@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace HiEvents\Providers;
 
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
+use HiEvents\Repository\Eloquent\ContactAttributeDefinitionRepository;
+use HiEvents\Repository\Eloquent\ContactRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
@@ -52,6 +54,8 @@ use HiEvents\Repository\Eloquent\WaitlistEntryRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
+use HiEvents\Repository\Interfaces\ContactAttributeDefinitionRepositoryInterface;
+use HiEvents\Repository\Interfaces\ContactRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
@@ -153,6 +157,8 @@ class RepositoryServiceProvider extends ServiceProvider
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        ContactRepositoryInterface::class => ContactRepository::class,
+        ContactAttributeDefinitionRepositoryInterface::class => ContactAttributeDefinitionRepository::class,
     ];
 
     public function register(): void

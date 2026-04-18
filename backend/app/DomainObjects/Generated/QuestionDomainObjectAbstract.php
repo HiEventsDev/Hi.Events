@@ -12,6 +12,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const PLURAL_NAME = 'questions';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const CONTACT_ATTRIBUTE_DEFINITION_ID = 'contact_attribute_definition_id';
     final public const TITLE = 'title';
     final public const REQUIRED = 'required';
     final public const TYPE = 'type';
@@ -23,9 +24,11 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const ORDER = 'order';
     final public const IS_HIDDEN = 'is_hidden';
     final public const DESCRIPTION = 'description';
+    final public const CONTACT_LINK_IGNORED_AT = 'contact_link_ignored_at';
 
     protected int $id;
     protected int $event_id;
+    protected ?int $contact_attribute_definition_id = null;
     protected string $title;
     protected bool $required = false;
     protected ?string $type = null;
@@ -37,12 +40,14 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected int $order = 1;
     protected bool $is_hidden = false;
     protected ?string $description = null;
+    protected ?string $contact_link_ignored_at = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'contact_attribute_definition_id' => $this->contact_attribute_definition_id ?? null,
                     'title' => $this->title ?? null,
                     'required' => $this->required ?? null,
                     'type' => $this->type ?? null,
@@ -54,6 +59,7 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'order' => $this->order ?? null,
                     'is_hidden' => $this->is_hidden ?? null,
                     'description' => $this->description ?? null,
+                    'contact_link_ignored_at' => $this->contact_link_ignored_at ?? null,
                 ];
     }
 
@@ -77,6 +83,17 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setContactAttributeDefinitionId(?int $contact_attribute_definition_id): self
+    {
+        $this->contact_attribute_definition_id = $contact_attribute_definition_id;
+        return $this;
+    }
+
+    public function getContactAttributeDefinitionId(): ?int
+    {
+        return $this->contact_attribute_definition_id;
     }
 
     public function setTitle(string $title): self
@@ -198,5 +215,16 @@ abstract class QuestionDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function setContactLinkIgnoredAt(?string $contact_link_ignored_at): self
+    {
+        $this->contact_link_ignored_at = $contact_link_ignored_at;
+        return $this;
+    }
+
+    public function getContactLinkIgnoredAt(): ?string
+    {
+        return $this->contact_link_ignored_at;
     }
 }

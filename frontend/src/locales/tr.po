@@ -25,7 +25,7 @@ msgstr "- Yayından Kaldırmak için Tıklayın"
 
 #: src/components/common/NoResultsSplash/index.tsx:14
 msgid "'There\\'s nothing to show yet'"
-msgstr ""
+msgstr "'Henüz gösterilecek bir şey yok'"
 
 #: src/components/routes/admin/Attribution/index.tsx:146
 msgid "(empty)"
@@ -97,10 +97,18 @@ msgstr "{totalCount} arasından {availableCount} mevcut"
 msgid "{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{days} gün, {hours} saat, {minutes} dakika ve {seconds} saniye"
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:180
+msgid "{eventCount} event ({questionCount})"
+msgstr "{eventCount} etkinlik ({questionCount})"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:79
 #: src/components/common/WebhookTable/index.tsx:79
 msgid "{eventCount} events"
 msgstr "{eventCount} etkinlik"
+
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:181
+msgid "{eventCount} events ({questionCount})"
+msgstr "{eventCount} etkinlik ({questionCount})"
 
 #: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
@@ -235,7 +243,7 @@ msgstr "94103"
 msgid "A cancellation notice has been sent to"
 msgstr "İptal bildirimi gönderildi:"
 
-#: src/components/forms/QuestionForm/index.tsx:138
+#: src/components/forms/QuestionForm/index.tsx:272
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "Tarih girişi. Doğum tarihi sormak gibi durumlar için mükemmel."
 
@@ -243,7 +251,7 @@ msgstr "Tarih girişi. Doğum tarihi sormak gibi durumlar için mükemmel."
 msgid "A default {type} is automaticaly applied to all new products. You can override this on a per product basis."
 msgstr "Varsayılan {type} otomatik olarak tüm yeni ürünlere uygulanır. Bunu ürün bazında geçersiz kılabilirsiniz."
 
-#: src/components/forms/QuestionForm/index.tsx:126
+#: src/components/forms/QuestionForm/index.tsx:260
 msgid "A Dropdown input allows only one selection"
 msgstr "Açılır menü sadece tek seçime izin verir"
 
@@ -255,7 +263,7 @@ msgstr "Rezervasyon ücreti veya hizmet ücreti gibi bir ücret"
 msgid "A fixed amount per product. E.g, $0.50 per product"
 msgstr "Ürün başına sabit miktar. Örn. ürün başına 0,50 $"
 
-#: src/components/forms/QuestionForm/index.tsx:108
+#: src/components/forms/QuestionForm/index.tsx:242
 msgid "A multi line text input"
 msgstr "Çok satırlı metin girişi"
 
@@ -271,7 +279,7 @@ msgstr "Ürün fiyatının yüzdesi. Örn. ürün fiyatının %3,5'i"
 msgid "A promo code with no discount can be used to reveal hidden products."
 msgstr "İndirim olmayan promosyon kodu gizli ürünleri göstermek için kullanılabilir."
 
-#: src/components/forms/QuestionForm/index.tsx:120
+#: src/components/forms/QuestionForm/index.tsx:254
 msgid "A Radio option has multiple options but only one can be selected."
 msgstr "Radyo seçeneği birden fazla seçenek sunar ancak sadece biri seçilebilir."
 
@@ -284,15 +292,15 @@ msgstr "Arama motoru sonuçlarında ve sosyal medyada paylaşılırken gösteril
 msgid "A short description of your organizer that will be displayed to your users."
 msgstr "Kullanıcılarınıza gösterilecek organizatörünüz hakkında kısa bir açıklama."
 
-#: src/components/forms/QuestionForm/index.tsx:102
+#: src/components/forms/QuestionForm/index.tsx:236
 msgid "A single line text input"
 msgstr "Tek satırlı metin girişi"
 
-#: src/components/forms/QuestionForm/index.tsx:87
+#: src/components/forms/QuestionForm/index.tsx:221
 msgid "A single question per order. E.g, What is your shipping address?"
 msgstr "Sipariş başına tek soru. Örn. Teslimat adresiniz nedir?"
 
-#: src/components/forms/QuestionForm/index.tsx:93
+#: src/components/forms/QuestionForm/index.tsx:227
 msgid "A single question per product. E.g, What is your t-shirt size?"
 msgstr "Ürün başına tek soru. Örn. Tişört bedeniniz nedir?"
 
@@ -313,6 +321,10 @@ msgstr "Hakkında"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:681
 msgid "About Stripe Connect"
 msgstr "Stripe Connect Hakkında"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:14
+msgid "About Sync"
+msgstr "Senkronizasyon Hakkında"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:192
 msgid "Absorb fee"
@@ -378,7 +390,7 @@ msgstr "Hesap Adı"
 msgid "Account not found"
 msgstr "Hesap bulunamadı"
 
-#: src/components/common/GlobalMenu/index.tsx:45
+#: src/components/common/GlobalMenu/index.tsx:46
 #: src/components/routes/account/ManageAccount/index.tsx:19
 msgid "Account Settings"
 msgstr "Hesap Ayarları"
@@ -427,7 +439,11 @@ msgstr "Etkinleştirme tarihi"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:267
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:82
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:88
 #: src/components/modals/EditUserModal/index.tsx:110
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:63
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:190
 #: src/components/routes/event/attendees.tsx:26
 msgid "Active"
 msgstr "Etkin"
@@ -435,6 +451,14 @@ msgstr "Etkin"
 #: src/components/routes/admin/Dashboard/index.tsx:354
 msgid "Active Events"
 msgstr "Aktif Etkinlikler"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+msgid "Add"
+msgstr "Ekle"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:148
+msgid "Add ({0})"
+msgstr "Ekle ({0})"
 
 #: src/components/forms/CheckInListForm/index.tsx:53
 msgid "Add a description for this check-in list"
@@ -456,11 +480,21 @@ msgstr "Sipariş hakkında not ekleyin. Bunlar müşteri tarafından görülmeye
 msgid "Add any notes about the order..."
 msgstr "Sipariş hakkında not ekleyin..."
 
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:40
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:125
+msgid "Add Attribute"
+msgstr "Nitelik ekle"
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:46
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:118
+msgid "Add Contact"
+msgstr "Kişi ekle"
+
 #: src/components/common/QuestionsTable/index.tsx:433
 msgid "Add custom questions to collect additional information during checkout"
 msgstr "Ödeme sırasında ek bilgi toplamak için özel sorular ekleyin"
 
-#: src/components/forms/QuestionForm/index.tsx:202
+#: src/components/forms/QuestionForm/index.tsx:386
 msgid "Add description"
 msgstr "Açıklama ekle"
 
@@ -480,7 +514,11 @@ msgstr "Daha fazla bilet ekle"
 msgid "Add New"
 msgstr "Yeni Ekle"
 
-#: src/components/forms/QuestionForm/index.tsx:68
+#: src/components/common/SortableOptionsInput/index.tsx:138
+msgid "Add option"
+msgstr "Seçenek ekle"
+
+#: src/components/forms/QuestionForm/index.tsx:129
 msgid "Add Option"
 msgstr "Seçenek Ekle"
 
@@ -530,6 +568,10 @@ msgstr "Webhook Ekle"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Sosyal medya hesaplarınızı ve web sitesi URL'nizi ekleyin. Bunlar herkese açık organizatör sayfanızda görüntülenecektir."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:78
+msgid "Added {0} contact(s)."
+msgstr "{0} kişi eklendi."
+
 #: src/components/common/PlatformFeesSettings/index.tsx:257
 msgid "Additional Fees"
 msgstr "Ek ücretler"
@@ -539,7 +581,7 @@ msgid "Additional Information"
 msgstr "Ek Bilgiler"
 
 #: src/components/common/OrderDetails/index.tsx:96
-#: src/components/forms/QuestionForm/index.tsx:130
+#: src/components/forms/QuestionForm/index.tsx:264
 #: src/components/routes/organizer/Settings/index.tsx:41
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:67
 msgid "Address"
@@ -578,8 +620,8 @@ msgstr "Yönetici"
 msgid "Admin Access Required"
 msgstr "Yönetici Erişimi Gerekli"
 
-#: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/common/GlobalMenu/index.tsx:67
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Yönetici Paneli"
@@ -655,6 +697,10 @@ msgstr "Tamamlandı! Artık yükseltilmiş ödeme sistemimizi kullanıyorsunuz."
 #: src/components/routes/events/Dashboard/index.tsx:75
 msgid "All Ended Events"
 msgstr "Tüm Sona Eren Etkinlikler"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+msgid "All event questions with answers are linked."
+msgstr "Yanıtları olan tüm etkinlik soruları bağlandı."
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
 msgid "All Events"
@@ -778,6 +824,14 @@ msgstr "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
 msgid "Answer updated successfully."
 msgstr "Cevap başarıyla güncellendi."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:200
+msgid "Answers"
+msgstr "Yanıtlar"
+
+#: src/components/forms/QuestionForm/index.tsx:290
+msgid "Answers will update the attendee's contact profile, making them reusable in future"
+msgstr "Yanıtlar katılımcının iletişim profilini güncelleyecek ve gelecekte yeniden kullanılabilir hale getirecek"
+
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
 msgstr "Ürün sahiplerinden gelen tüm sorular bu e-posta adresine gönderilecektir. Bu aynı zamanda bu etkinlikten gönderilen tüm e-postalar için \"yanıtla\" adresi olarak da kullanılacaktır"
@@ -793,6 +847,10 @@ msgstr "Uygulama Ücretleri Yapılandırması"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:564
 msgid "applied"
 msgstr "uygulandı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:87
+msgid "Applied {0} decision(s)."
+msgstr "{0} karar uygulandı."
 
 #: src/components/common/CapacityAssignmentList/index.tsx:94
 msgid "Applies to {0} products"
@@ -1002,11 +1060,11 @@ msgstr "İşletmeniz AB merkezli olduğundan, platform ücretlerimiz için doğr
 msgid "Ask for name and email for each ticket purchased"
 msgstr "Satın alınan her bilet için ad ve e-posta isteyin"
 
-#: src/components/forms/QuestionForm/index.tsx:85
+#: src/components/forms/QuestionForm/index.tsx:219
 msgid "Ask once per order"
 msgstr "Sipariş başına bir kez sor"
 
-#: src/components/forms/QuestionForm/index.tsx:91
+#: src/components/forms/QuestionForm/index.tsx:225
 msgid "Ask once per product"
 msgstr "Ürün başına bir kez sor"
 
@@ -1122,6 +1180,10 @@ msgstr "Katılımcılar"
 msgid "Attendees Exported"
 msgstr "Katılımcılar Dışa Aktarıldı"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:38
+msgid "Attendees from past orders whose email isn't in your contacts library yet. Select the rows you want and click Add to create contacts for them; click Ignore to hide them from future previews."
+msgstr "E-postası henüz kişi kitaplığınızda olmayan geçmiş siparişlerdeki katılımcılar. Satırları seçin ve Ekle'ye tıklayın; Yoksay'a tıklayarak gizleyin."
+
 #: src/components/common/EventCard/index.tsx:224
 msgid "Attendees registered"
 msgstr "Kayıtlı katılımcılar"
@@ -1137,6 +1199,27 @@ msgstr "Belirli bir bilete sahip katılımcılar"
 #: src/components/common/AdminEventsTable/index.tsx:138
 msgid "Attendees:"
 msgstr "Katılımcılar:"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:157
+msgid "Attribute"
+msgstr "Öznitelik"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:35
+msgid "Attribute definition created successfully"
+msgstr "Nitelik tanımı başarıyla oluşturuldu"
+
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:30
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:61
+msgid "Attribute definition deleted successfully"
+msgstr "Nitelik tanımı başarıyla silindi"
+
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:42
+msgid "Attribute definition updated successfully"
+msgstr "Nitelik tanımı başarıyla güncellendi"
+
+#: src/components/modals/EditContactModal/index.tsx:85
+msgid "Attributes"
+msgstr "Nitelikler"
 
 #: src/components/routes/admin/Attribution/index.tsx:29
 msgid "Attribution Analytics"
@@ -1168,7 +1251,7 @@ msgstr "Arka plan rengine göre otomatik olarak algılanır, ancak geçersiz kı
 
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:61
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
-msgstr ""
+msgstr "Kapasite uygun olduğunda bir sonraki kişiye otomatik olarak bilet teklif edin. Devre dışı bırakılırsa, Bekleme Listesi sayfasından bekleme listesini manuel olarak işleyebilirsiniz."
 
 #: src/components/common/WidgetEditor/index.tsx:238
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
@@ -1377,6 +1460,12 @@ msgstr "Kampanya"
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
 #: src/components/common/WaitlistTable/index.tsx:111
 #: src/components/common/WaitlistTable/index.tsx:132
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:89
+#: src/components/modals/CreateContactModal/index.tsx:62
+#: src/components/modals/CreateQuestionModal/index.tsx:133
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:95
+#: src/components/modals/EditContactModal/index.tsx:123
+#: src/components/modals/EditQuestionModal/index.tsx:156
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:61
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:67
@@ -1588,11 +1677,11 @@ msgstr "Check-In URL'si panoya kopyalandı"
 msgid "Check-Ins"
 msgstr "Girişler"
 
-#: src/components/forms/QuestionForm/index.tsx:114
+#: src/components/forms/QuestionForm/index.tsx:248
 msgid "Checkbox options allow multiple selections"
 msgstr "Onay kutusu seçenekleri çoklu seçime izin verir"
 
-#: src/components/forms/QuestionForm/index.tsx:112
+#: src/components/forms/QuestionForm/index.tsx:246
 msgid "Checkboxes"
 msgstr "Onay Kutuları"
 
@@ -1715,6 +1804,11 @@ msgstr "Kod en fazla 20 karakter olmalıdır"
 #: src/components/layouts/OrganizerLayout/index.tsx:168
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Birlikte harika etkinlikler oluşturmak için ekibinizle işbirliği yapın."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
+msgid "Collapse"
+msgstr "Daralt"
 
 #: src/components/forms/ProductForm/index.tsx:473
 msgid "Collapse this product when the event page is initially loaded"
@@ -1855,7 +1949,7 @@ msgstr "Yapılandırma adları son kullanıcılar tarafından görülebilir. Sab
 msgid "Configuration updated successfully"
 msgstr "Yapılandırma başarıyla güncellendi"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:64
 msgid "Configurations"
 msgstr "Yapılandırmalar"
@@ -2004,12 +2098,26 @@ msgstr "Bağlantı Detayları"
 #: src/components/common/WaitlistTable/index.tsx:149
 #: src/components/layouts/EventHomepage/index.tsx:583
 #: src/components/layouts/OrganizerHomepage/index.tsx:245
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:156
 msgid "Contact"
 msgstr "İletişim"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:66
 msgid "Contact {0}"
 msgstr "{0} ile İletişime Geç"
+
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:38
+msgid "Contact Attributes"
+msgstr "İletişim nitelikleri"
+
+#: src/components/modals/CreateContactModal/index.tsx:30
+msgid "Contact created successfully"
+msgstr "Kişi başarıyla oluşturuldu"
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:36
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:90
+msgid "Contact deleted successfully"
+msgstr "Kişi başarıyla silindi"
 
 #: src/components/forms/OrganizerForm/index.tsx:35
 msgid "Contact Email"
@@ -2019,6 +2127,18 @@ msgstr "İletişim E-postası"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:81
 msgid "Contact email for support"
 msgstr "Destek için iletişim e-postası"
+
+#: src/components/modals/EditContactModal/index.tsx:55
+msgid "Contact updated successfully"
+msgstr "Kişi başarıyla güncellendi"
+
+#: src/components/common/GlobalMenu/index.tsx:51
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:44
+#: src/components/routes/contacts/ContactsAdmin/index.tsx:47
+#: src/components/routes/contacts/ContactsAdmin/index.tsx:59
+msgid "Contacts"
+msgstr "Kişiler"
 
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
@@ -2107,7 +2227,7 @@ msgstr "Kodu Kopyala"
 
 #: src/components/common/OrdersTable/index.tsx:161
 msgid "Copy customer link"
-msgstr ""
+msgstr "Müşteri bağlantısını kopyala"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:477
 msgid "Copy details to first attendee"
@@ -2143,6 +2263,34 @@ msgstr "Panoya kopyala"
 #: src/components/common/PromoCodeTable/index.tsx:177
 msgid "Copy URL"
 msgstr "URL'yi Kopyala"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:81
+msgid "Could not add contacts."
+msgstr "Kişiler eklenemedi."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:90
+msgid "Could not apply decisions."
+msgstr "Kararlar uygulanamadı."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:93
+msgid "Could not ignore attendees."
+msgstr "Katılımcılar yok sayılamadı."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:95
+msgid "Could not ignore questions."
+msgstr "Sorular yok sayılamadı."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:105
+msgid "Could not restore attendees."
+msgstr "Katılımcılar geri yüklenemedi."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:107
+msgid "Could not restore questions."
+msgstr "Sorular geri yüklenemedi."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:83
+msgid "Could not reuse questions."
+msgstr "Sorular yeniden kullanılamadı."
 
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:152
@@ -2224,6 +2372,14 @@ msgstr "Satış için bilet ve ürünler oluşturup yapılandırın."
 msgid "Create Attendee"
 msgstr "Katılımcı Oluştur"
 
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:92
+msgid "Create Attribute"
+msgstr "Nitelik oluştur"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:47
+msgid "Create Attribute Definition"
+msgstr "Nitelik tanımı oluştur"
+
 #: src/components/common/CapacityAssignmentList/index.tsx:60
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:68
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:79
@@ -2254,6 +2410,11 @@ msgstr "Check-In Listesi Oluştur"
 msgid "Create Configuration"
 msgstr "Yapılandırma Oluştur"
 
+#: src/components/modals/CreateContactModal/index.tsx:40
+#: src/components/modals/CreateContactModal/index.tsx:65
+msgid "Create Contact"
+msgstr "Kişi oluştur"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:311
 msgid "Create custom email templates for this event that override the organizer defaults"
 msgstr "Organizatör varsayılanlarını geçersiz kılan bu etkinlik için özel e-posta şablonları oluşturun"
@@ -2281,7 +2442,7 @@ msgstr "Yeni oluştur"
 msgid "Create new password"
 msgstr "Yeni şifre oluştur"
 
-#: src/components/common/GlobalMenu/index.tsx:76
+#: src/components/common/GlobalMenu/index.tsx:82
 #: src/components/modals/CreateEventModal/index.tsx:138
 #: src/components/modals/CreateOrganizerModal/index.tsx:18
 #: src/components/modals/SwitchOrganizerModal/index.tsx:96
@@ -2297,8 +2458,8 @@ msgstr "Ürün Oluştur"
 msgid "Create Promo Code"
 msgstr "Promosyon Kodu Oluştur"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:70
-#: src/components/modals/CreateQuestionModal/index.tsx:75
+#: src/components/modals/CreateQuestionModal/index.tsx:127
+#: src/components/modals/CreateQuestionModal/index.tsx:136
 msgid "Create Question"
 msgstr "Soru Oluştur"
 
@@ -2343,9 +2504,12 @@ msgstr "Bilet satmaya ve katılımcıları yönetmeye başlamak için ilk etkinl
 msgid "Create your own event"
 msgstr "Kendi etkinliğinizi oluşturun"
 
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:67
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:132
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:309
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:202
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:142
 msgid "Created"
 msgstr "Oluşturuldu"
 
@@ -2438,7 +2602,7 @@ msgstr "Müşteri"
 
 #: src/components/common/OrdersTable/index.tsx:159
 msgid "Customer link copied to clipboard"
-msgstr ""
+msgstr "Müşteri bağlantısı panoya kopyalandı"
 
 #: src/components/modals/RefundOrderModal/index.tsx:125
 msgid "Customer will receive an email confirming the refund"
@@ -2554,7 +2718,7 @@ msgstr "Veri Sahipliği"
 
 #: src/components/common/AdminOrdersTable/index.tsx:94
 #: src/components/common/OrderDetails/index.tsx:39
-#: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/forms/QuestionForm/index.tsx:270
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
 msgid "Date"
@@ -2577,6 +2741,10 @@ msgstr "Siparişin verildiği tarih"
 msgid "Day one capacity"
 msgstr "Birinci gün kapasitesi"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:161
+msgid "Decision"
+msgstr "Karar"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:94
 msgid "Default"
 msgstr "Varsayılan"
@@ -2593,6 +2761,10 @@ msgstr "Varsayılan ücret işleme"
 msgid "Default template will be used"
 msgstr "Varsayılan şablon kullanılacak"
 
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:39
+msgid "Define custom attributes that can be stored on contacts"
+msgstr "Kişilerde saklanabilecek özel nitelikler tanımlayın"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:101
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:107
 msgid "delete"
@@ -2602,7 +2774,11 @@ msgstr "sil"
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:78
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:85
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:97
 #: src/components/routes/admin/FailedJobs/index.tsx:209
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:165
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:205
 msgid "Delete"
 msgstr "Sil"
 
@@ -2690,6 +2866,11 @@ msgstr "Detaylar"
 #: src/components/routes/welcome/index.tsx:193
 msgid "Didn't receive the code?"
 msgstr "Kodu almadınız mı?"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:54
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:47
+msgid "Different Answers"
+msgstr "Farklı yanıtlar"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:27
 msgid "Disabling this capacity will track sales but not stop them when the limit is reached"
@@ -2789,7 +2970,11 @@ msgstr "Fatura İndiriliyor"
 msgid "Draft"
 msgstr "Taslak"
 
-#: src/components/forms/QuestionForm/index.tsx:124
+#: src/components/common/SortableOptionsInput/index.tsx:53
+msgid "Drag to reorder"
+msgstr "Yeniden sıralamak için sürükle"
+
+#: src/components/forms/QuestionForm/index.tsx:258
 msgid "Dropdown selection"
 msgstr "Açılır seçim"
 
@@ -2802,6 +2987,8 @@ msgid ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
 msgstr ""
+"Yüksek spam riski nedeniyle, katılımcılara mesaj gönderebilmek için bir Stripe hesabı bağlamanız gerekir.\n"
+"Bu, tüm etkinlik organizatörlerinin doğrulandığından ve hesap verebilir olduğundan emin olmak içindir."
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:488
 msgid "Duplicate"
@@ -2841,6 +3028,19 @@ msgstr "örn., Bilet Al, Şimdi Kaydol"
 msgid "e.g., Important update about your tickets"
 msgstr "örn., Biletleriniz hakkında önemli güncelleme"
 
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:63
+msgid "e.g., role"
+msgstr "örn. rol"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:50
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:56
+msgid "e.g., Role"
+msgstr "örn. Rol"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:57
+msgid "e.g., role (machine name)"
+msgstr "örn. rol (makine adı)"
+
 #: src/components/routes/admin/Configurations/index.tsx:221
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "örn., Standart, Premium, Kurumsal"
@@ -2848,6 +3048,10 @@ msgstr "örn., Standart, Premium, Kurumsal"
 #: src/components/modals/OfferWaitlistModal/index.tsx:129
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Her kişi, satın alma işlemini tamamlamak için ayrılmış bir yer içeren bir e-posta alacaktır."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:65
+msgid "Each sub-tab runs independently — there's no single \"run everything\" button."
+msgstr "Her alt sekme bağımsız çalışır — tek bir \"hepsini çalıştır\" düğmesi yoktur."
 
 #: src/components/forms/ProductForm/index.tsx:86
 msgid "Early bird"
@@ -2857,7 +3061,11 @@ msgstr "Erken kuş"
 #: src/components/common/TaxAndFeeList/index.tsx:70
 #: src/components/modals/ManageAttendeeModal/index.tsx:221
 #: src/components/modals/ManageOrderModal/index.tsx:203
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:78
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:90
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:268
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:162
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:202
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:235
 msgid "Edit"
 msgstr "Düzenle"
@@ -2893,6 +3101,10 @@ msgstr "Katılımcıyı düzenle"
 msgid "Edit Attendee Details"
 msgstr "Katılımcı Detaylarını Düzenle"
 
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:53
+msgid "Edit Attribute Definition"
+msgstr "Nitelik tanımını düzenle"
+
 #: src/components/common/CapacityAssignmentList/index.tsx:143
 msgid "Edit Capacity"
 msgstr "Kapasiteyi Düzenle"
@@ -2921,6 +3133,10 @@ msgstr "Kodu Düzenle"
 msgid "Edit Configuration"
 msgstr "Yapılandırmayı Düzenle"
 
+#: src/components/modals/EditContactModal/index.tsx:64
+msgid "Edit Contact"
+msgstr "Kişiyi düzenle"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:45
 msgid "Edit Order Details"
 msgstr "Sipariş Detaylarını Düzenle"
@@ -2944,8 +3160,7 @@ msgstr "Ürün Kategorisini Düzenle"
 msgid "Edit Promo Code"
 msgstr "Promosyon Kodunu Düzenle"
 
-#: src/components/modals/EditQuestionModal/index.tsx:95
-#: src/components/modals/EditQuestionModal/index.tsx:101
+#: src/components/modals/EditQuestionModal/index.tsx:145
 msgid "Edit Question"
 msgstr "Soruyu Düzenle"
 
@@ -3002,15 +3217,20 @@ msgstr "Uygun Giriş Listeleri"
 #: src/components/common/OrderDetails/index.tsx:31
 #: src/components/common/QuestionsTable/index.tsx:253
 #: src/components/forms/AffiliateForm/index.tsx:89
+#: src/components/modals/CreateContactModal/index.tsx:42
+#: src/components/modals/EditContactModal/index.tsx:66
 #: src/components/modals/EditUserModal/index.tsx:80
 #: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/modals/JoinWaitlistModal/index.tsx:171
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:64
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
 #: src/components/routes/auth/Login/index.tsx:93
 #: src/components/routes/auth/Register/index.tsx:104
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:139
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:68
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:68
@@ -3077,6 +3297,7 @@ msgid "Email footer message"
 msgstr "E-posta alt bilgi mesajı"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:34
+#: src/components/modals/CreateContactModal/index.tsx:21
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:32
 msgid "Email is required"
@@ -3303,6 +3524,10 @@ msgstr "EUR"
 #: src/components/routes/admin/Dashboard/index.tsx:305
 #: src/components/routes/admin/Messages/index.tsx:163
 #: src/components/routes/admin/Messages/index.tsx:277
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:160
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:201
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:67
 #: src/components/routes/events/Dashboard/index.tsx:184
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
@@ -3311,9 +3536,21 @@ msgstr "EUR"
 msgid "Event"
 msgstr "Etkinlik"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:159
+msgid "Event Answer"
+msgstr "Etkinlik Cevabı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:134
+msgid "Event answers that don't match the contact's current value — either the attribute was empty, or the stored value differs. For each row, choose Update to write the event answer, or Leave alone to keep the existing value. Both outcomes mark the row as processed so it won't reappear."
+msgstr "Kişinin mevcut değeriyle eşleşmeyen etkinlik cevapları. Her satır için Güncelle veya Bırak'ı seçin. Her ikisi de satırı işlenmiş olarak işaretler."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:56
+msgid "Event answers that don't yet match the contact's stored value. Includes first-time fills (attribute was empty) and true conflicts (stored value differs from the event answer). Per row, choose Update to write the event answer or Leave alone to keep the existing value. Click Update to apply your decisions; resolved rows won't reappear on future previews."
+msgstr "Kişinin saklanan değeriyle henüz eşleşmeyen etkinlik cevapları. İlk doldurmaları ve gerçek çakışmaları içerir. Her satır için Güncelle veya Bırak seçin."
+
 #: src/components/forms/WebhookForm/index.tsx:55
 msgid "Event Archived"
-msgstr ""
+msgstr "Etkinlik arşivlendi"
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:54
 msgid "Event archived successfully"
@@ -3329,7 +3566,7 @@ msgstr "Etkinlik Kapak Görseli"
 
 #: src/components/forms/WebhookForm/index.tsx:43
 msgid "Event Created"
-msgstr ""
+msgstr "Etkinlik oluşturuldu"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:223
 msgid "Event custom template"
@@ -3482,7 +3719,7 @@ msgstr "Etkinlik Türleri"
 
 #: src/components/forms/WebhookForm/index.tsx:49
 msgid "Event Updated"
-msgstr ""
+msgstr "Etkinlik güncellendi"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:40
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:74
@@ -3525,6 +3762,15 @@ msgstr "Örnekler: \"Tişört bedeni\", \"Yemek tercihi\", \"Meslek unvanı\""
 #: src/components/routes/admin/FailedJobs/index.tsx:265
 msgid "Exception"
 msgstr "İstisna"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:158
+msgid "Existing"
+msgstr "Mevcut"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:16
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:17
+msgid "Expand"
+msgstr "Genişlet"
 
 #: src/components/forms/CheckInListForm/index.tsx:68
 msgid "Expiration date"
@@ -3585,6 +3831,10 @@ msgstr "Dışa aktarma tamamlandı. Dosya indiriliyor..."
 msgid "Exporting Orders"
 msgstr "Siparişler Dışa Aktarılıyor"
 
+#: src/components/routes/contacts/ContactsAdmin/index.tsx:62
+msgid "Extended Attributes"
+msgstr "Genişletilmiş Öznitelikler"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:46
 msgid "Facebook"
 msgstr "Facebook"
@@ -3598,7 +3848,7 @@ msgstr "Başarısız"
 msgid "Failed At"
 msgstr "Başarısız oldu"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Başarısız işler"
@@ -3690,9 +3940,29 @@ msgstr "Rapor dışa aktarılamadı. Lütfen tekrar deneyin."
 msgid "Failed to load Check-In List"
 msgstr "Giriş Listesi yüklenemedi"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:140
+msgid "Failed to load conflicts"
+msgstr "Çakışmalar yüklenemedi"
+
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:133
+msgid "Failed to load contact attributes"
+msgstr "Kişi öznitelikleri yüklenemedi"
+
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:126
+msgid "Failed to load contacts"
+msgstr "Kişiler yüklenemedi"
+
 #: src/components/modals/MessageRecipientsModal/index.tsx:48
 msgid "Failed to load recipients"
 msgstr "Alıcılar yüklenemedi"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:176
+msgid "Failed to load unlinked attendees"
+msgstr "Bağlanmamış katılımcılar yüklenemedi"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:173
+msgid "Failed to load unmapped questions"
+msgstr "Eşlenmemiş sorular yüklenemedi"
 
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:74
 #: src/components/modals/EditWebhookModal/index.tsx:75
@@ -3709,7 +3979,7 @@ msgstr "Bilet teklifi başarısız oldu"
 
 #: src/components/common/WaitlistTable/index.tsx:107
 msgid "Failed to remove from waitlist"
-msgstr ""
+msgstr "Bekleme listesinden kaldırılamadı"
 
 #: src/components/common/QuestionsTable/index.tsx:184
 msgid "Failed to reorder questions"
@@ -3878,6 +4148,14 @@ msgstr "Önce yukarıdaki bilgilerinizi doldurun"
 msgid "Filter Attendees"
 msgstr "Katılımcıları Filtrele"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:106
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:126
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:123
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:108
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:115
+msgid "Filter by event"
+msgstr "Etkinliğe göre filtrele"
+
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:123
 msgid "Filter by Event"
 msgstr "Etkinliğe göre filtrele"
@@ -3921,11 +4199,18 @@ msgid "First name"
 msgstr "Ad"
 
 #: src/components/common/QuestionsTable/index.tsx:251
+#: src/components/modals/CreateContactModal/index.tsx:49
+#: src/components/modals/CreateContactModal/index.tsx:50
+#: src/components/modals/EditContactModal/index.tsx:72
+#: src/components/modals/EditContactModal/index.tsx:73
 #: src/components/modals/EditUserModal/index.tsx:71
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/modals/JoinWaitlistModal/index.tsx:161
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:65
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:199
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:140
 #: src/components/routes/product-widget/CollectInformation/index.tsx:434
 #: src/components/routes/product-widget/CollectInformation/index.tsx:646
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:53
@@ -4179,6 +4464,7 @@ msgstr "Hi.Events platform ücretleri ve işlem bazında KDV dökümü"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:90
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:321
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:82
 msgid "Hidden"
 msgstr "Gizli"
 
@@ -4191,7 +4477,7 @@ msgstr "Katılımcılardan gizli - sadece organizatörler tarafından görülebi
 msgid "Hidden from public view"
 msgstr "Halk görünümünden gizli"
 
-#: src/components/forms/QuestionForm/index.tsx:218
+#: src/components/forms/QuestionForm/index.tsx:404
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "Gizli sorular yalnızca etkinlik organizatörü tarafından görülebilir, müşteri tarafından görülemez."
 
@@ -4236,7 +4522,7 @@ msgstr "Başlarken sayfasını kenar çubuğundan gizle"
 msgid "Hide this product from customers"
 msgstr "Bu ürünü müşterilerden gizle"
 
-#: src/components/forms/QuestionForm/index.tsx:219
+#: src/components/forms/QuestionForm/index.tsx:405
 msgid "Hide this question"
 msgstr "Bu soruyu gizle"
 
@@ -4366,6 +4652,24 @@ msgstr "Bu değişikliği talep etmediyseniz, lütfen hemen şifrenizi değişti
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Bizimle bir hesabınız varsa, şifrenizi nasıl sıfırlayacağınıza dair talimatlar içeren bir e-posta alacaksınız."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:158
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:155
+msgid "Ignore"
+msgstr "Yoksay"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:223
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:221
+msgid "ignored"
+msgstr "yok sayıldı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:90
+msgid "Ignored {0} attendee(s)."
+msgstr "{0} katılımcı yok sayıldı."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:92
+msgid "Ignored {0} question(s)."
+msgstr "{0} soru yok sayıldı."
+
 #: src/components/common/ImageUploadDropzone/index.tsx:124
 msgid "Image deleted successfully"
 msgstr "Resim başarıyla silindi"
@@ -4429,6 +4733,8 @@ msgstr "{diffMinutes} dakika içinde"
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
 #: src/components/modals/EditUserModal/index.tsx:111
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:63
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:190
 msgid "Inactive"
 msgstr "Pasif"
 
@@ -4634,7 +4940,7 @@ msgstr "Bekleme listesine katıl"
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 msgid "Join Waitlist for {productDisplayName}"
-msgstr ""
+msgstr "{productDisplayName} bekleme listesine katıl"
 
 #: src/components/common/JoinWaitlistButton/index.tsx:30
 #: src/components/common/WaitlistTable/index.tsx:197
@@ -4654,8 +4960,17 @@ msgid "Keep me updated on news and events from {0}"
 msgstr "{0} adresinden haberler ve etkinlikler hakkında beni bilgilendirin"
 
 #: src/components/forms/ProductForm/index.tsx:85
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:49
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:55
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:48
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:149
 msgid "Label"
 msgstr "Etiket"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:26
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:30
+msgid "Label is required"
+msgstr "Etiket gereklidir"
 
 #: src/components/common/AttendeeDetails/index.tsx:38
 #: src/components/modals/CreateAttendeeModal/index.tsx:155
@@ -4718,11 +5033,18 @@ msgid "Last name"
 msgstr "Soyad"
 
 #: src/components/common/QuestionsTable/index.tsx:252
+#: src/components/modals/CreateContactModal/index.tsx:55
+#: src/components/modals/CreateContactModal/index.tsx:56
+#: src/components/modals/EditContactModal/index.tsx:78
+#: src/components/modals/EditContactModal/index.tsx:79
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/modals/JoinWaitlistModal/index.tsx:166
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:66
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:200
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:141
 #: src/components/routes/product-widget/CollectInformation/index.tsx:440
 #: src/components/routes/product-widget/CollectInformation/index.tsx:441
 #: src/components/routes/product-widget/CollectInformation/index.tsx:652
@@ -4752,6 +5074,10 @@ msgstr "Son Tetiklenme"
 msgid "Last Used"
 msgstr "Son Kullanım"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:189
+msgid "Leave"
+msgstr "Bırak"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Varsayılan \"Fatura\" kelimesini kullanmak için boş bırakın"
@@ -4779,6 +5105,10 @@ msgstr "Bilete bağlantı"
 #: src/components/routes/event/EventDashboard/index.tsx:230
 msgid "Link your Stripe account to receive funds from ticket sales."
 msgstr "Bilet satışlarından gelir almak için Stripe hesabınızı bağlayın."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:80
+msgid "Linked {0} question(s) to new attribute(s)."
+msgstr "{0} soru yeni özelliklere bağlandı."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:61
 msgid "LinkedIn"
@@ -4814,7 +5144,7 @@ msgstr "Token'lar yükleniyor..."
 
 #: src/components/modals/OrganizerWebhookLogsModal/index.tsx:144
 msgid "Loading webhook logs..."
-msgstr ""
+msgstr "Webhook günlükleri yükleniyor..."
 
 #: src/components/routes/event/Webhooks/index.tsx:21
 #: src/components/routes/organizer/Webhooks/index.tsx:22
@@ -4868,7 +5198,7 @@ msgstr "Logo başlıkta görüntülenecektir"
 msgid "Logo will be displayed on the ticket"
 msgstr "Logo bilette görüntülenecektir"
 
-#: src/components/common/GlobalMenu/index.tsx:85
+#: src/components/common/GlobalMenu/index.tsx:91
 msgid "Logout"
 msgstr "Çıkış"
 
@@ -4884,9 +5214,13 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat el
 msgid "Make billing address mandatory during checkout"
 msgstr "Ödeme sırasında fatura adresini zorunlu kıl"
 
-#: src/components/forms/QuestionForm/index.tsx:212
+#: src/components/forms/QuestionForm/index.tsx:398
 msgid "Make this question mandatory"
 msgstr "Bu soruyu zorunlu kıl"
+
+#: src/components/forms/QuestionForm/index.tsx:306
+msgid "Make this question reusable for future events"
+msgstr "Bu soruyu gelecekteki etkinlikler için yeniden kullanılabilir yap"
 
 #: src/components/routes/event/EventDashboard/index.tsx:184
 msgid "Make your event live"
@@ -4905,6 +5239,10 @@ msgstr "Yönet"
 #: src/components/common/AttendeeTable/index.tsx:349
 msgid "Manage attendee"
 msgstr "Katılımcıyı yönet"
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:45
+msgid "Manage contacts linked to attendees across your events"
+msgstr "Etkinliklerdeki katılımcılara bağlı kişileri yönetin"
 
 #: src/components/common/EventCard/index.tsx:136
 msgid "Manage event"
@@ -4936,7 +5274,7 @@ msgstr "Hesap bilgilerinizi ve varsayılan ayarlarını yönetin"
 
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:48
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
-msgstr ""
+msgstr "Etkinliğinizin bekleme listesini yönetin, istatistikleri görüntüleyin ve katılımcılara bilet teklif edin."
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:817
 msgid "Manage your payment processing and view platform fees"
@@ -4946,7 +5284,7 @@ msgstr "Ödeme işlemenizi yönetin ve platform ücretlerini görüntüleyin"
 msgid "Manage your users and their permissions"
 msgstr "Kullanıcılarınızı ve izinlerini yönetin"
 
-#: src/components/forms/QuestionForm/index.tsx:211
+#: src/components/forms/QuestionForm/index.tsx:397
 msgid "Mandatory questions must be answered before the customer can checkout."
 msgstr "Zorunlu sorular müşteri ödeme yapmadan önce cevaplanmalıdır."
 
@@ -5101,9 +5439,14 @@ msgstr "Başarısız arka plan işlerini izleyin ve yönetin"
 msgid "Most Viewed Events (Last 14 Days)"
 msgstr "En Çok Görüntülenen Etkinlikler (Son 14 Gün)"
 
-#: src/components/forms/QuestionForm/index.tsx:106
+#: src/components/forms/QuestionForm/index.tsx:240
 msgid "Multi line text box"
 msgstr "Çok satırlı metin kutusu"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:67
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:73
+msgid "Multi Select"
+msgstr "Çoklu seçim"
 
 #: src/components/forms/ProductForm/index.tsx:174
 msgid "Multiple price options. Perfect for early bird products etc."
@@ -5123,7 +5466,7 @@ msgstr "Harika etkinlik açıklamam..."
 msgid "My amazing event title..."
 msgstr "Harika etkinlik başlığım..."
 
-#: src/components/common/GlobalMenu/index.tsx:40
+#: src/components/common/GlobalMenu/index.tsx:41
 msgid "My Profile"
 msgstr "Profilim"
 
@@ -5146,9 +5489,13 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/CheckInListForm/index.tsx:37
 #: src/components/forms/ProductForm/index.tsx:274
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:56
 #: src/components/modals/DuplicateEventModal/index.tsx:109
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:62
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:49
 #: src/components/routes/admin/Configurations/index.tsx:219
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:150
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:230
 msgid "Name"
@@ -5156,7 +5503,9 @@ msgstr "Ad"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:32
 #: src/components/modals/CreateAffiliateModal/index.tsx:28
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:25
 #: src/components/modals/EditAffiliateModal/index.tsx:33
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:29
 #: src/components/routes/admin/Configurations/index.tsx:168
 msgid "Name is required"
 msgstr "Ad gerekli"
@@ -5187,10 +5536,28 @@ msgstr "Net Gelir"
 msgid "Never"
 msgstr "Asla"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:36
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:33
+msgid "New Contacts"
+msgstr "Yeni Kişiler"
+
 #: src/components/routes/auth/ResetPassword/index.tsx:64
 #: src/components/routes/profile/ManageProfile/index.tsx:232
 msgid "New Password"
 msgstr "Yeni Şifre"
+
+#: src/components/forms/QuestionForm/index.tsx:209
+msgid "New Question (reusable on future events)"
+msgstr "Yeni Soru (gelecek etkinliklerde yeniden kullanılabilir)"
+
+#: src/components/forms/QuestionForm/index.tsx:210
+msgid "New Question (this event only)"
+msgstr "Yeni Soru (yalnızca bu etkinlik için)"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:45
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/index.tsx:40
+msgid "New Questions"
+msgstr "Yeni Sorular"
 
 #: src/components/routes/admin/Dashboard/index.tsx:225
 msgid "New Signups"
@@ -5270,6 +5637,20 @@ msgstr "Bu etkinlik için kullanılabilir giriş listesi yok."
 msgid "No configurations found"
 msgstr "Yapılandırma bulunamadı"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:146
+msgid "No conflicts."
+msgstr "Çakışma yok."
+
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:97
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:141
+msgid "No contact attribute definitions have been added."
+msgstr "Hiç iletişim niteliği tanımı eklenmedi."
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:109
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:131
+msgid "No contacts found."
+msgstr "Kişi bulunamadı."
+
 #: src/components/common/ReportTable/index.tsx:218
 msgid "No data available"
 msgstr "Veri mevcut değil"
@@ -5330,6 +5711,19 @@ msgstr "Fatura yok"
 #: src/components/modals/WebhookLogsModal/index.tsx:177
 msgid "No logs found"
 msgstr "Günlük bulunamadı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+msgid "No matching attendees."
+msgstr "Eşleşen katılımcı yok."
+
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:140
+msgid "No matching attributes."
+msgstr "Eşleşen öznitelik yok."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:178
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:57
+msgid "No matching questions."
+msgstr "Eşleşen soru yok."
 
 #: src/components/routes/admin/Messages/index.tsx:154
 msgid "No messages found"
@@ -5411,6 +5805,10 @@ msgstr "Gösterilecek Promosyon Kodu yok"
 msgid "No questions answered by this attendee."
 msgstr "Bu katılımcı tarafından cevaplanan soru yok."
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:57
+msgid "No questions are linked to this attribute."
+msgstr "Bu özniteliğe bağlı soru yok."
+
 #: src/components/modals/ManageOrderModal/index.tsx:119
 msgid "No questions have been asked for this order."
 msgstr "Bu sipariş için hiçbir soru sorulmamış."
@@ -5430,7 +5828,7 @@ msgstr "Yanıt yok"
 
 #: src/components/modals/OrganizerWebhookLogsModal/index.tsx:79
 msgid "No Response"
-msgstr ""
+msgstr "Yanıt yok"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:141
 #: src/components/common/WebhookTable/index.tsx:141
@@ -5456,6 +5854,14 @@ msgstr "Hiçbir Vergi veya Ücret eklenmemiş."
 #: src/components/routes/my-tickets/index.tsx:220
 msgid "No Tickets Found"
 msgstr "Bilet Bulunamadı"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:181
+msgid "No unlinked attendees. All attendees already have a contact."
+msgstr "Bağlantısız katılımcı yok. Tüm katılımcıların zaten bir kişisi var."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:147
+msgid "No unresolved conflicts. Toggle \"Show processed\" to see previously evaluated entries."
+msgstr "Çözülmemiş çakışma yok. Daha önce değerlendirilmiş girişleri görmek için \"İşlenmişleri göster\" seçeneğini açın."
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:286
 msgid "No upcoming events"
@@ -5514,6 +5920,10 @@ msgstr "Giriş Yapılmadı"
 #: src/components/common/CheckInStatusModal/index.tsx:118
 msgid "Not Eligible"
 msgstr "Uygun Değil"
+
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:185
+msgid "Not linked"
+msgstr "Bağlı değil"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:130
 #: src/components/modals/ManageOrderModal/index.tsx:164
@@ -5676,6 +6086,10 @@ msgstr "Yalnızca bu durumlara sahip siparişlere gönder"
 msgid "Only visible with promo code"
 msgstr "Yalnızca promosyon koduyla görünür"
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:105
+msgid "Open"
+msgstr "Aç"
+
 #: src/components/common/CheckInListList/index.tsx:165
 #: src/components/modals/CheckInListSuccessModal/index.tsx:56
 msgid "Open Check-In Page"
@@ -5691,7 +6105,7 @@ msgstr "Kenar çubuğunu aç"
 msgid "Open Stripe Dashboard"
 msgstr "Stripe Panosunu Aç"
 
-#: src/components/forms/QuestionForm/index.tsx:45
+#: src/components/forms/QuestionForm/index.tsx:103
 msgid "Option {i}"
 msgstr "Seçenek {i}"
 
@@ -5711,7 +6125,9 @@ msgstr "Feragatnameler, iletişim bilgileri veya teşekkür notları için iste�
 msgid "options"
 msgstr "seçenekler"
 
-#: src/components/forms/QuestionForm/index.tsx:28
+#: src/components/forms/QuestionForm/index.tsx:79
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:75
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:81
 msgid "Options"
 msgstr "Seçenekler"
 
@@ -6400,7 +6816,7 @@ msgstr "Platform Ücretleri Raporu"
 msgid "Platform Revenue"
 msgstr "Platform Geliri"
 
-#: src/components/forms/QuestionForm/index.tsx:31
+#: src/components/forms/QuestionForm/index.tsx:90
 msgid "Please add at least one option"
 msgstr "Lütfen en az bir seçenek ekleyin"
 
@@ -6624,6 +7040,10 @@ msgstr "Gizlilik Politikası"
 msgid "Process Refund"
 msgstr "İade İşle"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:182
+msgid "Processed"
+msgstr "İşlendi"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:372
 msgid "Processing order"
 msgstr "Sipariş işleniyor"
@@ -6759,11 +7179,13 @@ msgstr "Yalnızca Promosyon"
 msgid "Promotional emails may result in account suspension"
 msgstr "Promosyon e-postaları hesap askıya alınmasına neden olabilir"
 
-#: src/components/forms/QuestionForm/index.tsx:189
+#: src/components/forms/QuestionForm/index.tsx:373
 msgid ""
 "Provide additional context or instructions for this question. Use this field to add terms\n"
 "and conditions, guidelines, or any important information that attendees need to know before answering."
 msgstr ""
+"Bu soru için ek bağlam veya talimatlar sağlayın. Bu alanı şartlar\n"
+"ve koşullar, yönergeler veya katılımcıların yanıtlamadan önce bilmesi gereken önemli bilgileri eklemek için kullanın."
 
 #: src/components/common/StatusToggle/index.tsx:97
 msgid "Publish"
@@ -6797,17 +7219,26 @@ msgstr "Adet"
 msgid "Quantity Available"
 msgstr "Mevcut Miktar"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:198
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:66
+msgid "Question"
+msgstr "Soru"
+
 #: src/components/common/QuestionsTable/index.tsx:201
 msgid "Question deleted"
 msgstr "Soru silindi"
 
-#: src/components/forms/QuestionForm/index.tsx:188
+#: src/components/forms/QuestionForm/index.tsx:372
 msgid "Question Description"
 msgstr "Soru Açıklaması"
 
-#: src/components/forms/QuestionForm/index.tsx:178
+#: src/components/forms/QuestionForm/index.tsx:354
 msgid "Question Title"
 msgstr "Soru Başlığı"
+
+#: src/components/forms/QuestionForm/index.tsx:307
+msgid "Question will be added to the account library for use on future events"
+msgstr "Soru, gelecekteki etkinliklerde kullanılmak üzere hesap kitaplığına eklenecek"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:25
 msgid "Questions"
@@ -6818,6 +7249,10 @@ msgstr "Sorular"
 msgid "Questions & Answers"
 msgstr "Sorular ve Cevaplar"
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:42
+msgid "Questions linked to \"{0}\""
+msgstr "\"{0}\" özniteliğine bağlı sorular"
+
 #: src/components/common/QuestionsTable/index.tsx:183
 msgid "Questions reordered"
 msgstr "Sorular yeniden sıralandı"
@@ -6827,7 +7262,7 @@ msgstr "Sorular yeniden sıralandı"
 msgid "Queue"
 msgstr "Kuyruk"
 
-#: src/components/forms/QuestionForm/index.tsx:118
+#: src/components/forms/QuestionForm/index.tsx:252
 msgid "Radio Option"
 msgstr "Radyo Seçeneği"
 
@@ -6842,9 +7277,17 @@ msgstr "Oran"
 msgid "Rate limit exceeded. Please try again later."
 msgstr "Hız sınırı aşıldı. Lütfen daha sonra tekrar deneyin."
 
+#: src/components/forms/QuestionForm/index.tsx:145
+msgid "Re-lock field"
+msgstr "Alanı yeniden kilitle"
+
 #: src/components/common/WaitlistTable/index.tsx:69
 msgid "Re-offer Spot"
 msgstr "Yeri Yeniden Teklif Et"
+
+#: src/components/forms/QuestionForm/index.tsx:289
+msgid "Re-use Existing Question"
+msgstr "Mevcut Soruyu Yeniden Kullan"
 
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:224
 msgid "Ready to upgrade? This takes only a few minutes."
@@ -6912,6 +7355,10 @@ msgstr "Stripe'a yönlendiriliyor..."
 msgid "Referral Accounts"
 msgstr "Yönlendirme Hesapları"
 
+#: src/components/routes/contacts/ContactsAdmin/index.tsx:49
+msgid "Refresh"
+msgstr "Yenile"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:175
 msgid "Refresh Preview"
 msgstr "Önizlemeyi Yenile"
@@ -6978,6 +7425,10 @@ msgstr "Kayıt Ol"
 msgid "Registration Questions"
 msgstr "Kayıt soruları"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:47
+msgid "Registration questions used on past events that aren't marked as reusable. Select the rows and click Reuse to create an extended attribute from each question and link them; click Ignore to hide them from future previews."
+msgstr "Yeniden kullanılabilir olarak işaretlenmemiş geçmiş etkinliklerde kullanılan kayıt soruları. Satırları seçin ve Yeniden Kullan'a tıklayın; Yoksay'a tıklayarak gizleyin."
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:82
 msgid "Remaining Uses"
 msgstr "Kalan Kullanım"
@@ -6992,6 +7443,10 @@ msgstr "kaldır"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:569
 msgid "Remove"
 msgstr "Kaldır"
+
+#: src/components/common/SortableOptionsInput/index.tsx:63
+msgid "Remove option"
+msgstr "Seçeneği kaldır"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -7013,6 +7468,7 @@ msgid "Require Billing Address"
 msgstr "Fatura Adresi Gerekli"
 
 #: src/components/common/QuestionsTable/index.tsx:118
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:79
 msgid "Required"
 msgstr "Gerekli"
 
@@ -7083,11 +7539,11 @@ msgstr "Sıfırlanıyor..."
 
 #: src/components/modals/OrganizerWebhookLogsModal/index.tsx:116
 msgid "Response"
-msgstr ""
+msgstr "Yanıt"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:168
 msgid "Response Details"
-msgstr ""
+msgstr "Yanıt ayrıntıları"
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:61
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:67
@@ -7116,6 +7572,14 @@ msgstr "Bu etkinliği yeniden görünür hale getirmek için geri yükleyin."
 msgid "Restore this organizer and make it active again."
 msgstr "Bu organizatörü geri yükleyin ve yeniden aktif hale getirin."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:102
+msgid "Restored {0} attendee(s)."
+msgstr "{0} katılımcı geri yüklendi."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:104
+msgid "Restored {0} question(s)."
+msgstr "{0} soru geri yüklendi."
+
 #: src/components/routes/admin/FailedJobs/index.tsx:199
 msgid "Retry"
 msgstr "Yeniden dene"
@@ -7137,6 +7601,14 @@ msgstr "Etkinliğe Dön"
 msgid "Return to Event Page"
 msgstr "Etkinlik Sayfasına Dön"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+msgid "Reuse"
+msgstr "Yeniden Kullan"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:145
+msgid "Reuse ({0})"
+msgstr "Yeniden Kullan ({0})"
+
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:235
 #: src/components/routes/admin/Attribution/index.tsx:137
@@ -7155,7 +7627,7 @@ msgstr "Daveti iptal et"
 
 #: src/components/common/WaitlistTable/index.tsx:78
 msgid "Revoke Offer"
-msgstr ""
+msgstr "Teklifi iptal et"
 
 #: src/components/modals/EditUserModal/index.tsx:93
 #: src/components/modals/InviteUserModal/index.tsx:64
@@ -7240,6 +7712,7 @@ msgstr "San Francisco"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
+#: src/components/modals/EditQuestionModal/index.tsx:159
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:132
@@ -7329,6 +7802,10 @@ msgstr "Hesap adı veya e-posta ile ara..."
 msgid "Search by attendee name, email or order #..."
 msgstr "Katılımcı adı, e-posta veya sipariş #'a göre ara..."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:98
+msgid "Search by email or attribute..."
+msgstr "E-posta veya özniteliğe göre ara..."
+
 #: src/components/routes/events/Dashboard/index.tsx:150
 #: src/components/routes/organizer/Events/index.tsx:47
 msgid "Search by event name..."
@@ -7342,6 +7819,13 @@ msgstr "Etkinlik başlığı veya organizatöre göre ara..."
 msgid "Search by job name or exception..."
 msgstr "İş adı veya istisnaya göre ara..."
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:107
+msgid "Search by label, name, or type..."
+msgstr "Etiket, ad veya türe göre ara..."
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:51
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:118
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:100
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:56
 msgid "Search by name or email..."
 msgstr "İsim veya e-posta ile ara..."
@@ -7365,6 +7849,14 @@ msgstr "Ada göre ara..."
 #: src/components/routes/admin/Orders/index.tsx:47
 msgid "Search by order ID, customer name, or email..."
 msgstr "Sipariş kimliği, müşteri adı veya e-posta ile arayın..."
+
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:46
+msgid "Search by question or event title..."
+msgstr "Soru veya etkinlik başlığına göre ara..."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:115
+msgid "Search by question title..."
+msgstr "Soru başlığına göre ara..."
 
 #: src/components/routes/admin/Messages/index.tsx:113
 msgid "Search by subject, event, or account..."
@@ -7428,6 +7920,11 @@ msgstr "Bir seviye seçin"
 msgid "Select Account"
 msgstr "Hesap Seç"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:192
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:189
+msgid "Select all"
+msgstr "Tümünü seç"
+
 #: src/components/modals/DuplicateEventModal/index.tsx:138
 msgid "Select All"
 msgstr "Tümünü Seç"
@@ -7488,6 +7985,11 @@ msgstr "Ürün Katmanı Seç"
 #: src/components/modals/SendMessageModal/index.tsx:323
 msgid "Select products"
 msgstr "Ürünleri seç"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:213
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:211
+msgid "Select row"
+msgstr "Satır seç"
 
 #: src/components/common/CheckIn/ScannerSelectionModal.tsx:25
 msgid "Select Scanner Type"
@@ -7754,6 +8256,11 @@ msgstr "Mevcut ürün miktarını göster"
 msgid "Show fewer platforms"
 msgstr "Daha az platform göster"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:136
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:133
+msgid "Show ignored"
+msgstr "Yok sayılanları göster"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Show marketing opt-in checkbox"
 msgstr "Pazarlama onay kutusunu göster"
@@ -7771,6 +8278,10 @@ msgstr "Daha fazla göster"
 msgid "Show more platforms"
 msgstr "Daha fazla platform göster"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:116
+msgid "Show processed"
+msgstr "İşlenmişleri göster"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:63
 msgid "Show tax and fees separately"
 msgstr "Vergi ve ücretleri ayrı göster"
@@ -7787,7 +8298,7 @@ msgstr "Müşteriye ödeme yaptıktan sonra sipariş özeti sayfasında gösteri
 msgid "Shown to the customer before they checkout"
 msgstr "Müşteriye ödeme yapmadan önce gösterilir"
 
-#: src/components/forms/QuestionForm/index.tsx:132
+#: src/components/forms/QuestionForm/index.tsx:266
 msgid "Shows common address fields, including country"
 msgstr "Ülke dahil olmak üzere ortak adres alanlarını gösterir"
 
@@ -7800,9 +8311,14 @@ msgstr "Kayıt Tarihi"
 msgid "Simpson"
 msgstr "Simpson"
 
-#: src/components/forms/QuestionForm/index.tsx:100
+#: src/components/forms/QuestionForm/index.tsx:234
 msgid "Single line text box"
 msgstr "Tek satır metin kutusu"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:66
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:72
+msgid "Single Select"
+msgstr "Tekli seçim"
 
 #: src/components/routes/welcome/index.tsx:497
 msgid "Skip this step"
@@ -7850,6 +8366,16 @@ msgstr "Tükendi"
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
 msgid "Something went wrong"
 msgstr "Bir şeyler yanlış gitti"
+
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:31
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:64
+msgid "Something went wrong while deleting the attribute definition"
+msgstr "Nitelik tanımı silinirken bir hata oluştu"
+
+#: src/components/routes/account/ManageAccount/sections/Contacts/index.tsx:37
+#: src/components/routes/contacts/ContactsAdmin/ContactsTab.tsx:91
+msgid "Something went wrong while deleting the contact"
+msgstr "Kişi silinirken bir hata oluştu"
 
 #: src/components/common/TaxAndFeeList/index.tsx:39
 msgid "Something went wrong while deleting the Tax or Fee"
@@ -7957,11 +8483,14 @@ msgstr "İstatistikler hesap oluşturma tarihine göre hesaplanır"
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:56
 #: src/components/forms/WebhookForm/index.tsx:157
 #: src/components/modals/EditUserModal/index.tsx:103
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:51
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:157
 #: src/components/routes/admin/Dashboard/index.tsx:405
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:293
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:153
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/LinkedQuestionsDrawer.tsx:68
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:88
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:62
 msgid "Status"
@@ -8064,8 +8593,7 @@ msgstr "Ürün Başarıyla Oluşturuldu"
 msgid "Successfully Created Promo Code"
 msgstr "Promosyon Kodu Başarıyla Oluşturuldu"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:46
-#: src/components/modals/EditQuestionModal/index.tsx:66
+#: src/components/modals/CreateQuestionModal/index.tsx:103
 msgid "Successfully Created Question"
 msgstr "Soru Başarıyla Oluşturuldu"
 
@@ -8156,11 +8684,15 @@ msgstr "Platform ücreti ayarları başarıyla güncellendi"
 
 #: src/components/modals/EditProductModal/index.tsx:95
 msgid "Successfully updated product"
-msgstr ""
+msgstr "Ürün başarıyla güncellendi"
 
 #: src/components/modals/EditPromoCodeModal/index.tsx:52
 msgid "Successfully Updated Promo Code"
 msgstr "Promosyon Kodu Başarıyla Güncellendi"
+
+#: src/components/modals/EditQuestionModal/index.tsx:116
+msgid "Successfully Updated Question"
+msgstr "Soru başarıyla güncellendi"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:45
 msgid "Successfully Updated Seo Settings"
@@ -8217,6 +8749,10 @@ msgstr "İsveççe"
 #: src/components/modals/SwitchOrganizerModal/index.tsx:46
 msgid "Switch Organizer"
 msgstr "Organizatör Değiştir"
+
+#: src/components/routes/contacts/ContactsAdmin/index.tsx:65
+msgid "Sync"
+msgstr "Senkronize et"
 
 #: src/components/routes/admin/Configurations/index.tsx:85
 msgid "System Default"
@@ -8339,6 +8875,11 @@ msgstr "Şablon başarıyla kaydedildi"
 #: src/components/layouts/OrganizerHomepage/index.tsx:335
 msgid "Terms of Service"
 msgstr "Hizmet Koşulları"
+
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:65
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:71
+msgid "Text"
+msgstr "Metin"
 
 #: src/components/common/ThemeColorControls/index.tsx:107
 msgid "Text may be hard to read"
@@ -8574,6 +9115,10 @@ msgstr "Bu etkinlik sona erdi"
 msgid "This event is not published yet"
 msgstr "Bu etkinlik henüz yayınlanmadı"
 
+#: src/components/forms/QuestionForm/index.tsx:144
+msgid "This field is linked to a reusable attribute"
+msgstr "Bu alan, yeniden kullanılabilir bir özniteliğe bağlıdır"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Bu bilgiler ödeme sayfasında, sipariş özeti sayfasında ve sipariş onayı e-postasında gösterilecektir."
@@ -8702,6 +9247,10 @@ msgstr "Bu, kullanıcılarınızla bildirimler ve iletişim için kullanılacakt
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Bu müşterilere görünmeyecektir, ancak iş ortağını tanımlamanıza yardımcı olur."
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:33
+msgid "Three things to review and sync, one per sub-tab:"
+msgstr "Gözden geçirilecek ve senkronize edilecek üç şey, her alt sekmede bir tane:"
 
 #: src/components/common/AttendeeTable/index.tsx:370
 #: src/components/routes/my-tickets/index.tsx:85
@@ -9034,10 +9583,14 @@ msgid "Twitch"
 msgstr "Twitch"
 
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:63
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:69
+#: src/components/routes/account/ManageAccount/sections/ContactAttributes/index.tsx:50
 #: src/components/routes/admin/Attribution/index.tsx:109
 #: src/components/routes/admin/Messages/index.tsx:134
 #: src/components/routes/admin/Messages/index.tsx:165
 #: src/components/routes/admin/Messages/index.tsx:287
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:151
 msgid "Type"
 msgstr "Tür"
 
@@ -9045,6 +9598,10 @@ msgstr "Tür"
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:104
 msgid "Type \"delete\" to confirm"
 msgstr "Onaylamak için \"sil\" yazın"
+
+#: src/components/common/SortableOptionsInput/index.tsx:126
+msgid "Type an option and press Enter"
+msgstr "Bir seçenek yazın ve Enter'a basın"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:58
 msgid "Type of ticket"
@@ -9067,7 +9624,7 @@ msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 msgid "Unable to create product. Please check your details"
 msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
-#: src/components/modals/CreateQuestionModal/index.tsx:61
+#: src/components/modals/CreateQuestionModal/index.tsx:118
 msgid "Unable to create question. Please check the your details"
 msgstr "Soru oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
@@ -9083,13 +9640,18 @@ msgstr "Katılımcı getirilemedi"
 msgid "Unable to join waitlist"
 msgstr "Bekleme listesine katılınamadı"
 
-#: src/components/modals/EditQuestionModal/index.tsx:84
+#: src/components/modals/EditQuestionModal/index.tsx:134
 msgid "Unable to update question. Please check the your details"
 msgstr "Soru güncellenemedi. Lütfen bilgilerinizi kontrol edin"
 
 #: src/components/routes/admin/Attribution/index.tsx:84
 msgid "Unattributed Accounts"
 msgstr "Atıfsız Hesaplar"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnlinkedAttendeesSubTab.tsx:168
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/UnmappedQuestionsSubTab.tsx:165
+msgid "Unignore ({0})"
+msgstr "Yoksaymayı kaldır ({0})"
 
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
@@ -9135,6 +9697,26 @@ msgstr "Sınırsız mevcut"
 msgid "Unlimited usages allowed"
 msgstr "Sınırsız kullanıma izin verildi"
 
+#: src/components/forms/QuestionForm/index.tsx:145
+msgid "Unlock field"
+msgstr "Alanın kilidini aç"
+
+#: src/components/forms/QuestionForm/index.tsx:82
+msgid "Unlock options"
+msgstr "Seçeneklerin kilidini aç"
+
+#: src/components/forms/QuestionForm/index.tsx:203
+msgid "Unlock this field and override the reusable attribute for this event only?"
+msgstr "Bu alanın kilidini açıp yalnızca bu etkinlik için yeniden kullanılabilir özniteliği geçersiz kılmak ister misiniz?"
+
+#: src/components/forms/QuestionForm/index.tsx:144
+msgid "Unlock to edit (this will change the field for this event only)"
+msgstr "Düzenlemek için kilidi aç (bu, alanı yalnızca bu etkinlik için değiştirir)"
+
+#: src/components/forms/QuestionForm/index.tsx:81
+msgid "Unlock to edit options for this event only"
+msgstr "Yalnızca bu etkinlik için seçenekleri düzenlemek üzere kilidi aç"
+
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:34
 msgid "Unpaid Order"
 msgstr "Ödenmemiş Sipariş"
@@ -9159,6 +9741,15 @@ msgstr "Yaklaşan"
 msgid "Upcoming Events"
 msgstr "Yaklaşan Etkinlikler"
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:129
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:190
+msgid "Update"
+msgstr "Güncelle"
+
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/ConflictsSubTab.tsx:128
+msgid "Update ({updateCount} update, {0} leave)"
+msgstr "Güncelle ({updateCount} güncelle, {0} bırak)"
+
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
 msgstr "{0} Güncelle"
@@ -9166,6 +9757,14 @@ msgstr "{0} Güncelle"
 #: src/components/modals/EditAffiliateModal/index.tsx:108
 msgid "Update Affiliate"
 msgstr "Bağlı Kuruluşu Güncelle"
+
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:98
+msgid "Update Attribute"
+msgstr "Niteliği güncelle"
+
+#: src/components/modals/EditContactModal/index.tsx:126
+msgid "Update Contact"
+msgstr "Kişiyi güncelle"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:69
 msgid "Update event name, description and dates"
@@ -9261,11 +9860,15 @@ msgstr "Tüm katılımcılar için alıcının bilgilerini kullanın"
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "Kenarlıklar, vurgular ve QR kod stillemesi için kullanılır"
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:152
+msgid "Used in"
+msgstr "Kullanılan"
+
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:154
 msgid "User"
 msgstr "Kullanıcı"
 
-#: src/components/common/GlobalMenu/index.tsx:53
+#: src/components/common/GlobalMenu/index.tsx:59
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:142
 msgid "User Management"
 msgstr "Kullanıcı Yönetimi"
@@ -9292,7 +9895,7 @@ msgstr "Kullanıcılar e-postalarını <0>Profil Ayarları</0>'nda değiştirebi
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 msgid "UTM Analytics"
 msgstr "UTM Analitiği"
 
@@ -9471,6 +10074,10 @@ msgstr "Etkinlik sayfasını görüntüle"
 msgid "View Event Page"
 msgstr "Etkinlik sayfasını görüntüle"
 
+#: src/components/routes/contacts/ContactsAdmin/ExtendedAttributesTab/index.tsx:170
+msgid "View linked questions"
+msgstr "Bağlı soruları görüntüle"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:113
 #: src/components/common/WebhookTable/index.tsx:113
 msgid "View logs"
@@ -9564,11 +10171,11 @@ msgstr "Bekleme listesi"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:295
 msgid "Waitlist Enabled"
-msgstr ""
+msgstr "Bekleme listesi etkinleştirildi"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:372
 msgid "Waitlist offer expired"
-msgstr ""
+msgstr "Bekleme listesi teklifi sona erdi"
 
 #: src/components/routes/admin/Configurations/index.tsx:212
 msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
@@ -9637,7 +10244,7 @@ msgstr "Birden fazla denemeden sonra KDV numaranızı doğrulayamadık. Arka pla
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:100
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName}."
-msgstr ""
+msgstr "{productDisplayName} için bir yer açılırsa sizi e-posta ile bilgilendireceğiz."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:427
 msgid "We'll send your tickets to this email"
@@ -9739,7 +10346,7 @@ msgstr "Kademeli Ürünler nedir?"
 msgid "What is a Category?"
 msgstr "Kategori nedir?"
 
-#: src/components/forms/QuestionForm/index.tsx:159
+#: src/components/forms/QuestionForm/index.tsx:326
 msgid "What products does this code apply to?"
 msgstr "Bu kod hangi ürünler için geçerli?"
 
@@ -9751,7 +10358,7 @@ msgstr "Bu kod hangi ürünler için geçerli? (Varsayılan olarak tümü için 
 msgid "What products should this capacity apply to?"
 msgstr "Bu kapasite hangi ürünler için geçerli olmalı?"
 
-#: src/components/forms/QuestionForm/index.tsx:179
+#: src/components/forms/QuestionForm/index.tsx:361
 msgid "What time will you be arriving?"
 msgstr "Hangi saatte geleceksiniz?"
 
@@ -9759,7 +10366,7 @@ msgstr "Hangi saatte geleceksiniz?"
 msgid "What type of event?"
 msgstr "Ne tür bir etkinlik?"
 
-#: src/components/forms/QuestionForm/index.tsx:170
+#: src/components/forms/QuestionForm/index.tsx:337
 msgid "What type of question is this?"
 msgstr "Bu ne tür bir soru?"
 
@@ -9781,7 +10388,7 @@ msgstr "Yeni bir katılımcı oluşturulduğunda"
 
 #: src/components/forms/WebhookForm/index.tsx:45
 msgid "When a new event is created"
-msgstr ""
+msgstr "Yeni bir etkinlik oluşturulduğunda"
 
 #: src/components/forms/WebhookForm/index.tsx:75
 msgid "When a new order is created"
@@ -9801,7 +10408,7 @@ msgstr "Bir ürün güncellendiğinde"
 
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:52
 msgid "When a product sells out, customers can join a waitlist to be notified when spots become available."
-msgstr ""
+msgstr "Bir ürün tükendiğinde, müşteriler yer açıldığında bildirim almak için bekleme listesine katılabilir."
 
 #: src/components/forms/WebhookForm/index.tsx:117
 msgid "When an attendee is cancelled"
@@ -9817,11 +10424,11 @@ msgstr "Bir katılımcı güncellendiğinde"
 
 #: src/components/forms/WebhookForm/index.tsx:57
 msgid "When an event is archived"
-msgstr ""
+msgstr "Bir etkinlik arşivlendiğinde"
 
 #: src/components/forms/WebhookForm/index.tsx:51
 msgid "When an event is updated"
-msgstr ""
+msgstr "Bir etkinlik güncellendiğinde"
 
 #: src/components/forms/WebhookForm/index.tsx:99
 msgid "When an order is cancelled"
@@ -9879,7 +10486,7 @@ msgstr "Bu check-in listesiyle hangi biletler ilişkilendirilmeli?"
 msgid "Who is organizing this event?"
 msgstr "Bu etkinliği kim organize ediyor?"
 
-#: src/components/forms/QuestionForm/index.tsx:151
+#: src/components/forms/QuestionForm/index.tsx:318
 msgid "Who should be asked this question?"
 msgstr "Bu soru kime sorulmalı?"
 
@@ -9899,16 +10506,20 @@ msgstr "Widget Ayarları"
 msgid "Working"
 msgstr "Çalışıyor"
 
+#: src/components/modals/CreateContactAttributeDefinitionModal/index.tsx:92
+#: src/components/modals/CreateContactModal/index.tsx:65
 #: src/components/modals/CreateProductCategoryModal/index.tsx:60
 #: src/components/modals/CreateProductModal/index.tsx:89
 #: src/components/modals/CreatePromoCodeModal/index.tsx:56
-#: src/components/modals/CreateQuestionModal/index.tsx:75
+#: src/components/modals/CreateQuestionModal/index.tsx:136
 #: src/components/modals/DuplicateEventModal/index.tsx:177
 #: src/components/modals/DuplicateProductModal/index.tsx:117
+#: src/components/modals/EditContactAttributeDefinitionModal/index.tsx:98
+#: src/components/modals/EditContactModal/index.tsx:126
 #: src/components/modals/EditProductCategoryModal/index.tsx:70
 #: src/components/modals/EditProductModal/index.tsx:114
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
-#: src/components/modals/EditQuestionModal/index.tsx:101
+#: src/components/modals/EditQuestionModal/index.tsx:159
 #: src/components/modals/JoinWaitlistModal/index.tsx:188
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
@@ -10136,6 +10747,10 @@ msgstr "Harika web siteniz 🎉"
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Giriş listeniz başarıyla oluşturuldu. Aşağıdaki bağlantıyı giriş personelinizle paylaşın."
 
+#: src/components/routes/contacts/ContactsAdmin/BackfillTab/BackfillHelpPanel.tsx:25
+msgid "Your contacts library unifies attendees across events. When you add a new contact attribute (like \"Dietary preference\") or start using contacts mid-way through your account's history, answers from past events don't retroactively flow in. Sync reconciles that history."
+msgstr "Kişi kitaplığınız katılımcıları etkinlikler arasında birleştirir. Yeni bir kişi özelliği eklediğinizde (\"Beslenme tercihi\") veya hesabınızın geçmişinin ortasında kişileri kullanmaya başladığınızda, geçmiş cevaplar geriye dönük akmaz. Sync uzlaştırır."
+
 #: src/components/layouts/Checkout/index.tsx:275
 msgid "Your current order will be lost."
 msgstr "Mevcut siparişiniz kaybolacak."
@@ -10272,7 +10887,7 @@ msgstr "KDV numaranız kaydettiğinizde doğrulanacak"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:374
 msgid "Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available."
-msgstr ""
+msgstr "Bekleme listesi teklifiniz sona erdi ve siparişinizi tamamlayamadık. Daha fazla yer açıldığında bildirim almak için bekleme listesine yeniden katılın."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:67
 msgid "YouTube"

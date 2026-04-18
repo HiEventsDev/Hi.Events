@@ -691,6 +691,7 @@ export interface Question {
     product_ids?: number[];
     belongs_to: string;
     is_hidden: boolean;
+    contact_attribute_definition_id?: number | null;
 }
 
 export interface CapacityAssignment {
@@ -744,6 +745,7 @@ export interface QuestionRequestData {
     options: string[];
     product_ids?: string[];
     belongs_to: string;
+    contact_attribute_definition_id?: number | null;
 }
 
 export interface Message {
@@ -1079,4 +1081,37 @@ export interface WaitlistStats {
     cancelled: number;
     expired: number;
     products: WaitlistProductStats[];
+}
+
+export interface Contact {
+    id?: number;
+    account_id?: number;
+    email: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    attributes?: Record<string, unknown>;
+    attributes_history?: ContactAttributeChange[];
+    created_at?: string;
+    updated_at?: string;
+    attendees?: Attendee[];
+}
+
+export interface ContactAttributeChange {
+    changed_at: string;
+    changed_by: number;
+    old_values: Record<string, unknown>;
+    new_values: Record<string, unknown>;
+}
+
+export interface ContactAttributeDefinition {
+    id?: number;
+    account_id?: number;
+    name: string;
+    label: string;
+    type: 'text' | 'select' | 'multi_select';
+    options?: string[] | null;
+    sort_order: number;
+    is_active: boolean;
+    linked_question_count?: number;
+    linked_event_count?: number;
 }

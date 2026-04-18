@@ -36,6 +36,7 @@ class CreateQuestionService
             QuestionDomainObjectAbstract::OPTIONS => $question->getOptions(),
             QuestionDomainObjectAbstract::IS_HIDDEN => $question->getIsHidden(),
             QuestionDomainObjectAbstract::DESCRIPTION => $this->purifier->purify($question->getDescription()),
+            QuestionDomainObjectAbstract::CONTACT_ATTRIBUTE_DEFINITION_ID => $question->getContactAttributeDefinitionId(),
         ], $productIds));
     }
 }

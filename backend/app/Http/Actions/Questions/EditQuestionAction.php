@@ -41,6 +41,7 @@ class EditQuestionAction extends BaseAction
                 'is_hidden' => $request->boolean('is_hidden'),
                 'belongs_to' => QuestionBelongsTo::fromName($request->input('belongs_to')),
                 'description' => $request->input('description'),
+                'contact_attribute_definition_id' => $request->input('contact_attribute_definition_id'),
             ]));
 
         return $this->resourceResponse(QuestionResource::class, $question);

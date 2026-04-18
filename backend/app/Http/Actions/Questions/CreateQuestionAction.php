@@ -34,6 +34,7 @@ class CreateQuestionAction extends BaseAction
             'belongs_to' => $request->input('belongs_to'),
             'is_hidden' => $request->boolean('is_hidden'),
             'description' => $request->input('description'),
+            'contact_attribute_definition_id' => $request->input('contact_attribute_definition_id'),
         ]));
 
         return $this->resourceResponse(

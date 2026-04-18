@@ -1,0 +1,58 @@
+@use '../../../styles/mixins.scss' as mixins;
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  [data-mantine-color-scheme="dark"] & {
+    background: var(--mantine-color-dark-6);
+    border-color: var(--mantine-color-dark-4);
+  }
+
+  &.dragging {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    border-color: var(--mantine-color-primary-5);
+    z-index: 100;
+  }
+}
+
+.dragHandle {
+  cursor: grab;
+  color: var(--mantine-color-gray-5);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  touch-action: none;
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+
+    [data-mantine-color-scheme="dark"] & {
+      color: var(--mantine-color-dark-1);
+    }
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.optionLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

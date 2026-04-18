@@ -170,6 +170,7 @@ class ClassGenerator
             Types::STRING, Types::TEXT, Types::DATE_MUTABLE, Types::TIME_MUTABLE, Types::DATETIMETZ_MUTABLE, Types::DATETIME_MUTABLE => $column->getDefault(),
             Types::INTEGER, Types::BIGINT, Types::SMALLINT => (int)$column->getDefault(),
             Types::FLOAT, Types::DECIMAL => (float)$column->getDefault(),
+            Types::JSON => $column->getDefault(),
             Types::GUID => self::NO_TYPE,
             Types::BOOLEAN => (bool)$column->getDefault(),
             default => throw new NoDefaultValueAvailableForGeneratedDoProperty(

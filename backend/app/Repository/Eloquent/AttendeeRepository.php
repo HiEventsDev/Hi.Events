@@ -43,7 +43,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
         $this->model->whereIn('orders.status', [
             OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
             OrderStatus::COMPLETED->name,
-            OrderStatus::CANCELLED->name
+            OrderStatus::CANCELLED->name,
         ]);
 
         $model = $this->model->limit(10000)->get();
@@ -52,11 +52,10 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
         return $this->handleResults($model);
     }
 
-
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            ['attendees.event_id', '=', $eventId]
+            ['attendees.event_id', '=', $eventId],
         ];
 
         if ($params->query) {
@@ -66,14 +65,14 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                         DB::raw(
                             sprintf(
                                 "(%s||' '||%s)",
-                                'attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME,
-                                'attendees.' . AttendeeDomainObjectAbstract::LAST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::LAST_NAME,
                             )
-                        ), 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                        ), 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -93,7 +92,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                 ->leftJoin('products', 'products.id', '=', 'attendees.product_id')
                 ->orderBy('products.title', $sortDirection);
         } else {
-            $this->model = $this->model->orderBy('attendees.' . $sortBy, $sortDirection);
+            $this->model = $this->model->orderBy('attendees.'.$sortBy, $sortDirection);
         }
 
         return $this->paginateWhere(
@@ -101,6 +100,32 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             limit: $params->per_page,
             page: $params->page,
         );
+    }
+
+    public function bulkUpdateContactLinkIgnoredAt(int $accountId, array $attendeeIds, ?string $timestamp): int
+    {
+        if (empty($attendeeIds)) {
+            return 0;
+        }
+
+        $scopedIds = DB::table('attendees')
+            ->join('events', 'events.id', '=', 'attendees.event_id')
+            ->where('events.account_id', $accountId)
+            ->whereIn('attendees.id', $attendeeIds)
+            ->whereNull('attendees.deleted_at')
+            ->pluck('attendees.id')
+            ->all();
+
+        if (empty($scopedIds)) {
+            return 0;
+        }
+
+        return DB::table('attendees')
+            ->whereIn('id', $scopedIds)
+            ->update([
+                AttendeeDomainObjectAbstract::CONTACT_LINK_IGNORED_AT => $timestamp,
+                AttendeeDomainObjectAbstract::UPDATED_AT => now(),
+            ]);
     }
 
     public function getAttendeesByCheckInShortId(string $shortId, QueryParamsDTO $params): Paginator
@@ -113,14 +138,14 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                         DB::raw(
                             sprintf(
                                 "(%s||' '||%s)",
-                                'attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME,
-                                'attendees.' . AttendeeDomainObjectAbstract::LAST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::LAST_NAME,
                             )
-                        ), 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                        ), 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -129,7 +154,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             ->join('product_check_in_lists', 'product_check_in_lists.product_id', '=', 'attendees.product_id')
             ->join('check_in_lists', 'check_in_lists.id', '=', 'product_check_in_lists.check_in_list_id')
             ->where('check_in_lists.short_id', $shortId)
-            ->whereIn('attendees.status',[AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
+            ->whereIn('attendees.status', [AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
 
         $this->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'));

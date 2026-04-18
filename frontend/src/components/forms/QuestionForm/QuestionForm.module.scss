@@ -24,3 +24,14 @@
 .optionButton {
 
 }
+
+.lockedField {
+  :global(input:disabled),
+  :global(.mantine-Input-input:disabled),
+  :global(.mantine-Select-input:disabled) {
+    background-color: var(--mantine-color-gray-0);
+    color: var(--mantine-color-gray-8);
+    opacity: 1;
+    cursor: default;
+  }
+}

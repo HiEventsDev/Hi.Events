@@ -5,13 +5,14 @@ namespace HiEvents\Services\Application\Handlers\Question;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Domain\Question\EditQuestionService;
+use HiEvents\Services\Domain\Question\QuestionContactAttributeLinker;
 use Throwable;
 
 class EditQuestionHandler
 {
     public function __construct(
-        private readonly EditQuestionService $editQuestionService,
-
+        private readonly EditQuestionService            $editQuestionService,
+        private readonly QuestionContactAttributeLinker $contactAttributeLinker,
     )
     {
     }
@@ -21,6 +22,12 @@ class EditQuestionHandler
      */
     public function handle(int $questionId, UpsertQuestionDTO $createQuestionDTO): QuestionDomainObject
     {
+        $this->contactAttributeLinker->validate(
+            eventId: $createQuestionDTO->event_id,
+            definitionId: $createQuestionDTO->contact_attribute_definition_id,
+            questionType: $createQuestionDTO->type,
+        );
+
         $question = (new QuestionDomainObject())
             ->setId($questionId)
             ->setTitle($createQuestionDTO->title)
@@ -30,7 +37,8 @@ class EditQuestionHandler
             ->setRequired($createQuestionDTO->required)
             ->setOptions($createQuestionDTO->options)
             ->setIsHidden($createQuestionDTO->is_hidden)
-            ->setDescription($createQuestionDTO->description);
+            ->setDescription($createQuestionDTO->description)
+            ->setContactAttributeDefinitionId($createQuestionDTO->contact_attribute_definition_id);
 
         return $this->editQuestionService->editQuestion(
             question: $question,

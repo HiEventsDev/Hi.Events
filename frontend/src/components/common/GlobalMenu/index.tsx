@@ -1,6 +1,7 @@
 import {Avatar, Menu, UnstyledButton} from "@mantine/core";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {
+    IconAddressBook,
     IconLifebuoy,
     IconLogout,
     IconPlus,
@@ -45,6 +46,11 @@ export const GlobalMenu = () => {
             label: t`Account Settings`,
             icon: IconSettingsCog,
             link: `/account/settings`,
+        },
+        {
+            label: t`Contacts`,
+            icon: IconAddressBook,
+            link: `/account/contacts`,
         },
     ];
 

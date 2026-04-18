@@ -86,6 +86,12 @@ class Handler extends ExceptionHandler
             ], 404);
         }
 
+        if ($exception instanceof ResourceConflictException) {
+            return response()->json([
+                'message' => $exception->getMessage() ?: 'Resource conflict',
+            ], 409);
+        }
+
         return parent::render($request, $exception);
     }
 }

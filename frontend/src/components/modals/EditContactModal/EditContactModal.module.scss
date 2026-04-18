@@ -1,0 +1,11 @@
+@use '../../../styles/mixins.scss' as mixins;
+
+.attributesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantine-spacing-sm);
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
