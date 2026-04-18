@@ -5,6 +5,7 @@ export const googleTagManagerPlugin: TrackingPixelPlugin = {
 
     initialize(containerId: string) {
         if (typeof window === 'undefined') return;
+        if (document.querySelector('script[data-tracking-pixel="gtm"]')) return;
 
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({

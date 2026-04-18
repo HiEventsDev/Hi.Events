@@ -45,6 +45,14 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                         }
                     }
                 }
+
+                $enabledPixels = collect($pixels)->filter(fn ($p) => !empty($p['enabled']));
+                if ($enabledPixels->isNotEmpty() && !$this->input('tracking_consent_acknowledged')) {
+                    $validator->errors()->add(
+                        'tracking_consent_acknowledged',
+                        __('You must acknowledge your data controller responsibilities before enabling tracking pixels.')
+                    );
+                }
             },
         ];
     }

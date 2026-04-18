@@ -15,8 +15,9 @@ export const CookieConsentBanner = ({onConsent}: CookieConsentBannerProps) => {
 
     const text = getConfig(
         'VITE_COOKIE_CONSENT_TEXT',
-        t`This site uses cookies for analytics purposes.`
+        t`We use cookies to help us understand how the site is used and to improve your experience.`
     );
+    const privacyUrl = getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-cookie-banner');
 
     const handleAccept = () => {
         onConsent(true);
@@ -41,7 +42,17 @@ export const CookieConsentBanner = ({onConsent}: CookieConsentBannerProps) => {
                 <div className={classes.iconWrapper}>
                     <IconCookie size={20}/>
                 </div>
-                <p className={classes.text}>{text}</p>
+                <p className={classes.text}>
+                    {text}
+                    {privacyUrl && (
+                        <>
+                            {' '}
+                            <a href={privacyUrl as string} target="_blank" rel="noopener noreferrer" className={classes.privacyLink}>
+                                {t`Privacy Policy`}
+                            </a>
+                        </>
+                    )}
+                </p>
             </div>
             <div className={classes.actions}>
                 <button

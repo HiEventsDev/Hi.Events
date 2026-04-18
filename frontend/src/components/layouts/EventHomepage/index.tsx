@@ -54,19 +54,19 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
 
-    const {consentPending, onConsent} = useOrganizerTrackingPixels(
+    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
         event?.organizer?.settings?.tracking_pixels
     );
 
     useEffect(() => {
-        if (event && hasActivePixels()) {
+        if (event && consentGranted && hasActivePixels()) {
             trackPixelEvent({
                 eventName: 'ViewContent',
                 contentName: event.title,
                 contentId: event.id,
             });
         }
-    }, [event?.id, consentPending]);
+    }, [event?.id, consentGranted]);
 
     useEffect(() => {
         let showTimer: NodeJS.Timeout;

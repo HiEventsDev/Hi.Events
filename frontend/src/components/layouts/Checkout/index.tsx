@@ -147,22 +147,22 @@ const Checkout = () => {
         }
     }, [blocker.state]);
 
-    const {consentPending, onConsent} = useOrganizerTrackingPixels(
+    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
         publicEvent?.organizer?.settings?.tracking_pixels
     );
 
     useEffect(() => {
-        if (event && orderIsReserved && hasActivePixels()) {
+        if (event && orderIsReserved && consentGranted && hasActivePixels()) {
             trackPixelEvent({
                 eventName: 'InitiateCheckout',
                 contentName: event.title,
                 contentId: event.id,
             });
         }
-    }, [event?.id, orderIsReserved]);
+    }, [event?.id, orderIsReserved, consentGranted]);
 
     useEffect(() => {
-        if (!event || !order || !hasActivePixels()) return;
+        if (!event || !order || !consentGranted || !hasActivePixels()) return;
         if (!orderIsCompleted && !orderIsAwaitingOfflinePayment) return;
 
         const key = `purchase_tracked_${order.short_id}`;
@@ -180,7 +180,7 @@ const Checkout = () => {
         if (typeof sessionStorage !== 'undefined') {
             sessionStorage.setItem(key, '1');
         }
-    }, [order?.status, order?.short_id, consentPending]);
+    }, [order?.status, order?.short_id, consentGranted]);
 
     // Get accent color from event settings, derive mode from homepage background
     const homepageSettings = event?.settings?.homepage_theme_settings;
