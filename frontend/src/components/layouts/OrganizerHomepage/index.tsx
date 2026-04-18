@@ -18,6 +18,8 @@ import {getConfig} from "../../../utilites/config.ts";
 import {Pagination} from "../../common/Pagination";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
 import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
+import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
+import {CookieConsentBanner} from "../../common/CookieConsentBanner";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -45,6 +47,10 @@ export const OrganizerHomepage = ({
                                   }: OrganizerHomepageProps) => {
     const navigate = useNavigate();
     const [contactModalOpen, setContactModalOpen] = useState(false);
+
+    const {consentPending, onConsent} = useOrganizerTrackingPixels(
+        organizer?.settings?.tracking_pixels
+    );
 
     if (!organizer) {
         return null;
@@ -353,6 +359,9 @@ export const OrganizerHomepage = ({
                         organizer={organizer}
                     />
                 </div>
+                {consentPending && (
+                    <CookieConsentBanner onConsent={onConsent}/>
+                )}
             </main>
         </>
     );
