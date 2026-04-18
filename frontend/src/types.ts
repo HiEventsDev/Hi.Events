@@ -1098,9 +1098,10 @@ export interface Contact {
 
 export interface ContactAttributeChange {
     changed_at: string;
-    changed_by: number;
+    changed_by: number | null;
     old_values: Record<string, unknown>;
     new_values: Record<string, unknown>;
+    source_question_answer_ids?: number[];
 }
 
 export interface ContactAttributeDefinition {
