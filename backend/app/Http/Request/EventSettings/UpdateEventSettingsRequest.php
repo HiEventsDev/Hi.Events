@@ -4,6 +4,7 @@ namespace HiEvents\Http\Request\EventSettings;
 
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\Http\Request\BaseRequest;
@@ -98,6 +99,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.background' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
             'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
             'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
+            'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
@@ -147,6 +149,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.background' => $colorMessage,
             'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
             'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
+            'homepage_theme_settings.font_family.in' => __('The selected font is not supported.'),
         ];
     }
 }

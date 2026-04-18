@@ -19,7 +19,9 @@ import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
+import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {validateThemeSettings} from "../../../../utilites/themeUtils.ts";
+import {DEFAULT_HOMEPAGE_FONT} from "../../../../constants/homepageFonts.ts";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
@@ -38,7 +40,7 @@ const HomepageDesigner = () => {
     const [iframeSrc, setIframeSrc] = useState<string | null>(null);
     const [iframeLoaded, setIframeLoaded] = useState(false);
     const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
-    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'colors', 'button']);
+    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'colors', 'typography', 'button']);
 
     const existingCover = eventImagesQuery.data?.find((image) => image.type === 'EVENT_COVER');
 
@@ -49,6 +51,7 @@ const HomepageDesigner = () => {
                 background: '#f5f3ff',
                 mode: 'light',
                 background_type: 'COLOR',
+                font_family: DEFAULT_HOMEPAGE_FONT,
             },
             continue_button_text: '',
         }
@@ -237,6 +240,24 @@ const HomepageDesigner = () => {
                                         </Stack>
                                     </fieldset>
                                 </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+
+                        <Accordion.Item value="typography" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconTypography size={20} />}>
+                                <Text fw={500}>{t`Typography`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending} className={classes.fieldset}>
+                                    <ThemeFontControl
+                                        value={form.values.homepage_theme_settings.font_family}
+                                        onChange={(fontFamily) => form.setFieldValue('homepage_theme_settings', {
+                                            ...form.values.homepage_theme_settings,
+                                            font_family: fontFamily,
+                                        })}
+                                        disabled={eventSettingsQuery.isLoading || updateMutation.isPending}
+                                    />
+                                </fieldset>
                             </Accordion.Panel>
                         </Accordion.Item>
 

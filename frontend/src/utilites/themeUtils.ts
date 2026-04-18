@@ -1,4 +1,5 @@
 import {HomepageThemeSettings} from "../types.ts";
+import {buildHomepageFontStack, DEFAULT_HOMEPAGE_FONT} from "../constants/homepageFonts.ts";
 
 export interface DerivedThemeColors {
     surface: string;
@@ -23,6 +24,7 @@ export interface ThemeCSSVariables {
     '--theme-accent-tint-10': string;
     '--theme-accent-tint-15': string;
     '--theme-accent-tint-20': string;
+    '--theme-font-family': string;
 }
 
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
@@ -152,6 +154,7 @@ export function computeThemeVariables(settings: HomepageThemeSettings): ThemeCSS
         '--theme-accent-tint-10': `color-mix(in srgb, ${settings.accent} 10%, ${derived.surface})`,
         '--theme-accent-tint-15': `color-mix(in srgb, ${settings.accent} 15%, ${derived.surface})`,
         '--theme-accent-tint-20': `color-mix(in srgb, ${settings.accent} 20%, ${derived.surface})`,
+        '--theme-font-family': buildHomepageFontStack(settings.font_family),
     };
 }
 
@@ -161,6 +164,7 @@ export function getDefaultThemeSettings(): HomepageThemeSettings {
         background: '#f5f3ff',
         mode: 'light',
         background_type: 'COLOR',
+        font_family: DEFAULT_HOMEPAGE_FONT,
     };
 }
 
@@ -178,6 +182,7 @@ export function validateThemeSettings(
         background: settings.background || defaults.background,
         mode: settings.mode || detectMode(settings.background || defaults.background),
         background_type: settings.background_type || defaults.background_type,
+        font_family: settings.font_family || defaults.font_family,
     };
 }
 

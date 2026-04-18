@@ -17,6 +17,7 @@ import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
 import {Pagination} from "../../common/Pagination";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
+import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -85,6 +86,10 @@ export const OrganizerHomepage = ({
     const cssVars = computeThemeVariables(themeSettings);
     const backgroundType = themeSettings.background_type;
 
+    useEffect(() => {
+        ensureHomepageFontLoaded(themeSettings.font_family);
+    }, [themeSettings.font_family]);
+
     const themeStyles = {
         '--organizer-bg-color': themeSettings.background,
         '--organizer-content-bg-color': cssVars['--theme-surface'],
@@ -96,6 +101,8 @@ export const OrganizerHomepage = ({
         '--organizer-accent-soft': cssVars['--theme-accent-soft'],
         '--organizer-accent-muted': cssVars['--theme-accent-muted'],
         '--organizer-border-color': cssVars['--theme-border'],
+        '--theme-font-family': cssVars['--theme-font-family'],
+        fontFamily: cssVars['--theme-font-family'],
     } as React.CSSProperties;
 
     return (
