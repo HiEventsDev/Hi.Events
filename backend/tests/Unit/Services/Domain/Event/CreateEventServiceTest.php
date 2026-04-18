@@ -364,6 +364,14 @@ class CreateEventServiceTest extends TestCase
                 'background_type' => HomepageBackgroundType::COLOR->name,
                 'font_family' => 'Inter',
             ]);
+        $organizerSettings->shouldReceive('getDefaultAttendeeDetailsCollectionMethod')
+            ->andReturn('per_order');
+        $organizerSettings->shouldReceive('getDefaultShowMarketingOptIn')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultPassPlatformFeeToBuyer')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowAttendeeSelfEdit')
+            ->andReturn(false);
 
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')
