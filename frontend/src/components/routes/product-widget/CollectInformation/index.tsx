@@ -19,8 +19,9 @@ import {useGetOrderPublic} from "../../../../queries/useGetOrderPublic.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {useGetEventQuestionsPublic} from "../../../../queries/useGetEventQuestionsPublic.ts";
 import {CheckoutOrderQuestions, CheckoutProductQuestions} from "../../../common/CheckoutQuestion";
-import {Event, IdParam, Question} from "../../../../types.ts";
-import {useEffect, useState} from "react";
+import {Event, IdParam, Question, QuestionType} from "../../../../types.ts";
+import {contactClientPublic} from "../../../../api/contact-public.client.ts";
+import {useEffect, useRef, useState} from "react";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
@@ -208,6 +209,119 @@ export const CollectInformation = () => {
             copyDetailsToAttendees('none');
         }
     }, [form.values.order.first_name, form.values.order.last_name, form.values.order.email]);
+
+    const isResponseEmpty = (response: any): boolean => {
+        if (response === null || response === undefined) return true;
+        if (typeof response !== 'object') return response === '';
+        if ('answer' in response) {
+            const a = response.answer;
+            if (Array.isArray(a)) return a.length === 0;
+            return a === null || a === undefined || a === '';
+        }
+        const addressKeys = ['address_line_1', 'address_line_2', 'city', 'state_or_region', 'zip_or_postal_code', 'country'];
+        return !addressKeys.some(k => response[k]);
+    };
+
+    const toResponseObject = (questionType: string | undefined, value: unknown): Record<string, any> => {
+        if (questionType === QuestionType.ADDRESS && value && typeof value === 'object') {
+            return value as Record<string, any>;
+        }
+        if (questionType === QuestionType.CHECKBOX) {
+            if (Array.isArray(value)) return {answer: value};
+            if (typeof value === 'string' && value) return {answer: [value]};
+            return {answer: []};
+        }
+        if (Array.isArray(value)) return {answer: value.join(', ')};
+        return {answer: value == null ? '' : String(value)};
+    };
+
+    const applyContactToOrder = (result: {first_name: string | null; last_name: string | null; question_answers: Record<string, unknown>}) => {
+        const current = form.values.order;
+        const updates: any = {};
+        if (!current.first_name?.trim() && result.first_name) updates.first_name = result.first_name;
+        if (!current.last_name?.trim() && result.last_name) updates.last_name = result.last_name;
+        if (!current.email_confirmation?.trim() && current.email) updates.email_confirmation = current.email;
+
+        const updatedQuestions = (current.questions as any[] || []).map((q: any) => {
+            const value = result.question_answers?.[String(q.question_id)];
+            if (value === undefined) return q;
+            if (!isResponseEmpty(q.response)) return q;
+            const question = orderQuestions?.find(oq => oq.id === q.question_id);
+            return {...q, response: toResponseObject(question?.type, value)};
+        });
+
+        form.setValues({
+            ...form.values,
+            order: {
+                ...current,
+                ...updates,
+                questions: updatedQuestions,
+            },
+        });
+    };
+
+    const applyContactToProduct = (productIndex: number, result: {first_name: string | null; last_name: string | null; question_answers: Record<string, unknown>}) => {
+        const current = form.values.products[productIndex];
+        if (!current) return;
+        const updates: any = {};
+        if (!current.first_name?.trim() && result.first_name) updates.first_name = result.first_name;
+        if (!current.last_name?.trim() && result.last_name) updates.last_name = result.last_name;
+        if (!current.email_confirmation?.trim() && current.email) updates.email_confirmation = current.email;
+
+        const updatedQuestions = (current.questions as any[] || []).map((q: any) => {
+            const value = result.question_answers?.[String(q.question_id)];
+            if (value === undefined) return q;
+            if (!isResponseEmpty(q.response)) return q;
+            const question = productQuestions?.find(pq => pq.id === q.question_id);
+            return {...q, response: toResponseObject(question?.type, value)};
+        });
+
+        const updatedProducts = form.values.products.map((p, i) =>
+            i === productIndex ? {...p, ...updates, questions: updatedQuestions} : p
+        );
+
+        form.setValues({
+            ...form.values,
+            products: updatedProducts,
+        });
+    };
+
+    const lookupCacheRef = useRef<Map<string, any | null>>(new Map());
+    const runLookup = async (email: string, apply: (r: any) => void) => {
+        const key = email.trim().toLowerCase();
+        if (!key || !isEmailValid(key) || !eventId) return;
+        if (lookupCacheRef.current.has(key)) {
+            const cached = lookupCacheRef.current.get(key);
+            if (cached) apply(cached);
+            return;
+        }
+        try {
+            const result = await contactClientPublic.lookupByEmail(Number(eventId), key);
+            lookupCacheRef.current.set(key, result.found ? result : null);
+            if (result.found) apply(result);
+        } catch {
+            // swallow — autofill failures should not block checkout
+        }
+    };
+
+    // Debounced order email lookup
+    useEffect(() => {
+        const email = form.values.order.email;
+        if (!isEmailValid(email)) return;
+        const handle = setTimeout(() => { void runLookup(email, applyContactToOrder); }, 400);
+        return () => clearTimeout(handle);
+    }, [form.values.order.email]);
+
+    // Debounced per-attendee email lookup
+    useEffect(() => {
+        const handles = form.values.products.map((p, idx) => {
+            if (!isEmailValid(p.email ?? '')) return null;
+            return setTimeout(() => {
+                void runLookup(p.email, (r) => applyContactToProduct(idx, r));
+            }, 400);
+        });
+        return () => handles.forEach(h => h && clearTimeout(h));
+    }, [form.values.products.map(p => p.email).join('|')]);
 
     const mutation = useMutation({
         mutationFn: (orderData: FinaliseOrderPayload) => orderClientPublic.finaliseOrder(Number(eventId), String(orderShortId), orderData),
@@ -431,21 +545,7 @@ export const CollectInformation = () => {
                     <InputGroup>
                         <TextInput
                             withAsterisk
-                            label={t`First Name`}
-                            placeholder={t`First name`}
-                            {...form.getInputProps("order.first_name")}
-                        />
-                        <TextInput
-                            withAsterisk
-                            label={t`Last Name`}
-                            placeholder={t`Last Name`}
-                            {...form.getInputProps("order.last_name")}
-                        />
-                    </InputGroup>
-
-                    <InputGroup>
-                        <TextInput
-                            withAsterisk
+                            autoFocus
                             type={"email"}
                             label={t`Email Address`}
                             placeholder={t`Email Address`}
@@ -459,6 +559,21 @@ export const CollectInformation = () => {
                             placeholder={t`Confirm Email Address`}
                             rightSection={isEmailValid(form.values.order.email_confirmation) ? <EmailCheckIcon/> : null}
                             {...form.getInputProps("order.email_confirmation")}
+                        />
+                    </InputGroup>
+
+                    <InputGroup>
+                        <TextInput
+                            withAsterisk
+                            label={t`First Name`}
+                            placeholder={t`First name`}
+                            {...form.getInputProps("order.first_name")}
+                        />
+                        <TextInput
+                            withAsterisk
+                            label={t`Last Name`}
+                            placeholder={t`Last Name`}
+                            {...form.getInputProps("order.last_name")}
                         />
                     </InputGroup>
 
@@ -505,6 +620,14 @@ export const CollectInformation = () => {
                                 </div>
                             )}
                         </div>
+                    )}
+
+                    {event?.settings?.show_marketing_opt_in && (
+                        <Checkbox
+                            mt="md"
+                            label={t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
+                            {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
+                        />
                     )}
 
                     {requireBillingAddress && (
@@ -560,14 +683,6 @@ export const CollectInformation = () => {
                     )}
 
                     {orderQuestions && <CheckoutOrderQuestions form={form} questions={orderQuestions}/>}
-
-                    {event?.settings?.show_marketing_opt_in && (
-                        <Checkbox
-                            mt="md"
-                            label={t`Keep me updated on news and events from ${event?.organizer?.name || t`this organizer`}`}
-                            {...form.getInputProps('order.opted_into_marketing', {type: 'checkbox'})}
-                        />
-                    )}
                 </Card>
 
                 {orderItems?.map(orderItem => {
@@ -643,21 +758,6 @@ export const CollectInformation = () => {
                                                 <InputGroup>
                                                     <TextInput
                                                         withAsterisk
-                                                        label={t`First Name`}
-                                                        placeholder={t`First name`}
-                                                        {...form.getInputProps(`products.${currentProductIndex}.first_name`)}
-                                                    />
-                                                    <TextInput
-                                                        withAsterisk
-                                                        label={t`Last Name`}
-                                                        placeholder={t`Last Name`}
-                                                        {...form.getInputProps(`products.${currentProductIndex}.last_name`)}
-                                                    />
-                                                </InputGroup>
-
-                                                <InputGroup>
-                                                    <TextInput
-                                                        withAsterisk
                                                         type={"email"}
                                                         label={t`Email Address`}
                                                         placeholder={t`Email Address`}
@@ -673,6 +773,21 @@ export const CollectInformation = () => {
                                                         rightSection={isEmailValid(form.values.products[currentProductIndex]?.email_confirmation || '') ?
                                                             <EmailCheckIcon/> : null}
                                                         {...form.getInputProps(`products.${currentProductIndex}.email_confirmation`)}
+                                                    />
+                                                </InputGroup>
+
+                                                <InputGroup>
+                                                    <TextInput
+                                                        withAsterisk
+                                                        label={t`First Name`}
+                                                        placeholder={t`First name`}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.first_name`)}
+                                                    />
+                                                    <TextInput
+                                                        withAsterisk
+                                                        label={t`Last Name`}
+                                                        placeholder={t`Last Name`}
+                                                        {...form.getInputProps(`products.${currentProductIndex}.last_name`)}
                                                     />
                                                 </InputGroup>
                                             </>

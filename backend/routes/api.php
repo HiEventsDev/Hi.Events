@@ -555,6 +555,10 @@ $router->prefix('/public')->group(
         // Questions
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);
 
+        // Contact lookup (autofill on checkout)
+        $router->post('/events/{event_id}/contact-lookup', \HiEvents\Http\Actions\Contacts\Public\LookupContactByEmailPublicAction::class)
+            ->middleware('throttle:30,1');
+
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
 
