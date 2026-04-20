@@ -17,7 +17,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const CHECKED_IN_BY = 'checked_in_by';
     final public const CHECKED_OUT_BY = 'checked_out_by';
     final public const PRODUCT_PRICE_ID = 'product_price_id';
-    final public const CONTACT_ID = 'contact_id';
     final public const SHORT_ID = 'short_id';
     final public const FIRST_NAME = 'first_name';
     final public const LAST_NAME = 'last_name';
@@ -30,7 +29,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     final public const DELETED_AT = 'deleted_at';
     final public const LOCALE = 'locale';
     final public const NOTES = 'notes';
-    final public const CONTACT_LINK_IGNORED_AT = 'contact_link_ignored_at';
 
     protected int $id;
     protected int $order_id;
@@ -39,7 +37,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?int $checked_in_by = null;
     protected ?int $checked_out_by = null;
     protected int $product_price_id;
-    protected ?int $contact_id = null;
     protected string $short_id;
     protected string $first_name = '';
     protected string $last_name = '';
@@ -52,7 +49,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?string $deleted_at = null;
     protected string $locale = 'en';
     protected ?string $notes = null;
-    protected ?string $contact_link_ignored_at = null;
 
     public function toArray(): array
     {
@@ -64,7 +60,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'checked_in_by' => $this->checked_in_by ?? null,
                     'checked_out_by' => $this->checked_out_by ?? null,
                     'product_price_id' => $this->product_price_id ?? null,
-                    'contact_id' => $this->contact_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'first_name' => $this->first_name ?? null,
                     'last_name' => $this->last_name ?? null,
@@ -77,7 +72,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
                     'deleted_at' => $this->deleted_at ?? null,
                     'locale' => $this->locale ?? null,
                     'notes' => $this->notes ?? null,
-                    'contact_link_ignored_at' => $this->contact_link_ignored_at ?? null,
                 ];
     }
 
@@ -156,17 +150,6 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getProductPriceId(): int
     {
         return $this->product_price_id;
-    }
-
-    public function setContactId(?int $contact_id): self
-    {
-        $this->contact_id = $contact_id;
-        return $this;
-    }
-
-    public function getContactId(): ?int
-    {
-        return $this->contact_id;
     }
 
     public function setShortId(string $short_id): self
@@ -299,16 +282,5 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     public function getNotes(): ?string
     {
         return $this->notes;
-    }
-
-    public function setContactLinkIgnoredAt(?string $contact_link_ignored_at): self
-    {
-        $this->contact_link_ignored_at = $contact_link_ignored_at;
-        return $this;
-    }
-
-    public function getContactLinkIgnoredAt(): ?string
-    {
-        return $this->contact_link_ignored_at;
     }
 }
