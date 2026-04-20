@@ -40,7 +40,7 @@ class ImageStorageService
             file: $image,
             name: $filename,
             options: [
-                'visibility' => 'public',
+                'visibility' => env('AWS_PUBLIC_VISIBILITY', 'public'),
             ],
         );
 
