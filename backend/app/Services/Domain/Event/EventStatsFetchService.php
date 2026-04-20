@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Event;
 
 use Carbon\Carbon;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsResponseDTO;
 use HiEvents\Services\Domain\Event\DTO\EventCheckInStatsResponseDTO;
@@ -14,12 +15,22 @@ readonly class EventStatsFetchService
 {
     public function __construct(
         private DatabaseManager $db,
+        private EventRepositoryInterface $eventRepository,
     )
     {
     }
 
     public function getEventStats(EventStatsRequestDTO $requestData): EventStatsResponseDTO
     {
+        if ($requestData->start_date === null || $requestData->end_date === null) {
+            [$startDate, $endDate] = $this->resolveStatsDateRange(
+                $requestData->event_id,
+                $requestData->date_range_preset
+            );
+            $requestData->start_date = $startDate;
+            $requestData->end_date = $endDate;
+        }
+
         $eventId = $requestData->event_id;
 
         // Aggregate total statistics for the event for all time
@@ -111,6 +122,53 @@ readonly class EventStatsFetchService
                 total_refunded: $result->total_refunded,
             );
         });
+    }
+
+    private function resolveStatsDateRange(int $eventId, string $preset): array
+    {
+        $event = $this->eventRepository->findById($eventId);
+
+        $bounds = $this->db->selectOne(
+            'SELECT MIN(date) as min_date, MAX(date) as max_date
+             FROM event_daily_statistics
+             WHERE event_id = :eventId AND deleted_at IS NULL',
+            ['eventId' => $eventId]
+        );
+
+        $candidates = array_filter([
+            $event->getStartDate() ? Carbon::parse($event->getStartDate()) : null,
+            $bounds?->min_date ? Carbon::parse($bounds->min_date) : null,
+        ]);
+        $adjustedStart = $candidates ? min($candidates) : Carbon::now()->subDays(7);
+
+        switch ($preset) {
+            case 'week':
+                $endDate = (clone $adjustedStart)->addDays(7);
+                break;
+            case 'month':
+                $endDate = (clone $adjustedStart)->addDays(30);
+                break;
+            case 'quarter':
+                $endDate = (clone $adjustedStart)->addDays(90);
+                break;
+            case 'event':
+                $eventEnd = $event->getEndDate() ? Carbon::parse($event->getEndDate()) : null;
+                $endCandidates = array_filter([
+                    $eventEnd,
+                    $bounds?->max_date ? Carbon::parse($bounds->max_date) : null,
+                    (!$eventEnd || $eventEnd->isFuture()) ? Carbon::now() : null,
+                ]);
+                $endDate = $endCandidates ? max($endCandidates) : Carbon::now();
+                break;
+            default: // 'last_30_days'
+                $adjustedStart = Carbon::now()->subDays(30);
+                $endDate = Carbon::now();
+        }
+
+        return [
+            $adjustedStart->format('Y-m-d H:i:s'),
+            $endDate->format('Y-m-d H:i:s'),
+        ];
     }
 
     public function getCheckedInStats(int $eventId): EventCheckInStatsResponseDTO

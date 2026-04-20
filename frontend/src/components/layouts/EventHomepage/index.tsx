@@ -33,6 +33,9 @@ import {
 import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
+import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
+import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
+import {CookieConsentBanner} from "../../common/CookieConsentBanner";
 import {removeTransparency} from "../../../utilites/colorHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
@@ -50,6 +53,20 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
+
+    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
+        event?.organizer?.settings?.tracking_pixels
+    );
+
+    useEffect(() => {
+        if (event && consentGranted && hasActivePixels()) {
+            trackPixelEvent({
+                eventName: 'ViewContent',
+                contentName: event.title,
+                contentId: event.id,
+            });
+        }
+    }, [event?.id, consentGranted]);
 
     useEffect(() => {
         let showTimer: NodeJS.Timeout;
@@ -627,6 +644,9 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         organizer={organizer}
                     />
                 </div>
+                {consentPending && (
+                    <CookieConsentBanner onConsent={onConsent}/>
+                )}
             </main>
         </>
     );

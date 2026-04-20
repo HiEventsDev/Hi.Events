@@ -40,6 +40,13 @@ export const LanguageSwitcher = () => {
                 return t`Polish`;
             case "se":
                 return t`Swedish`;
+            default:
+                // Defensive fallback: if a new locale is added to SupportedLocales
+                // but not handled here, return the locale code itself rather than
+                // undefined. An undefined label propagates into Mantine's Combobox
+                // `defaultOptionsFilter`, which calls `.toLowerCase()` on it and
+                // throws during SSR, 500-ing every auth page.
+                return locale;
         }
     };
 
