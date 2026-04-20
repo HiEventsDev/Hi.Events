@@ -43,6 +43,9 @@ class UpdateCheckInListService
                     CheckInListDomainObjectAbstract::ACTIVATES_AT => $checkInList->getActivatesAt()
                         ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                         : null,
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
                 ],
                 where: [
                     CheckInListDomainObjectAbstract::ID => $checkInList->getId(),

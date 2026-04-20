@@ -42,8 +42,10 @@ use HiEvents\Http\Actions\CheckInLists\GetCheckInListsAction;
 use HiEvents\Http\Actions\CheckInLists\Public\CreateAttendeeCheckInPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\DeleteAttendeeCheckInPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeePublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeeDetailPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
+use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListStatsPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
@@ -535,8 +537,10 @@ $router->prefix('/public')->group(
 
         // Check-In
         $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
+        $router->get('/check-in-lists/{check_in_list_short_id}/stats', GetCheckInListStatsPublicAction::class);
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees', GetCheckInListAttendeesPublicAction::class);
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}', GetCheckInListAttendeePublicAction::class);
+        $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/detail', GetCheckInListAttendeeDetailPublicAction::class);
         $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
 

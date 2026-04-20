@@ -1,0 +1,322 @@
+@use "../../../../styles/mixins";
+
+.wrap {
+  flex: 1;
+  background: var(--hi-color-gray);
+  overflow-y: auto;
+  padding: 16px 16px calc(120px + env(safe-area-inset-bottom));
+  @include mixins.scrollbar();
+  min-height: 0;
+}
+
+.hero {
+  background: var(--hi-gradient);
+  border-radius: 20px;
+  padding: 22px 20px;
+  color: #fff;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 30px rgba(64, 41, 108, 0.28);
+}
+
+.heroCount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  letter-spacing: -0.03em;
+}
+
+.heroBig {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.heroOf {
+  font-size: 24px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.heroLabel {
+  margin-top: 4px;
+  font-size: 14px;
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+
+.heroProgress {
+  margin-top: 16px;
+  background: rgba(255, 255, 255, 0.18) !important;
+
+  :global(.mantine-Progress-section) {
+    background: #fff !important;
+  }
+}
+
+.heroPercent {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.85;
+
+  strong {
+    font-size: 18px;
+    font-weight: 800;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.cardIcon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--hi-color-money-green) 16%, transparent);
+  color: var(--hi-color-money-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.cardIconWarn {
+  background: color-mix(in srgb, #f59f00 16%, transparent);
+  color: #a87600;
+}
+
+.cardIconMuted {
+  background: var(--hi-color-gray);
+  color: var(--hi-color-gray-dark);
+}
+
+.cardLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hi-color-gray-dark);
+}
+
+.cardValue {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--hi-text);
+  margin-top: 2px;
+}
+
+.throughput {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.throughputIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--mantine-color-primary-8) 12%, transparent);
+  color: var(--mantine-color-primary-8);
+  flex-shrink: 0;
+}
+
+.throughputBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.throughputLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hi-color-gray-dark);
+}
+
+.throughputValue {
+  font-size: 14px;
+  color: var(--hi-text);
+  font-variant-numeric: tabular-nums;
+
+  strong {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-right: 2px;
+  }
+}
+
+.throughputUnit {
+  font-weight: 600;
+  color: var(--hi-color-gray-dark);
+}
+
+.throughputRate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+
+  strong {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--hi-primary);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  span {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--hi-color-gray-dark);
+    margin-top: 2px;
+  }
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hi-color-gray-dark);
+  margin: 18px 0 8px;
+  padding-left: 4px;
+}
+
+.productList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productRow {
+  background: #fff;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.productTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.productName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hi-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.productCount {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hi-text);
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.productOf {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hi-color-gray-dark);
+  margin-left: 2px;
+}
+
+.empty {
+  background: #fff;
+  border: 1px dashed var(--hi-color-gray-2);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  color: var(--hi-color-gray-dark);
+  font-size: 13px;
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recent {
+  background: #fff;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.recentCheck {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--hi-color-money-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.recentMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.recentName {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hi-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.recentCode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--hi-color-gray-dark);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentTime {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hi-color-gray-dark);
+  flex-shrink: 0;
+}

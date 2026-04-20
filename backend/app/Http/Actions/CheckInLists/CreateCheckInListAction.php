@@ -33,6 +33,9 @@ class CreateCheckInListAction extends BaseAction
                     productIds: $request->validated('product_ids'),
                     expiresAt: $request->validated('expires_at'),
                     activatesAt: $request->validated('activates_at'),
+                    publicShowAttendeeNotes: $request->validated('public_show_attendee_notes') ?? true,
+                    publicShowQuestionAnswers: $request->validated('public_show_question_answers') ?? true,
+                    publicShowOrderDetails: $request->validated('public_show_order_details') ?? true,
                 )
             );
         } catch (UnrecognizedProductIdException $exception) {
