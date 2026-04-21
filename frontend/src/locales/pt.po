@@ -85,11 +85,15 @@ msgstr "{0} bilhetes"
 msgid "{0} updated successfully"
 msgstr "{0} atualizado com sucesso"
 
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:101
+msgid "{appName} logo"
+msgstr ""
+
 #: src/components/common/EventCard/index.tsx:123
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} de {totalCount} disponíveis"
 
-#: src/components/common/CheckIn/CheckInInfoModal.tsx:51
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:55
 msgid "{checkedIn} / {total} checked in"
 msgstr "{checkedIn} / {total} com check-in"
 
@@ -433,7 +437,7 @@ msgstr "Ações"
 msgid "Activate"
 msgstr "Ativar"
 
-#: src/components/forms/CheckInListForm/index.tsx:63
+#: src/components/forms/CheckInListForm/index.tsx:101
 msgid "Activation date"
 msgstr "Data de ativação"
 
@@ -452,7 +456,7 @@ msgstr "Ativo"
 msgid "Active Events"
 msgstr "Eventos ativos"
 
-#: src/components/forms/CheckInListForm/index.tsx:53
+#: src/components/forms/CheckInListForm/index.tsx:91
 msgid "Add a description for this check-in list"
 msgstr "Adicione uma descrição para esta lista de registro"
 
@@ -810,9 +814,9 @@ msgstr "Resposta atualizada com sucesso."
 msgid "Answers"
 msgstr "Respostas"
 
-#: src/components/forms/CheckInListForm/index.tsx:103
-msgid "Answers the attendee provided at checkout"
-msgstr "Respostas fornecidas pelo participante na compra"
+#: src/components/forms/CheckInListForm/index.tsx:154
+msgid "Answers provided at checkout (e.g. meal choice)"
+msgstr "Respostas no checkout (ex.: escolha de refeição)"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:62
 msgid "Any queries from product holders will be sent to this email address. This will also be used as the \"reply-to\" address for all emails sent from this event"
@@ -837,6 +841,10 @@ msgstr "Aplica-se a {0} produtos"
 #: src/components/common/CapacityAssignmentList/index.tsx:95
 msgid "Applies to 1 product"
 msgstr "Aplica-se a 1 produto"
+
+#: src/components/forms/CheckInListForm/index.tsx:122
+msgid "Applies to anyone opening the shared check-in link without being signed in. Logged-in team members always see everything."
+msgstr "Aplica-se a quem abre o link sem sessão iniciada. Membros autenticados veem sempre tudo."
 
 #: src/components/common/FilterModal/index.tsx:284
 msgid "Apply"
@@ -1115,6 +1123,10 @@ msgstr "Nome do participante"
 #: src/components/layouts/CheckIn/index.tsx:327
 msgid "Attendee not found"
 msgstr "Participante não encontrado"
+
+#: src/components/forms/CheckInListForm/index.tsx:135
+msgid "Attendee notes"
+msgstr "Notas do participante"
 
 #: src/components/modals/ManageAttendeeModal/index.tsx:153
 msgid "Attendee Notes"
@@ -1635,10 +1647,6 @@ msgstr "Listas de Registo"
 msgid "Check-In Lists"
 msgstr "Listas de Registro"
 
-#: src/components/forms/CheckInListForm/index.tsx:31
-msgid "Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required."
-msgstr "As listas de check-in permitem controlar a entrada por dias, áreas ou tipos de bilhete. Pode partilhar uma ligação segura com a equipa — não é necessária conta."
-
 #: src/components/layouts/CheckIn/BottomNav.tsx:20
 msgid "Check-in navigation"
 msgstr "Navegação de check-in"
@@ -2158,6 +2166,10 @@ msgstr "Continuar para pagamento"
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:47
 msgid "Control how platform fees are handled for this event"
 msgstr "Controle como as taxas da plataforma são tratadas para este evento"
+
+#: src/components/forms/CheckInListForm/index.tsx:52
+msgid "Control who gets in, and when"
+msgstr "Controle quem entra e quando"
 
 #: src/components/common/AttendeeTicket/index.tsx:208
 #: src/components/common/CopyButton/index.tsx:13
@@ -2772,7 +2784,7 @@ msgstr "Excluir webhook"
 msgid "Description"
 msgstr "Descrição"
 
-#: src/components/forms/CheckInListForm/index.tsx:52
+#: src/components/forms/CheckInListForm/index.tsx:90
 msgid "Description for check-in staff"
 msgstr "Descrição para a equipe de registro"
 
@@ -2816,6 +2828,10 @@ msgstr "Desconto em {0}"
 #: src/components/forms/PromoCodeForm/index.tsx:73
 msgid "Discount Type"
 msgstr "Tipo de desconto"
+
+#: src/components/common/Callout/index.tsx:57
+msgid "Dismiss"
+msgstr "Dispensar"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:403
 msgid "Dismiss this message"
@@ -3633,7 +3649,7 @@ msgstr "Exemplos: \"Tamanho da camiseta\", \"Preferência de refeição\", \"Car
 msgid "Exception"
 msgstr "Exceção"
 
-#: src/components/forms/CheckInListForm/index.tsx:69
+#: src/components/forms/CheckInListForm/index.tsx:107
 msgid "Expiration date"
 msgstr "Data de Expiração"
 
@@ -4336,6 +4352,10 @@ msgstr "As perguntas ocultas são visíveis apenas para o organizador do evento 
 msgid "Hide"
 msgstr "Esconder"
 
+#: src/components/forms/CheckInListForm/index.tsx:84
+msgid "Hide advanced options"
+msgstr "Ocultar opções avançadas"
+
 #: src/components/common/AttendeeList/index.tsx:84
 msgid "Hide Answers"
 msgstr "Ocultar respostas"
@@ -4633,8 +4653,8 @@ msgstr "Pagamentos Instantâneos"
 msgid "Integrations"
 msgstr "Integrações"
 
-#: src/components/forms/CheckInListForm/index.tsx:96
-msgid "Internal notes added to the attendee's ticket"
+#: src/components/forms/CheckInListForm/index.tsx:137
+msgid "Internal notes on the attendee's ticket"
 msgstr "Notas internas no bilhete do participante"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
@@ -5304,7 +5324,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/common/OrderDetails/index.tsx:23
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
-#: src/components/forms/CheckInListForm/index.tsx:37
+#: src/components/forms/CheckInListForm/index.tsx:61
 #: src/components/forms/ProductForm/index.tsx:274
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/modals/DuplicateEventModal/index.tsx:109
@@ -5960,6 +5980,10 @@ msgstr "Moeda do Pedido"
 msgid "Order Date"
 msgstr "Data do pedido"
 
+#: src/components/forms/CheckInListForm/index.tsx:169
+msgid "Order details"
+msgstr "Detalhes da encomenda"
+
 #: src/components/common/OrdersTable/index.tsx:277
 #: src/components/modals/ManageAttendeeModal/index.tsx:166
 #: src/components/modals/ManageOrderModal/index.tsx:86
@@ -6036,9 +6060,9 @@ msgstr "Notas do pedido"
 msgid "Order Number"
 msgstr "Número do pedido"
 
-#: src/components/forms/CheckInListForm/index.tsx:110
-msgid "Order number, purchase date, total paid"
-msgstr "Número da encomenda, data de compra, total pago"
+#: src/components/forms/CheckInListForm/index.tsx:171
+msgid "Order number, purchase date, purchaser email"
+msgstr "Número da encomenda, data, email do comprador"
 
 #: src/components/common/MessageList/index.tsx:31
 msgid "Order owner"
@@ -6910,7 +6934,7 @@ msgstr "Perfil"
 msgid "Profile updated successfully"
 msgstr "Perfil atualizado com sucesso"
 
-#: src/components/common/CheckIn/CheckInInfoModal.tsx:43
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:47
 msgid "Progress"
 msgstr "Progresso"
 
@@ -6963,10 +6987,6 @@ msgid ""
 "and conditions, guidelines, or any important information that attendees need to know before answering."
 msgstr ""
 
-#: src/components/forms/CheckInListForm/index.tsx:80
-msgid "Public link visibility"
-msgstr "Visibilidade do link público"
-
 #: src/components/common/StatusToggle/index.tsx:97
 msgid "Publish"
 msgstr "Publicar"
@@ -7010,6 +7030,10 @@ msgstr "Quantidade Disponível"
 #: src/components/routes/event/EventDashboard/index.tsx:291
 msgid "Quarter"
 msgstr ""
+
+#: src/components/forms/CheckInListForm/index.tsx:152
+msgid "Question answers"
+msgstr "Respostas"
 
 #: src/components/common/QuestionsTable/index.tsx:201
 msgid "Question deleted"
@@ -7761,7 +7785,7 @@ msgstr "Selecione o nível de mensagens para esta conta. Isto controla os limite
 msgid "Select Ticket"
 msgstr "Selecione o ingresso"
 
-#: src/components/forms/CheckInListForm/index.tsx:43
+#: src/components/forms/CheckInListForm/index.tsx:67
 #: src/components/modals/SendMessageModal/index.tsx:311
 msgid "Select tickets"
 msgstr "Selecionar ingressos"
@@ -7986,13 +8010,17 @@ msgstr "Compartilhar página do organizador"
 msgid "Shared Capacity Management"
 msgstr "Gestão de capacidade compartilhada"
 
+#: src/components/forms/CheckInListForm/index.tsx:84
+msgid "Show advanced options"
+msgstr "Mostrar opções avançadas"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:232
 msgid "Show all platforms ({0} more with values)"
 msgstr "Mostrar todas as plataformas ({0} com valores)"
 
-#: src/components/forms/CheckInListForm/index.tsx:95
-msgid "Show attendee notes"
-msgstr "Mostrar notas"
+#: src/components/forms/CheckInListForm/index.tsx:143
+msgid "Show attendee notes to non-logged-in staff"
+msgstr "Mostrar notas a pessoal sem sessão"
 
 #: src/components/forms/ProductForm/index.tsx:475
 msgid "Show available product quantity"
@@ -8019,13 +8047,13 @@ msgstr "Mostre mais"
 msgid "Show more platforms"
 msgstr "Mostrar mais plataformas"
 
-#: src/components/forms/CheckInListForm/index.tsx:109
-msgid "Show order details"
-msgstr "Mostrar detalhes da encomenda"
+#: src/components/forms/CheckInListForm/index.tsx:177
+msgid "Show order details to non-logged-in staff"
+msgstr "Mostrar detalhes a pessoal sem sessão"
 
-#: src/components/forms/CheckInListForm/index.tsx:102
-msgid "Show question answers"
-msgstr "Mostrar respostas"
+#: src/components/forms/CheckInListForm/index.tsx:160
+msgid "Show question answers to non-logged-in staff"
+msgstr "Mostrar respostas a pessoal sem sessão"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:63
 msgid "Show tax and fees separately"
@@ -8034,6 +8062,10 @@ msgstr "Mostrar impostos e taxas separadamente"
 #: src/components/common/OrganizerReportTable/index.tsx:355
 msgid "Showing {0} of {totalRows} records"
 msgstr "A mostrar {0} de {totalRows} registos"
+
+#: src/components/forms/CheckInListForm/index.tsx:92
+msgid "Shown to staff the first time they open the check-in page."
+msgstr "Mostrado ao pessoal na primeira vez que abre a página."
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:100
 msgid "Shown to the customer after they checkout, on the order summary page."
@@ -8157,11 +8189,15 @@ msgstr "Fonte"
 msgid "Spanish"
 msgstr "espanhol"
 
+#: src/components/forms/CheckInListForm/index.tsx:53
+msgid "Split check-in across days, areas, or ticket types. Share the link with staff — no account needed on their end."
+msgstr "Divida o check-in por dia, zona ou tipo de bilhete. Partilhe o link com o pessoal — sem necessidade de conta."
+
 #: src/constants/eventCategories.ts:8
 msgid "Sports"
 msgstr "Desporto"
 
-#: src/components/common/CheckIn/CheckInInfoModal.tsx:80
+#: src/components/common/CheckIn/CheckInInfoModal.tsx:84
 msgid "Staff instructions"
 msgstr "Instruções para a equipa"
 
@@ -8801,10 +8837,6 @@ msgstr "Estes modelos serão usados como padrões para todos os eventos em sua o
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:319
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "Estes modelos substituirão os padrões do organizador apenas para este evento. Se nenhum modelo personalizado for definido aqui, o modelo do organizador será usado em vez disso."
-
-#: src/components/forms/CheckInListForm/index.tsx:87
-msgid "These toggles only apply to people opening the check-in link while <0>not logged in</0>. Logged-in team members always see all attendee data."
-msgstr "Estas opções aplicam-se apenas a quem abre o link <0>sem sessão iniciada</0>. Membros autenticados veem sempre todos os dados."
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:35
 msgid "This attendee has an unpaid order."
@@ -9826,7 +9858,7 @@ msgstr "Veja, edite e exporte seus participantes registrados."
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: src/components/forms/CheckInListForm/index.tsx:38
+#: src/components/forms/CheckInListForm/index.tsx:62
 msgid "VIP check-in list"
 msgstr "Lista de check-in VIP"
 
@@ -9837,10 +9869,6 @@ msgstr "Bilhete VIP"
 #: src/components/forms/ProductForm/index.tsx:464
 msgid "Visibility"
 msgstr "Visibilidade"
-
-#: src/components/forms/CheckInListForm/index.tsx:54
-msgid "Visible to check-in staff only. Shown to them the first time they open the check-in page."
-msgstr "Visível apenas para a equipa de check-in. Mostrado na primeira vez que abrem a página."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 msgid "VK"
@@ -10077,6 +10105,10 @@ msgstr "Que tipo de evento?"
 msgid "What type of question is this?"
 msgstr "Que tipo de pergunta é essa?"
 
+#: src/components/forms/CheckInListForm/index.tsx:119
+msgid "What unauthenticated staff can see"
+msgstr "O que vê o pessoal sem sessão"
+
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/index.tsx:77
 msgid "What you need to do:"
 msgstr "O que precisa fazer:"
@@ -10153,11 +10185,11 @@ msgstr "Quando um pedido é reembolsado"
 msgid "When an order is updated"
 msgstr "Quando um pedido é atualizado"
 
-#: src/components/forms/CheckInListForm/index.tsx:70
+#: src/components/forms/CheckInListForm/index.tsx:108
 msgid "When check-in closes"
 msgstr "Quando fecha o check-in"
 
-#: src/components/forms/CheckInListForm/index.tsx:64
+#: src/components/forms/CheckInListForm/index.tsx:102
 msgid "When check-in opens"
 msgstr "Quando abre o check-in"
 
@@ -10185,7 +10217,7 @@ msgstr "Quando ativado, não serão cobradas taxas de aplicação nas transaçõ
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "Quando os pagamentos offline estão ativados, os usuários poderão concluir seus pedidos e receber seus ingressos. Seus ingressos indicarão claramente que o pedido não foi pago, e a ferramenta de check-in notificará a equipe se um pedido exigir pagamento."
 
-#: src/components/forms/CheckInListForm/index.tsx:42
+#: src/components/forms/CheckInListForm/index.tsx:66
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Quais ingressos devem ser associados a esta lista de registro?"
 

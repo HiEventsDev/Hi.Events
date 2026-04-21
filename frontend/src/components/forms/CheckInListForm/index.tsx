@@ -1,16 +1,35 @@
-import {Alert, Box, Divider, Switch, Textarea, TextInput} from "@mantine/core";
+import {Collapse, Switch, Textarea, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {CheckInListRequest, ProductCategory, ProductType} from "../../../types.ts";
 import {InputGroup} from "../../common/InputGroup";
 import {ProductSelector} from "../../common/ProductSelector";
-import {useEffect, useMemo} from "react";
-import {IconEyeOff, IconInfoCircle} from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
+import {useEffect, useMemo, useState} from "react";
+import {
+    IconChevronRight,
+    IconClipboardText,
+    IconEye,
+    IconMessageCircleQuestion,
+    IconReceipt2,
+} from "@tabler/icons-react";
+import classes from "./CheckInListForm.module.scss";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
     productCategories: ProductCategory[];
 }
+
+const hasAdvancedValuesSet = (form: UseFormReturnType<CheckInListRequest>): boolean => {
+    return !!(
+        form.values.description
+        || form.values.activates_at
+        || form.values.expires_at
+        || form.values.public_show_attendee_notes === false
+        || form.values.public_show_question_answers === false
+        || form.values.public_show_order_details === false
+    );
+};
 
 export const CheckInListForm = ({form, productCategories}: CheckInListFormProps) => {
     const tickets = useMemo(() => {
@@ -18,6 +37,9 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
             .flatMap(category => category.products || [])
             .filter(product => product.product_type === ProductType.Ticket);
     }, [productCategories]);
+
+    // Open advanced panel automatically if editing a list that already uses any of those options.
+    const [showAdvanced, setShowAdvanced] = useState(() => hasAdvancedValuesSet(form));
 
     useEffect(() => {
         if (tickets.length === 1 && (!form.values.product_ids || form.values.product_ids.length === 0)) {
@@ -27,9 +49,11 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
 
     return (
         <>
-            <Alert mb={20} icon={<IconInfoCircle size={16}/>} color="blue" variant="light">
-                {t`Check-in lists let you control entry across days, areas, or ticket types. You can share a secure check-in link with staff — no account required.`}
-            </Alert>
+            <Callout variant="info" title={t`Control who gets in, and when`}>
+                <Trans>
+                    Split check-in across days, areas, or ticket types. Share the link with staff — no account needed on their end.
+                </Trans>
+            </Callout>
 
             <TextInput
                 {...form.getInputProps('name')}
@@ -47,68 +71,115 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
                 includedProductTypes={[ProductType.Ticket]}
             />
 
-            <Textarea
-                {...form.getInputProps('description')}
-                label={t`Description for check-in staff`}
-                placeholder={t`Add a description for this check-in list`}
-                description={t`Visible to check-in staff only. Shown to them the first time they open the check-in page.`}
-                minRows={3}
-                autosize
-            />
-
-            <InputGroup>
-                <TextInput
-                    {...form.getInputProps('activates_at')}
-                    type="datetime-local"
-                    label={t`Activation date`}
-                    description={t`When check-in opens`}
+            <button
+                type="button"
+                className={classes.advancedToggle}
+                onClick={() => setShowAdvanced(v => !v)}
+                aria-expanded={showAdvanced}
+            >
+                <IconChevronRight
+                    size={14}
+                    className={`${classes.chevron} ${showAdvanced ? classes.chevronOpen : ""}`}
                 />
-                <TextInput
-                    {...form.getInputProps('expires_at')}
-                    type="datetime-local"
-                    label={t`Expiration date`}
-                    description={t`When check-in closes`}
+                {showAdvanced ? t`Hide advanced options` : t`Show advanced options`}
+            </button>
+
+            <Collapse in={showAdvanced}>
+                <Textarea
+                    {...form.getInputProps('description')}
+                    label={t`Description for check-in staff`}
+                    placeholder={t`Add a description for this check-in list`}
+                    description={t`Shown to staff the first time they open the check-in page.`}
+                    minRows={3}
+                    autosize
                 />
-            </InputGroup>
 
-            <Divider
-                mt="md"
-                mb="md"
-                label={
-                    <Box style={{display: "flex", alignItems: "center", gap: 6}}>
-                        <IconEyeOff size={14}/>
-                        <span>{t`Public link visibility`}</span>
-                    </Box>
-                }
-                labelPosition="left"
-            />
+                <InputGroup>
+                    <TextInput
+                        {...form.getInputProps('activates_at')}
+                        type="datetime-local"
+                        label={t`Activation date`}
+                        description={t`When check-in opens`}
+                    />
+                    <TextInput
+                        {...form.getInputProps('expires_at')}
+                        type="datetime-local"
+                        label={t`Expiration date`}
+                        description={t`When check-in closes`}
+                    />
+                </InputGroup>
 
-            <Alert mb="sm" color="gray" variant="light">
-                <Trans>
-                    These toggles only apply to people opening the check-in link while <b>not logged in</b>. Logged-in team members always see all attendee data.
-                </Trans>
-            </Alert>
+                <div className={classes.visibilitySection}>
+                    <div className={classes.visibilityHeader}>
+                        <div className={classes.visibilityIcon}>
+                            <IconEye size={16}/>
+                        </div>
+                        <div>
+                            <div className={classes.visibilityTitle}>
+                                {t`What unauthenticated staff can see`}
+                            </div>
+                            <div className={classes.visibilityHint}>
+                                <Trans>
+                                    Applies to anyone opening the shared check-in link without being signed in. Logged-in team members always see everything.
+                                </Trans>
+                            </div>
+                        </div>
+                    </div>
 
-            <Switch
-                mb="sm"
-                {...form.getInputProps('public_show_attendee_notes', {type: 'checkbox'})}
-                label={t`Show attendee notes`}
-                description={t`Internal notes added to the attendee's ticket`}
-            />
+                    <div className={classes.visibilityRows}>
+                        <label className={classes.visibilityRow}>
+                            <div className={classes.visibilityRowIcon}>
+                                <IconClipboardText size={16}/>
+                            </div>
+                            <div className={classes.visibilityRowMain}>
+                                <div className={classes.visibilityRowLabel}>{t`Attendee notes`}</div>
+                                <div className={classes.visibilityRowDesc}>
+                                    {t`Internal notes on the attendee's ticket`}
+                                </div>
+                            </div>
+                            <Switch
+                                size="md"
+                                {...form.getInputProps('public_show_attendee_notes', {type: 'checkbox'})}
+                                aria-label={t`Show attendee notes to non-logged-in staff`}
+                            />
+                        </label>
 
-            <Switch
-                mb="sm"
-                {...form.getInputProps('public_show_question_answers', {type: 'checkbox'})}
-                label={t`Show question answers`}
-                description={t`Answers the attendee provided at checkout`}
-            />
+                        <label className={classes.visibilityRow}>
+                            <div className={classes.visibilityRowIcon}>
+                                <IconMessageCircleQuestion size={16}/>
+                            </div>
+                            <div className={classes.visibilityRowMain}>
+                                <div className={classes.visibilityRowLabel}>{t`Question answers`}</div>
+                                <div className={classes.visibilityRowDesc}>
+                                    {t`Answers provided at checkout (e.g. meal choice)`}
+                                </div>
+                            </div>
+                            <Switch
+                                size="md"
+                                {...form.getInputProps('public_show_question_answers', {type: 'checkbox'})}
+                                aria-label={t`Show question answers to non-logged-in staff`}
+                            />
+                        </label>
 
-            <Switch
-                mb="sm"
-                {...form.getInputProps('public_show_order_details', {type: 'checkbox'})}
-                label={t`Show order details`}
-                description={t`Order number, purchase date, total paid`}
-            />
+                        <label className={classes.visibilityRow}>
+                            <div className={classes.visibilityRowIcon}>
+                                <IconReceipt2 size={16}/>
+                            </div>
+                            <div className={classes.visibilityRowMain}>
+                                <div className={classes.visibilityRowLabel}>{t`Order details`}</div>
+                                <div className={classes.visibilityRowDesc}>
+                                    {t`Order number, purchase date, purchaser email`}
+                                </div>
+                            </div>
+                            <Switch
+                                size="md"
+                                {...form.getInputProps('public_show_order_details', {type: 'checkbox'})}
+                                aria-label={t`Show order details to non-logged-in staff`}
+                            />
+                        </label>
+                    </div>
+                </div>
+            </Collapse>
         </>
     );
 }
