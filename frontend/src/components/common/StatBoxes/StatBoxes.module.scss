@@ -20,26 +20,20 @@
   display: flex;
   align-items: center;
   padding: 1.25rem !important;
-  transition: all 0.2s ease-in-out;
   margin-bottom: 0 !important;
   height: 100%;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
 
   .leftPanel {
     flex: 1;
     display: grid;
     grid-template-rows: auto auto;
     min-height: 65px;
-    gap: 5px;
+    gap: 2px;
 
     .number {
       font-size: 1.75rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
+      font-weight: 700;
+      letter-spacing: -0.03em;
       line-height: 1.2;
       align-self: end;
 
@@ -49,10 +43,12 @@
     }
 
     .description {
-      font-size: 1rem;
+      font-size: 0.85rem;
       color: var(--hi-color-gray-dark);
-      font-weight: 500;
+      font-weight: 400;
       align-self: start;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
   }
 
@@ -61,23 +57,18 @@
     align-self: flex-start;
 
     .icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      transition: transform 0.2s ease;
 
       @include mixins.respond-below(md) {
         width: 36px;
         height: 36px;
         border-radius: 10px;
-      }
-
-      &:hover {
-        transform: scale(1.05);
       }
     }
   }

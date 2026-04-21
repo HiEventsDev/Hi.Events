@@ -95,6 +95,9 @@ class PartialUpdateOrganizerSettingsHandler
             'allow_search_engine_indexing' => $dto->getProvided('allowSearchEngineIndexing', $organizerSettings->getAllowSearchEngineIndexing()),
 
             'homepage_password' => $dto->getProvided('homepagePassword', $organizerSettings->getHomepagePassword()),
+
+            'tracking_pixels' => $dto->getProvided('trackingPixels', $organizerSettings->getTrackingPixels()),
+            'tracking_consent_acknowledged' => $dto->getProvided('trackingConsentAcknowledged', $organizerSettings->getTrackingConsentAcknowledged()),
         ], [
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),

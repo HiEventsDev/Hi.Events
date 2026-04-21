@@ -1,0 +1,120 @@
+.banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 900;
+    max-width: 340px;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--event-content-bg-color, var(--organizer-content-bg-color, rgba(255, 255, 255, 0.97)));
+    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.08)));
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(12px);
+    animation: slideUp 0.3s ease-out;
+
+    @media (max-width: 480px) {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        max-width: none;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+        background: var(--event-accent-soft, var(--organizer-accent-soft, rgba(0, 0, 0, 0.05)));
+    }
+}
+
+.content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-right: 16px;
+}
+
+.iconWrapper {
+    flex-shrink: 0;
+    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    margin-top: 1px;
+}
+
+.text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--event-primary-text-color, var(--organizer-primary-text-color, #374151));
+}
+
+.privacyLink {
+    color: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    text-decoration: underline;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.acceptButton,
+.declineButton {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    border: none;
+
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+.acceptButton {
+    background: var(--event-primary-color, var(--organizer-primary-color, #8b5cf6));
+    color: var(--event-accent-contrast, var(--organizer-accent-contrast, #ffffff));
+}
+
+.declineButton {
+    background: transparent;
+    color: var(--event-secondary-color, var(--organizer-secondary-color, #6b7280));
+    border: 1px solid var(--event-border-color, var(--organizer-border-color, rgba(0, 0, 0, 0.1)));
+
+    &:hover {
+        background: var(--event-accent-soft, var(--organizer-accent-soft, rgba(0, 0, 0, 0.03)));
+    }
+}

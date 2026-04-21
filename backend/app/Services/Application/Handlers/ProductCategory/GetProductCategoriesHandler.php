@@ -51,6 +51,7 @@ class GetProductCategoriesHandler
         return $this->productFilterService->filter(
             productsCategories: $categories,
             hideSoldOutProducts: false,
+            hideHiddenCategories: false,
         );
     }
 }

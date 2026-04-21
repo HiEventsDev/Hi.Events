@@ -29,6 +29,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
     final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
     final public const DEFAULT_ALLOW_ATTENDEE_SELF_EDIT = 'default_allow_attendee_self_edit';
+    final public const TRACKING_PIXELS = 'tracking_pixels';
+    final public const TRACKING_CONSENT_ACKNOWLEDGED = 'tracking_consent_acknowledged';
 
     protected int $id;
     protected int $organizer_id;
@@ -49,6 +51,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected bool $default_show_marketing_opt_in = true;
     protected bool $default_pass_platform_fee_to_buyer = false;
     protected bool $default_allow_attendee_self_edit = true;
+    protected array|string|null $tracking_pixels = null;
+    protected bool $tracking_consent_acknowledged = false;
 
     public function toArray(): array
     {
@@ -72,6 +76,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
                     'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
                     'default_allow_attendee_self_edit' => $this->default_allow_attendee_self_edit ?? null,
+                    'tracking_pixels' => $this->tracking_pixels ?? null,
+                    'tracking_consent_acknowledged' => $this->tracking_consent_acknowledged ?? null,
                 ];
     }
 
@@ -283,5 +289,27 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDefaultAllowAttendeeSelfEdit(): bool
     {
         return $this->default_allow_attendee_self_edit;
+    }
+
+    public function setTrackingPixels(array|string|null $tracking_pixels): self
+    {
+        $this->tracking_pixels = $tracking_pixels;
+        return $this;
+    }
+
+    public function getTrackingPixels(): array|string|null
+    {
+        return $this->tracking_pixels;
+    }
+
+    public function setTrackingConsentAcknowledged(bool $tracking_consent_acknowledged): self
+    {
+        $this->tracking_consent_acknowledged = $tracking_consent_acknowledged;
+        return $this;
+    }
+
+    public function getTrackingConsentAcknowledged(): bool
+    {
+        return $this->tracking_consent_acknowledged;
     }
 }
