@@ -14,7 +14,7 @@ class UpsertCheckInListRequest extends BaseRequest
 
         return [
             'name' => RulesHelper::REQUIRED_STRING,
-            'description' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:2000'],
             'expires_at' => ['nullable', 'date'],
             'activates_at' => ['nullable', 'date'],
             'product_ids' => ['required', 'array', 'min:1'],
@@ -25,6 +25,9 @@ class UpsertCheckInListRequest extends BaseRequest
                     ->where('event_id', $eventId)
                     ->whereNull('deleted_at'),
             ],
+            'public_show_attendee_notes' => ['nullable', 'boolean'],
+            'public_show_question_answers' => ['nullable', 'boolean'],
+            'public_show_order_details' => ['nullable', 'boolean'],
         ];
     }
 

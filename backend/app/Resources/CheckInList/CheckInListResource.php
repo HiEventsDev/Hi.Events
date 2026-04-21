@@ -24,6 +24,9 @@ class CheckInListResource extends JsonResource
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'total_attendees' => $this->getTotalAttendeesCount(),
             'checked_in_attendees' => $this->getCheckedInCount(),
+            'public_show_attendee_notes' => $this->getPublicShowAttendeeNotes(),
+            'public_show_question_answers' => $this->getPublicShowQuestionAnswers(),
+            'public_show_order_details' => $this->getPublicShowOrderDetails(),
             $this->mergeWhen($this->getEvent() !== null, fn() => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),

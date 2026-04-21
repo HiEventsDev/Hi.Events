@@ -43,6 +43,7 @@ class ProductFilterService
      * @param Collection<ProductCategoryDomainObject> $productsCategories
      * @param PromoCodeDomainObject|null $promoCode
      * @param bool $hideSoldOutProducts
+     * @param bool $hideHiddenCategories
      * @return Collection<ProductCategoryDomainObject>
      */
     public function filter(
@@ -50,6 +51,7 @@ class ProductFilterService
         ?PromoCodeDomainObject $promoCode = null,
         bool                   $hideSoldOutProducts = true,
         ?int                   $eventOccurrenceId = null,
+        bool                   $hideHiddenCategories = true,
     ): Collection
     {
         if ($productsCategories->isEmpty()) {
@@ -60,8 +62,9 @@ class ProductFilterService
             ->flatMap(fn(ProductCategoryDomainObject $category) => $category->getProducts());
 
         if ($products->isEmpty()) {
-            return $productsCategories
-                ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden());
+            return $hideHiddenCategories
+                ? $productsCategories->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
+                : $productsCategories;
         }
 
         $eventId = $products->first()->getEventId();
@@ -80,8 +83,11 @@ class ProductFilterService
             $filteredProducts = $this->filterByOccurrenceVisibility($filteredProducts, $eventOccurrenceId);
         }
 
-        return $productsCategories
-            ->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
+        $filteredCategories = $hideHiddenCategories
+            ? $productsCategories->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
+            : $productsCategories;
+
+        return $filteredCategories
             ->each(fn(ProductCategoryDomainObject $category) => $category->setProducts(
                 $filteredProducts->where(
                     static fn(ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()

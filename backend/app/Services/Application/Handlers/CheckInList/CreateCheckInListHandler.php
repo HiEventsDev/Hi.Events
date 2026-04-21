@@ -26,7 +26,10 @@ class CreateCheckInListHandler
             ->setEventId($listData->eventId)
             ->setExpiresAt($listData->expiresAt)
             ->setActivatesAt($listData->activatesAt)
-            ->setEventOccurrenceId($listData->eventOccurrenceId);
+            ->setEventOccurrenceId($listData->eventOccurrenceId)
+            ->setPublicShowAttendeeNotes($listData->publicShowAttendeeNotes)
+            ->setPublicShowQuestionAnswers($listData->publicShowQuestionAnswers)
+            ->setPublicShowOrderDetails($listData->publicShowOrderDetails);
 
         return $this->createCheckInListService->createCheckInList(
             checkInList: $checkInList,

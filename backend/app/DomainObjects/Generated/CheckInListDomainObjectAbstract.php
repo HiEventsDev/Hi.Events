@@ -21,6 +21,9 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const DELETED_AT = 'deleted_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const PUBLIC_SHOW_ATTENDEE_NOTES = 'public_show_attendee_notes';
+    final public const PUBLIC_SHOW_QUESTION_ANSWERS = 'public_show_question_answers';
+    final public const PUBLIC_SHOW_ORDER_DETAILS = 'public_show_order_details';
 
     protected int $id;
     protected int $event_id;
@@ -33,6 +36,9 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected ?string $deleted_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected bool $public_show_attendee_notes = true;
+    protected bool $public_show_question_answers = true;
+    protected bool $public_show_order_details = true;
 
     public function toArray(): array
     {
@@ -48,6 +54,9 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'deleted_at' => $this->deleted_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'public_show_attendee_notes' => $this->public_show_attendee_notes ?? null,
+                    'public_show_question_answers' => $this->public_show_question_answers ?? null,
+                    'public_show_order_details' => $this->public_show_order_details ?? null,
                 ];
     }
 
@@ -170,5 +179,38 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setPublicShowAttendeeNotes(bool $public_show_attendee_notes): self
+    {
+        $this->public_show_attendee_notes = $public_show_attendee_notes;
+        return $this;
+    }
+
+    public function getPublicShowAttendeeNotes(): bool
+    {
+        return $this->public_show_attendee_notes;
+    }
+
+    public function setPublicShowQuestionAnswers(bool $public_show_question_answers): self
+    {
+        $this->public_show_question_answers = $public_show_question_answers;
+        return $this;
+    }
+
+    public function getPublicShowQuestionAnswers(): bool
+    {
+        return $this->public_show_question_answers;
+    }
+
+    public function setPublicShowOrderDetails(bool $public_show_order_details): self
+    {
+        $this->public_show_order_details = $public_show_order_details;
+        return $this;
+    }
+
+    public function getPublicShowOrderDetails(): bool
+    {
+        return $this->public_show_order_details;
     }
 }

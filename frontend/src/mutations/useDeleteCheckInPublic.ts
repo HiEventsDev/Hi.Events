@@ -1,6 +1,9 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {publicCheckInClient} from "../api/check-in.client";
 import {GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY} from "../queries/useGetCheckInListAttendeesPublic.ts";
+import {GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY} from "../queries/useGetCheckInListPublic.ts";
+import {GET_CHECK_IN_LIST_STATS_PUBLIC_QUERY_KEY} from "../queries/useGetCheckInListStatsPublic.ts";
+import {GET_CHECK_IN_LIST_ATTENDEE_DETAIL_PUBLIC_QUERY_KEY} from "../queries/useGetCheckInListAttendeeDetailPublic.ts";
 import {IdParam, QueryFilters} from "../types.ts";
 
 export const useDeleteCheckInPublic = (pagination: QueryFilters) => {
@@ -31,6 +34,16 @@ export const useDeleteCheckInPublic = (pagination: QueryFilters) => {
                     ...oldData,
                     data: newAttendees,
                 };
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: [GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY, checkInListShortId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_CHECK_IN_LIST_STATS_PUBLIC_QUERY_KEY, checkInListShortId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: [GET_CHECK_IN_LIST_ATTENDEE_DETAIL_PUBLIC_QUERY_KEY, checkInListShortId],
             });
         }
     });

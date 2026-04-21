@@ -20,6 +20,10 @@ import {showError, showInfo} from "../../../utilites/notifications.tsx";
 import {isDateInFuture} from "../../../utilites/dates.ts";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
+import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
+import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
+import {CookieConsentBanner} from "../../common/CookieConsentBanner";
+import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 
 const DEFAULT_ACCENT = '#8b5cf6';
 
@@ -27,6 +31,7 @@ const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
+    const {data: publicEvent} = useGetEventPublic(eventId, !!eventId);
     const navigate = useNavigate();
     const location = useLocation();
     const orderIsCompleted = order?.status === 'COMPLETED';
@@ -141,6 +146,41 @@ const Checkout = () => {
             setShowAbandonDialog(true);
         }
     }, [blocker.state]);
+
+    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
+        publicEvent?.organizer?.settings?.tracking_pixels
+    );
+
+    useEffect(() => {
+        if (event && orderIsReserved && consentGranted && hasActivePixels()) {
+            trackPixelEvent({
+                eventName: 'InitiateCheckout',
+                contentName: event.title,
+                contentId: event.id,
+            });
+        }
+    }, [event?.id, orderIsReserved, consentGranted]);
+
+    useEffect(() => {
+        if (!event || !order || !consentGranted || !hasActivePixels()) return;
+        if (!orderIsCompleted && !orderIsAwaitingOfflinePayment) return;
+
+        const key = `purchase_tracked_${order.short_id}`;
+        if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(key)) return;
+
+        trackPixelEvent({
+            eventName: 'Purchase',
+            value: Number(order.total_gross) || 0,
+            currency: order.currency || 'USD',
+            contentName: event.title,
+            contentId: event.id,
+            transactionId: order.short_id,
+        });
+
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(key, '1');
+        }
+    }, [order?.status, order?.short_id, consentGranted]);
 
     // Get accent color from event settings, derive mode from homepage background
     const homepageSettings = event?.settings?.homepage_theme_settings;
@@ -292,6 +332,9 @@ const Checkout = () => {
                     </Group>
                 </div>
             </Modal>
+            {consentPending && (
+                <CookieConsentBanner onConsent={onConsent}/>
+            )}
         </CheckoutThemeProvider>
     );
 }

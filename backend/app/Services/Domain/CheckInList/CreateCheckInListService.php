@@ -45,6 +45,9 @@ class CreateCheckInListService
                     ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                     : null,
                 CheckInListDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
             ]);
 
             $this->checkInListProductAssociationService->addCheckInListToProducts(

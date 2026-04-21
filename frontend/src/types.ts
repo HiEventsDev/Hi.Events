@@ -21,7 +21,9 @@ export type ConfigKeys =
     | 'VITE_PLATFORM_SUPPORT_EMAIL'
     | 'VITE_STRIPE_PUBLISHABLE_KEY'
     | 'VITE_I_HAVE_PURCHASED_A_LICENCE'
-    | 'VITE_DEFAULT_IMAGE_URL';
+    | 'VITE_DEFAULT_IMAGE_URL'
+    | 'VITE_COOKIE_CONSENT_ENABLED'
+    | 'VITE_COOKIE_CONSENT_TEXT';
 
 export enum StripePlatform {
     Canada = 'ca',
@@ -560,6 +562,14 @@ export interface OrganizerSettings {
     seo_description?: string;
     seo_title?: string;
     allow_search_engine_indexing?: boolean;
+    tracking_pixels?: TrackingPixelConfig[];
+    tracking_consent_acknowledged?: boolean;
+}
+
+export interface TrackingPixelConfig {
+    provider: string;
+    pixel_id: string;
+    enabled: boolean;
 }
 
 export interface SortDirectionLabel {
@@ -710,7 +720,7 @@ export interface Attendee {
     check_ins?: AttendeeCheckIn[];
 }
 
-export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
+export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'short_id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
 
 export interface AttendeeCheckIn {
     id: IdParam;
@@ -861,13 +871,90 @@ export interface CheckInList {
         id: number;
         title: string;
     }[];
+    public_show_attendee_notes?: boolean;
+    public_show_question_answers?: boolean;
+    public_show_order_details?: boolean;
+}
+
+export interface AttendeeDetailPublicCheckIn {
+    id: number;
+    short_id: string;
+    check_in_list_id: number;
+    attendee_id: number;
+    checked_in_at: string;
+    order_id: number;
+}
+
+export interface AttendeeDetailPublicOrder {
+    id: number;
+    public_id: string;
+    short_id: string;
+    status: string;
+    total_gross: number;
+    currency: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    created_at: string;
+}
+
+export interface AttendeeDetailPublicQuestionAnswer {
+    question_id: number;
+    title: string;
+    answer: string | string[] | null;
+    belongs_to: string;
+}
+
+export interface AttendeeDetailPublic {
+    id: number;
+    public_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
+    product_id: number;
+    product_title: string | null;
+    check_ins: AttendeeDetailPublicCheckIn[];
+    visibility: {
+        notes: boolean;
+        question_answers: boolean;
+        order_details: boolean;
+    };
+    notes?: string | null;
+    question_answers?: AttendeeDetailPublicQuestionAnswer[];
+    order?: AttendeeDetailPublicOrder;
 }
 
 export type CheckInListRequest =
-    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active' | 'event_occurrence'>
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active' | 'event_occurrence' | 'public_show_attendee_notes' | 'public_show_question_answers' | 'public_show_order_details'>
     & {
     product_ids: IdParam[];
+    public_show_attendee_notes?: boolean;
+    public_show_question_answers?: boolean;
+    public_show_order_details?: boolean;
 };
+
+export interface CheckInListProductStat {
+    product_id: number;
+    product_title: string;
+    total_attendees: number;
+    checked_in_attendees: number;
+}
+
+export interface CheckInListRecentCheckIn {
+    attendee_public_id: string;
+    first_name: string;
+    last_name: string;
+    product_title: string | null;
+    checked_in_at: string;
+}
+
+export interface CheckInListStats {
+    total_attendees: number;
+    checked_in_attendees: number;
+    per_product: CheckInListProductStat[];
+    recent_check_ins: CheckInListRecentCheckIn[];
+}
 
 export interface QuestionRequestData {
     title: string;

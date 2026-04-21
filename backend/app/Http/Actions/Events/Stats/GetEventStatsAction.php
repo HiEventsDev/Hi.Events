@@ -2,7 +2,6 @@
 
 namespace HiEvents\Http\Actions\Events\Stats;
 
-use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Event\DTO\EventStatsRequestDTO;
@@ -23,11 +22,13 @@ class GetEventStatsAction extends BaseAction
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
+        $dateRangePreset = $request->query('date_range', 'month');
+        $occurrenceIdQuery = $request->query('occurrence_id');
+
         $stats = $this->eventStatsHandler->handle(EventStatsRequestDTO::fromArray([
             'event_id' => $eventId,
-            'start_date' => Carbon::now()->subDays(7)->format('Y-m-d H:i:s'),
-            'end_date' => Carbon::now()->format('Y-m-d H:i:s'),
-            'occurrence_id' => $request->query('occurrence_id') ? (int)$request->query('occurrence_id') : null,
+            'date_range_preset' => $dateRangePreset,
+            'occurrence_id' => $occurrenceIdQuery !== null ? (int)$occurrenceIdQuery : null,
         ]));
 
         return $this->resourceResponse(JsonResource::class, $stats);

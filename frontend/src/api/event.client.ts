@@ -37,9 +37,12 @@ export const eventsClient = {
         return response.data;
     },
 
-    getEventStats: async (eventId: IdParam, occurrenceId?: IdParam) => {
-        const params = occurrenceId ? `?occurrence_id=${occurrenceId}` : '';
-        const response = await api.get<GenericDataResponse<EventStats>>(`events/${eventId}/stats${params}`);
+    getEventStats: async (eventId: IdParam, options: {occurrenceId?: IdParam; dateRange?: string} = {}) => {
+        const params = new URLSearchParams();
+        if (options.occurrenceId) params.set('occurrence_id', String(options.occurrenceId));
+        if (options.dateRange) params.set('date_range', options.dateRange);
+        const qs = params.toString();
+        const response = await api.get<GenericDataResponse<EventStats>>(`events/${eventId}/stats${qs ? '?' + qs : ''}`);
         return response.data;
     },
 
