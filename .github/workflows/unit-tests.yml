@@ -5,9 +5,11 @@ on:
     branches: [main, develop]
     paths:
       - 'backend/**'
+      - '.github/workflows/unit-tests.yml'
   pull_request:
     paths:
       - 'backend/**'
+      - '.github/workflows/unit-tests.yml'
 
 jobs:
   run-tests:
@@ -17,6 +19,31 @@ jobs:
       matrix:
         php-versions: ['8.2', '8.3', '8.4']
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: hievents_test
+          POSTGRES_USER: hievents
+          POSTGRES_PASSWORD: hievents
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hievents -d hievents_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # Job-level env. .env.testing supplies the rest, but the DB host on a CI
+    # runner is 127.0.0.1 (service container exposes its port on the runner),
+    # not the docker network alias used locally — override here.
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: hievents_test
+      DB_USERNAME: hievents
+      DB_PASSWORD: hievents
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,7 +52,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, tokenizer
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, pdo_pgsql, pgsql, tokenizer
           ini-values: post_max_size=256M, upload_max_filesize=256M
           coverage: none
 
@@ -46,6 +73,23 @@ jobs:
 
       - name: Install dependencies
         run: cd backend && composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Stage .env for testing
+        # Laravel auto-loads .env.testing when APP_ENV=testing, but artisan
+        # commands run outside that flow read .env directly. Copy .env.testing
+        # to .env so both paths see the same config.
+        run: cp backend/.env.testing backend/.env
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h 127.0.0.1 -p 5432 -U hievents -d hievents_test; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres did not become ready in time" >&2
+          exit 1
 
       - name: Run PHPUnit Tests
         run: cd backend && ./vendor/bin/phpunit tests/Unit --no-coverage
