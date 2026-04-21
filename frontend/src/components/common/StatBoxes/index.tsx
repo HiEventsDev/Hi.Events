@@ -39,7 +39,7 @@ interface StatBoxesProps {
 
 export const StatBoxes = ({occurrenceId}: StatBoxesProps = {}) => {
     const {eventId} = useParams();
-    const eventStatsQuery = useGetEventStats(eventId, occurrenceId);
+    const eventStatsQuery = useGetEventStats(eventId, {occurrenceId});
     const eventQuery = useGetEvent(eventId);
     const event = eventQuery?.data;
     const {data: eventStats} = eventStatsQuery;

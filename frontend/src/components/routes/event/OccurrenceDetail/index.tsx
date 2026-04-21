@@ -36,7 +36,7 @@ const OccurrenceDetail = () => {
     const navigate = useNavigate();
     const {data: event} = useGetEvent(eventId);
     const {data: occurrence, isLoading: occurrenceLoading} = useGetEventOccurrence(eventId, occurrenceId);
-    const {data: eventStats} = useGetEventStats(eventId, occurrenceId);
+    const {data: eventStats} = useGetEventStats(eventId, {occurrenceId});
 
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
