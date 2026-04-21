@@ -35,6 +35,9 @@ export const EditCheckInListModal = ({
             activates_at: '',
             description: '',
             product_ids: [],
+            public_show_attendee_notes: true,
+            public_show_question_answers: true,
+            public_show_order_details: true,
         }
     });
     const editMutation = useEditCheckInList();
@@ -61,6 +64,9 @@ export const EditCheckInListModal = ({
                 expires_at: utcToTz(checkInList.expires_at, event.timezone),
                 activates_at: utcToTz(checkInList.activates_at, event.timezone),
                 product_ids: checkInList.products?.map(product => String(product.id)),
+                public_show_attendee_notes: checkInList.public_show_attendee_notes ?? true,
+                public_show_question_answers: checkInList.public_show_question_answers ?? true,
+                public_show_order_details: checkInList.public_show_order_details ?? true,
             });
         }
     }, [checkInList]);

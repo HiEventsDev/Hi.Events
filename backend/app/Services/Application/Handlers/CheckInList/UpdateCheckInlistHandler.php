@@ -26,7 +26,10 @@ class UpdateCheckInlistHandler
             ->setDescription($data->description)
             ->setEventId($data->eventId)
             ->setExpiresAt($data->expiresAt)
-            ->setActivatesAt($data->activatesAt);
+            ->setActivatesAt($data->activatesAt)
+            ->setPublicShowAttendeeNotes($data->publicShowAttendeeNotes)
+            ->setPublicShowQuestionAnswers($data->publicShowQuestionAnswers)
+            ->setPublicShowOrderDetails($data->publicShowOrderDetails);
 
         return $this->updateCheckInlistService->updateCheckInlist(
             checkInList: $checkInList,
