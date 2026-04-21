@@ -25,6 +25,9 @@ export const CreateCheckInListModal = ({onClose}: GenericModalProps) => {
             expires_at: '',
             activates_at: '',
             product_ids: [],
+            public_show_attendee_notes: true,
+            public_show_question_answers: true,
+            public_show_order_details: true,
         }
     });
     const createMutation = useCreateCheckInList();

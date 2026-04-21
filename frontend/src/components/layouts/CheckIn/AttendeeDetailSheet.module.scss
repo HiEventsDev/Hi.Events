@@ -1,0 +1,317 @@
+@use "../../../styles/mixins";
+
+.drawer {
+  border-radius: 20px 20px 0 0 !important;
+  max-height: 90vh !important;
+  // Default transition lets the sheet snap back when a partial drag is released.
+  // During an active drag we zero this out via inline style for direct 1:1 tracking.
+  transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.body {
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  @include mixins.scrollbar();
+}
+
+.handleHitArea {
+  // Fat target for the grab handle — the visible bar is thin but the draggable
+  // area needs to comfortably catch a thumb.
+  padding: 10px 0 6px;
+  display: flex;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  flex-shrink: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--hi-primary);
+    outline-offset: 2px;
+  }
+}
+
+.handle {
+  width: 42px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hi-color-gray-2);
+  pointer-events: none;
+}
+
+.loading {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.errorBlock {
+  padding: 40px 20px;
+  text-align: center;
+  color: #c92a2a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px 10px;
+}
+
+.headerMain {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--mantine-color-primary-1, #dcd2f0);
+  color: var(--mantine-color-primary-9, #33205a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--hi-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  margin-top: 2px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--hi-color-gray-dark);
+  min-width: 0;
+}
+
+.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  color: var(--hi-primary);
+  flex-shrink: 0;
+}
+
+.dot {
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusRow {
+  margin-top: 8px;
+}
+
+.closeBtn {
+  border: none;
+  background: var(--hi-color-gray);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--hi-color-gray-dark);
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--hi-color-gray-2);
+    color: var(--hi-text);
+  }
+}
+
+.contactRow {
+  padding: 0 20px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--hi-color-gray-dark);
+  padding: 4px 10px;
+  background: var(--hi-color-gray);
+  border-radius: 999px;
+  max-width: 100%;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.section {
+  padding: 10px 20px;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hi-color-gray-dark);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.checkInsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkInRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--hi-color-money-green) 8%, #fff);
+  border: 1px solid color-mix(in srgb, var(--hi-color-money-green) 28%, transparent);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--hi-text);
+}
+
+.checkInBadge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--hi-color-money-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notesBox {
+  padding: 12px 14px;
+  background: color-mix(in srgb, #f59f00 10%, #fff);
+  border: 1px solid color-mix(in srgb, #f59f00 32%, transparent);
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--hi-text);
+  white-space: pre-wrap;
+}
+
+.answersList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.answerRow {
+  padding: 10px 12px;
+  background: var(--hi-color-gray);
+  border-radius: 10px;
+}
+
+.answerQ {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--hi-color-gray-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.answerA {
+  font-size: 14px;
+  color: var(--hi-text);
+  margin-top: 2px;
+  white-space: pre-wrap;
+}
+
+.orderGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.orderCell {
+  padding: 10px 12px;
+  background: var(--hi-color-gray);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.orderLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--hi-color-gray-dark);
+  text-transform: uppercase;
+}
+
+.orderValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hi-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hiddenHint {
+  margin: 6px 20px 0;
+  padding: 10px 12px;
+  background: var(--hi-color-gray);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--hi-color-gray-dark);
+  line-height: 1.4;
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 20px calc(14px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid var(--hi-color-gray-2);
+  margin-top: 10px;
+}
