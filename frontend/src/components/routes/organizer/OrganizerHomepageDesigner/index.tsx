@@ -9,7 +9,7 @@ import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Accordion, Button, Group, Stack, Text} from "@mantine/core";
-import {IconColorPicker, IconHelp, IconPalette, IconPhoto} from "@tabler/icons-react";
+import {IconColorPicker, IconHelp, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {LoadingMask} from "../../../common/LoadingMask";
 import {CustomSelect} from "../../../common/CustomSelect";
@@ -19,7 +19,9 @@ import {organizerPreviewPath} from "../../../../utilites/urlHelper.ts";
 import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrganizerPublic.ts";
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
+import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {computeThemeVariables, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
+import {DEFAULT_HOMEPAGE_FONT} from "../../../../constants/homepageFonts.ts";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
@@ -38,7 +40,7 @@ const OrganizerHomepageDesigner = () => {
 
     const [iframeSrc, setIframeSrc] = useState<string | null>(null);
     const [iframeLoaded, setIframeLoaded] = useState(false);
-    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'theme']);
+    const [accordionValue, setAccordionValue] = useState<string[]>(['images', 'theme', 'typography']);
     const [lastCoverId, setLastCoverId] = useState<IdParam | null>(null);
     const [lastLogoId, setLastLogoId] = useState<IdParam | null>(null);
 
@@ -52,6 +54,7 @@ const OrganizerHomepageDesigner = () => {
                 background: '#f5f3ff',
                 mode: 'light',
                 background_type: 'COLOR',
+                font_family: DEFAULT_HOMEPAGE_FONT,
             },
         }
     });
@@ -269,6 +272,25 @@ const OrganizerHomepageDesigner = () => {
                                         </Stack>
                                     </fieldset>
                                 </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+
+                        <Accordion.Item value="typography" className={classes.accordionItem}>
+                            <Accordion.Control icon={<IconTypography size={20}/>}>
+                                <Text fw={500}>{t`Typography`}</Text>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                <fieldset disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}
+                                          className={classes.fieldset}>
+                                    <ThemeFontControl
+                                        value={form.values.homepage_theme_settings.font_family}
+                                        onChange={(fontFamily) => form.setFieldValue('homepage_theme_settings', {
+                                            ...form.values.homepage_theme_settings,
+                                            font_family: fontFamily,
+                                        })}
+                                        disabled={organizerSettingsQuery.isLoading || updateMutation.isPending}
+                                    />
+                                </fieldset>
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>

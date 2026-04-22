@@ -351,6 +351,132 @@ class CreateEventServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testCreateEventInheritsOrganizerFontFamily(): void
+    {
+        $eventData = $this->createMockEventDomainObjectWithCategory('MUSIC');
+
+        $organizerSettings = Mockery::mock(OrganizerSettingDomainObject::class);
+        $organizerSettings->shouldReceive('getHomepageThemeSettings')
+            ->andReturn([
+                'accent' => '#ff0000',
+                'background' => '#ffffff',
+                'mode' => 'light',
+                'background_type' => HomepageBackgroundType::COLOR->name,
+                'font_family' => 'Inter',
+            ]);
+        $organizerSettings->shouldReceive('getDefaultAttendeeDetailsCollectionMethod')
+            ->andReturn('per_order');
+        $organizerSettings->shouldReceive('getDefaultShowMarketingOptIn')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultPassPlatformFeeToBuyer')
+            ->andReturn(false);
+        $organizerSettings->shouldReceive('getDefaultAllowAttendeeSelfEdit')
+            ->andReturn(false);
+
+        $organizer = $this->createMockOrganizerDomainObject()
+            ->shouldReceive('getOrganizerSettings')
+            ->andReturn($organizerSettings)
+            ->getMock();
+
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->with(OrganizerSettingDomainObject::class)
+            ->once()
+            ->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($organizer);
+
+        $this->eventRepository->shouldReceive('create')->andReturn($eventData);
+
+        $this->config->shouldReceive('get')
+            ->with('filesystems.public')
+            ->andReturn('public');
+        $this->config->shouldReceive('get')
+            ->with('app.event_categories_cover_images_path')
+            ->andReturn('event-covers');
+
+        $mockDisk = Mockery::mock();
+        $mockDisk->shouldReceive('exists')
+            ->with('event-covers/MUSIC.jpg')
+            ->andReturn(false);
+
+        $this->filesystemManager->shouldReceive('disk')
+            ->with('public')
+            ->andReturn($mockDisk);
+
+        $this->eventSettingsRepository->shouldReceive('create')
+            ->with(Mockery::on(function ($arg) {
+                return isset($arg['homepage_theme_settings']['font_family'])
+                    && $arg['homepage_theme_settings']['font_family'] === 'Inter';
+            }));
+
+        $this->eventStatisticsRepository->shouldReceive('create');
+
+        $this->purifier->shouldReceive('purify')->andReturn('Test Description');
+
+        $this->createEventService->createEvent($eventData);
+
+        $this->assertTrue(true);
+    }
+
+    public function testCreateEventOmitsFontFamilyWhenOrganizerHasNone(): void
+    {
+        $eventData = $this->createMockEventDomainObjectWithCategory('MUSIC');
+        $organizer = $this->createMockOrganizerDomainObject()
+            ->shouldReceive('getOrganizerSettings')
+            ->andReturn(new OrganizerSettingDomainObject())
+            ->getMock();
+
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
+            return $callback();
+        });
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->with(OrganizerSettingDomainObject::class)
+            ->once()
+            ->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($organizer);
+
+        $this->eventRepository->shouldReceive('create')->andReturn($eventData);
+
+        $this->config->shouldReceive('get')
+            ->with('filesystems.public')
+            ->andReturn('public');
+        $this->config->shouldReceive('get')
+            ->with('app.event_categories_cover_images_path')
+            ->andReturn('event-covers');
+
+        $mockDisk = Mockery::mock();
+        $mockDisk->shouldReceive('exists')
+            ->with('event-covers/MUSIC.jpg')
+            ->andReturn(false);
+
+        $this->filesystemManager->shouldReceive('disk')
+            ->with('public')
+            ->andReturn($mockDisk);
+
+        $this->eventSettingsRepository->shouldReceive('create')
+            ->with(Mockery::on(function ($arg) {
+                return !array_key_exists('font_family', $arg['homepage_theme_settings'] ?? []);
+            }));
+
+        $this->eventStatisticsRepository->shouldReceive('create');
+
+        $this->purifier->shouldReceive('purify')->andReturn('Test Description');
+
+        $this->createEventService->createEvent($eventData);
+
+        $this->assertTrue(true);
+    }
+
     private function createMockEventDomainObject(): EventDomainObject
     {
         return Mockery::mock(EventDomainObject::class, static function ($mock) {
