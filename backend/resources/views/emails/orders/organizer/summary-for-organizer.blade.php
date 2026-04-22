@@ -27,9 +27,7 @@
 {{ __('Order Status:') }} <b>{{ $order->getHumanReadableStatus() }}</b>
 <br>
 
-<x-mail::button :url="$orderUrl">
-    {{ __('View Order') }}
-</x-mail::button>
+{{ __('Sign in to your Hi.Events dashboard to view the full order.') }}
 
 </x-mail::message>
 

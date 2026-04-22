@@ -36,6 +36,8 @@ export const emailTypeLabel = (emailType: string) => {
             return t`Waitlist Confirmation`;
         case 'waitlist_offer_expired':
             return t`Waitlist Offer Expired`;
+        case 'organizer_order_summary':
+            return t`Organizer Order Notification`;
         default:
             return emailType;
     }
@@ -66,6 +68,7 @@ export const emailTypeFilterOptions = [
     {label: t`Waitlist Offer`, value: 'waitlist_offer'},
     {label: t`Waitlist Confirmation`, value: 'waitlist_confirmation'},
     {label: t`Waitlist Offer Expired`, value: 'waitlist_offer_expired'},
+    {label: t`Organizer Order Notification`, value: 'organizer_order_summary'},
 ];
 
 const formatDate = (dateStr: string | null | undefined) => {

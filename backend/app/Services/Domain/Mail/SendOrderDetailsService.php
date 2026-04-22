@@ -143,8 +143,17 @@ class SendOrderDetailsService
             return;
         }
 
-        $this->mailer
-            ->to($event->getOrganizer()->getEmail())
-            ->send(new OrderSummaryForOrganizer($order, $event));
+        $mail = new OrderSummaryForOrganizer($order, $event);
+
+        $this->trackingService->recordAndSend(
+            mailer: $this->mailer,
+            recipient: $event->getOrganizer()->getEmail(),
+            mail: $mail,
+            emailType: TransactionalEmailType::ORGANIZER_ORDER_SUMMARY,
+            subject: $mail->envelope()->subject,
+            eventId: $event->getId(),
+            orderId: $order->getId(),
+            accountId: $event->getAccountId(),
+        );
     }
 }

@@ -10,4 +10,5 @@ enum TransactionalEmailType: string
     case WAITLIST_OFFER = 'waitlist_offer';
     case WAITLIST_CONFIRMATION = 'waitlist_confirmation';
     case WAITLIST_OFFER_EXPIRED = 'waitlist_offer_expired';
+    case ORGANIZER_ORDER_SUMMARY = 'organizer_order_summary';
 }
