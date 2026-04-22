@@ -75,6 +75,7 @@ export interface HomepageThemeSettings {
     background: string;
     mode: 'light' | 'dark';
     background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
+    font_family?: string;
 }
 
 export interface LoginResponse {

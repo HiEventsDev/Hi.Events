@@ -37,6 +37,7 @@ import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPix
 import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
 import {CookieConsentBanner} from "../../common/CookieConsentBanner";
 import {removeTransparency} from "../../../utilites/colorHelper.ts";
+import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
@@ -116,6 +117,10 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const cssVars = computeThemeVariables(themeSettings);
     const backgroundType = themeSettings.background_type;
 
+    useEffect(() => {
+        ensureHomepageFontLoaded(themeSettings.font_family);
+    }, [themeSettings.font_family]);
+
     const themeStyles = {
         '--event-bg-color': themeSettings.background,
         '--event-content-bg-color': cssVars['--theme-surface'],
@@ -127,6 +132,8 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         '--event-accent-soft': cssVars['--theme-accent-soft'],
         '--event-accent-muted': cssVars['--theme-accent-muted'],
         '--event-border-color': cssVars['--theme-border'],
+        '--theme-font-family': cssVars['--theme-font-family'],
+        fontFamily: cssVars['--theme-font-family'],
     } as React.CSSProperties;
 
     const coverImageData = eventCoverImage(event);
