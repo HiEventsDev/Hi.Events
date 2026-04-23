@@ -75,6 +75,7 @@ class MailBuilderService
             organizer: $organizer,
             eventSettings: $eventSettings,
             invoice: $invoice,
+            occurrence: $occurrence,
             renderedTemplate: $renderedTemplate,
         );
     }

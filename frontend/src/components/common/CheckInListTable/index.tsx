@@ -1,4 +1,4 @@
-import {Anchor, Button, Progress} from '@mantine/core';
+import {Anchor, Badge, Button, Progress} from '@mantine/core';
 import {CheckInList, Event, EventType, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
@@ -60,25 +60,31 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                     enableHiding: false,
                     cell: (info: CellContext<CheckInList, unknown>) => {
                         const list = info.row.original;
+                        const coversAllTickets = !list.products || list.products.length === 0;
                         return (
                             <div className={classes.listDetails}>
-                                <Anchor
-                                    className={classes.listName}
-                                    onClick={() => {
-                                        setSelectedCheckInListId(list.id as IdParam);
-                                        openEditModal();
-                                    }}
-                                >
-                                    <Truncate text={list.name} length={40}/>
-                                </Anchor>
-                                {list.products && list.products.length > 0 && (
-                                    <div className={classes.productsText}>
-                                        {list.products.length === 1
+                                <div className={classes.nameRow}>
+                                    <Anchor
+                                        className={classes.listName}
+                                        onClick={() => {
+                                            setSelectedCheckInListId(list.id as IdParam);
+                                            openEditModal();
+                                        }}
+                                    >
+                                        <Truncate text={list.name} length={40}/>
+                                    </Anchor>
+                                    {list.is_system_default && (
+                                        <Badge size="xs" color="gray" variant="light">{t`Default`}</Badge>
+                                    )}
+                                </div>
+                                <div className={classes.productsText}>
+                                    {coversAllTickets
+                                        ? t`Covers every ticket`
+                                        : list.products!.length === 1
                                             ? t`Includes 1 product`
-                                            : <Trans>Includes {list.products.length} products</Trans>
-                                        }
-                                    </div>
-                                )}
+                                            : <Trans>Includes {list.products!.length} products</Trans>
+                                    }
+                                </div>
                             </div>
                         );
                     },
@@ -179,61 +185,62 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                     enableHiding: false,
                     cell: (info: CellContext<CheckInList, unknown>) => {
                         const list = info.row.original;
+                        const manageItems = [
+                            {
+                                label: t`Edit Check-In List`,
+                                icon: <IconPencil size={14}/>,
+                                onClick: () => {
+                                    setSelectedCheckInListId(list.id as IdParam);
+                                    openEditModal();
+                                }
+                            },
+                            {
+                                label: t`Copy Check-In URL`,
+                                icon: <IconCopy size={14}/>,
+                                onClick: () => {
+                                    navigator.clipboard.writeText(
+                                        `${window.location.origin}/check-in/${list.short_id}`
+                                    ).then(() => {
+                                        showSuccess(t`Check-In URL copied to clipboard`);
+                                    });
+                                }
+                            },
+                            {
+                                label: t`Open Check-In Page`,
+                                icon: <IconExternalLink size={14}/>,
+                                onClick: () => {
+                                    window.open(`/check-in/${list.short_id}`, '_blank');
+                                }
+                            },
+                        ];
+                        const groups: {label: string; items: any[]}[] = [
+                            {label: t`Manage`, items: manageItems},
+                        ];
+                        if (!list.is_system_default) {
+                            groups.push({
+                                label: t`Danger zone`,
+                                items: [
+                                    {
+                                        label: t`Delete Check-In List`,
+                                        icon: <IconTrash size={14}/>,
+                                        onClick: () => {
+                                            confirmationDialog(
+                                                t`Are you sure you would like to delete this Check-In List?`,
+                                                () => {
+                                                    handleDeleteCheckInList(
+                                                        list.id as IdParam,
+                                                        eventId,
+                                                    );
+                                                })
+                                        },
+                                        color: 'red',
+                                    },
+                                ],
+                            });
+                        }
                         return (
                             <div className={classes.actionsMenu}>
-                                <ActionMenu itemsGroups={[
-                                    {
-                                        label: t`Manage`,
-                                        items: [
-                                            {
-                                                label: t`Edit Check-In List`,
-                                                icon: <IconPencil size={14}/>,
-                                                onClick: () => {
-                                                    setSelectedCheckInListId(list.id as IdParam);
-                                                    openEditModal();
-                                                }
-                                            },
-                                            {
-                                                label: t`Copy Check-In URL`,
-                                                icon: <IconCopy size={14}/>,
-                                                onClick: () => {
-                                                    navigator.clipboard.writeText(
-                                                        `${window.location.origin}/check-in/${list.short_id}`
-                                                    ).then(() => {
-                                                        showSuccess(t`Check-In URL copied to clipboard`);
-                                                    });
-                                                }
-                                            },
-                                            {
-                                                label: t`Open Check-In Page`,
-                                                icon: <IconExternalLink size={14}/>,
-                                                onClick: () => {
-                                                    window.open(`/check-in/${list.short_id}`, '_blank');
-                                                }
-                                            }
-                                        ],
-                                    },
-                                    {
-                                        label: t`Danger zone`,
-                                        items: [
-                                            {
-                                                label: t`Delete Check-In List`,
-                                                icon: <IconTrash size={14}/>,
-                                                onClick: () => {
-                                                    confirmationDialog(
-                                                        t`Are you sure you would like to delete this Check-In List?`,
-                                                        () => {
-                                                            handleDeleteCheckInList(
-                                                                list.id as IdParam,
-                                                                eventId,
-                                                            );
-                                                        })
-                                                },
-                                                color: 'red',
-                                            },
-                                        ],
-                                    },
-                                ]}/>
+                                <ActionMenu itemsGroups={groups}/>
                             </div>
                         );
                     },

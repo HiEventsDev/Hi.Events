@@ -52,12 +52,6 @@ export const CheckInListForm = ({
                                     isNewForOccurrence,
                                     hideIntro,
                                 }: CheckInListFormProps) => {
-    const tickets = useMemo(() => {
-        return productCategories
-            .flatMap(category => category.products || [])
-            .filter(product => product.product_type === ProductType.Ticket);
-    }, [productCategories]);
-
     const isRecurring = eventType === EventType.RECURRING;
     const activeOccurrences = useMemo(() => {
         if (!isRecurring || !occurrences || !timezone) return [];
@@ -77,11 +71,16 @@ export const CheckInListForm = ({
     // Open advanced panel automatically if editing a list that already uses any of those options.
     const [showAdvanced, setShowAdvanced] = useState(() => hasAdvancedValuesSet(form));
 
+    // UI mirror of "product_ids is empty" — default on for new lists.
+    const [scopeToAll, setScopeToAll] = useState(
+        () => !form.values.product_ids || form.values.product_ids.length === 0,
+    );
+
+    // Reflect late-hydrated values (edit modal sets product_ids in an effect).
     useEffect(() => {
-        if (tickets.length === 1 && (!form.values.product_ids || form.values.product_ids.length === 0)) {
-            form.setFieldValue('product_ids', [String(tickets[0].id)]);
-        }
-    }, [tickets]);
+        const hasProducts = (form.values.product_ids?.length ?? 0) > 0;
+        if (hasProducts && scopeToAll) setScopeToAll(false);
+    }, [form.values.product_ids]);
 
     const introTitle = isNewForOccurrence
         ? t`Control who gets in for this date`
@@ -104,14 +103,31 @@ export const CheckInListForm = ({
                 placeholder={t`VIP check-in list`}
             />
 
-            <ProductSelector
-                label={t`Which tickets should be associated with this check-in list?`}
-                placeholder={t`Select tickets`}
-                productCategories={productCategories}
-                form={form}
-                productFieldName="product_ids"
-                includedProductTypes={[ProductType.Ticket]}
+            {/* UI-only: empty product_ids = "covers every ticket" on the backend. */}
+            <Switch
+                mt="sm"
+                label={t`Apply to all tickets`}
+                description={t`Leave on to cover every ticket on the event. Turn off to pick specific tickets.`}
+                checked={scopeToAll}
+                onChange={(e) => {
+                    const checked = e.currentTarget.checked;
+                    setScopeToAll(checked);
+                    if (checked) {
+                        form.setFieldValue('product_ids', []);
+                    }
+                }}
             />
+
+            {!scopeToAll && (
+                <ProductSelector
+                    label={t`Which tickets should be associated with this check-in list?`}
+                    placeholder={t`Select tickets`}
+                    productCategories={productCategories}
+                    form={form}
+                    productFieldName="product_ids"
+                    includedProductTypes={[ProductType.Ticket]}
+                />
+            )}
 
             {isRecurring && occurrenceOptions.length > 0 && (
                 <Select

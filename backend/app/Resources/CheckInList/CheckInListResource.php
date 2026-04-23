@@ -21,6 +21,7 @@ class CheckInListResource extends JsonResource
             'expires_at' => $this->getExpiresAt(),
             'activates_at' => $this->getActivatesAt(),
             'short_id' => $this->getShortId(),
+            'is_system_default' => $this->getIsSystemDefault(),
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'total_attendees' => $this->getTotalAttendeesCount(),
             'checked_in_attendees' => $this->getCheckedInCount(),

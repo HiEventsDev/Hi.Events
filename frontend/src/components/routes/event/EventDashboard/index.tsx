@@ -22,6 +22,7 @@ import {useEffect, useRef, useState} from 'react';
 import {EventLifecycleStatus, EventStatus, EventType, StripePlatform} from "../../../../types.ts";
 import {isHiEvents} from "../../../../utilites/helpers.ts";
 import {UpcomingOccurrences} from "./UpcomingOccurrences";
+import {NextOccurrenceHero} from "./NextOccurrenceHero";
 import {StripeConnectButton} from "../../../common/StripeConnectButton";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 
@@ -155,6 +156,18 @@ export const EventDashboard = () => {
             )}
 
             {event && (<>
+                {event?.type === EventType.RECURRING && (
+                    <NextOccurrenceHero event={event} eventId={eventId}/>
+                )}
+
+                {/* Scope label — makes it unambiguous that the stat boxes
+                    aggregate across the whole event for the current date range,
+                    not the specific next session shown in the hero above. */}
+                <div className={classes.sectionLabel}>
+                    <span>{t`Event totals`}</span>
+                    {dateRangeLabel && <span className={classes.sectionLabelRange}>· {dateRangeLabel}</span>}
+                </div>
+
                 <StatBoxes/>
 
                 {event?.type === EventType.RECURRING && (

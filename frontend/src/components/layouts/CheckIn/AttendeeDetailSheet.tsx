@@ -3,6 +3,7 @@ import {Badge, Button, Drawer, Loader} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {
     IconAlertTriangle,
+    IconCalendarEvent,
     IconCheck,
     IconClipboardText,
     IconMail,
@@ -11,14 +12,17 @@ import {
     IconUser,
     IconX,
 } from "@tabler/icons-react";
-import {AttendeeDetailPublic} from "../../../types.ts";
+import {AttendeeDetailPublic, EventType} from "../../../types.ts";
 import {useGetCheckInListAttendeeDetailPublic} from "../../../queries/useGetCheckInListAttendeeDetailPublic.ts";
 import {useGetMe} from "../../../queries/useGetMe.ts";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import classes from "./AttendeeDetailSheet.module.scss";
 
 interface Props {
     checkInListShortId: string | undefined;
     attendeePublicId: string | null;
+    eventType?: EventType;
+    timezone?: string;
     onClose: () => void;
     onCheckInToggle: (detail: AttendeeDetailPublic) => void;
     isActionPending: boolean;
@@ -43,6 +47,8 @@ const DRAG_DISMISS_THRESHOLD_PX = 90;
 export const AttendeeDetailSheet = ({
                                         checkInListShortId,
                                         attendeePublicId,
+                                        eventType,
+                                        timezone,
                                         onClose,
                                         onCheckInToggle,
                                         isActionPending,
@@ -187,6 +193,17 @@ export const AttendeeDetailSheet = ({
                                         </>
                                     )}
                                 </div>
+                                {eventType === EventType.RECURRING && detail.event_occurrence && timezone && (
+                                    <div className={classes.occurrenceRow}>
+                                        <IconCalendarEvent size={12}/>
+                                        <span>
+                                            {formatDateWithLocale(detail.event_occurrence.start_date, 'shortDate', timezone)}
+                                            {' · '}
+                                            {formatDateWithLocale(detail.event_occurrence.start_date, 'timeOnly', timezone)}
+                                            {detail.event_occurrence.label ? ` · ${detail.event_occurrence.label}` : ''}
+                                        </span>
+                                    </div>
+                                )}
                                 <div className={classes.statusRow}>{statusBadge}</div>
                             </div>
                         </div>

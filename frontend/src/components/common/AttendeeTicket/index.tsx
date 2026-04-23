@@ -2,19 +2,20 @@ import {getAttendeeProductPrice, getAttendeeProductTitle} from "../../../utilite
 import {Button, CopyButton} from "@mantine/core";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
-import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
-import {Address, Attendee, Event, Product} from "../../../types.ts";
+import {Address, Attendee, Event, EventOccurrence, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 import {imageUrl} from "../../../utilites/urlHelper.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {PoweredByFooter} from "../PoweredByFooter";
+import {EventDateRange} from "../EventDateRange";
 
 interface AttendeeTicketProps {
     event: Event;
     attendee: Attendee;
     product: Product;
+    occurrence?: EventOccurrence;
     hideButtons?: boolean;
     showPoweredBy?: boolean;
 }
@@ -23,9 +24,14 @@ export const AttendeeTicket = ({
                                    attendee,
                                    product,
                                    event,
+                                   occurrence,
                                    hideButtons = false,
                                    showPoweredBy = false,
                                }: AttendeeTicketProps) => {
+    // Prefer attendee.event_occurrence (hydrated by backend) over caller-supplied
+    // occurrence, so the ticket always shows the date the attendee is booked for
+    // rather than the event's aggregated range.
+    const ticketOccurrence = attendee.event_occurrence ?? occurrence;
     const productPrice = getAttendeeProductPrice(attendee, product);
     const hasVenue = event?.settings?.location_details?.venue_name || event?.settings?.location_details?.address_line_1;
 
@@ -74,7 +80,10 @@ export const AttendeeTicket = ({
                         <div className={classes.detailRow}>
                             <div className={classes.detailLabel}>{t`Date & Time`}</div>
                             <div className={classes.detailValue}>
-                                {prettyDate(event.start_date, event.timezone, true)}
+                                <EventDateRange event={event} occurrence={ticketOccurrence}/>
+                                {ticketOccurrence?.label && (
+                                    <div className={classes.occurrenceLabel}>{ticketOccurrence.label}</div>
+                                )}
                             </div>
                         </div>
                         {event?.organizer?.name && (

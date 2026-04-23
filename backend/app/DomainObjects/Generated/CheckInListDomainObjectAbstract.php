@@ -24,6 +24,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const PUBLIC_SHOW_ATTENDEE_NOTES = 'public_show_attendee_notes';
     final public const PUBLIC_SHOW_QUESTION_ANSWERS = 'public_show_question_answers';
     final public const PUBLIC_SHOW_ORDER_DETAILS = 'public_show_order_details';
+    final public const IS_SYSTEM_DEFAULT = 'is_system_default';
 
     protected int $id;
     protected int $event_id;
@@ -39,6 +40,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected bool $public_show_attendee_notes = true;
     protected bool $public_show_question_answers = true;
     protected bool $public_show_order_details = true;
+    protected bool $is_system_default = false;
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'public_show_attendee_notes' => $this->public_show_attendee_notes ?? null,
                     'public_show_question_answers' => $this->public_show_question_answers ?? null,
                     'public_show_order_details' => $this->public_show_order_details ?? null,
+                    'is_system_default' => $this->is_system_default ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getPublicShowOrderDetails(): bool
     {
         return $this->public_show_order_details;
+    }
+
+    public function setIsSystemDefault(bool $is_system_default): self
+    {
+        $this->is_system_default = $is_system_default;
+        return $this;
+    }
+
+    public function getIsSystemDefault(): bool
+    {
+        return $this->is_system_default;
     }
 }

@@ -2,15 +2,17 @@ import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, QueryFilters, QueryFilterOperator} from "../../../types.ts";
-import {showError, showSuccess, showSuccessWithUndo} from "../../../utilites/notifications.tsx";
+import {Attendee, EventType, QueryFilters, QueryFilterOperator} from "../../../types.ts";
+import {showError, showInfo, showSuccess, showSuccessWithUndo} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
 import classes from "./CheckIn.module.scss";
 import {ActionIcon} from "@mantine/core";
-import {IconInfoCircle, IconWifiOff} from "@tabler/icons-react";
+import {IconCalendarEvent, IconInfoCircle, IconWifiOff} from "@tabler/icons-react";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import {useHaptics} from "../../../hooks/useHaptics.ts";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
+import {useGetCheckInListStatsPublic} from "../../../queries/useGetCheckInListStatsPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
 import {useDeleteCheckInPublic} from "../../../mutations/useDeleteCheckInPublic.ts";
 import {NoResultsSplash} from "../../common/NoResultsSplash";
@@ -26,6 +28,8 @@ import {ScanTab, ScanMode} from "./tabs/ScanTab.tsx";
 import {SearchTab} from "./tabs/SearchTab.tsx";
 import {StatsTab} from "./tabs/StatsTab.tsx";
 import {AttendeeDetailSheet} from "./AttendeeDetailSheet.tsx";
+import {OccurrenceFilterPill} from "./OccurrenceFilterPill.tsx";
+import {useCheckInOccurrenceFilter} from "../../../hooks/useCheckInOccurrenceFilter.ts";
 import {RecentScan, RecentScanStatus} from "./types.ts";
 
 const MAX_RECENT_SCANS = 20;
@@ -98,12 +102,33 @@ const CheckIn = () => {
     });
 
     const products = checkInList?.products;
+
+    // Prefer the list's unfiltered occurrences (includes past dates for
+    // reconciliation) over event.occurrences (future-only, customer-facing).
+    const pillOccurrences = checkInList?.event_occurrences ?? event?.occurrences;
+
+    const showOccurrenceFilter =
+        event?.type === EventType.RECURRING
+        && !checkInList?.event_occurrence_id
+        && (pillOccurrences?.length ?? 0) > 0;
+    const {occurrenceId: occurrenceFilter, setOccurrenceId: setOccurrenceFilter, didClearStale} =
+        useCheckInOccurrenceFilter(checkInListShortId, pillOccurrences);
+
+    useEffect(() => {
+        if (didClearStale) {
+            showInfo(t`Your saved date filter is no longer available — showing all dates.`);
+        }
+    }, [didClearStale]);
+
     const queryFilters: QueryFilters = {
         pageNumber: 1,
         query: searchQueryDebounced,
         perPage: 150,
         filterFields: {
             status: {operator: QueryFilterOperator.Equals, value: "ACTIVE"},
+            ...(showOccurrenceFilter && occurrenceFilter !== null
+                ? {event_occurrence_id: {operator: QueryFilterOperator.Equals, value: String(occurrenceFilter)}}
+                : {}),
         },
     };
 
@@ -131,8 +156,7 @@ const CheckIn = () => {
         }
     }, [scanMode]);
 
-    // Show the check-in list description on first open so staff see operator instructions.
-    // Dismissal is persisted per list short_id.
+    // Show description on first open; dismissal persists per list short_id.
     useEffect(() => {
         if (isSsr()) return;
         if (!checkInListShortId) return;
@@ -387,8 +411,8 @@ const CheckIn = () => {
         };
     }, []);
 
-    // HID scanner keyboard listener — active when on Scan tab in USB mode.
-    // Typing in an input (Search tab) is ignored so manual search still works.
+    // HID scanner listener — only active on Scan tab in USB mode. Ignores key
+    // events while focus is in an input so manual search still works.
     useEffect(() => {
         const usbListeningActive = activeTab === "scan" && scanMode === "usb";
         if (!usbListeningActive) {
@@ -492,8 +516,16 @@ const CheckIn = () => {
             />);
     }
 
-    const totalAttendees = checkInList?.total_attendees ?? 0;
-    const checkedInCount = checkInList?.checked_in_attendees ?? 0;
+    // Filtered stats drive the progress chip when an occurrence is selected;
+    // otherwise the list's own totals (pre-computed server-side) are used.
+    const progressStatsQuery = useGetCheckInListStatsPublic(
+        checkInListShortId,
+        !!checkInList?.is_active && !checkInList?.is_expired && showOccurrenceFilter && occurrenceFilter !== null,
+        occurrenceFilter,
+    );
+    const filteredStats = progressStatsQuery.data?.data;
+    const totalAttendees = filteredStats?.total_attendees ?? checkInList?.total_attendees ?? 0;
+    const checkedInCount = filteredStats?.checked_in_attendees ?? checkInList?.checked_in_attendees ?? 0;
 
     return (
         <div className={classes.app}>
@@ -503,6 +535,18 @@ const CheckIn = () => {
                     <div className={classes.topTitle}>
                         <Truncate text={checkInList?.name ?? ""} length={26}/>
                     </div>
+                    {/* Subtitle for scoped lists so staff know which session they're on. */}
+                    {checkInList?.event_occurrence && event?.timezone && (
+                        <div className={classes.topScope}>
+                            <IconCalendarEvent size={12}/>
+                            <span>
+                                {formatDateWithLocale(checkInList.event_occurrence.start_date, 'shortDate', event.timezone)}
+                                {' · '}
+                                {formatDateWithLocale(checkInList.event_occurrence.start_date, 'timeOnly', event.timezone)}
+                                {checkInList.event_occurrence.label ? ` · ${checkInList.event_occurrence.label}` : ''}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <div className={classes.topRight}>
                     {totalAttendees > 0 && (
@@ -530,6 +574,18 @@ const CheckIn = () => {
                 </div>
             </header>
 
+            {/* Persistent across tabs. Hidden for scoped lists (header shows it) and single events. */}
+            {showOccurrenceFilter && event?.timezone && (
+                <div className={classes.occurrenceFilterBar}>
+                    <OccurrenceFilterPill
+                        occurrences={pillOccurrences ?? []}
+                        activeOccurrenceId={occurrenceFilter}
+                        timezone={event.timezone}
+                        onSelect={setOccurrenceFilter}
+                    />
+                </div>
+            )}
+
             <main className={classes.content}>
                 {activeTab === "scan" && (
                     <ScanTab
@@ -545,23 +601,29 @@ const CheckIn = () => {
                     />
                 )}
                 {activeTab === "search" && (
-                    <SearchTab
-                        attendees={attendees}
-                        products={products}
-                        searchQuery={searchQuery}
-                        onSearchChange={setSearchQuery}
-                        onCheckInToggle={handleCheckInToggle}
-                        onOpenDetail={setDetailAttendeePublicId}
-                        isLoading={attendeesQuery.isFetching}
-                        isCheckInPending={checkInMutation.isPending}
-                        isDeletePending={deleteCheckInMutation.isPending}
-                        allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
-                    />
+                    <>
+                        <SearchTab
+                            attendees={attendees}
+                            products={products}
+                            searchQuery={searchQuery}
+                            onSearchChange={setSearchQuery}
+                            onCheckInToggle={handleCheckInToggle}
+                            onOpenDetail={setDetailAttendeePublicId}
+                            isLoading={attendeesQuery.isFetching}
+                            isCheckInPending={checkInMutation.isPending}
+                            isDeletePending={deleteCheckInMutation.isPending}
+                            allowOrdersAwaitingOfflinePaymentToCheckIn={allowOrdersAwaitingOfflinePaymentToCheckIn || false}
+                            eventType={event?.type as EventType | undefined}
+                            timezone={event?.timezone}
+                            showRowOccurrences={showOccurrenceFilter}
+                        />
+                    </>
                 )}
                 {activeTab === "stats" && (
                     <StatsTab
                         checkInListShortId={checkInListShortId}
                         enabled={!!checkInList?.is_active && !checkInList?.is_expired}
+                        eventOccurrenceId={showOccurrenceFilter ? occurrenceFilter : null}
                     />
                 )}
             </main>
@@ -591,6 +653,8 @@ const CheckIn = () => {
             <AttendeeDetailSheet
                 checkInListShortId={checkInListShortId}
                 attendeePublicId={detailAttendeePublicId}
+                eventType={event?.type}
+                timezone={event?.timezone}
                 onClose={() => setDetailAttendeePublicId(null)}
                 isActionPending={checkInMutation.isPending || deleteCheckInMutation.isPending}
                 onCheckInToggle={(detail) => {

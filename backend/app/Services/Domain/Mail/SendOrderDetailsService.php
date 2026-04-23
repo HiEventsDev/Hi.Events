@@ -10,8 +10,8 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Mail\Order\OrderFailed;
-use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Mail\Organizer\OrderSummaryForOrganizer;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -35,8 +35,28 @@ class SendOrderDetailsService
     public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
-            ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: AttendeeDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                    new Relationship(
+                        domainObject: ProductDomainObject::class,
+                        name: 'product',
+                    ),
+                ],
+            ))
             ->loadRelation(InvoiceDomainObject::class)
             ->findById($order->getId());
 
@@ -65,11 +85,12 @@ class SendOrderDetailsService
     }
 
     public function sendCustomerOrderSummary(
-        OrderDomainObject        $order,
-        EventDomainObject        $event,
-        OrganizerDomainObject    $organizer,
-        EventSettingDomainObject $eventSettings,
-        ?InvoiceDomainObject     $invoice = null
+        OrderDomainObject             $order,
+        EventDomainObject             $event,
+        OrganizerDomainObject         $organizer,
+        EventSettingDomainObject      $eventSettings,
+        ?InvoiceDomainObject          $invoice = null,
+        ?EventOccurrenceDomainObject  $occurrence = null,
     ): void
     {
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
@@ -77,13 +98,34 @@ class SendOrderDetailsService
             $event,
             $eventSettings,
             $organizer,
-            $invoice
+            $invoice,
+            $occurrence ?? $this->resolvePrimaryOccurrence($order),
         );
 
         $this->mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
             ->send($mail);
+    }
+
+    /**
+     * Single-occurrence orders return that occurrence so the email can show its
+     * date. Multi-occurrence series-pass orders return null (email falls back
+     * to the event-level range).
+     */
+    private function resolvePrimaryOccurrence(OrderDomainObject $order): ?EventOccurrenceDomainObject
+    {
+        $items = $order->getOrderItems();
+        if ($items === null || $items->isEmpty()) {
+            return null;
+        }
+
+        $distinct = $items
+            ->map(fn(OrderItemDomainObject $item) => $item->getEventOccurrence())
+            ->filter()
+            ->unique(fn(EventOccurrenceDomainObject $occ) => $occ->getId());
+
+        return $distinct->count() === 1 ? $distinct->first() : null;
     }
 
     private function sendAttendeeTicketEmails(OrderDomainObject $order, EventDomainObject $event): void

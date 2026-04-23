@@ -3,7 +3,9 @@
 namespace HiEvents\Resources\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\Event\EventResourcePublic;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Product\ProductMinimalResourcePublic;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +20,11 @@ class CheckInListResourcePublic extends JsonResource
             'id' => $this->getId(),
             'short_id' => $this->getShortId(),
             'name' => $this->getName(),
+            'is_system_default' => $this->getIsSystemDefault(),
             'event_occurrence_id' => $this->getEventOccurrenceId(),
+            'event_occurrence' => $this->getEventOccurrence()
+                ? (new EventOccurrenceResourcePublic($this->getEventOccurrence()))->toArray($request)
+                : null,
             'description' => $this->getDescription(),
             'expires_at' => $this->getExpiresAt(),
             'activates_at' => $this->getActivatesAt(),
@@ -31,6 +37,17 @@ class CheckInListResourcePublic extends JsonResource
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
                 'event' => EventResourcePublic::make($this->getEvent()),
+                // Unfiltered list (still excludes cancelled) so the staff filter
+                // pill can show past sessions for reconciliation. EventResourcePublic
+                // filters to future/active which is wrong for the check-in UI.
+                'event_occurrences' => $this->getEvent()->getEventOccurrences()
+                    ? EventOccurrenceResourcePublic::collection(
+                        $this->getEvent()->getEventOccurrences()
+                            ->filter(fn(EventOccurrenceDomainObject $occ) => !$occ->isCancelled())
+                            ->sortBy(fn(EventOccurrenceDomainObject $occ) => $occ->getStartDate())
+                            ->values()
+                    )
+                    : [],
             ]),
             $this->mergeWhen($this->getProducts() !== null, fn() => [
                 'products' => ProductMinimalResourcePublic::collection($this->getProducts()),

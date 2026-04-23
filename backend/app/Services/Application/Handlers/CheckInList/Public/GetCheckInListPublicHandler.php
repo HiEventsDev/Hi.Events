@@ -27,6 +27,9 @@ class GetCheckInListPublicHandler
                 new Relationship(domainObject: EventOccurrenceDomainObject::class, name: 'event_occurrences'),
             ], name: 'event')))
             ->loadRelation(ProductDomainObject::class)
+            // Load separately — it may be past and therefore absent from
+            // event.occurrences, which filters to future.
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class, name: 'event_occurrence'))
             ->findFirstWhere([
                 'short_id' => $shortId,
             ]);

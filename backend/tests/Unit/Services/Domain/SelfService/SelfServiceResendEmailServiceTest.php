@@ -73,9 +73,12 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getOrganizer')->andReturn($organizer);
 
+        // Three eager-loads: order (with nested order items), event_occurrence,
+        // and product — so the attendee-ticket email can render the occurrence
+        // date, venue, and ticket type.
         $this->attendeeRepository
             ->shouldReceive('loadRelation')
-            ->once()
+            ->times(3)
             ->with(Mockery::type(Relationship::class))
             ->andReturnSelf();
 
@@ -229,14 +232,12 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getOrganizer')->andReturn($organizer);
 
+        // Order + event_occurrence + product — three nested eager-loads so
+        // the resend email can show the occurrence date and the ticket type.
         $this->attendeeRepository
             ->shouldReceive('loadRelation')
-            ->once()
-            ->with(Mockery::on(function ($relationship) {
-                return $relationship instanceof Relationship
-                    && $relationship->getDomainObject() === OrderDomainObject::class
-                    && $relationship->getName() === 'order';
-            }))
+            ->times(3)
+            ->with(Mockery::type(Relationship::class))
             ->andReturnSelf();
 
         $this->attendeeRepository
@@ -298,17 +299,21 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getOrganizer')->andReturn($organizer);
 
-        $loadRelationCallCount = 0;
         $this->orderRepository
             ->shouldReceive('loadRelation')
             ->times(3)
-            ->with(Mockery::on(function ($domainObject) use (&$loadRelationCallCount) {
-                $loadRelationCallCount++;
-                return in_array($domainObject, [
-                    OrderItemDomainObject::class,
+            ->with(Mockery::on(function ($arg) {
+                // OrderItem is now passed as a Relationship with a nested
+                // event_occurrence load so the summary email can show the
+                // occurrence date. Attendee and Invoice are still plain class
+                // strings.
+                if ($arg instanceof \HiEvents\Repository\Eloquent\Value\Relationship) {
+                    return true;
+                }
+                return in_array($arg, [
                     AttendeeDomainObject::class,
                     InvoiceDomainObject::class,
-                ]);
+                ], true);
             }))
             ->andReturnSelf();
 

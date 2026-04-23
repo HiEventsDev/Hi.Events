@@ -2,14 +2,8 @@ import {CSSProperties, useMemo, useState} from "react";
 import {Combobox, InputBase, ScrollArea, Text, useCombobox} from "@mantine/core";
 import {IconCalendar, IconSearch} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import {EventOccurrence} from "../../../types.ts";
-import {formatDateWithLocale} from "../../../utilites/dates.ts";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import {filterAndGroupOccurrences, formatOccurrenceLabel, isToday} from "./occurrenceSelectUtils.ts";
 
 interface OccurrenceSelectProps {
     occurrences: EventOccurrence[];
@@ -27,26 +21,6 @@ interface OccurrenceSelectProps {
 }
 
 const MAX_VISIBLE = 50;
-
-const formatOccurrenceLabel = (occ: EventOccurrence, tz: string): string => {
-    const date = formatDateWithLocale(occ.start_date, 'shortDate', tz);
-    const time = formatDateWithLocale(occ.start_date, 'timeOnly', tz);
-    return date + ' ' + time + (occ.label ? ` — ${occ.label}` : '');
-};
-
-const getMonthKey = (occ: EventOccurrence, tz: string): string => {
-    return dayjs.utc(occ.start_date).tz(tz).format('YYYY-MM');
-};
-
-const getMonthLabel = (monthKey: string): string => {
-    return dayjs(monthKey + '-01').format('MMMM YYYY');
-};
-
-const isToday = (occ: EventOccurrence, tz: string): boolean => {
-    const occDate = dayjs.utc(occ.start_date).tz(tz).format('YYYY-MM-DD');
-    const today = dayjs().tz(tz).format('YYYY-MM-DD');
-    return occDate === today;
-};
 
 export const OccurrenceSelect = ({
     occurrences,
@@ -73,39 +47,15 @@ export const OccurrenceSelect = ({
         },
     });
 
-    const filtered = useMemo(() => {
-        let items = occurrences;
-        if (filterCancelled) {
-            items = items.filter(o => o.status !== 'CANCELLED');
-        }
-
-        if (search.trim()) {
-            const query = search.toLowerCase().trim();
-            items = items.filter(occ => {
-                const label = formatOccurrenceLabel(occ, tz).toLowerCase();
-                return label.includes(query);
-            });
-        }
-
-        return items.slice(0, MAX_VISIBLE);
-    }, [occurrences, tz, search, filterCancelled]);
-
-    const grouped = useMemo(() => {
-        const groups: {key: string; label: string; items: EventOccurrence[]}[] = [];
-        const map = new Map<string, EventOccurrence[]>();
-
-        for (const occ of filtered) {
-            const key = getMonthKey(occ, tz);
-            if (!map.has(key)) map.set(key, []);
-            map.get(key)!.push(occ);
-        }
-
-        for (const [key, items] of map) {
-            groups.push({key, label: getMonthLabel(key), items});
-        }
-
-        return groups;
-    }, [filtered, tz]);
+    const {grouped, totalFiltered, totalAvailable} = useMemo(
+        () => filterAndGroupOccurrences(occurrences, {
+            search,
+            tz,
+            filterCancelled,
+            maxVisible: MAX_VISIBLE,
+        }),
+        [occurrences, tz, search, filterCancelled],
+    );
 
     const selectedOcc = value
         ? occurrences.find(o => String(o.id) === value)
@@ -114,11 +64,6 @@ export const OccurrenceSelect = ({
     const displayValue = selectedOcc
         ? formatOccurrenceLabel(selectedOcc, tz)
         : (value === '' && allLabel) ? allLabel : null;
-
-    const totalFiltered = filtered.length;
-    const totalAvailable = filterCancelled
-        ? occurrences.filter(o => o.status !== 'CANCELLED').length
-        : occurrences.length;
 
     return (
         <div style={{width: 275, ...style}}>

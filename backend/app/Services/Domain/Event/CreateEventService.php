@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -38,6 +39,7 @@ class CreateEventService
         private readonly Repository                            $config,
         private readonly FilesystemManager                     $filesystemManager,
         private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
+        private readonly CheckInListRepositoryInterface        $checkInListRepository,
     )
     {
     }
@@ -71,8 +73,27 @@ class CreateEventService
 
             $this->createEventStatistics($event);
 
+            $this->createSystemDefaultCheckInList($event);
+
             return $event;
         });
+    }
+
+    /**
+     * Every event gets a default "covers every ticket" check-in list at creation
+     * time so staff can open check-in the moment tickets exist.
+     */
+    private function createSystemDefaultCheckInList(EventDomainObject $event): void
+    {
+        $this->checkInListRepository->create([
+            'event_id' => $event->getId(),
+            'short_id' => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+            'name' => __('Default check-in'),
+            'is_system_default' => true,
+            'public_show_attendee_notes' => true,
+            'public_show_question_answers' => true,
+            'public_show_order_details' => true,
+        ]);
     }
 
     /**

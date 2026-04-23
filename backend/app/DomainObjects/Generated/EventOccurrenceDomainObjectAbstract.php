@@ -19,9 +19,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     final public const CAPACITY = 'capacity';
     final public const USED_CAPACITY = 'used_capacity';
     final public const LABEL = 'label';
-    final public const DESCRIPTION_OVERRIDE = 'description_override';
     final public const IS_OVERRIDDEN = 'is_overridden';
-    final public const NOTES = 'notes';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
@@ -35,9 +33,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     protected ?int $capacity = null;
     protected int $used_capacity = 0;
     protected ?string $label = null;
-    protected ?string $description_override = null;
     protected bool $is_overridden = false;
-    protected ?string $notes = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
@@ -54,9 +50,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
                     'capacity' => $this->capacity ?? null,
                     'used_capacity' => $this->used_capacity ?? null,
                     'label' => $this->label ?? null,
-                    'description_override' => $this->description_override ?? null,
                     'is_overridden' => $this->is_overridden ?? null,
-                    'notes' => $this->notes ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
@@ -162,17 +156,6 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
         return $this->label;
     }
 
-    public function setDescriptionOverride(?string $description_override): self
-    {
-        $this->description_override = $description_override;
-        return $this;
-    }
-
-    public function getDescriptionOverride(): ?string
-    {
-        return $this->description_override;
-    }
-
     public function setIsOverridden(bool $is_overridden): self
     {
         $this->is_overridden = $is_overridden;
@@ -182,17 +165,6 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     public function getIsOverridden(): bool
     {
         return $this->is_overridden;
-    }
-
-    public function setNotes(?string $notes): self
-    {
-        $this->notes = $notes;
-        return $this;
-    }
-
-    public function getNotes(): ?string
-    {
-        return $this->notes;
     }
 
     public function setCreatedAt(?string $created_at): self

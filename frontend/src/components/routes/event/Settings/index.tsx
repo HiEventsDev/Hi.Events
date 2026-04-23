@@ -28,10 +28,16 @@ import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
 import {WaitlistSettings} from "./Sections/WaitlistSettings";
 import {DangerZoneSettings} from "./Sections/DangerZoneSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
+import {useGetEvent} from "../../../../queries/useGetEvent.ts";
+import {useParams} from "react-router";
+import {EventType} from "../../../../types.ts";
 
 export const Settings = () => {
     const {data: account} = useGetAccount();
     const isSaasMode = account?.is_saas_mode_enabled;
+    const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
+    const isRecurring = event?.type === EventType.RECURRING;
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -71,12 +77,16 @@ export const Settings = () => {
                 icon: IconAdjustments,
                 component: MiscSettings
             },
-            {
+            // Waitlist isn't occurrence-aware yet — offer generation assumes
+            // product-level availability and would fire against aggregated
+            // capacity on recurring events. Hide it for recurring, same pattern
+            // as Capacity Management.
+            ...(!isRecurring ? [{
                 id: 'waitlist-settings',
                 label: t`Waitlist`,
                 icon: IconListCheck,
                 component: WaitlistSettings,
-            },
+            }] : []),
             {
                 id: 'payment-settings',
                 label: t`Payment & Invoicing`,
@@ -102,7 +112,7 @@ export const Settings = () => {
         }
 
         return baseSections;
-    }, [isSaasMode]);
+    }, [isSaasMode, isRecurring]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const [activeSection, setActiveSection] = useState(() => {

@@ -47,6 +47,25 @@
   text-overflow: ellipsis;
 }
 
+.topScope {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--hi-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .topRight {
   display: flex;
   align-items: center;
@@ -101,4 +120,11 @@
   overflow: hidden;
   min-height: 0;
   position: relative;
+}
+
+.occurrenceFilterBar {
+  padding: 8px 12px 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-shrink: 0;
 }

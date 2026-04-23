@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Waitlist;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -16,6 +17,7 @@ class CreateWaitlistEntryHandler
     public function __construct(
         private readonly CreateWaitlistEntryService       $createWaitlistEntryService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly EventRepositoryInterface         $eventRepository,
         private readonly ProductPriceRepositoryInterface  $productPriceRepository,
         private readonly ProductRepositoryInterface       $productRepository,
     )
@@ -28,6 +30,15 @@ class CreateWaitlistEntryHandler
      */
     public function handle(CreateWaitlistEntryDTO $dto): WaitlistEntryDomainObject
     {
+        // Waitlist has no per-occurrence awareness — reject recurring events at
+        // the API level since the UI already hides it for them.
+        $event = $this->eventRepository->findById($dto->event_id);
+        if ($event !== null && $event->isRecurring()) {
+            throw new ResourceConflictException(
+                __('Waitlist is not available for events with multiple dates.')
+            );
+        }
+
         $eventSettings = $this->eventSettingsRepository->findFirstWhere([
             'event_id' => $dto->event_id,
         ]);

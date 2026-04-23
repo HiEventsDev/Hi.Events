@@ -36,6 +36,7 @@ class CreateEventServiceTest extends TestCase
     private Repository $config;
     private FilesystemManager $filesystemManager;
     private EventOccurrenceRepositoryInterface $occurrenceRepository;
+    private \HiEvents\Repository\Interfaces\CheckInListRepositoryInterface $checkInListRepository;
 
     protected function setUp(): void
     {
@@ -51,6 +52,7 @@ class CreateEventServiceTest extends TestCase
         $this->config = Mockery::mock(Repository::class);
         $this->filesystemManager = Mockery::mock(FilesystemManager::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->checkInListRepository = Mockery::mock(\HiEvents\Repository\Interfaces\CheckInListRepositoryInterface::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
@@ -63,6 +65,7 @@ class CreateEventServiceTest extends TestCase
             $this->config,
             $this->filesystemManager,
             $this->occurrenceRepository,
+            $this->checkInListRepository,
         );
     }
 
@@ -115,6 +118,11 @@ class CreateEventServiceTest extends TestCase
                     $arg['products_sold'] === 0 &&
                     $arg['sales_total_gross'] === 0;
             }));
+
+        // Every event now gets a system-default check-in list on creation.
+        $this->checkInListRepository->shouldReceive('create')->once()
+            ->with(Mockery::on(fn($arg) => ($arg['is_system_default'] ?? false) === true
+                && ($arg['event_id'] ?? null) === $eventData->getId()));
 
         // Mock event cover creation
         $this->config->shouldReceive('get')
@@ -181,6 +189,7 @@ class CreateEventServiceTest extends TestCase
             }));
 
         $this->eventStatisticsRepository->shouldReceive('create');
+        $this->checkInListRepository->shouldReceive('create');
 
         // Mock event cover creation
         $this->config->shouldReceive('get')
@@ -291,6 +300,7 @@ class CreateEventServiceTest extends TestCase
             }));
 
         $this->eventStatisticsRepository->shouldReceive('create');
+        $this->checkInListRepository->shouldReceive('create');
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 
@@ -349,6 +359,7 @@ class CreateEventServiceTest extends TestCase
             }));
 
         $this->eventStatisticsRepository->shouldReceive('create');
+        $this->checkInListRepository->shouldReceive('create');
 
         $this->purifier->shouldReceive('purify')->andReturn('Test Description');
 

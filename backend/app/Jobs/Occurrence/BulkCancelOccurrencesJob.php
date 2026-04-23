@@ -12,6 +12,8 @@ use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -77,6 +79,11 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     eventId: $this->eventId,
                     occurrenceId: $occurrenceId,
                     refundOrders: $this->refundOrders,
+                ));
+
+                event(new OccurrenceEvent(
+                    type: DomainEventType::OCCURRENCE_CANCELLED,
+                    occurrenceId: $occurrenceId,
                 ));
 
                 if ($this->refundOrders) {

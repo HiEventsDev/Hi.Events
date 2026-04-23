@@ -1,0 +1,183 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--mantine-color-gray-2);
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+  }
+}
+
+// Label ------------------------------------------------------------------
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 130px;
+}
+
+.labelTop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mantine-color-dimmed);
+}
+
+// Each state swaps the accent colour used by the icon, progress bar, and
+// pulse dot. Keeping the mapping here makes future states a one-line change.
+.labelIcon { color: var(--mantine-color-violet-6); }
+.state_future    .labelIcon { color: var(--mantine-color-violet-6); }
+.state_imminent  .labelIcon { color: var(--mantine-color-orange-6); }
+.state_live      .labelIcon { color: var(--mantine-color-green-6); }
+.state_wrapping  .labelIcon { color: var(--mantine-color-gray-6); }
+
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mantine-color-text);
+}
+
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mantine-color-green-6);
+  position: relative;
+  flex-shrink: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--mantine-color-green-6);
+    animation: hero_pulse 1.6s ease-out infinite;
+  }
+}
+
+@keyframes hero_pulse {
+  0%   { transform: scale(1);   opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+// Details (date + time) --------------------------------------------------
+
+.details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateLine {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeLine {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--mantine-color-text);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.occurrenceLabel {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+// Stats + progress bar ---------------------------------------------------
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+
+  @media (max-width: 720px) {
+    min-width: 0;
+  }
+}
+
+.statLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+}
+
+.statIcon {
+  color: var(--mantine-color-dimmed);
+  flex-shrink: 0;
+}
+
+.statSecondary {
+  color: var(--mantine-color-dimmed);
+  font-weight: 500;
+}
+
+// A slim bar communicates progress at a glance without demanding attention.
+.bar {
+  position: relative;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--mantine-color-gray-2);
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: var(--mantine-color-violet-6);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.state_imminent .barFill { background: var(--mantine-color-orange-6); }
+.state_live     .barFill { background: var(--mantine-color-green-6); }
+.state_wrapping .barFill { background: var(--mantine-color-gray-6); }
+
+// CTA --------------------------------------------------------------------
+
+.cta {
+  flex-shrink: 0;
+  font-weight: 600;
+
+  @media (max-width: 720px) {
+    width: 100%;
+  }
+}

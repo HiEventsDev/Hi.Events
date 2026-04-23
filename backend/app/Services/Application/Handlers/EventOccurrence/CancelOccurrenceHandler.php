@@ -14,6 +14,8 @@ use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Occurrence\RefundOccurrenceOrdersJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -93,6 +95,11 @@ class CancelOccurrenceHandler
                 eventId: $eventId,
                 occurrenceId: $occurrenceId,
                 refundOrders: $refundOrders,
+            ));
+
+            event(new OccurrenceEvent(
+                type: DomainEventType::OCCURRENCE_CANCELLED,
+                occurrenceId: $occurrenceId,
             ));
 
             if ($refundOrders) {

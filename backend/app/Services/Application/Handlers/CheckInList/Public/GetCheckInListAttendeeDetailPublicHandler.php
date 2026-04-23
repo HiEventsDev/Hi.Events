@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -42,6 +43,7 @@ class GetCheckInListAttendeeDetailPublicHandler
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)
             ->loadRelation(new Relationship(ProductDomainObject::class, name: 'product'))
             ->loadRelation(new Relationship(AttendeeCheckInDomainObject::class, name: 'check_ins'))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class, name: 'event_occurrence'))
             ->findFirstWhere([
                 'public_id' => $attendeePublicId,
                 'event_id' => $checkInList->getEventId(),

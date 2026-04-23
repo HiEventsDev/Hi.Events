@@ -76,7 +76,11 @@ class GetOrderPublicHandler
                             )
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
-                    )
+                    ),
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
                 ],
             ))
             ->loadRelation(new Relationship(domainObject: InvoiceDomainObject::class))

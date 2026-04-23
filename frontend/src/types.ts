@@ -867,6 +867,18 @@ export interface CheckInList {
     event_occurrence_id?: number | null;
     event?: Event;
     event_occurrence?: EventOccurrence;
+    /**
+     * Marks the list auto-created with the event. Can't be deleted, gets a
+     * "Default" badge in the admin table, and is the stable check-in entry
+     * point for the event.
+     */
+    is_system_default?: boolean;
+    /**
+     * Unfiltered occurrence list for the check-in tool's filter pill — includes
+     * past sessions so staff can reconcile after an event. Only present on the
+     * public check-in list response; admin endpoints use `event.occurrences`.
+     */
+    event_occurrences?: EventOccurrence[];
     products: {
         id: number;
         title: string;
@@ -914,6 +926,7 @@ export interface AttendeeDetailPublic {
     status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
     product_id: number;
     product_title: string | null;
+    event_occurrence: EventOccurrence | null;
     check_ins: AttendeeDetailPublicCheckIn[];
     visibility: {
         notes: boolean;

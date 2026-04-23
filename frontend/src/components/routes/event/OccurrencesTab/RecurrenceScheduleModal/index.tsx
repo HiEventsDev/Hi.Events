@@ -19,7 +19,6 @@ import {
     IconBulb,
     IconCalendarEvent,
     IconCalendarStats,
-    IconCheck,
     IconClock,
     IconHash,
     IconPlus,
@@ -31,7 +30,7 @@ import {
 } from "@tabler/icons-react";
 import {Modal} from "../../../../common/Modal";
 import {InputGroup} from "../../../../common/InputGroup";
-import {ModalIntro} from "../../../../common/ModalIntro";
+import {Callout} from "../../../../common/Callout";
 
 import {GenericModalProps, RecurrenceRule, RecurrenceTimeSlot} from "../../../../../types.ts";
 import {useGenerateOccurrences} from "../../../../../mutations/useGenerateOccurrences.ts";
@@ -347,6 +346,22 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
             yearly_month: String(new Date().getMonth() + 1),
             yearly_day: 1,
         },
+        validate: {
+            days_of_week: (value, values) => values.frequency === 'weekly' && value.length === 0
+                ? t`Pick at least one day of the week`
+                : null,
+            range_until: (value, values) => values.range_type === 'until' && !value
+                ? t`Pick an end date`
+                : null,
+            time_slots: (value) => value.every(s => !s.time.trim())
+                ? t`Add at least one time`
+                : null,
+            days_of_month: (value, values) => values.frequency === 'monthly'
+                && values.monthly_pattern === 'by_day_of_month'
+                && value.length === 0
+                    ? t`Pick at least one day of the month`
+                    : null,
+        },
     });
 
     useEffect(() => {
@@ -495,20 +510,18 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
     return (
         <Modal opened onClose={onClose} heading={null} size="lg">
             {hasExistingRule ? (
-                <div className={classes.returningBanner}>
-                    <div className={classes.returningIcon}>
-                        <IconCheck size={16}/>
-                    </div>
-                    <span className={classes.returningText}>
-                        {t`Any dates you've manually customized will be kept.`}
-                    </span>
-                </div>
+                <Callout variant="success" className={classes.introCallout}>
+                    {t`Any dates you've manually customized will be kept.`}
+                </Callout>
             ) : (
-                <ModalIntro
-                    icon={<IconCalendarEvent size={26}/>}
+                <Callout
+                    variant="tip"
                     title={t`Set Up Your Schedule`}
-                    subtitle={t`Tell us how often your event repeats and we'll create all the dates for you.`}
-                />
+                    icon={<IconCalendarEvent size={18}/>}
+                    className={classes.introCallout}
+                >
+                    {t`Tell us how often your event repeats and we'll create all the dates for you.`}
+                </Callout>
             )}
 
             <form onSubmit={form.onSubmit(handleSubmit)}>

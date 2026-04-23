@@ -12,6 +12,7 @@ use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
@@ -19,6 +20,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Resources\Event\EventResource;
 use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -29,13 +31,14 @@ use Spatie\WebhookServer\WebhookCall;
 class WebhookDispatchService
 {
     public function __construct(
-        private readonly LoggerInterface                    $logger,
-        private readonly WebhookRepositoryInterface         $webhookRepository,
-        private readonly OrderRepositoryInterface           $orderRepository,
-        private readonly ProductRepositoryInterface         $productRepository,
-        private readonly AttendeeRepositoryInterface        $attendeeRepository,
-        private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
-        private readonly EventRepositoryInterface           $eventRepository,
+        private readonly LoggerInterface                     $logger,
+        private readonly WebhookRepositoryInterface          $webhookRepository,
+        private readonly OrderRepositoryInterface            $orderRepository,
+        private readonly ProductRepositoryInterface          $productRepository,
+        private readonly AttendeeRepositoryInterface         $attendeeRepository,
+        private readonly AttendeeCheckInRepositoryInterface  $attendeeCheckInRepository,
+        private readonly EventRepositoryInterface            $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface  $eventOccurrenceRepository,
     )
     {
     }
@@ -85,6 +88,21 @@ class WebhookDispatchService
             eventType: $eventType,
             payload: new AttendeeCheckInResource($attendeeCheckIn),
             eventId: $attendeeCheckIn->getEventId(),
+        );
+    }
+
+    public function dispatchOccurrenceWebhook(DomainEventType $eventType, int $occurrenceId): void
+    {
+        $occurrence = $this->eventOccurrenceRepository->findById($occurrenceId);
+
+        if ($occurrence === null) {
+            return;
+        }
+
+        $this->dispatchWebhook(
+            eventType: $eventType,
+            payload: new EventOccurrenceResource($occurrence),
+            eventId: $occurrence->getEventId(),
         );
     }
 

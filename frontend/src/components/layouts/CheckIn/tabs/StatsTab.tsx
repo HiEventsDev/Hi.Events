@@ -9,6 +9,12 @@ import classes from "./StatsTab.module.scss";
 interface StatsTabProps {
     checkInListShortId: IdParam;
     enabled: boolean;
+    /**
+     * When the staff has narrowed an unscoped check-in list via the filter pill,
+     * pass the selected occurrence id so the stats endpoint returns counts for
+     * that session instead of the whole list.
+     */
+    eventOccurrenceId?: number | null;
 }
 
 const formatTime = (iso?: string) => {
@@ -28,8 +34,8 @@ const parseCheckInTime = (iso: string): number | null => {
     return Number.isNaN(t) ? null : t;
 };
 
-export const StatsTab = ({checkInListShortId, enabled}: StatsTabProps) => {
-    const statsQuery = useGetCheckInListStatsPublic(checkInListShortId, enabled);
+export const StatsTab = ({checkInListShortId, enabled, eventOccurrenceId}: StatsTabProps) => {
+    const statsQuery = useGetCheckInListStatsPublic(checkInListShortId, enabled, eventOccurrenceId);
     const stats = statsQuery.data?.data;
     const [now, setNow] = useState(() => Date.now());
 

@@ -5,11 +5,13 @@ namespace HiEvents\Services\Domain\SelfService;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -39,6 +41,14 @@ class SelfServiceResendEmailService
             ->loadRelation(new Relationship(OrderDomainObject::class, nested: [
                 new Relationship(OrderItemDomainObject::class),
             ], name: 'order'))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence',
+            ))
+            ->loadRelation(new Relationship(
+                domainObject: ProductDomainObject::class,
+                name: 'product',
+            ))
             ->findFirstWhere([
                 'id' => $attendeeId,
                 'order_id' => $orderId,
@@ -75,7 +85,15 @@ class SelfServiceResendEmailService
         ?string $userAgent
     ): void {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
             ->loadRelation(AttendeeDomainObject::class)
             ->loadRelation(InvoiceDomainObject::class)
             ->findFirstWhere([

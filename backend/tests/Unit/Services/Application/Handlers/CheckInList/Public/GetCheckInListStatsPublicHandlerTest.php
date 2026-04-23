@@ -45,6 +45,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
     {
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->checkInListRepository
             ->shouldReceive('findFirstWhere')
@@ -55,7 +56,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->checkInListRepository
             ->shouldReceive('getCheckedInAttendeeCountById')
             ->once()
-            ->with(42)
+            ->with(42, null)
             ->andReturn(new CheckedInAttendeesCountDTO(
                 checkInListId: 42,
                 checkedInCount: 5,
@@ -80,7 +81,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->checkInListRepository
             ->shouldReceive('getPerProductCheckInStatsById')
             ->once()
-            ->with(42)
+            ->with(42, null)
             ->andReturn($productStats);
 
         $recentCheckIns = collect([
@@ -96,7 +97,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->checkInListRepository
             ->shouldReceive('getRecentCheckInsById')
             ->once()
-            ->with(42, 20)
+            ->with(42, 20, null)
             ->andReturn($recentCheckIns);
 
         $stats = $this->handler->handle('short-id');
@@ -108,5 +109,65 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->assertSame(3, $stats->perProduct[0]->checkedInAttendees);
         $this->assertCount(1, $stats->recentCheckIns);
         $this->assertSame('Alice', $stats->recentCheckIns[0]->firstName);
+    }
+
+    public function testScopedListIgnoresClientOccurrenceFilter(): void
+    {
+        // A check-in list scoped to occurrence 99 must always report its own scope,
+        // regardless of what the client passes. Passing null to the repository lets
+        // it auto-scope via cil.event_occurrence_id.
+        $checkInList = m::mock(CheckInListDomainObject::class);
+        $checkInList->shouldReceive('getId')->andReturn(42);
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(99);
+
+        $this->checkInListRepository
+            ->shouldReceive('findFirstWhere')->once()
+            ->andReturn($checkInList);
+
+        $this->checkInListRepository->shouldReceive('getCheckedInAttendeeCountById')
+            ->once()->with(42, null)
+            ->andReturn(new CheckedInAttendeesCountDTO(checkInListId: 42, checkedInCount: 0, totalAttendeesCount: 0));
+
+        $this->checkInListRepository->shouldReceive('getPerProductCheckInStatsById')
+            ->once()->with(42, null)
+            ->andReturn(collect());
+
+        $this->checkInListRepository->shouldReceive('getRecentCheckInsById')
+            ->once()->with(42, 20, null)
+            ->andReturn(collect());
+
+        // Client tries to override with occurrence 77; handler should ignore it.
+        $this->handler->handle('short-id', 77);
+
+        $this->assertTrue(true);
+    }
+
+    public function testUnscopedListRespectsClientOccurrenceFilter(): void
+    {
+        // Unscoped list ("All occurrences") — the client's filter-pill selection
+        // propagates through to the repository so stats reflect the filtered view.
+        $checkInList = m::mock(CheckInListDomainObject::class);
+        $checkInList->shouldReceive('getId')->andReturn(42);
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
+
+        $this->checkInListRepository
+            ->shouldReceive('findFirstWhere')->once()
+            ->andReturn($checkInList);
+
+        $this->checkInListRepository->shouldReceive('getCheckedInAttendeeCountById')
+            ->once()->with(42, 77)
+            ->andReturn(new CheckedInAttendeesCountDTO(checkInListId: 42, checkedInCount: 0, totalAttendeesCount: 0));
+
+        $this->checkInListRepository->shouldReceive('getPerProductCheckInStatsById')
+            ->once()->with(42, 77)
+            ->andReturn(collect());
+
+        $this->checkInListRepository->shouldReceive('getRecentCheckInsById')
+            ->once()->with(42, 20, 77)
+            ->andReturn(collect());
+
+        $this->handler->handle('short-id', 77);
+
+        $this->assertTrue(true);
     }
 }

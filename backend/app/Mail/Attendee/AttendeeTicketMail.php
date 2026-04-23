@@ -75,6 +75,7 @@ class AttendeeTicketMail extends BaseMail
                 'eventSettings' => $this->eventSettings,
                 'organizer' => $this->organizer,
                 'order' => $this->order,
+                'occurrence' => $this->occurrence ?? $this->attendee->getEventOccurrence(),
                 'ticketUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ATTENDEE_TICKET),
                     $this->event->getId(),

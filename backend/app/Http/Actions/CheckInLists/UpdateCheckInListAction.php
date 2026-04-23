@@ -30,7 +30,7 @@ class UpdateCheckInListAction extends BaseAction
                     name: $request->validated('name'),
                     description: $request->validated('description'),
                     eventId: $eventId,
-                    productIds: $request->validated('product_ids'),
+                    productIds: $request->validated('product_ids') ?? [],
                     expiresAt: $request->validated('expires_at'),
                     activatesAt: $request->validated('activates_at'),
                     id: $checkInListId,

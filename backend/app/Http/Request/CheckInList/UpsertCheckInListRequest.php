@@ -17,7 +17,8 @@ class UpsertCheckInListRequest extends BaseRequest
             'description' => ['nullable', 'string', 'max:2000'],
             'expires_at' => ['nullable', 'date'],
             'activates_at' => ['nullable', 'date'],
-            'product_ids' => ['required', 'array', 'min:1'],
+            // Empty/absent = "covers every ticket on the event".
+            'product_ids' => ['nullable', 'array'],
             'event_occurrence_id' => [
                 'nullable',
                 'integer',
@@ -45,7 +46,6 @@ class UpsertCheckInListRequest extends BaseRequest
     public function messages(): array
     {
         return [
-            'product_ids.required' => __('Please select at least one product.'),
             'expires_at.after' => __('The expiration date must be after the activation date.'),
             'activates_at.before' => __('The activation date must be before the expiration date.'),
         ];

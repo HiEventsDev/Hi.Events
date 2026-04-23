@@ -38,7 +38,7 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
     protected ?int $checked_in_by = null;
     protected ?int $checked_out_by = null;
     protected int $product_price_id;
-    protected int $event_occurrence_id;
+    protected ?int $event_occurrence_id = null;
     protected string $short_id;
     protected string $first_name = '';
     protected string $last_name = '';
@@ -155,13 +155,13 @@ abstract class AttendeeDomainObjectAbstract extends \HiEvents\DomainObjects\Abst
         return $this->product_price_id;
     }
 
-    public function setEventOccurrenceId(int $event_occurrence_id): self
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
     {
         $this->event_occurrence_id = $event_occurrence_id;
         return $this;
     }
 
-    public function getEventOccurrenceId(): int
+    public function getEventOccurrenceId(): ?int
     {
         return $this->event_occurrence_id;
     }

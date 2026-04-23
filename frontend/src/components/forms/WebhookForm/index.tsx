@@ -128,6 +128,12 @@ export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) 
             value: 'checkin.deleted',
             description: t`When a check-in is deleted`,
         },
+        {
+            icon: <IconBolt size={14} />,
+            label: t`Occurrence Cancelled`,
+            value: 'occurrence.cancelled',
+            description: t`When a date is cancelled on a recurring event`,
+        },
     ];
 
     return (

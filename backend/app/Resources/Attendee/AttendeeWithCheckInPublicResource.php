@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\Resources\CheckInList\AttendeeCheckInPublicResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,6 +26,10 @@ class AttendeeWithCheckInPublicResource extends JsonResource
             'status' => $this->getStatus(),
             'locale' => $this->getLocale(),
             'order_id' => $this->getOrderId(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
+            'event_occurrence' => $this->getEventOccurrence()
+                ? (new EventOccurrenceResourcePublic($this->getEventOccurrence()))->toArray($request)
+                : null,
             $this->mergeWhen($this->getCheckIn() !== null, [
                 'check_in' => new AttendeeCheckInPublicResource($this->getCheckIn()),
             ]),
