@@ -78,14 +78,14 @@ const Login = () => {
         <>
             <header className={classes.header}>
                 <h2>{t`Welcome back`}</h2>
-                <p>
+                <!--<p>
                     <Trans>
                         Don't have an account?{' '}
                         <NavLink to={`/auth/register${location.search}`}>
                             Sign up
                         </NavLink>
                     </Trans>
-                </p>
+                </p>-->
             </header>
             <div className={classes.loginCard}>
                 <form onSubmit={form.onSubmit((values) => loginUser(values))}>
