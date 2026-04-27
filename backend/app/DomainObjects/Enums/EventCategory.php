@@ -52,7 +52,7 @@ enum EventCategory: string
             self::MIXEDMUSIC => __('MIXED MUSIC'),
             self::NEOTRANCE => __('NEOTRANCE'),
             self::SCHRANZ => __('SCHRANZ'),
-            self::TECHHOUSE => __('TECHH OUSE'),
+            self::TECHHOUSE => __('TECH HOUSE'),
             self::TECHNO => __('TECHNO'),
             self::TEKK => __('TEKK'),
             self::TRANCEMUSIC => __('TRANCE MUSIC'),
