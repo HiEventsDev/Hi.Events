@@ -1,23 +1,27 @@
 import {t} from "@lingui/macro";
 
 export const EventCategories = [
-    {id: 'NIGHTLIFE', name: t`Nightlife`, emoji: '🪩'},
-    {id: 'FESTIVAL', name: t`Festival`, emoji: '🎉'},
-
-    {id: 'MUSIC', name: t`Music`, emoji: '🎵'},
-    {id: 'SPORTS', name: t`Sports`, emoji: '⚽'},
-    {id: 'COMEDY', name: t`Comedy`, emoji: '😂'},
-    {id: 'THEATER', name: t`Theater`, emoji: '🎭'},
-    {id: 'ART', name: t`Art`, emoji: '🎨'},
-
-    {id: 'TECHNO', name: t`Techno`, emoji: '🤝'},
-    {id: 'HARDSTYLE', name: t`Hardstyle`, emoji: '🍽️'},
-    {id: 'CHARITY', name: t`Charity`, emoji: '🎗️'},
-
-    {id: 'BUSINESS', name: t`Business`, emoji: '💼'},
-    {id: 'TECH', name: t`Tech`, emoji: '💻'},
-    {id: 'EDUCATION', name: t`Education`, emoji: '📚'},
-    {id: 'WORKSHOP', name: t`Workshop`, emoji: '🛠️'},
-
-    {id: 'OTHER', name: t`Other`, emoji: '📝'},
+    {id: 'BASSHOUSE', name: t`BASS HOUSE`, emoji: '🎵'},
+    {id: 'BOUNCE', name: t`BOUNCE`, emoji: '🎵'},
+    {id: 'BOUNCYTECHNO', name: t`BOUNCY TECHNO`, emoji: '🎵'},
+    {id: 'DRUMBASS', name: t`DRUM & BASS`, emoji: '🎵'},
+    {id: 'EDM', name: t`EDM`, emoji: '🎵'},
+    {id: 'GOA', name: t`GOA`, emoji: '🎵'},
+    {id: 'GROOVEBOUNCE', name: t`GROOVE & BOUNCE`, emoji: '🎵'},
+    {id: 'HARDTECHNO', name: t`HARDTECHNO`, emoji: '🎵'},
+    {id: 'HARDCOREUPTEMPO', name: t`HARDCORE & UPTEMPO`, emoji: '🎵'},
+    {id: 'HARDSTYLE', name: t`HARDSTYLE`, emoji: '🎵'},
+    {id: 'RAWSTYLE', name: t`RAWSTYLE`, emoji: '🎵'},
+    {id: 'HOUSEMUSIC', name: t`HOUSE MUSIC`, emoji: '🎵'},
+    {id: 'MELODICHOUSE', name: t`MELODIC HOUSE`, emoji: '🎵'},
+    {id: 'MIXEDMUSIC', name: t`MIXED MUSIC`, emoji: '🎵'},
+    {id: 'NEOTRANCE', name: t`NEOTRANCE`, emoji: '🎵'},
+    {id: 'SCHRANZ', name: t`SCHRANZ`, emoji: '🎵'},
+    {id: 'TECHHOUSE', name: t`TECH HOUSE`, emoji: '🎵'},
+    {id: 'TECHNO', name: t`TECHNO`, emoji: '🎵'},
+    {id: 'TEKK', name: t`TEKK`, emoji: '🎵'},
+    {id: 'TRANCEMUSIC', name: t`TRANCE MUSIC`, emoji: '🎵'},
+    {id: 'UKG', name: t`UKG`, emoji: '🎵'},
+    {id: 'WORKSHOP', name: t`WORKSHOP`, emoji: '🎵'},
+    {id: 'INDUSTRIAL', name: t`INDUSTRIAL`, emoji: '🎵'},
 ];
