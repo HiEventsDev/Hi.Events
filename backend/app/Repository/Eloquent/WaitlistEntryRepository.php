@@ -156,8 +156,8 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         }
 
         $this->model = $this->model->orderBy(
-            column: $params->sort_by ?? WaitlistEntryDomainObject::getDefaultSort(),
-            direction: $params->sort_direction ?? WaitlistEntryDomainObject::getDefaultSortDirection(),
+            column: $this->validateSortColumn($params->sort_by, WaitlistEntryDomainObject::class),
+            direction: $this->validateSortDirection($params->sort_direction, WaitlistEntryDomainObject::class),
         );
 
         return $this->loadRelation(new Relationship(

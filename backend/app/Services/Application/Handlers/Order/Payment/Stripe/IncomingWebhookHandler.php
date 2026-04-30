@@ -99,7 +99,7 @@ class IncomingWebhookHandler
                     break;
                 case Event::PAYOUT_PAID:
                 case Event::PAYOUT_UPDATED:
-                    $this->payoutPaidHandler->handleEvent($event->data->object);
+                    $this->payoutPaidHandler->handleEvent($event->data->object, $event->account);
                     break;
             }
 
