@@ -19,6 +19,7 @@ class EventResource extends BaseResource
     {
         return [
             'id' => $this->getId(),
+            'organizer_id' => $this->getOrganizerId(),
             'title' => $this->getTitle(),
             'category' => $this->getCategory(),
             'description' => $this->getDescription(),
