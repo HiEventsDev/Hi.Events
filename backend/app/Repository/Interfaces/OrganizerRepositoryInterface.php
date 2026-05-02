@@ -18,4 +18,6 @@ interface OrganizerRepositoryInterface extends RepositoryInterface
     public function getSitemapOrganizers(int $page, int $perPage): LengthAwarePaginator;
 
     public function getSitemapOrganizerCount(): int;
+
+    public function getAllOrganizersForAdmin(?string $search, int $perPage): LengthAwarePaginator;
 }

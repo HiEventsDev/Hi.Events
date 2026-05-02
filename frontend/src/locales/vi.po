@@ -13,12 +13,12 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/layouts/Event/index.tsx:192
+#: src/components/layouts/Event/index.tsx:195
 #: src/components/layouts/OrganizerLayout/index.tsx:213
 msgid "- Click to Publish"
 msgstr "- Nhấp để xuất bản"
 
-#: src/components/layouts/Event/index.tsx:194
+#: src/components/layouts/Event/index.tsx:197
 #: src/components/layouts/OrganizerLayout/index.tsx:215
 msgid "- Click to Unpublish"
 msgstr "- Nhấp để gỡ bỏ"
@@ -349,6 +349,7 @@ msgid "Access Denied"
 msgstr "Truy cập bị từ chối"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
+#: src/components/common/AdminOrganizersTable/index.tsx:63
 #: src/components/routes/account/ManageAccount/index.tsx:24
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
@@ -579,7 +580,7 @@ msgid "Admin Access Required"
 msgstr "Yêu cầu quyền truy cập quản trị viên"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Bảng Điều Khiển Quản Trị"
@@ -617,7 +618,7 @@ msgstr "Doanh số đối tác liên kết sẽ không được theo dõi. Đi�
 msgid "Affiliate updated successfully"
 msgstr "Cập nhật đối tác liên kết thành công"
 
-#: src/components/layouts/Event/index.tsx:114
+#: src/components/layouts/Event/index.tsx:117
 #: src/components/modals/DuplicateEventModal/index.tsx:33
 #: src/components/routes/event/Affiliates/index.tsx:63
 msgid "Affiliates"
@@ -911,12 +912,12 @@ msgstr "Bạn có chắc là bạn muốn xóa webhook này không?"
 msgid "Are you sure you want to leave?"
 msgstr "Bạn có chắc chắn muốn rời đi?"
 
-#: src/components/layouts/Event/index.tsx:154
+#: src/components/layouts/Event/index.tsx:157
 #: src/components/routes/event/EventDashboard/index.tsx:73
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Bạn có chắc chắn muốn chuyển sự kiện này thành bản nháp không? Điều này sẽ làm cho sự kiện không hiển thị với công chúng."
 
-#: src/components/layouts/Event/index.tsx:155
+#: src/components/layouts/Event/index.tsx:158
 #: src/components/routes/event/EventDashboard/index.tsx:74
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "Bạn có chắc mình muốn công khai sự kiện này không? "
@@ -1109,7 +1110,7 @@ msgstr "Vé của người tham dự không có trong danh sách này"
 #: src/components/common/EventCard/index.tsx:227
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:382
 #: src/components/common/StatBoxes/index.tsx:45
-#: src/components/layouts/Event/index.tsx:118
+#: src/components/layouts/Event/index.tsx:121
 #: src/components/modals/ManageOrderModal/index.tsx:126
 #: src/components/routes/admin/Messages/index.tsx:90
 #: src/components/routes/admin/Messages/index.tsx:139
@@ -1452,7 +1453,7 @@ msgstr "Phân bổ sức chứa đã được xóa thành công"
 msgid "Capacity Assignments"
 msgstr "Phân bổ sức chứa"
 
-#: src/components/layouts/Event/index.tsx:122
+#: src/components/layouts/Event/index.tsx:125
 msgid "Capacity Management"
 msgstr "Quản lý sức chứa"
 
@@ -1469,13 +1470,18 @@ msgid "Categories reordered successfully."
 msgstr "Danh mục đã được sắp xếp lại thành công."
 
 #: src/components/routes/event/products.tsx:98
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:82
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:100
 msgid "Category"
 msgstr "Danh mục"
 
 #: src/components/modals/CreateProductCategoryModal/index.tsx:37
 msgid "Category Created Successfully"
 msgstr "Danh mục được tạo thành công"
+
+#: src/components/layouts/Event/index.tsx:212
+#: src/components/modals/ChangeEventOrganizerModal/index.tsx:62
+msgid "Change Organizer"
+msgstr "Đổi nhà tổ chức"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:238
 msgid "Change password"
@@ -1555,7 +1561,7 @@ msgstr "Danh sách Check-In không tồn tại"
 msgid "Check-in Lists"
 msgstr "Danh sách check-in"
 
-#: src/components/layouts/Event/index.tsx:119
+#: src/components/layouts/Event/index.tsx:122
 #: src/components/modals/DuplicateEventModal/index.tsx:29
 #: src/components/routes/event/CheckInLists/index.tsx:34
 msgid "Check-In Lists"
@@ -1855,7 +1861,7 @@ msgstr "Tên cấu hình hiển thị với người dùng cuối. Phí cố đ�
 msgid "Configuration updated successfully"
 msgstr "Cấu hình đã được cập nhật thành công"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:64
 msgid "Configurations"
 msgstr "Cấu hình"
@@ -1911,7 +1917,7 @@ msgstr "Xác nhận mật khẩu"
 msgid "Confirm Password"
 msgstr "Xác nhận mật khẩu"
 
-#: src/components/layouts/Event/index.tsx:257
+#: src/components/layouts/Event/index.tsx:274
 msgid "Confirm your email to access all features."
 msgstr "Xác nhận email của bạn để sử dụng đầy đủ tính năng."
 
@@ -2285,6 +2291,7 @@ msgstr "Tạo mật khẩu mới"
 #: src/components/modals/CreateEventModal/index.tsx:138
 #: src/components/modals/CreateOrganizerModal/index.tsx:18
 #: src/components/modals/SwitchOrganizerModal/index.tsx:96
+#: src/components/routes/admin/Organizers/index.tsx:44
 msgid "Create Organizer"
 msgstr "Tạo tổ chức"
 
@@ -2353,6 +2360,10 @@ msgstr "Đã tạo"
 msgid "Creating Event..."
 msgstr "Đang tạo sự kiện..."
 
+#: src/components/routes/admin/Organizers/index.tsx:49
+msgid "Creating from here adds the organizer to your own account. To create one inside another account, impersonate a user in that account first."
+msgstr "Tạo từ đây sẽ thêm nhà tổ chức vào tài khoản của bạn. Để tạo trong tài khoản khác, hãy mạo danh người dùng của tài khoản đó trước."
+
 #: src/components/forms/OrganizerForm/index.tsx:125
 msgid "Creating Organizer..."
 msgstr "Đang tạo nhà tổ chức..."
@@ -2373,13 +2384,17 @@ msgstr "Nhãn CTA là bắt buộc"
 #: src/components/forms/OrganizerForm/index.tsx:50
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:115
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:149
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:116
 msgid "Currency"
 msgstr "Tiền tệ"
+
+#: src/components/modals/ChangeEventOrganizerModal/index.tsx:73
+msgid "Current organizer"
+msgstr "Nhà tổ chức hiện tại"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:228
 msgid "Current Password"
@@ -2543,7 +2558,7 @@ msgid "Dark"
 msgstr "Tối"
 
 #: src/components/layouts/Admin/index.tsx:13
-#: src/components/layouts/Event/index.tsx:94
+#: src/components/layouts/Event/index.tsx:97
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:160
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -2665,7 +2680,7 @@ msgstr "Xóa webhook"
 #: src/components/forms/ProductForm/index.tsx:280
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
 #: src/components/modals/DuplicateEventModal/index.tsx:115
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:93
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:86
 msgid "Description"
 msgstr "Mô tả"
@@ -2784,7 +2799,7 @@ msgid "Downloading Invoice"
 msgstr "Tải xuống hóa đơn"
 
 #: src/components/common/EventCard/index.tsx:84
-#: src/components/layouts/Event/index.tsx:191
+#: src/components/layouts/Event/index.tsx:194
 #: src/components/layouts/OrganizerLayout/index.tsx:212
 msgid "Draft"
 msgstr "Bản nháp"
@@ -3066,7 +3081,7 @@ msgstr "Thay đổi email đang chờ xử lý"
 msgid "Email confirmation resent"
 msgstr "Xác nhận email đã được gửi lại"
 
-#: src/components/layouts/Event/index.tsx:74
+#: src/components/layouts/Event/index.tsx:77
 #: src/components/layouts/OrganizerLayout/index.tsx:102
 #: src/components/routes/profile/ManageProfile/index.tsx:100
 msgid "Email confirmation resent successfully"
@@ -3146,7 +3161,7 @@ msgstr "Đã bật"
 
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:129
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:107
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:141
 msgid "End Date"
 msgstr "Ngày kết thúc"
 
@@ -3279,7 +3294,7 @@ msgid "EU VAT-registered businesses: Reverse charge mechanism applies (0% - Arti
 msgstr "Doanh nghiệp đã đăng ký VAT EU: Áp dụng cơ chế đảo ngược thu phí (0% - Điều 196 của Chỉ thị VAT 2006/112/EC)"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:74
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:116
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:150
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:117
 msgid "EUR"
 msgstr "EUR"
@@ -3365,7 +3380,7 @@ msgid "Event details"
 msgstr "Chi tiết sự kiện"
 
 #: src/components/routes/event/Settings/index.tsx:40
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:68
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:86
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:605
 msgid "Event Details"
 msgstr "Chi tiết sự kiện"
@@ -3394,6 +3409,10 @@ msgstr "Vị trí sự kiện & địa điểm tổ chức"
 msgid "Event Management Platform"
 msgstr "Nền tảng quản lý sự kiện"
 
+#: src/components/modals/ChangeEventOrganizerModal/index.tsx:44
+msgid "Event moved to new organizer"
+msgstr "Đã chuyển sự kiện sang nhà tổ chức mới"
+
 #: src/components/routes/welcome/index.tsx:352
 msgid "Event name"
 msgstr "Tên sự kiện"
@@ -3420,7 +3439,11 @@ msgstr "Sự kiện không có sẵn"
 msgid "Event organizer name"
 msgstr "Tên ban tổ chức sự kiện"
 
-#: src/components/layouts/Event/index.tsx:246
+#: src/components/layouts/Event/index.tsx:90
+msgid "Event Overview"
+msgstr "Tổng quan sự kiện"
+
+#: src/components/layouts/Event/index.tsx:263
 msgid "Event Page"
 msgstr "Trang sự kiện"
 
@@ -3428,14 +3451,14 @@ msgstr "Trang sự kiện"
 msgid "Event restored successfully"
 msgstr "Sự kiện đã được khôi phục thành công"
 
-#: src/components/layouts/Event/index.tsx:104
+#: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/event/Settings/index.tsx:159
 msgid "Event Settings"
 msgstr "Cài đặt sự kiện"
 
 #: src/components/common/EventCard/index.tsx:70
 #: src/components/common/StatusToggle/index.tsx:63
-#: src/components/layouts/Event/index.tsx:170
+#: src/components/layouts/Event/index.tsx:173
 #: src/components/routes/event/EventDashboard/index.tsx:88
 #: src/components/routes/event/GettingStarted/index.tsx:68
 msgid "Event status update failed. Please try again later"
@@ -3443,7 +3466,7 @@ msgstr "Cập nhật trạng thái sự kiện thất bại. Vui lòng thử l�
 
 #: src/components/common/EventCard/index.tsx:67
 #: src/components/common/StatusToggle/index.tsx:55
-#: src/components/layouts/Event/index.tsx:166
+#: src/components/layouts/Event/index.tsx:169
 #: src/components/routes/event/EventDashboard/index.tsx:85
 #: src/components/routes/event/GettingStarted/index.tsx:65
 msgid "Event status updated"
@@ -3490,7 +3513,7 @@ msgid "Event Venue"
 msgstr "Địa Điểm Sự Kiện"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/OrganizerLayout/index.tsx:87
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
 #: src/components/routes/admin/Attribution/index.tsx:133
@@ -3598,7 +3621,7 @@ msgstr "Thất bại"
 msgid "Failed At"
 msgstr "Thất bại lúc"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Công việc thất bại"
@@ -3622,6 +3645,10 @@ msgstr "Không thể hủy tin nhắn"
 #: src/components/modals/CancelOrderModal/index.tsx:46
 msgid "Failed to cancel order"
 msgstr "Không thể hủy đơn hàng"
+
+#: src/components/modals/ChangeEventOrganizerModal/index.tsx:51
+msgid "Failed to change organizer. Please try again."
+msgstr "Không thể đổi nhà tổ chức. Vui lòng thử lại."
 
 #: src/components/modals/CreateAffiliateModal/index.tsx:62
 msgid "Failed to create affiliate"
@@ -4076,7 +4103,7 @@ msgstr "Lấy vé"
 msgid "Get your event ready"
 msgstr "Chuẩn bị sự kiện của bạn"
 
-#: src/components/layouts/Event/index.tsx:90
+#: src/components/layouts/Event/index.tsx:93
 msgid "Getting Started"
 msgstr "Bắt đầu"
 
@@ -4124,7 +4151,7 @@ msgstr "Tổng doanh số"
 msgid "Gross Sales"
 msgstr "Doanh thu gộp"
 
-#: src/components/layouts/Event/index.tsx:117
+#: src/components/layouts/Event/index.tsx:120
 msgid "Guest Management"
 msgstr "Quản lý khách"
 
@@ -4274,7 +4301,7 @@ msgstr "Sản phẩm nổi bật sẽ có màu nền khác để nổi bật tr�
 msgid "Homepage Design"
 msgstr "Thiết kế trang sự kiện"
 
-#: src/components/layouts/Event/index.tsx:105
+#: src/components/layouts/Event/index.tsx:108
 #: src/components/layouts/OrganizerLayout/index.tsx:91
 msgid "Homepage Designer"
 msgstr "Thiết kế trang chủ"
@@ -4484,7 +4511,7 @@ msgstr "Instagram"
 msgid "Instant Payouts"
 msgstr "Thanh toán ngay lập tức"
 
-#: src/components/layouts/Event/index.tsx:125
+#: src/components/layouts/Event/index.tsx:128
 #: src/components/layouts/OrganizerLayout/index.tsx:93
 msgid "Integrations"
 msgstr "Tích hợp"
@@ -4789,7 +4816,7 @@ msgid "Links Allowed"
 msgstr "Liên kết được phép"
 
 #: src/components/common/EventCard/index.tsx:87
-#: src/components/layouts/Event/index.tsx:193
+#: src/components/layouts/Event/index.tsx:196
 #: src/components/layouts/OrganizerLayout/index.tsx:214
 msgid "Live"
 msgstr "Trực tiếp"
@@ -5046,8 +5073,8 @@ msgstr "Tin nhắn đã được lên lịch"
 msgid "Message Sent"
 msgstr "Tin nhắn được gửi"
 
-#: src/components/layouts/Admin/index.tsx:18
-#: src/components/layouts/Event/index.tsx:120
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Event/index.tsx:123
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
 msgstr "Tin nhắn"
@@ -5149,7 +5176,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/modals/DuplicateEventModal/index.tsx:109
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
 #: src/components/routes/admin/Configurations/index.tsx:219
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:93
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:230
 msgid "Name"
 msgstr "Tên"
@@ -5208,6 +5235,10 @@ msgstr "Không"
 #: src/components/routes/account/ManageAccount/sections/PaymentSettings/VatSettings/VatSettingsForm.tsx:204
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "Không - Tôi là cá nhân hoặc doanh nghiệp không đăng ký VAT"
+
+#: src/components/common/AdminOrganizersTable/index.tsx:69
+msgid "No account"
+msgstr "Không có tài khoản"
 
 #: src/components/common/AdminUsersTable/index.tsx:143
 msgid "No accounts"
@@ -5358,6 +5389,14 @@ msgstr "Chưa có đơn hàng nào"
 #: src/components/routes/admin/Dashboard/index.tsx:377
 msgid "No organizer activity in the last 14 days"
 msgstr "Không có hoạt động của nhà tổ chức trong 14 ngày qua"
+
+#: src/components/common/AdminOrganizersTable/index.tsx:18
+msgid "No organizers found"
+msgstr "Không tìm thấy nhà tổ chức"
+
+#: src/components/modals/ChangeEventOrganizerModal/index.tsx:82
+msgid "No other active organizers in this account"
+msgstr "Không có nhà tổ chức nào khác đang hoạt động trong tài khoản này"
 
 #: src/components/modals/SwitchOrganizerModal/index.tsx:57
 msgid "No other organizers available"
@@ -5681,6 +5720,10 @@ msgstr "Chỉ hiển thị với mã khuyến mãi"
 msgid "Open Check-In Page"
 msgstr "Mở Trang Check-In"
 
+#: src/components/common/AdminOrganizersTable/index.tsx:49
+msgid "Open organizer dashboard"
+msgstr "Mở bảng điều khiển nhà tổ chức"
+
 #: src/components/layouts/AppLayout/index.tsx:29
 msgid "Open sidebar"
 msgstr "Mở thanh bên"
@@ -5923,8 +5966,8 @@ msgstr "URL đơn hàng"
 msgid "Order was cancelled"
 msgstr "Đơn hàng đã bị hủy"
 
-#: src/components/layouts/Admin/index.tsx:17
-#: src/components/layouts/Event/index.tsx:112
+#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Event/index.tsx:115
 #: src/components/routes/admin/Attribution/index.tsx:138
 #: src/components/routes/admin/Orders/index.tsx:44
 #: src/components/routes/event/orders.tsx:115
@@ -5982,6 +6025,7 @@ msgstr "Tên tổ chức"
 #: src/components/routes/admin/Dashboard/index.tsx:257
 #: src/components/routes/admin/Dashboard/index.tsx:306
 #: src/components/routes/admin/Dashboard/index.tsx:352
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:112
 #: src/components/routes/events/Dashboard/index.tsx:194
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:331
 msgid "Organizer"
@@ -5991,7 +6035,7 @@ msgstr "Người tổ chức"
 msgid "Organizer archived successfully"
 msgstr "Ban tổ chức đã được lưu trữ thành công"
 
-#: src/components/layouts/Event/index.tsx:84
+#: src/components/layouts/Event/index.tsx:87
 #: src/components/layouts/OrganizerLayout/index.tsx:78
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:160
 msgid "Organizer Dashboard"
@@ -6026,6 +6070,10 @@ msgstr "Tên ban tổ chức"
 msgid "Organizer Not Found"
 msgstr "Không tìm thấy nhà tổ chức"
 
+#: src/components/layouts/OrganizerLayout/index.tsx:77
+msgid "Organizer Overview"
+msgstr "Tổng quan nhà tổ chức"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:60
 msgid "Organizer restored successfully"
 msgstr "Ban tổ chức đã được khôi phục thành công"
@@ -6052,6 +6100,11 @@ msgstr "Trạng thái nhà tổ chức đã được cập nhật"
 msgid "Organizer/default template will be used"
 msgstr "Mẫu của tổ chức/mặc định sẽ được sử dụng"
 
+#: src/components/layouts/Admin/index.tsx:16
+#: src/components/routes/admin/Organizers/index.tsx:42
+msgid "Organizers"
+msgstr "Nhà tổ chức"
+
 #: src/components/modals/EditUserModal/index.tsx:57
 #: src/components/modals/InviteUserModal/index.tsx:49
 msgid "Organizers can only manage events and products. They cannot manage users, account settings or billing information."
@@ -6070,10 +6123,6 @@ msgstr "Danh Sách Khác (Vé Không Bao Gồm)"
 #: src/components/routes/admin/Messages/index.tsx:107
 msgid "Outgoing Messages"
 msgstr "Tin nhắn đi"
-
-#: src/components/layouts/Event/index.tsx:87
-msgid "Overview"
-msgstr "Tổng quan"
 
 #: src/components/common/WidgetEditor/index.tsx:227
 msgid "Padding"
@@ -6555,8 +6604,8 @@ msgstr "Xem trước"
 msgid "Preview checkout form"
 msgstr "Xem trước biểu mẫu thanh toán"
 
-#: src/components/layouts/Event/index.tsx:239
-#: src/components/layouts/Event/index.tsx:243
+#: src/components/layouts/Event/index.tsx:256
+#: src/components/layouts/Event/index.tsx:260
 msgid "Preview Event page"
 msgstr "Xem trước trang sự kiện"
 
@@ -6736,7 +6785,7 @@ msgstr "Trang mã khuyến mãi"
 msgid "Promo code usage and discount breakdown"
 msgstr "Chi tiết sử dụng mã khuyến mãi và giảm giá"
 
-#: src/components/layouts/Event/index.tsx:113
+#: src/components/layouts/Event/index.tsx:116
 #: src/components/modals/DuplicateEventModal/index.tsx:27
 #: src/components/routes/event/promo-codes.tsx:33
 msgid "Promo Codes"
@@ -6974,7 +7023,7 @@ msgid "Register"
 msgstr "Đăng ký"
 
 #: src/components/common/QuestionsTable/index.tsx:412
-#: src/components/layouts/Event/index.tsx:107
+#: src/components/layouts/Event/index.tsx:110
 msgid "Registration Questions"
 msgstr "Câu hỏi đăng ký"
 
@@ -6997,7 +7046,7 @@ msgstr "Hủy bỏ"
 msgid "Report not found"
 msgstr "Không tìm thấy báo cáo"
 
-#: src/components/layouts/Event/index.tsx:97
+#: src/components/layouts/Event/index.tsx:100
 #: src/components/layouts/OrganizerLayout/index.tsx:81
 #: src/components/routes/event/Reports/index.tsx:39
 #: src/components/routes/organizer/Reports/index.tsx:51
@@ -7028,7 +7077,7 @@ msgstr "Gửi lại xác nhận"
 msgid "Resend Confirmation Email"
 msgstr "Gửi lại email xác nhận"
 
-#: src/components/layouts/Event/index.tsx:259
+#: src/components/layouts/Event/index.tsx:276
 msgid "Resend email"
 msgstr "Gửi lại email"
 
@@ -7241,7 +7290,7 @@ msgstr "San Francisco"
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:129
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:163
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:132
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:166
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:102
@@ -7346,6 +7395,7 @@ msgstr "Tìm kiếm theo tên công việc hoặc ngoại lệ..."
 msgid "Search by name or email..."
 msgstr "Tìm kiếm theo tên hoặc email..."
 
+#: src/components/routes/admin/Organizers/index.tsx:53
 #: src/components/routes/admin/Users/index.tsx:60
 msgid "Search by name, email, or account..."
 msgstr "Tìm kiếm theo tên, email hoặc tài khoản..."
@@ -7408,7 +7458,7 @@ msgid "Select {0}"
 msgstr "Chọn {0}"
 
 #: src/components/modals/CreateEventModal/index.tsx:186
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:83
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:101
 msgid "Select a category"
 msgstr "Chọn danh mục"
 
@@ -7435,6 +7485,10 @@ msgstr "Chọn tất cả"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:124
 msgid "Select an event"
 msgstr "Chọn một sự kiện"
+
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:114
+msgid "Select an organizer"
+msgstr "Chọn một nhà tổ chức"
 
 #: src/components/modals/SendMessageModal/index.tsx:299
 msgid "Select attendee group"
@@ -7708,7 +7762,7 @@ msgstr "Đã cập nhật cài đặt"
 msgid "Settings"
 msgstr "Cài đặt"
 
-#: src/components/layouts/Event/index.tsx:103
+#: src/components/layouts/Event/index.tsx:106
 msgid "Setup & Design"
 msgstr "Thiết lập & thiết kế"
 
@@ -7726,8 +7780,8 @@ msgstr "Chia sẻ"
 msgid "Share Affiliate Link"
 msgstr "Chia sẻ liên kết đối tác"
 
-#: src/components/layouts/Event/index.tsx:209
-#: src/components/layouts/Event/index.tsx:215
+#: src/components/layouts/Event/index.tsx:220
+#: src/components/layouts/Event/index.tsx:226
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:102
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:131
 msgid "Share Event"
@@ -7872,7 +7926,7 @@ msgstr "Có gì đó không ổn."
 msgid "Something went wrong. Please try again later."
 msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 
-#: src/components/layouts/Event/index.tsx:78
+#: src/components/layouts/Event/index.tsx:81
 #: src/components/layouts/OrganizerLayout/index.tsx:106
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:145
@@ -7907,7 +7961,7 @@ msgstr "Sản phẩm tiêu chuẩn với giá cố định"
 
 #: src/components/common/AdminEventsTable/index.tsx:96
 #: src/components/modals/DuplicateEventModal/index.tsx:124
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:102
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 msgid "Start Date"
 msgstr "Ngày bắt đầu"
 
@@ -8109,7 +8163,7 @@ msgstr "Danh sách soát vé được cập nhật thành công"
 msgid "Successfully Updated Email Settings"
 msgstr "Cài đặt email được cập nhật thành công"
 
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:57
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:75
 msgid "Successfully Updated Event"
 msgstr "Sự kiện cập nhật thành công"
 
@@ -8195,7 +8249,7 @@ msgstr "Tóm tắt"
 
 #: src/components/modals/CreateEventModal/index.tsx:177
 #: src/components/modals/DuplicateEventModal/index.tsx:110
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:76
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:94
 msgid "Summer Music Festival {0}"
 msgstr "Lễ hội âm nhạc mùa hè {0}"
 
@@ -8360,6 +8414,10 @@ msgstr "Mã khuyến mãi không hợp lệ"
 #: src/components/common/ThemeColorControls/index.tsx:62
 msgid "The background color of the page. When using cover image, this is applied as an overlay."
 msgstr "Màu nền của trang. Khi sử dụng ảnh bìa, màu này được áp dụng dưới dạng lớp phủ."
+
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:113
+msgid "The brand this event is published under"
+msgstr "Thương hiệu mà sự kiện này được xuất bản"
 
 #: src/components/layouts/CheckIn/index.tsx:353
 msgid "The check-in list you are looking for does not exist."
@@ -8730,7 +8788,7 @@ msgstr "Thiết kế vé"
 msgid "Ticket design saved successfully"
 msgstr "Thiết kế vé đã được lưu thành công"
 
-#: src/components/layouts/Event/index.tsx:106
+#: src/components/layouts/Event/index.tsx:109
 msgid "Ticket Designer"
 msgstr "Thiết kế vé"
 
@@ -8804,7 +8862,7 @@ msgstr "Loại vé"
 msgid "Ticket URL"
 msgstr "URL vé"
 
-#: src/components/layouts/Event/index.tsx:110
+#: src/components/layouts/Event/index.tsx:113
 msgid "Ticketing & Sales"
 msgstr "Bán vé"
 
@@ -8816,7 +8874,7 @@ msgstr "vé"
 msgid "Tickets"
 msgstr "Vé"
 
-#: src/components/layouts/Event/index.tsx:111
+#: src/components/layouts/Event/index.tsx:114
 #: src/components/routes/event/products.tsx:48
 msgid "Tickets & Products"
 msgstr "Vé & Sản phẩm"
@@ -8869,7 +8927,7 @@ msgstr "Thời gian được sử dụng"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:140
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:124
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:158
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:326
 #: src/components/routes/profile/ManageProfile/index.tsx:187
@@ -9167,7 +9225,7 @@ msgstr "Cập nhật {0}"
 msgid "Update Affiliate"
 msgstr "Cập nhật đối tác"
 
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:69
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 msgid "Update event name, description and dates"
 msgstr "Cập nhật tên sự kiện, mô tả và ngày"
 
@@ -9286,13 +9344,13 @@ msgid "Users can change their email in <0>Profile Settings</0>"
 msgstr "Người dùng có thể thay đổi email của họ trong <0>Cài đặt hồ sơ</0>"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:83
-#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:125
+#: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:159
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:126
 #: src/components/routes/profile/ManageProfile/index.tsx:188
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 msgid "UTM Analytics"
 msgstr "Phân tích UTM"
 
@@ -9420,7 +9478,7 @@ msgstr "Đã xác minh"
 msgid "Verify Email"
 msgstr "Xác thực email"
 
-#: src/components/layouts/Event/index.tsx:256
+#: src/components/layouts/Event/index.tsx:273
 msgid "Verify your email"
 msgstr "Xác minh email của bạn"
 
@@ -9555,7 +9613,7 @@ msgstr "Đang chờ"
 msgid "Waiting for payment"
 msgstr "Đang chờ thanh toán"
 
-#: src/components/layouts/Event/index.tsx:121
+#: src/components/layouts/Event/index.tsx:124
 #: src/components/routes/event/Settings/index.tsx:76
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:51
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:49
@@ -9695,7 +9753,7 @@ msgstr "Webhook sẽ không gửi thông báo"
 msgid "Webhook will send notifications"
 msgstr "Webhook sẽ gửi thông báo"
 
-#: src/components/layouts/Event/index.tsx:127
+#: src/components/layouts/Event/index.tsx:130
 #: src/components/layouts/OrganizerLayout/index.tsx:94
 #: src/components/modals/DuplicateEventModal/index.tsx:32
 #: src/components/routes/event/Webhooks/index.tsx:32
@@ -9883,7 +9941,7 @@ msgstr "Ai đang tổ chức sự kiện này?"
 msgid "Who should be asked this question?"
 msgstr "Ai nên được hỏi câu hỏi này?"
 
-#: src/components/layouts/Event/index.tsx:126
+#: src/components/layouts/Event/index.tsx:129
 msgid "Widget Embed"
 msgstr "Nhúng Widget"
 

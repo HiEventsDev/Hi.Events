@@ -220,6 +220,30 @@ export interface GetAllOrdersParams {
     sort_direction?: 'asc' | 'desc';
 }
 
+export interface GetAllOrganizersParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+}
+
+export interface AdminOrganizer {
+    id: IdParam;
+    name: string;
+    email: string;
+    phone: string | null;
+    website: string | null;
+    currency: string;
+    timezone: string;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    account: {
+        id: IdParam;
+        name: string;
+        email: string;
+    } | null;
+}
+
 export interface AdminEventStatistics {
     total_gross_sales: number;
     products_sold: number;
@@ -413,6 +437,17 @@ export const adminClient = {
                 search: params.search || undefined,
                 sort_by: params.sort_by || 'start_date',
                 sort_direction: params.sort_direction || 'desc',
+            }
+        });
+        return response.data;
+    },
+
+    getAllOrganizers: async (params: GetAllOrganizersParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminOrganizer>>('admin/organizers', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
             }
         });
         return response.data;

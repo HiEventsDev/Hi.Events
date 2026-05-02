@@ -8,9 +8,11 @@ use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
+use HiEvents\Services\Domain\Organizer\OrganizerFetchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -26,6 +28,7 @@ readonly class UpdateEventHandler
         private DatabaseManager          $databaseManager,
         private OrderRepositoryInterface $orderRepository,
         private HtmlPurifierService      $purifier,
+        private OrganizerFetchService    $organizerFetchService,
     )
     {
     }
@@ -60,6 +63,7 @@ readonly class UpdateEventHandler
 
     /**
      * @throws CannotChangeCurrencyException
+     * @throws OrganizerNotFoundException
      */
     private function updateEventAttributes(UpdateEventDTO $eventData): void
     {
@@ -69,20 +73,28 @@ readonly class UpdateEventHandler
             $this->checkForCompletedOrders($eventData);
         }
 
+        $attributes = [
+            'title' => $eventData->title,
+            'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
+            'start_date' => DateHelper::convertToUTC($eventData->start_date, $eventData->timezone),
+            'end_date' => $eventData->end_date
+                ? DateHelper::convertToUTC($eventData->end_date, $eventData->timezone)
+                : null,
+            'description' => $this->purifier->purify($eventData->description),
+            'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
+            'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
+            'location' => $eventData->location,
+            'location_details' => $eventData->location_details?->toArray(),
+        ];
+
+        if ($eventData->organizer_id !== null && $eventData->organizer_id !== $existingEvent->getOrganizerId()) {
+            // Throws OrganizerNotFoundException if the organizer is not in this account.
+            $this->organizerFetchService->fetchOrganizer($eventData->organizer_id, $eventData->account_id);
+            $attributes['organizer_id'] = $eventData->organizer_id;
+        }
+
         $this->eventRepository->updateWhere(
-            attributes: [
-                'title' => $eventData->title,
-                'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
-                'start_date' => DateHelper::convertToUTC($eventData->start_date, $eventData->timezone),
-                'end_date' => $eventData->end_date
-                    ? DateHelper::convertToUTC($eventData->end_date, $eventData->timezone)
-                    : null,
-                'description' => $this->purifier->purify($eventData->description),
-                'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
-                'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
-                'location' => $eventData->location,
-                'location_details' => $eventData->location_details?->toArray(),
-            ],
+            attributes: $attributes,
             where: [
                 'id' => $eventData->id,
                 'account_id' => $eventData->account_id,

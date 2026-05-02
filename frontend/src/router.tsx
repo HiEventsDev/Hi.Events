@@ -173,6 +173,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "organizers",
+                async lazy() {
+                    const Organizers = await import("./components/routes/admin/Organizers");
+                    return { Component: Organizers.default };
+                }
+            },
+            {
                 path: "events",
                 async lazy() {
                     const Events = await import("./components/routes/admin/Events");

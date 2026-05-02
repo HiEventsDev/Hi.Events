@@ -74,7 +74,7 @@ const OrganizerLayout = () => {
             isActive: () => false,
             showWhen: () => organizers && organizers.length > 1,
         },
-        { label: 'Overview' },
+        { label: t`Organizer Overview` },
         { link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard },
         {
             link: 'reports',

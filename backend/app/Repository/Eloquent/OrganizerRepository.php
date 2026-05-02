@@ -55,6 +55,23 @@ class OrganizerRepository extends BaseRepository implements OrganizerRepositoryI
             ->count();
     }
 
+    public function getAllOrganizersForAdmin(?string $search, int $perPage): LengthAwarePaginator
+    {
+        $query = $this->model->query()->with(['account', 'organizer_settings']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'ilike', "%$search%")
+                    ->orWhere('email', 'ilike', "%$search%")
+                    ->orWhereHas('account', function ($accountQuery) use ($search) {
+                        $accountQuery->where('name', 'ilike', "%$search%");
+                    });
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
+    }
+
     public function getOrganizerStats(int $organizerId, int $accountId, string $currencyCode): OrganizerStatsResponseDTO
     {
         $totalsQuery = <<<SQL

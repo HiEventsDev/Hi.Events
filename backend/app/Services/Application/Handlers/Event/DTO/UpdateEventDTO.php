@@ -27,6 +27,7 @@ class UpdateEventDTO extends BaseDTO
         public readonly ?string        $location = null,
         public readonly ?AddressDTO    $location_details = null,
         public readonly ?string        $status = EventStatus::DRAFT->name,
+        public readonly ?int           $organizer_id = null,
     )
     {
     }

@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Events;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
+use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Event\UpdateEventRequest;
 use HiEvents\Resources\Event\EventResource;
@@ -45,6 +46,10 @@ class UpdateEventAction extends BaseAction
         } catch (CannotChangeCurrencyException $exception) {
             throw ValidationException::withMessages([
                 'currency' => $exception->getMessage(),
+            ]);
+        } catch (OrganizerNotFoundException $exception) {
+            throw ValidationException::withMessages([
+                'organizer_id' => $exception->getMessage(),
             ]);
         }
 

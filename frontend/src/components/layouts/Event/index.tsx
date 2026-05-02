@@ -15,6 +15,7 @@ import {
     IconReceipt,
     IconSend,
     IconSettings,
+    IconArrowsExchange,
     IconShare,
     IconStar,
     IconTicket,
@@ -39,6 +40,7 @@ import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {ShareModal} from "../../modals/ShareModal";
+import {ChangeEventOrganizerModal} from "../../modals/ChangeEventOrganizerModal";
 import {EventLiveCelebrationModal} from "../../modals/EventLiveCelebrationModal";
 import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
@@ -55,6 +57,7 @@ const EventLayout = () => {
 
     const [opened, {open, close}] = useDisclosure(false);
     const [celebrationOpened, {open: openCelebration, close: closeCelebration}] = useDisclosure(false);
+    const [changeOrganizerOpened, {open: openChangeOrganizer, close: closeChangeOrganizer}] = useDisclosure(false);
 
     const statusToggleMutation = useUpdateEventStatus();
 
@@ -84,7 +87,7 @@ const EventLayout = () => {
         {link: '/manage/organizer/' + event?.organizer?.id, label: t`Organizer Dashboard`, icon: IconArrowLeft},
 
         // 1. OVERVIEW
-        {label: t`Overview`},
+        {label: t`Event Overview`},
         {
             link: 'getting-started',
             label: t`Getting Started`,
@@ -202,6 +205,14 @@ const EventLayout = () => {
                     {event && (
                         <>
                             <Button
+                                onClick={openChangeOrganizer}
+                                variant="transparent"
+                                leftSection={<IconArrowsExchange size={16}/>}
+                            >
+                                {t`Change Organizer`}
+                            </Button>
+
+                            <Button
                                 onClick={open}
                                 variant="transparent"
                                 leftSection={<IconShare size={16}/>}
@@ -215,6 +226,12 @@ const EventLayout = () => {
                                 modalTitle={t`Share Event`}
                                 opened={opened}
                                 onClose={close}
+                            />
+
+                            <ChangeEventOrganizerModal
+                                opened={changeOrganizerOpened}
+                                onClose={closeChangeOrganizer}
+                                event={event}
                             />
 
                             <EventLiveCelebrationModal

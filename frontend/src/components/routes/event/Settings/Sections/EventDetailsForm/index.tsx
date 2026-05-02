@@ -3,9 +3,10 @@ import {Button, Select, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
+import {useGetOrganizers} from "../../../../../../queries/useGetOrganizers.ts";
 import {useEffect} from "react";
 import {useUpdateEvent} from "../../../../../../mutations/useUpdateEvent.ts";
-import {Event} from "../../../../../../types.ts";
+import {Event, OrganizerStatus} from "../../../../../../types.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {Card} from "../../../../../common/Card";
 import {Editor} from "../../../../../common/Editor";
@@ -20,8 +21,18 @@ import {EventCategories} from "../../../../../../constants/eventCategories.ts";
 export const EventDetailsForm = () => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
+    const organizersQuery = useGetOrganizers();
     const updateMutation = useUpdateEvent();
-    const form = useForm({
+    const form = useForm<{
+        title: string;
+        description: string;
+        start_date: string;
+        end_date: string;
+        timezone: string;
+        currency: string;
+        category: string;
+        organizer_id: string;
+    }>({
         initialValues: {
             title: '',
             description: '',
@@ -30,6 +41,7 @@ export const EventDetailsForm = () => {
             timezone: '',
             currency: '',
             category: '',
+            organizer_id: '',
         }
     });
     const formErrorHandle = useFormErrorResponseHandler();
@@ -44,13 +56,19 @@ export const EventDetailsForm = () => {
                 timezone: eventQuery.data.timezone,
                 currency: eventQuery.data.currency,
                 category: eventQuery.data.category,
+                organizer_id: eventQuery.data.organizer_id ? String(eventQuery.data.organizer_id) : '',
             });
         }
     }, [eventQuery.isFetched]);
 
-    const handleSubmit = (values: Partial<Event>) => {
+    const handleSubmit = (values: typeof form.values) => {
+        const eventData: Partial<Event> = {
+            ...values,
+            organizer_id: values.organizer_id ? Number(values.organizer_id) : undefined,
+        };
+
         updateMutation.mutate({
-            eventData: values,
+            eventData,
             eventId: eventId,
         }, {
             onSuccess: () => {
@@ -87,6 +105,22 @@ export const EventDetailsForm = () => {
                         }))}
                         searchable
                         clearable
+                    />
+
+                    <Select
+                        {...form.getInputProps('organizer_id')}
+                        label={t`Organizer`}
+                        description={t`The brand this event is published under`}
+                        placeholder={t`Select an organizer`}
+                        data={(organizersQuery.data?.data ?? [])
+                            .filter((org) => org.status !== OrganizerStatus.ARCHIVED)
+                            .map((org) => ({
+                                value: String(org.id),
+                                label: org.name,
+                            }))}
+                        searchable
+                        required
+                        disabled={organizersQuery.isLoading}
                     />
 
                     <Editor

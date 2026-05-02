@@ -194,6 +194,7 @@ use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMess
 use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
+use HiEvents\Http\Actions\Admin\Organizers\GetAllOrganizersAction as GetAllAdminOrganizersAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
@@ -461,6 +462,7 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->put('/configurations/{configuration_id}', UpdateConfigurationAction::class);
         $router->delete('/configurations/{configuration_id}', DeleteConfigurationAction::class);
         $router->get('/users', GetAllUsersAction::class);
+        $router->get('/organizers', GetAllAdminOrganizersAction::class);
         $router->get('/events', GetAllAdminEventsAction::class);
         $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->get('/orders', GetAllOrdersAction::class);
