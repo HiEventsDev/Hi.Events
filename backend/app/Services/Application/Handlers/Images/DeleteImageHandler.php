@@ -6,14 +6,14 @@ use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\DTO\DeleteImageDTO;
+use HiEvents\Services\Infrastructure\Image\ImageStorageService;
 
 class DeleteImageHandler
 {
     public function __construct(
         private readonly ImageRepositoryInterface $imageRepository,
-    )
-    {
-    }
+        private readonly ImageStorageService $imageStorageService,
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException
@@ -34,5 +34,9 @@ class DeleteImageHandler
             'id' => $imageData->imageId,
             'account_id' => $imageData->accountId,
         ]);
+
+        if ($image->getDisk() !== null && $image->getPath() !== null) {
+            $this->imageStorageService->delete($image->getDisk(), $image->getPath());
+        }
     }
 }

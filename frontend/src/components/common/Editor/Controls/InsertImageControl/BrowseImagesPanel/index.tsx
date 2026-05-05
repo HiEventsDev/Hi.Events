@@ -1,11 +1,14 @@
 import {useState} from "react";
 import {t} from "@lingui/macro";
-import {Loader, Stack, Text, TextInput} from "@mantine/core";
-import {IconSearch} from "@tabler/icons-react";
+import {ActionIcon, Loader, Stack, Text, TextInput} from "@mantine/core";
+import {IconSearch, IconTrash} from "@tabler/icons-react";
 import {useDebouncedValue} from "@mantine/hooks";
 import {useGetAccountImages} from "../../../../../../queries/useGetAccountImages.ts";
+import {useDeleteAccountImage} from "../../../../../../mutations/useDeleteAccountImage.ts";
 import {Pagination} from "../../../../Pagination";
 import {Image as ImageType} from "../../../../../../types.ts";
+import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
+import {showError, showSuccess} from "../../../../../../utilites/notifications.tsx";
 import classes from './index.module.scss';
 
 interface BrowseImagesPanelProps {
@@ -26,9 +29,31 @@ export const BrowseImagesPanel = ({onImageSelected, selectedUrl}: BrowseImagesPa
         sortDirection: 'desc',
     });
 
+    const deleteImage = useDeleteAccountImage();
+
     const handleSearchChange = (value: string) => {
         setSearchQuery(value);
         setPage(1);
+    };
+
+    const handleDelete = (image: ImageType) => {
+        confirmationDialog(
+            t`Delete "${image.file_name}" from the server? This cannot be undone.`,
+            () => {
+                deleteImage.mutate(image.id, {
+                    onSuccess: () => {
+                        showSuccess(t`Image deleted`);
+                        if (selectedUrl === image.url) {
+                            onImageSelected('');
+                        }
+                    },
+                    onError: () => {
+                        showError(t`Could not delete image. Please try again.`);
+                    },
+                });
+            },
+            {confirm: t`Delete`},
+        );
     };
 
     return (
@@ -62,6 +87,20 @@ export const BrowseImagesPanel = ({onImageSelected, selectedUrl}: BrowseImagesPa
                                             backgroundSize: 'cover',
                                         } : undefined}
                                     />
+                                    <ActionIcon
+                                        className={classes.deleteButton}
+                                        variant="filled"
+                                        color="red"
+                                        size="sm"
+                                        radius="xl"
+                                        aria-label={t`Delete image`}
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleDelete(image);
+                                        }}
+                                    >
+                                        <IconTrash size={14}/>
+                                    </ActionIcon>
                                 </div>
                                 <div className={classes.fileName} title={image.file_name}>
                                     {image.file_name}
