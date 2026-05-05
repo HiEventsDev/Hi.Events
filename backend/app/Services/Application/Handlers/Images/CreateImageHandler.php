@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\DTO\CreateImageDTO;
 use HiEvents\Services\Domain\Image\ImageUploadService;
 use HiEvents\Services\Infrastructure\Image\Exception\CouldNotUploadImageException;
+use HiEvents\Services\Infrastructure\Image\ImageStorageService;
 
 class CreateImageHandler
 {
@@ -24,13 +25,12 @@ class CreateImageHandler
     ];
 
     public function __construct(
-        private readonly ImageUploadService           $imageUploadService,
+        private readonly ImageUploadService $imageUploadService,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
-        private readonly ImageRepositoryInterface     $imageRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly ImageStorageService $imageStorageService,
+    ) {}
 
     /**
      * @throws CouldNotUploadImageException
@@ -91,12 +91,24 @@ class CreateImageHandler
 
     private function deleteExistingImages(CreateImageDTO $imageData, string $entityType): void
     {
-        if (in_array($imageData->imageType, self::IMAGES_TYPES_WITH_ONLY_ONE_IMAGE_ALLOWED, true)) {
-            $this->imageRepository->deleteWhere([
-                'entity_id' => $imageData->entityId,
-                'entity_type' => $entityType,
-                'type' => $imageData->imageType->name,
-            ]);
+        if (! in_array($imageData->imageType, self::IMAGES_TYPES_WITH_ONLY_ONE_IMAGE_ALLOWED, true)) {
+            return;
+        }
+
+        $where = [
+            'entity_id' => $imageData->entityId,
+            'entity_type' => $entityType,
+            'type' => $imageData->imageType->name,
+        ];
+
+        $existing = $this->imageRepository->findWhere($where);
+
+        $this->imageRepository->deleteWhere($where);
+
+        foreach ($existing as $image) {
+            if ($image->getDisk() !== null && $image->getPath() !== null) {
+                $this->imageStorageService->delete($image->getDisk(), $image->getPath());
+            }
         }
     }
 }
