@@ -21,9 +21,7 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
         private readonly UpdateEmailTemplateHandler $handler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -43,9 +41,8 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
         try {
             $cta = [
                 'label' => $validated['ctaLabel'],
-                'url_token' => 'order.url', // This will be determined by template type during update
             ];
-            
+
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),

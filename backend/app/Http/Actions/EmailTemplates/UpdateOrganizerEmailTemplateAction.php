@@ -10,8 +10,8 @@ use HiEvents\Exceptions\EmailTemplateValidationException;
 use HiEvents\Exceptions\InvalidEmailTemplateException;
 use HiEvents\Http\Resources\EmailTemplateResource;
 use HiEvents\Http\ResponseCodes;
-use HiEvents\Services\Application\Handlers\EmailTemplate\UpdateEmailTemplateHandler;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
+use HiEvents\Services\Application\Handlers\EmailTemplate\UpdateEmailTemplateHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -21,8 +21,7 @@ class UpdateOrganizerEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
         private readonly UpdateEmailTemplateHandler $handler
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -42,9 +41,8 @@ class UpdateOrganizerEmailTemplateAction extends BaseEmailTemplateAction
         try {
             $cta = [
                 'label' => $validated['ctaLabel'],
-                'url_token' => 'order.url', // This will be determined by template type during update
             ];
-            
+
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),
