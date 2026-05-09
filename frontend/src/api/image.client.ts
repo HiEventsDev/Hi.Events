@@ -25,8 +25,11 @@ export const imageClient = {
         });
         return response.data;
     },
-    delete: async (imageId: IdParam) => {
-        const response = await api.delete(`images/${imageId}`);
+    delete: async (imageId: IdParam, options?: { confirm?: boolean }) => {
+        const url = options?.confirm
+            ? `images/${imageId}?confirm=true`
+            : `images/${imageId}`;
+        const response = await api.delete(url);
         return response.data;
     },
 }

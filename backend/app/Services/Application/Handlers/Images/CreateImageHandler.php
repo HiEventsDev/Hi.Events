@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\DTO\CreateImageDTO;
+use HiEvents\Services\Domain\Image\ImageInUseService;
 use HiEvents\Services\Domain\Image\ImageUploadService;
 use HiEvents\Services\Infrastructure\Image\Exception\CouldNotUploadImageException;
 use HiEvents\Services\Infrastructure\Image\ImageStorageService;
@@ -30,6 +31,7 @@ class CreateImageHandler
         private readonly EventRepositoryInterface $eventRepository,
         private readonly ImageRepositoryInterface $imageRepository,
         private readonly ImageStorageService $imageStorageService,
+        private readonly ImageInUseService $imageInUseService,
     ) {}
 
     /**
@@ -106,9 +108,20 @@ class CreateImageHandler
         $this->imageRepository->deleteWhere($where);
 
         foreach ($existing as $image) {
-            if ($image->getDisk() !== null && $image->getPath() !== null) {
-                $this->imageStorageService->delete($image->getDisk(), $image->getPath());
+            if ($image->getDisk() === null || $image->getPath() === null) {
+                continue;
             }
+
+            $references = $this->imageInUseService->findReferences(
+                $image->getPath(),
+                $imageData->accountId,
+            );
+
+            if (! empty($references)) {
+                continue;
+            }
+
+            $this->imageStorageService->delete($image->getDisk(), $image->getPath());
         }
     }
 }

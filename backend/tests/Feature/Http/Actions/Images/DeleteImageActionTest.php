@@ -7,6 +7,7 @@ use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\Image;
 use HiEvents\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -107,6 +108,87 @@ class DeleteImageActionTest extends TestCase
         $response = $this->deleteJson('/images/'.$image->id);
 
         $this->assertNotEquals(ResponseCodes::HTTP_NO_CONTENT, $response->status());
+    }
+
+    public function test_blocks_deletion_when_image_referenced_by_active_event(): void
+    {
+        $disk = config('filesystems.public');
+        Storage::fake($disk);
+        Storage::disk($disk)->put('generic/active-logo.png', 'fake-bytes');
+
+        $image = $this->createImage($this->accountId, 'active-logo.png', $disk, 'generic/active-logo.png');
+        $this->insertEvent('Live Brunch', 'description', '<img src="https://cdn/generic/active-logo.png">', '+10 days', '+10 days +2 hours');
+
+        $response = $this->deleteJson('/images/'.$image->id, [], [
+            'Authorization' => 'Bearer '.$this->authToken,
+        ]);
+
+        $response->assertStatus(ResponseCodes::HTTP_CONFLICT);
+        $response->assertJsonPath('has_protected_references', true);
+        $response->assertJsonPath('deletable_with_confirm', false);
+        $response->assertJsonStructure(['message', 'references' => [['entity_type', 'entity_id', 'entity_name', 'field_label', 'is_protected']]]);
+
+        Storage::disk($disk)->assertExists('generic/active-logo.png');
+        $this->assertDatabaseHas('images', ['id' => $image->id, 'deleted_at' => null]);
+    }
+
+    public function test_requires_confirm_when_image_referenced_only_by_ended_event(): void
+    {
+        $disk = config('filesystems.public');
+        Storage::fake($disk);
+        Storage::disk($disk)->put('generic/old-logo.png', 'fake-bytes');
+
+        $image = $this->createImage($this->accountId, 'old-logo.png', $disk, 'generic/old-logo.png');
+        $this->insertEvent('Past Rally', 'description', '<img src="https://cdn/generic/old-logo.png">', '-30 days', '-29 days');
+
+        $response = $this->deleteJson('/images/'.$image->id, [], [
+            'Authorization' => 'Bearer '.$this->authToken,
+        ]);
+
+        $response->assertStatus(ResponseCodes::HTTP_CONFLICT);
+        $response->assertJsonPath('has_protected_references', false);
+        $response->assertJsonPath('deletable_with_confirm', true);
+
+        Storage::disk($disk)->assertExists('generic/old-logo.png');
+        $this->assertDatabaseHas('images', ['id' => $image->id, 'deleted_at' => null]);
+    }
+
+    public function test_deletes_with_confirm_when_only_ended_event_references(): void
+    {
+        $disk = config('filesystems.public');
+        Storage::fake($disk);
+        Storage::disk($disk)->put('generic/forced.png', 'fake-bytes');
+
+        $image = $this->createImage($this->accountId, 'forced.png', $disk, 'generic/forced.png');
+        $this->insertEvent('Past Rally', 'description', '<img src="https://cdn/generic/forced.png">', '-30 days', '-29 days');
+
+        $response = $this->deleteJson('/images/'.$image->id.'?confirm=true', [], [
+            'Authorization' => 'Bearer '.$this->authToken,
+        ]);
+
+        $response->assertStatus(ResponseCodes::HTTP_NO_CONTENT);
+        Storage::disk($disk)->assertMissing('generic/forced.png');
+        $this->assertSoftDeleted('images', ['id' => $image->id]);
+    }
+
+    private function insertEvent(string $title, string $field, string $value, string $startOffset, string $endOffset): int
+    {
+        $now = now();
+
+        return (int) DB::table('events')->insertGetId([
+            'title' => $title,
+            'account_id' => $this->accountId,
+            'user_id' => $this->user->id,
+            'short_id' => 'e_'.bin2hex(random_bytes(4)),
+            'start_date' => $now->copy()->modify($startOffset),
+            'end_date' => $now->copy()->modify($endOffset),
+            $field => $value,
+            'status' => 'LIVE',
+            'currency' => 'USD',
+            'timezone' => 'UTC',
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
     }
 
     private function createImage(int $accountId, string $filename, string $disk, string $path): Image
