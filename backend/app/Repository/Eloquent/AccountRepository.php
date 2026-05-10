@@ -26,16 +26,16 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
 
     public function findByEventId(int $eventId): AccountDomainObject
     {
-        $account = $this
-            ->model
-            ->select('accounts.*')
-            ->join('events', 'accounts.id', '=', 'events.account_id')
-            ->where('events.id', $eventId)
-            ->first();
+        return $this->runQuery(function () use ($eventId) {
+            $account = $this
+                ->model
+                ->select('accounts.*')
+                ->join('events', 'accounts.id', '=', 'events.account_id')
+                ->where('events.id', $eventId)
+                ->first();
 
-        $this->resetModel();
-
-        return $this->handleSingleResult($account, AccountDomainObject::class);
+            return $this->handleSingleResult($account, AccountDomainObject::class);
+        });
     }
 
     public function getAllAccountsWithCounts(?string $search, int $perPage): LengthAwarePaginator
@@ -75,7 +75,7 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
                 'users' => function ($query) {
                     $query->select('users.id', 'users.first_name', 'users.last_name', 'users.email')
                         ->withPivot('role');
-                }
+                },
             ])
             ->findOrFail($accountId);
     }

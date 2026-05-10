@@ -1,4 +1,4 @@
-import {Event, Product, ProductPrice} from "../../../types.ts";
+import {Event, EventType, IdParam, Product, ProductPrice} from "../../../types.ts";
 import {t} from "@lingui/macro";
 import {Tooltip} from "@mantine/core";
 import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
@@ -9,12 +9,13 @@ interface ProductPriceSaleDateMessageProps {
     price: ProductPrice;
     event: Event;
     product: Product;
+    eventOccurrenceId?: IdParam;
 }
 
-const ProductPriceSaleDateMessage = ({price, event, product}: ProductPriceSaleDateMessageProps) => {
+const ProductPriceSaleDateMessage = ({price, event, product, eventOccurrenceId}: ProductPriceSaleDateMessageProps) => {
     if (price.is_sold_out) {
-        if (product.waitlist_enabled) {
-            return <JoinWaitlistButton product={product} event={event} productPriceId={price.id} priceLabel={price.label}/>;
+        if (product.waitlist_enabled && (event.type !== EventType.RECURRING || eventOccurrenceId)) {
+            return <JoinWaitlistButton product={product} event={event} productPriceId={price.id} priceLabel={price.label} eventOccurrenceId={eventOccurrenceId}/>;
         }
         return t`Sold out`;
     }
@@ -40,12 +41,13 @@ const ProductPriceSaleDateMessage = ({price, event, product}: ProductPriceSaleDa
 interface ProductAvailabilityMessageProps {
     product: Product;
     event: Event;
+    eventOccurrenceId?: IdParam;
 }
 
-export const ProductAvailabilityMessage = ({product, event}: ProductAvailabilityMessageProps) => {
+export const ProductAvailabilityMessage = ({product, event, eventOccurrenceId}: ProductAvailabilityMessageProps) => {
     if (product.is_sold_out) {
-        if (product.waitlist_enabled && product.type !== 'TIERED') {
-            return <JoinWaitlistButton product={product} event={event} productPriceId={product.prices?.[0]?.id}/>;
+        if (product.waitlist_enabled && (event.type !== EventType.RECURRING || eventOccurrenceId) && product.type !== 'TIERED') {
+            return <JoinWaitlistButton product={product} event={event} productPriceId={product.prices?.[0]?.id} eventOccurrenceId={eventOccurrenceId}/>;
         }
         return t`Sold out`;
     }
@@ -70,13 +72,14 @@ interface ProductAndPriceAvailabilityProps {
     product: Product;
     price: ProductPrice;
     event: Event;
+    eventOccurrenceId?: IdParam;
 }
 
-export const ProductPriceAvailability = ({product, price, event}: ProductAndPriceAvailabilityProps) => {
+export const ProductPriceAvailability = ({product, price, event, eventOccurrenceId}: ProductAndPriceAvailabilityProps) => {
 
     if (product.type === 'TIERED') {
-        return <ProductPriceSaleDateMessage price={price} event={event} product={product}/>
+        return <ProductPriceSaleDateMessage price={price} event={event} product={product} eventOccurrenceId={eventOccurrenceId}/>
     }
 
-    return <ProductAvailabilityMessage product={product} event={event}/>
+    return <ProductAvailabilityMessage product={product} event={event} eventOccurrenceId={eventOccurrenceId}/>
 }

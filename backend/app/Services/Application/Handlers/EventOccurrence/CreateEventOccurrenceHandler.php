@@ -8,8 +8,8 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Helper\IdHelper;
-use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -17,10 +17,8 @@ class CreateEventOccurrenceHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
-        private readonly DatabaseManager                    $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -33,7 +31,7 @@ class CreateEventOccurrenceHandler
                 EventOccurrenceDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
                 EventOccurrenceDomainObjectAbstract::START_DATE => $dto->start_date,
                 EventOccurrenceDomainObjectAbstract::END_DATE => $dto->end_date,
-                EventOccurrenceDomainObjectAbstract::STATUS => $dto->status ?? EventOccurrenceStatus::ACTIVE->name,
+                EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::ACTIVE->name,
                 EventOccurrenceDomainObjectAbstract::CAPACITY => $dto->capacity,
                 EventOccurrenceDomainObjectAbstract::USED_CAPACITY => 0,
                 EventOccurrenceDomainObjectAbstract::LABEL => $dto->label,

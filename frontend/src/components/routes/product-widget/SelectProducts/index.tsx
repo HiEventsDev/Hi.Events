@@ -235,9 +235,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     useEffect(() => {
         let autoSelectedOccId: number | null = null;
 
-        const selectableOccurrences = activeOccurrences.filter(
-            occ => occ.status === EventOccurrenceStatus.ACTIVE
-        );
+        const selectableOccurrences = activeOccurrences;
 
         if (selectableOccurrences.length === 1 && selectableOccurrences[0].id) {
             autoSelectedOccId = Number(selectableOccurrences[0].id);
@@ -541,20 +539,28 @@ const SelectProducts = (props: SelectProductsProps) => {
                         );
                     })()}
 
-                    {needsOccurrenceSelection && occurrenceSelected && occurrenceEventRefetchMutation.isPending && (
-                        <div className="hi-occurrence-loading">
-                            <Loader size="sm" color="var(--widget-primary-color, #228be6)"/>
-                            <span>{t`Loading products...`}</span>
-                        </div>
-                    )}
+                    {/* No standalone "Loading products..." message — it pushed
+                        layout down and back up as it mounted/unmounted. The
+                        opacity dim on .hi-product-category-rows below is enough
+                        signal; an inline spinner is added inside the products
+                        area so the cue is in-place rather than reflow-causing. */}
 
-                    <div className={'hi-product-category-rows'} style={
-                        needsOccurrenceSelection && !occurrenceSelected
-                            ? {display: 'none'}
-                            : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
-                                ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
-                                : undefined
-                    }>
+                    <div
+                        className={'hi-product-category-rows'}
+                        style={{
+                            position: 'relative',
+                            ...(needsOccurrenceSelection && !occurrenceSelected
+                                ? {display: 'none'}
+                                : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
+                                    ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
+                                    : undefined),
+                        }}
+                    >
+                        {needsOccurrenceSelection && occurrenceSelected && occurrenceEventRefetchMutation.isPending && (
+                            <div className="hi-occurrence-loading-overlay">
+                                <Loader size="sm" color="var(--widget-primary-color, #228be6)"/>
+                            </div>
+                        )}
                         {productCategories && productCategories.map((category) => {
                             return (
                                 <div className={'hi-product-category-row'} key={category.id}>
@@ -626,7 +632,8 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                                                                 {(!product.is_available && product.type === 'TIERED') && (
                                                                     <ProductAvailabilityMessage product={product}
-                                                                                                event={event}/>
+                                                                                                event={event}
+                                                                                                eventOccurrenceId={selectedOccurrenceId}/>
                                                                 )}
 
                                                                 <span className={`hi-product-collapse-arrow`}>
@@ -644,6 +651,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                 event={event}
                                                                 product={product}
                                                                 form={form}
+                                                                eventOccurrenceId={selectedOccurrenceId}
                                                             />
                                                         </div>
 

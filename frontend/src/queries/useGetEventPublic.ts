@@ -11,7 +11,7 @@ export const getEventPublicQuery = (
     isPromoCodeValid: boolean,
     eventOccurrenceId?: number | null,
 ) => ({
-    queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId, isPromoCodeValid, eventOccurrenceId] as const,
+    queryKey: [GET_EVENT_PUBLIC_QUERY_KEY, eventId, promoCode, isPromoCodeValid, eventOccurrenceId] as const,
     queryFn: async (): Promise<Event> => {
         const {data} = await eventsClientPublic.findByID(eventId, promoCode, eventOccurrenceId);
         return data;
@@ -26,10 +26,11 @@ export const useGetEventPublic = (
     eventId: IdParam,
     enabled = true,
     isPromoCodeValid = false,
-    promoCode: string | null = null
+    promoCode: string | null = null,
+    eventOccurrenceId: number | null = null,
 ) => {
     return useQuery<Event, AxiosError>({
-        ...getEventPublicQuery(eventId, promoCode, isPromoCodeValid),
+        ...getEventPublicQuery(eventId, promoCode, isPromoCodeValid, eventOccurrenceId),
         enabled,
     });
 };

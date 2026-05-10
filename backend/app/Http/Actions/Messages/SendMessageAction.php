@@ -29,21 +29,24 @@ class SendMessageAction extends BaseAction
         $user = $this->getAuthenticatedUser();
 
         try {
+            $validated = $request->validated();
+
             $message = $this->messageHandler->handle(SendMessageDTO::fromArray([
                 'event_id' => $eventId,
-                'subject' => $request->input('subject'),
-                'message' => $request->input('message'),
-                'type' => $request->input('message_type'),
-                'is_test' => $request->input('is_test'),
-                'order_id' => $request->input('order_id'),
-                'attendee_ids' => $request->input('attendee_ids'),
-                'product_ids' => $request->input('product_ids'),
-                'order_statuses' => $request->input('order_statuses'),
-                'send_copy_to_current_user' => $request->boolean('send_copy_to_current_user'),
+                'subject' => $validated['subject'],
+                'message' => $validated['message'],
+                'type' => $validated['message_type'],
+                'is_test' => (bool) ($validated['is_test'] ?? false),
+                'order_id' => $validated['order_id'] ?? null,
+                'attendee_ids' => $validated['attendee_ids'] ?? [],
+                'product_ids' => $validated['product_ids'] ?? [],
+                'order_statuses' => $validated['order_statuses'] ?? [],
+                'send_copy_to_current_user' => (bool) ($validated['send_copy_to_current_user'] ?? false),
                 'sent_by_user_id' => $user->getId(),
                 'account_id' => $this->getAuthenticatedAccountId(),
-                'scheduled_at' => $request->input('scheduled_at'),
-                'event_occurrence_id' => $request->input('event_occurrence_id'),
+                'scheduled_at' => $validated['scheduled_at'] ?? null,
+                'event_occurrence_id' => $validated['event_occurrence_id'] ?? null,
+                'event_occurrence_ids' => $validated['event_occurrence_ids'] ?? null,
             ]));
         } catch (AccountNotVerifiedException $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);

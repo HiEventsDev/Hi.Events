@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace HiEvents\Jobs\Occurrence;
 
-use HiEvents\DomainObjects\Enums\EventType;
-use HiEvents\DomainObjects\EventOccurrenceDomainObject;
-use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
-use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
 use Illuminate\Bus\Queueable;
@@ -21,6 +19,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class BulkCancelOccurrencesJob implements ShouldQueue
 {
@@ -31,17 +30,19 @@ class BulkCancelOccurrencesJob implements ShouldQueue
     public int $backoff = 30;
 
     public function __construct(
-        public readonly int   $eventId,
+        public readonly int $eventId,
         public readonly array $occurrenceIds,
-        public readonly bool  $refundOrders = false,
+        public readonly bool $refundOrders = false,
     ) {
+        $this->onQueue('occurrences');
     }
 
     public function handle(
         EventOccurrenceRepositoryInterface $occurrenceRepository,
-        EventRepositoryInterface           $eventRepository,
+        RecurrenceRuleExclusionService $exclusionService,
+        CancelOccurrenceAttendeesService $cancelAttendeesService,
     ): void {
-        $cancelledDates = [];
+        $cancelledStartDates = [];
         $failedIds = [];
 
         foreach ($this->occurrenceIds as $occurrenceId) {
@@ -50,11 +51,11 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                 // row before checking its status. Without the lock, two concurrent bulk
                 // cancellations could both observe ACTIVE and dispatch the refund /
                 // notification side-effects twice.
-                $cancelledStartDate = DB::transaction(function () use ($occurrenceRepository, $occurrenceId) {
+                $cancelledStartDate = DB::transaction(function () use ($occurrenceRepository, $cancelAttendeesService, $occurrenceId) {
                     $occurrence = $occurrenceRepository->findByIdLocked($occurrenceId);
 
                     if (
-                        !$occurrence
+                        ! $occurrence
                         || $occurrence->getEventId() !== $this->eventId
                         || $occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name
                     ) {
@@ -67,6 +68,8 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                         ],
                         where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
                     );
+
+                    $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
 
                     return $occurrence->getStartDate();
                 });
@@ -86,11 +89,7 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     occurrenceId: $occurrenceId,
                 ));
 
-                if ($this->refundOrders) {
-                    RefundOccurrenceOrdersJob::dispatch($this->eventId, $occurrenceId);
-                }
-
-                $cancelledDates[] = date('Y-m-d', strtotime($cancelledStartDate));
+                $cancelledStartDates[] = $cancelledStartDate;
             } catch (\Throwable $e) {
                 $failedIds[] = $occurrenceId;
                 Log::error('Failed to cancel occurrence', [
@@ -101,49 +100,33 @@ class BulkCancelOccurrencesJob implements ShouldQueue
             }
         }
 
-        if (!empty($cancelledDates)) {
-            $this->addExcludedDates($eventRepository, $cancelledDates);
+        if (! empty($cancelledStartDates)) {
+            DB::transaction(fn () => $exclusionService->addExclusions($this->eventId, $cancelledStartDates));
         }
 
-        Log::info('Bulk cancel occurrences completed', [
+        $context = [
             'event_id' => $this->eventId,
-            'cancelled_count' => count($cancelledDates),
+            'cancelled_count' => count($cancelledStartDates),
             'failed_count' => count($failedIds),
             'failed_ids' => $failedIds,
             'refund_orders' => $this->refundOrders,
-        ]);
+            'peak_memory_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 1),
+        ];
+
+        if (empty($failedIds)) {
+            Log::info('Bulk cancel occurrences completed', $context);
+        } else {
+            Log::warning('Bulk cancel occurrences completed with failures', $context);
+        }
     }
 
-    private function addExcludedDates(EventRepositoryInterface $eventRepository, array $dates): void
+    public function failed(Throwable $exception): void
     {
-        DB::transaction(function () use ($eventRepository, $dates) {
-            $event = $eventRepository->findByIdLocked($this->eventId);
-
-            if ($event->getType() !== EventType::RECURRING->name) {
-                return;
-            }
-
-            $recurrenceRule = $event->getRecurrenceRule() ?? [];
-            if (is_string($recurrenceRule)) {
-                $recurrenceRule = json_decode($recurrenceRule, true, 512, JSON_THROW_ON_ERROR);
-            }
-
-            $excludedDates = $recurrenceRule['excluded_dates'] ?? [];
-
-            foreach ($dates as $date) {
-                if (!in_array($date, $excludedDates, true)) {
-                    $excludedDates[] = $date;
-                }
-            }
-
-            $recurrenceRule['excluded_dates'] = $excludedDates;
-
-            $eventRepository->updateFromArray(
-                id: $this->eventId,
-                attributes: [
-                    EventDomainObjectAbstract::RECURRENCE_RULE => $recurrenceRule,
-                ],
-            );
-        });
+        Log::critical('BulkCancelOccurrencesJob permanently failed after retries', [
+            'event_id' => $this->eventId,
+            'occurrence_ids' => $this->occurrenceIds,
+            'refund_orders' => $this->refundOrders,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -36,6 +37,10 @@ readonly class ResendAttendeeTicketHandler
             ->loadRelation(new Relationship(OrderDomainObject::class, nested: [
                 new Relationship(OrderItemDomainObject::class),
             ], name: 'order'))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence',
+            ))
             ->findFirstWhere([
                 'id' => $resendAttendeeProductDTO->attendeeId,
                 'event_id' => $resendAttendeeProductDTO->eventId,

@@ -78,6 +78,7 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
                     direction: CapacityChangeDirection::INCREASED,
                     productId: $productPrice->getProductId(),
                     productPriceId: $entry->getProductPriceId(),
+                    eventOccurrenceId: $entry->getEventOccurrenceId(),
                 ));
             } catch (Throwable $e) {
                 Log::error('Failed to process expired waitlist offer', [

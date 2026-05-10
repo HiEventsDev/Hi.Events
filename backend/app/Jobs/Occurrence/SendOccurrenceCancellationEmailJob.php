@@ -6,18 +6,19 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Repository\Eloquent\Value\Relationship;
-use HiEvents\Services\Domain\Email\MailBuilderService;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Email\MailBuilderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Mailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SendOccurrenceCancellationEmailJob implements ShouldQueue
 {
@@ -28,21 +29,20 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
     public int $backoff = 30;
 
     public function __construct(
-        private readonly int  $eventId,
-        private readonly int  $occurrenceId,
+        private readonly int $eventId,
+        private readonly int $occurrenceId,
         private readonly bool $refundOrders = false,
-    )
-    {
+    ) {
+        $this->onQueue('occurrences');
     }
 
     public function handle(
-        EventRepositoryInterface           $eventRepository,
+        EventRepositoryInterface $eventRepository,
         EventOccurrenceRepositoryInterface $occurrenceRepository,
-        AttendeeRepositoryInterface        $attendeeRepository,
-        Mailer                             $mailer,
-        MailBuilderService                 $mailBuilderService,
-    ): void
-    {
+        AttendeeRepositoryInterface $attendeeRepository,
+        Mailer $mailer,
+        MailBuilderService $mailBuilderService,
+    ): void {
         $occurrence = $occurrenceRepository->findById($this->occurrenceId);
 
         $event = $eventRepository
@@ -50,9 +50,14 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($this->eventId);
 
+        // Intentionally does NOT filter out CANCELLED attendees:
+        // CancelOccurrenceHandler now marks attendees as CANCELLED inside the
+        // same transaction that fires this job's event — a status filter here
+        // would exclude the very attendees we need to notify. Anyone tied to
+        // this occurrence by FK gets the cancellation email. Dedup by email
+        // address below handles shared-email attendees.
         $attendees = $attendeeRepository->findWhere([
             AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $this->occurrenceId,
-            [AttendeeDomainObjectAbstract::STATUS, '!=', AttendeeStatus::CANCELLED->name],
         ]);
 
         if ($attendees->isEmpty()) {
@@ -81,5 +86,22 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
                 ->locale($attendee->getLocale())
                 ->send($mail);
         });
+
+        Log::info('Sent occurrence cancellation emails', [
+            'event_id' => $this->eventId,
+            'occurrence_id' => $this->occurrenceId,
+            'recipient_count' => count($sentEmails),
+            'peak_memory_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 1),
+        ]);
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        Log::critical('SendOccurrenceCancellationEmailJob permanently failed after retries', [
+            'event_id' => $this->eventId,
+            'occurrence_id' => $this->occurrenceId,
+            'refund_orders' => $this->refundOrders,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

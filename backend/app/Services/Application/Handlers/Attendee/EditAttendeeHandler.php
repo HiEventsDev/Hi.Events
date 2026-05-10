@@ -71,6 +71,7 @@ class EditAttendeeHandler
                 direction: CapacityChangeDirection::INCREASED,
                 productId: $attendee->getProductId(),
                 productPriceId: $attendee->getProductPriceId(),
+                eventOccurrenceId: $attendee->getEventOccurrenceId(),
             ));
         }
     }

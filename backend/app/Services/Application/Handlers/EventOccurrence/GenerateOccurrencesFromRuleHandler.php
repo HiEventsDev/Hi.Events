@@ -36,7 +36,7 @@ class GenerateOccurrencesFromRuleHandler
 
         $previewCount = $this->ruleParserService->parse($dto->recurrence_rule, $timezone)->count();
 
-        if ($previewCount >= RecurrenceRuleParserService::MAX_OCCURRENCES) {
+        if ($previewCount > RecurrenceRuleParserService::MAX_OCCURRENCES) {
             throw ValidationException::withMessages([
                 'recurrence_rule' => [
                     __('This rule would generate too many occurrences. Please reduce the date range or frequency, or contact support.'),

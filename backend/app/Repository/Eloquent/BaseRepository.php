@@ -179,8 +179,9 @@ abstract class BaseRepository implements RepositoryInterface
         array $where,
         array $columns = self::DEFAULT_COLUMNS,
         array $orderAndDirections = [],
+        ?int $limit = null,
     ): Collection {
-        return $this->runQuery(function () use ($where, $columns, $orderAndDirections) {
+        return $this->runQuery(function () use ($where, $columns, $orderAndDirections, $limit) {
             $this->applyConditions($where);
 
             foreach ($orderAndDirections as $orderAndDirection) {
@@ -188,6 +189,10 @@ abstract class BaseRepository implements RepositoryInterface
                     $orderAndDirection->getOrder(),
                     $orderAndDirection->getDirection()
                 );
+            }
+
+            if ($limit !== null) {
+                $this->model = $this->model->limit($limit);
             }
 
             return $this->handleResults($this->model->get($columns));

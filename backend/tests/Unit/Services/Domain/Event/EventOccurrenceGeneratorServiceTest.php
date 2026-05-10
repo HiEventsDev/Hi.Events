@@ -7,12 +7,15 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
 use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class EventOccurrenceGeneratorServiceTest extends TestCase
@@ -20,6 +23,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
     private EventOccurrenceGeneratorService $service;
     private RecurrenceRuleParserService $ruleParser;
     private EventOccurrenceRepositoryInterface $occurrenceRepository;
+    private WaitlistEntryRepositoryInterface|MockInterface $waitlistEntryRepository;
 
     protected function setUp(): void
     {
@@ -27,10 +31,15 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $this->ruleParser = Mockery::mock(RecurrenceRuleParserService::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
+        // Most tests don't exercise stale-deletion; default to a no-op so the
+        // few that do can override with explicit expectations.
+        $this->waitlistEntryRepository->shouldReceive('updateWhere')->byDefault();
 
         $this->service = new EventOccurrenceGeneratorService(
             $this->ruleParser,
             $this->occurrenceRepository,
+            $this->waitlistEntryRepository,
         );
     }
 
@@ -40,17 +49,33 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         parent::tearDown();
     }
 
-    private function mockDbBatchQuery(array $occurrenceIdsWithOrders = []): void
-    {
-        $mockBuilder = Mockery::mock(\Illuminate\Database\Query\Builder::class);
-        $mockBuilder->shouldReceive('whereIn')->andReturnSelf();
-        $mockBuilder->shouldReceive('whereNull')->andReturnSelf();
-        $mockBuilder->shouldReceive('distinct')->andReturnSelf();
-        $mockBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithOrders));
+    /**
+     * Mocks the two batch lookups the generator runs to decide which existing
+     * occurrences are "in use" and therefore protected from soft-deletion:
+     * occurrences pointed at by an active order_item OR an active attendee.
+     */
+    private function mockDbBatchQuery(
+        array $occurrenceIdsWithOrders = [],
+        array $occurrenceIdsWithAttendees = [],
+    ): void {
+        $orderItemsBuilder = Mockery::mock(\Illuminate\Database\Query\Builder::class);
+        $orderItemsBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('whereNull')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('distinct')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithOrders));
+
+        $attendeesBuilder = Mockery::mock(\Illuminate\Database\Query\Builder::class);
+        $attendeesBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('whereNull')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('distinct')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithAttendees));
 
         DB::shouldReceive('table')
             ->with('order_items')
-            ->andReturn($mockBuilder);
+            ->andReturn($orderItemsBuilder);
+        DB::shouldReceive('table')
+            ->with('attendees')
+            ->andReturn($attendeesBuilder);
     }
 
     public function testNewOccurrencesAreCreatedWhenNoneExist(): void
@@ -342,7 +367,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $this->occurrenceRepository
             ->shouldReceive('deleteWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 5])
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
             ->once();
 
         $result = $this->service->generate($event, $recurrenceRule);
@@ -351,7 +376,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals(10, $result->first()->getId());
     }
 
-    public function testStaleOccurrenceWithOrdersIsNotDeleted(): void
+    public function testStaleOccurrenceWithOrdersIsMarkedOverriddenAndNotDeleted(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -395,6 +420,81 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             ->andReturn($newOccurrence);
 
         $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                [EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true],
+                [EventOccurrenceDomainObjectAbstract::ID => 5],
+            );
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(10, $result->first()->getId());
+    }
+
+    public function testStaleOccurrenceWithAttendeesButNoOrderItemsIsMarkedOverriddenAndNotDeleted(): void
+    {
+        // Regression: matches the single/bulk delete handlers, which both
+        // refuse to delete an occurrence that has any attendees pointing at
+        // it — even if no order_item row does. Regeneration was previously
+        // only checking order_items, so changing the recurrence rule could
+        // soft-delete an attendee-bearing occurrence in import / partial-
+        // restore scenarios where the two tables disagree.
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                [
+                    'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                    'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                    'capacity' => 100,
+                ],
+            ]));
+
+        $staleWithAttendees = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$staleWithAttendees]));
+
+        // No order_item rows pointing at occ 5, but the attendees query does
+        // return it — must still be protected.
+        $this->mockDbBatchQuery(occurrenceIdsWithOrders: [], occurrenceIdsWithAttendees: [5]);
+
+        $newOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-02 10:00:00',
+            endDate: '2025-03-02 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                [EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true],
+                [EventOccurrenceDomainObjectAbstract::ID => 5],
+            );
 
         $result = $this->service->generate($event, $recurrenceRule);
 
@@ -540,7 +640,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $this->occurrenceRepository
             ->shouldReceive('deleteWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 4])
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [4]]])
             ->once();
 
         $result = $this->service->generate($event, $recurrenceRule);
@@ -664,7 +764,70 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $this->occurrenceRepository
             ->shouldReceive('deleteWhere')
-            ->with([EventOccurrenceDomainObjectAbstract::ID => 5])
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
+            ->once();
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function testStaleOccurrenceWaitlistEntriesAreCancelledBeforeDeletion(): void
+    {
+        // Regression for the regenerate-strands-waitlist bug: removeStaleOccurrences
+        // soft-deletes orphaned occurrences. The FK is nullOnDelete which only
+        // fires on hard deletes, so without explicit waitlist cleanup, WAITING/
+        // OFFERED entries are left pointing at soft-deleted rows and crash
+        // ProcessWaitlistService on the next CapacityChangedEvent.
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect());
+
+        $stale = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$stale]));
+
+        $this->mockDbBatchQuery([]);
+
+        // Override the default no-op mock with a strict expectation: the
+        // waitlist cancel must run with the right scope before the delete.
+        $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
+        $this->waitlistEntryRepository
+            ->shouldReceive('updateWhere')
+            ->with(
+                ['status' => WaitlistEntryStatus::CANCELLED->name],
+                [
+                    ['event_id', 'in', [1]],
+                    ['event_occurrence_id', 'in', [5]],
+                    ['status', 'in', [
+                        WaitlistEntryStatus::WAITING->name,
+                        WaitlistEntryStatus::OFFERED->name,
+                    ]],
+                ],
+            )
+            ->once();
+
+        $this->service = new EventOccurrenceGeneratorService(
+            $this->ruleParser,
+            $this->occurrenceRepository,
+            $this->waitlistEntryRepository,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
             ->once();
 
         $result = $this->service->generate($event, $recurrenceRule);
@@ -757,9 +920,11 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         ?string $endDate = null,
         bool $isOverridden = false,
         ?int $capacity = null,
+        int $eventId = 1,
     ): EventOccurrenceDomainObject {
         $occ = new EventOccurrenceDomainObject();
         $occ->setId($id);
+        $occ->setEventId($eventId);
         $occ->setShortId('oc_test' . $id);
         $occ->setStartDate($startDate);
         $occ->setEndDate($endDate);

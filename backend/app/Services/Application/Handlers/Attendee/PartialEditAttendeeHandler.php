@@ -100,6 +100,7 @@ class PartialEditAttendeeHandler
                 direction: CapacityChangeDirection::DECREASED,
                 productId: $attendee->getProductId(),
                 productPriceId: $attendee->getProductPriceId(),
+                eventOccurrenceId: $attendee->getEventOccurrenceId(),
             ));
         } elseif ($data->status === AttendeeStatus::CANCELLED->name) {
             $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
@@ -109,6 +110,7 @@ class PartialEditAttendeeHandler
                 direction: CapacityChangeDirection::INCREASED,
                 productId: $attendee->getProductId(),
                 productPriceId: $attendee->getProductPriceId(),
+                eventOccurrenceId: $attendee->getEventOccurrenceId(),
             ));
         }
     }

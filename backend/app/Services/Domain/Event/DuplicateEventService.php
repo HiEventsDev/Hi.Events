@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Event;
 use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -42,49 +43,46 @@ use Throwable;
 class DuplicateEventService
 {
     public function __construct(
-        private readonly EventRepositoryInterface        $eventRepository,
-        private readonly CreateEventService              $createEventService,
-        private readonly CreateProductService            $createProductService,
-        private readonly CreateQuestionService           $createQuestionService,
-        private readonly CreatePromoCodeService          $createPromoCodeService,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly CreateEventService $createEventService,
+        private readonly CreateProductService $createProductService,
+        private readonly CreateQuestionService $createQuestionService,
+        private readonly CreatePromoCodeService $createPromoCodeService,
         private readonly CreateCapacityAssignmentService $createCapacityAssignmentService,
-        private readonly CreateCheckInListService        $createCheckInListService,
-        private readonly ImageRepositoryInterface        $imageRepository,
-        private readonly DatabaseManager                 $databaseManager,
-        private readonly HtmlPurifierService             $purifier,
-        private readonly CreateProductCategoryService    $createProductCategoryService,
-        private readonly CreateWebhookService            $createWebhookService,
-        private readonly AffiliateRepositoryInterface    $affiliateRepository,
+        private readonly CreateCheckInListService $createCheckInListService,
+        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly HtmlPurifierService $purifier,
+        private readonly CreateProductCategoryService $createProductCategoryService,
+        private readonly CreateWebhookService $createWebhookService,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
         private readonly ProductOccurrenceVisibilityRepositoryInterface $visibilityRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function duplicateEvent(
-        string  $eventId,
-        string  $accountId,
-        string  $title,
-        string  $startDate,
-        bool    $duplicateProducts = true,
-        bool    $duplicateQuestions = true,
-        bool    $duplicateSettings = true,
-        bool    $duplicatePromoCodes = true,
-        bool    $duplicateCapacityAssignments = true,
-        bool    $duplicateCheckInLists = true,
-        bool    $duplicateEventCoverImage = true,
-        bool    $duplicateTicketLogo = true,
-        bool    $duplicateWebhooks = true,
-        bool    $duplicateAffiliates = true,
-        bool    $duplicateOccurrences = true,
+        string $eventId,
+        string $accountId,
+        string $title,
+        string $startDate,
+        bool $duplicateProducts = true,
+        bool $duplicateQuestions = true,
+        bool $duplicateSettings = true,
+        bool $duplicatePromoCodes = true,
+        bool $duplicateCapacityAssignments = true,
+        bool $duplicateCheckInLists = true,
+        bool $duplicateEventCoverImage = true,
+        bool $duplicateTicketLogo = true,
+        bool $duplicateWebhooks = true,
+        bool $duplicateAffiliates = true,
+        bool $duplicateOccurrences = true,
         ?string $description = null,
         ?string $endDate = null,
-    ): EventDomainObject
-    {
+    ): EventDomainObject {
         try {
             $this->databaseManager->beginTransaction();
 
@@ -103,7 +101,7 @@ class DuplicateEventService
             );
 
             $oldToNewOccurrenceMap = [];
-            if ($duplicateOccurrences) {
+            if ($duplicateOccurrences && $event->getType() === EventType::RECURRING->name) {
                 $oldToNewOccurrenceMap = $this->cloneOccurrences($event, $newEvent->getId());
             }
 
@@ -121,12 +119,13 @@ class DuplicateEventService
                     duplicatePromoCodes: $duplicatePromoCodes,
                     duplicateCapacityAssignments: $duplicateCapacityAssignments,
                     duplicateCheckInLists: $duplicateCheckInLists,
+                    oldToNewOccurrenceMap: $oldToNewOccurrenceMap,
                 );
             } else {
                 $this->createProductCategoryService->createDefaultProductCategory($newEvent);
             }
 
-            if ($duplicateOccurrences && $duplicateProducts && !empty($oldToNewOccurrenceMap)) {
+            if ($duplicateOccurrences && $duplicateProducts && ! empty($oldToNewOccurrenceMap)) {
                 $this->cloneOccurrenceProductSettings($oldToNewOccurrenceMap, $oldProductToNewProductMap, $oldPriceToNewPriceMap);
             }
 
@@ -165,7 +164,7 @@ class DuplicateEventService
         ?string $endDate = null,
     ): EventDomainObject {
         return $this->createEventService->createEvent(
-            eventData: (new EventDomainObject())
+            eventData: (new EventDomainObject)
                 ->setOrganizerId($event->getOrganizerId())
                 ->setAccountId($event->getAccountId())
                 ->setUserId($event->getUserId())
@@ -177,11 +176,30 @@ class DuplicateEventService
                 ->setCurrency($event->getCurrency())
                 ->setStatus($event->getStatus())
                 ->setType($event->getType())
-                ->setRecurrenceRule($event->getRecurrenceRule()),
+                ->setRecurrenceRule($this->stripStaleExclusions($event->getRecurrenceRule())),
             startDate: $startDate,
             endDate: $endDate,
             eventSettings: $cloneEventSettings ? $event->getEventSettings() : null,
         );
+    }
+
+    /**
+     * The source's `excluded_dates` and `excluded_occurrences` both correspond
+     * to occurrences that were cancelled or deleted on the original event —
+     * those records aren't cloned (we only clone ACTIVE occurrences), so
+     * carrying their dates as exclusions on the duplicate would forever block
+     * those dates from regenerating with no record explaining why. Strip both
+     * on clone — additional_dates stay since they represent rule additions,
+     * not cancellations.
+     */
+    private function stripStaleExclusions(?array $rule): ?array
+    {
+        if ($rule === null) {
+            return null;
+        }
+        unset($rule['excluded_dates'], $rule['excluded_occurrences']);
+
+        return $rule;
     }
 
     /**
@@ -192,19 +210,19 @@ class DuplicateEventService
      */
     private function cloneExistingProducts(
         EventDomainObject $event,
-        int               $newEventId,
-        bool              $duplicateQuestions,
-        bool              $duplicatePromoCodes,
-        bool              $duplicateCapacityAssignments,
-        bool              $duplicateCheckInLists,
-    ): array
-    {
+        int $newEventId,
+        bool $duplicateQuestions,
+        bool $duplicatePromoCodes,
+        bool $duplicateCapacityAssignments,
+        bool $duplicateCheckInLists,
+        array $oldToNewOccurrenceMap = [],
+    ): array {
         $oldProductToNewProductMap = [];
         $oldPriceToNewPriceMap = [];
 
         $event->getProductCategories()?->each(function (ProductCategoryDomainObject $productCategory) use ($event, $newEventId, &$oldProductToNewProductMap, &$oldPriceToNewPriceMap) {
             $newCategory = $this->createProductCategoryService->createCategory(
-                (new ProductCategoryDomainObject())
+                (new ProductCategoryDomainObject)
                     ->setName($productCategory->getName())
                     ->setNoProductsMessage($productCategory->getNoProductsMessage())
                     ->setDescription($productCategory->getDescription())
@@ -219,7 +237,7 @@ class DuplicateEventService
                 $newProduct = $this->createProductService->createProduct(
                     product: $product,
                     accountId: $event->getAccountId(),
-                    taxAndFeeIds: $product->getTaxAndFees()?->map(fn($taxAndFee) => $taxAndFee->getId())?->toArray(),
+                    taxAndFeeIds: $product->getTaxAndFees()?->map(fn ($taxAndFee) => $taxAndFee->getId())?->toArray(),
                 );
                 $oldProductToNewProductMap[$product->getId()] = $newProduct->getId();
 
@@ -246,7 +264,7 @@ class DuplicateEventService
         }
 
         if ($duplicateCheckInLists) {
-            $this->cloneCheckInLists($event, $newEventId, $oldProductToNewProductMap);
+            $this->cloneCheckInLists($event, $newEventId, $oldProductToNewProductMap, $oldToNewOccurrenceMap);
         }
 
         return [$oldProductToNewProductMap, $oldPriceToNewPriceMap];
@@ -260,7 +278,7 @@ class DuplicateEventService
         foreach ($event->getQuestions() as $question) {
             if ($question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name) {
                 $this->createQuestionService->createQuestion(
-                    (new QuestionDomainObject())
+                    (new QuestionDomainObject)
                         ->setTitle($question->getTitle())
                         ->setEventId($newEventId)
                         ->setBelongsTo($question->getBelongsTo())
@@ -269,7 +287,7 @@ class DuplicateEventService
                         ->setOptions($question->getOptions())
                         ->setIsHidden($question->getIsHidden()),
                     array_map(
-                        static fn(ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
+                        static fn (ProductDomainObject $product) => $oldProductToNewProductMap[$product->getId()],
                         $question->getProducts()?->all(),
                     ),
                 );
@@ -285,7 +303,7 @@ class DuplicateEventService
         foreach ($event->getQuestions() as $question) {
             if ($question->getBelongsTo() === QuestionBelongsTo::ORDER->name) {
                 $this->createQuestionService->createQuestion(
-                    (new QuestionDomainObject())
+                    (new QuestionDomainObject)
                         ->setTitle($question->getTitle())
                         ->setDescription($question->getDescription())
                         ->setEventId($newEventId)
@@ -307,11 +325,11 @@ class DuplicateEventService
     {
         foreach ($event->getPromoCodes() as $promoCode) {
             $this->createPromoCodeService->createPromoCode(
-                (new PromoCodeDomainObject())
+                (new PromoCodeDomainObject)
                     ->setCode($promoCode->getCode())
                     ->setEventId($newEventId)
                     ->setApplicableProductIds(array_map(
-                        static fn($productId) => $oldProductToNewProductMap[$productId],
+                        static fn ($productId) => $oldProductToNewProductMap[$productId],
                         $promoCode->getApplicableProductIds() ?? [],
                     ))
                     ->setDiscountType($promoCode->getDiscountType())
@@ -327,30 +345,51 @@ class DuplicateEventService
         /** @var CapacityAssignmentDomainObject $capacityAssignment */
         foreach ($event->getCapacityAssignments() as $capacityAssignment) {
             $this->createCapacityAssignmentService->createCapacityAssignment(
-                capacityAssignment: (new CapacityAssignmentDomainObject())
+                capacityAssignment: (new CapacityAssignmentDomainObject)
                     ->setName($capacityAssignment->getName())
                     ->setEventId($newEventId)
                     ->setCapacity($capacityAssignment->getCapacity())
                     ->setAppliesTo($capacityAssignment->getAppliesTo())
                     ->setStatus($capacityAssignment->getStatus()),
                 productIds: $capacityAssignment->getProducts()
-                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
+                    ?->map(fn ($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
 
-    private function cloneCheckInLists(EventDomainObject $event, int $newEventId, $oldProductToNewProductMap): void
-    {
+    private function cloneCheckInLists(
+        EventDomainObject $event,
+        int $newEventId,
+        array $oldProductToNewProductMap,
+        array $oldToNewOccurrenceMap = [],
+    ): void {
         foreach ($event->getCheckInLists() as $checkInList) {
+            // CreateEventService already auto-created a system_default list on the
+            // new event — cloning the source's would produce two equivalent
+            // "covers every ticket" lists. Skip it.
+            if ($checkInList->getIsSystemDefault()) {
+                continue;
+            }
+
+            // Preserve occurrence scope: a list scoped to one source occurrence
+            // should map to the cloned occurrence on the duplicate. If the
+            // source occurrence was filtered out of the clone (cancelled or
+            // past), drop the scope rather than leaving it stale.
+            $sourceOccurrenceId = $checkInList->getEventOccurrenceId();
+            $newOccurrenceId = $sourceOccurrenceId !== null
+                ? ($oldToNewOccurrenceMap[$sourceOccurrenceId] ?? null)
+                : null;
+
             $this->createCheckInListService->createCheckInList(
-                checkInList: (new CheckInListDomainObject())
+                checkInList: (new CheckInListDomainObject)
                     ->setName($checkInList->getName())
                     ->setDescription($checkInList->getDescription())
                     ->setExpiresAt($checkInList->getExpiresAt())
                     ->setActivatesAt($checkInList->getActivatesAt())
+                    ->setEventOccurrenceId($newOccurrenceId)
                     ->setEventId($newEventId),
                 productIds: $checkInList->getProducts()
-                ?->map(fn($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
+                    ?->map(fn ($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
             );
         }
     }
@@ -358,7 +397,7 @@ class DuplicateEventService
     private function cloneEventCoverImage(EventDomainObject $event, int $newEventId): void
     {
         /** @var ImageDomainObject $coverImage */
-        $coverImage = $event->getImages()?->first(fn(ImageDomainObject $image) => $image->getType() === ImageType::EVENT_COVER->name);
+        $coverImage = $event->getImages()?->first(fn (ImageDomainObject $image) => $image->getType() === ImageType::EVENT_COVER->name);
         if ($coverImage) {
             $this->imageRepository->create([
                 'entity_id' => $newEventId,
@@ -376,7 +415,7 @@ class DuplicateEventService
     private function cloneTicketLogo(EventDomainObject $event, int $newEventId): void
     {
         /** @var ImageDomainObject $ticketLogo */
-        $ticketLogo = $event->getImages()?->first(fn(ImageDomainObject $image) => $image->getType() === ImageType::TICKET_LOGO->name);
+        $ticketLogo = $event->getImages()?->first(fn (ImageDomainObject $image) => $image->getType() === ImageType::TICKET_LOGO->name);
         if ($ticketLogo) {
             $this->imageRepository->create([
                 'entity_id' => $newEventId,
@@ -427,7 +466,7 @@ class DuplicateEventService
     {
         $event->getWebhooks()?->each(function (WebhookDomainObject $webhook) use ($newEvent) {
             $this->createWebhookService->createWebhook(
-                (new WebhookDomainObject())
+                (new WebhookDomainObject)
                     ->setEventId($newEvent->getId())
                     ->setUrl($webhook->getUrl())
                     ->setSecret($webhook->getSecret())
@@ -462,8 +501,7 @@ class DuplicateEventService
         $oldToNewOccurrenceMap = [];
 
         $event->getEventOccurrences()
-            ?->filter(fn(EventOccurrenceDomainObject $occurrence) =>
-                $occurrence->getStartDate() >= $now
+            ?->filter(fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getStartDate() >= $now
                 && $occurrence->getStatus() !== EventOccurrenceStatus::CANCELLED->name
             )
             ->each(function (EventOccurrenceDomainObject $occurrence) use ($newEventId, &$oldToNewOccurrenceMap) {

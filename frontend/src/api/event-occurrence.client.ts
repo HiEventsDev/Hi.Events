@@ -16,10 +16,12 @@ import {
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
 
 export const eventOccurrenceClient = {
-    all: async (eventId: IdParam, pagination: QueryFilters) => {
-        const response = await api.get<GenericPaginatedResponse<EventOccurrence>>(
-            `events/${eventId}/occurrences` + queryParamsHelper.buildQueryString(pagination)
-        );
+    all: async (eventId: IdParam, pagination: QueryFilters, options: {includeStats?: boolean} = {}) => {
+        const queryString = queryParamsHelper.buildQueryString(pagination);
+        const separator = queryString.includes('?') ? '&' : '?';
+        const url = `events/${eventId}/occurrences` + queryString
+            + (options.includeStats === false ? `${separator}include_stats=false` : '');
+        const response = await api.get<GenericPaginatedResponse<EventOccurrence>>(url);
         return response.data;
     },
 
@@ -61,6 +63,14 @@ export const eventOccurrenceClient = {
         return response.data;
     },
 
+    reactivate: async (eventId: IdParam, occurrenceId: IdParam) => {
+        const response = await api.post<GenericDataResponse<EventOccurrence>>(
+            `events/${eventId}/occurrences/${occurrenceId}/reactivate`,
+            {}
+        );
+        return response.data;
+    },
+
     generate: async (eventId: IdParam, data: GenerateOccurrencesRequest) => {
         const response = await api.post<GenericDataResponse<EventOccurrence[]>>(
             `events/${eventId}/occurrences/generate`,
@@ -70,7 +80,7 @@ export const eventOccurrenceClient = {
     },
 
     bulkUpdate: async (eventId: IdParam, data: BulkUpdateOccurrencesRequest) => {
-        const response = await api.post<{ updated_count: number }>(
+        const response = await api.post<{ updated_count: number; updated_ids: number[] }>(
             `events/${eventId}/occurrences/bulk-update`,
             data
         );

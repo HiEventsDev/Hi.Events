@@ -33,11 +33,13 @@ import {CalendarView} from "./CalendarView";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../../mutations/useDeleteEventOccurrence.ts";
 import {useBulkUpdateOccurrences} from "../../../../mutations/useBulkUpdateOccurrences.ts";
-import {useUpdateEventOccurrence} from "../../../../mutations/useUpdateEventOccurrence.ts";
+import {useReactivateOccurrence} from "../../../../mutations/useReactivateOccurrence.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {GroupedOccurrenceTable, GroupedTableColumn} from "./GroupedOccurrenceTable";
 import {OccurrenceMenuItems, OccurrenceMenuActions, statusLabel, StatusIcon} from "./OccurrenceMenu";
+import {openCancelOccurrenceDialog} from "./cancelOccurrenceDialog";
+import {launchCheckInForOccurrence} from "./checkInLaunch";
 import {ManageOccurrenceModal} from "../../../modals/ManageOccurrenceModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {ShareModal} from "../../../modals/ShareModal";
@@ -134,7 +136,7 @@ const OccurrencesTab = () => {
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
     const bulkUpdateMutation = useBulkUpdateOccurrences();
-    const updateMutation = useUpdateEventOccurrence();
+    const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
 
     const handleEditClick = (occurrenceId: number) => {
@@ -171,36 +173,12 @@ const OccurrencesTab = () => {
     };
 
     const handleCancel = (occurrenceId: number) => {
-        refundRef.current = false;
         const occ = occurrences?.find(o => o.id === occurrenceId);
-        const orderCount = occ?.statistics?.orders_created ?? 0;
-        modals.openConfirmModal({
-            title: t`Cancel Date`,
-            children: (
-                <>
-                    <Text size="sm" mb="md">
-                        {t`Are you sure you want to cancel this date? Affected attendees will be notified by email.`}
-                    </Text>
-                    {orderCount > 0 && (
-                        <Text size="sm" fw={600} c="red" mb="md">
-                            {t`This date has ${orderCount} order(s) that will be affected.`}
-                        </Text>
-                    )}
-                    <Checkbox
-                        label={t`Refund all orders for this date`}
-                        description={t`Orders spanning multiple dates will be flagged for manual review.`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
-                </>
-            ),
-            labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},
-            confirmProps: {color: 'red'},
-            onConfirm: () => {
-                cancelMutation.mutate({eventId, occurrenceId, refundOrders: refundRef.current}, {
-                    onSuccess: () => showSuccess(t`Date cancelled`),
-                    onError: (error: any) => showError(error?.response?.data?.message || t`Failed to cancel date`),
-                });
-            },
+        openCancelOccurrenceDialog({
+            eventId,
+            occurrenceId,
+            orderCount: occ?.statistics?.orders_created ?? 0,
+            mutation: cancelMutation,
         });
     };
 
@@ -214,16 +192,18 @@ const OccurrencesTab = () => {
     };
 
     const handleReactivate = (occ: EventOccurrence) => {
-        confirmationDialog(t`Reactivate this date? It will be reopened for future sales.`, () => {
-            updateMutation.mutate({
-                eventId,
-                occurrenceId: occ.id,
-                data: {start_date: occ.start_date, status: 'ACTIVE'},
-            }, {
-                onSuccess: () => showSuccess(t`Date reactivated`),
-                onError: (error: any) => showError(error?.response?.data?.message || t`Failed to reactivate date`),
-            });
-        });
+        confirmationDialog(
+            t`Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed.`,
+            () => {
+                reactivateMutation.mutate({
+                    eventId,
+                    occurrenceId: occ.id,
+                }, {
+                    onSuccess: () => showSuccess(t`Date reopened for new sales`),
+                    onError: (error: any) => showError(error?.response?.data?.message || t`Failed to reopen date`),
+                });
+            },
+        );
     };
 
     const handleBulkCancel = () => {
@@ -283,15 +263,17 @@ const OccurrencesTab = () => {
     };
 
     const handleCheckIn = useCallback((occurrenceId: number) => {
-        const list = checkInLists?.find(l => l.event_occurrence_id === occurrenceId)
-            || checkInLists?.find(l => !l.event_occurrence_id);
-
-        if (list) {
-            window.open(`/check-in/${list.short_id}`, '_blank');
-        } else {
-            setCreateCheckInForOccurrenceId(occurrenceId);
+        if (checkInListsQuery.isLoading || checkInListsQuery.isFetching) {
+            showError(t`Please try again.`);
+            return;
         }
-    }, [checkInLists]);
+
+        launchCheckInForOccurrence({
+            occurrenceId,
+            checkInLists,
+            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
+        });
+    }, [checkInLists, checkInListsQuery.isFetching, checkInListsQuery.isLoading]);
 
     const handlePageChange = (value: number) => {
         setSelectedIds(new Set());
@@ -359,7 +341,7 @@ const OccurrencesTab = () => {
                     const tooltip = occ.status === EventOccurrenceStatus.ACTIVE
                         ? t`Click to cancel`
                         : occ.status === EventOccurrenceStatus.CANCELLED
-                            ? t`Click to reactivate`
+                            ? t`Click to reopen for new sales`
                             : undefined;
 
                     const handleStatusClick = () => {

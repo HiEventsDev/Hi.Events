@@ -4,6 +4,7 @@ namespace HiEvents\Exports;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
@@ -21,16 +22,16 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
     private LengthAwarePaginator $orders;
+
     private Collection $questions;
 
-    public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter)
-    {
-    }
+    public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter) {}
 
     public function withData(LengthAwarePaginator $orders, Collection $questions): OrdersExport
     {
         $this->orders = $orders;
         $this->questions = $questions;
+
         return $this;
     }
 
@@ -41,7 +42,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
 
     public function headings(): array
     {
-        $questionTitles = $this->questions->map(fn($question) => $question->getTitle())->toArray();
+        $questionTitles = $this->questions->map(fn ($question) => $question->getTitle())->toArray();
 
         return array_merge([
             __('ID'),
@@ -73,14 +74,13 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
     }
 
     /**
-     * @param OrderDomainObject $order
-     * @return array
+     * @param  OrderDomainObject  $order
      */
     public function map($order): array
     {
         $answers = $this->questions->map(function (QuestionDomainObject $question) use ($order) {
             $answer = $order->getQuestionAndAnswerViews()
-                ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
+                ->first(fn ($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
 
             return $this->questionAnswerFormatter->getAnswerAsText(
                 $answer,
@@ -88,11 +88,15 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             );
         });
 
-        /** @var OrderItemDomainObject|null $firstItem */
-        $firstItem = $order->getOrderItems()?->first();
-        $occurrenceDate = $firstItem?->getEventOccurrence()?->getStartDate()
-            ? Carbon::parse($firstItem->getEventOccurrence()->getStartDate())->format('Y-m-d H:i:s')
-            : '';
+        // Orders can span multiple occurrences (series passes). List every distinct
+        // occurrence date, not just the first, so the export doesn't silently lose data.
+        $occurrenceDate = $order->getOrderItems()
+            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrence())
+            ?->filter()
+            ?->unique(fn (EventOccurrenceDomainObject $occ) => $occ->getId())
+            ?->sortBy(fn (EventOccurrenceDomainObject $occ) => $occ->getStartDate())
+            ?->map(fn (EventOccurrenceDomainObject $occ) => Carbon::parse($occ->getStartDate())->format('Y-m-d H:i:s'))
+            ?->implode(', ') ?? '';
 
         return array_merge([
             $order->getId(),

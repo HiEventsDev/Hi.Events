@@ -312,6 +312,13 @@ class CompleteOrderHandler
             if ($occurrence->isCancelled()) {
                 throw new ResourceConflictException(__('This event date has been cancelled'));
             }
+
+            // Reservation could have been created before the occurrence ended
+            // — re-check on completion so a reserved order cannot age into a
+            // valid purchase for a session that has since passed.
+            if ($occurrence->isPast()) {
+                throw new ResourceConflictException(__('This event date has already ended'));
+            }
         }
     }
 

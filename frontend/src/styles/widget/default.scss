@@ -282,15 +282,25 @@
     text-decoration: underline;
   }
 
-  .hi-occurrence-loading {
+  // Absolutely-positioned loading indicator that floats over the products
+  // while a date-switch refetch is in flight. Replaces the previous inline
+  // "Loading products..." block that caused layout shift on mount/unmount.
+  // The parent (.hi-product-category-rows) is set to position: relative
+  // inline, and the products themselves get opacity: 0.5 to signal updating.
+  .hi-occurrence-loading-overlay {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 16px;
-    font-size: 0.9rem;
-    color: var(--widget-primary-text-color, inherit);
-    opacity: 0.7;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 }
 

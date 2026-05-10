@@ -44,6 +44,7 @@ class OfferWaitlistEntryHandler
             quantity: $dto->quantity,
             event: $event,
             eventSettings: $eventSettings,
+            eventOccurrenceId: $dto->event_occurrence_id,
         );
     }
 }

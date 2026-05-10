@@ -2,18 +2,13 @@
 
 namespace Tests\Unit\Jobs\Occurrence;
 
-use HiEvents\DomainObjects\Enums\EventType;
-use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
-use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
-use HiEvents\Jobs\Occurrence\RefundOccurrenceOrdersJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
-use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use Illuminate\Support\Facades\Bus;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +18,10 @@ use Tests\TestCase;
 class BulkCancelOccurrencesJobTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
-    private EventRepositoryInterface|Mockery\MockInterface $eventRepository;
+
+    private RecurrenceRuleExclusionService|Mockery\MockInterface $exclusionService;
+
+    private CancelOccurrenceAttendeesService|Mockery\MockInterface $cancelAttendeesService;
 
     protected function setUp(): void
     {
@@ -31,13 +29,16 @@ class BulkCancelOccurrencesJobTest extends TestCase
 
         Event::fake();
 
-        DB::shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback());
+        DB::shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
-        $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
+        $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
+        $this->cancelAttendeesService = Mockery::mock(CancelOccurrenceAttendeesService::class);
+        $this->cancelAttendeesService->shouldReceive('cancelForOccurrence')->byDefault();
+        $this->exclusionService->shouldReceive('addExclusions')->byDefault();
     }
 
-    public function testHandleCancelsMultipleOccurrences(): void
+    public function test_handle_cancels_multiple_occurrences(): void
     {
         Log::shouldReceive('info')->once();
 
@@ -62,22 +63,18 @@ class BulkCancelOccurrencesJobTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('updateWhere')->twice();
 
-        $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getType')->andReturn(EventType::RECURRING->name);
-        $event->shouldReceive('getRecurrenceRule')->andReturn(['frequency' => 'weekly', 'excluded_dates' => []]);
-
-        $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
-        $this->eventRepository->shouldReceive('updateFromArray')
+        $this->exclusionService
+            ->shouldReceive('addExclusions')
             ->once()
-            ->with(1, Mockery::on(fn($attrs) => count($attrs[EventDomainObjectAbstract::RECURRENCE_RULE]['excluded_dates']) === 2));
+            ->with(1, ['2026-06-15 10:00:00', '2026-06-22 10:00:00']);
 
         $job = new BulkCancelOccurrencesJob(1, [10, 20]);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
+        $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
         Event::assertDispatchedTimes(OccurrenceCancelledEvent::class, 2);
     }
 
-    public function testHandleSkipsAlreadyCancelledOccurrences(): void
+    public function test_handle_skips_already_cancelled_occurrences(): void
     {
         Log::shouldReceive('info')->once();
 
@@ -90,9 +87,10 @@ class BulkCancelOccurrencesJobTest extends TestCase
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $job = new BulkCancelOccurrencesJob(1, [10]);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
+        $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
         Event::assertNotDispatched(OccurrenceCancelledEvent::class);
     }
@@ -101,8 +99,6 @@ class BulkCancelOccurrencesJobTest extends TestCase
     {
         Log::shouldReceive('info')->once();
 
-        // Returning an occurrence whose event_id does not match the bulk job's event_id
-        // simulates the IDOR case where a stale or attacker-supplied id slips through.
         $foreignOccurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $foreignOccurrence->shouldReceive('getEventId')->andReturn(99);
 
@@ -112,16 +108,16 @@ class BulkCancelOccurrencesJobTest extends TestCase
             ->andReturn($foreignOccurrence);
 
         $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $job = new BulkCancelOccurrencesJob(1, [10]);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
+        $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
         Event::assertNotDispatched(OccurrenceCancelledEvent::class);
     }
 
-    public function testHandleDispatchesRefundJobWhenFlagIsTrue(): void
+    public function test_handle_dispatches_event_with_refund_flag_true(): void
     {
-        Bus::fake();
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
@@ -134,21 +130,15 @@ class BulkCancelOccurrencesJobTest extends TestCase
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldReceive('updateWhere')->once();
-
-        $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
-
-        $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
 
         $job = new BulkCancelOccurrencesJob(1, [10], refundOrders: true);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
+        $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
-        Bus::assertDispatched(RefundOccurrenceOrdersJob::class, fn($j) => $j->eventId === 1 && $j->occurrenceId === 10);
+        Event::assertDispatched(OccurrenceCancelledEvent::class, fn ($e) => $e->occurrenceId === 10 && $e->refundOrders === true);
     }
 
-    public function testHandleDoesNotDispatchRefundJobWhenFlagIsFalse(): void
+    public function test_handle_dispatches_event_with_refund_flag_false(): void
     {
-        Bus::fake();
         Log::shouldReceive('info')->once();
 
         $occ = Mockery::mock(EventOccurrenceDomainObject::class);
@@ -161,43 +151,11 @@ class BulkCancelOccurrencesJobTest extends TestCase
             ->once()
             ->andReturn($occ);
         $this->occurrenceRepository->shouldReceive('updateWhere')->once();
-
-        $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
-
-        $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
 
         $job = new BulkCancelOccurrencesJob(1, [10], refundOrders: false);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
+        $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
-        Bus::assertNotDispatched(RefundOccurrenceOrdersJob::class);
-    }
-
-    public function testHandleDoesNotAddExcludedDatesForSingleEvent(): void
-    {
-        Log::shouldReceive('info')->once();
-
-        $occ = Mockery::mock(EventOccurrenceDomainObject::class);
-        $occ->shouldReceive('getEventId')->andReturn(1);
-        $occ->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::ACTIVE->name);
-        $occ->shouldReceive('getStartDate')->andReturn('2026-06-15 10:00:00');
-
-        $this->occurrenceRepository->shouldReceive('findByIdLocked')
-            ->with(10)
-            ->once()
-            ->andReturn($occ);
-        $this->occurrenceRepository->shouldReceive('updateWhere')->once();
-
-        $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
-
-        $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
-        $this->eventRepository->shouldNotReceive('updateFromArray');
-
-        $job = new BulkCancelOccurrencesJob(1, [10]);
-        $job->handle($this->occurrenceRepository, $this->eventRepository);
-
-        $this->assertTrue(true);
+        Event::assertDispatched(OccurrenceCancelledEvent::class, fn ($e) => $e->refundOrders === false);
     }
 
     protected function tearDown(): void

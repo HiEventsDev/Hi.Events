@@ -20,6 +20,7 @@ export interface CreateAttendeeRequest extends EditAttendeeRequest {
     taxes_and_fees: TaxAndFee[],
     locale: SupportedLocales,
     event_occurrence_id?: number | null,
+    override_capacity?: boolean,
 }
 
 export const attendeesClient = {

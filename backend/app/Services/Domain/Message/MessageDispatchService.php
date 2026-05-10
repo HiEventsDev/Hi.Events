@@ -17,22 +17,21 @@ class MessageDispatchService
 {
     public function __construct(
         private readonly MessageRepositoryInterface $messageRepository,
-    )
-    {
-    }
+    ) {}
 
     public function dispatchMessage(MessageDomainObject $message, MessageStatus $expectedStatus = MessageStatus::SCHEDULED): void
     {
         $sendData = $message->getSendData();
         $sendDataArray = is_string($sendData) ? json_decode($sendData, true) : $sendData;
 
-        if (!is_array($sendDataArray) || !isset($sendDataArray['account_id'])) {
+        if (! is_array($sendDataArray) || ! isset($sendDataArray['account_id'])) {
             Log::error('Message has invalid send_data, marking as FAILED', [
                 'message_id' => $message->getId(),
             ]);
             $this->messageRepository->updateFromArray($message->getId(), [
                 'status' => MessageStatus::FAILED->name,
             ]);
+
             return;
         }
 
@@ -45,6 +44,7 @@ class MessageDispatchService
             Log::info('Message status changed before dispatch, skipping', [
                 'message_id' => $message->getId(),
             ]);
+
             return;
         }
 
@@ -63,6 +63,8 @@ class MessageDispatchService
                 id: $message->getId(),
                 attendee_ids: $message->getAttendeeIds() ?? [],
                 product_ids: $message->getProductIds() ?? [],
+                event_occurrence_id: $message->getEventOccurrenceId(),
+                event_occurrence_ids: $sendDataArray['event_occurrence_ids'] ?? null,
             ));
         } catch (Throwable $e) {
             Log::error('Failed to dispatch SendMessagesJob, reverting status', [

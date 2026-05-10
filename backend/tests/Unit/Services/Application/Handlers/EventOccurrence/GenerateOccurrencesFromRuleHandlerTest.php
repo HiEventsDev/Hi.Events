@@ -91,7 +91,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $this->ruleParserService->shouldReceive('parse')
             ->with($rule, 'UTC')
             ->once()
-            ->andReturn(collect(range(1, RecurrenceRuleParserService::MAX_OCCURRENCES)));
+            ->andReturn(collect(range(1, RecurrenceRuleParserService::MAX_OCCURRENCES + 1)));
 
         $this->generatorService->shouldNotReceive('generate');
 

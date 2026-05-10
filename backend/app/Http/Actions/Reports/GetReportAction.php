@@ -29,7 +29,7 @@ class GetReportAction extends BaseAction
         $this->validateDateRange($request);
 
         if (!in_array($reportType, ReportTypes::valuesArray(), true)) {
-            throw new BadRequestHttpException('Invalid report type.');
+            throw new BadRequestHttpException(__('Invalid report type.'));
         }
 
         $reportData = $this->reportHandler->handle(
@@ -56,7 +56,9 @@ class GetReportAction extends BaseAction
         $diffInDays = Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate));
 
         if ($diffInDays > 370) {
-            throw ValidationException::withMessages(['start_date' => 'Date range must be less than 370 days.']);
+            throw ValidationException::withMessages([
+                'start_date' => __('Date range must be less than 370 days.'),
+            ]);
         }
     }
 }

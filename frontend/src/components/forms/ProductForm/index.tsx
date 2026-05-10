@@ -1,6 +1,14 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {Event, EventType, Product, ProductPriceType, TaxAndFee, TaxAndFeeCalculationType, TaxAndFeeType} from "../../../types.ts";
+import {
+    Event,
+    EventType,
+    Product,
+    ProductPriceType,
+    TaxAndFee,
+    TaxAndFeeCalculationType,
+    TaxAndFeeType
+} from "../../../types.ts";
 import {
     ActionIcon,
     Alert,
@@ -328,7 +336,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                              <Trans>
                                                  <p>
                                                      This is the default quantity across all dates. Each date's capacity
-                                                     can further limit availability on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.
+                                                     can further limit availability on the <NavLink
+                                                     to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
+                                                     page</NavLink>.
                                                  </p>
                                              </Trans>
                                          ) : (
@@ -353,7 +363,10 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
                     {isRecurring && (
                         <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
-                            <Trans>These are the default prices and quantities across all dates. Sale dates on tiers apply globally. You can override prices and quantities for individual dates on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
+                            <Trans>These are the default prices and quantities across all dates. Sale dates on tiers
+                                apply globally. You can override prices and quantities for individual dates on
+                                the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
+                                    page</NavLink>.</Trans>
                         </Alert>
                     )}
                     <div className={classes.priceTiers}>
@@ -467,7 +480,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     }>
                         {isRecurring && (
                             <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
-                                <Trans>Sale period dates apply across all dates in your schedule. To control pricing and availability for individual dates, use the overrides on the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
+                                <Trans>Sale period dates apply across all dates in your schedule. To control pricing and
+                                    availability for individual dates, use the overrides on the <NavLink
+                                        to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
                             </Alert>
                         )}
                         <InputGroup>
@@ -498,9 +513,10 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             <Switch {...form.getInputProps('hide_when_sold_out', {type: 'checkbox'})}
                                     label={t`Hide product when sold out`}/>
                             <Switch
-                                description={<>{t`You can create a promo code which targets this product on the`} <NavLink
-                                    target={'_blank'}
-                                    to={'../promo-codes'}>{t`Promo Code page`}</NavLink></>}
+                                description={<>{t`You can create a promo code which targets this product on the`}
+                                    <NavLink
+                                        target={'_blank'}
+                                        to={'../promo-codes'}>{t`Promo Code page`}</NavLink></>}
                                 {...form.getInputProps('is_hidden_without_promo_code', {type: 'checkbox'})}
                                 label={t`Hide product unless user has applicable promo code`}
                             />
@@ -509,13 +525,12 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 {...form.getInputProps(`is_hidden`, {type: 'checkbox'})}
                                 label={t`Hide this product from customers`}
                             />
-                            {!isRecurring && (
-                                <Switch
-                                    description={t`Allow customers to join a waitlist when this product is sold out`}
-                                    {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
-                                    label={t`Enable Waitlist`}
-                                />
-                            )}
+
+                            <Switch
+                                description={t`Allow customers to join a waitlist when this product is sold out`}
+                                {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
+                                label={t`Enable Waitlist`}
+                            />
                         </div>
                     </Fieldset>
 

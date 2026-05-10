@@ -7,8 +7,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Jobs\Occurrence\SendOccurrenceCancellationEmailJob;
+use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -21,9 +21,13 @@ use Tests\TestCase;
 class SendOccurrenceCancellationEmailJobTest extends TestCase
 {
     private EventRepositoryInterface|Mockery\MockInterface $eventRepository;
+
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
     private AttendeeRepositoryInterface|Mockery\MockInterface $attendeeRepository;
+
     private Mailer|Mockery\MockInterface $mailer;
+
     private MailBuilderService|Mockery\MockInterface $mailBuilderService;
 
     protected function setUp(): void
@@ -57,6 +61,7 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getEmail')->andReturn($email);
         $attendee->shouldReceive('getLocale')->andReturn($locale);
+
         return $attendee;
     }
 
@@ -71,7 +76,7 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $this->attendeeRepository->shouldReceive('findWhere')->once()->andReturn(collect($attendees));
     }
 
-    public function testHandleSendsEmailToEachUniqueAttendee(): void
+    public function test_handle_sends_email_to_each_unique_attendee(): void
     {
         $this->setupCommon([
             $this->makeAttendee('alice@example.com'),
@@ -85,6 +90,7 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
 
         $this->mailer->shouldReceive('to')->andReturnUsing(function ($email) use (&$emailsSent, $pendingMail) {
             $emailsSent[] = $email;
+
             return $pendingMail;
         });
 
@@ -96,7 +102,7 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $this->assertContains('bob@example.com', $emailsSent);
     }
 
-    public function testHandleDeduplicatesByEmail(): void
+    public function test_handle_deduplicates_by_email(): void
     {
         $this->setupCommon([
             $this->makeAttendee('same@example.com'),
@@ -110,6 +116,7 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
 
         $this->mailer->shouldReceive('to')->andReturnUsing(function ($email) use (&$emailsSent, $pendingMail) {
             $emailsSent[] = $email;
+
             return $pendingMail;
         });
 
@@ -119,7 +126,41 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $this->assertCount(1, $emailsSent);
     }
 
-    public function testHandleReturnsEarlyWhenNoAttendees(): void
+    public function test_handle_does_not_filter_out_cancelled_attendees(): void
+    {
+        // Regression guard: CancelOccurrenceHandler marks attendees CANCELLED
+        // inside the transaction that fires this job's event. If this query
+        // re-introduces a status filter it will silently exclude the very
+        // attendees we need to notify.
+        $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occurrence->shouldReceive('getStartDate')->andReturn('2026-06-15 14:00:00');
+
+        $this->occurrenceRepository->shouldReceive('findById')->once()->andReturn($occurrence);
+        $this->eventRepository->shouldReceive('loadRelation')->twice()->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->once()->andReturn($this->makeEvent());
+
+        $this->attendeeRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with(Mockery::on(function (array $where) {
+                // Exactly one condition: the occurrence filter. No status clause.
+                return array_keys($where) === ['event_occurrence_id']
+                    && $where['event_occurrence_id'] === 10;
+            }))
+            ->andReturn(collect([$this->makeAttendee('cancelled@example.com')]));
+
+        $pendingMail = Mockery::mock(PendingMail::class);
+        $pendingMail->shouldReceive('locale')->andReturnSelf();
+        $pendingMail->shouldReceive('send');
+        $this->mailer->shouldReceive('to')->andReturn($pendingMail);
+
+        $job = new SendOccurrenceCancellationEmailJob(1, 10);
+        $job->handle($this->eventRepository, $this->occurrenceRepository, $this->attendeeRepository, $this->mailer, $this->mailBuilderService);
+
+        $this->assertTrue(true);
+    }
+
+    public function test_handle_returns_early_when_no_attendees(): void
     {
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('getStartDate')->andReturn('2026-06-15 14:00:00');

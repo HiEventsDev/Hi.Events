@@ -13,6 +13,7 @@ import {
     Menu,
     MultiSelect,
     Select,
+    Text,
     TextInput
 } from "@mantine/core";
 import {
@@ -48,6 +49,17 @@ interface EventMessageModalProps extends GenericModalProps {
     messageType: MessageType,
     attendeeId?: IdParam,
     eventOccurrenceId?: IdParam,
+    /**
+     * Multi-occurrence targeting (e.g. after a bulk reschedule). When set,
+     * the occurrence dropdown is hidden and the modal sends the array
+     * through to the backend for whereIn-style filtering. Mutually exclusive
+     * with eventOccurrenceId.
+     */
+    eventOccurrenceIds?: IdParam[],
+    /** Pre-fill the subject field (organizer can still edit before sending). */
+    initialSubject?: string,
+    /** Pre-fill the message body. */
+    initialMessage?: string,
 }
 
 const OrderField = ({orderId, eventId}: { orderId: IdParam, eventId: IdParam }) => {
@@ -129,7 +141,17 @@ const getSchedulePresets = (event: Event, occurrence?: EventOccurrence) => {
 };
 
 export const SendMessageModal = (props: EventMessageModalProps) => {
-    const {onClose, orderId, productId, messageType, attendeeId, eventOccurrenceId} = props;
+    const {
+        onClose, orderId, productId, messageType, attendeeId,
+        eventOccurrenceId: rawEventOccurrenceId, eventOccurrenceIds,
+        initialSubject, initialMessage,
+    } = props;
+    // Normalize: a single-item array targets exactly one occurrence, so fall
+    // back to the scalar path (dropdown UI works as usual, backend uses the
+    // single FK column). Multi ≥ 2 keeps the array and the whereIn backend path.
+    const isMultiOccurrence = !!eventOccurrenceIds && eventOccurrenceIds.length > 1;
+    const eventOccurrenceId = rawEventOccurrenceId
+        ?? (eventOccurrenceIds?.length === 1 ? eventOccurrenceIds[0] : undefined);
     const {eventId} = useParams();
     const {data: event, data: {product_categories} = {}} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
@@ -147,6 +169,17 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 value: String(occ.id),
             }));
     }, [isRecurring, occurrencesData, event?.timezone]);
+
+    // Resolve the targeted occurrences for the multi-session case so we can
+    // render a verifiable list in the banner. Sorted chronologically — matches
+    // how they were selected and how attendees will see them on their tickets.
+    const targetedOccurrences = useMemo(() => {
+        if (!isMultiOccurrence || !occurrencesData?.data || !eventOccurrenceIds) return [];
+        const ids = new Set(eventOccurrenceIds.map(id => Number(id)));
+        return occurrencesData.data
+            .filter(occ => ids.has(Number(occ.id)))
+            .sort((a, b) => a.start_date.localeCompare(b.start_date));
+    }, [isMultiOccurrence, eventOccurrenceIds, occurrencesData]);
     const {data: me} = useGetMe();
     const errorHandler = useFormErrorResponseHandler();
     const isPreselectedRecipient = !!(orderId || attendeeId || productId);
@@ -163,8 +196,8 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
     const form = useForm({
         initialValues: {
-            subject: '',
-            message: '',
+            subject: initialSubject ?? '',
+            message: initialMessage ?? '',
             message_type: messageType,
             attendee_ids: attendeeId ? [String(attendeeId)] : [],
             product_ids: productId ? [String(productId)] : [],
@@ -176,6 +209,9 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             order_statuses: ['COMPLETED'],
             scheduled_at: '',
             event_occurrence_id: eventOccurrenceId ? Number(eventOccurrenceId) : null as number | null,
+            event_occurrence_ids: isMultiOccurrence
+                ? eventOccurrenceIds!.map(id => Number(id))
+                : null as number[] | null,
         },
         validate: {
             acknowledgement: (value) => value === true ? null : t`You must acknowledge that this email is not promotional`,
@@ -303,7 +339,30 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 {!formIsDisabled && (
                     <fieldset disabled={formIsDisabled} style={{border: 'none', padding: 0, margin: 0}}>
                         <div className={classes.formSection}>
-                            {isRecurring && !isPreselectedRecipient && occurrenceOptions.length > 0 && (
+                            {isMultiOccurrence && (
+                                <Alert color="blue" icon={<IconInfoCircle size={16}/>}>
+                                    <Text size="sm" fw={500} mb={targetedOccurrences.length ? 'xs' : 0}>
+                                        {t`Targeting attendees across ${eventOccurrenceIds!.length} selected sessions.`}
+                                    </Text>
+                                    {targetedOccurrences.length > 0 && (
+                                        <div className={classes.occurrenceList}>
+                                            {targetedOccurrences.map(occ => (
+                                                <div key={occ.id} className={classes.occurrenceChip}>
+                                                    {prettyDate(occ.start_date, event?.timezone || 'UTC')}
+                                                    {occ.label && <span className={classes.occurrenceChipLabel}> · {occ.label}</span>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {eventOccurrenceIds!.length > targetedOccurrences.length && (
+                                        <Text size="xs" c="dimmed" mt="xs">
+                                            {t`Showing the first ${targetedOccurrences.length} — the remaining ${eventOccurrenceIds!.length - targetedOccurrences.length} session(s) will still be targeted when the message is sent.`}
+                                        </Text>
+                                    )}
+                                </Alert>
+                            )}
+
+                            {isRecurring && !isPreselectedRecipient && !isMultiOccurrence && occurrenceOptions.length > 0 && (
                                 <Select
                                     label={t`Occurrence`}
                                     description={t`Send to all occurrences, or choose a specific one`}
@@ -325,9 +384,11 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                         },
                                         {
                                             value: 'ALL_ATTENDEES',
-                                            label: form.values.event_occurrence_id
-                                                ? t`All attendees of this occurrence`
-                                                : t`All attendees of this event`,
+                                            label: isMultiOccurrence
+                                                ? t`All attendees of the selected sessions`
+                                                : form.values.event_occurrence_id
+                                                    ? t`All attendees of this occurrence`
+                                                    : t`All attendees of this event`,
                                         },
                                         {
                                             value: 'ORDER_OWNERS_WITH_PRODUCT',

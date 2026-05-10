@@ -15,6 +15,7 @@ import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import dayjs from "dayjs";
 import {DateTimePicker} from "@mantine/dates";
 import {EventCategories} from "../../../constants/eventCategories.ts";
+import {Callout} from "../../common/Callout";
 
 interface CreateEventModalProps extends GenericModalProps {
     organizerId?: IdParam;
@@ -246,13 +247,12 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                             </div>
 
                             {form.values.type === EventType.RECURRING ? (
-                                <div className={classes.recurringNotice}>
-                                    <IconCalendarRepeat size={22} className={classes.recurringNoticeIcon}/>
-                                    <div>
-                                        <p className={classes.recurringNoticeTitle}>{t`Occurrences can be configured after creation`}</p>
-                                        <p className={classes.recurringNoticeText}>{t`You'll be able to set up dates, schedules, and recurrence rules in the next step.`}</p>
-                                    </div>
-                                </div>
+                                <Callout
+                                    icon={<IconCalendarRepeat size={22} className={classes.recurringNoticeIcon}/>}
+                                    title={t`Occurrences can be configured after creation`}
+                                    children={t`You'll be able to set up dates, schedules, and recurrence rules in the next step.`}
+                                    className={classes.recurringNotice}
+                                />
                             ) : (
                                 <div className={classes.dateTimeGrid}>
                                     <DateTimePicker

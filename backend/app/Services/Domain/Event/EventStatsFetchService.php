@@ -16,9 +16,7 @@ readonly class EventStatsFetchService
     public function __construct(
         private DatabaseManager $db,
         private EventRepositoryInterface $eventRepository,
-    )
-    {
-    }
+    ) {}
 
     public function getEventStats(EventStatsRequestDTO $requestData): EventStatsResponseDTO
     {
@@ -35,7 +33,11 @@ readonly class EventStatsFetchService
         $occurrenceId = $requestData->occurrence_id;
 
         if ($occurrenceId !== null) {
-            $totalsQuery = <<<SQL
+            // event_id is bound here so an organiser with access to event A
+            // cannot pass an occurrence id belonging to event B and read its
+            // stats. Action-level authorization gates eventId; this keeps the
+            // query honest about that scope.
+            $totalsQuery = <<<'SQL'
             SELECT
                 COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
                 COALESCE(SUM(eos.orders_created), 0) AS total_orders,
@@ -47,11 +49,15 @@ readonly class EventStatsFetchService
                 COALESCE(SUM(eos.attendees_registered), 0) AS attendees_registered
             FROM event_occurrence_statistics eos
             WHERE eos.event_occurrence_id = :occurrenceId
+              AND eos.event_id = :eventId
               AND eos.deleted_at IS NULL;
             SQL;
-            $totalsResult = $this->db->selectOne($totalsQuery, ['occurrenceId' => $occurrenceId]);
+            $totalsResult = $this->db->selectOne($totalsQuery, [
+                'occurrenceId' => $occurrenceId,
+                'eventId' => $eventId,
+            ]);
         } else {
-            $totalsQuery = <<<SQL
+            $totalsQuery = <<<'SQL'
             SELECT
                 COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
                 COALESCE(SUM(eos.orders_created), 0) AS total_orders,
@@ -91,8 +97,10 @@ readonly class EventStatsFetchService
         $endDate = $requestData->end_date;
 
         if ($occurrenceId !== null) {
-            $whereClause = 'eods.event_occurrence_id = :occurrenceId';
-            $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'occurrenceId' => $occurrenceId];
+            // event_id is bound alongside occurrence_id so cross-event ids
+            // produce zero rows rather than another event's stats.
+            $whereClause = 'eods.event_occurrence_id = :occurrenceId AND eods.event_id = :eventId';
+            $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'occurrenceId' => $occurrenceId, 'eventId' => $eventId];
         } else {
             $whereClause = 'eods.event_id = :eventId';
             $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'eventId' => $eventId];
@@ -127,7 +135,7 @@ readonly class EventStatsFetchService
         $currentTime = Carbon::now('UTC')->toTimeString();
 
         return collect($results)->map(function (object $result) use ($currentTime) {
-            $dateTimeWithCurrentTime = (new Carbon($result->date))->setTimezone('UTC')->format('Y-m-d') . ' ' . $currentTime;
+            $dateTimeWithCurrentTime = (new Carbon($result->date))->setTimezone('UTC')->format('Y-m-d').' '.$currentTime;
 
             return new EventDailyStatsResponseDTO(
                 date: $dateTimeWithCurrentTime,
@@ -174,7 +182,7 @@ readonly class EventStatsFetchService
                 $endCandidates = array_filter([
                     $eventEnd,
                     $bounds?->max_date ? Carbon::parse($bounds->max_date) : null,
-                    (!$eventEnd || $eventEnd->isFuture()) ? Carbon::now() : null,
+                    (! $eventEnd || $eventEnd->isFuture()) ? Carbon::now() : null,
                 ]);
                 $endDate = $endCandidates ? max($endCandidates) : Carbon::now();
                 break;

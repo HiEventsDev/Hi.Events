@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
@@ -10,6 +11,8 @@ use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Exceptions\CannotCheckInException;
+use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
@@ -29,6 +32,7 @@ class GetCheckInListAttendeeDetailPublicHandler
     public function handle(string $shortId, string $attendeePublicId, ?int $staffAccountId): PublicAttendeeDetailDTO
     {
         $checkInList = $this->checkInListRepository
+            ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
             ->findFirstWhere([
                 CheckInListDomainObjectAbstract::SHORT_ID => $shortId,
@@ -37,6 +41,8 @@ class GetCheckInListAttendeeDetailPublicHandler
         if (!$checkInList) {
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
+
+        $this->validateCheckInListIsActive($checkInList);
 
         $attendee = $this->attendeeRepository
             ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order'))
@@ -52,6 +58,8 @@ class GetCheckInListAttendeeDetailPublicHandler
         if (!$attendee) {
             throw new ResourceNotFoundException(__('Attendee not found'));
         }
+
+        $this->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
 
         $currentListCheckIns = $this->filterCheckInsForList($attendee->getCheckIns(), $checkInList->getId());
         $isStaff = $this->hasStaffAccess($checkInList, $staffAccountId);
@@ -91,5 +99,36 @@ class GetCheckInListAttendeeDetailPublicHandler
         }
 
         return $event->getAccountId() === $staffAccountId;
+    }
+
+    /**
+     * @throws CannotCheckInException
+     */
+    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
+    {
+        if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
+            throw new CannotCheckInException(__('Check-in list has expired'));
+        }
+
+        if ($checkInList->getActivatesAt() && DateHelper::utcDateIsFuture($checkInList->getActivatesAt())) {
+            throw new CannotCheckInException(__('Check-in list is not active yet'));
+        }
+    }
+
+    private function verifyAttendeeBelongsToCheckInList(
+        CheckInListDomainObject $checkInList,
+        AttendeeDomainObject $attendee,
+    ): void {
+        $allowedProductIds = $checkInList->getProducts()?->map(fn($product) => $product->getId())->toArray() ?? [];
+
+        if (! empty($allowedProductIds) && ! in_array($attendee->getProductId(), $allowedProductIds, true)) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
+        }
+
+        if ($checkInList->getEventOccurrenceId() !== null
+            && $attendee->getEventOccurrenceId() !== $checkInList->getEventOccurrenceId()
+        ) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
+        }
     }
 }

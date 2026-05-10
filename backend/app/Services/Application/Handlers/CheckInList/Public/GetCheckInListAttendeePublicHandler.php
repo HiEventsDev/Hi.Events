@@ -41,10 +41,18 @@ class GetCheckInListAttendeePublicHandler
 
         $this->validateCheckInListIsActive($checkInList);
 
-        return $this->attendeeRepository->findFirstWhere([
+        $attendee = $this->attendeeRepository->findFirstWhere([
             'public_id' => $attendeePublicId,
             'event_id' => $checkInList->getEventId(),
         ]);
+
+        if (! $attendee) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
+        }
+
+        $this->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
+
+        return $attendee;
     }
 
     /**
@@ -59,6 +67,23 @@ class GetCheckInListAttendeePublicHandler
 
         if ($checkInList->getActivatesAt() && DateHelper::utcDateIsFuture($checkInList->getActivatesAt())) {
             throw new CannotCheckInException(__('Check-in list is not active yet'));
+        }
+    }
+
+    private function verifyAttendeeBelongsToCheckInList(
+        CheckInListDomainObject $checkInList,
+        AttendeeDomainObject $attendee,
+    ): void {
+        $allowedProductIds = $checkInList->getProducts()?->map(fn($product) => $product->getId())->toArray() ?? [];
+
+        if (! empty($allowedProductIds) && ! in_array($attendee->getProductId(), $allowedProductIds, true)) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
+        }
+
+        if ($checkInList->getEventOccurrenceId() !== null
+            && $attendee->getEventOccurrenceId() !== $checkInList->getEventOccurrenceId()
+        ) {
+            throw new ResourceNotFoundException(__('Attendee not found'));
         }
     }
 }

@@ -70,6 +70,7 @@ class ResolveWaitlistEntryOnOrderCompletedListener
                     direction: CapacityChangeDirection::INCREASED,
                     productId: $productPrice->getProductId(),
                     productPriceId: $entry->getProductPriceId(),
+                    eventOccurrenceId: $entry->getEventOccurrenceId(),
                 );
             }
         });

@@ -35,14 +35,14 @@ class CheckInListProductAssociationService
         bool   $removePreviousAssignments = true
     ): void
     {
-        if (empty($productIds)) {
-            return;
-        }
-
         if ($removePreviousAssignments) {
             $this->productRepository->removeCheckInListFromProducts(
                 checkInListId: $checkInListId,
             );
+        }
+
+        if (empty($productIds)) {
+            return;
         }
 
         $this->productRepository->addCheckInListToProducts(

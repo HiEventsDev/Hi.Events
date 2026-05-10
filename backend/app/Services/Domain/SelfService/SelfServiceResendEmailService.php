@@ -4,7 +4,6 @@ namespace HiEvents\Services\Domain\SelfService;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
-use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
@@ -104,6 +103,7 @@ class SelfServiceResendEmailService
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->findById($eventId);
 
         $this->sendOrderDetailsService->sendCustomerOrderSummary(

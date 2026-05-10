@@ -49,6 +49,19 @@
 
 /* Calendar View */
 .hi-calendar-view {
+  // Positioning context for the time-slots overlay so the panel sits visually
+  // over the entire calendar — including the month-nav header — instead of
+  // leaving it sticking out above the panel.
+  position: relative;
+
+  .hi-calendar-stage {
+    transition: opacity 0.18s ease;
+
+    &.hi-calendar-stage-inert {
+      pointer-events: none;
+    }
+  }
+
   .hi-calendar-header {
     display: flex;
     align-items: center;
@@ -167,26 +180,108 @@
     margin-top: 2px;
   }
 
-  .hi-time-slots {
-    margin-top: 16px;
-    border-top: 1px solid color-mix(in srgb, var(--widget-primary-text-color, #888) 15%, transparent);
-    padding-top: 12px;
+  // Solid panel that covers the WHOLE calendar view (month nav + grid) so the
+  // user is in a clean "pick a time" mode without the underlying calendar
+  // header peeking out. Hardcoded white because --widget-background-color can
+  // be translucent or unset on themed widgets, which would let the calendar
+  // bleed through.
+  .hi-time-slots-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    animation: hi-time-slots-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top center;
+  }
+
+  .hi-time-slots-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 4px 12px;
+    border-bottom: 1px solid color-mix(in srgb, var(--widget-primary-text-color, #888) 10%, transparent);
+    margin-bottom: 8px;
+  }
+
+  .hi-time-slots-back {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px 6px 6px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--widget-primary-text-color, #444);
+    transition: background 0.12s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--widget-primary-color, #888) 10%, transparent);
+    }
+
+    &:active {
+      background: color-mix(in srgb, var(--widget-primary-color, #888) 16%, transparent);
+    }
   }
 
   .hi-time-slots-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: var(--widget-primary-text-color, inherit);
+    flex: 1;
+    min-width: 0;
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    justify-content: flex-end;
     gap: 8px;
+    overflow: hidden;
+  }
+
+  .hi-time-slots-date {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--widget-primary-text-color, inherit);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .hi-time-slots-tz {
     font-weight: 400;
     font-size: 0.75rem;
     opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .hi-time-slots-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px; // breathing room for the scrollbar on overflow
+  }
+
+  @keyframes hi-time-slots-enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px) scale(0.99);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  // Touch-friendly sizing on small screens.
+  @media (max-width: 480px) {
+    .hi-time-slots-back {
+      padding: 8px 12px 8px 8px;
+      font-size: 0.9rem;
+    }
+
+    .hi-time-slot {
+      padding: 12px;
+      min-height: 48px;
+    }
   }
 
   .hi-time-slot {

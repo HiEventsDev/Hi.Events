@@ -30,6 +30,7 @@ class CreateWaitlistEntryActionPublic extends BaseAction
                 first_name: $request->validated('first_name'),
                 last_name: $request->validated('last_name'),
                 locale: $request->input('locale', 'en'),
+                event_occurrence_id: $request->validated('event_occurrence_id'),
             ));
         } catch (ResourceConflictException $e) {
             return $this->errorResponse(

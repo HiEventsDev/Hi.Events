@@ -57,7 +57,7 @@ const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions): Occ
         !!actions.onMessage && {key: 'message', icon: <IconSend size={14}/>, label: t`Message`, onClick: () => actions.onMessage!(id), group: 'primary'},
         !!actions.onCheckIn && !isCancelled && {key: 'checkin', icon: <IconClipboardList size={14}/>, label: t`Check-In`, onClick: () => actions.onCheckIn!(id), group: 'primary'},
         !!actions.onShare && !isCancelled && {key: 'share', icon: <IconShare size={14}/>, label: t`Share`, onClick: () => actions.onShare!(occ), group: 'primary'},
-        isCancelled && !!actions.onReactivate && {key: 'reactivate', icon: <IconPlayerPlay size={14}/>, label: t`Reactivate`, onClick: () => actions.onReactivate!(occ), group: 'primary', color: 'green'},
+        isCancelled && !!actions.onReactivate && {key: 'reactivate', icon: <IconPlayerPlay size={14}/>, label: t`Reopen for new sales`, onClick: () => actions.onReactivate!(occ), group: 'primary', color: 'green'},
         isActive && {key: 'cancel', icon: <IconX size={14}/>, label: t`Cancel`, onClick: () => actions.onCancel(id), group: 'danger', color: 'red'},
         {key: 'delete', icon: <IconTrash size={14}/>, label: t`Delete`, onClick: () => actions.onDelete(id), group: 'danger', color: 'red'},
     ];

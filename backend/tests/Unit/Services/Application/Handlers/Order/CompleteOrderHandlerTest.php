@@ -75,7 +75,12 @@ class CompleteOrderHandlerTest extends TestCase
         $this->sessionManagementService->shouldReceive('verifySession')->andReturn(true)->byDefault();
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
-            collect([(new EventOccurrenceDomainObject())->setId(1)->setStatus(EventOccurrenceStatus::ACTIVE->name)])
+            collect([
+                (new EventOccurrenceDomainObject())
+                    ->setId(1)
+                    ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+                    ->setStartDate(Carbon::now()->addDay()->toDateTimeString()),
+            ])
         )->byDefault();
 
         $this->completeOrderHandler = new CompleteOrderHandler(
@@ -298,6 +303,35 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
             collect([(new EventOccurrenceDomainObject())->setId(1)->setStatus(EventOccurrenceStatus::CANCELLED->name)])
+        );
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
+    public function testHandleThrowsResourceConflictExceptionWhenOccurrenceHasEnded(): void
+    {
+        // Reservation could have been created before the occurrence ended
+        // (especially with long reservation windows). Re-checking on completion
+        // prevents a reserved order from aging into a valid purchase for a
+        // session that has since passed.
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('This event date has already ended');
+
+        $orderShortId = 'ABC123';
+        $orderData = $this->createMockCompleteOrderDTO();
+        $order = $this->createMockOrder();
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+
+        $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
+            collect([
+                (new EventOccurrenceDomainObject())
+                    ->setId(1)
+                    ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+                    ->setStartDate(Carbon::now()->subDay()->toDateTimeString()),
+            ])
         );
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);

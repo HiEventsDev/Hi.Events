@@ -35,35 +35,35 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
 
     public function findByEventIdForExport(int $eventId, ?int $eventOccurrenceId = null): Collection
     {
-        $conditions = [
-            'attendees.event_id' => $eventId,
-        ];
+        return $this->runQuery(function () use ($eventId, $eventOccurrenceId) {
+            $conditions = [
+                'attendees.event_id' => $eventId,
+            ];
 
-        if ($eventOccurrenceId !== null) {
-            $conditions['attendees.event_occurrence_id'] = $eventOccurrenceId;
-        }
+            if ($eventOccurrenceId !== null) {
+                $conditions['attendees.event_occurrence_id'] = $eventOccurrenceId;
+            }
 
-        $this->applyConditions($conditions);
+            $this->applyConditions($conditions);
 
-        $this->model->select('attendees.*');
-        $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
-        $this->model->whereIn('orders.status', [
-            OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
-            OrderStatus::COMPLETED->name,
-            OrderStatus::CANCELLED->name
-        ]);
+            $this->model->select('attendees.*');
+            $this->model->join('orders', 'orders.id', '=', 'attendees.order_id');
+            $this->model->whereIn('orders.status', [
+                OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+                OrderStatus::COMPLETED->name,
+                OrderStatus::CANCELLED->name,
+            ]);
 
-        $model = $this->model->limit(10000)->get();
-        $this->resetModel();
+            $model = $this->model->limit(10000)->get();
 
-        return $this->handleResults($model);
+            return $this->handleResults($model);
+        });
     }
-
 
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            ['attendees.event_id', '=', $eventId]
+            ['attendees.event_id', '=', $eventId],
         ];
 
         if ($params->query) {
@@ -73,14 +73,14 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                         DB::raw(
                             sprintf(
                                 "(%s||' '||%s)",
-                                'attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME,
-                                'attendees.' . AttendeeDomainObjectAbstract::LAST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::LAST_NAME,
                             )
-                        ), 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                        ), 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -100,7 +100,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                 ->leftJoin('products', 'products.id', '=', 'attendees.product_id')
                 ->orderBy('products.title', $sortDirection);
         } else {
-            $this->model = $this->model->orderBy('attendees.' . $sortBy, $sortDirection);
+            $this->model = $this->model->orderBy('attendees.'.$sortBy, $sortDirection);
         }
 
         return $this->paginateWhere(
@@ -120,14 +120,14 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                         DB::raw(
                             sprintf(
                                 "(%s||' '||%s)",
-                                'attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME,
-                                'attendees.' . AttendeeDomainObjectAbstract::LAST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME,
+                                'attendees.'.AttendeeDomainObjectAbstract::LAST_NAME,
                             )
-                        ), 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%' . $params->query . '%')
-                    ->orWhere('attendees.' . AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                        ), 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
+                    ->orWhere('attendees.'.AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -154,7 +154,7 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
                         ->whereNull('pcil.deleted_at');
                 });
             })
-            ->whereIn('attendees.status',[AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
+            ->whereIn('attendees.status', [AttendeeStatus::ACTIVE->name, AttendeeStatus::CANCELLED->name, AttendeeStatus::AWAITING_PAYMENT->name])
             ->whereIn('orders.status', [OrderStatus::COMPLETED->name, OrderStatus::AWAITING_OFFLINE_PAYMENT->name]);
 
         $occurrenceFilter = $params->filter_fields?->firstWhere('field', 'event_occurrence_id');

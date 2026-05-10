@@ -63,7 +63,7 @@ class SelfServiceEditOrderService
             $emailChanged = true;
         }
 
-        if (!empty($updateData)) {
+        if (! empty($updateData)) {
             $oldEmail = $order->getEmail();
 
             if ($emailChanged) {
@@ -115,6 +115,7 @@ class SelfServiceEditOrderService
         return $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->findById($eventId);
     }
 

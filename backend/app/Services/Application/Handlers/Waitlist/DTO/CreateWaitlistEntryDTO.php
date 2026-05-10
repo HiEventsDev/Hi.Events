@@ -13,6 +13,7 @@ class CreateWaitlistEntryDTO extends BaseDataObject
         public string  $first_name,
         public ?string $last_name = null,
         public string  $locale = 'en',
+        public ?int    $event_occurrence_id = null,
     )
     {
     }

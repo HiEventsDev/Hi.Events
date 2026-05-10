@@ -77,4 +77,32 @@ class OrderAuditLogService
             'user_agent' => $userAgent,
         ]);
     }
+
+    /**
+     * Records that an organiser overrode an occurrence's capacity ceiling when
+     * manually creating an attendee. The override flag intentionally bypasses a
+     * normally-blocking check, so the audit trail records who/when/which
+     * occurrence — important for later support and diagnosis when stats or
+     * waitlists look impossible.
+     */
+    public function logManualAttendeeCapacityOverride(
+        int $eventId,
+        int $orderId,
+        int $attendeeId,
+        int $occurrenceId,
+        string $ipAddress,
+        ?string $userAgent,
+    ): void {
+        $this->orderAuditLogRepository->create([
+            'event_id' => $eventId,
+            'order_id' => $orderId,
+            'attendee_id' => $attendeeId,
+            'action' => OrderAuditAction::MANUAL_ATTENDEE_CAPACITY_OVERRIDE->value,
+            'old_values' => null,
+            'new_values' => ['event_occurrence_id' => $occurrenceId],
+            'changed_fields' => 'event_occurrence_id',
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ]);
+    }
 }

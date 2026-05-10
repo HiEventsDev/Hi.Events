@@ -66,7 +66,11 @@ class UpdateProductVisibilityHandler
                 return collect();
             }
 
-            foreach ($dto->product_ids as $productId) {
+            // The request rule enforces `distinct`, but dedupe defensively in
+            // case a future caller bypasses request validation — the unique
+            // constraint on (event_occurrence_id, product_id) would otherwise
+            // surface as a 500 mid-batch.
+            foreach (array_unique($dto->product_ids) as $productId) {
                 $this->visibilityRepository->create([
                     ProductOccurrenceVisibilityDomainObjectAbstract::EVENT_OCCURRENCE_ID => $dto->event_occurrence_id,
                     ProductOccurrenceVisibilityDomainObjectAbstract::PRODUCT_ID => $productId,

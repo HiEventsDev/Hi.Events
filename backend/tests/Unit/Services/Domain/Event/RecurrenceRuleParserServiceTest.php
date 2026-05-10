@@ -14,12 +14,12 @@ class RecurrenceRuleParserServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = new RecurrenceRuleParserService();
+        $this->service = new RecurrenceRuleParserService;
     }
 
     // ─── Daily Frequency ───────────────────────────────────────────────
 
-    public function testDailyFrequencyGeneratesCorrectDates(): void
+    public function test_daily_frequency_generates_correct_dates(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -42,7 +42,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-05', $result[4]['start']->format('Y-m-d'));
     }
 
-    public function testDailyFrequencyRespectsInterval(): void
+    public function test_daily_frequency_respects_interval(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -66,7 +66,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Weekly Frequency ──────────────────────────────────────────────
 
-    public function testWeeklyFrequencyGeneratesCorrectDates(): void
+    public function test_weekly_frequency_generates_correct_dates(): void
     {
         $rule = [
             'frequency' => 'weekly',
@@ -91,7 +91,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-14', $result[5]['start']->format('Y-m-d')); // Fri
     }
 
-    public function testWeeklyFrequencyWithSpecificDaysOfWeek(): void
+    public function test_weekly_frequency_with_specific_days_of_week(): void
     {
         $rule = [
             'frequency' => 'weekly',
@@ -114,7 +114,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('Thursday', $result[3]['start']->format('l'));
     }
 
-    public function testWeeklyFrequencyEveryTwoWeeks(): void
+    public function test_weekly_frequency_every_two_weeks(): void
     {
         $rule = [
             'frequency' => 'weekly',
@@ -136,7 +136,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-31', $result[2]['start']->format('Y-m-d'));
     }
 
-    public function testWeeklyFrequencyWithEmptyDaysOfWeekReturnsEmpty(): void
+    public function test_weekly_frequency_with_empty_days_of_week_returns_empty(): void
     {
         $rule = [
             'frequency' => 'weekly',
@@ -157,7 +157,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Monthly by Day of Month ───────────────────────────────────────
 
-    public function testMonthlyByDayOfMonthGeneratesCorrectDates(): void
+    public function test_monthly_by_day_of_month_generates_correct_dates(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -181,7 +181,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-04-15', $result[3]['start']->format('Y-m-d'));
     }
 
-    public function testMonthlyByDayOfMonthSkipsDaysThatDontExist(): void
+    public function test_monthly_by_day_of_month_skips_days_that_dont_exist(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -206,7 +206,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertNotContains('2025-02-31', $dates);
     }
 
-    public function testMonthlyByDayOfMonthWithMultipleDays(): void
+    public function test_monthly_by_day_of_month_with_multiple_days(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -232,7 +232,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Monthly by Day of Week with Week Position ─────────────────────
 
-    public function testMonthlyByDayOfWeekFirstMonday(): void
+    public function test_monthly_by_day_of_week_first_monday(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -263,7 +263,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         }
     }
 
-    public function testMonthlyByDayOfWeekLastFriday(): void
+    public function test_monthly_by_day_of_week_last_friday(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -294,7 +294,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         }
     }
 
-    public function testMonthlyByDayOfWeekThirdWednesday(): void
+    public function test_monthly_by_day_of_week_third_wednesday(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -327,7 +327,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Yearly Frequency ──────────────────────────────────────────────
 
-    public function testYearlyFrequencyGeneratesCorrectDates(): void
+    public function test_yearly_frequency_generates_correct_dates(): void
     {
         $rule = [
             'frequency' => 'yearly',
@@ -349,7 +349,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2028-06-15', $result[3]['start']->format('Y-m-d'));
     }
 
-    public function testYearlyFrequencyEveryTwoYears(): void
+    public function test_yearly_frequency_every_two_years(): void
     {
         $rule = [
             'frequency' => 'yearly',
@@ -372,7 +372,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Interval ──────────────────────────────────────────────────────
 
-    public function testEveryThreeMonthsInterval(): void
+    public function test_every_three_months_interval(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -398,7 +398,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Times of Day ──────────────────────────────────────────────────
 
-    public function testMultipleTimesOfDayGeneratesMultipleOccurrences(): void
+    public function test_multiple_times_of_day_generates_multiple_occurrences(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -406,13 +406,14 @@ class RecurrenceRuleParserServiceTest extends TestCase
             'times_of_day' => ['09:00', '14:00', '19:00'],
             'range' => [
                 'type' => 'count',
-                'count' => 6,
+                'count' => 2,
                 'start' => '2025-03-01',
             ],
         ];
 
         $result = $this->service->parse($rule, 'UTC');
 
+        // 2 calendar dates * 3 times of day = 6 occurrences
         $this->assertCount(6, $result);
 
         // Day 1: three times
@@ -426,7 +427,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-02 19:00', $result[5]['start']->format('Y-m-d H:i'));
     }
 
-    public function testTimesOfDayDefaultsToMidnight(): void
+    public function test_times_of_day_defaults_to_midnight(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -447,7 +448,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Duration Minutes ──────────────────────────────────────────────
 
-    public function testDurationMinutesSetsEndDate(): void
+    public function test_duration_minutes_sets_end_date(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -470,7 +471,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-02 11:30', $result[1]['end']->format('Y-m-d H:i'));
     }
 
-    public function testNoDurationMinutesLeavesEndDateNull(): void
+    public function test_no_duration_minutes_leaves_end_date_null(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -491,7 +492,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Count Limit ───────────────────────────────────────────────────
 
-    public function testCountLimitStopsAfterNOccurrences(): void
+    public function test_count_limit_stops_after_n_occurrences(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -509,7 +510,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertCount(7, $result);
     }
 
-    public function testCountLimitWithMultipleTimesPerDay(): void
+    public function test_count_limit_with_multiple_times_per_day(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -524,18 +525,56 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        // count=5 with 2 times/day: generates 3 days worth (6 slots) but count limits to <=5
-        // The loop checks dates->count() * timesPerDay < maxCount, so 3 dates * 2 = 6 >= 5, stops at 3 dates
-        // But actual occurrences pushed can be 6 since all times of each date are pushed
-        // Let's verify the actual behavior: the loop generates dates where count*timesPerDay < maxCount
-        // 2 dates * 2 = 4 < 5, so continues. 3 dates * 2 = 6 >= 5, stops.
-        // Then pushes 3 dates * 2 times = 6, but capped at MAX_OCCURRENCES (500), not count
-        // Actually the candidate cap is MAX_OCCURRENCES, not count. So we get 6 results.
-        $this->assertLessThanOrEqual(6, $result->count());
-        $this->assertGreaterThanOrEqual(4, $result->count());
+        // range.count is the number of calendar dates. With 2 times/day, that yields 5 * 2 = 10 occurrences.
+        $this->assertCount(10, $result);
+        $this->assertEquals('2025-03-01 09:00', $result[0]['start']->format('Y-m-d H:i'));
+        $this->assertEquals('2025-03-01 18:00', $result[1]['start']->format('Y-m-d H:i'));
+        $this->assertEquals('2025-03-05 09:00', $result[8]['start']->format('Y-m-d H:i'));
+        $this->assertEquals('2025-03-05 18:00', $result[9]['start']->format('Y-m-d H:i'));
     }
 
-    public function testDefaultCountIsTenWhenNotSpecified(): void
+    public function test_count_limit_with_multiple_times_per_day_weekly(): void
+    {
+        $rule = [
+            'frequency' => 'weekly',
+            'interval' => 1,
+            'days_of_week' => ['monday', 'wednesday', 'friday'],
+            'times_of_day' => ['09:00', '18:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 4,
+                'start' => '2025-03-03', // Monday
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        // 4 calendar dates * 2 sessions per day = 8 occurrences total.
+        $this->assertCount(8, $result);
+    }
+
+    public function test_count_limit_with_multiple_times_per_day_monthly(): void
+    {
+        $rule = [
+            'frequency' => 'monthly',
+            'interval' => 1,
+            'monthly_pattern' => 'by_day_of_month',
+            'days_of_month' => [1, 15],
+            'times_of_day' => ['09:00', '18:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 4,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        // 4 calendar dates * 2 sessions per day = 8 occurrences total.
+        $this->assertCount(8, $result);
+    }
+
+    public function test_default_count_is_ten_when_not_specified(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -554,7 +593,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Until Date ────────────────────────────────────────────────────
 
-    public function testUntilDateStopsAtSpecifiedDate(): void
+    public function test_until_date_stops_at_specified_date(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -574,7 +613,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-03-05', $result[4]['start']->format('Y-m-d'));
     }
 
-    public function testUntilDateWithWeeklyFrequency(): void
+    public function test_until_date_with_weekly_frequency(): void
     {
         $rule = [
             'frequency' => 'weekly',
@@ -598,7 +637,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Excluded Dates ────────────────────────────────────────────────
 
-    public function testExcludedDatesAreSkipped(): void
+    public function test_excluded_dates_are_skipped(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -623,7 +662,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertContains('2025-03-04', $dates);
     }
 
-    public function testExcludedDatesWithMultipleTimesPerDay(): void
+    public function test_excluded_dates_with_multiple_times_per_day(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -644,9 +683,31 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertNotContains('2025-03-02', $dates);
     }
 
+    public function test_excluded_occurrences_skip_only_matching_time_slot(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['09:00', '18:00'],
+            'excluded_occurrences' => ['2025-03-02 09:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 6,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $starts = $result->pluck('start')->map(fn ($d) => $d->format('Y-m-d H:i'))->toArray();
+
+        $this->assertNotContains('2025-03-02 09:00', $starts);
+        $this->assertContains('2025-03-02 18:00', $starts);
+    }
+
     // ─── Additional Dates ──────────────────────────────────────────────
 
-    public function testAdditionalDatesAreIncluded(): void
+    public function test_additional_dates_are_included(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -673,7 +734,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertContains('2025-05-15', $dates);
     }
 
-    public function testAdditionalDatesAreSortedWithRegularDates(): void
+    public function test_additional_dates_are_sorted_with_regular_dates(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -700,7 +761,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         }
     }
 
-    public function testAdditionalDatesDefaultTimeToMidnight(): void
+    public function test_additional_dates_default_time_to_midnight(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -725,7 +786,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── DST Transition Handling ───────────────────────────────────────
 
-    public function testDstSpringForwardTransition(): void
+    public function test_dst_spring_forward_transition(): void
     {
         // 2025 DST spring forward in America/New_York: March 9 at 2:00 AM
         $rule = [
@@ -755,7 +816,104 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('14:00', $result[2]['start']->format('H:i'));
     }
 
-    public function testDstFallBackTransition(): void
+    public function test_weekly_rule_keeps_local_time_across_dst_spring_forward(): void
+    {
+        // A weekly class at 10:00 on Wednesdays in America/New_York, spanning the
+        // 2025 spring-forward (March 9). The attendee should always see 10:00 local.
+        $rule = [
+            'frequency' => 'weekly',
+            'interval' => 1,
+            'days_of_week' => ['wednesday'],
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-05',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'America/New_York');
+
+        $this->assertCount(3, $result);
+
+        // Wed Mar 5 (EST, UTC-5): 10:00 local → 15:00 UTC
+        $this->assertSame('2025-03-05 15:00', $result[0]['start']->format('Y-m-d H:i'));
+        // Wed Mar 12 (EDT, UTC-4): 10:00 local → 14:00 UTC
+        $this->assertSame('2025-03-12 14:00', $result[1]['start']->format('Y-m-d H:i'));
+        // Wed Mar 19 (EDT, UTC-4): 10:00 local → 14:00 UTC
+        $this->assertSame('2025-03-19 14:00', $result[2]['start']->format('Y-m-d H:i'));
+
+        foreach ($result as $slot) {
+            $this->assertSame('10:00', $slot['start']->setTimezone('America/New_York')->format('H:i'));
+        }
+    }
+
+    public function test_monthly_rule_keeps_local_time_across_dst_fall_back(): void
+    {
+        // Monthly on the 1st at 09:00 America/New_York: spans fall-back (Nov 2 2025).
+        $rule = [
+            'frequency' => 'monthly',
+            'interval' => 1,
+            'monthly_pattern' => 'by_day_of_month',
+            'days_of_month' => [1],
+            'times_of_day' => ['09:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-10-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'America/New_York');
+
+        $this->assertCount(3, $result);
+
+        foreach ($result as $slot) {
+            $this->assertSame('09:00', $slot['start']->setTimezone('America/New_York')->format('H:i'));
+        }
+
+        // Oct 1 before fall-back (EDT = UTC-4): 09:00 local → 13:00 UTC
+        $this->assertSame('13:00', $result[0]['start']->format('H:i'));
+        // Nov 1 still EDT (fall-back happens on Nov 2): 09:00 local → 13:00 UTC
+        $this->assertSame('13:00', $result[1]['start']->format('H:i'));
+        // Dec 1 after fall-back (EST = UTC-5): 09:00 local → 14:00 UTC
+        $this->assertSame('14:00', $result[2]['start']->format('H:i'));
+    }
+
+    public function test_daily_rule_at_skipped_hour_during_spring_forward_does_not_produce_invalid_time(): void
+    {
+        // In America/New_York on Mar 9 2025, 02:30 local time does not exist (clocks
+        // jump from 02:00 EST straight to 03:00 EDT). Parser should not emit an
+        // occurrence whose local time still reads 02:30 on the skipped day — Carbon
+        // rolls it forward to 03:30 EDT = 07:30 UTC.
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['02:30'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-08',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'America/New_York');
+
+        $this->assertCount(3, $result);
+
+        // Mar 8 (EST = UTC-5): 02:30 local → 07:30 UTC
+        $this->assertSame('2025-03-08 07:30', $result[0]['start']->format('Y-m-d H:i'));
+        // Mar 9 skipped hour: Carbon rolls the non-existent 02:30 forward to 03:30 EDT
+        // (the first valid minute after the clock jumps), which maps to 07:30 UTC. The
+        // concrete assertion catches regressions that would leave it at 02:30 EDT
+        // (06:30 UTC) or 02:30 EST (07:30 UTC but with wrong local reading).
+        $this->assertSame('2025-03-09 07:30', $result[1]['start']->format('Y-m-d H:i'));
+        $this->assertSame('03:30', $result[1]['start']->setTimezone('America/New_York')->format('H:i'));
+        // Mar 10 (EDT = UTC-4): 02:30 local → 06:30 UTC
+        $this->assertSame('2025-03-10 06:30', $result[2]['start']->format('Y-m-d H:i'));
+    }
+
+    public function test_dst_fall_back_transition(): void
     {
         // 2025 DST fall back in America/New_York: November 2 at 2:00 AM
         $rule = [
@@ -785,7 +943,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Timezone Conversion ───────────────────────────────────────────
 
-    public function testTimezoneConversionToUtc(): void
+    public function test_timezone_conversion_to_utc(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -808,8 +966,12 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Cap at 1200 Occurrences ───────────────────────────────────────
 
-    public function testCapAt500Occurrences(): void
+    public function test_cap_at1200_occurrences(): void
     {
+        // Parser is allowed to push one candidate beyond MAX so the handler's
+        // `count > MAX` overflow check can fire. The user-visible ceiling is
+        // still MAX — this just lets the overflow be detectable instead of
+        // silently truncated.
         $rule = [
             'frequency' => 'daily',
             'interval' => 1,
@@ -823,11 +985,14 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertLessThanOrEqual(1200, $result->count());
+        $this->assertLessThanOrEqual(\HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
     }
 
-    public function testCapAt500WithMultipleTimesPerDay(): void
+    public function test_overflow_pushes_one_extra_candidate_for_handler_detection(): void
     {
+        // Daily 4 times/day across ~5 years = 7305 candidates. Parser must
+        // surface this as MAX+1 rather than silently capping at MAX so the
+        // handler can return a 422.
         $rule = [
             'frequency' => 'daily',
             'interval' => 1,
@@ -841,12 +1006,15 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertLessThanOrEqual(1200, $result->count());
+        $this->assertSame(
+            \HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1,
+            $result->count(),
+        );
     }
 
     // ─── Default Capacity ──────────────────────────────────────────────
 
-    public function testDefaultCapacityIsIncludedInResults(): void
+    public function test_default_capacity_is_included_in_results(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -867,7 +1035,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals(100, $result[1]['capacity']);
     }
 
-    public function testDefaultCapacityIsNullWhenNotSpecified(): void
+    public function test_default_capacity_is_null_when_not_specified(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -887,7 +1055,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Unknown Frequency ─────────────────────────────────────────────
 
-    public function testUnknownFrequencyReturnsEmpty(): void
+    public function test_unknown_frequency_throws(): void
     {
         $rule = [
             'frequency' => 'unknown',
@@ -900,14 +1068,15 @@ class RecurrenceRuleParserServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->parse($rule, 'UTC');
+        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->expectExceptionMessage('Unsupported recurrence frequency');
 
-        $this->assertCount(0, $result);
+        $this->service->parse($rule, 'UTC');
     }
 
     // ─── Result Structure ──────────────────────────────────────────────
 
-    public function testResultContainsExpectedKeys(): void
+    public function test_result_contains_expected_keys(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -931,7 +1100,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertInstanceOf(CarbonImmutable::class, $result[0]['end']);
     }
 
-    public function testResultsAreReturnedAsCollection(): void
+    public function test_results_are_returned_as_collection(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -951,7 +1120,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
     // ─── Edge Cases ────────────────────────────────────────────────────
 
-    public function testAdditionalDatesRespectDurationMinutes(): void
+    public function test_additional_dates_respect_duration_minutes(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -976,11 +1145,11 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('16:00', $additionalOccurrence['end']->format('H:i'));
     }
 
-    public function testAdditionalDatesCapAt500Total(): void
+    public function test_additional_dates_cap_at1200_total(): void
     {
         $additionalDates = [];
-        for ($i = 0; $i < 600; $i++) {
-            $date = CarbonImmutable::parse('2025-01-01')->addDays($i);
+        for ($i = 0; $i < 1500; $i++) {
+            $date = CarbonImmutable::parse('2030-01-01')->addDays($i);
             $additionalDates[] = ['date' => $date->format('Y-m-d'), 'time' => '10:00'];
         }
 
@@ -998,10 +1167,10 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertLessThanOrEqual(1200, $result->count());
+        $this->assertLessThanOrEqual(\HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
     }
 
-    public function testMonthlyByDayOfWeekEveryTwoMonths(): void
+    public function test_monthly_by_day_of_week_every_two_months(): void
     {
         $rule = [
             'frequency' => 'monthly',
@@ -1032,7 +1201,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         }
     }
 
-    public function testDailyWithExcludedDatesStillProducesCorrectCount(): void
+    public function test_daily_with_excluded_dates_still_produces_correct_count(): void
     {
         $rule = [
             'frequency' => 'daily',
@@ -1055,7 +1224,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals(['2025-03-01', '2025-03-03', '2025-03-05'], $dates);
     }
 
-    public function testWeeklyWithStartDateMidWeek(): void
+    public function test_weekly_with_start_date_mid_week(): void
     {
         // Start date is a Thursday, but we want Monday and Friday events
         $rule = [
@@ -1076,5 +1245,228 @@ class RecurrenceRuleParserServiceTest extends TestCase
         // First occurrence should be Friday Mar 7 (first matching day on/after start)
         $this->assertEquals('2025-03-07', $result[0]['start']->format('Y-m-d'));
         $this->assertEquals('Friday', $result[0]['start']->format('l'));
+    }
+
+    // ─── Deduplication ─────────────────────────────────────────────────
+
+    public function test_duplicate_additional_date_is_deduped(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                // Same start time as the rule's first occurrence
+                ['date' => '2025-03-01', 'time' => '10:00'],
+            ],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $this->assertCount(3, $result);
+        $startTimes = $result->pluck('start')
+            ->map(fn ($d) => $d->toDateTimeString())
+            ->toArray();
+        $this->assertEquals(count($startTimes), count(array_unique($startTimes)));
+    }
+
+    public function test_duplicate_time_slots_are_deduped(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00', '10:00', '14:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 2,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        // 2 dates * 2 unique times = 4 occurrences (the duplicate 10:00 is deduped)
+        $this->assertCount(4, $result);
+        $startTimes = $result->pluck('start')
+            ->map(fn ($d) => $d->toDateTimeString())
+            ->toArray();
+        $this->assertEquals(count($startTimes), count(array_unique($startTimes)));
+    }
+
+    // ─── Validation ────────────────────────────────────────────────────
+
+    public function test_invalid_time_of_day_string_throws(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['25:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 2,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->service->parse($rule, 'UTC');
+    }
+
+    public function test_invalid_time_of_day_object_throws(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => [['time' => '99:99']],
+            'range' => [
+                'type' => 'count',
+                'count' => 1,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->service->parse($rule, 'UTC');
+    }
+
+    public function test_invalid_additional_date_time_throws(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                ['date' => '2025-04-01', 'time' => 'abc'],
+            ],
+            'range' => [
+                'type' => 'count',
+                'count' => 1,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->service->parse($rule, 'UTC');
+    }
+
+    public function test_weekly_rule_with_sunday_produces_sunday_dates(): void
+    {
+        // Carbon::SUNDAY is 0; the previous bare ->filter() dropped that, so a
+        // weekly Sunday-only rule silently emitted zero occurrences.
+        $rule = [
+            'frequency' => 'weekly',
+            'interval' => 1,
+            'days_of_week' => ['sunday'],
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-03', // Monday
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $this->assertCount(3, $result);
+        // First Sunday on/after Mon Mar 3 is Sun Mar 9.
+        $this->assertEquals('2025-03-09', $result[0]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-03-16', $result[1]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-03-23', $result[2]['start']->format('Y-m-d'));
+        foreach ($result as $occ) {
+            $this->assertEquals('Sunday', $occ['start']->format('l'));
+        }
+    }
+
+    public function test_weekly_rule_with_sunday_mixed_with_other_days(): void
+    {
+        // Sunday + Wednesday: ensure both are emitted and ordered correctly
+        // after the final sort.
+        $rule = [
+            'frequency' => 'weekly',
+            'interval' => 1,
+            'days_of_week' => ['sunday', 'wednesday'],
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 4,
+                'start' => '2025-03-03', // Monday
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $this->assertCount(4, $result);
+        // Wed Mar 5, Sun Mar 9, Wed Mar 12, Sun Mar 16
+        $this->assertEquals('2025-03-05', $result[0]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-03-09', $result[1]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-03-12', $result[2]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-03-16', $result[3]['start']->format('Y-m-d'));
+    }
+
+    public function test_monthly_by_day_of_week_first_sunday(): void
+    {
+        // The previous code compared dayOfWeekIso (Sun = 7) to Carbon::SUNDAY
+        // (= 0), so the inner walk-the-days loop never matched on a Sunday and
+        // looped indefinitely. dayOfWeek (0..6) lines up with the constant.
+        $rule = [
+            'frequency' => 'monthly',
+            'interval' => 1,
+            'monthly_pattern' => 'by_day_of_week',
+            'day_of_week' => 'sunday',
+            'week_position' => 1,
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $this->assertCount(3, $result);
+        // First Sundays of Mar/Apr/May 2025: Mar 2, Apr 6, May 4.
+        $this->assertEquals('2025-03-02', $result[0]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-04-06', $result[1]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-05-04', $result[2]['start']->format('Y-m-d'));
+        foreach ($result as $occ) {
+            $this->assertEquals('Sunday', $occ['start']->format('l'));
+        }
+    }
+
+    public function test_monthly_by_day_of_week_last_sunday(): void
+    {
+        // Last-Sunday rule exercised the -1 branch of getNthDayOfWeekInMonth,
+        // which had the same dayOfWeekIso bug walking backwards from end of
+        // month.
+        $rule = [
+            'frequency' => 'monthly',
+            'interval' => 1,
+            'monthly_pattern' => 'by_day_of_week',
+            'day_of_week' => 'sunday',
+            'week_position' => -1,
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $this->assertCount(3, $result);
+        // Last Sundays of Mar/Apr/May 2025: Mar 30, Apr 27, May 25.
+        $this->assertEquals('2025-03-30', $result[0]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-04-27', $result[1]['start']->format('Y-m-d'));
+        $this->assertEquals('2025-05-25', $result[2]['start']->format('Y-m-d'));
+        foreach ($result as $occ) {
+            $this->assertEquals('Sunday', $occ['start']->format('l'));
+        }
     }
 }

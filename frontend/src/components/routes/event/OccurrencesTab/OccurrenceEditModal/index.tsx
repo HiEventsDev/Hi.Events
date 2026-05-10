@@ -3,7 +3,7 @@ import {Button, Checkbox, NumberInput, Tabs, Text, TextInput, UnstyledButton} fr
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
-import {useEffect, useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
 import {
     IconAlertTriangle,
@@ -35,6 +35,9 @@ import {utcToTz} from "../../../../../utilites/dates.ts";
 import {showSuccess, showError} from "../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {OccurrenceProductSettings} from "../PriceOverrideForm";
+import {SendMessageModal} from "../../../../modals/SendMessageModal";
+import {MessageType} from "../../../../../types.ts";
+import {buildSingleRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceEditModal.module.scss';
 
 interface OccurrenceEditModalProps extends GenericModalProps {
@@ -107,12 +110,30 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         }
     }, [defaultDate]);
 
-    const handleSubmit = (values: UpsertEventOccurrenceRequest) => {
+    // If the user opts in to notifying attendees, we stash what's needed to
+    // pre-fill the SendMessageModal and open it once the save succeeds.
+    const [pendingNotification, setPendingNotification] = useState<{
+        occurrence: EventOccurrence;
+        newStartDate: string;
+        newEndDate: string | null | undefined;
+    } | null>(null);
+
+    const submit = (values: UpsertEventOccurrenceRequest, notifyAfterSave: boolean) => {
         const onSuccess = () => {
             showSuccess(isEditing
                 ? t`Date updated successfully`
                 : t`Date created successfully`
             );
+            if (notifyAfterSave && isEditing && occurrence) {
+                // The edit modal hides (opened={!pendingNotification}) and
+                // SendMessageModal takes over — one visible modal at a time.
+                setPendingNotification({
+                    occurrence,
+                    newStartDate: values.start_date,
+                    newEndDate: values.end_date,
+                });
+                return;
+            }
             onClose();
         };
         const onError = (error: any) => errorHandler(form, error);
@@ -122,6 +143,46 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         } else {
             createMutation.mutate({eventId, data: values}, {onSuccess, onError});
         }
+    };
+
+    const handleSubmit = (values: UpsertEventOccurrenceRequest) => {
+        // Only warn when editing an existing occurrence whose date/time actually
+        // changed AND someone has already registered.
+        const attendeeCount = occurrence?.statistics?.attendees_registered ?? 0;
+        const originalStart = occurrence && event ? utcToTz(occurrence.start_date, event.timezone) : '';
+        const originalEnd = occurrence && event ? utcToTz(occurrence.end_date, event.timezone) : '';
+        const dateChanged = isEditing
+            && (values.start_date !== originalStart || (values.end_date || '') !== (originalEnd || ''));
+
+        if (dateChanged && attendeeCount > 0) {
+            // Wrap in a ref so the onConfirm closure can read the current checkbox
+            // value — modals.openConfirmModal doesn't have a built-in way to track
+            // inner form state.
+            const notifyRef = {current: true};
+            modals.openConfirmModal({
+                title: t`You've changed the session time`,
+                children: (
+                    <>
+                        <Text size="sm" mb="md">
+                            {attendeeCount === 1
+                                ? t`1 attendee is registered for this session.`
+                                : t`${attendeeCount} attendees are registered for this session.`}
+                        </Text>
+                        <Checkbox
+                            defaultChecked={true}
+                            label={t`Let them know about the change`}
+                            description={t`We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically.`}
+                            onChange={(e) => { notifyRef.current = e.currentTarget.checked; }}
+                        />
+                    </>
+                ),
+                labels: {confirm: t`Save`, cancel: t`Cancel`},
+                onConfirm: () => submit(values, notifyRef.current),
+            });
+            return;
+        }
+
+        submit(values, false);
     };
 
     const refundRef = useRef(false);
@@ -196,9 +257,20 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         return dayjs(form.values.start_date).isBefore(dayjs());
     }, [form.values.start_date]);
 
+    const notificationTemplate = useMemo(() => {
+        if (!pendingNotification || !event) return null;
+        return buildSingleRescheduleTemplate(
+            event,
+            pendingNotification.occurrence,
+            pendingNotification.newStartDate,
+            pendingNotification.newEndDate,
+        );
+    }, [pendingNotification, event]);
+
     return (
+        <>
         <Modal
-            opened
+            opened={!pendingNotification}
             onClose={onClose}
             heading={isEditing ? t`Edit Date` : duplicateFrom ? t`Duplicate Date` : t`Add Date`}
             size="lg"
@@ -343,5 +415,18 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 )}
             </Tabs>
         </Modal>
+        {pendingNotification && notificationTemplate && (
+            <SendMessageModal
+                onClose={() => {
+                    setPendingNotification(null);
+                    onClose();
+                }}
+                messageType={MessageType.AllAttendees}
+                eventOccurrenceId={pendingNotification.occurrence.id}
+                initialSubject={notificationTemplate.subject}
+                initialMessage={notificationTemplate.message}
+            />
+        )}
+        </>
     );
 };

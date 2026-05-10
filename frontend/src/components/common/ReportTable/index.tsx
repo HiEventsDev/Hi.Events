@@ -81,7 +81,12 @@ const ReportTable = <T extends Record<string, any>>({
     const {reportType, eventId} = useParams();
 
     const isRecurring = event?.type === EventType.RECURRING;
-    const occurrencesQuery = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 500});
+    const occurrencesQuery = useGetEventOccurrences(
+        eventId,
+        {pageNumber: 1, perPage: 500},
+        true,
+        {includeStats: false},
+    );
     const occurrences = occurrencesQuery?.data?.data || [];
 
     const reportQuery = useGetEventReport(eventId, reportType, dateRange[0], dateRange[1], selectedOccurrenceId);

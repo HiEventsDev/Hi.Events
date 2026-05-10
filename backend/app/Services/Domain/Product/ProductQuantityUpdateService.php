@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Exceptions\OrderHasNoItemsException;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -14,7 +15,6 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use InvalidArgumentException;
 
 class ProductQuantityUpdateService
 {
@@ -77,7 +77,7 @@ class ProductQuantityUpdateService
     {
         $this->databaseManager->transaction(function () use ($order) {
             if ($order->getOrderItems() === null) {
-                throw new InvalidArgumentException(__('Order has no order items'));
+                throw new OrderHasNoItemsException(__('Order has no order items'));
             }
 
             $this->updateProductQuantities($order);

@@ -325,6 +325,7 @@ export interface RecurrenceRuleRange {
     type: 'until' | 'count';
     until?: string;
     count?: number;
+    start?: string;
 }
 
 export interface RecurrenceRuleAdditionalDate {
@@ -347,6 +348,11 @@ export interface RecurrenceRule {
     range: RecurrenceRuleRange;
     default_capacity?: number | null;
     excluded_dates?: string[];
+    // Written by the backend's RecurrenceRuleExclusionService whenever a
+    // generated date is cancelled — exposed here so the schedule modal can
+    // pass it through unchanged on save instead of dropping it and silently
+    // resurrecting cancelled dates on the next regenerate.
+    excluded_occurrences?: string[];
     additional_dates?: RecurrenceRuleAdditionalDate[];
     monthly_pattern?: 'by_day_of_month' | 'by_day_of_week';
     days_of_month?: number[];
@@ -422,6 +428,7 @@ export interface BulkUpdateOccurrencesRequest {
     skip_overridden?: boolean;
     refund_orders?: boolean;
     occurrence_ids?: number[];
+    apply_to_all?: boolean;
     label?: string;
     clear_label?: boolean;
     duration_minutes?: number;
@@ -1271,6 +1278,8 @@ export interface WaitlistEntry {
     id?: number;
     event_id?: number;
     product_price_id?: number;
+    event_occurrence_id?: number | null;
+    event_occurrence?: EventOccurrence | null;
     product?: Product;
     product_price?: ProductPrice;
     email?: string;
@@ -1292,6 +1301,7 @@ export interface WaitlistEntry {
 
 export interface JoinWaitlistRequest {
     product_price_id: number;
+    event_occurrence_id?: number;
     email: string;
     first_name: string;
     last_name?: string;

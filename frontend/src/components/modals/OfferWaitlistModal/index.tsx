@@ -14,6 +14,7 @@ interface OfferWaitlistModalProps extends GenericModalProps {
     eventId: IdParam;
     eventSettings?: EventSettings;
     stats?: WaitlistStats;
+    eventOccurrenceId?: IdParam | null;
 }
 
 const getDefaultQuantity = (product: WaitlistProductStats): number => {
@@ -27,7 +28,7 @@ const getMaxQuantity = (product: WaitlistProductStats): number => {
     return Math.min(product.waiting, product.available);
 };
 
-export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: OfferWaitlistModalProps) => {
+export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats, eventOccurrenceId}: OfferWaitlistModalProps) => {
     const mutation = useOfferWaitlistEntry();
     const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
 
@@ -54,6 +55,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
             eventId,
             productPriceId: product.product_price_id,
             quantity: qty,
+            eventOccurrenceId,
         }, {
             onSuccess: (response) => {
                 const count = response?.data?.length ?? qty;

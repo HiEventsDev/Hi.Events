@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Event;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -13,12 +14,12 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Event\CreateEventService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
-use Illuminate\Database\DatabaseManager;
-use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use Illuminate\Config\Repository;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Filesystem\FilesystemManager;
 use Mockery;
 use Tests\TestCase;
@@ -26,16 +27,27 @@ use Tests\TestCase;
 class CreateEventServiceTest extends TestCase
 {
     private CreateEventService $createEventService;
+
     private EventRepositoryInterface $eventRepository;
+
     private EventSettingsRepositoryInterface $eventSettingsRepository;
+
     private OrganizerRepositoryInterface $organizerRepository;
+
     private DatabaseManager $databaseManager;
+
     private EventStatisticRepositoryInterface $eventStatisticsRepository;
+
     private HtmlPurifierService $purifier;
+
     private ImageRepositoryInterface $imageRepository;
+
     private Repository $config;
+
     private FilesystemManager $filesystemManager;
+
     private EventOccurrenceRepositoryInterface $occurrenceRepository;
+
     private \HiEvents\Repository\Interfaces\CheckInListRepositoryInterface $checkInListRepository;
 
     protected function setUp(): void
@@ -75,7 +87,7 @@ class CreateEventServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCreateEventSuccess(): void
+    public function test_create_event_success(): void
     {
         $eventData = $this->createMockEventDomainObject();
         $eventSettings = $this->createMockEventSettingDomainObject();
@@ -121,7 +133,7 @@ class CreateEventServiceTest extends TestCase
 
         // Every event now gets a system-default check-in list on creation.
         $this->checkInListRepository->shouldReceive('create')->once()
-            ->with(Mockery::on(fn($arg) => ($arg['is_system_default'] ?? false) === true
+            ->with(Mockery::on(fn ($arg) => ($arg['is_system_default'] ?? false) === true
                 && ($arg['event_id'] ?? null) === $eventData->getId()));
 
         // Mock event cover creation
@@ -134,16 +146,16 @@ class CreateEventServiceTest extends TestCase
         $this->config->shouldReceive('get')
             ->with('filesystems.default')
             ->andReturn('local');
-        
+
         $mockDisk = Mockery::mock();
         $mockDisk->shouldReceive('exists')
             ->with('event-covers/CONFERENCE.jpg')
             ->andReturn(true);
-        
+
         $this->filesystemManager->shouldReceive('disk')
             ->with('public')
             ->andReturn($mockDisk);
-            
+
         $this->imageRepository->shouldReceive('create')
             ->once();
 
@@ -156,12 +168,12 @@ class CreateEventServiceTest extends TestCase
         $this->assertEquals($eventData->getId(), $result->getId());
     }
 
-    public function testCreateEventWithoutEventSettings(): void
+    public function test_create_event_without_event_settings(): void
     {
         $eventData = $this->createMockEventDomainObject();
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')
-            ->andReturn(new OrganizerSettingDomainObject())
+            ->andReturn(new OrganizerSettingDomainObject)
             ->getMock();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
@@ -201,12 +213,12 @@ class CreateEventServiceTest extends TestCase
         $this->config->shouldReceive('get')
             ->with('filesystems.default')
             ->andReturn('local');
-        
+
         $mockDisk = Mockery::mock();
         $mockDisk->shouldReceive('exists')
             ->with('event-covers/CONFERENCE.jpg')
             ->andReturn(false); // No cover exists for this test
-        
+
         $this->filesystemManager->shouldReceive('disk')
             ->with('public')
             ->andReturn($mockDisk);
@@ -216,7 +228,58 @@ class CreateEventServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testCreateEventThrowsOrganizerNotFoundException(): void
+    public function test_create_recurring_event_defaults_collection_method_to_per_order(): void
+    {
+        $eventData = Mockery::mock(EventDomainObject::class, static function ($mock) {
+            $mock->shouldReceive('getId')->andReturn(1);
+            $mock->shouldReceive('getTitle')->andReturn('Weekly Yoga');
+            $mock->shouldReceive('getOrganizerId')->andReturn(1);
+            $mock->shouldReceive('getAccountId')->andReturn(1);
+            $mock->shouldReceive('getTimezone')->andReturn('UTC');
+            $mock->shouldReceive('getCurrency')->andReturn('USD');
+            $mock->shouldReceive('getDescription')->andReturn('Desc');
+            $mock->shouldReceive('getLocationDetails')->andReturn(null);
+            $mock->shouldReceive('getUserId')->andReturn(1);
+            $mock->shouldReceive('getStatus')->andReturn('DRAFT');
+            $mock->shouldReceive('getCategory')->andReturn('WELLNESS');
+            $mock->shouldReceive('getAttributes')->andReturn([]);
+            $mock->shouldReceive('getType')->andReturn('RECURRING');
+            $mock->shouldReceive('getRecurrenceRule')->andReturn(null);
+        });
+
+        $organizer = $this->createMockOrganizerDomainObject()
+            ->shouldReceive('getOrganizerSettings')
+            ->andReturn(new OrganizerSettingDomainObject)
+            ->getMock();
+
+        $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(fn ($cb) => $cb());
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')->with(OrganizerSettingDomainObject::class)->once()->andReturnSelf()
+            ->getMock()
+            ->shouldReceive('findFirstWhere')->andReturn($organizer);
+
+        $this->eventRepository->shouldReceive('create')->andReturn($eventData);
+        $this->purifier->shouldReceive('purify')->andReturn('Desc');
+
+        $this->config->shouldReceive('get')->with('filesystems.public')->andReturn('public');
+        $this->config->shouldReceive('get')->with('app.event_categories_cover_images_path')->andReturn('event-covers');
+        $mockDisk = Mockery::mock();
+        $mockDisk->shouldReceive('exists')->andReturn(false);
+        $this->filesystemManager->shouldReceive('disk')->with('public')->andReturn($mockDisk);
+
+        $this->eventSettingsRepository->shouldReceive('create')
+            ->once()
+            ->with(Mockery::on(fn ($arg) => $arg['attendee_details_collection_method'] === AttendeeDetailsCollectionMethod::PER_ORDER->value));
+
+        $this->eventStatisticsRepository->shouldReceive('create');
+        $this->checkInListRepository->shouldReceive('create');
+
+        $this->createEventService->createEvent($eventData);
+        $this->assertTrue(true);
+    }
+
+    public function test_create_event_throws_organizer_not_found_exception(): void
     {
         $eventData = $this->createMockEventDomainObject();
 
@@ -238,12 +301,12 @@ class CreateEventServiceTest extends TestCase
         $this->createEventService->createEvent($eventData);
     }
 
-    public function testCreateEventWithEventCoverCreatesImageRecord(): void
+    public function test_create_event_with_event_cover_creates_image_record(): void
     {
         $eventData = $this->createMockEventDomainObject();
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')
-            ->andReturn(new OrganizerSettingDomainObject())
+            ->andReturn(new OrganizerSettingDomainObject)
             ->getMock();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
@@ -271,16 +334,16 @@ class CreateEventServiceTest extends TestCase
         $this->config->shouldReceive('get')
             ->with('filesystems.default')
             ->andReturn('local');
-        
+
         $mockDisk = Mockery::mock();
         $mockDisk->shouldReceive('exists')
             ->with('event-covers/CONFERENCE.jpg')
             ->andReturn(true);
-        
+
         $this->filesystemManager->shouldReceive('disk')
             ->with('public')
             ->andReturn($mockDisk);
-            
+
         // Verify image record is created with correct data
         $this->imageRepository->shouldReceive('create')
             ->once()
@@ -309,12 +372,12 @@ class CreateEventServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testCreateEventWithoutEventCoverDoesNotCreateImageRecord(): void
+    public function test_create_event_without_event_cover_does_not_create_image_record(): void
     {
         $eventData = $this->createMockEventDomainObjectWithCategory('MUSIC');
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')
-            ->andReturn(new OrganizerSettingDomainObject())
+            ->andReturn(new OrganizerSettingDomainObject)
             ->getMock();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
@@ -339,16 +402,16 @@ class CreateEventServiceTest extends TestCase
         $this->config->shouldReceive('get')
             ->with('app.event_categories_cover_images_path')
             ->andReturn('event-covers');
-        
+
         $mockDisk = Mockery::mock();
         $mockDisk->shouldReceive('exists')
             ->with('event-covers/MUSIC.jpg')
             ->andReturn(false);
-        
+
         $this->filesystemManager->shouldReceive('disk')
             ->with('public')
             ->andReturn($mockDisk);
-            
+
         // Image repository should NOT be called
         $this->imageRepository->shouldNotReceive('create');
 

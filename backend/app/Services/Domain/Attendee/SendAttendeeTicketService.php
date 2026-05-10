@@ -32,7 +32,8 @@ class SendAttendeeTicketService
             $order,
             $event,
             $eventSettings,
-            $organizer
+            $organizer,
+            $attendee->getEventOccurrence(),
         );
 
         $this->mailer

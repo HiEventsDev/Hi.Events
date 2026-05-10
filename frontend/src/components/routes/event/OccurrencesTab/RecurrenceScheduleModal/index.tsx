@@ -127,9 +127,20 @@ const getNthWeekdayOfMonth = (year: number, month: number, dayOfWeek: number, po
     return null;
 };
 
+const parseLocalDate = (value: string): Date | null => {
+    if (!value) return null;
+    const [y, m, d] = value.split('-').map(Number);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+};
+
 const computePreviewDates = (values: RecurrenceFormValues): Date[] => {
     const dates: Date[] = [];
-    const today = new Date();
+    // Anchor preview generation on the schedule start date (defaults to today,
+    // but organizers can shift it for events being scheduled in advance).
+    // Without this anchor the preview always starts from "today" even though
+    // the backend generates from values.range_start.
+    const today = parseLocalDate(values.range_start) ?? new Date();
     today.setHours(0, 0, 0, 0);
 
     const endDate = values.range_type === 'until' && values.range_until
@@ -284,6 +295,7 @@ interface RecurrenceFormValues {
     interval: number;
     days_of_week: string[];
     time_slots: TimeSlotFormValue[];
+    range_start: string;
     range_type: string;
     range_until: string;
     range_count: number;
@@ -295,6 +307,15 @@ interface RecurrenceFormValues {
     yearly_month: string;
     yearly_day: number;
 }
+
+const formatLocalDate = (date: Date): string => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+};
+
+const todayLocalDate = (): string => formatLocalDate(new Date());
 
 export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -335,6 +356,7 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
             interval: 1,
             days_of_week: [],
             time_slots: [{time: '09:00', end_time: '11:00', label: ''}],
+            range_start: todayLocalDate(),
             range_type: 'until',
             range_until: '',
             range_count: 10,
@@ -367,11 +389,25 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
     useEffect(() => {
         if (event?.recurrence_rule) {
             const rule = event.recurrence_rule;
+            // Prefer the rule's own start, then the earliest existing occurrence
+            // start (for events that already have generated dates), then today.
+            const earliestOccurrence = event.occurrences?.length
+                ? event.occurrences
+                    .map(o => o.start_date)
+                    .filter((d): d is string => !!d)
+                    .sort()[0]
+                : undefined;
+            const startFromRule = rule.range?.start;
+            const fallbackStart = earliestOccurrence
+                ? earliestOccurrence.slice(0, 10)
+                : todayLocalDate();
+
             form.setValues({
                 frequency: rule.frequency || 'weekly',
                 interval: rule.interval || 1,
                 days_of_week: rule.days_of_week || [],
                 time_slots: parseTimeSlotsFromRule(rule),
+                range_start: startFromRule ? startFromRule.slice(0, 10) : fallbackStart,
                 range_type: rule.range?.type || 'until',
                 range_until: rule.range?.until || '',
                 range_count: rule.range?.count || 10,
@@ -411,6 +447,7 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
         () => computePreviewDates(form.values),
         [
             form.values.frequency, form.values.interval, form.values.days_of_week,
+            form.values.range_start,
             form.values.range_type, form.values.range_until, form.values.range_count,
             form.values.monthly_pattern, form.values.days_of_month,
             form.values.day_of_week, form.values.week_position,
@@ -436,14 +473,46 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
             })
             : [{time: '09:00'}];
 
+        const range: RecurrenceRule['range'] = values.range_type === 'until'
+            ? {type: 'until', until: values.range_until}
+            : {type: 'count', count: values.range_count};
+
+        // Send range.start so the backend doesn't fall back to "now()" — for
+        // events scheduled in advance this is what anchors the generated dates
+        // to the organizer's intended start instead of the moment of submit.
+        if (values.range_start) {
+            range.start = values.range_start;
+        }
+
+        // Hidden recurrence metadata — written by the backend whenever a
+        // generated date is cancelled (excluded_occurrences) or manually
+        // added (additional_dates), and never editable through this form.
+        // Carry them forward verbatim so a routine schedule edit doesn't
+        // silently resurrect cancelled dates or drop manually-added ones.
+        // Legacy excluded_dates is also preserved to keep older rules intact
+        // until the backend migrates them to excluded_occurrences.
+        const existingRule = event?.recurrence_rule;
+        const preservedMetadata: Partial<RecurrenceRule> = {};
+        if (existingRule?.excluded_occurrences && existingRule.excluded_occurrences.length > 0) {
+            preservedMetadata.excluded_occurrences = existingRule.excluded_occurrences;
+        }
+        if (existingRule?.excluded_dates && existingRule.excluded_dates.length > 0) {
+            preservedMetadata.excluded_dates = existingRule.excluded_dates;
+        }
+        if (existingRule?.additional_dates && existingRule.additional_dates.length > 0) {
+            preservedMetadata.additional_dates = existingRule.additional_dates;
+        }
+
         const rule: RecurrenceRule = {
             frequency: values.frequency as RecurrenceRule['frequency'],
             interval: values.interval,
             times_of_day: timesOfDay,
-            range: values.range_type === 'until'
-                ? {type: 'until', until: values.range_until}
-                : {type: 'count', count: values.range_count},
-            default_capacity: values.default_capacity || null,
+            range,
+            // `??` not `||` — `0` means "closed/no inventory" (legitimate for
+            // placeholder dates, comp-only sessions). Coercing 0 to null would
+            // silently flip a closed date to unlimited capacity.
+            default_capacity: values.default_capacity ?? null,
+            ...preservedMetadata,
         };
 
         if (values.frequency === 'weekly') {
@@ -494,7 +563,7 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
 
         if (validTimes.length > 1) {
             return {
-                label: t`${totalOccurrences} dates across ${previewDates.length} days (${plural(validTimes.length, {one: "# session", other: "# sessions"})} per day)`,
+                label: t`${totalOccurrences} sessions across ${previewDates.length} dates (${plural(validTimes.length, {one: "# session", other: "# sessions"})} per day)`,
                 dates: shown,
                 remaining: remaining > 0 ? remaining : 0,
             };
@@ -700,6 +769,14 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
                         <span className={classes.sectionTitle}>{t`How long does the schedule run?`}</span>
                     </div>
 
+                    <TextInput
+                        type="date"
+                        label={t`Schedule starts on`}
+                        description={t`The first date this schedule will generate from.`}
+                        mb="sm"
+                        {...form.getInputProps('range_start')}
+                    />
+
                     <div className={classes.rangeToggle}>
                         <div
                             className={classes.rangeOption}
@@ -779,7 +856,7 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
                         </div>
                         {exceedsLimit && (
                             <div className={classes.previewWarning}>
-                                {t`The maximum is ${MAX_PREVIEW} dates. Please reduce the date range, frequency, or number of sessions per day.`}
+                                {t`The maximum is ${MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day.`}
                             </div>
                         )}
                         <div className={classes.previewDates}>

@@ -2,7 +2,7 @@ import {useParams} from "react-router";
 import {useGetCheckInListPublic} from "../../../queries/useGetCheckInListPublic.ts";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDebouncedValue, useDisclosure, useNetwork} from "@mantine/hooks";
-import {Attendee, EventType, QueryFilters, QueryFilterOperator} from "../../../types.ts";
+import {Attendee, EventOccurrenceStatus, EventType, QueryFilters, QueryFilterOperator} from "../../../types.ts";
 import {showError, showInfo, showSuccess, showSuccessWithUndo} from "../../../utilites/notifications.tsx";
 import {t, Trans} from "@lingui/macro";
 import {AxiosError} from "axios";
@@ -143,6 +143,11 @@ const CheckIn = () => {
     const areOfflinePaymentsEnabled = eventSettings?.payment_providers?.includes("OFFLINE");
     const allowOrdersAwaitingOfflinePaymentToCheckIn = areOfflinePaymentsEnabled
         && eventSettings?.allow_orders_awaiting_offline_payment_to_check_in;
+    const progressStatsQuery = useGetCheckInListStatsPublic(
+        checkInListShortId,
+        !!checkInList?.is_active && !checkInList?.is_expired && showOccurrenceFilter && occurrenceFilter !== null,
+        occurrenceFilter,
+    );
 
     useEffect(() => {
         if (!isSsr()) {
@@ -492,6 +497,30 @@ const CheckIn = () => {
             />);
     }
 
+    // Scoped lists become unusable when their occurrence is cancelled — the
+    // occurrence no longer exists for attendees to be checked in against.
+    if (checkInList?.event_occurrence?.status === EventOccurrenceStatus.CANCELLED) {
+        return (
+            <NoResultsSplash
+                heading={t`Session cancelled`}
+                imageHref={"/blank-slate/check-in-lists.svg"}
+                subHeading={(
+                    <>
+                        <p>
+                            <Trans>
+                                This check-in list is scoped to a session that has been cancelled, so it can no longer be used for check-ins.
+                            </Trans>
+                        </p>
+                        <p>
+                            <Trans>
+                                Create a new check-in list for an active session, or contact the organizer if you think this is a mistake.
+                            </Trans>
+                        </p>
+                    </>
+                )}
+            />);
+    }
+
     if (checkInList && !checkInList?.is_active) {
         return (
             <NoResultsSplash
@@ -518,11 +547,6 @@ const CheckIn = () => {
 
     // Filtered stats drive the progress chip when an occurrence is selected;
     // otherwise the list's own totals (pre-computed server-side) are used.
-    const progressStatsQuery = useGetCheckInListStatsPublic(
-        checkInListShortId,
-        !!checkInList?.is_active && !checkInList?.is_expired && showOccurrenceFilter && occurrenceFilter !== null,
-        occurrenceFilter,
-    );
     const filteredStats = progressStatsQuery.data?.data;
     const totalAttendees = filteredStats?.total_attendees ?? checkInList?.total_attendees ?? 0;
     const checkedInCount = filteredStats?.checked_in_attendees ?? checkInList?.checked_in_attendees ?? 0;

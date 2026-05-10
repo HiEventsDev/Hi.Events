@@ -13,14 +13,16 @@ class GetEventOccurrencesHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
-    )
-    {
-    }
+    ) {}
 
-    public function handle(int $eventId, QueryParamsDTO $queryParams): LengthAwarePaginator
+    public function handle(int $eventId, QueryParamsDTO $queryParams, bool $includeStats = true): LengthAwarePaginator
     {
-        return $this->occurrenceRepository
-            ->loadRelation(EventOccurrenceStatisticDomainObject::class)
-            ->findByEventId($eventId, $queryParams);
+        $repository = $this->occurrenceRepository;
+
+        if ($includeStats) {
+            $repository = $repository->loadRelation(EventOccurrenceStatisticDomainObject::class);
+        }
+
+        return $repository->findByEventId($eventId, $queryParams);
     }
 }

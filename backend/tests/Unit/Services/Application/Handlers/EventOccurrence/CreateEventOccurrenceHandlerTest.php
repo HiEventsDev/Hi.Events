@@ -41,7 +41,6 @@ class CreateEventOccurrenceHandlerTest extends TestCase
             event_id: 1,
             start_date: '2026-06-01 10:00:00',
             end_date: '2026-06-01 18:00:00',
-            status: EventOccurrenceStatus::ACTIVE->name,
             capacity: 100,
             label: 'Morning Session',
             is_overridden: false,
@@ -69,13 +68,15 @@ class CreateEventOccurrenceHandlerTest extends TestCase
         $this->assertSame($expectedOccurrence, $result);
     }
 
-    public function testHandleDefaultsStatusToActiveWhenNotProvided(): void
+    public function testHandleAlwaysCreatesOccurrencesAsActive(): void
     {
+        // Status is no longer client-controllable on create — it always starts
+        // ACTIVE. Cancellation goes through CancelOccurrenceHandler, SOLD_OUT
+        // is computed by ProductQuantityUpdateService.
         $dto = new UpsertEventOccurrenceDTO(
             event_id: 2,
             start_date: '2026-07-01 09:00:00',
             end_date: null,
-            status: null,
             capacity: null,
         );
 

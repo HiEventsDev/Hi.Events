@@ -1,12 +1,11 @@
-import {EventOccurrence, EventOccurrenceStatus, GenericModalProps, IdParam, MessageType} from "../../../types.ts";
+import {EventOccurrence, GenericModalProps, IdParam, MessageType} from "../../../types.ts";
 import {useNavigate, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
 import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
 import {t} from "@lingui/macro";
-import {useCallback, useMemo, useRef, useState} from "react";
-import {Checkbox, Progress, Skeleton, Stack, Text} from "@mantine/core";
-import {modals} from "@mantine/modals";
+import {useCallback, useMemo, useState} from "react";
+import {Progress, Skeleton, Stack, Text} from "@mantine/core";
 import {OccurrenceAttendeesAndOrders} from "../../common/OccurrenceAttendeesAndOrders";
 import {SideDrawer} from "../../common/SideDrawer";
 import {SendMessageModal} from "../SendMessageModal";
@@ -21,8 +20,10 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useCancelOccurrence} from "../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../mutations/useDeleteEventOccurrence.ts";
-import {useUpdateEventOccurrence} from "../../../mutations/useUpdateEventOccurrence.ts";
+import {useReactivateOccurrence} from "../../../mutations/useReactivateOccurrence.ts";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {openCancelOccurrenceDialog} from "../../routes/event/OccurrencesTab/cancelOccurrenceDialog";
+import {launchCheckInForOccurrence} from "../../routes/event/OccurrencesTab/checkInLaunch";
 import classes from './ManageOccurrenceModal.module.scss';
 
 interface ManageOccurrenceModalProps {
@@ -44,54 +45,24 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
-    const updateMutation = useUpdateEventOccurrence();
-    const refundRef = useRef(false);
+    const reactivateMutation = useReactivateOccurrence();
 
     const handleCheckIn = useCallback((occurrenceId: number) => {
-        const list = checkInLists?.find(l => l.event_occurrence_id === occurrenceId)
-            || checkInLists?.find(l => !l.event_occurrence_id);
-
-        if (list) {
-            window.open(`/check-in/${list.short_id}`, '_blank');
-        } else {
-            setCreateCheckInForOccurrenceId(occurrenceId);
-        }
+        launchCheckInForOccurrence({
+            occurrenceId,
+            checkInLists,
+            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
+        });
     }, [checkInLists]);
 
     const handleCancel = useCallback((occId: number) => {
-        const occ = occurrence;
-        const orderCount = occ?.statistics?.orders_created ?? 0;
-        refundRef.current = false;
-
-        modals.openConfirmModal({
-            title: t`Cancel Date`,
-            children: (
-                <>
-                    <Text size="sm" mb="md">
-                        {t`Are you sure you want to cancel this date? Affected attendees will be notified by email.`}
-                    </Text>
-                    {orderCount > 0 && (
-                        <Text size="sm" fw={600} c="red" mb="md">
-                            {t`This date has ${orderCount} order(s) that will be affected.`}
-                        </Text>
-                    )}
-                    <Checkbox
-                        label={t`Refund all orders for this date`}
-                        description={t`Orders spanning multiple dates will be flagged for manual review.`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
-                </>
-            ),
-            labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},
-            confirmProps: {color: 'red'},
-            onConfirm: () => {
-                cancelMutation.mutate({eventId, occurrenceId: occId, refundOrders: refundRef.current}, {
-                    onSuccess: () => showSuccess(t`Date cancelled`),
-                    onError: (error: any) => showError(error?.response?.data?.message || t`Failed to cancel date`),
-                });
-            },
+        openCancelOccurrenceDialog({
+            eventId,
+            occurrenceId: occId,
+            orderCount: occurrence?.statistics?.orders_created ?? 0,
+            mutation: cancelMutation,
         });
-    }, [occurrence, eventId]);
+    }, [occurrence, eventId, cancelMutation]);
 
     const handleDelete = useCallback((occId: number) => {
         confirmationDialog(t`Are you sure you want to delete this date? This action cannot be undone.`, () => {
@@ -107,10 +78,9 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
 
     const handleReactivate = useCallback((occ: EventOccurrence) => {
         confirmationDialog(t`Reactivate this date? It will be reopened for future sales.`, () => {
-            updateMutation.mutate({
+            reactivateMutation.mutate({
                 eventId,
                 occurrenceId: occ.id,
-                data: {start_date: occ.start_date, status: 'ACTIVE'},
             }, {
                 onSuccess: () => showSuccess(t`Date reactivated`),
                 onError: (error: any) => showError(error?.response?.data?.message || t`Failed to reactivate date`),

@@ -185,67 +185,57 @@ export const OccurrenceProductSettings = ({occurrenceId}: OccurrenceProductSetti
                         </div>
 
                         {hasPrices && (
-                            <table className={classes.priceTable}>
-                                <thead>
-                                    <tr className={classes.priceHeaderRow}>
-                                        <th>{t`Price Tier`}</th>
-                                        <th>{t`Base Price`}</th>
-                                        <th>{t`Override`}</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {product.prices!.map(price => {
-                                        const existing = getExistingOverride(price.id!);
-                                        const pendingValue = pendingOverrides[price.id!];
-                                        const displayPrice = pendingValue !== undefined
-                                            ? pendingValue
-                                            : existing?.price;
+                            <div className={classes.priceTable}>
+                                <div className={classes.priceHeaderRow}>
+                                    <span>{t`Price Tier`}</span>
+                                    <span>{t`Base Price`}</span>
+                                    <span>{t`Override`}</span>
+                                    <span/>
+                                </div>
+                                {product.prices!.map(price => {
+                                    const existing = getExistingOverride(price.id!);
+                                    const pendingValue = pendingOverrides[price.id!];
+                                    const displayPrice = pendingValue !== undefined
+                                        ? pendingValue
+                                        : existing?.price;
 
-                                        return (
-                                            <tr key={price.id} className={classes.priceRow}>
-                                                <td>
-                                                    <span className={classes.priceLabel}>
-                                                        {price.label || t`Default`}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span className={classes.basePrice}>
-                                                        {price.price?.toFixed(2)}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <NumberInput
-                                                        size="xs"
-                                                        placeholder={t`Override price`}
-                                                        value={displayPrice ?? ''}
-                                                        onChange={(val) => handlePriceChange(price.id!, val)}
-                                                        min={0}
-                                                        decimalScale={2}
-                                                        fixedDecimalScale
-                                                        className={classes.overrideInput}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    {existing && (
-                                                        <Tooltip label={t`Reset to base price`}>
-                                                            <ActionIcon
-                                                                size="sm"
-                                                                variant="subtle"
-                                                                color="gray"
-                                                                loading={deleteMutation.isPending}
-                                                                onClick={() => handleResetOverride(price.id!)}
-                                                            >
-                                                                <IconX size={14}/>
-                                                            </ActionIcon>
-                                                        </Tooltip>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                    return (
+                                        <div key={price.id} className={classes.priceRow}>
+                                            <span className={classes.priceLabel}>
+                                                {price.label || t`Default`}
+                                            </span>
+                                            <span className={classes.basePrice}>
+                                                {price.price?.toFixed(2)}
+                                            </span>
+                                            <NumberInput
+                                                size="xs"
+                                                placeholder={t`Override price`}
+                                                value={displayPrice ?? ''}
+                                                onChange={(val) => handlePriceChange(price.id!, val)}
+                                                min={0}
+                                                decimalScale={2}
+                                                fixedDecimalScale
+                                                className={classes.overrideInput}
+                                            />
+                                            <span className={classes.priceRowAction}>
+                                                {existing && (
+                                                    <Tooltip label={t`Reset to base price`}>
+                                                        <ActionIcon
+                                                            size="sm"
+                                                            variant="subtle"
+                                                            color="gray"
+                                                            loading={deleteMutation.isPending}
+                                                            onClick={() => handleResetOverride(price.id!)}
+                                                        >
+                                                            <IconX size={14}/>
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                )}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         )}
                     </div>
                 );

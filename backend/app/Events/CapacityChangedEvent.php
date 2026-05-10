@@ -12,6 +12,7 @@ readonly class CapacityChangedEvent
         public ?int                    $productId = null,
         public ?int                    $productPriceId = null,
         public ?int                    $newCapacity = null,
+        public ?int                    $eventOccurrenceId = null,
     )
     {
     }

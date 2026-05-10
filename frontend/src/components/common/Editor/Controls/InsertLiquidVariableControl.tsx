@@ -15,6 +15,14 @@ interface TemplateVariable {
     category?: string;
 }
 
+const OCCURRENCE_VARIABLES: TemplateVariable[] = [
+    {label: t`Occurrence Start Date`, value: 'occurrence.start_date', description: t`Start date of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence Start Time`, value: 'occurrence.start_time', description: t`Start time of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence End Date`, value: 'occurrence.end_date', description: t`End date of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence End Time`, value: 'occurrence.end_time', description: t`End time of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence Label`, value: 'occurrence.label', description: t`Label for the occurrence`, category: t`Occurrence`},
+];
+
 const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
     order_confirmation: [
         // Order Information
@@ -39,6 +47,7 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
 
+        ...OCCURRENCE_VARIABLES,
 
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
@@ -62,7 +71,7 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         // Order Information
         {label: t`Order Payment Pending`, value: 'order.is_awaiting_offline_payment', description: t`True if payment pending`, category: t`Order`},
         {label: t`Order Status`, value: 'order.status', description: t`Order Status`, category: t`Order`},
-        {label: t`Offline Payment`, value: 'is_offline_payment', description: t`True if offline payment`, category: t`Order`},
+        {label: t`Offline Payment`, value: 'order.is_offline_payment', description: t`True if offline payment`, category: t`Order`},
 
         // Event Information
         {label: t`Event Title`, value: 'event.title', description: t`Name of the event`, category: t`Event`},
@@ -72,6 +81,8 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Description`, value: 'event.description', description: t`Event details`, category: t`Event`},
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
+
+        ...OCCURRENCE_VARIABLES,
 
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
@@ -92,11 +103,7 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
         {label: t`Event URL`, value: 'event.url', description: t`Link to event homepage`, category: t`Event`},
 
-        {label: t`Occurrence Start Date`, value: 'occurrence.start_date', description: t`Start date of the occurrence`, category: t`Occurrence`},
-        {label: t`Occurrence Start Time`, value: 'occurrence.start_time', description: t`Start time of the occurrence`, category: t`Occurrence`},
-        {label: t`Occurrence End Date`, value: 'occurrence.end_date', description: t`End date of the occurrence`, category: t`Occurrence`},
-        {label: t`Occurrence End Time`, value: 'occurrence.end_time', description: t`End time of the occurrence`, category: t`Occurrence`},
-        {label: t`Occurrence Label`, value: 'occurrence.label', description: t`Label for the occurrence`, category: t`Occurrence`},
+        ...OCCURRENCE_VARIABLES,
 
         {label: t`Refund Issued`, value: 'cancellation.refund_issued', description: t`Whether refunds are being processed`, category: t`Cancellation`},
 

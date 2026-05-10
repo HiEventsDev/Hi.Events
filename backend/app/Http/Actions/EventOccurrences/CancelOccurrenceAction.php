@@ -13,9 +13,7 @@ class CancelOccurrenceAction extends BaseAction
 {
     public function __construct(
         private readonly CancelOccurrenceHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId, CancelOccurrenceRequest $request): JsonResponse
     {
@@ -24,7 +22,7 @@ class CancelOccurrenceAction extends BaseAction
         $occurrence = $this->handler->handle(
             eventId: $eventId,
             occurrenceId: $occurrenceId,
-            refundOrders: (bool) $request->input('refund_orders', false),
+            refundOrders: (bool) $request->validated('refund_orders', false),
         );
 
         return $this->resourceResponse(

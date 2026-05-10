@@ -16,10 +16,8 @@ class CreateEventOccurrenceAction extends BaseAction
 {
     public function __construct(
         private readonly CreateEventOccurrenceHandler $handler,
-        private readonly EventRepositoryInterface     $eventRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     public function __invoke(int $eventId, UpsertEventOccurrenceRequest $request): JsonResponse
     {
@@ -36,9 +34,9 @@ class CreateEventOccurrenceAction extends BaseAction
                 event_id: $eventId,
                 start_date: DateHelper::convertToUTC($startDate, $timezone),
                 end_date: $endDate ? DateHelper::convertToUTC($endDate, $timezone) : null,
-                status: $request->validated('status'),
                 capacity: $request->validated('capacity'),
                 label: $request->validated('label'),
+                is_overridden: true,
             )
         );
 

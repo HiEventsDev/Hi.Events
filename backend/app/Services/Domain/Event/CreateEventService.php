@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\ImageType;
@@ -29,31 +30,28 @@ use Throwable;
 class CreateEventService
 {
     public function __construct(
-        private readonly EventRepositoryInterface              $eventRepository,
-        private readonly EventSettingsRepositoryInterface      $eventSettingsRepository,
-        private readonly OrganizerRepositoryInterface          $organizerRepository,
-        private readonly DatabaseManager                       $databaseManager,
-        private readonly EventStatisticRepositoryInterface     $eventStatisticsRepository,
-        private readonly HtmlPurifierService                   $purifier,
-        private readonly ImageRepositoryInterface              $imageRepository,
-        private readonly Repository                            $config,
-        private readonly FilesystemManager                     $filesystemManager,
-        private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
-        private readonly CheckInListRepositoryInterface        $checkInListRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly HtmlPurifierService $purifier,
+        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly Repository $config,
+        private readonly FilesystemManager $filesystemManager,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function createEvent(
-        EventDomainObject         $eventData,
-        ?string                   $startDate = null,
-        ?string                   $endDate = null,
+        EventDomainObject $eventData,
+        ?string $startDate = null,
+        ?string $endDate = null,
         ?EventSettingDomainObject $eventSettings = null,
-    ): EventDomainObject
-    {
+    ): EventDomainObject {
         return $this->databaseManager->transaction(function () use ($eventData, $startDate, $endDate, $eventSettings) {
             $organizer = $this->getOrganizer(
                 organizerId: $eventData->getOrganizerId(),
@@ -166,19 +164,16 @@ class CreateEventService
 
     /**
      * If a default cover image exists for the event category, it will be created.
-     *
-     * @param EventDomainObject $event
-     * @return bool
      */
     private function createEventCover(EventDomainObject $event): bool
     {
         $disk = $this->config->get('filesystems.public');
         $defaultCoversPath = $this->config->get('app.event_categories_cover_images_path');
 
-        $imageFilename = $event->getCategory() . '.jpg';
-        $imagePath = $defaultCoversPath . '/' . $imageFilename;
+        $imageFilename = $event->getCategory().'.jpg';
+        $imagePath = $defaultCoversPath.'/'.$imageFilename;
 
-        if (!$this->filesystemManager->disk($disk)->exists($imagePath)) {
+        if (! $this->filesystemManager->disk($disk)->exists($imagePath)) {
             return false;
         }
 
@@ -199,11 +194,10 @@ class CreateEventService
 
     private function createEventSettings(
         ?EventSettingDomainObject $eventSettings,
-        EventDomainObject         $event,
-        OrganizerDomainObject     $organizer,
-        bool                      $eventCoverCreated = false
-    ): void
-    {
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
+        bool $eventCoverCreated = false
+    ): void {
         if ($eventSettings !== null) {
             $eventSettings->setEventId($event->getId());
             $eventSettingsArray = $eventSettings->toArray();
@@ -258,7 +252,12 @@ class CreateEventService
             'organization_address' => null,
             'invoice_tax_details' => null,
 
-            'attendee_details_collection_method' => $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+            // Recurring events default to per-order collection — each order typically
+            // covers multiple sessions, and collecting per-attendee details every time
+            // is high friction. Single events inherit the organizer-level default.
+            'attendee_details_collection_method' => $event->getType() === EventType::RECURRING->name
+                ? AttendeeDetailsCollectionMethod::PER_ORDER->value
+                : $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
             'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit() ?? false,

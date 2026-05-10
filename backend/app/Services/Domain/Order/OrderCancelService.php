@@ -135,15 +135,19 @@ class OrderCancelService
             'order_id' => $order->getId(),
         ]);
 
-        $productIds = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductId())
-            ->unique();
+        $capacityScopes = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => [
+                'product_id' => $attendee->getProductId(),
+                'event_occurrence_id' => $attendee->getEventOccurrenceId(),
+            ])
+            ->unique(fn (array $scope) => $scope['product_id'].'-'.$scope['event_occurrence_id']);
 
-        foreach ($productIds as $productId) {
+        foreach ($capacityScopes as $scope) {
             event(new CapacityChangedEvent(
                 eventId: $order->getEventId(),
                 direction: CapacityChangeDirection::INCREASED,
-                productId: $productId,
+                productId: $scope['product_id'],
+                eventOccurrenceId: $scope['event_occurrence_id'],
             ));
         }
     }

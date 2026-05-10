@@ -45,7 +45,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
     const nav = useNavigate();
     const errorHandler = useFormErrorResponseHandler();
 
-    const duplicateOptions: { key: string; label: string; description?: string }[] = [
+    const duplicateOptions: { key: keyof typeof form.values; label: string; description?: string }[] = [
         { key: 'duplicate_products', label: t`Products` },
         { key: 'duplicate_questions', label: t`Questions` },
         { key: 'duplicate_settings', label: t`Settings` },
@@ -56,7 +56,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
         { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
         { key: 'duplicate_webhooks', label: t`Webhooks` },
         { key: 'duplicate_affiliates', label: t`Affiliates` },
-        ...(isRecurring ? [{ key: 'duplicate_occurrences', label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
+        ...(isRecurring ? [{ key: 'duplicate_occurrences' as const, label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
     ];
 
     const handleSelectAll = () => {

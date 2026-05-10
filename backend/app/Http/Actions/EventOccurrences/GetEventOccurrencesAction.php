@@ -15,17 +15,20 @@ class GetEventOccurrencesAction extends BaseAction
 {
     public function __construct(
         private readonly GetEventOccurrencesHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, Request $request): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
+        // include_stats=false skips the per-row statistics relation for selector
+        // use cases (occurrence dropdowns) where the stats payload is wasted.
+        $includeStats = $request->boolean('include_stats', true);
+
         $occurrences = $this->handler->handle(
             $eventId,
             QueryParamsDTO::fromArray($request->query->all()),
+            $includeStats,
         );
 
         return $this->filterableResourceResponse(

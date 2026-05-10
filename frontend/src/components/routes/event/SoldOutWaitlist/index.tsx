@@ -19,7 +19,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {OfferWaitlistModal} from "../../../modals/OfferWaitlistModal";
 import {IconSend} from "@tabler/icons-react";
 import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
-import {prettyDate} from "../../../../utilites/dates.ts";
+import {OccurrenceSelect} from "../../../common/OccurrenceSelect";
 import {SortSelector} from "../../../common/SortSelector";
 
 export const SoldOutWaitlist = () => {
@@ -29,17 +29,18 @@ export const SoldOutWaitlist = () => {
     const entriesQuery = useGetEventWaitlistEntries(eventId, searchParams as QueryFilters);
     const entries = entriesQuery?.data?.data;
     const pagination = entriesQuery?.data?.meta;
-    const {data: stats} = useGetWaitlistStats(eventId);
+    const selectedOccurrenceId = (searchParams.filterFields?.event_occurrence_id as {value?: string})?.value || null;
+    const {data: stats} = useGetWaitlistStats(eventId, selectedOccurrenceId);
     const {data: eventSettings} = useGetEventSettings(eventId);
     const [offerModalOpen, {open: openOfferModal, close: closeOfferModal}] = useDisclosure(false);
     const isRecurring = event?.type === EventType.RECURRING;
-    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
-    const occurrenceOptions = (occurrencesData?.data || [])
-        .filter(occ => occ.status !== 'CANCELLED')
-        .map(occ => ({
-            label: prettyDate(occ.start_date, event?.timezone || 'UTC') + (occ.label ? ` (${occ.label})` : ''),
-            value: String(occ.id),
-        }));
+    const {data: occurrencesData} = useGetEventOccurrences(
+        eventId,
+        {pageNumber: 1, perPage: 1200} as QueryFilters,
+        true,
+        {includeStats: false},
+    );
+    const occurrences = occurrencesData?.data || [];
 
     const handleOccurrenceFilter = (value: string | null) => {
         setSearchParams({
@@ -94,16 +95,14 @@ export const SoldOutWaitlist = () => {
                                 }}
                             />
                         )}
-                        {isRecurring && occurrenceOptions.length > 0 && (
-                            <Select
+                        {isRecurring && occurrences.length > 0 && (
+                            <OccurrenceSelect
+                                occurrences={occurrences}
+                                timezone={event?.timezone || 'UTC'}
+                                value={selectedOccurrenceId}
+                                onChange={handleOccurrenceFilter}
                                 placeholder={t`All Dates`}
                                 clearable
-                                size="sm"
-                                mb={0}
-                                style={{minWidth: 160}}
-                                value={(searchParams.filterFields?.event_occurrence_id as {value?: string})?.value || null}
-                                onChange={handleOccurrenceFilter}
-                                data={occurrenceOptions}
                             />
                         )}
                         <Select
@@ -142,6 +141,7 @@ export const SoldOutWaitlist = () => {
                 <WaitlistTable
                     eventId={eventId}
                     entries={entries}
+                    event={event}
                 />
             )}
 
@@ -154,7 +154,13 @@ export const SoldOutWaitlist = () => {
             )}
 
             {(offerModalOpen && eventId) && (
-                <OfferWaitlistModal onClose={closeOfferModal} eventId={eventId} eventSettings={eventSettings} stats={stats}/>
+                <OfferWaitlistModal
+                    onClose={closeOfferModal}
+                    eventId={eventId}
+                    eventSettings={eventSettings}
+                    stats={stats}
+                    eventOccurrenceId={selectedOccurrenceId}
+                />
             )}
         </PageBody>
     );

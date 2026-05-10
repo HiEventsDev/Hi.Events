@@ -2,7 +2,9 @@
 
 namespace HiEvents\Mail\Waitlist;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -16,14 +18,14 @@ use Illuminate\Mail\Mailables\Envelope;
 class WaitlistConfirmationMail extends BaseMail
 {
     public function __construct(
-        private readonly WaitlistEntryDomainObject  $entry,
-        private readonly EventDomainObject          $event,
-        private readonly ?ProductDomainObject        $product,
-        private readonly ?ProductPriceDomainObject   $productPrice,
-        private readonly OrganizerDomainObject      $organizer,
-        private readonly EventSettingDomainObject   $eventSettings,
-    )
-    {
+        private readonly WaitlistEntryDomainObject $entry,
+        private readonly EventDomainObject $event,
+        private readonly ?ProductDomainObject $product,
+        private readonly ?ProductPriceDomainObject $productPrice,
+        private readonly OrganizerDomainObject $organizer,
+        private readonly EventSettingDomainObject $eventSettings,
+        private readonly ?EventOccurrenceDomainObject $occurrence = null,
+    ) {
         parent::__construct();
     }
 
@@ -43,6 +45,7 @@ class WaitlistConfirmationMail extends BaseMail
                 'entry' => $this->entry,
                 'event' => $this->event,
                 'productName' => $this->buildProductName(),
+                'occurrenceDateFormatted' => $this->formatOccurrenceDate(),
                 'organizer' => $this->organizer,
                 'eventSettings' => $this->eventSettings,
                 'eventUrl' => sprintf(
@@ -54,16 +57,27 @@ class WaitlistConfirmationMail extends BaseMail
         );
     }
 
+    private function formatOccurrenceDate(): ?string
+    {
+        if ($this->occurrence === null) {
+            return null;
+        }
+
+        return Carbon::parse($this->occurrence->getStartDate(), 'UTC')
+            ->setTimezone($this->event->getTimezone())
+            ->isoFormat('dddd, MMMM D · h:mm A');
+    }
+
     private function buildProductName(): ?string
     {
-        if (!$this->product) {
+        if (! $this->product) {
             return null;
         }
 
         $name = $this->product->getTitle();
 
         if ($this->productPrice?->getLabel()) {
-            $name .= ' - ' . $this->productPrice->getLabel();
+            $name .= ' - '.$this->productPrice->getLabel();
         }
 
         return $name;

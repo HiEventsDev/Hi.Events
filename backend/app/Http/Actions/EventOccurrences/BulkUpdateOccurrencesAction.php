@@ -15,10 +15,8 @@ class BulkUpdateOccurrencesAction extends BaseAction
 {
     public function __construct(
         private readonly BulkUpdateOccurrencesHandler $handler,
-        private readonly EventRepositoryInterface     $eventRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     public function __invoke(int $eventId, BulkUpdateOccurrencesRequest $request): JsonResponse
     {
@@ -26,7 +24,7 @@ class BulkUpdateOccurrencesAction extends BaseAction
 
         $event = $this->eventRepository->findById($eventId);
 
-        $updatedCount = $this->handler->handle(
+        $result = $this->handler->handle(
             new BulkUpdateOccurrencesDTO(
                 event_id: $eventId,
                 action: BulkOccurrenceAction::from($request->validated('action')),
@@ -43,6 +41,7 @@ class BulkUpdateOccurrencesAction extends BaseAction
                 skip_overridden: (bool) $request->validated('skip_overridden', true),
                 refund_orders: (bool) $request->validated('refund_orders', false),
                 occurrence_ids: $request->validated('occurrence_ids'),
+                apply_to_all: (bool) $request->validated('apply_to_all', false),
                 label: $request->validated('label'),
                 clear_label: (bool) $request->validated('clear_label', false),
                 duration_minutes: $request->validated('duration_minutes') !== null
@@ -52,7 +51,8 @@ class BulkUpdateOccurrencesAction extends BaseAction
         );
 
         return $this->jsonResponse([
-            'updated_count' => $updatedCount,
+            'updated_count' => $result->updated_count,
+            'updated_ids' => $result->updated_ids,
         ]);
     }
 }
