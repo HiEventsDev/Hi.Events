@@ -1,7 +1,6 @@
 import {useNavigate, useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {Checkbox, Skeleton, Text} from "@mantine/core";
-import {IconChevronLeft} from "@tabler/icons-react";
 import {useCallback, useMemo, useRef, useState} from "react";
 import {AreaChart} from "@mantine/charts";
 import {useDisclosure} from "@mantine/hooks";
@@ -16,13 +15,14 @@ import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {ShareModal} from "../../../modals/ShareModal";
 import {CreateCheckInListModal} from "../../../modals/CreateCheckInListModal";
 import {OccurrenceActionBar, OccurrenceMenuActions, statusLabel} from "../OccurrencesTab/OccurrenceMenu";
+import {launchCheckInForOccurrence} from "../OccurrencesTab/checkInLaunch";
 import {useGetEventOccurrence} from "../../../../queries/useGetEventOccurrence.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
 import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../../mutations/useDeleteEventOccurrence.ts";
-import {useUpdateEventOccurrence} from "../../../../mutations/useUpdateEventOccurrence.ts";
+import {useReactivateOccurrence} from "../../../../mutations/useReactivateOccurrence.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {EventOccurrence, MessageType} from "../../../../types.ts";
@@ -48,18 +48,15 @@ const OccurrenceDetail = () => {
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
-    const updateMutation = useUpdateEventOccurrence();
+    const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
 
     const handleCheckIn = useCallback((occId: number) => {
-        const list = checkInLists?.find(l => l.event_occurrence_id === occId)
-            || checkInLists?.find(l => !l.event_occurrence_id);
-
-        if (list) {
-            window.open(`/check-in/${list.short_id}`, '_blank');
-        } else {
-            setCreateCheckInForOccurrenceId(occId);
-        }
+        launchCheckInForOccurrence({
+            occurrenceId: occId,
+            checkInLists,
+            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
+        });
     }, [checkInLists]);
 
     const handleCancel = useCallback((occId: number) => {
@@ -110,10 +107,9 @@ const OccurrenceDetail = () => {
 
     const handleReactivate = useCallback((occ: EventOccurrence) => {
         confirmationDialog(t`Reactivate this date? It will be reopened for future sales.`, () => {
-            updateMutation.mutate({
+            reactivateMutation.mutate({
                 eventId,
                 occurrenceId: occ.id,
-                data: {start_date: occ.start_date, status: 'ACTIVE'},
             }, {
                 onSuccess: () => showSuccess(t`Date reactivated`),
                 onError: (error: any) => showError(error?.response?.data?.message || t`Failed to reactivate date`),
@@ -152,14 +148,6 @@ const OccurrenceDetail = () => {
 
     return (
         <PageBody>
-            <div
-                className={classes.backLink}
-                onClick={() => navigate(`/manage/event/${eventId}/occurrences`)}
-            >
-                <IconChevronLeft size={14}/>
-                {t`Back to Occurrence Schedule`}
-            </div>
-
             <div className={classes.header}>
                 <PageTitle style={{marginBottom: 0}}>
                     {startDate}
