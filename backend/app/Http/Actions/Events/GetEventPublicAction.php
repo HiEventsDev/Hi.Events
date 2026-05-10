@@ -30,6 +30,7 @@ class GetEventPublicAction extends BaseAction
             'ipAddress' => $this->getClientIp($request),
             'promoCode' => strtolower($request->string('promo_code')),
             'isAuthenticated' => $this->isUserAuthenticated(),
+            'eventOccurrenceId' => $request->integer('event_occurrence_id') ?: null,
         ]));
 
         if (!$this->canUserViewEvent($event)) {

@@ -53,7 +53,7 @@ class OrderItemProcessingService
         OrderDomainObject      $order,
         Collection             $productsOrderDetails,
         EventDomainObject      $event,
-        ?PromoCodeDomainObject $promoCode
+        ?PromoCodeDomainObject $promoCode,
     ): Collection
     {
         $this->loadPlatformFeeConfiguration($event->getId());
@@ -75,11 +75,13 @@ class OrderItemProcessingService
                 );
             }
 
-            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($promoCode, $order, $orderItems, $product, $event) {
+            $eventOccurrenceId = $productOrderDetail->event_occurrence_id;
+
+            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($promoCode, $order, $orderItems, $product, $event, $eventOccurrenceId) {
                 if ($productPrice->quantity === 0) {
                     return;
                 }
-                $orderItemData = $this->calculateOrderItemData($product, $productPrice, $order, $promoCode, $event->getCurrency());
+                $orderItemData = $this->calculateOrderItemData($product, $productPrice, $order, $promoCode, $event->getCurrency(), $eventOccurrenceId);
                 $orderItems->push($this->orderRepository->addOrderItem($orderItemData));
             });
         }
@@ -110,10 +112,11 @@ class OrderItemProcessingService
         OrderProductPriceDTO   $productPriceDetails,
         OrderDomainObject      $order,
         ?PromoCodeDomainObject $promoCode,
-        string                 $currency
+        string                 $currency,
+        ?int                   $eventOccurrenceId = null,
     ): array
     {
-        $prices = $this->productPriceService->getPrice($product, $productPriceDetails, $promoCode);
+        $prices = $this->productPriceService->getPrice($product, $productPriceDetails, $promoCode, $eventOccurrenceId);
         $priceWithDiscount = $prices->price;
         $priceBeforeDiscount = $prices->price_before_discount;
 
@@ -156,6 +159,7 @@ class OrderItemProcessingService
             'total_service_fee' => $totalFee,
             'total_gross' => $totalGross,
             'taxes_and_fees_rollup' => $rollUp,
+            'event_occurrence_id' => $eventOccurrenceId,
         ];
     }
 

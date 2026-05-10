@@ -18,6 +18,7 @@ import {affiliateClient} from "../../../../api/affiliate.client.ts";
 import {downloadBinary} from "../../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../../utilites/withLoadingNotification.tsx";
 import {useState} from "react";
+import {SortSelector} from "../../../common/SortSelector";
 
 const Affiliates = () => {
     const {eventId} = useParams();
@@ -63,14 +64,26 @@ const Affiliates = () => {
                 {t`Affiliates`}
             </PageTitle>
 
-            <ToolBar searchComponent={() => (
-                <SearchBarWrapper
-                    placeholder={t`Search affiliates...`}
-                    setSearchParams={setSearchParams}
-                    searchParams={searchParams}
-                    pagination={pagination}
-                />
-            )}>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search affiliates...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+                filterComponent={pagination?.allowed_sorts ? (
+                    <SortSelector
+                        selected={searchParams.sortBy && searchParams.sortDirection
+                            ? searchParams.sortBy + ':' + searchParams.sortDirection
+                            : pagination.default_sort + ':' + pagination.default_sort_direction}
+                        options={pagination.allowed_sorts}
+                        onSortSelect={(key, sortDirection) => {
+                            setSearchParams({sortBy: key, sortDirection});
+                        }}
+                    />
+                ) : undefined}
+            >
                 <Button
                     onClick={() => handleExport(eventId)}
                     rightSection={<IconDownload size={14}/>}

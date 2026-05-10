@@ -31,7 +31,14 @@ const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
-    const {data: publicEvent} = useGetEventPublic(eventId, !!eventId);
+    // Derive a single occurrence id from order items only when they all agree —
+    // a multi-occurrence order falls back to the event-wide view so the cache
+    // entry matches what would be loaded without occurrence scoping.
+    const orderOccurrenceIds = Array.from(new Set(
+        (order?.order_items ?? []).map(item => item.event_occurrence_id).filter((id): id is number => id != null)
+    ));
+    const orderOccurrenceId = orderOccurrenceIds.length === 1 ? orderOccurrenceIds[0] : null;
+    const {data: publicEvent} = useGetEventPublic(eventId, !!eventId, false, null, orderOccurrenceId);
     const navigate = useNavigate();
     const location = useLocation();
     const orderIsCompleted = order?.status === 'COMPLETED';

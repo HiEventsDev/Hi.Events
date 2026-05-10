@@ -1,6 +1,6 @@
 import {UseFormReturnType} from "@mantine/form";
 import {Alert, Button, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
+import {IconAlertCircle, IconBulb, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
 import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router";
@@ -10,6 +10,7 @@ import {InputGroup} from "../../common/InputGroup";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
+import {Callout} from "../../common/Callout";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
@@ -63,9 +64,13 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                 rightSectionWidth={'auto'}
             />
 
-            <Alert variant={'light'} mt={20} mb={20} icon={<IconAlertCircle size="1rem"/>} title={t`TIP`}>
+            <Callout
+                icon={<IconBulb size={18} stroke={2}/>}
+                variant="info"
+                title={t`Quick Tip`}
+            >
                 {t`A promo code with no discount can be used to reveal hidden products.`}
-            </Alert>
+            </Callout>
 
             <InputGroup>
                 <Select

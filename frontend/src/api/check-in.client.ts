@@ -16,8 +16,9 @@ export const publicCheckInClient = {
         const response = await publicApi.get<GenericDataResponse<CheckInList>>(`/check-in-lists/${checkInListShortId}`);
         return response.data;
     },
-    getCheckInListStats: async (checkInListShortId: IdParam) => {
-        const response = await publicApi.get<GenericDataResponse<CheckInListStats>>(`/check-in-lists/${checkInListShortId}/stats`);
+    getCheckInListStats: async (checkInListShortId: IdParam, eventOccurrenceId?: number | null) => {
+        const qs = eventOccurrenceId ? `?event_occurrence_id=${eventOccurrenceId}` : '';
+        const response = await publicApi.get<GenericDataResponse<CheckInListStats>>(`/check-in-lists/${checkInListShortId}/stats${qs}`);
         return response.data;
     },
     getCheckInListAttendees: async (checkInListShortId: IdParam, pagination: QueryFilters) => {

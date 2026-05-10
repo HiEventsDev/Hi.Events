@@ -18,7 +18,7 @@ abstract class AbstractReportService
     {
     }
 
-    public function generateReport(int $eventId, ?Carbon $startDate = null, ?Carbon $endDate = null): Collection
+    public function generateReport(int $eventId, ?Carbon $startDate = null, ?Carbon $endDate = null, ?int $occurrenceId = null): Collection
     {
         $event = $this->eventRepository->findById($eventId);
         $timezone = $event->getTimezone();
@@ -31,24 +31,34 @@ abstract class AbstractReportService
             ? $startDate->copy()->setTimezone($timezone)->startOfDay()
             : $endDate->copy()->subDays(30)->startOfDay();
 
+        $bindings = ['event_id' => $eventId];
+        if ($occurrenceId !== null) {
+            $bindings['occurrence_id'] = $occurrenceId;
+        }
+
+        $bindings = array_merge($bindings, $this->getAdditionalBindings($startDate, $endDate));
+
         $reportResults = $this->cache->remember(
-            key: $this->getCacheKey($eventId, $startDate, $endDate),
+            key: $this->getCacheKey($eventId, $startDate, $endDate, $occurrenceId),
             ttl: Carbon::now()->addSeconds(20),
             callback: fn() => $this->queryBuilder->select(
-                $this->getSqlQuery($startDate, $endDate),
-                [
-                    'event_id' => $eventId,
-                ]
+                $this->getSqlQuery($startDate, $endDate, $occurrenceId),
+                $bindings,
             )
         );
 
         return collect($reportResults);
     }
 
-    abstract protected function getSqlQuery(Carbon $startDate, Carbon $endDate): string;
+    abstract protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string;
 
-    protected function getCacheKey(int $eventId, ?Carbon $startDate, ?Carbon $endDate): string
+    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate): array
     {
-        return static::class . "$eventId.{$startDate?->toDateString()}.{$endDate?->toDateString()}";
+        return [];
+    }
+
+    protected function getCacheKey(int $eventId, ?Carbon $startDate, ?Carbon $endDate, ?int $occurrenceId = null): string
+    {
+        return static::class . "$eventId.{$startDate?->toDateString()}.{$endDate?->toDateString()}.{$occurrenceId}";
     }
 }

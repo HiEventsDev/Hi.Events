@@ -132,24 +132,34 @@ class CreateOrderHandler
      */
     private function validateProductAvailability(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
-        $availability = $this->availableProductQuantitiesFetchService
-            ->getAvailableProductQuantities($eventId, ignoreCache: true);
+        $productsByOccurrence = $createOrderPublicDTO->products->groupBy(
+            fn(DTO\ProductOrderDetailsDTO $p) => $p->event_occurrence_id
+        );
 
-        foreach ($createOrderPublicDTO->products as $product) {
-            foreach ($product->quantities as $priceQuantity) {
-                if ($priceQuantity->quantity <= 0) {
-                    continue;
-                }
+        foreach ($productsByOccurrence as $occurrenceId => $products) {
+            $availability = $this->availableProductQuantitiesFetchService
+                ->getAvailableProductQuantities(
+                    $eventId,
+                    ignoreCache: true,
+                    eventOccurrenceId: $occurrenceId ?: null,
+                );
 
-                $available = $availability->productQuantities
-                    ->where('product_id', $product->product_id)
-                    ->where('price_id', $priceQuantity->price_id)
-                    ->first()?->quantity_available ?? 0;
+            foreach ($products as $product) {
+                foreach ($product->quantities as $priceQuantity) {
+                    if ($priceQuantity->quantity <= 0) {
+                        continue;
+                    }
 
-                if ($priceQuantity->quantity > $available) {
-                    throw ValidationException::withMessages([
-                        'products' => __('Not enough products available. Please try again.'),
-                    ]);
+                    $available = $availability->productQuantities
+                        ->where('product_id', $product->product_id)
+                        ->where('price_id', $priceQuantity->price_id)
+                        ->first()?->quantity_available ?? 0;
+
+                    if ($priceQuantity->quantity > $available) {
+                        throw ValidationException::withMessages([
+                            'products' => __('Not enough products available. Please try again.'),
+                        ]);
+                    }
                 }
             }
         }

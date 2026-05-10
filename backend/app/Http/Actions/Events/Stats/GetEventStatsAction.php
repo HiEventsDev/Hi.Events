@@ -23,10 +23,12 @@ class GetEventStatsAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $dateRangePreset = $request->query('date_range', 'month');
+        $occurrenceIdQuery = $request->query('occurrence_id');
 
         $stats = $this->eventStatsHandler->handle(EventStatsRequestDTO::fromArray([
             'event_id' => $eventId,
             'date_range_preset' => $dateRangePreset,
+            'occurrence_id' => $occurrenceIdQuery !== null ? (int)$occurrenceIdQuery : null,
         ]));
 
         return $this->resourceResponse(JsonResource::class, $stats);

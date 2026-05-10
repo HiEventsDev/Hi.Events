@@ -59,6 +59,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Product ID'),
             __('Product Name'),
             __('Event ID'),
+            __('Occurrence Date'),
             __('Public ID'),
             __('Short ID'),
             __('Created Date'),
@@ -119,6 +120,10 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
                 ->join(', ')
             : '';
 
+        $occurrenceDate = $attendee->getEventOccurrence()?->getStartDate()
+            ? Carbon::parse($attendee->getEventOccurrence()->getStartDate())->format('Y-m-d H:i:s')
+            : '';
+
         return array_merge([
             $attendee->getId(),
             $attendee->getFirstName(),
@@ -129,6 +134,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $attendee->getProductId(),
             $ticketName,
             $attendee->getEventId(),
+            $occurrenceDate,
             $attendee->getPublicId(),
             $attendee->getShortId(),
             Carbon::parse($attendee->getCreatedAt())->format('Y-m-d H:i:s'),

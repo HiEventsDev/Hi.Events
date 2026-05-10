@@ -1,0 +1,100 @@
+.container {
+  padding: 0.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.occurrenceInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.dateTime {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.titleSuffix {
+  font-size: 0.875rem;
+  color: var(--mantine-color-dimmed);
+  margin-top: 2px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-light);
+    color: var(--mantine-color-green-filled);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-light);
+    color: var(--mantine-color-red-filled);
+  }
+
+  &[data-status="SOLD_OUT"] {
+    background: var(--mantine-color-orange-light);
+    color: var(--mantine-color-orange-filled);
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.statCard {
+  background: var(--mantine-color-gray-0);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--mantine-color-dimmed);
+  margin-top: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.sectionLink {
+  display: block;
+  text-align: center;
+  padding: 8px 0 4px;
+  font-size: 0.8rem;
+}
+
+.emptyText {
+  text-align: center;
+  padding: 1.5rem 0;
+}

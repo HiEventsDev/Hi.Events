@@ -1,6 +1,12 @@
 import {Event} from "../types.ts";
 import {formatAddress} from "./addressUtilities.ts";
 
+export interface OccurrenceDateOverride {
+    start_date: string;
+    end_date?: string;
+    label?: string;
+}
+
 const getEventLocation = (event: Event): string => {
     if (event.settings?.location_details) {
         const details = event.settings.location_details;
@@ -27,16 +33,22 @@ const stripHtml = (html: string): string => {
     return tmp.textContent || tmp.innerText || '';
 };
 
-export const createICSContent = (event: Event): string => {
+export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverride): string => {
+    const startDate = occurrence?.start_date || event.start_date;
+    const endDate = occurrence?.end_date || event.end_date || startDate;
+    const title = occurrence?.label
+        ? `${event.title} - ${occurrence.label}`
+        : event.title;
+
     return [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
         'PRODID:-//Hi.Events//NONSGML Event Calendar//EN',
         'CALSCALE:GREGORIAN',
         'BEGIN:VEVENT',
-        `DTSTART:${formatICSDate(event.start_date)}`,
-        `DTEND:${formatICSDate(event.end_date || event.start_date)}`,
-        `SUMMARY:${event.title.replace(/\n/g, '\\n')}`,
+        `DTSTART:${formatICSDate(startDate)}`,
+        `DTEND:${formatICSDate(endDate)}`,
+        `SUMMARY:${title.replace(/\n/g, '\\n')}`,
         `DESCRIPTION:${stripHtml(event.description_preview || '').replace(/\n/g, '\\n')}`,
         `LOCATION:${getEventLocation(event)}`,
         `DTSTAMP:${formatICSDate(new Date().toISOString())}`,
@@ -46,8 +58,8 @@ export const createICSContent = (event: Event): string => {
     ].join('\r\n');
 };
 
-export const downloadICSFile = (event: Event): void => {
-    const content = createICSContent(event);
+export const downloadICSFile = (event: Event, occurrence?: OccurrenceDateOverride): void => {
+    const content = createICSContent(event, occurrence);
     const blob = new Blob([content], {type: 'text/calendar;charset=utf-8'});
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
@@ -57,17 +69,23 @@ export const downloadICSFile = (event: Event): void => {
     document.body.removeChild(link);
 };
 
-export const createGoogleCalendarUrl = (event: Event): string => {
+export const createGoogleCalendarUrl = (event: Event, occurrence?: OccurrenceDateOverride): string => {
     const formatGoogleDate = (date: string): string => {
         return new Date(date).toISOString().replace(/-|:|\.\d{3}/g, '');
     };
 
+    const startDate = occurrence?.start_date || event.start_date;
+    const endDate = occurrence?.end_date || event.end_date || startDate;
+    const title = occurrence?.label
+        ? `${event.title} - ${occurrence.label}`
+        : event.title;
+
     const params = new URLSearchParams({
         action: 'TEMPLATE',
-        text: event.title,
+        text: title,
         details: event.description_preview || '',
         location: getEventLocation(event),
-        dates: `${formatGoogleDate(event.start_date)}/${formatGoogleDate(event.end_date || event.start_date)}`
+        dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`
     });
 
     return `https://calendar.google.com/calendar/render?${params.toString()}`;

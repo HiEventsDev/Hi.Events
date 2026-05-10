@@ -1,5 +1,5 @@
 import {ActionIcon, Tooltip} from '@mantine/core';
-import {Event, IdParam, Product} from "../../../types.ts";
+import {Event, EventType, IdParam, Product} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {NavLink, useNavigate} from "react-router";
 import {
@@ -7,6 +7,7 @@ import {
     IconCopy,
     IconDotsVertical,
     IconEye,
+    IconRepeat,
     IconSettings,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro"
@@ -151,10 +152,6 @@ export function EventCard({event}: EventCardProps) {
         },
     ];
 
-    const monthShort = formatDateWithLocale(event.start_date, 'monthShort', event.timezone);
-    const dayOfMonth = formatDateWithLocale(event.start_date, 'dayOfMonth', event.timezone);
-    const shortDateTime = formatDateWithLocale(event.start_date, 'shortDateTime', event.timezone);
-    const relativeDateStr = relativeDate(event.start_date);
     const locationText = getLocationText();
 
     const revenue = event?.statistics?.sales_total_gross || 0;
@@ -165,6 +162,13 @@ export function EventCard({event}: EventCardProps) {
 
     const isEnded = event.lifecycle_status === 'ENDED';
     const isDraft = event.status === 'DRAFT';
+    const isRecurring = event.type === EventType.RECURRING;
+
+    const displayDate = (isRecurring && event.next_occurrence_start_date) || event.start_date;
+    const monthShort = formatDateWithLocale(displayDate, 'monthShort', event.timezone);
+    const dayOfMonth = formatDateWithLocale(displayDate, 'dayOfMonth', event.timezone);
+    const shortDateTime = formatDateWithLocale(displayDate, 'shortDateTime', event.timezone);
+    const relativeDateStr = relativeDate(displayDate);
 
     return (
         <>
@@ -189,13 +193,27 @@ export function EventCard({event}: EventCardProps) {
                             <span className={classes.dateDay}>{dayOfMonth}</span>
                             <span className={classes.dateMonth}>{monthShort}</span>
                         </div>
+
+                        {isRecurring && (
+                            <div className={classes.recurringBadge}>
+                                <IconRepeat size={12}/>
+                            </div>
+                        )}
                     </div>
 
                     <div className={classes.content}>
                         <div className={classes.contentMain}>
                             <h3 className={classes.title}>{event.title}</h3>
                             <div className={classes.meta}>
-                                <span className={classes.eventDate}>{shortDateTime}</span>
+                                <span className={classes.eventDate}>
+                                    {shortDateTime}
+                                    {isRecurring && (
+                                        <span className={classes.recurringLabel}>
+                                            <IconRepeat size={11}/>
+                                            {t`Recurring`}
+                                        </span>
+                                    )}
+                                </span>
                                 <span className={classes.relativeDate}>({relativeDateStr})</span>
                                 {locationText && (
                                     <>

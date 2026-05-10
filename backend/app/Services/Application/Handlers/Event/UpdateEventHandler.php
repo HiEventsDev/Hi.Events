@@ -2,12 +2,14 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
@@ -21,11 +23,12 @@ use Throwable;
 readonly class UpdateEventHandler
 {
     public function __construct(
-        private EventRepositoryInterface $eventRepository,
-        private Dispatcher               $dispatcher,
-        private DatabaseManager          $databaseManager,
-        private OrderRepositoryInterface $orderRepository,
-        private HtmlPurifierService      $purifier,
+        private EventRepositoryInterface             $eventRepository,
+        private Dispatcher                           $dispatcher,
+        private DatabaseManager                      $databaseManager,
+        private OrderRepositoryInterface             $orderRepository,
+        private HtmlPurifierService                  $purifier,
+        private EventOccurrenceRepositoryInterface   $occurrenceRepository,
     )
     {
     }
@@ -73,10 +76,6 @@ readonly class UpdateEventHandler
             attributes: [
                 'title' => $eventData->title,
                 'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
-                'start_date' => DateHelper::convertToUTC($eventData->start_date, $eventData->timezone),
-                'end_date' => $eventData->end_date
-                    ? DateHelper::convertToUTC($eventData->end_date, $eventData->timezone)
-                    : null,
                 'description' => $this->purifier->purify($eventData->description),
                 'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
                 'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
@@ -86,6 +85,41 @@ readonly class UpdateEventHandler
             where: [
                 'id' => $eventData->id,
                 'account_id' => $eventData->account_id,
+            ],
+        );
+
+        $this->updateSingleOccurrenceDates($eventData, $existingEvent);
+    }
+
+    private function updateSingleOccurrenceDates(UpdateEventDTO $eventData, EventDomainObject $existingEvent): void
+    {
+        if ($existingEvent->getType() !== EventType::SINGLE->name) {
+            return;
+        }
+
+        if ($eventData->start_date === null) {
+            return;
+        }
+
+        $timezone = $eventData->timezone ?? $existingEvent->getTimezone();
+
+        $occurrence = $this->occurrenceRepository->findFirstWhere([
+            'event_id' => $eventData->id,
+        ]);
+
+        if ($occurrence === null) {
+            return;
+        }
+
+        $this->occurrenceRepository->updateWhere(
+            attributes: [
+                'start_date' => DateHelper::convertToUTC($eventData->start_date, $timezone),
+                'end_date' => $eventData->end_date
+                    ? DateHelper::convertToUTC($eventData->end_date, $timezone)
+                    : null,
+            ],
+            where: [
+                'id' => $occurrence->getId(),
             ],
         );
     }

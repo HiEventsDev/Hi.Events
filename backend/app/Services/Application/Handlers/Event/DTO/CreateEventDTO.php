@@ -7,6 +7,7 @@ use HiEvents\DataTransferObjects\Attributes\CollectionOf;
 use HiEvents\DataTransferObjects\AttributesDTO;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\EventCategory;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
 use Illuminate\Support\Collection;
@@ -29,6 +30,7 @@ class CreateEventDTO extends BaseDTO
         public readonly ?EventCategory $category = null,
         public readonly ?AddressDTO    $location_details = null,
         public readonly ?string        $status = EventStatus::DRAFT->name,
+        public readonly ?EventType     $type = EventType::SINGLE,
 
         public ?UpdateEventSettingsDTO $event_settings = null
     )

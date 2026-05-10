@@ -8,7 +8,19 @@ import {Loader} from "@mantine/core";
 const ProductWidget = () => {
     const {eventId} = useParams();
     const location = useLocation();
-    const eventQuery = useGetEventPublic(eventId);
+
+    // Forward `?occurrence_id=` from the embed URL so the public payload
+    // filters products by that occurrence and the storefront preselects it.
+    // Without this, embed share links to a specific date show ambiguous
+    // pickers and recurring products get the event-wide visibility set.
+    const eventOccurrenceId = useMemo(() => {
+        const raw = new URLSearchParams(location.search).get('occurrence_id');
+        if (raw === null) return null;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    }, [location.search]);
+
+    const eventQuery = useGetEventPublic(eventId, true, false, null, eventOccurrenceId);
 
     const settings = useMemo(() => {
         const searchParams = new URLSearchParams(location.search);

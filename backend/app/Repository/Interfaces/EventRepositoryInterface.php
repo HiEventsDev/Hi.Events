@@ -29,4 +29,6 @@ interface EventRepositoryInterface extends RepositoryInterface
     public function getSitemapEvents(int $page, int $perPage): LengthAwarePaginator;
 
     public function getSitemapEventCount(): int;
+
+    public function findByIdLocked(int $id): EventDomainObject;
 }

@@ -119,6 +119,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $entry->shouldReceive('getOrderId')->andReturn($orderId);
         $entry->shouldReceive('getEventId')->andReturn(10);
         $entry->shouldReceive('getProductPriceId')->andReturn(20);
+        $entry->shouldReceive('getEventOccurrenceId')->andReturn(30);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -161,7 +162,9 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->assertEquals(WaitlistEntryStatus::CANCELLED->name, $result->getStatus());
 
         Event::assertDispatched(CapacityChangedEvent::class, function ($event) {
-            return $event->eventId === 10 && $event->productId === 99;
+            return $event->eventId === 10
+                && $event->productId === 99
+                && $event->eventOccurrenceId === 30;
         });
     }
 

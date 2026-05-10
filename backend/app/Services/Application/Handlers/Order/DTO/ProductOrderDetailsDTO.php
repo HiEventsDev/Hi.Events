@@ -10,9 +10,10 @@ use Illuminate\Support\Collection;
 class ProductOrderDetailsDTO extends BaseDTO
 {
     public function __construct(
-        public readonly int $product_id,
+        public readonly int  $product_id,
         #[CollectionOf(OrderProductPriceDTO::class)]
-        public Collection   $quantities,
+        public Collection    $quantities,
+        public readonly ?int $event_occurrence_id = null,
     )
     {
     }

@@ -16,11 +16,12 @@ interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;
     event: Event;
     productPriceId: IdParam;
+    eventOccurrenceId?: IdParam;
     priceLabel?: string;
     onSuccess: () => void;
 }
 
-export const JoinWaitlistModal = ({onClose, product, event, productPriceId, priceLabel, onSuccess}: JoinWaitlistModalProps) => {
+export const JoinWaitlistModal = ({onClose, product, event, productPriceId, eventOccurrenceId, priceLabel, onSuccess}: JoinWaitlistModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const mutation = useJoinWaitlist();
     const [status, setStatus] = useState<'form' | 'success' | 'error'>('form');
@@ -56,6 +57,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
             data: {
                 ...values,
                 product_price_id: Number(productPriceId),
+                event_occurrence_id: eventOccurrenceId ? Number(eventOccurrenceId) : undefined,
             },
         }, {
             onSuccess: () => {

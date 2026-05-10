@@ -1,4 +1,4 @@
-import {CheckInListRequest, GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
+import {CheckInListRequest, EventType, GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
@@ -35,6 +35,7 @@ export const EditCheckInListModal = ({
             activates_at: '',
             description: '',
             product_ids: [],
+            event_occurrence_id: null,
             public_show_attendee_notes: true,
             public_show_question_answers: true,
             public_show_order_details: true,
@@ -64,6 +65,7 @@ export const EditCheckInListModal = ({
                 expires_at: utcToTz(checkInList.expires_at, event.timezone),
                 activates_at: utcToTz(checkInList.activates_at, event.timezone),
                 product_ids: checkInList.products?.map(product => String(product.id)),
+                event_occurrence_id: checkInList.event_occurrence_id ?? null,
                 public_show_attendee_notes: checkInList.public_show_attendee_notes ?? true,
                 public_show_question_answers: checkInList.public_show_question_answers ?? true,
                 public_show_order_details: checkInList.public_show_order_details ?? true,
@@ -91,6 +93,10 @@ export const EditCheckInListModal = ({
                     <CheckInListForm
                         form={form}
                         productCategories={event.product_categories as ProductCategory[]}
+                        eventType={event.type as EventType}
+                        occurrences={event.occurrences}
+                        timezone={event.timezone}
+                        hideIntro
                     />
                     <Button
                         type={'submit'}

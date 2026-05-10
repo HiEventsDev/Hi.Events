@@ -1,0 +1,85 @@
+<?php
+
+declare(strict_types=1);
+
+namespace HiEvents\Services\Application\Handlers\EventOccurrence;
+
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Events\OccurrenceCancelledEvent;
+use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
+use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
+use Illuminate\Database\DatabaseManager;
+use Throwable;
+
+class CancelOccurrenceHandler
+{
+    public function __construct(
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly RecurrenceRuleExclusionService $exclusionService,
+        private readonly CancelOccurrenceAttendeesService $cancelAttendeesService,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
+
+    /**
+     * @throws Throwable
+     */
+    public function handle(int $eventId, int $occurrenceId, bool $refundOrders = false): EventOccurrenceDomainObject
+    {
+        $wasCancelled = false;
+
+        $updated = $this->databaseManager->transaction(function () use ($eventId, $occurrenceId, &$wasCancelled) {
+            // Lock to prevent concurrent cancels from double-dispatching refund
+            // and notification side-effects below.
+            $occurrence = $this->occurrenceRepository->findByIdLocked($occurrenceId);
+
+            if (! $occurrence || $occurrence->getEventId() !== $eventId) {
+                throw new ResourceNotFoundException(
+                    __('Occurrence :id not found for event :eventId', [
+                        'id' => $occurrenceId,
+                        'eventId' => $eventId,
+                    ])
+                );
+            }
+
+            if ($occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name) {
+                return $occurrence;
+            }
+
+            $updated = $this->occurrenceRepository->updateFromArray(
+                id: $occurrenceId,
+                attributes: [
+                    EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                ],
+            );
+
+            $this->cancelAttendeesService->cancelForOccurrence($eventId, $occurrenceId);
+
+            $this->exclusionService->addExclusions($eventId, [$occurrence->getStartDate()]);
+
+            $wasCancelled = true;
+
+            return $updated;
+        });
+
+        if ($wasCancelled) {
+            event(new OccurrenceCancelledEvent(
+                eventId: $eventId,
+                occurrenceId: $occurrenceId,
+                refundOrders: $refundOrders,
+            ));
+
+            event(new OccurrenceEvent(
+                type: DomainEventType::OCCURRENCE_CANCELLED,
+                occurrenceId: $occurrenceId,
+            ));
+        }
+
+        return $updated;
+    }
+}

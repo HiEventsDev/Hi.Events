@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Services\Domain\Waitlist;
 
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -14,9 +16,11 @@ use HiEvents\Exceptions\NoCapacityAvailableException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Waitlist\SendWaitlistOfferEmailJob;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
@@ -33,13 +37,24 @@ use Tests\TestCase;
 class ProcessWaitlistServiceTest extends TestCase
 {
     private ProcessWaitlistService $service;
+
     private MockInterface|WaitlistEntryRepositoryInterface $waitlistEntryRepository;
+
     private MockInterface|DatabaseManager $databaseManager;
+
     private MockInterface|OrderManagementService $orderManagementService;
+
     private MockInterface|OrderItemProcessingService $orderItemProcessingService;
+
     private MockInterface|ProductRepositoryInterface $productRepository;
+
     private MockInterface|AvailableProductQuantitiesFetchService $availableQuantitiesService;
+
     private MockInterface|ProductPriceRepositoryInterface $productPriceRepository;
+
+    private MockInterface|EventOccurrenceRepositoryInterface $eventOccurrenceRepository;
+
+    private MockInterface|OccurrencePurchaseEligibilityService $eligibilityService;
 
     protected function setUp(): void
     {
@@ -52,6 +67,39 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
         $this->availableQuantitiesService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
+        $this->eventOccurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->eligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
+
+        // Default to "always eligible" for the existing happy-path tests; the
+        // dedicated past/cancelled/visibility tests override these on the spy.
+        // assertOccurrencePurchasable's return type is the loaded domain object,
+        // so we need a real instance — null would TypeError before the test
+        // assertion can run.
+        $defaultEligibilityOccurrence = new EventOccurrenceDomainObject;
+        $defaultEligibilityOccurrence->setId(50);
+        $defaultEligibilityOccurrence->setEventId(1);
+        $this->eligibilityService
+            ->shouldReceive('assertOccurrencePurchasable')
+            ->zeroOrMoreTimes()
+            ->andReturn($defaultEligibilityOccurrence)
+            ->byDefault();
+        $this->eligibilityService
+            ->shouldReceive('assertProductsVisibleOnOccurrence')
+            ->zeroOrMoreTimes()
+            ->andReturnNull()
+            ->byDefault();
+
+        // The eligibility helper looks up the productPrice to feed the visibility
+        // check; tests that don't reach offerEntry don't bother re-mocking this
+        // path so we provide a benign default that resolves to a synthetic price.
+        $defaultProductPrice = new ProductPriceDomainObject;
+        $defaultProductPrice->setId(0);
+        $defaultProductPrice->setProductId(0);
+        $this->productPriceRepository
+            ->shouldReceive('findById')
+            ->zeroOrMoreTimes()
+            ->andReturn($defaultProductPrice)
+            ->byDefault();
 
         $this->waitlistEntryRepository
             ->shouldReceive('lockForProductPrice')
@@ -65,6 +113,16 @@ class ProcessWaitlistServiceTest extends TestCase
             ->zeroOrMoreTimes()
             ->andReturn(true);
 
+        $occurrence = new EventOccurrenceDomainObject;
+        $occurrence->setId(50);
+        $occurrence->setEventId(1);
+
+        $this->eventOccurrenceRepository
+            ->shouldReceive('findWhere')
+            ->zeroOrMoreTimes()
+            ->andReturn(collect([$occurrence]))
+            ->byDefault();
+
         $this->service = new ProcessWaitlistService(
             waitlistEntryRepository: $this->waitlistEntryRepository,
             databaseManager: $this->databaseManager,
@@ -73,29 +131,34 @@ class ProcessWaitlistServiceTest extends TestCase
             productRepository: $this->productRepository,
             availableQuantitiesService: $this->availableQuantitiesService,
             productPriceRepository: $this->productPriceRepository,
+            eventOccurrenceRepository: $this->eventOccurrenceRepository,
+            eligibilityService: $this->eligibilityService,
         );
     }
 
     private function createMockEvent(int $id = 1, string $currency = 'USD'): EventDomainObject
     {
-        $event = new EventDomainObject();
+        $event = new EventDomainObject;
         $event->setId($id);
         $event->setCurrency($currency);
+        $event->setType(EventType::SINGLE->name);
+
         return $event;
     }
 
     private function createMockEventSettings(?int $timeoutMinutes = 30): EventSettingDomainObject
     {
-        $eventSettings = new EventSettingDomainObject();
+        $eventSettings = new EventSettingDomainObject;
         $eventSettings->setWaitlistOfferTimeoutMinutes($timeoutMinutes);
+
         return $eventSettings;
     }
 
-    private function mockAvailableQuantities(int $eventId, int $priceId, int $quantityAvailable = 10): void
+    private function mockAvailableQuantities(int $eventId, int $priceId, int $quantityAvailable = 10, ?int $occurrenceId = 50): void
     {
         $this->availableQuantitiesService
             ->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true)
+            ->with($eventId, true, $occurrenceId)
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
                     new AvailableProductQuantitiesDTO(
@@ -113,7 +176,7 @@ class ProcessWaitlistServiceTest extends TestCase
 
     private function mockOrderCreation(): OrderDomainObject
     {
-        $order = new OrderDomainObject();
+        $order = new OrderDomainObject;
         $order->setId(100);
         $order->setShortId('o_test123');
 
@@ -122,11 +185,12 @@ class ProcessWaitlistServiceTest extends TestCase
             ->once()
             ->withArgs(function () {
                 $args = func_get_args();
-                return count($args) >= 7 && is_string($args[6]) && !empty($args[6]);
+
+                return count($args) >= 7 && is_string($args[6]) && ! empty($args[6]);
             })
             ->andReturn($order);
 
-        $productPrice = new ProductPriceDomainObject();
+        $productPrice = new ProductPriceDomainObject;
         $productPrice->setId(1);
         $productPrice->setProductId(10);
 
@@ -134,7 +198,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('findById')
             ->andReturn($productPrice);
 
-        $product = new ProductDomainObject();
+        $product = new ProductDomainObject;
         $product->setId(10);
         $product->setProductPrices(new Collection([$productPrice]));
 
@@ -145,7 +209,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('findById')
             ->andReturn($product);
 
-        $orderItem = new OrderItemDomainObject();
+        $orderItem = new OrderItemDomainObject;
         $this->orderItemProcessingService
             ->shouldReceive('process')
             ->once()
@@ -159,7 +223,7 @@ class ProcessWaitlistServiceTest extends TestCase
         return $order;
     }
 
-    public function testSuccessfullyOffersToNextWaitingEntry(): void
+    public function test_successfully_offers_to_next_waiting_entry(): void
     {
         Bus::fake();
 
@@ -181,11 +245,12 @@ class ProcessWaitlistServiceTest extends TestCase
         $waitingEntry->shouldReceive('getId')->andReturn(1);
         $waitingEntry->shouldReceive('getLocale')->andReturn('en');
         $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
+            ->with($productPriceId)
             ->andReturn(new Collection([$waitingEntry]));
 
         $order = $this->mockOrderCreation();
@@ -196,7 +261,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(
                 Mockery::on(function ($attributes) use ($order) {
                     return $attributes['status'] === WaitlistEntryStatus::OFFERED->name
-                        && !empty($attributes['offer_token'])
+                        && ! empty($attributes['offer_token'])
                         && $attributes['offered_at'] !== null
                         && $attributes['offer_expires_at'] !== null
                         && $attributes['order_id'] === $order->getId();
@@ -204,7 +269,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 ['id' => 1],
             );
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId(1);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
         $updatedEntry->setOfferToken('some-token');
@@ -225,11 +290,12 @@ class ProcessWaitlistServiceTest extends TestCase
         Bus::assertDispatched(SendWaitlistOfferEmailJob::class, function ($job) {
             $reflection = new \ReflectionClass($job);
             $sessionProp = $reflection->getProperty('sessionIdentifier');
-            return !empty($sessionProp->getValue($job));
+
+            return ! empty($sessionProp->getValue($job));
         });
     }
 
-    public function testSetsCorrectOfferTokenAndOfferExpiresAt(): void
+    public function test_sets_correct_offer_token_and_offer_expires_at(): void
     {
         Bus::fake();
 
@@ -252,11 +318,12 @@ class ProcessWaitlistServiceTest extends TestCase
         $waitingEntry->shouldReceive('getId')->andReturn(5);
         $waitingEntry->shouldReceive('getLocale')->andReturn('en');
         $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
+            ->with($productPriceId)
             ->andReturn(new Collection([$waitingEntry]));
 
         $this->mockOrderCreation();
@@ -268,12 +335,13 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(
                 Mockery::on(function ($attributes) use (&$capturedAttributes) {
                     $capturedAttributes = $attributes;
+
                     return true;
                 }),
                 ['id' => 5],
             );
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId(5);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
 
@@ -293,7 +361,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->assertNotNull($capturedAttributes['order_id']);
     }
 
-    public function testCreatesReservedOrderWhenOffering(): void
+    public function test_creates_reserved_order_when_offering(): void
     {
         Bus::fake();
 
@@ -315,14 +383,15 @@ class ProcessWaitlistServiceTest extends TestCase
         $waitingEntry->shouldReceive('getId')->andReturn(1);
         $waitingEntry->shouldReceive('getLocale')->andReturn('en');
         $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
+            ->with($productPriceId)
             ->andReturn(new Collection([$waitingEntry]));
 
-        $order = new OrderDomainObject();
+        $order = new OrderDomainObject;
         $order->setId(100);
         $order->setShortId('o_test123');
 
@@ -330,17 +399,17 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('createNewOrder')
             ->once()
             ->with(
-                Mockery::on(fn($v) => $v === $event->getId()),
-                Mockery::on(fn($v) => $v instanceof EventDomainObject),
-                Mockery::on(fn($v) => $v === 30),
-                Mockery::on(fn($v) => $v === 'en'),
-                Mockery::on(fn($v) => $v === null),
-                Mockery::on(fn($v) => $v === null),
-                Mockery::on(fn($v) => is_string($v) && !empty($v)),
+                Mockery::on(fn ($v) => $v === $event->getId()),
+                Mockery::on(fn ($v) => $v instanceof EventDomainObject),
+                Mockery::on(fn ($v) => $v === 30),
+                Mockery::on(fn ($v) => $v === 'en'),
+                Mockery::on(fn ($v) => $v === null),
+                Mockery::on(fn ($v) => $v === null),
+                Mockery::on(fn ($v) => is_string($v) && ! empty($v)),
             )
             ->andReturn($order);
 
-        $productPrice = new ProductPriceDomainObject();
+        $productPrice = new ProductPriceDomainObject;
         $productPrice->setId(1);
         $productPrice->setProductId(10);
 
@@ -348,7 +417,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('findById')
             ->andReturn($productPrice);
 
-        $product = new ProductDomainObject();
+        $product = new ProductDomainObject;
         $product->setId(10);
         $product->setProductPrices(new Collection([$productPrice]));
 
@@ -360,7 +429,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(10)
             ->andReturn($product);
 
-        $orderItem = new OrderItemDomainObject();
+        $orderItem = new OrderItemDomainObject;
         $this->orderItemProcessingService
             ->shouldReceive('process')
             ->once()
@@ -375,11 +444,11 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($attrs) => $attrs['order_id'] === 100),
+                Mockery::on(fn ($attrs) => $attrs['order_id'] === 100),
                 ['id' => 1],
             );
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId(1);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
         $updatedEntry->setOrderId(100);
@@ -395,7 +464,109 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->assertEquals(100, $result->first()->getOrderId());
     }
 
-    public function testThrowsWhenNoWaitingEntries(): void
+    public function test_single_event_waitlist_reserved_order_uses_hidden_occurrence(): void
+    {
+        Bus::fake();
+
+        $productPriceId = 10;
+        $occurrenceId = 321;
+        $event = $this->createMockEvent(id: 44);
+        $eventSettings = $this->createMockEventSettings(30);
+
+        $occurrence = new EventOccurrenceDomainObject;
+        $occurrence->setId($occurrenceId);
+        $occurrence->setEventId($event->getId());
+
+        $this->eventOccurrenceRepository
+            ->shouldReceive('findWhere')
+            ->twice()
+            ->andReturn(collect([$occurrence]));
+
+        $this->databaseManager
+            ->shouldReceive('transaction')
+            ->once()
+            ->andReturnUsing(fn ($callback) => $callback());
+
+        $this->mockAvailableQuantities($event->getId(), $productPriceId, occurrenceId: $occurrenceId);
+
+        $waitingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+        $waitingEntry->shouldReceive('getId')->andReturn(1);
+        $waitingEntry->shouldReceive('getLocale')->andReturn('en');
+        $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('getNextWaitingEntries')
+            ->once()
+            ->with($productPriceId)
+            ->andReturn(new Collection([$waitingEntry]));
+
+        $order = new OrderDomainObject;
+        $order->setId(100);
+        $order->setShortId('o_test123');
+
+        $this->orderManagementService
+            ->shouldReceive('createNewOrder')
+            ->once()
+            ->andReturn($order);
+
+        $productPrice = new ProductPriceDomainObject;
+        $productPrice->setId($productPriceId);
+        $productPrice->setProductId(10);
+
+        $this->productPriceRepository
+            ->shouldReceive('findById')
+            ->andReturn($productPrice);
+
+        $product = new ProductDomainObject;
+        $product->setId(10);
+        $product->setProductPrices(new Collection([$productPrice]));
+
+        $this->productRepository
+            ->shouldReceive('loadRelation')
+            ->andReturnSelf();
+        $this->productRepository
+            ->shouldReceive('findById')
+            ->with(10)
+            ->andReturn($product);
+
+        $capturedOccurrenceId = null;
+        $orderItem = new OrderItemDomainObject;
+        $this->orderItemProcessingService
+            ->shouldReceive('process')
+            ->once()
+            ->withArgs(function ($orderArg, Collection $productsOrderDetails) use ($order, $occurrenceId, &$capturedOccurrenceId) {
+                $capturedOccurrenceId = $productsOrderDetails->first()->event_occurrence_id;
+
+                return $orderArg === $order && $capturedOccurrenceId === $occurrenceId;
+            })
+            ->andReturn(new Collection([$orderItem]));
+
+        $this->orderManagementService
+            ->shouldReceive('updateOrderTotals')
+            ->once()
+            ->andReturn($order);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('updateWhere')
+            ->once();
+
+        $updatedEntry = new WaitlistEntryDomainObject;
+        $updatedEntry->setId(1);
+        $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
+        $updatedEntry->setOrderId(100);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('findById')
+            ->once()
+            ->andReturn($updatedEntry);
+
+        $this->service->offerToNext($productPriceId, 1, $event, $eventSettings);
+
+        $this->assertSame($occurrenceId, $capturedOccurrenceId);
+    }
+
+    public function test_throws_when_no_waiting_entries(): void
     {
         $productPriceId = 10;
         $quantity = 2;
@@ -409,20 +580,18 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $this->mockAvailableQuantities($event->getId(), $productPriceId);
-
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
-            ->andReturn(new Collection());
+            ->with($productPriceId)
+            ->andReturn(new Collection);
 
         $this->expectException(NoCapacityAvailableException::class);
 
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
     }
 
-    public function testCapsOffersAtAvailableCapacity(): void
+    public function test_caps_offers_at_available_capacity(): void
     {
         Bus::fake();
 
@@ -444,11 +613,12 @@ class ProcessWaitlistServiceTest extends TestCase
         $waitingEntry->shouldReceive('getId')->andReturn(1);
         $waitingEntry->shouldReceive('getLocale')->andReturn('en');
         $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
+            ->with($productPriceId)
             ->andReturn(new Collection([$waitingEntry]));
 
         $this->mockOrderCreation();
@@ -457,7 +627,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once();
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId(1);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
 
@@ -471,7 +641,101 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testThrowsWhenNoCapacityAtAll(): void
+    public function test_offer_to_next_skips_full_occurrence_and_offers_later_eligible_entry(): void
+    {
+        Bus::fake();
+
+        $productPriceId = 10;
+        $event = $this->createMockEvent();
+        $event->setType(EventType::RECURRING->name);
+        $eventSettings = $this->createMockEventSettings();
+
+        $this->databaseManager
+            ->shouldReceive('transaction')
+            ->once()
+            ->andReturnUsing(fn ($callback) => $callback());
+
+        $fullOccurrenceEntry = new WaitlistEntryDomainObject;
+        $fullOccurrenceEntry->setId(1);
+        $fullOccurrenceEntry->setLocale('en');
+        $fullOccurrenceEntry->setProductPriceId($productPriceId);
+        $fullOccurrenceEntry->setEventOccurrenceId(11);
+
+        $eligibleEntry = new WaitlistEntryDomainObject;
+        $eligibleEntry->setId(2);
+        $eligibleEntry->setLocale('en');
+        $eligibleEntry->setProductPriceId($productPriceId);
+        $eligibleEntry->setEventOccurrenceId(22);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('getNextWaitingEntries')
+            ->once()
+            ->with($productPriceId)
+            ->andReturn(new Collection([$fullOccurrenceEntry, $eligibleEntry]));
+
+        $this->mockAvailableQuantities($event->getId(), $productPriceId, 0, 11);
+        $this->mockAvailableQuantities($event->getId(), $productPriceId, 1, 22);
+
+        $order = new OrderDomainObject;
+        $order->setId(100);
+        $order->setShortId('o_test123');
+
+        $this->orderManagementService
+            ->shouldReceive('createNewOrder')
+            ->once()
+            ->andReturn($order);
+
+        $productPrice = new ProductPriceDomainObject;
+        $productPrice->setId($productPriceId);
+        $productPrice->setProductId(10);
+
+        $this->productPriceRepository
+            ->shouldReceive('findById')
+            ->andReturn($productPrice);
+
+        $product = new ProductDomainObject;
+        $product->setId(10);
+        $product->setProductPrices(new Collection([$productPrice]));
+
+        $this->productRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->productRepository->shouldReceive('findById')->andReturn($product);
+
+        $this->orderItemProcessingService
+            ->shouldReceive('process')
+            ->once()
+            ->withArgs(function ($orderArg, Collection $productsOrderDetails) use ($order) {
+                return $orderArg === $order
+                    && $productsOrderDetails->first()->event_occurrence_id === 22;
+            })
+            ->andReturn(new Collection([new OrderItemDomainObject]));
+
+        $this->orderManagementService
+            ->shouldReceive('updateOrderTotals')
+            ->once()
+            ->andReturn($order);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(Mockery::any(), ['id' => 2]);
+
+        $updatedEntry = new WaitlistEntryDomainObject;
+        $updatedEntry->setId(2);
+        $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('findById')
+            ->once()
+            ->with(2)
+            ->andReturn($updatedEntry);
+
+        $result = $this->service->offerToNext($productPriceId, 1, $event, $eventSettings);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(2, $result->first()->getId());
+    }
+
+    public function test_throws_when_no_capacity_at_all(): void
     {
         $productPriceId = 10;
         $quantity = 2;
@@ -487,12 +751,22 @@ class ProcessWaitlistServiceTest extends TestCase
 
         $this->mockAvailableQuantities($event->getId(), $productPriceId, 0);
 
+        $waitingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+        $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('getNextWaitingEntries')
+            ->once()
+            ->with($productPriceId)
+            ->andReturn(new Collection([$waitingEntry]));
+
         $this->expectException(NoCapacityAvailableException::class);
 
         $this->service->offerToNext($productPriceId, $quantity, $event, $eventSettings);
     }
 
-    public function testOfferExpiresAtUsesDefaultWhenTimeoutNotSet(): void
+    public function test_offer_expires_at_uses_default_when_timeout_not_set(): void
     {
         Bus::fake();
 
@@ -514,11 +788,12 @@ class ProcessWaitlistServiceTest extends TestCase
         $waitingEntry->shouldReceive('getId')->andReturn(1);
         $waitingEntry->shouldReceive('getLocale')->andReturn('en');
         $waitingEntry->shouldReceive('getProductPriceId')->andReturn($productPriceId);
+        $waitingEntry->shouldReceive('getEventOccurrenceId')->andReturn(null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getNextWaitingEntries')
             ->once()
-            ->with($productPriceId, Mockery::any())
+            ->with($productPriceId)
             ->andReturn(new Collection([$waitingEntry]));
 
         $this->mockOrderCreation();
@@ -530,12 +805,13 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(
                 Mockery::on(function ($attributes) use (&$capturedAttributes) {
                     $capturedAttributes = $attributes;
+
                     return true;
                 }),
                 ['id' => 1],
             );
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId(1);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
 
@@ -549,7 +825,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->assertNotNull($capturedAttributes['offer_expires_at']);
     }
 
-    public function testOfferSpecificEntrySuccessfully(): void
+    public function test_offer_specific_entry_successfully(): void
     {
         Bus::fake();
 
@@ -566,7 +842,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId($entryId);
         $entry->setStatus(WaitlistEntryStatus::WAITING->name);
         $entry->setLocale('en');
@@ -588,14 +864,14 @@ class ProcessWaitlistServiceTest extends TestCase
             ->with(
                 Mockery::on(function ($attributes) use ($order) {
                     return $attributes['status'] === WaitlistEntryStatus::OFFERED->name
-                        && !empty($attributes['offer_token'])
+                        && ! empty($attributes['offer_token'])
                         && $attributes['offered_at'] !== null
                         && $attributes['order_id'] === $order->getId();
                 }),
                 ['id' => $entryId],
             );
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId($entryId);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
         $updatedEntry->setOrderId($order->getId());
@@ -614,7 +890,7 @@ class ProcessWaitlistServiceTest extends TestCase
         Bus::assertDispatched(SendWaitlistOfferEmailJob::class);
     }
 
-    public function testOfferSpecificEntryThrowsWhenEntryNotFound(): void
+    public function test_offer_specific_entry_throws_when_entry_not_found(): void
     {
         $entryId = 99;
         $eventId = 1;
@@ -639,7 +915,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->service->offerSpecificEntry($entryId, $eventId, $event, $eventSettings);
     }
 
-    public function testOfferSpecificEntryThrowsWhenStatusNotOfferable(): void
+    public function test_offer_specific_entry_throws_when_status_not_offerable(): void
     {
         $entryId = 7;
         $eventId = 1;
@@ -653,7 +929,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId($entryId);
         $entry->setStatus(WaitlistEntryStatus::PURCHASED->name);
 
@@ -667,7 +943,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->service->offerSpecificEntry($entryId, $eventId, $event, $eventSettings);
     }
 
-    public function testOfferSpecificEntryAllowsReOfferForExpiredEntries(): void
+    public function test_offer_specific_entry_allows_re_offer_for_expired_entries(): void
     {
         Bus::fake();
 
@@ -684,7 +960,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId($entryId);
         $entry->setStatus(WaitlistEntryStatus::OFFER_EXPIRED->name);
         $entry->setLocale('en');
@@ -703,7 +979,7 @@ class ProcessWaitlistServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once();
 
-        $updatedEntry = new WaitlistEntryDomainObject();
+        $updatedEntry = new WaitlistEntryDomainObject;
         $updatedEntry->setId($entryId);
         $updatedEntry->setStatus(WaitlistEntryStatus::OFFERED->name);
 
@@ -718,7 +994,7 @@ class ProcessWaitlistServiceTest extends TestCase
         Bus::assertDispatched(SendWaitlistOfferEmailJob::class);
     }
 
-    public function testOfferSpecificEntryThrowsWhenNoCapacityAvailable(): void
+    public function test_offer_specific_entry_throws_when_no_capacity_available(): void
     {
         $entryId = 7;
         $eventId = 1;
@@ -733,7 +1009,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId($entryId);
         $entry->setStatus(WaitlistEntryStatus::WAITING->name);
         $entry->setLocale('en');
@@ -752,7 +1028,7 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->service->offerSpecificEntry($entryId, $eventId, $event, $eventSettings);
     }
 
-    public function testOfferSpecificEntryThrowsWhenCapacityFullyOffered(): void
+    public function test_offer_specific_entry_throws_when_capacity_fully_offered(): void
     {
         $entryId = 7;
         $eventId = 1;
@@ -767,7 +1043,7 @@ class ProcessWaitlistServiceTest extends TestCase
                 return $callback();
             });
 
-        $entry = new WaitlistEntryDomainObject();
+        $entry = new WaitlistEntryDomainObject;
         $entry->setId($entryId);
         $entry->setStatus(WaitlistEntryStatus::WAITING->name);
         $entry->setLocale('en');

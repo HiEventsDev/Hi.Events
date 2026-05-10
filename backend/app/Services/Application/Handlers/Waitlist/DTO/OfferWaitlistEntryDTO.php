@@ -11,6 +11,7 @@ class OfferWaitlistEntryDTO extends BaseDataObject
         public ?int $product_price_id = null,
         public ?int $entry_id = null,
         public int  $quantity = 1,
+        public ?int $event_occurrence_id = null,
     )
     {
     }

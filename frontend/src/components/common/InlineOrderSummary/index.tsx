@@ -80,8 +80,17 @@ export const InlineOrderSummary = ({
                         <div className={classes.eventDetails}>
                             <div className={classes.eventTitle}>{event.title}</div>
                             <div className={classes.eventMeta}>
-                                {prettyDate(event.start_date, event.timezone, false)}
+                                {prettyDate(
+                                    order.order_items?.[0]?.event_occurrence?.start_date || event.start_date,
+                                    event.timezone,
+                                    false
+                                )}
                             </div>
+                            {order.order_items?.[0]?.event_occurrence?.label && (
+                                <div className={classes.eventMeta}>
+                                    {order.order_items[0].event_occurrence.label}
+                                </div>
+                            )}
                             {location && (
                                 <div className={classes.eventMeta}>{location}</div>
                             )}

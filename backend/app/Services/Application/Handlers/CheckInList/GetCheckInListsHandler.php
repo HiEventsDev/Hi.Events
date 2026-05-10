@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
@@ -23,6 +24,7 @@ class GetCheckInListsHandler
         $checkInLists = $this->checkInListRepository
             ->loadRelation(ProductDomainObject::class)
             ->loadRelation(new Relationship(domainObject: EventDomainObject::class, name: 'event'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, name: 'event_occurrence'))
             ->findByEventId(
                 eventId: $dto->eventId,
                 params: $dto->queryParams,

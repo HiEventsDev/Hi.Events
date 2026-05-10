@@ -27,6 +27,7 @@ class UpdateCheckInlistHandler
             ->setEventId($data->eventId)
             ->setExpiresAt($data->expiresAt)
             ->setActivatesAt($data->activatesAt)
+            ->setEventOccurrenceId($data->eventOccurrenceId)
             ->setPublicShowAttendeeNotes($data->publicShowAttendeeNotes)
             ->setPublicShowQuestionAnswers($data->publicShowQuestionAnswers)
             ->setPublicShowOrderDetails($data->publicShowOrderDetails);

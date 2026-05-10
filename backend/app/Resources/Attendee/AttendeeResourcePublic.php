@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Product\ProductMinimalResourcePublic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,6 +26,11 @@ class AttendeeResourcePublic extends JsonResource
             'product_id' => $this->getProductId(),
             'product_price_id' => $this->getProductPriceId(),
             'product' => $this->when((bool)$this->getProduct(), fn() => new ProductMinimalResourcePublic($this->getProduct())),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
+            'event_occurrence' => $this->when(
+                (bool)$this->getEventOccurrence(),
+                fn() => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
+            ),
             'locale' => $this->getLocale(),
         ];
     }

@@ -16,7 +16,7 @@ class GetCheckInListStatsPublicHandler
     {
     }
 
-    public function handle(string $shortId): CheckInListStatsDTO
+    public function handle(string $shortId, ?int $clientOccurrenceFilter = null): CheckInListStatsDTO
     {
         $checkInList = $this->checkInListRepository->findFirstWhere(['short_id' => $shortId]);
 
@@ -24,9 +24,15 @@ class GetCheckInListStatsPublicHandler
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 
-        $totals = $this->checkInListRepository->getCheckedInAttendeeCountById($checkInList->getId());
-        $perProduct = $this->checkInListRepository->getPerProductCheckInStatsById($checkInList->getId());
-        $recent = $this->checkInListRepository->getRecentCheckInsById($checkInList->getId(), self::RECENT_CHECK_INS_LIMIT);
+        // Scoped lists ignore the client filter (the list already owns an
+        // occurrence). Unscoped lists honour the filter pill.
+        $effectiveOverride = $checkInList->getEventOccurrenceId() !== null
+            ? null
+            : $clientOccurrenceFilter;
+
+        $totals = $this->checkInListRepository->getCheckedInAttendeeCountById($checkInList->getId(), $effectiveOverride);
+        $perProduct = $this->checkInListRepository->getPerProductCheckInStatsById($checkInList->getId(), $effectiveOverride);
+        $recent = $this->checkInListRepository->getRecentCheckInsById($checkInList->getId(), self::RECENT_CHECK_INS_LIMIT, $effectiveOverride);
 
         return new CheckInListStatsDTO(
             totalAttendees: $totals->totalAttendeesCount,

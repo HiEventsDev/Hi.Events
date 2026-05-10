@@ -37,9 +37,12 @@ export const eventsClient = {
         return response.data;
     },
 
-    getEventStats: async (eventId: IdParam, dateRange?: string) => {
-        const params = dateRange ? `?date_range=${dateRange}` : '';
-        const response = await api.get<GenericDataResponse<EventStats>>('events/' + eventId + '/stats' + params);
+    getEventStats: async (eventId: IdParam, options: {occurrenceId?: IdParam; dateRange?: string} = {}) => {
+        const params = new URLSearchParams();
+        if (options.occurrenceId) params.set('occurrence_id', String(options.occurrenceId));
+        if (options.dateRange) params.set('date_range', options.dateRange);
+        const qs = params.toString();
+        const response = await api.get<GenericDataResponse<EventStats>>(`events/${eventId}/stats${qs ? '?' + qs : ''}`);
         return response.data;
     },
 
@@ -92,8 +95,12 @@ export const eventsClient = {
         return response.data;
     },
 
-    getEventReport: async (eventId: IdParam, reportType: IdParam, startDate?: string, endDate?: string) => {
-        const response = await api.get<GenericDataResponse<any>>('events/' + eventId + '/reports/' + reportType + '?start_date=' + startDate + '&end_date=' + endDate);
+    getEventReport: async (eventId: IdParam, reportType: IdParam, startDate?: string, endDate?: string, occurrenceId?: IdParam) => {
+        const params = new URLSearchParams();
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+        if (occurrenceId) params.append('occurrence_id', String(occurrenceId));
+        const response = await api.get<GenericDataResponse<any>>('events/' + eventId + '/reports/' + reportType + '?' + params.toString());
         return response.data;
     }
 }
@@ -104,8 +111,12 @@ export const eventsClientPublic = {
         return response.data;
     },
 
-    findByID: async (eventId: any, promoCode: null | string) => {
-        const response = await publicApi.get<GenericDataResponse<Event>>('events/' + eventId + (promoCode ? '?promo_code=' + promoCode : ''));
+    findByID: async (eventId: any, promoCode?: null | string, eventOccurrenceId?: number | null) => {
+        const params = new URLSearchParams();
+        if (promoCode) params.set('promo_code', promoCode);
+        if (eventOccurrenceId) params.set('event_occurrence_id', String(eventOccurrenceId));
+        const queryString = params.toString();
+        const response = await publicApi.get<GenericDataResponse<Event>>('events/' + eventId + (queryString ? '?' + queryString : ''));
         return response.data;
     },
 }

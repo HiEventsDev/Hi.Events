@@ -77,12 +77,14 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('getLocale')->andReturn('en');
 
         $attendee1 = m::mock(AttendeeDomainObject::class);
-        $attendee1->shouldReceive('getproductPriceId')->andReturn(1);
+        $attendee1->shouldReceive('getProductPriceId')->andReturn(1);
         $attendee1->shouldReceive('getProductId')->andReturn(10);
+        $attendee1->shouldReceive('getEventOccurrenceId')->andReturn(1);
 
         $attendee2 = m::mock(AttendeeDomainObject::class);
-        $attendee2->shouldReceive('getproductPriceId')->andReturn(2);
+        $attendee2->shouldReceive('getProductPriceId')->andReturn(2);
         $attendee2->shouldReceive('getProductId')->andReturn(20);
+        $attendee2->shouldReceive('getEventOccurrenceId')->andReturn(1);
 
         $attendees = new Collection([$attendee1, $attendee2]);
 
@@ -168,12 +170,14 @@ class OrderCancelServiceTest extends TestCase
         $order->shouldReceive('getLocale')->andReturn('en');
 
         $attendee1 = m::mock(AttendeeDomainObject::class);
-        $attendee1->shouldReceive('getproductPriceId')->andReturn(1);
+        $attendee1->shouldReceive('getProductPriceId')->andReturn(1);
         $attendee1->shouldReceive('getProductId')->andReturn(10);
+        $attendee1->shouldReceive('getEventOccurrenceId')->andReturn(1);
 
         $attendee2 = m::mock(AttendeeDomainObject::class);
-        $attendee2->shouldReceive('getproductPriceId')->andReturn(2);
+        $attendee2->shouldReceive('getProductPriceId')->andReturn(2);
         $attendee2->shouldReceive('getProductId')->andReturn(20);
+        $attendee2->shouldReceive('getEventOccurrenceId')->andReturn(1);
 
         $attendees = new Collection([$attendee1, $attendee2]);
 

@@ -26,6 +26,7 @@ class CreateCheckInListHandler
             ->setEventId($listData->eventId)
             ->setExpiresAt($listData->expiresAt)
             ->setActivatesAt($listData->activatesAt)
+            ->setEventOccurrenceId($listData->eventOccurrenceId)
             ->setPublicShowAttendeeNotes($listData->publicShowAttendeeNotes)
             ->setPublicShowQuestionAnswers($listData->publicShowQuestionAnswers)
             ->setPublicShowOrderDetails($listData->publicShowOrderDetails);

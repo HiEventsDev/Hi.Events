@@ -1,0 +1,169 @@
+.upcomingCard {
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--mantine-color-text);
+  }
+}
+
+.occurrenceList {
+  display: flex;
+  flex-direction: column;
+}
+
+.occurrenceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  margin: 0 -8px;
+  border-bottom: 1px solid var(--mantine-color-gray-1);
+  gap: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--mantine-color-gray-0);
+  }
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 10px;
+  }
+
+  &:first-child {
+    padding-top: 10px;
+  }
+}
+
+.occurrenceInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.dateBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 4px 8px;
+  background: var(--mantine-color-gray-0);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.dateMonth {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--mantine-color-primary-6);
+  line-height: 1.2;
+}
+
+.dateDay {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--mantine-color-text);
+  line-height: 1.2;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.timeLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+  white-space: nowrap;
+}
+
+.suffix {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.occurrenceRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.capacityBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+
+  .sold {
+    font-weight: 600;
+    color: var(--mantine-color-text);
+  }
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-5);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-5);
+  }
+
+  &[data-status="SOLD_OUT"] {
+    background: var(--mantine-color-orange-5);
+  }
+}
+
+.quickLinks {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 20px 0 4px;
+}
+
+@media (max-width: 768px) {
+  .occurrenceRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .occurrenceRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

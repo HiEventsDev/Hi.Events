@@ -6,13 +6,16 @@ use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -50,6 +53,7 @@ class CompleteOrderHandlerTest extends TestCase
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
     private EventSettingsRepositoryInterface $eventSettingsRepository;
     private CheckoutSessionManagementService|MockInterface $sessionManagementService;
+    private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
     protected function setUp(): void
     {
@@ -69,6 +73,15 @@ class CompleteOrderHandlerTest extends TestCase
         $this->eventSettingsRepository = Mockery::mock(EventSettingsRepositoryInterface::class);
         $this->sessionManagementService = Mockery::mock(CheckoutSessionManagementService::class);
         $this->sessionManagementService->shouldReceive('verifySession')->andReturn(true)->byDefault();
+        $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
+            collect([
+                (new EventOccurrenceDomainObject())
+                    ->setId(1)
+                    ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+                    ->setStartDate(Carbon::now()->addDay()->toDateTimeString()),
+            ])
+        )->byDefault();
 
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
@@ -80,6 +93,7 @@ class CompleteOrderHandlerTest extends TestCase
             $this->domainEventDispatcherService,
             $this->eventSettingsRepository,
             $this->sessionManagementService,
+            $this->occurrenceRepository,
         );
     }
 
@@ -274,6 +288,55 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
+    public function testHandleThrowsResourceConflictExceptionWhenOccurrenceIsCancelled(): void
+    {
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('This event date has been cancelled');
+
+        $orderShortId = 'ABC123';
+        $orderData = $this->createMockCompleteOrderDTO();
+        $order = $this->createMockOrder();
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+
+        $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
+            collect([(new EventOccurrenceDomainObject())->setId(1)->setStatus(EventOccurrenceStatus::CANCELLED->name)])
+        );
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
+    public function testHandleThrowsResourceConflictExceptionWhenOccurrenceHasEnded(): void
+    {
+        // Reservation could have been created before the occurrence ended
+        // (especially with long reservation windows). Re-checking on completion
+        // prevents a reserved order from aging into a valid purchase for a
+        // session that has since passed.
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('This event date has already ended');
+
+        $orderShortId = 'ABC123';
+        $orderData = $this->createMockCompleteOrderDTO();
+        $order = $this->createMockOrder();
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+
+        $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
+            collect([
+                (new EventOccurrenceDomainObject())
+                    ->setId(1)
+                    ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+                    ->setStartDate(Carbon::now()->subDay()->toDateTimeString()),
+            ])
+        );
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
     private function createMockCompleteOrderDTO(): CompleteOrderDTO
     {
         $orderDTO = new CompleteOrderOrderDTO(
@@ -321,7 +384,8 @@ class CompleteOrderHandlerTest extends TestCase
             ->setQuantity(1)
             ->setPrice(10)
             ->setTotalGross(10)
-            ->setProductPriceId(1);
+            ->setProductPriceId(1)
+            ->setEventOccurrenceId(1);
     }
 
     private function createMockProductPrice(): ProductPriceDomainObject|MockInterface

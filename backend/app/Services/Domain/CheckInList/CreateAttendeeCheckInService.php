@@ -262,6 +262,7 @@ class CreateAttendeeCheckInService
             AttendeeCheckInDomainObjectAbstract::PRODUCT_ID => $attendee->getProductId(),
             AttendeeCheckInDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_PREFIX),
             AttendeeCheckInDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+            AttendeeCheckInDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendee->getEventOccurrenceId(),
         ]);
     }
 }

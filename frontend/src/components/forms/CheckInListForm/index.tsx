@@ -1,7 +1,13 @@
-import {Collapse, Switch, Textarea, TextInput} from "@mantine/core";
+import {Collapse, Select, Switch, Textarea, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {CheckInListRequest, ProductCategory, ProductType} from "../../../types.ts";
+import {
+    CheckInListRequest,
+    EventOccurrence,
+    EventType,
+    ProductCategory,
+    ProductType
+} from "../../../types.ts";
 import {InputGroup} from "../../common/InputGroup";
 import {ProductSelector} from "../../common/ProductSelector";
 import {Callout} from "../../common/Callout";
@@ -13,11 +19,17 @@ import {
     IconMessageCircleQuestion,
     IconReceipt2,
 } from "@tabler/icons-react";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import classes from "./CheckInListForm.module.scss";
 
 interface CheckInListFormProps {
     form: UseFormReturnType<CheckInListRequest>;
     productCategories: ProductCategory[];
+    eventType?: EventType;
+    occurrences?: EventOccurrence[];
+    timezone?: string;
+    isNewForOccurrence?: boolean;
+    hideIntro?: boolean;
 }
 
 const hasAdvancedValuesSet = (form: UseFormReturnType<CheckInListRequest>): boolean => {
@@ -31,29 +43,58 @@ const hasAdvancedValuesSet = (form: UseFormReturnType<CheckInListRequest>): bool
     );
 };
 
-export const CheckInListForm = ({form, productCategories}: CheckInListFormProps) => {
-    const tickets = useMemo(() => {
-        return productCategories
-            .flatMap(category => category.products || [])
-            .filter(product => product.product_type === ProductType.Ticket);
-    }, [productCategories]);
+export const CheckInListForm = ({
+                                    form,
+                                    productCategories,
+                                    eventType,
+                                    occurrences,
+                                    timezone,
+                                    isNewForOccurrence,
+                                    hideIntro,
+                                }: CheckInListFormProps) => {
+    const isRecurring = eventType === EventType.RECURRING;
+    const activeOccurrences = useMemo(() => {
+        if (!isRecurring || !occurrences || !timezone) return [];
+        return occurrences.filter(o => o.status !== 'CANCELLED');
+    }, [isRecurring, occurrences, timezone]);
+
+    const occurrenceOptions = useMemo(() => {
+        if (!activeOccurrences.length || !timezone) return [];
+        return activeOccurrences.map(o => ({
+            value: String(o.id),
+            label: formatDateWithLocale(o.start_date, 'shortDate', timezone)
+                + ' ' + formatDateWithLocale(o.start_date, 'timeOnly', timezone)
+                + (o.label ? ` — ${o.label}` : ''),
+        }));
+    }, [activeOccurrences, timezone]);
 
     // Open advanced panel automatically if editing a list that already uses any of those options.
     const [showAdvanced, setShowAdvanced] = useState(() => hasAdvancedValuesSet(form));
 
+    // UI mirror of "product_ids is empty" — default on for new lists.
+    const [scopeToAll, setScopeToAll] = useState(
+        () => !form.values.product_ids || form.values.product_ids.length === 0,
+    );
+
+    // Reflect late-hydrated values (edit modal sets product_ids in an effect).
     useEffect(() => {
-        if (tickets.length === 1 && (!form.values.product_ids || form.values.product_ids.length === 0)) {
-            form.setFieldValue('product_ids', [String(tickets[0].id)]);
-        }
-    }, [tickets]);
+        const hasProducts = (form.values.product_ids?.length ?? 0) > 0;
+        if (hasProducts && scopeToAll) setScopeToAll(false);
+    }, [form.values.product_ids]);
+
+    const introTitle = isNewForOccurrence
+        ? t`Control who gets in for this date`
+        : t`Control who gets in, and when`;
 
     return (
         <>
-            <Callout variant="info" title={t`Control who gets in, and when`}>
-                <Trans>
-                    Split check-in across days, areas, or ticket types. Share the link with staff — no account needed on their end.
-                </Trans>
-            </Callout>
+            {!hideIntro && (
+                <Callout variant="info" title={introTitle}>
+                    <Trans>
+                        Split check-in across days, areas, or ticket types. Share the link with staff — no account needed on their end.
+                    </Trans>
+                </Callout>
+            )}
 
             <TextInput
                 {...form.getInputProps('name')}
@@ -62,14 +103,43 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
                 placeholder={t`VIP check-in list`}
             />
 
-            <ProductSelector
-                label={t`Which tickets should be associated with this check-in list?`}
-                placeholder={t`Select tickets`}
-                productCategories={productCategories}
-                form={form}
-                productFieldName="product_ids"
-                includedProductTypes={[ProductType.Ticket]}
+            {/* UI-only: empty product_ids = "covers every ticket" on the backend. */}
+            <Switch
+                mt="sm"
+                label={t`Apply to all tickets`}
+                description={t`Leave on to cover every ticket on the event. Turn off to pick specific tickets.`}
+                checked={scopeToAll}
+                onChange={(e) => {
+                    const checked = e.currentTarget.checked;
+                    setScopeToAll(checked);
+                    if (checked) {
+                        form.setFieldValue('product_ids', []);
+                    }
+                }}
             />
+
+            {!scopeToAll && (
+                <ProductSelector
+                    label={t`Which tickets should be associated with this check-in list?`}
+                    placeholder={t`Select tickets`}
+                    productCategories={productCategories}
+                    form={form}
+                    productFieldName="product_ids"
+                    includedProductTypes={[ProductType.Ticket]}
+                />
+            )}
+
+            {isRecurring && occurrenceOptions.length > 0 && (
+                <Select
+                    label={t`Occurrence`}
+                    description={t`Leave empty to apply this check-in list to all occurrences`}
+                    placeholder={t`All occurrences`}
+                    data={occurrenceOptions}
+                    value={form.values.event_occurrence_id ? String(form.values.event_occurrence_id) : null}
+                    onChange={(val) => form.setFieldValue('event_occurrence_id', val ? Number(val) : null)}
+                    clearable
+                />
+            )}
 
             <button
                 type="button"

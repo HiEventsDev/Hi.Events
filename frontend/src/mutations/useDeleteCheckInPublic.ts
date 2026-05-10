@@ -13,8 +13,8 @@ export const useDeleteCheckInPublic = (pagination: QueryFilters) => {
         mutationFn: ({checkInListShortId, checkInShortId}: { checkInListShortId: IdParam, checkInShortId: IdParam }) =>
             publicCheckInClient.deleteCheckIn(checkInListShortId, checkInShortId),
 
-        onSettled: (_, error,  {checkInListShortId, checkInShortId}) => {
-            if (error && error.response.status !== 409) {
+        onSettled: (_, error: any,  {checkInListShortId, checkInShortId}) => {
+            if (error && error?.response?.status !== 409) {
                 return;
             }
 

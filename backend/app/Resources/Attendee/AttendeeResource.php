@@ -5,6 +5,7 @@ namespace HiEvents\Resources\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\Resources\CheckInList\AttendeeCheckInResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Question\QuestionAnswerViewResource;
 use HiEvents\Resources\Product\ProductResource;
@@ -30,8 +31,13 @@ class AttendeeResource extends JsonResource
             'last_name' => $this->getLastName(),
             'public_id' => $this->getPublicId(),
             'short_id' => $this->getShortId(),
+            'event_occurrence_id' => $this->getEventOccurrenceId(),
             'locale' => $this->getLocale(),
             'notes' => $this->getNotes(),
+            'event_occurrence' => $this->when(
+                !is_null($this->getEventOccurrence()),
+                fn() => new EventOccurrenceResource($this->getEventOccurrence()),
+            ),
             'product' => $this->when(
                 !is_null($this->getProduct()),
                 fn() => new ProductResource($this->getProduct()),

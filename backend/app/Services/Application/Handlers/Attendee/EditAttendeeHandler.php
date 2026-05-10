@@ -63,14 +63,15 @@ class EditAttendeeHandler
     private function adjustProductQuantities(AttendeeDomainObject $attendee, EditAttendeeDTO $editAttendeeDTO): void
     {
         if ($attendee->getProductPriceId() !== $editAttendeeDTO->product_price_id) {
-            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId());
-            $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id);
+            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
+            $this->productQuantityService->increaseQuantitySold($editAttendeeDTO->product_price_id, 1, $attendee->getEventOccurrenceId());
 
             event(new CapacityChangedEvent(
                 eventId: $editAttendeeDTO->event_id,
                 direction: CapacityChangeDirection::INCREASED,
                 productId: $attendee->getProductId(),
                 productPriceId: $attendee->getProductPriceId(),
+                eventOccurrenceId: $attendee->getEventOccurrenceId(),
             ));
         }
     }

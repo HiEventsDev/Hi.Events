@@ -1,0 +1,235 @@
+@use "../../../../styles/mixins";
+
+// Unified toolbar
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbarDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--mantine-color-gray-2);
+  flex-shrink: 0;
+}
+
+.toolbarSpacer {
+  flex: 1;
+}
+
+// Selection group (inline in toolbar)
+.selectionGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selectionCount {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mantine-primary-color-filled);
+  padding-right: 4px;
+}
+
+.selectionAction {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--mantine-radius-sm);
+  cursor: pointer;
+  border: 1px solid var(--mantine-color-gray-3);
+  background: white;
+  color: var(--mantine-color-text);
+  transition: all 0.12s ease;
+
+  &:hover {
+    background: var(--mantine-color-gray-0);
+    border-color: var(--mantine-color-gray-4);
+  }
+
+  &[data-danger] {
+    color: var(--mantine-color-red-7);
+    border-color: var(--mantine-color-red-2);
+
+    &:hover {
+      background: var(--mantine-color-red-0);
+      border-color: var(--mantine-color-red-3);
+    }
+  }
+}
+
+// Date & Time column
+.dateTimeLink {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover .dateTimePrimary {
+    color: var(--mantine-color-primary-6);
+  }
+}
+
+.dateTimePrimary {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+  line-height: 1.3;
+  transition: color 0.15s ease;
+}
+
+.dateTimeMeta {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.3;
+}
+
+// Status badge
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+
+  &[data-status="ACTIVE"] {
+    background: var(--mantine-color-green-1);
+    color: var(--mantine-color-green-9);
+  }
+
+  &[data-status="CANCELLED"] {
+    background: var(--mantine-color-red-1);
+    color: var(--mantine-color-red-9);
+  }
+
+  &[data-status="SOLD_OUT"] {
+    background: var(--mantine-color-orange-1);
+    color: var(--mantine-color-orange-9);
+  }
+
+  &[data-clickable] {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(0.95);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+  }
+}
+
+.editedIcon {
+  color: var(--mantine-color-dimmed);
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+// Tickets sold column
+.ticketsSold {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.ticketsSoldNumbers {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.ticketsSoldCount {
+  font-weight: 600;
+  color: var(--mantine-color-text);
+}
+
+.ticketsSoldTotal {
+  color: var(--mantine-color-dimmed);
+}
+
+.ticketsProgress {
+  max-width: 80px;
+}
+
+.capacityUnlimited {
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+}
+
+// Activity column
+.activity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activityText {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mantine-color-text);
+}
+
+.activityRefunded {
+  font-size: 11px;
+  color: var(--mantine-color-red-6);
+}
+
+// Actions
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// Empty state
+.emptyState {
+  padding: 60px 24px;
+  text-align: center;
+  border-style: dashed;
+}
+
+// Content area - ensures consistent layout across loading/list/calendar views
+.contentArea {
+  min-height: 720px;
+}
+
+// Count text
+.countText {
+  font-size: 13px;
+  color: var(--mantine-color-dimmed);
+  padding: 12px 4px 0;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .toolbarDivider {
+    display: none;
+  }
+
+  .toolbarSpacer {
+    display: none;
+  }
+
+  .selectionGroup {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

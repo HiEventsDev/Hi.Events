@@ -1,8 +1,9 @@
 import {useMemo, useState} from "react";
 import {t, Trans} from "@lingui/macro";
-import {IconCheck, IconSearch, IconTicket, IconX} from "@tabler/icons-react";
+import {IconCalendarEvent, IconCheck, IconSearch, IconTicket, IconX} from "@tabler/icons-react";
 import {Button, Loader} from "@mantine/core";
-import {Attendee} from "../../../../types.ts";
+import {Attendee, EventType} from "../../../../types.ts";
+import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import classes from "./SearchTab.module.scss";
 
 type FilterKey = "all" | "pending" | "checked_in" | "awaiting_payment";
@@ -18,6 +19,14 @@ interface SearchTabProps {
     isCheckInPending: boolean;
     isDeletePending: boolean;
     allowOrdersAwaitingOfflinePaymentToCheckIn: boolean;
+    /**
+     * Shown next to the product on each row when the event is recurring and
+     * the check-in list covers multiple occurrences. Suppressed on single
+     * events (the hidden implicit occurrence would just be noise).
+     */
+    eventType?: EventType;
+    timezone?: string;
+    showRowOccurrences?: boolean;
 }
 
 const getInitials = (attendee: Attendee) =>
@@ -34,7 +43,11 @@ export const SearchTab = ({
                               isCheckInPending,
                               isDeletePending,
                               allowOrdersAwaitingOfflinePaymentToCheckIn,
+                              eventType,
+                              timezone,
+                              showRowOccurrences,
                           }: SearchTabProps) => {
+    const showOccurrence = showRowOccurrences && eventType === EventType.RECURRING && !!timezone;
     const [filter, setFilter] = useState<FilterKey>("all");
 
     const stats = useMemo(() => {
@@ -201,6 +214,17 @@ export const SearchTab = ({
                                             </>
                                         )}
                                     </div>
+                                    {showOccurrence && attendee.event_occurrence && (
+                                        <div className={classes.rowOccurrence}>
+                                            <IconCalendarEvent size={12}/>
+                                            <span>
+                                                {formatDateWithLocale(attendee.event_occurrence.start_date, 'shortDate', timezone!)}
+                                                {' · '}
+                                                {formatDateWithLocale(attendee.event_occurrence.start_date, 'timeOnly', timezone!)}
+                                                {attendee.event_occurrence.label ? ` · ${attendee.event_occurrence.label}` : ''}
+                                            </span>
+                                        </div>
+                                    )}
                                     {(isAwaiting || isCancelled) && (
                                         <div className={classes.rowTags}>
                                             {isAwaiting && <span className={classes.tagWarn}>{t`Awaiting payment`}</span>}

@@ -52,18 +52,21 @@ class CreateEventHandler
             ->setAccountId($eventData->account_id)
             ->setUserId($eventData->user_id)
             ->setTitle($eventData->title)
-            ->setStartDate($eventData->start_date)
-            ->setEndDate($eventData->end_date)
             ->setDescription($eventData->description)
             ->setAttributes($eventData->attributes?->toArray())
             ->setTimezone($eventData->timezone ?? $organizer->getTimezone())
             ->setCurrency($eventData->currency ?? $organizer->getCurrency())
             ->setCategory($eventData->category?->value ?? EventCategory::OTHER->value)
             ->setStatus($eventData->status)
+            ->setType($eventData->type?->name)
             ->setEventSettings($eventData->event_settings)
             ->setLocationDetails($eventData->location_details?->toArray());
 
-        $newEvent = $this->createEventService->createEvent($event);
+        $newEvent = $this->createEventService->createEvent(
+            eventData: $event,
+            startDate: $eventData->start_date,
+            endDate: $eventData->end_date,
+        );
 
         $this->createProductCategoryService->createDefaultProductCategory($newEvent);
 

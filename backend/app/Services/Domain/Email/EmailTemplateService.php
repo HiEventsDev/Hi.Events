@@ -151,6 +151,10 @@ class EmailTemplateService
                 'label' => __('View Ticket'),
                 'url_token' => 'ticket.url',
             ],
+            EmailTemplateType::OCCURRENCE_CANCELLATION->value => [
+                'label' => __('View Event'),
+                'url_token' => 'event.url',
+            ],
         ];
     }
 
@@ -190,6 +194,23 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 <strong>Total Amount:</strong> {{ order.total }}<br>
 
 If you have any questions or need assistance, please contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+
+Best regards,<br>
+{{ organizer.name }}
+LIQUID
+            ],
+            EmailTemplateType::OCCURRENCE_CANCELLATION->value => [
+                'subject' => '{{ event.title }} on {{ occurrence.start_date }} has been cancelled',
+                'body' => <<<'LIQUID'
+Hello,<br>
+
+We're sorry to let you know that <strong>{{ event.title }}</strong> scheduled for <strong>{{ occurrence.start_date }}</strong> at <strong>{{ occurrence.start_time }}</strong> has been cancelled.<br>
+
+{% if cancellation.refund_issued %}
+A refund for your order will be processed automatically. Please allow a few business days for the refund to appear on your statement.<br>
+{% else %}
+If you have any questions about your order, please respond to this email or contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+{% endif %}
 
 Best regards,<br>
 {{ organizer.name }}

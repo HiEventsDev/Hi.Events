@@ -10,6 +10,8 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
@@ -38,6 +40,10 @@ class EventStatisticsCancellationServiceTest extends TestCase
 
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
         $this->eventDailyStatisticRepository = Mockery::mock(EventDailyStatisticRepositoryInterface::class);
+        $eventOccurrenceStatisticRepository = Mockery::mock(EventOccurrenceStatisticRepositoryInterface::class);
+        $eventOccurrenceStatisticRepository->shouldReceive('findFirstWhere')->andReturnNull();
+        $eventOccurrenceDailyStatisticRepository = Mockery::mock(EventOccurrenceDailyStatisticRepositoryInterface::class);
+        $eventOccurrenceDailyStatisticRepository->shouldReceive('findFirstWhere')->andReturnNull();
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
@@ -47,6 +53,8 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->service = new EventStatisticsCancellationService(
             $this->eventStatisticsRepository,
             $this->eventDailyStatisticRepository,
+            $eventOccurrenceStatisticRepository,
+            $eventOccurrenceDailyStatisticRepository,
             $this->attendeeRepository,
             $this->orderRepository,
             $this->logger,
@@ -64,9 +72,11 @@ class EventStatisticsCancellationServiceTest extends TestCase
         // Create mock order items
         $ticketOrderItem1 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem1->shouldReceive('getQuantity')->andReturn(2);
+        $ticketOrderItem1->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $ticketOrderItem2 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem2->shouldReceive('getQuantity')->andReturn(1);
+        $ticketOrderItem2->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $orderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
         $ticketOrderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);

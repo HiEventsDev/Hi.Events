@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\SelfService;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -62,7 +63,7 @@ class SelfServiceEditOrderService
             $emailChanged = true;
         }
 
-        if (!empty($updateData)) {
+        if (! empty($updateData)) {
             $oldEmail = $order->getEmail();
 
             if ($emailChanged) {
@@ -114,13 +115,22 @@ class SelfServiceEditOrderService
         return $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
             ->findById($eventId);
     }
 
     private function sendConfirmationToNewEmail(int $orderId, EventDomainObject $event): void
     {
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrderItemDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
             ->loadRelation(AttendeeDomainObject::class)
             ->loadRelation(InvoiceDomainObject::class)
             ->findById($orderId);

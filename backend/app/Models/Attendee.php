@@ -28,6 +28,11 @@ class Attendee extends BaseModel
         return $this->belongsTo(Product::class);
     }
 
+    public function event_occurrence(): BelongsTo
+    {
+        return $this->belongsTo(EventOccurrence::class, 'event_occurrence_id');
+    }
+
     public function check_ins(): HasMany
     {
         return $this->hasMany(AttendeeCheckIn::class);

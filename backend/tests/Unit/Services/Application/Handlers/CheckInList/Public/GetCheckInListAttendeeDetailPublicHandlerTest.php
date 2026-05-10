@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeeDetailPublicHandler;
+use Illuminate\Support\Collection;
 use Mockery as m;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Tests\TestCase;
@@ -146,6 +147,10 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $checkInList->shouldReceive('getId')->andReturn(1);
         $checkInList->shouldReceive('getEventId')->andReturn($eventId);
         $checkInList->shouldReceive('getEvent')->andReturn($event);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
+        $checkInList->shouldReceive('getProducts')->andReturn(new Collection());
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
         $checkInList->shouldReceive('getPublicShowAttendeeNotes')->andReturn($showNotes);
         $checkInList->shouldReceive('getPublicShowQuestionAnswers')->andReturn($showQuestions);
         $checkInList->shouldReceive('getPublicShowOrderDetails')->andReturn($showOrderDetails);

@@ -15,6 +15,14 @@ interface TemplateVariable {
     category?: string;
 }
 
+const OCCURRENCE_VARIABLES: TemplateVariable[] = [
+    {label: t`Occurrence Start Date`, value: 'occurrence.start_date', description: t`Start date of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence Start Time`, value: 'occurrence.start_time', description: t`Start time of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence End Date`, value: 'occurrence.end_date', description: t`End date of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence End Time`, value: 'occurrence.end_time', description: t`End time of the occurrence`, category: t`Occurrence`},
+    {label: t`Occurrence Label`, value: 'occurrence.label', description: t`Label for the occurrence`, category: t`Occurrence`},
+];
+
 const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
     order_confirmation: [
         // Order Information
@@ -39,6 +47,7 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
 
+        ...OCCURRENCE_VARIABLES,
 
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
@@ -62,7 +71,7 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         // Order Information
         {label: t`Order Payment Pending`, value: 'order.is_awaiting_offline_payment', description: t`True if payment pending`, category: t`Order`},
         {label: t`Order Status`, value: 'order.status', description: t`Order Status`, category: t`Order`},
-        {label: t`Offline Payment`, value: 'is_offline_payment', description: t`True if offline payment`, category: t`Order`},
+        {label: t`Offline Payment`, value: 'order.is_offline_payment', description: t`True if offline payment`, category: t`Order`},
 
         // Event Information
         {label: t`Event Title`, value: 'event.title', description: t`Name of the event`, category: t`Event`},
@@ -73,6 +82,8 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
 
+        ...OCCURRENCE_VARIABLES,
+
         // Organization
         {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
         {label: t`Organizer Email`, value: 'organizer.email', description: t`Organizer email address`, category: t`Organization`},
@@ -81,6 +92,25 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Support Email`, value: 'settings.support_email', description: t`Contact email for support`, category: t`Settings`},
         {label: t`Offline Payment Instructions`, value: 'settings.offline_payment_instructions', description: t`How to pay offline`, category: t`Settings`},
         {label: t`Post Checkout Message`, value: 'settings.post_checkout_message', description: t`Custom message after checkout`, category: t`Settings`},
+    ],
+    occurrence_cancellation: [
+        {label: t`Event Title`, value: 'event.title', description: t`Name of the event`, category: t`Event`},
+        {label: t`Event Date`, value: 'event.date', description: t`Date of the event`, category: t`Event`},
+        {label: t`Event Time`, value: 'event.time', description: t`Start time of the event`, category: t`Event`},
+        {label: t`Event Full Address`, value: 'event.full_address', description: t`The full event address`, category: t`Event`},
+        {label: t`Event Description`, value: 'event.description', description: t`Event details`, category: t`Event`},
+        {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
+        {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
+        {label: t`Event URL`, value: 'event.url', description: t`Link to event homepage`, category: t`Event`},
+
+        ...OCCURRENCE_VARIABLES,
+
+        {label: t`Refund Issued`, value: 'cancellation.refund_issued', description: t`Whether refunds are being processed`, category: t`Cancellation`},
+
+        {label: t`Organizer Name`, value: 'organizer.name', description: t`Event organizer name`, category: t`Organization`},
+        {label: t`Organizer Email`, value: 'organizer.email', description: t`Organizer email address`, category: t`Organization`},
+
+        {label: t`Support Email`, value: 'settings.support_email', description: t`Contact email for support`, category: t`Settings`},
     ],
 };
 

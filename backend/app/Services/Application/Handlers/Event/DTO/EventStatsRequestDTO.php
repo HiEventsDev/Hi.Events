@@ -11,6 +11,7 @@ class EventStatsRequestDTO extends BaseDTO
         public ?string $start_date = null,
         public ?string $end_date = null,
         public string  $date_range_preset = 'month',
+        public ?int    $occurrence_id = null,
     )
     {
     }

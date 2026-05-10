@@ -3,10 +3,12 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\EventLifecycleStatus;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
@@ -32,6 +34,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $affiliates = null;
 
+    private ?Collection $eventOccurrences = null;
+
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
@@ -44,8 +48,6 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         return [
             self::TITLE,
-            self::START_DATE,
-            self::END_DATE,
             self::CREATED_AT,
             self::UPDATED_AT,
             self::STATUS,
@@ -57,14 +59,6 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         return new AllowedSorts(
             [
-                self::START_DATE => [
-                    'asc' => __('Closest start date'),
-                    'desc' => __('Furthest start date'),
-                ],
-                self::END_DATE => [
-                    'asc' => __('Closest end date'),
-                    'desc' => __('Furthest end date'),
-                ],
                 self::CREATED_AT => [
                     'desc' => __('Newest first'),
                     'asc' => __('Oldest first'),
@@ -79,12 +73,12 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     public static function getDefaultSort(): string
     {
-        return self::START_DATE;
+        return self::CREATED_AT;
     }
 
     public static function getDefaultSortDirection(): string
     {
-        return 'asc';
+        return 'desc';
     }
 
     public function setProducts(Collection $products): self
@@ -178,58 +172,135 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return StringHelper::previewFromHtml($this->getDescription());
     }
 
+    public function setEventOccurrences(?Collection $eventOccurrences): self
+    {
+        $this->eventOccurrences = $eventOccurrences;
+        return $this;
+    }
+
+    public function getEventOccurrences(): ?Collection
+    {
+        return $this->eventOccurrences;
+    }
+
+    public function getStartDate(): ?string
+    {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        return $this->eventOccurrences->min(
+            fn(EventOccurrenceDomainObject $o) => $o->getStartDate()
+        );
+    }
+
+    public function getEndDate(): ?string
+    {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        $withEndDates = $this->eventOccurrences->filter(
+            fn(EventOccurrenceDomainObject $o) => $o->getEndDate() !== null
+        );
+
+        if ($withEndDates->isEmpty()) {
+            return $this->eventOccurrences->max(
+                fn(EventOccurrenceDomainObject $o) => $o->getStartDate()
+            );
+        }
+
+        return $withEndDates->max(
+            fn(EventOccurrenceDomainObject $o) => $o->getEndDate()
+        );
+    }
+
+    public function getNextOccurrenceStartDate(): ?string
+    {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        $now = Carbon::now();
+
+        $nextOccurrence = $this->eventOccurrences
+            ->filter(fn(EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name)
+            ->filter(fn(EventOccurrenceDomainObject $o) => Carbon::parse($o->getStartDate(), 'UTC')->isFuture())
+            ->sortBy(fn(EventOccurrenceDomainObject $o) => $o->getStartDate())
+            ->first();
+
+        return $nextOccurrence?->getStartDate();
+    }
+
     public function isEventInPast(): bool
     {
-        if ($this->getEndDate() === null) {
+        $endDate = $this->getEndDate();
+        if ($endDate === null) {
             return false;
         }
-        $endDate = Carbon::parse($this->getEndDate());
-        $endDate->setTimezone($this->getTimezone());
 
-        return $endDate->isPast();
+        $parsed = Carbon::parse($endDate);
+        if ($this->getTimezone()) {
+            $parsed->setTimezone($this->getTimezone());
+        }
+
+        return $parsed->isPast();
     }
 
     public function isEventInFuture(): bool
     {
-        if ($this->getStartDate() === null) {
+        $startDate = $this->getStartDate();
+        if ($startDate === null) {
             return false;
         }
-        $startDate = Carbon::parse($this->getStartDate());
-        $startDate->setTimezone($this->getTimezone());
 
-        return $startDate->isFuture();
+        $parsed = Carbon::parse($startDate);
+        if ($this->getTimezone()) {
+            $parsed->setTimezone($this->getTimezone());
+        }
+
+        return $parsed->isFuture();
     }
 
     public function isEventOngoing(): bool
     {
-        $startDate = Carbon::parse($this->getStartDate());
-        $startDate->setTimezone($this->getTimezone());
-
-        if ($this->getEndDate() === null) {
-            return $startDate->isPast();
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return false;
         }
 
-        $endDate = Carbon::parse($this->getEndDate());
-        $endDate->setTimezone($this->getTimezone());
+        foreach ($this->eventOccurrences as $occurrence) {
+            if ($occurrence->getStatus() !== EventOccurrenceStatus::ACTIVE->name) {
+                continue;
+            }
 
-        return $startDate->isPast() && $endDate->isFuture();
+            $start = Carbon::parse($occurrence->getStartDate(), 'UTC');
+            $end = $occurrence->getEndDate() ? Carbon::parse($occurrence->getEndDate(), 'UTC') : null;
+
+            if ($start->isPast() && ($end === null || $end->isFuture())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getLifecycleStatus(): string
     {
-        if ($this->isEventInPast()) {
-            return EventLifecycleStatus::ENDED->name;
+        if ($this->isEventOngoing()) {
+            return EventLifecycleStatus::ONGOING->name;
         }
 
         if ($this->isEventInFuture()) {
             return EventLifecycleStatus::UPCOMING->name;
         }
 
-        if ($this->isEventOngoing()) {
-            return EventLifecycleStatus::ONGOING->name;
-        }
-
         return EventLifecycleStatus::ENDED->name;
+
+    }
+
+    public function isRecurring(): bool
+    {
+        return $this->getType() === EventType::RECURRING->name;
     }
 
     public function getPromoCodes(): ?Collection

@@ -1,11 +1,11 @@
 import {t} from "@lingui/macro";
-import {Button, Select, TextInput} from "@mantine/core";
+import {Anchor, Button, Select, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useParams} from "react-router";
+import {NavLink, useParams} from "react-router";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {useEffect} from "react";
 import {useUpdateEvent} from "../../../../../../mutations/useUpdateEvent.ts";
-import {Event} from "../../../../../../types.ts";
+import {Event, EventType} from "../../../../../../types.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {Card} from "../../../../../common/Card";
 import {Editor} from "../../../../../common/Editor";
@@ -21,6 +21,7 @@ export const EventDetailsForm = () => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
     const updateMutation = useUpdateEvent();
+    const isRecurring = eventQuery.data?.type === EventType.RECURRING;
     const form = useForm({
         initialValues: {
             title: '',
@@ -66,7 +67,9 @@ export const EventDetailsForm = () => {
         <Card>
             <HeadingWithDescription
                 heading={t`Event Details`}
-                description={t`Update event name, description and dates`}
+                description={isRecurring
+                    ? t`Update event name and description`
+                    : t`Update event name, description and dates`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={eventQuery.isLoading || updateMutation.isPending}>
@@ -96,17 +99,33 @@ export const EventDetailsForm = () => {
                         error={form.errors?.description as string}
                     />
 
-                    <InputGroup>
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('start_date')}
-                                   label={t`Start Date`}
-                                   required
-                        />
-                        <TextInput type={'datetime-local'}
-                                   {...form.getInputProps('end_date')}
-                                   label={t`End Date`}
-                        />
-                    </InputGroup>
+                    {isRecurring ? (
+                        <div style={{
+                            padding: '12px 16px',
+                            background: 'var(--mantine-color-blue-0)',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            color: 'var(--mantine-color-blue-9)',
+                            marginBottom: '16px',
+                        }}>
+                            {t`Dates and times are managed on the`}{' '}
+                            <Anchor component={NavLink} to={'/manage/event/' + eventId + '/occurrences'}>
+                                {t`Occurrence Schedule page`}
+                            </Anchor>.
+                        </div>
+                    ) : (
+                        <InputGroup>
+                            <TextInput type={'datetime-local'}
+                                       {...form.getInputProps('start_date')}
+                                       label={t`Start Date`}
+                                       required
+                            />
+                            <TextInput type={'datetime-local'}
+                                       {...form.getInputProps('end_date')}
+                                       label={t`End Date`}
+                            />
+                        </InputGroup>
+                    )}
                     <InputGroup>
                         <Select
                             searchable

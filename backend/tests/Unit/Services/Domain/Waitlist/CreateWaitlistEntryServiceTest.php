@@ -70,18 +70,19 @@ class CreateWaitlistEntryServiceTest extends TestCase
                 'event_id' => 1,
                 ['status', 'in', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]],
                 'product_price_id' => 10,
+                'event_occurrence_id' => null,
             ])
             ->andReturnNull();
 
         $this->waitlistEntryRepository
             ->shouldReceive('lockForProductPrice')
             ->once()
-            ->with(10);
+            ->with(10, null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getMaxPosition')
             ->once()
-            ->with(10)
+            ->with(10, null)
             ->andReturn(3);
 
         $createdEntry = new WaitlistEntryDomainObject();
@@ -100,6 +101,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
             ->with(Mockery::on(function ($attributes) {
                 return $attributes['event_id'] === 1
                     && $attributes['product_price_id'] === 10
+                    && $attributes['event_occurrence_id'] === null
                     && $attributes['email'] === 'test@example.com'
                     && $attributes['first_name'] === 'John'
                     && $attributes['last_name'] === 'Doe'
@@ -139,7 +141,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->waitlistEntryRepository
             ->shouldReceive('lockForProductPrice')
             ->once()
-            ->with(10);
+            ->with(10, null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -149,6 +151,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
                 'event_id' => 1,
                 ['status', 'in', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]],
                 'product_price_id' => 10,
+                'event_occurrence_id' => null,
             ])
             ->andReturn($existingEntry);
 
@@ -184,11 +187,12 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->waitlistEntryRepository
             ->shouldReceive('lockForProductPrice')
             ->once()
-            ->with(10);
+            ->with(10, null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('getMaxPosition')
             ->once()
+            ->with(10, null)
             ->andReturn(0);
 
         $createdEntry = new WaitlistEntryDomainObject();
@@ -225,7 +229,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->waitlistEntryRepository
             ->shouldReceive('lockForProductPrice')
             ->once()
-            ->with(10);
+            ->with(10, null);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -235,6 +239,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
                 'event_id' => 1,
                 ['status', 'in', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]],
                 'product_price_id' => 10,
+                'event_occurrence_id' => null,
             ])
             ->andReturn($existingEntry);
 

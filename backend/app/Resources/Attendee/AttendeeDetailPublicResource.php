@@ -5,6 +5,7 @@ namespace HiEvents\Resources\Attendee;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 use HiEvents\Resources\CheckInList\AttendeeCheckInPublicResource;
+use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\PublicAttendeeDetailDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,6 +21,8 @@ class AttendeeDetailPublicResource extends JsonResource
         $order = $attendee->getOrder();
         $product = $attendee->getProduct();
 
+        $occurrence = $attendee->getEventOccurrence();
+
         $data = [
             'id' => $attendee->getId(),
             'public_id' => $attendee->getPublicId(),
@@ -29,6 +32,9 @@ class AttendeeDetailPublicResource extends JsonResource
             'status' => $attendee->getStatus(),
             'product_id' => $attendee->getProductId(),
             'product_title' => $product?->getTitle(),
+            'event_occurrence' => $occurrence
+                ? (new EventOccurrenceResourcePublic($occurrence))->toArray(request())
+                : null,
             'check_ins' => $this->currentListCheckIns
                 ->map(static fn(AttendeeCheckInDomainObject $checkIn) => (new AttendeeCheckInPublicResource($checkIn))->toArray(request()))
                 ->values()

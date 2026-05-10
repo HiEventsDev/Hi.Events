@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Waitlist\Organizer;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Waitlist\GetWaitlistStatsRequest;
 use HiEvents\Services\Application\Handlers\Waitlist\GetWaitlistStatsHandler;
 use Illuminate\Http\JsonResponse;
 
@@ -15,11 +16,15 @@ class GetWaitlistStatsAction extends BaseAction
     {
     }
 
-    public function __invoke(int $eventId): JsonResponse
+    public function __invoke(GetWaitlistStatsRequest $request, int $eventId): JsonResponse
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
+        $validated = $request->validated();
 
-        $stats = $this->handler->handle($eventId);
+        $stats = $this->handler->handle(
+            $eventId,
+            isset($validated['event_occurrence_id']) ? (int) $validated['event_occurrence_id'] : null,
+        );
 
         return $this->jsonResponse([
             'total' => $stats->total,

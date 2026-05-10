@@ -55,12 +55,16 @@ export const CollectInformation = () => {
         isError: isOrderError,
         error: orderError,
     } = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const orderOccurrenceIds = Array.from(new Set(
+        (orderItems ?? []).map(item => item.event_occurrence_id).filter((id): id is number => id != null)
+    ));
+    const orderOccurrenceId = orderOccurrenceIds.length === 1 ? orderOccurrenceIds[0] : null;
     const {
         data: event,
         data: {product_categories: productCategories} = {},
         isFetched: isEventFetched,
         isError: isEventError,
-    } = useGetEventPublic(eventId, isOrderFetched, !!order?.promo_code, order?.promo_code ?? null);
+    } = useGetEventPublic(eventId, isOrderFetched, !!order?.promo_code, order?.promo_code ?? null, orderOccurrenceId);
     const {
         data: questions,
         isFetched: isQuestionsFetched,

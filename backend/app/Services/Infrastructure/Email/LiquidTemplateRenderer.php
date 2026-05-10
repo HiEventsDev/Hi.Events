@@ -146,6 +146,31 @@ class LiquidTemplateRenderer
                 'description' => __('Message shown after checkout'),
                 'example' => 'Thank you for your purchase!',
             ],
+            [
+                'token' => '{{ occurrence.start_date }}',
+                'description' => __('The occurrence start date'),
+                'example' => 'January 15, 2024',
+            ],
+            [
+                'token' => '{{ occurrence.start_time }}',
+                'description' => __('The occurrence start time'),
+                'example' => '7:00 PM',
+            ],
+            [
+                'token' => '{{ occurrence.end_date }}',
+                'description' => __('The occurrence end date'),
+                'example' => 'January 16, 2024',
+            ],
+            [
+                'token' => '{{ occurrence.end_time }}',
+                'description' => __('The occurrence end time'),
+                'example' => '11:00 PM',
+            ],
+            [
+                'token' => '{{ occurrence.label }}',
+                'description' => __('The occurrence title suffix'),
+                'example' => 'Session A',
+            ],
         ];
 
         $orderTokens = [
@@ -214,9 +239,23 @@ class LiquidTemplateRenderer
             ],
         ];
 
+        $cancellationTokens = [
+            [
+                'token' => '{{ cancellation.refund_issued }}',
+                'description' => __('Whether refunds are being processed for this cancellation'),
+                'example' => 'true',
+            ],
+            [
+                'token' => '{{ event.url }}',
+                'description' => __('Link to the event homepage'),
+                'example' => 'https://example.com/event/123/summer-fest',
+            ],
+        ];
+
         return match ($type) {
             EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens),
             EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens),
+            EmailTemplateType::OCCURRENCE_CANCELLATION => array_merge($commonTokens, $cancellationTokens),
         };
     }
 }

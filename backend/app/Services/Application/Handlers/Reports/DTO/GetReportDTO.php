@@ -11,7 +11,8 @@ class GetReportDTO extends BaseDTO
         public readonly int         $eventId,
         public readonly ReportTypes $reportType,
         public readonly ?string     $startDate,
-        public readonly ?string     $endDate
+        public readonly ?string     $endDate,
+        public readonly ?int        $occurrenceId = null,
     )
     {
     }

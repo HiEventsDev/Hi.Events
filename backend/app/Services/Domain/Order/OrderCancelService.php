@@ -103,11 +103,17 @@ class OrderCancelService
             return $attendee->getStatus() === AttendeeStatus::ACTIVE->name;
         });
 
-        $productIdCountMap = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId())->countBy();
+        $groupedCounts = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId() . '_' . $attendee->getEventOccurrenceId())
+            ->countBy();
 
-        foreach ($productIdCountMap as $productPriceId => $count) {
-            $this->productQuantityService->decreaseQuantitySold($productPriceId, $count);
+        foreach ($groupedCounts as $compositeKey => $count) {
+            [$productPriceId, $eventOccurrenceId] = explode('_', (string) $compositeKey);
+            $this->productQuantityService->decreaseQuantitySold(
+                (int) $productPriceId,
+                $count,
+                $eventOccurrenceId ? (int) $eventOccurrenceId : null,
+            );
         }
     }
 
@@ -129,15 +135,19 @@ class OrderCancelService
             'order_id' => $order->getId(),
         ]);
 
-        $productIds = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductId())
-            ->unique();
+        $capacityScopes = $attendees
+            ->map(fn(AttendeeDomainObject $attendee) => [
+                'product_id' => $attendee->getProductId(),
+                'event_occurrence_id' => $attendee->getEventOccurrenceId(),
+            ])
+            ->unique(fn (array $scope) => $scope['product_id'].'-'.$scope['event_occurrence_id']);
 
-        foreach ($productIds as $productId) {
+        foreach ($capacityScopes as $scope) {
             event(new CapacityChangedEvent(
                 eventId: $order->getEventId(),
                 direction: CapacityChangeDirection::INCREASED,
-                productId: $productId,
+                productId: $scope['product_id'],
+                eventOccurrenceId: $scope['event_occurrence_id'],
             ));
         }
     }
