@@ -69,9 +69,9 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
         return $this->model
             ->withCount(['events', 'users'])
             ->with([
-                'configuration',
-                'account_vat_setting',
                 'messagingTier',
+                'organizers.organizer_configuration',
+                'organizers.organizer_vat_setting',
                 'users' => function ($query) {
                     $query->select('users.id', 'users.first_name', 'users.last_name', 'users.email')
                         ->withPivot('role');

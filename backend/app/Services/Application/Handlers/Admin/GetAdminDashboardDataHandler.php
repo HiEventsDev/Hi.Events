@@ -125,13 +125,23 @@ class GetAdminDashboardDataHandler
 
     private function getRecentAccounts(int $limit): array
     {
+        // stripe_connect_setup_complete is computed from organizer_stripe_platforms —
+        // any organizer in the account with completed setup counts as connected.
         $query = <<<SQL
             SELECT
                 a.id,
                 a.name,
                 a.email,
                 a.created_at,
-                a.stripe_connect_setup_complete,
+                EXISTS (
+                    SELECT 1
+                    FROM organizer_stripe_platforms osp
+                    JOIN organizers o ON o.id = osp.organizer_id
+                    WHERE o.account_id = a.id
+                      AND osp.stripe_setup_completed_at IS NOT NULL
+                      AND osp.deleted_at IS NULL
+                      AND o.deleted_at IS NULL
+                ) AS stripe_connect_setup_complete,
                 a.account_verified_at,
                 COUNT(DISTINCT e.id) as events_count,
                 COUNT(DISTINCT au.user_id) as users_count
@@ -139,7 +149,7 @@ class GetAdminDashboardDataHandler
             LEFT JOIN events e ON e.account_id = a.id AND e.deleted_at IS NULL
             LEFT JOIN account_users au ON au.account_id = a.id AND au.deleted_at IS NULL
             WHERE a.deleted_at IS NULL
-            GROUP BY a.id, a.name, a.email, a.created_at, a.stripe_connect_setup_complete, a.account_verified_at
+            GROUP BY a.id, a.name, a.email, a.created_at, a.account_verified_at
             ORDER BY a.created_at DESC
             LIMIT :limit
         SQL;

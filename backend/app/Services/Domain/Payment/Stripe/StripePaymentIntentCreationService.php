@@ -66,14 +66,16 @@ class StripePaymentIntentCreationService
         try {
             $this->databaseManager->beginTransaction();
 
-            $accountConfiguration = $paymentIntentDTO->account->getConfiguration();
-            $bypassApplicationFees = $accountConfiguration?->getBypassApplicationFees() ?? false;
+            $configuration = $paymentIntentDTO->configuration;
+            $bypassApplicationFees = $configuration?->getBypassApplicationFees() ?? false;
 
-            $applicationFee = $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $accountConfiguration,
-                order: $paymentIntentDTO->order,
-                vatSettings: $paymentIntentDTO->vatSettings,
-            );
+            $applicationFee = $configuration
+                ? $this->orderApplicationFeeCalculationService->calculateApplicationFee(
+                    configuration: $configuration,
+                    order: $paymentIntentDTO->order,
+                    vatSettings: $paymentIntentDTO->vatSettings,
+                )
+                : null;
 
             $paymentIntent = $stripeClient->paymentIntents->create([
                 'amount' => $paymentIntentDTO->amount->toMinorUnit(),

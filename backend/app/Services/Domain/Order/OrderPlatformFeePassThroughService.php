@@ -3,7 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Money\Currency as BrickCurrency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
@@ -45,7 +45,7 @@ class OrderPlatformFeePassThroughService
      * In other words: application_fee(total + P) = P
      */
     public function calculatePlatformFee(
-        AccountConfigurationDomainObject $accountConfiguration,
+        OrganizerConfigurationDomainObject $organizerConfiguration,
         EventSettingDomainObject         $eventSettings,
         float                            $total,
         int                              $quantity,
@@ -56,8 +56,8 @@ class OrderPlatformFeePassThroughService
             return 0.0;
         }
 
-        $fixedFee = $this->getConvertedFixedFee($accountConfiguration, $currency);
-        $percentageRate = $accountConfiguration->getPercentageApplicationFee() / 100;
+        $fixedFee = $this->getConvertedFixedFee($organizerConfiguration, $currency);
+        $percentageRate = $organizerConfiguration->getPercentageApplicationFee() / 100;
 
         if ($percentageRate >= 1) {
             return Currency::round(($fixedFee * $quantity) + ($total * $percentageRate));
@@ -70,12 +70,12 @@ class OrderPlatformFeePassThroughService
     }
 
     private function getConvertedFixedFee(
-        AccountConfigurationDomainObject $accountConfiguration,
+        OrganizerConfigurationDomainObject $organizerConfiguration,
         string                           $currency
     ): float
     {
-        $baseFee = $accountConfiguration->getFixedApplicationFee();
-        $baseCurrency = $accountConfiguration->getApplicationFeeCurrency();
+        $baseFee = $organizerConfiguration->getFixedApplicationFee();
+        $baseCurrency = $organizerConfiguration->getApplicationFeeCurrency();
 
         if ($currency === $baseCurrency) {
             return $baseFee;

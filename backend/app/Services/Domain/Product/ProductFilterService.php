@@ -3,9 +3,10 @@
 namespace HiEvents\Services\Domain\Product;
 
 use HiEvents\Constants;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -13,7 +14,6 @@ use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\Relationship;
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
@@ -23,7 +23,7 @@ use Illuminate\Support\Collection;
 
 class ProductFilterService
 {
-    private ?AccountConfigurationDomainObject $accountConfiguration = null;
+    private ?OrganizerConfigurationDomainObject $organizerConfiguration = null;
     private ?EventSettingDomainObject $eventSettings = null;
     private ?string $eventCurrency = null;
 
@@ -32,7 +32,6 @@ class ProductFilterService
         private readonly ProductPriceService                              $productPriceService,
         private readonly AvailableProductQuantitiesFetchService           $fetchAvailableProductQuantitiesService,
         private readonly OrderPlatformFeePassThroughService               $platformFeeService,
-        private readonly AccountRepositoryInterface                       $accountRepository,
         private readonly EventRepositoryInterface                         $eventRepository,
         private readonly ProductOccurrenceVisibilityRepositoryInterface   $productOccurrenceVisibilityRepository,
     )
@@ -97,21 +96,23 @@ class ProductFilterService
 
     private function loadAccountConfiguration(int $eventId): void
     {
-        $account = $this->accountRepository
-            ->loadRelation(new Relationship(
-                domainObject: AccountConfigurationDomainObject::class,
-                name: 'configuration',
-            ))
-            ->findByEventId($eventId);
-
-        $this->accountConfiguration = $account->getConfiguration();
-
         $event = $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrganizerDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'organizer_configuration',
+                    ),
+                ],
+                name: 'organizer',
+            ))
             ->findById($eventId);
 
         $this->eventSettings = $event->getEventSettings();
         $this->eventCurrency = $event->getCurrency();
+        $this->organizerConfiguration = $event->getOrganizer()?->getOrganizerConfiguration();
     }
 
     private function isHiddenByPromoCode(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode): bool
@@ -243,12 +244,12 @@ class ProductFilterService
 
     private function calculatePlatformFee(float $total): float
     {
-        if ($this->accountConfiguration === null || $this->eventSettings === null) {
+        if ($this->organizerConfiguration === null || $this->eventSettings === null) {
             return 0.0;
         }
 
         return $this->platformFeeService->calculatePlatformFee(
-            accountConfiguration: $this->accountConfiguration,
+            organizerConfiguration: $this->organizerConfiguration,
             eventSettings: $this->eventSettings,
             total: $total,
             quantity: 1,

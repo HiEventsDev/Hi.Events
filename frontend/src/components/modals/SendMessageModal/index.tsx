@@ -1,5 +1,5 @@
 import {Event, EventOccurrence, EventType, GenericModalProps, IdParam, MessageType, ProductType, QueryFilters} from "../../../types.ts";
-import {useParams} from "react-router";
+import {NavLink, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
@@ -18,6 +18,7 @@ import {
 } from "@mantine/core";
 import {
     IconAlertCircle,
+    IconBrandStripe,
     IconCheck,
     IconChevronDown,
     IconClock,
@@ -36,7 +37,6 @@ import {useSendEventMessage} from "../../../mutations/useSendEventMessage.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {useEffect, useMemo, useState} from "react";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {StripeConnectButton} from "../../common/StripeConnectButton";
 import {getConfig} from "../../../utilites/config";
 import {utcToTz, prettyDate} from "../../../utilites/dates.ts";
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
@@ -301,9 +301,18 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                            title={t`Connect Stripe to enable messaging`}>
                         {t`Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.
                          This is to ensure that all event organizers are verified and accountable.`}
-                        <div className={classes.stripeConnectButton}>
-                            <StripeConnectButton/>
-                        </div>
+                        {event?.organizer_id && (
+                            <div className={classes.stripeConnectButton}>
+                                <Button
+                                    component={NavLink}
+                                    to={`/manage/organizer/${event.organizer_id}/payments`}
+                                    leftSection={<IconBrandStripe size={16}/>}
+                                    variant="light"
+                                >
+                                    {t`Connect Stripe`}
+                                </Button>
+                            </div>
+                        )}
                     </Alert>
                 )}
 

@@ -3,8 +3,8 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Money\Currency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
-use HiEvents\DomainObjects\AccountVatSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerVatSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Services\Domain\Order\DTO\ApplicationFeeValuesDTO;
 use HiEvents\Services\Domain\Order\Vat\VatRateDeterminationService;
@@ -23,9 +23,9 @@ class OrderApplicationFeeCalculationService
     }
 
     public function calculateApplicationFee(
-        AccountConfigurationDomainObject $accountConfiguration,
+        OrganizerConfigurationDomainObject $configuration,
         OrderDomainObject                $order,
-        ?AccountVatSettingDomainObject   $vatSettings = null
+        ?OrganizerVatSettingDomainObject   $vatSettings = null
     ): ?ApplicationFeeValuesDTO
     {
         $currency = $order->getCurrency();
@@ -35,8 +35,8 @@ class OrderApplicationFeeCalculationService
             return null;
         }
 
-        $fixedFee = $this->getConvertedFixedFee($accountConfiguration, $currency);
-        $percentageFee = $accountConfiguration->getPercentageApplicationFee();
+        $fixedFee = $this->getConvertedFixedFee($configuration, $currency);
+        $percentageFee = $configuration->getPercentageApplicationFee();
 
         $netApplicationFee = MoneyValue::fromFloat(
             amount: ($fixedFee->toFloat() * $quantityPurchased) + ($order->getTotalGross() * $percentageFee / 100),
@@ -58,20 +58,20 @@ class OrderApplicationFeeCalculationService
     }
 
     private function getConvertedFixedFee(
-        AccountConfigurationDomainObject $accountConfiguration,
+        OrganizerConfigurationDomainObject $configuration,
         string                           $currency
     ): MoneyValue
     {
-        $baseCurrency = $accountConfiguration->getApplicationFeeCurrency();
+        $baseCurrency = $configuration->getApplicationFeeCurrency();
 
         if ($currency === $baseCurrency) {
-            return MoneyValue::fromFloat($accountConfiguration->getFixedApplicationFee(), $currency);
+            return MoneyValue::fromFloat($configuration->getFixedApplicationFee(), $currency);
         }
 
         return $this->currencyConversionClient->convert(
             fromCurrency: Currency::of($baseCurrency),
             toCurrency: Currency::of($currency),
-            amount: $accountConfiguration->getFixedApplicationFee()
+            amount: $configuration->getFixedApplicationFee()
         );
     }
 
@@ -98,7 +98,7 @@ class OrderApplicationFeeCalculationService
      * - Gross charged: £0.72 (£0.60 + £0.12)
      */
     private function calculateFeeWithVat(
-        AccountVatSettingDomainObject $vatSettings,
+        OrganizerVatSettingDomainObject $vatSettings,
         MoneyValue                    $netApplicationFee,
         string                        $currency,
     ): ApplicationFeeValuesDTO

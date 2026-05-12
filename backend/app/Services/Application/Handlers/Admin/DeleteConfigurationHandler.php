@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Admin;
 
 use HiEvents\Exceptions\CannotDeleteEntityException;
-use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 
 class DeleteConfigurationHandler
 {
     public function __construct(
-        private readonly AccountConfigurationRepositoryInterface $repository,
+        private readonly OrganizerConfigurationRepositoryInterface $repository,
     ) {
     }
 

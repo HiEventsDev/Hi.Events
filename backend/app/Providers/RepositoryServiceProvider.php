@@ -8,9 +8,7 @@ use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
-use HiEvents\Repository\Eloquent\AccountStripePlatformRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
-use HiEvents\Repository\Eloquent\AccountVatSettingRepository;
 use HiEvents\Repository\Eloquent\AffiliateRepository;
 use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
@@ -35,6 +33,9 @@ use HiEvents\Repository\Eloquent\OrderRefundRepository;
 use HiEvents\Repository\Eloquent\OrderRepository;
 use HiEvents\Repository\Eloquent\OrganizerRepository;
 use HiEvents\Repository\Eloquent\OrganizerSettingsRepository;
+use HiEvents\Repository\Eloquent\OrganizerStripePlatformRepository;
+use HiEvents\Repository\Eloquent\OrganizerVatSettingRepository;
+use HiEvents\Repository\Eloquent\OrganizerConfigurationRepository;
 use HiEvents\Repository\Eloquent\OutgoingMessageRepository;
 use HiEvents\Repository\Eloquent\PasswordResetRepository;
 use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
@@ -60,9 +61,7 @@ use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -87,6 +86,9 @@ use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
@@ -158,8 +160,9 @@ class RepositoryServiceProvider extends ServiceProvider
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
         EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
-        AccountStripePlatformRepositoryInterface::class => AccountStripePlatformRepository::class,
-        AccountVatSettingRepositoryInterface::class => AccountVatSettingRepository::class,
+        OrganizerStripePlatformRepositoryInterface::class => OrganizerStripePlatformRepository::class,
+        OrganizerVatSettingRepositoryInterface::class => OrganizerVatSettingRepository::class,
+        OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,

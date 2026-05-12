@@ -8,6 +8,7 @@ export interface NavItem {
     comingSoon?: boolean;
     isActive?: (isActive: boolean) => boolean;
     badge?: string | number | null | undefined;
+    badgeColor?: string;
     onClick?: () => void;
     showWhen?: () => boolean | undefined;
     loading?: boolean;

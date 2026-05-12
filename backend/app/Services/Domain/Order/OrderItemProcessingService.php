@@ -2,19 +2,19 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
 use HiEvents\DomainObjects\Enums\TaxCalculationType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\Relationship;
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class OrderItemProcessingService
 {
-    private ?AccountConfigurationDomainObject $accountConfiguration = null;
+    private ?OrganizerConfigurationDomainObject $organizerConfiguration = null;
     private ?EventSettingDomainObject $eventSettings = null;
 
     public function __construct(
@@ -36,7 +36,6 @@ class OrderItemProcessingService
         private readonly TaxAndFeeCalculationService        $taxCalculationService,
         private readonly ProductPriceService                $productPriceService,
         private readonly OrderPlatformFeePassThroughService $platformFeeService,
-        private readonly AccountRepositoryInterface         $accountRepository,
         private readonly EventRepositoryInterface           $eventRepository,
     )
     {
@@ -91,20 +90,22 @@ class OrderItemProcessingService
 
     private function loadPlatformFeeConfiguration(int $eventId): void
     {
-        $account = $this->accountRepository
-            ->loadRelation(new Relationship(
-                domainObject: AccountConfigurationDomainObject::class,
-                name: 'configuration',
-            ))
-            ->findByEventId($eventId);
-
-        $this->accountConfiguration = $account->getConfiguration();
-
         $event = $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrganizerDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'organizer_configuration',
+                    ),
+                ],
+                name: 'organizer',
+            ))
             ->findById($eventId);
 
         $this->eventSettings = $event->getEventSettings();
+        $this->organizerConfiguration = $event->getOrganizer()?->getOrganizerConfiguration();
     }
 
     private function calculateOrderItemData(
@@ -165,12 +166,12 @@ class OrderItemProcessingService
 
     private function calculatePlatformFee(float $total, int $quantity, string $currency): float
     {
-        if ($this->accountConfiguration === null || $this->eventSettings === null) {
+        if ($this->organizerConfiguration === null || $this->eventSettings === null) {
             return 0.0;
         }
 
         return $this->platformFeeService->calculatePlatformFee(
-            $this->accountConfiguration,
+            $this->organizerConfiguration,
             $this->eventSettings,
             $total,
             $quantity,

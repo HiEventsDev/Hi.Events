@@ -76,38 +76,48 @@ export interface UpdateConfigurationData {
     bypass_application_fees?: boolean;
 }
 
-export interface AssignConfigurationData {
-    configuration_id: number;
-}
-
-export interface AccountVatSetting {
+export interface AdminOrganizerVatSetting {
     id: number;
-    account_id: number;
     vat_registered: boolean;
     vat_number: string | null;
     vat_validated: boolean;
+    vat_validation_status: 'PENDING' | 'VALIDATING' | 'VALID' | 'INVALID' | 'FAILED' | null;
     vat_validation_date: string | null;
     business_name: string | null;
     business_address: string | null;
     vat_country_code: string | null;
-    created_at: string;
-    updated_at: string;
+}
+
+export interface AdminOrganizerSummary {
+    id: IdParam;
+    name: string;
+    configuration: AccountConfiguration | null;
+    vat_setting: AdminOrganizerVatSetting | null;
 }
 
 export interface AdminAccountDetail extends AdminAccount {
-    configuration?: AccountConfiguration;
-    vat_setting?: AccountVatSetting;
     messaging_tier?: AccountMessagingTier;
+    organizers: AdminOrganizerSummary[];
 }
 
-
-export interface UpdateAccountVatSettingsData {
-    vat_registered: boolean;
+export interface UpdateAdminOrganizerVatSettingData {
+    vat_registered?: boolean;
     vat_number?: string | null;
+    vat_validated?: boolean;
     business_name?: string | null;
     business_address?: string | null;
     vat_country_code?: string | null;
 }
+
+export interface UpdateOrganizerConfigurationOverrideData {
+    application_fees?: {
+        fixed: number;
+        percentage: number;
+        currency: string;
+    };
+    bypass_application_fees?: boolean;
+}
+
 
 export interface AdminStats {
     total_users: number;
@@ -453,14 +463,6 @@ export const adminClient = {
         return response.data;
     },
 
-    assignConfiguration: async (accountId: IdParam, data: AssignConfigurationData) => {
-        const response = await api.put(
-            `admin/accounts/${accountId}/configuration`,
-            data
-        );
-        return response.data;
-    },
-
     getAllConfigurations: async () => {
         const response = await api.get<GenericDataResponse<AccountConfiguration[]>>(
             'admin/configurations'
@@ -489,10 +491,26 @@ export const adminClient = {
         return response.data;
     },
 
-    updateAccountVatSettings: async (accountId: IdParam, data: UpdateAccountVatSettingsData) => {
-        const response = await api.put<GenericDataResponse<AccountVatSetting>>(
-            `admin/accounts/${accountId}/vat-settings`,
-            data
+    assignOrganizerConfiguration: async (organizerId: IdParam, configurationId: IdParam) => {
+        const response = await api.put(
+            `admin/organizers/${organizerId}/configuration`,
+            { configuration_id: configurationId },
+        );
+        return response.data;
+    },
+
+    updateOrganizerConfigurationOverride: async (organizerId: IdParam, data: UpdateOrganizerConfigurationOverrideData) => {
+        const response = await api.patch<GenericDataResponse<AccountConfiguration>>(
+            `admin/organizers/${organizerId}/configuration`,
+            data,
+        );
+        return response.data;
+    },
+
+    updateOrganizerVatSetting: async (organizerId: IdParam, data: UpdateAdminOrganizerVatSettingData) => {
+        const response = await api.put<GenericDataResponse<AdminOrganizerVatSetting>>(
+            `admin/organizers/${organizerId}/vat-settings`,
+            data,
         );
         return response.data;
     },

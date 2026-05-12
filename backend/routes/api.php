@@ -2,16 +2,18 @@
 
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
-use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
-use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
+use HiEvents\Http\Actions\Organizers\Stripe\CopyStripeConnectAccountAction;
+use HiEvents\Http\Actions\Organizers\Stripe\CreateStripeConnectAccountAction;
+use HiEvents\Http\Actions\Organizers\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
-use HiEvents\Http\Actions\Accounts\Vat\GetAccountVatSettingAction;
-use HiEvents\Http\Actions\Accounts\Vat\UpsertAccountVatSettingAction;
-use HiEvents\Http\Actions\Admin\Accounts\AssignConfigurationAction;
+use HiEvents\Http\Actions\Organizers\Vat\GetOrganizerVatSettingAction;
+use HiEvents\Http\Actions\Organizers\Vat\UpsertOrganizerVatSettingAction;
+use HiEvents\Http\Actions\Admin\Organizers\AssignOrganizerConfigurationAction;
+use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
+use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
-use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountVatSettingAction as UpdateAdminAccountVatSettingAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
@@ -281,12 +283,6 @@ $router->middleware(['auth:api'])->group(
         // Accounts
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
-        $router->get('/accounts/{account_id}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
-        $router->post('/accounts/{account_id}/stripe/connect', CreateStripeConnectAccountAction::class);
-
-        // VAT Settings
-        $router->get('/accounts/{account_id}/vat-settings', GetAccountVatSettingAction::class);
-        $router->post('/accounts/{account_id}/vat-settings', UpsertAccountVatSettingAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);
@@ -310,6 +306,15 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}', GetOrganizerWebhookAction::class);
         $router->delete('/organizers/{organizer_id}/webhooks/{webhook_id}', DeleteOrganizerWebhookAction::class);
         $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}/logs', GetOrganizerWebhookLogsAction::class);
+
+        // Stripe Connect - Organizer level
+        $router->get('/organizers/{organizerId}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
+        $router->post('/organizers/{organizerId}/stripe/connect', CreateStripeConnectAccountAction::class);
+        $router->post('/organizers/{organizerId}/stripe/copy_from/{sourceOrganizerId}', CopyStripeConnectAccountAction::class);
+
+        // VAT Settings - Organizer level
+        $router->get('/organizers/{organizerId}/vat-settings', GetOrganizerVatSettingAction::class);
+        $router->post('/organizers/{organizerId}/vat-settings', UpsertOrganizerVatSettingAction::class);
 
         // Email Templates - Organizer level
         $router->get('/organizers/{organizerId}/email-templates', GetOrganizerEmailTemplatesAction::class);
@@ -486,8 +491,9 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/attribution/stats', GetUtmAttributionStatsAction::class);
         $router->get('/accounts', GetAllAdminAccountsAction::class);
         $router->get('/accounts/{account_id}', GetAdminAccountAction::class);
-        $router->put('/accounts/{account_id}/vat-settings', UpdateAdminAccountVatSettingAction::class);
-        $router->put('/accounts/{account_id}/configuration', AssignConfigurationAction::class);
+        $router->put('/organizers/{organizerId}/vat-settings', UpdateOrganizerVatSettingAction::class);
+        $router->patch('/organizers/{organizerId}/configuration', UpdateOrganizerConfigurationAction::class);
+        $router->put('/organizers/{organizerId}/configuration', AssignOrganizerConfigurationAction::class);
         $router->get('/configurations', GetAllConfigurationsAction::class);
         $router->post('/configurations', CreateConfigurationAction::class);
         $router->put('/configurations/{configuration_id}', UpdateConfigurationAction::class);
