@@ -18,6 +18,7 @@ import {Browser, useBrowser} from "../../../../hooks/useGetBrowser.ts";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {EventType} from "../../../../types.ts";
 import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
+import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 
 const GettingStarted = () => {
     const {eventId} = useParams();
@@ -52,6 +53,9 @@ const GettingStarted = () => {
     const hasImages = eventImages && eventImages.length > 0;
     const accountQuery = useGetAccount();
     const account = accountQuery.data;
+    const organizerId = event?.organizer_id;
+    const {data: organizer} = useGetOrganizer(organizerId);
+    const isStripeConnected = !!organizer?.stripe_connect_setup_complete;
     const statusToggleMutation = useUpdateEventStatus();
     const isRecurring = event?.type === EventType.RECURRING;
     const occurrencesQuery = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 1});
@@ -108,7 +112,7 @@ const GettingStarted = () => {
                                         const steps = [
                                             hasProducts,
                                             event?.description,
-                                            account?.stripe_connect_setup_complete,
+                                            ...(account?.is_saas_mode_enabled ? [isStripeConnected] : []),
                                             hasImages,
                                             event?.status === 'LIVE',
                                             account?.is_account_email_confirmed,
@@ -171,20 +175,22 @@ const GettingStarted = () => {
                         </Button>
                     </Card>
 
-                    <Card className={account?.stripe_connect_setup_complete ? classes.completedCard : ''}>
-                        {account?.stripe_connect_setup_complete && <CompletedBadge/>}
-                        <h2>
-                            {t`💳 Connect with Stripe`}
-                        </h2>
-                        <p>
-                            {t`Connect your Stripe account to start receiving payments.`}
-                        </p>
-                        {!account?.stripe_connect_setup_complete && (
-                            <Button variant={'light'} component={NavLink} to={'/account/payment'}>
-                                {t`Connect with Stripe`}
-                            </Button>)
-                        }
-                    </Card>
+                    {account?.is_saas_mode_enabled && (
+                        <Card className={isStripeConnected ? classes.completedCard : ''}>
+                            {isStripeConnected && <CompletedBadge/>}
+                            <h2>
+                                {t`💳 Connect with Stripe`}
+                            </h2>
+                            <p>
+                                {t`Connect your Stripe account to start receiving payments.`}
+                            </p>
+                            {!isStripeConnected && organizerId && (
+                                <Button variant={'light'} component={NavLink} to={`/manage/organizer/${organizerId}/settings#payouts`}>
+                                    {t`Connect with Stripe`}
+                                </Button>
+                            )}
+                        </Card>
+                    )}
 
                     <Card className={hasImages ? classes.completedCard : ''}>
                         {hasImages && <CompletedBadge/>}

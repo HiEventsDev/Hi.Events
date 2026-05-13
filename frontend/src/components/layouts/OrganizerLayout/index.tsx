@@ -5,7 +5,6 @@ import {
     IconCalendarPlus,
     IconChartPie,
     IconChevronRight,
-    IconCreditCard,
     IconDashboard,
     IconExternalLink,
     IconEye,
@@ -33,7 +32,6 @@ import { SwitchOrganizerModal } from "../../modals/SwitchOrganizerModal";
 import { CreateOrganizerModal } from "../../modals/CreateOrganizerModal";
 import { useGetOrganizers } from "../../../queries/useGetOrganizers.ts";
 import { useGetAccount } from "../../../queries/useGetAccount.ts";
-import { StripeConnectButton } from "../../common/StripeConnectButton";
 import { ShareModal } from "../../modals/ShareModal";
 import { organizerHomepageUrl } from "../../../utilites/urlHelper";
 import { useUpdateOrganizerStatus } from "../../../mutations/useUpdateOrganizerStatus.ts";
@@ -66,6 +64,9 @@ const OrganizerLayout = () => {
 
     const statusToggleMutation = useUpdateOrganizerStatus();
 
+    const isStripeConnected = !!organizer?.stripe_connect_setup_complete;
+    const showPayoutsSection = !!account?.is_saas_mode_enabled;
+
     const navItems: NavItem[] = [
         {
             label: t`Switch Organizer`,
@@ -74,6 +75,15 @@ const OrganizerLayout = () => {
             isActive: () => false,
             showWhen: () => organizers && organizers.length > 1,
         },
+        ...(showPayoutsSection && !isStripeConnected ? [
+            { label: t`Get Paid` },
+            {
+                link: 'settings#payouts',
+                label: t`Set up payouts`,
+                icon: IconBrandStripe,
+                isActive: () => false,
+            },
+        ] as NavItem[] : []),
         { label: 'Overview' },
         { link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard },
         {
@@ -175,22 +185,6 @@ const OrganizerLayout = () => {
         },
     ];
 
-    if (account && !account?.stripe_connect_setup_complete) {
-        callouts.unshift({
-            icon: <IconBrandStripe size={20} />,
-            heading: t`Connect Stripe`,
-            description: t`Connect your Stripe account to accept payments for tickets and products.`,
-            storageKey: `stripe-callout-dismissed`,
-            customButton:
-                <StripeConnectButton
-                    fullWidth
-                    variant="white"
-                    buttonIcon={<IconCreditCard size={16} />}
-                    buttonText={t`Connect Stripe`}
-                    className={classes.calloutButton}
-                />
-        });
-    }
 
     return (
         <>

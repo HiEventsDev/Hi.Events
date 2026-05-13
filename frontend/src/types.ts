@@ -115,14 +115,9 @@ export interface Account {
     timezone?: string;
     currency_code?: string;
     password?: string;
-    stripe_connect_setup_complete?: boolean;
-    stripe_account_id?: string;
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
-    configuration?: AccountConfiguration;
     requires_manual_verification?: boolean;
-    stripe_platform: string;
-    stripe_hi_events_primary_platform?: string;
 }
 
 export interface AccountConfiguration {
@@ -136,29 +131,50 @@ export interface AccountConfiguration {
     is_system_default: boolean;
 }
 
-export interface StripeConnectDetails {
-    account: Account;
+export interface OrganizerStripeConnectDetails {
+    organizer: Organizer;
     stripe_account_id: string;
     is_connect_setup_complete: boolean;
     connect_url: string | null;
 }
 
-export interface StripeConnectAccount {
+export interface OrganizerStripeConnectAccount {
     stripe_account_id: string;
     connect_url: string | null;
     is_setup_complete: boolean;
     platform: string | null;
     account_type: string | null;
     is_primary: boolean;
-    country?: string;
+    country?: string | null;
+    business_type?: string | null;
+    charges_enabled: boolean;
+    payouts_enabled: boolean;
+    capabilities: Record<string, string>;
+    requirements: {
+        currently_due: string[];
+        eventually_due: string[];
+        past_due: string[];
+        pending_verification: string[];
+    };
 }
 
-export interface StripeConnectAccountsResponse {
-    account: {
+export interface ReusableStripeConnection {
+    organizer_id: IdParam;
+    organizer_name: string;
+    stripe_account_id: string;
+    platform: string | null;
+    country?: string | null;
+    business_type?: string | null;
+}
+
+export interface OrganizerStripeConnectAccountsResponse {
+    organizer: {
         id: IdParam;
+        name: string;
         stripe_platform: string | null;
     };
-    stripe_connect_accounts: StripeConnectAccount[];
+    stripe_connect_accounts: OrganizerStripeConnectAccount[];
+    reusable_connections: ReusableStripeConnection[];
     primary_stripe_account_id: string | null;
     has_completed_setup: boolean;
 }
@@ -534,6 +550,9 @@ export interface Organizer {
     settings?: OrganizerSettings;
     location_details?: VenueAddress;
     status?: OrganizerStatus;
+    stripe_connect_setup_complete?: boolean;
+    stripe_account_id?: string | null;
+    configuration?: AccountConfiguration;
 }
 
 export interface OrganizerSettings {

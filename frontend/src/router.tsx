@@ -259,13 +259,6 @@ export const router: RouteObject[] = [
                             return { Component: Users.default };
                         }
                     },
-                    {
-                        path: "payment",
-                        async lazy() {
-                            const PaymentSettings = await import("./components/routes/account/ManageAccount/sections/PaymentSettings");
-                            return { Component: PaymentSettings.default };
-                        }
-                    },
                 ]
             },
         ]
@@ -311,6 +304,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Webhooks = await import("./components/routes/organizer/Webhooks");
                     return { Component: Webhooks.default };
+                }
+            },
+            {
+                path: "payments",
+                async lazy() {
+                    const PaymentsRedirect = await import("./components/routes/organizer/Payments/Redirect");
+                    return { Component: PaymentsRedirect.default };
                 }
             },
             {

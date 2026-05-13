@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Order;
 
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeCalculationService;
@@ -52,9 +52,9 @@ class OrderApplicationFeeCalculationServiceTest extends TestCase
         return $item;
     }
 
-    private function createAccountConfig(float $fixedFee = 0, float $percentageFee = 0, string $currency = 'USD'): AccountConfigurationDomainObject
+    private function createAccountConfig(float $fixedFee = 0, float $percentageFee = 0, string $currency = 'USD'): OrganizerConfigurationDomainObject
     {
-        $config = $this->getMockBuilder(AccountConfigurationDomainObject::class)
+        $config = $this->getMockBuilder(OrganizerConfigurationDomainObject::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getFixedApplicationFee', 'getPercentageApplicationFee', 'getApplicationFeeCurrency'])
             ->getMock();

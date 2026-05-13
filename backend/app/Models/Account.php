@@ -34,6 +34,11 @@ class Account extends BaseModel
         return $this->hasMany(Event::class);
     }
 
+    public function organizers(): HasMany
+    {
+        return $this->hasMany(Organizer::class);
+    }
+
     public function configuration(): BelongsTo
     {
         return $this->belongsTo(

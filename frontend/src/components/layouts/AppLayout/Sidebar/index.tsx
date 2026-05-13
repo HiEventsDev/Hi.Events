@@ -62,8 +62,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 >
                     {item.icon && <item.icon size={20} className={classes.linkIcon} stroke={1.5}/>}
                     <span>{item.label}</span>
-                    {item.badge !== undefined &&
-                        <Badge size="xs" radius="xl" className={classes.navBadge}>{item.badge}</Badge>}
+                    {item.badge !== undefined && (
+                        <Badge
+                            size="xs"
+                            radius="xl"
+                            className={item.badgeColor ? classes.navBadgeAlert : classes.navBadge}
+                        >
+                            {item.badge}
+                        </Badge>
+                    )}
                     {item.comingSoon &&
                         <Badge ml={'4px'} size={'xs'} className={classes.comingSoonBadge}>{t`Coming Soon`}</Badge>}
                 </NavLink>

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use Brick\Money\Currency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
@@ -32,9 +32,9 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
     }
 
-    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): AccountConfigurationDomainObject
+    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): OrganizerConfigurationDomainObject
     {
-        $mock = $this->createMock(AccountConfigurationDomainObject::class);
+        $mock = $this->createMock(OrganizerConfigurationDomainObject::class);
         $mock->method('getFixedApplicationFee')->willReturn($fixedFee);
         $mock->method('getPercentageApplicationFee')->willReturn($percentageFee);
         $mock->method('getApplicationFeeCurrency')->willReturn($currency);

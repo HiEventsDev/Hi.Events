@@ -32,6 +32,19 @@ class OrganizerResource extends JsonResource
                 condition: !is_null($this->getOrganizerSettings()),
                 value: fn() => new OrganizerSettingsResource($this->getOrganizerSettings())
             ),
+            $this->mergeWhen(
+                config('app.saas_mode_enabled') && $this->getOrganizerStripePlatforms() !== null,
+                fn() => [
+                    'stripe_connect_setup_complete' => $this->isStripeSetupComplete(),
+                    'stripe_account_id' => $this->getActiveStripeAccountId(),
+                ],
+            ),
+            $this->mergeWhen(
+                $this->getOrganizerConfiguration() !== null,
+                fn() => [
+                    'configuration' => new OrganizerConfigurationResource($this->getOrganizerConfiguration()),
+                ],
+            ),
         ];
     }
 }

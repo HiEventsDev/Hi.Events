@@ -3,8 +3,6 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Math\Exception\MathException;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
-use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -14,6 +12,7 @@ use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
@@ -206,24 +205,26 @@ class MarkOrderAsPaidService
         /** @var EventDomainObject $event */
         $event = $this->eventRepository
             ->loadRelation(new Relationship(
-                domainObject: AccountDomainObject::class,
+                domainObject: OrganizerDomainObject::class,
                 nested: [
                     new Relationship(
-                        domainObject: AccountConfigurationDomainObject::class,
-                        name: 'configuration',
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'organizer_configuration',
                     ),
                 ],
-                name: 'account'
+                name: 'organizer'
             ))
             ->findById($updatedOrder->getEventId());
 
-        /** @var AccountConfigurationDomainObject $config */
-        $config = $event->getAccount()->getConfiguration();
+        $config = $event->getOrganizer()?->getOrganizerConfiguration();
+        if (!$config) {
+            return;
+        }
 
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
             applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $config,
+                configuration: $config,
                 order: $updatedOrder,
             )?->netApplicationFee?->toMinorUnit() ?? 0,
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,

@@ -12,11 +12,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AccountFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         $currencies = include base_path('data/currencies.php');
@@ -27,33 +22,10 @@ class AccountFactory extends Factory
             'timezone' => fake()->timezone(),
             'currency_code' => fake()->randomElement(array_values($currencies)),
             'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
-            'account_configuration_id' => 1, // Default account configuration is first entry
+            'account_configuration_id' => 1,
         ];
     }
 
-    /**
-     * Indicate that the model's stripe account id is set.
-     */
-    public function stripeAccount(): self
-    {
-        return $this->state(fn(array $attributes) => [
-            'stripe_account_id' => fake()->stripeConnectAccountId(),
-        ]);
-    }
-
-    /**
-     * Indicate that the model's stripe account connection setup is complete.
-     */
-    public function stripeConnectSetupComplete(bool $isComplete = true): self
-    {
-        return $this->state(fn(array $attributes) => [
-            'stripe_connect_setup_complete' => $isComplete,
-        ]);
-    }
-
-    /**
-     * Indicate that the model is verified.
-     */
     public function verified(): self
     {
         return $this->state(fn(array $attributes) => [
@@ -61,9 +33,6 @@ class AccountFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the model has been manually verified.
-     */
     public function manuallyVerified(): self
     {
         return $this->state(fn(array $attributes) => [

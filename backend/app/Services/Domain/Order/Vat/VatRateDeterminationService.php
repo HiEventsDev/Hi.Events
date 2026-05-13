@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Domain\Order\Vat;
 
-use HiEvents\DomainObjects\AccountVatSettingDomainObject;
 use HiEvents\DomainObjects\Enums\CountryCode;
+use HiEvents\DomainObjects\OrganizerVatSettingDomainObject;
 use Illuminate\Config\Repository;
 use ValueError;
 
@@ -21,7 +21,7 @@ class VatRateDeterminationService
         $this->defaultVatCountry = $this->config->get('app.tax.default_vat_country', CountryCode::IE->value);
     }
 
-    public function determineVatRatePercentage(AccountVatSettingDomainObject $vatSetting): float
+    public function determineVatRatePercentage(OrganizerVatSettingDomainObject $vatSetting): float
     {
         $country = $vatSetting->getVatCountryCode();
 

@@ -6,15 +6,15 @@ namespace HiEvents\Http\Actions\Admin\Configurations;
 
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
-use HiEvents\Resources\Account\AccountConfigurationResource;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
+use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UpdateConfigurationAction extends BaseAction
 {
     public function __construct(
-        private readonly AccountConfigurationRepositoryInterface $repository,
+        private readonly OrganizerConfigurationRepositoryInterface $repository,
     ) {
     }
 
@@ -41,7 +41,7 @@ class UpdateConfigurationAction extends BaseAction
         );
 
         return $this->jsonResponse(
-            new AccountConfigurationResource($configuration),
+            new OrganizerConfigurationResource($configuration),
             wrapInData: true
         );
     }

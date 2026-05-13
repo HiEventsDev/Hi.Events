@@ -3,7 +3,10 @@
 namespace HiEvents\Http\Actions\Organizers;
 
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerResource;
@@ -24,6 +27,11 @@ class GetOrganizerAction extends BaseAction
 
         $organizer = $this->organizerRepository
             ->loadRelation(ImageDomainObject::class)
+            ->loadRelation(OrganizerStripePlatformDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: OrganizerConfigurationDomainObject::class,
+                name: 'organizer_configuration',
+            ))
             ->findFirstWhere([
                 'id' => $organizerId,
                 'account_id' => $this->getAuthenticatedAccountId(),

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {ActionIcon, Alert, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
-import {IconAlertCircle, IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
+import {IconAlertCircle, IconBrandStripe, IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
 import {t, Trans} from '@lingui/macro';
 import {useDisclosure} from '@mantine/hooks';
 import {EmailTemplateEditor} from '../EmailTemplateEditor';
@@ -18,7 +18,8 @@ import {
 import {Card} from '../Card';
 import {HeadingWithDescription} from '../Card/CardHeading';
 import {useGetAccount} from '../../../queries/useGetAccount';
-import {StripeConnectButton} from '../StripeConnectButton';
+import {NavLink} from 'react-router';
+import {useGetEvent} from '../../../queries/useGetEvent';
 
 interface EmailTemplateSettingsBaseProps {
     // Context 
@@ -78,6 +79,10 @@ export const EmailTemplateSettingsBase = ({
     const [editingType, setEditingType] = useState<EmailTemplateType>('order_confirmation');
     const handleFormError = useFormErrorResponseHandler();
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
+    const eventQuery = useGetEvent(contextType === 'event' ? contextId : undefined);
+    const stripeOrganizerId = contextType === 'organizer'
+        ? contextId
+        : eventQuery.data?.organizer_id;
     const isAccountVerified = isAccountFetched && account?.is_account_email_confirmed;
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification;
@@ -356,9 +361,18 @@ export const EmailTemplateSettingsBase = ({
                     <Text size="sm">
                         {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
                     </Text>
-                    <div style={{marginTop: '0.75rem'}}>
-                        <StripeConnectButton/>
-                    </div>
+                    {stripeOrganizerId && (
+                        <div style={{marginTop: '0.75rem'}}>
+                            <Button
+                                component={NavLink}
+                                to={`/manage/organizer/${stripeOrganizerId}/settings#payouts`}
+                                leftSection={<IconBrandStripe size={16}/>}
+                                variant="light"
+                            >
+                                {t`Connect Stripe`}
+                            </Button>
+                        </div>
+                    )}
                 </Alert>
             )}
 

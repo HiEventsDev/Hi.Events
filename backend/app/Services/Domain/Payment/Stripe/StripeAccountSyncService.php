@@ -2,14 +2,15 @@
 
 namespace HiEvents\Services\Domain\Payment\Stripe;
 
-use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Enums\CountryCode;
-use HiEvents\DomainObjects\Generated\AccountStripePlatformDomainObjectAbstract;
-use HiEvents\DomainObjects\Generated\AccountVatSettingDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrganizerStripePlatformDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\OrganizerVatSettingDomainObjectAbstract;
+use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
@@ -19,64 +20,14 @@ use Throwable;
 class StripeAccountSyncService
 {
     public function __construct(
-        private readonly LoggerInterface                          $logger,
-        private readonly AccountRepositoryInterface               $accountRepository,
-        private readonly AccountStripePlatformRepositoryInterface $accountStripePlatformRepository,
-        private readonly AccountVatSettingRepositoryInterface     $vatSettingRepository,
-        private readonly Repository                               $config,
+        private readonly LoggerInterface                            $logger,
+        private readonly AccountRepositoryInterface                 $accountRepository,
+        private readonly OrganizerRepositoryInterface               $organizerRepository,
+        private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
+        private readonly OrganizerVatSettingRepositoryInterface     $vatSettingRepository,
+        private readonly Repository                                 $config,
     )
     {
-    }
-
-    /**
-     * Sync Stripe account status and details to our database
-     */
-    public function syncStripeAccountStatus(
-        AccountStripePlatformDomainObject $accountStripePlatform,
-        Account                           $stripeAccount
-    ): void
-    {
-        $isAccountSetupCompleted = $this->isStripeAccountComplete($stripeAccount);
-        $isCurrentlyComplete = $accountStripePlatform->getStripeSetupCompletedAt() !== null;
-
-        // Only update if status has actually changed
-        if ($isCurrentlyComplete === $isAccountSetupCompleted) {
-            // Still update account details even if status hasn't changed
-            $this->updateAccountDetails($stripeAccount);
-            return;
-        }
-
-        if ($isAccountSetupCompleted) {
-            $this->markAccountAsComplete($accountStripePlatform, $stripeAccount);
-        } else {
-            $this->logger->info(sprintf(
-                'Stripe Connect account is no longer complete. Updating account stripe platform %s',
-                $stripeAccount->id
-            ));
-            $this->updateAccountStatusAndDetails($stripeAccount, isAccountSetupCompleted: false);
-            $this->updateAccountDetails($stripeAccount);
-        }
-    }
-
-    /**
-     * Force update account status when we know it should be complete
-     * (e.g., from GetStripeConnectAccountsHandler when Stripe says complete but DB doesn't)
-     * @throws NoStripeCountryCodeException
-     */
-    public function markAccountAsComplete(
-        AccountStripePlatformDomainObject $accountStripePlatform,
-        Account                           $stripeAccount
-    ): void
-    {
-        $this->logger->info(sprintf(
-            'Marking Stripe Connect account as complete for account stripe platform %s with Stripe account ID %s',
-            $accountStripePlatform->getId(),
-            $stripeAccount->id
-        ));
-
-        $this->updateAccountStatusAndDetails($stripeAccount, isAccountSetupCompleted: true);
-        $this->updateAccountCountryAndVerificationStatus($accountStripePlatform, $stripeAccount);
-        $this->createVatSettingIfMissing($accountStripePlatform);
     }
 
     public function isStripeAccountComplete(Account $stripeAccount): bool
@@ -84,30 +35,170 @@ class StripeAccountSyncService
         return $stripeAccount->charges_enabled && $stripeAccount->payouts_enabled;
     }
 
-    private function updateAccountStatusAndDetails(
-        Account $stripeAccount,
-        bool    $isAccountSetupCompleted
-    ): void
+    public function createStripeAccountSetupUrl(Account $stripeAccount, StripeClient $stripeClient, int $organizerId): ?string
     {
-        $this->accountStripePlatformRepository->updateWhere(
+        try {
+            $refreshUrl = sprintf(Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_REFRESH_URL), $organizerId);
+            $returnUrl = sprintf(Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_RETURN_URL), $organizerId);
+
+            $accountLink = $stripeClient->accountLinks->create([
+                'account' => $stripeAccount->id,
+                'refresh_url' => $this->appendQueryParam($refreshUrl, 'is_refresh=1'),
+                'return_url' => $this->appendQueryParam($returnUrl, 'is_return=1'),
+                'type' => 'account_onboarding',
+            ]);
+
+            return $accountLink->url;
+        } catch (Throwable $e) {
+            $this->logger->error('Failed to create Stripe Connect Account Link', [
+                'stripe_account_id' => $stripeAccount->id,
+                'organizer_id' => $organizerId,
+                'error' => $e->getMessage(),
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Insert the query param BEFORE the URL's fragment so the resulting URL is well-formed.
+     * Naive concatenation breaks when the configured return URL ends with #fragment
+     * (e.g. /manage/organizer/%d/settings#payouts) — the param lands inside the hash.
+     */
+    private function appendQueryParam(string $url, string $param): string
+    {
+        $hashPosition = strpos($url, '#');
+        $base = $hashPosition === false ? $url : substr($url, 0, $hashPosition);
+        $fragment = $hashPosition === false ? '' : substr($url, $hashPosition);
+        $separator = str_contains($base, '?') ? '&' : '?';
+
+        return $base . $separator . $param . $fragment;
+    }
+
+    /**
+     * Webhook entrypoint — updates every organizer row sharing this Stripe account
+     * and seeds account-level country/VAT state for every organizer that owns one.
+     */
+    public function syncStripeAccountStatusByAccountId(Account $stripeAccount): void
+    {
+        $details = $this->buildAccountDetails($stripeAccount);
+        $isAccountSetupCompleted = $this->isStripeAccountComplete($stripeAccount);
+
+        $this->organizerStripePlatformRepository->updateWhere(
             attributes: [
-                AccountStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT => $isAccountSetupCompleted ? now() : null,
-                AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT => $isAccountSetupCompleted ? now() : null,
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $details,
             ],
             where: [
-                AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
             ]
+        );
+
+        if (!$isAccountSetupCompleted) {
+            return;
+        }
+
+        $organizerRows = $this->organizerStripePlatformRepository->findWhere([
+            OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+        ]);
+
+        foreach ($organizerRows as $organizerRow) {
+            $this->updateOrganizerCountryAndVerificationStatus($organizerRow, $stripeAccount);
+            $this->seedVatSettingForOrganizerIfMissing(
+                organizerId: $organizerRow->getOrganizerId(),
+                countryCode: $stripeAccount->country,
+                stripeAccountId: $stripeAccount->id,
+                organizerStripePlatformId: $organizerRow->getId(),
+            );
+        }
+    }
+
+    public function markAccountAsCompleteForOrganizer(
+        OrganizerStripePlatformDomainObject $organizerStripePlatform,
+        Account                             $stripeAccount,
+    ): void
+    {
+        $this->logger->info(sprintf(
+            'Marking Stripe Connect account as complete for organizer stripe platform %s with Stripe account ID %s',
+            $organizerStripePlatform->getId(),
+            $stripeAccount->id,
+        ));
+
+        $this->organizerStripePlatformRepository->updateWhere(
+            attributes: [
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT => now(),
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
+            ],
+            where: [
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+            ]
+        );
+
+        $this->updateOrganizerCountryAndVerificationStatus($organizerStripePlatform, $stripeAccount);
+        $this->seedVatSettingForOrganizerIfMissing(
+            organizerId: $organizerStripePlatform->getOrganizerId(),
+            countryCode: $stripeAccount->country,
+            stripeAccountId: $stripeAccount->id,
+            organizerStripePlatformId: $organizerStripePlatform->getId(),
         );
     }
 
-    private function updateAccountDetails(Account $stripeAccount): void
+    /**
+     * Seeds an empty organizer VAT setting row when an organizer first connects
+     * (or copies a connection) to a Stripe account in an EU country.
+     * Public so the copy/reuse flow can call it with a country code parsed
+     * from cached stripe_account_details rather than a live Stripe Account.
+     */
+    public function seedVatSettingForOrganizerIfMissing(
+        int     $organizerId,
+        ?string $countryCode,
+        ?string $stripeAccountId = null,
+        ?int    $organizerStripePlatformId = null,
+    ): void
     {
-        $this->accountStripePlatformRepository->updateWhere(
+        if (!$this->config->get('app.saas_mode_enabled')) {
+            return;
+        }
+
+        if ($this->config->get('app.tax.eu_vat_handling_enabled') !== true) {
+            return;
+        }
+
+        if (!$countryCode) {
+            $this->logger->error('Stripe account country code is missing, cannot create VAT setting.', [
+                'organizer_id' => $organizerId,
+                'organizer_stripe_platform_id' => $organizerStripePlatformId,
+                'stripe_account_id' => $stripeAccountId,
+            ]);
+            return;
+        }
+
+        $countryCode = strtoupper($countryCode);
+        if (!CountryCode::isEuCountry(CountryCode::from($countryCode))) {
+            return;
+        }
+
+        $existingVatSetting = $this->vatSettingRepository->findByOrganizerId($organizerId);
+
+        if ($existingVatSetting === null) {
+            $this->vatSettingRepository->create([
+                OrganizerVatSettingDomainObjectAbstract::ORGANIZER_ID => $organizerId,
+                OrganizerVatSettingDomainObjectAbstract::VAT_VALIDATED => false,
+                OrganizerVatSettingDomainObjectAbstract::VAT_COUNTRY_CODE => $countryCode,
+            ]);
+        }
+    }
+
+    public function syncStripeAccountDetailsForOrganizer(
+        OrganizerStripePlatformDomainObject $organizerStripePlatform,
+        Account                             $stripeAccount,
+    ): void
+    {
+        $this->organizerStripePlatformRepository->updateWhere(
             attributes: [
-                AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
             ],
             where: [
-                AccountStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
+                OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,
             ]
         );
     }
@@ -134,36 +225,20 @@ class StripeAccountSyncService
         ], JSON_THROW_ON_ERROR);
     }
 
-    public function createStripeAccountSetupUrl(Account $stripeAccount, StripeClient $stripeClient): ?string
-    {
-        try {
-            $accountLink = $stripeClient->accountLinks->create([
-                'account' => $stripeAccount->id,
-                'refresh_url' => Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_REFRESH_URL, [
-                    'is_refresh' => true,
-                ]),
-                'return_url' => Url::getFrontEndUrlFromConfig(Url::STRIPE_CONNECT_RETURN_URL, [
-                    'is_return' => true,
-                ]),
-                'type' => 'account_onboarding',
-            ]);
-
-            return $accountLink->url;
-        } catch (Throwable $e) {
-            $this->logger->error('Failed to create Stripe Connect Account Link', [
-                'stripe_account_id' => $stripeAccount->id,
-                'error' => $e->getMessage(),
-            ]);
-            return null;
-        }
-    }
-
-    private function updateAccountCountryAndVerificationStatus(
-        AccountStripePlatformDomainObject $accountStripePlatform,
-        Account                           $stripeAccount,
+    private function updateOrganizerCountryAndVerificationStatus(
+        OrganizerStripePlatformDomainObject $organizerStripePlatform,
+        Account                             $stripeAccount,
     ): void
     {
-        $account = $this->accountRepository->findById($accountStripePlatform->getAccountId());
+        $organizer = $this->organizerRepository->findById($organizerStripePlatform->getOrganizerId());
+        if ($organizer === null) {
+            return;
+        }
+
+        $account = $this->accountRepository->findById($organizer->getAccountId());
+        if ($account === null) {
+            return;
+        }
 
         $updates = [];
         if (!$account->getCountry()) {
@@ -178,58 +253,10 @@ class StripeAccountSyncService
             $this->accountRepository->updateWhere(
                 attributes: $updates,
                 where: [
-                    'id' => $accountStripePlatform->getAccountId(),
+                    'id' => $account->getId(),
                 ]
             );
         }
     }
 
-    /**
-     * @throws NoStripeCountryCodeException
-     */
-    private function createVatSettingIfMissing(AccountStripePlatformDomainObject $accountStripePlatform): void
-    {
-        if ($this->config->get('app.tax.eu_vat_handling_enabled') !== true) {
-            $this->logger->info('EU VAT handling is disabled, skipping VAT setting creation.', [
-                'account_stripe_platform_id' => $accountStripePlatform->getId(),
-                'account_id' => $accountStripePlatform->getAccountId(),
-            ]);
-            return;
-        }
-
-        $countryCode = $accountStripePlatform->getStripeAccountDetails()['country'];
-
-        if ($countryCode === null) {
-            $this->logger->error('Stripe account country code is missing, cannot create VAT setting.', [
-                'account_stripe_platform_id' => $accountStripePlatform->getId(),
-                'account_id' => $accountStripePlatform->getAccountId(),
-            ]);
-
-            throw new NoStripeCountryCodeException('Stripe account country code is missing. cannot create VAT setting.',
-                accountStripePlatformId: $accountStripePlatform->getId(),
-                accountId: $accountStripePlatform->getAccountId()
-            );
-        }
-
-        if (!CountryCode::isEuCountry(CountryCode::from($countryCode))) {
-            $this->logger->info('Account is not in an EU country, skipping VAT setting creation.', [
-                'account_stripe_platform_id' => $accountStripePlatform->getId(),
-                'account_id' => $accountStripePlatform->getAccountId(),
-                'country_code' => $countryCode,
-            ]);
-            return;
-        }
-
-        $existingVatSetting = $this->vatSettingRepository->findFirstWhere([
-            AccountVatSettingDomainObjectAbstract::ACCOUNT_ID => $accountStripePlatform->getAccountId(),
-        ]);
-
-        if ($existingVatSetting === null) {
-            $this->vatSettingRepository->create([
-                AccountVatSettingDomainObjectAbstract::ACCOUNT_ID => $accountStripePlatform->getAccountId(),
-                AccountVatSettingDomainObjectAbstract::VAT_VALIDATED => false,
-                AccountVatSettingDomainObjectAbstract::VAT_COUNTRY_CODE => $countryCode,
-            ]);
-        }
-    }
 }
