@@ -365,7 +365,7 @@ export const EmailTemplateSettingsBase = ({
                         <div style={{marginTop: '0.75rem'}}>
                             <Button
                                 component={NavLink}
-                                to={`/manage/organizer/${stripeOrganizerId}/payments`}
+                                to={`/manage/organizer/${stripeOrganizerId}/settings#payouts`}
                                 leftSection={<IconBrandStripe size={16}/>}
                                 variant="light"
                             >

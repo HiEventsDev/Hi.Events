@@ -309,8 +309,8 @@ export const router: RouteObject[] = [
             {
                 path: "payments",
                 async lazy() {
-                    const OrganizerPayments = await import("./components/routes/organizer/Payments");
-                    return { Component: OrganizerPayments.default };
+                    const PaymentsRedirect = await import("./components/routes/organizer/Payments/Redirect");
+                    return { Component: PaymentsRedirect.default };
                 }
             },
             {

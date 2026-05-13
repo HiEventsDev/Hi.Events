@@ -185,7 +185,7 @@ const GettingStarted = () => {
                                 {t`Connect your Stripe account to start receiving payments.`}
                             </p>
                             {!isStripeConnected && organizerId && (
-                                <Button variant={'light'} component={NavLink} to={`/manage/organizer/${organizerId}/payments`}>
+                                <Button variant={'light'} component={NavLink} to={`/manage/organizer/${organizerId}/settings#payouts`}>
                                     {t`Connect with Stripe`}
                                 </Button>
                             )}

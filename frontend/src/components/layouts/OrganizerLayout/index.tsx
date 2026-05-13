@@ -75,6 +75,15 @@ const OrganizerLayout = () => {
             isActive: () => false,
             showWhen: () => organizers && organizers.length > 1,
         },
+        ...(showPayoutsSection && !isStripeConnected ? [
+            { label: t`Get Paid` },
+            {
+                link: 'settings#payouts',
+                label: t`Set up payouts`,
+                icon: IconBrandStripe,
+                isActive: () => false,
+            },
+        ] as NavItem[] : []),
         { label: 'Overview' },
         { link: 'dashboard', label: t`Organizer Dashboard`, icon: IconDashboard },
         {
@@ -86,13 +95,6 @@ const OrganizerLayout = () => {
 
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
-        ...(showPayoutsSection ? [{
-            link: 'payments',
-            label: t`Payments`,
-            icon: IconBrandStripe,
-            badge: isStripeConnected ? undefined : t`Set up`,
-            badgeColor: isStripeConnected ? undefined : 'orange',
-        }] as NavItem[] : []),
         { link: 'settings', label: t`Settings`, icon: IconSettings },
 
         { label: t`Tools` },

@@ -235,7 +235,7 @@ export const EventDashboard = () => {
                                         {!isStripeConnected && organizerId && (
                                             <Button
                                                 onClick={() => {
-                                                    window.location.href = `/manage/organizer/${organizerId}/payments`;
+                                                    window.location.href = `/manage/organizer/${organizerId}/settings#payouts`;
                                                 }}
                                                 variant="light"
                                                 size="sm"

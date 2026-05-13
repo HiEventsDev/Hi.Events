@@ -1,11 +1,10 @@
 import {t} from '@lingui/macro';
-import {Alert, Text, Title} from '@mantine/core';
+import {Alert, Text} from '@mantine/core';
 import {IconAlertCircle, IconInfoCircle} from '@tabler/icons-react';
 import {IdParam} from '../../../../../types';
 import {getVatInfo} from './VatNotice';
 import {VatSettingsForm} from './VatSettingsForm';
 import {useGetOrganizerVatSetting} from '../../../../../queries/useGetOrganizerVatSetting';
-import {Card} from '../../../../common/Card';
 
 interface VatSettingsProps {
     organizerId: IdParam;
@@ -17,7 +16,11 @@ export const VatSettings = ({organizerId, stripeCountry}: VatSettingsProps) => {
     const vatInfo = getVatInfo(stripeCountry);
 
     if (!vatInfo.isEU) {
-        return null;
+        return (
+            <Text size="sm" c="dimmed">
+                {t`VAT does not apply because your Stripe account is outside the EU.`}
+            </Text>
+        );
     }
 
     const existingSettings = vatSettingQuery.data;
@@ -25,26 +28,21 @@ export const VatSettings = ({organizerId, stripeCountry}: VatSettingsProps) => {
 
     if (vatInfo.isIreland) {
         return (
-            <Card>
-                <Title mb={10} order={4}>{t`VAT Information`}</Title>
-                <Alert color="blue" icon={<IconInfoCircle />}>
-                    <Text size="sm" fw={500} mb="xs">{t`VAT Treatment for Platform Fees`}</Text>
-                    <Text size="sm" lh={1.6}>
-                        {t`As your business is based in Ireland, Irish VAT at 23% applies automatically to all platform fees.`}
-                    </Text>
-                </Alert>
-            </Card>
+            <Alert color="blue" icon={<IconInfoCircle/>}>
+                <Text size="sm" fw={500} mb="xs">{t`VAT Treatment for Platform Fees`}</Text>
+                <Text size="sm" lh={1.6}>
+                    {t`As your business is based in Ireland, Irish VAT at 23% applies automatically to all platform fees.`}
+                </Text>
+            </Alert>
         );
     }
 
     return (
-        <Card>
-            <Title mb={10} order={4}>{t`VAT Registration Information`}</Title>
-
+        <>
             {needsVatInfo && (
                 <Alert
                     color="orange"
-                    icon={<IconAlertCircle />}
+                    icon={<IconAlertCircle/>}
                     mb="lg"
                 >
                     <Text size="sm" fw={500} mb="sm">{t`Action Required: VAT Information Needed`}</Text>
@@ -60,7 +58,7 @@ export const VatSettings = ({organizerId, stripeCountry}: VatSettingsProps) => {
                 </Text>
             )}
 
-            <VatSettingsForm organizerId={organizerId} />
-        </Card>
+            <VatSettingsForm organizerId={organizerId}/>
+        </>
     );
 };

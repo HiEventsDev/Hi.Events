@@ -43,8 +43,8 @@ class StripeAccountSyncService
 
             $accountLink = $stripeClient->accountLinks->create([
                 'account' => $stripeAccount->id,
-                'refresh_url' => $refreshUrl . '?is_refresh=1',
-                'return_url' => $returnUrl . '?is_return=1',
+                'refresh_url' => $this->appendQueryParam($refreshUrl, 'is_refresh=1'),
+                'return_url' => $this->appendQueryParam($returnUrl, 'is_return=1'),
                 'type' => 'account_onboarding',
             ]);
 
@@ -57,6 +57,21 @@ class StripeAccountSyncService
             ]);
             return null;
         }
+    }
+
+    /**
+     * Insert the query param BEFORE the URL's fragment so the resulting URL is well-formed.
+     * Naive concatenation breaks when the configured return URL ends with #fragment
+     * (e.g. /manage/organizer/%d/settings#payouts) — the param lands inside the hash.
+     */
+    private function appendQueryParam(string $url, string $param): string
+    {
+        $hashPosition = strpos($url, '#');
+        $base = $hashPosition === false ? $url : substr($url, 0, $hashPosition);
+        $fragment = $hashPosition === false ? '' : substr($url, $hashPosition);
+        $separator = str_contains($base, '?') ? '&' : '?';
+
+        return $base . $separator . $param . $fragment;
     }
 
     /**

@@ -4,6 +4,8 @@ import { SocialLinks } from "./Sections/SocialLinks";
 import { AddressSettings } from "./Sections/AddressSettings";
 import EmailTemplateSettings from "./Sections/EmailTemplateSettings";
 import { EventDefaults } from "./Sections/EventDefaults";
+import { PayoutsSettings } from "./Sections/PayoutsSettings";
+import { VatSettings } from "./Sections/VatSettings";
 import { PlatformFeesSettings } from "./Sections/PlatformFeesSettings";
 import { DangerZoneSettings } from "./Sections/DangerZoneSettings";
 import { TrackingPixelSettings } from "./Sections/TrackingPixelSettings";
@@ -11,11 +13,11 @@ import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconAlertTriangle, IconBrandGoogleAnalytics, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
+import { IconAlertTriangle, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconReceipt, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useGetAccount } from "../../../../queries/useGetAccount.ts";
 
 const Settings = () => {
@@ -83,19 +85,58 @@ const Settings = () => {
         ];
 
         if (isSaasMode) {
-            baseSections.splice(2, 0, {
-                id: 'platform-fees',
-                label: t`Platform Fees`,
-                icon: IconPercentage,
-                component: PlatformFeesSettings,
-            });
+            baseSections.splice(2, 0,
+                {
+                    id: 'payouts',
+                    label: t`Payouts`,
+                    icon: IconBrandStripe,
+                    component: PayoutsSettings,
+                },
+                {
+                    id: 'vat',
+                    label: t`VAT`,
+                    icon: IconReceipt,
+                    component: VatSettings,
+                },
+                {
+                    id: 'platform-fees',
+                    label: t`Platform Fees`,
+                    icon: IconPercentage,
+                    component: PlatformFeesSettings,
+                });
         }
 
         return baseSections;
     }, [isSaasMode, organizerId]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
-    const [activeSection, setActiveSection] = useState('basic-settings');
+    const location = useLocation();
+    // Strip any query string that ended up inside the hash (e.g. Stripe return
+    // URLs append `?is_return=1` to /settings#payouts, which leaves the literal
+    // `payouts?is_return=1` as the hash fragment) before matching a section.
+    const targetSectionId = useMemo(() => {
+        const raw = location.hash?.replace(/^#/, '').split('?')[0] ?? '';
+        return raw && SECTIONS.some(s => s.id === raw) ? raw : null;
+    }, [location.hash, SECTIONS]);
+    const [activeSection, setActiveSection] = useState(targetSectionId ?? 'basic-settings');
+
+    useEffect(() => {
+        if (!targetSectionId) return;
+        setActiveSection(targetSectionId);
+
+        // Async data inside a section (e.g. the Stripe query in Payouts) keeps
+        // growing the card after the first paint, which moves the target down.
+        // 'smooth' here is unreliable because rapid re-calls cancel each other
+        // before any movement happens, so use instant jumps at increasing delays.
+        const retryDelays = [0, 200, 600, 1200, 2000];
+        const timers = retryDelays.map(delay => window.setTimeout(() => {
+            document.getElementById(targetSectionId)?.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }, delay));
+
+        return () => {
+            timers.forEach(t => window.clearTimeout(t));
+        };
+    }, [targetSectionId]);
 
     const handleClick = (sectionId: string) => {
         setActiveSection(sectionId);

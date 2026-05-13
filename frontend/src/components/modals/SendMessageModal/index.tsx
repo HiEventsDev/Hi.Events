@@ -305,7 +305,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                             <div className={classes.stripeConnectButton}>
                                 <Button
                                     component={NavLink}
-                                    to={`/manage/organizer/${event.organizer_id}/payments`}
+                                    to={`/manage/organizer/${event.organizer_id}/settings#payouts`}
                                     leftSection={<IconBrandStripe size={16}/>}
                                     variant="light"
                                 >
