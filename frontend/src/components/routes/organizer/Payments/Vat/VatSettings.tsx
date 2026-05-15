@@ -16,11 +16,7 @@ export const VatSettings = ({organizerId, stripeCountry}: VatSettingsProps) => {
     const vatInfo = getVatInfo(stripeCountry);
 
     if (!vatInfo.isEU) {
-        return (
-            <Text size="sm" c="dimmed">
-                {t`VAT does not apply because your Stripe account is outside the EU.`}
-            </Text>
-        );
+        return null;
     }
 
     const existingSettings = vatSettingQuery.data;

@@ -40,6 +40,8 @@ import {OrganizerStripeConnectAccount, ReusableStripeConnection} from "../../../
 import {showError, showSuccess} from "../../../../../../utilites/notifications";
 import {CapabilityList} from "../../../Payments/CapabilityList";
 import {RequirementsList} from "../../../Payments/RequirementsList";
+import {VatSettings as VatSettingsBody} from "../../../Payments/Vat/VatSettings";
+import {getVatInfo} from "../../../Payments/Vat/VatNotice";
 import classes from "../../../Payments/Payments.module.scss";
 
 const summarizeActiveCapabilities = (capabilities: Record<string, string>): number => {
@@ -383,6 +385,17 @@ export const PayoutsSettings = () => {
                         </Text>
                         <RequirementsList items={account.requirements.eventually_due} severity="eventually"/>
                     </Alert>
+                )}
+
+                {organizerId && getVatInfo(account.country).isEU && (
+                    <Box mt="xl">
+                        <Divider mb="md"/>
+                        <Title order={4} mb={4}>{t`VAT`}</Title>
+                        <Text c="dimmed" size="sm" mb="md">
+                            {t`How VAT is applied to the platform fees we charge you.`}
+                        </Text>
+                        <VatSettingsBody organizerId={organizerId} stripeCountry={account.country}/>
+                    </Box>
                 )}
             </>
         );
