@@ -17,6 +17,7 @@ const config: LinguiConfig = {
         "se", // Swedish
         "it", // Italian
         "pl", // Polish
+        "el", // Greek
         // "ja", // Japanese
         // "ko", // Korean
         // "id", // Indonesian
