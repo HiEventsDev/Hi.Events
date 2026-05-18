@@ -58,8 +58,17 @@ export const organizerClient = {
         return response.data;
     },
 
-    getOrganizerStats: async (organizerId: IdParam, currencyCode: string) => {
-        const response = await api.get<GenericDataResponse<OrganizerStats>>('organizers/' + organizerId + '/stats?currency_code=' + currencyCode);
+    getOrganizerStats: async (
+        organizerId: IdParam,
+        options: {currencyCode: string; startDate?: string; endDate?: string},
+    ) => {
+        const params = new URLSearchParams();
+        params.append('currency_code', options.currencyCode);
+        if (options.startDate) params.append('start_date', options.startDate);
+        if (options.endDate) params.append('end_date', options.endDate);
+        const response = await api.get<GenericDataResponse<OrganizerStats>>(
+            `organizers/${organizerId}/stats?${params.toString()}`,
+        );
         return response.data;
     },
 

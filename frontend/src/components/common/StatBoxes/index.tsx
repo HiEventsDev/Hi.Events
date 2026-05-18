@@ -1,103 +1,112 @@
-import classes from "./StatBoxes.module.scss";
-import {IconCash, IconCreditCardRefund, IconEye, IconReceipt, IconShoppingCart, IconUsers} from "@tabler/icons-react";
-import {Card} from "../Card";
-import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
+import {useMemo} from "react";
 import {useParams} from "react-router";
 import {t} from "@lingui/macro";
+import {KpiCell, KpiGrid} from "../KpiGrid";
+import {PeriodPreset} from "../PeriodSelector";
+import {computeDelta, periodPresetToDateRange, previousPeriodRange} from "../../../utilites/periodPreset.ts";
+import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import {ReactNode} from "react";
-import {IdParam} from "../../../types.ts";
+import {EventStats, IdParam} from "../../../types.ts";
 
-interface StatBoxProps {
-    number: string | number;
-    description: string;
-    icon: ReactNode;
-    backgroundColor: string;
-}
-
-export const StatBox = ({number, description, icon, backgroundColor}: StatBoxProps) => {
-    return (
-        <Card className={classes.statistic}>
-            <div className={classes.leftPanel}>
-                <div className={classes.number}>{number}</div>
-                <div className={classes.description}>{description}</div>
-            </div>
-            <div className={classes.rightPanel}>
-                <div className={classes.icon} style={{backgroundColor}}>
-                    {icon}
-                </div>
-            </div>
-        </Card>
-    );
-};
+export const StatBox = KpiCell;
 
 interface StatBoxesProps {
     occurrenceId?: IdParam;
+    dateRange?: PeriodPreset;
 }
 
-export const StatBoxes = ({occurrenceId}: StatBoxesProps = {}) => {
-    const {eventId} = useParams();
-    const eventStatsQuery = useGetEventStats(eventId, {occurrenceId});
-    const eventQuery = useGetEvent(eventId);
-    const event = eventQuery?.data;
-    const {data: eventStats} = eventStatsQuery;
+const sparkFrom = (stats: EventStats | undefined, key: keyof EventStats['daily_stats'][number]): number[] => {
+    if (!stats?.daily_stats) return [];
+    return stats.daily_stats.map((d) => Number(d[key] ?? 0));
+};
 
-    const data = [
+export const StatBoxes = ({occurrenceId, dateRange}: StatBoxesProps = {}) => {
+    const {eventId} = useParams();
+    const eventQuery = useGetEvent(eventId);
+    const currency = eventQuery?.data?.currency;
+
+    const currentRange = useMemo(
+        () => periodPresetToDateRange(dateRange ?? 'last_30_days'),
+        [dateRange],
+    );
+    const previousRange = useMemo(() => previousPeriodRange(currentRange), [currentRange]);
+
+    const currentStatsQuery = useGetEventStats(eventId, {
+        occurrenceId,
+        startDate: currentRange.startDate,
+        endDate: currentRange.endDate,
+    });
+    const previousStatsQuery = useGetEventStats(eventId, {
+        occurrenceId,
+        startDate: previousRange.startDate,
+        endDate: previousRange.endDate,
+    });
+
+    const isLoading = currentStatsQuery.isLoading || previousStatsQuery.isLoading;
+    const current = currentStatsQuery.data;
+    const previous = previousStatsQuery.data;
+
+    const cells = [
         {
-            number: formatNumber(eventStats?.total_attendees_registered as number),
-            description: t`Attendees`,
-            icon: <IconUsers size={18}/>,
-            backgroundColor: '#E6677E'
+            key: 'attendees',
+            label: t`Attendees`,
+            value: formatNumber(current?.total_attendees_registered ?? 0),
+            sparkline: sparkFrom(current, 'attendees_registered'),
+            delta: computeDelta(current?.total_attendees_registered, previous?.total_attendees_registered),
         },
         {
-            number: formatNumber(eventStats?.total_products_sold as number),
-            description: t`Products sold`,
-            icon: <IconShoppingCart size={18}/>,
-            backgroundColor: '#4B7BE5'
+            key: 'products_sold',
+            label: t`Products sold`,
+            value: formatNumber(current?.total_products_sold ?? 0),
+            sparkline: sparkFrom(current, 'products_sold'),
+            delta: computeDelta(current?.total_products_sold, previous?.total_products_sold),
         },
         {
-            number: formatCurrency(eventStats?.total_refunded as number || 0, event?.currency),
-            description: t`Refunded`,
-            icon: <IconCreditCardRefund size={18}/>,
-            backgroundColor: '#49A6B7'
+            key: 'refunded',
+            label: t`Refunded`,
+            value: formatCurrency(current?.total_refunded ?? 0, currency),
+            sparkline: sparkFrom(current, 'total_refunded'),
+            delta: computeDelta(current?.total_refunded, previous?.total_refunded),
         },
         {
-            number: formatCurrency(eventStats?.total_gross_sales || 0, event?.currency),
-            description: t`Gross sales`,
-            icon: <IconCash size={18}/>,
-            backgroundColor: '#7C63E6'
+            key: 'gross_sales',
+            label: t`Gross sales`,
+            value: formatCurrency(current?.total_gross_sales ?? 0, currency),
+            sparkline: sparkFrom(current, 'total_sales_gross'),
+            delta: computeDelta(current?.total_gross_sales, previous?.total_gross_sales),
         },
         {
-            number: formatNumber(eventStats?.total_views as number),
-            description: t`Page views`,
-            icon: <IconEye size={18}/>,
-            backgroundColor: '#63B3A1'
+            key: 'page_views',
+            label: t`Page views`,
+            value: formatNumber(current?.total_views ?? 0),
+            sparkline: undefined as number[] | undefined,
+            delta: computeDelta(current?.total_views, previous?.total_views),
         },
         {
-            number: formatNumber(eventStats?.total_orders as number),
-            description: t`Completed orders`,
-            icon: <IconReceipt size={18}/>,
-            backgroundColor: '#E67D49'
-        }
+            key: 'orders',
+            label: t`Completed orders`,
+            value: formatNumber(current?.total_orders ?? 0),
+            sparkline: sparkFrom(current, 'orders_created'),
+            delta: computeDelta(current?.total_orders, previous?.total_orders),
+        },
     ];
 
-    const filteredData = occurrenceId
-        ? data.filter((stat) => stat.description !== t`Page views`)
-        : data;
+    const visibleCells = occurrenceId ? cells.filter((cell) => cell.key !== 'page_views') : cells;
 
     return (
-        <div className={classes.statistics}>
-            {filteredData.map((stat) => (
-                <StatBox
-                    key={stat.description}
-                    number={stat.number}
-                    description={stat.description}
-                    icon={stat.icon}
-                    backgroundColor={stat.backgroundColor}
+        <KpiGrid>
+            {visibleCells.map((cell) => (
+                <KpiCell
+                    key={cell.key}
+                    label={cell.label}
+                    value={cell.value}
+                    sparkline={cell.sparkline}
+                    delta={cell.delta}
+                    isLoading={isLoading}
                 />
             ))}
-        </div>
+        </KpiGrid>
     );
 };

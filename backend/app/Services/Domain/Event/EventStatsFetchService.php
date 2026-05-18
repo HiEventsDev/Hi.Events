@@ -39,39 +39,59 @@ readonly class EventStatsFetchService
             // query honest about that scope.
             $totalsQuery = <<<'SQL'
             SELECT
-                COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
-                COALESCE(SUM(eos.orders_created), 0) AS total_orders,
-                COALESCE(SUM(eos.sales_total_gross), 0) AS total_gross_sales,
-                COALESCE(SUM(eos.total_tax), 0) AS total_tax,
-                COALESCE(SUM(eos.total_fee), 0) AS total_fees,
+                COALESCE(SUM(eods.products_sold), 0) AS total_products_sold,
+                COALESCE(SUM(eods.orders_created), 0) AS total_orders,
+                COALESCE(SUM(eods.sales_total_gross), 0) AS total_gross_sales,
+                COALESCE(SUM(eods.total_tax), 0) AS total_tax,
+                COALESCE(SUM(eods.total_fee), 0) AS total_fees,
                 0 AS total_views,
-                COALESCE(SUM(eos.total_refunded), 0) AS total_refunded,
-                COALESCE(SUM(eos.attendees_registered), 0) AS attendees_registered
-            FROM event_occurrence_statistics eos
-            WHERE eos.event_occurrence_id = :occurrenceId
-              AND eos.event_id = :eventId
-              AND eos.deleted_at IS NULL;
+                COALESCE(SUM(eods.total_refunded), 0) AS total_refunded,
+                COALESCE(SUM(eods.attendees_registered), 0) AS attendees_registered
+            FROM event_occurrence_daily_statistics eods
+            WHERE eods.event_occurrence_id = :occurrenceId
+              AND eods.event_id = :eventId
+              AND eods.deleted_at IS NULL
+              AND eods.date >= :startDate::date
+              AND eods.date <= :endDate::date;
             SQL;
             $totalsResult = $this->db->selectOne($totalsQuery, [
                 'occurrenceId' => $occurrenceId,
                 'eventId' => $eventId,
+                'startDate' => $requestData->start_date,
+                'endDate' => $requestData->end_date,
             ]);
         } else {
             $totalsQuery = <<<'SQL'
             SELECT
-                COALESCE(SUM(eos.products_sold), 0) AS total_products_sold,
-                COALESCE(SUM(eos.orders_created), 0) AS total_orders,
-                COALESCE(SUM(eos.sales_total_gross), 0) AS total_gross_sales,
-                COALESCE(SUM(eos.total_tax), 0) AS total_tax,
-                COALESCE(SUM(eos.total_fee), 0) AS total_fees,
-                COALESCE((SELECT SUM(es.total_views) FROM event_statistics es WHERE es.event_id = :eventIdViews AND es.deleted_at IS NULL), 0) AS total_views,
-                COALESCE(SUM(eos.total_refunded), 0) AS total_refunded,
-                COALESCE(SUM(eos.attendees_registered), 0) AS attendees_registered
-            FROM event_occurrence_statistics eos
-            WHERE eos.event_id = :eventId
-              AND eos.deleted_at IS NULL;
+                COALESCE(SUM(eods.products_sold), 0) AS total_products_sold,
+                COALESCE(SUM(eods.orders_created), 0) AS total_orders,
+                COALESCE(SUM(eods.sales_total_gross), 0) AS total_gross_sales,
+                COALESCE(SUM(eods.total_tax), 0) AS total_tax,
+                COALESCE(SUM(eods.total_fee), 0) AS total_fees,
+                COALESCE((
+                    SELECT SUM(eds.total_views)
+                    FROM event_daily_statistics eds
+                    WHERE eds.event_id = :eventIdViews
+                      AND eds.deleted_at IS NULL
+                      AND eds.date >= :startDateViews::date
+                      AND eds.date <= :endDateViews::date
+                ), 0) AS total_views,
+                COALESCE(SUM(eods.total_refunded), 0) AS total_refunded,
+                COALESCE(SUM(eods.attendees_registered), 0) AS attendees_registered
+            FROM event_occurrence_daily_statistics eods
+            WHERE eods.event_id = :eventId
+              AND eods.deleted_at IS NULL
+              AND eods.date >= :startDate::date
+              AND eods.date <= :endDate::date;
             SQL;
-            $totalsResult = $this->db->selectOne($totalsQuery, ['eventId' => $eventId, 'eventIdViews' => $eventId]);
+            $totalsResult = $this->db->selectOne($totalsQuery, [
+                'eventId' => $eventId,
+                'eventIdViews' => $eventId,
+                'startDate' => $requestData->start_date,
+                'endDate' => $requestData->end_date,
+                'startDateViews' => $requestData->start_date,
+                'endDateViews' => $requestData->end_date,
+            ]);
         }
 
         return new EventStatsResponseDTO(

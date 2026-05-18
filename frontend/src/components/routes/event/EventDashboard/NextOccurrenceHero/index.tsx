@@ -151,7 +151,7 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
     }, [countdown?.tickMs]);
 
     if (occurrenceQuery.isLoading && nextOccurrence) {
-        return <Skeleton height={220} radius="lg" mb="20px"/>;
+        return <Skeleton height={220} radius="lg" mt="20px"/>;
     }
 
     if (!occurrence || !countdown) {

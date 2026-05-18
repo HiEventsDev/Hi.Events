@@ -523,6 +523,15 @@ export interface EventStats {
     total_refunded: number;
 }
 
+export interface OrganizerDailyStats {
+    date: string;
+    attendees_registered: number;
+    products_sold: number;
+    total_sales_gross: number;
+    orders_created: number;
+    total_refunded: number;
+}
+
 export interface OrganizerStats {
     total_products_sold: number;
     total_attendees_registered: number;
@@ -532,6 +541,9 @@ export interface OrganizerStats {
     total_fees: number;
     total_views: number;
     total_refunded: number;
+    daily_stats: OrganizerDailyStats[];
+    start_date: string;
+    end_date: string;
     all_organizers_currencies: string[];
 }
 
