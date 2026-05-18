@@ -12,6 +12,7 @@ use HiEvents\Services\Application\Handlers\Event\UpdateEventHandler;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Queue;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
@@ -30,6 +31,8 @@ class UpdateEventHandlerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Queue::fake();
 
         $this->eventRepository = m::mock(EventRepositoryInterface::class);
         $this->dispatcher = m::mock(Dispatcher::class);
