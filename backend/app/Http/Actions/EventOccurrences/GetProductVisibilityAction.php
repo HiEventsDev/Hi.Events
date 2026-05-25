@@ -12,9 +12,7 @@ class GetProductVisibilityAction extends BaseAction
 {
     public function __construct(
         private readonly GetProductVisibilityHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId): JsonResponse
     {

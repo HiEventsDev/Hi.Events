@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Checkbox, NumberInput, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
+import {Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
@@ -10,6 +10,7 @@ import {
     IconCalendar,
     IconEdit,
     IconInfoCircle,
+    IconMapPin,
     IconShoppingCart,
     IconTag,
     IconTrash,
@@ -22,10 +23,18 @@ import {
     EventOccurrence,
     EventOccurrenceStatus,
     GenericModalProps,
+    GeoPlace,
     IdParam,
+    LocationType,
     UpsertEventOccurrenceRequest,
+    VenueAddress,
 } from "../../../../../types.ts";
+import {AddressAutocomplete} from "../../../../common/AddressAutocomplete";
+import {Editor} from "../../../../common/Editor";
+import {useCreateLocation} from "../../../../../mutations/useCreateLocation.ts";
 import {useGetEventOccurrence} from "../../../../../queries/useGetEventOccurrence.ts";
+import {useGetOrganizerLocations} from "../../../../../queries/useGetOrganizerLocations.ts";
+import {formatAddress} from "../../../../../utilites/addressUtilities.ts";
 import {useCreateEventOccurrence} from "../../../../../mutations/useCreateEventOccurrence.ts";
 import {useUpdateEventOccurrence} from "../../../../../mutations/useUpdateEventOccurrence.ts";
 import {useCancelOccurrence} from "../../../../../mutations/useCancelOccurrence.ts";
@@ -33,6 +42,7 @@ import {useDeleteEventOccurrence} from "../../../../../mutations/useDeleteEventO
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {utcToTz} from "../../../../../utilites/dates.ts";
 import {showSuccess, showError} from "../../../../../utilites/notifications.tsx";
+import {isEmptyHtml} from "../../../../../utilites/helpers.ts";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {OccurrenceProductSettings} from "../PriceOverrideForm";
 import {SendMessageModal} from "../../../../modals/SendMessageModal";
@@ -57,13 +67,46 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     const updateMutation = useUpdateEventOccurrence();
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
+    const createLocationMutation = useCreateLocation();
+    const organizerId = event?.organizer?.id ?? event?.organizer_id;
+    const savedLocationsQuery = useGetOrganizerLocations(organizerId, undefined, !!organizerId);
+    const savedLocations = savedLocationsQuery.data?.data ?? [];
 
-    const form = useForm<UpsertEventOccurrenceRequest>({
+    type LocationPickerMode = 'saved' | 'new';
+
+    type OccurrenceFormShape = {
+        start_date: string;
+        end_date: string;
+        capacity: number | null;
+        label: string;
+        online_event_connection_details: string;
+        location_mode: 'inherit' | 'override' | 'online';
+        location_picker: LocationPickerMode;
+        saved_location_id: string | null;
+        override_address: VenueAddress;
+        override_latlng: {lat: number | null; lng: number | null; provider: string | null; placeId: string | null};
+    };
+
+    const form = useForm<OccurrenceFormShape>({
         initialValues: {
             start_date: '',
             end_date: '',
             capacity: null,
             label: '',
+            online_event_connection_details: '',
+            location_mode: 'inherit',
+            location_picker: 'saved',
+            saved_location_id: null,
+            override_address: {
+                venue_name: '',
+                address_line_1: '',
+                address_line_2: '',
+                city: '',
+                state_or_region: '',
+                zip_or_postal_code: '',
+                country: '',
+            },
+            override_latlng: {lat: null, lng: null, provider: null, placeId: null},
         },
         validate: {
             start_date: (value) => !value ? t`Start date is required` : null,
@@ -79,16 +122,50 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 }
                 return null;
             },
+            online_event_connection_details: (value, values) => {
+                if (values.location_mode === 'online' && (!value || isEmptyHtml(value))) {
+                    return t`Connection details are required for online dates`;
+                }
+                return null;
+            },
         },
     });
 
     useEffect(() => {
         if (occurrence && event) {
+            const eventLocation = occurrence.event_location;
+            const occType = eventLocation?.type;
+            const mode: 'inherit' | 'override' | 'online' = (() => {
+                if (occType === LocationType.Online) return 'online';
+                if (occType === LocationType.InPerson) return 'override';
+                return 'inherit';
+            })();
+            const occLocation = eventLocation?.location;
+            const occLocationId = eventLocation?.location_id ?? null;
             form.setValues({
                 start_date: utcToTz(occurrence.start_date, event.timezone) || '',
                 end_date: utcToTz(occurrence.end_date, event.timezone) || '',
                 capacity: occurrence.capacity ?? null,
                 label: occurrence.label || '',
+                online_event_connection_details: eventLocation?.online_event_connection_details ?? '',
+                location_mode: mode,
+                location_picker: occLocationId ? 'saved' : 'new',
+                saved_location_id: occLocationId ? String(occLocationId) : null,
+                override_address: occLocation?.structured_address ?? {
+                    venue_name: '',
+                    address_line_1: '',
+                    address_line_2: '',
+                    city: '',
+                    state_or_region: '',
+                    zip_or_postal_code: '',
+                    country: '',
+                },
+                override_latlng: {
+                    lat: occLocation?.latitude ?? null,
+                    lng: occLocation?.longitude ?? null,
+                    provider: occLocation?.provider ?? null,
+                    placeId: occLocation?.provider_place_id ?? null,
+                },
             });
         }
     }, [occurrence, event]);
@@ -118,34 +195,95 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         newEndDate: string | null | undefined;
     } | null>(null);
 
-    const submit = (values: UpsertEventOccurrenceRequest, notifyAfterSave: boolean) => {
-        const onSuccess = () => {
-            showSuccess(isEditing
-                ? t`Date updated successfully`
-                : t`Date created successfully`
-            );
-            if (notifyAfterSave && isEditing && occurrence) {
-                // The edit modal hides (opened={!pendingNotification}) and
-                // SendMessageModal takes over — one visible modal at a time.
-                setPendingNotification({
-                    occurrence,
-                    newStartDate: values.start_date,
-                    newEndDate: values.end_date,
-                });
-                return;
-            }
-            onClose();
-        };
-        const onError = (error: any) => errorHandler(form, error);
+    type OccurrenceFormValues = OccurrenceFormShape;
 
-        if (isEditing) {
-            updateMutation.mutate({eventId, occurrenceId, data: values}, {onSuccess, onError});
-        } else {
-            createMutation.mutate({eventId, data: values}, {onSuccess, onError});
+    const submit = async (values: OccurrenceFormValues, notifyAfterSave: boolean) => {
+        try {
+            let eventLocationPayload: UpsertEventOccurrenceRequest['event_location'] = undefined;
+            let clearEventLocation = false;
+
+            if (values.location_mode === 'inherit') {
+                clearEventLocation = true;
+            } else if (values.location_mode === 'online') {
+                eventLocationPayload = {
+                    type: LocationType.Online,
+                    online_event_connection_details: values.online_event_connection_details || null,
+                };
+            } else if (values.location_mode === 'override') {
+                if (!organizerId) {
+                    throw new Error('No organizer context available');
+                }
+                let locationIdForOccurrence: number | null = null;
+                if (values.location_picker === 'saved') {
+                    if (!values.saved_location_id) {
+                        throw new Error('Pick a saved location or switch to "New location"');
+                    }
+                    locationIdForOccurrence = Number(values.saved_location_id);
+                } else {
+                    if (!values.override_address?.address_line_1 && !values.override_address?.venue_name && !values.override_address?.city) {
+                        throw new Error('Provide at least one address field for the override location');
+                    }
+                    const created = await createLocationMutation.mutateAsync({
+                        organizerId,
+                        payload: {
+                            name: values.override_address.venue_name || null,
+                            structured_address: values.override_address,
+                            latitude: values.override_latlng.lat,
+                            longitude: values.override_latlng.lng,
+                            provider: values.override_latlng.provider,
+                            provider_place_id: values.override_latlng.placeId,
+                        },
+                    });
+                    locationIdForOccurrence = (created.data.id as number | undefined) ?? null;
+                }
+                eventLocationPayload = {
+                    type: LocationType.InPerson,
+                    location_id: locationIdForOccurrence,
+                };
+            }
+
+            const normalisedEnd = values.end_date && values.end_date > values.start_date
+                ? values.end_date
+                : undefined;
+
+            const payload: UpsertEventOccurrenceRequest = {
+                start_date: values.start_date,
+                end_date: normalisedEnd,
+                capacity: values.capacity,
+                label: values.label,
+                ...(eventLocationPayload ? {event_location: eventLocationPayload} : {}),
+                ...(clearEventLocation ? {clear_event_location: true} : {}),
+            };
+
+            const onSuccess = () => {
+                showSuccess(isEditing
+                    ? t`Date updated successfully`
+                    : t`Date created successfully`
+                );
+                if (notifyAfterSave && isEditing && occurrence) {
+                    setPendingNotification({
+                        occurrence,
+                        newStartDate: values.start_date,
+                        newEndDate: values.end_date,
+                    });
+                    return;
+                }
+                onClose();
+            };
+            const onError = (error: any) => errorHandler(form, error);
+
+            if (isEditing) {
+                updateMutation.mutate({eventId, occurrenceId, data: payload}, {onSuccess, onError});
+            } else {
+                createMutation.mutate({eventId, data: payload}, {onSuccess, onError});
+            }
+        } catch (error: any) {
+            showError(error?.message || t`Could not save date`);
+            errorHandler(form, error);
         }
     };
 
-    const handleSubmit = (values: UpsertEventOccurrenceRequest) => {
+    const handleSubmit = (values: OccurrenceFormValues) => {
         // Only warn when editing an existing occurrence whose date/time actually
         // changed AND someone has already registered.
         const attendeeCount = occurrence?.statistics?.attendees_registered ?? 0;
@@ -329,6 +467,106 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <div className={classes.pastDateWarning}>
                                         <IconAlertTriangle size={14}/>
                                         <span>{t`This date is in the past. It will be created but won't be visible to attendees under upcoming dates.`}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className={classes.section}>
+                                <div className={classes.sectionHeader}>
+                                    <div className={classes.sectionIcon}><IconMapPin size={16}/></div>
+                                    <span className={classes.sectionTitle}>{t`Location`}</span>
+                                </div>
+                                <Radio.Group
+                                    value={form.values.location_mode}
+                                    onChange={(value) => form.setFieldValue('location_mode', value as 'inherit' | 'override' | 'online')}
+                                >
+                                    <Radio value="inherit" label={t`Same as event`} mb={6}/>
+                                    <Radio value="override" label={t`Different location`} mb={6}/>
+                                    <Radio value="online" label={t`Online`}/>
+                                </Radio.Group>
+
+                                {form.values.location_mode === 'override' && (
+                                    <div style={{marginTop: 12}}>
+                                        <SegmentedControl
+                                            fullWidth
+                                            size="sm"
+                                            mb="sm"
+                                            data={[
+                                                {value: 'saved', label: t`Saved location`},
+                                                {value: 'new', label: t`New location`},
+                                            ]}
+                                            value={form.values.location_picker}
+                                            onChange={(value) => form.setFieldValue('location_picker', value as LocationPickerMode)}
+                                        />
+                                        {form.values.location_picker === 'saved' ? (
+                                            <Select
+                                                label={t`Saved locations`}
+                                                placeholder={savedLocations.length === 0 ? t`No saved locations yet` : t`Pick a location`}
+                                                disabled={savedLocations.length === 0}
+                                                data={savedLocations.map((loc) => ({
+                                                    value: String(loc.id),
+                                                    label: loc.name || loc.structured_address?.venue_name || formatAddress(loc.structured_address ?? {}) || t`Unnamed location`,
+                                                }))}
+                                                searchable
+                                                value={form.values.saved_location_id}
+                                                onChange={(value) => form.setFieldValue('saved_location_id', value)}
+                                            />
+                                        ) : (
+                                            <>
+                                                {organizerId && (
+                                                    <AddressAutocomplete
+                                                        organizerId={organizerId}
+                                                        country={form.values.override_address?.country || undefined}
+                                                        onPlaceSelected={(place: GeoPlace) => {
+                                                            form.setFieldValue('override_address', {
+                                                                venue_name: place.address.venue_name || '',
+                                                                address_line_1: place.address.address_line_1 || '',
+                                                                address_line_2: place.address.address_line_2 || '',
+                                                                city: place.address.city || '',
+                                                                state_or_region: place.address.state_or_region || '',
+                                                                zip_or_postal_code: place.address.zip_or_postal_code || '',
+                                                                country: place.address.country || '',
+                                                            });
+                                                            form.setFieldValue('override_latlng', {
+                                                                lat: place.latitude ?? null,
+                                                                lng: place.longitude ?? null,
+                                                                provider: place.provider,
+                                                                placeId: place.provider_place_id,
+                                                            });
+                                                        }}
+                                                    />
+                                                )}
+                                                <TextInput
+                                                    {...form.getInputProps('override_address.venue_name')}
+                                                    label={t`Venue Name`}
+                                                    placeholder={t`Conference Center`}
+                                                />
+                                                <InputGroup>
+                                                    <TextInput {...form.getInputProps('override_address.address_line_1')} label={t`Address Line 1`}/>
+                                                    <TextInput {...form.getInputProps('override_address.address_line_2')} label={t`Address Line 2`}/>
+                                                </InputGroup>
+                                                <InputGroup>
+                                                    <TextInput {...form.getInputProps('override_address.city')} label={t`City`}/>
+                                                    <TextInput {...form.getInputProps('override_address.state_or_region')} label={t`State or Region`}/>
+                                                </InputGroup>
+                                                <InputGroup>
+                                                    <TextInput {...form.getInputProps('override_address.zip_or_postal_code')} label={t`Zip or Postal Code`}/>
+                                                    <TextInput {...form.getInputProps('override_address.country')} label={t`Country`} maxLength={2} placeholder="IE"/>
+                                                </InputGroup>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                                {form.values.location_mode === 'online' && (
+                                    <div style={{marginTop: 12}}>
+                                        <Editor
+                                            value={form.values.online_event_connection_details || ''}
+                                            error={form.errors.online_event_connection_details as string}
+                                            label={t`Connection Details`}
+                                            description={t`These details are shown on the attendee's ticket and order summary for this date only.`}
+                                            onChange={(value) => form.setFieldValue('online_event_connection_details', value)}
+                                        />
                                     </div>
                                 )}
                             </div>

@@ -1,4 +1,5 @@
-import {Event} from "../types.ts";
+import {Event, EventOccurrence, LocationType} from "../types.ts";
+import {resolveEventLocation} from "./effectiveLocation.ts";
 import {formatAddress} from "./addressUtilities.ts";
 
 export interface OccurrenceDateOverride {
@@ -7,19 +8,21 @@ export interface OccurrenceDateOverride {
     label?: string;
 }
 
-const getEventLocation = (event: Event): string => {
-    if (event.settings?.location_details) {
-        const details = event.settings.location_details;
-        const address = formatAddress(details);
+const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): string => {
+    const effective = resolveEventLocation(event, occurrence ?? null);
 
-        if (details.venue_name && address) {
-            return `${details.venue_name}, ${address}`;
-        }
-
-        return details.venue_name || address;
+    if (effective?.type === LocationType.Online) {
+        return effective.online_event_connection_details
+            ? `Online — ${effective.online_event_connection_details.replace(/<[^>]+>/g, '').trim()}`.slice(0, 240)
+            : 'Online';
     }
 
-    return '';
+    if (effective?.type !== LocationType.InPerson) return '';
+
+    const venue = effective.location?.name || effective.location?.structured_address?.venue_name || '';
+    const address = effective.location?.structured_address ? formatAddress(effective.location.structured_address) : '';
+    if (venue && address) return `${venue}, ${address}`;
+    return venue || address;
 };
 
 const formatICSDate = (date: string): string => {
@@ -33,12 +36,56 @@ const stripHtml = (html: string): string => {
     return tmp.textContent || tmp.innerText || '';
 };
 
+// RFC 5545 §3.3.11 TEXT escaping. Backslash, semicolon and comma must be
+// escaped; CR/LF collapse to the literal "\n" sequence. Without this, a
+// crafted venue/title/description can inject extra calendar properties.
+const escapeICSText = (value: string): string => {
+    return (value ?? '')
+        .replace(/\\/g, '\\\\')
+        .replace(/;/g, '\\;')
+        .replace(/,/g, '\\,')
+        .replace(/\r\n|\r|\n/g, '\\n');
+};
+
+// RFC 5545 §3.1 content-line folding: lines longer than 75 octets must be
+// split with CRLF + a leading whitespace continuation.
+const foldICSLine = (line: string): string => {
+    const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
+    if (!encoder) {
+        return line;
+    }
+
+    const bytes = encoder.encode(line);
+    if (bytes.length <= 75) {
+        return line;
+    }
+
+    const decoder = new TextDecoder();
+    const chunks: string[] = [];
+    let cursor = 0;
+    let limit = 75;
+    while (cursor < bytes.length) {
+        let end = Math.min(cursor + limit, bytes.length);
+        // Avoid splitting in the middle of a UTF-8 sequence.
+        while (end < bytes.length && (bytes[end] & 0xc0) === 0x80) {
+            end--;
+        }
+        chunks.push(decoder.decode(bytes.subarray(cursor, end)));
+        cursor = end;
+        limit = 74; // continuation lines begin with a space, so 1 byte less of content
+    }
+    return chunks.join('\r\n ');
+};
+
 export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverride): string => {
     const startDate = occurrence?.start_date || event.start_date;
     const endDate = occurrence?.end_date || event.end_date || startDate;
     const title = occurrence?.label
         ? `${event.title} - ${occurrence.label}`
         : event.title;
+    const matchingOccurrence = occurrence
+        ? event.occurrences?.find((o) => o.start_date === occurrence.start_date)
+        : null;
 
     return [
         'BEGIN:VCALENDAR',
@@ -48,9 +95,9 @@ export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverri
         'BEGIN:VEVENT',
         `DTSTART:${formatICSDate(startDate)}`,
         `DTEND:${formatICSDate(endDate)}`,
-        `SUMMARY:${title.replace(/\n/g, '\\n')}`,
-        `DESCRIPTION:${stripHtml(event.description_preview || '').replace(/\n/g, '\\n')}`,
-        `LOCATION:${getEventLocation(event)}`,
+        foldICSLine(`SUMMARY:${escapeICSText(title)}`),
+        foldICSLine(`DESCRIPTION:${escapeICSText(stripHtml(event.description_preview || ''))}`),
+        foldICSLine(`LOCATION:${escapeICSText(getEventLocation(event, matchingOccurrence))}`),
         `DTSTAMP:${formatICSDate(new Date().toISOString())}`,
         `UID:${crypto.randomUUID()}@hi.events`,
         'END:VEVENT',
@@ -79,12 +126,15 @@ export const createGoogleCalendarUrl = (event: Event, occurrence?: OccurrenceDat
     const title = occurrence?.label
         ? `${event.title} - ${occurrence.label}`
         : event.title;
+    const matchingOccurrence = occurrence
+        ? event.occurrences?.find((o) => o.start_date === occurrence.start_date)
+        : null;
 
     const params = new URLSearchParams({
         action: 'TEMPLATE',
         text: title,
         details: event.description_preview || '',
-        location: getEventLocation(event),
+        location: getEventLocation(event, matchingOccurrence),
         dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`
     });
 

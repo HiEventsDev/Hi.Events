@@ -9,6 +9,7 @@ use HiEvents\Http\Request\EventOccurrence\BulkUpdateOccurrencesRequest;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\BulkUpdateOccurrencesHandler;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\BulkUpdateOccurrencesDTO;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use Illuminate\Http\JsonResponse;
 
 class BulkUpdateOccurrencesAction extends BaseAction
@@ -23,6 +24,8 @@ class BulkUpdateOccurrencesAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $event = $this->eventRepository->findById($eventId);
+
+        $eventLocationPayload = $request->validated('event_location');
 
         $result = $this->handler->handle(
             new BulkUpdateOccurrencesDTO(
@@ -47,6 +50,8 @@ class BulkUpdateOccurrencesAction extends BaseAction
                 duration_minutes: $request->validated('duration_minutes') !== null
                     ? (int) $request->validated('duration_minutes')
                     : null,
+                event_location: $eventLocationPayload !== null ? EventLocationData::fromArray($eventLocationPayload) : null,
+                clear_event_location: (bool) $request->validated('clear_event_location', false),
             )
         );
 

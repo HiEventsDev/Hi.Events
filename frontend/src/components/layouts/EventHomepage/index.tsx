@@ -4,7 +4,7 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, EventOccurrenceStatus, EventType, OrganizerStatus} from "../../../types.ts";
+import {Event, EventOccurrenceStatus, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -28,9 +28,9 @@ import {socialMediaConfig} from "../../../constants/socialMediaConfig";
 import {
     formatAddress,
     getGoogleMapsUrl,
-    getShortLocationDisplay,
-    isAddressSet
+    getShortLocationDisplay
 } from "../../../utilites/addressUtilities.ts";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
@@ -136,11 +136,39 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const organizer = event.organizer!;
     const organizerSocials = organizer?.settings?.social_media_handles;
     const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
-    const organizerLocation = organizer?.settings?.location_details;
+    const organizerLocation = organizer?.location?.structured_address;
     const websiteUrl = organizer?.website;
-    const locationDetails = event.settings?.location_details;
-    const isOnlineEvent = event.settings?.is_online_event;
-    const hasLocation = isAddressSet(locationDetails) && !isOnlineEvent;
+    const occurrences = event.occurrences ?? [];
+    const resolvedList = occurrences.length > 0
+        ? occurrences.map(o => resolveEventLocation(event, o))
+        : [resolveEventLocation(event, null)];
+    const types = new Set<string>();
+    const locationIds = new Set<string>();
+    for (const r of resolvedList) {
+        if (r) {
+            types.add(r.type);
+            if (r.location_id != null) locationIds.add(String(r.location_id));
+        }
+    }
+    const effective = resolvedList[0];
+    const hasMixedModes = types.size > 1;
+    const hasMultipleLocations = locationIds.size > 1;
+    const isOnlineEvent = effective?.type === LocationType.Online;
+    const venueName = effective?.type === LocationType.InPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const formattedAddress = effective?.type === LocationType.InPerson && effective.location?.structured_address
+        ? formatAddress(effective.location.structured_address)
+        : '';
+    const locationDetails = effective?.type === LocationType.InPerson
+        ? effective.location?.structured_address ?? null
+        : null;
+    const hasLocation = !hasMixedModes
+        && !hasMultipleLocations
+        && effective?.type === LocationType.InPerson
+        && Boolean(locationDetails);
+    const multipleLocationsLabel = hasMultipleLocations ? t`Multiple locations` : null;
+    const mixedModesLabel = hasMixedModes ? t`Online & in-person — see schedule` : null;
 
     const socialLinks = organizerSocials ? Object.entries(organizerSocials)
         .filter(([platform, handle]) => handle && socialMediaConfig[platform as keyof typeof socialMediaConfig])
@@ -173,7 +201,15 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
 
     const statusBadge = getStatusBadge();
 
-    const mapUrl = event.settings?.maps_url || (locationDetails ? getGoogleMapsUrl(locationDetails) : null);
+    const mapUrl = (() => {
+        if (effective?.type !== LocationType.InPerson || !effective.location) return null;
+        const {latitude, longitude, structured_address} = effective.location;
+        if (latitude != null && longitude != null) {
+            return `https://www.google.com/maps?q=${latitude},${longitude}`;
+        }
+        if (structured_address) return getGoogleMapsUrl(structured_address) || null;
+        return null;
+    })();
 
     return (
         <>
@@ -400,19 +436,50 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
                                         )}
 
-                                        {/* Location */}
-                                        {hasLocation && locationDetails && (
+                                        {/* Mixed modes */}
+                                        {mixedModesLabel && (
                                             <div className={classes.metaItem}>
                                                 <div className={classes.metaIconBox}>
                                                     <IconMapPin/>
                                                 </div>
                                                 <div className={classes.metaContent}>
-                                                    <div className={classes.metaPrimary}>
-                                                        {locationDetails.venue_name}
-                                                    </div>
+                                                    <div className={classes.metaPrimary}>{mixedModesLabel}</div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Multiple locations */}
+                                        {multipleLocationsLabel && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconMapPin/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>{multipleLocationsLabel}</div>
                                                     <div className={classes.metaSecondary}>
-                                                        {formatAddress(locationDetails)}
+                                                        {t`See schedule`}
                                                     </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Location */}
+                                        {hasLocation && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconMapPin/>
+                                                </div>
+                                                <div className={classes.metaContent}>
+                                                    {venueName && (
+                                                        <div className={classes.metaPrimary}>
+                                                            {venueName}
+                                                        </div>
+                                                    )}
+                                                    {formattedAddress && (
+                                                        <div className={classes.metaSecondary}>
+                                                            {formattedAddress}
+                                                        </div>
+                                                    )}
                                                     {mapUrl && (
                                                         <a
                                                             href={mapUrl}
@@ -445,19 +512,23 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                             )}
 
                             {/* Location Section (with map) */}
-                            {hasLocation && locationDetails && (
+                            {hasLocation && (
                                 <div className={classes.section}>
                                     <div className={classes.sectionHeader}>
                                         <h2 className={classes.sectionTitle}>{t`Location`}</h2>
                                     </div>
                                     <div className={classes.locationContent}>
                                         <div className={classes.venueDetails}>
-                                            <div className={classes.venueName}>
-                                                {locationDetails.venue_name}
-                                            </div>
-                                            <div className={classes.venueAddress}>
-                                                {formatAddress(locationDetails)}
-                                            </div>
+                                            {venueName && (
+                                                <div className={classes.venueName}>
+                                                    {venueName}
+                                                </div>
+                                            )}
+                                            {formattedAddress && (
+                                                <div className={classes.venueAddress}>
+                                                    {formattedAddress}
+                                                </div>
+                                            )}
                                             {mapUrl && (
                                                 <a
                                                     href={mapUrl}

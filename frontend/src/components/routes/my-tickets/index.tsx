@@ -17,6 +17,7 @@ import {useState} from "react";
 import {useGetOrdersByLookupToken} from "../../../queries/useGetOrdersByLookupToken.ts";
 import {useSendTicketLookupEmail} from "../../../mutations/useSendTicketLookupEmail.ts";
 import {dateToBrowserTz} from "../../../utilites/dates.ts";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {showError} from "../../../utilites/notifications.tsx";
 
@@ -26,7 +27,7 @@ import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
 
-import {Event, Order} from "../../../types.ts";
+import {Event, LocationType, Order} from "../../../types.ts";
 import classes from './MyTickets.module.scss';
 
 const OrderStatusBadge = () => (
@@ -37,7 +38,23 @@ const OrderStatusBadge = () => (
 
 const OrderCard = ({order}: { order: Order }) => {
     const event = order.event as Event;
-    const location = event?.settings?.location_details ? formatAddress(event.settings.location_details) : null;
+    const occurrenceId = order.attendees?.[0]?.event_occurrence_id
+        ?? order.order_items?.[0]?.event_occurrence_id;
+    const occurrence = occurrenceId != null
+        ? event?.occurrences?.find((o) => o.id === occurrenceId) ?? null
+        : null;
+    const effective = resolveEventLocation(event, occurrence);
+    const venueName = effective?.type === LocationType.InPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const formattedAddress = effective?.type === LocationType.InPerson && effective.location?.structured_address
+        ? formatAddress(effective.location.structured_address)
+        : '';
+    const locationLabel = effective?.type === LocationType.InPerson
+        ? [venueName, formattedAddress].filter(Boolean).join(', ') || null
+        : effective?.type === LocationType.Online
+            ? t`Online`
+            : null;
     const ticketCount = order.attendees?.length || 0;
     const orderUrl = `/checkout/${event?.id}/${order.short_id}/summary`;
     const printUrl = `/order/${event?.id}/${order.short_id}/print`;
@@ -65,13 +82,13 @@ const OrderCard = ({order}: { order: Order }) => {
                     </Group>
                 </div>
 
-                {location && (
+                {locationLabel && (
                     <div className={classes.detailItem}>
                         <Group gap="xs" wrap="nowrap">
                             <IconMapPin size={18} style={{color: 'var(--mantine-color-gray-6)'}}/>
                             <div>
                                 <Text size="xs" c="dimmed">{t`Location`}</Text>
-                                <Text size="sm" lineClamp={1}>{location}</Text>
+                                <Text size="sm" lineClamp={1}>{locationLabel}</Text>
                             </div>
                         </Group>
                     </div>

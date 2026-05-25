@@ -4,6 +4,7 @@ namespace HiEvents\Resources\EventOccurrence;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\EventLocation\EventLocationResource;
 use Illuminate\Http\Request;
 
 /**
@@ -30,7 +31,11 @@ class EventOccurrenceResource extends BaseResource
             'is_past' => $this->isPast(),
             'is_future' => $this->isFuture(),
             'is_active' => $this->isActive(),
-            'statistics' => $this->when($stats !== null, fn() => [
+            'event_location' => $this->when(
+                condition: $this->getEventLocation() !== null,
+                value: fn () => new EventLocationResource($this->getEventLocation()),
+            ),
+            'statistics' => $this->when($stats !== null, fn () => [
                 'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
                 'total_tax' => $stats->getTotalTax() ?? 0,
                 'total_fee' => $stats->getTotalFee() ?? 0,

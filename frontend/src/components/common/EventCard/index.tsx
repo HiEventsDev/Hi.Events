@@ -1,5 +1,5 @@
 import {ActionIcon, Tooltip} from '@mantine/core';
-import {Event, EventType, IdParam, Product} from "../../../types.ts";
+import {Event, EventType, IdParam, LocationType, Product} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {NavLink, useNavigate} from "react-router";
 import {
@@ -23,6 +23,8 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {formatDateWithLocale, relativeDate} from "../../../utilites/dates.ts";
 import {Card} from "../Card";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../utilites/addressUtilities.ts";
 
 const placeholderGradients = [
     'linear-gradient(135deg, var(--mantine-color-violet-5) 0%, var(--mantine-color-indigo-5) 100%)',
@@ -91,11 +93,30 @@ export function EventCard({event}: EventCardProps) {
     };
 
     const getLocationText = () => {
-        if (event.settings?.is_online_event) return t`Online`;
-        const location = event.settings?.location_details;
-        if (location?.venue_name) return location.venue_name;
-        if (location?.city) return location.city;
-        return null;
+        const occurrences = event.occurrences ?? [];
+        const resolvedList = occurrences.length > 0
+            ? occurrences.map(o => resolveEventLocation(event, o))
+            : [resolveEventLocation(event, null)];
+
+        const types = new Set<string>();
+        const locationIds = new Set<string>();
+        for (const r of resolvedList) {
+            if (r) {
+                types.add(r.type);
+                if (r.location_id != null) locationIds.add(String(r.location_id));
+            }
+        }
+
+        const first = resolvedList[0];
+        if (!first) return null;
+        if (types.size > 1) return t`Online & in-person`;
+        if (first.type === LocationType.Online) return t`Online`;
+        if (locationIds.size > 1) return t`Multiple locations`;
+        if (first.type !== LocationType.InPerson) return null;
+        const city = first.location?.structured_address?.city;
+        const venueName = first.location?.name || first.location?.structured_address?.venue_name;
+        const formatted = first.location?.structured_address ? formatAddress(first.location.structured_address) : '';
+        return venueName ?? city ?? (formatted ? formatted : null);
     };
 
     const getTicketAvailability = () => {

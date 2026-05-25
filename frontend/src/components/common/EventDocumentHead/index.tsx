@@ -1,8 +1,10 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 import {Helmet} from "react-helmet-async";
-import {Event} from "../../../types";
+import {Event, LocationType} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {utcToTz} from "../../../utilites/dates.ts";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../utilites/addressUtilities.ts";
 
 interface EventDocumentHeadProps {
     event: Event;
@@ -19,25 +21,62 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const startDate = utcToTz(new Date(event.start_date), event.timezone);
     const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 
-    const address = {
+    const occurrences = event.occurrences ?? [];
+    const resolvedList = occurrences.length > 0
+        ? occurrences.map(o => resolveEventLocation(event, o))
+        : [resolveEventLocation(event, null)];
+    const types = new Set<string>();
+    for (const r of resolvedList) {
+        if (r) types.add(r.type);
+    }
+    const effective = resolvedList[0];
+    const hasMixedModes = types.size > 1;
+    const structuredAddress = effective?.type === LocationType.InPerson ? effective.location?.structured_address : null;
+
+    const address = structuredAddress ? {
         "@type": "http://schema.org/PostalAddress",
-        streetAddress: eventSettings?.location_details?.address_line_1,
-        addressLocality: eventSettings?.location_details?.city,
-        addressRegion: eventSettings?.location_details?.state_or_region,
-        postalCode: eventSettings?.location_details?.zip_or_postal_code,
-        addressCountry: eventSettings?.location_details?.country
-    };
+        streetAddress: structuredAddress.address_line_1,
+        addressLocality: structuredAddress.city,
+        addressRegion: structuredAddress.state_or_region,
+        postalCode: structuredAddress.zip_or_postal_code,
+        addressCountry: structuredAddress.country
+    } : null;
 
-    // Filter out undefined address properties
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    Object.keys(address).forEach(key => address[key] === undefined && delete address[key]);
+    if (address) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        Object.keys(address).forEach(key => address[key] === undefined && delete address[key]);
+    }
 
-    const location = eventSettings?.location_details && Object.keys(address).length > 1 ? {
+    const latitude = effective?.type === LocationType.InPerson ? effective.location?.latitude : null;
+    const longitude = effective?.type === LocationType.InPerson ? effective.location?.longitude : null;
+    const geo = latitude != null && longitude != null ? {
+        "@type": "http://schema.org/GeoCoordinates",
+        latitude,
+        longitude,
+    } : null;
+
+    const venueName = effective?.type === LocationType.InPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const placeName = venueName
+        ?? (effective?.type === LocationType.InPerson && structuredAddress ? formatAddress(structuredAddress) : null);
+
+    const includePlace = effective?.type === LocationType.InPerson && address && Object.keys(address).length > 1;
+    const location = includePlace ? {
         "@type": "http://schema.org/Place",
-        name: event.location_details?.venue_name,
-        address
+        name: placeName,
+        address,
+        ...(geo ? {geo} : {}),
     } : {};
+
+    const eventAttendanceMode = hasMixedModes
+        ? "https://schema.org/MixedEventAttendanceMode"
+        : effective?.type === LocationType.Online
+            ? "https://schema.org/OnlineEventAttendanceMode"
+            : effective?.type === LocationType.InPerson
+                ? "https://schema.org/OfflineEventAttendanceMode"
+                : undefined;
 
     const schemaOrgJSONLD = {
         "@context": "http://schema.org",
@@ -56,7 +95,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         },
         url,
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: event.settings?.is_online_event ? "https://schema.org/OnlineEventAttendanceMode" : "https://schema.org/OfflineEventAttendanceMode",
+        eventAttendanceMode,
         currency: event.currency,
         offers: products.map(product => ({
             "@type": "http://schema.org/Offer",

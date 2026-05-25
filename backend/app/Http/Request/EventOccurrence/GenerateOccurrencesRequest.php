@@ -22,9 +22,10 @@ class GenerateOccurrencesRequest extends BaseRequest
             'recurrence_rule.times_of_day' => ['nullable', 'array', 'max:24'],
             'recurrence_rule.times_of_day.*' => [function ($attribute, $value, $fail) {
                 if (is_string($value)) {
-                    if (!preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $value)) {
+                    if (! preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $value)) {
                         $fail(__('Each time of day must be in HH:MM 24-hour format.'));
                     }
+
                     return;
                 }
 
@@ -36,11 +37,13 @@ class GenerateOccurrencesRequest extends BaseRequest
                 if (is_array($value)) {
                     if (! isset($value['time']) || ! is_string($value['time'])) {
                         $fail(__('Each time of day object must include a time field.'));
+
                         return;
                     }
                     if (! preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $value['time'])) {
                         $fail(__('Each time of day must be in HH:MM 24-hour format.'));
                     }
+
                     return;
                 }
 

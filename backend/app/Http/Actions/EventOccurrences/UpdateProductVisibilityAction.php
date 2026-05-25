@@ -14,9 +14,7 @@ class UpdateProductVisibilityAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateProductVisibilityHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId, UpdateProductVisibilityRequest $request): JsonResponse
     {

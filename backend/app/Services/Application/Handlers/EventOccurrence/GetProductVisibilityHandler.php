@@ -15,10 +15,8 @@ class GetProductVisibilityHandler
 {
     public function __construct(
         private readonly ProductOccurrenceVisibilityRepositoryInterface $visibilityRepository,
-        private readonly EventOccurrenceRepositoryInterface             $occurrenceRepository,
-    )
-    {
-    }
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+    ) {}
 
     public function handle(int $eventId, int $occurrenceId): Collection
     {
@@ -27,7 +25,7 @@ class GetProductVisibilityHandler
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
         ]);
 
-        if (!$occurrence) {
+        if (! $occurrence) {
             throw new ResourceNotFoundException(
                 __('Occurrence :id not found for this event', ['id' => $occurrenceId])
             );

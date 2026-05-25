@@ -4,11 +4,13 @@ namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
@@ -54,10 +56,14 @@ class GetPublicEventHandler
                 ])
             )
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
             ->loadRelation(new Relationship(ImageDomainObject::class))
             ->loadRelation(new Relationship(OrganizerDomainObject::class, nested: [
                 new Relationship(ImageDomainObject::class),
                 new Relationship(OrganizerSettingDomainObject::class),
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location_record'),
             ], name: 'organizer'))
             ->findById($data->eventId);
 
@@ -72,13 +78,17 @@ class GetPublicEventHandler
 
         // +1 lets us detect overflow without loading the entire occurrence table for
         // long-running recurring events (e.g. daily over multiple years).
-        $occurrences = $this->occurrenceRepository->findWhere(
-            where: $occurrenceWhere,
-            orderAndDirections: [
-                new OrderAndDirection(EventOccurrenceDomainObjectAbstract::START_DATE, 'asc'),
-            ],
-            limit: self::MAX_PUBLIC_OCCURRENCES + 1,
-        );
+        $occurrences = $this->occurrenceRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->findWhere(
+                where: $occurrenceWhere,
+                orderAndDirections: [
+                    new OrderAndDirection(EventOccurrenceDomainObjectAbstract::START_DATE, 'asc'),
+                ],
+                limit: self::MAX_PUBLIC_OCCURRENCES + 1,
+            );
 
         // Resolve once: only honour the requested occurrence id if it actually
         // belongs to this event. The caller can supply any id, and downstream
@@ -91,11 +101,15 @@ class GetPublicEventHandler
                 fn (EventOccurrenceDomainObject $o) => $o->getId() === $data->eventOccurrenceId
             );
             if ($verifiedOccurrence === null) {
-                $verifiedOccurrence = $this->occurrenceRepository->findFirstWhere([
-                    EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
-                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
-                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-                ]);
+                $verifiedOccurrence = $this->occurrenceRepository
+                    ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]))
+                    ->findFirstWhere([
+                        EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
+                        EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
+                        [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+                    ]);
             }
             // The fallback above only filters out CANCELLED — drop past dates
             // here too. Without this, a stale share/email link to a past date

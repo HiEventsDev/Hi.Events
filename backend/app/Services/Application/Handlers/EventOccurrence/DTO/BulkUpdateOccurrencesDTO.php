@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\EventOccurrence\DTO;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
 
 class BulkUpdateOccurrencesDTO extends BaseDataObject
 {
@@ -23,5 +24,7 @@ class BulkUpdateOccurrencesDTO extends BaseDataObject
         public readonly ?string $label = null,
         public readonly bool $clear_label = false,
         public readonly ?int $duration_minutes = null,
+        public readonly ?EventLocationData $event_location = null,
+        public readonly bool $clear_event_location = false,
     ) {}
 }

@@ -25,7 +25,8 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
-import {formatAddress} from "../../../../utilites/addressUtilities.ts";
+import {formatAddress, getGoogleMapsUrl} from "../../../../utilites/addressUtilities.ts";
+import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
 import {showSuccess, showError} from "../../../../utilites/notifications.tsx";
 
@@ -46,7 +47,7 @@ import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
-import {Attendee, Event, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, LocationType, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 // Purchase tracking is handled by the parent Checkout layout
@@ -295,10 +296,33 @@ const OrderDetails = ({
 
 const EventDetails = ({event, order}: { event: Event; order: Order }) => {
     const orderOccurrence = order.order_items?.[0]?.event_occurrence;
-    const location = event.settings?.location_details ? formatAddress(event.settings.location_details) : null;
-    const venueDetails = event.settings?.location_details?.venue_name
-        ? `${event.settings.location_details.venue_name}${location ? `, ${location}` : ''}`
-        : location;
+    const effective = resolveEventLocation(event, orderOccurrence);
+    const isInPerson = effective?.type === LocationType.InPerson;
+    const venueName = isInPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const formattedAddress = isInPerson && effective.location?.structured_address
+        ? formatAddress(effective.location.structured_address)
+        : '';
+    const venueDetails = isInPerson
+        ? (venueName
+            ? `${venueName}${formattedAddress ? `, ${formattedAddress}` : ''}`
+            : formattedAddress || null)
+        : null;
+    const builtMapsUrl = (() => {
+        if (!isInPerson || !effective.location) return null;
+        const {latitude, longitude, structured_address} = effective.location;
+        if (latitude != null && longitude != null) {
+            return `https://www.google.com/maps?q=${latitude},${longitude}`;
+        }
+        if (structured_address) return getGoogleMapsUrl(structured_address) || null;
+        return null;
+    })();
+    const mapsUrl = builtMapsUrl
+        ?? event.settings?.maps_url
+        ?? (formattedAddress
+            ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formattedAddress)}`
+            : '');
 
     return (
         <Card>
@@ -321,7 +345,7 @@ const EventDetails = ({event, order}: { event: Event; order: Order }) => {
                         label={t`Location`}
                         value={(
                             <NavLink
-                                to={event.settings?.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event?.settings?.location_details ? formatAddress(event.settings.location_details) : '')}`}
+                                to={mapsUrl}
                                 target="_blank"
                             >
                                 {venueDetails}
@@ -607,7 +631,7 @@ export const OrderSummaryAndProducts = () => {
                     onResendClick={handleResendOrderConfirmation}
                 />
 
-                {event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>}
+                <OnlineEventDetails event={event} occurrence={order.order_items?.[0]?.event_occurrence ?? null}/>
 
                 {!!event?.settings?.post_checkout_message && <PostCheckoutMessage message={event.settings.post_checkout_message}/>}
 

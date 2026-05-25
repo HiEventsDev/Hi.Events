@@ -12,6 +12,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     final public const PLURAL_NAME = 'event_occurrences';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const EVENT_LOCATION_ID = 'event_location_id';
     final public const SHORT_ID = 'short_id';
     final public const START_DATE = 'start_date';
     final public const END_DATE = 'end_date';
@@ -26,6 +27,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
 
     protected int $id;
     protected int $event_id;
+    protected ?int $event_location_id = null;
     protected string $short_id;
     protected string $start_date;
     protected ?string $end_date = null;
@@ -43,6 +45,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'event_location_id' => $this->event_location_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'start_date' => $this->start_date ?? null,
                     'end_date' => $this->end_date ?? null,
@@ -77,6 +80,17 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setEventLocationId(?int $event_location_id): self
+    {
+        $this->event_location_id = $event_location_id;
+        return $this;
+    }
+
+    public function getEventLocationId(): ?int
+    {
+        return $this->event_location_id;
     }
 
     public function setShortId(string $short_id): self

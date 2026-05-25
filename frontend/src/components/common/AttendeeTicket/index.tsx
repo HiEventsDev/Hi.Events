@@ -4,9 +4,10 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
-import {Address, Attendee, Event, EventOccurrence, Product} from "../../../types.ts";
+import {Attendee, Event, EventOccurrence, LocationType, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
 import {imageUrl} from "../../../utilites/urlHelper.ts";
+import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {PoweredByFooter} from "../PoweredByFooter";
 import {EventDateRange} from "../EventDateRange";
@@ -33,7 +34,16 @@ export const AttendeeTicket = ({
     // rather than the event's aggregated range.
     const ticketOccurrence = attendee.event_occurrence ?? occurrence;
     const productPrice = getAttendeeProductPrice(attendee, product);
-    const hasVenue = event?.settings?.location_details?.venue_name || event?.settings?.location_details?.address_line_1;
+    const eventLocation = resolveEventLocation(event, ticketOccurrence);
+    const venueName = eventLocation?.type === LocationType.InPerson
+        ? (eventLocation.location?.name || eventLocation.location?.structured_address?.venue_name || null)
+        : null;
+    const formattedAddress = eventLocation?.type === LocationType.InPerson && eventLocation.location?.structured_address
+        ? formatAddress(eventLocation.location.structured_address)
+        : '';
+    const locationLine = [venueName, formattedAddress].filter(Boolean).join(', ');
+    const isInPerson = eventLocation?.type === LocationType.InPerson && locationLine.length > 0;
+    const isOnline = eventLocation?.type === LocationType.Online;
 
     const ticketDesignSettings = event?.settings?.ticket_design_settings;
     const accentColor = ticketDesignSettings?.accent_color || '#6B46C1';
@@ -95,11 +105,20 @@ export const AttendeeTicket = ({
                             </div>
                         )}
 
-                        {hasVenue && (
+                        {isInPerson && (
                             <div className={classes.detailRow}>
                                 <div className={classes.detailLabel}>{t`Location`}</div>
                                 <div className={classes.detailValue}>
-                                    {formatAddress(event?.settings?.location_details as Address)}
+                                    {locationLine}
+                                </div>
+                            </div>
+                        )}
+
+                        {isOnline && (
+                            <div className={classes.detailRow}>
+                                <div className={classes.detailLabel}>{t`Location`}</div>
+                                <div className={classes.detailValue}>
+                                    {t`Online event`}
                                 </div>
                             </div>
                         )}

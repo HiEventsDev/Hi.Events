@@ -4,9 +4,11 @@ namespace HiEvents\Services\Domain\SelfService;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\OrderAuditAction;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -42,6 +44,11 @@ class SelfServiceResendEmailService
             ], name: 'order'))
             ->loadRelation(new Relationship(
                 domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ],
                 name: 'event_occurrence',
             ))
             ->loadRelation(new Relationship(
@@ -57,6 +64,9 @@ class SelfServiceResendEmailService
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
             ->findById($eventId);
 
         $this->sendAttendeeTicketService->send(
@@ -89,11 +99,29 @@ class SelfServiceResendEmailService
                 nested: [
                     new Relationship(
                         domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
                         name: 'event_occurrence',
                     ),
                 ],
             ))
-            ->loadRelation(AttendeeDomainObject::class)
+            ->loadRelation(new Relationship(
+                domainObject: AttendeeDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                            ]),
+                        ],
+                        name: 'event_occurrence',
+                    ),
+                ],
+            ))
             ->loadRelation(InvoiceDomainObject::class)
             ->findFirstWhere([
                 'id' => $orderId,
@@ -103,7 +131,14 @@ class SelfServiceResendEmailService
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
-            ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]),
+            ]))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
             ->findById($eventId);
 
         $this->sendOrderDetailsService->sendCustomerOrderSummary(

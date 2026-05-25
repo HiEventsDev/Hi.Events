@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\EventOccurrence\DTO;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
 
 class UpsertEventOccurrenceDTO extends BaseDataObject
 {
@@ -14,5 +15,7 @@ class UpsertEventOccurrenceDTO extends BaseDataObject
         public readonly ?string $label = null,
         public readonly bool $is_overridden = false,
         public readonly ?int $id = null,
+        public readonly ?EventLocationData $event_location = null,
+        public readonly bool $clear_event_location = false,
     ) {}
 }

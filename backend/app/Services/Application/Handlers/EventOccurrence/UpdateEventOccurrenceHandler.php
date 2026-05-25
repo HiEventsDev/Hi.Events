@@ -10,7 +10,10 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
+use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
+use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -18,6 +21,9 @@ class UpdateEventOccurrenceHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventLocationUpserter $eventLocationUpserter,
+        private readonly EventLocationCleaner $eventLocationCleaner,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -41,32 +47,52 @@ class UpdateEventOccurrenceHandler
                 );
             }
 
-            // Only flag as overridden when a rule-determining field actually changes
-            // away from what the rule would produce. Label edits and no-op saves
-            // shouldn't pin the row against rule regenerates. Dates are normalized
-            // to a canonical parsed form — `DateHelper::convertToUTC` returns a
-            // different string format than the DB-hydrated getStartDate(), so
-            // string comparison alone would always register as changed.
+            $previousEventLocationId = $occurrence->getEventLocationId();
+            $newEventLocationId = $previousEventLocationId;
+            $eventLocationChanged = false;
+
+            if ($dto->event_location !== null) {
+                $event = $this->eventRepository->findById($dto->event_id);
+                if ($event === null) {
+                    throw new ResourceNotFoundException(__('Event :id not found', ['id' => $dto->event_id]));
+                }
+
+                if ($previousEventLocationId === null) {
+                    $eventLocation = $this->eventLocationUpserter->createForEvent(
+                        eventId: $dto->event_id,
+                        accountId: $event->getAccountId(),
+                        data: $dto->event_location,
+                    );
+                    $newEventLocationId = $eventLocation->getId();
+                    $eventLocationChanged = true;
+                } else {
+                    $this->eventLocationUpserter->updateInPlace(
+                        eventLocationId: $previousEventLocationId,
+                        eventId: $dto->event_id,
+                        accountId: $event->getAccountId(),
+                        data: $dto->event_location,
+                    );
+                }
+            } elseif ($dto->clear_event_location && $previousEventLocationId !== null) {
+                $newEventLocationId = null;
+                $eventLocationChanged = true;
+            }
+
+            // `DateHelper::convertToUTC` normalizes to a different string than the
+            // DB-hydrated value, so string compare alone always reports a change.
             $isOverride = $occurrence->getIsOverridden()
                 || $this->datesDiffer($dto->start_date, $occurrence->getStartDate())
                 || $this->datesDiffer($dto->end_date, $occurrence->getEndDate())
-                || $dto->capacity !== $occurrence->getCapacity();
+                || $dto->capacity !== $occurrence->getCapacity()
+                || $eventLocationChanged;
 
-            // CANCELLED is intentionally not writable here — lifecycle
-            // transitions (cancel / reactivate) live in their own handlers
-            // and fan out into refund / attendee / recurrence-exclusion side
-            // effects this handler does not perform. SOLD_OUT/ACTIVE on the
-            // other hand are capacity-derived: ProductQuantityUpdateService
-            // flips between them whenever used_capacity crosses capacity, so
-            // a capacity edit here has to do the same reconciliation or a
-            // sold-out date stays blocked after capacity is increased / cleared,
-            // and an over-capacity active date stays visually open.
             $attributes = [
                 EventOccurrenceDomainObjectAbstract::START_DATE => $dto->start_date,
                 EventOccurrenceDomainObjectAbstract::END_DATE => $dto->end_date,
                 EventOccurrenceDomainObjectAbstract::CAPACITY => $dto->capacity,
                 EventOccurrenceDomainObjectAbstract::LABEL => $dto->label,
                 EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => $isOverride,
+                EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID => $newEventLocationId,
             ];
 
             $reconciledStatus = $this->reconcileCapacityStatus(
@@ -78,19 +104,19 @@ class UpdateEventOccurrenceHandler
                 $attributes[EventOccurrenceDomainObjectAbstract::STATUS] = $reconciledStatus;
             }
 
-            return $this->occurrenceRepository->updateFromArray(
+            $updated = $this->occurrenceRepository->updateFromArray(
                 id: $occurrence->getId(),
                 attributes: $attributes,
             );
+
+            if ($dto->clear_event_location && $previousEventLocationId !== null) {
+                $this->eventLocationCleaner->deleteIfOrphaned($previousEventLocationId);
+            }
+
+            return $updated;
         });
     }
 
-    /**
-     * Returns the status the occurrence should sit at after a capacity edit,
-     * or null if the existing status is correct. Only flips between ACTIVE
-     * and SOLD_OUT — never touches CANCELLED, which is owned by the dedicated
-     * cancel/reactivate handlers.
-     */
     private function reconcileCapacityStatus(
         string $currentStatus,
         ?int $newCapacity,
@@ -100,7 +126,6 @@ class UpdateEventOccurrenceHandler
             return null;
         }
 
-        // Unlimited (null) capacity can never be sold out.
         if ($newCapacity === null) {
             return $currentStatus === EventOccurrenceStatus::SOLD_OUT->name
                 ? EventOccurrenceStatus::ACTIVE->name

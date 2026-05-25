@@ -18,8 +18,11 @@ use Tests\TestCase;
 class DeletePriceOverrideHandlerTest extends TestCase
 {
     private ProductPriceOccurrenceOverrideRepositoryInterface|MockInterface $overrideRepository;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
+
     private DatabaseManager|MockInterface $databaseManager;
+
     private DeletePriceOverrideHandler $handler;
 
     protected function setUp(): void
@@ -31,7 +34,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new DeletePriceOverrideHandler(
             $this->overrideRepository,
@@ -40,7 +43,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         );
     }
 
-    public function testHandleSuccessfullyDeletesOverrideScopedToOccurrence(): void
+    public function test_handle_successfully_deletes_override_scoped_to_occurrence(): void
     {
         $eventId = 1;
         $occurrenceId = 10;
@@ -79,7 +82,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testHandleThrowsExceptionWhenOccurrenceDoesNotBelongToEvent(): void
+    public function test_handle_throws_exception_when_occurrence_does_not_belong_to_event(): void
     {
         $eventId = 1;
         $occurrenceId = 10;
@@ -102,7 +105,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         $this->handler->handle($eventId, $occurrenceId, $overrideId);
     }
 
-    public function testHandleThrowsExceptionWhenOverrideNotFound(): void
+    public function test_handle_throws_exception_when_override_not_found(): void
     {
         $eventId = 1;
         $occurrenceId = 10;
@@ -131,7 +134,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         $this->handler->handle($eventId, $occurrenceId, $overrideId);
     }
 
-    public function testHandleScopesLookupToOccurrenceId(): void
+    public function test_handle_scopes_lookup_to_occurrence_id(): void
     {
         $eventId = 1;
         $occurrenceId = 42;
@@ -158,7 +161,7 @@ class DeletePriceOverrideHandlerTest extends TestCase
         $this->handler->handle($eventId, $occurrenceId, $overrideId);
     }
 
-    public function testHandleDeletesOnlyTheSpecifiedOverride(): void
+    public function test_handle_deletes_only_the_specified_override(): void
     {
         $eventId = 1;
         $occurrenceId = 10;

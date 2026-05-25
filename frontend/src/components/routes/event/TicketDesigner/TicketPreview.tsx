@@ -1,10 +1,10 @@
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {t} from "@lingui/macro";
-import {IdParam} from "../../../../types.ts";
+import {IdParam, LocationType} from "../../../../types.ts";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
+import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import classes from './TicketPreview.module.scss';
-import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 
 interface TicketDesignSettings {
     accent_color: string;
@@ -22,11 +22,9 @@ interface TicketPreviewProps {
 export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) => {
     const eventQuery = useGetEvent(eventId);
     const meQuery = useGetMe();
-    const eventSettingsQuery = useGetEventSettings(eventId);
 
     const event = eventQuery.data;
     const user = meQuery.data;
-    const eventSettings = eventSettingsQuery.data;
 
     if (!event || !user) {
         return (
@@ -74,8 +72,21 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         }
     };
 
+    const fallbackLocationDetails = {
+        venue_name: t`Sample Venue`,
+        address_line_1: t`123 Sample Street`,
+    };
+    const resolved = resolveEventLocation(event, null);
+    const resolvedEventLocation = resolved?.type === LocationType.InPerson && resolved.location
+        ? resolved
+        : {
+            id: 0,
+            type: LocationType.InPerson,
+            location: {name: fallbackLocationDetails.venue_name, structured_address: fallbackLocationDetails},
+        };
     const eventWithDesignSettings = {
         ...event,
+        event_location: resolvedEventLocation,
         settings: {
             ...event.settings,
             ticket_design_settings: {
@@ -84,10 +95,6 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
                 footer_text: settings.footer_text,
                 enabled: settings.enabled
             },
-            location_details: eventSettings?.location_details || {
-                venue_name: t`Sample Venue`,
-                address_line_1: t`123 Sample Street`,
-            }
         },
         images: logoUrl && settings.logo_image_id ? [
             ...((event.images || []).filter(img => img.type !== 'TICKET_LOGO')),

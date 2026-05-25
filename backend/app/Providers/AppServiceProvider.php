@@ -12,6 +12,10 @@ use HiEvents\Models\Organizer;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
+use HiEvents\Services\Infrastructure\Geo\GeoProviderInterface;
+use HiEvents\Services\Infrastructure\Geo\GooglePlacesGeoProvider;
+use HiEvents\Services\Infrastructure\Geo\NoOpGeoProvider;
+use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->bindDoctrineConnection();
         $this->bindStripeServices();
         $this->bindCurrencyConversionClient();
+        $this->bindGeoProvider();
     }
 
     /**
@@ -139,6 +144,30 @@ class AppServiceProvider extends ServiceProvider
                 // Fallback to no-op client if no other client is available
                 return new NoOpCurrencyConversionClient(
                     logger: $this->app->make('log')
+                );
+            }
+        );
+    }
+
+    private function bindGeoProvider(): void
+    {
+        $this->app->bind(
+            GeoProviderInterface::class,
+            function () {
+                $provider = config('services.geo.provider');
+                $googleKey = config('services.geo.google.api_key');
+
+                if ($provider === 'google' && $googleKey) {
+                    return new GooglePlacesGeoProvider(
+                        apiKey: $googleKey,
+                        http: $this->app->make(HttpClient::class),
+                        logger: $this->app->make('log'),
+                        cache: $this->app->make(\Illuminate\Contracts\Cache\Repository::class),
+                    );
+                }
+
+                return new NoOpGeoProvider(
+                    logger: $this->app->make('log'),
                 );
             }
         );

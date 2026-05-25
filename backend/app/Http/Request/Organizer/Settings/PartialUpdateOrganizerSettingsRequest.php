@@ -91,16 +91,6 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
 
             'website_url' => ['sometimes', 'nullable', 'url'],
 
-            // Location details
-            'location_details' => ['sometimes', 'array'],
-            'location_details.venue_name' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_1' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_2' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.city' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.state_or_region' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.zip_or_postal_code' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.country' => ['sometimes', 'nullable', 'string', 'max:2'],
-
             // Homepage
             'homepage_visibility' => ['nullable', Rule::in(OrganizerHomepageVisibility::valuesArray())],
 

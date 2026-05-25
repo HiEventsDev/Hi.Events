@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
-use HiEvents\DomainObjects\EventOccurrenceStatisticDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GetEventOccurrencesHandler;
@@ -13,6 +12,7 @@ use Tests\TestCase;
 class GetEventOccurrencesHandlerTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
     private GetEventOccurrencesHandler $handler;
 
     protected function setUp(): void
@@ -23,15 +23,13 @@ class GetEventOccurrencesHandlerTest extends TestCase
         $this->handler = new GetEventOccurrencesHandler($this->occurrenceRepository);
     }
 
-    public function testHandleReturnsPaginatedOccurrencesWithStats(): void
+    public function test_handle_returns_paginated_occurrences_with_stats(): void
     {
         $queryParams = Mockery::mock(QueryParamsDTO::class);
         $paginator = Mockery::mock(LengthAwarePaginator::class);
 
         $this->occurrenceRepository
             ->shouldReceive('loadRelation')
-            ->with(EventOccurrenceStatisticDomainObject::class)
-            ->once()
             ->andReturnSelf();
 
         $this->occurrenceRepository

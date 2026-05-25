@@ -18,9 +18,13 @@ use Tests\TestCase;
 class GenerateOccurrencesFromRuleHandlerTest extends TestCase
 {
     private EventOccurrenceGeneratorService|Mockery\MockInterface $generatorService;
+
     private EventRepositoryInterface|Mockery\MockInterface $eventRepository;
+
     private RecurrenceRuleParserService|Mockery\MockInterface $ruleParserService;
+
     private DatabaseManager|Mockery\MockInterface $databaseManager;
+
     private GenerateOccurrencesFromRuleHandler $handler;
 
     protected function setUp(): void
@@ -33,7 +37,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new GenerateOccurrencesFromRuleHandler(
             $this->generatorService,
@@ -43,7 +47,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         );
     }
 
-    public function testHandleGeneratesOccurrencesAndUpdatesEventType(): void
+    public function test_handle_generates_occurrences_and_updates_event_type(): void
     {
         $rule = ['frequency' => 'weekly', 'range' => ['type' => 'count', 'count' => 10]];
         $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);
@@ -78,7 +82,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $this->assertSame($generatedOccurrences, $result);
     }
 
-    public function testHandleThrowsValidationExceptionWhenTooManyOccurrences(): void
+    public function test_handle_throws_validation_exception_when_too_many_occurrences(): void
     {
         $rule = ['frequency' => 'daily', 'range' => ['type' => 'count', 'count' => 2000]];
         $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);
@@ -100,7 +104,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-    public function testHandleUsesUtcWhenEventHasNoTimezone(): void
+    public function test_handle_uses_utc_when_event_has_no_timezone(): void
     {
         $rule = ['frequency' => 'weekly'];
         $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);

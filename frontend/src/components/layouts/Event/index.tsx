@@ -30,6 +30,7 @@ import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings";
 import {useGetEventStats} from "../../../queries/useGetEventStats";
+import {useGeoStatus} from "../../../queries/useGeoStatus.ts";
 import Truncate from "../../common/Truncate";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
@@ -69,6 +70,7 @@ const EventLayout = () => {
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+    useGeoStatus();
 
     const occurrenceIdFromUrl = useMemo(() => {
         const match = location.pathname.match(/\/occurrences\/(\d+)$/);

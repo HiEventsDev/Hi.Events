@@ -13,6 +13,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const ID = 'id';
     final public const ACCOUNT_ID = 'account_id';
     final public const ORGANIZER_CONFIGURATION_ID = 'organizer_configuration_id';
+    final public const LOCATION_ID = 'location_id';
     final public const NAME = 'name';
     final public const EMAIL = 'email';
     final public const PHONE = 'phone';
@@ -28,6 +29,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected int $id;
     protected int $account_id;
     protected ?int $organizer_configuration_id = null;
+    protected ?int $location_id = null;
     protected string $name;
     protected string $email;
     protected ?string $phone = null;
@@ -46,6 +48,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'id' => $this->id ?? null,
                     'account_id' => $this->account_id ?? null,
                     'organizer_configuration_id' => $this->organizer_configuration_id ?? null,
+                    'location_id' => $this->location_id ?? null,
                     'name' => $this->name ?? null,
                     'email' => $this->email ?? null,
                     'phone' => $this->phone ?? null,
@@ -91,6 +94,17 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getOrganizerConfigurationId(): ?int
     {
         return $this->organizer_configuration_id;
+    }
+
+    public function setLocationId(?int $location_id): self
+    {
+        $this->location_id = $location_id;
+        return $this;
+    }
+
+    public function getLocationId(): ?int
+    {
+        return $this->location_id;
     }
 
     public function setName(string $name): self

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router";
-import {Event} from "../../../../types.ts";
+import {Event, LocationType} from "../../../../types.ts";
 import classes from './EventCard.module.scss';
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {t} from "@lingui/macro";
@@ -11,6 +11,8 @@ import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
 import {ShareComponent} from "../../../common/ShareIcon";
 import dayjs from "dayjs";
 import {IconCalendar, IconClock, IconMapPin, IconTicket, IconWifi} from '@tabler/icons-react';
+import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 
 interface EventCardProps {
     event: Event;
@@ -37,8 +39,33 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     const endDay = event.end_date ? formatDateWithLocale(event.end_date, "dayOfMonth", event.timezone) : null;
 
     const coverImage = event.images?.find(img => img.type === 'EVENT_COVER');
-    const location = event?.settings?.location_details?.city || event?.settings?.location_details?.venue_name;
-    const isOnlineEvent = event.settings?.is_online_event;
+    const occurrences = event.occurrences ?? [];
+    const resolvedList = occurrences.length > 0
+        ? occurrences.map(o => resolveEventLocation(event, o))
+        : [resolveEventLocation(event, null)];
+    const types = new Set<string>();
+    const locationIds = new Set<string>();
+    for (const r of resolvedList) {
+        if (r) {
+            types.add(r.type);
+            if (r.location_id != null) locationIds.add(String(r.location_id));
+        }
+    }
+    const effective = resolvedList[0];
+    const hasMixedModes = types.size > 1;
+    const hasMultipleLocations = locationIds.size > 1;
+    const isOnlineEvent = effective?.type === LocationType.Online;
+    const locationLabel: string | null = (() => {
+        if (hasMixedModes) return t`Online & in-person`;
+        if (isOnlineEvent) return t`Online`;
+        if (hasMultipleLocations) return t`Multiple locations`;
+        if (effective?.type !== LocationType.InPerson) return null;
+        const city = effective.location?.structured_address?.city;
+        const venueName = effective.location?.name || effective.location?.structured_address?.venue_name;
+        const formatted = effective.location?.structured_address ? formatAddress(effective.location.structured_address) : '';
+        return venueName ?? city ?? (formatted ? formatted : null);
+    })();
+    const location = !isOnlineEvent ? locationLabel : null;
 
     // Check if event is live
     const now = dayjs();

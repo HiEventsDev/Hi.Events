@@ -6,7 +6,6 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductOccurrenceVisibilityDomainObjectAbstract;
-use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductOccurrenceVisibilityDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -22,9 +21,13 @@ use Tests\TestCase;
 class UpdateProductVisibilityHandlerTest extends TestCase
 {
     private ProductOccurrenceVisibilityRepositoryInterface|Mockery\MockInterface $visibilityRepository;
+
     private ProductRepositoryInterface|Mockery\MockInterface $productRepository;
+
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
     private DatabaseManager|Mockery\MockInterface $databaseManager;
+
     private UpdateProductVisibilityHandler $handler;
 
     protected function setUp(): void
@@ -37,7 +40,7 @@ class UpdateProductVisibilityHandlerTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new UpdateProductVisibilityHandler(
             $this->visibilityRepository,
@@ -50,15 +53,24 @@ class UpdateProductVisibilityHandlerTest extends TestCase
     private function makeProductCollection(array $ids): Collection
     {
         return collect(array_map(function ($id) {
-            return new class($id) {
+            return new class($id)
+            {
                 public function __construct(public readonly int $id) {}
-                public function offsetGet($key) { return $this->$key; }
-                public function offsetExists($key): bool { return isset($this->$key); }
+
+                public function offsetGet($key)
+                {
+                    return $this->$key;
+                }
+
+                public function offsetExists($key): bool
+                {
+                    return isset($this->$key);
+                }
             };
         }, $ids));
     }
 
-    public function testHandleCreatesVisibilityRecordsForSelectedProducts(): void
+    public function test_handle_creates_visibility_records_for_selected_products(): void
     {
         $dto = new UpdateProductVisibilityDTO(
             event_id: 1,
@@ -101,7 +113,7 @@ class UpdateProductVisibilityHandlerTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testHandleReturnsEmptyWhenAllProductsSelected(): void
+    public function test_handle_returns_empty_when_all_products_selected(): void
     {
         $dto = new UpdateProductVisibilityDTO(
             event_id: 1,
@@ -124,7 +136,7 @@ class UpdateProductVisibilityHandlerTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    public function testHandleThrowsWhenOccurrenceNotFound(): void
+    public function test_handle_throws_when_occurrence_not_found(): void
     {
         $dto = new UpdateProductVisibilityDTO(
             event_id: 1,
@@ -139,7 +151,7 @@ class UpdateProductVisibilityHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-    public function testHandleThrowsWhenProductIdDoesNotBelongToEvent(): void
+    public function test_handle_throws_when_product_id_does_not_belong_to_event(): void
     {
         $dto = new UpdateProductVisibilityDTO(
             event_id: 1,

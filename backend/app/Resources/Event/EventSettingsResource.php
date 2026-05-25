@@ -34,10 +34,6 @@ class EventSettingsResource extends JsonResource
             'website_url' => $this->getWebsiteUrl(),
             'maps_url' => $this->getMapsUrl(),
 
-            'location_details' => $this->getLocationDetails(),
-            'is_online_event' => $this->getIsOnlineEvent(),
-            'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
-
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),
             'seo_keywords' => $this->getSeoKeywords(),
