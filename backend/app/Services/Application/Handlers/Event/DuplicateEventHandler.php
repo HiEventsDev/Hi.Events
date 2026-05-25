@@ -11,9 +11,7 @@ class DuplicateEventHandler
 {
     public function __construct(
         private readonly DuplicateEventService $duplicateEventService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

@@ -15,11 +15,9 @@ use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClient
 class GetPlatformFeePreviewHandler
 {
     public function __construct(
-        private readonly EventRepositoryInterface          $eventRepository,
+        private readonly EventRepositoryInterface $eventRepository,
         private readonly CurrencyConversionClientInterface $currencyConversionClient,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetPlatformFeePreviewDTO $dto): PlatformFeePreviewResponseDTO
     {

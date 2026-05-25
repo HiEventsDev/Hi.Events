@@ -19,12 +19,10 @@ class GenerateOccurrencesFromRuleHandler
 {
     public function __construct(
         private readonly EventOccurrenceGeneratorService $generatorService,
-        private readonly EventRepositoryInterface        $eventRepository,
-        private readonly RecurrenceRuleParserService     $ruleParserService,
-        private readonly DatabaseManager                 $databaseManager,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly RecurrenceRuleParserService $ruleParserService,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable

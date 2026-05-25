@@ -11,9 +11,7 @@ class DeletePriceOverrideAction extends BaseAction
 {
     public function __construct(
         private readonly DeletePriceOverrideHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId, int $overrideId): Response
     {

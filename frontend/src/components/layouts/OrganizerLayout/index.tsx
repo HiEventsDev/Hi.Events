@@ -9,6 +9,7 @@ import {
     IconExternalLink,
     IconEye,
     IconEyeOff,
+    IconMapPin,
     IconPaint,
     IconSettings,
     IconShare,
@@ -21,6 +22,7 @@ import AppLayout from "../AppLayout";
 import { NavLink, useLocation, useParams } from "react-router";
 import { Button, Modal, Stack, Text } from "@mantine/core";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
+import { useGeoStatus } from "../../../queries/useGeoStatus.ts";
 import { useState } from "react";
 import { CreateEventModal } from "../../modals/CreateEventModal";
 import { TopBarButton } from "../../common/TopBarButton";
@@ -44,6 +46,7 @@ const OrganizerLayout = () => {
     const { organizerId } = useParams();
     const location = useLocation();
     const { data: organizer } = useGetOrganizer(organizerId);
+    useGeoStatus();
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [showCreateOrganizerModal, setShowCreateOrganizerModal] = useState(false);
     const [createModalOpen, { open: openCreateModal, close: closeCreateModal }] = useDisclosure(false);
@@ -99,6 +102,9 @@ const OrganizerLayout = () => {
 
         { label: t`Tools` },
         { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint },
+
+        { label: t`Library` },
+        { link: 'locations', label: t`Locations`, icon: IconMapPin },
 
         { label: t`Integrations` },
         { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },

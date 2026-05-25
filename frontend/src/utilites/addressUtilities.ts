@@ -1,11 +1,14 @@
 import {VenueAddress} from "../types.ts";
 
+// Mirrors LegacyEventLocationBackfiller::normaliseAddress on the backend:
+// venue_name counts as a meaningful field, so a hall name without a postal
+// address is still treated as a real venue.
 export const isAddressSet = (address?: VenueAddress) => {
     if (!address) return false;
 
     const addressFields: (keyof VenueAddress)[] = [
+        'venue_name',
         'address_line_1',
-        'address_line_2',
         'city',
         'state_or_region',
         'zip_or_postal_code',
@@ -28,7 +31,7 @@ export const formatAddress = (address: VenueAddress) => {
     return addressLines.filter((line) => line).join(', ');
 }
 
-export const getShortLocationDisplay = (locationDetails?: VenueAddress) => {
+export const getShortLocationDisplay = (locationDetails?: VenueAddress | null) => {
     if (!locationDetails) return null;
 
     const parts = [];
@@ -42,7 +45,7 @@ export const getShortLocationDisplay = (locationDetails?: VenueAddress) => {
     return parts.length > 0 ? parts.join(', ') : null;
 };
 
-export const getGoogleMapsUrl = (locationDetails: VenueAddress) => {
+export const getGoogleMapsUrl = (locationDetails: VenueAddress | null | undefined) => {
     if (!locationDetails) return '';
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatAddress(locationDetails))}`;
 };

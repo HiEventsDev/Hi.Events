@@ -11,9 +11,7 @@ class DeleteEventHandler
 {
     public function __construct(
         private readonly EventDeletionService $eventDeletionService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

@@ -20,11 +20,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class GetPublicEventsHandler
 {
     public function __construct(
-        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly EventRepositoryInterface $eventRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetPublicOrganizerEventsDTO $dto): LengthAwarePaginator
     {

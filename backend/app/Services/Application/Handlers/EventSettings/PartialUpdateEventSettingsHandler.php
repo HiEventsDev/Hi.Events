@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\EventSettings;
 
-use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -13,11 +12,9 @@ use Throwable;
 class PartialUpdateEventSettingsHandler
 {
     public function __construct(
-        private readonly UpdateEventSettingsHandler       $eventSettingsHandler,
+        private readonly UpdateEventSettingsHandler $eventSettingsHandler,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -28,15 +25,8 @@ class PartialUpdateEventSettingsHandler
             'event_id' => $eventSettingsDTO->event_id,
         ]);
 
-        if (!$existingSettings) {
+        if (! $existingSettings) {
             throw new RefundNotPossibleException('Event settings not found');
-        }
-
-        $locationDetails = AddressDTO::from($eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails());
-        $isOnlineEvent = $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent();
-
-        if ($isOnlineEvent) {
-            $locationDetails = null;
         }
 
         return $this->eventSettingsHandler->handle(
@@ -70,11 +60,6 @@ class PartialUpdateEventSettingsHandler
                 'maps_url' => array_key_exists('maps_url', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['maps_url']
                     : $existingSettings->getMapsUrl(),
-                'location_details' => $locationDetails,
-                'is_online_event' => $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent(),
-                'online_event_connection_details' => array_key_exists('online_event_connection_details', $eventSettingsDTO->settings)
-                    ? $eventSettingsDTO->settings['online_event_connection_details']
-                    : $existingSettings->getOnlineEventConnectionDetails(),
 
                 'seo_title' => $eventSettingsDTO->settings['seo_title'] ?? $existingSettings->getSeoTitle(),
                 'seo_description' => $eventSettingsDTO->settings['seo_description'] ?? $existingSettings->getSeoDescription(),

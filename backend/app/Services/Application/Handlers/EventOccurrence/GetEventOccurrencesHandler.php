@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Application\Handlers\EventOccurrence;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceStatisticDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -17,7 +20,10 @@ class GetEventOccurrencesHandler
 
     public function handle(int $eventId, QueryParamsDTO $queryParams, bool $includeStats = true): LengthAwarePaginator
     {
-        $repository = $this->occurrenceRepository;
+        $repository = $this->occurrenceRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]));
 
         if ($includeStats) {
             $repository = $repository->loadRelation(EventOccurrenceStatisticDomainObject::class);

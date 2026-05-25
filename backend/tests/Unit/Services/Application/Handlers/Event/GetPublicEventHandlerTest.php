@@ -106,7 +106,8 @@ class GetPublicEventHandlerTest extends TestCase
             ->setProductCategories(collect());
         $pastOccurrence = $this->makeOccurrence(10, '2024-01-01 10:00:00');
 
-        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(4);
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
         $this->occurrenceRepository
             ->shouldReceive('findWhere')
@@ -199,7 +200,8 @@ class GetPublicEventHandlerTest extends TestCase
             ->map(fn (int $id) => $this->makeOccurrence($id, '2026-01-01 10:00:00'));
         $linkedOccurrence = $this->makeOccurrence($linkedOccurrenceId, '2027-01-01 10:00:00');
 
-        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(4);
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
         // findWhere has signature ($where, $columns, $orderAndDirections, $limit)
         // — production passes the limit by name, but Mockery sees them as
@@ -250,7 +252,8 @@ class GetPublicEventHandlerTest extends TestCase
 
     private function setupEventRepositoryMock($event, $eventId): void
     {
-        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf()->times(4);
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->with($eventId)->andReturn($event);
         $this->occurrenceRepository->shouldReceive('findWhere')->andReturn(collect());
     }

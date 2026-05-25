@@ -4,6 +4,7 @@ namespace HiEvents\Resources\Organizer;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Resources\Image\ImageResource;
+use HiEvents\Resources\Location\LocationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -24,6 +25,11 @@ class OrganizerResource extends JsonResource
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),
+            'location_id' => $this->getLocationId(),
+            'location' => $this->when(
+                condition: $this->getLocationRecord() !== null,
+                value: fn() => new LocationResource($this->getLocationRecord()),
+            ),
             'images' => $this->when(
                 (bool)$this->getImages(),
                 fn() => ImageResource::collection($this->getImages())

@@ -14,7 +14,7 @@ use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable, IsFilterable
+class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsFilterable, IsSortable
 {
     private ?Collection $products = null;
 
@@ -43,6 +43,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     private ?EventStatisticDomainObject $eventStatistics = null;
 
     private ?AccountDomainObject $account = null;
+
+    private ?EventLocationDomainObject $eventLocation = null;
 
     public static function getAllowedFilterFields(): array
     {
@@ -96,6 +98,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setQuestions(?Collection $questions): EventDomainObject
     {
         $this->questions = $questions;
+
         return $this;
     }
 
@@ -112,6 +115,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setImages(?Collection $images): EventDomainObject
     {
         $this->images = $images;
+
         return $this;
     }
 
@@ -128,6 +132,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventSettings(?EventSettingDomainObject $settings): EventDomainObject
     {
         $this->settings = $settings;
+
         return $this;
     }
 
@@ -151,6 +156,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setAccount(?AccountDomainObject $account): self
     {
         $this->account = $account;
+
         return $this;
     }
 
@@ -175,6 +181,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventOccurrences(?Collection $eventOccurrences): self
     {
         $this->eventOccurrences = $eventOccurrences;
+
         return $this;
     }
 
@@ -190,7 +197,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         }
 
         return $this->eventOccurrences->min(
-            fn(EventOccurrenceDomainObject $o) => $o->getStartDate()
+            fn (EventOccurrenceDomainObject $o) => $o->getStartDate()
         );
     }
 
@@ -201,17 +208,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         }
 
         $withEndDates = $this->eventOccurrences->filter(
-            fn(EventOccurrenceDomainObject $o) => $o->getEndDate() !== null
+            fn (EventOccurrenceDomainObject $o) => $o->getEndDate() !== null
         );
 
         if ($withEndDates->isEmpty()) {
             return $this->eventOccurrences->max(
-                fn(EventOccurrenceDomainObject $o) => $o->getStartDate()
+                fn (EventOccurrenceDomainObject $o) => $o->getStartDate()
             );
         }
 
         return $withEndDates->max(
-            fn(EventOccurrenceDomainObject $o) => $o->getEndDate()
+            fn (EventOccurrenceDomainObject $o) => $o->getEndDate()
         );
     }
 
@@ -224,9 +231,9 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         $now = Carbon::now();
 
         $nextOccurrence = $this->eventOccurrences
-            ->filter(fn(EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name)
-            ->filter(fn(EventOccurrenceDomainObject $o) => Carbon::parse($o->getStartDate(), 'UTC')->isFuture())
-            ->sortBy(fn(EventOccurrenceDomainObject $o) => $o->getStartDate())
+            ->filter(fn (EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name)
+            ->filter(fn (EventOccurrenceDomainObject $o) => Carbon::parse($o->getStartDate(), 'UTC')->isFuture())
+            ->sortBy(fn (EventOccurrenceDomainObject $o) => $o->getStartDate())
             ->first();
 
         return $nextOccurrence?->getStartDate();
@@ -347,12 +354,14 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventStatistics(?EventStatisticDomainObject $eventStatistics): self
     {
         $this->eventStatistics = $eventStatistics;
+
         return $this;
     }
 
     public function setProductCategories(?Collection $productCategories): EventDomainObject
     {
         $this->productCategories = $productCategories;
+
         return $this;
     }
 
@@ -369,6 +378,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setWebhooks(?Collection $webhooks): EventDomainObject
     {
         $this->webhooks = $webhooks;
+
         return $this;
     }
 
@@ -380,6 +390,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setAffiliates(?Collection $affiliates): EventDomainObject
     {
         $this->affiliates = $affiliates;
+
+        return $this;
+    }
+
+    public function getEventLocation(): ?EventLocationDomainObject
+    {
+        return $this->eventLocation;
+    }
+
+    public function setEventLocation(?EventLocationDomainObject $eventLocation): self
+    {
+        $this->eventLocation = $eventLocation;
+
         return $this;
     }
 }

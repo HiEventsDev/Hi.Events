@@ -20,6 +20,11 @@ class EventOccurrence extends BaseModel
         return $this->belongsTo(Event::class);
     }
 
+    public function event_location(): BelongsTo
+    {
+        return $this->belongsTo(EventLocation::class, 'event_location_id');
+    }
+
     public function order_items(): HasMany
     {
         return $this->hasMany(OrderItem::class, 'event_occurrence_id');

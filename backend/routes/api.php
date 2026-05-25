@@ -2,15 +2,7 @@
 
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
-use HiEvents\Http\Actions\Organizers\Stripe\CopyStripeConnectAccountAction;
-use HiEvents\Http\Actions\Organizers\Stripe\CreateStripeConnectAccountAction;
-use HiEvents\Http\Actions\Organizers\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
-use HiEvents\Http\Actions\Organizers\Vat\GetOrganizerVatSettingAction;
-use HiEvents\Http\Actions\Organizers\Vat\UpsertOrganizerVatSettingAction;
-use HiEvents\Http\Actions\Admin\Organizers\AssignOrganizerConfigurationAction;
-use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
-use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
@@ -31,6 +23,9 @@ use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
 use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
 use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
+use HiEvents\Http\Actions\Admin\Organizers\AssignOrganizerConfigurationAction;
+use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
+use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
@@ -124,6 +119,13 @@ use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
 use HiEvents\Http\Actions\Images\DeleteImageAction;
+use HiEvents\Http\Actions\Locations\CreateLocationAction;
+use HiEvents\Http\Actions\Locations\DeleteLocationAction;
+use HiEvents\Http\Actions\Locations\GeoAutocompleteAction;
+use HiEvents\Http\Actions\Locations\GeoPlaceDetailsAction;
+use HiEvents\Http\Actions\Locations\GetGeoStatusAction;
+use HiEvents\Http\Actions\Locations\GetLocationsAction;
+use HiEvents\Http\Actions\Locations\UpdateLocationAction;
 use HiEvents\Http\Actions\Messages\CancelMessageAction;
 use HiEvents\Http\Actions\Messages\GetMessageRecipientsAction;
 use HiEvents\Http\Actions\Messages\GetMessagesAction;
@@ -159,7 +161,13 @@ use HiEvents\Http\Actions\Organizers\Public\SendOrganizerContactMessagePublicAct
 use HiEvents\Http\Actions\Organizers\Settings\GetOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsAction;
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
+use HiEvents\Http\Actions\Organizers\Stripe\CopyStripeConnectAccountAction;
+use HiEvents\Http\Actions\Organizers\Stripe\CreateStripeConnectAccountAction;
+use HiEvents\Http\Actions\Organizers\Stripe\GetStripeConnectAccountsAction;
+use HiEvents\Http\Actions\Organizers\UpdateOrganizerLocationAction;
 use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
+use HiEvents\Http\Actions\Organizers\Vat\GetOrganizerVatSettingAction;
+use HiEvents\Http\Actions\Organizers\Vat\UpsertOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\CreateOrganizerWebhookAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\DeleteOrganizerWebhookAction;
 use HiEvents\Http\Actions\Organizers\Webhooks\EditOrganizerWebhookAction;
@@ -298,6 +306,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
+        $router->patch('/organizers/{organizer_id}/location', UpdateOrganizerLocationAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}/export', ExportOrganizerReportAction::class);
         $router->post('/organizers/{organizer_id}/webhooks', CreateOrganizerWebhookAction::class);
@@ -306,6 +315,18 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}', GetOrganizerWebhookAction::class);
         $router->delete('/organizers/{organizer_id}/webhooks/{webhook_id}', DeleteOrganizerWebhookAction::class);
         $router->get('/organizers/{organizer_id}/webhooks/{webhook_id}/logs', GetOrganizerWebhookLogsAction::class);
+
+        // Locations - Organizer level
+        $router->get('/organizers/{organizer_id}/locations', GetLocationsAction::class);
+        $router->post('/organizers/{organizer_id}/locations', CreateLocationAction::class);
+        $router->get('/geo/status', GetGeoStatusAction::class);
+        $router->get('/organizers/{organizer_id}/locations/autocomplete', GeoAutocompleteAction::class)
+            ->middleware('throttle:60,1');
+        $router->get('/organizers/{organizer_id}/locations/places/{place_id}', GeoPlaceDetailsAction::class)
+            ->where('place_id', '[A-Za-z0-9_\-]+')
+            ->middleware('throttle:60,1');
+        $router->put('/organizers/{organizer_id}/locations/{location_id}', UpdateLocationAction::class);
+        $router->delete('/organizers/{organizer_id}/locations/{location_id}', DeleteLocationAction::class);
 
         // Stripe Connect - Organizer level
         $router->get('/organizers/{organizerId}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
@@ -336,6 +357,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events', GetEventsAction::class);
         $router->get('/events/{event_id}', GetEventAction::class);
         $router->put('/events/{event_id}', UpdateEventAction::class);
+        $router->patch('/events/{event_id}/event-location', \HiEvents\Http\Actions\Events\UpdateEventLocationAction::class);
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
         $router->delete('/events/{event_id}', DeleteEventAction::class);
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
@@ -603,4 +625,4 @@ $router->prefix('/public')->group(
     }
 );
 
-include_once __DIR__.'/mail.php';
+include_once __DIR__ . '/mail.php';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\Enums\EventType;
@@ -9,13 +11,13 @@ use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
-use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
-use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -23,15 +25,13 @@ use Throwable;
 readonly class UpdateEventHandler
 {
     public function __construct(
-        private EventRepositoryInterface             $eventRepository,
-        private Dispatcher                           $dispatcher,
-        private DatabaseManager                      $databaseManager,
-        private OrderRepositoryInterface             $orderRepository,
-        private HtmlPurifierService                  $purifier,
-        private EventOccurrenceRepositoryInterface   $occurrenceRepository,
-    )
-    {
-    }
+        private EventRepositoryInterface $eventRepository,
+        private Dispatcher $dispatcher,
+        private DatabaseManager $databaseManager,
+        private OrderRepositoryInterface $orderRepository,
+        private HtmlPurifierService $purifier,
+        private EventOccurrenceRepositoryInterface $occurrenceRepository,
+    ) {}
 
     /**
      * @throws Throwable
@@ -45,7 +45,10 @@ readonly class UpdateEventHandler
         });
     }
 
-    private function fetchExistingEvent(UpdateEventDTO $eventData)
+    /**
+     * @throws CannotChangeCurrencyException
+     */
+    private function updateEventAttributes(UpdateEventDTO $eventData): void
     {
         $existingEvent = $this->eventRepository->findFirstWhere([
             'id' => $eventData->id,
@@ -54,34 +57,24 @@ readonly class UpdateEventHandler
 
         if ($existingEvent === null) {
             throw new ResourceNotFoundException(
-                __('Event :id not found', ['id' => $eventData->id])
+                __('Event :id not found', ['id' => $eventData->id]),
             );
         }
-
-        return $existingEvent;
-    }
-
-    /**
-     * @throws CannotChangeCurrencyException
-     */
-    private function updateEventAttributes(UpdateEventDTO $eventData): void
-    {
-        $existingEvent = $this->fetchExistingEvent($eventData);
 
         if ($eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency()) {
             $this->checkForCompletedOrders($eventData);
         }
 
+        $attributes = [
+            'title' => $eventData->title,
+            'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
+            'description' => $this->purifier->purify($eventData->description),
+            'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
+            'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
+        ];
+
         $this->eventRepository->updateWhere(
-            attributes: [
-                'title' => $eventData->title,
-                'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
-                'description' => $this->purifier->purify($eventData->description),
-                'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),
-                'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
-                'location' => $eventData->location,
-                'location_details' => $eventData->location_details?->toArray(),
-            ],
+            attributes: $attributes,
             where: [
                 'id' => $eventData->id,
                 'account_id' => $eventData->account_id,
@@ -151,11 +144,10 @@ readonly class UpdateEventHandler
             'status' => OrderStatus::COMPLETED->name,
         ]);
 
-        if (!$orders->isNotEmpty()) {
+        if ($orders->isNotEmpty()) {
             throw new CannotChangeCurrencyException(
                 __('You cannot change the currency of an event that has completed orders'),
             );
         }
     }
 }
-

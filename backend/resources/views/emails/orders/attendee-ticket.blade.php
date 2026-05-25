@@ -28,8 +28,8 @@
         $endFormatted = $sameDay ? $formatTime($displayEnd) : $formatDateTime($displayEnd);
     }
 
-    $venueName = $eventSettings->getLocationDetails()['venue_name'] ?? null;
-    $addressString = $eventSettings->getIsOnlineEvent() ? null : $eventSettings->getAddressString();
+    $venueName = $effectiveVenueName ?? null;
+    $addressString = $effectiveAddressString ?? null;
     $productTitle = $attendee->getProduct()?->getTitle();
 @endphp
 

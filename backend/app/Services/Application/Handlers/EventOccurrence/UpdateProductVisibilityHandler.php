@@ -20,12 +20,10 @@ class UpdateProductVisibilityHandler
 {
     public function __construct(
         private readonly ProductOccurrenceVisibilityRepositoryInterface $visibilityRepository,
-        private readonly ProductRepositoryInterface                     $productRepository,
-        private readonly EventOccurrenceRepositoryInterface             $occurrenceRepository,
-        private readonly DatabaseManager                                $databaseManager,
-    )
-    {
-    }
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -37,7 +35,7 @@ class UpdateProductVisibilityHandler
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $dto->event_id,
         ]);
 
-        if (!$occurrence) {
+        if (! $occurrence) {
             throw new ResourceNotFoundException(
                 __('Occurrence :id not found for this event', ['id' => $dto->event_occurrence_id])
             );
@@ -56,7 +54,7 @@ class UpdateProductVisibilityHandler
             $selectedProductIds = collect($dto->product_ids)->sort()->values()->toArray();
 
             $invalidIds = array_diff($selectedProductIds, $allProductIds);
-            if (!empty($invalidIds)) {
+            if (! empty($invalidIds)) {
                 throw new ResourceNotFoundException(
                     __('One or more product IDs do not belong to this event')
                 );

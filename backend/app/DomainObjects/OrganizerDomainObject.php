@@ -24,6 +24,8 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
 
     private ?OrganizerConfigurationDomainObject $configuration = null;
 
+    private ?LocationDomainObject $locationRecord = null;
+
     public function getImages(): ?Collection
     {
         return $this->images;
@@ -142,5 +144,22 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
         $this->configuration = $configuration;
 
         return $this;
+    }
+
+    public function getLocationRecord(): ?LocationDomainObject
+    {
+        return $this->locationRecord;
+    }
+
+    public function setLocationRecord(?LocationDomainObject $locationRecord): self
+    {
+        $this->locationRecord = $locationRecord;
+
+        return $this;
+    }
+
+    public function getLocation(): ?LocationDomainObject
+    {
+        return $this->locationRecord;
     }
 }

@@ -221,9 +221,6 @@ export interface EventSettings {
     homepage_secondary_text_color: string;
     homepage_body_background_color: string;
     homepage_background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
-    location_details?: VenueAddress;
-    is_online_event?: boolean;
-    online_event_connection_details?: string;
     maps_url?: string;
     seo_title?: string;
     seo_description?: string;
@@ -285,6 +282,49 @@ export interface VenueAddress {
     country?: string;
 }
 
+export interface Location {
+    id?: IdParam;
+    short_id?: string;
+    organizer_id?: IdParam;
+    name?: string | null;
+    structured_address?: VenueAddress | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    provider?: string | null;
+    provider_place_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface GeoSuggestion {
+    provider_place_id: string;
+    primary_text: string;
+    secondary_text?: string | null;
+}
+
+export interface GeoPlace {
+    provider: string;
+    provider_place_id: string;
+    address: VenueAddress;
+    latitude?: number | null;
+    longitude?: number | null;
+    display_name?: string | null;
+}
+
+export interface EventLocation {
+    id: number;
+    type: LocationType;
+    location_id?: number | null;
+    location?: Location;
+    online_event_connection_details?: string | null;
+}
+
+export type UpsertEventLocationPayload = {
+    type: LocationType;
+    location_id?: number | null;
+    online_event_connection_details?: string | null;
+};
+
 export interface EventBase {
     title: string;
     description?: string;
@@ -329,6 +369,11 @@ export enum EventLifecycleStatus {
 export enum EventType {
     SINGLE = 'SINGLE',
     RECURRING = 'RECURRING',
+}
+
+export enum LocationType {
+    InPerson = 'IN_PERSON',
+    Online = 'ONLINE',
 }
 
 export enum EventOccurrenceStatus {
@@ -402,6 +447,7 @@ export interface EventOccurrence {
     is_past?: boolean;
     is_future?: boolean;
     is_active?: boolean;
+    event_location?: EventLocation;
     statistics?: EventOccurrenceStatistics;
     created_at?: string;
     updated_at?: string;
@@ -428,6 +474,8 @@ export interface UpsertEventOccurrenceRequest {
     capacity?: number | null;
     label?: string;
     status?: string;
+    event_location?: UpsertEventLocationPayload | null;
+    clear_event_location?: boolean;
 }
 
 export interface GenerateOccurrencesRequest {
@@ -448,6 +496,8 @@ export interface BulkUpdateOccurrencesRequest {
     label?: string;
     clear_label?: boolean;
     duration_minutes?: number;
+    event_location?: UpsertEventLocationPayload | null;
+    clear_event_location?: boolean;
 }
 
 export interface UpsertPriceOverrideRequest {
@@ -471,7 +521,7 @@ export interface Event extends EventBase {
     currency: string;
     timezone: string;
     organizer_id?: IdParam;
-    location_details?: VenueAddress;
+    event_location?: EventLocation;
     statistics?: EventStatistics;
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
@@ -548,7 +598,8 @@ export interface Organizer {
     images?: Image[];
     events?: Event[];
     settings?: OrganizerSettings;
-    location_details?: VenueAddress;
+    location_id?: IdParam | null;
+    location?: Location | null;
     status?: OrganizerStatus;
     stripe_connect_setup_complete?: boolean;
     stripe_account_id?: string | null;
@@ -565,7 +616,6 @@ export interface OrganizerSettings {
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;
-    location_details?: VenueAddress;
     social_media_handles?: {
         facebook?: string;
         instagram?: string;

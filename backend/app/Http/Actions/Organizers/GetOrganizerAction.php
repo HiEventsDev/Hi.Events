@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Organizers;
 
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
@@ -32,6 +33,7 @@ class GetOrganizerAction extends BaseAction
                 domainObject: OrganizerConfigurationDomainObject::class,
                 name: 'organizer_configuration',
             ))
+            ->loadRelation(new Relationship(LocationDomainObject::class, name: 'location_record'))
             ->findFirstWhere([
                 'id' => $organizerId,
                 'account_id' => $this->getAuthenticatedAccountId(),

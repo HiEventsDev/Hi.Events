@@ -42,4 +42,9 @@ class Organizer extends BaseModel
     {
         return $this->belongsTo(OrganizerConfiguration::class, 'organizer_configuration_id');
     }
+
+    public function location_record(): BelongsTo
+    {
+        return $this->belongsTo(Location::class, 'location_id');
+    }
 }

@@ -14,6 +14,8 @@ class IdHelper
     public const CHECK_IN_LIST_PREFIX = 'cil';
     public const CHECK_IN_PREFIX = 'ci';
     public const OCCURRENCE_PREFIX = 'oc';
+    public const LOCATION_PREFIX = 'loc';
+    public const EVENT_LOCATION_PREFIX = 'el';
 
     public static function shortId(string $prefix, int $length = 13): string
     {

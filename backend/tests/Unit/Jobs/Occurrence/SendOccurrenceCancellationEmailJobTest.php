@@ -70,8 +70,9 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('getStartDate')->andReturn('2026-06-15 14:00:00');
 
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->occurrenceRepository->shouldReceive('findById')->with(10)->once()->andReturn($occurrence);
-        $this->eventRepository->shouldReceive('loadRelation')->twice()->andReturnSelf();
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->with(1)->once()->andReturn($this->makeEvent());
         $this->attendeeRepository->shouldReceive('findWhere')->once()->andReturn(collect($attendees));
     }
@@ -135,8 +136,9 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('getStartDate')->andReturn('2026-06-15 14:00:00');
 
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->occurrenceRepository->shouldReceive('findById')->once()->andReturn($occurrence);
-        $this->eventRepository->shouldReceive('loadRelation')->twice()->andReturnSelf();
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->once()->andReturn($this->makeEvent());
 
         $this->attendeeRepository
@@ -165,8 +167,9 @@ class SendOccurrenceCancellationEmailJobTest extends TestCase
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('getStartDate')->andReturn('2026-06-15 14:00:00');
 
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->occurrenceRepository->shouldReceive('findById')->once()->andReturn($occurrence);
-        $this->eventRepository->shouldReceive('loadRelation')->twice()->andReturnSelf();
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->once()->andReturn($this->makeEvent());
         $this->attendeeRepository->shouldReceive('findWhere')->once()->andReturn(collect());
 

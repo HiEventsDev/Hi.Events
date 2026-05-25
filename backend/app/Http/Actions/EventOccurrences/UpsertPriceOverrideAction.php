@@ -14,9 +14,7 @@ class UpsertPriceOverrideAction extends BaseAction
 {
     public function __construct(
         private readonly UpsertPriceOverrideHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId, UpsertPriceOverrideRequest $request): JsonResponse
     {

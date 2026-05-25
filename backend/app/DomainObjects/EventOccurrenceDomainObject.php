@@ -10,7 +10,7 @@ use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use Illuminate\Support\Collection;
 
-class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract implements IsSortable, IsFilterable
+class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract implements IsFilterable, IsSortable
 {
     private ?EventDomainObject $event = null;
 
@@ -23,6 +23,8 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     private ?Collection $priceOverrides = null;
 
     private ?EventOccurrenceStatisticDomainObject $eventOccurrenceStatistics = null;
+
+    private ?EventLocationDomainObject $eventLocation = null;
 
     public static function getAllowedFilterFields(): array
     {
@@ -57,6 +59,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setEvent(?EventDomainObject $event): self
     {
         $this->event = $event;
+
         return $this;
     }
 
@@ -68,6 +71,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setOrderItems(?Collection $orderItems): self
     {
         $this->orderItems = $orderItems;
+
         return $this;
     }
 
@@ -79,6 +83,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setAttendees(?Collection $attendees): self
     {
         $this->attendees = $attendees;
+
         return $this;
     }
 
@@ -90,6 +95,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setCheckInLists(?Collection $checkInLists): self
     {
         $this->checkInLists = $checkInLists;
+
         return $this;
     }
 
@@ -101,6 +107,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setPriceOverrides(?Collection $priceOverrides): self
     {
         $this->priceOverrides = $priceOverrides;
+
         return $this;
     }
 
@@ -112,6 +119,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function setEventOccurrenceStatistics(?EventOccurrenceStatisticDomainObject $statistics): self
     {
         $this->eventOccurrenceStatistics = $statistics;
+
         return $this;
     }
 
@@ -138,6 +146,7 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
     public function isPast(): bool
     {
         $endDate = $this->getEndDate() ?? $this->getStartDate();
+
         return Carbon::parse($endDate, 'UTC')->isPast();
     }
 
@@ -153,5 +162,17 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
         }
 
         return max(0, $this->getCapacity() - $this->getUsedCapacity());
+    }
+
+    public function setEventLocation(?EventLocationDomainObject $eventLocation): self
+    {
+        $this->eventLocation = $eventLocation;
+
+        return $this;
+    }
+
+    public function getEventLocation(): ?EventLocationDomainObject
+    {
+        return $this->eventLocation;
     }
 }

@@ -14,14 +14,18 @@ use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\BulkUpdateOccurrencesDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\BulkUpdateOccurrencesResultDTO;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
+use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -30,10 +34,13 @@ class BulkUpdateOccurrencesHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderItemRepositoryInterface $orderItemRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
         private readonly RecurrenceRuleExclusionService $exclusionService,
+        private readonly EventLocationUpserter $eventLocationUpserter,
+        private readonly EventLocationCleaner $eventLocationCleaner,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -43,6 +50,11 @@ class BulkUpdateOccurrencesHandler
     public function handle(BulkUpdateOccurrencesDTO $dto): BulkUpdateOccurrencesResultDTO
     {
         return $this->databaseManager->transaction(function () use ($dto) {
+            $event = $this->eventRepository->findById($dto->event_id);
+            if ($event === null) {
+                throw new ResourceNotFoundException(__('Event :id not found', ['id' => $dto->event_id]));
+            }
+
             $occurrences = $this->occurrenceRepository->findWhere(
                 where: [
                     EventOccurrenceDomainObjectAbstract::EVENT_ID => $dto->event_id,
@@ -54,7 +66,7 @@ class BulkUpdateOccurrencesHandler
             return match ($dto->action) {
                 BulkOccurrenceAction::CANCEL => $this->handleCancel($dto, $eligible),
                 BulkOccurrenceAction::DELETE => $this->handleDelete($dto, $eligible),
-                BulkOccurrenceAction::UPDATE => $this->handleUpdate($dto, $eligible),
+                BulkOccurrenceAction::UPDATE => $this->handleUpdate($dto, $eligible, $event->getAccountId()),
             };
         });
     }
@@ -104,10 +116,7 @@ class BulkUpdateOccurrencesHandler
             return new BulkUpdateOccurrencesResultDTO(updated_count: 0, updated_ids: []);
         }
 
-        // Two batched lookups instead of 2N countWhere calls — bulk delete
-        // during regenerate can touch hundreds of occurrences. Mirrors the
-        // single-delete handler: attendees can exist without order items
-        // (imports, legacy data), so both checks must run.
+        // Attendees can exist without order items (imports/legacy), so both checks must run.
         $idsWithOrders = $this->orderItemRepository
             ->findWhereIn(
                 field: OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID,
@@ -130,6 +139,7 @@ class BulkUpdateOccurrencesHandler
 
         $deletableIds = [];
         $deletableStartDates = [];
+        $deletableEventLocationIds = [];
 
         foreach ($eligible as $occurrence) {
             $id = $occurrence->getId();
@@ -137,6 +147,9 @@ class BulkUpdateOccurrencesHandler
             if (! isset($idsWithOrders[$id]) && ! isset($idsWithAttendees[$id])) {
                 $deletableIds[] = $id;
                 $deletableStartDates[] = $occurrence->getStartDate();
+                if ($occurrence->getEventLocationId() !== null) {
+                    $deletableEventLocationIds[] = $occurrence->getEventLocationId();
+                }
             }
         }
 
@@ -163,6 +176,10 @@ class BulkUpdateOccurrencesHandler
             ]);
 
             $this->exclusionService->addExclusions($dto->event_id, $deletableStartDates);
+
+            foreach (array_unique($deletableEventLocationIds) as $eventLocationId) {
+                $this->eventLocationCleaner->deleteIfOrphaned($eventLocationId);
+            }
         }
 
         return new BulkUpdateOccurrencesResultDTO(
@@ -171,14 +188,17 @@ class BulkUpdateOccurrencesHandler
         );
     }
 
-    private function handleUpdate(BulkUpdateOccurrencesDTO $dto, Collection $eligible): BulkUpdateOccurrencesResultDTO
+    private function handleUpdate(BulkUpdateOccurrencesDTO $dto, Collection $eligible, int $accountId): BulkUpdateOccurrencesResultDTO
     {
+        $perRowEventLocation = $dto->event_location !== null || $dto->clear_event_location;
+
         $requiresPerRow = $dto->start_time_shift !== null
             || $dto->end_time_shift !== null
-            || $dto->duration_minutes !== null;
+            || $dto->duration_minutes !== null
+            || $perRowEventLocation;
 
         if ($requiresPerRow) {
-            return $this->applyPerRowUpdate($dto, $eligible);
+            return $this->applyPerRowUpdate($dto, $eligible, $accountId);
         }
 
         return $this->applyUniformUpdate($dto, $eligible);
@@ -194,9 +214,6 @@ class BulkUpdateOccurrencesHandler
 
         $capacityChanged = array_key_exists(EventOccurrenceDomainObjectAbstract::CAPACITY, $attributes);
 
-        // Capacity changes diverge the occurrence from the rule's defaults —
-        // flag overridden so the next regenerate doesn't reset them. Label-only
-        // edits don't pin against regenerate (parity with single-edit handler).
         if ($capacityChanged) {
             $attributes[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] = true;
         }
@@ -214,12 +231,6 @@ class BulkUpdateOccurrencesHandler
             ],
         );
 
-        // Mirror the single-edit handler's status reconciliation: capacity is
-        // uniform across the batch but each occurrence carries its own
-        // used_capacity, so SOLD_OUT/ACTIVE has to flip per row. Two scoped
-        // updateWheres avoid an N-row loop while still respecting the uniform
-        // path. CANCELLED is left untouched on either side — its lifecycle
-        // belongs to the dedicated cancel/reactivate handlers.
         if ($capacityChanged) {
             $this->reconcileStatusForUniformCapacity(
                 ids: $ids,
@@ -238,8 +249,6 @@ class BulkUpdateOccurrencesHandler
      */
     private function reconcileStatusForUniformCapacity(array $ids, ?int $newCapacity): void
     {
-        // Re-open any sold-out occurrence that now has headroom (or is now
-        // unlimited).
         $reopenWhere = [
             [EventOccurrenceDomainObjectAbstract::ID, 'in', $ids],
             [EventOccurrenceDomainObjectAbstract::STATUS, '=', EventOccurrenceStatus::SOLD_OUT->name],
@@ -255,8 +264,6 @@ class BulkUpdateOccurrencesHandler
             where: $reopenWhere,
         );
 
-        // Mark sold-out any active occurrence that the new ceiling has now
-        // exceeded. Only meaningful when the new capacity is finite.
         if ($newCapacity !== null) {
             $this->occurrenceRepository->updateWhere(
                 attributes: [
@@ -271,18 +278,35 @@ class BulkUpdateOccurrencesHandler
         }
     }
 
-    private function applyPerRowUpdate(BulkUpdateOccurrencesDTO $dto, Collection $eligible): BulkUpdateOccurrencesResultDTO
+    private function applyPerRowUpdate(BulkUpdateOccurrencesDTO $dto, Collection $eligible, int $accountId): BulkUpdateOccurrencesResultDTO
     {
         $updatedIds = [];
+        $orphanCandidateIds = [];
 
         foreach ($eligible as $occurrence) {
             $attributes = $this->buildPerRowAttributes($dto, $occurrence);
 
+            $previousEventLocationId = $occurrence->getEventLocationId();
+
+            if ($dto->event_location !== null) {
+                $eventLocation = $this->eventLocationUpserter->createForEvent(
+                    eventId: $dto->event_id,
+                    accountId: $accountId,
+                    data: $dto->event_location,
+                );
+                $attributes[EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID] = $eventLocation->getId();
+                $attributes[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] = true;
+
+                if ($previousEventLocationId !== null) {
+                    $orphanCandidateIds[] = $previousEventLocationId;
+                }
+            } elseif ($dto->clear_event_location && $previousEventLocationId !== null) {
+                $attributes[EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID] = null;
+                $attributes[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] = true;
+                $orphanCandidateIds[] = $previousEventLocationId;
+            }
+
             if (! empty($attributes)) {
-                // Same SOLD_OUT/ACTIVE reconciliation as the single-edit and
-                // uniform-bulk paths — when the bulk operation also tweaks
-                // capacity (e.g. shift_times + clear_capacity in one save) the
-                // status has to follow the new ceiling per row.
                 if (array_key_exists(EventOccurrenceDomainObjectAbstract::CAPACITY, $attributes)) {
                     $reconciled = $this->reconcileCapacityStatus(
                         currentStatus: $occurrence->getStatus(),
@@ -302,17 +326,16 @@ class BulkUpdateOccurrencesHandler
             }
         }
 
+        foreach (array_unique($orphanCandidateIds) as $eventLocationId) {
+            $this->eventLocationCleaner->deleteIfOrphaned($eventLocationId);
+        }
+
         return new BulkUpdateOccurrencesResultDTO(
             updated_count: count($updatedIds),
             updated_ids: $updatedIds,
         );
     }
 
-    /**
-     * Returns the status the occurrence should sit at after a capacity edit,
-     * or null if the existing status is correct. Mirrors UpdateEventOccurrenceHandler
-     * — keep both in sync. Never touches CANCELLED.
-     */
     private function reconcileCapacityStatus(
         string $currentStatus,
         ?int $newCapacity,
@@ -386,8 +409,6 @@ class BulkUpdateOccurrencesHandler
             $startEndChanged = true;
         }
 
-        // Pin overridden so the next regenerate doesn't revert the shift.
-        // Capacity-only changes already flagged via buildUniformAttributes path.
         if ($startEndChanged
             || array_key_exists(EventOccurrenceDomainObjectAbstract::CAPACITY, $attributes)
         ) {

@@ -10,6 +10,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\UpdateEventOccurrenceHandler;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use Illuminate\Http\JsonResponse;
 
 class UpdateEventOccurrenceAction extends BaseAction
@@ -28,6 +29,7 @@ class UpdateEventOccurrenceAction extends BaseAction
 
         $startDate = $request->validated('start_date');
         $endDate = $request->validated('end_date');
+        $eventLocationPayload = $request->validated('event_location');
 
         $occurrence = $this->handler->handle(
             $occurrenceId,
@@ -37,6 +39,8 @@ class UpdateEventOccurrenceAction extends BaseAction
                 end_date: $endDate ? DateHelper::convertToUTC($endDate, $timezone) : null,
                 capacity: $request->validated('capacity'),
                 label: $request->validated('label'),
+                event_location: $eventLocationPayload !== null ? EventLocationData::fromArray($eventLocationPayload) : null,
+                clear_event_location: (bool) $request->validated('clear_event_location', false),
             )
         );
 

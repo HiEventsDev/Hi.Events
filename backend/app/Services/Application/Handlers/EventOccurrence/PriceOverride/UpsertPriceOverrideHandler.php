@@ -20,13 +20,11 @@ class UpsertPriceOverrideHandler
 {
     public function __construct(
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $overrideRepository,
-        private readonly EventOccurrenceRepositoryInterface                $occurrenceRepository,
-        private readonly ProductPriceRepositoryInterface                   $productPriceRepository,
-        private readonly ProductRepositoryInterface                        $productRepository,
-        private readonly DatabaseManager                                   $databaseManager,
-    )
-    {
-    }
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -38,14 +36,14 @@ class UpsertPriceOverrideHandler
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $dto->event_id,
         ]);
 
-        if (!$occurrence) {
+        if (! $occurrence) {
             throw new ResourceNotFoundException(
                 __('Occurrence :id not found for this event', ['id' => $dto->event_occurrence_id])
             );
         }
 
         $productPrice = $this->productPriceRepository->findFirst($dto->product_price_id);
-        if (!$productPrice) {
+        if (! $productPrice) {
             throw new ResourceNotFoundException(
                 __('Product price :id not found', ['id' => $dto->product_price_id])
             );
@@ -56,7 +54,7 @@ class UpsertPriceOverrideHandler
             'event_id' => $dto->event_id,
         ]);
 
-        if (!$product) {
+        if (! $product) {
             throw new ResourceNotFoundException(
                 __('Product price :id does not belong to this event', ['id' => $dto->product_price_id])
             );
