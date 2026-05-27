@@ -42,7 +42,6 @@ class EventSettingsResource extends JsonResource
             'notify_organizer_of_new_orders' => $this->getNotifyOrganizerOfNewOrders(),
 
             'price_display_mode' => $this->getPriceDisplayMode(),
-            'hide_getting_started_page' => $this->getHideGettingStartedPage(),
 
             // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),

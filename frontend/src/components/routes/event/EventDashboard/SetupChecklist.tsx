@@ -1,8 +1,10 @@
 import {Button} from "@mantine/core";
 import {IconCheck, IconCircle, IconCircleCheck, IconX} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
-import {Event, EventSettings, Organizer} from "../../../../types.ts";
+import {Account, Event, EventSettings, EventType, Image, Organizer, User} from "../../../../types.ts";
 import {BouncingEmoji} from "../../../common/BouncingEmoji";
+import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
+import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import classes from "./SetupChecklist.module.scss";
 
 interface SetupChecklistProps {
@@ -11,10 +13,16 @@ interface SetupChecklistProps {
     organizer: Organizer | undefined;
     isStripeConnected: boolean;
     productCount: number;
+    hasOccurrences: boolean;
+    eventImages: Image[] | undefined;
+    account: Account | undefined;
+    me: User | undefined;
     onPublish: () => void;
     onConnectStripe: () => void;
     onAddTickets: () => void;
     onEditDetails: () => void;
+    onSetupSchedule: () => void;
+    onCustomizePage: () => void;
     onDismiss: () => void;
     isDismissed: boolean;
     showCongratsHeader?: boolean;
@@ -49,6 +57,7 @@ interface Step {
     actionLabel?: string;
     actionStyle?: ActionStyle;
     onAction?: () => void;
+    actionLoading?: boolean;
 }
 
 export const SetupChecklist = ({
@@ -57,10 +66,16 @@ export const SetupChecklist = ({
                                    organizer,
                                    isStripeConnected,
                                    productCount,
+                                   hasOccurrences,
+                                   eventImages,
+                                   account,
+                                   me,
                                    onPublish,
                                    onConnectStripe,
                                    onAddTickets,
                                    onEditDetails,
+                                   onSetupSchedule,
+                                   onCustomizePage,
                                    onDismiss,
                                    isDismissed,
                                    showCongratsHeader = false,
@@ -68,6 +83,20 @@ export const SetupChecklist = ({
     const payoutsButtonLabel = organizer?.stripe_account_id
         ? t`Finish setup`
         : t`Connect bank`;
+
+    const resendEmailConfirmation = useResendEmailConfirmation();
+    const handleResendEmail = () => {
+        if (!me?.id) return;
+        resendEmailConfirmation.mutate({userId: me.id}, {
+            onSuccess: () => showSuccess(t`Verification email sent. Check your inbox.`),
+            onError: () => showError(t`Couldn't send verification email. Please try again.`),
+        });
+    };
+
+    const hasCoverImage = (eventImages?.length ?? 0) > 0;
+    const isEmailVerified = !!account?.is_account_email_confirmed;
+    const isRecurring = event.type === EventType.RECURRING;
+    const isSaasMode = !!account?.is_saas_mode_enabled;
 
     const steps: Step[] = [
         {
@@ -80,7 +109,7 @@ export const SetupChecklist = ({
             actionStyle: 'primary',
             onAction: onPublish,
         },
-        {
+        ...(isSaasMode ? [{
             key: 'payouts',
             title: t`Set up payouts`,
             helperIncomplete: t`Connect your bank to receive ticket sales straight to your account`,
@@ -89,7 +118,7 @@ export const SetupChecklist = ({
             actionLabel: payoutsButtonLabel,
             actionStyle: 'secondary',
             onAction: onConnectStripe,
-        },
+        } as Step] : []),
         {
             key: 'tickets',
             title: t`Add tickets`,
@@ -102,6 +131,16 @@ export const SetupChecklist = ({
             actionStyle: 'secondary',
             onAction: onAddTickets,
         },
+        ...(isRecurring ? [{
+            key: 'schedule',
+            title: t`Set up your schedule`,
+            helperIncomplete: t`Add dates and times for your recurring event`,
+            helperComplete: t`Schedule added`,
+            complete: hasOccurrences,
+            actionLabel: hasOccurrences ? t`Manage schedule` : t`Set up schedule`,
+            actionStyle: 'secondary',
+            onAction: onSetupSchedule,
+        } as Step] : []),
         {
             key: 'details',
             title: t`Add event details`,
@@ -112,6 +151,29 @@ export const SetupChecklist = ({
             actionStyle: 'secondary',
             onAction: onEditDetails,
         },
+        {
+            key: 'customize',
+            title: t`Customize your event page`,
+            helperIncomplete: t`Add a cover image and theme to match your brand`,
+            helperComplete: t`Cover image added`,
+            complete: hasCoverImage,
+            actionLabel: t`Customize page`,
+            actionStyle: 'secondary',
+            onAction: onCustomizePage,
+        },
+        ...(isSaasMode && me ? [{
+            key: 'verify_email',
+            title: t`Verify your email`,
+            helperIncomplete: me?.email
+                ? t`We sent a verification link to ${me.email}`
+                : t`Verify your email so attendees can receive tickets`,
+            helperComplete: t`Email verified`,
+            complete: isEmailVerified,
+            actionLabel: t`Resend email`,
+            actionStyle: 'secondary',
+            onAction: handleResendEmail,
+            actionLoading: resendEmailConfirmation.isPending,
+        } as Step] : []),
     ];
 
     const completedCount = steps.filter((s) => s.complete).length;
@@ -156,7 +218,6 @@ export const SetupChecklist = ({
                     )}
                     <div className={classes.subtitle}>
                         {t`${completedCount} of ${totalCount} steps complete`}
-                        {!showCongratsHeader && ` · ${t`finish setup to start selling`}`}
                     </div>
                 </div>
                 <div className={classes.headerRight}>
@@ -199,6 +260,7 @@ export const SetupChecklist = ({
                                     <Button
                                         size="xs"
                                         onClick={step.onAction}
+                                        loading={step.actionLoading}
                                         className={classes.actionPrimary}
                                     >
                                         {step.actionLabel}
@@ -208,6 +270,7 @@ export const SetupChecklist = ({
                                         size="xs"
                                         variant="default"
                                         onClick={step.onAction}
+                                        loading={step.actionLoading}
                                         className={classes.actionSecondary}
                                     >
                                         {step.actionLabel}

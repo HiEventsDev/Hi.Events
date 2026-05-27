@@ -1,4 +1,5 @@
 import {PeriodPreset} from "../components/common/PeriodSelector";
+import {Event} from "../types.ts";
 
 export interface DateRange {
     startDate: string;
@@ -10,10 +11,63 @@ const formatDate = (d: Date): string => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 };
 
-export const periodPresetToDateRange = (preset: PeriodPreset): DateRange => {
-    const now = new Date();
-    const end = new Date(now);
+const parseEventDate = (raw: string | undefined | null): Date | null => {
+    if (!raw) return null;
+    const normalized = raw.includes('T') ? raw : raw.replace(' ', 'T');
+    const date = new Date(normalized);
+    return isNaN(date.getTime()) ? null : date;
+};
 
+export const EVENT_RELATIVE_PRESETS: ReadonlySet<PeriodPreset> = new Set([
+    'event_first_week',
+    'event_first_month',
+    'event_first_quarter',
+    'event_full',
+]);
+
+export const isEventRelativePreset = (preset: PeriodPreset): boolean =>
+    EVENT_RELATIVE_PRESETS.has(preset);
+
+export const periodPresetToDateRange = (preset: PeriodPreset, event?: Event): DateRange => {
+    const now = new Date();
+
+    if (isEventRelativePreset(preset)) {
+        const eventStart = parseEventDate(event?.start_date) ?? now;
+        const eventEnd = parseEventDate(event?.end_date);
+
+        let start: Date;
+        let end: Date;
+        switch (preset) {
+            case 'event_first_week':
+                start = eventStart;
+                end = new Date(eventStart);
+                end.setDate(end.getDate() + 7);
+                break;
+            case 'event_first_month':
+                start = eventStart;
+                end = new Date(eventStart);
+                end.setDate(end.getDate() + 30);
+                break;
+            case 'event_first_quarter':
+                start = eventStart;
+                end = new Date(eventStart);
+                end.setDate(end.getDate() + 90);
+                break;
+            case 'event_full':
+            default: {
+                end = eventEnd && eventEnd.getTime() < now.getTime() ? eventEnd : now;
+                const desiredStart = new Date(eventStart);
+                desiredStart.setDate(desiredStart.getDate() - 365);
+                const floorStart = new Date(end);
+                floorStart.setDate(floorStart.getDate() - 369);
+                start = desiredStart.getTime() > floorStart.getTime() ? desiredStart : floorStart;
+                break;
+            }
+        }
+        return {startDate: formatDate(start), endDate: formatDate(end)};
+    }
+
+    const end = new Date(now);
     let start: Date;
     switch (preset) {
         case 'today':
@@ -34,6 +88,9 @@ export const periodPresetToDateRange = (preset: PeriodPreset): DateRange => {
         case 'year_to_date':
             start = new Date(now.getFullYear(), 0, 1, 0, 0, 0);
             break;
+        default:
+            start = new Date(now);
+            start.setDate(start.getDate() - 30);
     }
 
     return {startDate: formatDate(start), endDate: formatDate(end)};

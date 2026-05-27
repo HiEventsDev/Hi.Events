@@ -17,14 +17,16 @@ import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
-import {useEffect, useState} from 'react';
-import {EventType} from "../../../../types.ts";
+import {useEffect, useRef, useState} from 'react';
+import {EventLifecycleStatus, EventStatus, EventType} from "../../../../types.ts";
 import {UpcomingOccurrences} from "./UpcomingOccurrences";
 import {NextOccurrenceHero} from "./NextOccurrenceHero";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {useGetEventProductCategories} from "../../../../queries/useGetProductCategories.ts";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
+import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";
+import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
 import {PeriodSelector, PeriodPreset} from "../../../common/PeriodSelector";
 import {periodPresetToDateRange} from "../../../../utilites/periodPreset.ts";
 import {hasEventDetails, SetupChecklist} from "./SetupChecklist";
@@ -47,13 +49,19 @@ export const EventDashboard = () => {
     const {data: me} = useGetMe();
     const event = eventQuery?.data;
 
-    const [effectiveDateRange, setDateRange] = useState<PeriodPreset>('last_30_days');
-    const {startDate, endDate} = periodPresetToDateRange(effectiveDateRange);
+    const defaultDateRangeRef = useRef<PeriodPreset | null>(null);
+    if (event && !defaultDateRangeRef.current) {
+        defaultDateRangeRef.current = (event.lifecycle_status === EventLifecycleStatus.ENDED
+            || event.status === EventStatus.ARCHIVED) ? 'event_full' : 'last_30_days';
+    }
+    const [dateRangeOverride, setDateRange] = useState<PeriodPreset | null>(null);
+    const effectiveDateRange: PeriodPreset = dateRangeOverride ?? defaultDateRangeRef.current ?? 'last_30_days';
+    const {startDate, endDate} = periodPresetToDateRange(effectiveDateRange, event);
 
     const eventStatsQuery = useGetEventStats(eventId, {
         startDate,
         endDate,
-        enabled: !!event,
+        enabled: !!event && !!defaultDateRangeRef.current,
     });
     const {data: eventStats} = eventStatsQuery;
     const isMobile = useMediaQuery('(max-width: 768px)');
@@ -72,6 +80,15 @@ export const EventDashboard = () => {
         (sum, category) => sum + (category.products?.length ?? 0),
         0,
     ) ?? 0;
+    const {data: eventImages} = useGetEventImages(eventId);
+    const isRecurring = event?.type === EventType.RECURRING;
+    const occurrencesQuery = useGetEventOccurrences(
+        eventId,
+        {pageNumber: 1, perPage: 1},
+        isRecurring,
+    );
+    const hasOccurrences = (occurrencesQuery?.data?.data?.length ?? 0) > 0;
+    const hasCoverImage = (eventImages?.length ?? 0) > 0;
 
     useEffect(() => {
         setIsMounted(true);
@@ -143,11 +160,29 @@ export const EventDashboard = () => {
         navigate(`/manage/event/${eventId}/settings`);
     };
 
+    const handleSetupSchedule = () => {
+        if (!eventId) {
+            return;
+        }
+        navigate(`/manage/event/${eventId}/occurrences`);
+    };
+
+    const handleCustomizePage = () => {
+        if (!eventId) {
+            return;
+        }
+        navigate(`/manage/event/${eventId}/homepage-designer`);
+    };
+
+    const isSaasMode = !!account?.is_saas_mode_enabled;
     const allChecklistComplete = !!event
         && event.status === 'LIVE'
-        && isStripeConnected
+        && (!isSaasMode || isStripeConnected)
         && productCount > 0
-        && hasEventDetails(event, eventSettings);
+        && hasEventDetails(event, eventSettings)
+        && hasCoverImage
+        && (!isRecurring || hasOccurrences)
+        && (!isSaasMode || !!account?.is_account_email_confirmed);
 
     useEffect(() => {
         if (allChecklistComplete && isMounted && typeof window !== 'undefined' && eventId) {
@@ -155,11 +190,19 @@ export const EventDashboard = () => {
         }
     }, [allChecklistComplete, isMounted, eventId]);
 
-    const dateRangeLabel = (event)
-        ? `${formatDateWithLocale(startDate, 'chartDate', event.timezone)} - ${formatDateWithLocale(endDate, 'chartDate', event.timezone)}`
-        : '';
+    const dateRangeLabel = (() => {
+        if (!event) return '';
+        const startYear = new Date(startDate.replace(' ', 'T')).getFullYear();
+        const endYear = new Date(endDate.replace(' ', 'T')).getFullYear();
+        const startStr = formatDateWithLocale(startDate, 'chartDate', event.timezone);
+        const endStr = formatDateWithLocale(endDate, 'chartDate', event.timezone);
+        if (startYear !== endYear) {
+            return `${startStr}, ${startYear} - ${endStr}, ${endYear}`;
+        }
+        return `${startStr} - ${endStr}`;
+    })();
 
-    const shouldShowChecklist = !!(event && accountIsFetched && account?.is_saas_mode_enabled);
+    const shouldShowChecklist = !!(event && accountIsFetched);
 
     return (
         <PageBody>
@@ -189,10 +232,16 @@ export const EventDashboard = () => {
                         organizer={organizer}
                         isStripeConnected={isStripeConnected}
                         productCount={productCount}
+                        hasOccurrences={hasOccurrences}
+                        eventImages={eventImages}
+                        account={account}
+                        me={me}
                         onPublish={handleStatusToggle}
                         onConnectStripe={handleConnectStripe}
                         onAddTickets={handleAddTickets}
                         onEditDetails={handleEditDetails}
+                        onSetupSchedule={handleSetupSchedule}
+                        onCustomizePage={handleCustomizePage}
                         onDismiss={dismissChecklist}
                         isDismissed={isChecklistDismissed}
                         showCongratsHeader={isNewEvent}
@@ -211,10 +260,11 @@ export const EventDashboard = () => {
                         value={effectiveDateRange}
                         onChange={setDateRange}
                         storageKey={`eventDashboard.dateRange.${eventId}`}
+                        event={event}
                     />
                 </div>
 
-                <StatBoxes dateRange={effectiveDateRange}/>
+                <StatBoxes dateRange={effectiveDateRange} event={event}/>
 
                 {event?.type === EventType.RECURRING && (
                     <UpcomingOccurrences eventId={eventId} event={event}/>

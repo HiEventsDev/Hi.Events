@@ -3,18 +3,24 @@ import {useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {KpiCell, KpiGrid} from "../KpiGrid";
 import {PeriodPreset} from "../PeriodSelector";
-import {computeDelta, periodPresetToDateRange, previousPeriodRange} from "../../../utilites/periodPreset.ts";
+import {
+    computeDelta,
+    isEventRelativePreset,
+    periodPresetToDateRange,
+    previousPeriodRange,
+} from "../../../utilites/periodPreset.ts";
 import {useGetEventStats} from "../../../queries/useGetEventStats.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import {EventStats, IdParam} from "../../../types.ts";
+import {Event, EventStats, IdParam} from "../../../types.ts";
 
 export const StatBox = KpiCell;
 
 interface StatBoxesProps {
     occurrenceId?: IdParam;
     dateRange?: PeriodPreset;
+    event?: Event;
 }
 
 const sparkFrom = (stats: EventStats | undefined, key: keyof EventStats['daily_stats'][number]): number[] => {
@@ -22,16 +28,23 @@ const sparkFrom = (stats: EventStats | undefined, key: keyof EventStats['daily_s
     return stats.daily_stats.map((d) => Number(d[key] ?? 0));
 };
 
-export const StatBoxes = ({occurrenceId, dateRange}: StatBoxesProps = {}) => {
+export const StatBoxes = ({occurrenceId, dateRange, event}: StatBoxesProps = {}) => {
     const {eventId} = useParams();
     const eventQuery = useGetEvent(eventId);
-    const currency = eventQuery?.data?.currency;
+    const currency = event?.currency ?? eventQuery?.data?.currency;
+    const resolvedEvent = event ?? eventQuery?.data;
+
+    const preset: PeriodPreset = dateRange ?? 'last_30_days';
+    const compareToPrevious = !isEventRelativePreset(preset);
 
     const currentRange = useMemo(
-        () => periodPresetToDateRange(dateRange ?? 'last_30_days'),
-        [dateRange],
+        () => periodPresetToDateRange(preset, resolvedEvent),
+        [preset, resolvedEvent],
     );
-    const previousRange = useMemo(() => previousPeriodRange(currentRange), [currentRange]);
+    const previousRange = useMemo(
+        () => (compareToPrevious ? previousPeriodRange(currentRange) : null),
+        [compareToPrevious, currentRange],
+    );
 
     const currentStatsQuery = useGetEventStats(eventId, {
         occurrenceId,
@@ -40,13 +53,19 @@ export const StatBoxes = ({occurrenceId, dateRange}: StatBoxesProps = {}) => {
     });
     const previousStatsQuery = useGetEventStats(eventId, {
         occurrenceId,
-        startDate: previousRange.startDate,
-        endDate: previousRange.endDate,
+        startDate: previousRange?.startDate,
+        endDate: previousRange?.endDate,
+        enabled: compareToPrevious,
     });
 
-    const isLoading = currentStatsQuery.isLoading || previousStatsQuery.isLoading;
+    const isLoading = currentStatsQuery.isLoading || (compareToPrevious && previousStatsQuery.isLoading);
     const current = currentStatsQuery.data;
-    const previous = previousStatsQuery.data;
+    const previous = compareToPrevious ? previousStatsQuery.data : undefined;
+
+    const delta = (key: keyof EventStats) => {
+        if (!compareToPrevious) return null;
+        return computeDelta(current?.[key] as number | undefined, previous?.[key] as number | undefined);
+    };
 
     const cells = [
         {
@@ -54,42 +73,42 @@ export const StatBoxes = ({occurrenceId, dateRange}: StatBoxesProps = {}) => {
             label: t`Attendees`,
             value: formatNumber(current?.total_attendees_registered ?? 0),
             sparkline: sparkFrom(current, 'attendees_registered'),
-            delta: computeDelta(current?.total_attendees_registered, previous?.total_attendees_registered),
+            delta: delta('total_attendees_registered'),
         },
         {
             key: 'products_sold',
             label: t`Products sold`,
             value: formatNumber(current?.total_products_sold ?? 0),
             sparkline: sparkFrom(current, 'products_sold'),
-            delta: computeDelta(current?.total_products_sold, previous?.total_products_sold),
+            delta: delta('total_products_sold'),
         },
         {
             key: 'refunded',
             label: t`Refunded`,
             value: formatCurrency(current?.total_refunded ?? 0, currency),
             sparkline: sparkFrom(current, 'total_refunded'),
-            delta: computeDelta(current?.total_refunded, previous?.total_refunded),
+            delta: delta('total_refunded'),
         },
         {
             key: 'gross_sales',
             label: t`Gross sales`,
             value: formatCurrency(current?.total_gross_sales ?? 0, currency),
             sparkline: sparkFrom(current, 'total_sales_gross'),
-            delta: computeDelta(current?.total_gross_sales, previous?.total_gross_sales),
+            delta: delta('total_gross_sales'),
         },
         {
             key: 'page_views',
             label: t`Page views`,
             value: formatNumber(current?.total_views ?? 0),
             sparkline: undefined as number[] | undefined,
-            delta: computeDelta(current?.total_views, previous?.total_views),
+            delta: delta('total_views'),
         },
         {
             key: 'orders',
             label: t`Completed orders`,
             value: formatNumber(current?.total_orders ?? 0),
             sparkline: sparkFrom(current, 'orders_created'),
-            delta: computeDelta(current?.total_orders, previous?.total_orders),
+            delta: delta('total_orders'),
         },
     ];
 

@@ -30,6 +30,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const HOMEPAGE_PRIMARY_COLOR = 'homepage_primary_color';
     final public const HOMEPAGE_SECONDARY_TEXT_COLOR = 'homepage_secondary_text_color';
     final public const HOMEPAGE_SECONDARY_COLOR = 'homepage_secondary_color';
+    final public const LOCATION_DETAILS = 'location_details';
+    final public const ONLINE_EVENT_CONNECTION_DETAILS = 'online_event_connection_details';
+    final public const IS_ONLINE_EVENT = 'is_online_event';
     final public const ALLOW_SEARCH_ENGINE_INDEXING = 'allow_search_engine_indexing';
     final public const SEO_TITLE = 'seo_title';
     final public const SEO_DESCRIPTION = 'seo_description';
@@ -38,7 +41,6 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SEO_KEYWORDS = 'seo_keywords';
     final public const NOTIFY_ORGANIZER_OF_NEW_ORDERS = 'notify_organizer_of_new_orders';
     final public const PRICE_DISPLAY_MODE = 'price_display_mode';
-    final public const HIDE_GETTING_STARTED_PAGE = 'hide_getting_started_page';
     final public const SHOW_SHARE_BUTTONS = 'show_share_buttons';
     final public const HOMEPAGE_BODY_BACKGROUND_COLOR = 'homepage_body_background_color';
     final public const HOMEPAGE_BACKGROUND_TYPE = 'homepage_background_type';
@@ -85,6 +87,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $homepage_primary_color = null;
     protected ?string $homepage_secondary_text_color = null;
     protected ?string $homepage_secondary_color = null;
+    protected array|string|null $location_details = null;
+    protected ?string $online_event_connection_details = null;
+    protected bool $is_online_event = false;
     protected bool $allow_search_engine_indexing = true;
     protected ?string $seo_title = null;
     protected ?string $seo_description = null;
@@ -93,7 +98,6 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?string $seo_keywords = null;
     protected bool $notify_organizer_of_new_orders = true;
     protected string $price_display_mode = 'INCLUSIVE';
-    protected bool $hide_getting_started_page = false;
     protected bool $show_share_buttons = true;
     protected ?string $homepage_body_background_color = null;
     protected string $homepage_background_type = 'COLOR';
@@ -143,6 +147,9 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'homepage_primary_color' => $this->homepage_primary_color ?? null,
                     'homepage_secondary_text_color' => $this->homepage_secondary_text_color ?? null,
                     'homepage_secondary_color' => $this->homepage_secondary_color ?? null,
+                    'location_details' => $this->location_details ?? null,
+                    'online_event_connection_details' => $this->online_event_connection_details ?? null,
+                    'is_online_event' => $this->is_online_event ?? null,
                     'allow_search_engine_indexing' => $this->allow_search_engine_indexing ?? null,
                     'seo_title' => $this->seo_title ?? null,
                     'seo_description' => $this->seo_description ?? null,
@@ -151,7 +158,6 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'seo_keywords' => $this->seo_keywords ?? null,
                     'notify_organizer_of_new_orders' => $this->notify_organizer_of_new_orders ?? null,
                     'price_display_mode' => $this->price_display_mode ?? null,
-                    'hide_getting_started_page' => $this->hide_getting_started_page ?? null,
                     'show_share_buttons' => $this->show_share_buttons ?? null,
                     'homepage_body_background_color' => $this->homepage_body_background_color ?? null,
                     'homepage_background_type' => $this->homepage_background_type ?? null,
@@ -400,6 +406,39 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
         return $this->homepage_secondary_color;
     }
 
+    public function setLocationDetails(array|string|null $location_details): self
+    {
+        $this->location_details = $location_details;
+        return $this;
+    }
+
+    public function getLocationDetails(): array|string|null
+    {
+        return $this->location_details;
+    }
+
+    public function setOnlineEventConnectionDetails(?string $online_event_connection_details): self
+    {
+        $this->online_event_connection_details = $online_event_connection_details;
+        return $this;
+    }
+
+    public function getOnlineEventConnectionDetails(): ?string
+    {
+        return $this->online_event_connection_details;
+    }
+
+    public function setIsOnlineEvent(bool $is_online_event): self
+    {
+        $this->is_online_event = $is_online_event;
+        return $this;
+    }
+
+    public function getIsOnlineEvent(): bool
+    {
+        return $this->is_online_event;
+    }
+
     public function setAllowSearchEngineIndexing(bool $allow_search_engine_indexing): self
     {
         $this->allow_search_engine_indexing = $allow_search_engine_indexing;
@@ -486,17 +525,6 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getPriceDisplayMode(): string
     {
         return $this->price_display_mode;
-    }
-
-    public function setHideGettingStartedPage(bool $hide_getting_started_page): self
-    {
-        $this->hide_getting_started_page = $hide_getting_started_page;
-        return $this;
-    }
-
-    public function getHideGettingStartedPage(): bool
-    {
-        return $this->hide_getting_started_page;
     }
 
     public function setShowShareButtons(bool $show_share_buttons): self

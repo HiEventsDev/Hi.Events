@@ -3,19 +3,25 @@ import {Menu, UnstyledButton} from "@mantine/core";
 import {IconChevronDown} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classes from "./PeriodSelector.module.scss";
+import {Event} from "../../../types.ts";
 
 export type PeriodPreset =
     | 'today'
     | 'last_7_days'
     | 'last_30_days'
     | 'last_90_days'
-    | 'year_to_date';
+    | 'year_to_date'
+    | 'event_first_week'
+    | 'event_first_month'
+    | 'event_first_quarter'
+    | 'event_full';
 
 interface PeriodSelectorProps {
     value: PeriodPreset;
     onChange: (preset: PeriodPreset) => void;
     storageKey?: string;
     className?: string;
+    event?: Event;
 }
 
 const getLabel = (preset: PeriodPreset): string => {
@@ -30,10 +36,18 @@ const getLabel = (preset: PeriodPreset): string => {
             return t`Last 90 days`;
         case 'year_to_date':
             return t`Year to date`;
+        case 'event_first_week':
+            return t`First 7 days`;
+        case 'event_first_month':
+            return t`First 30 days`;
+        case 'event_first_quarter':
+            return t`First 90 days`;
+        case 'event_full':
+            return t`Full event`;
     }
 };
 
-const VALID_PRESETS: PeriodPreset[] = [
+const ROLLING_PRESETS: PeriodPreset[] = [
     'today',
     'last_7_days',
     'last_30_days',
@@ -41,12 +55,20 @@ const VALID_PRESETS: PeriodPreset[] = [
     'year_to_date',
 ];
 
-const isValidPreset = (raw: string | null): raw is PeriodPreset => {
-    return raw !== null && (VALID_PRESETS as string[]).includes(raw);
+const EVENT_PRESETS: PeriodPreset[] = [
+    'event_first_week',
+    'event_first_month',
+    'event_first_quarter',
+    'event_full',
+];
+
+const isValidPreset = (raw: string | null, allowed: PeriodPreset[]): raw is PeriodPreset => {
+    return raw !== null && (allowed as string[]).includes(raw);
 };
 
-export const PeriodSelector = ({value, onChange, storageKey, className = ''}: PeriodSelectorProps) => {
+export const PeriodSelector = ({value, onChange, storageKey, className = '', event}: PeriodSelectorProps) => {
     const [hydrated, setHydrated] = useState(false);
+    const allowed: PeriodPreset[] = event ? [...ROLLING_PRESETS, ...EVENT_PRESETS] : ROLLING_PRESETS;
 
     useEffect(() => {
         if (hydrated || !storageKey) {
@@ -57,14 +79,14 @@ export const PeriodSelector = ({value, onChange, storageKey, className = ''}: Pe
         }
         try {
             const stored = window.localStorage.getItem(storageKey);
-            if (isValidPreset(stored) && stored !== value) {
+            if (isValidPreset(stored, allowed) && stored !== value) {
                 onChange(stored);
             }
         } catch {
             // ignore
         }
         setHydrated(true);
-    }, [hydrated, storageKey, value, onChange]);
+    }, [hydrated, storageKey, value, onChange, allowed]);
 
     const handleSelect = (preset: PeriodPreset) => {
         onChange(preset);
@@ -78,7 +100,7 @@ export const PeriodSelector = ({value, onChange, storageKey, className = ''}: Pe
     };
 
     return (
-        <Menu shadow="md" width={180} position="bottom-end" withinPortal>
+        <Menu shadow="md" width={200} position="bottom-end" withinPortal>
             <Menu.Target>
                 <UnstyledButton className={`${classes.trigger} ${className}`}>
                     <span>{getLabel(value)}</span>
@@ -86,7 +108,8 @@ export const PeriodSelector = ({value, onChange, storageKey, className = ''}: Pe
                 </UnstyledButton>
             </Menu.Target>
             <Menu.Dropdown>
-                {VALID_PRESETS.map((preset) => (
+                {event && <Menu.Label className={classes.sectionLabel}>{t`Recent activity`}</Menu.Label>}
+                {ROLLING_PRESETS.map((preset) => (
                     <Menu.Item
                         key={preset}
                         onClick={() => handleSelect(preset)}
@@ -95,6 +118,21 @@ export const PeriodSelector = ({value, onChange, storageKey, className = ''}: Pe
                         {getLabel(preset)}
                     </Menu.Item>
                 ))}
+                {event && (
+                    <>
+                        <Menu.Divider/>
+                        <Menu.Label className={classes.sectionLabel}>{t`Event lifetime`}</Menu.Label>
+                        {EVENT_PRESETS.map((preset) => (
+                            <Menu.Item
+                                key={preset}
+                                onClick={() => handleSelect(preset)}
+                                className={value === preset ? classes.selected : ''}
+                            >
+                                {getLabel(preset)}
+                            </Menu.Item>
+                        ))}
+                    </>
+                )}
             </Menu.Dropdown>
         </Menu>
     );

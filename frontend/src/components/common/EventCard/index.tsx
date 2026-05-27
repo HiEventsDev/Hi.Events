@@ -39,9 +39,10 @@ const placeholderGradients = [
 
 interface EventCardProps {
     event: Event;
+    compact?: boolean;
 }
 
-export function EventCard({event}: EventCardProps) {
+export function EventCard({event, compact = false}: EventCardProps) {
     const navigate = useNavigate();
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
@@ -78,18 +79,18 @@ export function EventCard({event}: EventCardProps) {
 
     const getStatusConfig = () => {
         if (event.status === 'ARCHIVED') {
-            return {label: t`Archived`, status: 'archived'};
+            return {label: t`Archived`, status: 'archived', tone: 'muted'};
         }
         if (event.lifecycle_status === 'ENDED') {
-            return {label: t`Ended`, status: 'ended'};
+            return {label: t`Ended`, status: 'ended', tone: 'muted'};
         }
         if (event.status === 'DRAFT') {
-            return {label: t`Draft`, status: 'draft'};
+            return {label: t`Draft`, status: 'draft', tone: 'warning'};
         }
         if (event.lifecycle_status === 'ONGOING') {
-            return {label: t`Live`, status: 'live', pulse: true};
+            return {label: t`Live`, status: 'live', tone: 'success', pulse: true};
         }
-        return {label: t`On Sale`, status: 'onsale'};
+        return {label: t`On Sale`, status: 'onsale', tone: 'success'};
     };
 
     const getLocationText = () => {
@@ -190,6 +191,96 @@ export function EventCard({event}: EventCardProps) {
     const dayOfMonth = formatDateWithLocale(displayDate, 'dayOfMonth', event.timezone);
     const shortDateTime = formatDateWithLocale(displayDate, 'shortDateTime', event.timezone);
     const relativeDateStr = relativeDate(displayDate);
+
+    if (compact) {
+        return (
+            <>
+                <div className={`${classes.eventCardCompact} ${isEnded ? classes.isEnded : ''} ${isDraft ? classes.isDraft : ''}`}>
+                    <NavLink to={`/manage/event/${event.id}/dashboard`} className={classes.cardLinkCompact}>
+                        <div className={classes.compactThumb}>
+                            <div
+                                className={`${classes.compactImage} ${!coverImage ? classes.placeholderImage : ''}`}
+                                style={coverImage
+                                    ? {backgroundImage: `url(${coverImage.url})`}
+                                    : {background: placeholderGradient}
+                                }
+                            />
+                            <div className={`${classes.compactDateBadge}`}>
+                                <span className={classes.compactDateDay}>{dayOfMonth}</span>
+                                <span className={classes.compactDateMonth}>{monthShort}</span>
+                            </div>
+                        </div>
+
+                        <div className={classes.compactContent}>
+                            <div className={classes.compactPrimary}>
+                                <span className={classes.compactTitle}>{event.title}</span>
+                                {isRecurring && (
+                                    <span className={classes.compactRecurringIcon} aria-label={t`Recurring`}>
+                                        <IconRepeat size={12}/>
+                                    </span>
+                                )}
+                            </div>
+                            <div className={classes.compactMeta}>
+                                <span className={`${classes.compactStatus} ${classes[`compactStatus-${statusConfig.tone}`]}`}>
+                                    {statusConfig.pulse && <span className={classes.compactStatusDot}/>}
+                                    {statusConfig.label}
+                                </span>
+                                <span className={classes.compactDot}>·</span>
+                                <span className={classes.compactMetaItem}>
+                                    {shortDateTime}
+                                </span>
+                                <span className={classes.compactDot}>·</span>
+                                <span className={classes.compactMetaItem}>{relativeDateStr}</span>
+                                {locationText && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={`${classes.compactMetaItem} ${classes.compactLocation}`}>
+                                            {locationText}
+                                        </span>
+                                    </>
+                                )}
+                                {ticketAvailability && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={`${classes.compactTickets} ${classes[`compactTickets-${ticketAvailability.status}`]}`}>
+                                            {ticketAvailability.text}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={classes.compactStats}>
+                            <div className={classes.compactStat}>
+                                <span className={classes.compactStatValue}>{formatNumber(attendees)}</span>
+                                <span className={classes.compactStatLabel}>{t`Attendees`}</span>
+                            </div>
+                            <div className={classes.compactStat}>
+                                <span className={classes.compactStatValue}>{formatCurrency(revenue, event?.currency)}</span>
+                                <span className={classes.compactStatLabel}>{t`Revenue`}</span>
+                            </div>
+                        </div>
+
+                        <div className={classes.compactMenuButton} onClick={(e) => e.preventDefault()}>
+                            <ActionMenu
+                                itemsGroups={menuItems}
+                                target={
+                                    <ActionIcon
+                                        className={classes.actionButton}
+                                        size="sm"
+                                        variant="subtle"
+                                    >
+                                        <IconDotsVertical size={16}/>
+                                    </ActionIcon>
+                                }
+                            />
+                        </div>
+                    </NavLink>
+                </div>
+                {isDuplicateModalOpen && <DuplicateEventModal eventId={eventId} onClose={duplicateModal.close}/>}
+            </>
+        );
+    }
 
     return (
         <>

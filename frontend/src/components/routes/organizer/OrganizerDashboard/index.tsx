@@ -1,9 +1,9 @@
 import {useEffect, useMemo, useState} from 'react';
 import {NavLink, useParams} from "react-router";
-import {Menu, SegmentedControl, Skeleton, UnstyledButton} from '@mantine/core';
+import {Button, Menu, SegmentedControl, Skeleton, UnstyledButton} from '@mantine/core';
 import {AreaChart} from "@mantine/charts";
-import {IconArrowDownRight, IconArrowUpRight, IconChevronDown, IconChevronRight} from '@tabler/icons-react';
-import {t} from '@lingui/macro';
+import {IconArrowDownRight, IconArrowUpRight, IconChevronDown, IconChevronRight, IconReceipt} from '@tabler/icons-react';
+import {t, Trans} from '@lingui/macro';
 
 import {PageTitle} from "../../../common/PageTitle";
 import {PageBody} from "../../../common/PageBody";
@@ -22,6 +22,7 @@ import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {currenciesMap} from "../../../../../data/currencies.ts";
 import {CreateEventModal} from "../../../modals/CreateEventModal";
 import {getEventQueryFilters} from "../../../../utilites/eventsPageFiltersHelper.ts";
+import {EventCard} from "../../../common/EventCard";
 
 type HeroTab = 'sales' | 'orders' | 'attendees';
 
@@ -79,14 +80,14 @@ export const OrganizerDashboard = () => {
     );
 
     const ordersQuery = useGetOrganizerOrders(organizerId, {
-        perPage: 4,
+        perPage: 10,
         sortBy: 'created_at',
         sortDirection: 'desc',
     });
     const recentOrders = ordersQuery.data?.data;
 
     const {data: eventsResponse} = useGetEvents(getEventQueryFilters({}) as QueryFilters);
-    const recentEvents = eventsResponse?.data?.slice(0, 4);
+    const recentEvents = eventsResponse?.data?.slice(0, 10);
 
     const isStatsLoading = organizerStatsQuery.isLoading;
     const isPreviousLoading = previousStatsQuery.isLoading;
@@ -303,60 +304,73 @@ export const OrganizerDashboard = () => {
             </KpiGrid>
 
             <div className={classes.recentLists}>
-                <div className={classes.listCard}>
+                <div className={`${classes.listCard} ${classes.ordersListCard}`}>
                     <div className={classes.listCardHeader}>
                         <div className={classes.listCardTitle}>{t`Recent orders`}</div>
-                        <NavLink
-                            to={`/manage/organizer/${organizerId}/orders`}
-                            className={classes.listCardLink}
-                        >
-                            {t`View all →`}
-                        </NavLink>
                     </div>
                     {recentOrders && recentOrders.length > 0 ? (
-                        recentOrders.slice(0, 4).map((order: Order) => {
-                            const customerName = [order.first_name, order.last_name].filter(Boolean).join(' ');
-                            const orderStatus = formatOrderStatus(order);
-                            return (
-                                <NavLink
-                                    key={order.id}
-                                    to={`/manage/event/${order.event_id}/orders#order-${order.id}`}
-                                    className={classes.listRowLink}
-                                >
-                                    <div className={classes.listRow}>
-                                        <div className={classes.listRowMain}>
-                                            <div className={classes.listRowPrimary}>
-                                                <span className={classes.listRowName}>
-                                                    {customerName || t`Guest`}
-                                                </span>
-                                                <span className={classes.listRowOrderId}>#{order.public_id}</span>
+                        <div className={classes.orderCardList}>
+                            {recentOrders.map((order: Order) => {
+                                const customerName = [order.first_name, order.last_name].filter(Boolean).join(' ');
+                                const orderStatus = formatOrderStatus(order);
+                                const initials = orderInitials(order.first_name, order.last_name);
+                                const gradient = orderGradient(order.id);
+                                return (
+                                    <NavLink
+                                        key={order.id}
+                                        to={`/manage/event/${order.event_id}/orders#order-${order.id}`}
+                                        className={classes.orderCardLink}
+                                    >
+                                        <div className={classes.orderCard}>
+                                            <div
+                                                className={classes.orderAvatar}
+                                                style={{background: gradient}}
+                                            >
+                                                {initials || <IconReceipt size={20}/>}
                                             </div>
-                                            <div className={classes.listRowSecondary}>
-                                                <span className={`${classes.statusPill} ${classes[`statusPill-${orderStatus.tone}`]}`}>
-                                                    {orderStatus.label}
-                                                </span>
-                                                <span className={classes.listRowDot}>·</span>
-                                                <span className={classes.listRowMuted}>{relativeDate(order.created_at)}</span>
+                                            <div className={classes.orderContent}>
+                                                <div className={classes.orderPrimary}>
+                                                    <span className={classes.orderName}>
+                                                        {customerName || t`Guest`}
+                                                    </span>
+                                                    <span className={classes.orderId}>#{order.public_id}</span>
+                                                </div>
+                                                <div className={classes.orderMeta}>
+                                                    <span className={`${classes.statusPill} ${classes[`statusPill-${orderStatus.tone}`]}`}>
+                                                        {orderStatus.label}
+                                                    </span>
+                                                    <span className={classes.orderDot}>·</span>
+                                                    <span className={classes.orderMuted}>
+                                                        {relativeDate(order.created_at)}
+                                                    </span>
+                                                </div>
                                             </div>
+                                            <div className={classes.orderStat}>
+                                                <span className={classes.orderStatValue}>
+                                                    {formatCurrency(order.total_gross, order.currency)}
+                                                </span>
+                                                <span className={classes.orderStatLabel}>{t`Total`}</span>
+                                            </div>
+                                            <IconChevronRight size={16} className={classes.orderChevron}/>
                                         </div>
-                                        <div className={classes.listRowAside}>
-                                            <span className={classes.listRowAmount}>
-                                                {formatCurrency(order.total_gross, order.currency)}
-                                            </span>
-                                            <IconChevronRight size={14} className={classes.listRowChevron}/>
-                                        </div>
-                                    </div>
-                                </NavLink>
-                            );
-                        })
+                                    </NavLink>
+                                );
+                            })}
+                        </div>
                     ) : (
-                        <div className={classes.listRowEmpty}>
-                            {t`No orders yet — they'll appear here when customers buy tickets.`}
+                        <div className={classes.eventsEmptyState}>
+                            <div className={classes.eventsEmptyEmoji}>📦</div>
+                            <h4 className={classes.eventsEmptyTitle}>
+                                <Trans>No orders yet</Trans>
+                            </h4>
+                            <p className={classes.eventsEmptyCopy}>
+                                <Trans>When customers purchase tickets, their orders will appear here.</Trans>
+                            </p>
                         </div>
                     )}
                 </div>
 
-                <div className={classes.listCard}>
+                <div className={`${classes.listCard} ${classes.eventsListCard}`}>
                     <div className={classes.listCardHeader}>
                         <div className={classes.listCardTitle}>{t`Upcoming events`}</div>
                         <NavLink
@@ -367,55 +381,28 @@ export const OrganizerDashboard = () => {
                         </NavLink>
                     </div>
                     {recentEvents && recentEvents.length > 0 ? (
-                        recentEvents.map((event: Event) => {
-                            const status = formatEventStatus(event);
-                            const attendees = event.statistics?.attendees_registered ?? 0;
-                            const revenue = event.statistics?.sales_total_gross ?? 0;
-                            return (
-                                <NavLink
-                                    key={event.id}
-                                    to={`/manage/event/${event.id}/dashboard`}
-                                    className={classes.listRowLink}
-                                >
-                                    <div className={classes.listRow}>
-                                        <div className={classes.listRowMain}>
-                                            <div className={classes.listRowPrimary}>
-                                                <span className={classes.listRowName}>{event.title}</span>
-                                            </div>
-                                            <div className={classes.listRowSecondary}>
-                                                <span className={classes.statusIndicator}>
-                                                    <span className={`${classes.statusDot} ${classes[`statusDot-${status.tone}`]}`}/>
-                                                    {status.label}
-                                                </span>
-                                                <span className={classes.listRowDot}>·</span>
-                                                <span className={classes.listRowMuted}>
-                                                    {formatNumber(attendees)} {attendees === 1 ? t`attendee` : t`attendees`}
-                                                </span>
-                                                <span className={classes.listRowDot}>·</span>
-                                                <span className={classes.listRowMuted}>
-                                                    {formatCurrency(revenue, event.currency)}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className={classes.listRowAside}>
-                                            <span className={classes.listRowMuted}>{relativeDate(event.start_date)}</span>
-                                            <IconChevronRight size={14} className={classes.listRowChevron}/>
-                                        </div>
-                                    </div>
-                                </NavLink>
-                            );
-                        })
+                        <div className={classes.eventCardList}>
+                            {recentEvents.map((event: Event) => (
+                                <EventCard key={event.id} event={event} compact/>
+                            ))}
+                        </div>
                     ) : (
-                        <div className={classes.listRowEmpty}>
-                            {t`No events yet —`}{' '}
-                            <a
-                                role="button"
-                                tabIndex={0}
+                        <div className={classes.eventsEmptyState}>
+                            <div className={classes.eventsEmptyEmoji}>🎉</div>
+                            <h4 className={classes.eventsEmptyTitle}>
+                                <Trans>No events yet</Trans>
+                            </h4>
+                            <p className={classes.eventsEmptyCopy}>
+                                <Trans>Create your first event to start selling tickets and managing attendees.</Trans>
+                            </p>
+                            <Button
                                 onClick={() => setShowCreateEventModal(true)}
-                                className={classes.listRowEmptyAction}
+                                variant="light"
+                                size="sm"
+                                mt="xs"
                             >
-                                {t`create event →`}
-                            </a>
+                                <Trans>Create event</Trans>
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -452,17 +439,26 @@ const formatOrderStatus = (order: Order): {label: string; tone: StatusTone} => {
     return {label: order.status ?? t`Unknown`, tone: 'muted'};
 };
 
-const formatEventStatus = (event: Event): {label: string; tone: StatusTone} => {
-    if (event.status === 'ARCHIVED') {
-        return {label: t`Archived`, tone: 'muted'};
-    }
-    if (event.lifecycle_status === 'ENDED') {
-        return {label: t`Ended`, tone: 'muted'};
-    }
-    if (event.status === 'DRAFT') {
-        return {label: t`Draft`, tone: 'warning'};
-    }
-    return {label: t`Live`, tone: 'success'};
+const orderAvatarGradients = [
+    'linear-gradient(135deg, var(--mantine-color-violet-5) 0%, var(--mantine-color-indigo-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-pink-5) 0%, var(--mantine-color-grape-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-blue-5) 0%, var(--mantine-color-cyan-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-teal-5) 0%, var(--mantine-color-green-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-orange-5) 0%, var(--mantine-color-yellow-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-indigo-5) 0%, var(--mantine-color-blue-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-grape-5) 0%, var(--mantine-color-violet-5) 100%)',
+    'linear-gradient(135deg, var(--mantine-color-cyan-5) 0%, var(--mantine-color-teal-5) 100%)',
+];
+
+const orderGradient = (orderId: Order['id']): string => {
+    const idNum = typeof orderId === 'number' ? orderId : Number(orderId ?? 0);
+    return orderAvatarGradients[Math.abs(idNum) % orderAvatarGradients.length];
+};
+
+const orderInitials = (firstName?: string, lastName?: string): string => {
+    const f = firstName?.trim()?.[0] ?? '';
+    const l = lastName?.trim()?.[0] ?? '';
+    return (f + l).toUpperCase();
 };
 
 export default OrganizerDashboard;
