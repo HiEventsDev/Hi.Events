@@ -33,11 +33,13 @@ class EventStatsFetchServiceTest extends TestCase
             ->shouldReceive('selectOne')
             ->once()
             ->with(
-                Mockery::on(static fn (string $sql): bool => str_contains($sql, 'eos.event_occurrence_id = :occurrenceId')
-                    && str_contains($sql, 'eos.event_id = :eventId')),
+                Mockery::on(static fn (string $sql): bool => str_contains($sql, 'eods.event_occurrence_id = :occurrenceId')
+                    && str_contains($sql, 'eods.event_id = :eventId')),
                 [
                     'occurrenceId' => 200,
                     'eventId' => 10,
+                    'startDate' => '2026-01-01',
+                    'endDate' => '2026-01-31',
                 ],
             )
             ->andReturn((object) [

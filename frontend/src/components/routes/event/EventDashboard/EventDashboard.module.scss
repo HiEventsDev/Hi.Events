@@ -21,223 +21,27 @@
   }
 }
 
-.dateRangeSelector {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
-
 .sectionLabel {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  flex-wrap: wrap;
+  gap: 8px;
+  row-gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--mantine-color-dimmed);
-  margin: 4px 0 10px;
+  color: var(--hi-color-text-muted);
+  margin: 24px 0 12px;
 }
 
 .sectionLabelRange {
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
+  color: var(--hi-color-text-muted);
 }
 
-.setupCard {
-  margin-bottom: 28px;
-  margin-top: 24px;
-  position: relative;
-  padding: 32px 28px;
-  background: linear-gradient(to right, rgba(249, 250, 251, 0.6), rgba(243, 244, 246, 0.6));
-  border: 1px solid var(--mantine-color-gray-2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+.sectionLabelSpacer {
+  flex: 1;
 }
-
-.dismissButton {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  color: var(--mantine-color-gray-5);
-  background-color: rgba(255, 255, 255, 0.7);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    color: var(--mantine-color-gray-7);
-  }
-}
-
-.setupCardContent {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.checklistContainer {
-  width: 100%;
-
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-    margin-top: 0;
-    color: var(--mantine-color-gray-8);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-
-  .setupDescription {
-    margin-bottom: 1.75rem;
-    color: var(--mantine-color-gray-6);
-    font-size: 1rem;
-    line-height: 1.5;
-    max-width: 80%;
-  }
-}
-
-.checklistItems {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -12px;
-}
-
-.checklistItem {
-  width: calc(50% - 24px);
-  margin: 0 12px 24px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  border: 1px solid var(--mantine-color-gray-2);
-  transition: all 0.2s ease;
-
-  h3 {
-    font-size: 1.1rem;
-    margin: 0 0 0.75rem 0;
-    color: var(--mantine-color-gray-8);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-  }
-
-  p {
-    margin: 0 0 1rem 0;
-    color: var(--mantine-color-gray-6);
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  /* Always show a consistent layout with status indicator */
-  .status-section {
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-  }
-}
-
-.checkboxContainer {
-  margin-right: 12px;
-}
-
-.checkbox {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  border: 2px solid var(--mantine-color-gray-3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.6);
-  transition: all 0.2s ease;
-
-  svg {
-    transform: scale(0.85);
-  }
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.status-complete {
-  background-color: var(--mantine-color-green-0);
-  color: var(--mantine-color-green-6);
-}
-
-.status-pending {
-  background-color: var(--mantine-color-yellow-0);
-  color: var(--mantine-color-yellow-6);
-}
-
-/* Tablet and smaller desktop styles */
-@media (max-width: 1200px) {
-  .setupCard {
-    padding: 24px 20px;
-  }
-
-  .checklistContainer {
-    .setupDescription {
-      max-width: 100%;
-    }
-  }
-}
-
-/* Small tablet styles */
-@media (max-width: 992px) {
-  .checklistItem {
-    width: 100%;
-    margin-bottom: 16px;
-  }
-
-  .setupCard {
-    padding: 20px 18px;
-  }
-
-  .checklistContainer h2 {
-    font-size: 1.4rem;
-  }
-}
-
-/* Mobile styles */
-@media (max-width: 768px) {
-  .setupCard {
-    padding: 20px 16px;
-    margin-bottom: 20px;
-  }
-
-  .checklistContainer {
-    h2 {
-      font-size: 1.3rem;
-    }
-
-    .setupDescription {
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-  }
-
-  .checklistItem {
-    padding: 18px 16px;
-  }
-
-  .dismissButton {
-    top: 12px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
-  }
-}
-

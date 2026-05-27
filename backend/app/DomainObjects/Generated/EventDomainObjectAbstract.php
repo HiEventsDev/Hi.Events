@@ -18,6 +18,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const TITLE = 'title';
     final public const DESCRIPTION = 'description';
     final public const STATUS = 'status';
+    final public const LOCATION_DETAILS = 'location_details';
     final public const CURRENCY = 'currency';
     final public const TIMEZONE = 'timezone';
     final public const ATTRIBUTES = 'attributes';
@@ -39,6 +40,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected string $title;
     protected ?string $description = null;
     protected ?string $status = null;
+    protected array|string|null $location_details = null;
     protected string $currency = 'USD';
     protected ?string $timezone = null;
     protected array|string|null $attributes = null;
@@ -63,6 +65,7 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'title' => $this->title ?? null,
                     'description' => $this->description ?? null,
                     'status' => $this->status ?? null,
+                    'location_details' => $this->location_details ?? null,
                     'currency' => $this->currency ?? null,
                     'timezone' => $this->timezone ?? null,
                     'attributes' => $this->attributes ?? null,
@@ -164,6 +167,17 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getStatus(): ?string
     {
         return $this->status;
+    }
+
+    public function setLocationDetails(array|string|null $location_details): self
+    {
+        $this->location_details = $location_details;
+        return $this;
+    }
+
+    public function getLocationDetails(): array|string|null
+    {
+        return $this->location_details;
     }
 
     public function setCurrency(string $currency): self

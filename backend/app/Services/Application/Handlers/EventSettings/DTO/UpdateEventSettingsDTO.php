@@ -45,8 +45,6 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         public readonly ?PriceDisplayMode $price_display_mode = PriceDisplayMode::INCLUSIVE,
 
-        public readonly ?bool $hide_getting_started_page = false,
-
         // Payment settings
         public readonly array $payment_providers = [],
         public readonly ?string $offline_payment_instructions = null,
@@ -115,7 +113,6 @@ class UpdateEventSettingsDTO extends BaseDTO
             allow_search_engine_indexing: true,
             notify_organizer_of_new_orders: null,
             price_display_mode: PriceDisplayMode::INCLUSIVE,
-            hide_getting_started_page: false,
 
             // Payment defaults
             payment_providers: [PaymentProviders::STRIPE->value],

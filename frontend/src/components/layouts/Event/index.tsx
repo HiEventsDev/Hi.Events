@@ -17,7 +17,6 @@ import {
     IconSend,
     IconSettings,
     IconShare,
-    IconStar,
     IconTicket,
     IconTrendingUp,
     IconUserQuestion,
@@ -64,7 +63,7 @@ const EventLayout = () => {
     const statusToggleMutation = useUpdateEventStatus();
 
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
-    const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
+    const {isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventStats} = useGetEventStats(eventId);
     const {data: me} = useGetMe();
 
@@ -97,12 +96,6 @@ const EventLayout = () => {
 
         // 1. OVERVIEW
         {label: t`Overview`},
-        {
-            link: 'getting-started',
-            label: t`Getting Started`,
-            icon: IconStar,
-            showWhen: () => !eventSettings?.hide_getting_started_page
-        },
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {
             link: 'reports',

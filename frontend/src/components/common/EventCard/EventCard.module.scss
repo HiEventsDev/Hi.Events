@@ -399,3 +399,259 @@
     color: var(--mantine-color-text);
   }
 }
+
+.eventCardCompact {
+  border: 0.5px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-card);
+  overflow: hidden;
+  background: var(--hi-color-white);
+  transition: background-color 0.12s ease;
+  container-type: inline-size;
+
+  &:hover {
+    background-color: var(--mantine-color-gray-0);
+
+    .compactTitle {
+      color: var(--mantine-color-primary-7);
+    }
+  }
+
+  &.isDraft {
+    .compactImage {
+      opacity: 0.85;
+    }
+  }
+
+  &.isEnded {
+    .compactImage {
+      filter: grayscale(60%);
+    }
+  }
+}
+
+.cardLinkCompact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 76px;
+
+  @container (max-width: 460px) {
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+.compactThumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: var(--hi-radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+
+  @container (max-width: 460px) {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+}
+
+.compactImage {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.compactDateBadge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--mantine-color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.compactDateDay {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+
+  @container (max-width: 460px) {
+    font-size: 0.8125rem;
+  }
+}
+
+.compactDateMonth {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+
+  @container (max-width: 460px) {
+    font-size: 0.5625rem;
+  }
+}
+
+.compactContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.compactPrimary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.compactTitle {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--hi-text);
+  transition: color 0.12s ease;
+  @include mixins.ellipsis;
+  letter-spacing: -0.005em;
+}
+
+.compactRecurringIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hi-color-text-muted);
+  flex-shrink: 0;
+}
+
+.compactMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--hi-color-text-muted);
+  line-height: 1.3;
+}
+
+.compactMetaItem {
+  white-space: nowrap;
+}
+
+.compactLocation {
+  @include mixins.ellipsis;
+  max-width: 160px;
+}
+
+.compactDot {
+  color: var(--hi-color-border);
+}
+
+.compactStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.compactStatusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.compactStatus-success {
+  color: var(--hi-color-success);
+}
+
+.compactStatus-warning {
+  color: var(--hi-color-warning);
+}
+
+.compactStatus-danger {
+  color: var(--hi-color-danger);
+}
+
+.compactStatus-muted {
+  color: var(--hi-color-text-muted);
+}
+
+.compactTickets {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.compactTickets-available {
+  color: var(--hi-color-success);
+}
+
+.compactTickets-partial {
+  color: var(--hi-color-warning);
+}
+
+.compactTickets-sold-out {
+  color: var(--hi-color-danger);
+}
+
+.compactStats {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+
+  @container (max-width: 460px) {
+    gap: 0;
+  }
+}
+
+.compactStat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 64px;
+
+  @container (max-width: 460px) {
+    min-width: 0;
+
+    &:not(:last-child) {
+      display: none;
+    }
+  }
+}
+
+.compactStatValue {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hi-text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.compactStatLabel {
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hi-color-text-muted);
+  margin-top: 2px;
+
+  @container (max-width: 460px) {
+    display: none;
+  }
+}
+
+.compactMenuButton {
+  flex-shrink: 0;
+}

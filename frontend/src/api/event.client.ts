@@ -38,10 +38,15 @@ export const eventsClient = {
         return response.data;
     },
 
-    getEventStats: async (eventId: IdParam, options: {occurrenceId?: IdParam; dateRange?: string} = {}) => {
+    getEventStats: async (
+        eventId: IdParam,
+        options: {occurrenceId?: IdParam; dateRange?: string; startDate?: string; endDate?: string} = {},
+    ) => {
         const params = new URLSearchParams();
         if (options.occurrenceId) params.set('occurrence_id', String(options.occurrenceId));
         if (options.dateRange) params.set('date_range', options.dateRange);
+        if (options.startDate) params.set('start_date', options.startDate);
+        if (options.endDate) params.set('end_date', options.endDate);
         const qs = params.toString();
         const response = await api.get<GenericDataResponse<EventStats>>(`events/${eventId}/stats${qs ? '?' + qs : ''}`);
         return response.data;

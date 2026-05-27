@@ -45,6 +45,13 @@ cd docker/development
 
 ## Development Guidelines
 
+### Comments — hard rule for all code (backend, frontend, SCSS)
+- **DON'T** add explanatory comments. The code must speak for itself.
+- This includes "why" comments justifying a design choice ("X is intentionally omitted because…", "matches the rest of the section rhythm…", "Views live on the per-event-per-day table…", "Online events satisfy the where requirement…"). If you'd write that, rename a variable / extract a function / restructure the code instead, or just leave it implicit.
+- Functional annotations are fine: PHPDoc `@throws` / `@return` / `@param`, `// TODO(handle:owner)` linked to a tracked task, schema comments inside SQL migrations that future migrations depend on.
+- Never restate what the next line does. If a reviewer can read the diff and understand it, the comment is noise.
+- If you're tempted to leave a comment "for the next agent", **don't** — write it as a CLAUDE.md note instead.
+
 ### Backend
 
 #### Architecture Flow
@@ -58,8 +65,8 @@ cd docker/development
 - **ALWAYS** wrap all translatable strings in `__()` helper
 - Domain Objects are auto-generated via `php artisan generate-domain-objects` - never edit manually
 - **Always** create unit tests for new features in `backend/tests/Unit/`
+- **DON'T** add comments — see the comments rule above. No exceptions for "this seems useful context".
 - **NEVER leave dead code.** Code that has no production callers — unused methods, unused DTO fields, unused constants, columns that are written but never read, classes only called from tests — must be deleted, not left "for future use". This applies to both backend and frontend. If you add a method speculatively, wire it to a real caller in the same change or remove it. The same rule applies after refactors: if something becomes unreferenced, it goes. Confirm with grep before claiming a method or class is reachable.
-- **DON'T** add comments unless absolutely necessary
 - **ALWAYS** sanitize user-provided content with `HtmlPurifierService` before storing, especially content rendered as HTML
 
 #### DTOs
@@ -94,6 +101,7 @@ cd docker/development
 - **DON'T** use `RefreshDatabase` - use `DatabaseTransactions` instead
 - Unit tests extend Laravel's TestCase, not PHPUnit's TestCase
 - Use Mockery for mocking
+- **Unit suite (`tests/Unit/`) is for pure isolation tests** — no DB, no HTTP, no real container resolution. If a test uses `DatabaseTransactions`, hits the DB (raw `DB::` calls, factories that persist, repository methods that query), or boots significant framework state, it's an integration test and belongs in `tests/Feature/` (mirror the path, e.g. `tests/Feature/Repository/Eloquent/`). Running `--testsuite=Unit` must stay fast and DB-free.
 - Tests run against a dedicated `hievents_test` database, configured via `backend/.env.testing` and enforced by `phpunit.xml`. The local docker-compose creates this database automatically via `docker/development/pgsql-init/`. If your existing pgsql volume predates this script, create the DB once with: `docker compose -f docker-compose.dev.yml exec pgsql psql -U username -d backend -c 'CREATE DATABASE hievents_test OWNER username;'`
 - Database name **must end in `_test`**. Enforced globally by a `final` guard in `tests/TestCase.php::guardAgainstNonTestDatabase()` which runs on every test that boots Laravel — no per-test opt-in needed and no way to bypass.
 

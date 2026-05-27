@@ -457,13 +457,6 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "getting-started",
-                async lazy() {
-                    const GettingStarted = await import("./components/routes/event/GettingStarted");
-                    return { Component: GettingStarted.default };
-                }
-            },
-            {
                 path: "sold-out-waitlist",
                 async lazy() {
                     const SoldOutWaitlist = await import("./components/routes/event/SoldOutWaitlist");

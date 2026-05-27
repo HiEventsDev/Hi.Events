@@ -46,8 +46,6 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             'price_display_mode' => [Rule::in(PriceDisplayMode::valuesArray())],
 
-            'hide_getting_started_page' => ['boolean'],
-
             // Payment settings
             'payment_providers' => ['array'],
             'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
