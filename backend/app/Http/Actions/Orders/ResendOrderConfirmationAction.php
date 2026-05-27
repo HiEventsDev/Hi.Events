@@ -3,9 +3,12 @@
 namespace HiEvents\Http\Actions\Orders;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -36,7 +39,17 @@ class ResendOrderConfirmationAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         $order = $this->orderRepository
-            ->loadRelation(OrderItemDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: OrderItemDomainObject::class, nested: [
+                new Relationship(
+                    domainObject: EventOccurrenceDomainObject::class,
+                    nested: [
+                        new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                            new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                        ]),
+                    ],
+                    name: 'event_occurrence',
+                ),
+            ]))
             ->loadRelation(InvoiceDomainObject::class)
             ->findFirstWhere([
                 OrderDomainObjectAbstract::EVENT_ID => $eventId,
@@ -51,6 +64,14 @@ class ResendOrderConfirmationAction extends BaseAction
             $event = $this->eventRepository
                 ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
+                ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ]))
+                ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]))
                 ->findById($order->getEventId());
 
             $mail = $this->mailBuilderService->buildOrderSummaryMail(

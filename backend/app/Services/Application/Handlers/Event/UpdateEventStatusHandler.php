@@ -3,12 +3,12 @@
 namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
+use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
-use HiEvents\DomainObjects\Status\EventStatus;
-use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -17,13 +17,11 @@ use Throwable;
 readonly class UpdateEventStatusHandler
 {
     public function __construct(
-        private EventRepositoryInterface   $eventRepository,
+        private EventRepositoryInterface $eventRepository,
         private AccountRepositoryInterface $accountRepository,
-        private LoggerInterface            $logger,
-        private DatabaseManager            $databaseManager,
-    )
-    {
-    }
+        private LoggerInterface $logger,
+        private DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws AccountNotVerifiedException|Throwable
@@ -60,7 +58,7 @@ readonly class UpdateEventStatusHandler
 
         $this->logger->info('Event status updated', [
             'eventId' => $updateEventStatusDTO->eventId,
-            'status' => $updateEventStatusDTO->status
+            'status' => $updateEventStatusDTO->status,
         ]);
 
         $event = $this->eventRepository->findFirstWhere([

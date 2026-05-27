@@ -10,7 +10,5 @@ class UpdateEventStatusDTO extends BaseDTO
         public string $status,
         public int $eventId,
         public int $accountId,
-    )
-    {
-    }
+    ) {}
 }

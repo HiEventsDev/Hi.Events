@@ -16,7 +16,9 @@ use Tests\TestCase;
 class GetPriceOverridesHandlerTest extends TestCase
 {
     private ProductPriceOccurrenceOverrideRepositoryInterface|MockInterface $overrideRepository;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
+
     private GetPriceOverridesHandler $handler;
 
     protected function setUp(): void
@@ -35,7 +37,7 @@ class GetPriceOverridesHandlerTest extends TestCase
             ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
     }
 
-    public function testHandleReturnsCollectionOfOverridesForOccurrence(): void
+    public function test_handle_returns_collection_of_overrides_for_occurrence(): void
     {
         $this->mockOccurrenceOwnership();
 
@@ -55,21 +57,21 @@ class GetPriceOverridesHandlerTest extends TestCase
         $this->assertSame($expectedCollection, $result);
     }
 
-    public function testHandleReturnsEmptyCollectionWhenNoneExist(): void
+    public function test_handle_returns_empty_collection_when_none_exist(): void
     {
         $this->mockOccurrenceOwnership();
 
         $this->overrideRepository
             ->shouldReceive('findWhere')
             ->once()
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
         $result = $this->handler->handle(1, 99);
 
         $this->assertTrue($result->isEmpty());
     }
 
-    public function testHandleThrowsWhenOccurrenceDoesNotBelongToEvent(): void
+    public function test_handle_throws_when_occurrence_does_not_belong_to_event(): void
     {
         $this->occurrenceRepository
             ->shouldReceive('findFirstWhere')

@@ -51,6 +51,13 @@ export const organizerClient = {
         return response.data;
     },
 
+    updateLocation: async (organizerId: IdParam, locationId: IdParam | null) => {
+        const response = await api.patch<GenericDataResponse<Organizer>>('organizers/' + organizerId + '/location', {
+            location_id: locationId,
+        });
+        return response.data;
+    },
+
     findEventsByOrganizerId: async (organizerId: IdParam, pagination: QueryFilters) => {
         const response = await api.get<GenericPaginatedResponse<Event>>(
             'organizers/' + organizerId + '/events' + queryParamsHelper.buildQueryString(pagination)

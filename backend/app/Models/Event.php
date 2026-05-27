@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends BaseModel
 {
-    use SoftDeletes;
     use HasImages;
+    use SoftDeletes;
 
     public function account(): BelongsTo
     {
@@ -86,6 +86,11 @@ class Event extends BaseModel
         return $this->hasMany(EventOccurrence::class);
     }
 
+    public function event_location(): BelongsTo
+    {
+        return $this->belongsTo(EventLocation::class, 'event_location_id');
+    }
+
     public static function boot(): void
     {
         parent::boot();
@@ -102,7 +107,6 @@ class Event extends BaseModel
     {
         return [
             EventDomainObjectAbstract::ATTRIBUTES => 'array',
-            EventDomainObjectAbstract::LOCATION_DETAILS => 'array',
             EventDomainObjectAbstract::RECURRENCE_RULE => 'array',
         ];
     }

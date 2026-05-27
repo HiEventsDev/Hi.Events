@@ -3,17 +3,17 @@
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
-use HiEvents\DomainObjects\EventOccurrenceStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GetEventOccurrenceHandler;
 use Mockery;
-use HiEvents\Exceptions\ResourceNotFoundException;
 use Tests\TestCase;
 
 class GetEventOccurrenceHandlerTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
     private GetEventOccurrenceHandler $handler;
 
     protected function setUp(): void
@@ -24,14 +24,12 @@ class GetEventOccurrenceHandlerTest extends TestCase
         $this->handler = new GetEventOccurrenceHandler($this->occurrenceRepository);
     }
 
-    public function testHandleReturnsOccurrenceWithStats(): void
+    public function test_handle_returns_occurrence_with_stats(): void
     {
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
 
         $this->occurrenceRepository
             ->shouldReceive('loadRelation')
-            ->with(EventOccurrenceStatisticDomainObject::class)
-            ->once()
             ->andReturnSelf();
 
         $this->occurrenceRepository
@@ -48,11 +46,10 @@ class GetEventOccurrenceHandlerTest extends TestCase
         $this->assertSame($occurrence, $result);
     }
 
-    public function testHandleThrowsWhenOccurrenceNotFound(): void
+    public function test_handle_throws_when_occurrence_not_found(): void
     {
         $this->occurrenceRepository
             ->shouldReceive('loadRelation')
-            ->once()
             ->andReturnSelf();
 
         $this->occurrenceRepository

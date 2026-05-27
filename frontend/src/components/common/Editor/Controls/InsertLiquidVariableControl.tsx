@@ -23,6 +23,15 @@ const OCCURRENCE_VARIABLES: TemplateVariable[] = [
     {label: t`Occurrence Label`, value: 'occurrence.label', description: t`Label for the occurrence`, category: t`Occurrence`},
 ];
 
+const LOCATION_VARIABLES: TemplateVariable[] = [
+    {label: t`Location Name`, value: 'event_location.name', description: t`Resolved location or venue name`, category: t`Location`},
+    {label: t`Location Formatted Address`, value: 'event_location.formatted_address', description: t`Full resolved address`, category: t`Location`},
+    {label: t`Location Latitude`, value: 'event_location.latitude', description: t`Latitude of the resolved location`, category: t`Location`},
+    {label: t`Location Longitude`, value: 'event_location.longitude', description: t`Longitude of the resolved location`, category: t`Location`},
+    {label: t`Location Mode`, value: 'event_location.mode', description: t`in_person, online, unset, or mixed`, category: t`Location`},
+    {label: t`Online Connection Details`, value: 'event_location.online_connection_details', description: t`Online event connection details`, category: t`Location`},
+];
+
 const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
     order_confirmation: [
         // Order Information
@@ -46,6 +55,8 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Description`, value: 'event.description', description: t`Event details`, category: t`Event`},
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
+
+        ...LOCATION_VARIABLES,
 
         ...OCCURRENCE_VARIABLES,
 
@@ -82,6 +93,8 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
 
+        ...LOCATION_VARIABLES,
+
         ...OCCURRENCE_VARIABLES,
 
         // Organization
@@ -102,6 +115,8 @@ const TEMPLATE_VARIABLES: Record<EmailTemplateType, TemplateVariable[]> = {
         {label: t`Event Timezone`, value: 'event.timezone', description: t`Event timezone`, category: t`Event`},
         {label: t`Event Venue`, value: 'event.location_details.venue_name', description: t`The event venue`, category: t`Event`},
         {label: t`Event URL`, value: 'event.url', description: t`Link to event homepage`, category: t`Event`},
+
+        ...LOCATION_VARIABLES,
 
         ...OCCURRENCE_VARIABLES,
 

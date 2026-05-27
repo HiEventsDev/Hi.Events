@@ -10,6 +10,7 @@ import {
     Image,
     ImageType,
     QueryFilters,
+    UpsertEventLocationPayload,
 } from "../types";
 import {publicApi} from "./public-client.ts";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
@@ -90,6 +91,14 @@ export const eventsClient = {
 
     duplicate: async (eventId: IdParam, event: EventDuplicatePayload) => {
         const response = await api.post<GenericDataResponse<Event>>('events/' + eventId + '/duplicate', event);
+        return response.data;
+    },
+
+    updateEventLocation: async (
+        eventId: IdParam,
+        payload: { event_location?: UpsertEventLocationPayload | null; clear_event_location?: boolean },
+    ) => {
+        const response = await api.patch<GenericDataResponse<Event>>('events/' + eventId + '/event-location', payload);
         return response.data;
     },
 

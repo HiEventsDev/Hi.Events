@@ -16,11 +16,9 @@ class DeletePriceOverrideHandler
 {
     public function __construct(
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $overrideRepository,
-        private readonly EventOccurrenceRepositoryInterface                $occurrenceRepository,
-        private readonly DatabaseManager                                   $databaseManager,
-    )
-    {
-    }
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -33,7 +31,7 @@ class DeletePriceOverrideHandler
                 EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
             ]);
 
-            if (!$occurrence) {
+            if (! $occurrence) {
                 throw new ResourceNotFoundException(
                     __('Occurrence :id not found for event :eventId', [
                         'id' => $occurrenceId,
@@ -47,7 +45,7 @@ class DeletePriceOverrideHandler
                 ProductPriceOccurrenceOverrideDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
             ]);
 
-            if (!$override) {
+            if (! $override) {
                 throw new ResourceNotFoundException(
                     __('Price override :id not found for occurrence :occurrenceId', [
                         'id' => $overrideId,

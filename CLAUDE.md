@@ -66,6 +66,7 @@ cd docker/development
 - Domain Objects are auto-generated via `php artisan generate-domain-objects` - never edit manually
 - **Always** create unit tests for new features in `backend/tests/Unit/`
 - **DON'T** add comments — see the comments rule above. No exceptions for "this seems useful context".
+- **NEVER leave dead code.** Code that has no production callers — unused methods, unused DTO fields, unused constants, columns that are written but never read, classes only called from tests — must be deleted, not left "for future use". This applies to both backend and frontend. If you add a method speculatively, wire it to a real caller in the same change or remove it. The same rule applies after refactors: if something becomes unreferenced, it goes. Confirm with grep before claiming a method or class is reachable.
 - **ALWAYS** sanitize user-provided content with `HtmlPurifierService` before storing, especially content rendered as HTML
 
 #### DTOs

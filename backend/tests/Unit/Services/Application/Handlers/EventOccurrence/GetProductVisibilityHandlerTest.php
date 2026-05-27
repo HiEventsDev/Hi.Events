@@ -16,7 +16,9 @@ use Tests\TestCase;
 class GetProductVisibilityHandlerTest extends TestCase
 {
     private ProductOccurrenceVisibilityRepositoryInterface|Mockery\MockInterface $visibilityRepository;
+
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
     private GetProductVisibilityHandler $handler;
 
     protected function setUp(): void
@@ -28,7 +30,7 @@ class GetProductVisibilityHandlerTest extends TestCase
         $this->handler = new GetProductVisibilityHandler($this->visibilityRepository, $this->occurrenceRepository);
     }
 
-    public function testHandleReturnsVisibilityRecords(): void
+    public function test_handle_returns_visibility_records(): void
     {
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
 
@@ -51,7 +53,7 @@ class GetProductVisibilityHandlerTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testHandleThrowsWhenOccurrenceNotFound(): void
+    public function test_handle_throws_when_occurrence_not_found(): void
     {
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn(null);
 

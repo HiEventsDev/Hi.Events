@@ -11,9 +11,7 @@ class DeleteEventOccurrenceAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteEventOccurrenceHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $occurrenceId): Response
     {

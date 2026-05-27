@@ -6,10 +6,12 @@ use Brick\Math\Exception\MathException;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
@@ -72,7 +74,14 @@ class MarkOrderAsPaidService
             $event = $this->eventRepository
                 ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
-                ->loadRelation(new Relationship(EventOccurrenceDomainObject::class))
+                ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ]))
+                ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]))
                 ->findById($order->getEventId());
 
             if ($order->getStatus() !== OrderStatus::AWAITING_OFFLINE_PAYMENT->name) {
@@ -95,6 +104,11 @@ class MarkOrderAsPaidService
                     nested: [
                         new Relationship(
                             domainObject: EventOccurrenceDomainObject::class,
+                            nested: [
+                                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                                ]),
+                            ],
                             name: 'event_occurrence',
                         ),
                     ],

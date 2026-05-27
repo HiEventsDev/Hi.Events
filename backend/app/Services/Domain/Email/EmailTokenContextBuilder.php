@@ -4,8 +4,10 @@ namespace HiEvents\Services\Domain\Email;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\LocationType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -20,32 +22,42 @@ use HiEvents\Locale;
 
 class EmailTokenContextBuilder
 {
+    /**
+     * Callers must hydrate `$event->event_location` (with nested `location`) and
+     * `$occurrence->event_location` before invoking these builders. Reads happen
+     * directly off the domain objects with no lazy-load fallback — invoking from
+     * a tight loop without preloads will N+1.
+     */
     public function buildOrderConfirmationContext(
-        OrderDomainObject        $order,
-        EventDomainObject        $event,
-        OrganizerDomainObject    $organizer,
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
         EventSettingDomainObject $eventSettings,
         ?EventOccurrenceDomainObject $occurrence = null,
-    ): array
-    {
+    ): array {
         $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
         $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
 
         $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
         $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
 
+        $eventLocation = $occurrence?->getEventLocation() ?? $event->getEventLocation();
+        $structuredAddress = $this->extractStructuredAddress($eventLocation);
+
         return [
             'event' => [
-                'title' => $event->getTitle() . ($occurrence?->getLabel() ? ' - ' . $occurrence->getLabel() : ''),
+                'title' => $event->getTitle().($occurrence?->getLabel() ? ' - '.$occurrence->getLabel() : ''),
                 'date' => $eventStartDate?->format('F j, Y') ?? '',
                 'time' => $eventStartDate?->format('g:i A') ?? '',
                 'end_date' => $eventEndDate?->format('F j, Y') ?? '',
                 'end_time' => $eventEndDate?->format('g:i A') ?? '',
-                'full_address' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
-                'location_details' => $eventSettings->getLocationDetails(),
+                'full_address' => $structuredAddress ? AddressHelper::formatAddress($structuredAddress) : '',
+                'location_details' => $structuredAddress,
                 'description' => $event->getDescription() ?? '',
                 'timezone' => $event->getTimezone(),
             ],
+
+            'event_location' => $this->buildLocationContext($eventLocation, $structuredAddress),
 
             'order' => [
                 'url' => sprintf(
@@ -87,25 +99,23 @@ class EmailTokenContextBuilder
     }
 
     public function buildAttendeeTicketContext(
-        AttendeeDomainObject     $attendee,
-        OrderDomainObject        $order,
-        EventDomainObject        $event,
-        OrganizerDomainObject    $organizer,
+        AttendeeDomainObject $attendee,
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
         EventSettingDomainObject $eventSettings,
         ?EventOccurrenceDomainObject $occurrence = null,
-    ): array
-    {
+    ): array {
         $baseContext = $this->buildOrderConfirmationContext($order, $event, $organizer, $eventSettings, $occurrence);
 
         /** @var OrderItemDomainObject $orderItem */
-        $orderItem = $order->getOrderItems()->first(fn(OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->getProductPriceId());
+        $orderItem = $order->getOrderItems()->first(fn (OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->getProductPriceId());
 
         $ticketPrice = Currency::format($orderItem?->getPrice() ?? 0, $event->getCurrency());
         $ticketName = $orderItem?->getItemName();
 
-        // Add attendee and ticket objects
         $baseContext['attendee'] = [
-            'name' => $attendee->getFirstName() . ' ' . $attendee->getLastName(),
+            'name' => $attendee->getFirstName().' '.$attendee->getLastName(),
             'email' => $attendee->getEmail() ?? '',
         ];
 
@@ -128,23 +138,25 @@ class EmailTokenContextBuilder
         OrganizerDomainObject $organizer,
         EventSettingDomainObject $eventSettings,
         bool $refundOrders = false,
-    ): array
-    {
+    ): array {
         $startDateRaw = $occurrence->getStartDate();
         $endDateRaw = $occurrence->getEndDate();
 
         $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
         $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;
 
+        $eventLocation = $occurrence->getEventLocation() ?? $event->getEventLocation();
+        $structuredAddress = $this->extractStructuredAddress($eventLocation);
+
         return [
             'event' => [
-                'title' => $event->getTitle() . ($occurrence->getLabel() ? ' - ' . $occurrence->getLabel() : ''),
+                'title' => $event->getTitle().($occurrence->getLabel() ? ' - '.$occurrence->getLabel() : ''),
                 'date' => $eventStartDate?->format('F j, Y') ?? '',
                 'time' => $eventStartDate?->format('g:i A') ?? '',
                 'end_date' => $eventEndDate?->format('F j, Y') ?? '',
                 'end_time' => $eventEndDate?->format('g:i A') ?? '',
-                'full_address' => $eventSettings->getLocationDetails() ? AddressHelper::formatAddress($eventSettings->getLocationDetails()) : '',
-                'location_details' => $eventSettings->getLocationDetails(),
+                'full_address' => $structuredAddress ? AddressHelper::formatAddress($structuredAddress) : '',
+                'location_details' => $structuredAddress,
                 'description' => $event->getDescription() ?? '',
                 'timezone' => $event->getTimezone(),
                 'url' => sprintf(
@@ -153,6 +165,8 @@ class EmailTokenContextBuilder
                     $event->getSlug(),
                 ),
             ],
+
+            'event_location' => $this->buildLocationContext($eventLocation, $structuredAddress),
 
             'occurrence' => [
                 'start_date' => $eventStartDate?->format('F j, Y') ?? '',
@@ -197,7 +211,7 @@ class EmailTokenContextBuilder
                     'state_or_region' => 'Dublin 1',
                     'zip_or_postal_code' => 'D01 T0X4',
                     'country' => 'IE',
-                ]
+                ],
             ],
             'order' => [
                 'url' => 'https://example.com/order/ABC123',
@@ -210,7 +224,7 @@ class EmailTokenContextBuilder
                 'is_awaiting_offline_payment' => false,
                 'is_offline_payment' => false,
                 'locale' => Locale::EN->value,
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             'organizer' => [
                 'name' => 'ACME Events Inc.',
@@ -229,6 +243,18 @@ class EmailTokenContextBuilder
             'end_date' => 'April 26, 2029',
             'end_time' => '11:00 PM',
             'label' => 'Session A',
+        ];
+
+        $baseContext['event_location'] = [
+            'type' => LocationType::IN_PERSON->name,
+            'is_online' => false,
+            'online_connection_details' => null,
+            'name' => '3 Arena',
+            'label' => null,
+            'formatted_address' => __('3 Arena, North Wall Quay, Dublin 1, Ireland'),
+            'latitude' => 53.3478,
+            'longitude' => -6.2289,
+            'structured_address' => $baseContext['event']['location_details'],
         ];
 
         if ($templateType === 'attendee_ticket') {
@@ -251,5 +277,42 @@ class EmailTokenContextBuilder
         }
 
         return $baseContext;
+    }
+
+    private function extractStructuredAddress(?EventLocationDomainObject $eventLocation): ?array
+    {
+        if ($eventLocation === null) {
+            return null;
+        }
+
+        if ($eventLocation->getType() !== LocationType::IN_PERSON->name) {
+            return null;
+        }
+
+        $location = $eventLocation->getLocation();
+        if ($location === null) {
+            return null;
+        }
+
+        $address = $location->getStructuredAddress();
+
+        return is_array($address) ? $address : null;
+    }
+
+    private function buildLocationContext(?EventLocationDomainObject $eventLocation, ?array $structuredAddress): array
+    {
+        $type = $eventLocation?->getType();
+        $location = $eventLocation?->getLocation();
+
+        return [
+            'type' => $type,
+            'is_online' => $type === LocationType::ONLINE->name,
+            'online_connection_details' => $eventLocation?->getOnlineEventConnectionDetails(),
+            'name' => $location?->getName(),
+            'formatted_address' => $structuredAddress ? AddressHelper::formatAddress($structuredAddress) : '',
+            'latitude' => $location?->getLatitude(),
+            'longitude' => $location?->getLongitude(),
+            'structured_address' => $structuredAddress,
+        ];
     }
 }

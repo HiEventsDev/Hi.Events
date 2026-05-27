@@ -22,10 +22,15 @@ use Tests\TestCase;
 class UpsertPriceOverrideHandlerTest extends TestCase
 {
     private ProductPriceOccurrenceOverrideRepositoryInterface|MockInterface $overrideRepository;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
+
     private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
+
     private ProductRepositoryInterface|MockInterface $productRepository;
+
     private DatabaseManager|MockInterface $databaseManager;
+
     private UpsertPriceOverrideHandler $handler;
 
     protected function setUp(): void
@@ -39,7 +44,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new UpsertPriceOverrideHandler(
             $this->overrideRepository,
@@ -67,7 +72,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
             ->andReturn(Mockery::mock(ProductDomainObject::class));
     }
 
-    public function testHandleCreatesNewOverrideWhenNoneExists(): void
+    public function test_handle_creates_new_override_when_none_exists(): void
     {
         $this->mockOwnershipChecks();
 
@@ -104,7 +109,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->assertSame($expectedOverride, $result);
     }
 
-    public function testHandleUpdatesExistingOverride(): void
+    public function test_handle_updates_existing_override(): void
     {
         $this->mockOwnershipChecks();
 
@@ -145,7 +150,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->assertSame($updatedOverride, $result);
     }
 
-    public function testHandlePassesCorrectEventOccurrenceId(): void
+    public function test_handle_passes_correct_event_occurrence_id(): void
     {
         $occurrenceId = 42;
         $this->mockOwnershipChecks();
@@ -180,7 +185,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->assertSame($expectedOverride, $result);
     }
 
-    public function testHandlePassesCorrectProductPriceId(): void
+    public function test_handle_passes_correct_product_price_id(): void
     {
         $priceId = 77;
         $this->mockOwnershipChecks();
@@ -215,7 +220,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->assertSame($expectedOverride, $result);
     }
 
-    public function testHandlePassesCorrectPrice(): void
+    public function test_handle_passes_correct_price(): void
     {
         $price = 199.50;
         $this->mockOwnershipChecks();

@@ -17,9 +17,7 @@ class UpdateEventAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateEventHandler $updateEventHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable|ValidationException

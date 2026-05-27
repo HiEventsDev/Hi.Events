@@ -4,6 +4,7 @@ namespace HiEvents\Resources\EventOccurrence;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Resources\EventLocation\EventLocationResourcePublic;
 use Illuminate\Http\Request;
 
 /**
@@ -26,6 +27,10 @@ class EventOccurrenceResourcePublic extends BaseResource
             'is_past' => $this->isPast(),
             'is_future' => $this->isFuture(),
             'is_active' => $this->isActive(),
+            'event_location' => $this->when(
+                condition: $this->getEventLocation() !== null,
+                value: fn () => new EventLocationResourcePublic($this->getEventLocation(), false),
+            ),
         ];
     }
 }

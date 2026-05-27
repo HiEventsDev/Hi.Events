@@ -3,8 +3,10 @@
 namespace HiEvents\Jobs\Occurrence;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -43,11 +45,18 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
         Mailer $mailer,
         MailBuilderService $mailBuilderService,
     ): void {
-        $occurrence = $occurrenceRepository->findById($this->occurrenceId);
+        $occurrence = $occurrenceRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
+            ->findById($this->occurrenceId);
 
         $event = $eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
             ->findById($this->eventId);
 
         // Intentionally does NOT filter out CANCELLED attendees:

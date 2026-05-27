@@ -4,6 +4,9 @@ namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
+use HiEvents\DomainObjects\Enums\LocationType;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
@@ -13,11 +16,15 @@ use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\BulkUpdateOccurrencesHandler;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\BulkUpdateOccurrencesDTO;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
+use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
@@ -29,6 +36,8 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
+    private EventRepositoryInterface|MockInterface $eventRepository;
+
     private OrderItemRepositoryInterface|MockInterface $orderItemRepository;
 
     private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
@@ -37,20 +46,39 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     private RecurrenceRuleExclusionService|MockInterface $exclusionService;
 
+    private EventLocationUpserter|MockInterface $eventLocationUpserter;
+
+    private EventLocationCleaner|MockInterface $eventLocationCleaner;
+
     private DatabaseManager|MockInterface $databaseManager;
 
     private BulkUpdateOccurrencesHandler $handler;
+
+    private EventDomainObject|MockInterface $event;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->orderItemRepository = Mockery::mock(OrderItemRepositoryInterface::class);
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
         $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
+        $this->eventLocationUpserter = Mockery::mock(EventLocationUpserter::class);
+        $this->eventLocationCleaner = Mockery::mock(EventLocationCleaner::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
+
+        // The handler always fetches the event up front; default-mock it to a
+        // mock with accountId 7 so all tests get a consistent event lookup.
+        $this->event = Mockery::mock(EventDomainObject::class);
+        $this->event->shouldReceive('getAccountId')->andReturn(7)->byDefault();
+
+        $this->eventRepository
+            ->shouldReceive('findById')
+            ->andReturn($this->event)
+            ->byDefault();
 
         // Default: no attendees on any occurrence. Delete-path tests that need
         // to assert the attendee guard override this expectation.
@@ -89,12 +117,21 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
         $this->handler = new BulkUpdateOccurrencesHandler(
             $this->occurrenceRepository,
+            $this->eventRepository,
             $this->orderItemRepository,
             $this->attendeeRepository,
             $this->waitlistEntryRepository,
             $this->exclusionService,
+            $this->eventLocationUpserter,
+            $this->eventLocationCleaner,
             $this->databaseManager,
         );
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     public function test_handle_updates_capacity_for_future_non_overridden_occurrences(): void
@@ -582,10 +619,13 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
         $this->handler = new BulkUpdateOccurrencesHandler(
             $this->occurrenceRepository,
+            $this->eventRepository,
             $this->orderItemRepository,
             $this->attendeeRepository,
             $this->waitlistEntryRepository,
             $this->exclusionService,
+            $this->eventLocationUpserter,
+            $this->eventLocationCleaner,
             $this->databaseManager,
         );
 
@@ -604,6 +644,171 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $this->assertEquals(1, $result->updated_count);
     }
 
+    public function test_per_occurrence_fork_when_event_location_supplied(): void
+    {
+        // Fork-per-override: every targeted occurrence gets its OWN freshly-created
+        // EventLocation row, even if some already had overrides. Three occurrences →
+        // three calls to createForEvent (no shared rows across the batch).
+        $locationData = new EventLocationData(
+            type: LocationType::IN_PERSON,
+            location_id: 42,
+        );
+
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::UPDATE,
+            timezone: 'UTC',
+            future_only: false,
+            skip_overridden: false,
+            apply_to_all: true,
+            event_location: $locationData,
+        );
+
+        $occ1 = $this->createOccurrenceMock(10, false, false);
+        $occ2 = $this->createOccurrenceMock(11, false, false, eventLocationId: 200);
+        $occ3 = $this->createOccurrenceMock(12, false, false);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([$occ1, $occ2, $occ3]));
+
+        // Fork-per-override: createForEvent must be called THREE times.
+        $newLocations = [
+            $this->makeEventLocationMock(501),
+            $this->makeEventLocationMock(502),
+            $this->makeEventLocationMock(503),
+        ];
+
+        $this->eventLocationUpserter
+            ->shouldReceive('createForEvent')
+            ->times(3)
+            ->with(1, 7, $locationData)
+            ->andReturn($newLocations[0], $newLocations[1], $newLocations[2]);
+
+        // updateInPlace must NOT be called even though one occurrence already had
+        // an FK — fork-per-override semantics.
+        $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
+
+        // Each row gets its own per-row update with its new FK.
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->times(3)
+            ->with(
+                Mockery::on(fn (array $attrs) => array_key_exists(EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID, $attrs)
+                    && $attrs[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] === true),
+                Mockery::any(),
+            );
+
+        // Occ 11's previous FK (200) is now orphan-candidate → cleaner runs for it.
+        $this->eventLocationCleaner
+            ->shouldReceive('deleteIfOrphaned')
+            ->once()
+            ->with(200);
+
+        $result = $this->handler->handle($dto);
+
+        $this->assertEquals(3, $result->updated_count);
+    }
+
+    public function test_clears_overrides_and_cleans_up_orphans(): void
+    {
+        // clear_event_location on 3 occurrences, 2 of which had FKs → 2 cleanup
+        // calls.
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::UPDATE,
+            timezone: 'UTC',
+            future_only: false,
+            skip_overridden: false,
+            apply_to_all: true,
+            clear_event_location: true,
+        );
+
+        $occWithFk1 = $this->createOccurrenceMock(10, false, false, eventLocationId: 200);
+        $occWithFk2 = $this->createOccurrenceMock(11, false, false, eventLocationId: 201);
+        $occNoFk = $this->createOccurrenceMock(12, false, false, eventLocationId: null);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([$occWithFk1, $occWithFk2, $occNoFk]));
+
+        $this->eventLocationUpserter->shouldNotReceive('createForEvent');
+        $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
+
+        // Two FK-bearing rows hit the clear branch and get updateWhere(...EVENT_LOCATION_ID=null...).
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->times(2)
+            ->with(
+                Mockery::on(fn (array $attrs) => array_key_exists(EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID, $attrs)
+                    && $attrs[EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID] === null
+                    && $attrs[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] === true),
+                Mockery::any(),
+            );
+
+        $this->eventLocationCleaner
+            ->shouldReceive('deleteIfOrphaned')
+            ->twice()
+            ->with(Mockery::on(fn ($id) => $id === 200 || $id === 201));
+
+        $result = $this->handler->handle($dto);
+
+        // Only the 2 FK-bearing rows produced an update; the no-FK occurrence
+        // contributes no attributes so it's skipped.
+        $this->assertEquals(2, $result->updated_count);
+    }
+
+    public function test_no_op_when_no_location_keys_in_payload(): void
+    {
+        // No event_location and no clear_event_location → no upserter or cleaner
+        // calls. (Capacity update still runs through the uniform path.)
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::UPDATE,
+            timezone: 'UTC',
+            capacity: 50,
+            future_only: false,
+            skip_overridden: false,
+            apply_to_all: true,
+        );
+
+        $occurrence = $this->createOccurrenceMock(10, false, false);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([$occurrence]));
+
+        $this->eventLocationUpserter->shouldNotReceive('createForEvent');
+        $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
+        $this->eventLocationCleaner->shouldNotReceive('deleteIfOrphaned');
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                [
+                    EventOccurrenceDomainObjectAbstract::CAPACITY => 50,
+                    EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true,
+                ],
+                [[EventOccurrenceDomainObjectAbstract::ID, 'in', [10]]],
+            );
+
+        $result = $this->handler->handle($dto);
+
+        $this->assertEquals(1, $result->updated_count);
+    }
+
+    private function makeEventLocationMock(int $id): EventLocationDomainObject|MockInterface
+    {
+        $mock = Mockery::mock(EventLocationDomainObject::class);
+        $mock->shouldReceive('getId')->andReturn($id);
+
+        return $mock;
+    }
+
     private function createOccurrenceMock(
         int $id,
         bool $isPast,
@@ -611,6 +816,7 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         string $startDate = '2026-03-01 09:00:00',
         ?string $endDate = '2026-03-01 11:00:00',
         string $status = 'ACTIVE',
+        ?int $eventLocationId = null,
     ): EventOccurrenceDomainObject|MockInterface {
         $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
         $occurrence->shouldReceive('isPast')->andReturn($isPast);
@@ -619,13 +825,10 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $occurrence->shouldReceive('getStatus')->andReturn($status);
         $occurrence->shouldReceive('getStartDate')->andReturn($startDate);
         $occurrence->shouldReceive('getEndDate')->andReturn($endDate);
+        $occurrence->shouldReceive('getEventLocationId')->andReturn($eventLocationId);
+        $occurrence->shouldReceive('getUsedCapacity')->andReturn(0)->byDefault();
+        $occurrence->shouldReceive('getCapacity')->andReturn(null)->byDefault();
 
         return $occurrence;
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
     }
 }

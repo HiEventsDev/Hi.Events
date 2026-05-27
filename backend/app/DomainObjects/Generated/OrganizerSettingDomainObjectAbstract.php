@@ -24,7 +24,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
-    final public const LOCATION_DETAILS = 'location_details';
     final public const DEFAULT_ATTENDEE_DETAILS_COLLECTION_METHOD = 'default_attendee_details_collection_method';
     final public const DEFAULT_SHOW_MARKETING_OPT_IN = 'default_show_marketing_opt_in';
     final public const DEFAULT_PASS_PLATFORM_FEE_TO_BUYER = 'default_pass_platform_fee_to_buyer';
@@ -46,7 +45,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
-    protected array|string|null $location_details = null;
     protected string $default_attendee_details_collection_method = 'PER_TICKET';
     protected bool $default_show_marketing_opt_in = true;
     protected bool $default_pass_platform_fee_to_buyer = false;
@@ -71,7 +69,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
-                    'location_details' => $this->location_details ?? null,
                     'default_attendee_details_collection_method' => $this->default_attendee_details_collection_method ?? null,
                     'default_show_marketing_opt_in' => $this->default_show_marketing_opt_in ?? null,
                     'default_pass_platform_fee_to_buyer' => $this->default_pass_platform_fee_to_buyer ?? null,
@@ -233,17 +230,6 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
-    }
-
-    public function setLocationDetails(array|string|null $location_details): self
-    {
-        $this->location_details = $location_details;
-        return $this;
-    }
-
-    public function getLocationDetails(): array|string|null
-    {
-        return $this->location_details;
     }
 
     public function setDefaultAttendeeDetailsCollectionMethod(

@@ -124,7 +124,6 @@ class CreateEventService
             'timezone' => $eventData->getTimezone(),
             'currency' => $eventData->getCurrency(),
             'category' => $eventData->getCategory(),
-            'location_details' => $eventData->getLocationDetails(),
             'account_id' => $eventData->getAccountId(),
             'user_id' => $eventData->getUserId(),
             'status' => $eventData->getStatus(),

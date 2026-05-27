@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Request\EventOccurrence;
 
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
+use HiEvents\DomainObjects\Enums\LocationType;
 use HiEvents\Http\Request\BaseRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
@@ -20,16 +21,32 @@ class BulkUpdateOccurrencesRequest extends BaseRequest
             'future_only' => ['nullable', 'boolean'],
             'skip_overridden' => ['nullable', 'boolean'],
             'refund_orders' => ['nullable', 'boolean'],
-            // Caller MUST either name the occurrences explicitly (occurrence_ids
-            // non-empty) or opt in to event-wide application via apply_to_all=true.
-            // Previously an absent/empty occurrence_ids silently meant "every
-            // matching occurrence" — a footgun the bulk-edit modal hit by accident.
+            // Caller must either name occurrence_ids explicitly or set
+            // apply_to_all=true. An absent set is rejected by withValidator().
             'apply_to_all' => ['nullable', 'boolean'],
             'occurrence_ids' => ['array'],
             'occurrence_ids.*' => ['integer'],
             'label' => ['nullable', 'string', 'max:255'],
             'clear_label' => ['nullable', 'boolean'],
             'duration_minutes' => ['nullable', 'integer', 'min:1'],
+            'event_location' => ['nullable', 'array'],
+            'event_location.type' => ['required_with:event_location', Rule::in(LocationType::valuesArray())],
+            'event_location.location_id' => [
+                'nullable', 'integer',
+                'required_if:event_location.type,'.LocationType::IN_PERSON->name,
+            ],
+            'event_location.online_event_connection_details' => [
+                'nullable', 'string', 'max:10000',
+                'required_if:event_location.type,'.LocationType::ONLINE->name,
+            ],
+            'clear_event_location' => ['sometimes', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'event_location.location_id.required_if' => __('A saved location must be selected for in-person occurrences'),
         ];
     }
 
