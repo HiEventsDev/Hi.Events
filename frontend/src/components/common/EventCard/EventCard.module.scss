@@ -439,9 +439,8 @@
   min-height: 76px;
 
   @container (max-width: 460px) {
-    flex-wrap: wrap;
-    padding: 12px;
-    row-gap: 10px;
+    gap: 10px;
+    padding: 10px;
   }
 }
 
@@ -453,6 +452,12 @@
   border-radius: var(--hi-radius-sm);
   overflow: hidden;
   flex-shrink: 0;
+
+  @container (max-width: 460px) {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
 }
 
 .compactImage {
@@ -478,6 +483,10 @@
   font-size: 1rem;
   font-weight: 700;
   line-height: 1;
+
+  @container (max-width: 460px) {
+    font-size: 0.8125rem;
+  }
 }
 
 .compactDateMonth {
@@ -486,6 +495,10 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 2px;
+
+  @container (max-width: 460px) {
+    font-size: 0.5625rem;
+  }
 }
 
 .compactContent {
@@ -494,11 +507,6 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-
-  @container (max-width: 460px) {
-    flex-basis: 100%;
-    order: 3;
-  }
 }
 
 .compactPrimary {
@@ -603,8 +611,7 @@
   flex-shrink: 0;
 
   @container (max-width: 460px) {
-    order: 2;
-    margin-left: auto;
+    gap: 0;
   }
 }
 
@@ -613,6 +620,14 @@
   flex-direction: column;
   align-items: flex-end;
   min-width: 64px;
+
+  @container (max-width: 460px) {
+    min-width: 0;
+
+    &:not(:last-child) {
+      display: none;
+    }
+  }
 }
 
 .compactStatValue {
@@ -631,12 +646,12 @@
   letter-spacing: 0.06em;
   color: var(--hi-color-text-muted);
   margin-top: 2px;
+
+  @container (max-width: 460px) {
+    display: none;
+  }
 }
 
 .compactMenuButton {
   flex-shrink: 0;
-
-  @container (max-width: 460px) {
-    order: 4;
-  }
 }

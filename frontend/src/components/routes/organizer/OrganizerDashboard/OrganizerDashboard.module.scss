@@ -302,8 +302,6 @@
 
 .orderCard {
   display: flex;
-  flex-wrap: wrap;
-  row-gap: 10px;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
@@ -326,6 +324,11 @@
       transform: translateX(2px);
     }
   }
+
+  @container (max-width: 460px) {
+    gap: 10px;
+    padding: 10px;
+  }
 }
 
 .orderAvatar {
@@ -342,6 +345,13 @@
   color: var(--mantine-color-white);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
+
+  @container (max-width: 460px) {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 0.8125rem;
+  }
 }
 
 .orderContent {
@@ -350,11 +360,6 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-
-  @container (max-width: 460px) {
-    flex-basis: 100%;
-    order: 3;
-  }
 }
 
 .orderPrimary {
@@ -409,8 +414,7 @@
   flex-shrink: 0;
 
   @container (max-width: 460px) {
-    order: 2;
-    margin-left: auto;
+    min-width: 0;
   }
 }
 
@@ -430,6 +434,10 @@
   letter-spacing: 0.06em;
   color: var(--hi-color-text-muted);
   margin-top: 2px;
+
+  @container (max-width: 460px) {
+    display: none;
+  }
 }
 
 .orderChevron {
@@ -439,7 +447,7 @@
   flex-shrink: 0;
 
   @container (max-width: 460px) {
-    order: 4;
+    display: none;
   }
 }
 
