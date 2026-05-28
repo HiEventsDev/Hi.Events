@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import {CSSProperties, ReactNode} from "react";
 import {t} from "@lingui/macro";
 import {
     IconAlertTriangle,
@@ -14,10 +14,11 @@ export type CalloutVariant = "info" | "tip" | "warning" | "success";
 interface CalloutProps {
     variant?: CalloutVariant;
     title?: ReactNode;
-    children: ReactNode;
+    children?: ReactNode;
     icon?: ReactNode;
     onDismiss?: () => void;
     className?: string;
+    style?: CSSProperties;
 }
 
 const defaultIcon: Record<CalloutVariant, ReactNode> = {
@@ -39,15 +40,16 @@ export const Callout = ({
                             icon,
                             onDismiss,
                             className,
+                            style,
                         }: CalloutProps) => {
     return (
-        <aside className={`${classes.callout} ${classes[variant]} ${className ?? ""}`}>
+        <aside className={`${classes.callout} ${classes[variant]} ${className ?? ""}`} style={style}>
             <div className={`${classes.iconWrap} ${classes[`iconWrap_${variant}`]}`} aria-hidden="true">
                 {icon ?? defaultIcon[variant]}
             </div>
             <div className={classes.body}>
                 {title && <div className={classes.title}>{title}</div>}
-                <div className={classes.text}>{children}</div>
+                {children && <div className={classes.text}>{children}</div>}
             </div>
             {onDismiss && (
                 <button

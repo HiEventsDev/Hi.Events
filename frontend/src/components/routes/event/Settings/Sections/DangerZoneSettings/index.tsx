@@ -1,5 +1,6 @@
 import {t} from "@lingui/macro";
-import {Button, Alert, TextInput, Stack, Text} from "@mantine/core";
+import {Button, TextInput, Stack, Text} from "@mantine/core";
+import {Callout} from "../../../../../common/Callout";
 import {useNavigate, useParams} from "react-router";
 import {useState} from "react";
 import {DangerZone, DangerZoneSection} from "../../../../../common/DangerZone";
@@ -10,7 +11,7 @@ import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {showSuccess, showError} from "../../../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
 import {EventStatus} from "../../../../../../types.ts";
-import {IconInfoCircle, IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
+import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
 import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
 import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
@@ -88,9 +89,9 @@ export const DangerZoneSettings = () => {
                 action={
                     <>
                         {!isDeletionStatusLoading && !deletionStatus?.can_delete && (
-                            <Alert icon={<IconInfoCircle size={16}/>} variant="light" color="gray" mb="sm">
+                            <Callout variant="info" style={{marginBottom: 8}}>
                                 {deletionStatus?.reason}
-                            </Alert>
+                            </Callout>
                         )}
                         {deletionStatus?.can_delete && (
                             <Stack gap="xs" maw={400}>

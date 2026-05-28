@@ -1,7 +1,6 @@
 import {
     Accordion,
     ActionIcon,
-    Alert,
     Anchor,
     Badge,
     Box,
@@ -28,6 +27,7 @@ import {
     IconShieldCheck,
     IconWorld,
 } from "@tabler/icons-react";
+import {Callout} from "../../../../../common/Callout";
 import {t, Trans} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
@@ -374,17 +374,16 @@ export const PayoutsSettings = () => {
                 </Accordion>
 
                 {account.requirements.eventually_due.length > 0 && (
-                    <Alert
-                        color="yellow"
-                        icon={<IconAlertCircle size={18}/>}
+                    <Callout
+                        variant="tip"
                         title={t`Stripe will need a few more details soon`}
-                        mt="md"
+                        style={{marginTop: 16}}
                     >
                         <Text size="sm" mb="xs">
                             {t`Provide the following before Stripe's next review to keep payouts flowing.`}
                         </Text>
                         <RequirementsList items={account.requirements.eventually_due} severity="eventually"/>
-                    </Alert>
+                    </Callout>
                 )}
 
                 {organizerId && getVatInfo(account.country).isEU && (

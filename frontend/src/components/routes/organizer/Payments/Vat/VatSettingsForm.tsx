@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import {t} from '@lingui/macro';
 import {Alert, Button, Group, Loader, Radio, Stack, Text, TextInput} from '@mantine/core';
-import {IconAlertCircle, IconCheck, IconClock, IconRefresh} from '@tabler/icons-react';
+import {IconAlertCircle, IconClock, IconRefresh} from '@tabler/icons-react';
+import {Callout} from '../../../../common/Callout';
 import {useGetOrganizerVatSetting} from '../../../../../queries/useGetOrganizerVatSetting';
 import {useUpsertOrganizerVatSetting} from '../../../../../mutations/useUpsertOrganizerVatSetting';
 import {showError, showSuccess} from '../../../../../utilites/notifications';
@@ -48,16 +49,13 @@ const ValidationStatusAlert = ({
     switch (status) {
         case 'VALID':
             return (
-                <Alert color="green" icon={<IconCheck />}>
-                    <Text size="sm" fw={500}>
-                        {t`VAT number validated successfully`}
-                    </Text>
+                <Callout variant="success" title={t`VAT number validated successfully`}>
                     {businessName && (
                         <Text size="xs" c="dimmed">
                             {businessName}
                         </Text>
                     )}
-                </Alert>
+                </Callout>
             );
 
         case 'PENDING':
