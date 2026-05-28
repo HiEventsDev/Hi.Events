@@ -5,19 +5,19 @@ namespace Tests\Unit\Services\Infrastructure\Session;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Config\Repository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
+use Mockery;
 use Tests\TestCase;
 
 class CheckoutSessionManagementServiceTest extends TestCase
 {
     public function testGetSessionIdWithExistingCookie(): void
     {
-        $request = $this->createMock(Request::class);
-
-        $request->expects($this->once())
-            ->method('cookie')
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive('query')->with('session_identifier')->andReturnNull();
+        $request->shouldReceive('cookie')
+            ->once()
             ->with('session_identifier')
-            ->willReturn('existingSessionId');
+            ->andReturn('existingSessionId');
 
         $configMock = $this->mock(Repository::class);
 
@@ -28,12 +28,12 @@ class CheckoutSessionManagementServiceTest extends TestCase
 
     public function testVerifySession(): void
     {
-        $request = $this->createMock(Request::class);
-
-        $request->expects($this->once())
-            ->method('cookie')
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive('query')->with('session_identifier')->andReturnNull();
+        $request->shouldReceive('cookie')
+            ->once()
             ->with('session_identifier')
-            ->willReturn('existingSessionId');
+            ->andReturn('existingSessionId');
 
         $configMock = $this->mock(Repository::class);
 
@@ -44,12 +44,13 @@ class CheckoutSessionManagementServiceTest extends TestCase
 
     public function testGetSessionCookie(): void
     {
-        $request = $this->createMock(Request::class);
-
-        $request->expects($this->once())
-            ->method('cookie')
+        $request = Mockery::mock(Request::class);
+        $request->shouldReceive('query')->with('session_identifier')->andReturnNull();
+        $request->shouldReceive('cookie')
+            ->once()
             ->with('session_identifier')
-            ->willReturn('existingSessionId');
+            ->andReturn('existingSessionId');
+        $request->shouldReceive('getHost')->andReturn('example.com');
 
         $configMock = $this->mock(Repository::class)
             ->shouldReceive('get')
