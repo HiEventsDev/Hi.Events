@@ -1,5 +1,7 @@
 <?php
 
+use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\PreventRequestForgery;
 use Laravel\Sanctum\Sanctum;
 
 return [
@@ -60,8 +62,8 @@ return [
     */
 
     'middleware' => [
-        'verify_csrf_token' => \HiEvents\Http\Middleware\VerifyCsrfToken::class,
-        'encrypt_cookies' => \HiEvents\Http\Middleware\EncryptCookies::class,
+        'verify_csrf_token' => PreventRequestForgery::class,
+        'encrypt_cookies' => EncryptCookies::class,
     ],
 
 ];
