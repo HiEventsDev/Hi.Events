@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.3', '8.4']
+        php-versions: ['8.3', '8.4', '8.5']
 
     services:
       # Postgres is started for the Feature suite. The Unit suite does not need
@@ -55,7 +55,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, pdo_pgsql, pgsql, tokenizer
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, pdo_pgsql, pgsql, tokenizer, gd
           ini-values: post_max_size=256M, upload_max_filesize=256M
           coverage: none
 

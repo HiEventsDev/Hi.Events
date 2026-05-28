@@ -2,7 +2,7 @@
 
 namespace HiEvents\Exports;
 
-use HiEvents\Resources\PromoCode\PromoCodeResource;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -19,9 +19,11 @@ class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, Wit
         return $this;
     }
 
-    public function collection()
+    public function collection(): Collection
     {
-        return PromoCodeResource::collection($this->data);
+        return $this->data instanceof Collection
+            ? $this->data
+            : collect(is_array($this->data) ? $this->data : $this->data->items());
     }
 
     public function headings(): array

@@ -10,10 +10,8 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -39,9 +37,11 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         return $this;
     }
 
-    public function collection(): AnonymousResourceCollection
+    public function collection(): Collection
     {
-        return AttendeeResource::collection($this->data);
+        return $this->data instanceof Collection
+            ? $this->data
+            : collect($this->data->items());
     }
 
     public function headings(): array
