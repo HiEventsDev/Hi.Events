@@ -4,9 +4,8 @@ namespace HiEvents\Exports;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AffiliateDomainObject;
-use HiEvents\Resources\Affiliate\AffiliateResource;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -23,9 +22,9 @@ class AffiliatesExport implements FromCollection, WithHeadings, WithMapping, Wit
         return $this;
     }
 
-    public function collection(): AnonymousResourceCollection
+    public function collection(): Collection
     {
-        return AffiliateResource::collection($this->affiliates);
+        return collect($this->affiliates->items());
     }
 
     public function headings(): array

@@ -1,4 +1,4 @@
-FROM serversideup/php:8.4-fpm-nginx-alpine
+FROM serversideup/php:8.5-fpm-nginx-alpine
 
 ENV PHP_OPCACHE_ENABLE=1
 ENV NGINX_WEBROOT=/var/www/html/public
@@ -12,7 +12,7 @@ COPY --chown=www-data:www-data . /var/www/html
 
 # Switch to root user to install PHP extensions
 USER root
-RUN install-php-extensions intl imagick
+RUN install-php-extensions intl imagick gd
 USER www-data
 
 RUN chmod -R 755 /var/www/html/storage \

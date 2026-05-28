@@ -8,9 +8,7 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
-use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Services\Domain\Question\QuestionAnswerFormatter;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -35,9 +33,9 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
         return $this;
     }
 
-    public function collection(): AnonymousResourceCollection
+    public function collection(): Collection
     {
-        return OrderResource::collection($this->orders);
+        return collect($this->orders->items());
     }
 
     public function headings(): array

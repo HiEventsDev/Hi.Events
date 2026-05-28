@@ -77,7 +77,6 @@ class ResetPasswordTest extends TestCase
         // extract the token from the email
         $reflection = new ReflectionClass($email);
         $tokenProperty = $reflection->getProperty('token');
-        $tokenProperty->setAccessible(true);
         $token = $tokenProperty->getValue($email);
 
         $response2 = $this->getJson(self::RESET_PASSWORD_ROUTE . '/' . urlencode($token));
@@ -138,7 +137,6 @@ class ResetPasswordTest extends TestCase
         // extract the token from the email
         $reflection = new ReflectionClass($email);
         $tokenProperty = $reflection->getProperty('token');
-        $tokenProperty->setAccessible(true);
         $token = $tokenProperty->getValue($email);
 
         $response2 = $this->postJson(self::RESET_PASSWORD_ROUTE . '/' . urlencode($token), [
