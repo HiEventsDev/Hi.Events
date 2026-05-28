@@ -1,6 +1,7 @@
 import {useState} from 'react';
-import {ActionIcon, Alert, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
-import {IconAlertCircle, IconBrandStripe, IconEdit, IconInfoCircle, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
+import {ActionIcon, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
+import {IconBrandStripe, IconEdit, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
+import {Callout} from '../Callout';
 import {t, Trans} from '@lingui/macro';
 import {useDisclosure} from '@mantine/hooks';
 import {EmailTemplateEditor} from '../EmailTemplateEditor';
@@ -349,18 +350,14 @@ export const EmailTemplateSettingsBase = ({
             />
 
             {(!isAccountVerified && isAccountFetched) && (
-                <Alert icon={<IconAlertCircle size={16}/>} variant="light" mb="lg" color="orange">
-                    <Text size="sm">
-                        {t`You need to verify your account email before you can modify email templates.`}
-                    </Text>
-                </Alert>
+                <Callout variant="tip">
+                    {t`You need to verify your account email before you can modify email templates.`}
+                </Callout>
             )}
 
             {accountRequiresManualVerification && (
-                <Alert icon={<IconAlertCircle size={16}/>} variant="light" mb="lg" color="orange" title={t`Connect Stripe to enable email template editing`}>
-                    <Text size="sm">
-                        {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
-                    </Text>
+                <Callout variant="tip" title={t`Connect Stripe to enable email template editing`}>
+                    {t`Due to the high risk of spam, you must connect a Stripe account before you can modify email templates. This is to ensure that all event organizers are verified and accountable.`}
                     {stripeOrganizerId && (
                         <div style={{marginTop: '0.75rem'}}>
                             <Button
@@ -373,14 +370,12 @@ export const EmailTemplateSettingsBase = ({
                             </Button>
                         </div>
                     )}
-                </Alert>
+                </Callout>
             )}
 
-            <Alert icon={<IconInfoCircle size={16}/>} variant="light" mb="lg">
-                <Text size="sm">
-                    {getAlertMessage()}
-                </Text>
-            </Alert>
+            <Callout variant="info">
+                {getAlertMessage()}
+            </Callout>
 
             <div style={{position: 'relative'}}>
                 <LoadingOverlay visible={isLoading}/>

@@ -4,8 +4,8 @@ import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useForm} from "@mantine/form";
-import {Alert, LoadingOverlay, NumberInput, Select, Switch, TextInput} from "@mantine/core";
-import {IconAlertTriangle} from "@tabler/icons-react";
+import {LoadingOverlay, NumberInput, Select, Switch, TextInput} from "@mantine/core";
+import {Callout} from "../../common/Callout";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {CreateAttendeeRequest} from "../../../api/attendee.client.ts";
 import {useCreateAttendee} from "../../../mutations/useCreateAttendee.ts";
@@ -267,10 +267,9 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                 )}
 
                 {occurrenceIsFull && (
-                    <Alert
-                        mt="md"
-                        color="orange"
-                        icon={<IconAlertTriangle size={16}/>}
+                    <Callout
+                        variant="tip"
+                        style={{marginTop: 16}}
                         title={t`This occurrence is at capacity`}
                     >
                         <Stack gap="xs">
@@ -285,7 +284,7 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                                 {...form.getInputProps('override_capacity', {type: 'checkbox'})}
                             />
                         </Stack>
-                    </Alert>
+                    </Callout>
                 )}
 
                 <NumberInput

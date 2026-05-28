@@ -31,7 +31,6 @@ import {
     IconEye,
     IconFlame,
     IconHeartDollar,
-    IconInfoCircle,
     IconPlus,
     IconReceipt,
     IconShirt,
@@ -40,6 +39,7 @@ import {
     IconTrash,
     IconTrashOff,
 } from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
 import {useDisclosure} from "@mantine/hooks";
 import {NavLink, useParams} from "react-router";
 import {useEffect} from "react";
@@ -233,9 +233,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     return (
         <>
             {Number(product?.quantity_sold) > 0 && (
-                <Alert icon={<IconInfoCircle/>} mb={20} color={'blue'}>
+                <Callout variant="info">
                     {t`You cannot change the product type as there are attendees associated with this product.`}
-                </Alert>
+                </Callout>
             )}
 
             <CustomSelect
@@ -269,13 +269,13 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             )}
 
             {form.values.type === ProductPriceType.Tiered && (
-                <Alert variant="light" title={t`What are Tiered Products?`} mb={20} icon={<IconInfoCircle size={18}/>}>
+                <Callout variant="info" title={t`What are Tiered Products?`}>
                     <Trans>
                         Tiered products allow you to offer multiple price options for the same product.
                         This is perfect for early bird products, or offering different price
                         options for different groups of people.
                     </Trans>
-                </Alert>
+                </Callout>
             )}
 
             <TextInput
@@ -362,12 +362,12 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             {form.values.type === ProductPriceType.Tiered && (
                 <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
                     {isRecurring && (
-                        <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
+                        <Callout variant="info" style={{marginBottom: 10}}>
                             <Trans>These are the default prices and quantities across all dates. Sale dates on tiers
                                 apply globally. You can override prices and quantities for individual dates on
                                 the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
                                     page</NavLink>.</Trans>
-                        </Alert>
+                        </Callout>
                     )}
                     <div className={classes.priceTiers}>
                         <ProductPriceTierForm product={product} form={form} event={event}/>
@@ -449,12 +449,12 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         </Button>
 
                         {(form.values.type === ProductPriceType.Free && !!form.values.tax_and_fee_ids?.length) && (
-                            <Alert mt={15}>
+                            <Callout variant="info" style={{marginTop: 15}}>
                                 <p>
                                     {t`You have taxes and fees added to a Free Product. Would you like to remove them?`}
                                 </p>
                                 <Button onClick={removeTaxesAndFees} size={'xs'}>{t`Yes, remove them`}</Button>
-                            </Alert>
+                            </Callout>
                         )}
                     </Fieldset>
 
@@ -479,11 +479,11 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         </span>
                     }>
                         {isRecurring && (
-                            <Alert variant="light" icon={<IconInfoCircle size={16}/>} mb={10}>
+                            <Callout variant="info" style={{marginBottom: 10}}>
                                 <Trans>Sale period dates apply across all dates in your schedule. To control pricing and
                                     availability for individual dates, use the overrides on the <NavLink
                                         to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
-                            </Alert>
+                            </Callout>
                         )}
                         <InputGroup>
                             <TextInput type={'datetime-local'} {...form.getInputProps('sale_start_date')}

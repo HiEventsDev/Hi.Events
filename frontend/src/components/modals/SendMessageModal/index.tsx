@@ -23,10 +23,10 @@ import {
     IconChevronDown,
     IconClock,
     IconCopy,
-    IconInfoCircle,
     IconSend,
     IconTestPipe
 } from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -290,15 +290,14 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
 
             <form onSubmit={form.onSubmit(handleSend)}>
                 {(!isAccountVerified && isAccountFetched) && (
-                    <Alert className={classes.verificationAlert} variant={'light'}
-                           icon={<IconAlertCircle size="1rem"/>}>
+                    <Callout variant="info" className={classes.verificationAlert}>
                         {t`You need to verify your account email before you can send messages.`}
-                    </Alert>
+                    </Callout>
                 )}
 
                 {accountRequiresManualVerification && (
-                    <Alert className={classes.verificationAlert} variant={'light'} icon={<IconAlertCircle size="1rem"/>}
-                           title={t`Connect Stripe to enable messaging`}>
+                    <Callout variant="info" className={classes.verificationAlert}
+                             title={t`Connect Stripe to enable messaging`}>
                         {t`Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.
                          This is to ensure that all event organizers are verified and accountable.`}
                         {event?.organizer_id && (
@@ -313,7 +312,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                 </Button>
                             </div>
                         )}
-                    </Alert>
+                    </Callout>
                 )}
 
                 {tierLimitError && (
@@ -334,22 +333,17 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                 )}
 
                 {!formIsDisabled && !tierLimitError && supportEmail && (
-                    <Alert
-                        variant="light"
-                        color="blue"
-                        icon={<IconInfoCircle size="1rem"/>}
-                        mb="md"
-                    >
+                    <Callout variant="info">
                         {t`Your account has messaging limits. To increase your limits, contact us at`}{' '}
                         <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
-                    </Alert>
+                    </Callout>
                 )}
 
                 {!formIsDisabled && (
                     <fieldset disabled={formIsDisabled} style={{border: 'none', padding: 0, margin: 0}}>
                         <div className={classes.formSection}>
                             {isMultiOccurrence && (
-                                <Alert color="blue" icon={<IconInfoCircle size={16}/>}>
+                                <Callout variant="info">
                                     <Text size="sm" fw={500} mb={targetedOccurrences.length ? 'xs' : 0}>
                                         {t`Targeting attendees across ${eventOccurrenceIds!.length} selected sessions.`}
                                     </Text>
@@ -368,7 +362,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                             {t`Showing the first ${targetedOccurrences.length} — the remaining ${eventOccurrenceIds!.length - targetedOccurrences.length} session(s) will still be targeted when the message is sent.`}
                                         </Text>
                                     )}
-                                </Alert>
+                                </Callout>
                             )}
 
                             {isRecurring && !isPreselectedRecipient && !isMultiOccurrence && occurrenceOptions.length > 0 && (

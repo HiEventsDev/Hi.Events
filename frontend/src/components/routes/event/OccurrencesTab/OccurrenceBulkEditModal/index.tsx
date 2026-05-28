@@ -1,11 +1,12 @@
 import {t} from "@lingui/macro";
-import {Alert, Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Stack, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
 import {useMemo, useState} from "react";
-import {IconClock, IconInfoCircle, IconMapPin, IconRuler, IconTag, IconUsers} from "@tabler/icons-react";
+import {IconClock, IconMapPin, IconRuler, IconTag, IconUsers} from "@tabler/icons-react";
 import {Modal} from "../../../../common/Modal";
+import {Callout} from "../../../../common/Callout";
 import {InputGroup} from "../../../../common/InputGroup";
 import {AddressAutocomplete} from "../../../../common/AddressAutocomplete";
 import {Editor} from "../../../../common/Editor";
@@ -382,7 +383,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                         />
                     </Stack>
 
-                    <Alert icon={<IconInfoCircle size={16}/>} color="blue" variant="light" mb="md">
+                    <Callout variant="info">
                         {isAllMatching
                             ? t`Applies to every ${scopeParts.join(', ')}, non-cancelled date in this event — including dates not currently loaded.`
                             : t`Applies to ${scopeParts.join(', ')}, non-cancelled dates currently loaded on this page.`}
@@ -391,7 +392,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                                 {t`This will affect ${loadedAffectedCount} date(s).`}
                             </Text>
                         )}
-                    </Alert>
+                    </Callout>
 
                     {selectedAction === 'shift_times' && (
                         <>
@@ -581,9 +582,9 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                             )}
 
                             {form.values.location_mode === 'clear' && (
-                                <Alert color="yellow" variant="light" icon={<IconInfoCircle size={16}/>}>
+                                <Callout variant="tip">
                                     {t`Clearing removes any per-date override. Affected dates will fall back to the event's default location.`}
-                                </Alert>
+                                </Callout>
                             )}
                         </Stack>
                     )}

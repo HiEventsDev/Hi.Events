@@ -1,10 +1,10 @@
 import {t} from '@lingui/macro';
-import {Alert, Text} from '@mantine/core';
-import {IconAlertCircle, IconInfoCircle} from '@tabler/icons-react';
+import {Text} from '@mantine/core';
 import {IdParam} from '../../../../../types';
 import {getVatInfo} from './VatNotice';
 import {VatSettingsForm} from './VatSettingsForm';
 import {useGetOrganizerVatSetting} from '../../../../../queries/useGetOrganizerVatSetting';
+import {Callout} from '../../../../common/Callout';
 
 interface VatSettingsProps {
     organizerId: IdParam;
@@ -24,28 +24,18 @@ export const VatSettings = ({organizerId, stripeCountry}: VatSettingsProps) => {
 
     if (vatInfo.isIreland) {
         return (
-            <Alert color="blue" icon={<IconInfoCircle/>}>
-                <Text size="sm" fw={500} mb="xs">{t`VAT Treatment for Platform Fees`}</Text>
-                <Text size="sm" lh={1.6}>
-                    {t`As your business is based in Ireland, Irish VAT at 23% applies automatically to all platform fees.`}
-                </Text>
-            </Alert>
+            <Callout variant="info" title={t`VAT Treatment for Platform Fees`}>
+                {t`As your business is based in Ireland, Irish VAT at 23% applies automatically to all platform fees.`}
+            </Callout>
         );
     }
 
     return (
         <>
             {needsVatInfo && (
-                <Alert
-                    color="orange"
-                    icon={<IconAlertCircle/>}
-                    mb="lg"
-                >
-                    <Text size="sm" fw={500} mb="sm">{t`Action Required: VAT Information Needed`}</Text>
-                    <Text size="sm" lh={1.6}>
-                        {t`Tell us your VAT registration status so we apply the correct VAT treatment to platform fees.`}
-                    </Text>
-                </Alert>
+                <Callout variant="tip" title={t`Action Required: VAT Information Needed`} style={{marginBottom: 24}}>
+                    {t`Tell us your VAT registration status so we apply the correct VAT treatment to platform fees.`}
+                </Callout>
             )}
 
             {!needsVatInfo && (
