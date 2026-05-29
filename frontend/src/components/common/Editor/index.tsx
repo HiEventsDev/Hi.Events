@@ -1,11 +1,9 @@
 import {Link, RichTextEditor} from "@mantine/tiptap";
 import {useEditor} from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Image from '@tiptap/extension-image';
-import TextStyle from '@tiptap/extension-text-style';
-import Color from '@tiptap/extension-color';
+import {TextAlign} from '@tiptap/extension-text-align';
+import {Image} from '@tiptap/extension-image';
+import {Color, TextStyle} from '@tiptap/extension-text-style';
 import React, {useEffect, useState} from "react";
 import {InputDescription, InputError, InputLabel, MantineFontSize} from "@mantine/core";
 import classes from "./Editor.module.scss";
@@ -49,6 +47,7 @@ export const Editor = ({
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
+                link: false,
                 paragraph: {
                     HTMLAttributes: {
                         style: 'margin: 0.5em 0;'
@@ -60,7 +59,6 @@ export const Editor = ({
                     }
                 }
             }),
-            Underline,
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
             Image,
@@ -86,7 +84,7 @@ export const Editor = ({
     useEffect(() => {
         if (value && editor) {
             if (value !== editor.getHTML()) {
-                editor.commands.setContent(value, false, {preserveWhitespace: "full"});
+                editor.commands.setContent(value, {emitUpdate: false, parseOptions: {preserveWhitespace: "full"}});
             }
             const htmlLength = value.length;
 

@@ -126,7 +126,7 @@ const Login = () => {
                     />
                 </UnstyledButton>
 
-                <Collapse in={ticketLookupOpen}>
+                <Collapse expanded={ticketLookupOpen}>
                     <div className={classes.ticketLookupContent}>
                         {ticketLookupSuccess ? (
                             <div className={classes.successMessage}>

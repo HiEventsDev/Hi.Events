@@ -98,7 +98,7 @@ export const InsertImageControl = () => {
                     }}
                     title={t`Insert Image`}
                 >
-                    <Tabs value={tab} onChange={setTab} variant="outline">
+                    <Tabs value={tab} onChange={(value) => setTab(value ?? 'url')} variant="outline">
                         <Tabs.List grow>
                             <Tabs.Tab value="url">{t`Paste URL`}</Tabs.Tab>
                             <Tabs.Tab value="upload">{t`Upload Image`}</Tabs.Tab>

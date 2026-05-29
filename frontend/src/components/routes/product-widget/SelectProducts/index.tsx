@@ -643,7 +643,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </div>
                                                         </UnstyledButton>
                                                     </div>
-                                                    <Collapse transitionDuration={100} in={!isProductCollapsed}
+                                                    <Collapse transitionDuration={100} expanded={!isProductCollapsed}
                                                               className={'hi-product-content'} hidden={isProductCollapsed}>
                                                         <div className={'hi-price-tiers-rows'}>
                                                             <TieredPricing
