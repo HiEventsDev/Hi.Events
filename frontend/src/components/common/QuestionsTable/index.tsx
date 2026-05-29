@@ -287,7 +287,7 @@ const LivePreview = ({
                 {isOpen ? <IconChevronUp size={16}/> : <IconChevronDown size={16}/>}
             </UnstyledButton>
 
-            <Collapse in={isOpen}>
+            <Collapse expanded={isOpen}>
                 <div className={classes.previewContent}>
                     <div className={classes.previewPane}>
                         <Text size="xs" fw={600} c="dimmed" tt="uppercase" mb={6}>

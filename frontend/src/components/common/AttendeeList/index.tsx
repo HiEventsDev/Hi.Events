@@ -119,7 +119,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                             </div>
 
                             {/* Collapsible answers section */}
-                            <Collapse in={isExpanded(attendee.id)}>
+                            <Collapse expanded={isExpanded(attendee.id)}>
                                 <div className={classes.answersContainer}>
                                     <QuestionList
                                         compact

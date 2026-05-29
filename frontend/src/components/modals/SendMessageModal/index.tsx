@@ -7,6 +7,7 @@ import {
     Alert,
     Button,
     Checkbox,
+    ComboboxItem,
     ComboboxItemGroup,
     Group,
     LoadingOverlay,
@@ -91,7 +92,7 @@ const AttendeeField = ({orderId, eventId, attendeeId, form}: {
         return null;
     }
 
-    const groups: ComboboxItemGroup[] = products.map(product => {
+    const groups: ComboboxItemGroup<ComboboxItem>[] = products.map(product => {
         return {
             group: product.title,
             items: order.attendees?.filter(a => a.product_id === product.id).map(attendee => {

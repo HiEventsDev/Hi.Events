@@ -418,7 +418,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 )}
             </div>
 
-            <Collapse in={opened}>
+            <Collapse expanded={opened}>
                 <div className={classes.additionalOptionsContent}>
                     <Fieldset legend={
                         <span className={classes.fieldsetLegend}>

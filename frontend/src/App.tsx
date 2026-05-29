@@ -1,5 +1,5 @@
 import React, {FC, PropsWithChildren, useCallback, useEffect} from "react";
-import {MantineProvider} from "@mantine/core";
+import {MantineProvider, v8CssVariablesResolver} from "@mantine/core";
 import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
@@ -71,6 +71,7 @@ export const App: FC<
                 }}
             />
             <MantineProvider
+                cssVariablesResolver={v8CssVariablesResolver}
                 theme={{
                     colors: {
                         primary: generateColors(getConfig("VITE_APP_PRIMARY_COLOR", "#40296C") as string),
@@ -79,6 +80,7 @@ export const App: FC<
                     primaryColor: "primary",
                     fontFamily: "Outfit, sans-serif",
                     primaryShade: 8,
+                    defaultRadius: "sm",
                 }}
             >
                 <HelmetProvider context={props.helmetContext}>
@@ -97,7 +99,7 @@ export const App: FC<
                                     </Helmet>
                                     {props.children}
                                 </ModalsProvider>
-                                <Notifications/>
+                                <Notifications pauseResetOnHover="notification"/>
                                 {showGlobalConsentBanner && (
                                     <CookieConsentBanner onConsent={handleGlobalConsent}/>
                                 )}

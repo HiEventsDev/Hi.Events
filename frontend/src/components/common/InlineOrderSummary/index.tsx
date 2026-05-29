@@ -72,7 +72,7 @@ export const InlineOrderSummary = ({
                 </div>
             </div>
 
-            <Collapse in={expanded}>
+            <Collapse expanded={expanded}>
                 <div className={classes.content}>
                     <div className={classes.eventInfo}>
                         <div className={classes.eventImage}>

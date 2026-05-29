@@ -159,7 +159,7 @@ const FeaturePanel = () => {
 const AuthLayout = () => {
     const me = useGetMe();
     const clickCountRef = useRef(0);
-    const clickTimerRef = useRef<ReturnType<typeof setTimeout>>();
+    const clickTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const handleLogoClick = useCallback(() => {
         clickCountRef.current += 1;

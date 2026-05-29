@@ -154,7 +154,7 @@ export const CheckInListForm = ({
                 {showAdvanced ? t`Hide advanced options` : t`Show advanced options`}
             </button>
 
-            <Collapse in={showAdvanced}>
+            <Collapse expanded={showAdvanced}>
                 <Textarea
                     {...form.getInputProps('description')}
                     label={t`Description for check-in staff`}
