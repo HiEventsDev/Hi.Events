@@ -1,4 +1,4 @@
-import {Outlet, useBlocker, useLocation, useNavigate, useParams} from "react-router";
+import {Outlet, useBlocker, useLocation, useNavigate, useParams, useSearchParams} from "react-router";
 import classes from './Checkout.module.scss';
 import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
@@ -10,14 +10,17 @@ import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
 import {ProgressStepper} from "../../common/ProgressStepper";
 import {useMediaQuery} from "@mantine/hooks";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {getEmbedMode, getParentOrigin} from "../../../utilites/iframeResize.ts";
 import {Invoice} from "../../../types.ts";
 import {orderClientPublic} from "../../../api/order.client.ts";
 import {downloadBinary} from "../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
 import {useAbandonOrderPublic} from "../../../mutations/useAbandonOrderPublic.ts";
 import {showError, showInfo} from "../../../utilites/notifications.tsx";
-import {isDateInFuture} from "../../../utilites/dates.ts";
+import {isDateInFuture, utcDateToEpochMs} from "../../../utilites/dates.ts";
+import {getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
+import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
@@ -29,7 +32,7 @@ const DEFAULT_ACCENT = '#8b5cf6';
 
 const Checkout = () => {
     const {eventId, orderShortId} = useParams();
-    const {data: order} = useGetOrderPublic(eventId, orderShortId, ['event']);
+    const {data: order, isError: isOrderError} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
     // Derive a single occurrence id from order items only when they all agree —
     // a multi-occurrence order falls back to the event-wide view so the cache
@@ -41,6 +44,12 @@ const Checkout = () => {
     const {data: publicEvent} = useGetEventPublic(eventId, !!eventId, false, null, orderOccurrenceId);
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const isModal = useMemo(() => {
+        const fromUrl = searchParams.get('embed') === 'modal';
+        const cached = getEmbedMode() === 'modal';
+        return fromUrl || cached;
+    }, [searchParams]);
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
@@ -50,7 +59,19 @@ const Checkout = () => {
     const [showAbandonDialog, setShowAbandonDialog] = useState(false);
     const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
     const [isAbandoning, setIsAbandoning] = useState(false);
+    const [pendingClose, setPendingClose] = useState(false);
     const abandonOrderMutation = useAbandonOrderPublic();
+
+    const postToParent = useCallback((type: string, data?: Record<string, unknown>) => {
+        if (typeof window === 'undefined') return;
+        try {
+            window.parent.postMessage({type, ...(data ?? {})}, getParentOrigin() || '*');
+        } catch (e) {
+            /* noop */
+        }
+    }, []);
+
+    const closeModal = useCallback(() => postToParent('hievents:close-checkout'), [postToParent]);
 
     const getCurrentStep = (): 'details' | 'payment' | 'summary' => {
         const pathname = location.pathname;
@@ -80,8 +101,74 @@ const Checkout = () => {
     };
 
     const handleReturn = () => {
+        if (isModal) {
+            closeModal();
+            return;
+        }
         navigate(`/event/${event?.id}/${event?.slug}`);
     };
+
+    const handleRequestClose = useCallback(() => {
+        postToParent('hievents:close-pending');
+        if (isOrderReservedAndNotExpired) {
+            setPendingClose(true);
+            setShowAbandonDialog(true);
+        } else {
+            closeModal();
+        }
+    }, [postToParent, closeModal, isOrderReservedAndNotExpired]);
+
+    useEffect(() => {
+        if (!isModal) return;
+        const parentOrigin = getParentOrigin();
+        const onMessage = (event: MessageEvent) => {
+            if (parentOrigin && event.origin !== parentOrigin) return;
+            if (event.data?.type === 'hievents:request-close') {
+                handleRequestClose();
+            }
+        };
+        window.addEventListener('message', onMessage);
+        return () => window.removeEventListener('message', onMessage);
+    }, [isModal, handleRequestClose]);
+
+    useEffect(() => {
+        if (isModal && isOrderError) {
+            postToParent('hievents:checkout-cleared');
+            closeModal();
+        }
+    }, [isModal, isOrderError, postToParent, closeModal]);
+
+    useEffect(() => {
+        if (!isModal) return;
+        if (isOrderReservedAndNotExpired) {
+            postToParent('hievents:checkout-progress', {
+                eventId,
+                orderShortId,
+                sessionId: getCheckoutSessionIdentifier(String(orderShortId)),
+                step: currentStep,
+                reservedUntil: order?.reserved_until ? utcDateToEpochMs(order.reserved_until) : null,
+            });
+        } else if (orderIsCompleted || orderIsAwaitingOfflinePayment) {
+            postToParent('hievents:checkout-cleared');
+        }
+    }, [isModal, isOrderReservedAndNotExpired, orderIsCompleted, orderIsAwaitingOfflinePayment, order?.reserved_until, currentStep, eventId, orderShortId, postToParent]);
+
+    useEffect(() => {
+        if (!isModal) return;
+        const onKeydown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && !showAbandonDialog && !isExpired) {
+                handleRequestClose();
+            }
+        };
+        window.addEventListener('keydown', onKeydown);
+        return () => window.removeEventListener('keydown', onKeydown);
+    }, [isModal, showAbandonDialog, isExpired, handleRequestClose]);
+
+    useEffect(() => {
+        if (isModal && order?.is_expired) {
+            setIsExpired(true);
+        }
+    }, [isModal, order?.is_expired]);
 
     const handleInvoiceDownload = async (invoice: Invoice) => {
         await withLoadingNotification(
@@ -119,7 +206,10 @@ const Checkout = () => {
             setShowAbandonDialog(false);
             showInfo(t`Your order has been cancelled.`);
 
-            if (blocker.state === 'blocked') {
+            if (pendingClose) {
+                setPendingClose(false);
+                closeModal();
+            } else if (blocker.state === 'blocked') {
                 blocker.proceed();
             } else if (pendingNavigation) {
                 navigate(pendingNavigation);
@@ -136,6 +226,7 @@ const Checkout = () => {
         }
         setShowAbandonDialog(false);
         setPendingNavigation(null);
+        setPendingClose(false);
     };
 
     const handleEventHomepageClick = (e: React.MouseEvent) => {
@@ -201,16 +292,20 @@ const Checkout = () => {
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         {(event) && (
-                            <div className={classes.actionBar}>
+                            <div className={classes.actionBar} style={isModal ? {paddingRight: '44px'} : undefined}>
                                 <Group justify="space-between" wrap="nowrap">
-                                    <Button
-                                        title={t`Back to event page`}
-                                        variant="subtle"
-                                        leftSection={<IconArrowLeft size={20}/>}
-                                        onClick={handleEventHomepageClick}
-                                    >
-                                        {!isMobile && t`Event Homepage`}
-                                    </Button>
+                                    {isModal ? (
+                                        <span/>
+                                    ) : (
+                                        <Button
+                                            title={t`Back to event page`}
+                                            variant="subtle"
+                                            leftSection={<IconArrowLeft size={20}/>}
+                                            onClick={handleEventHomepageClick}
+                                        >
+                                            {!isMobile && t`Event Homepage`}
+                                        </Button>
+                                    )}
 
                                     {orderIsReserved && (
                                         <ProgressStepper
@@ -280,6 +375,9 @@ const Checkout = () => {
                         )}
                     </header>
                     <Outlet/>
+                    {isModal && currentStep !== 'summary' && (
+                        <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                    )}
                 </div>
             </div>
 

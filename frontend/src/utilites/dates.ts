@@ -117,6 +117,10 @@ export const isDateInFuture = (date: string): boolean => {
     return dayjs.utc(date).diff(dayjs()) > 0;
 };
 
+export const utcDateToEpochMs = (date: string): number => {
+    return dayjs.utc(date).valueOf();
+};
+
 export const isDateInPast = (date: string): boolean => {
     return dayjs.utc(date).diff(dayjs()) < 0;
 }

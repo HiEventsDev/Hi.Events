@@ -124,15 +124,11 @@ export const orderClientPublic = {
     findByShortId: async (
         eventId: number,
         orderShortId: string,
-        includes: string[] = [],
-        sessionIdentifier?: string
+        includes: string[] = []
     ) => {
         const query = new URLSearchParams();
         if (includes.length > 0) {
             query.append("include", includes.join(","));
-        }
-        if (sessionIdentifier) {
-            query.append("session_identifier", sessionIdentifier);
         }
 
         const response = await publicApi.get<GenericDataResponse<Order>>(

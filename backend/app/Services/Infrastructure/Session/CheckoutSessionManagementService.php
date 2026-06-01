@@ -50,7 +50,7 @@ class CheckoutSessionManagementService
             domain: $this->config->get('session.domain') ?? '.' . $this->request->getHost(),
             secure: true,
             sameSite: 'None',
-        );
+        )->withPartitioned(true);
     }
 
     private function createSessionId(): string

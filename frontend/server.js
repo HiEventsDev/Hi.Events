@@ -37,6 +37,20 @@ async function main() {
 
     app.use('/.well-known', express.static(path.join(__dirname, 'public/.well-known')));
 
+    app.get('/widget.js', async (req, res) => {
+        try {
+            const widgetPath = isProduction
+                ? path.join(__dirname, './dist/client/widget.js')
+                : path.join(__dirname, './public/widget.js');
+            const widgetJs = await fs.readFile(widgetPath, 'utf-8');
+            res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+            res.setHeader('Cache-Control', 'no-cache');
+            return res.status(200).send(widgetJs);
+        } catch (error) {
+            return res.status(404).send('');
+        }
+    });
+
     let vite;
 
     if (!isProduction) {

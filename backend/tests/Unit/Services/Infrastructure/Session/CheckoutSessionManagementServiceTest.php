@@ -66,5 +66,6 @@ class CheckoutSessionManagementServiceTest extends TestCase
         $this->assertEquals('existingSessionId', $cookie->getValue());
         $this->assertTrue($cookie->isSecure());
         $this->assertEquals('none', $cookie->getSameSite());
+        $this->assertTrue($cookie->isPartitioned());
     }
 }
