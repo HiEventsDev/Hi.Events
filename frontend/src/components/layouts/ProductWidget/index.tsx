@@ -20,6 +20,10 @@ const ProductWidget = () => {
         return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
     }, [location.search]);
 
+    const checkoutMode = useMemo(() => {
+        return new URLSearchParams(location.search).get('Checkout') === 'new-tab' ? 'new-tab' : 'modal';
+    }, [location.search]);
+
     const eventQuery = useGetEventPublic(eventId, true, false, null, eventOccurrenceId);
 
     const settings = useMemo(() => {
@@ -57,6 +61,7 @@ const ProductWidget = () => {
         <div className={'full-height'} style={{backgroundColor: settings.colors.bodyBackground}}>
             <SelectProducts
                 widgetMode={'embedded'}
+                checkoutMode={checkoutMode}
                 event={eventQuery.data}
                 colors={settings.colors}
                 continueButtonText={settings.continueButtonText}

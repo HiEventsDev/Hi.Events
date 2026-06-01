@@ -29,6 +29,7 @@ import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {eventCheckoutPath, eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 import {showInfo} from "../../../../utilites/notifications.tsx";
+import {getEmbedMode} from "../../../../utilites/iframeResize.ts";
 import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
@@ -134,7 +135,7 @@ export const CollectInformation = () => {
         const attendeeProductIds = new Set<IdParam>(
             products
                 .filter(product => product && product.product_type === 'TICKET')
-                .map(product => product.id)
+                .map(product => product!.id)
         );
 
         return form.values.products
@@ -233,7 +234,7 @@ export const CollectInformation = () => {
                 });
 
                 // if it's a 409, we need to redirect to the event page as the order is no longer valid
-                if (error.response.status === 409) {
+                if (error.response.status === 409 && getEmbedMode() !== 'modal') {
                     navigate(eventHomepagePath(event as Event));
                 }
             }
@@ -315,7 +316,7 @@ export const CollectInformation = () => {
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
     useEffect(() => {
-        if ((order && event) && order?.is_expired) {
+        if ((order && event) && order?.is_expired && getEmbedMode() !== 'modal') {
             showInfo(t`This order has expired. Please start again.`);
             navigate(`/event/${eventId}/${event.slug}`);
         }

@@ -24,7 +24,14 @@ import {useForm} from "@mantine/form";
 import {range, useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
-import {addQueryStringToUrl, isObjectEmpty, removeQueryStringFromUrl} from "../../../../utilites/helpers.ts";
+import {
+    addQueryStringToUrl,
+    isObjectEmpty,
+    removeQueryStringFromUrl,
+    safeLocalStorageGet,
+    safeLocalStorageRemove,
+    safeLocalStorageSet
+} from "../../../../utilites/helpers.ts";
 import {TieredPricing} from "./Prices/Tiered";
 import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
@@ -35,6 +42,8 @@ import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconCalendar, IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
+import {setCheckoutSessionIdentifier} from "../../../../utilites/checkoutSession.ts";
+import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../../utilites/iframeResize.ts";
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {OccurrenceSelector} from "../OccurrenceSelector";
@@ -42,23 +51,26 @@ import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
+const buildCheckoutPath = (
+    eventId: string | undefined,
+    orderShortId: string | undefined,
+    sessionId?: string | null,
+    extraParams: Record<string, string> = {}
+) => {
+    const params = new URLSearchParams();
+    if (sessionId) {
+        params.set('session_identifier', sessionId);
+    }
+    Object.entries(extraParams).forEach(([key, value]) => params.set(key, value));
+    const query = params.toString();
+
+    return `/checkout/${eventId}/${orderShortId}/details${query ? `?${query}` : ''}`;
+};
+
 const sendHeightToIframeWidgets = () => {
     const height = document.documentElement.scrollHeight;
     const widgetHeight = document.querySelector('.hi-product-widget-container')?.getBoundingClientRect().height || 0;
-    const urlParams = new URLSearchParams(window.location.search);
-    const iframeId = urlParams.get('iframeId');
-
-    const finalHeight = Math.max(height, widgetHeight);
-
-    if (!iframeId) {
-        return;
-    }
-
-    window.parent.postMessage({
-        type: 'resize',
-        height: finalHeight,
-        iframeId: iframeId
-    }, '*');
+    sendHeightToParent(Math.max(height, widgetHeight));
 };
 
 interface SelectProductsProps {
@@ -77,6 +89,7 @@ interface SelectProductsProps {
     padding?: string;
     continueButtonText?: string;
     widgetMode?: 'preview' | 'normal' | 'embedded';
+    checkoutMode?: 'modal' | 'new-tab';
     showPoweredBy?: boolean;
     initialOccurrenceId?: number | null;
 }
@@ -104,12 +117,12 @@ const SelectProducts = (props: SelectProductsProps) => {
 
         if (affiliateCodeFromUrl) {
             const data = {code: affiliateCodeFromUrl, timestamp: now};
-            localStorage.setItem(storageKey, JSON.stringify(data));
+            safeLocalStorageSet(storageKey, JSON.stringify(data));
             setAffiliateCode(affiliateCodeFromUrl);
             return;
         }
 
-        const storedData = localStorage.getItem(storageKey);
+        const storedData = safeLocalStorageGet(storageKey);
         if (storedData) {
             try {
                 const parsed = JSON.parse(storedData);
@@ -117,10 +130,10 @@ const SelectProducts = (props: SelectProductsProps) => {
                 if (ageInDays <= AFFILIATE_EXPIRY_DAYS) {
                     setAffiliateCode(parsed.code);
                 } else {
-                    localStorage.removeItem(storageKey);
+                    safeLocalStorageRemove(storageKey);
                 }
             } catch {
-                localStorage.removeItem(storageKey);
+                safeLocalStorageRemove(storageKey);
             }
         }
     }, []);
@@ -157,31 +170,61 @@ const SelectProducts = (props: SelectProductsProps) => {
     }, [event?.occurrences]);
     const needsOccurrenceSelection = isRecurring && activeOccurrences.length >= 1;
     const occurrenceSelected = !!selectedOccurrenceId;
+    const eventHasEnded = useMemo(() => {
+        const occurrences = event?.occurrences ?? [];
+        return occurrences.length > 0 && !occurrences.some(occ => !occ.is_past);
+    }, [event?.occurrences]);
 
     const productMutation = useMutation({
         mutationFn: (orderData: ProductFormPayload) => orderClientPublic.create(Number(eventId), orderData),
 
         onSuccess: (data) => queryClient.invalidateQueries()
             .then(() => {
-                const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
+                const sessionId = data.data.session_identifier;
+                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId);
+
+                if (sessionId) {
+                    setCheckoutSessionIdentifier(String(data.data.short_id), sessionId);
+                }
+
                 if (props.widgetMode === 'embedded') {
-                    window.open(
-                        url + '?session_identifier=' + data.data.session_identifier + '&utm_source=embedded_widget',
-                        '_blank'
+                    const parentSupportsModal = props.checkoutMode !== 'new-tab' && !!getEmbedParentUrl();
+
+                    if (!parentSupportsModal) {
+                        window.open(
+                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {utm_source: 'embedded_widget'}),
+                            '_blank',
+                            'noopener,noreferrer'
+                        );
+                        setOrderInProcessOverlayVisible(true);
+                        return;
+                    }
+
+                    window.parent.postMessage(
+                        {type: 'hievents:open-checkout', path: pathWithSession},
+                        getParentOrigin() || '*'
                     );
-                    setOrderInProcessOverlayVisible(true);
                     return;
                 }
 
-                return navigate(url);
+                return navigate(pathWithSession);
             }),
 
         onError: (error: any) => {
-            if (error?.response?.data?.errors) {
-                form.setErrors(error.response.data.errors);
+            const errors = error?.response?.data?.errors;
+            if (errors) {
+                form.setErrors(errors);
             }
 
-            showError(error.response.data.errors?.products[0] || t`Unable to create product. Please check your details`);
+            const firstError = errors
+                ? Object.values(errors).flat().find((message) => typeof message === 'string')
+                : undefined;
+
+            showError(
+                (firstError as string)
+                || error?.response?.data?.message
+                || t`Unable to create product. Please check your details`
+            );
         }
     });
 
@@ -396,7 +439,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                  '--widget-secondary-text-color': props.colors?.secondaryText,
                  '--widget-padding': props?.padding,
              } as React.CSSProperties}>
-            {!productAreAvailable && (
+            {!productAreAvailable && !eventHasEnded && (
                 <div className={classNames(['hi-no-products'])}>
                     <p className={classNames(['hi-no-products-message'])}>
                         {t`There are no products available for this event`}
@@ -407,6 +450,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                 <div className={classNames(['hi-no-products'])}>
                     <p className={classNames(['hi-no-products-message'])}>
                         {t`There are no upcoming dates for this event`}
+                    </p>
+                </div>
+            )}
+            {eventHasEnded && (
+                <div className={classNames(['hi-no-products'])}>
+                    <p className={classNames(['hi-no-products-message'])}>
+                        {t`Ticket sales have ended for this event`}
                     </p>
                 </div>
             )}
@@ -454,7 +504,12 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                             <Button
                                 component="a"
-                                href={'/checkout/' + eventId + '/' + productMutation.data?.data.short_id + '/details' + '?session_identifier=' + productMutation.data?.data.session_identifier}
+                                href={buildCheckoutPath(
+                                    eventId,
+                                    productMutation.data?.data.short_id,
+                                    productMutation.data?.data.session_identifier,
+                                    {utm_source: 'embedded_widget'}
+                                )}
                                 target={'_blank'}
                                 rel={'noopener noreferrer'}
                                 fullWidth
@@ -495,7 +550,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </Modal>
             )}
-            {(event && productAreAvailable && !(isRecurring && activeOccurrences.length === 0)) && (
+            {(event && productAreAvailable && !eventHasEnded && !(isRecurring && activeOccurrences.length === 0)) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
@@ -711,7 +766,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 </form>
             )}
             <div className={'hi-promo-code-row'} style={
-                needsOccurrenceSelection && !occurrenceSelected
+                eventHasEnded || (needsOccurrenceSelection && !occurrenceSelected)
                     ? {display: 'none'}
                     : needsOccurrenceSelection && occurrenceEventRefetchMutation.isPending
                         ? {opacity: 0.5, pointerEvents: 'none', transition: 'opacity 0.15s'}
