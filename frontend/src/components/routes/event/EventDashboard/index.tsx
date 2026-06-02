@@ -90,18 +90,23 @@ export const EventDashboard = () => {
     const hasOccurrences = (occurrencesQuery?.data?.data?.length ?? 0) > 0;
     const hasCoverImage = (eventImages?.length ?? 0) > 0;
 
+    const isNewEvent = new URLSearchParams(location.search).get('new_event') === 'true';
+
     useEffect(() => {
         setIsMounted(true);
         if (typeof window === 'undefined' || !eventId) {
+            return;
+        }
+        if (isNewEvent) {
+            window.localStorage.removeItem('setupChecklistDismissed-' + eventId);
+            setIsChecklistDismissed(false);
             return;
         }
         const dismissed = window.localStorage.getItem('setupChecklistDismissed-' + eventId);
         if (dismissed === 'true') {
             setIsChecklistDismissed(true);
         }
-    }, [eventId]);
-
-    const isNewEvent = new URLSearchParams(location.search).get('new_event') === 'true';
+    }, [eventId, isNewEvent]);
 
     const dismissChecklist = () => {
         setIsChecklistDismissed(true);
@@ -150,7 +155,7 @@ export const EventDashboard = () => {
         if (!eventId) {
             return;
         }
-        navigate(`/manage/event/${eventId}/products`);
+        navigate(`/manage/event/${eventId}/products#create-product`);
     };
 
     const handleEditDetails = () => {

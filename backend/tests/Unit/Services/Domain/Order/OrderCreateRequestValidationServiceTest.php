@@ -69,6 +69,16 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->byDefault()
             ->andReturn(0);
 
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->byDefault()
+            ->andReturn(collect([1]));
+
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->byDefault()
+            ->andReturn(1);
+
         // Build the real eligibility service from the same mocked repositories
         // — keeps the existing tests as integration-style verification that the
         // validator + eligibility service compose correctly without doubling up
@@ -168,7 +178,6 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->setupEventLookup(1, isRecurring: false);
         $this->occurrenceRepository
             ->shouldReceive('findWhere')
-            ->once()
             ->andReturn(collect([$occurrence]));
         $this->setupOccurrenceLookup(1, 10, $occurrence);
         $this->setupAvailability(1);

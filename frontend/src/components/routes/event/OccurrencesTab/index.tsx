@@ -25,6 +25,7 @@ import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync
 import {EventOccurrence, EventOccurrenceStatus, MessageType, QueryFilterFields, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
+import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal} from "./OccurrenceEditModal";
 import {OccurrenceBulkEditModal} from "./OccurrenceBulkEditModal";
@@ -39,12 +40,10 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {GroupedOccurrenceTable, GroupedTableColumn} from "./GroupedOccurrenceTable";
 import {OccurrenceMenuItems, OccurrenceMenuActions, statusLabel, StatusIcon} from "./OccurrenceMenu";
 import {openCancelOccurrenceDialog} from "./cancelOccurrenceDialog";
-import {launchCheckInForOccurrence} from "./checkInLaunch";
+import {useOccurrenceCheckIn} from "../../../../hooks/useOccurrenceCheckIn.tsx";
 import {ManageOccurrenceModal} from "../../../modals/ManageOccurrenceModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {ShareModal} from "../../../modals/ShareModal";
-import {CreateCheckInListModal} from "../../../modals/CreateCheckInListModal";
-import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts";
 import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 import classes from './OccurrencesTab.module.scss';
 
@@ -128,10 +127,7 @@ const OccurrencesTab = () => {
     const [defaultDate, setDefaultDate] = useState<string | undefined>();
     const [messageOccurrenceId, setMessageOccurrenceId] = useState<number | undefined>();
     const [shareOccurrence, setShareOccurrence] = useState<EventOccurrence | undefined>();
-    const [createCheckInForOccurrenceId, setCreateCheckInForOccurrenceId] = useState<number | undefined>();
-
-    const checkInListsQuery = useGetEventCheckInLists(eventId);
-    const checkInLists = checkInListsQuery?.data?.data;
+    const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
@@ -262,19 +258,6 @@ const OccurrencesTab = () => {
         });
     };
 
-    const handleCheckIn = useCallback((occurrenceId: number) => {
-        if (checkInListsQuery.isLoading || checkInListsQuery.isFetching) {
-            showError(t`Please try again.`);
-            return;
-        }
-
-        launchCheckInForOccurrence({
-            occurrenceId,
-            checkInLists,
-            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
-        });
-    }, [checkInLists, checkInListsQuery.isFetching, checkInListsQuery.isLoading]);
-
     const handlePageChange = (value: number) => {
         setSelectedIds(new Set());
         setSearchParams({pageNumber: value});
@@ -295,7 +278,7 @@ const OccurrencesTab = () => {
         onNavigate: navigate,
         onDuplicate: handleDuplicate,
         onMessage: (id: number) => setMessageOccurrenceId(id),
-        onCheckIn: handleCheckIn,
+        onCheckIn: launchCheckIn,
         onReactivate: handleReactivate,
         onShare: (occ: EventOccurrence) => setShareOccurrence(occ),
     };
@@ -311,6 +294,7 @@ const OccurrencesTab = () => {
                     const endTime = occ.end_date
                         ? formatDateWithLocale(occ.end_date, 'timeOnly', event.timezone)
                         : null;
+                    const locationDisplay = getEventLocationDisplay(event, occ);
                     return (
                         <Anchor
                             className={classes.dateTimeLink}
@@ -326,6 +310,11 @@ const OccurrencesTab = () => {
                             </div>
                             {occ.label && (
                                 <div className={classes.dateTimeMeta}>{occ.label}</div>
+                            )}
+                            {locationDisplay && (
+                                <div className={classes.dateTimeLocation}>
+                                    {locationDisplay.isOnline ? t`Online` : locationDisplay.short}
+                                </div>
                             )}
                         </Anchor>
                     );
@@ -682,12 +671,7 @@ const OccurrencesTab = () => {
                 />
             )}
 
-            {createCheckInForOccurrenceId && (
-                <CreateCheckInListModal
-                    onClose={() => setCreateCheckInForOccurrenceId(undefined)}
-                    initialOccurrenceId={createCheckInForOccurrenceId}
-                />
-            )}
+            {checkInModals}
 
             {shareOccurrence && event && (
                 <ShareModal

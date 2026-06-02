@@ -97,38 +97,19 @@ export const SetupChecklist = ({
     const isEmailVerified = !!account?.is_account_email_confirmed;
     const isRecurring = event.type === EventType.RECURRING;
     const isSaasMode = !!account?.is_saas_mode_enabled;
+    const hasTickets = productCount > 0;
 
     const steps: Step[] = [
         {
-            key: 'publish',
-            title: t`Publish your event`,
-            helperIncomplete: t`Make it visible so people can buy tickets`,
-            helperComplete: t`Live`,
-            complete: event.status === 'LIVE',
-            actionLabel: t`Publish`,
-            actionStyle: 'primary',
-            onAction: onPublish,
-        },
-        ...(isSaasMode ? [{
-            key: 'payouts',
-            title: t`Set up payouts`,
-            helperIncomplete: t`Connect your bank to receive ticket sales straight to your account`,
-            helperComplete: t`Bank account connected`,
-            complete: isStripeConnected,
-            actionLabel: payoutsButtonLabel,
-            actionStyle: 'secondary',
-            onAction: onConnectStripe,
-        } as Step] : []),
-        {
             key: 'tickets',
             title: t`Add tickets`,
-            helperIncomplete: t`Create ticket types so people can buy them`,
+            helperIncomplete: t`Set up the tickets you'll sell and their prices`,
             helperComplete: productCount === 1
                 ? t`1 ticket type configured`
                 : t`${productCount} ticket types configured`,
             complete: productCount > 0,
             actionLabel: t`Add tickets`,
-            actionStyle: 'secondary',
+            actionStyle: 'primary',
             onAction: onAddTickets,
         },
         ...(isRecurring ? [{
@@ -138,8 +119,31 @@ export const SetupChecklist = ({
             helperComplete: t`Schedule added`,
             complete: hasOccurrences,
             actionLabel: hasOccurrences ? t`Manage schedule` : t`Set up schedule`,
-            actionStyle: 'secondary',
+            actionStyle: 'primary',
             onAction: onSetupSchedule,
+        } as Step] : []),
+        {
+            key: 'publish',
+            title: t`Publish your event`,
+            helperIncomplete: t`Make it visible so people can buy tickets`,
+            helperComplete: t`Live`,
+            complete: event.status === 'LIVE',
+            actionLabel: t`Publish`,
+            actionStyle:
+                isRecurring
+                    ? (hasOccurrences && hasTickets ? 'primary' : 'secondary')
+                    : (!hasTickets ? 'secondary' : 'primary'),
+            onAction: onPublish,
+        },
+        ...(isSaasMode ? [{
+            key: 'payouts',
+            title: t`Set up payouts`,
+            helperIncomplete: t`Connect your bank to receive ticket sales straight to your account`,
+            helperComplete: t`Bank account connected`,
+            complete: isStripeConnected,
+            actionLabel: payoutsButtonLabel,
+            actionStyle: 'primary',
+            onAction: onConnectStripe,
         } as Step] : []),
         {
             key: 'details',

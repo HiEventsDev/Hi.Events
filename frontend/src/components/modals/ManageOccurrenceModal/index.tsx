@@ -2,16 +2,16 @@ import {EventOccurrence, GenericModalProps, IdParam, MessageType} from "../../..
 import {useNavigate, useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
-import {useGetEventCheckInLists} from "../../../queries/useGetCheckInLists.ts";
 import {t} from "@lingui/macro";
 import {useCallback, useMemo, useState} from "react";
-import {Progress, Skeleton, Stack, Text} from "@mantine/core";
+import {Anchor, Progress, Skeleton, Stack, Text} from "@mantine/core";
+import {IconMapPin, IconWorld} from "@tabler/icons-react";
+import {getEventLocationDisplay} from "../../../utilites/effectiveLocation.ts";
 import {OccurrenceAttendeesAndOrders} from "../../common/OccurrenceAttendeesAndOrders";
 import {SideDrawer} from "../../common/SideDrawer";
 import {SendMessageModal} from "../SendMessageModal";
 import {ShareModal} from "../ShareModal";
 import {OccurrenceEditModal} from "../../routes/event/OccurrencesTab/OccurrenceEditModal";
-import {CreateCheckInListModal} from "../CreateCheckInListModal";
 import {OccurrenceActionBar, OccurrenceMenuActions} from "../../routes/event/OccurrencesTab/OccurrenceMenu";
 import {statusLabel} from "../../routes/event/OccurrencesTab/OccurrenceMenu";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
@@ -23,7 +23,7 @@ import {useDeleteEventOccurrence} from "../../../mutations/useDeleteEventOccurre
 import {useReactivateOccurrence} from "../../../mutations/useReactivateOccurrence.ts";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {openCancelOccurrenceDialog} from "../../routes/event/OccurrencesTab/cancelOccurrenceDialog";
-import {launchCheckInForOccurrence} from "../../routes/event/OccurrencesTab/checkInLaunch";
+import {useOccurrenceCheckIn} from "../../../hooks/useOccurrenceCheckIn.tsx";
 import classes from './ManageOccurrenceModal.module.scss';
 
 interface ManageOccurrenceModalProps {
@@ -35,25 +35,15 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
     const navigate = useNavigate();
     const {data: occurrence} = useGetEventOccurrence(eventId, occurrenceId);
     const {data: event} = useGetEvent(eventId);
-    const checkInListsQuery = useGetEventCheckInLists(eventId);
-    const checkInLists = checkInListsQuery?.data?.data;
+    const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
 
     const [showMessageModal, setShowMessageModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showShareOccurrence, setShowShareOccurrence] = useState<EventOccurrence | undefined>();
-    const [createCheckInForOccurrenceId, setCreateCheckInForOccurrenceId] = useState<number | undefined>();
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
     const reactivateMutation = useReactivateOccurrence();
-
-    const handleCheckIn = useCallback((occurrenceId: number) => {
-        launchCheckInForOccurrence({
-            occurrenceId,
-            checkInLists,
-            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
-        });
-    }, [checkInLists]);
 
     const handleCancel = useCallback((occId: number) => {
         openCancelOccurrenceDialog({
@@ -98,10 +88,10 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
             navigate(path);
         },
         onMessage: () => setShowMessageModal(true),
-        onCheckIn: handleCheckIn,
+        onCheckIn: launchCheckIn,
         onReactivate: handleReactivate,
         onShare: (occ: EventOccurrence) => setShowShareOccurrence(occ),
-    }), [eventId, handleCheckIn, handleCancel, handleDelete, handleReactivate, onClose, navigate]);
+    }), [eventId, launchCheckIn, handleCancel, handleDelete, handleReactivate, onClose, navigate]);
 
     if (!occurrence || !event) {
         return (
@@ -125,6 +115,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
     const endFormatted = occurrence.end_date
         ? formatDateWithLocale(occurrence.end_date, 'timeOnly', event.timezone)
         : null;
+    const locationDisplay = getEventLocationDisplay(event, occurrence);
 
     const usedCapacity = occurrence.used_capacity ?? 0;
     const hasCapacityLimit = occurrence.capacity != null;
@@ -145,6 +136,31 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
                         </Text>
                         {occurrence.label && (
                             <Text className={classes.titleSuffix}>{occurrence.label}</Text>
+                        )}
+                        {locationDisplay && (
+                            <div className={classes.location}>
+                                {locationDisplay.isOnline
+                                    ? <IconWorld size={13} className={classes.locationIcon}/>
+                                    : <IconMapPin size={13} className={classes.locationIcon}/>}
+                                {locationDisplay.isOnline ? (
+                                    <span className={classes.locationText}>{t`Online event`}</span>
+                                ) : locationDisplay.mapsUrl ? (
+                                    <Anchor
+                                        href={locationDisplay.mapsUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={classes.locationText}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        {locationDisplay.venueName && (
+                                            <span className={classes.locationVenue}>{locationDisplay.venueName}</span>
+                                        )}
+                                        <span>{locationDisplay.full}</span>
+                                    </Anchor>
+                                ) : (
+                                    <span className={classes.locationText}>{locationDisplay.short}</span>
+                                )}
+                            </div>
                         )}
                     </div>
                     <div className={classes.statusBadge} data-status={occurrence.status}>
@@ -199,12 +215,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
                 />
             )}
 
-            {createCheckInForOccurrenceId && (
-                <CreateCheckInListModal
-                    onClose={() => setCreateCheckInForOccurrenceId(undefined)}
-                    initialOccurrenceId={createCheckInForOccurrenceId}
-                />
-            )}
+            {checkInModals}
 
             {showShareOccurrence && (
                 <ShareModal

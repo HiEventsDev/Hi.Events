@@ -359,6 +359,10 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "getting-started",
+                element: <Navigate to="../dashboard" replace={true} />
+            },
+            {
                 path: "reports",
                 async lazy() {
                     const Reports = await import("./components/routes/event/Reports");

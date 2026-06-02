@@ -2,11 +2,11 @@ import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
 import {t, Trans} from "@lingui/macro";
 import {Card} from "../../common/Card";
-import {Button, Center, Container, PinInput, Select, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Center, Container, PinInput, Select, Stack, Switch, Text, TextInput} from "@mantine/core";
 import classes from "./Welcome.module.scss";
 import {useForm} from "@mantine/form";
 import {useDebouncedValue, useMediaQuery} from "@mantine/hooks";
-import {Event} from "../../../types.ts";
+import {Event, EventType, IdParam} from "../../../types.ts";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
 import {NavLink, useNavigate} from "react-router";
 import {useEffect, useRef, useState} from "react";
@@ -15,11 +15,12 @@ import {LoadingContainer} from "../../common/LoadingContainer";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import {useConfirmEmailWithCode} from "../../../mutations/useConfirmEmailWithCode.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
-import {IconClock, IconMailCheck, IconSparkles} from "@tabler/icons-react";
+import {IconCalendarRepeat, IconClock, IconMailCheck, IconSparkles} from "@tabler/icons-react";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {DateTimePicker} from "@mantine/dates";
 import dayjs from "dayjs";
 import {EventCategories} from "../../../constants/eventCategories.ts";
+import {Callout} from "../../common/Callout";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 
@@ -98,7 +99,7 @@ const ConfirmVerificationPin = ({progressInfo}: {
                     form.reset();
                     setCompletedPin('');
                 },
-                onError: (error) => {
+                onError: (error: any) => {
                     showError(error.response?.data?.message || t`Failed to verify email`);
                     // Clear the pin on error so user can try again
                     form.reset();
@@ -217,21 +218,35 @@ const ConfirmVerificationPin = ({progressInfo}: {
     );
 }
 
+interface CreateEventFormValues {
+    title: string;
+    type: EventType;
+    start_date: string | Date | null;
+    end_date: string | Date | null;
+    category: string;
+    organizer_id?: IdParam;
+}
+
 export const CreateEvent = ({progressInfo}: {
     progressInfo?: { currentStep: number, totalSteps: number, progressPercentage: number }
 }) => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const form = useForm({
+    const form = useForm<CreateEventFormValues>({
         initialValues: {
             title: '',
+            type: EventType.SINGLE,
             start_date: dayjs().add(1, 'day').hour(19).minute(0).second(0).toDate(),
             end_date: dayjs().add(1, 'day').hour(21).minute(0).second(0).toDate(),
             category: '',
         },
         validate: {
             title: (value) => !value ? t`Event name is required` : null,
-            start_date: (value) => !value ? t`Start date is required` : null,
+            start_date: (value, values) => {
+                if (values.type === EventType.RECURRING) return null;
+                return !value ? t`Start date is required` : null;
+            },
             end_date: (value, values) => {
+                if (values.type === EventType.RECURRING) return null;
                 if (value && values.start_date && dayjs(value).isBefore(dayjs(values.start_date))) {
                     return t`End date must be after start date`;
                 }
@@ -245,19 +260,26 @@ export const CreateEvent = ({progressInfo}: {
         pageNumber: 1,
     });
 
-    const handleSubmit = (values: Partial<Event>) => {
-        const submitData = {
+    const isRecurring = form.values.type === EventType.RECURRING;
+
+    const handleRecurringToggle = (checked: boolean) => {
+        form.setFieldValue('type', checked ? EventType.RECURRING : EventType.SINGLE);
+    };
+
+    const handleSubmit = (values: CreateEventFormValues) => {
+        const recurring = values.type === EventType.RECURRING;
+        const submitData: Partial<Event> = {
             ...values,
-            start_date: values.start_date ? dayjs(values.start_date).toISOString() : undefined,
-            end_date: values.end_date ? dayjs(values.end_date).toISOString() : undefined,
+            start_date: !recurring && values.start_date ? dayjs(values.start_date).toISOString() : undefined,
+            end_date: !recurring && values.end_date ? dayjs(values.end_date).toISOString() : undefined,
         };
 
         eventMutation.mutate({
             eventData: submitData,
         }, {
-            onSuccess: (values) => {
+            onSuccess: (result) => {
                 trackEvent(AnalyticsEvents.FIRST_EVENT_CREATED);
-                navigate(`/manage/event/${values.data.id}/dashboard?new_event=true`)
+                navigate(`/manage/event/${result.data.id}/dashboard?new_event=true`);
             }
         });
     }
@@ -358,43 +380,82 @@ export const CreateEvent = ({progressInfo}: {
                             </div>
 
                             {/* Date & Time */}
-                            <div className={classes.dateTimeGrid}>
-                                <DateTimePicker
-                                    {...form.getInputProps('start_date')}
-                                    label={t`Start date & time`}
-                                    placeholder={t`Select start time`}
-                                    valueFormat="MMM DD, h:mm A"
-                                    size="lg"
-                                    required
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
-                                    onChange={(value) => {
-                                        form.setFieldValue('start_date', value);
-                                        if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                            form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toDate());
-                                        }
-                                    }}
+                            <div className={classes.dateSection}>
+                                <Switch
+                                    checked={isRecurring}
+                                    onChange={(event) => handleRecurringToggle(event.currentTarget.checked)}
                                     disabled={eventMutation.isPending}
+                                    size="md"
+                                    labelPosition="left"
+                                    classNames={{
+                                        root: classes.recurringToggle,
+                                        body: classes.recurringToggleBody,
+                                        labelWrapper: classes.recurringToggleLabelWrapper,
+                                    }}
+                                    label={
+                                        <span className={classes.recurringToggleLabel}>
+                                            <IconCalendarRepeat size={18} className={classes.recurringToggleIcon}/>
+                                            <span className={classes.recurringToggleText}>
+                                                <span className={classes.recurringToggleTitle}>
+                                                    {t`This is a recurring event`}
+                                                </span>
+                                                <span className={classes.recurringToggleHint}>
+                                                    {t`It happens on more than one date`}
+                                                </span>
+                                            </span>
+                                        </span>
+                                    }
                                 />
 
-                                <DateTimePicker
-                                    {...form.getInputProps('end_date')}
-                                    label={t`End time (optional)`}
-                                    placeholder={t`Select end time`}
-                                    valueFormat="MMM DD, h:mm A"
-                                    size="lg"
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
-                                    minDate={form.values.start_date ?? undefined}
-                                    date={form.values.start_date ?? undefined}
-                                    disabled={eventMutation.isPending}
-                                />
+                                {isRecurring ? (
+                                    <Callout
+                                        variant="info"
+                                        icon={<IconCalendarRepeat size={20}/>}
+                                        title={t`Set up your schedule in the next steps`}
+                                        className={classes.recurringCallout}
+                                    >
+                                        {t`After your event is created, you can choose how often it repeats from the dashboard.`}
+                                    </Callout>
+                                ) : (
+                                    <div className={classes.dateTimeGrid}>
+                                        <DateTimePicker
+                                            {...form.getInputProps('start_date')}
+                                            label={t`Start date & time`}
+                                            placeholder={t`Select start time`}
+                                            valueFormat="MMM DD, h:mm A"
+                                            size="lg"
+                                            required
+                                            dropdownType="modal"
+                                            timePickerProps={{
+                                                format: '12h',
+                                                withDropdown: true,
+                                            }}
+                                            onChange={(value) => {
+                                                form.setFieldValue('start_date', value);
+                                                if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
+                                                    form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toDate());
+                                                }
+                                            }}
+                                            disabled={eventMutation.isPending}
+                                        />
+
+                                        <DateTimePicker
+                                            {...form.getInputProps('end_date')}
+                                            label={t`End time (optional)`}
+                                            placeholder={t`Select end time`}
+                                            valueFormat="MMM DD, h:mm A"
+                                            size="lg"
+                                            dropdownType="modal"
+                                            timePickerProps={{
+                                                format: '12h',
+                                                withDropdown: true,
+                                            }}
+                                            minDate={form.values.start_date ?? undefined}
+                                            date={form.values.start_date ?? undefined}
+                                            disabled={eventMutation.isPending}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </Stack>
                         <Button
@@ -417,7 +478,7 @@ export const CreateEvent = ({progressInfo}: {
 }
 
 // Helper function to get progress information
-const getProgressInfo = (requiresVerification: boolean, organizerExists: boolean, currentStep: 'verification' | 'organizer' | 'event') => {
+const getProgressInfo = (requiresVerification: boolean, currentStep: 'verification' | 'organizer' | 'event') => {
     const totalSteps = requiresVerification ? 3 : 2;
     let currentStepNumber = 1;
 
@@ -446,9 +507,9 @@ const Welcome = () => {
     const organizerExists = organizersQuery.isFetched && Number(organizers?.length) > 0;
     const hasTrackedSignup = useRef(false);
 
-    const requiresVerification = userData
+    const requiresVerification = !!(userData
         && userData.enforce_email_confirmation_during_registration
-        && !userData.is_email_verified;
+        && !userData.is_email_verified);
 
     useEffect(() => {
         if (!userData || hasTrackedSignup.current) {
@@ -478,11 +539,11 @@ const Welcome = () => {
 
                 <Card className={classes.welcomeCard}>
                     {requiresVerification && <ConfirmVerificationPin
-                        progressInfo={getProgressInfo(requiresVerification, organizerExists, 'verification')}/>}
+                        progressInfo={getProgressInfo(requiresVerification, 'verification')}/>}
                     {(!requiresVerification && organizerExists) &&
-                        <CreateEvent progressInfo={getProgressInfo(requiresVerification, organizerExists, 'event')}/>}
+                        <CreateEvent progressInfo={getProgressInfo(requiresVerification, 'event')}/>}
                     {(!requiresVerification && !organizerExists) && <CreateOrganizer
-                        progressInfo={getProgressInfo(requiresVerification, organizerExists, 'organizer')}/>}
+                        progressInfo={getProgressInfo(requiresVerification, 'organizer')}/>}
                 </Card>
 
                 {(!requiresVerification && organizerExists) && (

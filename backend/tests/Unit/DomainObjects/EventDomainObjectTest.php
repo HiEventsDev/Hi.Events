@@ -279,6 +279,13 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals(EventLifecycleStatus::ENDED->name, $event->getLifecycleStatus());
     }
 
+    public function testGetLifecycleStatusReturnsUpcomingWhenNoOccurrences(): void
+    {
+        $event = $this->createEvent(collect());
+
+        $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
+    }
+
     public function testIsRecurringReturnsTrueForRecurringType(): void
     {
         $event = new EventDomainObject();

@@ -50,7 +50,7 @@ class UpdateProductVisibilityHandler
                 ProductDomainObjectAbstract::EVENT_ID => $dto->event_id,
             ]);
 
-            $allProductIds = $allProducts->pluck('id')->sort()->values()->toArray();
+            $allProductIds = $allProducts->map(fn ($product) => $product->getId())->sort()->values()->toArray();
             $selectedProductIds = collect($dto->product_ids)->sort()->values()->toArray();
 
             $invalidIds = array_diff($selectedProductIds, $allProductIds);
