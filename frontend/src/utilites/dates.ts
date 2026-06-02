@@ -90,6 +90,10 @@ export const relativeDate = (date: string): string => {
     return dayjs().to(dateInUTC);
 };
 
+export const isValidDate = (date?: string | null): boolean => {
+    return !!date && dayjs(date).isValid();
+};
+
 export const utcToTz = (date: undefined | string | Date, tz: string): string | undefined => {
     if (!date) {
         return undefined;

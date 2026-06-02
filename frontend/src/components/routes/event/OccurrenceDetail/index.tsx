@@ -13,13 +13,11 @@ import {OccurrenceAttendeesAndOrders} from "../../../common/OccurrenceAttendeesA
 import {OccurrenceEditModal} from "../OccurrencesTab/OccurrenceEditModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {ShareModal} from "../../../modals/ShareModal";
-import {CreateCheckInListModal} from "../../../modals/CreateCheckInListModal";
 import {OccurrenceActionBar, OccurrenceMenuActions, statusLabel} from "../OccurrencesTab/OccurrenceMenu";
-import {launchCheckInForOccurrence} from "../OccurrencesTab/checkInLaunch";
+import {useOccurrenceCheckIn} from "../../../../hooks/useOccurrenceCheckIn.tsx";
 import {useGetEventOccurrence} from "../../../../queries/useGetEventOccurrence.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
-import {useGetEventCheckInLists} from "../../../../queries/useGetCheckInLists.ts";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../../mutations/useDeleteEventOccurrence.ts";
 import {useReactivateOccurrence} from "../../../../mutations/useReactivateOccurrence.ts";
@@ -41,23 +39,13 @@ const OccurrenceDetail = () => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
     const [showShareOccurrence, setShowShareOccurrence] = useState<EventOccurrence | undefined>();
-    const [createCheckInForOccurrenceId, setCreateCheckInForOccurrenceId] = useState<number | undefined>();
 
-    const checkInListsQuery = useGetEventCheckInLists(eventId);
-    const checkInLists = checkInListsQuery?.data?.data;
+    const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
 
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
     const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
-
-    const handleCheckIn = useCallback((occId: number) => {
-        launchCheckInForOccurrence({
-            occurrenceId: occId,
-            checkInLists,
-            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
-        });
-    }, [checkInLists]);
 
     const handleCancel = useCallback((occId: number) => {
         const orderCount = occurrence?.statistics?.orders_created ?? 0;
@@ -124,10 +112,10 @@ const OccurrenceDetail = () => {
         onDelete: handleDelete,
         onNavigate: navigate,
         onMessage: () => setShowMessageModal(true),
-        onCheckIn: handleCheckIn,
+        onCheckIn: launchCheckIn,
         onReactivate: handleReactivate,
         onShare: (occ: EventOccurrence) => setShowShareOccurrence(occ),
-    }), [eventId, handleCheckIn, handleCancel, handleDelete, handleReactivate, navigate, openEditModal]);
+    }), [eventId, launchCheckIn, handleCancel, handleDelete, handleReactivate, navigate, openEditModal]);
 
     if (occurrenceLoading || !event) {
         return (
@@ -162,7 +150,7 @@ const OccurrenceDetail = () => {
 
             {occurrence && (
                 <div style={{marginBottom: 16}}>
-                    <OccurrenceActionBar occurrence={occurrence} actions={menuActions}/>
+                    <OccurrenceActionBar occurrence={occurrence} actions={menuActions} hiddenKeys={['dashboard']}/>
                 </div>
             )}
 
@@ -250,12 +238,7 @@ const OccurrenceDetail = () => {
                 />
             )}
 
-            {createCheckInForOccurrenceId && (
-                <CreateCheckInListModal
-                    onClose={() => setCreateCheckInForOccurrenceId(undefined)}
-                    initialOccurrenceId={createCheckInForOccurrenceId}
-                />
-            )}
+            {checkInModals}
 
             {showShareOccurrence && (
                 <ShareModal

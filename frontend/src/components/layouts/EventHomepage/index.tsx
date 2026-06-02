@@ -4,7 +4,7 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, EventOccurrenceStatus, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
+import {Event, EventOccurrence, EventOccurrenceStatus, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -54,6 +54,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const {event, promoCodeValid, promoCode, initialOccurrenceId} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
+    const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
 
     const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
@@ -378,14 +379,9 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 )}
                                             </div>
                                             {(() => {
-                                                const nextOccurrence = event.type === EventType.RECURRING
-                                                    ? (event.occurrences || [])
-                                                        .filter(o => o.status === EventOccurrenceStatus.ACTIVE && !o.is_past)
-                                                        .sort((a, b) => a.start_date.localeCompare(b.start_date))[0]
-                                                    : undefined;
-                                                if (event.type === EventType.RECURRING && !nextOccurrence) return null;
+                                                if (event.type === EventType.RECURRING && !selectedOccurrence) return null;
                                                 return (
-                                                    <CalendarOptionsPopover event={event} occurrence={nextOccurrence}>
+                                                    <CalendarOptionsPopover event={event} occurrence={selectedOccurrence}>
                                                         <button className={classes.addToCalendarButton}>
                                                             <IconCalendarPlus/>
                                                             {t`Add to Calendar`}
@@ -606,6 +602,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     promoCode={promoCode}
                                     showPoweredBy={false}
                                     initialOccurrenceId={initialOccurrenceId}
+                                    onSelectedOccurrenceChange={setSelectedOccurrence}
                                 />
                             </div>
 

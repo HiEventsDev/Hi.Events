@@ -414,6 +414,68 @@
   }
 }
 
+.recurringToggle {
+  margin-bottom: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 8px;
+  background: var(--hi-color-white);
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: var(--hi-primary);
+  }
+
+  &:has(input:checked) {
+    border-color: var(--hi-primary);
+    background: var(--hi-secondary);
+  }
+}
+
+.recurringCallout {
+  margin-bottom: 1em;
+}
+
+.recurringToggleBody {
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recurringToggleLabelWrapper {
+  cursor: pointer;
+}
+
+.recurringToggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.recurringToggleIcon {
+  flex-shrink: 0;
+  color: var(--hi-primary);
+}
+
+.recurringToggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recurringToggleTitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--hi-text);
+}
+
+.recurringToggleHint {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: var(--hi-secondary-text);
+}
+
 
 // Clean button
 .primaryButton {

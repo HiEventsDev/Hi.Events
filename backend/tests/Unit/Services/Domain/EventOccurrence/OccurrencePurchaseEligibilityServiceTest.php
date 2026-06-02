@@ -37,6 +37,11 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
             ->byDefault()
             ->andReturn(0);
 
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->byDefault()
+            ->andReturn(1);
+
         $this->service = new OccurrencePurchaseEligibilityService(
             $this->occurrenceRepository,
             $this->orderItemRepository,
@@ -211,6 +216,36 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
         );
 
         $this->assertSame($occurrence, $result);
+    }
+
+    public function test_uses_single_occurrence_wording_for_single_occurrence_event(): void
+    {
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($this->occurrence(EventOccurrenceStatus::CANCELLED->name));
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->andReturn(1);
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('This event has been cancelled');
+
+        $this->service->assertOccurrencePurchasable(eventId: 1, occurrenceId: 10);
+    }
+
+    public function test_uses_occurrence_wording_for_multi_occurrence_event(): void
+    {
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($this->occurrence(EventOccurrenceStatus::CANCELLED->name));
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->andReturn(2);
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('This event occurrence has been cancelled');
+
+        $this->service->assertOccurrencePurchasable(eventId: 1, occurrenceId: 10);
     }
 
     public function test_product_visibility_allows_all_when_no_rules_exist(): void

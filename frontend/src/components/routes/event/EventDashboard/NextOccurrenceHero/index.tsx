@@ -13,10 +13,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {Event, EventOccurrence, EventOccurrenceStatus, IdParam} from "../../../../../types.ts";
 import {useGetEventOccurrence} from "../../../../../queries/useGetEventOccurrence.ts";
-import {useGetEventCheckInLists} from "../../../../../queries/useGetCheckInLists.ts";
+import {useOccurrenceCheckIn} from "../../../../../hooks/useOccurrenceCheckIn.tsx";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
-import {launchCheckInForOccurrence} from "../../OccurrencesTab/checkInLaunch.tsx";
-import {CreateCheckInListModal} from "../../../../modals/CreateCheckInListModal";
 import classes from "./NextOccurrenceHero.module.scss";
 
 dayjs.extend(utc);
@@ -133,9 +131,7 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
     const occurrenceQuery = useGetEventOccurrence(eventId, nextOccurrence?.id);
     const occurrence = occurrenceQuery.data ?? nextOccurrence;
 
-    const checkInListsQuery = useGetEventCheckInLists(eventId);
-    const checkInLists = checkInListsQuery?.data?.data;
-    const [createCheckInForOccurrenceId, setCreateCheckInForOccurrenceId] = useState<number | undefined>();
+    const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
 
     const [now, setNow] = useState(() => dayjs());
     const countdown = useMemo(
@@ -221,11 +217,7 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
                 rightSection={<IconArrowRight size={14}/>}
                 onClick={() => {
                     if (countdown.state === 'live') {
-                        launchCheckInForOccurrence({
-                            occurrenceId: Number(occurrence.id),
-                            checkInLists,
-                            onCreateForOccurrence: setCreateCheckInForOccurrenceId,
-                        });
+                        launchCheckIn(Number(occurrence.id));
                         return;
                     }
                     navigate(`/manage/event/${eventId}/occurrences/${occurrence.id}`);
@@ -236,12 +228,7 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
                 {countdown.state === 'live' ? t`Open check-in` : t`Open occurrence`}
             </Button>
 
-            {createCheckInForOccurrenceId && (
-                <CreateCheckInListModal
-                    onClose={() => setCreateCheckInForOccurrenceId(undefined)}
-                    initialOccurrenceId={createCheckInForOccurrenceId}
-                />
-            )}
+            {checkInModals}
         </div>
     );
 };

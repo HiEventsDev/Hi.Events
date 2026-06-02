@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductOccurrenceVisibilityDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductOccurrenceVisibilityDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -52,22 +53,10 @@ class UpdateProductVisibilityHandlerTest extends TestCase
 
     private function makeProductCollection(array $ids): Collection
     {
-        return collect(array_map(function ($id) {
-            return new class($id)
-            {
-                public function __construct(public readonly int $id) {}
-
-                public function offsetGet($key)
-                {
-                    return $this->$key;
-                }
-
-                public function offsetExists($key): bool
-                {
-                    return isset($this->$key);
-                }
-            };
-        }, $ids));
+        return collect(array_map(
+            fn ($id) => (new ProductDomainObject)->setId($id),
+            $ids,
+        ));
     }
 
     public function test_handle_creates_visibility_records_for_selected_products(): void

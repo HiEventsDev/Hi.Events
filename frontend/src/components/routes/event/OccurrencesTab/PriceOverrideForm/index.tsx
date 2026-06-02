@@ -58,6 +58,13 @@ export const OccurrenceProductSettings = ({occurrenceId}: OccurrenceProductSetti
     }, [overrides]);
 
     const handleToggleProduct = (productId: number, enabled: boolean) => {
+        if (!enabled) {
+            const liveEnabledCount = products?.filter(p => enabledProductIds.has(p.id!)).length ?? 0;
+            if (liveEnabledCount <= 1 && enabledProductIds.has(productId)) {
+                showError(t`At least one product must stay available for this date. To make the date inaccessible, cancel it from the schedule instead.`);
+                return;
+            }
+        }
         setEnabledProductIds(prev => {
             const next = new Set(prev);
             if (enabled) {
@@ -103,11 +110,20 @@ export const OccurrenceProductSettings = ({occurrenceId}: OccurrenceProductSetti
         if (!products) return;
         setIsSaving(true);
 
+        const liveEnabledProductIds = Array.from(enabledProductIds)
+            .filter(id => products.some(p => p.id === id));
+
+        if (liveEnabledProductIds.length === 0) {
+            showError(t`At least one product must stay available for this date. To make the date inaccessible, cancel it from the schedule instead.`);
+            setIsSaving(false);
+            return;
+        }
+
         try {
             await visibilityMutation.mutateAsync({
                 eventId,
                 occurrenceId,
-                productIds: Array.from(enabledProductIds),
+                productIds: liveEnabledProductIds,
             });
 
             const disabledProductIds = new Set(

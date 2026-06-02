@@ -1,5 +1,6 @@
 import {t} from "@lingui/macro";
-import {Anchor, Button, Select, TextInput} from "@mantine/core";
+import {Button, Select, TextInput} from "@mantine/core";
+import {IconCalendarRepeat} from "@tabler/icons-react";
 import {useForm} from "@mantine/form";
 import {NavLink, useParams} from "react-router";
 import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
@@ -8,6 +9,7 @@ import {useUpdateEvent} from "../../../../../../mutations/useUpdateEvent.ts";
 import {Event, EventType} from "../../../../../../types.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {Card} from "../../../../../common/Card";
+import {Callout} from "../../../../../common/Callout";
 import {Editor} from "../../../../../common/Editor";
 import {utcToTz} from "../../../../../../utilites/dates.ts";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
@@ -100,19 +102,19 @@ export const EventDetailsForm = () => {
                     />
 
                     {isRecurring ? (
-                        <div style={{
-                            padding: '12px 16px',
-                            background: 'var(--mantine-color-blue-0)',
-                            borderRadius: '8px',
-                            fontSize: '14px',
-                            color: 'var(--mantine-color-blue-9)',
-                            marginBottom: '16px',
-                        }}>
-                            {t`Dates and times are managed on the`}{' '}
-                            <Anchor component={NavLink} to={'/manage/event/' + eventId + '/occurrences'}>
-                                {t`Occurrence Schedule page`}
-                            </Anchor>.
-                        </div>
+                        <Callout variant="info" title={t`Dates are managed per occurrence`}>
+                            {t`This event's dates and times are set on the occurrence schedule.`}
+                            <div style={{marginTop: '0.75rem'}}>
+                                <Button
+                                    component={NavLink}
+                                    to={'/manage/event/' + eventId + '/occurrences'}
+                                    leftSection={<IconCalendarRepeat size={16}/>}
+                                    variant="light"
+                                >
+                                    {t`Manage schedule`}
+                                </Button>
+                            </div>
+                        </Callout>
                     ) : (
                         <InputGroup>
                             <TextInput type={'datetime-local'}

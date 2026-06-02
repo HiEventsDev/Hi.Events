@@ -27,6 +27,36 @@
   margin-top: 2px;
 }
 
+.location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--mantine-color-dimmed);
+}
+
+.locationIcon {
+  flex-shrink: 0;
+  color: var(--mantine-color-gray-5);
+}
+
+.locationText {
+  line-height: 1.3;
+}
+
+.locationVenue {
+  font-weight: 500;
+  color: var(--mantine-color-text);
+
+  &::after {
+    content: '·';
+    margin: 0 5px;
+    color: var(--mantine-color-dimmed);
+    font-weight: 400;
+  }
+}
+
 .statusBadge {
   display: inline-flex;
   align-items: center;

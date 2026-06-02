@@ -21,7 +21,7 @@ import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
-import {formatDateWithLocale, relativeDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, isValidDate, relativeDate} from "../../../utilites/dates.ts";
 import {Card} from "../Card";
 import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
@@ -187,6 +187,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
     const isRecurring = event.type === EventType.RECURRING;
 
     const displayDate = (isRecurring && event.next_occurrence_start_date) || event.start_date;
+    const hasDate = isValidDate(displayDate);
     const monthShort = formatDateWithLocale(displayDate, 'monthShort', event.timezone);
     const dayOfMonth = formatDateWithLocale(displayDate, 'dayOfMonth', event.timezone);
     const shortDateTime = formatDateWithLocale(displayDate, 'shortDateTime', event.timezone);
@@ -205,10 +206,12 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                     : {background: placeholderGradient}
                                 }
                             />
-                            <div className={`${classes.compactDateBadge}`}>
-                                <span className={classes.compactDateDay}>{dayOfMonth}</span>
-                                <span className={classes.compactDateMonth}>{monthShort}</span>
-                            </div>
+                            {hasDate && (
+                                <div className={`${classes.compactDateBadge}`}>
+                                    <span className={classes.compactDateDay}>{dayOfMonth}</span>
+                                    <span className={classes.compactDateMonth}>{monthShort}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className={classes.compactContent}>
@@ -227,10 +230,14 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                 </span>
                                 <span className={classes.compactDot}>·</span>
                                 <span className={classes.compactMetaItem}>
-                                    {shortDateTime}
+                                    {hasDate ? shortDateTime : t`No date added`}
                                 </span>
-                                <span className={classes.compactDot}>·</span>
-                                <span className={classes.compactMetaItem}>{relativeDateStr}</span>
+                                {hasDate && (
+                                    <>
+                                        <span className={classes.compactDot}>·</span>
+                                        <span className={classes.compactMetaItem}>{relativeDateStr}</span>
+                                    </>
+                                )}
                                 {locationText && (
                                     <>
                                         <span className={classes.compactDot}>·</span>
@@ -301,10 +308,12 @@ export function EventCard({event, compact = false}: EventCardProps) {
                             {statusConfig.label}
                         </div>
 
-                        <div className={classes.dateBadge}>
-                            <span className={classes.dateDay}>{dayOfMonth}</span>
-                            <span className={classes.dateMonth}>{monthShort}</span>
-                        </div>
+                        {hasDate && (
+                            <div className={classes.dateBadge}>
+                                <span className={classes.dateDay}>{dayOfMonth}</span>
+                                <span className={classes.dateMonth}>{monthShort}</span>
+                            </div>
+                        )}
 
                         {isRecurring && (
                             <div className={classes.recurringBadge}>
@@ -318,7 +327,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
                             <h3 className={classes.title}>{event.title}</h3>
                             <div className={classes.meta}>
                                 <span className={classes.eventDate}>
-                                    {shortDateTime}
+                                    {hasDate ? shortDateTime : t`No date added`}
                                     {isRecurring && (
                                         <span className={classes.recurringLabel}>
                                             <IconRepeat size={11}/>
@@ -326,7 +335,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                         </span>
                                     )}
                                 </span>
-                                <span className={classes.relativeDate}>({relativeDateStr})</span>
+                                {hasDate && <span className={classes.relativeDate}>({relativeDateStr})</span>}
                                 {locationText && (
                                     <>
                                         <span className={classes.separator}>·</span>

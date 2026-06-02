@@ -116,6 +116,7 @@ export const OccurrenceMenuItems = ({occurrence, actions}: OccurrenceMenuItemsPr
 interface OccurrenceActionBarProps {
     occurrence: EventOccurrence;
     actions: OccurrenceMenuActions;
+    hiddenKeys?: string[];
 }
 
 const actionButtonStyle = {
@@ -135,8 +136,9 @@ const actionButtonStyle = {
     whiteSpace: 'nowrap' as const,
 };
 
-export const OccurrenceActionBar = ({occurrence, actions}: OccurrenceActionBarProps) => {
-    const allActions = buildActions(occurrence, actions);
+export const OccurrenceActionBar = ({occurrence, actions, hiddenKeys}: OccurrenceActionBarProps) => {
+    const allActions = buildActions(occurrence, actions)
+        .filter(a => !hiddenKeys?.includes(a.key));
     const primary = allActions.filter(a => a.group === 'primary');
     const overflow = allActions.filter(a => a.group === 'secondary' || a.group === 'danger');
     const overflowSecondary = overflow.filter(a => a.group === 'secondary');

@@ -37,7 +37,7 @@ import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {ProductAvailabilityMessage} from "../../../common/ProductPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {Event, EventOccurrenceStatus, EventType, Product} from "../../../../types.ts";
+import {Event, EventOccurrence, EventOccurrenceStatus, EventType, Product, ProductType} from "../../../../types.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconCalendar, IconChevronRight, IconX} from "@tabler/icons-react"
@@ -92,6 +92,7 @@ interface SelectProductsProps {
     checkoutMode?: 'modal' | 'new-tab';
     showPoweredBy?: boolean;
     initialOccurrenceId?: number | null;
+    onSelectedOccurrenceChange?: (occurrence?: EventOccurrence) => void;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -152,6 +153,13 @@ const SelectProducts = (props: SelectProductsProps) => {
     }, [affiliateCode]);
 
     const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
+
+    const {onSelectedOccurrenceChange} = props;
+    useEffect(() => {
+        onSelectedOccurrenceChange?.(
+            (event?.occurrences || []).find(o => Number(o.id) === selectedOccurrenceId)
+        );
+    }, [selectedOccurrenceId, event?.occurrences, onSelectedOccurrenceChange]);
 
     const form = useForm<ProductFormPayload>({
         initialValues: {
@@ -426,6 +434,19 @@ const SelectProducts = (props: SelectProductsProps) => {
         || products?.every(product => product.is_sold_out)
         || (needsOccurrenceSelection && !occurrenceSelected);
 
+    const unavailableMessage = (() => {
+        if (eventHasEnded) {
+            return t`Ticket sales have ended for this event`;
+        }
+        if (isRecurring && activeOccurrences.length === 0) {
+            return t`There are no upcoming dates for this event`;
+        }
+        if (!productAreAvailable) {
+            return t`There are no products available for this event`;
+        }
+        return null;
+    })();
+
     let productIndex = 0;
 
     return (
@@ -439,24 +460,10 @@ const SelectProducts = (props: SelectProductsProps) => {
                  '--widget-secondary-text-color': props.colors?.secondaryText,
                  '--widget-padding': props?.padding,
              } as React.CSSProperties}>
-            {!productAreAvailable && !eventHasEnded && (
+            {unavailableMessage && (
                 <div className={classNames(['hi-no-products'])}>
                     <p className={classNames(['hi-no-products-message'])}>
-                        {t`There are no products available for this event`}
-                    </p>
-                </div>
-            )}
-            {isRecurring && activeOccurrences.length === 0 && (
-                <div className={classNames(['hi-no-products'])}>
-                    <p className={classNames(['hi-no-products-message'])}>
-                        {t`There are no upcoming dates for this event`}
-                    </p>
-                </div>
-            )}
-            {eventHasEnded && (
-                <div className={classNames(['hi-no-products'])}>
-                    <p className={classNames(['hi-no-products-message'])}>
-                        {t`Ticket sales have ended for this event`}
+                        {unavailableMessage}
                     </p>
                 </div>
             )}
@@ -670,7 +677,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                                 {product.title}
                                                             </h3>
                                                             <div className={'hi-product-title-metadata'}>
-                                                                {(product.is_available && !!product.quantity_available) && (
+                                                                {(product.is_available && !!product.quantity_available && !(isRecurring && product.product_type === ProductType.Ticket)) && (
                                                                     <>
                                                                         {product.quantity_available === Constants.INFINITE_TICKETS && (
                                                                             <Trans>

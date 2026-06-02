@@ -297,12 +297,11 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
             return EventLifecycleStatus::ONGOING->name;
         }
 
-        if ($this->isEventInFuture()) {
+        if ($this->isEventInFuture() || $this->getStartDate() === null) {
             return EventLifecycleStatus::UPCOMING->name;
         }
 
         return EventLifecycleStatus::ENDED->name;
-
     }
 
     public function isRecurring(): bool
