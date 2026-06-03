@@ -4,7 +4,7 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, EventOccurrence, EventOccurrenceStatus, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
+import {Event, EventOccurrence, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -392,29 +392,15 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                         </div>
 
                                         {/* Event Ended */}
-                                        {event.type === EventType.RECURRING ? (
-                                            (event.occurrences || []).filter(o => o.status === EventOccurrenceStatus.ACTIVE && !o.is_past).length === 0 &&
-                                            (event.occurrences || []).length > 0 && (
-                                                <div className={classes.metaItem}>
-                                                    <div className={classes.metaIconBox}>
-                                                        <IconCalendarOff/>
-                                                    </div>
-                                                    <div className={classes.metaContent}>
-                                                        <div className={classes.metaPrimary}>{t`No upcoming dates`}</div>
-                                                    </div>
+                                        {event.type !== EventType.RECURRING && event.end_date && isDateInPast(event.end_date) && (
+                                            <div className={classes.metaItem}>
+                                                <div className={classes.metaIconBox}>
+                                                    <IconCalendarOff/>
                                                 </div>
-                                            )
-                                        ) : (
-                                            event.end_date && isDateInPast(event.end_date) && (
-                                                <div className={classes.metaItem}>
-                                                    <div className={classes.metaIconBox}>
-                                                        <IconCalendarOff/>
-                                                    </div>
-                                                    <div className={classes.metaContent}>
-                                                        <div className={classes.metaPrimary}>{t`This event has ended`}</div>
-                                                    </div>
+                                                <div className={classes.metaContent}>
+                                                    <div className={classes.metaPrimary}>{t`This event has ended`}</div>
                                                 </div>
-                                            )
+                                            </div>
                                         )}
 
                                         {/* Online Event */}

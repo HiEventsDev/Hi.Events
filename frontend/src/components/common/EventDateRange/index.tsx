@@ -42,19 +42,19 @@ export const EventDateRange = ({event, occurrence}: EventDateRangeProps) => {
     }
 
     if (event.type === EventType.RECURRING) {
-        const activeOccurrences = (event.occurrences || [])
-            .filter(o => o.status === EventOccurrenceStatus.ACTIVE && !o.is_past)
+        const upcomingOccurrences = (event.occurrences || [])
+            .filter(o => o.status !== EventOccurrenceStatus.CANCELLED && !o.is_past)
             .sort((a, b) => a.start_date.localeCompare(b.start_date));
 
-        if (activeOccurrences.length > 0) {
-            const next = activeOccurrences[0];
-            if (activeOccurrences.length === 1) {
+        if (upcomingOccurrences.length > 0) {
+            const next = upcomingOccurrences[0];
+            if (upcomingOccurrences.length === 1) {
                 return formatRange(next.start_date, next.end_date, event.timezone);
             }
             const nextFormatted = formatDateWithLocale(next.start_date, "shortDateTime", event.timezone);
             return (
                 <span>
-                    {t`Next: ${nextFormatted}`} · {t`${activeOccurrences.length} upcoming dates`}
+                    {t`Next: ${nextFormatted}`} · {t`${upcomingOccurrences.length} upcoming dates`}
                 </span>
             );
         }
