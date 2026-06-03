@@ -240,6 +240,7 @@ export interface EventSettings {
         logo_image_id?: IdParam;
         footer_text?: string;
         layout_type?: 'default' | 'modern';
+        date_display_mode?: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
         enabled?: boolean;
     };
 
