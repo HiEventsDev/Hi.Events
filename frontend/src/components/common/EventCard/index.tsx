@@ -344,13 +344,25 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                 )}
                             </div>
                             <div className={classes.footer}>
-                                <NavLink
-                                    to={`/manage/organizer/${event?.organizer?.id}`}
+                                <span
+                                    role="link"
+                                    tabIndex={0}
                                     className={classes.organizer}
-                                    onClick={(e) => e.stopPropagation()}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        navigate(`/manage/organizer/${event?.organizer?.id}`);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            navigate(`/manage/organizer/${event?.organizer?.id}`);
+                                        }
+                                    }}
                                 >
                                     {event?.organizer?.name}
-                                </NavLink>
+                                </span>
                                 {ticketAvailability && (
                                     <span className={`${classes.ticketStatus} ${classes[`ticket-${ticketAvailability.status}`]}`}>
                                         {ticketAvailability.text}
