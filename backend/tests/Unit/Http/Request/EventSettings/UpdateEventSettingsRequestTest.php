@@ -43,4 +43,34 @@ class UpdateEventSettingsRequestTest extends TestCase
 
         $this->assertFalse($validator->errors()->has('ticket_design_settings.date_display_mode'));
     }
+
+    public function test_allow_copy_details_to_all_attendees_accepts_boolean(): void
+    {
+        $validator = Validator::make(
+            ['allow_copy_details_to_all_attendees' => false],
+            (new UpdateEventSettingsRequest)->rules()
+        );
+
+        $this->assertFalse($validator->errors()->has('allow_copy_details_to_all_attendees'));
+    }
+
+    public function test_allow_copy_details_to_all_attendees_rejects_non_boolean(): void
+    {
+        $validator = Validator::make(
+            ['allow_copy_details_to_all_attendees' => 'not-a-boolean'],
+            (new UpdateEventSettingsRequest)->rules()
+        );
+
+        $this->assertTrue($validator->errors()->has('allow_copy_details_to_all_attendees'));
+    }
+
+    public function test_allow_copy_details_to_all_attendees_is_optional(): void
+    {
+        $validator = Validator::make(
+            ['ticket_design_settings' => ['accent_color' => '#333333']],
+            (new UpdateEventSettingsRequest)->rules()
+        );
+
+        $this->assertFalse($validator->errors()->has('allow_copy_details_to_all_attendees'));
+    }
 }

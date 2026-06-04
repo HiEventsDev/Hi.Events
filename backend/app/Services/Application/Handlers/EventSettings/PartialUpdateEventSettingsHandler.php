@@ -127,6 +127,9 @@ class PartialUpdateEventSettingsHandler
                 // Marketing settings
                 'show_marketing_opt_in' => $eventSettingsDTO->settings['show_marketing_opt_in'] ?? $existingSettings->getShowMarketingOptIn(),
 
+                // Attendee detail copy control
+                'allow_copy_details_to_all_attendees' => $eventSettingsDTO->settings['allow_copy_details_to_all_attendees'] ?? $existingSettings->getAllowCopyDetailsToAllAttendees(),
+
                 // Platform fee settings
                 'pass_platform_fee_to_buyer' => $eventSettingsDTO->settings['pass_platform_fee_to_buyer'] ?? $existingSettings->getPassPlatformFeeToBuyer(),
 

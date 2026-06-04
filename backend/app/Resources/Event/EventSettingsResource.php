@@ -71,6 +71,9 @@ class EventSettingsResource extends JsonResource
             // Marketing settings
             'show_marketing_opt_in' => $this->getShowMarketingOptIn(),
 
+            // Attendee detail copy control
+            'allow_copy_details_to_all_attendees' => $this->getAllowCopyDetailsToAllAttendees(),
+
             // Platform fee settings
             'pass_platform_fee_to_buyer' => $this->getPassPlatformFeeToBuyer(),
 
