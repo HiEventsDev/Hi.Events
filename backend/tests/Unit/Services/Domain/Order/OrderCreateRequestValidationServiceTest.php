@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Order;
 
+use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -150,12 +151,64 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->service->validateRequestData($eventId, $data);
     }
 
+    public function testUnrelatedOverReservedCapacityDoesNotBlockSelectedProduct(): void
+    {
+        $eventId = 1;
+        $selectedProductId = 10;
+        $selectedPriceId = 101;
+        $unrelatedProductId = 20;
+        $unrelatedPriceId = 201;
+
+        $unrelatedProduct = Mockery::mock(ProductDomainObject::class);
+        $unrelatedProduct->shouldReceive('getId')->andReturn($unrelatedProductId);
+
+        $unrelatedCapacity = (new CapacityAssignmentDomainObject())
+            ->setCapacity(10)
+            ->setUsedCapacity(20)
+            ->setProducts(collect([$unrelatedProduct]));
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $selectedProductId,
+            priceIds: [$selectedPriceId],
+            priceLabels: ['Selected Product'],
+            availabilities: [
+                ['price_id' => $selectedPriceId, 'quantity_available' => 5, 'quantity_reserved' => 0],
+            ],
+            capacities: collect([$unrelatedCapacity]),
+            extraAvailabilities: [
+                [
+                    'product_id' => $unrelatedProductId,
+                    'price_id' => $unrelatedPriceId,
+                    'quantity_available' => -10,
+                    'quantity_reserved' => 0,
+                ],
+            ],
+        );
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => $selectedProductId,
+                    'quantities' => [
+                        ['price_id' => $selectedPriceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData($eventId, $data);
+        $this->assertTrue(true);
+    }
+
     private function setupMocks(
         int   $eventId,
         int   $productId,
         array $priceIds,
         array $priceLabels,
         array $availabilities,
+        ?Collection $capacities = null,
+        array $extraAvailabilities = [],
     ): void
     {
         $event = Mockery::mock(EventDomainObject::class);
@@ -188,23 +241,32 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $quantityDTOs = collect();
         foreach ($availabilities as $avail) {
-            $quantityDTOs->push(AvailableProductQuantitiesDTO::fromArray([
-                'product_id' => $productId,
-                'price_id' => $avail['price_id'],
-                'product_title' => 'Test Product',
-                'price_label' => null,
-                'quantity_available' => $avail['quantity_available'],
-                'quantity_reserved' => $avail['quantity_reserved'],
-                'initial_quantity_available' => 100,
-                'capacities' => collect(),
-            ]));
+            $quantityDTOs->push($this->makeQuantityDTO($avail, $productId));
+        }
+
+        foreach ($extraAvailabilities as $avail) {
+            $quantityDTOs->push($this->makeQuantityDTO($avail, $productId));
         }
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
             ->with($eventId, Mockery::any())
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: $quantityDTOs,
-                capacities: collect(),
+                capacities: $capacities ?? collect(),
             ));
+    }
+
+    private function makeQuantityDTO(array $availability, int $defaultProductId): AvailableProductQuantitiesDTO
+    {
+        return AvailableProductQuantitiesDTO::fromArray([
+            'product_id' => $availability['product_id'] ?? $defaultProductId,
+            'price_id' => $availability['price_id'],
+            'product_title' => 'Test Product',
+            'price_label' => null,
+            'quantity_available' => $availability['quantity_available'],
+            'quantity_reserved' => $availability['quantity_reserved'],
+            'initial_quantity_available' => 100,
+            'capacities' => collect(),
+        ]);
     }
 }

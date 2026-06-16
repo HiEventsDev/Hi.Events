@@ -357,6 +357,10 @@ class OrderCreateRequestValidationService
                 ->filter(fn($product) => in_array($product['product_id'], $productIds->toArray(), true))
                 ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
 
+            if ($totalQuantity === 0) {
+                continue;
+            }
+
             $reservedProductQuantities = $capacity->getProducts()
                 ->map(fn(ProductDomainObject $product) => $this
                     ->availableProductQuantities
