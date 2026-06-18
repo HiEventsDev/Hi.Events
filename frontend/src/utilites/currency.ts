@@ -1,3 +1,5 @@
+import {t} from "@lingui/macro";
+
 export const formatCurrency = (value: number | string, currency = 'USD') => {
     const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
     const formatter = new Intl.NumberFormat(locale, {
@@ -8,6 +10,32 @@ export const formatCurrency = (value: number | string, currency = 'USD') => {
 
     return formatter.format(value as number);
 }
+
+export const formatPercentage = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(value / 100);
+};
+
+export const formatFee = (percentage: number, fixed: number, currency: string) => {
+    const parts: string[] = [];
+    if (percentage > 0) {
+        parts.push(formatPercentage(percentage));
+    }
+    if (fixed > 0) {
+        parts.push(formatCurrency(fixed, currency));
+    }
+    return parts.join(' + ');
+};
+
+export const planFeeLabel = (fees?: { percentage: number; fixed: number; currency: string }) => {
+    if (!fees) {
+        return t`Free`;
+    }
+    return formatFee(fees.percentage, fees.fixed, fees.currency) || t`Free`;
+};
 
 export const getCurrencySymbol = (currencyCode: string): string => {
     const currencySymbols: { [key: string]: string } = {

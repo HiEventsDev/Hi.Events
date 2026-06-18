@@ -2,28 +2,41 @@
 
 namespace HiEvents\Services\Application\Handlers\Organizer\Settings;
 
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
+use HiEvents\Exceptions\BrandingRemovalNotAllowedException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
+use HiEvents\Services\Domain\Organizer\OrganizerPlanEntitlementService;
 
 class PartialUpdateOrganizerSettingsHandler
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
-        private readonly OrganizerRepositoryInterface         $organizerRepository,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly OrganizerPlanEntitlementService $entitlementService,
+    ) {}
 
+    /**
+     * @throws BrandingRemovalNotAllowedException
+     */
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
     {
         /** @var OrganizerDomainObject $organizer */
-        $organizer = $this->organizerRepository->findFirstWhere([
-            'id' => $dto->organizerId,
-            'account_id' => $dto->accountId,
-        ]);
+        $organizer = $this->organizerRepository
+            ->loadRelation(new Relationship(
+                domainObject: OrganizerConfigurationDomainObject::class,
+                name: 'organizer_configuration',
+            ))
+            ->findFirstWhere([
+                'id' => $dto->organizerId,
+                'account_id' => $dto->accountId,
+            ]);
+
+        $this->validateBrandingRemovalAllowed($dto, $organizer);
 
         /** @var OrganizerSettingDomainObject $organizerSettings */
         $organizerSettings = $this->organizerSettingsRepository->findFirstWhere([
@@ -85,11 +98,27 @@ class PartialUpdateOrganizerSettingsHandler
 
             'tracking_pixels' => $dto->getProvided('trackingPixels', $organizerSettings->getTrackingPixels()),
             'tracking_consent_acknowledged' => $dto->getProvided('trackingConsentAcknowledged', $organizerSettings->getTrackingConsentAcknowledged()),
+
+            'hide_branding' => $dto->getProvided('hideBranding', $organizerSettings->getHideBranding()),
         ], [
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),
         ]);
 
         return $this->organizerSettingsRepository->findFirst($organizerSettings->getId());
+    }
+
+    /**
+     * @throws BrandingRemovalNotAllowedException
+     */
+    private function validateBrandingRemovalAllowed(
+        PartialUpdateOrganizerSettingsDTO $dto,
+        OrganizerDomainObject $organizer,
+    ): void {
+        if ($dto->getProvided('hideBranding', false) !== true) {
+            return;
+        }
+
+        $this->entitlementService->assertCanEnableBrandingRemoval($organizer->getOrganizerConfiguration());
     }
 }

@@ -13,13 +13,13 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/layouts/Event/index.tsx:216
-#: src/components/layouts/OrganizerLayout/index.tsx:213
+#: src/components/layouts/Event/index.tsx:237
+#: src/components/layouts/OrganizerLayout/index.tsx:232
 msgid "- Click to Publish"
 msgstr "- 点击发布"
 
-#: src/components/layouts/Event/index.tsx:218
-#: src/components/layouts/OrganizerLayout/index.tsx:215
+#: src/components/layouts/Event/index.tsx:239
+#: src/components/layouts/OrganizerLayout/index.tsx:234
 msgid "- Click to Unpublish"
 msgstr "- 点击取消发布"
 
@@ -106,6 +106,22 @@ msgstr "{0}更新成功"
 msgid "{activeCount} enabled"
 msgstr "已启用 {activeCount} 个"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:104
+msgid "{appName} branding is removed from your paid events as soon as you upgrade. Free events always include {appName} branding."
+msgstr "升级后，您的付费活动将立即移除 {appName} 品牌标识。免费活动始终包含 {appName} 品牌标识。"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:47
+msgid "{appName} branding removed"
+msgstr "已移除 {appName} 品牌标识"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:47
+msgid "{appName} branding restored"
+msgstr "已恢复 {appName} 品牌标识"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:160
+msgid "{appName} branding will reappear on your emails, event pages, checkout and tickets."
+msgstr "{appName} 品牌标识将重新出现在您的邮件、活动页面、结账页面和票券上。"
+
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:101
 msgid "{appName} logo"
 msgstr "{appName} 标志"
@@ -146,6 +162,10 @@ msgstr "{diffSec} 秒前"
 #: src/components/common/WebhookTable/index.tsx:79
 msgid "{eventCount} events"
 msgstr "{eventCount} 个事件"
+
+#: src/hooks/useOrganizerPlanActions.tsx:22
+#~ msgid "{fee} per paid order"
+#~ msgstr "每笔付费订单 {fee}"
 
 #: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
@@ -217,7 +237,7 @@ msgstr "<0>这是所有日期的默认数量。每个日期的容量可在 <1>�
 msgid "<0>Webhooks instantly notify external services when events happen, like adding a new attendee to your CRM or mailing list upon registration, ensuring seamless automation.</0><1>Use third-party services like <2>Zapier</2>, <3>IFTTT</3> or <4>Make</4> to create custom workflows and automate tasks.</1>"
 msgstr "<0>Webhooks 可在事件发生时立即通知外部服务，例如，在注册时将新与会者添加到您的 CRM 或邮件列表，确保无缝自动化。</0><1>使用第三方服务，如 <2>Zapier</2>、<3>IFTTT</3> 或 <4>Make</4> 来创建自定义工作流并自动化任务。</1>"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:160
+#: src/components/common/PlatformFeesSettings/index.tsx:155
 msgid "≈ {0} at current rate"
 msgstr "≈ {0}（按当前汇率）"
 
@@ -349,6 +369,11 @@ msgstr "无折扣的促销代码可以用来显示隐藏的产品。"
 msgid "A Radio option has multiple options but only one can be selected."
 msgstr "单选题有多个选项，但只能选择一个。"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:43
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:80
+msgid "A seamless, fully-branded experience for your attendees"
+msgstr "为参与者提供无缝的全品牌体验"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:323
 msgid "a shift in start/end times"
 msgstr "开始/结束时间变更"
@@ -386,11 +411,11 @@ msgstr "已放弃"
 msgid "About"
 msgstr "关于"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:192
+#: src/components/common/PlatformFeesSettings/index.tsx:187
 msgid "Absorb fee"
 msgstr "承担费用"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:229
+#: src/components/common/PlatformFeesSettings/index.tsx:224
 msgid "Absorb Fee"
 msgstr "承担费用"
 
@@ -532,6 +557,10 @@ msgstr ""
 msgid "Add a description for this check-in list"
 msgstr "为此签到列表添加描述"
 
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:103
+msgid "Add a logo"
+msgstr "添加徽标"
+
 #: src/components/routes/event/OccurrencesTab/index.tsx:538
 msgid "Add a Single Date"
 msgstr "添加单个日期"
@@ -672,7 +701,7 @@ msgstr "添加 Webhook"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "添加您的社交媒体账号和网站链接。这些信息将显示在您的公开组织者页面上。"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:257
+#: src/components/common/PlatformFeesSettings/index.tsx:252
 msgid "Additional Fees"
 msgstr "额外费用"
 
@@ -683,7 +712,7 @@ msgstr "附加信息"
 #: src/components/common/OrderDetails/index.tsx:118
 #: src/components/forms/QuestionForm/index.tsx:130
 #: src/components/routes/organizer/Locations/index.tsx:90
-#: src/components/routes/organizer/Settings/index.tsx:43
+#: src/components/routes/organizer/Settings/index.tsx:44
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:152
 msgid "Address"
 msgstr "地址"
@@ -770,7 +799,7 @@ msgstr "将不会跟踪推广员销售。这将停用该推广员。"
 msgid "Affiliate updated successfully"
 msgstr "推广员更新成功"
 
-#: src/components/layouts/Event/index.tsx:125
+#: src/components/layouts/Event/index.tsx:146
 #: src/components/modals/DuplicateEventModal/index.tsx:58
 #: src/components/routes/event/Affiliates/index.tsx:64
 msgid "Affiliates"
@@ -1024,6 +1053,10 @@ msgstr "适用于未登录打开签到链接的人。已登录的团队成员始
 msgid "Applies to every {0}, non-cancelled date in this event — including dates not currently loaded."
 msgstr "适用于本活动中每一个未取消的 {0} 日期 — 包括当前未加载的日期。"
 
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:84
+msgid "Applies to paid events — free events always include {appName} branding."
+msgstr "适用于付费活动——免费活动始终包含 {appName} 品牌标识。"
+
 #: src/components/common/FilterModal/index.tsx:284
 msgid "Apply"
 msgstr "应用"
@@ -1134,7 +1167,7 @@ msgstr "您确定要删除所有失败的任务吗？"
 msgid "Are you sure you want to delete this affiliate? This action cannot be undone."
 msgstr "您确定要删除此推广员吗？此操作无法撤销。"
 
-#: src/components/routes/admin/Configurations/index.tsx:40
+#: src/components/routes/admin/Configurations/index.tsx:50
 msgid "Are you sure you want to delete this configuration? This may affect accounts using it."
 msgstr "确定要删除此配置吗？这可能会影响使用它的账户。"
 
@@ -1165,21 +1198,21 @@ msgstr "您确定要删除此 Webhook 吗？"
 msgid "Are you sure you want to leave?"
 msgstr "您确定要离开吗？"
 
-#: src/components/layouts/Event/index.tsx:178
+#: src/components/layouts/Event/index.tsx:199
 #: src/components/routes/event/EventDashboard/index.tsx:126
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "您确定要将此活动设为草稿吗？这将使公众无法看到该活动"
 
-#: src/components/layouts/Event/index.tsx:179
+#: src/components/layouts/Event/index.tsx:200
 #: src/components/routes/event/EventDashboard/index.tsx:127
 msgid "Are you sure you want to make this event public? This will make the event visible to the public"
 msgstr "您确定要将此事件公开吗？这将使事件对公众可见"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:145
+#: src/components/layouts/OrganizerLayout/index.tsx:153
 msgid "Are you sure you want to make this organizer draft? This will make the organizer page invisible to the public"
 msgstr "您确定要将此组织者设为草稿吗？这样将使组织者页面对公众不可见。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:146
+#: src/components/layouts/OrganizerLayout/index.tsx:154
 msgid "Are you sure you want to make this organizer public? This will make the organizer page visible to the public"
 msgstr "您确定要将此组织者设为公开吗？这样将使组织者页面对公众可见。"
 
@@ -1264,11 +1297,11 @@ msgstr "每份订单询问一次"
 msgid "Ask once per product"
 msgstr "每个产品询问一次"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:119
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:122
 msgid "Assign a different plan"
-msgstr ""
+msgstr "分配其他套餐"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:130
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:133
 msgid "Assign plan"
 msgstr "分配套餐"
 
@@ -1386,7 +1419,7 @@ msgstr "参与者"
 #: src/components/common/EventCard/index.tsx:366
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:382
 #: src/components/common/StatBoxes/index.tsx:73
-#: src/components/layouts/Event/index.tsx:129
+#: src/components/layouts/Event/index.tsx:150
 #: src/components/modals/ManageOccurrenceModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:126
 #: src/components/routes/admin/Messages/index.tsx:90
@@ -1576,7 +1609,7 @@ msgstr "基础价格"
 msgid "Based on the global sale period above, not per date"
 msgstr "基于上方的全局销售期，而非按单个日期"
 
-#: src/components/routes/organizer/Settings/index.tsx:31
+#: src/components/routes/organizer/Settings/index.tsx:32
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:63
 msgid "Basic Information"
 msgstr "基本信息"
@@ -1602,6 +1635,15 @@ msgstr "收藏此页面，随时管理您的订单。"
 msgid "Brand your tickets with a custom logo, colors, and footer message."
 msgstr "使用自定义徽标、颜色和页脚信息打造您的门票品牌。"
 
+#: src/components/routes/organizer/Settings/index.tsx:103
+msgid "Branding"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:120
+#: src/components/routes/admin/Configurations/index.tsx:299
+msgid "Branding removal"
+msgstr "移除品牌标识"
+
 #: src/components/common/LanguageSwitcher/index.tsx:30
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙语"
@@ -1626,11 +1668,11 @@ msgstr "批量更新失败。"
 msgid "Business"
 msgstr "商务"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:190
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:193
 msgid "Business address"
 msgstr ""
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:185
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:188
 msgid "Business name"
 msgstr "公司名称"
 
@@ -1642,11 +1684,11 @@ msgstr "按钮标签"
 msgid "Button Text"
 msgstr "按钮文字"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:63
+#: src/components/common/PlatformFeesSettings/index.tsx:56
 msgid "Buyer pays"
 msgstr "买家支付"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:235
+#: src/components/common/PlatformFeesSettings/index.tsx:230
 msgid "Buyers see a clean price. The platform fee is deducted from your payout."
 msgstr "买家看到的是净价。平台费用将从您的付款中扣除。"
 
@@ -1675,7 +1717,7 @@ msgstr "注册即表示您同意我们的<0>服务条款</0>和<1>隐私政策</
 msgid "By ticket type"
 msgstr "按票种"
 
-#: src/components/routes/admin/Configurations/index.tsx:259
+#: src/components/routes/admin/Configurations/index.tsx:316
 msgid "Bypass Application Fees"
 msgstr "绕过应用费用"
 
@@ -1725,6 +1767,7 @@ msgstr "无法签到"
 #: src/components/common/QuestionAndAnswerList/index.tsx:149
 #: src/components/common/WaitlistTable/index.tsx:114
 #: src/components/common/WaitlistTable/index.tsx:135
+#: src/components/modals/UpgradePlanModal/index.tsx:109
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
@@ -1806,7 +1849,7 @@ msgstr "已取消"
 msgid "Cancelled {0} date(s)"
 msgstr "已取消 {0} 个日期"
 
-#: src/components/routes/admin/Configurations/index.tsx:36
+#: src/components/routes/admin/Configurations/index.tsx:41
 msgid "Cannot delete the system default configuration"
 msgstr "无法删除系统默认配置"
 
@@ -1832,7 +1875,7 @@ msgstr "容量分配"
 msgid "Capacity management"
 msgstr "容量管理"
 
-#: src/components/layouts/Event/index.tsx:135
+#: src/components/layouts/Event/index.tsx:156
 msgid "Capacity Management"
 msgstr "容量管理"
 
@@ -1876,6 +1919,10 @@ msgstr "更改"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
 msgid "Change duration"
 msgstr "更改时长"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:103
+msgid "Change logo"
+msgstr "更换徽标"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:239
 msgid "Change password"
@@ -2003,7 +2050,7 @@ msgstr "签到列表"
 msgid "Check-in Lists"
 msgstr "签到列表"
 
-#: src/components/layouts/Event/index.tsx:130
+#: src/components/layouts/Event/index.tsx:151
 #: src/components/modals/DuplicateEventModal/index.tsx:54
 #: src/components/routes/event/CheckInLists/index.tsx:37
 msgid "Check-In Lists"
@@ -2085,9 +2132,9 @@ msgstr "中文（繁体）"
 msgid "Choose a color for your background"
 msgstr "选择背景颜色"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:123
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:126
 msgid "Choose a configuration"
-msgstr ""
+msgstr "选择配置"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:360
 msgid "Choose a different action"
@@ -2113,11 +2160,11 @@ msgstr "选择一个组织者"
 msgid "Choose calendar"
 msgstr "选择日历"
 
-#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:45
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:70
 msgid "Choose the default setting for new events. This can be overridden for individual events."
 msgstr "为新活动选择默认设置。这可以针对单个活动进行覆盖。"
 
-#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:51
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:53
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "选择谁支付平台费用。这不会影响您在账户设置中配置的额外费用。"
 
@@ -2219,7 +2266,7 @@ msgstr "代码长度必须在 3 至 50 个字符之间"
 msgid "Code must be no more than 20 characters"
 msgstr "代码不能超过20个字符"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:184
+#: src/components/layouts/OrganizerLayout/index.tsx:203
 msgid "Collaborate with your team to create amazing events together."
 msgstr "与您的团队协作，共同创建精彩的活动。"
 
@@ -2347,24 +2394,19 @@ msgstr ""
 msgid "Configuration assigned"
 msgstr "已分配配置"
 
-#: src/components/routes/admin/Configurations/index.tsx:196
+#: src/components/routes/admin/Configurations/index.tsx:234
 msgid "Configuration created successfully"
 msgstr "配置创建成功"
 
-#: src/components/routes/admin/Configurations/index.tsx:42
+#: src/components/routes/admin/Configurations/index.tsx:52
 msgid "Configuration deleted successfully"
 msgstr "配置删除成功"
 
-#: src/components/routes/admin/Configurations/index.tsx:75
-msgid "Configuration names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate."
-msgstr "配置名称对最终用户可见。固定费用将按当前汇率转换为订单货币。"
-
-#: src/components/routes/admin/Configurations/index.tsx:196
+#: src/components/routes/admin/Configurations/index.tsx:234
 msgid "Configuration updated successfully"
 msgstr "配置更新成功"
 
 #: src/components/layouts/Admin/index.tsx:21
-#: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "配置"
 
@@ -2376,7 +2418,7 @@ msgstr "配置活动详情、地点、结账选项和电子邮件通知。"
 msgid "Configure how attendee details are collected during checkout"
 msgstr "配置结账时如何收集参与者信息"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:264
+#: src/components/common/PlatformFeesSettings/index.tsx:259
 msgid "Configure Taxes & Fees"
 msgstr "配置税费"
 
@@ -2423,11 +2465,11 @@ msgstr "确认密码"
 msgid "Confirm Password"
 msgstr "确认密码"
 
-#: src/components/layouts/Event/index.tsx:281
+#: src/components/layouts/Event/index.tsx:302
 msgid "Confirm your email to access all features."
 msgstr "请确认您的邮箱以访问所有功能。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:309
+#: src/components/layouts/OrganizerLayout/index.tsx:328
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "确认邮件已发送！请检查您的收件箱。"
 
@@ -2506,6 +2548,10 @@ msgstr "联系邮箱"
 msgid "Contact email for support"
 msgstr "支持联系邮箱"
 
+#: src/components/common/FeatureGate/index.tsx:60
+msgid "Contact us"
+msgstr "联系我们"
+
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
 #: src/components/routes/product-widget/SelectProducts/index.tsx:770
@@ -2539,7 +2585,7 @@ msgstr "继续下一步"
 msgid "Continue to Payment"
 msgstr "继续付款"
 
-#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:49
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:51
 msgid "Control how platform fees are handled for this event"
 msgstr "控制此活动的平台费用如何处理"
 
@@ -2798,12 +2844,6 @@ msgstr "创建类别"
 msgid "Create Check-In List"
 msgstr "创建签到列表"
 
-#: src/components/routes/admin/Configurations/index.tsx:70
-#: src/components/routes/admin/Configurations/index.tsx:207
-#: src/components/routes/admin/Configurations/index.tsx:269
-msgid "Create Configuration"
-msgstr "创建配置"
-
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:323
 msgid "Create custom email templates for this event that override the organizer defaults"
 msgstr "为此活动创建自定义邮件模板以覆盖组织者默认设置"
@@ -2825,7 +2865,7 @@ msgid "Create event"
 msgstr ""
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:27
-#: src/components/layouts/OrganizerLayout/index.tsx:174
+#: src/components/layouts/OrganizerLayout/index.tsx:182
 #: src/components/routes/organizer/Events/index.tsx:62
 msgid "Create Event"
 msgstr "创建活动"
@@ -2844,6 +2884,12 @@ msgstr "创建新密码"
 #: src/components/modals/SwitchOrganizerModal/index.tsx:96
 msgid "Create Organizer"
 msgstr "创建组织器"
+
+#: src/components/routes/admin/Configurations/index.tsx:80
+#: src/components/routes/admin/Configurations/index.tsx:245
+#: src/components/routes/admin/Configurations/index.tsx:326
+msgid "Create Plan"
+msgstr "创建套餐"
 
 #: src/components/modals/CreateProductModal/index.tsx:89
 msgid "Create Product"
@@ -2941,6 +2987,10 @@ msgstr "货币"
 #: src/components/routes/profile/ManageProfile/index.tsx:229
 msgid "Current Password"
 msgstr "当前密码"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:81
+msgid "Current plan"
+msgstr "当前套餐"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:107
 msgid "Currently assigned"
@@ -3099,7 +3149,7 @@ msgstr "危险区"
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:602
 #: src/components/routes/event/Settings/index.tsx:98
-#: src/components/routes/organizer/Settings/index.tsx:79
+#: src/components/routes/organizer/Settings/index.tsx:80
 msgid "Danger Zone"
 msgstr "危险区"
 
@@ -3108,7 +3158,7 @@ msgid "Dark"
 msgstr "深色"
 
 #: src/components/layouts/Admin/index.tsx:13
-#: src/components/layouts/Event/index.tsx:99
+#: src/components/layouts/Event/index.tsx:120
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:54
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:155
 msgid "Dashboard"
@@ -3224,6 +3274,7 @@ msgstr "拒绝"
 #: src/components/common/CheckInListTable/index.tsx:77
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:113
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:221
+#: src/utilites/plans.ts:8
 msgid "Default"
 msgstr "默认"
 
@@ -3235,7 +3286,7 @@ msgstr "默认参与者信息收集"
 msgid "Default capacity per date"
 msgstr "每个日期的默认容量"
 
-#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:44
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:69
 msgid "Default Fee Handling"
 msgstr "默认费用处理"
 
@@ -3490,8 +3541,8 @@ msgid "Downloading Invoice"
 msgstr "正在下载发票"
 
 #: src/components/common/EventCard/index.tsx:88
-#: src/components/layouts/Event/index.tsx:215
-#: src/components/layouts/OrganizerLayout/index.tsx:212
+#: src/components/layouts/Event/index.tsx:236
+#: src/components/layouts/OrganizerLayout/index.tsx:231
 msgid "Draft"
 msgstr "草稿"
 
@@ -3564,7 +3615,7 @@ msgstr "例如：获取门票，立即注册"
 msgid "e.g., Important update about your tickets"
 msgstr "例如，关于您门票的重要更新"
 
-#: src/components/routes/admin/Configurations/index.tsx:222
+#: src/components/routes/admin/Configurations/index.tsx:260
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "例如，标准版、高级版、企业版"
 
@@ -3641,10 +3692,6 @@ msgstr "编辑签到列表"
 msgid "Edit Code"
 msgstr "编辑代码"
 
-#: src/components/routes/admin/Configurations/index.tsx:207
-msgid "Edit Configuration"
-msgstr "编辑配置"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
 msgid "Edit Date"
 msgstr "编辑日期"
@@ -3664,6 +3711,10 @@ msgstr "编辑订单详情"
 #: src/components/modals/EditOrganizerModal/index.tsx:63
 msgid "Edit Organizer"
 msgstr "编辑组织器"
+
+#: src/components/routes/admin/Configurations/index.tsx:245
+msgid "Edit Plan"
+msgstr "编辑套餐"
 
 #: src/components/modals/EditProductModal/index.tsx:106
 #: src/components/modals/EditProductModal/index.tsx:114
@@ -3806,8 +3857,8 @@ msgstr "电子邮件更改待定"
 msgid "Email confirmation resent"
 msgstr "重新发送电子邮件确认"
 
-#: src/components/layouts/Event/index.tsx:85
-#: src/components/layouts/OrganizerLayout/index.tsx:118
+#: src/components/layouts/Event/index.tsx:106
+#: src/components/layouts/OrganizerLayout/index.tsx:126
 #: src/components/routes/profile/ManageProfile/index.tsx:101
 msgid "Email confirmation resent successfully"
 msgstr "成功重新发送电子邮件确认"
@@ -3831,11 +3882,11 @@ msgid "Email Preview"
 msgstr "邮件预览"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:348
-#: src/components/routes/organizer/Settings/index.tsx:67
+#: src/components/routes/organizer/Settings/index.tsx:68
 msgid "Email Templates"
 msgstr "邮件模板"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:288
+#: src/components/layouts/OrganizerLayout/index.tsx:307
 msgid "Email Verification Required"
 msgstr "需要验证邮箱"
 
@@ -3846,6 +3897,10 @@ msgstr ""
 #: src/components/routes/welcome/index.tsx:98
 msgid "Email verified successfully!"
 msgstr "邮箱验证成功！"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:99
+msgid "Emails use the organizer logo from your Homepage Designer."
+msgstr "邮件使用您在主页设计器中设置的主办方徽标。"
 
 #: src/components/common/WidgetEditor/index.tsx:246
 #: src/components/common/WidgetEditor/index.tsx:275
@@ -4141,7 +4196,7 @@ msgid "Event Date"
 msgstr "活动日期"
 
 #: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
-#: src/components/routes/organizer/Settings/index.tsx:37
+#: src/components/routes/organizer/Settings/index.tsx:38
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:73
 msgid "Event Defaults"
 msgstr "事件默认值"
@@ -4221,7 +4276,7 @@ msgstr "活动不可用"
 msgid "Event organizer name"
 msgstr "活动组织者姓名"
 
-#: src/components/layouts/Event/index.tsx:270
+#: src/components/layouts/Event/index.tsx:291
 msgid "Event Page"
 msgstr "活动页面"
 
@@ -4229,21 +4284,21 @@ msgstr "活动页面"
 msgid "Event restored successfully"
 msgstr "活动已成功恢复"
 
-#: src/components/layouts/Event/index.tsx:115
+#: src/components/layouts/Event/index.tsx:136
 #: src/components/routes/event/Settings/index.tsx:169
 msgid "Event Settings"
 msgstr "活动设置"
 
 #: src/components/common/EventCard/index.tsx:74
 #: src/components/common/StatusToggle/index.tsx:63
-#: src/components/layouts/Event/index.tsx:194
+#: src/components/layouts/Event/index.tsx:215
 #: src/components/routes/event/EventDashboard/index.tsx:141
 msgid "Event status update failed. Please try again later"
 msgstr "活动状态更新失败。请稍后再试"
 
 #: src/components/common/EventCard/index.tsx:71
 #: src/components/common/StatusToggle/index.tsx:55
-#: src/components/layouts/Event/index.tsx:190
+#: src/components/layouts/Event/index.tsx:211
 #: src/components/routes/event/EventDashboard/index.tsx:138
 msgid "Event status updated"
 msgstr "事件状态已更新"
@@ -4303,7 +4358,7 @@ msgstr "活动场地"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/layouts/Admin/index.tsx:16
-#: src/components/layouts/OrganizerLayout/index.tsx:100
+#: src/components/layouts/OrganizerLayout/index.tsx:108
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:138
 #: src/components/routes/admin/Attribution/index.tsx:133
 #: src/components/routes/admin/Dashboard/index.tsx:403
@@ -4476,7 +4531,7 @@ msgstr "取消订单失败"
 msgid "Failed to create affiliate"
 msgstr "创建推广员失败"
 
-#: src/components/routes/admin/Configurations/index.tsx:200
+#: src/components/routes/admin/Configurations/index.tsx:238
 msgid "Failed to create configuration"
 msgstr "配置创建失败"
 
@@ -4489,7 +4544,7 @@ msgstr "创建日程失败"
 msgid "Failed to create template"
 msgstr "创建模板失败"
 
-#: src/components/routes/admin/Configurations/index.tsx:43
+#: src/components/routes/admin/Configurations/index.tsx:53
 msgid "Failed to delete configuration"
 msgstr "配置删除失败"
 
@@ -4676,7 +4731,11 @@ msgstr "更新答案失败。"
 msgid "Failed to update attendee"
 msgstr "更新参与者失败"
 
-#: src/components/routes/admin/Configurations/index.tsx:200
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:50
+msgid "Failed to update branding settings"
+msgstr "更新品牌标识设置失败"
+
+#: src/components/routes/admin/Configurations/index.tsx:238
 msgid "Failed to update configuration"
 msgstr "配置更新失败"
 
@@ -4724,6 +4783,11 @@ msgstr "家庭"
 msgid "Fast payouts to your bank"
 msgstr "快速到账您的银行"
 
+#: src/components/routes/admin/Configurations/index.tsx:118
+#: src/components/routes/admin/Configurations/index.tsx:297
+msgid "Features"
+msgstr "功能"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:72
 msgid "February"
 msgstr "二月"
@@ -4738,11 +4802,11 @@ msgstr "二月"
 msgid "Fee"
 msgstr "费用"
 
-#: src/components/routes/admin/Configurations/index.tsx:228
+#: src/components/routes/admin/Configurations/index.tsx:266
 msgid "Fee Currency"
 msgstr "费用货币"
 
-#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:50
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:52
 msgid "Fee Handling"
 msgstr "费用处理"
 
@@ -4757,7 +4821,7 @@ msgstr ""
 msgid "Fees"
 msgstr "费用"
 
-#: src/components/routes/admin/Configurations/index.tsx:89
+#: src/components/routes/admin/Configurations/index.tsx:102
 msgid "Fees Bypassed"
 msgstr "费用已绕过"
 
@@ -4884,20 +4948,20 @@ msgstr "固定式"
 msgid "Fixed amount"
 msgstr "固定金额"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:145
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:148
 msgid "Fixed fee"
 msgstr "固定费用"
 
-#: src/components/routes/admin/Configurations/index.tsx:94
-#: src/components/routes/admin/Configurations/index.tsx:236
+#: src/components/routes/admin/Configurations/index.tsx:107
+#: src/components/routes/admin/Configurations/index.tsx:274
 msgid "Fixed Fee"
 msgstr "固定费用"
 
-#: src/components/routes/admin/Configurations/index.tsx:237
+#: src/components/routes/admin/Configurations/index.tsx:275
 msgid "Fixed fee charged per transaction"
 msgstr "每笔交易收取的固定费用"
 
-#: src/components/routes/admin/Configurations/index.tsx:173
+#: src/components/routes/admin/Configurations/index.tsx:207
 msgid "Fixed fee must be 0 or greater"
 msgstr "固定费用必须为0或更大"
 
@@ -4933,10 +4997,13 @@ msgstr "五"
 #: src/components/common/Currency/index.tsx:90
 #: src/components/common/OrderSummary/index.tsx:58
 #: src/components/common/OrderSummary/index.tsx:111
+#: src/components/common/PlatformFeesSettings/index.tsx:151
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:113
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:123
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:207
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:54
+#: src/utilites/currency.ts:35
+#: src/utilites/currency.ts:37
 msgid "Free"
 msgstr "免费"
 
@@ -5025,7 +5092,7 @@ msgstr "德国"
 msgid "Get Directions"
 msgstr "获取路线"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:82
+#: src/components/layouts/OrganizerLayout/index.tsx:90
 msgid "Get Paid"
 msgstr "收款"
 
@@ -5113,7 +5180,7 @@ msgstr "总销售额"
 msgid "Guest"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:128
+#: src/components/layouts/Event/index.tsx:149
 msgid "Guest Management"
 msgstr "来宾管理"
 
@@ -5273,8 +5340,8 @@ msgstr "爱好"
 msgid "Homepage Design"
 msgstr "主页设计"
 
-#: src/components/layouts/Event/index.tsx:116
-#: src/components/layouts/OrganizerLayout/index.tsx:104
+#: src/components/layouts/Event/index.tsx:137
+#: src/components/layouts/OrganizerLayout/index.tsx:112
 msgid "Homepage Designer"
 msgstr "主页设计器"
 
@@ -5470,6 +5537,14 @@ msgstr "包含您的在线活动的连接详细信息。这些信息将在订单
 msgid "Include tax and fees in the price"
 msgstr "价格中包含税费"
 
+#: src/components/common/FeatureGate/index.tsx:50
+msgid "Included in the {0} plan"
+msgstr "包含在 {0} 套餐中"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:94
+msgid "Included in your plan. Applies to paid events — free events always include {appName} branding."
+msgstr "已包含在您的套餐中。适用于付费活动——免费活动始终包含 {appName} 品牌标识。"
+
 #: src/components/common/CheckInListList/index.tsx:101
 #: src/components/common/CheckInListTable/index.tsx:85
 msgid "Includes {0} products"
@@ -5479,6 +5554,11 @@ msgstr "包括{0}个产品"
 #: src/components/common/CheckInListTable/index.tsx:84
 msgid "Includes 1 product"
 msgstr "包括1个产品"
+
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:117
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:46
+msgid "Includes branding removal"
+msgstr "包含移除品牌标识"
 
 #: src/components/common/MessageList/index.tsx:28
 msgid "Individual attendees"
@@ -5508,8 +5588,8 @@ msgstr "Instagram"
 msgid "Instant Stripe payouts"
 msgstr "Stripe 即时付款"
 
-#: src/components/layouts/Event/index.tsx:141
-#: src/components/layouts/OrganizerLayout/index.tsx:109
+#: src/components/layouts/Event/index.tsx:162
+#: src/components/layouts/OrganizerLayout/index.tsx:117
 msgid "Integrations"
 msgstr "集成"
 
@@ -5557,7 +5637,7 @@ msgstr "邀请团队成员"
 msgid "Invite Team Member"
 msgstr "邀请团队成员"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:186
+#: src/components/layouts/OrganizerLayout/index.tsx:205
 msgid "Invite Team Members"
 msgstr "邀请团队成员"
 
@@ -5565,7 +5645,7 @@ msgstr "邀请团队成员"
 msgid "Invite User"
 msgstr "邀请用户"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:183
+#: src/components/layouts/OrganizerLayout/index.tsx:202
 msgid "Invite Your Team"
 msgstr "邀请您的团队"
 
@@ -5684,6 +5764,10 @@ msgstr "刚刚结束"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:572
 msgid "Keep me updated on news and events from {0}"
 msgstr "及时向我更新来自{0}的新闻和活动"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:165
+msgid "Keep my plan"
+msgstr "保留当前套餐"
 
 #: src/components/layouts/AuthLayout/index.tsx:50
 msgid "Keep the profit."
@@ -5843,7 +5927,7 @@ msgstr "通知他们这一变更"
 msgid "Let them know about the changes"
 msgstr "通知他们这些变更"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:106
+#: src/components/layouts/OrganizerLayout/index.tsx:114
 msgid "Library"
 msgstr "图书"
 
@@ -5885,8 +5969,8 @@ msgstr "列表视图"
 
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/layouts/AuthLayout/index.tsx:78
-#: src/components/layouts/Event/index.tsx:217
-#: src/components/layouts/OrganizerLayout/index.tsx:214
+#: src/components/layouts/Event/index.tsx:238
+#: src/components/layouts/OrganizerLayout/index.tsx:233
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:129
 msgid "Live"
 msgstr "上线"
@@ -5982,7 +6066,7 @@ msgstr "地点已更新"
 msgid "location updates"
 msgstr "地点更新"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:107
+#: src/components/layouts/OrganizerLayout/index.tsx:115
 #: src/components/routes/organizer/Locations/index.tsx:57
 msgid "Locations"
 msgstr "地点"
@@ -6042,9 +6126,19 @@ msgstr "总部"
 msgid "Make billing address mandatory during checkout"
 msgstr "在结账时强制要求填写账单地址"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:65
+msgid "Make every touchpoint unmistakably yours."
+msgstr "让每一个接触点都彰显您的品牌。"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:128
 msgid "Make it visible so people can buy tickets"
 msgstr ""
+
+#: src/components/layouts/Event/index.tsx:87
+#: src/components/layouts/OrganizerLayout/index.tsx:191
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:60
+msgid "Make it yours"
+msgstr "打造您的专属品牌"
 
 #: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
@@ -6057,7 +6151,7 @@ msgstr "将此问题作为必答题"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:461
 #: src/components/common/PromoCodeTable/index.tsx:167
-#: src/components/layouts/OrganizerLayout/index.tsx:99
+#: src/components/layouts/OrganizerLayout/index.tsx:107
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:240
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:83
 msgid "Manage"
@@ -6090,6 +6184,10 @@ msgstr "管理订单"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:99
 msgid "Manage payment and invoicing settings for this event."
 msgstr "管理此活动的支付和发票设置。"
+
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:61
+msgid "Manage plan"
+msgstr "管理套餐"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:112
 msgid "Manage Profile"
@@ -6154,7 +6252,7 @@ msgstr "三月"
 msgid "Mark as paid"
 msgstr "标记为已支付"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:180
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:183
 msgid "Mark as validated (admin override)"
 msgstr "标记为已验证（管理员覆盖）"
 
@@ -6243,7 +6341,7 @@ msgid "Message Sent"
 msgstr "发送的信息"
 
 #: src/components/layouts/Admin/index.tsx:18
-#: src/components/layouts/Event/index.tsx:131
+#: src/components/layouts/Event/index.tsx:152
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
 msgstr "信息"
@@ -6400,7 +6498,7 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
 #: src/components/modals/DuplicateEventModal/index.tsx:112
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
-#: src/components/routes/admin/Configurations/index.tsx:220
+#: src/components/routes/admin/Configurations/index.tsx:258
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:80
 #: src/components/routes/organizer/Locations/index.tsx:89
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:232
@@ -6410,11 +6508,11 @@ msgstr "名称"
 #: src/components/common/ContactOrganizerModal/index.tsx:32
 #: src/components/modals/CreateAffiliateModal/index.tsx:28
 #: src/components/modals/EditAffiliateModal/index.tsx:33
-#: src/components/routes/admin/Configurations/index.tsx:169
+#: src/components/routes/admin/Configurations/index.tsx:203
 msgid "Name is required"
 msgstr "姓名为必填项"
 
-#: src/components/routes/admin/Configurations/index.tsx:170
+#: src/components/routes/admin/Configurations/index.tsx:204
 msgid "Name must be less than 255 characters"
 msgstr "名称长度必须少于255个字符"
 
@@ -6486,6 +6584,11 @@ msgstr "否"
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:200
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "否 - 我是个人或未注册增值税的企业"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:42
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:76
+msgid "No \"Powered by {appName}\" on your event page, checkout or tickets"
+msgstr "活动页面、结账和门票上不再显示\"Powered by {appName}\""
 
 #: src/components/common/AdminUsersTable/index.tsx:143
 msgid "No accounts"
@@ -6566,7 +6669,7 @@ msgstr "此活动没有可用的签到列表。"
 msgid "No check-ins yet"
 msgstr "暂无签到"
 
-#: src/components/routes/admin/Configurations/index.tsx:127
+#: src/components/routes/admin/Configurations/index.tsx:152
 msgid "No configurations found"
 msgstr "未找到配置"
 
@@ -6829,6 +6932,10 @@ msgstr "无即将到来的日期"
 msgid "No upcoming events"
 msgstr "没有即将到来的活动"
 
+#: src/components/routes/admin/Configurations/index.tsx:308
+msgid "No upgrade path"
+msgstr "无升级路径"
+
 #: src/components/common/AdminUsersTable/index.tsx:18
 msgid "No users found"
 msgstr "未找到用户"
@@ -6948,7 +7055,7 @@ msgstr "场次结束时间"
 msgid "Occurrence Label"
 msgstr "场次标签"
 
-#: src/components/layouts/Event/index.tsx:111
+#: src/components/layouts/Event/index.tsx:132
 #: src/components/routes/event/OccurrencesTab/index.tsx:461
 msgid "Occurrence Schedule"
 msgstr "场次日程"
@@ -7423,7 +7530,7 @@ msgid "orders"
 msgstr "订单"
 
 #: src/components/layouts/Admin/index.tsx:17
-#: src/components/layouts/Event/index.tsx:123
+#: src/components/layouts/Event/index.tsx:144
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:138
 #: src/components/routes/admin/Orders/index.tsx:44
@@ -7504,8 +7611,8 @@ msgstr "主办方"
 msgid "Organizer archived successfully"
 msgstr "主办方已成功归档"
 
-#: src/components/layouts/Event/index.tsx:95
-#: src/components/layouts/OrganizerLayout/index.tsx:91
+#: src/components/layouts/Event/index.tsx:116
+#: src/components/layouts/OrganizerLayout/index.tsx:99
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:155
 msgid "Organizer Dashboard"
 msgstr "组织者仪表板"
@@ -7546,17 +7653,17 @@ msgstr "未找到组织者"
 msgid "Organizer restored successfully"
 msgstr "主办方已成功恢复"
 
-#: src/components/routes/organizer/Settings/index.tsx:165
+#: src/components/routes/organizer/Settings/index.tsx:173
 msgid "Organizer Settings"
 msgstr "组织者设置"
 
 #: src/components/common/StatusToggle/index.tsx:64
-#: src/components/layouts/OrganizerLayout/index.tsx:157
+#: src/components/layouts/OrganizerLayout/index.tsx:165
 msgid "Organizer status update failed. Please try again later"
 msgstr "组织者状态更新失败。请稍后再试"
 
 #: src/components/common/StatusToggle/index.tsx:56
-#: src/components/layouts/OrganizerLayout/index.tsx:154
+#: src/components/layouts/OrganizerLayout/index.tsx:162
 msgid "Organizer status updated"
 msgstr "组织者状态已更新"
 
@@ -7572,6 +7679,14 @@ msgstr "主办方"
 #: src/components/modals/InviteUserModal/index.tsx:49
 msgid "Organizers can only manage events and products. They cannot manage users, account settings or billing information."
 msgstr "组织者只能管理活动和产品。他们无法管理用户、账户设置或账单信息。"
+
+#: src/components/routes/admin/Configurations/index.tsx:300
+msgid "Organizers on this plan can hide platform branding at no extra fee."
+msgstr "此套餐的组织者可免费隐藏平台品牌标识。"
+
+#: src/components/routes/admin/Configurations/index.tsx:307
+msgid "Organizers on this plan can self-serve upgrade to the selected plan."
+msgstr "此套餐的组织者可自助升级到所选套餐。"
 
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:143
 #: src/components/common/OrdersTable/index.tsx:406
@@ -7595,7 +7710,7 @@ msgstr "发出的消息"
 msgid "Override"
 msgstr "覆盖"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:136
 msgid "Override fees on this organizer"
 msgstr ""
 
@@ -7607,7 +7722,7 @@ msgstr "覆盖价格"
 msgid "Override removed"
 msgstr "覆盖已移除"
 
-#: src/components/layouts/Event/index.tsx:98
+#: src/components/layouts/Event/index.tsx:119
 msgid "Overview"
 msgstr "概览"
 
@@ -7668,11 +7783,15 @@ msgstr "部分退款"
 msgid "Partially refunded: {0}"
 msgstr "部分退款:{0}"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:191
+#: src/components/common/PlatformFeesSettings/index.tsx:186
 msgid "Pass fee to buyer"
 msgstr "将费用转嫁给买家"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:206
+#: src/components/modals/UpgradePlanModal/index.tsx:99
+msgid "Pass platform fees on to your buyers and upgrading won't cost you anything extra."
+msgstr "将平台费用转嫁给买家，升级就不会产生任何额外费用。"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:201
 msgid "Pass to Buyer"
 msgstr "转嫁给买家"
 
@@ -7815,7 +7934,7 @@ msgstr "付款条款"
 msgid "Payments not available"
 msgstr "付款不可用"
 
-#: src/components/routes/organizer/Settings/index.tsx:90
+#: src/components/routes/organizer/Settings/index.tsx:91
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:352
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:406
 msgid "Payouts"
@@ -7843,6 +7962,10 @@ msgstr "每分钟"
 msgid "Per order"
 msgstr "每个订单"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:90
+msgid "per paid order"
+msgstr "每笔付费订单"
+
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:40
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Per ticket"
@@ -7857,20 +7980,20 @@ msgstr "百分比"
 msgid "Percentage Amount"
 msgstr "百分比 金额"
 
-#: src/components/routes/admin/Configurations/index.tsx:101
-#: src/components/routes/admin/Configurations/index.tsx:247
+#: src/components/routes/admin/Configurations/index.tsx:114
+#: src/components/routes/admin/Configurations/index.tsx:285
 msgid "Percentage Fee"
 msgstr "百分比费用"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:137
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:140
 msgid "Percentage fee (%)"
 msgstr "百分比费用 (%)"
 
-#: src/components/routes/admin/Configurations/index.tsx:175
+#: src/components/routes/admin/Configurations/index.tsx:209
 msgid "Percentage must be between 0 and 100"
 msgstr "百分比必须在0到100之间"
 
-#: src/components/routes/admin/Configurations/index.tsx:248
+#: src/components/routes/admin/Configurations/index.tsx:286
 msgid "Percentage of transaction amount"
 msgstr "交易金额的百分比"
 
@@ -7927,24 +8050,39 @@ msgstr "将此放置在您网站的 <head> 中。"
 msgid "Placed"
 msgstr "下单"
 
+#: src/components/routes/organizer/Settings/index.tsx:97
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:67
+msgid "Plan & Fees"
+msgstr "套餐与费用"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:141
+msgid "Plan change failed. Please try again."
+msgstr "套餐变更失败，请重试。"
+
+#: src/components/routes/admin/Configurations/index.tsx:85
+msgid "Plan names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate."
+msgstr "套餐名称对最终用户可见。固定费用将按当前汇率转换为订单货币。"
+
 #: src/components/common/PoweredByFooter/index.tsx:48
 msgid "Planning an event?"
 msgstr "计划举办活动？"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:57
-#: src/components/common/PlatformFeesSettings/index.tsx:153
+#: src/components/routes/admin/Configurations/index.tsx:75
+msgid "Plans"
+msgstr "套餐"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:50
+#: src/components/common/PlatformFeesSettings/index.tsx:149
 msgid "Platform fee"
 msgstr "平台费用"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:73
+#: src/components/common/PlatformFeesSettings/index.tsx:66
 msgid "Platform fee of {0} deducted from your payout"
 msgstr "从您的付款中扣除 {0} 的平台费用"
 
 #: src/components/routes/event/Settings/index.tsx:108
-#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:48
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:50
 #: src/components/routes/organizer/Reports/index.tsx:41
-#: src/components/routes/organizer/Settings/index.tsx:96
-#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:42
 msgid "Platform Fees"
 msgstr "平台费用"
 
@@ -8104,6 +8242,7 @@ msgid "Post Checkout Message"
 msgstr "结账后消息"
 
 #: src/components/common/PoweredByFooter/index.tsx:60
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:143
 msgid "Powered by"
 msgstr "技术支持"
 
@@ -8124,10 +8263,14 @@ msgstr "预览"
 msgid "Preview checkout form"
 msgstr "预览结账表单"
 
-#: src/components/layouts/Event/index.tsx:263
-#: src/components/layouts/Event/index.tsx:267
+#: src/components/layouts/Event/index.tsx:284
+#: src/components/layouts/Event/index.tsx:288
 msgid "Preview Event page"
 msgstr "预览活动页面"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:151
+msgid "Preview: your emails with {appName} branding removed"
+msgstr "预览：移除 {appName} 品牌标识后的邮件"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:360
 #: src/components/forms/ProductForm/index.tsx:89
@@ -8193,6 +8336,10 @@ msgstr "打印为PDF"
 #: src/components/layouts/OrganizerHomepage/index.tsx:334
 msgid "Privacy Policy"
 msgstr "隐私政策"
+
+#: src/utilites/plans.ts:6
+msgid "Pro"
+msgstr "专业版"
 
 #: src/components/modals/RefundOrderModal/index.tsx:151
 msgid "Process Refund"
@@ -8334,7 +8481,7 @@ msgstr "促销码"
 msgid "Promo codes"
 msgstr "促销码"
 
-#: src/components/layouts/Event/index.tsx:124
+#: src/components/layouts/Event/index.tsx:145
 #: src/components/modals/DuplicateEventModal/index.tsx:52
 #: src/components/routes/event/promo-codes.tsx:34
 msgid "Promo Codes"
@@ -8400,6 +8547,10 @@ msgstr "购买者"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:288
 msgid "Purchaser email"
 msgstr "购买者邮箱"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:61
+msgid "Put your brand front and center, everywhere your attendees look."
+msgstr "让您的品牌成为焦点，出现在参与者目光所及的每个角落。"
 
 #: src/components/modals/ShareModal/index.tsx:168
 msgid "QR Code"
@@ -8644,7 +8795,7 @@ msgid "Register"
 msgstr "注册"
 
 #: src/components/common/QuestionsTable/index.tsx:412
-#: src/components/layouts/Event/index.tsx:118
+#: src/components/layouts/Event/index.tsx:139
 msgid "Registration Questions"
 msgstr "注册问题"
 
@@ -8673,6 +8824,10 @@ msgstr "去除"
 msgid "Remove"
 msgstr "移除"
 
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:93
+msgid "Remove {appName} branding"
+msgstr "移除 {appName} 品牌标识"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:483
 msgid "Remove label from all dates"
 msgstr "从所有日期移除标签"
@@ -8693,8 +8848,8 @@ msgstr "每隔"
 msgid "Report not found"
 msgstr "未找到报告"
 
-#: src/components/layouts/Event/index.tsx:102
-#: src/components/layouts/OrganizerLayout/index.tsx:94
+#: src/components/layouts/Event/index.tsx:123
+#: src/components/layouts/OrganizerLayout/index.tsx:102
 #: src/components/routes/event/Reports/index.tsx:47
 #: src/components/routes/organizer/Reports/index.tsx:51
 msgid "Reports"
@@ -8720,11 +8875,11 @@ msgstr "重新发送验证码"
 msgid "Resend Confirmation"
 msgstr "重新发送确认"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:305
+#: src/components/layouts/OrganizerLayout/index.tsx:324
 msgid "Resend Confirmation Email"
 msgstr "重新发送确认邮件"
 
-#: src/components/layouts/Event/index.tsx:283
+#: src/components/layouts/Event/index.tsx:304
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:176
 msgid "Resend email"
 msgstr "重新发送邮件"
@@ -8972,7 +9127,7 @@ msgstr "销售额："
 msgid "Same as event"
 msgstr "与活动相同"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:175
+#: src/components/common/PlatformFeesSettings/index.tsx:170
 msgid "Sample ticket price"
 msgstr "示例票价"
 
@@ -8994,7 +9149,7 @@ msgstr "周六"
 msgid "Saturday"
 msgstr "星期六"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:249
+#: src/components/common/PlatformFeesSettings/index.tsx:244
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
@@ -9019,7 +9174,7 @@ msgstr "节省"
 #: src/components/modals/LocationEditModal/index.tsx:132
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
-#: src/components/routes/admin/Configurations/index.tsx:269
+#: src/components/routes/admin/Configurations/index.tsx:326
 #: src/components/routes/event/HomepageDesigner/index.tsx:272
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:266
@@ -9027,7 +9182,7 @@ msgstr "节省"
 msgid "Save Changes"
 msgstr "保存更改"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:160
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:163
 msgid "Save fee override"
 msgstr "保存费用覆盖"
 
@@ -9055,7 +9210,7 @@ msgstr "保存模板"
 msgid "Save Ticket Design"
 msgstr "保存票券设计"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:202
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:205
 msgid "Save VAT settings"
 msgstr "保存增值税设置"
 
@@ -9077,7 +9232,7 @@ msgstr "已保存的地点"
 msgid "Saved Locations"
 msgstr "已保存的地点"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:153
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:156
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
 msgstr "如该主办方当前使用系统默认设置，保存覆盖将为其创建专属配置。"
 
@@ -9411,8 +9566,8 @@ msgstr "选择..."
 msgid "selected"
 msgstr "已选择"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:208
-#: src/components/common/PlatformFeesSettings/index.tsx:231
+#: src/components/common/PlatformFeesSettings/index.tsx:203
+#: src/components/common/PlatformFeesSettings/index.tsx:226
 msgid "Selected"
 msgstr "已选择"
 
@@ -9512,7 +9667,7 @@ msgid "Sent to each attendee with their ticket details"
 msgstr "发送给每位参会者及其门票详情"
 
 #: src/components/routes/event/Settings/index.tsx:64
-#: src/components/routes/organizer/Settings/index.tsx:61
+#: src/components/routes/organizer/Settings/index.tsx:62
 msgid "SEO"
 msgstr "SEO"
 
@@ -9552,10 +9707,6 @@ msgstr "场次已取消"
 msgid "Set a minimum price and let users pay more if they choose"
 msgstr "设定最低价格，用户可选择支付更高的价格"
 
-#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:43
-msgid "Set default platform fee settings for new events created under this organizer."
-msgstr "为此组织者创建的新活动设置默认平台费用设置。"
-
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:74
 msgid "Set default settings for new events created under this organizer."
 msgstr "为此组织者创建的新活动设置默认设置。"
@@ -9592,7 +9743,7 @@ msgstr "设置循环日程以自动创建日期，或逐个添加。"
 msgid "Set up check-in lists for different entrances, sessions, or days."
 msgstr "为不同的入口、场次或日期设置签到列表。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:85
+#: src/components/layouts/OrganizerLayout/index.tsx:93
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:140
 msgid "Set up payouts"
 msgstr "设置付款"
@@ -9641,12 +9792,12 @@ msgstr "设置已更新"
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:106
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:107
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:128
-#: src/components/layouts/OrganizerLayout/index.tsx:101
+#: src/components/layouts/OrganizerLayout/index.tsx:109
 #: src/components/modals/DuplicateEventModal/index.tsx:51
 msgid "Settings"
 msgstr "设置"
 
-#: src/components/layouts/Event/index.tsx:108
+#: src/components/layouts/Event/index.tsx:129
 msgid "Setup & Design"
 msgstr "设置与设计"
 
@@ -9656,7 +9807,7 @@ msgstr "设置只需几分钟——您无需已有的 Stripe 账户。Stripe 会
 
 #: src/components/common/ShareIcon/index.tsx:30
 #: src/components/layouts/EventHomepage/index.tsx:351
-#: src/components/layouts/OrganizerLayout/index.tsx:234
+#: src/components/layouts/OrganizerLayout/index.tsx:253
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
 #: src/components/modals/ShareModal/index.tsx:186
@@ -9669,15 +9820,15 @@ msgstr "分享"
 msgid "Share Affiliate Link"
 msgstr "分享推广链接"
 
-#: src/components/layouts/Event/index.tsx:233
-#: src/components/layouts/Event/index.tsx:239
+#: src/components/layouts/Event/index.tsx:254
+#: src/components/layouts/Event/index.tsx:260
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:102
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:131
 msgid "Share Event"
 msgstr "分享活动"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:231
-#: src/components/layouts/OrganizerLayout/index.tsx:273
+#: src/components/layouts/OrganizerLayout/index.tsx:250
+#: src/components/layouts/OrganizerLayout/index.tsx:292
 msgid "Share Organizer Page"
 msgstr "分享组织者页面"
 
@@ -9817,7 +9968,7 @@ msgstr "Snapchat"
 msgid "Social"
 msgstr "社交"
 
-#: src/components/routes/organizer/Settings/index.tsx:55
+#: src/components/routes/organizer/Settings/index.tsx:56
 msgid "Social Links"
 msgstr "社交链接"
 
@@ -9878,8 +10029,8 @@ msgstr "出问题了"
 msgid "Something went wrong. Please try again later."
 msgstr "出了点问题。请稍后再试。"
 
-#: src/components/layouts/Event/index.tsx:89
-#: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/layouts/Event/index.tsx:110
+#: src/components/layouts/OrganizerLayout/index.tsx:130
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -10231,11 +10382,11 @@ msgstr "组织者更新成功"
 msgid "Successfully Updated Payment & Invoicing Settings"
 msgstr "支付和发票设置已成功更新"
 
-#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:29
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:36
 msgid "Successfully Updated Platform Fee Defaults"
 msgstr "平台费用默认设置更新成功"
 
-#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:35
+#: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:37
 msgid "Successfully Updated Platform Fee Settings"
 msgstr "平台费用设置更新成功"
 
@@ -10311,12 +10462,28 @@ msgstr "支持电子邮件"
 msgid "Swedish"
 msgstr "瑞典语"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:75
+#: src/components/modals/UpgradePlanModal/index.tsx:149
+#~ msgid "Switch back to {0}?"
+#~ msgstr "切换回 {0}？"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:152
+msgid "Switch back to {targetName}?"
+msgstr ""
+
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:53
+msgid "Switch back to the {0} plan"
+msgstr "切换回 {0} 套餐"
+
+#: src/components/layouts/OrganizerLayout/index.tsx:83
 #: src/components/modals/SwitchOrganizerModal/index.tsx:46
 msgid "Switch Organizer"
 msgstr "切换组织者"
 
-#: src/components/routes/admin/Configurations/index.tsx:86
+#: src/components/modals/UpgradePlanModal/index.tsx:168
+msgid "Switch plan"
+msgstr "切换套餐"
+
+#: src/components/routes/admin/Configurations/index.tsx:96
 msgid "System Default"
 msgstr "系统默认"
 
@@ -10489,7 +10656,7 @@ msgstr "您查找的签到列表不存在。"
 msgid "The code will expire in 10 minutes. Check your spam folder if you don't see the email."
 msgstr "验证码将在10分钟后过期。如果您没有收到邮件，请检查垃圾邮件文件夹。"
 
-#: src/components/routes/admin/Configurations/index.tsx:229
+#: src/components/routes/admin/Configurations/index.tsx:267
 msgid "The currency in which the fixed fee is defined. It will be converted to the order currency at checkout."
 msgstr "定义固定费用的货币。结账时将转换为订单货币。"
 
@@ -10573,7 +10740,7 @@ msgstr "该覆盖已记录在订单审计日志中。"
 msgid "The page you are looking for does not exist"
 msgstr "您要查找的页面不存在"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:212
+#: src/components/common/PlatformFeesSettings/index.tsx:207
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "平台费用会添加到票价中。买家支付更多，但您会收到完整的票价。"
 
@@ -10770,6 +10937,14 @@ msgstr "此活动尚未发布"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "此活动的日期和时间在排期中设置。"
 
+#: src/components/common/FeatureGate/index.tsx:37
+msgid "This feature is not available because platform fees are disabled for your account."
+msgstr "由于您的账户已禁用平台费用，此功能不可用。"
+
+#: src/components/common/FeatureGate/index.tsx:57
+msgid "This feature isn't included in your plan. Get in touch and we'll set you up."
+msgstr "您的套餐不包含此功能。请联系我们为您开通。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "这些信息将显示在支付页面、订单摘要页面和订单确认电子邮件中。"
@@ -10811,7 +10986,7 @@ msgstr "此信息将包含在本次活动发送的所有电子邮件的页脚中
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "此消息仅在订单成功完成后显示。等待付款的订单不会显示此消息。"
 
-#: src/components/routes/admin/Configurations/index.tsx:221
+#: src/components/routes/admin/Configurations/index.tsx:259
 msgid "This name is visible to end users"
 msgstr "此名称对最终用户可见"
 
@@ -10862,6 +11037,10 @@ msgstr "此主办方资料尚未发布"
 #: src/components/forms/ProductForm/index.tsx:524
 msgid "This overrides all visibility settings and will hide the product from all customers."
 msgstr "这将覆盖所有可见性设置，并将该产品对所有客户隐藏。"
+
+#: src/components/routes/admin/Configurations/index.tsx:46
+msgid "This plan is an upgrade target for another plan. Remove that link first."
+msgstr "此套餐是另一个套餐的升级目标。请先移除该关联。"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:69
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
@@ -10946,7 +11125,7 @@ msgstr "票券设计"
 msgid "Ticket design saved successfully"
 msgstr "票券设计保存成功"
 
-#: src/components/layouts/Event/index.tsx:117
+#: src/components/layouts/Event/index.tsx:138
 msgid "Ticket Designer"
 msgstr "门票设计器"
 
@@ -10999,7 +11178,7 @@ msgstr "票或商品"
 msgid "Ticket Preview for"
 msgstr "门票预览："
 
-#: src/components/common/PlatformFeesSettings/index.tsx:52
+#: src/components/common/PlatformFeesSettings/index.tsx:45
 msgid "Ticket price"
 msgstr "票价"
 
@@ -11024,7 +11203,7 @@ msgstr "票券类型"
 msgid "Ticket URL"
 msgstr "门票链接"
 
-#: src/components/layouts/Event/index.tsx:121
+#: src/components/layouts/Event/index.tsx:142
 msgid "Ticketing & Sales"
 msgstr "票务与销售"
 
@@ -11036,7 +11215,7 @@ msgstr "门票"
 msgid "Tickets"
 msgstr "门票"
 
-#: src/components/layouts/Event/index.tsx:122
+#: src/components/layouts/Event/index.tsx:143
 #: src/components/routes/event/products.tsx:48
 msgid "Tickets & Products"
 msgstr "票务与商品"
@@ -11130,7 +11309,7 @@ msgstr "切换列"
 msgid "Tomorrow"
 msgstr "明天"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:103
+#: src/components/layouts/OrganizerLayout/index.tsx:111
 msgid "Tools"
 msgstr "工具"
 
@@ -11235,7 +11414,7 @@ msgstr "旅游"
 msgid "Track account growth and performance by attribution source"
 msgstr "按归因来源跟踪账户增长和表现"
 
-#: src/components/routes/organizer/Settings/index.tsx:73
+#: src/components/routes/organizer/Settings/index.tsx:74
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:172
 msgid "Tracking & Analytics"
 msgstr ""
@@ -11504,6 +11683,43 @@ msgstr "已更新 {count} 个日期的标签"
 msgid "Updated location for {count} date(s)"
 msgstr "已更新 {count} 个场次的地点"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:53
+msgid "Upgrade failed. Please try again."
+msgstr "升级失败，请重试。"
+
+#: src/hooks/useOrganizerPlanActions.tsx:58
+#~ msgid "Upgrade plan"
+#~ msgstr "升级套餐"
+
+#: src/components/routes/admin/Configurations/index.tsx:99
+msgid "Upgrade target"
+msgstr "升级目标"
+
+#: src/components/common/UpgradePlanButton/index.tsx:27
+#: src/components/layouts/Event/index.tsx:90
+#: src/components/layouts/OrganizerLayout/index.tsx:194
+msgid "Upgrade to {0}"
+msgstr "升级到 {0}"
+
+#: src/components/layouts/Event/index.tsx:88
+#: src/components/layouts/OrganizerLayout/index.tsx:192
+msgid "Upgrade to {0} to remove {appName} branding from your paid events."
+msgstr "升级到 {0} 以从您的付费活动中移除 {appName} 品牌标识。"
+
+#: src/hooks/useOrganizerPlanActions.tsx:30
+#~ msgid "Upgrade to {0}?"
+#~ msgstr "升级到 {0}？"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:64
+#: src/components/modals/UpgradePlanModal/index.tsx:116
+msgid "Upgrade to {targetName}"
+msgstr ""
+
+#: src/components/routes/admin/Configurations/index.tsx:124
+#: src/components/routes/admin/Configurations/index.tsx:306
+msgid "Upgrades to"
+msgstr "升级到"
+
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:39
 msgid "Upload a cover image for your organizer"
 msgstr "上传组织者封面图像"
@@ -11631,11 +11847,11 @@ msgstr "正在验证您的增值税号..."
 msgid "VAT"
 msgstr "增值税"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:195
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:198
 msgid "VAT country code"
 msgstr ""
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:173
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:176
 msgid "VAT number"
 msgstr "增值税号"
 
@@ -11672,7 +11888,7 @@ msgstr "费用增值税"
 msgid "VAT Rate"
 msgstr "增值税率"
 
-#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:171
 msgid "VAT registered"
 msgstr "已注册增值税"
 
@@ -11733,7 +11949,7 @@ msgstr "已验证"
 msgid "Verify Email"
 msgstr "验证邮箱"
 
-#: src/components/layouts/Event/index.tsx:280
+#: src/components/layouts/Event/index.tsx:301
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:170
 msgid "Verify your email"
 msgstr "验证您的邮箱"
@@ -11833,6 +12049,7 @@ msgstr "在谷歌地图上查看"
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:72
 #: src/components/common/WaitlistTable/index.tsx:62
 #: src/components/routes/my-tickets/index.tsx:127
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:140
 msgid "View Order"
 msgstr "查看订单"
 
@@ -11845,10 +12062,14 @@ msgstr "查看订单详情"
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "查看订单详情、退款和重新发送确认。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:249
-#: src/components/layouts/OrganizerLayout/index.tsx:252
+#: src/components/layouts/OrganizerLayout/index.tsx:268
+#: src/components/layouts/OrganizerLayout/index.tsx:271
 msgid "View Organizer Homepage"
 msgstr "查看组织者主页"
+
+#: src/components/common/FeatureGate/index.tsx:46
+msgid "View plan details"
+msgstr "查看套餐详情"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:59
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:72
@@ -11896,7 +12117,7 @@ msgid "Waiting for scan…"
 msgstr "等待扫描…"
 
 #: src/components/layouts/AuthLayout/index.tsx:24
-#: src/components/layouts/Event/index.tsx:132
+#: src/components/layouts/Event/index.tsx:153
 #: src/components/routes/event/Settings/index.tsx:86
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:51
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:73
@@ -11915,7 +12136,7 @@ msgstr "候补邀约已过期"
 msgid "Waitlist triggered"
 msgstr "已触发候补名单"
 
-#: src/components/routes/admin/Configurations/index.tsx:213
+#: src/components/routes/admin/Configurations/index.tsx:251
 msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
 msgstr "警告：这是系统默认配置。更改将影响所有未分配特定配置的账户。"
 
@@ -12073,8 +12294,8 @@ msgstr "Webhook 不会发送通知"
 msgid "Webhook will send notifications"
 msgstr "Webhook 将发送通知"
 
-#: src/components/layouts/Event/index.tsx:143
-#: src/components/layouts/OrganizerLayout/index.tsx:110
+#: src/components/layouts/Event/index.tsx:164
+#: src/components/layouts/OrganizerLayout/index.tsx:118
 #: src/components/modals/DuplicateEventModal/index.tsx:57
 #: src/components/routes/event/Webhooks/index.tsx:32
 #: src/components/routes/organizer/Webhooks/index.tsx:30
@@ -12274,7 +12495,7 @@ msgstr "启用后，新活动将允许参与者通过安全链接管理自己的
 msgid "When enabled, new events will display a marketing opt-in checkbox during checkout. This can be overridden per event."
 msgstr "启用后，新活动将在结账时显示营销订阅复选框。此设置可以针对每个活动单独覆盖。"
 
-#: src/components/routes/admin/Configurations/index.tsx:260
+#: src/components/routes/admin/Configurations/index.tsx:317
 msgid "When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported."
 msgstr "启用后，Stripe Connect交易将不收取应用费用。用于不支持应用费用的国家。"
 
@@ -12298,7 +12519,7 @@ msgstr "这项活动由谁组织？"
 msgid "Who should be asked this question?"
 msgstr "这个问题应该问谁？"
 
-#: src/components/layouts/Event/index.tsx:142
+#: src/components/layouts/Event/index.tsx:163
 msgid "Widget Embed"
 msgstr "嵌入小部件"
 
@@ -12395,7 +12616,7 @@ msgstr "您正在发出部分退款。客户将获得 {0} {1} 的退款。"
 msgid "You are offline"
 msgstr "您处于离线状态"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:259
+#: src/components/common/PlatformFeesSettings/index.tsx:254
 msgid "You can configure additional service fees and taxes in your account settings."
 msgstr "您可以在账户设置中配置额外的服务费和税费。"
 
@@ -12464,6 +12685,10 @@ msgstr "您已超时，未能完成订单。"
 msgid "You have taxes and fees added to a Free Product. Would you like to remove them?"
 msgstr "您已向免费产品添加了税费。您想要删除它们吗？"
 
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:100
+msgid "You haven't added an organizer logo yet — add one so your emails are fully branded."
+msgstr "您还没有添加主办方徽标 — 添加一个，让您的邮件完整呈现品牌标识。"
+
 #: src/components/modals/SendMessageModal/index.tsx:218
 msgid "You must acknowledge that this email is not promotional"
 msgstr "您必须确认此电子邮件并非促销邮件"
@@ -12488,7 +12713,7 @@ msgstr "必须先创建机票，然后才能手动添加与会者。"
 msgid "You must have at least one price tier"
 msgstr "您必须至少有一个价格等级"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:294
+#: src/components/layouts/OrganizerLayout/index.tsx:313
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "您必须先验证电子邮箱地址，才能更新组织者状态。"
 
@@ -12504,7 +12729,11 @@ msgstr "您需要验证账户电子邮件后才能修改电子邮件模板。"
 msgid "You need to verify your account email before you can send messages."
 msgstr "您需要验证您的帐户电子邮件才能发送消息。"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:67
+#: src/components/modals/UpgradePlanModal/index.tsx:95
+msgid "You pass platform fees on to your buyers, so upgrading adds nothing to your costs."
+msgstr "您已将平台费用转嫁给买家，因此升级不会增加您的任何成本。"
+
+#: src/components/common/PlatformFeesSettings/index.tsx:60
 msgid "You receive"
 msgstr "您收到"
 
@@ -12528,6 +12757,14 @@ msgstr "在您创建容量分配之前，您需要一个产品。"
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "您需要至少一个产品才能开始。免费、付费或让用户决定支付金额。"
 
+#: src/components/modals/UpgradePlanModal/index.tsx:134
+#~ msgid "You're back on {0}. {appName} branding has been restored."
+#~ msgstr "您已回到 {0}。{appName} 品牌标识已恢复。"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:137
+msgid "You're back on {targetName}. {appName} branding has been restored."
+msgstr ""
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:279
 msgid "You're changing session times"
 msgstr "您正在更改场次时间"
@@ -12535,6 +12772,14 @@ msgstr "您正在更改场次时间"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:166
 msgid "You're going to {0}!"
 msgstr "您将参加 {0}！"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:47
+#~ msgid "You're on {0}. {appName} branding has been removed."
+#~ msgstr "您已升级到 {0}。{appName} 品牌标识已移除。"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:49
+msgid "You're on {targetName}. {appName} branding has been removed."
+msgstr ""
 
 #: src/components/modals/JoinWaitlistModal/index.tsx:99
 msgid "You're on the waitlist!"
@@ -12559,6 +12804,10 @@ msgstr "您的账户名称会在活动页面和电子邮件中使用。"
 #: src/components/routes/event/Affiliates/index.tsx:48
 msgid "Your affiliates have been exported successfully."
 msgstr "您的推广员已成功导出。"
+
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:150
+msgid "Your attendee emails, fully branded"
+msgstr "您的参与者邮件，全品牌呈现"
 
 #: src/components/routes/event/attendees.tsx:164
 msgid "Your attendees have been exported successfully."
@@ -12595,6 +12844,11 @@ msgstr "您要求将电子邮件更改为<0>{0}</0>的申请正在处理中。�
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:48
 msgid "Your event is live!"
 msgstr "您的活动已上线！"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:41
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:72
+msgid "Your logo on every attendee email"
+msgstr "每封参与者邮件都显示您的标志"
 
 #: src/components/common/OrdersTable/index.tsx:87
 msgid "Your message has been sent"
@@ -12636,6 +12890,10 @@ msgstr "您的订单已被取消。"
 msgid "Your order is awaiting payment"
 msgstr "您的订单正在等待付款"
 
+#: src/components/routes/organizer/Settings/Sections/BrandingSettings/index.tsx:136
+msgid "Your Order is Confirmed!"
+msgstr "您的订单已确认！"
+
 #: src/components/routes/event/orders.tsx:127
 msgid "Your orders have been exported successfully."
 msgstr "您的订单已成功导出。"
@@ -12669,9 +12927,21 @@ msgstr "您的付款未成功，请重试。"
 msgid "Your payment was unsuccessful. Please try again."
 msgstr "您的付款未成功。请重试。"
 
-#: src/components/common/PlatformFeesSettings/index.tsx:149
+#: src/components/common/PlatformFeesSettings/index.tsx:144
 msgid "Your Plan"
 msgstr "您的计划"
+
+#: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:68
+msgid "Your plan, its platform fee, and how fees are handled for new events."
+msgstr "您的套餐、平台费用以及新活动的费用处理方式。"
+
+#: src/components/modals/UpgradePlanModal/index.tsx:154
+msgid "Your platform fee changes to {0} per paid order."
+msgstr "您的平台费用将变为每笔付费订单 {0}。"
+
+#: src/hooks/useOrganizerPlanActions.tsx:79
+#~ msgid "Your platform fee changes to {0}. {appName} branding will reappear on your emails, event pages, checkout and tickets."
+#~ msgstr "您的平台费用将变为 {0}。{appName} 品牌标识将重新出现在您的邮件、活动页面、结账和门票上。"
 
 #: src/components/modals/RefundOrderModal/index.tsx:59
 msgid "Your refund is processing."

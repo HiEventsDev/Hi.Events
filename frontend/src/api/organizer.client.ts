@@ -1,5 +1,6 @@
 import {api} from "./client";
 import {
+    AccountConfiguration,
     Event,
     GenericDataResponse,
     GenericPaginatedResponse,
@@ -31,6 +32,20 @@ export const organizerClient = {
 
     findByID: async (organizerId: IdParam) => {
         const response = await api.get<GenericDataResponse<Organizer>>('organizers/' + organizerId);
+        return response.data;
+    },
+
+    upgradeConfiguration: async (organizerId: IdParam) => {
+        const response = await api.post<GenericDataResponse<AccountConfiguration>>(
+            'organizers/' + organizerId + '/configuration/upgrade',
+        );
+        return response.data;
+    },
+
+    downgradeConfiguration: async (organizerId: IdParam) => {
+        const response = await api.post<GenericDataResponse<AccountConfiguration>>(
+            'organizers/' + organizerId + '/configuration/downgrade',
+        );
         return response.data;
     },
 

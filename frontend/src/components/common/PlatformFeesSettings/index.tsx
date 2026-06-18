@@ -1,21 +1,14 @@
 import {t} from "@lingui/macro";
 import {Anchor, Button, Grid, Group, NumberInput, SegmentedControl, Stack, Text, Title} from "@mantine/core";
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {Card} from "../Card";
 import {HeadingWithDescription} from "../Card/CardHeading";
-import {formatCurrency} from "../../../utilites/currency.ts";
+import {formatCurrency, formatFee} from "../../../utilites/currency.ts";
+import {planDisplayName} from "../../../utilites/plans.ts";
 import {IconArrowRight} from "@tabler/icons-react";
 import classes from "./PlatformFeesSettings.module.scss";
 import {AccountConfiguration} from "../../../types.ts";
 import {PlatformFeePreview} from "../../../api/event-settings.client.ts";
-
-const formatPercentage = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'percent',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(value / 100);
-};
 
 interface FeeBreakdownProps {
     ticketPrice: number;
@@ -90,6 +83,7 @@ export interface PlatformFeesSettingsProps {
     feeHandlingDescription: string;
     feePreview?: PlatformFeePreview;
     onPriceChange?: (price: number) => void;
+    planSlot?: ReactNode;
 }
 
 export const PlatformFeesSettings = ({
@@ -104,6 +98,7 @@ export const PlatformFeesSettings = ({
     feeHandlingDescription,
     feePreview,
     onPriceChange,
+    planSlot,
 }: PlatformFeesSettingsProps) => {
     const [samplePrice, setSamplePrice] = useState<number | string>(50);
     const [selectedOption, setSelectedOption] = useState<'pass' | 'absorb'>(currentValue ? 'pass' : 'absorb');
@@ -147,15 +142,15 @@ export const PlatformFeesSettings = ({
                         <Group justify="space-between" align="flex-start">
                             <div>
                                 <Text size="sm" fw={500} mb="xs">{t`Your Plan`}</Text>
-                                <Title order={4}>{configuration.name}</Title>
+                                <Title order={4}>{planDisplayName(configuration.name)}</Title>
+                                {planSlot}
                             </div>
                             <div style={{textAlign: 'right'}}>
                                 <Text size="sm" c="dimmed">{t`Platform fee`}</Text>
                                 <Text fw={600}>
-                                    {formatPercentage(feePercentage)}
-                                    {configuration.application_fees?.fixed > 0 && ` + ${formatCurrency(configuration.application_fees.fixed, configCurrency)}`}
+                                    {formatFee(feePercentage, fixedFee, configCurrency) || t`Free`}
                                 </Text>
-                                {feePreview && configCurrency !== feeCurrency && configuration.application_fees?.fixed > 0 && (
+                                {feePreview && configCurrency !== feeCurrency && fixedFee > 0 && (
                                     <Text size="xs" c="dimmed">
                                         {t`≈ ${formatCurrency(fixedFee, feeCurrency)} at current rate`}
                                     </Text>

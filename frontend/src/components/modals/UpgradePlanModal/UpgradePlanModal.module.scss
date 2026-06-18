@@ -1,0 +1,158 @@
+.wrapper {
+    border-radius: var(--mantine-radius-lg);
+    overflow: hidden;
+}
+
+.hero {
+    position: relative;
+    padding: 30px 28px 26px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--mantine-color-primary-7), var(--mantine-color-primary-5));
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 82% -20%, rgba(255, 255, 255, 0.28), transparent 46%);
+    pointer-events: none;
+}
+
+.heroMuted {
+    background: linear-gradient(135deg, var(--mantine-color-gray-7), var(--mantine-color-gray-5));
+}
+
+.heroIcon {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+}
+
+.heroTitle {
+    position: relative;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.heroSubtitle {
+    position: relative;
+    font-size: 0.92rem;
+    opacity: 0.92;
+    margin-top: 5px;
+}
+
+.body {
+    padding: 22px 26px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--mantine-color-gray-8);
+}
+
+.benefits li svg {
+    color: var(--mantine-color-primary-6);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.feeCompare {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.feeCol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--mantine-color-gray-2);
+    background: var(--mantine-color-gray-0);
+}
+
+.feeColActive {
+    border-color: color-mix(in srgb, var(--mantine-color-primary-5) 40%, transparent);
+    background: color-mix(in srgb, var(--mantine-color-primary-5) 8%, #fff);
+}
+
+.feeLabel {
+    font-size: 0.78rem;
+    color: var(--mantine-color-gray-6);
+}
+
+.feeValue {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--mantine-color-gray-9);
+}
+
+.feeColActive .feeValue {
+    color: var(--mantine-color-primary-7);
+}
+
+.feeArrow {
+    align-self: center;
+    flex-shrink: 0;
+    color: var(--mantine-color-gray-5);
+}
+
+.feeCaption {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--mantine-color-gray-6);
+    margin-top: 7px;
+}
+
+.fineprint {
+    line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 26px 20px 22px;
+    }
+
+    .heroTitle {
+        font-size: 1.3rem;
+    }
+
+    .body {
+        padding: 20px 18px 22px;
+    }
+
+    .feeCompare {
+        flex-direction: column;
+    }
+
+    .feeArrow {
+        transform: rotate(90deg);
+    }
+}

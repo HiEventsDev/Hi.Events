@@ -3,23 +3,27 @@
 namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
-use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -27,17 +31,16 @@ use Throwable;
 class OrderCancelService
 {
     public function __construct(
-        private readonly Mailer                              $mailer,
-        private readonly AttendeeRepositoryInterface         $attendeeRepository,
-        private readonly EventRepositoryInterface            $eventRepository,
-        private readonly OrderRepositoryInterface            $orderRepository,
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly ProductQuantityUpdateService        $productQuantityService,
-        private readonly DomainEventDispatcherService        $domainEventDispatcherService,
-        private readonly EventStatisticsCancellationService  $eventStatisticsCancellationService,
-    )
-    {
-    }
+        private readonly Mailer $mailer,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly ProductQuantityUpdateService $productQuantityService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly EventStatisticsCancellationService $eventStatisticsCancellationService,
+        private readonly MailBrandingService $mailBrandingService,
+    ) {}
 
     /**
      * @throws Throwable
@@ -53,19 +56,25 @@ class OrderCancelService
             $this->updateOrderStatus($order);
 
             $event = $this->eventRepository
-                ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
+                ->loadRelation(new Relationship(OrganizerDomainObject::class, nested: [
+                    new Relationship(domainObject: OrganizerSettingDomainObject::class, name: 'organizer_settings'),
+                    new Relationship(domainObject: ImageDomainObject::class),
+                ], name: 'organizer'))
+                ->loadRelation(ProductDomainObject::class)
                 ->loadRelation(EventSettingDomainObject::class)
                 ->findById($order->getEventId());
+
+            $mail = new OrderCancelled(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+            );
 
             $this->mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
-                ->send(new OrderCancelled(
-                    order: $order,
-                    event: $event,
-                    organizer: $event->getOrganizer(),
-                    eventSettings: $event->getEventSettings(),
-                ));
+                ->send($mail->withBranding($this->mailBrandingService->fromEvent($event)));
 
             $this->domainEventDispatcherService->dispatch(
                 new OrderEvent(
@@ -104,7 +113,7 @@ class OrderCancelService
         });
 
         $groupedCounts = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => $attendee->getProductPriceId() . '_' . $attendee->getEventOccurrenceId())
+            ->map(fn (AttendeeDomainObject $attendee) => $attendee->getProductPriceId().'_'.$attendee->getEventOccurrenceId())
             ->countBy();
 
         foreach ($groupedCounts as $compositeKey => $count) {
@@ -136,7 +145,7 @@ class OrderCancelService
         ]);
 
         $capacityScopes = $attendees
-            ->map(fn(AttendeeDomainObject $attendee) => [
+            ->map(fn (AttendeeDomainObject $attendee) => [
                 'product_id' => $attendee->getProductId(),
                 'event_occurrence_id' => $attendee->getEventOccurrenceId(),
             ])

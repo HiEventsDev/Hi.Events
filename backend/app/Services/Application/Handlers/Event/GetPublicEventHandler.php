@@ -55,6 +55,7 @@ class GetPublicEventHandler
                     ),
                 ])
             )
+            ->loadRelation(new Relationship(ProductDomainObject::class))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
                 new Relationship(domainObject: LocationDomainObject::class, name: 'location'),

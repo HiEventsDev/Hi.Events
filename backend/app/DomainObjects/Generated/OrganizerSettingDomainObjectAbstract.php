@@ -31,6 +31,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     final public const DEFAULT_ALLOW_ATTENDEE_SELF_EDIT = 'default_allow_attendee_self_edit';
     final public const TRACKING_PIXELS = 'tracking_pixels';
     final public const TRACKING_CONSENT_ACKNOWLEDGED = 'tracking_consent_acknowledged';
+    final public const HIDE_BRANDING = 'hide_branding';
 
     protected int $id;
     protected int $organizer_id;
@@ -53,6 +54,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     protected bool $default_allow_attendee_self_edit = true;
     protected array|string|null $tracking_pixels = null;
     protected bool $tracking_consent_acknowledged = false;
+    protected bool $hide_branding = false;
 
     public function toArray(): array
     {
@@ -78,6 +80,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
                     'default_allow_attendee_self_edit' => $this->default_allow_attendee_self_edit ?? null,
                     'tracking_pixels' => $this->tracking_pixels ?? null,
                     'tracking_consent_acknowledged' => $this->tracking_consent_acknowledged ?? null,
+                    'hide_branding' => $this->hide_branding ?? null,
                 ];
     }
 
@@ -311,5 +314,16 @@ abstract class OrganizerSettingDomainObjectAbstract extends \HiEvents\DomainObje
     public function getTrackingConsentAcknowledged(): bool
     {
         return $this->tracking_consent_acknowledged;
+    }
+
+    public function setHideBranding(bool $hide_branding): self
+    {
+        $this->hide_branding = $hide_branding;
+        return $this;
+    }
+
+    public function getHideBranding(): bool
+    {
+        return $this->hide_branding;
     }
 }

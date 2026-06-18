@@ -32,7 +32,11 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
         );
     }
 
-    private function createAccountConfig(float $fixedFee = 0.30, float $percentageFee = 2.9, string $currency = 'USD'): OrganizerConfigurationDomainObject
+    private function createAccountConfig(
+        float $fixedFee = 0.30,
+        float $percentageFee = 2.9,
+        string $currency = 'USD',
+    ): OrganizerConfigurationDomainObject
     {
         $mock = $this->createMock(OrganizerConfigurationDomainObject::class);
         $mock->method('getFixedApplicationFee')->willReturn($fixedFee);
@@ -343,4 +347,5 @@ class OrderPlatformFeePassThroughServiceTest extends TestCase
 
         $this->assertEquals(0.0, $platformFee);
     }
+
 }

@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -30,12 +31,12 @@ class GetOrdersByLookupTokenHandler
     public function __construct(
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @throws InvalidTicketLookupTokenException
      * @return Collection<OrderDomainObject>
+     *
+     * @throws InvalidTicketLookupTokenException
      */
     public function handle(GetOrdersByLookupTokenDTO $dto): Collection
     {
@@ -51,7 +52,7 @@ class GetOrdersByLookupTokenHandler
     {
         $tokenRecord = $this->ticketLookupTokenRepository->findFirstWhere(['token' => $token]);
 
-        if (!$tokenRecord) {
+        if (! $tokenRecord) {
             throw new InvalidTicketLookupTokenException(__('Invalid or expired link. Please request a new one.'));
         }
 
@@ -81,10 +82,10 @@ class GetOrdersByLookupTokenHandler
                         nested: [
                             new Relationship(
                                 domainObject: ProductPriceDomainObject::class,
-                            )
+                            ),
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
-                    )
+                    ),
                 ],
             ))
             ->loadRelation(new Relationship(
@@ -95,11 +96,20 @@ class GetOrdersByLookupTokenHandler
                     ),
                     new Relationship(
                         domainObject: OrganizerDomainObject::class,
+                        nested: [
+                            new Relationship(
+                                domainObject: OrganizerSettingDomainObject::class,
+                                name: 'organizer_settings',
+                            ),
+                        ],
                         name: OrganizerDomainObjectAbstract::SINGULAR_NAME,
                     ),
                     new Relationship(
+                        domainObject: ProductDomainObject::class,
+                    ),
+                    new Relationship(
                         domainObject: ImageDomainObject::class,
-                    )
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ))

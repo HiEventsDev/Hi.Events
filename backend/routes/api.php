@@ -155,6 +155,8 @@ use HiEvents\Http\Actions\Organizers\GetOrganizerAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerDeletionStatusAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizerEventsAction;
 use HiEvents\Http\Actions\Organizers\GetOrganizersAction;
+use HiEvents\Http\Actions\Organizers\Configuration\DowngradeOrganizerConfigurationAction;
+use HiEvents\Http\Actions\Organizers\Configuration\UpgradeOrganizerConfigurationAction;
 use HiEvents\Http\Actions\Organizers\GetPublicOrganizerAction;
 use HiEvents\Http\Actions\Organizers\Orders\GetOrganizerOrdersAction;
 use HiEvents\Http\Actions\Organizers\Public\SendOrganizerContactMessagePublicAction;
@@ -306,6 +308,8 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
+        $router->post('/organizers/{organizer_id}/configuration/upgrade', UpgradeOrganizerConfigurationAction::class);
+        $router->post('/organizers/{organizer_id}/configuration/downgrade', DowngradeOrganizerConfigurationAction::class);
         $router->patch('/organizers/{organizer_id}/location', UpdateOrganizerLocationAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}', GetOrganizerReportAction::class);
         $router->get('/organizers/{organizer_id}/reports/{report_type}/export', ExportOrganizerReportAction::class);

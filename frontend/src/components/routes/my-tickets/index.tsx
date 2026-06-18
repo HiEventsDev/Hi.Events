@@ -262,7 +262,7 @@ export const MyTickets = () => {
                     ))}
                 </div>
             </div>
-            <PoweredByFooter/>
+            <PoweredByFooter hide={orders.every((order) => order.branding_removed)}/>
         </CheckoutContent>
     );
 };

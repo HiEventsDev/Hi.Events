@@ -376,7 +376,7 @@ const Checkout = () => {
                     </header>
                     <Outlet/>
                     {isModal && currentStep !== 'summary' && (
-                        <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                        <PoweredByFooter hide={publicEvent?.branding_removed ?? event?.branding_removed} style={{marginTop: '12px', paddingBottom: '16px'}}/>
                     )}
                 </div>
             </div>

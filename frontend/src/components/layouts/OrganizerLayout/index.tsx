@@ -13,6 +13,7 @@ import {
     IconPaint,
     IconSettings,
     IconShare,
+    IconSparkles,
     IconUsersGroup,
     IconWebhook
 } from "@tabler/icons-react";
@@ -41,6 +42,10 @@ import { confirmationDialog } from "../../../utilites/confirmationDialog.tsx";
 import { showError, showSuccess } from "../../../utilites/notifications.tsx";
 import { useResendEmailConfirmation } from "../../../mutations/useResendEmailConfirmation.ts";
 import { useGetMe } from "../../../queries/useGetMe.ts";
+import { useBrandingUpsell } from "../../../hooks/useBrandingUpsell.ts";
+import { useOrganizerPlanActions } from "../../../hooks/useOrganizerPlanActions.tsx";
+import { getConfig } from "../../../utilites/config.ts";
+import { planDisplayName } from "../../../utilites/plans.ts";
 
 const OrganizerLayout = () => {
     const { organizerId } = useParams();
@@ -64,6 +69,9 @@ const OrganizerLayout = () => {
     const { data: me } = useGetMe();
     const isUserEmailVerfied = me?.is_email_verified;
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const appName = getConfig("VITE_APP_NAME", "Hi.Events");
+    const { isEligible: showBrandingUpsell, upgrade: brandingUpgrade } = useBrandingUpsell(organizerId);
+    const { openUpgradeModal } = useOrganizerPlanActions(organizerId);
 
     const statusToggleMutation = useUpdateOrganizerStatus();
 
@@ -178,6 +186,17 @@ const OrganizerLayout = () => {
     ];
 
     const callouts: CalloutConfig[] = [
+        ...(showBrandingUpsell && brandingUpgrade ? [{
+            icon: <IconSparkles size={20} />,
+            heading: t`Make it yours`,
+            description: t`Upgrade to ${planDisplayName(brandingUpgrade.name)} to remove ${appName} branding from your paid events.`,
+            buttonIcon: <IconSparkles size={16} />,
+            buttonText: t`Upgrade to ${planDisplayName(brandingUpgrade.name)}`,
+            onClick: () => {
+                openUpgradeModal(brandingUpgrade);
+            },
+            storageKey: `organizer-${organizerId}-branding-upsell-dismissed`
+        }] as CalloutConfig[] : []),
         {
             icon: <IconUsersGroup size={20} />,
             heading: t`Invite Your Team`,

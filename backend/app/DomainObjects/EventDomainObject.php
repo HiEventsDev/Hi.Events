@@ -95,6 +95,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return $this->products;
     }
 
+    public function hasPaidProducts(): bool
+    {
+        $isRevenueProducing = static fn (ProductDomainObject $product): bool => $product->isPaidType() || $product->isDonationType() || $product->isTieredType();
+
+        if ($this->products?->contains($isRevenueProducing)) {
+            return true;
+        }
+
+        return (bool) $this->productCategories
+            ?->flatMap(fn (ProductCategoryDomainObject $category) => $category->getProducts() ?? collect())
+            ->contains($isRevenueProducing);
+    }
+
     public function setQuestions(?Collection $questions): EventDomainObject
     {
         $this->questions = $questions;

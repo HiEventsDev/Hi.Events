@@ -19,12 +19,8 @@ import {getConfig} from "../../../utilites/config.ts";
  * If you wish to remove this notice, a commercial license is available at: https://hi.events/licensing
  */
 export const PoweredByFooter = (
-    props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    {hide, ...props}: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & { hide?: boolean }
 ) => {
-    if (iHavePurchasedALicence()) {
-        return <></>;
-    }
-
     const link = useMemo(() => {
         let host = getConfig("VITE_FRONTEND_URL") ?? "unknown";
         let medium = "app";
@@ -42,6 +38,10 @@ export const PoweredByFooter = (
 
         return url.toString();
     }, []);
+
+    if (hide || iHavePurchasedALicence()) {
+        return <></>;
+    }
 
     const footerContent = isHiEvents() ? (
         <>

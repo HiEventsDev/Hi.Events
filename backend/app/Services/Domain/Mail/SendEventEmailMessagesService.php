@@ -36,6 +36,7 @@ class SendEventEmailMessagesService
         private readonly UserRepositoryInterface $userRepository,
         private readonly Logger $logger,
         private readonly Dispatcher $dispatcher,
+        private readonly MailBrandingService $mailBrandingService,
     ) {}
 
     /**
@@ -264,15 +265,17 @@ class SendEventEmailMessagesService
             return;
         }
 
+        $eventMessage = new EventMessage(
+            event: $event,
+            eventSettings: $event->getEventSettings(),
+            messageData: $messageData
+        );
+
         $this->dispatcher->dispatch(
             new SendEventEmailJob(
                 email: $emailAddress,
                 toName: $fullName,
-                eventMessage: new EventMessage(
-                    event: $event,
-                    eventSettings: $event->getEventSettings(),
-                    messageData: $messageData
-                ),
+                eventMessage: $eventMessage->withBranding($this->mailBrandingService->resolveForEvent($event->getId())),
                 messageData: $messageData,
             )
         );

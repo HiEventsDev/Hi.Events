@@ -7,12 +7,14 @@ use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Services\Domain\Organizer\OrganizerPlanEntitlementService;
 
 class UpdateOrganizerConfigurationHandler
 {
     public function __construct(
         private readonly OrganizerConfigurationRepositoryInterface $configurationRepository,
         private readonly OrganizerRepositoryInterface              $organizerRepository,
+        private readonly OrganizerPlanEntitlementService           $entitlementService,
     )
     {
     }
@@ -45,12 +47,16 @@ class UpdateOrganizerConfigurationHandler
             'name' => sprintf('%s (#%d) - Custom Fees', $organizer->getName(), $organizer->getId()),
             'is_system_default' => false,
             'application_fees' => $dto->applicationFees,
+            'features' => $currentConfiguration?->getFeaturesArray() ?: null,
+            'bypass_application_fees' => $currentConfiguration?->getBypassApplicationFees() ?? false,
         ]);
 
         $this->organizerRepository->updateFromArray(
             id: $organizer->getId(),
             attributes: ['organizer_configuration_id' => $configuration->getId()],
         );
+
+        $this->entitlementService->syncOrganizerSettingsWithPlan($organizer->getId(), $configuration);
 
         return $configuration;
     }

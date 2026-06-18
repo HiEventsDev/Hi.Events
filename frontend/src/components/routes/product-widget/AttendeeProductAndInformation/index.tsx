@@ -55,7 +55,7 @@ export const AttendeeProductAndInformation = () => {
 
             <OnlineEventDetails event={event} occurrence={attendee?.event_occurrence ?? null}/>
 
-            <PoweredByFooter/>
+            <PoweredByFooter hide={event?.branding_removed}/>
         </Container>
     )
 }

@@ -17,7 +17,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
         return [
             function ($validator) {
                 $pixels = $this->input('tracking_pixels', []);
-                if (!is_array($pixels)) {
+                if (! is_array($pixels)) {
                     return;
                 }
 
@@ -33,11 +33,12 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
                         );
+
                         continue;
                     }
 
                     if ($provider && $pixelId !== '') {
-                        if (!preg_match($provider->pixelIdPattern(), $pixelId)) {
+                        if (! preg_match($provider->pixelIdPattern(), $pixelId)) {
                             $validator->errors()->add(
                                 "tracking_pixels.{$index}.pixel_id",
                                 $provider->pixelIdFormatDescription()
@@ -46,8 +47,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                     }
                 }
 
-                $enabledPixels = collect($pixels)->filter(fn ($p) => !empty($p['enabled']));
-                if ($enabledPixels->isNotEmpty() && !$this->input('tracking_consent_acknowledged')) {
+                $enabledPixels = collect($pixels)->filter(fn ($p) => ! empty($p['enabled']));
+                if ($enabledPixels->isNotEmpty() && ! $this->input('tracking_consent_acknowledged')) {
                     $validator->errors()->add(
                         'tracking_consent_acknowledged',
                         __('You must acknowledge your data controller responsibilities before enabling tracking pixels.')
@@ -116,6 +117,9 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],
             'tracking_pixels.*.enabled' => ['required', 'boolean'],
             'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
+
+            // Branding
+            'hide_branding' => ['sometimes', 'nullable', 'boolean'],
         ];
     }
 }

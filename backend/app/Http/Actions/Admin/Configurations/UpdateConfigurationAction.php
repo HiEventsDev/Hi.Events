@@ -8,15 +8,17 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
+use HiEvents\Services\Domain\Organizer\OrganizerPlanEntitlementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UpdateConfigurationAction extends BaseAction
 {
     public function __construct(
         private readonly OrganizerConfigurationRepositoryInterface $repository,
-    ) {
-    }
+        private readonly OrganizerPlanEntitlementService $entitlementService,
+    ) {}
 
     public function __invoke(Request $request, int $configurationId): JsonResponse
     {
@@ -28,6 +30,14 @@ class UpdateConfigurationAction extends BaseAction
             'application_fees.fixed' => 'required|numeric|min:0',
             'application_fees.percentage' => 'required|numeric|min:0|max:100',
             'application_fees.currency' => 'sometimes|string|size:3|alpha|uppercase',
+            'features' => ['sometimes', 'nullable', 'array', CreateConfigurationAction::validFeatureMap()],
+            'upgrades_to_id' => [
+                'sometimes',
+                'nullable',
+                'integer',
+                Rule::notIn([$configurationId]),
+                Rule::exists('organizer_configurations', 'id')->whereNull('deleted_at'),
+            ],
             'bypass_application_fees' => 'sometimes|boolean',
         ]);
 
@@ -36,9 +46,13 @@ class UpdateConfigurationAction extends BaseAction
             attributes: [
                 'name' => $validated['name'],
                 'application_fees' => $validated['application_fees'],
+                'features' => $validated['features'] ?? null,
+                'upgrades_to_id' => $validated['upgrades_to_id'] ?? null,
                 'bypass_application_fees' => $validated['bypass_application_fees'] ?? false,
             ]
         );
+
+        $this->entitlementService->syncAllOrganizersOnConfiguration($configuration);
 
         return $this->jsonResponse(
             new OrganizerConfigurationResource($configuration),

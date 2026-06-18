@@ -14,6 +14,7 @@ use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
 use HiEvents\Mail\Order\PaymentSuccessButOrderExpiredMail;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Contracts\Mail\Mailer;
@@ -29,7 +30,7 @@ readonly class StripeRefundExpiredOrderService
         private LoggerInterface                  $logger,
         private EventRepositoryInterface         $eventRepository,
         private StripeClientFactory              $stripeClientFactory,
-
+        private MailBrandingService              $mailBrandingService,
     )
     {
     }
@@ -66,15 +67,17 @@ readonly class StripeRefundExpiredOrderService
             $stripeClient
         );
 
+        $mail = new PaymentSuccessButOrderExpiredMail(
+            order: $order,
+            event: $event,
+            eventSettings: $event->getEventSettings(),
+            organizer: $event->getOrganizer(),
+        );
+
         $this->mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
-            ->send(new PaymentSuccessButOrderExpiredMail(
-                order: $order,
-                event: $event,
-                eventSettings: $event->getEventSettings(),
-                organizer: $event->getOrganizer(),
-            ));
+            ->send($mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId())));
 
         $this->logger->info('Refunded expired order', [
             'order_id' => $order->getId(),

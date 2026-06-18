@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\Services\Application\Handlers\OrganizerSettings;
 
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
+use HiEvents\Exceptions\BrandingRemovalNotAllowedException;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
 use HiEvents\Services\Application\Handlers\Organizer\Settings\PartialUpdateOrganizerSettingsHandler;
+use HiEvents\Services\Domain\Organizer\OrganizerPlanEntitlementService;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
@@ -18,6 +21,7 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
 
     private OrganizerSettingsRepositoryInterface $settingsRepository;
     private OrganizerRepositoryInterface $organizerRepository;
+    private OrganizerPlanEntitlementService $entitlementService;
     private PartialUpdateOrganizerSettingsHandler $handler;
 
     protected function setUp(): void
@@ -26,10 +30,12 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
 
         $this->settingsRepository = Mockery::mock(OrganizerSettingsRepositoryInterface::class);
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
+        $this->entitlementService = Mockery::mock(OrganizerPlanEntitlementService::class);
 
         $this->handler = new PartialUpdateOrganizerSettingsHandler(
             organizerSettingsRepository: $this->settingsRepository,
             organizerRepository: $this->organizerRepository,
+            entitlementService: $this->entitlementService,
         );
     }
 
@@ -41,6 +47,11 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
         $existingSettings = new OrganizerSettingDomainObject();
         $existingSettings->setId(10);
         $existingSettings->setOrganizerId(1);
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->andReturnSelf();
 
         $this->organizerRepository
             ->shouldReceive('findFirstWhere')
@@ -107,6 +118,11 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
         $existingSettings->setTrackingConsentAcknowledged(true);
 
         $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->andReturnSelf();
+
+        $this->organizerRepository
             ->shouldReceive('findFirstWhere')
             ->once()
             ->andReturn($organizer);
@@ -141,5 +157,85 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
         ]);
 
         $this->handler->handle($dto);
+    }
+
+    public function testEnablingBrandingRemovalAssertsEntitlement(): void
+    {
+        $configuration = new OrganizerConfigurationDomainObject();
+        $organizer = (new OrganizerDomainObject())->setId(1)->setOrganizerConfiguration($configuration);
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->andReturnSelf();
+
+        $this->organizerRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->andReturn($organizer);
+
+        $this->entitlementService
+            ->shouldReceive('assertCanEnableBrandingRemoval')
+            ->once()
+            ->with($configuration)
+            ->andThrow(new BrandingRemovalNotAllowedException('Branding removal is not included in your plan.'));
+
+        $dto = PartialUpdateOrganizerSettingsDTO::from([
+            'organizer_id' => 1,
+            'account_id' => '100',
+            'hide_branding' => true,
+        ]);
+
+        $this->expectException(BrandingRemovalNotAllowedException::class);
+
+        $this->handler->handle($dto);
+    }
+
+    public function testDisablingBrandingRemovalSkipsEntitlementCheck(): void
+    {
+        $configuration = new OrganizerConfigurationDomainObject();
+        $organizer = (new OrganizerDomainObject())->setId(1)->setOrganizerConfiguration($configuration);
+
+        $existingSettings = new OrganizerSettingDomainObject();
+        $existingSettings->setId(10);
+        $existingSettings->setOrganizerId(1);
+        $existingSettings->setHideBranding(true);
+
+        $this->organizerRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->andReturnSelf();
+
+        $this->organizerRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->andReturn($organizer);
+
+        $this->entitlementService->shouldNotReceive('assertCanEnableBrandingRemoval');
+
+        $this->settingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->andReturn($existingSettings);
+
+        $this->settingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                Mockery::on(fn (array $attributes) => $attributes['hide_branding'] === false),
+                Mockery::any()
+            );
+
+        $this->settingsRepository
+            ->shouldReceive('findFirst')
+            ->with(10)
+            ->once()
+            ->andReturn($existingSettings);
+
+        $this->handler->handle(PartialUpdateOrganizerSettingsDTO::from([
+            'organizer_id' => 1,
+            'account_id' => '100',
+            'hide_branding' => false,
+        ]));
     }
 }

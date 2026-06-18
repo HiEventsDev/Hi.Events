@@ -723,7 +723,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     {t`Terms of Service`}
                                 </Anchor>
                             </div>
-                            <PoweredByFooter className={classes.poweredByFooter}/>
+                            <PoweredByFooter className={classes.poweredByFooter} hide={event?.branding_removed}/>
                         </div>
                     </div>
 

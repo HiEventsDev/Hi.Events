@@ -32,6 +32,16 @@ class GetOrganizerAction extends BaseAction
             ->loadRelation(new Relationship(
                 domainObject: OrganizerConfigurationDomainObject::class,
                 name: 'organizer_configuration',
+                nested: [
+                    new Relationship(
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'upgrades_to',
+                    ),
+                    new Relationship(
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'downgrade_options',
+                    ),
+                ],
             ))
             ->loadRelation(new Relationship(LocationDomainObject::class, name: 'location_record'))
             ->findFirstWhere([

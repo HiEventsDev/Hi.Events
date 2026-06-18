@@ -1,8 +1,12 @@
+@php
+    $hideBranding ??= false;
+    $organizerName ??= null;
+@endphp
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
-        <x-mail::header :url="config('app.url')">
-            {{ config('app.name') }}
+        <x-mail::header :url="$hideBranding ? '' : config('app.url')">
+            {{ $hideBranding ? ($organizerName ?? '') : config('app.name') }}
         </x-mail::header>
     </x-slot:header>
 
@@ -21,7 +25,11 @@
     {{-- Footer --}}
     <x-slot:footer>
         <x-mail::footer>
-            © {{ date('Y') }} {{ config('app.name') }}. @lang('All rights reserved.')
+            @if($hideBranding)
+                {{ $organizerName }}
+            @else
+                © {{ date('Y') }} {{ config('app.name') }}. @lang('All rights reserved.')
+            @endif
         </x-mail::footer>
     </x-slot:footer>
 </x-mail::layout>

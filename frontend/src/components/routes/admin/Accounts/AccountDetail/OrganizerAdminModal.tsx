@@ -113,6 +113,9 @@ export const OrganizerAdminModal = ({organizer, onClose}: Props) => {
                                     <Badge size="xs">{t`Default`}</Badge>
                                 )}
                             </Group>
+                            {organizer.configuration?.features?.branding_removal && (
+                                <Text size="xs" c="dimmed">{t`Includes branding removal`}</Text>
+                            )}
                         </div>
 
                         <Select

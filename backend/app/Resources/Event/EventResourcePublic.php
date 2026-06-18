@@ -12,6 +12,7 @@ use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
 use HiEvents\Resources\ProductCategory\ProductCategoryResourcePublic;
 use HiEvents\Resources\Question\QuestionResource;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use Illuminate\Http\Request;
 
 /**
@@ -83,6 +84,13 @@ class EventResourcePublic extends BaseResource
             'organizer' => $this->when(
                 condition: ! is_null($this->getOrganizer()),
                 value: fn () => new OrganizerResourcePublic($this->getOrganizer()),
+            ),
+            'branding_removed' => $this->when(
+                condition: app(BrandingVisibilityService::class)->canDetermineVisibility($this->resource),
+                value: fn () => app(BrandingVisibilityService::class)->shouldHideBranding(
+                    $this->resource,
+                    $this->getOrganizer()?->getOrganizerSettings(),
+                ),
             ),
             'occurrences' => $this->when(
                 condition: ! is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),

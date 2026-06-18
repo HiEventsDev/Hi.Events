@@ -9,6 +9,7 @@ use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\Order\Invoice\InvoiceResourcePublic;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use Illuminate\Http\Request;
 
 /**
@@ -30,8 +31,8 @@ class OrderResourcePublic extends BaseResource
             'currency' => $this->getCurrency(),
             'reserved_until' => $this->getReservedUntil(),
             'is_expired' => $this->when(
-                !is_null($this->getReservedUntil()),
-                fn() => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
+                ! is_null($this->getReservedUntil()),
+                fn () => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
             ),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
@@ -41,29 +42,36 @@ class OrderResourcePublic extends BaseResource
             'promo_code' => $this->getPromoCode(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event' => $this->when(
-                !is_null($this->getEvent()),
-                fn() => new EventResourcePublic(
+                ! is_null($this->getEvent()),
+                fn () => new EventResourcePublic(
                     resource: $this->getEvent(),
                     includePostCheckoutData: $this->getStatus() === OrderStatus::COMPLETED->name,
                 ),
             ),
+            'branding_removed' => $this->when(
+                ! is_null($this->getEvent()) && app(BrandingVisibilityService::class)->canDetermineVisibility($this->getEvent()),
+                fn () => app(BrandingVisibilityService::class)->shouldHideBranding(
+                    $this->getEvent(),
+                    $this->getEvent()->getOrganizer()?->getOrganizerSettings(),
+                ),
+            ),
             'latest_invoice' => $this->when(
-                !is_null($this->getLatestInvoice()),
-                fn() => (new InvoiceResourcePublic($this->getLatestInvoice()))->toArray($request),
+                ! is_null($this->getLatestInvoice()),
+                fn () => (new InvoiceResourcePublic($this->getLatestInvoice()))->toArray($request),
             ),
             'address' => $this->when(
-                !is_null($this->getAddress()),
-                fn() => $this->getAddress()
+                ! is_null($this->getAddress()),
+                fn () => $this->getAddress()
             ),
             'order_items' => $this->when(
-                !is_null($this->getOrderItems()),
-                fn() => OrderItemResourcePublic::collection($this->getOrderItems())
+                ! is_null($this->getOrderItems()),
+                fn () => OrderItemResourcePublic::collection($this->getOrderItems())
             ),
             'attendees' => $this->when(
-                !is_null($this->getAttendees()),
-                fn() => AttendeeResourcePublic::collection($this->getAttendees())
+                ! is_null($this->getAttendees()),
+                fn () => AttendeeResourcePublic::collection($this->getAttendees())
             ),
-            $this->mergeWhen($this->getSessionIdentifier() !== null, fn() => [
+            $this->mergeWhen($this->getSessionIdentifier() !== null, fn () => [
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
         ];
