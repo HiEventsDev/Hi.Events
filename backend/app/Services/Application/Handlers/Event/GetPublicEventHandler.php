@@ -24,6 +24,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 
@@ -37,6 +38,7 @@ class GetPublicEventHandler
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
         private readonly ProductFilterService $productFilterService,
         private readonly EventPageViewIncrementService $eventPageViewIncrementService,
+        private readonly BrandingVisibilityService $brandingVisibilityService,
     ) {}
 
     public function handle(GetPublicEventDTO $data): EventDomainObject
@@ -153,6 +155,8 @@ class GetPublicEventHandler
         if (! $data->isAuthenticated) {
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
+
+        $event->setBrandingRemoved($this->brandingVisibilityService->resolveBrandingRemoved($event));
 
         return $event->setProductCategories($this->productFilterService->filter(
             productsCategories: $event->getProductCategories(),

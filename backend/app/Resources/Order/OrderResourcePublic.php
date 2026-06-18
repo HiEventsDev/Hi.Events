@@ -9,7 +9,6 @@ use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\Order\Invoice\InvoiceResourcePublic;
-use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use Illuminate\Http\Request;
 
 /**
@@ -46,13 +45,6 @@ class OrderResourcePublic extends BaseResource
                 fn () => new EventResourcePublic(
                     resource: $this->getEvent(),
                     includePostCheckoutData: $this->getStatus() === OrderStatus::COMPLETED->name,
-                ),
-            ),
-            'branding_removed' => $this->when(
-                ! is_null($this->getEvent()) && app(BrandingVisibilityService::class)->canDetermineVisibility($this->getEvent()),
-                fn () => app(BrandingVisibilityService::class)->shouldHideBranding(
-                    $this->getEvent(),
-                    $this->getEvent()->getOrganizer()?->getOrganizerSettings(),
                 ),
             ),
             'latest_invoice' => $this->when(

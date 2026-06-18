@@ -882,7 +882,6 @@ export interface Order {
     total_gross_after_refund: number;
     total_refunded: number;
     is_expired: boolean;
-    branding_removed?: boolean;
     order_items?: OrderItem[];
     attendees?: Attendee[];
     created_at: string;

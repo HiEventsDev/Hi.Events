@@ -35,4 +35,13 @@ class BrandingVisibilityService
 
         return $event->getProducts() !== null || $event->getProductCategories() !== null;
     }
+
+    public function resolveBrandingRemoved(EventDomainObject $event): ?bool
+    {
+        if (! $this->canDetermineVisibility($event)) {
+            return null;
+        }
+
+        return $this->shouldHideBranding($event, $event->getOrganizer()?->getOrganizerSettings());
+    }
 }

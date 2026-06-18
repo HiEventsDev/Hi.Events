@@ -10,6 +10,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\GetOrdersByLookupTokenDTO;
 use HiEvents\Services\Application\Handlers\TicketLookup\GetOrdersByLookupTokenHandler;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -18,6 +19,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
 {
     private TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository;
     private OrderRepositoryInterface $orderRepository;
+    private BrandingVisibilityService $brandingVisibilityService;
     private GetOrdersByLookupTokenHandler $handler;
 
     protected function setUp(): void
@@ -26,10 +28,13 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
 
         $this->ticketLookupTokenRepository = m::mock(TicketLookupTokenRepositoryInterface::class);
         $this->orderRepository = m::mock(OrderRepositoryInterface::class);
+        $this->brandingVisibilityService = m::mock(BrandingVisibilityService::class);
+        $this->brandingVisibilityService->shouldReceive('resolveBrandingRemoved')->andReturn(null);
 
         $this->handler = new GetOrdersByLookupTokenHandler(
             $this->ticketLookupTokenRepository,
             $this->orderRepository,
+            $this->brandingVisibilityService,
         );
     }
 
@@ -46,6 +51,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
             ->andReturn($email);
 
         $order = m::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEvent')->andReturn(null);
         $orders = new Collection([$order]);
 
         $this->ticketLookupTokenRepository

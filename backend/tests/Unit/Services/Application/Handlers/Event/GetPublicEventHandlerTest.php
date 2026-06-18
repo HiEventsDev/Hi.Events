@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use Illuminate\Support\Collection;
@@ -31,6 +32,8 @@ class GetPublicEventHandlerTest extends TestCase
 
     private EventPageViewIncrementService $eventPageViewIncrementService;
 
+    private BrandingVisibilityService $brandingVisibilityService;
+
     private GetPublicEventHandler $handler;
 
     protected function setUp(): void
@@ -42,13 +45,16 @@ class GetPublicEventHandlerTest extends TestCase
         $this->promoCodeRepository = m::mock(PromoCodeRepositoryInterface::class);
         $this->ticketFilterService = m::mock(ProductFilterService::class);
         $this->eventPageViewIncrementService = m::mock(EventPageViewIncrementService::class);
+        $this->brandingVisibilityService = m::mock(BrandingVisibilityService::class);
+        $this->brandingVisibilityService->shouldReceive('resolveBrandingRemoved')->andReturn(null);
 
         $this->handler = new GetPublicEventHandler(
             $this->eventRepository,
             $this->occurrenceRepository,
             $this->promoCodeRepository,
             $this->ticketFilterService,
-            $this->eventPageViewIncrementService
+            $this->eventPageViewIncrementService,
+            $this->brandingVisibilityService
         );
     }
 

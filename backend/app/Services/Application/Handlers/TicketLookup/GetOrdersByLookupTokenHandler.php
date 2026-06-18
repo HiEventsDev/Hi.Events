@@ -24,6 +24,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\GetOrdersByLookupTokenDTO;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use Illuminate\Support\Collection;
 
 class GetOrdersByLookupTokenHandler
@@ -31,6 +32,7 @@ class GetOrdersByLookupTokenHandler
     public function __construct(
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly OrderRepositoryInterface $orderRepository,
+        private readonly BrandingVisibilityService $brandingVisibilityService,
     ) {}
 
     /**
@@ -73,7 +75,7 @@ class GetOrdersByLookupTokenHandler
      */
     private function getOrdersForEmail(string $email): Collection
     {
-        return $this->orderRepository
+        $orders = $this->orderRepository
             ->loadRelation(new Relationship(
                 domainObject: AttendeeDomainObject::class,
                 nested: [
@@ -122,5 +124,15 @@ class GetOrdersByLookupTokenHandler
                     new OrderAndDirection(OrderDomainObjectAbstract::CREATED_AT, 'desc'),
                 ],
             );
+
+        $orders->each(function (OrderDomainObject $order) {
+            $event = $order->getEvent();
+
+            if ($event !== null) {
+                $event->setBrandingRemoved($this->brandingVisibilityService->resolveBrandingRemoved($event));
+            }
+        });
+
+        return $orders;
     }
 }

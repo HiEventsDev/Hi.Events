@@ -110,4 +110,49 @@ class BrandingVisibilityServiceTest extends TestCase
 
         $this->assertTrue($service->canDetermineVisibility($event));
     }
+
+    public function test_resolve_returns_null_when_visibility_cannot_be_determined(): void
+    {
+        $service = $this->makeService(true);
+
+        $organizer = Mockery::mock(OrganizerDomainObject::class);
+        $organizer->shouldReceive('getOrganizerSettings')->andReturn(null);
+
+        $event = Mockery::mock(EventDomainObject::class);
+        $event->shouldReceive('getOrganizer')->andReturn($organizer);
+
+        $this->assertNull($service->resolveBrandingRemoved($event));
+    }
+
+    public function test_resolve_returns_true_when_determinable_and_should_hide(): void
+    {
+        $service = $this->makeService(true);
+
+        $this->assertTrue($service->resolveBrandingRemoved(
+            $this->makeDeterminableEvent(hideBranding: true, hasPaidProducts: true)
+        ));
+    }
+
+    public function test_resolve_returns_false_when_determinable_but_should_not_hide(): void
+    {
+        $service = $this->makeService(true);
+
+        $this->assertFalse($service->resolveBrandingRemoved(
+            $this->makeDeterminableEvent(hideBranding: false, hasPaidProducts: true)
+        ));
+    }
+
+    private function makeDeterminableEvent(bool $hideBranding, bool $hasPaidProducts): EventDomainObject
+    {
+        $organizer = Mockery::mock(OrganizerDomainObject::class);
+        $organizer->shouldReceive('getOrganizerSettings')->andReturn($this->makeSettings($hideBranding));
+
+        $event = Mockery::mock(EventDomainObject::class);
+        $event->shouldReceive('getOrganizer')->andReturn($organizer);
+        $event->shouldReceive('getProducts')->andReturn(new Collection());
+        $event->shouldReceive('getProductCategories')->andReturn(null);
+        $event->shouldReceive('hasPaidProducts')->andReturn($hasPaidProducts);
+
+        return $event;
+    }
 }

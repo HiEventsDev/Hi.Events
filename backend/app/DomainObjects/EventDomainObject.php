@@ -46,6 +46,20 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?EventLocationDomainObject $eventLocation = null;
 
+    private ?bool $brandingRemoved = null;
+
+    public function setBrandingRemoved(?bool $brandingRemoved): self
+    {
+        $this->brandingRemoved = $brandingRemoved;
+
+        return $this;
+    }
+
+    public function getBrandingRemoved(): ?bool
+    {
+        return $this->brandingRemoved;
+    }
+
     public static function getAllowedFilterFields(): array
     {
         return [
