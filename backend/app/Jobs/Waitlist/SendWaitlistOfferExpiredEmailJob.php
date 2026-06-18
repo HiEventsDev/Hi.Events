@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,6 +35,7 @@ class SendWaitlistOfferExpiredEmailJob implements ShouldQueue
         ProductRepositoryInterface $productRepository,
         EventOccurrenceRepositoryInterface $occurrenceRepository,
         Mailer $mailer,
+        MailBrandingService $mailBrandingService,
     ): void {
         $event = $eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
@@ -51,17 +53,19 @@ class SendWaitlistOfferExpiredEmailJob implements ShouldQueue
             ? $occurrenceRepository->findById($this->entry->getEventOccurrenceId())
             : null;
 
+        $mail = new WaitlistOfferExpiredMail(
+            entry: $this->entry,
+            event: $event,
+            product: $product,
+            productPrice: $productPrice,
+            organizer: $event->getOrganizer(),
+            eventSettings: $event->getEventSettings(),
+            occurrence: $occurrence,
+        );
+
         $mailer
             ->to($this->entry->getEmail())
             ->locale($this->entry->getLocale())
-            ->send(new WaitlistOfferExpiredMail(
-                entry: $this->entry,
-                event: $event,
-                product: $product,
-                productPrice: $productPrice,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-                occurrence: $occurrence,
-            ));
+            ->send($mail->withBranding($mailBrandingService->resolveForEvent($event->getId())));
     }
 }

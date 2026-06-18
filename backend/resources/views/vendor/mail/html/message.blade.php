@@ -1,8 +1,18 @@
+@php
+    $hideBranding ??= false;
+    $organizerLogoUrl ??= null;
+    $organizerName ??= null;
+@endphp
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
-        <x-mail::header :url="config('app.email_logo_link_url')">
-            @if($appLogo = config('app.email_logo_url'))
+        <x-mail::header :url="$hideBranding ? '' : config('app.email_logo_link_url')">
+            @if($hideBranding)
+                @if($organizerLogoUrl)
+                    <img src="{{ $organizerLogoUrl }}" class="logo" alt="{{ $organizerName ?? '' }}"
+                         style="max-width: 300px;">
+                @endif
+            @elseif($appLogo = config('app.email_logo_url'))
                 <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}"
                      style="max-width: 300px;">
             @else
@@ -29,7 +39,7 @@
         <x-mail::footer>
             @if($appEmailFooter = config('app.email_footer_text'))
                 {{ $appEmailFooter }}
-            @else
+            @elseif(! $hideBranding)
                 {{-- (c) Hi.Events Ltd 2025 --}}
                 {{-- PLEASE NOTE: --}}
                 {{-- Hi.Events is licensed under the GNU Affero General Public License (AGPL) version 3. --}}

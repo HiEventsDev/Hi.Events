@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,6 +39,7 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
         ProductRepositoryInterface $productRepository,
         EventOccurrenceRepositoryInterface $occurrenceRepository,
         Mailer $mailer,
+        MailBrandingService $mailBrandingService,
     ): void {
         $event = $eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
@@ -55,19 +57,21 @@ class SendWaitlistOfferEmailJob implements ShouldQueue
             ? $occurrenceRepository->findById($this->entry->getEventOccurrenceId())
             : null;
 
+        $mail = new WaitlistOfferMail(
+            entry: $this->entry,
+            event: $event,
+            product: $product,
+            productPrice: $productPrice,
+            organizer: $event->getOrganizer(),
+            eventSettings: $event->getEventSettings(),
+            orderShortId: $this->orderShortId,
+            sessionIdentifier: $this->sessionIdentifier,
+            occurrence: $occurrence,
+        );
+
         $mailer
             ->to($this->entry->getEmail())
             ->locale($this->entry->getLocale())
-            ->send(new WaitlistOfferMail(
-                entry: $this->entry,
-                event: $event,
-                product: $product,
-                productPrice: $productPrice,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-                orderShortId: $this->orderShortId,
-                sessionIdentifier: $this->sessionIdentifier,
-                occurrence: $occurrence,
-            ));
+            ->send($mail->withBranding($mailBrandingService->resolveForEvent($event->getId())));
     }
 }

@@ -120,6 +120,21 @@ export interface Account {
     requires_manual_verification?: boolean;
 }
 
+export type OrganizerFeature = 'branding_removal';
+
+export type PlanFeatures = Partial<Record<OrganizerFeature, boolean>>;
+
+export interface PlanSummary {
+    id: IdParam;
+    name: string;
+    application_fees: {
+        percentage: number;
+        fixed: number;
+        currency: string;
+    };
+    features?: PlanFeatures;
+}
+
 export interface AccountConfiguration {
     id: IdParam;
     name: string;
@@ -128,6 +143,11 @@ export interface AccountConfiguration {
         fixed: number;
         currency: string;
     },
+    features?: PlanFeatures;
+    upgrades_to_id?: number | null;
+    upgrade?: PlanSummary;
+    downgrade?: PlanSummary;
+    bypass_application_fees?: boolean;
     is_system_default: boolean;
 }
 
@@ -517,6 +537,7 @@ export interface Event extends EventBase {
     product_categories?: ProductCategory[];
     images?: Image[];
     organizer?: Organizer;
+    branding_removed?: boolean;
     currency: string;
     timezone: string;
     organizer_id?: IdParam;
@@ -624,6 +645,7 @@ export interface OrganizerSettings {
     default_show_marketing_opt_in?: boolean;
     default_pass_platform_fee_to_buyer?: boolean;
     default_allow_attendee_self_edit?: boolean;
+    hide_branding?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;

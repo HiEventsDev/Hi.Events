@@ -53,6 +53,10 @@ export interface AccountConfiguration {
         percentage: number;
         currency: string;
     };
+    features?: {
+        branding_removal?: boolean;
+    };
+    upgrades_to_id?: number | null;
     bypass_application_fees: boolean;
 }
 
@@ -63,6 +67,10 @@ export interface CreateConfigurationData {
         percentage: number;
         currency: string;
     };
+    features?: {
+        branding_removal?: boolean;
+    } | null;
+    upgrades_to_id?: number | null;
     bypass_application_fees?: boolean;
 }
 
@@ -73,6 +81,10 @@ export interface UpdateConfigurationData {
         percentage: number;
         currency: string;
     };
+    features?: {
+        branding_removal?: boolean;
+    } | null;
+    upgrades_to_id?: number | null;
     bypass_application_fees?: boolean;
 }
 

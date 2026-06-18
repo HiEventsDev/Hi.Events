@@ -54,7 +54,7 @@ export const PrintOrder = () => {
             
             {/* PoweredBy footer for web view only */}
             <div className={classes.webOnlyFooter}>
-                <PoweredByFooter/>
+                <PoweredByFooter hide={event?.branding_removed}/>
             </div>
         </div>
     );

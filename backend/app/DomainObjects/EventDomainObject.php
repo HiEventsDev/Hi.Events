@@ -46,6 +46,20 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?EventLocationDomainObject $eventLocation = null;
 
+    private ?bool $brandingRemoved = null;
+
+    public function setBrandingRemoved(?bool $brandingRemoved): self
+    {
+        $this->brandingRemoved = $brandingRemoved;
+
+        return $this;
+    }
+
+    public function getBrandingRemoved(): ?bool
+    {
+        return $this->brandingRemoved;
+    }
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -93,6 +107,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function getProducts(): ?Collection
     {
         return $this->products;
+    }
+
+    public function hasPaidProducts(): bool
+    {
+        $isRevenueProducing = static fn (ProductDomainObject $product): bool => $product->isPaidType() || $product->isDonationType() || $product->isTieredType();
+
+        if ($this->products?->contains($isRevenueProducing)) {
+            return true;
+        }
+
+        return (bool) $this->productCategories
+            ?->flatMap(fn (ProductCategoryDomainObject $category) => $category->getProducts() ?? collect())
+            ->contains($isRevenueProducing);
     }
 
     public function setQuestions(?Collection $questions): EventDomainObject

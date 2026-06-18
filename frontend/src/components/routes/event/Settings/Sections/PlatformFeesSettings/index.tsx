@@ -1,6 +1,7 @@
 import {t} from "@lingui/macro";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
+import {Anchor} from "@mantine/core";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
@@ -11,6 +12,7 @@ import {PlatformFeesSettings as PlatformFeesSettingsBase} from "../../../../../c
 
 export const PlatformFeesSettings = () => {
     const {eventId} = useParams();
+    const navigate = useNavigate();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const eventQuery = useGetEvent(eventId);
     const organizerQuery = useGetOrganizer(eventQuery.data?.organizer_id);
@@ -51,6 +53,14 @@ export const PlatformFeesSettings = () => {
             feeHandlingDescription={t`Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings.`}
             feePreview={feePreviewQuery.data}
             onPriceChange={setPreviewPrice}
+            planSlot={(
+                <Anchor
+                    size="xs"
+                    onClick={() => navigate(`/manage/organizer/${eventQuery.data?.organizer_id}/settings#platform-fees`)}
+                >
+                    {t`Manage plan`} →
+                </Anchor>
+            )}
         />
     );
 };

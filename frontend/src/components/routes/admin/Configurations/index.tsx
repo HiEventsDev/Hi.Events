@@ -1,4 +1,4 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, NumberInput, TextInput, Skeleton, Switch, Select} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, ActionIcon, NumberInput, TextInput, Skeleton, Switch, Select, Checkbox} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useGetAllConfigurations} from "../../../../queries/useGetAllConfigurations";
 import {useCreateConfiguration} from "../../../../mutations/useCreateConfiguration";
@@ -20,6 +20,8 @@ interface ConfigurationFormValues {
     fixed_fee: number;
     percentage_fee: number;
     currency: string;
+    branding_removal: boolean;
+    upgrades_to_id: string | null;
     bypass_application_fees: boolean;
 }
 
@@ -30,6 +32,9 @@ const Configurations = () => {
     const [editingConfig, setEditingConfig] = useState<AccountConfiguration | null>(null);
 
     const configurations = configurationsData?.data || [];
+    const upgradeTargetIds = new Set(
+        configurations.map((config) => config.upgrades_to_id).filter(Boolean)
+    );
 
     const handleDelete = (config: AccountConfiguration) => {
         if (config.is_system_default) {
@@ -37,10 +42,15 @@ const Configurations = () => {
             return;
         }
 
+        if (upgradeTargetIds.has(config.id)) {
+            showError(t`This plan is an upgrade target for another plan. Remove that link first.`);
+            return;
+        }
+
         if (window.confirm(t`Are you sure you want to delete this configuration? This may affect accounts using it.`)) {
             deleteMutation.mutate(config.id, {
                 onSuccess: () => showSuccess(t`Configuration deleted successfully`),
-                onError: () => showError(t`Failed to delete configuration`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to delete configuration`),
             });
         }
     };
@@ -62,17 +72,17 @@ const Configurations = () => {
             <Container size="xl" p="xl">
                 <Stack gap="lg">
                     <Group justify="space-between">
-                        <Title order={1}>{t`Configurations`}</Title>
+                        <Title order={1}>{t`Plans`}</Title>
                         <Button
                             leftSection={<IconPlus size={16} />}
                             onClick={() => setShowCreateModal(true)}
                         >
-                            {t`Create Configuration`}
+                            {t`Create Plan`}
                         </Button>
                     </Group>
 
                     <Callout variant="tip">
-                        {t`Configuration names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate.`}
+                        {t`Plan names are visible to end users. Fixed fees will be converted to the order currency at the current exchange rate.`}
                     </Callout>
 
                     <Stack gap="md">
@@ -84,6 +94,9 @@ const Configurations = () => {
                                             <Text fw={600}>{config.name}</Text>
                                             {config.is_system_default && (
                                                 <Badge color="blue" size="sm">{t`System Default`}</Badge>
+                                            )}
+                                            {upgradeTargetIds.has(config.id) && (
+                                                <Badge color="grape" size="sm">{t`Upgrade target`}</Badge>
                                             )}
                                             {config.bypass_application_fees && (
                                                 <Badge color="orange" size="sm">{t`Fees Bypassed`}</Badge>
@@ -100,6 +113,18 @@ const Configurations = () => {
                                             <div>
                                                 <Text size="xs" c="dimmed">{t`Percentage Fee`}</Text>
                                                 <Text size="sm" fw={500}>{config.application_fees?.percentage || 0}%</Text>
+                                            </div>
+                                            <div>
+                                                <Text size="xs" c="dimmed">{t`Features`}</Text>
+                                                <Text size="sm" fw={500}>
+                                                    {config.features?.branding_removal ? t`Branding removal` : '—'}
+                                                </Text>
+                                            </div>
+                                            <div>
+                                                <Text size="xs" c="dimmed">{t`Upgrades to`}</Text>
+                                                <Text size="sm" fw={500}>
+                                                    {configurations.find((c) => c.id === config.upgrades_to_id)?.name ?? '—'}
+                                                </Text>
                                             </div>
                                         </Group>
                                     </Stack>
@@ -132,12 +157,14 @@ const Configurations = () => {
 
             {showCreateModal && (
                 <ConfigurationModal
+                    configurations={configurations}
                     onClose={() => setShowCreateModal(false)}
                 />
             )}
 
             {editingConfig && (
                 <ConfigurationModal
+                    configurations={configurations}
                     configuration={editingConfig}
                     onClose={() => setEditingConfig(null)}
                 />
@@ -147,14 +174,19 @@ const Configurations = () => {
 };
 
 interface ConfigurationModalProps {
+    configurations: AccountConfiguration[];
     configuration?: AccountConfiguration;
     onClose: () => void;
 }
 
-const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) => {
+const ConfigurationModal = ({configurations, configuration, onClose}: ConfigurationModalProps) => {
     const createMutation = useCreateConfiguration();
     const updateMutation = useUpdateConfiguration(configuration?.id || 0);
     const isEditing = !!configuration;
+
+    const upgradeOptions = configurations
+        .filter((config) => config.id !== configuration?.id)
+        .map((config) => ({value: String(config.id), label: config.name}));
 
     const form = useForm<ConfigurationFormValues>({
         initialValues: {
@@ -162,6 +194,8 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             fixed_fee: configuration?.application_fees?.fixed || 0,
             percentage_fee: configuration?.application_fees?.percentage || 0,
             currency: configuration?.application_fees?.currency || 'USD',
+            branding_removal: configuration?.features?.branding_removal || false,
+            upgrades_to_id: configuration?.upgrades_to_id ? String(configuration.upgrades_to_id) : null,
             bypass_application_fees: configuration?.bypass_application_fees || false,
         },
         validate: {
@@ -186,6 +220,10 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                 percentage: values.percentage_fee,
                 currency: values.currency,
             },
+            features: {
+                branding_removal: values.branding_removal,
+            },
+            upgrades_to_id: values.upgrades_to_id ? Number(values.upgrades_to_id) : null,
             bypass_application_fees: values.bypass_application_fees,
         };
 
@@ -204,7 +242,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
 
     return (
         <Modal
-            heading={isEditing ? t`Edit Configuration` : t`Create Configuration`}
+            heading={isEditing ? t`Edit Plan` : t`Create Plan`}
             onClose={onClose}
             opened
         >
@@ -255,6 +293,25 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         {...form.getInputProps('percentage_fee')}
                     />
 
+                    <div>
+                        <Text fw={500} size="sm" mb={4}>{t`Features`}</Text>
+                        <Checkbox
+                            label={t`Branding removal`}
+                            description={t`Organizers on this plan can hide platform branding at no extra fee.`}
+                            {...form.getInputProps('branding_removal', {type: 'checkbox'})}
+                        />
+                    </div>
+
+                    <Select
+                        label={t`Upgrades to`}
+                        description={t`Organizers on this plan can self-serve upgrade to the selected plan.`}
+                        placeholder={t`No upgrade path`}
+                        data={upgradeOptions}
+                        clearable
+                        searchable
+                        {...form.getInputProps('upgrades_to_id')}
+                    />
+
                     <Switch
                         label={t`Bypass Application Fees`}
                         description={t`When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported.`}
@@ -266,7 +323,7 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         loading={createMutation.isPending || updateMutation.isPending}
                         type="submit"
                     >
-                        {isEditing ? t`Save Changes` : t`Create Configuration`}
+                        {isEditing ? t`Save Changes` : t`Create Plan`}
                     </Button>
                 </Stack>
             </form>

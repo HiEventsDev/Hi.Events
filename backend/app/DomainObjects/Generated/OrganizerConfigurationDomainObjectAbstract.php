@@ -11,6 +11,7 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     final public const SINGULAR_NAME = 'organizer_configuration';
     final public const PLURAL_NAME = 'organizer_configurations';
     final public const ID = 'id';
+    final public const UPGRADES_TO_ID = 'upgrades_to_id';
     final public const NAME = 'name';
     final public const IS_SYSTEM_DEFAULT = 'is_system_default';
     final public const APPLICATION_FEES = 'application_fees';
@@ -19,8 +20,10 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const FEATURES = 'features';
 
     protected int $id;
+    protected ?int $upgrades_to_id = null;
     protected string $name;
     protected bool $is_system_default = false;
     protected array|string|null $application_fees = null;
@@ -29,11 +32,13 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected array|string|null $features = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
+                    'upgrades_to_id' => $this->upgrades_to_id ?? null,
                     'name' => $this->name ?? null,
                     'is_system_default' => $this->is_system_default ?? null,
                     'application_fees' => $this->application_fees ?? null,
@@ -42,6 +47,7 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'features' => $this->features ?? null,
                 ];
     }
 
@@ -54,6 +60,17 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setUpgradesToId(?int $upgrades_to_id): self
+    {
+        $this->upgrades_to_id = $upgrades_to_id;
+        return $this;
+    }
+
+    public function getUpgradesToId(): ?int
+    {
+        return $this->upgrades_to_id;
     }
 
     public function setName(string $name): self
@@ -142,5 +159,16 @@ abstract class OrganizerConfigurationDomainObjectAbstract extends \HiEvents\Doma
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setFeatures(array|string|null $features): self
+    {
+        $this->features = $features;
+        return $this;
+    }
+
+    public function getFeatures(): array|string|null
+    {
+        return $this->features;
     }
 }

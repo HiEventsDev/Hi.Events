@@ -24,6 +24,7 @@ import {
     IconUsersGroup,
     IconWebhook,
     IconListCheck,
+    IconSparkles,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
@@ -45,6 +46,11 @@ import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
+import {CalloutConfig, SidebarCalloutQueue} from "../../common/SidebarCallout/SidebarCalloutQueue";
+import {useBrandingUpsell} from "../../../hooks/useBrandingUpsell.ts";
+import {useOrganizerPlanActions} from "../../../hooks/useOrganizerPlanActions.tsx";
+import {getConfig} from "../../../utilites/config.ts";
+import {planDisplayName} from "../../../utilites/plans.ts";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useMemo, useState} from "react";
@@ -70,6 +76,21 @@ const EventLayout = () => {
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
     useGeoStatus();
+
+    const appName = getConfig("VITE_APP_NAME", "Hi.Events");
+    const organizerId = event?.organizer?.id;
+    const {isEligible: showBrandingUpsell, upgrade: brandingUpgrade} = useBrandingUpsell(organizerId);
+    const {openUpgradeModal} = useOrganizerPlanActions(organizerId);
+
+    const sidebarCallouts: CalloutConfig[] = showBrandingUpsell && brandingUpgrade ? [{
+        icon: <IconSparkles size={20}/>,
+        heading: t`Make it yours`,
+        description: t`Upgrade to ${planDisplayName(brandingUpgrade.name)} to remove ${appName} branding from your paid events.`,
+        buttonIcon: <IconSparkles size={16}/>,
+        buttonText: t`Upgrade to ${planDisplayName(brandingUpgrade.name)}`,
+        onClick: () => openUpgradeModal(brandingUpgrade),
+        storageKey: `organizer-${organizerId}-branding-upsell-dismissed`,
+    }] : [];
 
     const occurrenceIdFromUrl = useMemo(() => {
         const match = location.pathname.match(/\/occurrences\/(\d+)$/);
@@ -283,7 +304,9 @@ const EventLayout = () => {
                         buttonText={t`Resend email`}
                         onClick={() => handleEmailConfirmationResend()}
                     />
-                ) : null)
+                ) : (
+                    <SidebarCalloutQueue callouts={sidebarCallouts}/>
+                ))
             }
         />
     );

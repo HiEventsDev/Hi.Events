@@ -14,6 +14,7 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -21,23 +22,23 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\GetOrderPublicDTO;
+use HiEvents\Services\Domain\Branding\BrandingVisibilityService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class GetOrderPublicHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly CheckoutSessionManagementService $sessionIdentifierService
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly CheckoutSessionManagementService $sessionIdentifierService,
+        private readonly BrandingVisibilityService $brandingVisibilityService,
+    ) {}
 
     public function handle(GetOrderPublicDTO $getOrderData): OrderDomainObject
     {
         $order = $this->getOrderDomainObject($getOrderData);
 
-        if (!$order) {
+        if (! $order) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 
@@ -50,12 +51,18 @@ class GetOrderPublicHandler
             $this->verifySessionId($order->getSessionId());
         }
 
+        $event = $order->getEvent();
+
+        if ($event !== null) {
+            $event->setBrandingRemoved($this->brandingVisibilityService->resolveBrandingRemoved($event));
+        }
+
         return $order;
     }
 
     private function verifySessionId(string $orderSessionId): void
     {
-        if (!$this->sessionIdentifierService->verifySession($orderSessionId)) {
+        if (! $this->sessionIdentifierService->verifySession($orderSessionId)) {
             throw new UnauthorizedException(
                 __('Sorry, we could not verify your session. Please restart your order.')
             );
@@ -73,7 +80,7 @@ class GetOrderPublicHandler
                         nested: [
                             new Relationship(
                                 domainObject: ProductPriceDomainObject::class,
-                            )
+                            ),
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
                     ),
@@ -103,11 +110,20 @@ class GetOrderPublicHandler
                     ),
                     new Relationship(
                         domainObject: OrganizerDomainObject::class,
+                        nested: [
+                            new Relationship(
+                                domainObject: OrganizerSettingDomainObject::class,
+                                name: 'organizer_settings',
+                            ),
+                        ],
                         name: OrganizerDomainObjectAbstract::SINGULAR_NAME,
                     ),
                     new Relationship(
+                        domainObject: ProductDomainObject::class,
+                    ),
+                    new Relationship(
                         domainObject: ImageDomainObject::class,
-                    )
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ));

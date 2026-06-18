@@ -676,7 +676,7 @@ export const OrderSummaryAndProducts = () => {
                     </>
                 )}
 
-                <PoweredByFooter/>
+                <PoweredByFooter hide={event?.branding_removed}/>
             </CheckoutContent>
 
             {editingAttendee && (

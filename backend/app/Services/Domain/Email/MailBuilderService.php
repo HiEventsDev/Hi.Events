@@ -16,14 +16,15 @@ use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 
 class MailBuilderService
 {
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService,
         private readonly EmailTokenContextBuilder $tokenContextBuilder,
-    ) {
-    }
+        private readonly MailBrandingService $mailBrandingService,
+    ) {}
 
     public function buildAttendeeTicketMail(
         AttendeeDomainObject $attendee,
@@ -42,7 +43,7 @@ class MailBuilderService
             $occurrence,
         );
 
-        return new AttendeeTicketMail(
+        $mail = new AttendeeTicketMail(
             order: $order,
             attendee: $attendee,
             event: $event,
@@ -51,6 +52,8 @@ class MailBuilderService
             renderedTemplate: $renderedTemplate,
             occurrence: $occurrence,
         );
+
+        return $mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId()));
     }
 
     public function buildOrderSummaryMail(
@@ -69,7 +72,7 @@ class MailBuilderService
             $occurrence,
         );
 
-        return new OrderSummary(
+        $mail = new OrderSummary(
             order: $order,
             event: $event,
             organizer: $organizer,
@@ -78,6 +81,8 @@ class MailBuilderService
             occurrence: $occurrence,
             renderedTemplate: $renderedTemplate,
         );
+
+        return $mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId()));
     }
 
     private function renderAttendeeTicketTemplate(
@@ -95,7 +100,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 
@@ -125,7 +130,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 
@@ -158,7 +163,7 @@ class MailBuilderService
         $startDate = DateHelper::convertFromUTC($occurrence->getStartDate(), $event->getTimezone());
         $formattedDate = (new Carbon($startDate))->format('F j, Y g:i A');
 
-        return new OccurrenceCancellationMail(
+        $mail = new OccurrenceCancellationMail(
             event: $event,
             occurrence: $occurrence,
             organizer: $organizer,
@@ -167,6 +172,8 @@ class MailBuilderService
             refundOrders: $refundOrders,
             renderedTemplate: $renderedTemplate,
         );
+
+        return $mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId()));
     }
 
     private function renderOccurrenceCancellationTemplate(
@@ -183,7 +190,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 

@@ -16,6 +16,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Domain\SelfService\DTO\EditAttendeeResultDTO;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,6 +27,7 @@ class SelfServiceEditAttendeeService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
+        private readonly MailBrandingService $mailBrandingService,
     ) {}
 
     public function editAttendee(
@@ -157,13 +159,15 @@ class SelfServiceEditAttendeeService
 
         $changedFields = $this->formatChangedFields($oldValues, $newValues);
 
-        Mail::to($oldEmail)->queue(new AttendeeDetailsChangedMail(
+        $mail = new AttendeeDetailsChangedMail(
             ticketTitle: $attendee->getProduct()?->getTitle() ?? __('Ticket'),
             event: $event,
             organizer: $event->getOrganizer(),
             eventSettings: $event->getEventSettings(),
             changedFields: $changedFields
-        ));
+        );
+
+        Mail::to($oldEmail)->queue($mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId())));
     }
 
     private function formatChangedFields(array $oldValues, array $newValues): array

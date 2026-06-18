@@ -17,6 +17,7 @@ use HiEvents\Mail\Order\OrderDetailsChangedMail;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Mail\MailBrandingService;
 use HiEvents\Services\Domain\Mail\SendOrderDetailsService;
 use HiEvents\Services\Domain\SelfService\DTO\EditOrderResultDTO;
 use Illuminate\Support\Facades\Mail;
@@ -28,6 +29,7 @@ class SelfServiceEditOrderService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly SendOrderDetailsService $sendOrderDetailsService,
+        private readonly MailBrandingService $mailBrandingService,
     ) {}
 
     public function editOrder(
@@ -179,12 +181,14 @@ class SelfServiceEditOrderService
     ): void {
         $changedFields = $this->formatChangedFields($oldValues, $newValues);
 
-        Mail::to($oldEmail)->queue(new OrderDetailsChangedMail(
+        $mail = new OrderDetailsChangedMail(
             event: $event,
             organizer: $event->getOrganizer(),
             eventSettings: $event->getEventSettings(),
             changedFields: $changedFields
-        ));
+        );
+
+        Mail::to($oldEmail)->queue($mail->withBranding($this->mailBrandingService->resolveForEvent($event->getId())));
     }
 
     private function formatChangedFields(array $oldValues, array $newValues): array

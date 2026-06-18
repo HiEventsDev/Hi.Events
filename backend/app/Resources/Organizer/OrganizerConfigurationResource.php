@@ -21,6 +21,33 @@ class OrganizerConfigurationResource extends JsonResource
                 'fixed' => $this->getFixedApplicationFee(),
                 'currency' => $this->getApplicationFeeCurrency(),
             ],
+            'features' => (object) $this->getFeaturesArray(),
+            'upgrades_to_id' => $this->getUpgradesToId(),
+            'upgrade' => $this->when(
+                $this->getUpgradesTo() !== null,
+                fn () => [
+                    'id' => $this->getUpgradesTo()->getId(),
+                    'name' => $this->getUpgradesTo()->getName(),
+                    'application_fees' => [
+                        'percentage' => $this->getUpgradesTo()->getPercentageApplicationFee(),
+                        'fixed' => $this->getUpgradesTo()->getFixedApplicationFee(),
+                        'currency' => $this->getUpgradesTo()->getApplicationFeeCurrency(),
+                    ],
+                    'features' => (object) $this->getUpgradesTo()->getFeaturesArray(),
+                ],
+            ),
+            'downgrade' => $this->when(
+                $this->getDowngradeTarget() !== null,
+                fn () => [
+                    'id' => $this->getDowngradeTarget()->getId(),
+                    'name' => $this->getDowngradeTarget()->getName(),
+                    'application_fees' => [
+                        'percentage' => $this->getDowngradeTarget()->getPercentageApplicationFee(),
+                        'fixed' => $this->getDowngradeTarget()->getFixedApplicationFee(),
+                        'currency' => $this->getDowngradeTarget()->getApplicationFeeCurrency(),
+                    ],
+                ],
+            ),
             'bypass_application_fees' => $this->getBypassApplicationFees(),
         ];
     }

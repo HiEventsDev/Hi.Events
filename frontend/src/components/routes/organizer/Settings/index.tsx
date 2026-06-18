@@ -6,13 +6,14 @@ import EmailTemplateSettings from "./Sections/EmailTemplateSettings";
 import { EventDefaults } from "./Sections/EventDefaults";
 import { PayoutsSettings } from "./Sections/PayoutsSettings";
 import { PlatformFeesSettings } from "./Sections/PlatformFeesSettings";
+import { BrandingSettings } from "./Sections/BrandingSettings";
 import { DangerZoneSettings } from "./Sections/DangerZoneSettings";
 import { TrackingPixelSettings } from "./Sections/TrackingPixelSettings";
 import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconAlertTriangle, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
+import { IconAlertTriangle, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar, IconPalette } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
@@ -93,9 +94,15 @@ const Settings = () => {
                 },
                 {
                     id: 'platform-fees',
-                    label: t`Platform Fees`,
+                    label: t`Plan & Fees`,
                     icon: IconPercentage,
                     component: PlatformFeesSettings,
+                },
+                {
+                    id: 'branding',
+                    label: t`Branding`,
+                    icon: IconPalette,
+                    component: BrandingSettings,
                 });
         }
 
@@ -109,7 +116,8 @@ const Settings = () => {
     // `payouts?is_return=1` as the hash fragment) before matching a section.
     const targetSectionId = useMemo(() => {
         const raw = location.hash?.replace(/^#/, '').split('?')[0] ?? '';
-        return raw && SECTIONS.some(s => s.id === raw) ? raw : null;
+        const sectionId = raw === 'plan' ? 'platform-fees' : raw;
+        return sectionId && SECTIONS.some(s => s.id === sectionId) ? sectionId : null;
     }, [location.hash, SECTIONS]);
     const [activeSection, setActiveSection] = useState(targetSectionId ?? 'basic-settings');
 

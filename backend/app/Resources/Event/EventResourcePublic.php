@@ -84,6 +84,7 @@ class EventResourcePublic extends BaseResource
                 condition: ! is_null($this->getOrganizer()),
                 value: fn () => new OrganizerResourcePublic($this->getOrganizer()),
             ),
+            'branding_removed' => $this->whenNotNull($this->getBrandingRemoved()),
             'occurrences' => $this->when(
                 condition: ! is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),
                 // Cap is enforced by GetPublicEventHandler; do not re-cap here

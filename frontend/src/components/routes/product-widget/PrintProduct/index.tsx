@@ -53,13 +53,13 @@ const PrintProduct = () => {
                 </div>
                 
                 <div className={classes.poweredBy}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter hide={event?.branding_removed}/>
                 </div>
             </div>
             
             {/* PoweredBy footer for web view only */}
             <div className={classes.webOnlyFooter}>
-                <PoweredByFooter/>
+                <PoweredByFooter hide={event?.branding_removed}/>
             </div>
         </div>
     )

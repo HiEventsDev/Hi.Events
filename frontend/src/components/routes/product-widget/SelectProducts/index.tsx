@@ -846,7 +846,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                  */
             }
             {(props.showPoweredBy ?? true) && (
-                <PoweredByFooter style={{
+                <PoweredByFooter hide={event?.branding_removed} style={{
                     'color': props.colors?.primaryText || '#000',
                 }}/>
             )}

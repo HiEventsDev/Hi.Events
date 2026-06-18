@@ -231,7 +231,7 @@ class MarkOrderAsPaidService
             ->findById($updatedOrder->getEventId());
 
         $config = $event->getOrganizer()?->getOrganizerConfiguration();
-        if (!$config) {
+        if (! $config) {
             return;
         }
 

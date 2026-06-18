@@ -246,7 +246,7 @@ export const AttendeeTicket = ({
             {/* Powered By - Only shown in print mode */}
             {showPoweredBy && (
                 <div className={classes.poweredByInTicket}>
-                    <PoweredByFooter/>
+                    <PoweredByFooter hide={event?.branding_removed}/>
                 </div>
             )}
         </div>
