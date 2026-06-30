@@ -84,7 +84,7 @@ class OrderCreateRequestValidationService
             'products' => 'required|array',
             'products.*.product_id' => 'required|integer',
             'products.*.quantities' => 'required|array',
-            'products.*.quantities.*.quantity' => 'required|integer',
+            'products.*.quantities.*.quantity' => 'required|integer|min:0',
             'products.*.quantities.*.price_id' => 'required|integer',
             'products.*.quantities.*.price' => 'numeric|min:0',
         ]);
@@ -356,6 +356,10 @@ class OrderCreateRequestValidationService
             $totalQuantity = collect($data['products'])
                 ->filter(fn($product) => in_array($product['product_id'], $productIds->toArray(), true))
                 ->sum(fn($product) => collect($product['quantities'])->sum('quantity'));
+
+            if ($totalQuantity === 0) {
+                continue;
+            }
 
             $reservedProductQuantities = $capacity->getProducts()
                 ->map(fn(ProductDomainObject $product) => $this
