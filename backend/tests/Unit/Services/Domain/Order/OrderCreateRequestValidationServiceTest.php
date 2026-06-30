@@ -151,6 +151,40 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->service->validateRequestData($eventId, $data);
     }
 
+    public function testNegativeQuantityOnAPriceTierIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $cheapPriceId = 101;
+        $expensivePriceId = 102;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$cheapPriceId, $expensivePriceId],
+            priceLabels: ['Cheap', 'VIP'],
+            availabilities: [
+                ['price_id' => $cheapPriceId, 'quantity_available' => 100, 'quantity_reserved' => 0],
+                ['price_id' => $expensivePriceId, 'quantity_available' => 100, 'quantity_reserved' => 0],
+            ],
+        );
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $cheapPriceId, 'quantity' => 5],
+                        ['price_id' => $expensivePriceId, 'quantity' => -1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
     public function testUnrelatedOverReservedCapacityDoesNotBlockSelectedProduct(): void
     {
         $eventId = 1;

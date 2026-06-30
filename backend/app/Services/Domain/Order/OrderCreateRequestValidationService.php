@@ -84,7 +84,7 @@ class OrderCreateRequestValidationService
             'products' => 'required|array',
             'products.*.product_id' => 'required|integer',
             'products.*.quantities' => 'required|array',
-            'products.*.quantities.*.quantity' => 'required|integer',
+            'products.*.quantities.*.quantity' => 'required|integer|min:0',
             'products.*.quantities.*.price_id' => 'required|integer',
             'products.*.quantities.*.price' => 'numeric|min:0',
         ]);
