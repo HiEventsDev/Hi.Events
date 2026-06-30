@@ -8,7 +8,7 @@ import {IdParam} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, ColorInput, Textarea, Accordion, Stack, Text, Group} from "@mantine/core";
+import {Button, ColorInput, Textarea, Accordion, Stack, Text, Group, Select} from "@mantine/core";
 import {IconColorSwatch, IconHelp, IconPrinter} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
@@ -21,6 +21,7 @@ interface TicketDesignSettings {
     accent_color: string;
     logo_image_id: IdParam;
     footer_text: string | null;
+    date_display_mode: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
     enabled: boolean;
 }
 
@@ -39,6 +40,7 @@ const TicketDesigner = () => {
             accent_color: '#333333',
             logo_image_id: undefined,
             footer_text: '',
+            date_display_mode: 'START_DATE_TIME',
             enabled: true,
         }
     });
@@ -52,6 +54,7 @@ const TicketDesigner = () => {
                 accent_color: settings.accent_color || '#333333',
                 logo_image_id: settings.logo_image_id || undefined,
                 footer_text: settings.footer_text || '',
+                date_display_mode: settings.date_display_mode || 'START_DATE_TIME',
                 enabled: settings.enabled !== false,
             });
         }
@@ -73,6 +76,7 @@ const TicketDesigner = () => {
                         accent_color: values.accent_color,
                         logo_image_id: values.logo_image_id,
                         footer_text: values.footer_text || undefined,
+                        date_display_mode: values.date_display_mode,
                         enabled: values.enabled
                     }
                 },
@@ -176,6 +180,21 @@ const TicketDesigner = () => {
                                                 <Text size="xs" c="dimmed" ta="right" mt={4}>
                                                     {form.values.footer_text?.length || 0} / 500
                                                 </Text>
+                                            </div>
+
+                                            <div>
+                                                <Select
+                                                    label={t`Event date display`}
+                                                    description={t`Choose how the event date is shown on the ticket`}
+                                                    size="sm"
+                                                    allowDeselect={false}
+                                                    data={[
+                                                        {value: 'START_DATE_TIME', label: t`Only show start date and time`},
+                                                        {value: 'DATE_RANGE', label: t`Show entire date range`},
+                                                        {value: 'HIDDEN', label: t`Hide the date`},
+                                                    ]}
+                                                    {...form.getInputProps('date_display_mode')}
+                                                />
                                             </div>
                                         </Stack>
                                     </Accordion.Panel>

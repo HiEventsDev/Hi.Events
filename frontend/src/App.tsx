@@ -4,6 +4,7 @@ import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
 import {I18nProvider} from "@lingui/react";
 import {ModalsProvider} from "@mantine/modals";
+import {DatesProvider} from "@mantine/dates";
 import {HydrationBoundary, QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {Helmet, HelmetProvider} from "react-helmet-async";
 import {generateColors} from '@mantine/colors-generator';
@@ -22,6 +23,7 @@ import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
 import {getConfig} from "./utilites/config.ts";
 import {CookieConsentBanner} from "./components/common/CookieConsentBanner";
 import {isConsentPending, setConsentState, updateGoogleConsentMode} from "./utilites/trackingPixels/consent";
+import "./utilites/dateLocales.ts";
 
 declare global {
     interface Window {
@@ -83,6 +85,7 @@ export const App: FC<
             >
                 <HelmetProvider context={props.helmetContext}>
                     <I18nProvider i18n={i18n}>
+                        <DatesProvider settings={{locale: props.locale}}>
                         <QueryClientProvider client={props.queryClient}>
                             <HydrationBoundary state={props.dehydratedState}>
                                 <StartupChecks/>
@@ -103,6 +106,7 @@ export const App: FC<
                                 )}
                             </HydrationBoundary>
                         </QueryClientProvider>
+                        </DatesProvider>
                     </I18nProvider>
                 </HelmetProvider>
             </MantineProvider>

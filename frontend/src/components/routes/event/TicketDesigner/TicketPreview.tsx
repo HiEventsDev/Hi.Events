@@ -10,6 +10,7 @@ interface TicketDesignSettings {
     accent_color: string;
     logo_image_id: IdParam | null;
     footer_text: string | null;
+    date_display_mode: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
     enabled: boolean;
 }
 
@@ -82,6 +83,7 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
                 accent_color: settings.accent_color,
                 logo_image_id: settings.logo_image_id,
                 footer_text: settings.footer_text,
+                date_display_mode: settings.date_display_mode,
                 enabled: settings.enabled
             },
             location_details: eventSettings?.location_details || {

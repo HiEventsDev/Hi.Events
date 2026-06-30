@@ -93,7 +93,7 @@ const Users = () => {
                 <Badge variant="outline">
                     <Group gap={5}>
                         {user.role === 'ORGANIZER' && <IconUser size={14}/>}
-                        {user.role === 'ADMIN' && <IconUserShield size={14}/>} {user.role}
+                        {user.role === 'ADMIN' && <IconUserShield size={14}/>} {user.role === 'ADMIN' ? t`Admin` : user.role === 'ORGANIZER' ? t`Organizer` : user.role}
                     </Group>
                 </Badge>
             </Table.Td>
@@ -102,7 +102,7 @@ const Users = () => {
             </Table.Td>
             <Table.Td>
                 <Badge color={statusColor(user.status as string)} variant="light">
-                    {user.status}
+                    {user.status === 'ACTIVE' ? t`Active` : user.status === 'INVITED' ? t`Invited` : user.status === 'INACTIVE' ? t`Inactive` : user.status}
                 </Badge>
             </Table.Td>
             <Table.Td width={'60px'}>
