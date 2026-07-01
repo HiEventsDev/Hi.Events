@@ -2,8 +2,14 @@
 
 namespace HiEvents\Resources\Event;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
+use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Http\Resources\Json\JsonResource;
+use RuntimeException;
 
 /**
  * @mixin EventSettingDomainObject
@@ -11,8 +17,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class EventSettingsResourcePublic extends JsonResource
 {
     public function __construct(
-        mixed                 $resource,
-        private readonly bool $includePostCheckoutData = false,
+        mixed                              $resource,
+        private readonly bool              $includePostCheckoutData = false,
+        private readonly ?EventDomainObject $eventContext = null,
+        private readonly ?OrderDomainObject $orderContext = null,
     )
     {
         parent::__construct($resource);
@@ -67,7 +75,7 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Payment settings
             'payment_providers' => $this->getPaymentProviders(),
-            'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
+            'offline_payment_instructions' => $this->getOfflinePaymentInstructionsForOrder(),
             'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
 
             // Invoice settings
@@ -93,5 +101,29 @@ class EventSettingsResourcePublic extends JsonResource
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
             'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
         ];
+    }
+
+    private function getOfflinePaymentInstructionsForOrder(): ?string
+    {
+        $instructions = $this->getOfflinePaymentInstructions();
+        $organizer = $this->eventContext?->getOrganizer();
+
+        if (!$instructions || !$this->eventContext || !$this->orderContext || !$organizer) {
+            return $instructions;
+        }
+
+        try {
+            $context = app(EmailTokenContextBuilder::class)->buildOrderConfirmationContext(
+                order: $this->orderContext,
+                event: $this->eventContext,
+                organizer: $organizer,
+                eventSettings: $this->resource,
+            );
+            $rendered = app(LiquidTemplateRenderer::class)->render($instructions, $context);
+
+            return app(HtmlPurifierService::class)->purify($rendered);
+        } catch (RuntimeException) {
+            return $instructions;
+        }
     }
 }

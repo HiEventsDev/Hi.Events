@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Image\ImageResource;
 use HiEvents\Resources\Organizer\OrganizerResourcePublic;
@@ -17,9 +18,12 @@ class EventResourcePublic extends BaseResource
 {
     private readonly bool $includePostCheckoutData;
 
+    private readonly ?OrderDomainObject $orderContext;
+
     public function __construct(
         mixed $resource,
         mixed $includePostCheckoutData = false,
+        ?OrderDomainObject $orderContext = null,
     )
     {
         // This is a hacky workaround to handle when this resource is instantiated
@@ -28,6 +32,7 @@ class EventResourcePublic extends BaseResource
         $this->includePostCheckoutData = is_bool($includePostCheckoutData)
             ? $includePostCheckoutData
             : false;
+        $this->orderContext = $orderContext;
 
         parent::__construct($resource);
     }
@@ -56,7 +61,9 @@ class EventResourcePublic extends BaseResource
                 condition: !is_null($this->getEventSettings()),
                 value: fn() => new EventSettingsResourcePublic(
                     $this->getEventSettings(),
-                    $this->includePostCheckoutData
+                    $this->includePostCheckoutData,
+                    $this->resource instanceof EventDomainObject ? $this->resource : null,
+                    $this->orderContext,
                 ),
             ),
             // @TODO - public question resource
