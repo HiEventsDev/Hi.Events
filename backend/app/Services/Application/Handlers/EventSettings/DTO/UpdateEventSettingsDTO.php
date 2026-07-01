@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
+use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 
 class UpdateEventSettingsDTO extends BaseDTO
@@ -74,6 +75,9 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Marketing settings
         public readonly bool                    $show_marketing_opt_in = true,
+
+        // Attendee detail copy control
+        public readonly bool                    $allow_copy_details_to_all_attendees = true,
 
         // Platform fee settings
         public readonly bool                    $pass_platform_fee_to_buyer = false,
@@ -150,11 +154,15 @@ class UpdateEventSettingsDTO extends BaseDTO
                 'logo_image_id' => null,
                 'footer_text' => null,
                 'layout_type' => 'classic',
+                'date_display_mode' => TicketDateDisplayMode::START_DATE_TIME->value,
                 'enabled' => true,
             ],
 
             // Marketing defaults
             show_marketing_opt_in: true,
+
+            // Attendee detail copy control default
+            allow_copy_details_to_all_attendees: true,
 
             // Platform fee defaults
             pass_platform_fee_to_buyer: false,

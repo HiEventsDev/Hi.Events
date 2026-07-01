@@ -86,8 +86,15 @@ export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean
  */
 export const relativeDate = (date: string): string => {
     const dateInUTC = dayjs.utc(date);
+    const locale = getClientLocale();
 
-    return dayjs().to(dateInUTC);
+    return dayjs().locale(locale).to(dateInUTC);
+};
+
+export const getDateTimePickerFormat = (): string => {
+    const locale = getClientLocale();
+    const safeLocale = getSafeLocale(locale);
+    return localeFormats[safeLocale].dateTimePicker;
 };
 
 export const utcToTz = (date: undefined | string | Date, tz: string): string | undefined => {

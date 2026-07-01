@@ -89,6 +89,9 @@ class UpdateEventSettingsHandler
                     // Marketing settings
                     'show_marketing_opt_in' => $settings->show_marketing_opt_in,
 
+                    // Attendee detail copy control
+                    'allow_copy_details_to_all_attendees' => $settings->allow_copy_details_to_all_attendees,
+
                     // Platform fee settings
                     'pass_platform_fee_to_buyer' => $settings->pass_platform_fee_to_buyer,
 

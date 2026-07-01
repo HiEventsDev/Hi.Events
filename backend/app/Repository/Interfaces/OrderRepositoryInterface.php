@@ -31,6 +31,8 @@ interface OrderRepositoryInterface extends RepositoryInterface
 
     public function countOrdersAssociatedWithProducts(int $eventId, array $productIds, array $orderStatuses): int;
 
+    public function countActivePromoCodeUsage(int $promoCodeId): int;
+
     public function getAllOrdersForAdmin(
         ?string $search = null,
         int $perPage = 20,

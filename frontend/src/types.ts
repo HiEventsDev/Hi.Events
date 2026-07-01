@@ -240,11 +240,15 @@ export interface EventSettings {
         logo_image_id?: IdParam;
         footer_text?: string;
         layout_type?: 'default' | 'modern';
+        date_display_mode?: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
         enabled?: boolean;
     };
 
     // Marketing settings
     show_marketing_opt_in?: boolean;
+
+    // Attendee detail copy control
+    allow_copy_details_to_all_attendees?: boolean;
 
     // Platform fee settings
     pass_platform_fee_to_buyer?: boolean;
