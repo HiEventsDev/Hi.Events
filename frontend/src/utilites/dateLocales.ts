@@ -224,7 +224,8 @@ export const localeFormats: Record<SupportedLocales, {
         dayOfMonth: 'D.',
         dayName: 'dddd D. MMMM',
         timeOnly: 'HH:mm',
-        timezone: 'z'
+        timezone: 'z',
+        dateTimePicker: 'D. MMM YYYY HH:mm'
     },
 };
 
