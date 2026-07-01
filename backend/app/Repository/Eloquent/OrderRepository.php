@@ -185,6 +185,26 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return $count;
     }
 
+    public function countActivePromoCodeUsage(int $promoCodeId): int
+    {
+        $count = $this->model
+            ->where('promo_code_id', $promoCodeId)
+            ->where(static function (Builder $query) {
+                $query->whereIn('status', [
+                    OrderStatus::COMPLETED->name,
+                    OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+                ])->orWhere(static function (Builder $reserved) {
+                    $reserved->where('status', OrderStatus::RESERVED->name)
+                        ->where('reserved_until', '>', now());
+                });
+            })
+            ->count();
+
+        $this->resetModel();
+
+        return $count;
+    }
+
     public function getAllOrdersForAdmin(
         ?string $search = null,
         int $perPage = 20,

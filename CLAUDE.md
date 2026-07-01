@@ -118,6 +118,10 @@ cd docker/development
 - **DO** use `useFormErrorResponseHandler` from `frontend/src/hooks/useFormErrorResponseHandler.tsx` for validation errors
 - **DO** handle errors in parent components, not in reusable components
 
+## Git Commit Guidelines
+
+- **NEVER** add `Co-Authored-By: Claude` or any AI attribution lines to commit messages.
+
 ## Development Workflows
 
 ### Database Changes (in Backend Container)

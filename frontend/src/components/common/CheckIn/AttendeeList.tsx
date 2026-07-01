@@ -83,9 +83,6 @@ export const AttendeeList = ({
                                     {t`Ticket Cancelled`}
                                 </div>
                             ) : null}
-                            <div style={{fontSize: '0.8em', color: '#555'}}>
-                                {attendee.email}
-                            </div>
                             {isAttendeeAwaitingPayment && (
                                 <div className={classes.awaitingPayment}>
                                     {t`Awaiting payment`}

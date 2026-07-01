@@ -61,6 +61,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const TICKET_DESIGN_SETTINGS = 'ticket_design_settings';
     final public const ATTENDEE_DETAILS_COLLECTION_METHOD = 'attendee_details_collection_method';
     final public const SHOW_MARKETING_OPT_IN = 'show_marketing_opt_in';
+    final public const ALLOW_COPY_DETAILS_TO_ALL_ATTENDEES = 'allow_copy_details_to_all_attendees';
     final public const HOMEPAGE_THEME_SETTINGS = 'homepage_theme_settings';
     final public const PASS_PLATFORM_FEE_TO_BUYER = 'pass_platform_fee_to_buyer';
     final public const ALLOW_ATTENDEE_SELF_EDIT = 'allow_attendee_self_edit';
@@ -119,6 +120,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected array|string|null $ticket_design_settings = null;
     protected string $attendee_details_collection_method = 'PER_TICKET';
     protected bool $show_marketing_opt_in = true;
+    protected bool $allow_copy_details_to_all_attendees = true;
     protected array|string|null $homepage_theme_settings = null;
     protected bool $pass_platform_fee_to_buyer = false;
     protected bool $allow_attendee_self_edit = true;
@@ -180,6 +182,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'ticket_design_settings' => $this->ticket_design_settings ?? null,
                     'attendee_details_collection_method' => $this->attendee_details_collection_method ?? null,
                     'show_marketing_opt_in' => $this->show_marketing_opt_in ?? null,
+                    'allow_copy_details_to_all_attendees' => $this->allow_copy_details_to_all_attendees ?? null,
                     'homepage_theme_settings' => $this->homepage_theme_settings ?? null,
                     'pass_platform_fee_to_buyer' => $this->pass_platform_fee_to_buyer ?? null,
                     'allow_attendee_self_edit' => $this->allow_attendee_self_edit ?? null,
@@ -749,6 +752,17 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getShowMarketingOptIn(): bool
     {
         return $this->show_marketing_opt_in;
+    }
+
+    public function setAllowCopyDetailsToAllAttendees(bool $allow_copy_details_to_all_attendees): self
+    {
+        $this->allow_copy_details_to_all_attendees = $allow_copy_details_to_all_attendees;
+        return $this;
+    }
+
+    public function getAllowCopyDetailsToAllAttendees(): bool
+    {
+        return $this->allow_copy_details_to_all_attendees;
     }
 
     public function setHomepageThemeSettings(array|string|null $homepage_theme_settings): self

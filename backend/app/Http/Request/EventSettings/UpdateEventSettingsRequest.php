@@ -92,6 +92,9 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
 
+            // Attendee detail copy control
+            'allow_copy_details_to_all_attendees' => ['boolean'],
+
             // Platform fee settings
             'pass_platform_fee_to_buyer' => ['boolean'],
 

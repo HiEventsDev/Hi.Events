@@ -71,6 +71,7 @@ export const CollectInformation = () => {
     const products = productCategories?.flatMap(category => category.products);
     const requireBillingAddress = event?.settings?.require_billing_address;
     const isPerOrderCollection = event?.settings?.attendee_details_collection_method === 'PER_ORDER';
+    const allowCopyToAllAttendees = event?.settings?.allow_copy_details_to_all_attendees ?? true;
     const [copyOption, setCopyOption] = useState<'none' | 'first' | 'all'>('none');
 
     const isEmailValid = (email: string) => {
@@ -498,7 +499,7 @@ export const CollectInformation = () => {
                                             data={[
                                                 {label: t`None`, value: 'none'},
                                                 {label: t`First attendee`, value: 'first'},
-                                                {label: t`All attendees`, value: 'all'},
+                                                ...(allowCopyToAllAttendees ? [{label: t`All attendees`, value: 'all'}] : []),
                                             ]}
                                         />
                                     </Tooltip>

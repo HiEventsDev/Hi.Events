@@ -118,7 +118,43 @@ class UpdateEventSettingsHandlerTest extends TestCase
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    private function createDTO(?bool $waitlist_auto_process = null): UpdateEventSettingsDTO
+    public function testPersistsAllowCopyDetailsToAllAttendees(): void
+    {
+        Event::fake();
+
+        $existingSettings = new EventSettingDomainObject();
+
+        $this->eventSettingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1])
+            ->twice()
+            ->andReturn($existingSettings);
+
+        $captured = null;
+        $this->eventSettingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturnUsing(function (...$args) use (&$captured) {
+                foreach ($args as $arg) {
+                    if (is_array($arg) && array_key_exists('allow_copy_details_to_all_attendees', $arg)) {
+                        $captured = $arg['allow_copy_details_to_all_attendees'];
+                    }
+                }
+                return 1;
+            });
+
+        $this->handler->handle($this->createDTO(allow_copy_details_to_all_attendees: false));
+
+        $this->assertFalse(
+            $captured,
+            'Expected allow_copy_details_to_all_attendees=false to be persisted via updateWhere'
+        );
+    }
+
+    private function createDTO(
+        ?bool $waitlist_auto_process = null,
+        bool  $allow_copy_details_to_all_attendees = true,
+    ): UpdateEventSettingsDTO
     {
         return UpdateEventSettingsDTO::fromArray([
             'account_id' => 1,
@@ -143,6 +179,7 @@ class UpdateEventSettingsHandlerTest extends TestCase
             'seo_title' => null,
             'seo_description' => null,
             'seo_keywords' => null,
+            'allow_copy_details_to_all_attendees' => $allow_copy_details_to_all_attendees,
             'waitlist_auto_process' => $waitlist_auto_process,
             'waitlist_offer_timeout_minutes' => 60,
         ]);

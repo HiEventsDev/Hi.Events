@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\CreateOrganizerDTO;
 use HiEvents\Services\Domain\Organizer\CreateDefaultOrganizerSettingsService;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -16,6 +17,7 @@ class CreateOrganizerHandler
         private readonly OrganizerRepositoryInterface          $organizerRepository,
         private readonly DatabaseManager                       $databaseManager,
         private readonly CreateDefaultOrganizerSettingsService $createDefaultOrganizerSettingsService,
+        private readonly HtmlPurifierService                   $purifier,
     )
     {
     }
@@ -37,7 +39,7 @@ class CreateOrganizerHandler
             'email' => $organizerData->email,
             'phone' => $organizerData->phone,
             'website' => $organizerData->website,
-            'description' => $organizerData->description,
+            'description' => $this->purifier->purify($organizerData->description),
             'account_id' => $organizerData->account_id,
             'timezone' => $organizerData->timezone,
             'currency' => $organizerData->currency,

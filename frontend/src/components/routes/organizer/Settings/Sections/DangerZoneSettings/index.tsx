@@ -27,7 +27,8 @@ export const DangerZoneSettings = () => {
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
     const isArchived = organizer?.status === OrganizerStatus.ARCHIVED;
-    const isDeleteConfirmed = deleteConfirmation.toLowerCase() === 'delete';
+    const deleteConfirmationPhrase = t`delete`;
+    const isDeleteConfirmed = deleteConfirmation.trim().toLocaleLowerCase() === deleteConfirmationPhrase.toLocaleLowerCase();
 
     const activeOrganizerCount = organizers?.data?.filter(
         org => org.status !== OrganizerStatus.ARCHIVED
@@ -104,7 +105,7 @@ export const DangerZoneSettings = () => {
                                     {t`Type "delete" to confirm`}
                                 </Text>
                                 <TextInput
-                                    placeholder={t`delete`}
+                                    placeholder={deleteConfirmationPhrase}
                                     value={deleteConfirmation}
                                     onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
                                 />
