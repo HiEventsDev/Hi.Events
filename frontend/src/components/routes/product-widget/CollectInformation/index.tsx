@@ -33,6 +33,7 @@ import countries from "../../../../../data/countries.json";
 import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
+import {useCheckoutPrefill, CheckoutPrefill} from "../../../../hooks/useCheckoutPrefill.ts";
 
 const LoadingSkeleton = () =>
     (
@@ -48,6 +49,8 @@ export const CollectInformation = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const isFromWaitlist = searchParams.get('waitlist') === 'true';
+    const {prefill, lock} = useCheckoutPrefill();
+    const isLocked = (field: keyof CheckoutPrefill) => lock && prefill[field] !== undefined;
     const {
         isFetched: isOrderFetched,
         data: order,
@@ -296,14 +299,33 @@ export const CollectInformation = () => {
 
     useEffect(() => {
         if (isEventFetched && isOrderFetched && isQuestionsFetched && productQuestions && orderQuestions) {
-            const products = createProductsAndQuestions(createProductIdToQuestionMap());
+            const builtProducts = createProductsAndQuestions(createProductIdToQuestionMap());
             const formOrderQuestions = createFormOrderQuestions();
+
+            const orderPrefill = {
+                ...(prefill.first_name !== undefined && {first_name: prefill.first_name}),
+                ...(prefill.last_name !== undefined && {last_name: prefill.last_name}),
+                ...(prefill.email !== undefined && {email: prefill.email, email_confirmation: prefill.email}),
+            };
+
+            const ticketProductIds = new Set(
+                (products ?? [])
+                    .filter(product => product && product.product_type === 'TICKET')
+                    .map(product => product!.id)
+            );
+
+            const prefilledProducts = builtProducts.map((product: any) =>
+                ticketProductIds.has(product.product_id)
+                    ? {...product, ...orderPrefill}
+                    : product
+            );
 
             form.setValues({
                 ...form.values,
-                products: products,
+                products: prefilledProducts,
                 order: {
                     ...form.values.order,
+                    ...orderPrefill,
                     questions: formOrderQuestions,
                 },
             });
@@ -433,12 +455,14 @@ export const CollectInformation = () => {
                             withAsterisk
                             label={t`First Name`}
                             placeholder={t`First name`}
+                            disabled={isLocked('first_name')}
                             {...form.getInputProps("order.first_name")}
                         />
                         <TextInput
                             withAsterisk
                             label={t`Last Name`}
                             placeholder={t`Last Name`}
+                            disabled={isLocked('last_name')}
                             {...form.getInputProps("order.last_name")}
                         />
                     </InputGroup>
@@ -449,6 +473,7 @@ export const CollectInformation = () => {
                             type={"email"}
                             label={t`Email Address`}
                             placeholder={t`Email Address`}
+                            disabled={isLocked('email')}
                             rightSection={isEmailValid(form.values.order.email) ? <EmailCheckIcon/> : null}
                             {...form.getInputProps("order.email")}
                         />
@@ -457,6 +482,7 @@ export const CollectInformation = () => {
                             type={"email"}
                             label={t`Confirm Email Address`}
                             placeholder={t`Confirm Email Address`}
+                            disabled={isLocked('email')}
                             rightSection={isEmailValid(form.values.order.email_confirmation) ? <EmailCheckIcon/> : null}
                             {...form.getInputProps("order.email_confirmation")}
                         />
@@ -645,12 +671,14 @@ export const CollectInformation = () => {
                                                         withAsterisk
                                                         label={t`First Name`}
                                                         placeholder={t`First name`}
+                                                        disabled={isLocked('first_name')}
                                                         {...form.getInputProps(`products.${currentProductIndex}.first_name`)}
                                                     />
                                                     <TextInput
                                                         withAsterisk
                                                         label={t`Last Name`}
                                                         placeholder={t`Last Name`}
+                                                        disabled={isLocked('last_name')}
                                                         {...form.getInputProps(`products.${currentProductIndex}.last_name`)}
                                                     />
                                                 </InputGroup>
@@ -661,6 +689,7 @@ export const CollectInformation = () => {
                                                         type={"email"}
                                                         label={t`Email Address`}
                                                         placeholder={t`Email Address`}
+                                                        disabled={isLocked('email')}
                                                         rightSection={isEmailValid(form.values.products[currentProductIndex]?.email || '') ?
                                                             <EmailCheckIcon/> : null}
                                                         {...form.getInputProps(`products.${currentProductIndex}.email`)}
@@ -670,6 +699,7 @@ export const CollectInformation = () => {
                                                         type={"email"}
                                                         label={t`Confirm Email Address`}
                                                         placeholder={t`Confirm Email Address`}
+                                                        disabled={isLocked('email')}
                                                         rightSection={isEmailValid(form.values.products[currentProductIndex]?.email_confirmation || '') ?
                                                             <EmailCheckIcon/> : null}
                                                         {...form.getInputProps(`products.${currentProductIndex}.email_confirmation`)}
