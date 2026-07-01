@@ -12,6 +12,11 @@ export interface UseCheckoutPrefillResult {
     lock: boolean;
 }
 
+// Query params the checkout details form reads to prefill itself. Also forwarded
+// from the event page to the details step so prefill survives order creation
+// (see SelectProducts).
+export const CHECKOUT_PREFILL_PARAM_KEYS = ["first_name", "last_name", "email", "lock"] as const;
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const useCheckoutPrefill = (): UseCheckoutPrefillResult => {
