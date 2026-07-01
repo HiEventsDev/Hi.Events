@@ -315,7 +315,7 @@ export const CollectInformation = () => {
             );
 
             const prefilledProducts = builtProducts.map((product: any) =>
-                ticketProductIds.has(product.product_id)
+                (!isPerOrderCollection && ticketProductIds.has(product.product_id))
                     ? {...product, ...orderPrefill}
                     : product
             );
@@ -330,6 +330,7 @@ export const CollectInformation = () => {
                 },
             });
         }
+        // prefill/lock intentionally omitted: they're memoized off query params that don't change during the page's lifetime
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
     useEffect(() => {
@@ -488,7 +489,7 @@ export const CollectInformation = () => {
                         />
                     </InputGroup>
 
-                    {orderRequiresAttendeeDetails && !isPerOrderCollection && totalTicketAttendees > 0 && (
+                    {orderRequiresAttendeeDetails && !isPerOrderCollection && totalTicketAttendees > 0 && !lock && (
                         <div className={classes.copyDetailsSection}>
                             {totalTicketAttendees === 1 ? (
                                 <Tooltip
