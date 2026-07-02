@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Order;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -317,7 +318,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->setStatus(EventOccurrenceStatus::ACTIVE->name)
             ->setCapacity(100)
             ->setUsedCapacity(0)
-            ->setStartDate('2026-07-15 10:00:00');
+            ->setStartDate(Carbon::now()->addMonths(2)->toDateTimeString());
 
         $this->setupOccurrenceLookup(1, 10, $occurrence10);
         $this->setupOccurrenceLookup(1, 20, $occurrence20);
@@ -373,7 +374,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->setStatus(EventOccurrenceStatus::ACTIVE->name)
             ->setCapacity(100)
             ->setUsedCapacity(0)
-            ->setStartDate('2026-08-01 10:00:00');
+            ->setStartDate(Carbon::now()->addMonths(3)->toDateTimeString());
 
         $this->setupOccurrenceLookup(1, 10, $occurrence10);
         $this->setupOccurrenceLookup(1, 20, $occurrence20);
@@ -423,7 +424,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->setStatus($status)
             ->setCapacity($capacity)
             ->setUsedCapacity($usedCapacity)
-            ->setStartDate('2026-06-15 10:00:00');
+            ->setStartDate(Carbon::now()->addMonth()->toDateTimeString());
     }
 
     private function setupOccurrenceLookup(int $eventId, int $occurrenceId, ?EventOccurrenceDomainObject $occurrence): void
