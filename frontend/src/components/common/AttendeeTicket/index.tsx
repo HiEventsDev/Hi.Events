@@ -2,6 +2,7 @@ import {getAttendeeProductPrice, getAttendeeProductTitle} from "../../../utilite
 import {Button, CopyButton} from "@mantine/core";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
+import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
 import {IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
 import {Attendee, Event, EventOccurrence, LocationType, Product} from "../../../types.ts";
@@ -48,6 +49,7 @@ export const AttendeeTicket = ({
     const ticketDesignSettings = event?.settings?.ticket_design_settings;
     const accentColor = ticketDesignSettings?.accent_color || '#6B46C1';
     const footerText = ticketDesignSettings?.footer_text;
+    const dateDisplayMode = ticketDesignSettings?.date_display_mode || 'START_DATE_TIME';
     const logoUrl = imageUrl('TICKET_LOGO', event?.images);
 
     const ticketStyle = {
@@ -87,15 +89,19 @@ export const AttendeeTicket = ({
                 <div className={classes.contentLeft}>
                     {/* Event Details */}
                     <div className={classes.eventDetails}>
-                        <div className={classes.detailRow}>
-                            <div className={classes.detailLabel}>{t`Date & Time`}</div>
-                            <div className={classes.detailValue}>
-                                <EventDateRange event={event} occurrence={ticketOccurrence}/>
-                                {ticketOccurrence?.label && (
-                                    <div className={classes.occurrenceLabel}>{ticketOccurrence.label}</div>
-                                )}
+                        {dateDisplayMode !== 'HIDDEN' && (
+                            <div className={classes.detailRow}>
+                                <div className={classes.detailLabel}>{t`Date & Time`}</div>
+                                <div className={classes.detailValue}>
+                                    {dateDisplayMode === 'DATE_RANGE'
+                                        ? <EventDateRange event={event} occurrence={ticketOccurrence}/>
+                                        : prettyDate(ticketOccurrence?.start_date ?? event.start_date, event.timezone, true)}
+                                    {ticketOccurrence?.label && (
+                                        <div className={classes.occurrenceLabel}>{ticketOccurrence.label}</div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
                         {event?.organizer?.name && (
                             <div className={classes.detailRow}>
                                 <div className={classes.detailLabel}>{t`Organizer`}</div>

@@ -192,12 +192,6 @@ class OrderCreateRequestValidationService
             'products.*.product_id' => 'required|integer',
             'products.*.event_occurrence_id' => 'required|integer',
             'products.*.quantities' => 'required|array',
-            // `min:0` blocks the mixed-tier exploit: without it, a single
-            // request with one tier at +2 and another at -1 sums to a positive
-            // selection but persists a negative order_item that distorts
-            // totals/stock and survives downstream availability checks
-            // (validateProductPricesQuantity only guards `quantity > available`,
-            // and `-1 > N` is false).
             'products.*.quantities.*.quantity' => 'required|integer|min:0',
             'products.*.quantities.*.price_id' => 'required|integer',
             'products.*.quantities.*.price' => 'numeric|min:0',
@@ -497,6 +491,10 @@ class OrderCreateRequestValidationService
             $totalQuantity = collect($data['products'])
                 ->filter(fn ($product) => in_array($product['product_id'], $productIds->toArray(), true))
                 ->sum(fn ($product) => collect($product['quantities'])->sum('quantity'));
+
+            if ($totalQuantity === 0) {
+                continue;
+            }
 
             $reservedProductQuantities = $capacity->getProducts()
                 ->map(fn (ProductDomainObject $product) => $this

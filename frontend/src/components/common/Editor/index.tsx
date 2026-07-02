@@ -2,7 +2,6 @@ import {Link, RichTextEditor} from "@mantine/tiptap";
 import {useEditor} from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import {TextAlign} from '@tiptap/extension-text-align';
-import {Image} from '@tiptap/extension-image';
 import {Color, TextStyle} from '@tiptap/extension-text-style';
 import React, {useEffect, useState} from "react";
 import {InputDescription, InputError, InputLabel, MantineFontSize} from "@mantine/core";
@@ -61,7 +60,6 @@ export const Editor = ({
             }),
             Link,
             TextAlign.configure({types: ['heading', 'paragraph']}),
-            Image,
             ImageResize,
             TextStyle,
             Color,

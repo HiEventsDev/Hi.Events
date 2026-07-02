@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import {DateTimePicker} from "@mantine/dates";
 import {EventCategories} from "../../../constants/eventCategories.ts";
 import {Callout} from "../../common/Callout";
+import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
 
 interface CreateEventModalProps extends GenericModalProps {
     organizerId?: IdParam;
@@ -261,7 +262,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         required
                                         size="md"
                                         placeholder={t`Select start date and time`}
-                                        valueFormat="MMM DD, YYYY [at] h:mm A"
+                                        valueFormat={getDateTimePickerFormat()}
                                         clearable
                                         dropdownType="modal"
                                         timePickerProps={{
@@ -282,7 +283,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         {...form.getInputProps('end_date')}
                                         size="md"
                                         placeholder={t`Select end date and time`}
-                                        valueFormat="MMM DD, YYYY [at] h:mm A"
+                                        valueFormat={getDateTimePickerFormat()}
                                         clearable
                                         dropdownType="modal"
                                         timePickerProps={{

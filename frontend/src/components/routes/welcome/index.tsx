@@ -23,6 +23,7 @@ import {EventCategories} from "../../../constants/eventCategories.ts";
 import {Callout} from "../../common/Callout";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
+import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
 
 export const CreateOrganizer = ({progressInfo}: {
     progressInfo?: { currentStep: number, totalSteps: number, progressPercentage: number }
@@ -422,7 +423,7 @@ export const CreateEvent = ({progressInfo}: {
                                             {...form.getInputProps('start_date')}
                                             label={t`Start date & time`}
                                             placeholder={t`Select start time`}
-                                            valueFormat="MMM DD, h:mm A"
+                                            valueFormat={getDateTimePickerFormat()}
                                             size="lg"
                                             required
                                             dropdownType="modal"
@@ -443,7 +444,7 @@ export const CreateEvent = ({progressInfo}: {
                                             {...form.getInputProps('end_date')}
                                             label={t`End time (optional)`}
                                             placeholder={t`Select end time`}
-                                            valueFormat="MMM DD, h:mm A"
+                                            valueFormat={getDateTimePickerFormat()}
                                             size="lg"
                                             dropdownType="modal"
                                             timePickerProps={{

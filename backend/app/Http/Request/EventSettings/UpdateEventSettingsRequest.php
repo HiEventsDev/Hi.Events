@@ -4,8 +4,10 @@ namespace HiEvents\Http\Request\EventSettings;
 
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
+use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
@@ -70,10 +72,14 @@ class UpdateEventSettingsRequest extends BaseRequest
             'ticket_design_settings.logo_image_id' => ['nullable', 'integer'],
             'ticket_design_settings.footer_text' => ['nullable', 'string', 'max:500'],
             'ticket_design_settings.layout_type' => ['nullable', 'string', Rule::in(['default', 'modern'])],
+            'ticket_design_settings.date_display_mode' => ['nullable', 'string', Rule::in(TicketDateDisplayMode::valuesArray())],
             'ticket_design_settings.enabled' => ['boolean'],
 
             // Marketing settings
             'show_marketing_opt_in' => ['boolean'],
+
+            // Attendee detail copy control
+            'allow_copy_details_to_all_attendees' => ['boolean'],
 
             // Platform fee settings
             'pass_platform_fee_to_buyer' => ['boolean'],
@@ -84,6 +90,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.background' => ['nullable', 'string', ...RulesHelper::HEX_COLOR],
             'homepage_theme_settings.mode' => ['nullable', 'string', Rule::in(['light', 'dark'])],
             'homepage_theme_settings.background_type' => ['nullable', 'string', Rule::in(HomepageBackgroundType::valuesArray())],
+            'homepage_theme_settings.font_family' => ['nullable', 'string', Rule::in(HomepageFontFamily::valuesArray())],
 
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
@@ -128,6 +135,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'homepage_theme_settings.background' => $colorMessage,
             'homepage_theme_settings.mode.in' => __('The mode must be light or dark.'),
             'homepage_theme_settings.background_type.in' => __('The background type must be COLOR or MIRROR_COVER_IMAGE.'),
+            'homepage_theme_settings.font_family.in' => __('The selected font is not supported.'),
         ];
     }
 }

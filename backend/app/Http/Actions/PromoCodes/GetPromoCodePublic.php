@@ -5,16 +5,17 @@ namespace HiEvents\Http\Actions\PromoCodes;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GetPromoCodePublic extends BaseAction
 {
-    private PromoCodeRepositoryInterface $promoCodeRepository;
-
-    public function __construct(PromoCodeRepositoryInterface $promoCodeRepository)
+    public function __construct(
+        private readonly PromoCodeRepositoryInterface    $promoCodeRepository,
+        private readonly PromoCodeUsageValidationService $promoCodeUsageValidationService,
+    )
     {
-        $this->promoCodeRepository = $promoCodeRepository;
     }
 
     public function __invoke(int $eventId, string $promoCode, Request $request): JsonResponse
@@ -26,7 +27,7 @@ class GetPromoCodePublic extends BaseAction
         ]);
 
         return $this->jsonResponse([
-            'valid' => $promoCode !== null && $promoCode->isValid(),
+            'valid' => $this->promoCodeUsageValidationService->isPromoCodeUsable($promoCode),
         ]);
     }
 }

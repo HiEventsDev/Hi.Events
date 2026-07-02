@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
@@ -29,6 +30,7 @@ class CreateOrderHandlerTest extends TestCase
 {
     private EventRepositoryInterface|MockInterface $eventRepository;
     private PromoCodeRepositoryInterface|MockInterface $promoCodeRepository;
+    private PromoCodeUsageValidationService|MockInterface $promoCodeUsageValidationService;
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
     private OrderManagementService|MockInterface $orderManagementService;
     private OrderItemProcessingService|MockInterface $orderItemProcessingService;
@@ -42,6 +44,7 @@ class CreateOrderHandlerTest extends TestCase
 
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->promoCodeRepository = Mockery::mock(PromoCodeRepositoryInterface::class);
+        $this->promoCodeUsageValidationService = Mockery::mock(PromoCodeUsageValidationService::class);
         $this->affiliateRepository = Mockery::mock(AffiliateRepositoryInterface::class);
         $this->orderManagementService = Mockery::mock(OrderManagementService::class);
         $this->orderItemProcessingService = Mockery::mock(OrderItemProcessingService::class);
@@ -54,6 +57,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->handler = new CreateOrderHandler(
             $this->eventRepository,
             $this->promoCodeRepository,
+            $this->promoCodeUsageValidationService,
             $this->affiliateRepository,
             $this->orderManagementService,
             $this->orderItemProcessingService,

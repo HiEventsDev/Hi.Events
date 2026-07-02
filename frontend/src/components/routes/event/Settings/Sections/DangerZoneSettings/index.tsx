@@ -26,7 +26,8 @@ export const DangerZoneSettings = () => {
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
     const isArchived = event?.status === EventStatus.ARCHIVED;
-    const isDeleteConfirmed = deleteConfirmation.toLowerCase() === 'delete';
+    const deleteConfirmationPhrase = t`delete`;
+    const isDeleteConfirmed = deleteConfirmation.trim().toLocaleLowerCase() === deleteConfirmationPhrase.toLocaleLowerCase();
 
     const handleDelete = () => {
         const organizerId = event?.organizer?.id;
@@ -99,7 +100,7 @@ export const DangerZoneSettings = () => {
                                     {t`Type "delete" to confirm`}
                                 </Text>
                                 <TextInput
-                                    placeholder={t`delete`}
+                                    placeholder={deleteConfirmationPhrase}
                                     value={deleteConfirmation}
                                     onChange={(e) => setDeleteConfirmation(e.currentTarget.value)}
                                 />

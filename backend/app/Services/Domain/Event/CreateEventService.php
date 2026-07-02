@@ -221,6 +221,10 @@ class CreateEventService
                 : ($organizerThemeSettings['background_type'] ?? HomepageBackgroundType::COLOR->name),
         ];
 
+        if (!empty($organizerThemeSettings['font_family'])) {
+            $homepageThemeSettings['font_family'] = $organizerThemeSettings['font_family'];
+        }
+
         $this->eventSettingsRepository->create([
             'event_id' => $event->getId(),
 
@@ -258,6 +262,7 @@ class CreateEventService
                 ? AttendeeDetailsCollectionMethod::PER_ORDER->value
                 : $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
+            'allow_copy_details_to_all_attendees' => true,
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
             'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit() ?? false,
             'ticket_design_settings' => [
