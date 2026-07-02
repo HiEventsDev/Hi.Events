@@ -23,9 +23,7 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
     public function __construct(
         private readonly UpdateEmailTemplateHandler $handler,
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException

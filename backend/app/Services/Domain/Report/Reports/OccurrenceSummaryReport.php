@@ -17,7 +17,7 @@ class OccurrenceSummaryReport extends AbstractReportService
 
     protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string
     {
-        return <<<SQL
+        return <<<'SQL'
             SELECT
                 eo.id AS occurrence_id,
                 eo.short_id,

@@ -46,6 +46,7 @@ class GetOrganizerStatsAction extends BaseAction
 
     /**
      * @return array{start_date: ?string, end_date: ?string}
+     *
      * @throws ValidationException
      */
     private function validateDateRange(Request $request): array
@@ -58,7 +59,7 @@ class GetOrganizerStatsAction extends BaseAction
             ],
         )->validate();
 
-        if (!empty($validated['start_date']) && !empty($validated['end_date'])) {
+        if (! empty($validated['start_date']) && ! empty($validated['end_date'])) {
             $days = Carbon::parse($validated['start_date'])->diffInDays(Carbon::parse($validated['end_date']));
             if ($days > self::MAX_RANGE_DAYS) {
                 throw ValidationException::withMessages([

@@ -189,7 +189,7 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
         $query = $this->db->select($sql, array_merge($checkInListIds, $checkInListIds, $checkInListIds));
 
         return collect($query)->map(
-            static fn($item) => new CheckedInAttendeesCountDTO(
+            static fn ($item) => new CheckedInAttendeesCountDTO(
                 checkInListId: $item->check_in_list_id,
                 checkedInCount: $item->checked_in_attendees,
                 totalAttendeesCount: $item->total_attendees,
@@ -280,11 +280,11 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
         );
 
         return collect($rows)->map(
-            static fn($row) => new CheckInListProductStatDTO(
-                productId: (int)$row->product_id,
+            static fn ($row) => new CheckInListProductStatDTO(
+                productId: (int) $row->product_id,
                 productTitle: $row->product_title,
-                totalAttendees: (int)$row->total_attendees,
-                checkedInAttendees: (int)$row->checked_in_attendees,
+                totalAttendees: (int) $row->total_attendees,
+                checkedInAttendees: (int) $row->checked_in_attendees,
             )
         );
     }
@@ -321,12 +321,12 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
         ], $clause->bindings));
 
         return collect($rows)->map(
-            static fn($row) => new CheckInListRecentCheckInDTO(
+            static fn ($row) => new CheckInListRecentCheckInDTO(
                 attendeePublicId: $row->attendee_public_id,
                 firstName: $row->first_name ?? '',
                 lastName: $row->last_name ?? '',
                 productTitle: $row->product_title,
-                checkedInAt: (string)$row->checked_in_at,
+                checkedInAt: (string) $row->checked_in_at,
             )
         );
     }
@@ -334,13 +334,13 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            [CheckInListDomainObjectAbstract::EVENT_ID, '=', $eventId]
+            [CheckInListDomainObjectAbstract::EVENT_ID, '=', $eventId],
         ];
 
-        if (!empty($params->query)) {
+        if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->where(CapacityAssignmentDomainObjectAbstract::NAME, 'ilike', '%' . $params->query . '%');
+                    ->where(CapacityAssignmentDomainObjectAbstract::NAME, 'ilike', '%'.$params->query.'%');
             };
         }
 

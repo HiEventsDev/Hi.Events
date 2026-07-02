@@ -26,10 +26,15 @@ class OrderItemRepositoryTest extends TestCase
     private OrderItemRepository $repository;
 
     private int $eventId;
+
     private int $occurrenceId;
+
     private int $otherOccurrenceId;
+
     private int $productId;
+
     private int $productPriceId;
+
     private int $accountId;
 
     protected function setUp(): void
@@ -61,13 +66,13 @@ class OrderItemRepositoryTest extends TestCase
             'organizer_id' => $organizerId,
             'currency' => 'USD',
             'timezone' => 'UTC',
-            'short_id' => 'test_evt_' . uniqid(),
+            'short_id' => 'test_evt_'.uniqid(),
             'created_at' => $now,
             'updated_at' => $now,
         ]);
 
         $this->occurrenceId = DB::table('event_occurrences')->insertGetId([
-            'short_id' => 'occ_' . uniqid(),
+            'short_id' => 'occ_'.uniqid(),
             'event_id' => $this->eventId,
             'start_date' => now()->addDay()->toDateTimeString(),
             'end_date' => now()->addDays(1)->addHours(2)->toDateTimeString(),
@@ -79,7 +84,7 @@ class OrderItemRepositoryTest extends TestCase
         ]);
 
         $this->otherOccurrenceId = DB::table('event_occurrences')->insertGetId([
-            'short_id' => 'occ_' . uniqid(),
+            'short_id' => 'occ_'.uniqid(),
             'event_id' => $this->eventId,
             'start_date' => now()->addDays(2)->toDateTimeString(),
             'end_date' => now()->addDays(2)->addHours(2)->toDateTimeString(),
@@ -106,12 +111,12 @@ class OrderItemRepositoryTest extends TestCase
         ]);
     }
 
-    public function testReturnsZeroWhenNoReservations(): void
+    public function test_returns_zero_when_no_reservations(): void
     {
         $this->assertSame(0, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
     }
 
-    public function testSumsActiveReservationsForOccurrence(): void
+    public function test_sums_active_reservations_for_occurrence(): void
     {
         $this->insertOrderWithItems(
             status: OrderStatus::RESERVED->name,
@@ -127,7 +132,7 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(5, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
     }
 
-    public function testIgnoresExpiredReservations(): void
+    public function test_ignores_expired_reservations(): void
     {
         $this->insertOrderWithItems(
             status: OrderStatus::RESERVED->name,
@@ -143,7 +148,7 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(4, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
     }
 
-    public function testIgnoresNonReservedOrders(): void
+    public function test_ignores_non_reserved_orders(): void
     {
         $this->insertOrderWithItems(
             status: OrderStatus::COMPLETED->name,
@@ -164,7 +169,7 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(1, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
     }
 
-    public function testIgnoresSoftDeletedOrders(): void
+    public function test_ignores_soft_deleted_orders(): void
     {
         $this->insertOrderWithItems(
             status: OrderStatus::RESERVED->name,
@@ -181,7 +186,7 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(2, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
     }
 
-    public function testScopesByOccurrenceId(): void
+    public function test_scopes_by_occurrence_id(): void
     {
         $this->insertOrderWithItems(
             status: OrderStatus::RESERVED->name,
@@ -196,15 +201,15 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(7, $this->repository->getReservedQuantityForOccurrence($this->otherOccurrenceId));
     }
 
-    public function testIgnoresSoftDeletedOrderItems(): void
+    public function test_ignores_soft_deleted_order_items(): void
     {
         $orderId = DB::table('orders')->insertGetId([
-            'short_id' => 'ord_' . uniqid(),
+            'short_id' => 'ord_'.uniqid(),
             'event_id' => $this->eventId,
             'currency' => 'USD',
             'status' => OrderStatus::RESERVED->name,
             'reserved_until' => now()->addHour(),
-            'public_id' => 'pub_' . uniqid(),
+            'public_id' => 'pub_'.uniqid(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -235,7 +240,7 @@ class OrderItemRepositoryTest extends TestCase
     }
 
     /**
-     * @param array<int, int> $occurrenceQuantities Map of event_occurrence_id => quantity
+     * @param  array<int, int>  $occurrenceQuantities  Map of event_occurrence_id => quantity
      */
     private function insertOrderWithItems(
         string $status,
@@ -244,12 +249,12 @@ class OrderItemRepositoryTest extends TestCase
         ?\DateTimeInterface $deletedAt = null,
     ): int {
         $orderId = DB::table('orders')->insertGetId([
-            'short_id' => 'ord_' . uniqid(),
+            'short_id' => 'ord_'.uniqid(),
             'event_id' => $this->eventId,
             'currency' => 'USD',
             'status' => $status,
             'reserved_until' => $reservedUntil,
-            'public_id' => 'pub_' . uniqid(),
+            'public_id' => 'pub_'.uniqid(),
             'created_at' => now(),
             'updated_at' => now(),
             'deleted_at' => $deletedAt,

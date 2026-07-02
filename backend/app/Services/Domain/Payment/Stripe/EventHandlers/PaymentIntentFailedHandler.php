@@ -19,13 +19,11 @@ use Throwable;
 readonly class PaymentIntentFailedHandler
 {
     public function __construct(
-        private OrderRepositoryInterface                    $orderRepository,
-        private StripePaymentsRepository                    $stripePaymentsRepository,
-        private DatabaseManager                             $databaseManager,
+        private OrderRepositoryInterface $orderRepository,
+        private StripePaymentsRepository $stripePaymentsRepository,
+        private DatabaseManager $databaseManager,
         private StripePaymentUpdateFromPaymentIntentService $stripePaymentUpdateFromPaymentIntentService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

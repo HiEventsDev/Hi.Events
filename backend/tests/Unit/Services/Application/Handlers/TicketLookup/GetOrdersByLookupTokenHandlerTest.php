@@ -17,7 +17,9 @@ use Tests\TestCase;
 class GetOrdersByLookupTokenHandlerTest extends TestCase
 {
     private TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository;
+
     private OrderRepositoryInterface $orderRepository;
+
     private GetOrdersByLookupTokenHandler $handler;
 
     protected function setUp(): void
@@ -33,7 +35,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
         );
     }
 
-    public function testHandleSuccessfullyReturnsOrdersWhenTokenIsValid(): void
+    public function test_handle_successfully_returns_orders_when_token_is_valid(): void
     {
         $token = 'tl_validtoken123';
         $email = 'test@example.com';
@@ -69,7 +71,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testHandleThrowsExceptionWhenTokenNotFound(): void
+    public function test_handle_throws_exception_when_token_not_found(): void
     {
         $token = 'tl_invalidtoken';
         $dto = new GetOrdersByLookupTokenDTO(token: $token);
@@ -89,7 +91,7 @@ class GetOrdersByLookupTokenHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-    public function testHandleThrowsExceptionWhenTokenIsExpired(): void
+    public function test_handle_throws_exception_when_token_is_expired(): void
     {
         $token = 'tl_expiredtoken';
         $dto = new GetOrdersByLookupTokenDTO(token: $token);

@@ -33,8 +33,7 @@ interface CheckInListRepositoryInterface extends RepositoryInterface
      * to its own event_occurrence_id — no override because each row has
      * independent scope.
      *
-     * @param array<int> $checkInListIds
-     *
+     * @param  array<int>  $checkInListIds
      * @return Collection<CheckedInAttendeesCountDTO>
      */
     public function getCheckedInAttendeeCountByIds(array $checkInListIds): Collection;

@@ -28,7 +28,7 @@ class JobPollingService
     {
         $batch = Bus::findBatch($jobUuid);
 
-        if (!$batch) {
+        if (! $batch) {
             return new JobPollingResultDTO(
                 status: JobStatusEnum::NOT_FOUND,
                 message: __('Job not found'),
@@ -37,7 +37,7 @@ class JobPollingService
         }
 
         if ($batch->finished()) {
-            if ($filePath && !Storage::disk(self::STORAGE_DISK)->exists($filePath)) {
+            if ($filePath && ! Storage::disk(self::STORAGE_DISK)->exists($filePath)) {
                 return new JobPollingResultDTO(
                     status: JobStatusEnum::NOT_FOUND,
                     message: __('Export file not found'),

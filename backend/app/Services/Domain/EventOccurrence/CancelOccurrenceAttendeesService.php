@@ -17,6 +17,7 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
+use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -121,12 +122,12 @@ class CancelOccurrenceAttendeesService
      * and a stats discrepancy is recoverable through reconciliation but a
      * raised exception here would roll the cancel transaction back.
      *
-     * @param  \Illuminate\Support\Collection<int, AttendeeDomainObject>  $attendees
+     * @param  Collection<int, AttendeeDomainObject>  $attendees
      */
     private function decrementStatisticsForCancelledAttendees(
         int $eventId,
         int $occurrenceId,
-        \Illuminate\Support\Collection $attendees,
+        Collection $attendees,
     ): void {
         $countsByOrderId = $attendees
             ->groupBy(fn (AttendeeDomainObject $attendee) => $attendee->getOrderId())

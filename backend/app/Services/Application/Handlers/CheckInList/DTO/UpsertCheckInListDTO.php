@@ -7,18 +7,16 @@ use HiEvents\DataTransferObjects\BaseDTO;
 class UpsertCheckInListDTO extends BaseDTO
 {
     public function __construct(
-        public string  $name,
+        public string $name,
         public ?string $description,
-        public int     $eventId,
-        public array   $productIds,
+        public int $eventId,
+        public array $productIds,
         public ?string $expiresAt = null,
         public ?string $activatesAt = null,
-        public ?int    $id = null,
-        public ?int    $eventOccurrenceId = null,
-        public bool    $publicShowAttendeeNotes = true,
-        public bool    $publicShowQuestionAnswers = true,
-        public bool    $publicShowOrderDetails = true,
-    )
-    {
-    }
+        public ?int $id = null,
+        public ?int $eventOccurrenceId = null,
+        public bool $publicShowAttendeeNotes = true,
+        public bool $publicShowQuestionAnswers = true,
+        public bool $publicShowOrderDetails = true,
+    ) {}
 }

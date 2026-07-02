@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class OrganizerVatSettingDomainObject extends Generated\OrganizerVatSettingDomainObjectAbstract
-{
-}
+class OrganizerVatSettingDomainObject extends Generated\OrganizerVatSettingDomainObjectAbstract {}

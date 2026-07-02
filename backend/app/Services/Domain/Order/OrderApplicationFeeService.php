@@ -12,18 +12,15 @@ class OrderApplicationFeeService
 {
     public function __construct(
         private readonly OrderApplicationFeeRepositoryInterface $orderApplicationFeeRepository,
-    )
-    {
-    }
+    ) {}
 
     public function createOrderApplicationFee(
-        int                       $orderId,
-        int                       $applicationFeeAmountMinorUnit,
+        int $orderId,
+        int $applicationFeeAmountMinorUnit,
         OrderApplicationFeeStatus $orderApplicationFeeStatus,
-        PaymentProviders          $paymentMethod,
-        string                    $currency,
-    ): void
-    {
+        PaymentProviders $paymentMethod,
+        string $currency,
+    ): void {
         $isZeroDecimalCurrency = Currency::isZeroDecimalCurrency($currency);
 
         $applicationFeeAmount = $isZeroDecimalCurrency
@@ -35,7 +32,7 @@ class OrderApplicationFeeService
             OrderApplicationFeeDomainObjectAbstract::AMOUNT => $applicationFeeAmount,
             OrderApplicationFeeDomainObjectAbstract::STATUS => $orderApplicationFeeStatus->value,
             OrderApplicationFeeDomainObjectAbstract::PAYMENT_METHOD => $paymentMethod->value,
-            ORderApplicationFeeDomainObjectAbstract::CURRENCY => $currency,
+            OrderApplicationFeeDomainObjectAbstract::CURRENCY => $currency,
             OrderApplicationFeeDomainObjectAbstract::PAID_AT => $orderApplicationFeeStatus->value === OrderApplicationFeeStatus::PAID->value
                 ? now()->toDateTimeString()
                 : null,

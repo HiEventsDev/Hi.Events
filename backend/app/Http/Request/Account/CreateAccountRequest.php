@@ -14,7 +14,7 @@ class CreateAccountRequest extends BaseRequest
 {
     public function rules(): array
     {
-        $currencies = include __DIR__ . '/../../../../data/currencies.php';
+        $currencies = include __DIR__.'/../../../../data/currencies.php';
 
         return [
             'first_name' => RulesHelper::REQUIRED_STRING,

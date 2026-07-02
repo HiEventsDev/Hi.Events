@@ -13,20 +13,17 @@ use Illuminate\Contracts\Mail\Mailer;
 class SendAttendeeTicketService
 {
     public function __construct(
-        private readonly Mailer             $mailer,
+        private readonly Mailer $mailer,
         private readonly MailBuilderService $mailBuilderService,
-    )
-    {
-    }
+    ) {}
 
     public function send(
-        OrderDomainObject        $order,
-        AttendeeDomainObject     $attendee,
-        EventDomainObject        $event,
+        OrderDomainObject $order,
+        AttendeeDomainObject $attendee,
+        EventDomainObject $event,
         EventSettingDomainObject $eventSettings,
-        OrganizerDomainObject    $organizer,
-    ): void
-    {
+        OrganizerDomainObject $organizer,
+    ): void {
         $mail = $this->mailBuilderService->buildAttendeeTicketMail(
             $attendee,
             $order,

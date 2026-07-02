@@ -26,19 +26,17 @@ use Throwable;
 class EventStatisticsIncrementService
 {
     public function __construct(
-        private readonly PromoCodeRepositoryInterface           $promoCodeRepository,
-        private readonly ProductRepositoryInterface             $productRepository,
-        private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
-        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface $eventOccurrenceStatisticRepository,
         private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
-        private readonly DatabaseManager                                  $databaseManager,
-        private readonly OrderRepositoryInterface               $orderRepository,
-        private readonly LoggerInterface                        $logger,
-        private readonly Retrier                                $retrier,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly LoggerInterface $logger,
+        private readonly Retrier $retrier,
+    ) {}
 
     /**
      * Increment statistics for a new order
@@ -91,10 +89,10 @@ class EventStatisticsIncrementService
         ]);
 
         $productsSold = $order->getOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         $attendeesRegistered = $order->getTicketOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         if ($eventStatistics === null) {
             $this->eventStatisticsRepository->create([
@@ -144,7 +142,7 @@ class EventStatisticsIncrementService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event statistics version mismatch. Expected version '
-                . $eventStatistics->getVersion() . ' but it was already updated.'
+                .$eventStatistics->getVersion().' but it was already updated.'
             );
         }
 
@@ -175,10 +173,10 @@ class EventStatisticsIncrementService
         ]);
 
         $productsSold = $order->getOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         $attendeesRegistered = $order->getTicketOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         if ($eventDailyStatistic === null) {
             $this->eventDailyStatisticRepository->create([
@@ -231,7 +229,7 @@ class EventStatisticsIncrementService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event daily statistics version mismatch. Expected version '
-                . $eventDailyStatistic->getVersion() . ' but it was already updated.'
+                .$eventDailyStatistic->getVersion().' but it was already updated.'
             );
         }
 
@@ -265,15 +263,15 @@ class EventStatisticsIncrementService
         }
 
         foreach ($itemsByOccurrence as $occurrenceId => $items) {
-            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $productsSold = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getQuantity(), $items));
             $attendeesRegistered = array_sum(array_map(
-                fn(OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
+                fn (OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
                 $items,
             ));
-            $totalGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross(), $items));
-            $totalBeforeAdditions = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
-            $totalTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
-            $totalFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $totalGross = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalGross(), $items));
+            $totalBeforeAdditions = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
+            $totalTax = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $totalFee = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
 
             $existing = $this->eventOccurrenceStatisticRepository->findFirstWhere([
                 'event_id' => $order->getEventId(),
@@ -293,6 +291,7 @@ class EventStatisticsIncrementService
                     'orders_created' => 1,
                     'orders_cancelled' => 0,
                 ]);
+
                 continue;
             }
 
@@ -317,7 +316,7 @@ class EventStatisticsIncrementService
 
             if ($updated === 0) {
                 throw new EventStatisticsVersionMismatchException(
-                    'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                    'Occurrence statistics version mismatch for occurrence '.$occurrenceId
                 );
             }
         }
@@ -340,15 +339,15 @@ class EventStatisticsIncrementService
         }
 
         foreach ($itemsByOccurrence as $occurrenceId => $items) {
-            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $productsSold = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getQuantity(), $items));
             $attendeesRegistered = array_sum(array_map(
-                fn(OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
+                fn (OrderItemDomainObject $i) => $i->getProductType() === ProductType::TICKET->name ? $i->getQuantity() : 0,
                 $items,
             ));
-            $totalGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross(), $items));
-            $totalBeforeAdditions = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
-            $totalTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
-            $totalFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $totalGross = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalGross(), $items));
+            $totalBeforeAdditions = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalBeforeAdditions(), $items));
+            $totalTax = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $totalFee = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
 
             $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
                 'event_occurrence_id' => $occurrenceId,
@@ -369,6 +368,7 @@ class EventStatisticsIncrementService
                     'orders_created' => 1,
                     'orders_cancelled' => 0,
                 ]);
+
                 continue;
             }
 
@@ -394,7 +394,7 @@ class EventStatisticsIncrementService
 
             if ($updated === 0) {
                 throw new EventStatisticsVersionMismatchException(
-                    'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                    'Occurrence daily statistics version mismatch for occurrence '.$occurrenceId
                 );
             }
         }
@@ -415,7 +415,7 @@ class EventStatisticsIncrementService
         );
 
         $attendeeCount = $order->getOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         if ($attendeeCount > 0) {
             $this->promoCodeRepository->increment(

@@ -20,11 +20,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetCheckInListAttendeesPublicHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface    $attendeeRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotCheckInException
@@ -38,7 +36,7 @@ class GetCheckInListAttendeesPublicHandler
                 CheckInListDomainObjectAbstract::SHORT_ID => $shortId,
             ]);
 
-        if (!$checkInList) {
+        if (! $checkInList) {
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 
@@ -51,6 +49,7 @@ class GetCheckInListAttendeesPublicHandler
         // Set the check-in for each attendee
         $attendees->getCollection()->transform(function (AttendeeDomainObject $attendee) use ($checkInList) {
             $attendee->setCheckIn($attendee->getCheckIns()?->first(fn ($checkIn) => $checkIn->getCheckInListId() === $checkInList->getId()));
+
             return $attendee;
         });
 
@@ -71,7 +70,7 @@ class GetCheckInListAttendeesPublicHandler
         }
 
         $filterFields = ($queryParams->filter_fields ?? collect())
-            ->reject(fn(FilterFieldDTO $f) => $f->field === 'event_occurrence_id')
+            ->reject(fn (FilterFieldDTO $f) => $f->field === 'event_occurrence_id')
             ->push(new FilterFieldDTO(
                 field: 'event_occurrence_id',
                 operator: 'eq',

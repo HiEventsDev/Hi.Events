@@ -19,9 +19,7 @@ class CopyStripeConnectAccountAction extends BaseAction
 {
     public function __construct(
         private readonly CopyStripeConnectAccountHandler $copyStripeConnectAccountHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

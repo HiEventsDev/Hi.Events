@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use HiEvents\Helper\IdHelper;
+use HiEvents\Models\Account;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\HiEvents\Models\Account>
+ * @extends Factory<Account>
  */
 class AccountFactory extends Factory
 {
@@ -28,14 +29,14 @@ class AccountFactory extends Factory
 
     public function verified(): self
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'account_verified_at' => now(),
         ]);
     }
 
     public function manuallyVerified(): self
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_manually_verified' => true,
         ]);
     }

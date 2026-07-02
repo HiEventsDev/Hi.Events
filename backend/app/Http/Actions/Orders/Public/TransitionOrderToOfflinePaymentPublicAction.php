@@ -13,9 +13,7 @@ class TransitionOrderToOfflinePaymentPublicAction extends BaseAction
 {
     public function __construct(
         private readonly TransitionOrderToOfflinePaymentHandler $initializeOrderOfflinePaymentPublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId, string $orderShortId): JsonResponse
     {

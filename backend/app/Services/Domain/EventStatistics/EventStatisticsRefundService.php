@@ -20,15 +20,13 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class EventStatisticsRefundService
 {
     public function __construct(
-        private readonly EventStatisticRepositoryInterface            $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface       $eventDailyStatisticRepository,
-        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface $eventOccurrenceStatisticRepository,
         private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
-        private readonly OrderRepositoryInterface                         $orderRepository,
-        private readonly LoggerInterface                              $logger,
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * Update statistics when an order is refunded
@@ -71,7 +69,7 @@ class EventStatisticsRefundService
             'event_id' => $order->getEventId(),
         ]);
 
-        if (!$eventStatistics) {
+        if (! $eventStatistics) {
             throw new ResourceNotFoundException("Event statistics not found for event {$order->getEventId()}");
         }
 
@@ -132,6 +130,7 @@ class EventStatisticsRefundService
                     'order_id' => $order->getId(),
                 ]
             );
+
             return;
         }
 
@@ -179,14 +178,14 @@ class EventStatisticsRefundService
      * lose updates. Version is bumped so any concurrent reader using optimistic locking
      * (e.g. EventStatisticsIncrementService) detects the change.
      *
-     * @param array<int, OrderItemDomainObject[]> $itemsByOccurrence
+     * @param  array<int, OrderItemDomainObject[]>  $itemsByOccurrence
      */
     private function updateOccurrenceStatisticsForRefund(array $itemsByOccurrence, float $refundProportion): void
     {
         foreach ($itemsByOccurrence as $occurrenceId => $items) {
-            $occurrenceGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
-            $occurrenceTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
-            $occurrenceFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $occurrenceGross = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
+            $occurrenceTax = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $occurrenceFee = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
 
             $grossDelta = $this->formatDelta($occurrenceGross * $refundProportion);
             $taxDelta = $this->formatDelta($occurrenceTax * $refundProportion);
@@ -211,14 +210,14 @@ class EventStatisticsRefundService
      * Atomic per-occurrence-per-day refund stats update. See updateOccurrenceStatisticsForRefund
      * for the rationale behind raw SQL increments.
      *
-     * @param array<int, OrderItemDomainObject[]> $itemsByOccurrence
+     * @param  array<int, OrderItemDomainObject[]>  $itemsByOccurrence
      */
     private function updateOccurrenceDailyStatisticsForRefund(array $itemsByOccurrence, float $refundProportion, string $orderDate): void
     {
         foreach ($itemsByOccurrence as $occurrenceId => $items) {
-            $occurrenceGross = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
-            $occurrenceTax = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
-            $occurrenceFee = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
+            $occurrenceGross = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
+            $occurrenceTax = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
+            $occurrenceFee = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
 
             $grossDelta = $this->formatDelta($occurrenceGross * $refundProportion);
             $taxDelta = $this->formatDelta($occurrenceTax * $refundProportion);
@@ -261,6 +260,7 @@ class EventStatisticsRefundService
             }
             $itemsByOccurrence[$occId][] = $orderItem;
         }
+
         return $itemsByOccurrence;
     }
 }

@@ -11,8 +11,7 @@ class DeleteConfigurationHandler
 {
     public function __construct(
         private readonly OrganizerConfigurationRepositoryInterface $repository,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

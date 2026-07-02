@@ -13,12 +13,12 @@ use HiEvents\Mail\Order\OrderCancelled;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
-use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
@@ -30,13 +30,21 @@ use Throwable;
 class OrderCancelServiceTest extends TestCase
 {
     private Mailer $mailer;
+
     private AttendeeRepositoryInterface $attendeeRepository;
+
     private EventRepositoryInterface $eventRepository;
+
     private OrderRepositoryInterface $orderRepository;
+
     private DatabaseManager $databaseManager;
+
     private ProductQuantityUpdateService $productQuantityService;
+
     private OrderCancelService $service;
+
     private DomainEventDispatcherService $domainEventDispatcherService;
+
     private EventStatisticsCancellationService $eventStatisticsCancellationService;
 
     protected function setUp(): void
@@ -64,7 +72,7 @@ class OrderCancelServiceTest extends TestCase
         );
     }
 
-    public function testCancelOrder(): void
+    public function test_cancel_order(): void
     {
         Event::fake();
 
@@ -106,9 +114,9 @@ class OrderCancelServiceTest extends TestCase
             ->once()
             ->with($order);
 
-        $event = new EventDomainObject();
-        $event->setEventSettings(new EventSettingDomainObject());
-        $event->setOrganizer(new OrganizerDomainObject());
+        $event = new EventDomainObject;
+        $event->setEventSettings(new EventSettingDomainObject);
+        $event->setOrganizer(new OrganizerDomainObject);
         $this->eventRepository
             ->shouldReceive('loadRelation')
             ->twice()
@@ -146,7 +154,7 @@ class OrderCancelServiceTest extends TestCase
         try {
             $this->service->cancelOrder($order);
         } catch (Throwable $e) {
-            $this->fail("Failed to cancel order: " . $e->getMessage());
+            $this->fail('Failed to cancel order: '.$e->getMessage());
         }
 
         Event::assertDispatched(CapacityChangedEvent::class, 2);
@@ -158,7 +166,7 @@ class OrderCancelServiceTest extends TestCase
         });
     }
 
-    public function testCancelOrderAwaitingOfflinePayment(): void
+    public function test_cancel_order_awaiting_offline_payment(): void
     {
         Event::fake();
 
@@ -199,9 +207,9 @@ class OrderCancelServiceTest extends TestCase
             ->once()
             ->with($order);
 
-        $event = new EventDomainObject();
-        $event->setEventSettings(new EventSettingDomainObject());
-        $event->setOrganizer(new OrganizerDomainObject());
+        $event = new EventDomainObject;
+        $event->setEventSettings(new EventSettingDomainObject);
+        $event->setOrganizer(new OrganizerDomainObject);
         $this->eventRepository
             ->shouldReceive('loadRelation')
             ->twice()
@@ -239,9 +247,9 @@ class OrderCancelServiceTest extends TestCase
         try {
             $this->service->cancelOrder($order);
         } catch (Throwable $e) {
-            $this->fail("Failed to cancel order: " . $e->getMessage());
+            $this->fail('Failed to cancel order: '.$e->getMessage());
         }
 
-        $this->assertTrue(true, "Order cancellation proceeded without throwing an exception.");
+        $this->assertTrue(true, 'Order cancellation proceeded without throwing an exception.');
     }
 }

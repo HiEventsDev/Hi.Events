@@ -16,16 +16,14 @@ class GetAllOrdersAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllOrdersHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $orders = $this->handler->handle(new GetAllOrdersDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
             sortBy: $request->query('sort_by', 'created_at'),
             sortDirection: $request->query('sort_direction', 'desc'),

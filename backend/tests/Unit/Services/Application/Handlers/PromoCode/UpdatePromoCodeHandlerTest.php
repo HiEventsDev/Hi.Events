@@ -17,8 +17,11 @@ use Tests\TestCase;
 class UpdatePromoCodeHandlerTest extends TestCase
 {
     private PromoCodeRepositoryInterface $promoCodeRepository;
+
     private EventProductValidationService $eventProductValidationService;
+
     private EventRepositoryInterface $eventRepository;
+
     private UpdatePromoCodeHandler $handler;
 
     protected function setUp(): void
@@ -36,7 +39,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         );
     }
 
-    public function testHandleThrowsExceptionWhenPromoCodeNotFoundForEvent(): void
+    public function test_handle_throws_exception_when_promo_code_not_found_for_event(): void
     {
         $promoCodeId = 1;
         $eventId = 2;
@@ -65,7 +68,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         $this->handler->handle($promoCodeId, $dto);
     }
 
-    public function testHandleVerifiesPromoCodeBelongsToEvent(): void
+    public function test_handle_verifies_promo_code_belongs_to_event(): void
     {
         $promoCodeId = 1;
         $eventIdFromRequest = 2;
@@ -98,7 +101,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         $this->handler->handle($promoCodeId, $dto);
     }
 
-    public function testHandleSuccessfullyUpdatesPromoCodeWhenOwnershipVerified(): void
+    public function test_handle_successfully_updates_promo_code_when_ownership_verified(): void
     {
         $promoCodeId = 1;
         $eventId = 2;

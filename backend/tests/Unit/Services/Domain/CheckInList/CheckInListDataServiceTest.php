@@ -17,7 +17,9 @@ use Tests\TestCase;
 class CheckInListDataServiceTest extends TestCase
 {
     private CheckInListRepositoryInterface|MockInterface $checkInListRepository;
+
     private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
+
     private CheckInListDataService $service;
 
     protected function setUp(): void
@@ -33,7 +35,7 @@ class CheckInListDataServiceTest extends TestCase
         );
     }
 
-    public function testVerifyAttendeeBelongsToCheckInListPassesWhenProductMatches(): void
+    public function test_verify_attendee_belongs_to_check_in_list_passes_when_product_matches(): void
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn(1);
@@ -50,7 +52,7 @@ class CheckInListDataServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testVerifyPassesAcrossOccurrencesWhenListHasNoOccurrence(): void
+    public function test_verify_passes_across_occurrences_when_list_has_no_occurrence(): void
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn(1);
@@ -67,7 +69,7 @@ class CheckInListDataServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testVerifyPassesWhenOccurrenceMatches(): void
+    public function test_verify_passes_when_occurrence_matches(): void
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn(1);
@@ -85,7 +87,7 @@ class CheckInListDataServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testVerifyThrowsWhenOccurrenceMismatch(): void
+    public function test_verify_throws_when_occurrence_mismatch(): void
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn(1);
@@ -104,7 +106,7 @@ class CheckInListDataServiceTest extends TestCase
         $this->service->verifyAttendeeBelongsToCheckInList($checkInList, $attendee);
     }
 
-    public function testVerifyThrowsWhenProductMismatch(): void
+    public function test_verify_throws_when_product_mismatch(): void
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn(1);

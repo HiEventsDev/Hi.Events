@@ -8,10 +8,8 @@ use HiEvents\DomainObjects\Enums\StripePlatform;
 class CreateStripeConnectAccountDTO extends BaseDataObject
 {
     public function __construct(
-        public readonly int                 $organizerId,
-        public readonly int                 $accountId,
-        public readonly StripePlatform|null $platform = null,
-    )
-    {
-    }
+        public readonly int $organizerId,
+        public readonly int $accountId,
+        public readonly ?StripePlatform $platform = null,
+    ) {}
 }

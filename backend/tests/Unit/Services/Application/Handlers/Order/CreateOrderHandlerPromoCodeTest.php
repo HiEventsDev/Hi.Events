@@ -26,16 +26,17 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private const EVENT_ID = 1;
+
     private const PROMO_CODE_ID = 5;
 
-    public function testPromoCodeIsDroppedWhenNotUsable(): void
+    public function test_promo_code_is_dropped_when_not_usable(): void
     {
         $captured = $this->runHandler(isUsable: false);
 
         $this->assertNull($captured);
     }
 
-    public function testPromoCodeIsAppliedWhenUsable(): void
+    public function test_promo_code_is_applied_when_usable(): void
     {
         $captured = $this->runHandler(isUsable: true);
 
@@ -45,7 +46,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
 
     private function runHandler(bool $isUsable): mixed
     {
-        $promoCode = (new PromoCodeDomainObject())
+        $promoCode = (new PromoCodeDomainObject)
             ->setId(self::PROMO_CODE_ID)
             ->setCode('save50');
 
@@ -77,6 +78,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
             ->shouldReceive('createNewOrder')
             ->andReturnUsing(function ($eventId, $event, $timeOut, $locale, $promo, $affiliate, $sessionId) use (&$captured, $order) {
                 $captured = $promo;
+
                 return $order;
             });
         $orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
@@ -93,7 +95,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('statement')->andReturn(true);
-        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback());
+        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
         $handler = new CreateOrderHandler(
             $eventRepository,

@@ -3,7 +3,9 @@
 namespace Tests\Unit\Services\Domain\Event;
 
 use Carbon\CarbonImmutable;
+use HiEvents\Exceptions\InvalidRecurrenceRuleException;
 use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class RecurrenceRuleParserServiceTest extends TestCase
@@ -985,7 +987,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertLessThanOrEqual(\HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
+        $this->assertLessThanOrEqual(RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
     }
 
     public function test_overflow_pushes_one_extra_candidate_for_handler_detection(): void
@@ -1007,7 +1009,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $result = $this->service->parse($rule, 'UTC');
 
         $this->assertSame(
-            \HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1,
+            RecurrenceRuleParserService::MAX_OCCURRENCES + 1,
             $result->count(),
         );
     }
@@ -1068,7 +1070,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
             ],
         ];
 
-        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->expectException(InvalidRecurrenceRuleException::class);
         $this->expectExceptionMessage('Unsupported recurrence frequency');
 
         $this->service->parse($rule, 'UTC');
@@ -1115,7 +1117,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $result);
+        $this->assertInstanceOf(Collection::class, $result);
     }
 
     // ─── Edge Cases ────────────────────────────────────────────────────
@@ -1167,7 +1169,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
 
         $result = $this->service->parse($rule, 'UTC');
 
-        $this->assertLessThanOrEqual(\HiEvents\Services\Domain\Event\RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
+        $this->assertLessThanOrEqual(RecurrenceRuleParserService::MAX_OCCURRENCES + 1, $result->count());
     }
 
     public function test_monthly_by_day_of_week_every_two_months(): void
@@ -1313,7 +1315,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
             ],
         ];
 
-        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->expectException(InvalidRecurrenceRuleException::class);
         $this->service->parse($rule, 'UTC');
     }
 
@@ -1330,7 +1332,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
             ],
         ];
 
-        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->expectException(InvalidRecurrenceRuleException::class);
         $this->service->parse($rule, 'UTC');
     }
 
@@ -1350,7 +1352,7 @@ class RecurrenceRuleParserServiceTest extends TestCase
             ],
         ];
 
-        $this->expectException(\HiEvents\Exceptions\InvalidRecurrenceRuleException::class);
+        $this->expectException(InvalidRecurrenceRuleException::class);
         $this->service->parse($rule, 'UTC');
     }
 

@@ -14,19 +14,25 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
 class ProductQuantityUpdateServiceTest extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use MockeryPHPUnitIntegration;
+
     private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
+
     private ProductRepositoryInterface|MockInterface $productRepository;
+
     private CapacityAssignmentRepositoryInterface|MockInterface $capacityAssignmentRepository;
+
     private DatabaseManager|MockInterface $databaseManager;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
+
     private ProductQuantityUpdateService $service;
 
     protected function setUp(): void
@@ -40,7 +46,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->service = new ProductQuantityUpdateService(
             $this->productPriceRepository,
@@ -51,7 +57,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         );
     }
 
-    public function testIncreaseQuantitySoldIncrementsOccurrenceCapacity(): void
+    public function test_increase_quantity_sold_increments_occurrence_capacity(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -74,7 +80,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($data) => array_key_exists('quantity_sold', $data)),
+                Mockery::on(fn ($data) => array_key_exists('quantity_sold', $data)),
                 ['id' => $priceId],
             );
 
@@ -82,11 +88,11 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             );
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(null)
             ->setUsedCapacity($adjustment)
@@ -100,7 +106,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->increaseQuantitySold($priceId, $adjustment, $occurrenceId);
     }
 
-    public function testDecreaseQuantitySoldDecrementsOccurrenceCapacity(): void
+    public function test_decrease_quantity_sold_decrements_occurrence_capacity(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -123,7 +129,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($data) => array_key_exists('quantity_sold', $data)),
+                Mockery::on(fn ($data) => array_key_exists('quantity_sold', $data)),
                 ['id' => $priceId],
             );
 
@@ -131,11 +137,11 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             );
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(10)
             ->setUsedCapacity(5)
@@ -149,7 +155,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->decreaseQuantitySold($priceId, $adjustment, $occurrenceId);
     }
 
-    public function testIncreaseQuantitySoldSkipsOccurrenceWhenNull(): void
+    public function test_increase_quantity_sold_skips_occurrence_when_null(): void
     {
         $priceId = 100;
 
@@ -170,6 +176,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->once()
             ->andReturnUsing(function () use (&$priceUpdateCalled) {
                 $priceUpdateCalled = true;
+
                 return 1;
             });
 
@@ -181,15 +188,15 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->assertTrue($priceUpdateCalled);
     }
 
-    public function testUpdateQuantitiesFromOrderPassesOccurrenceId(): void
+    public function test_update_quantities_from_order_passes_occurrence_id(): void
     {
-        $orderItem = (new OrderItemDomainObject())
+        $orderItem = (new OrderItemDomainObject)
             ->setId(1)
             ->setProductPriceId(100)
             ->setQuantity(2)
             ->setEventOccurrenceId(5);
 
-        $order = (new OrderDomainObject())
+        $order = (new OrderDomainObject)
             ->setOrderItems(new Collection([$orderItem]));
 
         $price = Mockery::mock(ProductPriceDomainObject::class);
@@ -213,11 +220,11 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => 5],
             );
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId(5)
             ->setCapacity(null)
             ->setUsedCapacity(2)
@@ -231,7 +238,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->updateQuantitiesFromOrder($order);
     }
 
-    public function testIncreaseQuantitySoldSetsOccurrenceToSoldOutWhenAtCapacity(): void
+    public function test_increase_quantity_sold_sets_occurrence_to_sold_out_when_at_capacity(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -256,12 +263,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             )
             ->once();
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(10)
             ->setUsedCapacity(10)
@@ -283,7 +290,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->increaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
-    public function testIncreaseQuantitySoldDoesNotSetSoldOutWhenCapacityIsNull(): void
+    public function test_increase_quantity_sold_does_not_set_sold_out_when_capacity_is_null(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -308,12 +315,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             )
             ->once();
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(null)
             ->setUsedCapacity(100)
@@ -327,7 +334,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->increaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
-    public function testDecreaseQuantitySoldResetsOccurrenceFromSoldOutToActive(): void
+    public function test_decrease_quantity_sold_resets_occurrence_from_sold_out_to_active(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -352,12 +359,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             )
             ->once();
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(10)
             ->setUsedCapacity(9)
@@ -379,7 +386,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->decreaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
-    public function testDecreaseQuantitySoldDoesNotResetNonSoldOutOccurrence(): void
+    public function test_decrease_quantity_sold_does_not_reset_non_sold_out_occurrence(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -404,12 +411,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             )
             ->once();
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(10)
             ->setUsedCapacity(5)
@@ -423,7 +430,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->decreaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
-    public function testIncreaseQuantitySoldDoesNotOverrideCancelledStatus(): void
+    public function test_increase_quantity_sold_does_not_override_cancelled_status(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -448,12 +455,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
-                Mockery::on(fn($data) => array_key_exists('used_capacity', $data)),
+                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
                 ['id' => $occurrenceId],
             )
             ->once();
 
-        $occurrence = (new EventOccurrenceDomainObject())
+        $occurrence = (new EventOccurrenceDomainObject)
             ->setId($occurrenceId)
             ->setCapacity(10)
             ->setUsedCapacity(10)

@@ -124,7 +124,7 @@ enum ColorTheme: string
     public static function getAllThemes(): array
     {
         return array_map(
-            static fn(self $theme) => $theme->getThemeData(),
+            static fn (self $theme) => $theme->getThemeData(),
             self::cases()
         );
     }

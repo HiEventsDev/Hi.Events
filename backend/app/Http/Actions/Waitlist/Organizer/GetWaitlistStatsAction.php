@@ -12,9 +12,7 @@ class GetWaitlistStatsAction extends BaseAction
 {
     public function __construct(
         private readonly GetWaitlistStatsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(GetWaitlistStatsRequest $request, int $eventId): JsonResponse
     {
@@ -33,7 +31,7 @@ class GetWaitlistStatsAction extends BaseAction
             'purchased' => $stats->purchased,
             'cancelled' => $stats->cancelled,
             'expired' => $stats->expired,
-            'products' => array_map(fn($p) => [
+            'products' => array_map(fn ($p) => [
                 'product_price_id' => $p->product_price_id,
                 'product_title' => $p->product_title,
                 'waiting' => $p->waiting,

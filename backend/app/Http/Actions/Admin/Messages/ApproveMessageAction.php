@@ -13,8 +13,7 @@ class ApproveMessageAction extends BaseAction
 {
     public function __construct(
         private readonly ApproveMessageHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(int $messageId): JsonResponse
     {

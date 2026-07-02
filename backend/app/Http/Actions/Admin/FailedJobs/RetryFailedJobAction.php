@@ -13,8 +13,7 @@ class RetryFailedJobAction extends BaseAction
 {
     public function __construct(
         private readonly RetryFailedJobHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(int $jobId): JsonResponse
     {
@@ -22,7 +21,7 @@ class RetryFailedJobAction extends BaseAction
 
         $retried = $this->handler->handle($jobId);
 
-        if (!$retried) {
+        if (! $retried) {
             return $this->errorResponse(__('Failed job not found'), 404);
         }
 

@@ -14,8 +14,7 @@ class GetAllConfigurationsAction extends BaseAction
 {
     public function __construct(
         private readonly OrganizerConfigurationRepositoryInterface $repository,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): JsonResponse
     {

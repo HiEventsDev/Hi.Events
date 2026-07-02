@@ -12,15 +12,13 @@ class GetCheckInListStatsPublicHandler
 
     public function __construct(
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(string $shortId, ?int $clientOccurrenceFilter = null): CheckInListStatsDTO
     {
         $checkInList = $this->checkInListRepository->findFirstWhere(['short_id' => $shortId]);
 
-        if (!$checkInList) {
+        if (! $checkInList) {
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 

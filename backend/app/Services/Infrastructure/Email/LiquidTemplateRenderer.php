@@ -14,7 +14,7 @@ class LiquidTemplateRenderer
 
     public function __construct()
     {
-        $this->liquid = new Template();
+        $this->liquid = new Template;
         $this->liquid->parse(''); // Initialize
     }
 
@@ -22,9 +22,10 @@ class LiquidTemplateRenderer
     {
         try {
             $this->liquid->parse($template);
+
             return $this->liquid->render($context);
         } catch (Exception $e) {
-            throw new RuntimeException('Failed to render template: ' . $e->getMessage(), 0, $e);
+            throw new RuntimeException('Failed to render template: '.$e->getMessage(), 0, $e);
         }
     }
 
@@ -32,6 +33,7 @@ class LiquidTemplateRenderer
     {
         try {
             $this->liquid->parse($template);
+
             return true;
         } catch (ParseException $e) {
             return false;
@@ -42,6 +44,7 @@ class LiquidTemplateRenderer
     {
         try {
             $this->liquid->parse($template);
+
             return null;
         } catch (ParseException $e) {
             return $e->getMessage();

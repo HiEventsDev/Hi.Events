@@ -8,12 +8,10 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 class CreateStripeConnectAccountResponse extends BaseDataObject
 {
     public function __construct(
-        public string                $stripeConnectAccountType,
-        public string                $stripeAccountId,
+        public string $stripeConnectAccountType,
+        public string $stripeAccountId,
         public OrganizerDomainObject $organizer,
-        public bool                  $isConnectSetupComplete,
-        public ?string               $connectUrl = null,
-    )
-    {
-    }
+        public bool $isConnectSetupComplete,
+        public ?string $connectUrl = null,
+    ) {}
 }

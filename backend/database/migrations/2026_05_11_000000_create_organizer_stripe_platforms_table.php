@@ -29,7 +29,7 @@ return new class extends Migration
         // Preserve original created_at so getPrimaryStripePlatform()'s sortByDesc(created_at)
         // is deterministic when an account had multiple platform rows (e.g. IE + US).
         // Without this, every backfilled row shares NOW() and ties pick non-deterministically.
-        DB::statement("
+        DB::statement('
             INSERT INTO organizer_stripe_platforms (
                 organizer_id,
                 stripe_connect_account_type,
@@ -54,7 +54,7 @@ return new class extends Migration
             WHERE asp.deleted_at IS NULL
               AND o.deleted_at IS NULL
               AND asp.stripe_account_id IS NOT NULL
-        ");
+        ');
     }
 
     public function down(): void

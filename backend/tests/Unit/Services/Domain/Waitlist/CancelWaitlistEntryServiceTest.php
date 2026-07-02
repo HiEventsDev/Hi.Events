@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Services\Domain\Waitlist;
 
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
-use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
@@ -22,9 +22,13 @@ use Tests\TestCase;
 class CancelWaitlistEntryServiceTest extends TestCase
 {
     private CancelWaitlistEntryService $service;
+
     private MockInterface|WaitlistEntryRepositoryInterface $waitlistEntryRepository;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|DatabaseManager $databaseManager;
+
     private MockInterface|ProductPriceRepositoryInterface $productPriceRepository;
 
     protected function setUp(): void
@@ -42,7 +46,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
                 return $callback();
             });
 
-        $productPrice = new ProductPriceDomainObject();
+        $productPrice = new ProductPriceDomainObject;
         $productPrice->setId(20);
         $productPrice->setProductId(99);
 
@@ -59,7 +63,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         );
     }
 
-    public function testSuccessfullyCancelsByToken(): void
+    public function test_successfully_cancels_by_token(): void
     {
         Event::fake();
 
@@ -88,7 +92,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
                 ['id' => 1],
             );
 
-        $cancelledEntry = new WaitlistEntryDomainObject();
+        $cancelledEntry = new WaitlistEntryDomainObject;
         $cancelledEntry->setId(1);
         $cancelledEntry->setStatus(WaitlistEntryStatus::CANCELLED->name);
 
@@ -106,7 +110,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testSuccessfullyCancelsByTokenWhenStatusIsOfferedDeletesOrder(): void
+    public function test_successfully_cancels_by_token_when_status_is_offered_deletes_order(): void
     {
         Event::fake();
 
@@ -147,7 +151,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
                 ['id' => 2],
             );
 
-        $cancelledEntry = new WaitlistEntryDomainObject();
+        $cancelledEntry = new WaitlistEntryDomainObject;
         $cancelledEntry->setId(2);
         $cancelledEntry->setStatus(WaitlistEntryStatus::CANCELLED->name);
 
@@ -168,7 +172,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         });
     }
 
-    public function testSuccessfullyCancelsById(): void
+    public function test_successfully_cancels_by_id(): void
     {
         Event::fake();
 
@@ -201,7 +205,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
                 ['id' => $entryId],
             );
 
-        $cancelledEntry = new WaitlistEntryDomainObject();
+        $cancelledEntry = new WaitlistEntryDomainObject;
         $cancelledEntry->setId($entryId);
         $cancelledEntry->setStatus(WaitlistEntryStatus::CANCELLED->name);
 
@@ -219,7 +223,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testThrowsExceptionForInvalidToken(): void
+    public function test_throws_exception_for_invalid_token(): void
     {
         $invalidToken = 'invalid-token-does-not-exist';
 
@@ -235,7 +239,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->service->cancelByToken($invalidToken);
     }
 
-    public function testThrowsExceptionForInvalidEntryId(): void
+    public function test_throws_exception_for_invalid_entry_id(): void
     {
         $entryId = 999;
         $eventId = 1;
@@ -255,7 +259,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->service->cancelById($entryId, $eventId);
     }
 
-    public function testThrowsExceptionForAlreadyCancelledEntry(): void
+    public function test_throws_exception_for_already_cancelled_entry(): void
     {
         $cancelToken = 'already-cancelled-token';
 
@@ -274,7 +278,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->service->cancelByToken($cancelToken);
     }
 
-    public function testThrowsExceptionForPurchasedEntry(): void
+    public function test_throws_exception_for_purchased_entry(): void
     {
         $cancelToken = 'purchased-token';
 
@@ -293,7 +297,7 @@ class CancelWaitlistEntryServiceTest extends TestCase
         $this->service->cancelByToken($cancelToken);
     }
 
-    public function testThrowsExceptionForExpiredOfferEntry(): void
+    public function test_throws_exception_for_expired_offer_entry(): void
     {
         $cancelToken = 'expired-offer-token';
 

@@ -2,9 +2,9 @@
 
 namespace HiEvents\Services\Application\Handlers\Waitlist;
 
-use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
@@ -21,16 +21,14 @@ use Illuminate\Validation\ValidationException;
 class CreateWaitlistEntryHandler
 {
     public function __construct(
-        private readonly CreateWaitlistEntryService       $createWaitlistEntryService,
+        private readonly CreateWaitlistEntryService $createWaitlistEntryService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly EventRepositoryInterface         $eventRepository,
-        private readonly ProductPriceRepositoryInterface  $productPriceRepository,
-        private readonly ProductRepositoryInterface       $productRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ResourceConflictException

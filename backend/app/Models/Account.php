@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends BaseModel
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     public function users(): BelongsToMany
     {

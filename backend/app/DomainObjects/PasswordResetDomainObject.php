@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class PasswordResetDomainObject extends Generated\PasswordResetDomainObjectAbstract
-{
-}
+class PasswordResetDomainObject extends Generated\PasswordResetDomainObjectAbstract {}

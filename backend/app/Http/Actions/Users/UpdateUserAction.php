@@ -37,10 +37,10 @@ class UpdateUserAction extends BaseAction
         $authenticatedUser = $this->getAuthenticatedUser();
 
         $userData = $request->validated() + [
-                'id' => $userId,
-                'account_id' => $this->getAuthenticatedAccountId(),
-                'updated_by_user_id' => $authenticatedUser->getId(),
-            ];
+            'id' => $userId,
+            'account_id' => $this->getAuthenticatedAccountId(),
+            'updated_by_user_id' => $authenticatedUser->getId(),
+        ];
 
         try {
             $user = $this->updateUserHandler->handle(UpdateUserDTO::fromArray($userData));

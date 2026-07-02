@@ -27,7 +27,7 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
             'max_allowed_usages' => 'nullable|gte:1|max:9999999',
             'discount_type' => [
                 'required',
-                Rule::in(PromoCodeDiscountTypeEnum::valuesArray())
+                Rule::in(PromoCodeDiscountTypeEnum::valuesArray()),
             ],
         ];
     }

@@ -20,22 +20,19 @@ class SendEventEmailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        private readonly string         $email,
-        private readonly string         $toName,
-        private readonly EventMessage   $eventMessage,
+        private readonly string $email,
+        private readonly string $toName,
+        private readonly EventMessage $eventMessage,
         private readonly SendMessageDTO $messageData,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(
-        Mailer                             $mailer,
+        Mailer $mailer,
         OutgoingMessageRepositoryInterface $outgoingMessageRepository,
-    ): void
-    {
+    ): void {
         try {
             $mailer
                 ->to($this->email, $this->toName)

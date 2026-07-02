@@ -63,7 +63,7 @@ class SelfServiceEditAttendeeService
             $emailChanged = true;
         }
 
-        if (!empty($updateData)) {
+        if (! empty($updateData)) {
             $oldEmail = $attendee->getEmail();
 
             if ($emailChanged) {

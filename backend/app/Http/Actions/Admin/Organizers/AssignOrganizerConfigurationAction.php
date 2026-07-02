@@ -14,9 +14,7 @@ class AssignOrganizerConfigurationAction extends BaseAction
 {
     public function __construct(
         private readonly AssignOrganizerConfigurationHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
@@ -26,7 +24,7 @@ class AssignOrganizerConfigurationAction extends BaseAction
             'configuration_id' => 'required|integer|exists:organizer_configurations,id',
         ]);
 
-        $this->handler->handle($organizerId, (int)$validated['configuration_id']);
+        $this->handler->handle($organizerId, (int) $validated['configuration_id']);
 
         return $this->jsonResponse([
             'message' => __('Configuration assigned successfully.'),

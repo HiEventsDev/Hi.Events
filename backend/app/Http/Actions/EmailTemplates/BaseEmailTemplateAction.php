@@ -25,7 +25,7 @@ abstract class BaseEmailTemplateAction extends BaseAction
         /** @var Repository $config */
         $config = app(Repository::class);
 
-        if (!$config->get('app.saas_mode_enabled')) {
+        if (! $config->get('app.saas_mode_enabled')) {
             return;
         }
 
@@ -38,7 +38,7 @@ abstract class BaseEmailTemplateAction extends BaseAction
             throw new AccountNotVerifiedException(__('You cannot modify email templates until your account is verified.'));
         }
 
-        if (!$account->getIsManuallyVerified()) {
+        if (! $account->getIsManuallyVerified()) {
             throw new AccountNotVerifiedException(
                 __('Due to issues with spam, you must connect a Stripe account before you can modify email templates.')
             );

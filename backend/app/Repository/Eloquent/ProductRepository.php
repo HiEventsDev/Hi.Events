@@ -30,13 +30,13 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $where = [
-            [ProductDomainObjectAbstract::EVENT_ID, '=', $eventId]
+            [ProductDomainObjectAbstract::EVENT_ID, '=', $eventId],
         ];
 
-        if (!empty($params->query)) {
+        if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->where(ProductDomainObjectAbstract::TITLE, 'ilike', '%' . $params->query . '%');
+                    ->where(ProductDomainObjectAbstract::TITLE, 'ilike', '%'.$params->query.'%');
             };
         }
 
@@ -52,14 +52,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         );
     }
 
-    /**
-     * @param int $productId
-     * @param int $productPriceId
-     * @return int
-     */
     public function getQuantityRemainingForProductPrice(int $productId, int $productPriceId): int
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
         SELECT
             COALESCE(product_prices.initial_quantity_available, 0) - (
                 product_prices.quantity_sold + COALESCE((
@@ -82,7 +77,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         $result = $this->db->selectOne($query, [
             'productPriceId' => $productPriceId,
-            'productId' => $productId
+            'productId' => $productId,
         ]);
 
         if ($result === null) {
@@ -93,12 +88,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             return Constants::INFINITE;
         }
 
-        return (int)$result->quantity_remaining;
+        return (int) $result->quantity_remaining;
     }
 
     public function getTaxesByProductId(int $productId): Collection
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT tf.*
             FROM product_taxes_and_fees ttf
             INNER JOIN taxes_and_fees tf ON tf.id = ttf.tax_and_fee_id
@@ -107,7 +102,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         SQL;
 
         $taxAndFees = $this->db->select($query, [
-            'productId' => $productId
+            'productId' => $productId,
         ]);
 
         return $this->handleResults($taxAndFees, TaxAndFeesDomainObject::class);
@@ -115,7 +110,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProductsByTaxId(int $taxId): Collection
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT t.*
             FROM product_taxes_and_fees ttf
             INNER JOIN products t ON t.id = ttf.product_id
@@ -124,7 +119,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         SQL;
 
         $products = $this->model->select($query, [
-            'taxAndFeeId' => $taxId
+            'taxAndFeeId' => $taxId,
         ]);
 
         return $this->handleResults($products, ProductDomainObject::class);
@@ -208,22 +203,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             $productParameters = [
                 'eventId' => $eventId,
-                'productIds' => '{' . implode(',', $productIds) . '}',
-                'productOrders' => '{' . implode(',', $productOrders) . '}',
-                'productCategoryIds' => '{' . implode(',', $productCategoryIds) . '}',
+                'productIds' => '{'.implode(',', $productIds).'}',
+                'productOrders' => '{'.implode(',', $productOrders).'}',
+                'productCategoryIds' => '{'.implode(',', $productCategoryIds).'}',
             ];
 
-            $productUpdateQuery = "WITH new_order AS (
+            $productUpdateQuery = 'WITH new_order AS (
                                   SELECT unnest(:productIds::bigint[]) AS product_id,
                                          unnest(:productOrders::int[]) AS order,
                                          unnest(:productCategoryIds::bigint[]) AS category_id
                               )
                               UPDATE products
-                              SET \"order\" = new_order.order,
+                              SET "order" = new_order.order,
                                   product_category_id = new_order.category_id,
                                   updated_at = NOW()
                               FROM new_order
-                              WHERE products.id = new_order.product_id AND products.event_id = :eventId";
+                              WHERE products.id = new_order.product_id AND products.event_id = :eventId';
 
             $this->db->update($productUpdateQuery, $productParameters);
 
@@ -232,19 +227,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             $categoryParameters = [
                 'eventId' => $eventId,
-                'categoryIds' => '{' . implode(',', $categoryIds) . '}',
-                'categoryOrders' => '{' . implode(',', $categoryOrders) . '}',
+                'categoryIds' => '{'.implode(',', $categoryIds).'}',
+                'categoryOrders' => '{'.implode(',', $categoryOrders).'}',
             ];
 
-            $categoryUpdateQuery = "WITH new_category_order AS (
+            $categoryUpdateQuery = 'WITH new_category_order AS (
                                   SELECT unnest(:categoryIds::bigint[]) AS category_id,
                                          unnest(:categoryOrders::int[]) AS order
                               )
                               UPDATE product_categories
-                              SET \"order\" = new_category_order.order,
+                              SET "order" = new_category_order.order,
                                   updated_at = NOW()
                               FROM new_category_order
-                              WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId";
+                              WHERE product_categories.id = new_category_order.category_id AND product_categories.event_id = :eventId';
 
             $this->db->update($categoryUpdateQuery, $categoryParameters);
 

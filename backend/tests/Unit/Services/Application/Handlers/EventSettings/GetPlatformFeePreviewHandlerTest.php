@@ -19,7 +19,9 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private EventRepositoryInterface $eventRepository;
+
     private CurrencyConversionClientInterface $currencyConversionClient;
+
     private GetPlatformFeePreviewHandler $handler;
 
     protected function setUp(): void
@@ -47,7 +49,7 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
         return $event;
     }
 
-    public function testPreviewWithSameCurrency(): void
+    public function test_preview_with_same_currency(): void
     {
         $configuration = Mockery::mock(OrganizerConfigurationDomainObject::class);
         $configuration->shouldReceive('getApplicationFeeCurrency')->andReturn('USD');
@@ -70,7 +72,7 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
         $this->assertEquals(112.22, $result->total);
     }
 
-    public function testPreviewWithCurrencyConversion(): void
+    public function test_preview_with_currency_conversion(): void
     {
         $configuration = Mockery::mock(OrganizerConfigurationDomainObject::class);
         $configuration->shouldReceive('getApplicationFeeCurrency')->andReturn('GBP');
@@ -84,8 +86,8 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
 
         $this->currencyConversionClient->shouldReceive('convert')
             ->with(
-                Mockery::on(fn($c) => $c->getCurrencyCode() === 'GBP'),
-                Mockery::on(fn($c) => $c->getCurrencyCode() === 'EUR'),
+                Mockery::on(fn ($c) => $c->getCurrencyCode() === 'GBP'),
+                Mockery::on(fn ($c) => $c->getCurrencyCode() === 'EUR'),
                 1.0,
             )
             ->andReturn(MoneyValue::fromFloat(1.15, 'EUR'));
@@ -101,7 +103,7 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
         $this->assertEquals(112.39, $result->total);
     }
 
-    public function testPreviewWithNoConfiguration(): void
+    public function test_preview_with_no_configuration(): void
     {
         $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')
@@ -117,7 +119,7 @@ class GetPlatformFeePreviewHandlerTest extends TestCase
         $this->assertEquals(100.0, $result->total);
     }
 
-    public function testPreviewWithZeroPercentageFee(): void
+    public function test_preview_with_zero_percentage_fee(): void
     {
         $configuration = Mockery::mock(OrganizerConfigurationDomainObject::class);
         $configuration->shouldReceive('getApplicationFeeCurrency')->andReturn('USD');

@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\Helper\IdHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ return new class extends Migration
 
                         DB::table('event_occurrences')->insert([
                             'event_id' => $event->id,
-                            'short_id' => \HiEvents\Helper\IdHelper::shortId(\HiEvents\Helper\IdHelper::OCCURRENCE_PREFIX),
+                            'short_id' => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
                             'start_date' => $event->start_date ?? $event->created_at ?? now(),
                             'end_date' => $event->end_date,
                             'status' => 'ACTIVE',

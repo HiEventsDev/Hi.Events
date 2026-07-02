@@ -24,11 +24,17 @@ use Tests\TestCase;
 class EventStatisticsRefundServiceTest extends TestCase
 {
     private EventStatisticsRefundService $service;
+
     private MockInterface|EventStatisticRepositoryInterface $eventStatisticsRepository;
+
     private MockInterface|EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository;
+
     private MockInterface|EventOccurrenceStatisticRepositoryInterface $eventOccurrenceStatisticRepository;
+
     private MockInterface|EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|LoggerInterface $logger;
 
     protected function setUp(): void
@@ -61,7 +67,7 @@ class EventStatisticsRefundServiceTest extends TestCase
      * Helper that stubs `orderRepository->loadRelation(...)->findById(...)` to return
      * an OrderDomainObject pre-stocked with the given items + totalGross + createdAt.
      *
-     * @param OrderItemDomainObject[] $items
+     * @param  OrderItemDomainObject[]  $items
      */
     private function stubOrderReload(
         float $totalGross,
@@ -79,8 +85,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         return $reloaded;
     }
 
-
-    public function testUpdateForRefundFullAmount(): void
+    public function test_update_for_refund_full_amount(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -165,7 +170,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testUpdateForRefundPartialAmount(): void
+    public function test_update_for_refund_partial_amount(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -247,7 +252,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testThrowsExceptionWhenAggregateStatisticsNotFound(): void
+    public function test_throws_exception_when_aggregate_statistics_not_found(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -271,7 +276,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->service->updateForRefund($order, $refundAmount);
     }
 
-    public function testLogsWarningWhenDailyStatisticsNotFound(): void
+    public function test_logs_warning_when_daily_statistics_not_found(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -340,7 +345,7 @@ class EventStatisticsRefundServiceTest extends TestCase
      *   3. The deltas are emitted as DB::raw atomic increments (not scalars).
      *   4. The version column is bumped via raw SQL so optimistic readers see the change.
      */
-    public function testUpdateForRefundUpdatesOccurrenceStatsForOrderWithItems(): void
+    public function test_update_for_refund_updates_occurrence_stats_for_order_with_items(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -384,8 +389,7 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn(array $attrs) =>
-                    $this->isRawIncrement($attrs['sales_total_gross'] ?? null, 'sales_total_gross', '-')
+                Mockery::on(fn (array $attrs) => $this->isRawIncrement($attrs['sales_total_gross'] ?? null, 'sales_total_gross', '-')
                     && $this->isRawIncrement($attrs['total_refunded'] ?? null, 'total_refunded', '+')
                     && $this->isRawIncrement($attrs['total_tax'] ?? null, 'total_tax', '-')
                     && $this->isRawIncrement($attrs['total_fee'] ?? null, 'total_fee', '-')
@@ -398,8 +402,7 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                Mockery::on(fn(array $attrs) =>
-                    $this->isRawIncrement($attrs['sales_total_gross'] ?? null, 'sales_total_gross', '-')
+                Mockery::on(fn (array $attrs) => $this->isRawIncrement($attrs['sales_total_gross'] ?? null, 'sales_total_gross', '-')
                     && $this->isRawIncrement($attrs['total_refunded'] ?? null, 'total_refunded', '+')
                     && $this->isVersionBump($attrs['version'] ?? null)
                 ),
@@ -417,7 +420,7 @@ class EventStatisticsRefundServiceTest extends TestCase
      * An order with items split across two different occurrences must produce one
      * updateWhere call per occurrence on each stats repository (4 calls total).
      */
-    public function testUpdateForRefundSplitsRefundAcrossMultipleOccurrences(): void
+    public function test_update_for_refund_splits_refund_across_multiple_occurrences(): void
     {
         $eventId = 1;
         $orderId = 200;
@@ -484,7 +487,7 @@ class EventStatisticsRefundServiceTest extends TestCase
      * Order items without an event_occurrence_id (legacy / non-recurring orders) must
      * not trigger any occurrence-stats updates.
      */
-    public function testUpdateForRefundSkipsOccurrencePathWhenNoItemsHaveOccurrenceId(): void
+    public function test_update_for_refund_skips_occurrence_path_when_no_items_have_occurrence_id(): void
     {
         $eventId = 1;
         $orderId = 300;
@@ -571,6 +574,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $order->shouldReceive('getTotalGross')->andReturn($totalGross);
         $order->shouldReceive('getTotalTax')->andReturn(0.0);
         $order->shouldReceive('getTotalFee')->andReturn(0.0);
+
         return $order;
     }
 
@@ -581,24 +585,27 @@ class EventStatisticsRefundServiceTest extends TestCase
         $item->shouldReceive('getTotalGross')->andReturn($totalGross);
         $item->shouldReceive('getTotalTax')->andReturn($totalTax);
         $item->shouldReceive('getTotalServiceFee')->andReturn($totalServiceFee);
+
         return $item;
     }
 
     private function isRawIncrement(mixed $value, string $column, string $op): bool
     {
-        if (!$value instanceof Expression) {
+        if (! $value instanceof Expression) {
             return false;
         }
         $sql = (string) $value->getValue(\DB::connection()->getQueryGrammar());
+
         return str_contains($sql, $column) && str_contains($sql, $op);
     }
 
     private function isVersionBump(mixed $value): bool
     {
-        if (!$value instanceof Expression) {
+        if (! $value instanceof Expression) {
             return false;
         }
         $sql = (string) $value->getValue(\DB::connection()->getQueryGrammar());
+
         return $sql === 'version + 1';
     }
 

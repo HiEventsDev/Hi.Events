@@ -27,7 +27,7 @@ return new class extends Migration
 
         // Copy every non-deleted account_configuration row 1:1 into organizer_configurations,
         // preserving the legacy id pointer so we can map organizers deterministically.
-        DB::statement("
+        DB::statement('
             INSERT INTO organizer_configurations
                 (name, is_system_default, application_fees, bypass_application_fees,
                  legacy_account_configuration_id, created_at, updated_at)
@@ -35,12 +35,12 @@ return new class extends Migration
                    id, NOW(), NOW()
             FROM account_configuration
             WHERE deleted_at IS NULL
-        ");
+        ');
 
         // Ensure there's always a system default. If the legacy table didn't have one
         // (fresh open-source install), seed from app config.
         $hasDefault = DB::table('organizer_configurations')->where('is_system_default', true)->exists();
-        if (!$hasDefault) {
+        if (! $hasDefault) {
             DB::table('organizer_configurations')->insert([
                 'name' => 'Default',
                 'is_system_default' => true,
@@ -68,7 +68,7 @@ return new class extends Migration
 
         // Map each organizer to the new row that mirrors its parent account's plan.
         // Falls back to the system default if the account had no plan assigned.
-        DB::statement("
+        DB::statement('
             UPDATE organizers o
             SET organizer_configuration_id = COALESCE((
                 SELECT oc.id
@@ -78,7 +78,7 @@ return new class extends Migration
                 LIMIT 1
             ), ?)
             WHERE o.deleted_at IS NULL
-        ", [$defaultConfigId]);
+        ', [$defaultConfigId]);
     }
 
     public function down(): void

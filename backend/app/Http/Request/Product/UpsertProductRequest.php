@@ -23,7 +23,7 @@ class UpsertProductRequest extends BaseRequest
             'max_per_order' => 'integer|nullable',
             'prices' => ['required', 'array'],
             'prices.*.price' => [...RulesHelper::MONEY, 'required'],
-            'prices.*.label' => ['nullable', ...RulesHelper::STRING, 'required_if:type,' . ProductPriceType::TIERED->name],
+            'prices.*.label' => ['nullable', ...RulesHelper::STRING, 'required_if:type,'.ProductPriceType::TIERED->name],
             'prices.*.sale_start_date' => ['date', 'nullable', 'after:sale_start_date'],
             'prices.*.sale_end_date' => 'date|nullable|after:prices.*.sale_start_date',
             'prices.*.initial_quantity_available' => ['integer', 'nullable', 'min:0'],

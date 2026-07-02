@@ -19,9 +19,7 @@ class WebhookEventListener
 {
     public function __construct(
         private readonly Repository $config,
-    )
-    {
-    }
+    ) {}
 
     public function handle(BaseDomainEvent $event): void
     {

@@ -7,14 +7,12 @@ use HiEvents\DataTransferObjects\BaseDataObject;
 class CreateWaitlistEntryDTO extends BaseDataObject
 {
     public function __construct(
-        public int     $event_id,
-        public int     $product_price_id,
-        public string  $email,
-        public string  $first_name,
+        public int $event_id,
+        public int $product_price_id,
+        public string $email,
+        public string $first_name,
         public ?string $last_name = null,
-        public string  $locale = 'en',
-        public ?int    $event_occurrence_id = null,
-    )
-    {
-    }
+        public string $locale = 'en',
+        public ?int $event_occurrence_id = null,
+    ) {}
 }

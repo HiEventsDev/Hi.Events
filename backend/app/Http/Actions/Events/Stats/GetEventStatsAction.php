@@ -19,9 +19,7 @@ class GetEventStatsAction extends BaseAction
 
     public function __construct(
         private readonly GetEventStatsHandler $eventStatsHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -39,7 +37,7 @@ class GetEventStatsAction extends BaseAction
             'date_range_preset' => $request->query('date_range', 'month'),
             'start_date' => $validated['start_date'] ?? null,
             'end_date' => $validated['end_date'] ?? null,
-            'occurrence_id' => $occurrenceIdQuery !== null ? (int)$occurrenceIdQuery : null,
+            'occurrence_id' => $occurrenceIdQuery !== null ? (int) $occurrenceIdQuery : null,
         ]));
 
         return $this->resourceResponse(JsonResource::class, $stats);
@@ -47,6 +45,7 @@ class GetEventStatsAction extends BaseAction
 
     /**
      * @return array{start_date: ?string, end_date: ?string}
+     *
      * @throws ValidationException
      */
     private function validateDateRange(Request $request): array
@@ -59,7 +58,7 @@ class GetEventStatsAction extends BaseAction
             ],
         )->validate();
 
-        if (!empty($validated['start_date']) && !empty($validated['end_date'])) {
+        if (! empty($validated['start_date']) && ! empty($validated['end_date'])) {
             $days = Carbon::parse($validated['start_date'])->diffInDays(Carbon::parse($validated['end_date']));
             if ($days > self::MAX_RANGE_DAYS) {
                 throw ValidationException::withMessages([

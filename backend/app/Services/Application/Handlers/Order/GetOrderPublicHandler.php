@@ -27,17 +27,15 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetOrderPublicHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface         $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly CheckoutSessionManagementService $sessionIdentifierService
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetOrderPublicDTO $getOrderData): OrderDomainObject
     {
         $order = $this->getOrderDomainObject($getOrderData);
 
-        if (!$order) {
+        if (! $order) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 
@@ -55,7 +53,7 @@ class GetOrderPublicHandler
 
     private function verifySessionId(string $orderSessionId): void
     {
-        if (!$this->sessionIdentifierService->verifySession($orderSessionId)) {
+        if (! $this->sessionIdentifierService->verifySession($orderSessionId)) {
             throw new UnauthorizedException(
                 __('Sorry, we could not verify your session. Please restart your order.')
             );
@@ -73,7 +71,7 @@ class GetOrderPublicHandler
                         nested: [
                             new Relationship(
                                 domainObject: ProductPriceDomainObject::class,
-                            )
+                            ),
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
                     ),
@@ -107,7 +105,7 @@ class GetOrderPublicHandler
                     ),
                     new Relationship(
                         domainObject: ImageDomainObject::class,
-                    )
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ));

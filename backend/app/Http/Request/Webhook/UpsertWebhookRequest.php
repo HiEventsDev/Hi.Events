@@ -13,7 +13,7 @@ class UpsertWebhookRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'url' => ['required', 'url', new NoInternalUrlRule()],
+            'url' => ['required', 'url', new NoInternalUrlRule],
             'event_types.*' => ['required', Rule::in(DomainEventType::valuesArray())],
             'status' => ['nullable', Rule::in(WebhookStatus::valuesArray())],
         ];

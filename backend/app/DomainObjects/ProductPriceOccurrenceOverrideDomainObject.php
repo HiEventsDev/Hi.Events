@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class ProductPriceOccurrenceOverrideDomainObject extends Generated\ProductPriceOccurrenceOverrideDomainObjectAbstract
-{
-}
+class ProductPriceOccurrenceOverrideDomainObject extends Generated\ProductPriceOccurrenceOverrideDomainObjectAbstract {}

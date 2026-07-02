@@ -35,7 +35,7 @@ class AttendeeDetailPublicResource extends JsonResource
                 ? (new EventOccurrenceResourcePublic($occurrence))->toArray(request())
                 : null,
             'check_ins' => $this->currentListCheckIns
-                ->map(static fn(AttendeeCheckInDomainObject $checkIn) => (new AttendeeCheckInPublicResource($checkIn))->toArray(request()))
+                ->map(static fn (AttendeeCheckInDomainObject $checkIn) => (new AttendeeCheckInPublicResource($checkIn))->toArray(request()))
                 ->values()
                 ->all(),
             'visibility' => [
@@ -51,7 +51,7 @@ class AttendeeDetailPublicResource extends JsonResource
 
         if ($this->showQuestionAnswers) {
             $data['question_answers'] = array_map(
-                static fn(QuestionAndAnswerViewDomainObject $qa) => [
+                static fn (QuestionAndAnswerViewDomainObject $qa) => [
                     'question_id' => $qa->getQuestionId(),
                     'title' => $qa->getTitle(),
                     'answer' => $qa->getAnswer(),

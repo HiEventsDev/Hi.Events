@@ -11,11 +11,9 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 class GetWaitlistStatsHandler
 {
     public function __construct(
-        private readonly WaitlistEntryRepositoryInterface       $waitlistEntryRepository,
+        private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
         private readonly AvailableProductQuantitiesFetchService $availableQuantitiesService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, ?int $eventOccurrenceId = null): WaitlistStatsDTO
     {
@@ -60,6 +58,7 @@ class GetWaitlistStatsHandler
                 if ($available === Constants::INFINITE) {
                     return Constants::INFINITE;
                 }
+
                 return $available;
             }
         }

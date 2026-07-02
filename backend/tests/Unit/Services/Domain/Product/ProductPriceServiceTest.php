@@ -18,6 +18,7 @@ use Tests\TestCase;
 class ProductPriceServiceTest extends TestCase
 {
     private ProductPriceOccurrenceOverrideRepositoryInterface|MockInterface $priceOverrideRepository;
+
     private ProductPriceService $service;
 
     protected function setUp(): void
@@ -28,7 +29,7 @@ class ProductPriceServiceTest extends TestCase
         $this->service = new ProductPriceService($this->priceOverrideRepository);
     }
 
-    public function testGetPriceUsesOverrideWhenPresent(): void
+    public function test_get_price_uses_override_when_present(): void
     {
         $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
         $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
@@ -49,7 +50,7 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(35.00, $result->price);
     }
 
-    public function testGetPriceFallsBackToBaseWhenNoOverride(): void
+    public function test_get_price_falls_back_to_base_when_no_override(): void
     {
         $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
         $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
@@ -67,7 +68,7 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(50.00, $result->price);
     }
 
-    public function testGetPriceSkipsOverrideLookupWithoutOccurrence(): void
+    public function test_get_price_skips_override_lookup_without_occurrence(): void
     {
         $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
         $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
@@ -79,7 +80,7 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(50.00, $result->price);
     }
 
-    public function testGetPriceAppliesPromoCodeAfterOverride(): void
+    public function test_get_price_applies_promo_code_after_override(): void
     {
         $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
         $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
@@ -104,7 +105,7 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(40.00, $result->price_before_discount);
     }
 
-    public function testGetPriceReturnsFreeForFreeProduct(): void
+    public function test_get_price_returns_free_for_free_product(): void
     {
         $product = $this->createProduct(ProductPriceType::FREE->name, 0.0);
         $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);

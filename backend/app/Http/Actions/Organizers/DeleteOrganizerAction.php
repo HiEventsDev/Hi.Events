@@ -18,9 +18,7 @@ class DeleteOrganizerAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteOrganizerHandler $deleteOrganizerHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId): Response|JsonResponse
     {

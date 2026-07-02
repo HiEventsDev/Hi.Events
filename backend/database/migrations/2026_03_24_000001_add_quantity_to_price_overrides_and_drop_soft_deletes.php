@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         if (Schema::hasColumn('product_price_occurrence_overrides', 'deleted_at')) {
@@ -15,7 +16,7 @@ return new class extends Migration {
         }
 
         Schema::table('product_price_occurrence_overrides', function (Blueprint $table) {
-            if (!Schema::hasColumn('product_price_occurrence_overrides', 'quantity_available')) {
+            if (! Schema::hasColumn('product_price_occurrence_overrides', 'quantity_available')) {
                 $table->integer('quantity_available')->nullable()->after('price');
             }
             if (Schema::hasColumn('product_price_occurrence_overrides', 'deleted_at')) {

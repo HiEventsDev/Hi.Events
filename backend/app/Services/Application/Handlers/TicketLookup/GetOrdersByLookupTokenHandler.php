@@ -30,12 +30,12 @@ class GetOrdersByLookupTokenHandler
     public function __construct(
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @throws InvalidTicketLookupTokenException
      * @return Collection<OrderDomainObject>
+     *
+     * @throws InvalidTicketLookupTokenException
      */
     public function handle(GetOrdersByLookupTokenDTO $dto): Collection
     {
@@ -51,7 +51,7 @@ class GetOrdersByLookupTokenHandler
     {
         $tokenRecord = $this->ticketLookupTokenRepository->findFirstWhere(['token' => $token]);
 
-        if (!$tokenRecord) {
+        if (! $tokenRecord) {
             throw new InvalidTicketLookupTokenException(__('Invalid or expired link. Please request a new one.'));
         }
 
@@ -81,10 +81,10 @@ class GetOrdersByLookupTokenHandler
                         nested: [
                             new Relationship(
                                 domainObject: ProductPriceDomainObject::class,
-                            )
+                            ),
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
-                    )
+                    ),
                 ],
             ))
             ->loadRelation(new Relationship(
@@ -99,7 +99,7 @@ class GetOrdersByLookupTokenHandler
                     ),
                     new Relationship(
                         domainObject: ImageDomainObject::class,
-                    )
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ))

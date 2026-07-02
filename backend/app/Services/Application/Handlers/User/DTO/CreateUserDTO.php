@@ -10,15 +10,13 @@ use Spatie\LaravelData\Casts\EnumCast;
 class CreateUserDTO extends BaseDataObject
 {
     public function __construct(
-        public string  $first_name,
-        public ?string $last_name = null,
-        public string  $email,
-        public int     $invited_by,
-        public int     $account_id,
+        public string $first_name,
+        public ?string $last_name,
+        public string $email,
+        public int $invited_by,
+        public int $account_id,
 
         #[WithCast(EnumCast::class)]
-        public Role    $role,
-    )
-    {
-    }
+        public Role $role,
+    ) {}
 }

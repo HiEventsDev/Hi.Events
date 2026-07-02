@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class CheckoutSessionManagementServiceTest extends TestCase
 {
-    public function testGetSessionIdWithExistingCookie(): void
+    public function test_get_session_id_with_existing_cookie(): void
     {
         $request = Mockery::mock(Request::class);
         $request->shouldReceive('query')->with('session_identifier')->andReturnNull();
@@ -26,7 +26,7 @@ class CheckoutSessionManagementServiceTest extends TestCase
         $this->assertEquals('existingSessionId', $service->getSessionId());
     }
 
-    public function testVerifySession(): void
+    public function test_verify_session(): void
     {
         $request = Mockery::mock(Request::class);
         $request->shouldReceive('query')->with('session_identifier')->andReturnNull();
@@ -42,7 +42,7 @@ class CheckoutSessionManagementServiceTest extends TestCase
         $this->assertTrue($service->verifySession('existingSessionId'));
     }
 
-    public function testGetSessionCookie(): void
+    public function test_get_session_cookie(): void
     {
         $request = Mockery::mock(Request::class);
         $request->shouldReceive('query')->with('session_identifier')->andReturnNull();

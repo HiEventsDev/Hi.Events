@@ -18,12 +18,10 @@ class UpsertOrganizerVatSettingHandler
 {
     public function __construct(
         private readonly OrganizerVatSettingRepositoryInterface $vatSettingRepository,
-        private readonly OrganizerRepositoryInterface           $organizerRepository,
-        private readonly ViesValidationService                  $viesValidationService,
-        private readonly LoggerInterface                        $logger,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly ViesValidationService $viesValidationService,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws ResourceNotFoundException
@@ -53,7 +51,7 @@ class UpsertOrganizerVatSettingHandler
             $vatNumber = strtoupper(trim($command->vatNumber));
 
             if (preg_match('/^[A-Z]{2}[0-9A-Z]{8,15}$/', $vatNumber)) {
-                $vatNumberChanged = !$existing || $existing->getVatNumber() !== $vatNumber;
+                $vatNumberChanged = ! $existing || $existing->getVatNumber() !== $vatNumber;
 
                 $data['vat_number'] = $vatNumber;
                 $data['vat_country_code'] = substr($vatNumber, 0, 2);
@@ -158,6 +156,6 @@ class UpsertOrganizerVatSettingHandler
             return $vatNumber;
         }
 
-        return substr($vatNumber, 0, 2) . str_repeat('*', $length - 4) . substr($vatNumber, -2);
+        return substr($vatNumber, 0, 2).str_repeat('*', $length - 4).substr($vatNumber, -2);
     }
 }

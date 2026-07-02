@@ -27,13 +27,21 @@ use Tests\TestCase;
 class EventStatisticsIncrementServiceTest extends TestCase
 {
     private EventStatisticsIncrementService $service;
+
     private MockInterface|PromoCodeRepositoryInterface $promoCodeRepository;
+
     private MockInterface|ProductRepositoryInterface $productRepository;
+
     private MockInterface|EventStatisticRepositoryInterface $eventStatisticsRepository;
+
     private MockInterface|EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository;
+
     private MockInterface|DatabaseManager $databaseManager;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|LoggerInterface $logger;
+
     private MockInterface|Retrier $retrier;
 
     protected function setUp(): void
@@ -65,7 +73,7 @@ class EventStatisticsIncrementServiceTest extends TestCase
         );
     }
 
-    public function testIncrementForOrderWithExistingStatistics(): void
+    public function test_increment_for_order_with_existing_statistics(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -234,11 +242,10 @@ class EventStatisticsIncrementServiceTest extends TestCase
         // Execute
         $this->service->incrementForOrder($order);
 
-
         $this->assertTrue(true);
     }
 
-    public function testIncrementForOrderCreatesNewStatistics(): void
+    public function test_increment_for_order_creates_new_statistics(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -349,7 +356,6 @@ class EventStatisticsIncrementServiceTest extends TestCase
 
         // Execute
         $this->service->incrementForOrder($order);
-
 
         $this->assertTrue(true);
     }

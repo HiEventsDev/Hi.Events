@@ -18,7 +18,7 @@ class EventDomainObjectTest extends TestCase
         ?string $endDate = null,
         string $status = 'ACTIVE',
     ): EventOccurrenceDomainObject {
-        $occurrence = new EventOccurrenceDomainObject();
+        $occurrence = new EventOccurrenceDomainObject;
         $occurrence->setStartDate($startDate);
         $occurrence->setEndDate($endDate);
         $occurrence->setStatus($status);
@@ -28,7 +28,7 @@ class EventDomainObjectTest extends TestCase
 
     private function createEvent(?Collection $occurrences = null, ?string $timezone = null): EventDomainObject
     {
-        $event = new EventDomainObject();
+        $event = new EventDomainObject;
 
         if ($occurrences !== null) {
             $event->setEventOccurrences($occurrences);
@@ -41,7 +41,7 @@ class EventDomainObjectTest extends TestCase
         return $event;
     }
 
-    public function testGetStartDateReturnsEarliestOccurrenceStartDate(): void
+    public function test_get_start_date_returns_earliest_occurrence_start_date(): void
     {
         $earlier = Carbon::now()->subDays(3)->toDateTimeString();
         $later = Carbon::now()->subDay()->toDateTimeString();
@@ -56,7 +56,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals($earlier, $event->getStartDate());
     }
 
-    public function testGetStartDateReturnsNullWhenNoOccurrences(): void
+    public function test_get_start_date_returns_null_when_no_occurrences(): void
     {
         $event = $this->createEvent();
         $this->assertNull($event->getStartDate());
@@ -65,7 +65,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertNull($eventWithEmpty->getStartDate());
     }
 
-    public function testGetEndDateReturnsLatestOccurrenceEndDate(): void
+    public function test_get_end_date_returns_latest_occurrence_end_date(): void
     {
         $earlierEnd = Carbon::now()->addDay()->toDateTimeString();
         $laterEnd = Carbon::now()->addDays(3)->toDateTimeString();
@@ -86,7 +86,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals($laterEnd, $event->getEndDate());
     }
 
-    public function testGetEndDateFallsBackToLatestStartDateWhenNoEndDates(): void
+    public function test_get_end_date_falls_back_to_latest_start_date_when_no_end_dates(): void
     {
         $earlierStart = Carbon::now()->subDay()->toDateTimeString();
         $laterStart = Carbon::now()->addDay()->toDateTimeString();
@@ -101,7 +101,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals($laterStart, $event->getEndDate());
     }
 
-    public function testGetEndDateReturnsNullWhenNoOccurrences(): void
+    public function test_get_end_date_returns_null_when_no_occurrences(): void
     {
         $event = $this->createEvent();
         $this->assertNull($event->getEndDate());
@@ -110,7 +110,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertNull($eventWithEmpty->getEndDate());
     }
 
-    public function testIsEventInPastReturnsTrueWhenAllOccurrencesArePast(): void
+    public function test_is_event_in_past_returns_true_when_all_occurrences_are_past(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -128,7 +128,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertTrue($event->isEventInPast());
     }
 
-    public function testIsEventInPastReturnsFalseWhenSomeOccurrencesAreFuture(): void
+    public function test_is_event_in_past_returns_false_when_some_occurrences_are_future(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -146,7 +146,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertFalse($event->isEventInPast());
     }
 
-    public function testIsEventInFutureReturnsTrueWhenEarliestStartIsFuture(): void
+    public function test_is_event_in_future_returns_true_when_earliest_start_is_future(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -164,7 +164,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertTrue($event->isEventInFuture());
     }
 
-    public function testIsEventInFutureReturnsFalseWhenEarliestStartIsPast(): void
+    public function test_is_event_in_future_returns_false_when_earliest_start_is_past(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -182,7 +182,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertFalse($event->isEventInFuture());
     }
 
-    public function testIsEventOngoingReturnsTrueWhenActiveOccurrenceHasStartedButNotEnded(): void
+    public function test_is_event_ongoing_returns_true_when_active_occurrence_has_started_but_not_ended(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -197,7 +197,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertTrue($event->isEventOngoing());
     }
 
-    public function testIsEventOngoingReturnsFalseForCancelledOccurrences(): void
+    public function test_is_event_ongoing_returns_false_for_cancelled_occurrences(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -212,7 +212,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertFalse($event->isEventOngoing());
     }
 
-    public function testIsEventOngoingReturnsTrueWhenActiveOccurrenceHasNoEndDate(): void
+    public function test_is_event_ongoing_returns_true_when_active_occurrence_has_no_end_date(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -227,7 +227,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertTrue($event->isEventOngoing());
     }
 
-    public function testIsEventOngoingReturnsFalseWhenNoOccurrences(): void
+    public function test_is_event_ongoing_returns_false_when_no_occurrences(): void
     {
         $event = $this->createEvent();
         $this->assertFalse($event->isEventOngoing());
@@ -236,7 +236,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertFalse($eventWithEmpty->isEventOngoing());
     }
 
-    public function testGetLifecycleStatusReturnsOngoingWhenOngoing(): void
+    public function test_get_lifecycle_status_returns_ongoing_when_ongoing(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -251,7 +251,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals(EventLifecycleStatus::ONGOING->name, $event->getLifecycleStatus());
     }
 
-    public function testGetLifecycleStatusReturnsUpcomingWhenAllFuture(): void
+    public function test_get_lifecycle_status_returns_upcoming_when_all_future(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -265,7 +265,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
     }
 
-    public function testGetLifecycleStatusReturnsEndedWhenAllPast(): void
+    public function test_get_lifecycle_status_returns_ended_when_all_past(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -279,24 +279,24 @@ class EventDomainObjectTest extends TestCase
         $this->assertEquals(EventLifecycleStatus::ENDED->name, $event->getLifecycleStatus());
     }
 
-    public function testGetLifecycleStatusReturnsUpcomingWhenNoOccurrences(): void
+    public function test_get_lifecycle_status_returns_upcoming_when_no_occurrences(): void
     {
         $event = $this->createEvent(collect());
 
         $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
     }
 
-    public function testIsRecurringReturnsTrueForRecurringType(): void
+    public function test_is_recurring_returns_true_for_recurring_type(): void
     {
-        $event = new EventDomainObject();
+        $event = new EventDomainObject;
         $event->setType(EventType::RECURRING->name);
 
         $this->assertTrue($event->isRecurring());
     }
 
-    public function testIsRecurringReturnsFalseForSingleType(): void
+    public function test_is_recurring_returns_false_for_single_type(): void
     {
-        $event = new EventDomainObject();
+        $event = new EventDomainObject;
         $event->setType(EventType::SINGLE->name);
 
         $this->assertFalse($event->isRecurring());

@@ -11,16 +11,14 @@ class CreateCheckInListHandler
 {
     public function __construct(
         private readonly CreateCheckInListService $createCheckInListService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
      */
     public function handle(UpsertCheckInListDTO $listData): CheckInListDomainObject
     {
-        $checkInList = (new CheckInListDomainObject())
+        $checkInList = (new CheckInListDomainObject)
             ->setName($listData->name)
             ->setDescription($listData->description)
             ->setEventId($listData->eventId)

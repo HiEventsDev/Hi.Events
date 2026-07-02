@@ -14,11 +14,9 @@ class CreateEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
-        private readonly EmailTemplateService             $emailTemplateService,
-        private readonly HtmlPurifierService              $purifier,
-    )
-    {
-    }
+        private readonly EmailTemplateService $emailTemplateService,
+        private readonly HtmlPurifierService $purifier,
+    ) {}
 
     /**
      * @throws EmailTemplateValidationException
@@ -27,7 +25,7 @@ class CreateEmailTemplateHandler
     public function handle(UpsertEmailTemplateDTO $dto): EmailTemplateDomainObject
     {
         $validation = $this->emailTemplateService->validateTemplate($dto->subject, $dto->body);
-        if (!$validation['valid']) {
+        if (! $validation['valid']) {
             $exception = new EmailTemplateValidationException('Template validation failed');
             $exception->validationErrors = $validation['errors'];
             throw $exception;

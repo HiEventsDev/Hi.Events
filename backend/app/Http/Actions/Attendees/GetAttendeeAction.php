@@ -52,7 +52,7 @@ class GetAttendeeAction extends BaseAction
                 'event_id' => $eventId,
             ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             return $this->notFoundResponse();
         }
 

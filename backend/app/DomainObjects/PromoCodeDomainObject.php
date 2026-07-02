@@ -60,7 +60,7 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
     public function appliesToProduct(ProductDomainObject $product): bool
     {
         // If there's no product IDs we apply the promo to all products
-        if (!$this->getApplicableProductIds()) {
+        if (! $this->getApplicableProductIds()) {
             return true;
         }
 

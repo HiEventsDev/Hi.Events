@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
+use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -48,7 +49,7 @@ class CreateEventServiceTest extends TestCase
 
     private EventOccurrenceRepositoryInterface $occurrenceRepository;
 
-    private \HiEvents\Repository\Interfaces\CheckInListRepositoryInterface $checkInListRepository;
+    private CheckInListRepositoryInterface $checkInListRepository;
 
     protected function setUp(): void
     {
@@ -64,7 +65,7 @@ class CreateEventServiceTest extends TestCase
         $this->config = Mockery::mock(Repository::class);
         $this->filesystemManager = Mockery::mock(FilesystemManager::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
-        $this->checkInListRepository = Mockery::mock(\HiEvents\Repository\Interfaces\CheckInListRepositoryInterface::class);
+        $this->checkInListRepository = Mockery::mock(CheckInListRepositoryInterface::class);
 
         $this->createEventService = new CreateEventService(
             $this->eventRepository,
@@ -431,7 +432,7 @@ class CreateEventServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testCreateEventInheritsOrganizerFontFamily(): void
+    public function test_create_event_inherits_organizer_font_family(): void
     {
         $eventData = $this->createMockEventDomainObjectWithCategory('MUSIC');
 
@@ -505,12 +506,12 @@ class CreateEventServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testCreateEventOmitsFontFamilyWhenOrganizerHasNone(): void
+    public function test_create_event_omits_font_family_when_organizer_has_none(): void
     {
         $eventData = $this->createMockEventDomainObjectWithCategory('MUSIC');
         $organizer = $this->createMockOrganizerDomainObject()
             ->shouldReceive('getOrganizerSettings')
-            ->andReturn(new OrganizerSettingDomainObject())
+            ->andReturn(new OrganizerSettingDomainObject)
             ->getMock();
 
         $this->databaseManager->shouldReceive('transaction')->once()->andReturnUsing(function ($callback) {
@@ -546,7 +547,7 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventSettingsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) {
-                return !array_key_exists('font_family', $arg['homepage_theme_settings'] ?? []);
+                return ! array_key_exists('font_family', $arg['homepage_theme_settings'] ?? []);
             }));
 
         $this->eventStatisticsRepository->shouldReceive('create');

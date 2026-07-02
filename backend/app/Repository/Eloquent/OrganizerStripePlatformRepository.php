@@ -33,7 +33,7 @@ class OrganizerStripePlatformRepository extends BaseRepository implements Organi
             ->whereNull('organizers.deleted_at')
             ->where('organizers.account_id', $accountId)
             ->where('organizer_stripe_platforms.organizer_id', '!=', $excludeOrganizerId)
-            ->when($excludeStripeAccountId !== null, fn($q) => $q->where('organizer_stripe_platforms.stripe_account_id', '!=', $excludeStripeAccountId))
+            ->when($excludeStripeAccountId !== null, fn ($q) => $q->where('organizer_stripe_platforms.stripe_account_id', '!=', $excludeStripeAccountId))
             ->whereNotNull('organizer_stripe_platforms.stripe_account_id')
             ->select([
                 'organizer_stripe_platforms.organizer_id as organizer_id',

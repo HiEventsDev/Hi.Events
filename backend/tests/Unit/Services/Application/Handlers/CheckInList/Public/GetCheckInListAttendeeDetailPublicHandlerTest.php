@@ -16,7 +16,9 @@ use Tests\TestCase;
 class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
 {
     private CheckInListRepositoryInterface $checkInListRepository;
+
     private AttendeeRepositoryInterface $attendeeRepository;
+
     private GetCheckInListAttendeeDetailPublicHandler $handler;
 
     protected function setUp(): void
@@ -32,7 +34,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         );
     }
 
-    public function testHandleThrowsNotFoundIfCheckInListMissing(): void
+    public function test_handle_throws_not_found_if_check_in_list_missing(): void
     {
         $this->checkInListRepository
             ->shouldReceive('loadRelation')->andReturnSelf();
@@ -46,7 +48,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 'A-123', null);
     }
 
-    public function testHandleThrowsNotFoundIfAttendeeMissing(): void
+    public function test_handle_throws_not_found_if_attendee_missing(): void
     {
         $checkInList = $this->buildList(eventId: 5);
 
@@ -70,7 +72,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 'A-123', null);
     }
 
-    public function testAnonymousRequestRespectsListVisibilityFlags(): void
+    public function test_anonymous_request_respects_list_visibility_flags(): void
     {
         $checkInList = $this->buildList(
             eventId: 5,
@@ -91,7 +93,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $this->assertFalse($result->showOrderDetails);
     }
 
-    public function testAuthenticatedStaffBypassesVisibilityFlags(): void
+    public function test_authenticated_staff_bypasses_visibility_flags(): void
     {
         $checkInList = $this->buildList(
             eventId: 5,
@@ -112,7 +114,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $this->assertTrue($result->showOrderDetails);
     }
 
-    public function testAuthenticatedUserFromDifferentAccountStillFiltered(): void
+    public function test_authenticated_user_from_different_account_still_filtered(): void
     {
         $checkInList = $this->buildList(
             eventId: 5,
@@ -134,8 +136,8 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
     }
 
     private function buildList(
-        int  $eventId = 5,
-        int  $accountId = 1,
+        int $eventId = 5,
+        int $accountId = 1,
         bool $showNotes = true,
         bool $showQuestions = true,
         bool $showOrderDetails = true,
@@ -149,11 +151,12 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $checkInList->shouldReceive('getEvent')->andReturn($event);
         $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
         $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
-        $checkInList->shouldReceive('getProducts')->andReturn(new Collection());
+        $checkInList->shouldReceive('getProducts')->andReturn(new Collection);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
         $checkInList->shouldReceive('getPublicShowAttendeeNotes')->andReturn($showNotes);
         $checkInList->shouldReceive('getPublicShowQuestionAnswers')->andReturn($showQuestions);
         $checkInList->shouldReceive('getPublicShowOrderDetails')->andReturn($showOrderDetails);
+
         return $checkInList;
     }
 

@@ -13,13 +13,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use Tests\TestCase;
 use Tests\Feature\Repository\Fixtures\WidgetCategoryDomainObject;
 use Tests\Feature\Repository\Fixtures\WidgetCategoryModel;
 use Tests\Feature\Repository\Fixtures\WidgetCategoryRepository;
 use Tests\Feature\Repository\Fixtures\WidgetDomainObject;
 use Tests\Feature\Repository\Fixtures\WidgetModel;
 use Tests\Feature\Repository\Fixtures\WidgetRepository;
+use Tests\TestCase;
 
 /**
  * Exercises HiEvents\Repository\Eloquent\BaseRepository against an isolated

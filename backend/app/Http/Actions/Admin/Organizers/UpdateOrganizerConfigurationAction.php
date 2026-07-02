@@ -16,9 +16,7 @@ class UpdateOrganizerConfigurationAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateOrganizerConfigurationHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {

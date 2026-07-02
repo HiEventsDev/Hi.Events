@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Services\Infrastructure\Geo;
 
+use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException;
+use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderQuotaExceededException;
 use HiEvents\Services\Infrastructure\Geo\GooglePlacesGeoProvider;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository as CacheRepository;
@@ -140,7 +142,7 @@ class GooglePlacesGeoProviderTest extends TestCase
 
         $provider = $this->makeProvider();
 
-        $this->expectException(\HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException::class);
+        $this->expectException(GeoProviderException::class);
         $provider->getPlaceDetails('ChIJ-503');
     }
 
@@ -152,7 +154,7 @@ class GooglePlacesGeoProviderTest extends TestCase
 
         $provider = $this->makeProvider();
 
-        $this->expectException(\HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException::class);
+        $this->expectException(GeoProviderException::class);
         $provider->autocomplete('something');
     }
 
@@ -164,7 +166,7 @@ class GooglePlacesGeoProviderTest extends TestCase
 
         $provider = $this->makeProvider();
 
-        $this->expectException(\HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderQuotaExceededException::class);
+        $this->expectException(GeoProviderQuotaExceededException::class);
         $provider->autocomplete('something');
     }
 

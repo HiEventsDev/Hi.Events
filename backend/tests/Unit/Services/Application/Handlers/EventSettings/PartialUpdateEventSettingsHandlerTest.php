@@ -45,7 +45,7 @@ class PartialUpdateEventSettingsHandlerTest extends TestCase
      */
     private function runPartialUpdate(bool $existingValue, array $settings): UpdateEventSettingsDTO
     {
-        $existingSettings = (new EventSettingDomainObject())
+        $existingSettings = (new EventSettingDomainObject)
             ->setAllowCopyDetailsToAllAttendees($existingValue)
             ->setPaymentProviders([]);
 
@@ -60,6 +60,7 @@ class PartialUpdateEventSettingsHandlerTest extends TestCase
             ->once()
             ->andReturnUsing(function (UpdateEventSettingsDTO $dto) use (&$captured, $existingSettings) {
                 $captured = $dto;
+
                 return $existingSettings;
             });
 

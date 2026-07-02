@@ -27,14 +27,14 @@ class ValidateVatNumberJob implements ShouldQueue
     public int $timeout = 15;
 
     public function __construct(
-        private readonly int    $vatSettingId,
+        private readonly int $vatSettingId,
         private readonly string $vatNumber,
     ) {}
 
     public function handle(
-        ViesValidationService                  $viesService,
+        ViesValidationService $viesService,
         OrganizerVatSettingRepositoryInterface $repository,
-        LoggerInterface                        $logger,
+        LoggerInterface $logger,
     ): void {
         $logger->info('VAT validation job started', [
             'organizer_vat_setting_id' => $this->vatSettingId,
@@ -161,6 +161,6 @@ class ValidateVatNumberJob implements ShouldQueue
             return $vatNumber;
         }
 
-        return substr($vatNumber, 0, 2) . str_repeat('*', $length - 4) . substr($vatNumber, -2);
+        return substr($vatNumber, 0, 2).str_repeat('*', $length - 4).substr($vatNumber, -2);
     }
 }

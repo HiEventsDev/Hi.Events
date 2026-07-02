@@ -12,10 +12,8 @@ class PartialUpdateOrganizerSettingsHandler
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
-        private readonly OrganizerRepositoryInterface         $organizerRepository,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+    ) {}
 
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
     {

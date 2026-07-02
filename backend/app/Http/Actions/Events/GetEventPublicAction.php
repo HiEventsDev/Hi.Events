@@ -18,10 +18,8 @@ class GetEventPublicAction extends BaseAction
 {
     public function __construct(
         private readonly GetPublicEventHandler $getPublicEventHandler,
-        private readonly LoggerInterface       $logger,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function __invoke(int $eventId, Request $request): Response|JsonResponse
     {
@@ -33,9 +31,9 @@ class GetEventPublicAction extends BaseAction
             'eventOccurrenceId' => $request->integer('event_occurrence_id') ?: null,
         ]));
 
-        if (!$this->canUserViewEvent($event)) {
+        if (! $this->canUserViewEvent($event)) {
             $this->logger->debug(__('Event with ID :eventId is not live and user is not authenticated', [
-                'eventId' => $eventId
+                'eventId' => $eventId,
             ]));
 
             return $this->notFoundResponse();
@@ -59,6 +57,7 @@ class GetEventPublicAction extends BaseAction
                 'eventId' => $event->getId(),
                 'accountId' => $this->getAuthenticatedAccountId(),
             ]));
+
             return true;
         }
 

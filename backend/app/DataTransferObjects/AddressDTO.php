@@ -14,7 +14,5 @@ class AddressDTO extends Data
         public readonly ?string $state_or_region = null,
         public readonly ?string $zip_or_postal_code = null,
         public readonly ?string $country = null,
-    )
-    {
-    }
+    ) {}
 }

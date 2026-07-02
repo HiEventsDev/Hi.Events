@@ -11,9 +11,7 @@ class GetCheckInListPublicAction extends BaseAction
 {
     public function __construct(
         private readonly GetCheckInListPublicHandler $getCheckInListPublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(string $checkInListShortId): JsonResponse
     {

@@ -2,9 +2,9 @@
 
 namespace HiEvents\Jobs\Waitlist;
 
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
-use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -24,11 +24,10 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
 
     public function handle(
         WaitlistEntryRepositoryInterface $repository,
-        OrderRepositoryInterface         $orderRepository,
-        ProductPriceRepositoryInterface  $productPriceRepository,
-        DatabaseManager                  $databaseManager,
-    ): void
-    {
+        OrderRepositoryInterface $orderRepository,
+        ProductPriceRepositoryInterface $productPriceRepository,
+        DatabaseManager $databaseManager,
+    ): void {
         $expiredEntries = $repository->findWhere([
             'status' => WaitlistEntryStatus::OFFERED->name,
             ['offer_expires_at', '<=', now()->toDateTimeString()],

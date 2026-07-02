@@ -17,11 +17,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetCheckInListAttendeePublicHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface    $attendeeRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotCheckInException
@@ -35,7 +33,7 @@ class GetCheckInListAttendeePublicHandler
                 CheckInListDomainObjectAbstract::SHORT_ID => $shortId,
             ]);
 
-        if (!$checkInList) {
+        if (! $checkInList) {
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 
@@ -57,6 +55,7 @@ class GetCheckInListAttendeePublicHandler
 
     /**
      * @todo - Move this to its own service. It's used 3 times
+     *
      * @throws CannotCheckInException
      */
     private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
@@ -74,7 +73,7 @@ class GetCheckInListAttendeePublicHandler
         CheckInListDomainObject $checkInList,
         AttendeeDomainObject $attendee,
     ): void {
-        $allowedProductIds = $checkInList->getProducts()?->map(fn($product) => $product->getId())->toArray() ?? [];
+        $allowedProductIds = $checkInList->getProducts()?->map(fn ($product) => $product->getId())->toArray() ?? [];
 
         if (! empty($allowedProductIds) && ! in_array($attendee->getProductId(), $allowedProductIds, true)) {
             throw new ResourceNotFoundException(__('Attendee not found'));

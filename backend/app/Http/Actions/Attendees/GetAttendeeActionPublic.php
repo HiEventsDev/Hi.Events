@@ -40,10 +40,10 @@ class GetAttendeeActionPublic extends BaseAction
                 name: 'event_occurrence',
             ))
             ->findFirstWhere([
-                AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId
+                AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId,
             ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             return $this->notFoundResponse();
         }
 

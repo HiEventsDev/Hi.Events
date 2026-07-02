@@ -16,9 +16,7 @@ class GetStripeConnectAccountsAction extends BaseAction
 {
     public function __construct(
         private readonly GetStripeConnectAccountsHandler $getStripeConnectAccountsHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

@@ -15,11 +15,9 @@ class CheckoutSessionManagementService
     private ?string $sessionId = null;
 
     public function __construct(
-        private readonly Request    $request,
+        private readonly Request $request,
         private readonly Repository $config,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the session ID from query param, cookie, or generate a new one.
@@ -47,7 +45,7 @@ class CheckoutSessionManagementService
         return Cookie::make(
             name: self::SESSION_IDENTIFIER,
             value: $this->getSessionId(),
-            domain: $this->config->get('session.domain') ?? '.' . $this->request->getHost(),
+            domain: $this->config->get('session.domain') ?? '.'.$this->request->getHost(),
             secure: true,
             sameSite: 'None',
         )->withPartitioned(true);
@@ -55,6 +53,6 @@ class CheckoutSessionManagementService
 
     private function createSessionId(): string
     {
-        return sha1(Str::uuid() . Str::random(40));
+        return sha1(Str::uuid().Str::random(40));
     }
 }

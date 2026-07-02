@@ -22,18 +22,19 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class AttendeesExport implements FromCollection, WithHeadings, WithMapping, WithStyles
 {
     private LengthAwarePaginator|Collection $data;
+
     private Collection $productQuestions;
+
     private Collection $orderQuestions;
 
-    public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter)
-    {
-    }
+    public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter) {}
 
     public function withData(LengthAwarePaginator|Collection $data, Collection $productQuestions, Collection $orderQuestions): AttendeesExport
     {
         $this->data = $data;
         $this->productQuestions = $productQuestions;
         $this->orderQuestions = $orderQuestions;
+
         return $this;
     }
 
@@ -46,8 +47,8 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function headings(): array
     {
-        $productQuestionTitles = $this->productQuestions->map(fn($question) => $question->getTitle())->toArray();
-        $orderQuestionsTitles = $this->orderQuestions->map(fn($orderQuestion) => $orderQuestion->getTitle())->toArray();
+        $productQuestionTitles = $this->productQuestions->map(fn ($question) => $question->getTitle())->toArray();
+        $orderQuestionsTitles = $this->orderQuestions->map(fn ($orderQuestion) => $orderQuestion->getTitle())->toArray();
 
         return array_merge([
             __('ID'),
@@ -69,14 +70,13 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
     }
 
     /**
-     * @param AttendeeDomainObject $attendee
-     * @return array
+     * @param  AttendeeDomainObject  $attendee
      */
     public function map($attendee): array
     {
         $productAnswers = $this->productQuestions->map(function (QuestionDomainObject $question) use ($attendee) {
             $answer = $attendee->getQuestionAndAnswerViews()
-                ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
+                ->first(fn ($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
 
             return $this->questionAnswerFormatter->getAnswerAsText(
                 $answer,
@@ -88,7 +88,7 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             /** @var OrderDomainObject $order */
             $order = $attendee->getOrder();
             $answer = $order->getQuestionAndAnswerViews()
-                ->first(fn($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
+                ->first(fn ($qav) => $qav->getQuestionId() === $question->getId())?->getAnswer() ?? '';
 
             return $this->questionAnswerFormatter->getAnswerAsText(
                 $answer,
@@ -100,19 +100,19 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
         $ticket = $attendee->getProduct();
         $ticketName = $ticket?->getTitle();
         if ($ticket && $ticket->getType() === ProductPriceType::TIERED->name) {
-            $ticketName .= ' - ' . $ticket
-                    ->getProductPrices()
-                    ->first(fn(ProductPriceDomainObject $tp) => $tp->getId() === $attendee->getProductPriceId())
-                    ->getLabel();
+            $ticketName .= ' - '.$ticket
+                ->getProductPrices()
+                ->first(fn (ProductPriceDomainObject $tp) => $tp->getId() === $attendee->getProductPriceId())
+                ->getLabel();
         }
 
-        if (!$ticketName) {
+        if (! $ticketName) {
             $ticketName = __('Unknown');
         }
 
         $checkIns = $attendee->getCheckIns()
             ? $attendee->getCheckIns()
-                ->map(fn($checkIn) => sprintf(
+                ->map(fn ($checkIn) => sprintf(
                     '%s (%s)',
                     $checkIn->getCheckInList()?->getName() ?? __('Unknown'),
                     Carbon::parse($checkIn->getCreatedAt())->format('Y-m-d H:i:s')

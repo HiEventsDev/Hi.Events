@@ -10,7 +10,5 @@ class CopyStripeConnectAccountDTO extends BaseDataObject
         public readonly int $targetOrganizerId,
         public readonly int $sourceOrganizerId,
         public readonly int $accountId,
-    )
-    {
-    }
+    ) {}
 }

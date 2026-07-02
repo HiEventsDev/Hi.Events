@@ -36,7 +36,7 @@ return new class extends Migration
             $table->index('vat_validation_status');
         });
 
-        DB::statement("
+        DB::statement('
             INSERT INTO organizer_vat_settings (
                 organizer_id, vat_registered, vat_number, vat_validated, vat_validation_status,
                 vat_validation_error, vat_validation_attempts, vat_validation_date,
@@ -60,7 +60,7 @@ return new class extends Migration
             JOIN account_vat_settings avs ON avs.account_id = o.account_id
             WHERE avs.deleted_at IS NULL
               AND o.deleted_at IS NULL
-        ");
+        ');
     }
 
     public function down(): void

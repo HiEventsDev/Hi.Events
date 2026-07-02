@@ -13,9 +13,7 @@ class DeleteCheckInListAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteCheckInListHandler $deleteCheckInListHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $checkInListId): Response|JsonResponse
     {

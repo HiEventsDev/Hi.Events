@@ -7,6 +7,4 @@ use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
 /**
  * @extends RepositoryInterface<ProductPriceOccurrenceOverrideDomainObject>
  */
-interface ProductPriceOccurrenceOverrideRepositoryInterface extends RepositoryInterface
-{
-}
+interface ProductPriceOccurrenceOverrideRepositoryInterface extends RepositoryInterface {}

@@ -10,7 +10,6 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
@@ -20,6 +19,7 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -29,13 +29,21 @@ use Tests\TestCase;
 class CreateOrderHandlerTest extends TestCase
 {
     private EventRepositoryInterface|MockInterface $eventRepository;
+
     private PromoCodeRepositoryInterface|MockInterface $promoCodeRepository;
+
     private PromoCodeUsageValidationService|MockInterface $promoCodeUsageValidationService;
+
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
+
     private OrderManagementService|MockInterface $orderManagementService;
+
     private OrderItemProcessingService|MockInterface $orderItemProcessingService;
+
     private AvailableProductQuantitiesFetchService|MockInterface $availabilityService;
+
     private DatabaseManager|MockInterface $databaseManager;
+
     private CreateOrderHandler $handler;
 
     protected function setUp(): void
@@ -52,7 +60,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new CreateOrderHandler(
             $this->eventRepository,
@@ -72,7 +80,7 @@ class CreateOrderHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testAcquiresAdvisoryLockBeforeCreatingOrder(): void
+    public function test_acquires_advisory_lock_before_creating_order(): void
     {
         $eventId = 42;
 
@@ -87,7 +95,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->assertInstanceOf(OrderDomainObject::class, $result);
     }
 
-    public function testThrowsWhenProductQuantityExceedsAvailability(): void
+    public function test_throws_when_product_quantity_exceeds_availability(): void
     {
         $eventId = 1;
 
@@ -118,7 +126,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->handler->handle($eventId, $dto);
     }
 
-    public function testPassesWhenQuantityIsWithinAvailability(): void
+    public function test_passes_when_quantity_is_within_availability(): void
     {
         $eventId = 1;
 
@@ -131,7 +139,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->assertInstanceOf(OrderDomainObject::class, $result);
     }
 
-    public function testSkipsZeroQuantityProducts(): void
+    public function test_skips_zero_quantity_products(): void
     {
         $eventId = 1;
 
@@ -184,8 +192,7 @@ class CreateOrderHandlerTest extends TestCase
         int $productId = 10,
         int $priceId = 100,
         int $available = 10,
-    ): void
-    {
+    ): void {
         $this->setupEventMock($eventId);
 
         $this->orderManagementService->shouldReceive('deleteExistingOrders');

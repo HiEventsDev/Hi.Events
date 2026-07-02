@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Schema;
  * 4. [TODO] Drop event_statistics table and remove double-writes
  * 5. [TODO] Drop event_daily_statistics table and remove double-writes
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('event_occurrence_daily_statistics', function (Blueprint $table) {

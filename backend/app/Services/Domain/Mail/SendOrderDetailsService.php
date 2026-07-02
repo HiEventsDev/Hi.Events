@@ -25,14 +25,12 @@ use Illuminate\Mail\Mailer;
 class SendOrderDetailsService
 {
     public function __construct(
-        private readonly EventRepositoryInterface  $eventRepository,
-        private readonly OrderRepositoryInterface  $orderRepository,
-        private readonly Mailer                    $mailer,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly Mailer $mailer,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
-        private readonly MailBuilderService        $mailBuilderService,
-    )
-    {
-    }
+        private readonly MailBuilderService $mailBuilderService,
+    ) {}
 
     public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
     {
@@ -104,14 +102,13 @@ class SendOrderDetailsService
     }
 
     public function sendCustomerOrderSummary(
-        OrderDomainObject             $order,
-        EventDomainObject             $event,
-        OrganizerDomainObject         $organizer,
-        EventSettingDomainObject      $eventSettings,
-        ?InvoiceDomainObject          $invoice = null,
-        ?EventOccurrenceDomainObject  $occurrence = null,
-    ): void
-    {
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
+        EventSettingDomainObject $eventSettings,
+        ?InvoiceDomainObject $invoice = null,
+        ?EventOccurrenceDomainObject $occurrence = null,
+    ): void {
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
             $order,
             $event,
@@ -140,9 +137,9 @@ class SendOrderDetailsService
         }
 
         $distinct = $items
-            ->map(fn(OrderItemDomainObject $item) => $item->getEventOccurrence())
+            ->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrence())
             ->filter()
-            ->unique(fn(EventOccurrenceDomainObject $occ) => $occ->getId());
+            ->unique(fn (EventOccurrenceDomainObject $occ) => $occ->getId());
 
         return $distinct->count() === 1 ? $distinct->first() : null;
     }
@@ -177,7 +174,7 @@ class SendOrderDetailsService
             invoice: $order->getLatestInvoice(),
         );
 
-        if ($order->getIsManuallyCreated() || !$event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
+        if ($order->getIsManuallyCreated() || ! $event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;
         }
 

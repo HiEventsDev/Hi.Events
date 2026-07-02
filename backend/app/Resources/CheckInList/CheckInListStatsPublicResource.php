@@ -18,7 +18,7 @@ class CheckInListStatsPublicResource extends JsonResource
             'total_attendees' => $this->totalAttendees,
             'checked_in_attendees' => $this->checkedInAttendees,
             'per_product' => array_map(
-                static fn(CheckInListProductStatDTO $stat) => [
+                static fn (CheckInListProductStatDTO $stat) => [
                     'product_id' => $stat->productId,
                     'product_title' => $stat->productTitle,
                     'total_attendees' => $stat->totalAttendees,
@@ -27,7 +27,7 @@ class CheckInListStatsPublicResource extends JsonResource
                 $this->perProduct,
             ),
             'recent_check_ins' => array_map(
-                static fn(CheckInListRecentCheckInDTO $checkIn) => [
+                static fn (CheckInListRecentCheckInDTO $checkIn) => [
                     'attendee_public_id' => $checkIn->attendeePublicId,
                     'first_name' => $checkIn->firstName,
                     'last_name' => $checkIn->lastName,

@@ -8,16 +8,13 @@ use HiEvents\DomainObjects\Enums\MessagingTierViolationEnum;
 class MessagingTierViolationDTO extends BaseDataObject
 {
     /**
-     * @param int $accountId
-     * @param string $tierName
-     * @param MessagingTierViolationEnum[] $violations
+     * @param  MessagingTierViolationEnum[]  $violations
      */
     public function __construct(
         public readonly int $accountId,
         public readonly string $tierName,
         public readonly array $violations,
-    ) {
-    }
+    ) {}
 
     public function getFirstViolationMessage(): string
     {

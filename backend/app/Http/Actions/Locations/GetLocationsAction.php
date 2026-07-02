@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Locations;
 
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -31,7 +32,7 @@ class GetLocationsAction extends BaseAction
         return $this->filterableResourceResponse(
             resource: LocationResource::class,
             data: $locations,
-            domainObject: \HiEvents\DomainObjects\LocationDomainObject::class,
+            domainObject: LocationDomainObject::class,
         );
     }
 }

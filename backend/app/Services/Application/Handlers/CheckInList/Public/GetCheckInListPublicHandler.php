@@ -15,9 +15,7 @@ class GetCheckInListPublicHandler
 {
     public function __construct(
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(string $shortId): CheckInListDomainObject
     {

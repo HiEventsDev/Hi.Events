@@ -25,18 +25,16 @@ use Throwable;
 class EventStatisticsCancellationService
 {
     public function __construct(
-        private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
-        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface $eventOccurrenceStatisticRepository,
         private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
-        private readonly AttendeeRepositoryInterface                      $attendeeRepository,
-        private readonly OrderRepositoryInterface               $orderRepository,
-        private readonly LoggerInterface                        $logger,
-        private readonly DatabaseManager                        $databaseManager,
-        private readonly Retrier                                $retrier,
-    )
-    {
-    }
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Retrier $retrier,
+    ) {}
 
     /**
      * Decrement statistics for a cancelled order (deterministic - only decrements once)
@@ -60,6 +58,7 @@ class EventStatisticsCancellationService
                     'decremented_at' => $order->getStatisticsDecrementedAt(),
                 ]
             );
+
             return;
         }
 
@@ -76,6 +75,7 @@ class EventStatisticsCancellationService
                                 'decremented_at' => $currentOrder->getStatisticsDecrementedAt(),
                             ]
                         );
+
                         return;
                     }
 
@@ -165,7 +165,7 @@ class EventStatisticsCancellationService
         // Products sold should be the full order quantities - products don't get "uncancelled"
         // when individual attendees are cancelled, only when the entire order is cancelled
         $productsSold = $order->getOrderItems()
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
         // Attendees registered should only be the currently active attendees
         // to avoid over-decrementing when some attendees were already cancelled individually
@@ -189,8 +189,8 @@ class EventStatisticsCancellationService
             'event_id' => $order->getEventId(),
         ]);
 
-        if (!$eventStatistics) {
-            throw new ResourceNotFoundException('Event statistics not found for event ' . $order->getEventId());
+        if (! $eventStatistics) {
+            throw new ResourceNotFoundException('Event statistics not found for event '.$order->getEventId());
         }
 
         $updates = [
@@ -212,7 +212,7 @@ class EventStatisticsCancellationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event statistics version mismatch. Expected version '
-                . $eventStatistics->getVersion() . ' but it was already updated.'
+                .$eventStatistics->getVersion().' but it was already updated.'
             );
         }
 
@@ -241,8 +241,8 @@ class EventStatisticsCancellationService
             'event_id' => $eventId,
         ]);
 
-        if (!$eventStatistics) {
-            throw new ResourceNotFoundException('Event statistics not found for event ' . $eventId);
+        if (! $eventStatistics) {
+            throw new ResourceNotFoundException('Event statistics not found for event '.$eventId);
         }
 
         // Only decrement attendees_registered for individual attendee cancellations
@@ -263,7 +263,7 @@ class EventStatisticsCancellationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event statistics version mismatch. Expected version '
-                . $eventStatistics->getVersion() . ' but it was already updated.'
+                .$eventStatistics->getVersion().' but it was already updated.'
             );
         }
 
@@ -292,7 +292,7 @@ class EventStatisticsCancellationService
             'date' => $orderDate,
         ]);
 
-        if (!$eventDailyStatistic) {
+        if (! $eventDailyStatistic) {
             $this->logger->warning(
                 'Event daily statistics not found for event, skipping daily decrement',
                 [
@@ -300,6 +300,7 @@ class EventStatisticsCancellationService
                     'date' => $orderDate,
                 ]
             );
+
             return;
         }
 
@@ -323,7 +324,7 @@ class EventStatisticsCancellationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event daily statistics version mismatch. Expected version '
-                . $eventDailyStatistic->getVersion() . ' but it was already updated.'
+                .$eventDailyStatistic->getVersion().' but it was already updated.'
             );
         }
 
@@ -356,7 +357,7 @@ class EventStatisticsCancellationService
             'date' => $formattedDate,
         ]);
 
-        if (!$eventDailyStatistic) {
+        if (! $eventDailyStatistic) {
             $this->logger->warning(
                 'Event daily statistics not found for event, skipping daily decrement for cancelled attendee',
                 [
@@ -364,6 +365,7 @@ class EventStatisticsCancellationService
                     'date' => $formattedDate,
                 ]
             );
+
             return;
         }
 
@@ -386,7 +388,7 @@ class EventStatisticsCancellationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event daily statistics version mismatch. Expected version '
-                . $eventDailyStatistic->getVersion() . ' but it was already updated.'
+                .$eventDailyStatistic->getVersion().' but it was already updated.'
             );
         }
 
@@ -411,7 +413,7 @@ class EventStatisticsCancellationService
             'event_occurrence_id' => $occurrenceId,
         ]);
 
-        if (!$existing) {
+        if (! $existing) {
             return;
         }
 
@@ -430,7 +432,7 @@ class EventStatisticsCancellationService
 
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
-                'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                'Occurrence statistics version mismatch for occurrence '.$occurrenceId
             );
         }
     }
@@ -454,11 +456,11 @@ class EventStatisticsCancellationService
                 'event_occurrence_id' => $occurrenceId,
             ]);
 
-            if (!$existing) {
+            if (! $existing) {
                 continue;
             }
 
-            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $productsSold = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getQuantity(), $items));
             $attendeesRegistered = $this->countActiveAttendeesForOccurrence($order->getId(), $occurrenceId);
 
             $updates = [
@@ -479,7 +481,7 @@ class EventStatisticsCancellationService
 
             if ($updated === 0) {
                 throw new EventStatisticsVersionMismatchException(
-                    'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                    'Occurrence statistics version mismatch for occurrence '.$occurrenceId
                 );
             }
         }
@@ -519,11 +521,11 @@ class EventStatisticsCancellationService
                 'date' => $orderDate,
             ]);
 
-            if (!$existing) {
+            if (! $existing) {
                 continue;
             }
 
-            $productsSold = array_sum(array_map(fn(OrderItemDomainObject $i) => $i->getQuantity(), $items));
+            $productsSold = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getQuantity(), $items));
             $attendeesRegistered = $this->countActiveAttendeesForOccurrence($order->getId(), $occurrenceId);
 
             $updates = [
@@ -545,7 +547,7 @@ class EventStatisticsCancellationService
 
             if ($updated === 0) {
                 throw new EventStatisticsVersionMismatchException(
-                    'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                    'Occurrence daily statistics version mismatch for occurrence '.$occurrenceId
                 );
             }
         }
@@ -563,7 +565,7 @@ class EventStatisticsCancellationService
             'date' => $formattedDate,
         ]);
 
-        if (!$existing) {
+        if (! $existing) {
             return;
         }
 
@@ -583,7 +585,7 @@ class EventStatisticsCancellationService
 
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
-                'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                'Occurrence daily statistics version mismatch for occurrence '.$occurrenceId
             );
         }
     }

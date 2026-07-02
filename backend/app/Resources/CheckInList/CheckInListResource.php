@@ -28,15 +28,15 @@ class CheckInListResource extends JsonResource
             'public_show_attendee_notes' => $this->getPublicShowAttendeeNotes(),
             'public_show_question_answers' => $this->getPublicShowQuestionAnswers(),
             'public_show_order_details' => $this->getPublicShowOrderDetails(),
-            $this->mergeWhen($this->getEvent() !== null, fn() => [
+            $this->mergeWhen($this->getEvent() !== null, fn () => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
             ]),
             'event_occurrence' => $this->when(
-                !is_null($this->getEventOccurrence()),
-                fn() => new EventOccurrenceResource($this->getEventOccurrence()),
+                ! is_null($this->getEventOccurrence()),
+                fn () => new EventOccurrenceResource($this->getEventOccurrence()),
             ),
-            $this->mergeWhen($this->getProducts() !== null, fn() => [
+            $this->mergeWhen($this->getProducts() !== null, fn () => [
                 'products' => ProductResource::collection($this->getProducts()),
             ]),
         ];

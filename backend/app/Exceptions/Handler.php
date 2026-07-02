@@ -3,6 +3,9 @@
 namespace HiEvents\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Sentry\Laravel\Facade as Sentry;
 use Sentry\State\Scope;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as SymfonyResourceNotFoundException;
@@ -34,8 +37,8 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param Throwable $e
      * @return void
+     *
      * @throws Throwable
      */
     public function report(Throwable $e)
@@ -52,7 +55,7 @@ class Handler extends ExceptionHandler
                         $scope->setUser([
                             'id' => $user->id,
                             'email' => $user->email,
-                            'username' => trim($user->first_name . ' ' . $user->last_name),
+                            'username' => trim($user->first_name.' '.$user->last_name),
                             'ip_address' => $ip,
                         ]);
 
@@ -73,9 +76,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param Throwable $exception
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     *
      * @throws Throwable
      */
     public function render($request, Throwable $exception)

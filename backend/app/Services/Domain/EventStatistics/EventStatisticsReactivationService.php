@@ -19,16 +19,14 @@ use Throwable;
 class EventStatisticsReactivationService
 {
     public function __construct(
-        private readonly EventStatisticRepositoryInterface      $eventStatisticsRepository,
-        private readonly EventDailyStatisticRepositoryInterface      $eventDailyStatisticRepository,
-        private readonly EventOccurrenceStatisticRepositoryInterface      $eventOccurrenceStatisticRepository,
+        private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
+        private readonly EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository,
+        private readonly EventOccurrenceStatisticRepositoryInterface $eventOccurrenceStatisticRepository,
         private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
-        private readonly LoggerInterface                                  $logger,
-        private readonly DatabaseManager                        $databaseManager,
-        private readonly Retrier                                $retrier,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Retrier $retrier,
+    ) {}
 
     /**
      * @throws EventStatisticsVersionMismatchException
@@ -73,8 +71,8 @@ class EventStatisticsReactivationService
             'event_id' => $eventId,
         ]);
 
-        if (!$eventStatistics) {
-            throw new ResourceNotFoundException('Event statistics not found for event ' . $eventId);
+        if (! $eventStatistics) {
+            throw new ResourceNotFoundException('Event statistics not found for event '.$eventId);
         }
 
         $updates = [
@@ -93,7 +91,7 @@ class EventStatisticsReactivationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event statistics version mismatch. Expected version '
-                . $eventStatistics->getVersion() . ' but it was already updated.'
+                .$eventStatistics->getVersion().' but it was already updated.'
             );
         }
 
@@ -119,7 +117,7 @@ class EventStatisticsReactivationService
             'date' => $formattedDate,
         ]);
 
-        if (!$eventDailyStatistic) {
+        if (! $eventDailyStatistic) {
             $this->logger->warning(
                 'Event daily statistics not found for event, skipping daily increment for reactivated attendee',
                 [
@@ -127,6 +125,7 @@ class EventStatisticsReactivationService
                     'date' => $formattedDate,
                 ]
             );
+
             return;
         }
 
@@ -147,7 +146,7 @@ class EventStatisticsReactivationService
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
                 'Event daily statistics version mismatch. Expected version '
-                . $eventDailyStatistic->getVersion() . ' but it was already updated.'
+                .$eventDailyStatistic->getVersion().' but it was already updated.'
             );
         }
 
@@ -171,7 +170,7 @@ class EventStatisticsReactivationService
             'event_occurrence_id' => $occurrenceId,
         ]);
 
-        if (!$existing) {
+        if (! $existing) {
             return;
         }
 
@@ -190,7 +189,7 @@ class EventStatisticsReactivationService
 
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
-                'Occurrence statistics version mismatch for occurrence ' . $occurrenceId
+                'Occurrence statistics version mismatch for occurrence '.$occurrenceId
             );
         }
     }
@@ -207,7 +206,7 @@ class EventStatisticsReactivationService
             'date' => $formattedDate,
         ]);
 
-        if (!$existing) {
+        if (! $existing) {
             return;
         }
 
@@ -227,7 +226,7 @@ class EventStatisticsReactivationService
 
         if ($updated === 0) {
             throw new EventStatisticsVersionMismatchException(
-                'Occurrence daily statistics version mismatch for occurrence ' . $occurrenceId
+                'Occurrence daily statistics version mismatch for occurrence '.$occurrenceId
             );
         }
     }

@@ -2,11 +2,11 @@
 
 namespace HiEvents\Services\Domain\Product;
 
-use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
-use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
@@ -16,17 +16,14 @@ class ProductPriceService
 {
     public function __construct(
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
-    )
-    {
-    }
+    ) {}
 
     public function getIndividualPrice(
-        ProductDomainObject      $product,
+        ProductDomainObject $product,
         ProductPriceDomainObject $price,
-        ?PromoCodeDomainObject   $promoCode,
-        ?int                     $eventOccurrenceId = null,
-    ): float
-    {
+        ?PromoCodeDomainObject $promoCode,
+        ?int $eventOccurrenceId = null,
+    ): float {
         return $this->getPrice($product, new OrderProductPriceDTO(
             quantity: 1,
             price_id: $price->getId(),
@@ -34,12 +31,11 @@ class ProductPriceService
     }
 
     public function getPrice(
-        ProductDomainObject    $product,
-        OrderProductPriceDTO   $productOrderDetail,
+        ProductDomainObject $product,
+        OrderProductPriceDTO $productOrderDetail,
         ?PromoCodeDomainObject $promoCode,
-        ?int                   $eventOccurrenceId = null,
-    ): PriceDTO
-    {
+        ?int $eventOccurrenceId = null,
+    ): PriceDTO {
         $price = $this->determineProductPrice($product, $productOrderDetail, $eventOccurrenceId);
 
         if ($product->getType() === ProductPriceType::FREE->name) {
@@ -50,7 +46,7 @@ class ProductPriceService
             return new PriceDTO($price);
         }
 
-        if (!$promoCode || !$promoCode->appliesToProduct($product)) {
+        if (! $promoCode || ! $promoCode->appliesToProduct($product)) {
             return new PriceDTO($price);
         }
 

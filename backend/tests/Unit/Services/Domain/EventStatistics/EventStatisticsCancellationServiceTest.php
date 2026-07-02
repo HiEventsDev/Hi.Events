@@ -26,12 +26,19 @@ use Tests\TestCase;
 class EventStatisticsCancellationServiceTest extends TestCase
 {
     private EventStatisticsCancellationService $service;
+
     private MockInterface|EventStatisticRepositoryInterface $eventStatisticsRepository;
+
     private MockInterface|EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository;
+
     private MockInterface|AttendeeRepositoryInterface $attendeeRepository;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|DatabaseManager $databaseManager;
+
     private MockInterface|LoggerInterface $logger;
+
     private MockInterface|Retrier $retrier;
 
     protected function setUp(): void
@@ -63,7 +70,7 @@ class EventStatisticsCancellationServiceTest extends TestCase
         );
     }
 
-    public function testDecrementForCancelledOrderSuccess(): void
+    public function test_decrement_for_cancelled_order_success(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -215,7 +222,7 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testSkipsDecrementWhenAlreadyDecremented(): void
+    public function test_skips_decrement_when_already_decremented(): void
     {
         $orderId = 123;
         $eventId = 1;
@@ -262,7 +269,7 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testDecrementForCancelledAttendee(): void
+    public function test_decrement_for_cancelled_attendee(): void
     {
         $eventId = 1;
         $orderDate = '2024-01-15 10:30:00';

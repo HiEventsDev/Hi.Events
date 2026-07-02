@@ -1,5 +1,9 @@
 <?php
 
+use Spatie\WebhookServer\BackoffStrategy\ExponentialBackoffStrategy;
+use Spatie\WebhookServer\CallWebhookJob;
+use Spatie\WebhookServer\Signer\DefaultSigner;
+
 return [
 
     /*
@@ -29,7 +33,7 @@ return [
      * the headers of the webhook request. A webhook client can use the signature
      * to verify the request hasn't been tampered with.
      */
-    'signer' => \Spatie\WebhookServer\Signer\DefaultSigner::class,
+    'signer' => DefaultSigner::class,
 
     /*
      * This is the name of the header where the signature will be added.
@@ -58,12 +62,12 @@ return [
     /*
      * This class determines how many seconds there should be between attempts.
      */
-    'backoff_strategy' => \Spatie\WebhookServer\BackoffStrategy\ExponentialBackoffStrategy::class,
+    'backoff_strategy' => ExponentialBackoffStrategy::class,
 
     /*
      * This class is used to dispatch webhooks onto the queue.
      */
-    'webhook_job' => \Spatie\WebhookServer\CallWebhookJob::class,
+    'webhook_job' => CallWebhookJob::class,
 
     /*
      * By default we will verify that the ssl certificate of the destination

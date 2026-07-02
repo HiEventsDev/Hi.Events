@@ -16,19 +16,18 @@ use HiEvents\Services\Domain\Payment\Stripe\StripeAccountSyncService;
 use HiEvents\Services\Infrastructure\Stripe\StripeClientFactory;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
+use Stripe\Account;
 use Throwable;
 
 class GetStripeConnectAccountsHandler
 {
     public function __construct(
-        private readonly OrganizerRepositoryInterface               $organizerRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
-        private readonly StripeClientFactory                        $stripeClientFactory,
-        private readonly StripeAccountSyncService                   $stripeAccountSyncService,
-        private readonly LoggerInterface                            $logger,
-    )
-    {
-    }
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly StripeAccountSyncService $stripeAccountSyncService,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws ResourceNotFoundException
@@ -65,7 +64,7 @@ class GetStripeConnectAccountsHandler
         $stripeAccounts = collect();
         $stripePlatforms = $organizer->getOrganizerStripePlatforms();
 
-        if (!$stripePlatforms || $stripePlatforms->isEmpty()) {
+        if (! $stripePlatforms || $stripePlatforms->isEmpty()) {
             return $stripeAccounts;
         }
 
@@ -81,7 +80,7 @@ class GetStripeConnectAccountsHandler
 
     private function buildStripeAccountDTO(OrganizerStripePlatformDomainObject $stripePlatform): ?StripeConnectAccountDTO
     {
-        if (!$stripePlatform->getStripeAccountId()) {
+        if (! $stripePlatform->getStripeAccountId()) {
             return null;
         }
 
@@ -102,7 +101,7 @@ class GetStripeConnectAccountsHandler
                 $this->stripeAccountSyncService->syncStripeAccountDetailsForOrganizer($stripePlatform, $stripeAccount);
             }
 
-            if (!$isSetupComplete) {
+            if (! $isSetupComplete) {
                 $connectUrl = $this->stripeAccountSyncService->createStripeAccountSetupUrl($stripeAccount, $stripeClient, $stripePlatform->getOrganizerId());
             }
 
@@ -121,8 +120,8 @@ class GetStripeConnectAccountsHandler
                 isPrimary: $isSetupComplete,
                 country: $stripeAccount->country ?? ($details['country'] ?? null),
                 businessType: $stripeAccount->business_type ?? ($details['business_type'] ?? null),
-                chargesEnabled: (bool)($stripeAccount->charges_enabled ?? false),
-                payoutsEnabled: (bool)($stripeAccount->payouts_enabled ?? false),
+                chargesEnabled: (bool) ($stripeAccount->charges_enabled ?? false),
+                payoutsEnabled: (bool) ($stripeAccount->payouts_enabled ?? false),
                 capabilities: $this->normalizeCapabilities($stripeAccount),
                 requirements: $this->normalizeRequirements($stripeAccount),
             );
@@ -132,6 +131,7 @@ class GetStripeConnectAccountsHandler
                 'platform' => $stripePlatform->getStripeConnectPlatform(),
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         } catch (Throwable $e) {
             $this->logger->error('Failed to retrieve Stripe account', [
@@ -139,11 +139,12 @@ class GetStripeConnectAccountsHandler
                 'platform' => $stripePlatform->getStripeConnectPlatform(),
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
 
-    private function normalizeCapabilities(\Stripe\Account $stripeAccount): array
+    private function normalizeCapabilities(Account $stripeAccount): array
     {
         $capabilities = $stripeAccount->capabilities;
         if (is_array($capabilities)) {
@@ -152,12 +153,14 @@ class GetStripeConnectAccountsHandler
         if ($capabilities && method_exists($capabilities, 'toArray')) {
             return $capabilities->toArray();
         }
+
         return [];
     }
 
-    private function normalizeRequirements(\Stripe\Account $stripeAccount): array
+    private function normalizeRequirements(Account $stripeAccount): array
     {
         $requirements = $stripeAccount->requirements;
+
         return [
             'currently_due' => $requirements?->currently_due ?? [],
             'eventually_due' => $requirements?->eventually_due ?? [],
@@ -188,13 +191,13 @@ class GetStripeConnectAccountsHandler
             if (is_string($details)) {
                 $details = json_decode($details, true) ?? [];
             }
-            if (!is_array($details)) {
+            if (! is_array($details)) {
                 $details = [];
             }
 
             $result->push(new ReusableStripeConnectionDTO(
-                organizerId: (int)$row->organizer_id,
-                organizerName: (string)$row->organizer_name,
+                organizerId: (int) $row->organizer_id,
+                organizerName: (string) $row->organizer_name,
                 stripeAccountId: $stripeAccountId,
                 platform: $row->stripe_connect_platform,
                 country: $details['country'] ?? null,

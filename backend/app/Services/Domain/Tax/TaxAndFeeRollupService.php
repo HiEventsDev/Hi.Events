@@ -49,7 +49,7 @@ class TaxAndFeeRollupService
                 'name' => $name,
                 'rate' => $taxOrFee->getRate(),
                 'type' => $taxOrFee->getCalculationType(),
-                'value' => $amount
+                'value' => $amount,
             ];
         } else {
             $this->rollUp[$type][$foundIndex]['value'] += $amount;

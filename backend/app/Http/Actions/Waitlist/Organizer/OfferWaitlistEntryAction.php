@@ -19,9 +19,7 @@ class OfferWaitlistEntryAction extends BaseAction
 {
     public function __construct(
         private readonly OfferWaitlistEntryHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(OfferWaitlistEntryRequest $request, int $eventId): JsonResponse
     {

@@ -24,12 +24,10 @@ use Illuminate\Foundation\Application;
 readonly class IsAuthorizedService
 {
     public function __construct(
-        private Application                    $app,
+        private Application $app,
         private AccountUserRepositoryInterface $accountUserRepository,
-        private AuthManager                    $auth,
-    )
-    {
-    }
+        private AuthManager $auth,
+    ) {}
 
     /**
      * @todo This is a very simplistic way of handling roles. Currently we have an ADMIN and ORGANIZER role, but we
@@ -49,13 +47,12 @@ readonly class IsAuthorizedService
     }
 
     public function isActionAuthorized(
-        int              $entityId,
-        string           $entityType,
+        int $entityId,
+        string $entityType,
         UserDomainObject $authUser,
-        int              $authAccountId,
-        Role             $minimumRole
-    ): void
-    {
+        int $authAccountId,
+        Role $minimumRole
+    ): void {
         $this->validateUserStatus($authUser);
         $this->validateUserRole($minimumRole, $authUser);
 
@@ -79,8 +76,8 @@ readonly class IsAuthorizedService
             TaxAndFeesDomainObject::class => $this->validateTax($entity, $authAccountId),
         };
 
-        if (!$result) {
-            throw new UnauthorizedException();
+        if (! $result) {
+            throw new UnauthorizedException;
         }
     }
 

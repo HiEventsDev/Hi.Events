@@ -15,9 +15,7 @@ class GetCheckInListsHandler
 {
     public function __construct(
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetCheckInListsDTO $dto): LengthAwarePaginator
     {
@@ -35,7 +33,7 @@ class GetCheckInListsHandler
         }
 
         $attendeeCheckInCounts = $this->checkInListRepository->getCheckedInAttendeeCountByIds(
-            $checkInLists->map(fn($checkInList) => $checkInList->getId())->toArray(),
+            $checkInLists->map(fn ($checkInList) => $checkInList->getId())->toArray(),
         );
 
         if ($attendeeCheckInCounts->isEmpty()) {

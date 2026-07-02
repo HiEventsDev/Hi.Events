@@ -15,16 +15,14 @@ class StartImpersonationAction extends BaseAuthAction
 {
     public function __construct(
         private readonly StartImpersonationHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $userId): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $this->validate($request, [
-            'account_id' => 'required|exists:accounts,id'
+            'account_id' => 'required|exists:accounts,id',
         ]);
 
         $token = $this->handler->handle(new StartImpersonationDTO(
@@ -36,7 +34,7 @@ class StartImpersonationAction extends BaseAuthAction
         $response = $this->jsonResponse([
             'message' => __('Impersonation started'),
             'redirect_url' => '/manage/events',
-            'token' => $token
+            'token' => $token,
         ]);
 
         return $this->addTokenToResponse($response, $token);

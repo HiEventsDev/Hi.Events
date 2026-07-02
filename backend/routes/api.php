@@ -112,6 +112,7 @@ use HiEvents\Http\Actions\Events\Images\DeleteEventImageAction;
 use HiEvents\Http\Actions\Events\Images\GetEventImagesAction;
 use HiEvents\Http\Actions\Events\Stats\GetEventStatsAction;
 use HiEvents\Http\Actions\Events\UpdateEventAction;
+use HiEvents\Http\Actions\Events\UpdateEventLocationAction;
 use HiEvents\Http\Actions\Events\UpdateEventStatusAction;
 use HiEvents\Http\Actions\EventSettings\EditEventSettingsAction;
 use HiEvents\Http\Actions\EventSettings\GetEventSettingsAction;
@@ -357,7 +358,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events', GetEventsAction::class);
         $router->get('/events/{event_id}', GetEventAction::class);
         $router->put('/events/{event_id}', UpdateEventAction::class);
-        $router->patch('/events/{event_id}/event-location', \HiEvents\Http\Actions\Events\UpdateEventLocationAction::class);
+        $router->patch('/events/{event_id}/event-location', UpdateEventLocationAction::class);
         $router->put('/events/{event_id}/status', UpdateEventStatusAction::class);
         $router->delete('/events/{event_id}', DeleteEventAction::class);
         $router->get('/events/{event_id}/deletion-status', GetEventDeletionStatusAction::class);
@@ -625,4 +626,4 @@ $router->prefix('/public')->group(
     }
 );
 
-include_once __DIR__ . '/mail.php';
+include_once __DIR__.'/mail.php';

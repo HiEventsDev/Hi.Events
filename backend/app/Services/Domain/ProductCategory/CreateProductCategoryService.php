@@ -10,9 +10,7 @@ class CreateProductCategoryService
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
-    )
-    {
-    }
+    ) {}
 
     public function createCategory(ProductCategoryDomainObject $productCategoryDomainObject): ProductCategoryDomainObject
     {
@@ -21,7 +19,7 @@ class CreateProductCategoryService
 
     public function createDefaultProductCategory(EventDomainObject $event): void
     {
-        $this->createCategory((new ProductCategoryDomainObject())
+        $this->createCategory((new ProductCategoryDomainObject)
             ->setEventId($event->getId())
             ->setName(__('Tickets'))
             ->setIsHidden(false)

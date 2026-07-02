@@ -23,12 +23,10 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class ExportAttendeesAction extends BaseAction
 {
     public function __construct(
-        private readonly AttendeesExport             $export,
+        private readonly AttendeesExport $export,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly QuestionRepositoryInterface $questionRepository
-    )
-    {
-    }
+    ) {}
 
     /**
      * @todo This should be passed off to a queue and moved to a service
@@ -65,7 +63,7 @@ class ExportAttendeesAction extends BaseAction
                 nested: [
                     new Relationship(
                         domainObject: QuestionAndAnswerViewDomainObject::class
-                    )
+                    ),
                 ],
                 name: 'order'
             ))

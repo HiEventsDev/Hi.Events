@@ -28,26 +28,26 @@ class OrganizerResource extends JsonResource
             'location_id' => $this->getLocationId(),
             'location' => $this->when(
                 condition: $this->getLocationRecord() !== null,
-                value: fn() => new LocationResource($this->getLocationRecord()),
+                value: fn () => new LocationResource($this->getLocationRecord()),
             ),
             'images' => $this->when(
-                (bool)$this->getImages(),
-                fn() => ImageResource::collection($this->getImages())
+                (bool) $this->getImages(),
+                fn () => ImageResource::collection($this->getImages())
             ),
             'settings' => $this->when(
-                condition: !is_null($this->getOrganizerSettings()),
-                value: fn() => new OrganizerSettingsResource($this->getOrganizerSettings())
+                condition: ! is_null($this->getOrganizerSettings()),
+                value: fn () => new OrganizerSettingsResource($this->getOrganizerSettings())
             ),
             $this->mergeWhen(
                 config('app.saas_mode_enabled') && $this->getOrganizerStripePlatforms() !== null,
-                fn() => [
+                fn () => [
                     'stripe_connect_setup_complete' => $this->isStripeSetupComplete(),
                     'stripe_account_id' => $this->getActiveStripeAccountId(),
                 ],
             ),
             $this->mergeWhen(
                 $this->getOrganizerConfiguration() !== null,
-                fn() => [
+                fn () => [
                     'configuration' => new OrganizerConfigurationResource($this->getOrganizerConfiguration()),
                 ],
             ),

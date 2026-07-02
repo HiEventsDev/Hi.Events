@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class EventOccurrenceStatisticDomainObject extends Generated\EventOccurrenceStatisticDomainObjectAbstract
-{
-}
+class EventOccurrenceStatisticDomainObject extends Generated\EventOccurrenceStatisticDomainObjectAbstract {}

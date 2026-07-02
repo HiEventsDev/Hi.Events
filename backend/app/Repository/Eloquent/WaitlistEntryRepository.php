@@ -19,6 +19,7 @@ use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Waitlist\DTO\WaitlistStatsDTO;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRepositoryInterface
@@ -67,7 +68,7 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         );
     }
 
-    public function getProductStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): \Illuminate\Support\Collection
+    public function getProductStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): Collection
     {
         $query = DB::table('waitlist_entries')
             ->join('product_prices', 'waitlist_entries.product_price_id', '=', 'product_prices.id')
@@ -108,9 +109,9 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, WaitlistEntryDomainObject>
+     * @return Collection<int, WaitlistEntryDomainObject>
      */
-    public function getNextWaitingEntries(int $productPriceId, ?int $limit = null, ?int $eventOccurrenceId = null): \Illuminate\Support\Collection
+    public function getNextWaitingEntries(int $productPriceId, ?int $limit = null, ?int $eventOccurrenceId = null): Collection
     {
         $query = WaitlistEntry::query()
             ->where('product_price_id', $productPriceId)

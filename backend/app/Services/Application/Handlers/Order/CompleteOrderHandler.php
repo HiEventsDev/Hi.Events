@@ -40,9 +40,9 @@ use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
-use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -54,19 +54,17 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class CompleteOrderHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface          $orderRepository,
-        private readonly AffiliateRepositoryInterface      $affiliateRepository,
-        private readonly AttendeeRepositoryInterface       $attendeeRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly QuestionAnswerRepositoryInterface $questionAnswersRepository,
-        private readonly ProductQuantityUpdateService      $productQuantityUpdateService,
-        private readonly ProductPriceRepositoryInterface   $productPriceRepository,
-        private readonly DomainEventDispatcherService      $domainEventDispatcherService,
-        private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
-        private readonly CheckoutSessionManagementService  $sessionManagementService,
+        private readonly ProductQuantityUpdateService $productQuantityUpdateService,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly CheckoutSessionManagementService $sessionManagementService,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ResourceNotFoundException|ResourceConflictException|RuntimeException
@@ -99,7 +97,7 @@ class CompleteOrderHandler
              *
              * @see PaymentIntentSucceededHandler
              */
-            if (!$order->isPaymentRequired()) {
+            if (! $order->isPaymentRequired()) {
                 $this->productQuantityUpdateService->updateQuantitiesFromOrder($updatedOrder);
             }
 
@@ -125,16 +123,16 @@ class CompleteOrderHandler
     }
 
     /**
-     * @param Collection<CompleteOrderProductDataDTO> $orderProducts
+     * @param  Collection<CompleteOrderProductDataDTO>  $orderProducts
+     *
      * @throws Exception
      */
     private function createAttendees(
-        Collection                $orderProducts,
-        OrderDomainObject         $order,
-        CompleteOrderOrderDTO     $orderDTO,
-        EventSettingDomainObject  $eventSettings,
-    ): void
-    {
+        Collection $orderProducts,
+        OrderDomainObject $order,
+        CompleteOrderOrderDTO $orderDTO,
+        EventSettingDomainObject $eventSettings,
+    ): void {
         $inserts = [];
         $createdProductData = collect();
 
@@ -149,11 +147,11 @@ class CompleteOrderHandler
         $this->validateTicketProductsCount($order, $orderProducts);
 
         $orderItemRemainingQuantities = $order->getOrderItems()
-            ->mapWithKeys(fn(OrderItemDomainObject $item) => [$item->getId() => $item->getQuantity()]);
+            ->mapWithKeys(fn (OrderItemDomainObject $item) => [$item->getId() => $item->getQuantity()]);
 
         foreach ($orderProducts as $attendee) {
             $productId = $productsPrices->first(
-                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
+                fn (ProductPriceDomainObject $productPrice) => $productPrice->getId() === $attendee->product_price_id)
                 ->getProductId();
             $productType = $this->getProductTypeFromPriceId($attendee->product_price_id, $order->getOrderItems());
 
@@ -167,7 +165,7 @@ class CompleteOrderHandler
             }
 
             $orderItem = $order->getOrderItems()->first(
-                fn(OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->product_price_id
+                fn (OrderItemDomainObject $item) => $item->getProductPriceId() === $attendee->product_price_id
                     && ($orderItemRemainingQuantities[$item->getId()] ?? 0) > 0
             );
 
@@ -200,7 +198,7 @@ class CompleteOrderHandler
             ));
         }
 
-        if (!$this->attendeeRepository->insert($inserts)) {
+        if (! $this->attendeeRepository->insert($inserts)) {
             throw new RuntimeException(__('Failed to create attendee'));
         }
 
@@ -226,16 +224,16 @@ class CompleteOrderHandler
     }
 
     /**
-     * @param Collection<CreatedProductDataDTO> $createdAttendees
-     * @param Collection<ProductPriceDomainObject> $productPrices
+     * @param  Collection<CreatedProductDataDTO>  $createdAttendees
+     * @param  Collection<ProductPriceDomainObject>  $productPrices
+     *
      * @throws ResourceConflictException|Exception
      */
     private function createProductQuestions(
-        Collection        $createdAttendees,
+        Collection $createdAttendees,
         OrderDomainObject $order,
-        Collection        $productPrices
-    ): void
-    {
+        Collection $productPrices
+    ): void {
         $newAttendees = $this->attendeeRepository->findWhereIn(
             field: AttendeeDomainObjectAbstract::SHORT_ID,
             values: $createdAttendees->pluck('shortId')->toArray(),
@@ -249,12 +247,12 @@ class CompleteOrderHandler
             }
 
             $productId = $productPrices->first(
-                fn(ProductPriceDomainObject $productPrice) => $productPrice->getId() === $productRequestData->product_price_id
+                fn (ProductPriceDomainObject $productPrice) => $productPrice->getId() === $productRequestData->product_price_id
             )->getProductId();
 
             // This will be null for non-ticket products
             $insertedAttendee = $newAttendees->first(
-                fn(AttendeeDomainObject $attendee) => $attendee->getShortId() === $createdAttendee->shortId,
+                fn (AttendeeDomainObject $attendee) => $attendee->getShortId() === $createdAttendee->shortId,
             );
 
             foreach ($productRequestData->questions as $question) {
@@ -297,7 +295,7 @@ class CompleteOrderHandler
     private function validateOccurrenceStatus(OrderDomainObject $order): void
     {
         $occurrenceIds = $order->getOrderItems()
-            ?->map(fn(OrderItemDomainObject $item) => $item->getEventOccurrenceId())
+            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrenceId())
             ->filter()
             ->unique()
             ->values();
@@ -340,7 +338,7 @@ class CompleteOrderHandler
         }
 
         if ($order->getSessionId() === null
-            || !$this->sessionManagementService->verifySession($order->getSessionId())) {
+            || ! $this->sessionManagementService->verifySession($order->getSessionId())) {
             throw new UnauthorizedException(
                 __('Sorry, we could not verify your session. Please restart your order.')
             );
@@ -375,7 +373,7 @@ class CompleteOrderHandler
             );
 
         // Update affiliate sales if this is a free order (no payment required) and has an affiliate
-        if (!$order->isPaymentRequired() && $updatedOrder->getAffiliateId()) {
+        if (! $order->isPaymentRequired() && $updatedOrder->getAffiliateId()) {
             $this->affiliateRepository->incrementSales(
                 $updatedOrder->getAffiliateId(),
                 $updatedOrder->getTotalGross()
@@ -393,9 +391,9 @@ class CompleteOrderHandler
     private function validateProductPriceIdsMatchOrder(OrderDomainObject $order, Collection $productsPrices): void
     {
         $orderProductPriceIds = $order->getOrderItems()
-            ?->map(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId())->toArray();
+            ?->map(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId())->toArray();
 
-        $productsPricesIds = $productsPrices->map(fn(ProductPriceDomainObject $productPrice) => $productPrice->getId());
+        $productsPricesIds = $productsPrices->map(fn (ProductPriceDomainObject $productPrice) => $productPrice->getId());
 
         if ($productsPricesIds->diff($orderProductPriceIds)->isNotEmpty()) {
             throw new ResourceConflictException(__('There is an unexpected product price ID in the order'));
@@ -408,15 +406,15 @@ class CompleteOrderHandler
     private function validateTicketProductsCount(OrderDomainObject $order, Collection $attendees): void
     {
         $orderAttendeeCount = $order->getOrderItems()
-            ?->filter(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductType() === ProductType::TICKET->name)
-            ?->sum(fn(OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
+            ?->filter(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductType() === ProductType::TICKET->name)
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
 
         $ticketAttendeeCount = $attendees
             ->filter(
-                fn(CompleteOrderProductDataDTO $attendee) => $this->getProductTypeFromPriceId(
-                        $attendee->product_price_id,
-                        $order->getOrderItems()
-                    ) === ProductType::TICKET->name)
+                fn (CompleteOrderProductDataDTO $attendee) => $this->getProductTypeFromPriceId(
+                    $attendee->product_price_id,
+                    $order->getOrderItems()
+                ) === ProductType::TICKET->name)
             ->count();
 
         if ($orderAttendeeCount !== $ticketAttendeeCount) {
@@ -428,7 +426,7 @@ class CompleteOrderHandler
 
     private function getProductTypeFromPriceId(int $priceId, Collection $orderItems): string
     {
-        return $orderItems->first(fn(OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId() === $priceId)
+        return $orderItems->first(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId() === $priceId)
             ->getProductType();
     }
 }

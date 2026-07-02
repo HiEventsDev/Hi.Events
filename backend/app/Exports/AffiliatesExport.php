@@ -19,6 +19,7 @@ class AffiliatesExport implements FromCollection, WithHeadings, WithMapping, Wit
     public function withData(LengthAwarePaginator $affiliates): AffiliatesExport
     {
         $this->affiliates = $affiliates;
+
         return $this;
     }
 
@@ -43,8 +44,7 @@ class AffiliatesExport implements FromCollection, WithHeadings, WithMapping, Wit
     }
 
     /**
-     * @param AffiliateDomainObject $affiliate
-     * @return array
+     * @param  AffiliateDomainObject  $affiliate
      */
     public function map($affiliate): array
     {

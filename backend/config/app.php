@@ -1,6 +1,11 @@
 <?php
 
 use HiEvents\DomainObjects\Enums\ColorTheme;
+use HiEvents\Providers\AppServiceProvider;
+use HiEvents\Providers\AuthServiceProvider;
+use HiEvents\Providers\EventServiceProvider;
+use HiEvents\Providers\RepositoryServiceProvider;
+use HiEvents\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -107,7 +112,7 @@ return [
     |
     */
 
-    'debug' => (bool)env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -228,12 +233,12 @@ return [
         /*
          * Application Service Providers...
          */
-        \HiEvents\Providers\AppServiceProvider::class,
-        \HiEvents\Providers\AuthServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        \HiEvents\Providers\EventServiceProvider::class,
-        \HiEvents\Providers\RouteServiceProvider::class,
-        \HiEvents\Providers\RepositoryServiceProvider::class
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        RepositoryServiceProvider::class,
 
     ])->toArray(),
 
@@ -251,7 +256,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
-
 
     'is_hi_events' => env('APP_IS_HI_EVENTS', false),
 ];

@@ -13,10 +13,8 @@ class GetProductsHandler
 {
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
-        private readonly ProductFilterService       $productFilterService,
-    )
-    {
-    }
+        private readonly ProductFilterService $productFilterService,
+    ) {}
 
     public function handle(int $eventId, QueryParamsDTO $queryParamsDTO): LengthAwarePaginator
     {

@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Services\Application\Handlers\CheckInList\Public;
 
-use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\Http\DTO\FilterFieldDTO;
 use HiEvents\Http\DTO\QueryParamsDTO;
@@ -17,7 +16,9 @@ use Tests\TestCase;
 class GetCheckInListAttendeesPublicHandlerTest extends TestCase
 {
     private CheckInListRepositoryInterface $checkInListRepository;
+
     private AttendeeRepositoryInterface $attendeeRepository;
+
     private GetCheckInListAttendeesPublicHandler $handler;
 
     protected function setUp(): void
@@ -59,7 +60,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
         return new Paginator(collect([]), 10);
     }
 
-    public function testInjectsCheckInListOccurrenceFilterWhenListIsScoped(): void
+    public function test_injects_check_in_list_occurrence_filter_when_list_is_scoped(): void
     {
         $this->expectCheckInListLoaded($this->buildCheckInList(occurrenceId: 42));
 
@@ -69,11 +70,12 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
             ->once()
             ->with('short-id', m::on(function (QueryParamsDTO $params) use (&$capturedParams) {
                 $capturedParams = $params;
+
                 return true;
             }))
             ->andReturn($this->emptyAttendeePaginator());
 
-        $this->handler->handle('short-id', new QueryParamsDTO());
+        $this->handler->handle('short-id', new QueryParamsDTO);
 
         $this->assertNotNull($capturedParams);
         $filter = $capturedParams->filter_fields->firstWhere('field', 'event_occurrence_id');
@@ -81,7 +83,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
         $this->assertSame('42', $filter->value);
     }
 
-    public function testOverridesClientSuppliedOccurrenceFilterForScopedList(): void
+    public function test_overrides_client_supplied_occurrence_filter_for_scoped_list(): void
     {
         // A misbehaving or stale client might try to pass a different occurrence id.
         // For a scoped list we must ignore it and force the list's own occurrence.
@@ -93,6 +95,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
             ->once()
             ->with('short-id', m::on(function (QueryParamsDTO $params) use (&$capturedParams) {
                 $capturedParams = $params;
+
                 return true;
             }))
             ->andReturn($this->emptyAttendeePaginator());
@@ -114,7 +117,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
         $this->assertCount(1, $filters->where('field', 'status'));
     }
 
-    public function testLeavesClientSuppliedOccurrenceFilterAloneWhenListIsNotScoped(): void
+    public function test_leaves_client_supplied_occurrence_filter_alone_when_list_is_not_scoped(): void
     {
         // Unscoped ("All occurrences") list — respect the client's optional filter
         // (this is how the filter pill in the check-in UI works).
@@ -126,6 +129,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
             ->once()
             ->with('short-id', m::on(function (QueryParamsDTO $params) use (&$capturedParams) {
                 $capturedParams = $params;
+
                 return true;
             }))
             ->andReturn($this->emptyAttendeePaginator());

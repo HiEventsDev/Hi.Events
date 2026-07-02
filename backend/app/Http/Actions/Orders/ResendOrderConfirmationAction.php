@@ -12,7 +12,6 @@ use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
-use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -25,11 +24,9 @@ class ResendOrderConfirmationAction extends BaseAction
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly Mailer                   $mailer,
-        private readonly MailBuilderService       $mailBuilderService,
-    )
-    {
-    }
+        private readonly Mailer $mailer,
+        private readonly MailBuilderService $mailBuilderService,
+    ) {}
 
     /**
      * @todo - move this to a handler
@@ -56,7 +53,7 @@ class ResendOrderConfirmationAction extends BaseAction
                 OrderDomainObjectAbstract::ID => $orderId,
             ]);
 
-        if (!$order) {
+        if (! $order) {
             return $this->notFoundResponse();
         }
 

@@ -16,9 +16,7 @@ class CreateCheckInListAction extends BaseAction
 {
     public function __construct(
         private readonly CreateCheckInListHandler $checkInListHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(UpsertCheckInListRequest $request, int $eventId): JsonResponse
     {

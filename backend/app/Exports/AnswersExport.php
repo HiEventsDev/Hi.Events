@@ -17,13 +17,12 @@ class AnswersExport implements WithMultipleSheets
 
     public function __construct(
         private readonly QuestionAnswerFormatter $questionAnswerFormatter,
-    )
-    {
-    }
+    ) {}
 
     public function withData(Collection $answers): AnswersExport
     {
         $this->answers = $answers;
+
         return $this;
     }
 
@@ -34,21 +33,21 @@ class AnswersExport implements WithMultipleSheets
         })->sortBy([
             ['title', 'asc'],
             ['order_id', 'asc'],
-            ['attendee_id', 'asc']
+            ['attendee_id', 'asc'],
         ]);
 
         $productAnswers = $this->answers->filter(function (QuestionAndAnswerViewDomainObject $answer) {
             return $answer->getBelongsTo() === QuestionBelongsTo::PRODUCT->name && $answer->getAttendeeId() === null;
         })->sortBy([
             ['title', 'asc'],
-            ['order_id', 'asc']
+            ['order_id', 'asc'],
         ]);
 
         $orderAnswers = $this->answers->filter(function (QuestionAndAnswerViewDomainObject $answer) {
             return $answer->getBelongsTo() === QuestionBelongsTo::ORDER->name;
         })->sortBy([
             ['title', 'asc'],
-            ['order_id', 'asc']
+            ['order_id', 'asc'],
         ]);
 
         return [

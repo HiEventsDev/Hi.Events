@@ -12,10 +12,8 @@ class UpdateOrganizerConfigurationHandler
 {
     public function __construct(
         private readonly OrganizerConfigurationRepositoryInterface $configurationRepository,
-        private readonly OrganizerRepositoryInterface              $organizerRepository,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+    ) {}
 
     public function handle(UpdateOrganizerConfigurationDTO $dto): OrganizerConfigurationDomainObject
     {
@@ -32,7 +30,7 @@ class UpdateOrganizerConfigurationHandler
         // The system default and any backfilled/shared row may be referenced by sibling
         // organizers, so mutating it would silently change their fees too.
         if ($currentConfiguration !== null
-            && !$currentConfiguration->getIsSystemDefault()
+            && ! $currentConfiguration->getIsSystemDefault()
             && $this->isConfigurationDedicatedTo($currentConfiguration->getId(), $organizer->getId())
         ) {
             return $this->configurationRepository->updateFromArray(

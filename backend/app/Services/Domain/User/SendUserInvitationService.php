@@ -19,10 +19,9 @@ class SendUserInvitationService
 
     public function __construct(
         EncryptedPayloadService $encryptedPayloadService,
-        Mailer                  $mailer,
-        Repository              $config,
-    )
-    {
+        Mailer $mailer,
+        Repository $config,
+    ) {
         $this->encryptedPayloadService = $encryptedPayloadService;
         $this->mailer = $mailer;
         $this->config = $config;

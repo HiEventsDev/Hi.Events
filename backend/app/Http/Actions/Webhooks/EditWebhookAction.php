@@ -15,9 +15,7 @@ class EditWebhookAction extends BaseAction
 {
     public function __construct(
         private readonly EditWebhookHandler $editWebhookHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $webhookId, UpsertWebhookRequest $request): JsonResponse
     {

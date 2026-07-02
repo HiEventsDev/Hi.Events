@@ -4,9 +4,9 @@ namespace Tests\Unit\Services\Domain\Payment\Stripe;
 
 use HiEvents\DomainObjects\Generated\OrganizerStripePlatformDomainObjectAbstract;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\StripeAccountSyncService;
 use Illuminate\Config\Repository;
 use Mockery as m;
@@ -17,11 +17,17 @@ use Tests\TestCase;
 class StripeAccountSyncServiceTest extends TestCase
 {
     private StripeAccountSyncService $service;
+
     private LoggerInterface $logger;
+
     private AccountRepositoryInterface $accountRepository;
+
     private OrganizerRepositoryInterface $organizerRepository;
+
     private OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository;
+
     private OrganizerVatSettingRepositoryInterface $vatSettingRepository;
+
     private Repository $config;
 
     protected function setUp(): void
@@ -45,26 +51,26 @@ class StripeAccountSyncServiceTest extends TestCase
         );
     }
 
-    public function testIsStripeAccountCompleteReturnsTrueWhenBothEnabled(): void
+    public function test_is_stripe_account_complete_returns_true_when_both_enabled(): void
     {
-        $stripeAccount = new Account();
+        $stripeAccount = new Account;
         $stripeAccount->charges_enabled = true;
         $stripeAccount->payouts_enabled = true;
 
         $this->assertTrue($this->service->isStripeAccountComplete($stripeAccount));
     }
 
-    public function testIsStripeAccountCompleteReturnsFalseWhenAnythingDisabled(): void
+    public function test_is_stripe_account_complete_returns_false_when_anything_disabled(): void
     {
         foreach ([[false, true], [true, false], [false, false]] as [$charges, $payouts]) {
-            $stripeAccount = new Account();
+            $stripeAccount = new Account;
             $stripeAccount->charges_enabled = $charges;
             $stripeAccount->payouts_enabled = $payouts;
             $this->assertFalse($this->service->isStripeAccountComplete($stripeAccount));
         }
     }
 
-    public function testSyncByAccountIdUpdatesAllOrganizerRowsAndStopsIfIncomplete(): void
+    public function test_sync_by_account_id_updates_all_organizer_rows_and_stops_if_incomplete(): void
     {
         $stripeAccount = Account::constructFrom([
             'id' => 'acct_123',
@@ -86,7 +92,7 @@ class StripeAccountSyncServiceTest extends TestCase
             ->shouldReceive('updateWhere')
             ->once()
             ->with(
-                m::on(fn($attrs) => array_key_exists(OrganizerStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT, $attrs)
+                m::on(fn ($attrs) => array_key_exists(OrganizerStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT, $attrs)
                     && $attrs[OrganizerStripePlatformDomainObjectAbstract::STRIPE_SETUP_COMPLETED_AT] === null),
                 [OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => 'acct_123'],
             )

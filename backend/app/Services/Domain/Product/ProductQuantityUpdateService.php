@@ -19,14 +19,12 @@ use Illuminate\Support\Facades\DB;
 class ProductQuantityUpdateService
 {
     public function __construct(
-        private readonly ProductPriceRepositoryInterface       $productPriceRepository,
-        private readonly ProductRepositoryInterface            $productRepository,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-        private readonly DatabaseManager                       $databaseManager,
-        private readonly EventOccurrenceRepositoryInterface    $occurrenceRepository,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+    ) {}
 
     public function increaseQuantitySold(int $priceId, int $adjustment = 1, ?int $eventOccurrenceId = null): void
     {
@@ -38,7 +36,7 @@ class ProductQuantityUpdateService
             });
 
             $this->productPriceRepository->updateWhere([
-                'quantity_sold' => DB::raw('quantity_sold + ' . $adjustment),
+                'quantity_sold' => DB::raw('quantity_sold + '.$adjustment),
             ], [
                 'id' => $priceId,
             ]);
@@ -59,7 +57,7 @@ class ProductQuantityUpdateService
             });
 
             $this->productPriceRepository->updateWhere([
-                'quantity_sold' => DB::raw('GREATEST(0, quantity_sold - ' . $adjustment . ')'),
+                'quantity_sold' => DB::raw('GREATEST(0, quantity_sold - '.$adjustment.')'),
             ], [
                 'id' => $priceId,
             ]);
@@ -84,10 +82,6 @@ class ProductQuantityUpdateService
         });
     }
 
-    /**
-     * @param OrderDomainObject $order
-     * @return void
-     */
     private function updateProductQuantities(OrderDomainObject $order): void
     {
         /** @var OrderItemDomainObject $orderItem */
@@ -103,7 +97,7 @@ class ProductQuantityUpdateService
     private function increaseCapacityAssignmentUsedCapacity(int $capacityAssignmentId, int $adjustment = 1): void
     {
         $this->capacityAssignmentRepository->updateWhere([
-            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw(CapacityAssignmentDomainObjectAbstract::USED_CAPACITY . ' + ' . $adjustment),
+            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw(CapacityAssignmentDomainObjectAbstract::USED_CAPACITY.' + '.$adjustment),
         ], [
             'id' => $capacityAssignmentId,
         ]);
@@ -112,7 +106,7 @@ class ProductQuantityUpdateService
     private function decreaseCapacityAssignmentUsedCapacity(int $capacityAssignmentId, int $adjustment = 1): void
     {
         $this->capacityAssignmentRepository->updateWhere([
-            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw('GREATEST(0, ' . CapacityAssignmentDomainObjectAbstract::USED_CAPACITY . ' - ' . $adjustment . ')'),
+            CapacityAssignmentDomainObjectAbstract::USED_CAPACITY => DB::raw('GREATEST(0, '.CapacityAssignmentDomainObjectAbstract::USED_CAPACITY.' - '.$adjustment.')'),
         ], [
             'id' => $capacityAssignmentId,
         ]);
@@ -121,7 +115,7 @@ class ProductQuantityUpdateService
     private function increaseOccurrenceUsedCapacity(int $occurrenceId, int $adjustment): void
     {
         $this->occurrenceRepository->updateWhere([
-            'used_capacity' => DB::raw('used_capacity + ' . $adjustment),
+            'used_capacity' => DB::raw('used_capacity + '.$adjustment),
         ], [
             'id' => $occurrenceId,
         ]);
@@ -144,7 +138,7 @@ class ProductQuantityUpdateService
     private function decreaseOccurrenceUsedCapacity(int $occurrenceId, int $adjustment): void
     {
         $this->occurrenceRepository->updateWhere([
-            'used_capacity' => DB::raw('GREATEST(0, used_capacity - ' . $adjustment . ')'),
+            'used_capacity' => DB::raw('GREATEST(0, used_capacity - '.$adjustment.')'),
         ], [
             'id' => $occurrenceId,
         ]);
@@ -165,7 +159,6 @@ class ProductQuantityUpdateService
     }
 
     /**
-     * @param int $priceId
      * @return Collection<CapacityAssignmentDomainObject>
      */
     private function getCapacityAssignments(int $priceId): Collection

@@ -17,9 +17,7 @@ class UpdateAffiliateAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateAffiliateHandler $updateAffiliateHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(UpdateAffiliateRequest $request, int $eventId, int $affiliateId): JsonResponse
     {

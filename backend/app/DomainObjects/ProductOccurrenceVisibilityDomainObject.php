@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class ProductOccurrenceVisibilityDomainObject extends Generated\ProductOccurrenceVisibilityDomainObjectAbstract
-{
-}
+class ProductOccurrenceVisibilityDomainObject extends Generated\ProductOccurrenceVisibilityDomainObjectAbstract {}

@@ -12,9 +12,7 @@ class GetPublicOrganizerHandler
 {
     public function __construct(
         private readonly OrganizerRepositoryInterface $organizerRepository
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $organizerId)
     {

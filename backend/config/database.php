@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Str;
+use Pdo\Mysql;
 
 $url = env('DATABASE_URL') ? parse_url(env('DATABASE_URL')) : [];
 
-$db =  [
+$db = [
 
     /*
     |--------------------------------------------------------------------------
@@ -61,7 +62,7 @@ $db =  [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+                (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

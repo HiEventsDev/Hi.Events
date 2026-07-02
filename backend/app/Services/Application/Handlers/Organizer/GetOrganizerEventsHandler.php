@@ -17,9 +17,7 @@ class GetOrganizerEventsHandler
 {
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetOrganizerEventsDTO $dto): LengthAwarePaginator
     {

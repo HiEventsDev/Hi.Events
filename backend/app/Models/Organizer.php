@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organizer extends BaseModel
 {
-    use SoftDeletes;
     use HasImages;
+    use SoftDeletes;
 
     public function events(): HasMany
     {

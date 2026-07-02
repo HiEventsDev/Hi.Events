@@ -15,8 +15,7 @@ class EmailTemplateService
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly LiquidTemplateRenderer $liquidRenderer,
         private readonly EmailTokenContextBuilder $tokenBuilder
-    ) {
-    }
+    ) {}
 
     public function getTemplateByType(
         EmailTemplateType $type,
@@ -68,7 +67,7 @@ class EmailTemplateService
         $defaults = $this->getDefaultTemplates();
         $ctaDefaults = $this->getDefaultCTAs();
 
-        $template = $defaults[$type->value] ?? throw new ResourceNotFoundException('No default template for type ' . $type->value);
+        $template = $defaults[$type->value] ?? throw new ResourceNotFoundException('No default template for type '.$type->value);
 
         $template['cta'] = $ctaDefaults[$type->value] ?? null;
 
@@ -131,7 +130,7 @@ class EmailTemplateService
         $value = $array;
 
         foreach ($keys as $k) {
-            if (!isset($value[$k])) {
+            if (! isset($value[$k])) {
                 return null;
             }
             $value = $value[$k];

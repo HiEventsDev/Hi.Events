@@ -19,8 +19,8 @@ use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
-use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
@@ -29,27 +29,24 @@ use Throwable;
 class CreateOrderHandler
 {
     public function __construct(
-        private readonly EventRepositoryInterface               $eventRepository,
-        private readonly PromoCodeRepositoryInterface           $promoCodeRepository,
-        private readonly PromoCodeUsageValidationService        $promoCodeUsageValidationService,
-        private readonly AffiliateRepositoryInterface           $affiliateRepository,
-        private readonly OrderManagementService                 $orderManagementService,
-        private readonly OrderItemProcessingService             $orderItemProcessingService,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly PromoCodeUsageValidationService $promoCodeUsageValidationService,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly OrderManagementService $orderManagementService,
+        private readonly OrderItemProcessingService $orderItemProcessingService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
-        private readonly DatabaseManager                        $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(
-        int                  $eventId,
+        int $eventId,
         CreateOrderPublicDTO $createOrderPublicDTO,
-        bool                 $deleteExistingOrdersForSession = true
-    ): OrderDomainObject
-    {
+        bool $deleteExistingOrdersForSession = true
+    ): OrderDomainObject {
         return $this->databaseManager->transaction(function () use ($eventId, $createOrderPublicDTO, $deleteExistingOrdersForSession) {
             $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$eventId]);
 
@@ -101,7 +98,7 @@ class CreateOrderHandler
             PromoCodeDomainObjectAbstract::EVENT_ID => $eventId,
         ]);
 
-        if (!$this->promoCodeUsageValidationService->isPromoCodeUsable($promoCode)) {
+        if (! $this->promoCodeUsageValidationService->isPromoCodeUsable($promoCode)) {
             return null;
         }
 
@@ -123,7 +120,7 @@ class CreateOrderHandler
 
     public function validateEventStatus(EventDomainObject $event, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
-        if (!$createOrderPublicDTO->is_user_authenticated && $event->getStatus() !== EventStatus::LIVE->name) {
+        if (! $createOrderPublicDTO->is_user_authenticated && $event->getStatus() !== EventStatus::LIVE->name) {
             throw new UnauthorizedException(
                 __('This event is not live.')
             );
@@ -136,7 +133,7 @@ class CreateOrderHandler
     private function validateProductAvailability(int $eventId, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
         $productsByOccurrence = $createOrderPublicDTO->products->groupBy(
-            fn(DTO\ProductOrderDetailsDTO $p) => $p->event_occurrence_id
+            fn (DTO\ProductOrderDetailsDTO $p) => $p->event_occurrence_id
         );
 
         foreach ($productsByOccurrence as $occurrenceId => $products) {

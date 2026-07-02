@@ -25,14 +25,12 @@ use Throwable;
 class EditAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly ProductRepositoryInterface   $productRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly ProductQuantityUpdateService $productQuantityService,
-        private readonly DatabaseManager              $databaseManager,
+        private readonly DatabaseManager $databaseManager,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -97,8 +95,7 @@ class EditAttendeeHandler
     private function validateProductId(
         EditAttendeeDTO $editAttendeeDTO,
         AttendeeDomainObject $attendee,
-    ): void
-    {
+    ): void {
         /** @var ProductDomainObject $product */
         $product = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
@@ -112,8 +109,8 @@ class EditAttendeeHandler
             ]);
         }
 
-        $productPriceIds = $product->getProductPrices()->map(fn($productPrice) => $productPrice->getId())->toArray();
-        if (!in_array($editAttendeeDTO->product_price_id, $productPriceIds, true)) {
+        $productPriceIds = $product->getProductPrices()->map(fn ($productPrice) => $productPrice->getId())->toArray();
+        if (! in_array($editAttendeeDTO->product_price_id, $productPriceIds, true)) {
             throw ValidationException::withMessages([
                 'product_price_id' => __('Product price ID is not valid'),
             ]);

@@ -22,8 +22,7 @@ class MailBuilderService
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService,
         private readonly EmailTokenContextBuilder $tokenContextBuilder,
-    ) {
-    }
+    ) {}
 
     public function buildAttendeeTicketMail(
         AttendeeDomainObject $attendee,
@@ -95,7 +94,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 
@@ -125,7 +124,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 
@@ -183,7 +182,7 @@ class MailBuilderService
             organizerId: $organizer->getId()
         );
 
-        if (!$template) {
+        if (! $template) {
             return null;
         }
 

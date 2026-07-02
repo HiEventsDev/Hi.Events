@@ -32,17 +32,19 @@ class SeedDevDashboardDataCommand extends Command
 
     public function handle(): int
     {
-        if (app()->environment('production') && !$this->option('force')) {
+        if (app()->environment('production') && ! $this->option('force')) {
             $this->error('Refusing to run in production. Pass --force to override.');
+
             return self::FAILURE;
         }
 
-        $eventId = (int)$this->argument('eventId');
-        $days = (int)$this->option('days');
+        $eventId = (int) $this->argument('eventId');
+        $days = (int) $this->option('days');
 
         $event = DB::table('events')->where('id', $eventId)->first();
         if ($event === null) {
             $this->error("Event {$eventId} not found.");
+
             return self::FAILURE;
         }
 
@@ -53,6 +55,7 @@ class SeedDevDashboardDataCommand extends Command
 
         if ($occurrence === null) {
             $this->error("Event {$eventId} has no event_occurrence rows. Cannot seed daily statistics.");
+
             return self::FAILURE;
         }
 
@@ -101,7 +104,7 @@ class SeedDevDashboardDataCommand extends Command
 
                     $isCancelled = random_int(1, 100) <= 8;
                     $refundedAmount = 0.0;
-                    if (!$isCancelled && random_int(1, 100) <= 6) {
+                    if (! $isCancelled && random_int(1, 100) <= 6) {
                         $refundedAmount = $gross;
                     }
 
@@ -118,7 +121,7 @@ class SeedDevDashboardDataCommand extends Command
                         'currency' => $event->currency,
                         'first_name' => $this->randomChoice(self::FIRST_NAMES),
                         'last_name' => $this->randomChoice(self::LAST_NAMES),
-                        'email' => 'seed' . random_int(1000, 9999) . '@example.com',
+                        'email' => 'seed'.random_int(1000, 9999).'@example.com',
                         'status' => $status,
                         'payment_status' => $paymentStatus,
                         'refund_status' => $refundStatus,
@@ -137,6 +140,7 @@ class SeedDevDashboardDataCommand extends Command
 
                     if ($isCancelled) {
                         $dayOrdersCancelled++;
+
                         continue;
                     }
 
@@ -208,7 +212,7 @@ class SeedDevDashboardDataCommand extends Command
                     'products_sold' => $aggregateProducts,
                     'attendees_registered' => $aggregateAttendees,
                     'total_views' => $aggregateViews,
-                    'unique_views' => (int)round($aggregateViews * 0.65),
+                    'unique_views' => (int) round($aggregateViews * 0.65),
                     'updated_at' => now(),
                 ]);
 
@@ -219,16 +223,17 @@ class SeedDevDashboardDataCommand extends Command
                     ['Orders (cancelled)', $aggregateCancelled],
                     ['Products sold', $aggregateProducts],
                     ['Attendees', $aggregateAttendees],
-                    ['Gross sales', number_format($aggregateGross, 2) . ' ' . $event->currency],
-                    ['Tax', number_format($aggregateTax, 2) . ' ' . $event->currency],
-                    ['Fees', number_format($aggregateFee, 2) . ' ' . $event->currency],
-                    ['Refunded', number_format($aggregateRefunded, 2) . ' ' . $event->currency],
+                    ['Gross sales', number_format($aggregateGross, 2).' '.$event->currency],
+                    ['Tax', number_format($aggregateTax, 2).' '.$event->currency],
+                    ['Fees', number_format($aggregateFee, 2).' '.$event->currency],
+                    ['Refunded', number_format($aggregateRefunded, 2).' '.$event->currency],
                     ['Page views', $aggregateViews],
                 ],
             );
         });
 
         $this->info('Done.');
+
         return self::SUCCESS;
     }
 
@@ -247,11 +252,12 @@ class SeedDevDashboardDataCommand extends Command
         $base = $isWeekend ? random_int(4, 12) : random_int(1, 7);
 
         if ($daysAgo > 30) {
-            $base = (int)round($base * 0.6);
+            $base = (int) round($base * 0.6);
         }
         if (random_int(1, 100) <= 4) {
             $base += random_int(8, 20);
         }
+
         return max(0, $base);
     }
 

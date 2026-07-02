@@ -31,7 +31,7 @@ class GetAdminDashboardDataHandler
 
     private function getPopularEvents(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 e.id,
                 e.title,
@@ -66,7 +66,7 @@ class GetAdminDashboardDataHandler
 
     private function getMostViewedEvents(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 e.id,
                 e.title,
@@ -99,7 +99,7 @@ class GetAdminDashboardDataHandler
 
     private function getTopOrganizers(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 o.id,
                 o.name,
@@ -127,7 +127,7 @@ class GetAdminDashboardDataHandler
     {
         // stripe_connect_setup_complete is computed from organizer_stripe_platforms —
         // any organizer in the account with completed setup counts as connected.
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 a.id,
                 a.name,
@@ -161,7 +161,7 @@ class GetAdminDashboardDataHandler
 
     private function getRecentRevenue(Carbon $since): float
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COALESCE(SUM(es.sales_total_gross), 0) as total_revenue
             FROM event_statistics es
             WHERE es.updated_at >= :since
@@ -170,12 +170,12 @@ class GetAdminDashboardDataHandler
 
         $result = DB::selectOne($query, ['since' => $since]);
 
-        return (float)($result->total_revenue ?? 0);
+        return (float) ($result->total_revenue ?? 0);
     }
 
     private function getRecentOrdersCount(Carbon $since): int
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COUNT(*) as count
             FROM orders o
             WHERE o.created_at >= :since
@@ -190,12 +190,12 @@ class GetAdminDashboardDataHandler
             'paymentStatusPaid' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
         ]);
 
-        return (int)($result->count ?? 0);
+        return (int) ($result->count ?? 0);
     }
 
     private function getRecentOrdersTotal(Carbon $since): float
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COALESCE(SUM(o.total_gross), 0) as total
             FROM orders o
             WHERE o.created_at >= :since
@@ -210,12 +210,12 @@ class GetAdminDashboardDataHandler
             'paymentStatusPaid' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
         ]);
 
-        return (float)($result->total ?? 0);
+        return (float) ($result->total ?? 0);
     }
 
     private function getRecentSignupsCount(Carbon $since): int
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COUNT(*) as count
             FROM accounts a
             WHERE a.created_at >= :since
@@ -224,6 +224,6 @@ class GetAdminDashboardDataHandler
 
         $result = DB::selectOne($query, ['since' => $since]);
 
-        return (int)($result->count ?? 0);
+        return (int) ($result->count ?? 0);
     }
 }

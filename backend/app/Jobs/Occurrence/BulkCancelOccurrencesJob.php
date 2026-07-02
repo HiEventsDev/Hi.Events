@@ -90,7 +90,7 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                 ));
 
                 $cancelledStartDates[] = $cancelledStartDate;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $failedIds[] = $occurrenceId;
                 Log::error('Failed to cancel occurrence', [
                     'event_id' => $this->eventId,

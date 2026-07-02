@@ -14,11 +14,9 @@ class DispatchOccurrenceWebhookJob
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int             $occurrenceId,
+        public int $occurrenceId,
         public DomainEventType $eventType,
-    )
-    {
-    }
+    ) {}
 
     public function handle(WebhookDispatchService $webhookDispatchService): void
     {

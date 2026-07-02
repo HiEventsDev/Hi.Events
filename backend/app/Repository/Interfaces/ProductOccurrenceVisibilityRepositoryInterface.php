@@ -7,6 +7,4 @@ use HiEvents\DomainObjects\ProductOccurrenceVisibilityDomainObject;
 /**
  * @extends RepositoryInterface<ProductOccurrenceVisibilityDomainObject>
  */
-interface ProductOccurrenceVisibilityRepositoryInterface extends RepositoryInterface
-{
-}
+interface ProductOccurrenceVisibilityRepositoryInterface extends RepositoryInterface {}

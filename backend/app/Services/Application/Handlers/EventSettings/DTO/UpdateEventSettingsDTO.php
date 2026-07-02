@@ -70,7 +70,7 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly bool $show_marketing_opt_in = true,
 
         // Attendee detail copy control
-        public readonly bool                    $allow_copy_details_to_all_attendees = true,
+        public readonly bool $allow_copy_details_to_all_attendees = true,
 
         // Platform fee settings
         public readonly bool $pass_platform_fee_to_buyer = false,

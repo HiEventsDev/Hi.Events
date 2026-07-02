@@ -15,8 +15,7 @@ class VatRateDeterminationService
 
     public function __construct(
         private readonly Repository $config,
-    )
-    {
+    ) {
         $this->defaultVatRate = $this->config->get('app.tax.default_vat_rate', 0.23);
         $this->defaultVatCountry = $this->config->get('app.tax.default_vat_country', CountryCode::IE->value);
     }
@@ -30,7 +29,7 @@ class VatRateDeterminationService
             return $this->defaultVatRate;
         }
 
-        $hasVatNumber = !empty($vatSetting->getVatNumber());
+        $hasVatNumber = ! empty($vatSetting->getVatNumber());
         $validated = $vatSetting->getVatValidated();
 
         // Try to determine if EU country, default to charging VAT if invalid country code
@@ -46,7 +45,7 @@ class VatRateDeterminationService
         }
 
         // 2. If outside EU → No VAT
-        if (!$isEu) {
+        if (! $isEu) {
             return 0.0;
         }
 

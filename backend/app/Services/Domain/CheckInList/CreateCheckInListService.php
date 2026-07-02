@@ -15,14 +15,12 @@ use Illuminate\Database\DatabaseManager;
 class CreateCheckInListService
 {
     public function __construct(
-        private readonly CheckInListRepositoryInterface       $checkInListRepository,
-        private readonly EventProductValidationService        $eventProductValidationService,
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly EventRepositoryInterface            $eventRepository,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException

@@ -30,7 +30,7 @@ class ProductCategoryRepository extends BaseRepository implements ProductCategor
             ->with(['products']);
 
         // Apply filters from QueryParamsDTO, if needed
-        if (!empty($queryParamsDTO->filter_fields)) {
+        if (! empty($queryParamsDTO->filter_fields)) {
             foreach ($queryParamsDTO->filter_fields as $filter) {
                 $query->where($filter->field, $filter->operator ?? '=', $filter->value);
             }

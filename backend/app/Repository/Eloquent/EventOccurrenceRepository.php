@@ -42,7 +42,7 @@ class EventOccurrenceRepository extends BaseRepository implements EventOccurrenc
             direction: $this->validateSortDirection($params->sort_direction, EventOccurrenceDomainObject::class),
         );
 
-        if (!empty($params->filter_fields)) {
+        if (! empty($params->filter_fields)) {
             $this->applyFilterFields($params, EventOccurrenceDomainObject::getAllowedFilterFields());
 
             $timePeriod = $params->filter_fields->firstWhere('field', 'time_period');

@@ -25,15 +25,13 @@ use Illuminate\Database\DatabaseManager;
 class TransitionOrderToOfflinePaymentHandler
 {
     public function __construct(
-        private readonly ProductQuantityUpdateService     $productQuantityUpdateService,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly DatabaseManager                  $databaseManager,
+        private readonly ProductQuantityUpdateService $productQuantityUpdateService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly DomainEventDispatcherService     $domainEventDispatcherService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
     {
@@ -48,7 +46,7 @@ class TransitionOrderToOfflinePaymentHandler
             }
 
             if ($order->getSessionId() === null
-                || !$this->sessionManagementService->verifySession($order->getSessionId())) {
+                || ! $this->sessionManagementService->verifySession($order->getSessionId())) {
                 throw new UnauthorizedException(
                     __('Sorry, we could not verify your session. Please restart your order.')
                 );
@@ -100,11 +98,10 @@ class TransitionOrderToOfflinePaymentHandler
      * @throws ResourceConflictException
      */
     public function validateOfflinePayment(
-        OrderDomainObject        $order,
+        OrderDomainObject $order,
         EventSettingDomainObject $settings,
-    ): void
-    {
-        if (!$order->isOrderReserved()) {
+    ): void {
+        if (! $order->isOrderReserved()) {
             throw new ResourceConflictException(__('Order is not in the correct status to transition to offline payment'));
         }
 

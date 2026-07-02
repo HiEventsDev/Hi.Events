@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Application\Handlers\EventOccurrence\PriceOverride
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\ProductPriceOccurrenceOverrideDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\PriceOverride\GetPriceOverridesHandler;
@@ -77,7 +78,7 @@ class GetPriceOverridesHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn(null);
 
-        $this->expectException(\HiEvents\Exceptions\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $this->handler->handle(1, 999);
     }

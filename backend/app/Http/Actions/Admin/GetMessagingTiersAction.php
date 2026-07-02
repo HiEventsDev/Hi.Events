@@ -14,8 +14,7 @@ class GetMessagingTiersAction extends BaseAction
 {
     public function __construct(
         private readonly AccountMessagingTierRepositoryInterface $messagingTierRepository,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): JsonResponse
     {

@@ -27,7 +27,7 @@ class CapacityAssignmentResource extends BaseResource
             $this->mergeWhen(
                 condition: $this->getProducts() !== null && $this->getAppliesTo() === CapacityAssignmentAppliesTo::PRODUCTS->name,
                 value: [
-                    'products' => $this->getProducts()?->map(fn(ProductDomainObject $product) => [
+                    'products' => $this->getProducts()?->map(fn (ProductDomainObject $product) => [
                         'id' => $product->getId(),
                         'title' => $product->getTitle(),
                     ]),

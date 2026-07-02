@@ -6,6 +6,4 @@ namespace HiEvents\Http\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-abstract class BaseRequest extends FormRequest
-{
-}
+abstract class BaseRequest extends FormRequest {}

@@ -13,9 +13,7 @@ use Throwable;
 
 class DuplicateEventAction extends BaseAction
 {
-    public function __construct(private readonly DuplicateEventHandler $handler)
-    {
-    }
+    public function __construct(private readonly DuplicateEventHandler $handler) {}
 
     /**
      * @throws Throwable

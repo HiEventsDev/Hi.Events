@@ -23,9 +23,13 @@ use Tests\TestCase;
 class CopyStripeConnectAccountHandlerTest extends TestCase
 {
     private OrganizerRepositoryInterface $organizerRepository;
+
     private OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository;
+
     private StripeAccountSyncService $stripeAccountSyncService;
+
     private DatabaseManager $databaseManager;
+
     private Repository $config;
 
     protected function setUp(): void
@@ -46,15 +50,15 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCopiesConnectionWhenSaasModeEnabledAndSourceComplete(): void
+    public function test_copies_connection_when_saas_mode_enabled_and_source_complete(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnTrue();
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
-            ->andReturnUsing(fn(Closure $closure) => $closure());
+            ->andReturnUsing(fn (Closure $closure) => $closure());
 
-        $sourcePlatform = (new OrganizerStripePlatformDomainObject())
+        $sourcePlatform = (new OrganizerStripePlatformDomainObject)
             ->setId(11)
             ->setOrganizerId(2)
             ->setStripeAccountId('acct_source')
@@ -63,13 +67,13 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
             ->setStripeSetupCompletedAt('2026-01-01 00:00:00')
             ->setStripeAccountDetails(['country' => 'CA']);
 
-        $source = (new OrganizerDomainObject())
+        $source = (new OrganizerDomainObject)
             ->setId(2)
             ->setAccountId(99)
             ->setName('Source');
         $source->setOrganizerStripePlatforms(collect([$sourcePlatform]));
 
-        $target = (new OrganizerDomainObject())
+        $target = (new OrganizerDomainObject)
             ->setId(1)
             ->setAccountId(99)
             ->setName('Target');
@@ -107,7 +111,7 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
         $this->assertTrue($response->isConnectSetupComplete);
     }
 
-    public function testThrowsWhenSaasModeDisabled(): void
+    public function test_throws_when_saas_mode_disabled(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnFalse();
 
@@ -120,19 +124,19 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
         ));
     }
 
-    public function testThrowsWhenSourceHasNoCompletedSetup(): void
+    public function test_throws_when_source_has_no_completed_setup(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnTrue();
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
-            ->andReturnUsing(fn(Closure $closure) => $closure());
+            ->andReturnUsing(fn (Closure $closure) => $closure());
 
-        $source = (new OrganizerDomainObject())->setId(2)->setAccountId(99)->setName('Source');
-        $source->setOrganizerStripePlatforms(new Collection());
+        $source = (new OrganizerDomainObject)->setId(2)->setAccountId(99)->setName('Source');
+        $source->setOrganizerStripePlatforms(new Collection);
 
-        $target = (new OrganizerDomainObject())->setId(1)->setAccountId(99)->setName('Target');
-        $target->setOrganizerStripePlatforms(new Collection());
+        $target = (new OrganizerDomainObject)->setId(1)->setAccountId(99)->setName('Target');
+        $target->setOrganizerStripePlatforms(new Collection);
 
         $this->organizerRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->organizerRepository
@@ -153,13 +157,13 @@ class CopyStripeConnectAccountHandlerTest extends TestCase
         ));
     }
 
-    public function testThrowsWhenTargetOrganizerNotFound(): void
+    public function test_throws_when_target_organizer_not_found(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnTrue();
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
-            ->andReturnUsing(fn(Closure $closure) => $closure());
+            ->andReturnUsing(fn (Closure $closure) => $closure());
 
         $this->organizerRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->organizerRepository

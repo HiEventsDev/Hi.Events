@@ -10,10 +10,8 @@ readonly class DeletePromoCodeHandler
 {
     public function __construct(
         private PromoCodeRepositoryInterface $promoCodeRepository,
-        private LoggerInterface              $logger,
-    )
-    {
-    }
+        private LoggerInterface $logger,
+    ) {}
 
     public function handle(DeletePromoCodeDTO $data): void
     {

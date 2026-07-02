@@ -21,12 +21,10 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class ExportOrdersAction extends BaseAction
 {
     public function __construct(
-        private readonly OrderRepositoryInterface    $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly QuestionRepositoryInterface $questionRepository,
-        private readonly OrdersExport                $export
-    )
-    {
-    }
+        private readonly OrdersExport $export
+    ) {}
 
     public function __invoke(Request $request, int $eventId): BinaryFileResponse
     {

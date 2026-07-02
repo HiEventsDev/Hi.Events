@@ -8,14 +8,17 @@ use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Domain\Email\EmailTemplateService;
 use HiEvents\Services\Domain\Email\EmailTokenContextBuilder;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
-use Tests\TestCase;
 use Mockery;
+use Tests\TestCase;
 
 class EmailTemplateServiceTest extends TestCase
 {
     private EmailTemplateService $emailTemplateService;
+
     private EmailTemplateRepositoryInterface $mockRepository;
+
     private LiquidTemplateRenderer $mockLiquidRenderer;
+
     private EmailTokenContextBuilder $mockTokenBuilder;
 
     protected function setUp(): void

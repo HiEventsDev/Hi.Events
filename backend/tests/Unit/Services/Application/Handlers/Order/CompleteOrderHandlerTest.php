@@ -5,8 +5,8 @@ namespace Tests\Unit\Services\Application\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -44,15 +44,25 @@ use Tests\TestCase;
 class CompleteOrderHandlerTest extends TestCase
 {
     private OrderRepositoryInterface|MockInterface $orderRepository;
+
     private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
+
     private QuestionAnswerRepositoryInterface|MockInterface $questionAnswersRepository;
+
     private ProductQuantityUpdateService|MockInterface $productQuantityUpdateService;
+
     private ProductPriceRepositoryInterface|MockInterface $productPriceRepository;
+
     private CompleteOrderHandler $completeOrderHandler;
+
     private DomainEventDispatcherService $domainEventDispatcherService;
+
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
+
     private EventSettingsRepositoryInterface $eventSettingsRepository;
+
     private CheckoutSessionManagementService|MockInterface $sessionManagementService;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
     protected function setUp(): void
@@ -61,7 +71,7 @@ class CompleteOrderHandlerTest extends TestCase
         Queue::fake();
         Mail::fake();
         Bus::fake();
-        DB::shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback(Mockery::mock(Connection::class)));
+        DB::shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback(Mockery::mock(Connection::class)));
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
@@ -76,7 +86,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
             collect([
-                (new EventOccurrenceDomainObject())
+                (new EventOccurrenceDomainObject)
                     ->setId(1)
                     ->setStatus(EventOccurrenceStatus::ACTIVE->name)
                     ->setStartDate(Carbon::now()->addDay()->toDateTimeString()),
@@ -103,7 +113,7 @@ class CompleteOrderHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testHandleSuccessfullyCompletesOrder(): void
+    public function test_handle_successfully_completes_order(): void
     {
         $orderShortId = 'ABC123';
         $orderData = $this->createMockCompleteOrderDTO();
@@ -129,7 +139,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testHandleThrowsResourceNotFoundExceptionWhenOrderNotFound(): void
+    public function test_handle_throws_resource_not_found_exception_when_order_not_found(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 
@@ -143,7 +153,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleThrowsResourceConflictExceptionWhenOrderAlreadyProcessed(): void
+    public function test_handle_throws_resource_conflict_exception_when_order_already_processed(): void
     {
         $this->expectException(ResourceConflictException::class);
         $this->expectExceptionMessage('This order has already been processed');
@@ -162,7 +172,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleThrowsResourceConflictExceptionWhenOrderExpired(): void
+    public function test_handle_throws_resource_conflict_exception_when_order_expired(): void
     {
         $this->expectException(ResourceConflictException::class);
 
@@ -180,7 +190,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleUpdatesProductQuantitiesForFreeOrder(): void
+    public function test_handle_updates_product_quantities_for_free_order(): void
     {
         Event::fake();
 
@@ -215,7 +225,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->assertSame($order->getStatus(), OrderStatus::COMPLETED->name);
     }
 
-    public function testHandleDoesNotUpdateProductQuantitiesForPaidOrder(): void
+    public function test_handle_does_not_update_product_quantities_for_paid_order(): void
     {
         $orderShortId = 'ABC123';
         $orderData = $this->createMockCompleteOrderDTO();
@@ -242,7 +252,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-    public function testHandleThrowsExceptionWhenAttendeeInsertFails(): void
+    public function test_handle_throws_exception_when_attendee_insert_fails(): void
     {
         $this->expectException(Exception::class);
 
@@ -263,7 +273,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testExceptionIsThrowWhenAttendeeCountDoesNotMatchOrderItemsCount(): void
+    public function test_exception_is_throw_when_attendee_count_does_not_match_order_items_count(): void
     {
         $this->expectException(ResourceConflictException::class);
         $this->expectExceptionMessage('The number of attendees does not match the number of tickets in the order');
@@ -283,12 +293,12 @@ class CompleteOrderHandlerTest extends TestCase
         $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
-        $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection());
+        $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection);
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleThrowsResourceConflictExceptionWhenOccurrenceIsCancelled(): void
+    public function test_handle_throws_resource_conflict_exception_when_occurrence_is_cancelled(): void
     {
         $this->expectException(ResourceConflictException::class);
         $this->expectExceptionMessage('This event date has been cancelled');
@@ -302,13 +312,13 @@ class CompleteOrderHandlerTest extends TestCase
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
 
         $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
-            collect([(new EventOccurrenceDomainObject())->setId(1)->setStatus(EventOccurrenceStatus::CANCELLED->name)])
+            collect([(new EventOccurrenceDomainObject)->setId(1)->setStatus(EventOccurrenceStatus::CANCELLED->name)])
         );
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
-    public function testHandleThrowsResourceConflictExceptionWhenOccurrenceHasEnded(): void
+    public function test_handle_throws_resource_conflict_exception_when_occurrence_has_ended(): void
     {
         // Reservation could have been created before the occurrence ended
         // (especially with long reservation windows). Re-checking on completion
@@ -327,7 +337,7 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findWhereIn')->andReturn(
             collect([
-                (new EventOccurrenceDomainObject())
+                (new EventOccurrenceDomainObject)
                     ->setId(1)
                     ->setStatus(EventOccurrenceStatus::ACTIVE->name)
                     ->setStartDate(Carbon::now()->subDay()->toDateTimeString()),
@@ -355,14 +365,13 @@ class CompleteOrderHandlerTest extends TestCase
 
         return new CompleteOrderDTO(
             order: $orderDTO,
-            products: new Collection([$attendeeDTO])
-            , event_id: 1
+            products: new Collection([$attendeeDTO]), event_id: 1
         );
     }
 
     private function createMockOrder(OrderStatus $status = OrderStatus::RESERVED): OrderDomainObject|MockInterface
     {
-        return (new OrderDomainObject())
+        return (new OrderDomainObject)
             ->setEmail(null)
             ->setSessionId('test-session-id')
             ->setReservedUntil(Carbon::now()->addHour()->toDateTimeString())
@@ -372,13 +381,13 @@ class CompleteOrderHandlerTest extends TestCase
             ->setLocale('en')
             ->setTotalGross(10)
             ->setOrderItems(new Collection([
-                $this->createMockOrderItem()
+                $this->createMockOrderItem(),
             ]));
     }
 
     private function createMockOrderItem(): OrderItemDomainObject|MockInterface
     {
-        return (new OrderItemDomainObject())
+        return (new OrderItemDomainObject)
             ->setId(1)
             ->setProductId(1)
             ->setQuantity(1)
@@ -393,6 +402,7 @@ class CompleteOrderHandlerTest extends TestCase
         $productPrice = Mockery::mock(ProductPriceDomainObject::class);
         $productPrice->shouldReceive('getId')->andReturn(1);
         $productPrice->shouldReceive('getProductId')->andReturn(1);
+
         return $productPrice;
     }
 
@@ -401,12 +411,13 @@ class CompleteOrderHandlerTest extends TestCase
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(1);
         $attendee->shouldReceive('getProductId')->andReturn(1);
+
         return $attendee;
     }
 
     private function createMockEventSetting(): EventSettingDomainObject
     {
-        return (new EventSettingDomainObject())
+        return (new EventSettingDomainObject)
             ->setId(1)
             ->setEventId(1);
     }

@@ -36,17 +36,15 @@ use Throwable;
 readonly class CreatePaymentIntentHandler
 {
     public function __construct(
-        private OrderRepositoryInterface           $orderRepository,
+        private OrderRepositoryInterface $orderRepository,
         private StripePaymentIntentCreationService $stripePaymentService,
-        private CheckoutSessionManagementService   $sessionIdentifierService,
-        private StripePaymentsRepositoryInterface  $stripePaymentsRepository,
-        private AccountRepositoryInterface         $accountRepository,
-        private OrganizerRepositoryInterface       $organizerRepository,
-        private StripeClientFactory                $stripeClientFactory,
-        private StripeConfigurationService         $stripeConfigurationService,
-    )
-    {
-    }
+        private CheckoutSessionManagementService $sessionIdentifierService,
+        private StripePaymentsRepositoryInterface $stripePaymentsRepository,
+        private AccountRepositoryInterface $accountRepository,
+        private OrganizerRepositoryInterface $organizerRepository,
+        private StripeClientFactory $stripeClientFactory,
+        private StripeConfigurationService $stripeConfigurationService,
+    ) {}
 
     /**
      * @throws CreatePaymentIntentFailedException
@@ -65,7 +63,7 @@ readonly class CreatePaymentIntentHandler
             ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
             ->findByShortId($orderShortId);
 
-        if (!$order || !$this->sessionIdentifierService->verifySession($order->getSessionId())) {
+        if (! $order || ! $this->sessionIdentifierService->verifySession($order->getSessionId())) {
             throw new UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
         }
 
@@ -114,7 +112,7 @@ readonly class CreatePaymentIntentHandler
         $description = __(':item_count item(s) for event: :event_name (Order :order_short_id)', [
             'event_name' => Str::limit($order->getEvent()?->getTitle() ?? __('Event'), 75),
             'order_short_id' => $orderShortId,
-            'item_count' => $order->getOrderItems()->sum(fn(OrderItemDomainObject $item) => $item->getQuantity()),
+            'item_count' => $order->getOrderItems()->sum(fn (OrderItemDomainObject $item) => $item->getQuantity()),
         ]);
 
         $paymentIntent = $this->stripePaymentService->createPaymentIntentWithClient(

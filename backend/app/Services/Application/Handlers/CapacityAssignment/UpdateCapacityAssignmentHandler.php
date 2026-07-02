@@ -14,11 +14,9 @@ use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 class UpdateCapacityAssignmentHandler
 {
     public function __construct(
-        private readonly UpdateCapacityAssignmentService        $updateCapacityAssignmentService,
-        private readonly CapacityAssignmentRepositoryInterface  $capacityAssignmentRepository,
-    )
-    {
-    }
+        private readonly UpdateCapacityAssignmentService $updateCapacityAssignmentService,
+        private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
@@ -50,9 +48,8 @@ class UpdateCapacityAssignmentHandler
 
     private function dispatchCapacityChangedEvents(
         CapacityAssignmentDomainObject $existingAssignment,
-        UpsertCapacityAssignmentDTO    $data,
-    ): void
-    {
+        UpsertCapacityAssignmentDTO $data,
+    ): void {
         if (empty($data->product_ids)) {
             return;
         }
@@ -62,11 +59,9 @@ class UpdateCapacityAssignmentHandler
 
         $direction = match (true) {
             ($newCapacity === null && $oldCapacity !== null),
-            ($newCapacity !== null && $oldCapacity !== null && $newCapacity > $oldCapacity)
-                => CapacityChangeDirection::INCREASED,
+            ($newCapacity !== null && $oldCapacity !== null && $newCapacity > $oldCapacity) => CapacityChangeDirection::INCREASED,
             ($newCapacity !== null && $oldCapacity === null),
-            ($newCapacity !== null && $oldCapacity !== null && $newCapacity < $oldCapacity)
-                => CapacityChangeDirection::DECREASED,
+            ($newCapacity !== null && $oldCapacity !== null && $newCapacity < $oldCapacity) => CapacityChangeDirection::DECREASED,
             default => null,
         };
 

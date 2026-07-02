@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductPriceOccurrenceOverride extends BaseModel
 {
-
     protected $table = 'product_price_occurrence_overrides';
 
     public function event_occurrence(): BelongsTo

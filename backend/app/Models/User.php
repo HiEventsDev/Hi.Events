@@ -28,14 +28,14 @@ use RuntimeException;
  */
 class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, JWTSubject
 {
-    use SoftDeletes;
-    use Notifiable;
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
-    use MustVerifyEmail;
     use HasFactory;
     use Impersonate;
+    use MustVerifyEmail;
+    use Notifiable;
+    use SoftDeletes;
 
     /** @var array */
     protected $guarded = [];

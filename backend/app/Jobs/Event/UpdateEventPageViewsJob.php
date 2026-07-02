@@ -16,6 +16,7 @@ class UpdateEventPageViewsJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private int $eventId;
+
     private int $amount;
 
     public function __construct(int $eventId, int $amount)
@@ -26,9 +27,8 @@ class UpdateEventPageViewsJob implements ShouldQueue
 
     public function handle(
         EventStatisticRepositoryInterface $eventStatisticsRepository,
-        LoggerInterface                   $logger,
-    ): void
-    {
+        LoggerInterface $logger,
+    ): void {
         try {
             $eventStatisticsRepository->incrementWhere(
                 where: ['event_id' => $this->eventId],

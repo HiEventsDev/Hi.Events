@@ -8,8 +8,6 @@ class OccurrenceEvent extends BaseDomainEvent
 {
     public function __construct(
         public DomainEventType $type,
-        public int             $occurrenceId,
-    )
-    {
-    }
+        public int $occurrenceId,
+    ) {}
 }

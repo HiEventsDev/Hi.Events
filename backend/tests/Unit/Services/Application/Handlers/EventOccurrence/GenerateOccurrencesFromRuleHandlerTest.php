@@ -11,6 +11,7 @@ use HiEvents\Services\Application\Handlers\EventOccurrence\GenerateOccurrencesFr
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
 use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Mockery;
 use Tests\TestCase;
@@ -126,7 +127,7 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
 
         $result = $this->handler->handle($dto);
 
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $result);
+        $this->assertInstanceOf(Collection::class, $result);
     }
 
     protected function tearDown(): void

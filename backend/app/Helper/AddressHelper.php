@@ -17,12 +17,11 @@ class AddressHelper
             $address['city'] ?? null,
             $address['state_or_region'] ?? null,
             $address['zip_or_postal_code'] ?? null,
-            $address['country'] ?? null
+            $address['country'] ?? null,
         ];
 
-        $filteredAddressParts = array_filter($addressParts, static fn($part) => !is_null($part) && $part !== '');
+        $filteredAddressParts = array_filter($addressParts, static fn ($part) => ! is_null($part) && $part !== '');
 
         return implode(', ', $filteredAddressParts);
     }
 }
-

@@ -12,11 +12,9 @@ use Illuminate\Http\Request;
 class GetPromoCodePublic extends BaseAction
 {
     public function __construct(
-        private readonly PromoCodeRepositoryInterface    $promoCodeRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
         private readonly PromoCodeUsageValidationService $promoCodeUsageValidationService,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $promoCode, Request $request): JsonResponse
     {

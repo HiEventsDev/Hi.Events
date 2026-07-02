@@ -81,24 +81,24 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
 
     public function getPrimaryStripePlatform(): ?OrganizerStripePlatformDomainObject
     {
-        if (!$this->stripePlatforms || $this->stripePlatforms->isEmpty()) {
+        if (! $this->stripePlatforms || $this->stripePlatforms->isEmpty()) {
             return null;
         }
 
         return $this->stripePlatforms
-            ->filter(fn($platform) => $platform->getStripeSetupCompletedAt() !== null)
-            ->sortByDesc(fn($platform) => $platform->getCreatedAt())
+            ->filter(fn ($platform) => $platform->getStripeSetupCompletedAt() !== null)
+            ->sortByDesc(fn ($platform) => $platform->getCreatedAt())
             ->first();
     }
 
     public function getStripePlatformByType(?StripePlatform $platformType): ?OrganizerStripePlatformDomainObject
     {
-        if (!$this->stripePlatforms || $this->stripePlatforms->isEmpty()) {
+        if (! $this->stripePlatforms || $this->stripePlatforms->isEmpty()) {
             return null;
         }
 
         return $this->stripePlatforms
-            ->filter(fn($platform) => $platform->getStripeConnectPlatform() === $platformType?->value)
+            ->filter(fn ($platform) => $platform->getStripeConnectPlatform() === $platformType?->value)
             ->first();
     }
 
@@ -110,7 +110,7 @@ class OrganizerDomainObject extends Generated\OrganizerDomainObjectAbstract
     public function getActiveStripePlatform(): ?StripePlatform
     {
         $primaryPlatform = $this->getPrimaryStripePlatform();
-        if (!$primaryPlatform || !$primaryPlatform->getStripeConnectPlatform()) {
+        if (! $primaryPlatform || ! $primaryPlatform->getStripeConnectPlatform()) {
             return null;
         }
 

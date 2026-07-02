@@ -11,11 +11,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class AssignOrganizerConfigurationHandler
 {
     public function __construct(
-        private readonly OrganizerRepositoryInterface              $organizerRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly OrganizerConfigurationRepositoryInterface $configurationRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ModelNotFoundException

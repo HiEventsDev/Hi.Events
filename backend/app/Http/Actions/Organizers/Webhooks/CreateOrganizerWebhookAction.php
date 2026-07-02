@@ -15,9 +15,7 @@ class CreateOrganizerWebhookAction extends BaseAction
 {
     public function __construct(
         private readonly CreateWebhookHandler $createWebhookHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId, UpsertWebhookRequest $request): JsonResponse
     {

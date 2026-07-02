@@ -18,12 +18,10 @@ class CancelWaitlistEntryService
 {
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly ProductPriceRepositoryInterface  $productPriceRepository,
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -69,7 +67,7 @@ class CancelWaitlistEntryService
      */
     private function cancelEntry(WaitlistEntryDomainObject $entry): WaitlistEntryDomainObject
     {
-        if (!in_array($entry->getStatus(), [
+        if (! in_array($entry->getStatus(), [
             WaitlistEntryStatus::WAITING->name,
             WaitlistEntryStatus::OFFERED->name,
         ], true)) {

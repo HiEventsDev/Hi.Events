@@ -19,16 +19,14 @@ use Throwable;
 class EmailConfirmationService
 {
     public function __construct(
-        private readonly Mailer                       $mailer,
-        private readonly EncryptedPayloadService      $encryptedPayloadService,
-        private readonly UserRepositoryInterface      $userRepository,
-        private readonly DatabaseManager              $databaseManager,
+        private readonly Mailer $mailer,
+        private readonly EncryptedPayloadService $encryptedPayloadService,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly EmailVerificationCodeService $emailVerificationCodeService,
-        private readonly VerifyUserEmailService       $verifyUserEmailService,
-        private readonly EventRepositoryInterface     $eventRepository,
-    )
-    {
-    }
+        private readonly VerifyUserEmailService $verifyUserEmailService,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws DecryptionFailedException

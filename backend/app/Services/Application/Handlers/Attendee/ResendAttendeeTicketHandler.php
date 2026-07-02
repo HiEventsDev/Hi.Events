@@ -2,8 +2,8 @@
 
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
-use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -20,13 +20,11 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 readonly class ResendAttendeeTicketHandler
 {
     public function __construct(
-        private SendAttendeeTicketService   $sendAttendeeProductService,
+        private SendAttendeeTicketService $sendAttendeeProductService,
         private AttendeeRepositoryInterface $attendeeRepository,
-        private EventRepositoryInterface    $eventRepository,
-        private LoggerInterface             $logger,
-    )
-    {
-    }
+        private EventRepositoryInterface $eventRepository,
+        private LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -46,8 +44,8 @@ readonly class ResendAttendeeTicketHandler
                 'event_id' => $resendAttendeeProductDTO->eventId,
             ]);
 
-        if (!$attendee) {
-            throw new ResourceNotFoundException();
+        if (! $attendee) {
+            throw new ResourceNotFoundException;
         }
 
         if ($attendee->getStatus() !== AttendeeStatus::ACTIVE->name) {
@@ -69,7 +67,7 @@ readonly class ResendAttendeeTicketHandler
 
         $this->logger->info('Attendee ticket resent', [
             'attendeeId' => $resendAttendeeProductDTO->attendeeId,
-            'eventId' => $resendAttendeeProductDTO->eventId
+            'eventId' => $resendAttendeeProductDTO->eventId,
         ]);
     }
 }

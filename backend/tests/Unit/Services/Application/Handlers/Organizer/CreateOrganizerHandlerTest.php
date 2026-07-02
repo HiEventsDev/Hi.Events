@@ -21,7 +21,7 @@ class CreateOrganizerHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testDescriptionIsPurifiedOnCreate(): void
+    public function test_description_is_purified_on_create(): void
     {
         $organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
         $organizerConfigurationRepository = Mockery::mock(OrganizerConfigurationRepositoryInterface::class);
@@ -31,8 +31,8 @@ class CreateOrganizerHandlerTest extends TestCase
         $purifier = Mockery::mock(HtmlPurifierService::class);
         $logger = Mockery::mock(LoggerInterface::class);
 
-        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback());
-        $purifier->shouldReceive('purify')->andReturnUsing(fn($v) => is_string($v) ? 'PURIFIED:' . $v : $v);
+        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
+        $purifier->shouldReceive('purify')->andReturnUsing(fn ($v) => is_string($v) ? 'PURIFIED:'.$v : $v);
 
         $defaultConfiguration = Mockery::mock(OrganizerConfigurationDomainObject::class);
         $defaultConfiguration->shouldReceive('getId')->andReturn(99);
@@ -51,6 +51,7 @@ class CreateOrganizerHandlerTest extends TestCase
             ->once()
             ->andReturnUsing(function ($attributes) use (&$capturedAttributes, $organizer) {
                 $capturedAttributes = $attributes;
+
                 return $organizer;
             });
 

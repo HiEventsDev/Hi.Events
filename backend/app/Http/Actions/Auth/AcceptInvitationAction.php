@@ -16,9 +16,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class AcceptInvitationAction extends BaseAction
 {
-    public function __construct(private readonly AcceptInvitationHandler $handler)
-    {
-    }
+    public function __construct(private readonly AcceptInvitationHandler $handler) {}
 
     public function __invoke(AcceptInvitationRequest $request, string $inviteToken): Response
     {

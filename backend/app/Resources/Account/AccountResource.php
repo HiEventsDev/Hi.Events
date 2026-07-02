@@ -22,7 +22,7 @@ class AccountResource extends JsonResource
 
             'is_account_email_confirmed' => $this->getAccountVerifiedAt() !== null,
             'is_saas_mode_enabled' => config('app.saas_mode_enabled'),
-            'requires_manual_verification' => config('app.saas_mode_enabled') && !$this->getIsManuallyVerified(),
+            'requires_manual_verification' => config('app.saas_mode_enabled') && ! $this->getIsManuallyVerified(),
         ];
     }
 }

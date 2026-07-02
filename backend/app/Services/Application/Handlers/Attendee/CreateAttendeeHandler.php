@@ -315,7 +315,7 @@ class CreateAttendeeHandler
             'event_id' => $attendeeDTO->event_id,
         ]);
 
-        if (!$occurrence) {
+        if (! $occurrence) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => __('No occurrence found for this event.'),
             ]);

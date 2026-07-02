@@ -11,9 +11,7 @@ class GetOrganizerVatSettingHandler
 {
     public function __construct(
         private readonly OrganizerVatSettingRepositoryInterface $vatSettingRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $organizerId): ?OrganizerVatSettingDomainObject
     {

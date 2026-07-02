@@ -11,8 +11,8 @@ use HiEvents\Exceptions\InvalidEmailTemplateException;
 use HiEvents\Http\Resources\EmailTemplateResource;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
-use HiEvents\Services\Application\Handlers\EmailTemplate\UpdateEmailTemplateHandler;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
+use HiEvents\Services\Application\Handlers\EmailTemplate\UpdateEmailTemplateHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -23,8 +23,7 @@ class UpdateOrganizerEmailTemplateAction extends BaseEmailTemplateAction
     public function __construct(
         private readonly UpdateEmailTemplateHandler $handler,
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ValidationException

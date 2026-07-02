@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\Application\Handlers\Organizer\Payment\Stripe;
 
 use Closure;
-use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Exceptions\SaasModeEnabledException;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
@@ -22,12 +21,19 @@ use Tests\TestCase;
 class CreateStripeConnectAccountHandlerTest extends TestCase
 {
     private OrganizerRepositoryInterface $organizerRepository;
+
     private OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository;
+
     private DatabaseManager $databaseManager;
+
     private LoggerInterface $logger;
+
     private Repository $config;
+
     private StripeClientFactory $stripeClientFactory;
+
     private StripeConfigurationService $stripeConfigurationService;
+
     private StripeAccountSyncService $stripeAccountSyncService;
 
     protected function setUp(): void
@@ -50,7 +56,7 @@ class CreateStripeConnectAccountHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testThrowsWhenSaasModeDisabled(): void
+    public function test_throws_when_saas_mode_disabled(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnFalse();
 
@@ -62,13 +68,13 @@ class CreateStripeConnectAccountHandlerTest extends TestCase
         ));
     }
 
-    public function testThrowsResourceNotFoundWhenOrganizerMissing(): void
+    public function test_throws_resource_not_found_when_organizer_missing(): void
     {
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturnTrue();
         $this->databaseManager
             ->shouldReceive('transaction')
             ->once()
-            ->andReturnUsing(fn(Closure $closure) => $closure());
+            ->andReturnUsing(fn (Closure $closure) => $closure());
 
         $this->organizerRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->organizerRepository

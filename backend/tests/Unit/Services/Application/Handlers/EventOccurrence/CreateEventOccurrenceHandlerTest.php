@@ -15,6 +15,7 @@ use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurr
 use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -209,12 +210,12 @@ class CreateEventOccurrenceHandlerTest extends TestCase
             ->shouldReceive('findById')
             ->once()
             ->with(999)
-            ->andThrow(new \Illuminate\Database\Eloquent\ModelNotFoundException);
+            ->andThrow(new ModelNotFoundException);
 
         $this->eventLocationUpserter->shouldNotReceive('createForEvent');
         $this->occurrenceRepository->shouldNotReceive('create');
 
-        $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         $this->handler->handle($dto);
     }

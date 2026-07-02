@@ -3,8 +3,8 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Money\Currency as BrickCurrency;
-use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use Illuminate\Config\Repository;
@@ -19,15 +19,13 @@ class OrderPlatformFeePassThroughService
     }
 
     public function __construct(
-        private readonly Repository                        $config,
+        private readonly Repository $config,
         private readonly CurrencyConversionClientInterface $currencyConversionClient,
-    )
-    {
-    }
+    ) {}
 
     public function isEnabled(EventSettingDomainObject $eventSettings): bool
     {
-        if (!$this->config->get('app.saas_mode_enabled')) {
+        if (! $this->config->get('app.saas_mode_enabled')) {
             return false;
         }
 
@@ -46,13 +44,12 @@ class OrderPlatformFeePassThroughService
      */
     public function calculatePlatformFee(
         OrganizerConfigurationDomainObject $organizerConfiguration,
-        EventSettingDomainObject         $eventSettings,
-        float                            $total,
-        int                              $quantity,
-        string                           $currency,
-    ): float
-    {
-        if (!$this->isEnabled($eventSettings) || $total <= 0) {
+        EventSettingDomainObject $eventSettings,
+        float $total,
+        int $quantity,
+        string $currency,
+    ): float {
+        if (! $this->isEnabled($eventSettings) || $total <= 0) {
             return 0.0;
         }
 
@@ -71,9 +68,8 @@ class OrderPlatformFeePassThroughService
 
     private function getConvertedFixedFee(
         OrganizerConfigurationDomainObject $organizerConfiguration,
-        string                           $currency
-    ): float
-    {
+        string $currency
+    ): float {
         $baseFee = $organizerConfiguration->getFixedApplicationFee();
         $baseCurrency = $organizerConfiguration->getApplicationFeeCurrency();
 

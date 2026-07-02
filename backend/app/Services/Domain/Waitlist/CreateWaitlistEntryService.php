@@ -18,20 +18,17 @@ class CreateWaitlistEntryService
 {
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
-        private readonly DatabaseManager                  $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws ResourceConflictException
      */
     public function createEntry(
-        CreateWaitlistEntryDTO    $dto,
-        EventSettingDomainObject  $eventSettings,
-        ProductDomainObject       $product,
-    ): WaitlistEntryDomainObject
-    {
+        CreateWaitlistEntryDTO $dto,
+        EventSettingDomainObject $eventSettings,
+        ProductDomainObject $product,
+    ): WaitlistEntryDomainObject {
         $this->validateWaitlistEnabled($product);
 
         /** @var WaitlistEntryDomainObject $entry */

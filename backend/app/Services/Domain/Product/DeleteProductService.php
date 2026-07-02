@@ -17,14 +17,12 @@ use Throwable;
 class DeleteProductService
 {
     public function __construct(
-        private readonly ProductRepositoryInterface      $productRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly ProductPriceRepositoryInterface $productPriceRepository,
-        private readonly LoggerInterface                 $logger,
-        private readonly DatabaseManager                 $databaseManager,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

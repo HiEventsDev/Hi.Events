@@ -3,12 +3,12 @@
 namespace HiEvents\Listeners\Waitlist;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
-use HiEvents\Events\OrderStatusChangedEvent;
-use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
+use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
@@ -17,11 +17,9 @@ class ResolveWaitlistEntryOnOrderCompletedListener
 {
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
-        private readonly ProductPriceRepositoryInterface  $productPriceRepository,
-        private readonly DatabaseManager                  $databaseManager,
-    )
-    {
-    }
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function handle(OrderStatusChangedEvent $event): void
     {
@@ -29,6 +27,7 @@ class ResolveWaitlistEntryOnOrderCompletedListener
 
         if ($order->getStatus() === OrderStatus::COMPLETED->name) {
             $this->resolveByOrderId($order->getId());
+
             return;
         }
 

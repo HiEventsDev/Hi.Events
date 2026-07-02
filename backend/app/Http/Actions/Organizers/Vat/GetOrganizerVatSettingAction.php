@@ -14,9 +14,7 @@ class GetOrganizerVatSettingAction extends BaseAction
 {
     public function __construct(
         private readonly GetOrganizerVatSettingHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId): JsonResponse
     {
@@ -24,7 +22,7 @@ class GetOrganizerVatSettingAction extends BaseAction
 
         $vatSetting = $this->handler->handle($organizerId);
 
-        if (!$vatSetting) {
+        if (! $vatSetting) {
             return $this->jsonResponse(['data' => null]);
         }
 

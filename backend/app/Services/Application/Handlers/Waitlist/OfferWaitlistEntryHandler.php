@@ -13,12 +13,10 @@ use Illuminate\Support\Collection;
 class OfferWaitlistEntryHandler
 {
     public function __construct(
-        private readonly ProcessWaitlistService           $processWaitlistService,
+        private readonly ProcessWaitlistService $processWaitlistService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly EventRepositoryInterface         $eventRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     public function handle(OfferWaitlistEntryDTO $dto): Collection
     {

@@ -17,12 +17,11 @@ use Illuminate\Mail\Mailables\Envelope;
 class OrderFailed extends BaseMail
 {
     public function __construct(
-        private readonly OrderDomainObject        $order,
-        private readonly EventDomainObject        $event,
-        private readonly OrganizerDomainObject    $organizer,
+        private readonly OrderDomainObject $order,
+        private readonly EventDomainObject $event,
+        private readonly OrganizerDomainObject $organizer,
         private readonly EventSettingDomainObject $eventSettings,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -47,7 +46,7 @@ class OrderFailed extends BaseMail
                     Url::getFrontEndUrlFromConfig(Url::EVENT_HOMEPAGE),
                     $this->event->getId(),
                     $this->event->getSlug(),
-                )
+                ),
             ]
         );
     }

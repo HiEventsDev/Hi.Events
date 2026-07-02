@@ -29,30 +29,28 @@ use Throwable;
 class CreateStripeConnectAccountHandler
 {
     public function __construct(
-        private readonly OrganizerRepositoryInterface                 $organizerRepository,
-        private readonly OrganizerStripePlatformRepositoryInterface   $organizerStripePlatformRepository,
-        private readonly DatabaseManager                              $databaseManager,
-        private readonly LoggerInterface                              $logger,
-        private readonly Repository                                   $config,
-        private readonly StripeClientFactory                          $stripeClientFactory,
-        private readonly StripeConfigurationService                   $stripeConfigurationService,
-        private readonly StripeAccountSyncService                     $stripeAccountSyncService,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly LoggerInterface $logger,
+        private readonly Repository $config,
+        private readonly StripeClientFactory $stripeClientFactory,
+        private readonly StripeConfigurationService $stripeConfigurationService,
+        private readonly StripeAccountSyncService $stripeAccountSyncService,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(CreateStripeConnectAccountDTO $command): CreateStripeConnectAccountResponse
     {
-        if (!$this->config->get('app.saas_mode_enabled')) {
+        if (! $this->config->get('app.saas_mode_enabled')) {
             throw new SaasModeEnabledException(
                 __('Stripe Connect Account creation is only available in Saas Mode.'),
             );
         }
 
-        return $this->databaseManager->transaction(fn() => $this->createOrGetStripeConnectAccount($command));
+        return $this->databaseManager->transaction(fn () => $this->createOrGetStripeConnectAccount($command));
     }
 
     /**
@@ -122,12 +120,11 @@ class CreateStripeConnectAccountHandler
      * @throws CreateStripeConnectAccountFailedException
      */
     private function getOrCreateStripeConnectAccount(
-        OrganizerDomainObject                $organizer,
+        OrganizerDomainObject $organizer,
         ?OrganizerStripePlatformDomainObject $organizerStripePlatform,
-        StripeClient                         $stripeClient,
-        ?StripePlatform                      $platform
-    ): Account
-    {
+        StripeClient $stripeClient,
+        ?StripePlatform $platform
+    ): Account {
         try {
             if ($organizerStripePlatform && $organizerStripePlatform->getStripeAccountId() !== null) {
                 return $stripeClient->accounts->retrieve($organizerStripePlatform->getStripeAccountId());
@@ -138,7 +135,7 @@ class CreateStripeConnectAccountHandler
                     ?? StripeConnectAccountType::EXPRESS->value,
             ]);
         } catch (Throwable $e) {
-            $this->logger->error('Failed to create or fetch Stripe Connect Account: ' . $e->getMessage(), [
+            $this->logger->error('Failed to create or fetch Stripe Connect Account: '.$e->getMessage(), [
                 'organizerId' => $organizer->getId(),
                 'stripeAccountId' => $organizerStripePlatform?->getStripeAccountId() ?? 'null',
                 'platform' => $platform?->value ?? 'null',
@@ -151,7 +148,7 @@ class CreateStripeConnectAccountHandler
             );
         }
 
-        if (!$organizerStripePlatform) {
+        if (! $organizerStripePlatform) {
             $this->organizerStripePlatformRepository->create([
                 OrganizerStripePlatformDomainObjectAbstract::ORGANIZER_ID => $organizer->getId(),
                 OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_ID => $stripeAccount->id,

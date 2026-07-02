@@ -10,9 +10,7 @@ class DeleteCheckInListHandler
 {
     public function __construct(
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, int $checkInListId): void
     {

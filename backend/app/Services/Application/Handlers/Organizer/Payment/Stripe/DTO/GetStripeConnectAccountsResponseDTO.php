@@ -10,11 +10,9 @@ class GetStripeConnectAccountsResponseDTO extends BaseDataObject
 {
     public function __construct(
         public readonly OrganizerDomainObject $organizer,
-        public readonly Collection            $stripeConnectAccounts,
-        public readonly Collection            $reusableConnections,
-        public readonly ?string               $primaryStripeAccountId = null,
-        public readonly bool                  $hasCompletedSetup = false,
-    )
-    {
-    }
+        public readonly Collection $stripeConnectAccounts,
+        public readonly Collection $reusableConnections,
+        public readonly ?string $primaryStripeAccountId = null,
+        public readonly bool $hasCompletedSetup = false,
+    ) {}
 }

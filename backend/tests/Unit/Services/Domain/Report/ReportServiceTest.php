@@ -17,7 +17,9 @@ use Tests\TestCase;
 class ReportServiceTest extends TestCase
 {
     private CacheRepository|Mockery\MockInterface $cache;
+
     private DatabaseManager|Mockery\MockInterface $queryBuilder;
+
     private EventRepositoryInterface|Mockery\MockInterface $eventRepository;
 
     protected function setUp(): void
@@ -37,15 +39,15 @@ class ReportServiceTest extends TestCase
     private function setupCachePassthrough(): void
     {
         $this->cache->shouldReceive('remember')
-            ->andReturnUsing(fn($key, $ttl, $callback) => $callback());
+            ->andReturnUsing(fn ($key, $ttl, $callback) => $callback());
     }
 
-    public function testProductSalesReportGeneratesWithoutOccurrence(): void
+    public function test_product_sales_report_generates_without_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with(Mockery::on(fn($sql) => str_contains($sql, 'filtered_orders') && !str_contains($sql, ':occurrence_id')), ['event_id' => 1])
+            ->with(Mockery::on(fn ($sql) => str_contains($sql, 'filtered_orders') && ! str_contains($sql, ':occurrence_id')), ['event_id' => 1])
             ->andReturn([]);
 
         $report = new ProductSalesReport($this->cache, $this->queryBuilder, $this->eventRepository);
@@ -54,13 +56,13 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testProductSalesReportGeneratesWithOccurrence(): void
+    public function test_product_sales_report_generates_with_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($sql) => str_contains($sql, ':occurrence_id')),
+                Mockery::on(fn ($sql) => str_contains($sql, ':occurrence_id')),
                 ['event_id' => 1, 'occurrence_id' => 10],
             )
             ->andReturn([]);
@@ -71,13 +73,13 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testDailySalesReportUsesEventDailyStatsWithoutOccurrence(): void
+    public function test_daily_sales_report_uses_event_daily_stats_without_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($sql) => str_contains($sql, 'event_daily_statistics') && !str_contains($sql, 'event_occurrence_daily_statistics')),
+                Mockery::on(fn ($sql) => str_contains($sql, 'event_daily_statistics') && ! str_contains($sql, 'event_occurrence_daily_statistics')),
                 ['event_id' => 1],
             )
             ->andReturn([]);
@@ -88,13 +90,13 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testDailySalesReportUsesOccurrenceDailyStatsWithOccurrence(): void
+    public function test_daily_sales_report_uses_occurrence_daily_stats_with_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($sql) => str_contains($sql, 'event_occurrence_daily_statistics') && str_contains($sql, ':occurrence_id')),
+                Mockery::on(fn ($sql) => str_contains($sql, 'event_occurrence_daily_statistics') && str_contains($sql, ':occurrence_id')),
                 ['event_id' => 1, 'occurrence_id' => 10],
             )
             ->andReturn([]);
@@ -105,13 +107,13 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testPromoCodesReportGeneratesWithOccurrence(): void
+    public function test_promo_codes_report_generates_with_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($sql) => str_contains($sql, ':occurrence_id')),
+                Mockery::on(fn ($sql) => str_contains($sql, ':occurrence_id')),
                 ['event_id' => 1, 'occurrence_id' => 10],
             )
             ->andReturn([]);
@@ -122,12 +124,12 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testPromoCodesReportGeneratesWithoutOccurrence(): void
+    public function test_promo_codes_report_generates_without_occurrence(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with(Mockery::on(fn($sql) => !str_contains($sql, ':occurrence_id')), ['event_id' => 1])
+            ->with(Mockery::on(fn ($sql) => ! str_contains($sql, ':occurrence_id')), ['event_id' => 1])
             ->andReturn([]);
 
         $report = new PromoCodesReport($this->cache, $this->queryBuilder, $this->eventRepository);
@@ -136,14 +138,14 @@ class ReportServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testOccurrenceSummaryReportGenerates(): void
+    public function test_occurrence_summary_report_generates(): void
     {
         $this->setupCachePassthrough();
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn($sql) => str_contains($sql, 'event_occurrences') && str_contains($sql, 'event_occurrence_statistics')),
-                Mockery::on(fn($bindings) => $bindings['event_id'] === 1
+                Mockery::on(fn ($sql) => str_contains($sql, 'event_occurrences') && str_contains($sql, 'event_occurrence_statistics')),
+                Mockery::on(fn ($bindings) => $bindings['event_id'] === 1
                     && isset($bindings['start_date'])
                     && isset($bindings['end_date'])),
             )

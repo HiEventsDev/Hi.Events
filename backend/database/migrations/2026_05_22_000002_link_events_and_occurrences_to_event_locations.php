@@ -31,7 +31,7 @@ return new class extends Migration
 
     private const SHORT_ID_RANDOM_LENGTH = 13;
 
-    private ?\HTMLPurifier $purifier = null;
+    private ?HTMLPurifier $purifier = null;
 
     public function up(): void
     {
@@ -236,8 +236,8 @@ return new class extends Migration
         return $this->purifier()->purify($html);
     }
 
-    private function purifier(): \HTMLPurifier
+    private function purifier(): HTMLPurifier
     {
-        return $this->purifier ??= new \HTMLPurifier(\HTMLPurifier_Config::createDefault());
+        return $this->purifier ??= new HTMLPurifier(HTMLPurifier_Config::createDefault());
     }
 };

@@ -11,9 +11,7 @@ class DeleteImageHandler
 {
     public function __construct(
         private readonly ImageRepositoryInterface $imageRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

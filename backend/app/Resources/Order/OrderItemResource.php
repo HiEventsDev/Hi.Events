@@ -26,8 +26,8 @@ class OrderItemResource extends BaseResource
             'price_before_discount' => $this->getPriceBeforeDiscount(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event_occurrence' => $this->when(
-                !is_null($this->getEventOccurrence()),
-                fn() => new EventOccurrenceResource($this->getEventOccurrence()),
+                ! is_null($this->getEventOccurrence()),
+                fn () => new EventOccurrenceResource($this->getEventOccurrence()),
             ),
         ];
     }

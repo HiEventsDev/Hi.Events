@@ -18,9 +18,10 @@ class ResetPasswordTest extends TestCase
     use RefreshDatabase;
 
     private const RESET_PASSWORD_ROUTE = '/auth/reset-password';
+
     private const FORGOT_PASSWORD_ROUTE = '/auth/forgot-password';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         AccountConfiguration::firstOrCreate(['id' => 1], [
@@ -79,12 +80,12 @@ class ResetPasswordTest extends TestCase
         $tokenProperty = $reflection->getProperty('token');
         $token = $tokenProperty->getValue($email);
 
-        $response2 = $this->getJson(self::RESET_PASSWORD_ROUTE . '/' . urlencode($token));
+        $response2 = $this->getJson(self::RESET_PASSWORD_ROUTE.'/'.urlencode($token));
         // assert token is valid
         $response2->assertStatus(204);
 
         $password = fake()->password(16);
-        $response3 = $this->postJson(self::RESET_PASSWORD_ROUTE . '/' . urlencode($token), [
+        $response3 = $this->postJson(self::RESET_PASSWORD_ROUTE.'/'.urlencode($token), [
             'password' => $password,
             'password_confirmation' => $password,
         ]);
@@ -104,12 +105,12 @@ class ResetPasswordTest extends TestCase
         ]);
         $response->assertStatus(200);
 
-        $response2 = $this->getJson(self::RESET_PASSWORD_ROUTE . '/' . 'invalid_token');
+        $response2 = $this->getJson(self::RESET_PASSWORD_ROUTE.'/'.'invalid_token');
         $response2->assertStatus(404);
 
         $password = fake()->password(16);
 
-        $response3 = $this->postJson(self::RESET_PASSWORD_ROUTE . '/' . 'invalid_token', [
+        $response3 = $this->postJson(self::RESET_PASSWORD_ROUTE.'/'.'invalid_token', [
             'password' => $password,
             'password_confirmation' => $password,
         ]);
@@ -139,7 +140,7 @@ class ResetPasswordTest extends TestCase
         $tokenProperty = $reflection->getProperty('token');
         $token = $tokenProperty->getValue($email);
 
-        $response2 = $this->postJson(self::RESET_PASSWORD_ROUTE . '/' . urlencode($token), [
+        $response2 = $this->postJson(self::RESET_PASSWORD_ROUTE.'/'.urlencode($token), [
             'password' => $password,
             'password_confirmation' => $password,
         ]);

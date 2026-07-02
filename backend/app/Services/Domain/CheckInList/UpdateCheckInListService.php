@@ -14,14 +14,12 @@ use Illuminate\Database\DatabaseManager;
 class UpdateCheckInListService
 {
     public function __construct(
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
-        private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventRepositoryInterface            $eventRepository,
-    )
-    {
-    }
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException

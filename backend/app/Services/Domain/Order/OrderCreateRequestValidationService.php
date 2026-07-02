@@ -31,12 +31,12 @@ class OrderCreateRequestValidationService
     private AvailableProductQuantitiesResponseDTO $availableProductQuantities;
 
     public function __construct(
-        readonly private ProductRepositoryInterface $productRepository,
-        readonly private PromoCodeRepositoryInterface $promoCodeRepository,
-        readonly private EventRepositoryInterface $eventRepository,
-        readonly private EventOccurrenceRepositoryInterface $occurrenceRepository,
-        readonly private AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
-        readonly private OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
+        private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
     ) {}
 
     /**

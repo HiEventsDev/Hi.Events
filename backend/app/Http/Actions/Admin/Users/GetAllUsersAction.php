@@ -16,16 +16,14 @@ class GetAllUsersAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllUsersHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $users = $this->handler->handle(new GetAllUsersDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
         ));
 

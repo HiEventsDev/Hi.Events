@@ -15,9 +15,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class GetReportAction extends BaseAction
 {
-    public function __construct(private readonly GetReportHandler $reportHandler)
-    {
-    }
+    public function __construct(private readonly GetReportHandler $reportHandler) {}
 
     /**
      * @throws ValidationException
@@ -28,7 +26,7 @@ class GetReportAction extends BaseAction
 
         $this->validateDateRange($request);
 
-        if (!in_array($reportType, ReportTypes::valuesArray(), true)) {
+        if (! in_array($reportType, ReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
         }
 

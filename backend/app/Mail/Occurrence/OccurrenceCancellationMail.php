@@ -17,15 +17,14 @@ class OccurrenceCancellationMail extends BaseMail
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
     public function __construct(
-        private readonly EventDomainObject           $event,
+        private readonly EventDomainObject $event,
         private readonly EventOccurrenceDomainObject $occurrence,
-        private readonly OrganizerDomainObject       $organizer,
-        private readonly EventSettingDomainObject    $eventSettings,
-        private readonly string                      $formattedDate,
-        private readonly bool                        $refundOrders = false,
-        ?RenderedEmailTemplateDTO                    $renderedTemplate = null,
-    )
-    {
+        private readonly OrganizerDomainObject $organizer,
+        private readonly EventSettingDomainObject $eventSettings,
+        private readonly string $formattedDate,
+        private readonly bool $refundOrders = false,
+        ?RenderedEmailTemplateDTO $renderedTemplate = null,
+    ) {
         $this->renderedTemplate = $renderedTemplate;
         parent::__construct();
     }

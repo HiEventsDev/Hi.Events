@@ -9,9 +9,7 @@ class AccountUpdateHandler
 {
     public function __construct(
         private readonly StripeAccountSyncService $stripeAccountSyncService,
-    )
-    {
-    }
+    ) {}
 
     public function handleEvent(Account $stripeAccount): void
     {

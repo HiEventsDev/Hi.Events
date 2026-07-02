@@ -17,16 +17,14 @@ use Throwable;
 class CreateOrganizerHandler
 {
     public function __construct(
-        private readonly OrganizerRepositoryInterface              $organizerRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly OrganizerConfigurationRepositoryInterface $organizerConfigurationRepository,
-        private readonly AccountRepositoryInterface                $accountRepository,
-        private readonly DatabaseManager                           $databaseManager,
-        private readonly CreateDefaultOrganizerSettingsService     $createDefaultOrganizerSettingsService,
-        private readonly HtmlPurifierService                       $purifier,
-        private readonly LoggerInterface                           $logger,
-    )
-    {
-    }
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly CreateDefaultOrganizerSettingsService $createDefaultOrganizerSettingsService,
+        private readonly HtmlPurifierService $purifier,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws Throwable
@@ -34,7 +32,7 @@ class CreateOrganizerHandler
     public function handle(CreateOrganizerDTO $organizerData): OrganizerDomainObject
     {
         return $this->databaseManager->transaction(
-            fn() => $this->createOrganizer($organizerData)
+            fn () => $this->createOrganizer($organizerData)
         );
     }
 
@@ -88,6 +86,7 @@ class CreateOrganizerHandler
             $this->logger->error('No default organizer configuration found while creating organizer', [
                 'account_id' => $accountId,
             ]);
+
             return null;
         }
 

@@ -20,6 +20,7 @@ use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurr
 use HiEvents\Services\Application\Handlers\EventOccurrence\UpdateEventOccurrenceHandler;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -116,7 +117,7 @@ class EventLocationCanaryTest extends TestCase
         // Absent values come back as Laravel's MissingValue, not as null.
         $this->assertTrue(
             ! array_key_exists('event_location', $payload)
-                || $payload['event_location'] instanceof \Illuminate\Http\Resources\MissingValue,
+                || $payload['event_location'] instanceof MissingValue,
             'Inheriting occurrence must not carry its own event_location on the resource',
         );
     }
@@ -290,7 +291,7 @@ class EventLocationCanaryTest extends TestCase
     {
         return array_filter(
             $payload,
-            fn ($value) => ! ($value instanceof \Illuminate\Http\Resources\MissingValue),
+            fn ($value) => ! ($value instanceof MissingValue),
         );
     }
 

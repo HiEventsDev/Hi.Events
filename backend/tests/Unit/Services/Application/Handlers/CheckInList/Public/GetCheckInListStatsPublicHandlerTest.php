@@ -15,6 +15,7 @@ use Tests\TestCase;
 class GetCheckInListStatsPublicHandlerTest extends TestCase
 {
     private CheckInListRepositoryInterface $checkInListRepository;
+
     private GetCheckInListStatsPublicHandler $handler;
 
     protected function setUp(): void
@@ -28,7 +29,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         );
     }
 
-    public function testHandleThrowsNotFoundIfCheckInListMissing(): void
+    public function test_handle_throws_not_found_if_check_in_list_missing(): void
     {
         $this->checkInListRepository
             ->shouldReceive('findFirstWhere')
@@ -41,7 +42,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->handler->handle('short-id');
     }
 
-    public function testHandleReturnsStatsDTO(): void
+    public function test_handle_returns_stats_dto(): void
     {
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
@@ -111,7 +112,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->assertSame('Alice', $stats->recentCheckIns[0]->firstName);
     }
 
-    public function testScopedListIgnoresClientOccurrenceFilter(): void
+    public function test_scoped_list_ignores_client_occurrence_filter(): void
     {
         // A check-in list scoped to occurrence 99 must always report its own scope,
         // regardless of what the client passes. Passing null to the repository lets
@@ -142,7 +143,7 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testUnscopedListRespectsClientOccurrenceFilter(): void
+    public function test_unscoped_list_respects_client_occurrence_filter(): void
     {
         // Unscoped list ("All occurrences") — the client's filter-pill selection
         // propagates through to the repository so stats reflect the filtered view.

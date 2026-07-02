@@ -32,10 +32,10 @@ class OrderItemResourcePublic extends BaseResource
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'event_occurrence' => $this->when(
-                !is_null($this->getEventOccurrence()),
-                fn() => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
+                ! is_null($this->getEventOccurrence()),
+                fn () => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
             ),
-            'product' => $this->when((bool)$this->getProduct(), fn() => new ProductResourcePublic($this->getProduct())),
+            'product' => $this->when((bool) $this->getProduct(), fn () => new ProductResourcePublic($this->getProduct())),
         ];
     }
 }

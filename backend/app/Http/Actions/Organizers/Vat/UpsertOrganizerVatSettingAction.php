@@ -19,9 +19,7 @@ class UpsertOrganizerVatSettingAction extends BaseAction
 {
     public function __construct(
         private readonly UpsertOrganizerVatSettingHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {

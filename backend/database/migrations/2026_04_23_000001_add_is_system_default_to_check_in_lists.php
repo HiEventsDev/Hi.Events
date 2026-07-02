@@ -6,7 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::table('check_in_lists', function (Blueprint $table) {
@@ -16,11 +17,11 @@ return new class extends Migration {
         });
 
         // One default list per event.
-        DB::statement("
+        DB::statement('
             CREATE UNIQUE INDEX check_in_lists_one_default_per_event
             ON check_in_lists (event_id)
             WHERE is_system_default = true AND deleted_at IS NULL
-        ");
+        ');
 
         // Backfill one default list per existing event. Chunked for large DBs.
         DB::table('events')

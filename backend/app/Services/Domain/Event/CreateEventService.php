@@ -221,7 +221,7 @@ class CreateEventService
                 : ($organizerThemeSettings['background_type'] ?? HomepageBackgroundType::COLOR->name),
         ];
 
-        if (!empty($organizerThemeSettings['font_family'])) {
+        if (! empty($organizerThemeSettings['font_family'])) {
             $homepageThemeSettings['font_family'] = $organizerThemeSettings['font_family'];
         }
 

@@ -23,11 +23,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class GetCheckInListAttendeeDetailPublicHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface    $attendeeRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly CheckInListRepositoryInterface $checkInListRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(string $shortId, string $attendeePublicId, ?int $staffAccountId): PublicAttendeeDetailDTO
     {
@@ -38,7 +36,7 @@ class GetCheckInListAttendeeDetailPublicHandler
                 CheckInListDomainObjectAbstract::SHORT_ID => $shortId,
             ]);
 
-        if (!$checkInList) {
+        if (! $checkInList) {
             throw new ResourceNotFoundException(__('Check-in list not found'));
         }
 
@@ -55,7 +53,7 @@ class GetCheckInListAttendeeDetailPublicHandler
                 'event_id' => $checkInList->getEventId(),
             ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             throw new ResourceNotFoundException(__('Attendee not found'));
         }
 
@@ -79,11 +77,11 @@ class GetCheckInListAttendeeDetailPublicHandler
     private function filterCheckInsForList(?Collection $checkIns, int $checkInListId): Collection
     {
         if ($checkIns === null) {
-            return new Collection();
+            return new Collection;
         }
 
         return $checkIns->filter(
-            static fn(AttendeeCheckInDomainObject $checkIn) => $checkIn->getCheckInListId() === $checkInListId
+            static fn (AttendeeCheckInDomainObject $checkIn) => $checkIn->getCheckInListId() === $checkInListId
         )->values();
     }
 
@@ -119,7 +117,7 @@ class GetCheckInListAttendeeDetailPublicHandler
         CheckInListDomainObject $checkInList,
         AttendeeDomainObject $attendee,
     ): void {
-        $allowedProductIds = $checkInList->getProducts()?->map(fn($product) => $product->getId())->toArray() ?? [];
+        $allowedProductIds = $checkInList->getProducts()?->map(fn ($product) => $product->getId())->toArray() ?? [];
 
         if (! empty($allowedProductIds) && ! in_array($attendee->getProductId(), $allowedProductIds, true)) {
             throw new ResourceNotFoundException(__('Attendee not found'));

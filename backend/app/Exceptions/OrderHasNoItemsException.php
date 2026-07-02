@@ -2,6 +2,4 @@
 
 namespace HiEvents\Exceptions;
 
-class OrderHasNoItemsException extends BaseException
-{
-}
+class OrderHasNoItemsException extends BaseException {}

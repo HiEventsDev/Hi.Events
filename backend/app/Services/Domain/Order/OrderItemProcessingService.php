@@ -28,33 +28,27 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class OrderItemProcessingService
 {
     private ?OrganizerConfigurationDomainObject $organizerConfiguration = null;
+
     private ?EventSettingDomainObject $eventSettings = null;
 
     public function __construct(
-        private readonly OrderRepositoryInterface           $orderRepository,
-        private readonly ProductRepositoryInterface         $productRepository,
-        private readonly TaxAndFeeCalculationService        $taxCalculationService,
-        private readonly ProductPriceService                $productPriceService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly TaxAndFeeCalculationService $taxCalculationService,
+        private readonly ProductPriceService $productPriceService,
         private readonly OrderPlatformFeePassThroughService $platformFeeService,
-        private readonly EventRepositoryInterface           $eventRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
-     * @param OrderDomainObject $order
-     * @param Collection<ProductOrderDetailsDTO> $productsOrderDetails
-     * @param EventDomainObject $event
-     * @param PromoCodeDomainObject|null $promoCode
-     * @return Collection
+     * @param  Collection<ProductOrderDetailsDTO>  $productsOrderDetails
      */
     public function process(
-        OrderDomainObject      $order,
-        Collection             $productsOrderDetails,
-        EventDomainObject      $event,
+        OrderDomainObject $order,
+        Collection $productsOrderDetails,
+        EventDomainObject $event,
         ?PromoCodeDomainObject $promoCode,
-    ): Collection
-    {
+    ): Collection {
         $this->loadPlatformFeeConfiguration($event->getId());
 
         $orderItems = collect();
@@ -109,14 +103,13 @@ class OrderItemProcessingService
     }
 
     private function calculateOrderItemData(
-        ProductDomainObject    $product,
-        OrderProductPriceDTO   $productPriceDetails,
-        OrderDomainObject      $order,
+        ProductDomainObject $product,
+        OrderProductPriceDTO $productPriceDetails,
+        OrderDomainObject $order,
         ?PromoCodeDomainObject $promoCode,
-        string                 $currency,
-        ?int                   $eventOccurrenceId = null,
-    ): array
-    {
+        string $currency,
+        ?int $eventOccurrenceId = null,
+    ): array {
         $prices = $this->productPriceService->getPrice($product, $productPriceDetails, $promoCode, $eventOccurrenceId);
         $priceWithDiscount = $prices->price;
         $priceBeforeDiscount = $prices->price_before_discount;
@@ -195,9 +188,9 @@ class OrderItemProcessingService
     private function getOrderItemLabel(ProductDomainObject $product, int $priceId): string
     {
         if ($product->isTieredType()) {
-            return $product->getTitle() . ' - ' . $product->getProductPrices()
-                    ?->filter(fn($p) => $p->getId() === $priceId)->first()
-                    ?->getLabel();
+            return $product->getTitle().' - '.$product->getProductPrices()
+                ?->filter(fn ($p) => $p->getId() === $priceId)->first()
+                ?->getLabel();
         }
 
         return $product->getTitle();

@@ -10,9 +10,7 @@ abstract class WebhookCallEventListener
 {
     public function __construct(
         private readonly WebhookResponseHandlerService $webhookResponseHandlerService,
-    )
-    {
-    }
+    ) {}
 
     protected function handleEvent(WebhookCallEvent $event): void
     {

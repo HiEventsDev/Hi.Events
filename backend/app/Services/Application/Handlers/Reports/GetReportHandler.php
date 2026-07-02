@@ -11,9 +11,7 @@ class GetReportHandler
 {
     public function __construct(
         private readonly ReportServiceFactory $reportServiceFactory,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetReportDTO $reportData): Collection
     {

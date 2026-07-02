@@ -35,7 +35,7 @@ return new class extends Migration
                 'organization_address',
                 'invoice_tax_details',
                 'payment_providers',
-                'offline_payment_instructions'
+                'offline_payment_instructions',
             ]);
         });
     }

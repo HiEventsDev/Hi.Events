@@ -19,27 +19,25 @@ use Throwable;
 class CopyStripeConnectAccountHandler
 {
     public function __construct(
-        private readonly OrganizerRepositoryInterface               $organizerRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
-        private readonly StripeAccountSyncService                   $stripeAccountSyncService,
-        private readonly DatabaseManager                            $databaseManager,
-        private readonly Repository                                 $config,
-    )
-    {
-    }
+        private readonly StripeAccountSyncService $stripeAccountSyncService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Repository $config,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(CopyStripeConnectAccountDTO $command): CreateStripeConnectAccountResponse
     {
-        if (!$this->config->get('app.saas_mode_enabled')) {
+        if (! $this->config->get('app.saas_mode_enabled')) {
             throw new SaasModeEnabledException(
                 __('Stripe Connect Account creation is only available in Saas Mode.'),
             );
         }
 
-        return $this->databaseManager->transaction(fn() => $this->copy($command));
+        return $this->databaseManager->transaction(fn () => $this->copy($command));
     }
 
     /**
@@ -78,7 +76,7 @@ class CopyStripeConnectAccountHandler
         }
 
         $existing = $target->getOrganizerStripePlatforms()
-            ?->first(fn(OrganizerStripePlatformDomainObject $row) => $row->getStripeAccountId() === $sourcePlatform->getStripeAccountId());
+            ?->first(fn (OrganizerStripePlatformDomainObject $row) => $row->getStripeAccountId() === $sourcePlatform->getStripeAccountId());
 
         if ($existing !== null) {
             $this->organizerStripePlatformRepository->updateWhere(
@@ -110,12 +108,12 @@ class CopyStripeConnectAccountHandler
         $sourceDetails = $sourcePlatform->getStripeAccountDetails();
         if (is_string($sourceDetails)) {
             $sourceDetails = json_decode($sourceDetails, true) ?: [];
-        } elseif (!is_array($sourceDetails)) {
+        } elseif (! is_array($sourceDetails)) {
             $sourceDetails = [];
         }
 
         $this->stripeAccountSyncService->seedVatSettingForOrganizerIfMissing(
-            organizerId: (int)$target->getId(),
+            organizerId: (int) $target->getId(),
             countryCode: $sourceDetails['country'] ?? null,
             stripeAccountId: $sourcePlatform->getStripeAccountId(),
         );

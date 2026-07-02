@@ -25,11 +25,11 @@ class AttendeeResourcePublic extends JsonResource
             'short_id' => $this->getShortId(),
             'product_id' => $this->getProductId(),
             'product_price_id' => $this->getProductPriceId(),
-            'product' => $this->when((bool)$this->getProduct(), fn() => new ProductMinimalResourcePublic($this->getProduct())),
+            'product' => $this->when((bool) $this->getProduct(), fn () => new ProductMinimalResourcePublic($this->getProduct())),
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'event_occurrence' => $this->when(
-                (bool)$this->getEventOccurrence(),
-                fn() => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
+                (bool) $this->getEventOccurrence(),
+                fn () => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
             ),
             'locale' => $this->getLocale(),
         ];

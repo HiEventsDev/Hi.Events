@@ -43,21 +43,19 @@ use Throwable;
 class PaymentIntentSucceededHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly StripePaymentsRepository         $stripePaymentsRepository,
-        private readonly AffiliateRepositoryInterface     $affiliateRepository,
-        private readonly ProductQuantityUpdateService     $quantityUpdateService,
-        private readonly StripeRefundExpiredOrderService  $refundExpiredOrderService,
-        private readonly AttendeeRepositoryInterface      $attendeeRepository,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly LoggerInterface                  $logger,
-        private readonly Repository                       $cache,
-        private readonly DomainEventDispatcherService     $domainEventDispatcherService,
-        private readonly OrderApplicationFeeService       $orderApplicationFeeService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly StripePaymentsRepository $stripePaymentsRepository,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly ProductQuantityUpdateService $quantityUpdateService,
+        private readonly StripeRefundExpiredOrderService $refundExpiredOrderService,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly LoggerInterface $logger,
+        private readonly Repository $cache,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly OrderApplicationFeeService $orderApplicationFeeService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -80,7 +78,7 @@ class PaymentIntentSucceededHandler
                     StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->id,
                 ]);
 
-            if (!$stripePayment) {
+            if (! $stripePayment) {
                 $this->logger->error('Payment intent not found when handling payment intent succeeded event', [
                     'paymentIntent' => $paymentIntent->toArray(),
                 ]);
@@ -170,15 +168,14 @@ class PaymentIntentSucceededHandler
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
      * @throws StripeClientConfigurationException
+     *
      * @todo We could check to see if there are products available, and if so, complete the order.
      *       This would be a better user experience.
-     *
      */
     private function handleExpiredOrder(
         StripePaymentDomainObjectAbstract $stripePayment,
-        PaymentIntent                     $paymentIntent,
-    ): void
-    {
+        PaymentIntent $paymentIntent,
+    ): void {
         if ((new Carbon($stripePayment->getOrder()?->getReservedUntil()))->isPast()) {
             $this->refundExpiredOrderService->refundExpiredOrder(
                 paymentIntent: $paymentIntent,
@@ -188,7 +185,7 @@ class PaymentIntentSucceededHandler
 
             throw new CannotAcceptPaymentException(
                 __('Payment was successful, but order has expired. Order: :id', [
-                    'id' => $stripePayment->getOrderId()
+                    'id' => $stripePayment->getOrderId(),
                 ])
             );
         }
@@ -204,10 +201,9 @@ class PaymentIntentSucceededHandler
      */
     private function validatePaymentAndOrderStatus(
         StripePaymentDomainObjectAbstract $stripePayment,
-        PaymentIntent                     $paymentIntent
-    ): void
-    {
-        if (!in_array($stripePayment->getOrder()?->getPaymentStatus(), [
+        PaymentIntent $paymentIntent
+    ): void {
+        if (! in_array($stripePayment->getOrder()?->getPaymentStatus(), [
             OrderPaymentStatus::AWAITING_PAYMENT->name,
             OrderPaymentStatus::PAYMENT_FAILED->name,
         ], true)) {
@@ -243,12 +239,12 @@ class PaymentIntentSucceededHandler
             'currency' => $paymentIntent->currency,
         ]);
 
-        $this->cache->put('payment_intent_handled_' . $paymentIntent->id, true, 3600);
+        $this->cache->put('payment_intent_handled_'.$paymentIntent->id, true, 3600);
     }
 
     private function isPaymentIntentAlreadyHandled(PaymentIntent $paymentIntent): bool
     {
-        return $this->cache->has('payment_intent_handled_' . $paymentIntent->id);
+        return $this->cache->has('payment_intent_handled_'.$paymentIntent->id);
     }
 
     private function storeApplicationFeePayment(OrderDomainObject $updatedOrder, PaymentIntent $paymentIntent): void

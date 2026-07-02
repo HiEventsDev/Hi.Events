@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class OrganizerStripePlatformDomainObject extends Generated\OrganizerStripePlatformDomainObjectAbstract
-{
-}
+class OrganizerStripePlatformDomainObject extends Generated\OrganizerStripePlatformDomainObjectAbstract {}

@@ -12,7 +12,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
 use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Mockery;
 use Mockery\MockInterface;
@@ -21,8 +21,11 @@ use Tests\TestCase;
 class EventOccurrenceGeneratorServiceTest extends TestCase
 {
     private EventOccurrenceGeneratorService $service;
+
     private RecurrenceRuleParserService $ruleParser;
+
     private EventOccurrenceRepositoryInterface $occurrenceRepository;
+
     private WaitlistEntryRepositoryInterface|MockInterface $waitlistEntryRepository;
 
     protected function setUp(): void
@@ -58,13 +61,13 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         array $occurrenceIdsWithOrders = [],
         array $occurrenceIdsWithAttendees = [],
     ): void {
-        $orderItemsBuilder = Mockery::mock(\Illuminate\Database\Query\Builder::class);
+        $orderItemsBuilder = Mockery::mock(Builder::class);
         $orderItemsBuilder->shouldReceive('whereIn')->andReturnSelf();
         $orderItemsBuilder->shouldReceive('whereNull')->andReturnSelf();
         $orderItemsBuilder->shouldReceive('distinct')->andReturnSelf();
         $orderItemsBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithOrders));
 
-        $attendeesBuilder = Mockery::mock(\Illuminate\Database\Query\Builder::class);
+        $attendeesBuilder = Mockery::mock(Builder::class);
         $attendeesBuilder->shouldReceive('whereIn')->andReturnSelf();
         $attendeesBuilder->shouldReceive('whereNull')->andReturnSelf();
         $attendeesBuilder->shouldReceive('distinct')->andReturnSelf();
@@ -78,7 +81,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             ->andReturn($attendeesBuilder);
     }
 
-    public function testNewOccurrencesAreCreatedWhenNoneExist(): void
+    public function test_new_occurrences_are_created_when_none_exist(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -128,7 +131,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals(10, $result->first()->getId());
     }
 
-    public function testMultipleNewOccurrencesCreated(): void
+    public function test_multiple_new_occurrences_created(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -171,7 +174,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    public function testExistingOccurrenceWithoutOrdersAndNotOverriddenIsUpdatedInPlace(): void
+    public function test_existing_occurrence_without_orders_and_not_overridden_is_updated_in_place(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -236,7 +239,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals('2025-03-01 12:00:00', $result->first()->getEndDate());
     }
 
-    public function testExistingOccurrenceWithOrdersIsNotModified(): void
+    public function test_existing_occurrence_with_orders_is_not_modified(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -279,7 +282,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals('2025-03-01 11:00:00', $result->first()->getEndDate());
     }
 
-    public function testExistingOverriddenOccurrenceIsNotModified(): void
+    public function test_existing_overridden_occurrence_is_not_modified(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -322,7 +325,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals('2025-03-01 11:00:00', $result->first()->getEndDate());
     }
 
-    public function testStaleOccurrenceWithNoOrdersAndNotOverriddenIsSoftDeleted(): void
+    public function test_stale_occurrence_with_no_orders_and_not_overridden_is_soft_deleted(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -376,7 +379,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals(10, $result->first()->getId());
     }
 
-    public function testStaleOccurrenceWithOrdersIsMarkedOverriddenAndNotDeleted(): void
+    public function test_stale_occurrence_with_orders_is_marked_overridden_and_not_deleted(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -435,7 +438,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals(10, $result->first()->getId());
     }
 
-    public function testStaleOccurrenceWithAttendeesButNoOrderItemsIsMarkedOverriddenAndNotDeleted(): void
+    public function test_stale_occurrence_with_attendees_but_no_order_items_is_marked_overridden_and_not_deleted(): void
     {
         // Regression: matches the single/bulk delete handlers, which both
         // refuse to delete an occurrence that has any attendees pointing at
@@ -502,7 +505,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertEquals(10, $result->first()->getId());
     }
 
-    public function testStaleOverriddenOccurrenceIsNotDeleted(): void
+    public function test_stale_overridden_occurrence_is_not_deleted(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -552,7 +555,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    public function testMixedScenarioWithNewUpdatedSkippedAndStaleOccurrences(): void
+    public function test_mixed_scenario_with_new_updated_skipped_and_stale_occurrences(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -655,7 +658,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertNotContains(4, $ids);
     }
 
-    public function testEventTimezoneIsPassedToParser(): void
+    public function test_event_timezone_is_passed_to_parser(): void
     {
         $event = $this->createMockEvent(timezone: 'America/New_York');
         $recurrenceRule = ['frequency' => 'daily'];
@@ -676,7 +679,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testNullTimezoneDefaultsToUtc(): void
+    public function test_null_timezone_defaults_to_utc(): void
     {
         $event = $this->createMockEvent(timezone: null);
         $recurrenceRule = ['frequency' => 'daily'];
@@ -697,7 +700,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testNewOccurrenceWithNullEndDate(): void
+    public function test_new_occurrence_with_null_end_date(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -738,7 +741,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertNull($result->first()->getEndDate());
     }
 
-    public function testEmptyCandidatesWithExistingOccurrencesDeletesStale(): void
+    public function test_empty_candidates_with_existing_occurrences_deletes_stale(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -772,7 +775,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testStaleOccurrenceWaitlistEntriesAreCancelledBeforeDeletion(): void
+    public function test_stale_occurrence_waitlist_entries_are_cancelled_before_deletion(): void
     {
         // Regression for the regenerate-strands-waitlist bug: removeStaleOccurrences
         // soft-deletes orphaned occurrences. The FK is nullOnDelete which only
@@ -835,7 +838,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testEmptyCandidatesWithOverriddenExistingOccurrenceKeepsIt(): void
+    public function test_empty_candidates_with_overridden_existing_occurrence_keeps_it(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -866,7 +869,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testExistingOccurrenceWithOrdersAndOverriddenIsSkipped(): void
+    public function test_existing_occurrence_with_orders_and_overridden_is_skipped(): void
     {
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
@@ -922,10 +925,10 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         ?int $capacity = null,
         int $eventId = 1,
     ): EventOccurrenceDomainObject {
-        $occ = new EventOccurrenceDomainObject();
+        $occ = new EventOccurrenceDomainObject;
         $occ->setId($id);
         $occ->setEventId($eventId);
-        $occ->setShortId('oc_test' . $id);
+        $occ->setShortId('oc_test'.$id);
         $occ->setStartDate($startDate);
         $occ->setEndDate($endDate);
         $occ->setIsOverridden($isOverridden);

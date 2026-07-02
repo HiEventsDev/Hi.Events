@@ -20,15 +20,13 @@ use Throwable;
 class StripeAccountSyncService
 {
     public function __construct(
-        private readonly LoggerInterface                            $logger,
-        private readonly AccountRepositoryInterface                 $accountRepository,
-        private readonly OrganizerRepositoryInterface               $organizerRepository,
+        private readonly LoggerInterface $logger,
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
-        private readonly OrganizerVatSettingRepositoryInterface     $vatSettingRepository,
-        private readonly Repository                                 $config,
-    )
-    {
-    }
+        private readonly OrganizerVatSettingRepositoryInterface $vatSettingRepository,
+        private readonly Repository $config,
+    ) {}
 
     public function isStripeAccountComplete(Account $stripeAccount): bool
     {
@@ -55,6 +53,7 @@ class StripeAccountSyncService
                 'organizer_id' => $organizerId,
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -71,7 +70,7 @@ class StripeAccountSyncService
         $fragment = $hashPosition === false ? '' : substr($url, $hashPosition);
         $separator = str_contains($base, '?') ? '&' : '?';
 
-        return $base . $separator . $param . $fragment;
+        return $base.$separator.$param.$fragment;
     }
 
     /**
@@ -93,7 +92,7 @@ class StripeAccountSyncService
             ]
         );
 
-        if (!$isAccountSetupCompleted) {
+        if (! $isAccountSetupCompleted) {
             return;
         }
 
@@ -114,9 +113,8 @@ class StripeAccountSyncService
 
     public function markAccountAsCompleteForOrganizer(
         OrganizerStripePlatformDomainObject $organizerStripePlatform,
-        Account                             $stripeAccount,
-    ): void
-    {
+        Account $stripeAccount,
+    ): void {
         $this->logger->info(sprintf(
             'Marking Stripe Connect account as complete for organizer stripe platform %s with Stripe account ID %s',
             $organizerStripePlatform->getId(),
@@ -149,13 +147,12 @@ class StripeAccountSyncService
      * from cached stripe_account_details rather than a live Stripe Account.
      */
     public function seedVatSettingForOrganizerIfMissing(
-        int     $organizerId,
+        int $organizerId,
         ?string $countryCode,
         ?string $stripeAccountId = null,
-        ?int    $organizerStripePlatformId = null,
-    ): void
-    {
-        if (!$this->config->get('app.saas_mode_enabled')) {
+        ?int $organizerStripePlatformId = null,
+    ): void {
+        if (! $this->config->get('app.saas_mode_enabled')) {
             return;
         }
 
@@ -163,17 +160,18 @@ class StripeAccountSyncService
             return;
         }
 
-        if (!$countryCode) {
+        if (! $countryCode) {
             $this->logger->error('Stripe account country code is missing, cannot create VAT setting.', [
                 'organizer_id' => $organizerId,
                 'organizer_stripe_platform_id' => $organizerStripePlatformId,
                 'stripe_account_id' => $stripeAccountId,
             ]);
+
             return;
         }
 
         $countryCode = strtoupper($countryCode);
-        if (!CountryCode::isEuCountry(CountryCode::from($countryCode))) {
+        if (! CountryCode::isEuCountry(CountryCode::from($countryCode))) {
             return;
         }
 
@@ -190,9 +188,8 @@ class StripeAccountSyncService
 
     public function syncStripeAccountDetailsForOrganizer(
         OrganizerStripePlatformDomainObject $organizerStripePlatform,
-        Account                             $stripeAccount,
-    ): void
-    {
+        Account $stripeAccount,
+    ): void {
         $this->organizerStripePlatformRepository->updateWhere(
             attributes: [
                 OrganizerStripePlatformDomainObjectAbstract::STRIPE_ACCOUNT_DETAILS => $this->buildAccountDetails($stripeAccount),
@@ -227,9 +224,8 @@ class StripeAccountSyncService
 
     private function updateOrganizerCountryAndVerificationStatus(
         OrganizerStripePlatformDomainObject $organizerStripePlatform,
-        Account                             $stripeAccount,
-    ): void
-    {
+        Account $stripeAccount,
+    ): void {
         $organizer = $this->organizerRepository->findById($organizerStripePlatform->getOrganizerId());
         if ($organizer === null) {
             return;
@@ -241,15 +237,15 @@ class StripeAccountSyncService
         }
 
         $updates = [];
-        if (!$account->getCountry()) {
+        if (! $account->getCountry()) {
             $updates['country'] = strtoupper($stripeAccount->country);
         }
 
-        if (!$account->getIsManuallyVerified()) {
+        if (! $account->getIsManuallyVerified()) {
             $updates['is_manually_verified'] = true;
         }
 
-        if (!empty($updates)) {
+        if (! empty($updates)) {
             $this->accountRepository->updateWhere(
                 attributes: $updates,
                 where: [
@@ -258,5 +254,4 @@ class StripeAccountSyncService
             );
         }
     }
-
 }

@@ -27,8 +27,7 @@ class MessagingEligibilityService
         private readonly AccountMessagingTierRepositoryInterface $accountMessagingTierRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-    ) {
-    }
+    ) {}
 
     public function checkEligibility(int $accountId, int $eventId): ?MessagingEligibilityFailureDTO
     {
@@ -49,11 +48,11 @@ class MessagingEligibilityService
 
         $failures = [];
 
-        if (!$organizer || !$organizer->isStripeSetupComplete()) {
+        if (! $organizer || ! $organizer->isStripeSetupComplete()) {
             $failures[] = MessagingEligibilityFailureEnum::STRIPE_NOT_CONNECTED;
         }
 
-        if (!$this->hasPaidOrder($accountId)) {
+        if (! $this->hasPaidOrder($accountId)) {
             $failures[] = MessagingEligibilityFailureEnum::NO_PAID_ORDERS;
         }
 
@@ -88,7 +87,7 @@ class MessagingEligibilityService
             $violations[] = MessagingTierViolationEnum::RECIPIENT_LIMIT_EXCEEDED;
         }
 
-        if (!$tier->getLinksAllowed() && $this->containsLinks($messageContent)) {
+        if (! $tier->getLinksAllowed() && $this->containsLinks($messageContent)) {
             $violations[] = MessagingTierViolationEnum::LINKS_NOT_ALLOWED;
         }
 

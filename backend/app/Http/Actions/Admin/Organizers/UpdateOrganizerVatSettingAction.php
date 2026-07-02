@@ -16,9 +16,7 @@ class UpdateOrganizerVatSettingAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateAdminOrganizerVatSettingHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {

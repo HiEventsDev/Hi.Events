@@ -33,7 +33,7 @@ class CheckInListResourcePublic extends JsonResource
             'public_show_attendee_notes' => $this->getPublicShowAttendeeNotes(),
             'public_show_question_answers' => $this->getPublicShowQuestionAnswers(),
             'public_show_order_details' => $this->getPublicShowOrderDetails(),
-            $this->mergeWhen($this->getEvent() !== null, fn() => [
+            $this->mergeWhen($this->getEvent() !== null, fn () => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
                 'event' => EventResourcePublic::make($this->getEvent()),
@@ -43,13 +43,13 @@ class CheckInListResourcePublic extends JsonResource
                 'event_occurrences' => $this->getEvent()->getEventOccurrences()
                     ? EventOccurrenceResourcePublic::collection(
                         $this->getEvent()->getEventOccurrences()
-                            ->filter(fn(EventOccurrenceDomainObject $occ) => !$occ->isCancelled())
-                            ->sortBy(fn(EventOccurrenceDomainObject $occ) => $occ->getStartDate())
+                            ->filter(fn (EventOccurrenceDomainObject $occ) => ! $occ->isCancelled())
+                            ->sortBy(fn (EventOccurrenceDomainObject $occ) => $occ->getStartDate())
                             ->values()
                     )
                     : [],
             ]),
-            $this->mergeWhen($this->getProducts() !== null, fn() => [
+            $this->mergeWhen($this->getProducts() !== null, fn () => [
                 'products' => ProductMinimalResourcePublic::collection($this->getProducts()),
             ]),
         ];

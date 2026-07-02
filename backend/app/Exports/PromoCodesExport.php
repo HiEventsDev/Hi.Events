@@ -16,6 +16,7 @@ class PromoCodesExport implements FromCollection, WithHeadings, WithMapping, Wit
     public function withData($data): PromoCodesExport
     {
         $this->data = $data;
+
         return $this;
     }
 
