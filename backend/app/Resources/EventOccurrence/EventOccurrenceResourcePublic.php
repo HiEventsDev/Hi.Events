@@ -17,7 +17,6 @@ class EventOccurrenceResourcePublic extends BaseResource
         return [
             'id' => $this->getId(),
             'event_id' => $this->getEventId(),
-            'short_id' => $this->getShortId(),
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
             'status' => $this->getStatus(),

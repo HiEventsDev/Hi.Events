@@ -28,7 +28,6 @@ class AttendeeDetailPublicResource extends JsonResource
             'public_id' => $attendee->getPublicId(),
             'first_name' => $attendee->getFirstName(),
             'last_name' => $attendee->getLastName(),
-            'email' => $attendee->getEmail(),
             'status' => $attendee->getStatus(),
             'product_id' => $attendee->getProductId(),
             'product_title' => $product?->getTitle(),
@@ -63,6 +62,7 @@ class AttendeeDetailPublicResource extends JsonResource
         }
 
         if ($this->showOrderDetails && $order) {
+            $data['email'] = $attendee->getEmail();
             $data['order'] = [
                 'id' => $order->getId(),
                 'public_id' => $order->getPublicId(),

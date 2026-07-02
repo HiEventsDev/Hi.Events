@@ -217,12 +217,12 @@ export const AttendeeDetailSheet = ({
                         </button>
                     </header>
 
-                    <div className={classes.contactRow}>
+                    {!!detail.email && <div className={classes.contactRow}>
                         <div className={classes.contactItem}>
                             <IconMail size={14}/>
                             <span>{detail.email}</span>
                         </div>
-                    </div>
+                    </div>}
 
                     {isCheckedIn && currentCheckIn && (
                         <div className={classes.section}>
@@ -273,7 +273,8 @@ export const AttendeeDetailSheet = ({
                                 </div>
                                 <div className={classes.orderCell}>
                                     <span className={classes.orderLabel}>{t`Placed`}</span>
-                                    <span className={classes.orderValue}>{formatDateTime(detail.order.created_at)}</span>
+                                    <span
+                                        className={classes.orderValue}>{formatDateTime(detail.order.created_at)}</span>
                                 </div>
                                 {detail.order.first_name && (
                                     <div className={classes.orderCell}>
