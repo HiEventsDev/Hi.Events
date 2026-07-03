@@ -8,4 +8,5 @@ enum PaymentProviders: string
 
     case STRIPE = 'STRIPE';
     case OFFLINE = 'OFFLINE';
+    case RAZORPAY = 'RAZORPAY';
 }

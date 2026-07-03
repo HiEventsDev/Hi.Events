@@ -8,7 +8,9 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\RefundOrderRequest;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
-use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\Payment\Razorpay\RefundOrderHandler as RazorpayRefundOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler as StripeRefundOrderHandler;
+use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Stripe\Exception\ApiErrorException;
@@ -16,8 +18,11 @@ use Throwable;
 
 class RefundOrderAction extends BaseAction
 {
-    public function __construct(private readonly RefundOrderHandler     $refundOrderHandler)
-    {
+    public function __construct(
+        private readonly StripeRefundOrderHandler   $stripeRefundOrderHandler,
+        private readonly RazorpayRefundOrderHandler $razorpayRefundOrderHandler,
+        private readonly OrderRepositoryInterface   $orderRepository
+    ) {
     }
 
     /**
@@ -29,16 +34,22 @@ class RefundOrderAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         try {
-            $order = $this->refundOrderHandler->handle(
-                refundOrderDTO: RefundOrderDTO::fromArray(array_merge($request->validated(), [
-                    'event_id' => $eventId,
-                    'order_id' => $orderId,
-                ]))
-            );
-        } catch (ApiErrorException|RefundNotPossibleException $exception) {
+            $order = $this->orderRepository->findById($orderId);
+            
+            $refundOrderDTO = RefundOrderDTO::fromArray(array_merge($request->validated(), [
+                'event_id' => $eventId,
+                'order_id' => $orderId,
+            ]));
+
+            if ($order->getPaymentProvider() === \HiEvents\DomainObjects\Enums\PaymentProviders::RAZORPAY->name) {
+                $order = $this->razorpayRefundOrderHandler->handle($refundOrderDTO);
+            } else {
+                $order = $this->stripeRefundOrderHandler->handle($refundOrderDTO);
+            }
+        } catch (ApiErrorException|RefundNotPossibleException|\HiEvents\Exceptions\Razorpay\RazorpayClientConfigurationException $exception) {
             throw ValidationException::withMessages([
                 'amount' => $exception instanceof ApiErrorException
-                    ? 'Stripe error: ' . $exception->getMessage()
+                    ? 'Payment gateway error: ' . $exception->getMessage()
                     : $exception->getMessage(),
             ]);
         }
