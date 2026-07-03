@@ -30,8 +30,12 @@ class CreateRazorpayOrderHandler
     {
         $order = $this->orderRepository->findByShortId($orderShortId);
 
-        if (!$order || !$this->checkoutSessionManagementService->verifySession($order->getSessionIdentifier())) {
-            throw new ResourceNotFoundException('Order not found or invalid session');
+        if (!$order || !$this->checkoutSessionManagementService->verifySession($order->getSessionId() ?? '')) {
+            throw new \HiEvents\Exceptions\UnauthorizedException(__('Sorry, we could not verify your session. Please create a new order.'));
+        }
+
+        if ($order->getStatus() !== \HiEvents\DomainObjects\Status\OrderStatus::RESERVED->name || $order->isReservedOrderExpired()) {
+            throw new \HiEvents\Exceptions\ResourceConflictException(__('Sorry, your order is expired or not in a valid state.'));
         }
 
         // Check if a Razorpay order already exists for this order
