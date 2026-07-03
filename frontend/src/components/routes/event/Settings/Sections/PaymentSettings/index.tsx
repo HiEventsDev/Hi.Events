@@ -86,6 +86,11 @@ export const PaymentAndInvoicingSettings = () => {
             description: t`Accept credit card payments with Stripe`
         },
         {
+            value: "RAZORPAY",
+            label: t`Razorpay`,
+            description: t`Accept credit card, UPI, and other payments with Razorpay`
+        },
+        {
             value: "OFFLINE",
             label: t`Offline Payments`,
             description: t`Accept bank transfers, checks, or other offline payment methods`
