@@ -82,7 +82,7 @@ const groupOccurrencesByDate = (occurrences: EventOccurrence[], tz: string): Dat
     const tomorrow = today.add(1, 'day');
 
     return Array.from(map.entries()).map(([dateKey, occs]) => {
-        const date = dayjs(dateKey);
+        const date = dayjs.tz(dateKey, tz);
         let label: string;
         if (date.isSame(today, 'day')) {
             label = t`Today` + ' — ' + formatDateWithLocale(occs[0].start_date, 'dayName', tz);

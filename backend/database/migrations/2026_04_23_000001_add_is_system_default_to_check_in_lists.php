@@ -46,9 +46,9 @@ return new class extends Migration
                         'name' => 'Default check-in',
                         'description' => null,
                         'is_system_default' => true,
-                        'public_show_attendee_notes' => true,
-                        'public_show_question_answers' => true,
-                        'public_show_order_details' => true,
+                        'public_show_attendee_notes' => false,
+                        'public_show_question_answers' => false,
+                        'public_show_order_details' => false,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);

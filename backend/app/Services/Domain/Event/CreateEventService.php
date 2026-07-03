@@ -88,9 +88,9 @@ class CreateEventService
             'short_id' => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
             'name' => __('Default check-in'),
             'is_system_default' => true,
-            'public_show_attendee_notes' => true,
-            'public_show_question_answers' => true,
-            'public_show_order_details' => true,
+            'public_show_attendee_notes' => false,
+            'public_show_question_answers' => false,
+            'public_show_order_details' => false,
         ]);
     }
 

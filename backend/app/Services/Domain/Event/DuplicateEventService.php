@@ -387,6 +387,9 @@ class DuplicateEventService
                     ->setExpiresAt($checkInList->getExpiresAt())
                     ->setActivatesAt($checkInList->getActivatesAt())
                     ->setEventOccurrenceId($newOccurrenceId)
+                    ->setPublicShowAttendeeNotes($checkInList->getPublicShowAttendeeNotes())
+                    ->setPublicShowQuestionAnswers($checkInList->getPublicShowQuestionAnswers())
+                    ->setPublicShowOrderDetails($checkInList->getPublicShowOrderDetails())
                     ->setEventId($newEventId),
                 productIds: $checkInList->getProducts()
                     ?->map(fn ($product) => $oldProductToNewProductMap[$product->getId()])?->toArray() ?? [],
