@@ -36,7 +36,7 @@ class EmailTemplateTokenTest extends TestCase
 
         // Create user with account
         $password = 'password123';
-        $this->user = User::factory()->password($password)->withAccount()->create();
+        $this->user = User::factory()->password($password)->withAccount()->create(['locale' => 'en']);
 
         // Get the account created by withAccount()
         $this->account = $this->user->accounts()->first();
