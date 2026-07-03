@@ -4,8 +4,10 @@ services:
       context: ./../../
       dockerfile: Dockerfile.all-in-one
     restart: unless-stopped
-    ports:
-      - "8123:80"
+
+    expose:
+      - "80"
+
     environment:
       - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
       - VITE_API_URL_CLIENT=${VITE_API_URL_CLIENT}
@@ -53,32 +55,51 @@ services:
       redis:
         condition: service_healthy
 
+    networks:
+      - default
+      - dokploy-network
+
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+
     volumes:
       - redisdata:/data
+
+    networks:
+      - default
 
   postgres:
     image: postgres:17-alpine
     restart: unless-stopped
+
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-hi-events}" ]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-hi-events}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-hi-events}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+    networks:
+      - default
 
 volumes:
   pgdata:
   redisdata:
+
+networks:
+  dokploy-network:
+    external: true
