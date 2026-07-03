@@ -37,15 +37,15 @@ export const RazorpayPaymentMethod = ({enabled, setSubmitHandler}: RazorpayPayme
     const {data: event} = useGetEventPublic(eventId);
 
     useEffect(() => {
-        // Load Razorpay SDK
+        if (document.getElementById('razorpay-sdk')) {
+            return;
+        }
+        
         const script = document.createElement("script");
+        script.id = 'razorpay-sdk';
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         script.async = true;
         document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        };
     }, []);
 
     useEffect(() => {
