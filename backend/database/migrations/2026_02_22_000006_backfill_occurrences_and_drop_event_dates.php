@@ -12,9 +12,9 @@ return new class extends Migration
     {
         DB::transaction(function () {
             // Step 1: Create one occurrence per existing event (with short_id).
-            // Skip when columns are already dropped (the migration previously reached
-            // Step 5) and skip individual events that already have an occurrence so a
-            // retry after partial completion succeeds rather than crashing.
+            // start_date/end_date are read here and intentionally retained on the
+            // events table (never dropped). Skip individual events that already have
+            // an occurrence so a retry after partial completion succeeds.
             if (Schema::hasColumn('events', 'start_date')) {
                 DB::table('events')->select('id', 'start_date', 'end_date', 'created_at')->orderBy('id')->chunk(500, function ($events) {
                     $eventIds = $events->pluck('id')->all();
@@ -71,36 +71,11 @@ return new class extends Migration
             Schema::table('attendees', function (Blueprint $table) {
                 $table->foreignId('event_occurrence_id')->nullable(false)->change();
             });
-
-            // Step 5: Drop start_date and end_date from events (no-op if already dropped).
-            if (Schema::hasColumn('events', 'start_date')) {
-                Schema::table('events', function (Blueprint $table) {
-                    $table->dropColumn(['start_date', 'end_date']);
-                });
-            }
         });
     }
 
     public function down(): void
     {
-        // Re-add date columns to events
-        Schema::table('events', function (Blueprint $table) {
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
-        });
-
-        // Restore dates from occurrences
-        DB::statement('
-            UPDATE events e
-            SET start_date = (
-                SELECT MIN(eo.start_date) FROM event_occurrences eo WHERE eo.event_id = e.id
-            ),
-            end_date = (
-                SELECT MAX(eo.end_date) FROM event_occurrences eo WHERE eo.event_id = e.id
-            )
-        ');
-
-        // Null out occurrence FKs and make nullable again
         DB::statement('UPDATE attendees SET event_occurrence_id = NULL');
 
         Schema::table('attendees', function (Blueprint $table) {

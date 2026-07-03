@@ -4,6 +4,7 @@ import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import {useMemo} from "react";
 import {Loader} from "@mantine/core";
+import {t} from "@lingui/macro";
 
 const ProductWidget = () => {
     const {eventId} = useParams();
@@ -42,6 +43,26 @@ const ProductWidget = () => {
             padding: searchParams.get("Padding") || '10px',
         };
     }, [location.search]);
+
+    if (eventQuery.isError || (eventQuery.isFetched && !eventQuery.data)) {
+        return (
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                padding: '20px',
+                textAlign: 'center',
+                backgroundColor: settings.colors.background,
+                color: settings.colors.primaryText,
+            }}>
+                <div>
+                    <p style={{fontWeight: 600, margin: '0 0 4px'}}>{t`This event is not available`}</p>
+                    <p style={{margin: 0, opacity: 0.7}}>{t`It may have been unpublished or removed. Please check the link and try again.`}</p>
+                </div>
+            </div>
+        )
+    }
 
     if (!eventQuery.isFetched || !eventQuery.data) {
         return (

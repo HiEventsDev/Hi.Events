@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('check_in_lists', function (Blueprint $table) {
-            $table->boolean('public_show_attendee_notes')->default(true);
-            $table->boolean('public_show_question_answers')->default(true);
-            $table->boolean('public_show_order_details')->default(true);
+            $table->boolean('public_show_attendee_notes')->default(false);
+            $table->boolean('public_show_question_answers')->default(false);
+            $table->boolean('public_show_order_details')->default(false);
         });
     }
 
