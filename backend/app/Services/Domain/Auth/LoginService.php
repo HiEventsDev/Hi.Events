@@ -53,6 +53,10 @@ readonly class LoginService
 
         $accountId = $this->getAccountId($accounts, $requestedAccountId);
 
+        if ($accountId && config('app.require_account_approval', false)) {
+            $this->validateAccountApproval($accountId, $accounts);
+        }
+
         if ($accountId) {
             $this->validateUserStatus($accountId, $userAccounts);
         }
@@ -149,5 +153,17 @@ readonly class LoginService
             ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
 
         return Role::from($currentAccount?->getRole());
+    }
+
+    private function validateAccountApproval(int $accountId, Collection $accounts): void
+    {
+        /** @var \HiEvents\DomainObjects\AccountDomainObject|null $account */
+        $account = $accounts->first(fn($a) => $a->getId() === $accountId);
+
+        if ($account && $account->getApprovedAt() === null) {
+            throw new UnauthorizedException(
+                __('Your account is pending approval. You will receive an email once it has been approved.')
+            );
+        }
     }
 }

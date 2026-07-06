@@ -46,9 +46,13 @@ export const Register = () => {
         const registrationData = utmData ? {...data, ...utmData} : data;
 
         mutate.mutate({registerData: registrationData}, {
-            onSuccess: () => {
+            onSuccess: (response: any) => {
                 clearStoredUtmData();
-                navigate(`/welcome${location.search}`);
+                if (response?.pending_approval) {
+                    navigate('/auth/pending-approval');
+                } else {
+                    navigate(`/welcome${location.search}`);
+                }
             },
             onError: (error: any) => {
                 errorHandler(form, error, error.response?.data?.message);
