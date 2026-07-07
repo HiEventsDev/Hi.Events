@@ -60,7 +60,7 @@ msgstr "{0} <0>checked out</0> thành công"
 msgid "{0} Active Webhooks"
 msgstr "{0} Webhook đang hoạt động"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:688
+#: src/components/routes/product-widget/SelectProducts/index.tsx:514
 msgid "{0} available"
 msgstr "{0} Có sẵn"
 
@@ -69,7 +69,6 @@ msgid "{0} created successfully"
 msgstr "{0} đã tạo thành công"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:399
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:471
 msgid "{0} left"
 msgstr "Còn {0}"
 
@@ -85,10 +84,6 @@ msgstr "Đã có {0} trong số {1} chỗ được đặt."
 #: src/components/routes/events/Dashboard/index.tsx:141
 msgid "{0} organizers"
 msgstr "{0} nhà tổ chức"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:375
-msgid "{0} spots left"
-msgstr "Còn {0} chỗ"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:602
 msgid "{0} tickets"
@@ -110,13 +105,17 @@ msgstr "Đã bật {activeCount}"
 msgid "{appName} logo"
 msgstr "Logo {appName}"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:307
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:321
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr "{attendeeCount} người tham dự đã đăng ký cho buổi này."
 
 #: src/components/common/EventCard/index.tsx:146
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} trong số {totalCount} có sẵn"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "{capacity} spots left"
+msgstr "Còn {capacity} chỗ"
 
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:55
 msgid "{checkedIn} / {total} checked in"
@@ -166,6 +165,11 @@ msgstr "Sự kiện đầu tiên của {organizerName}"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:109
 msgid "{productCount} ticket types configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "{slotCount} times available"
+msgstr "{slotCount} khung giờ khả dụng"
 
 #: src/components/common/EventCard/index.tsx:142
 msgid "{totalCount} ticket types"
@@ -234,7 +238,7 @@ msgstr "1 Webhook đang hoạt động"
 msgid "1 attendee is registered across the affected sessions."
 msgstr "1 người tham dự đã đăng ký trên các buổi bị ảnh hưởng."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:320
 msgid "1 attendee is registered for this session."
 msgstr "1 người tham dự đã đăng ký cho buổi này."
 
@@ -265,6 +269,11 @@ msgstr "1 loại vé"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:108
 msgid "1 ticket type configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "1 time available"
+msgstr "1 khung giờ khả dụng"
 
 #: src/components/modals/SendMessageModal/index.tsx:127
 msgid "1 week before event"
@@ -574,7 +583,7 @@ msgstr "Thêm thông tin kết nối cho sự kiện trực tuyến."
 msgid "Add custom questions to collect additional information during checkout"
 msgstr "Thêm câu hỏi tùy chỉnh để thu thập thông tin bổ sung trong quá trình thanh toán"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Add Date"
 msgstr "Thêm ngày"
 
@@ -700,7 +709,7 @@ msgstr "Dòng địa chỉ 1"
 
 #: src/components/modals/LocationEditModal/index.tsx:114
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:559
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:545
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:559
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:243
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:172
 #: src/components/routes/product-widget/CollectInformation/index.tsx:525
@@ -714,7 +723,7 @@ msgstr "Dòng địa chỉ 2"
 
 #: src/components/modals/LocationEditModal/index.tsx:115
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:560
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:546
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:560
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:248
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:177
 #: src/components/routes/product-widget/CollectInformation/index.tsx:530
@@ -890,7 +899,7 @@ msgstr "Cho phép người tham dự liên kết với đơn hàng chưa thanh t
 msgid "Allow attendees to update their ticket information (name, email) via a secure link sent with their order confirmation."
 msgstr "Cho phép người tham dự cập nhật thông tin vé của họ (tên, email) qua liên kết bảo mật được gửi cùng với xác nhận đơn hàng."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:135
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:140
 msgid "Allow buyers to copy their details to all attendees"
 msgstr ""
 
@@ -1015,7 +1024,7 @@ msgstr "Mọi thắc mắc từ chủ sở hữu sản phẩm sẽ được gử
 msgid "Appearance"
 msgstr "Giao diện"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:790
+#: src/components/routes/product-widget/SelectProducts/index.tsx:606
 msgid "applied"
 msgstr "đã được áp dụng"
 
@@ -1047,7 +1056,7 @@ msgstr "Áp dụng"
 msgid "Apply Changes"
 msgstr "Áp dụng thay đổi"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:818
+#: src/components/routes/product-widget/SelectProducts/index.tsx:635
 msgid "Apply Promo Code"
 msgstr "Áp dụng mã khuyến mãi"
 
@@ -1133,7 +1142,7 @@ msgstr "Bạn có chắc mình muốn hủy người tham dự này không? Đi�
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:59
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:36
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:337
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
 msgid "Are you sure you want to cancel this date? Affected attendees will be notified by email."
 msgstr "Bạn có chắc chắn muốn hủy ngày này không? Người tham dự bị ảnh hưởng sẽ được thông báo qua email."
 
@@ -1202,7 +1211,7 @@ msgstr "Bạn có chắc muốn công khai nhà tổ chức này không? Trang c
 msgid "Are you sure you want to offer a spot to this person? They will receive an email notification."
 msgstr "Bạn có chắc chắn muốn cung cấp một suất cho người này không? Họ sẽ nhận được thông báo qua email."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:372
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:386
 msgid "Are you sure you want to permanently delete this date? This cannot be undone."
 msgstr "Bạn có chắc chắn muốn xóa vĩnh viễn ngày này không? Hành động này không thể hoàn tác."
 
@@ -1350,7 +1359,7 @@ msgstr "Email người tham dự"
 msgid "Attendee Information"
 msgstr "Thông tin người tham dự"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
 msgid "Attendee information collection"
 msgstr "Thu thập thông tin người tham dự"
 
@@ -1484,6 +1493,10 @@ msgstr "Tự động thay đổi chiều cao widget dựa trên nội dung. Khi 
 msgid "Available"
 msgstr "Còn chỗ"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:193
+msgid "Available times on {dayName}"
+msgstr "Khung giờ khả dụng vào {dayName}"
+
 #: src/components/modals/RefundOrderModal/index.tsx:93
 msgid "Available to Refund"
 msgstr "Có thể hoàn tiền"
@@ -1533,17 +1546,9 @@ msgstr "Công ty TNHH Awesome Events"
 msgid "Awesome Organizer Ltd."
 msgstr "Nhà tổ chức tuyệt vời Ltd."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:329
-msgid "Back"
-msgstr "Quay lại"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
 msgid "Back to Accounts"
 msgstr "Quay lại tài khoản"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:326
-msgid "Back to calendar"
-msgstr "Quay lại lịch"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:144
 #: src/components/routes/product-widget/CollectInformation/index.tsx:336
@@ -1704,10 +1709,6 @@ msgstr "Loại tính toán"
 msgid "Calendar"
 msgstr "Lịch"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:545
-msgid "Calendar view"
-msgstr "Xem lịch"
-
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:261
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:190
 msgid "California"
@@ -1745,7 +1746,7 @@ msgstr "Không thể check-in"
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
 #: src/components/routes/organizer/Locations/index.tsx:40
@@ -1769,9 +1770,9 @@ msgstr "Hủy tất cả sản phẩm và trả lại pool có sẵn"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:32
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:333
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:615
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:347
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:656
 msgid "Cancel Date"
 msgstr "Hủy ngày"
 
@@ -1815,7 +1816,8 @@ msgstr "Hủy bỏ"
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:425
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:368
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:137
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:99
 msgid "Cancelled"
 msgstr "Hủy bỏ"
@@ -1829,7 +1831,7 @@ msgid "Cannot delete the system default configuration"
 msgstr "Không thể xóa cấu hình mặc định của hệ thống"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:577
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:591
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:830
 msgid "Capacity"
 msgstr "Công suất"
@@ -1854,7 +1856,7 @@ msgstr "Quản lý sức chứa"
 msgid "Capacity Management"
 msgstr "Quản lý sức chứa"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:121
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:132
 msgid "Capacity must be 0 or greater"
 msgstr "Sức chứa phải bằng 0 hoặc lớn hơn"
 
@@ -1887,10 +1889,6 @@ msgstr "Danh mục"
 msgid "Category Created Successfully"
 msgstr "Danh mục được tạo thành công"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:598
-msgid "Change"
-msgstr "Thay đổi"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
 msgid "Change duration"
 msgstr "Thay đổi thời lượng"
@@ -1902,6 +1900,10 @@ msgstr "Thay đổi mật khẩu"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:37
 msgid "Change the attendee limit"
 msgstr "Thay đổi giới hạn người tham dự"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:256
+msgid "Change time"
+msgstr "Đổi giờ"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:100
 msgid "Change waitlist settings"
@@ -2086,7 +2088,7 @@ msgstr "Đã check-in"
 msgid "Checkout"
 msgstr "Thanh toán"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:89
 msgid "Checkout Settings"
 msgstr "Cài đặt thanh toán"
 
@@ -2150,7 +2152,7 @@ msgstr "Chọn ai trả phí nền tảng. Điều này không ảnh hưởng đ
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/modals/LocationEditModal/index.tsx:118
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:563
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:549
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:563
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:184
 #: src/components/routes/product-widget/CollectInformation/index.tsx:539
@@ -2195,7 +2197,7 @@ msgstr "Nhấn để mở lại cho việc bán vé mới"
 msgid "Click to view notes"
 msgstr "Nhấp để xem ghi chú"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:823
+#: src/components/routes/product-widget/SelectProducts/index.tsx:641
 msgid "close"
 msgstr "đóng"
 
@@ -2204,7 +2206,7 @@ msgstr "đóng"
 #: src/components/modals/JoinWaitlistModal/index.tsx:105
 #: src/components/modals/JoinWaitlistModal/index.tsx:132
 #: src/components/modals/RefundOrderModal/index.tsx:163
-#: src/components/routes/product-widget/SelectProducts/index.tsx:824
+#: src/components/routes/product-widget/SelectProducts/index.tsx:642
 msgid "Close"
 msgstr "Đóng"
 
@@ -2253,7 +2255,7 @@ msgstr "Hợp tác với nhóm của bạn để tạo nên những sự kiện 
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Thu gọn sản phẩm này khi trang sự kiện ban đầu được tải"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:43
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:34
 msgid "Collect attendee details for each ticket purchased."
 msgstr "Thu thập thông tin chi tiết người tham dự cho mỗi vé đã mua."
@@ -2321,20 +2323,6 @@ msgstr "Hoàn tất thanh toán"
 msgid "Complete Stripe setup"
 msgstr "Hoàn tất thiết lập Stripe"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:418
-#: src/components/common/StripeConnectButton/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Complete Stripe Setup"
-#~ msgstr "Hoàn tất thiết lập Stripe"
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:115
-#~ msgid "Complete the setup below to continue"
-#~ msgstr "Hoàn thành thiết lập bên dưới để tiếp tục"
-
-#: src/components/routes/event/EventDashboard/index.tsx:171
-#~ msgid "Complete these steps to start selling tickets for your event."
-#~ msgstr "Hoàn thành các bước này để bắt đầu bán vé cho sự kiện của bạn."
-
 #: src/components/routes/product-widget/CollectInformation/index.tsx:419
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "Hoàn tất đơn hàng để đảm bảo vé của bạn. Ưu đãi này có thời hạn, vì vậy đừng chờ đợi quá lâu."
@@ -2375,7 +2363,7 @@ msgstr "Soạn"
 
 #: src/components/modals/LocationEditModal/index.tsx:111
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:556
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:542
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:556
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:238
 msgid "Conference Center"
 msgstr "Trung tâm hội nghị"
@@ -2484,21 +2472,9 @@ msgstr "Đang xác nhận địa chỉ email..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Chúc mừng! Sự kiện của bạn hiện đã hiển thị công khai."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:235
-#~ msgid "Connect & Upgrade"
-#~ msgstr "Kết nối và nâng cấp"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:85
 msgid "Connect bank"
 msgstr ""
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:653
-#~ msgid "Connect Documentation"
-#~ msgstr "Tài liệu kết nối"
-
-#: src/components/routes/event/EventDashboard/index.tsx:236
-#~ msgid "Connect payment processing"
-#~ msgstr "Kết nối xử lý thanh toán"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:369
 #: src/components/modals/SendMessageModal/index.tsx:312
@@ -2517,10 +2493,6 @@ msgstr "Kết nối Stripe để bật tính năng nhắn tin"
 msgid "Connect Stripe to receive ticket payments directly to your bank account."
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Connect to Stripe"
-#~ msgstr "Kết nối với Stripe"
-
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:210
 msgid "Connect with Stripe"
 msgstr "Kết nối với Stripe"
@@ -2530,12 +2502,12 @@ msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr ""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:578
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:566
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:580
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:214
 msgid "Connection Details"
 msgstr "Chi tiết kết nối"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:127
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:138
 msgid "Connection details are required for online dates"
 msgstr ""
 
@@ -2565,7 +2537,7 @@ msgstr "Email liên hệ hỗ trợ"
 
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
-#: src/components/routes/product-widget/SelectProducts/index.tsx:770
+#: src/components/routes/product-widget/SelectProducts/index.tsx:590
 msgid "Continue"
 msgstr "Tiếp tục"
 
@@ -2580,7 +2552,7 @@ msgstr "Văn bản nút Tiếp tục"
 msgid "Continue Setup"
 msgstr "Tiếp tục thiết lập"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:537
+#: src/components/routes/product-widget/SelectProducts/index.tsx:737
 msgid "Continue to Checkout"
 msgstr "Tiếp tục đến thanh toán"
 
@@ -2714,7 +2686,7 @@ msgstr "Không thể truy xuất chi tiết địa chỉ"
 msgid "Could not save address"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:281
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:295
 msgid "Could not save date"
 msgstr "Không thể lưu ngày"
 
@@ -2731,7 +2703,7 @@ msgstr ""
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/modals/LocationEditModal/index.tsx:127
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:568
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:568
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:274
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:202
 #: src/components/routes/product-widget/CollectInformation/index.tsx:560
@@ -2869,7 +2841,7 @@ msgstr "Tạo mẫu email tùy chỉnh cho sự kiện này ghi đè mặc đị
 msgid "Create Custom Template"
 msgstr "Tạo mẫu tùy chỉnh"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 msgid "Create Date"
 msgstr "Tạo ngày"
 
@@ -3082,7 +3054,7 @@ msgstr "Tùy chỉnh cài đặt email và thông báo cho sự kiện này"
 msgid "Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization."
 msgstr "Tùy chỉnh email gửi cho khách hàng bằng mẫu Liquid. Các mẫu này sẽ được dùng làm mặc định cho tất cả sự kiện trong tổ chức của bạn."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:85
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
 msgid "Customize the event homepage and checkout messaging"
 msgstr "Tùy chỉnh trang chủ sự kiện và tin nhắn thanh toán"
 
@@ -3120,7 +3092,7 @@ msgid "Customize your organizer page appearance"
 msgstr "Tùy chỉnh giao diện trang tổ chức của bạn"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:56
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Daily"
 msgstr "Hàng ngày"
 
@@ -3154,7 +3126,7 @@ msgstr "Vùng nguy hiểm"
 
 #: src/components/common/AttendeeTable/index.tsx:387
 #: src/components/common/DangerZone/index.tsx:30
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:602
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:643
 #: src/components/routes/event/Settings/index.tsx:98
 #: src/components/routes/organizer/Settings/index.tsx:79
 msgid "Danger Zone"
@@ -3183,7 +3155,7 @@ msgid "Date"
 msgstr "Ngày"
 
 #: src/components/common/AttendeeTicket/index.tsx:94
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:459
 msgid "Date & Time"
 msgstr "Ngày và giờ"
 
@@ -3197,11 +3169,11 @@ msgstr "Hủy ngày"
 msgid "Date cancelled"
 msgstr "Đã hủy ngày"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:356
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:370
 msgid "Date cancelled successfully"
 msgstr "Hủy ngày thành công"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:261
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:275
 msgid "Date created successfully"
 msgstr "Tạo ngày thành công"
 
@@ -3211,7 +3183,7 @@ msgstr "Tạo ngày thành công"
 msgid "Date deleted"
 msgstr "Đã xóa ngày"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:380
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:394
 msgid "Date deleted successfully"
 msgstr "Xóa ngày thành công"
 
@@ -3234,13 +3206,17 @@ msgstr "Đã kích hoạt lại ngày"
 msgid "Date reopened for new sales"
 msgstr "Đã mở lại ngày để bán vé mới"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:260
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:274
 msgid "Date updated successfully"
 msgstr "Cập nhật ngày thành công"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:105
 msgid "Dates are managed per occurrence"
 msgstr "Ngày được quản lý theo từng lần diễn ra"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:489
+msgid "Dates with sessions"
+msgstr "Ngày có buổi"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:93
 msgid "day"
@@ -3350,8 +3326,8 @@ msgstr "Xóa danh sách check-in"
 msgid "Delete code"
 msgstr "Xóa mã"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:369
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:629
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:383
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:670
 msgid "Delete Date"
 msgstr "Xóa ngày"
 
@@ -3378,7 +3354,7 @@ msgstr "Xóa địa điểm"
 msgid "Delete Organizer"
 msgstr "Xóa ban tổ chức"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Delete Permanently"
 msgstr "Xóa vĩnh viễn"
 
@@ -3426,7 +3402,7 @@ msgstr "Các yếu tố thiết kế"
 
 #: src/components/common/ProgressStepper/index.tsx:18
 #: src/components/common/ProgressStepper/index.tsx:23
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:419
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:433
 msgid "Details"
 msgstr "Chi tiết"
 
@@ -3434,7 +3410,7 @@ msgstr "Chi tiết"
 msgid "Didn't receive the code?"
 msgstr "Không nhận được mã?"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:484
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:498
 msgid "Different location"
 msgstr "Địa điểm khác"
 
@@ -3475,13 +3451,17 @@ msgstr "Đóng"
 msgid "Dismiss setup checklist"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:554
+#: src/components/routes/product-widget/SelectProducts/index.tsx:754
 msgid "Dismiss this message"
 msgstr "Bỏ qua thông báo này"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:129
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:134
 msgid "Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer."
 msgstr "Hiển thị hộp kiểm cho phép khách hàng đăng ký nhận thông tin tiếp thị từ ban tổ chức sự kiện này."
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:149
+msgid "Display how many spots are left on each date in the ticket widget. You can override this for individual dates. Sold-out dates are always labelled."
+msgstr "Hiển thị số chỗ còn lại cho mỗi ngày trong tiện ích vé. Bạn có thể ghi đè cho từng ngày riêng lẻ. Những ngày đã bán hết luôn được ghi nhãn."
 
 #: src/components/modals/LocationEditModal/index.tsx:104
 msgid "Display name"
@@ -3574,7 +3554,7 @@ msgstr ""
 msgid "Duplicate"
 msgstr "Nhân đôi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Duplicate Date"
 msgstr "Nhân đôi ngày"
 
@@ -3609,7 +3589,7 @@ msgid "e.g. 180 (3 hours)"
 msgstr "ví dụ 180 (3 giờ)"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:477
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:462
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:476
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:733
 msgid "e.g. Morning Session"
 msgstr "ví dụ: Buổi sáng"
@@ -3703,7 +3683,7 @@ msgstr "Chỉnh sửa mã"
 msgid "Edit Configuration"
 msgstr "Chỉnh sửa cấu hình"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Edit Date"
 msgstr "Chỉnh sửa ngày"
 
@@ -3958,7 +3938,7 @@ msgstr "Kết thúc"
 
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:133
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:457
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:471
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
 msgid "End Date"
 msgstr "Ngày kết thúc"
@@ -3968,7 +3948,7 @@ msgid "End Date & Time (optional)"
 msgstr "Ngày và giờ kết thúc (tùy chọn)"
 
 #: src/components/modals/CreateEventModal/index.tsx:47
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:115
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:126
 #: src/components/routes/welcome/index.tsx:252
 msgid "End date must be after start date"
 msgstr "Ngày kết thúc phải sau ngày bắt đầu"
@@ -4383,29 +4363,29 @@ msgstr "Hiệu suất sự kiện"
 msgid "Events Starting in Next 24 Hours"
 msgstr "Sự kiện bắt đầu trong 24 giờ tới"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0}"
 msgstr "Mỗi {0}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Every {0} days"
 msgstr "Mỗi {0} ngày"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Every {0} months"
 msgstr "Mỗi {0} tháng"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Every {0} weeks"
 msgstr "Mỗi {0} tuần"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0} weeks on {1}"
 msgstr "Mỗi {0} tuần vào {1}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Every {0} years"
 msgstr "Mỗi {0} năm"
 
@@ -4518,7 +4498,7 @@ msgstr "Không thể hủy người tham dự"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:78
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:58
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:374
 msgid "Failed to cancel date"
 msgstr "Không thể hủy ngày"
 
@@ -4561,7 +4541,7 @@ msgstr "Không thể xóa cấu hình"
 msgid "Failed to delete date"
 msgstr "Không thể xóa ngày"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:384
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:398
 msgid "Failed to delete date. It may have existing orders."
 msgstr "Không thể xóa ngày. Có thể đã có đơn hàng."
 
@@ -4886,25 +4866,13 @@ msgstr "Đầu tiên"
 msgid "First 30 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:282
-#~ msgid "First 30 days from event start"
-#~ msgstr "30 ngày đầu kể từ khi sự kiện bắt đầu"
-
 #: src/components/common/PeriodSelector/index.tsx:40
 msgid "First 7 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
-#~ msgid "First 7 days from event start"
-#~ msgstr "7 ngày đầu kể từ khi sự kiện bắt đầu"
-
 #: src/components/common/PeriodSelector/index.tsx:44
 msgid "First 90 days"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:290
-#~ msgid "First 90 days from event start"
-#~ msgstr "90 ngày đầu kể từ khi sự kiện bắt đầu"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "First attendee"
@@ -5003,10 +4971,6 @@ msgstr "Quên mật khẩu?"
 msgid "Fourth"
 msgstr "Thứ tư"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Fr"
-msgstr "T6"
-
 #: src/components/common/AttendeeTicket/index.tsx:82
 #: src/components/common/Currency/index.tsx:90
 #: src/components/common/OrderSummary/index.tsx:58
@@ -5038,7 +5002,7 @@ msgstr "Tần suất"
 msgid "Fri"
 msgstr "Thứ 6"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Friday"
 msgstr "Thứ Sáu"
 
@@ -5049,10 +5013,6 @@ msgstr "Toàn quyền sở hữu dữ liệu"
 #: src/components/common/PeriodSelector/index.tsx:46
 msgid "Full event"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:298
-#~ msgid "Full event duration"
-#~ msgstr "Toàn bộ thời gian sự kiện"
 
 #: src/components/modals/RefundOrderModal/index.tsx:110
 msgid "Full refund"
@@ -5134,8 +5094,8 @@ msgstr "GitHub"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
 #: src/components/routes/event/OccurrencesTab/index.tsx:222
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Go Back"
 msgstr "Quay lại"
 
@@ -5212,7 +5172,7 @@ msgstr "Người được mời"
 msgid "Happening now"
 msgstr "Đang diễn ra"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:785
+#: src/components/routes/product-widget/SelectProducts/index.tsx:601
 msgid "Have a promo code?"
 msgstr "Nhập mã khuyến mãi?"
 
@@ -5240,11 +5200,6 @@ msgstr "Đây là component React bạn có thể sử dụng để nhúng widge
 #: src/components/common/AffiliateTable/index.tsx:230
 msgid "Here is your affiliate link"
 msgstr "Đây là liên kết đối tác của bạn"
-
-#: src/components/routes/event/EventDashboard/index.tsx:223
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
-#~ msgid "Here's what to expect:"
-#~ msgstr "Đây là những gì cần mong đợi:"
 
 #: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Hi {0} 👋"
@@ -5281,8 +5236,9 @@ msgstr "Ẩn khỏi chế độ xem công khai"
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "Các câu hỏi ẩn chỉ hiển thị cho người tổ chức sự kiện chứ không phải cho khách hàng."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:738
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:621
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:564
 msgid "Hide"
 msgstr "Ẩn"
 
@@ -5321,10 +5277,6 @@ msgstr "Ẩn sản phẩm khi bán hết"
 #: src/components/routes/event/TicketDesigner/index.tsx:194
 msgid "Hide the date"
 msgstr "Ẩn ngày"
-
-#: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:93
-#~ msgid "Hide the getting started page from the sidebar"
-#~ msgstr "ẩn trang bắt đầu từ thanh bên"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:37
 msgid "Hide this category?"
@@ -5404,7 +5356,7 @@ msgstr "Thời gian khách hàng phải hoàn tất mua hàng sau khi nhận đ�
 msgid "How long does the schedule run?"
 msgstr "Lịch trình kéo dài bao lâu?"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:127
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Khách hàng phải hoàn thành đơn đơn hàng bao nhiêu phút. "
 
@@ -5461,7 +5413,7 @@ msgstr "Tôi đồng ý với <0>các điều khoản và điều kiện</0>"
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Tôi xác nhận đây là tin nhắn giao dịch liên quan đến sự kiện này"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:509
+#: src/components/routes/product-widget/SelectProducts/index.tsx:709
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Nếu tab mới không tự động mở, vui lòng nhấn nút bên dưới để tiếp tục thanh toán."
 
@@ -5533,10 +5485,6 @@ msgstr "Thông báo quan trọng"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:77
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Quan trọng: Việc thay đổi địa chỉ email sẽ cập nhật liên kết để truy cập đơn hàng này. Bạn sẽ được chuyển hướng đến liên kết đơn hàng mới sau khi lưu."
-
-#: src/components/routes/event/EventDashboard/index.tsx:137
-#~ msgid "Important: Stripe reconnection required"
-#~ msgstr "Quan trọng: Cần kết nối lại Stripe"
 
 #: src/components/routes/admin/Dashboard/index.tsx:44
 msgid "In {diffHours} hours"
@@ -5810,7 +5758,7 @@ msgid "Keep the profit."
 msgstr "Giữ lại lợi nhuận."
 
 #: src/components/forms/ProductForm/index.tsx:93
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:461
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:475
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:730
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
 msgid "Label"
@@ -5942,7 +5890,7 @@ msgstr "Vĩ độ của địa điểm đã xác định"
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Để trống để sử dụng từ mặc định \"Hóa đơn\""
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:595
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:835
 msgid "Leave empty for unlimited"
 msgstr "Để trống cho không giới hạn"
@@ -5955,7 +5903,7 @@ msgstr "Để trống để áp dụng danh sách check-in này cho tất cả c
 msgid "Leave on to cover every ticket on the event. Turn off to pick specific tickets."
 msgstr "Để bật để bao gồm mọi vé của sự kiện. Tắt để chọn vé cụ thể."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:325
 msgid "Let them know about the change"
 msgstr "Cho họ biết về sự thay đổi"
 
@@ -5987,10 +5935,6 @@ msgstr "Liên kết đến chi tiết đơn hàng"
 msgid "Link to ticket"
 msgstr "Liên kết đến vé"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
-#~ msgid "Link your Stripe account to receive funds from ticket sales."
-#~ msgstr "Liên kết tài khoản Stripe của bạn để nhận tiền từ việc bán vé."
-
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:61
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -6002,10 +5946,6 @@ msgstr "Liên kết được phép"
 #: src/components/routes/event/OccurrencesTab/index.tsx:470
 msgid "List"
 msgstr "Danh sách"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
-msgid "List view"
-msgstr "Xem dạng danh sách"
 
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/layouts/AuthLayout/index.tsx:78
@@ -6062,7 +6002,7 @@ msgstr "Đang tải ..."
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:507
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:477
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:491
 #: src/components/routes/event/Settings/index.tsx:52
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:200
 #: src/components/routes/my-tickets/index.tsx:90
@@ -6173,10 +6113,6 @@ msgstr ""
 #: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
 msgstr "Làm cho câu hỏi này bắt buộc"
-
-#: src/components/routes/event/EventDashboard/index.tsx:192
-#~ msgid "Make your event live"
-#~ msgstr "Làm cho sự kiện của bạn hoạt động"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:140
 #: src/components/common/CheckInListList/index.tsx:143
@@ -6410,10 +6346,6 @@ msgstr "Linh tinh"
 msgid "Miscellaneous Settings"
 msgstr "Cài đặt linh tinh"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Mo"
-msgstr "T2"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:492
 msgid "Mode"
 msgstr "Chế độ"
@@ -6422,7 +6354,7 @@ msgstr "Chế độ"
 msgid "Mon"
 msgstr "Thứ 2"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Monday"
 msgstr "Thứ Hai"
 
@@ -6443,7 +6375,7 @@ msgid "Month"
 msgstr "Tháng"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:58
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Monthly"
 msgstr "Hàng tháng"
 
@@ -6580,7 +6512,7 @@ msgid "New label"
 msgstr "Nhãn mới"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:510
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:496
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:510
 msgid "New location"
 msgstr "Địa điểm mới"
 
@@ -6721,7 +6653,7 @@ msgstr "Không có dữ liệu để hiển thị. Vui lòng chọn khoảng th�
 msgid "No date added"
 msgstr "Chưa thêm ngày"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:309
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:483
 msgid "No dates available this month. Try navigating to another month."
 msgstr "Không có ngày nào khả dụng trong tháng này. Hãy thử chuyển sang tháng khác."
 
@@ -6931,7 +6863,7 @@ msgid "No results"
 msgstr "Không có kết quả"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "No saved locations yet"
 msgstr "Chưa có địa điểm nào được lưu"
 
@@ -7034,7 +6966,7 @@ msgstr "Chưa có gì để hiển thị"
 msgid "Notification Settings"
 msgstr "Cài đặt thông báo"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:616
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:657
 msgid "Notify attendees and stop sales"
 msgstr "Thông báo cho người tham dự và dừng bán"
 
@@ -7223,7 +7155,7 @@ msgstr "Đang diễn ra"
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:60
 #: src/components/routes/event/OccurrencesTab/index.tsx:316
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:485
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:499
 #: src/components/routes/my-tickets/index.tsx:56
 #: src/components/routes/product-widget/Payment/index.tsx:123
 msgid "Online"
@@ -7264,6 +7196,10 @@ msgstr "Chi tiết kết nối sự kiện trực tuyến"
 msgid "Online Event Details"
 msgstr "Chi tiết sự kiện trực tuyến"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "Only {capacity} left"
+msgstr "Chỉ còn {capacity}"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:74
 msgid "Only account administrators can delete or archive events. Contact your account admin for assistance."
 msgstr "Chỉ quản trị viên tài khoản mới có thể xóa hoặc lưu trữ sự kiện. Liên hệ quản trị viên tài khoản của bạn để được hỗ trợ."
@@ -7279,6 +7215,10 @@ msgstr "Chỉ gửi đến các đơn hàng có trạng thái này"
 #: src/components/routes/event/TicketDesigner/index.tsx:192
 msgid "Only show start date and time"
 msgstr "Chỉ hiển thị ngày và giờ bắt đầu"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:601
+msgid "Only tickets count toward capacity"
+msgstr "Chỉ vé mới tính vào sức chứa"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:311
 msgid "Only visible with promo code"
@@ -7534,7 +7474,7 @@ msgstr "Trạng thái đơn hàng"
 msgid "Order Summary"
 msgstr "Tóm tắt đơn hàng"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Order timeout"
 msgstr "Thời gian chờ đơn hàng"
 
@@ -7591,7 +7531,7 @@ msgstr "Đơn hàng đã được xuất"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:68
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:45
 #: src/components/routes/event/OccurrencesTab/index.tsx:217
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:346
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
 msgid "Orders spanning multiple dates will be flagged for manual review."
 msgstr "Các đơn hàng kéo dài qua nhiều ngày sẽ được đánh dấu để xem xét thủ công."
 
@@ -7984,12 +7924,12 @@ msgstr "Theo người tham dự"
 msgid "per min"
 msgstr "mỗi phút"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
 msgid "Per order"
 msgstr "Mỗi đơn hàng"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:41
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:45
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Per ticket"
 msgstr "Mỗi vé"
@@ -8032,7 +7972,7 @@ msgstr "Xóa vĩnh viễn sự kiện này và tất cả dữ liệu liên quan
 msgid "Permanently delete this organizer and all its events."
 msgstr "Xóa vĩnh viễn ban tổ chức này và tất cả các sự kiện của họ."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:630
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:671
 msgid "Permanently remove this date"
 msgstr "Xóa vĩnh viễn ngày này"
 
@@ -8045,7 +7985,7 @@ msgid "Phone"
 msgstr "Điện thoại"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "Pick a location"
 msgstr "Chọn một địa điểm"
 
@@ -8128,7 +8068,7 @@ msgstr "Vui lòng kiểm tra email của bạn để xác nhận địa chỉ em
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Vui lòng kiểm tra vé của bạn để biết thời gian đã cập nhật. Vé của bạn vẫn còn hiệu lực — không cần làm gì trừ khi thời gian mới không phù hợp với bạn. Trả lời email này nếu bạn có thắc mắc."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:500
+#: src/components/routes/product-widget/SelectProducts/index.tsx:700
 msgid "Please continue in the new tab"
 msgstr "Vui lòng tiếp tục trong tab mới"
 
@@ -8177,7 +8117,7 @@ msgstr "Vui lòng bắt đầu lại quy trình thanh toán."
 msgid "Please return to the event page to start over."
 msgstr "Vui lòng quay lại trang sự kiện để bắt đầu lại."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:395
+#: src/components/routes/product-widget/SelectProducts/index.tsx:392
 msgid "Please select a date and time"
 msgstr "Vui lòng chọn ngày và giờ"
 
@@ -8189,7 +8129,7 @@ msgstr "Vui lòng chọn khoảng thời gian"
 msgid "Please select an image."
 msgstr "Vui lòng chọn một hình ảnh."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:417
+#: src/components/routes/product-widget/SelectProducts/index.tsx:414
 msgid "Please select at least one product"
 msgstr "Vui lòng chọn ít nhất một sản phẩm"
 
@@ -8240,7 +8180,7 @@ msgstr "Tiếng Bồ Đào Nha"
 msgid "Position"
 msgstr "Vị trí"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
 msgid "Post Checkout message"
 msgstr "Tin nhắn sau phần thanh toán"
 
@@ -8253,7 +8193,7 @@ msgstr "Tin Nhắn Sau Thanh Toán"
 msgid "Powered by"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:95
 msgid "Pre Checkout message"
 msgstr "Thông báo trước khi thanh toán"
 
@@ -8391,7 +8331,7 @@ msgstr "Bán Hàng"
 msgid "Product sales, revenue, and tax breakdown"
 msgstr "Chi tiết doanh số sản phẩm, doanh thu và thuế"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:646
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:687
 msgid "Product settings cannot be edited for cancelled dates."
 msgstr "Không thể chỉnh sửa cài đặt sản phẩm cho các ngày đã hủy."
 
@@ -8418,7 +8358,7 @@ msgstr "Sản phẩm(s)"
 
 #: src/components/common/PromoCodeTable/index.tsx:72
 #: src/components/modals/DuplicateEventModal/index.tsx:49
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:423
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:437
 msgid "Products"
 msgstr "Sản phẩm"
 
@@ -8452,7 +8392,7 @@ msgstr "Hồ sơ cập nhật thành công"
 msgid "Progress"
 msgstr "Tiến độ"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:341
+#: src/components/routes/product-widget/SelectProducts/index.tsx:338
 msgid "Promo {promo_code} code applied"
 msgstr "Mã {Promo_code} đã được áp dụng"
 
@@ -8528,10 +8468,6 @@ msgstr "Nhà cung cấp"
 msgid "Publish"
 msgstr "Xuất bản"
 
-#: src/components/routes/event/EventDashboard/index.tsx:203
-#~ msgid "Publish Event"
-#~ msgstr "Công bố sự kiện"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:127
 msgid "Publish your event"
 msgstr ""
@@ -8567,10 +8503,6 @@ msgstr "SL"
 #: src/components/forms/ProductForm/index.tsx:334
 msgid "Quantity Available"
 msgstr "Số lượng có sẵn"
-
-#: src/components/routes/event/EventDashboard/index.tsx:291
-#~ msgid "Quarter"
-#~ msgstr "Quý"
 
 #: src/components/forms/CheckInListForm/index.tsx:222
 msgid "Question answers"
@@ -8644,10 +8576,6 @@ msgstr "Phân tích theo thời gian thực"
 msgid "Receive product updates from {0}."
 msgstr "Nhận cập nhật sản phẩm từ {0}."
 
-#: src/components/routes/event/EventDashboard/index.tsx:267
-#~ msgid "Recent"
-#~ msgstr "Gần đây"
-
 #: src/components/routes/admin/Dashboard/index.tsx:389
 msgid "Recent Account Signups"
 msgstr "Đăng ký tài khoản gần đây"
@@ -8699,10 +8627,6 @@ msgstr "Người nhận sẽ có sau khi tin nhắn được gửi"
 msgid "Recommended"
 msgstr "Đề xuất"
 
-#: src/components/routes/event/EventDashboard/index.tsx:143
-#~ msgid "Reconnect Stripe →"
-#~ msgstr "Kết nối lại Stripe →"
-
 #: src/components/common/EventCard/index.tsx:221
 #: src/components/common/EventCard/index.tsx:334
 msgid "Recurring"
@@ -8739,7 +8663,7 @@ msgstr "Hoàn tiền tất cả đơn hàng cho các ngày này"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:67
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:44
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:345
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:359
 msgid "Refund all orders for this date"
 msgstr "Hoàn tiền tất cả đơn hàng cho ngày này"
 
@@ -8826,14 +8750,14 @@ msgstr "Sử dụng còn lại"
 msgid "Reminder scheduled"
 msgstr "Đã lên lịch nhắc nhở"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:794
+#: src/components/routes/product-widget/SelectProducts/index.tsx:611
 msgid "remove"
 msgstr "Loại bỏ"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
 #: src/components/common/WaitlistTable/index.tsx:79
 #: src/components/common/WaitlistTable/index.tsx:114
-#: src/components/routes/product-widget/SelectProducts/index.tsx:795
+#: src/components/routes/product-widget/SelectProducts/index.tsx:612
 msgid "Remove"
 msgstr "Hủy bỏ"
 
@@ -9058,10 +8982,6 @@ msgstr "Vai trò"
 msgid "Run until a specific date"
 msgstr "Chạy cho đến một ngày cụ thể"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Sa"
-msgstr "T7"
-
 #: src/components/forms/ProductForm/index.tsx:112
 #: src/components/forms/ProductForm/index.tsx:492
 msgid "Sale End Date"
@@ -9132,7 +9052,7 @@ msgstr "Doanh số, đơn hàng và chỉ số hiệu suất cho tất cả sự
 msgid "Sales:"
 msgstr "Doanh thu:"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:497
 msgid "Same as event"
 msgstr "Giống như sự kiện"
 
@@ -9154,17 +9074,17 @@ msgstr "San Francisco"
 msgid "Sat"
 msgstr "Thứ 7"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Saturday"
 msgstr "Thứ Bảy"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:150
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:155
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:288
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
@@ -9185,7 +9105,7 @@ msgstr "Lưu"
 #: src/components/modals/ManageOrderModal/index.tsx:175
 #: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/event/HomepageDesigner/index.tsx:293
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:266
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:305
 msgid "Save Changes"
@@ -9228,12 +9148,12 @@ msgid "Save VAT Settings"
 msgstr "Lưu cài đặt VAT"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:509
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:495
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:509
 msgid "Saved location"
 msgstr "Địa điểm đã lưu"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:517
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:503
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Saved locations"
 msgstr "Địa điểm đã lưu"
 
@@ -9430,9 +9350,13 @@ msgstr "Chọn {0}"
 msgid "Select a category"
 msgstr "Chọn danh mục"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:529
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:530
 msgid "Select a Date & Time"
 msgstr "Chọn ngày và giờ"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:168
+msgid "Select a date to see available times"
+msgstr "Chọn một ngày để xem các khung giờ khả dụng"
 
 #: src/components/routes/event/messages.tsx:340
 msgid "Select a message to view its contents"
@@ -9441,10 +9365,6 @@ msgstr "Chọn một tin nhắn để xem nội dung"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 msgid "Select a tier"
 msgstr "Chọn cấp độ"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:320
-msgid "Select a time"
-msgstr "Chọn thời gian"
 
 #: src/components/common/AdminUsersTable/index.tsx:100
 msgid "Select Account"
@@ -9577,12 +9497,17 @@ msgstr "đã chọn"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:208
 #: src/components/common/PlatformFeesSettings/index.tsx:231
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:113
 msgid "Selected"
 msgstr "Đã chọn"
 
 #: src/components/layouts/AuthLayout/index.tsx:49
 msgid "Sell out your event."
 msgstr "Bán hết vé sự kiện của bạn."
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:604
+msgid "Selling a physical product? Cap its quantity on the <0>products page</0> instead."
+msgstr "Bán sản phẩm vật lý? Hãy giới hạn số lượng trên <0>trang sản phẩm</0>."
 
 #: src/components/forms/ProductForm/index.tsx:554
 msgid "Selling fast 🔥"
@@ -9857,6 +9782,10 @@ msgstr "Dịch chuyển thời gian"
 msgid "Shifted times for {count} date(s)"
 msgstr "Đã dịch chuyển thời gian cho {count} ngày"
 
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:620
+msgid "Show"
+msgstr "Hiển thị"
+
 #: src/components/forms/CheckInListForm/index.tsx:154
 msgid "Show advanced options"
 msgstr "Hiện tùy chọn nâng cao"
@@ -9881,7 +9810,7 @@ msgstr "Hiển thị toàn bộ khoảng thời gian"
 msgid "Show fewer platforms"
 msgstr "Hiển thị ít nền tảng hơn"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:133
 msgid "Show marketing opt-in checkbox"
 msgstr "Hiển thị hộp kiểm đăng ký tiếp thị"
 
@@ -9889,14 +9818,10 @@ msgstr "Hiển thị hộp kiểm đăng ký tiếp thị"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Hiển thị hộp kiểm đăng ký tiếp thị theo mặc định"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:737
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:563
 msgid "Show more"
 msgstr "Hiển thị thêm"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:491
-msgid "Show more dates"
-msgstr "Hiển thị thêm ngày"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:233
 msgid "Show more platforms"
@@ -9909,6 +9834,14 @@ msgstr "Hiện chi tiết đơn cho nhân viên chưa đăng nhập"
 #: src/components/forms/CheckInListForm/index.tsx:230
 msgid "Show question answers to non-logged-in staff"
 msgstr "Hiện câu trả lời cho nhân viên chưa đăng nhập"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:148
+msgid "Show remaining capacity on event dates"
+msgstr "Hiển thị số chỗ còn lại trên các ngày của sự kiện"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:613
+msgid "Show remaining capacity to buyers"
+msgstr "Hiển thị số chỗ còn lại cho người mua"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:61
 msgid "Show tax and fees separately"
@@ -9935,11 +9868,11 @@ msgstr "Đang hiển thị {0} đầu tiên — {1} buổi còn lại vẫn sẽ
 msgid "Shown to staff the first time they open the check-in page."
 msgstr "Hiển thị cho nhân viên lần đầu mở trang."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:107
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "Hiển thị cho khách hàng sau khi họ thanh toán, trên trang Tóm tắt đơn hàng."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
 msgid "Shown to the customer before they checkout"
 msgstr "Hiển thị cho khách hàng trước khi họ thanh toán"
 
@@ -9999,6 +9932,10 @@ msgstr "Liên kết mạng xã hội & Trang web"
 msgid "Sold"
 msgstr "Đã bán"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:403
+msgid "sold out"
+msgstr "đã bán hết"
+
 #: src/components/common/EventCard/index.tsx:138
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:52
@@ -10009,8 +9946,8 @@ msgstr "Đã bán hết"
 #: src/components/layouts/EventHomepage/index.tsx:200
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:218
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:371
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:467
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:140
 msgid "Sold Out"
 msgstr "Đã bán hết"
 
@@ -10055,12 +9992,7 @@ msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 msgid "Something went wrong. Please try again."
 msgstr "Có gì đó không ổn. Vui lòng thử lại"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
-#: src/components/routes/event/EventDashboard/index.tsx:139
-#~ msgid "Sorry for the inconvenience."
-#~ msgstr "Xin lỗi vì sự bất tiện này."
-
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
+#: src/components/routes/product-widget/SelectProducts/index.tsx:423
 msgid "Sorry, this promo code is not recognized"
 msgstr "Xin lỗi, mã khuyến mãi này không được công nhận"
 
@@ -10102,7 +10034,7 @@ msgstr "Bắt đầu check-in"
 
 #: src/components/common/AdminEventsTable/index.tsx:96
 #: src/components/modals/DuplicateEventModal/index.tsx:128
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:451
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:465
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:122
 msgid "Start Date"
 msgstr "Ngày bắt đầu"
@@ -10115,7 +10047,7 @@ msgstr "Ngày & giờ bắt đầu"
 msgid "Start Date & Time"
 msgstr "Ngày và giờ bắt đầu"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:112
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:123
 #: src/components/routes/welcome/index.tsx:247
 msgid "Start date is required"
 msgstr "Ngày bắt đầu là bắt buộc"
@@ -10161,7 +10093,7 @@ msgstr "Bắt đầu ngày mai"
 #: src/components/common/CheckoutQuestion/index.tsx:165
 #: src/components/modals/LocationEditModal/index.tsx:119
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:564
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:550
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:260
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:189
 #: src/components/routes/product-widget/CollectInformation/index.tsx:545
@@ -10256,10 +10188,6 @@ msgstr "Stripe sẽ sớm cần thêm vài thông tin"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:230
 msgid "Stripe will walk you through a few quick questions to finish setup."
 msgstr "Stripe sẽ hướng dẫn bạn qua vài câu hỏi nhanh để hoàn tất thiết lập."
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Su"
-msgstr "CN"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:452
@@ -10380,7 +10308,7 @@ msgstr "Đã cập nhật mặc định sự kiện thành công"
 msgid "Successfully Updated Homepage Design"
 msgstr "Thiết kế trang sự kiện được cập nhật thành công"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:73
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:78
 msgid "Successfully Updated Homepage Settings"
 msgstr "Cài đặt trang chủ được cập nhật thành công"
 
@@ -10469,7 +10397,7 @@ msgstr "Lễ hội Âm nhạc Mùa hè 2025"
 msgid "Sun"
 msgstr "Chủ Nhật"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Sunday"
 msgstr "Chủ Nhật"
 
@@ -10628,10 +10556,6 @@ msgstr "Điều khoản dịch vụ"
 msgid "Text may be hard to read"
 msgstr "Văn bản có thể khó đọc"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Th"
-msgstr "T5"
-
 #: src/components/routes/event/TicketDesigner/index.tsx:166
 msgid "Thank you for attending!"
 msgstr "Cảm ơn bạn đã tham dự!"
@@ -10641,8 +10565,8 @@ msgstr "Cảm ơn bạn đã tham dự!"
 msgid "Thanks,"
 msgstr "Cảm ơn,"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:248
-#: src/components/routes/product-widget/SelectProducts/index.tsx:349
+#: src/components/routes/product-widget/SelectProducts/index.tsx:246
+#: src/components/routes/product-widget/SelectProducts/index.tsx:346
 msgid "That promo code is invalid"
 msgstr "Mã khuyến mãi không hợp lệ"
 
@@ -10729,7 +10653,7 @@ msgstr "Ngôn ngữ của khách hàng"
 msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
 msgstr "Tối đa là {MAX_PREVIEW} buổi. Vui lòng giảm phạm vi ngày, tần suất hoặc số buổi mỗi ngày."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:722
+#: src/components/routes/product-widget/SelectProducts/index.tsx:548
 msgid "The maximum number of products for {0}is {1}"
 msgstr "Số lượng sản phẩm tối đa cho {0}là {1}"
 
@@ -10801,15 +10725,15 @@ msgstr "Sân khấu"
 msgid "Theme & Colors"
 msgstr "Chủ đề & Màu sắc"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:445
+#: src/components/routes/product-widget/SelectProducts/index.tsx:442
 msgid "There are no products available for this event"
 msgstr "Không có sản phẩm nào cho sự kiện này"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:645
+#: src/components/routes/product-widget/SelectProducts/index.tsx:471
 msgid "There are no products available in this category"
 msgstr "Không có sản phẩm nào trong danh mục này"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:442
+#: src/components/routes/product-widget/SelectProducts/index.tsx:439
 msgid "There are no upcoming dates for this event"
 msgstr "Không có ngày sắp tới nào cho sự kiện này"
 
@@ -10833,7 +10757,7 @@ msgstr "Có một lỗi khi gửi tin nhắn của bạn"
 msgid "These are the default prices and quantities across all dates. Sale dates on tiers apply globally. You can override prices and quantities for individual dates on the <0>Occurrence Schedule page</0>."
 msgstr "Đây là giá và số lượng mặc định cho tất cả các ngày. Ngày bán theo tầng áp dụng toàn cục. Bạn có thể ghi đè giá và số lượng cho từng ngày trên <0>trang Lịch buổi</0>."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
 msgid "These details are shown on the attendee's ticket and order summary for this date only."
 msgstr "Các chi tiết này chỉ được hiển thị trên vé của người tham dự và tóm tắt đơn hàng cho ngày này."
 
@@ -10911,15 +10835,15 @@ msgstr "Kết hợp màu này có thể khó đọc đối với một số ngư
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:40
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:341
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:355
 msgid "This date has {orderCount} order(s) that will be affected."
 msgstr "Ngày này có {orderCount} đơn hàng sẽ bị ảnh hưởng."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:435
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:449
 msgid "This date has been cancelled. You can still delete it to remove it permanently."
 msgstr "Ngày này đã bị hủy. Bạn vẫn có thể xóa để loại bỏ vĩnh viễn."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:469
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
 msgid "This date is in the past. It will be created but won't be visible to attendees under upcoming dates."
 msgstr "Ngày này đã qua. Sẽ được tạo nhưng sẽ không hiển thị cho người tham dự trong danh sách ngày sắp tới."
 
@@ -10927,7 +10851,7 @@ msgstr "Ngày này đã qua. Sẽ được tạo nhưng sẽ không hiển thị
 msgid "This date is marked sold out."
 msgstr "Ngày này được đánh dấu là đã bán hết."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:401
+#: src/components/routes/product-widget/SelectProducts/index.tsx:398
 msgid "This date is no longer available. Please select another date."
 msgstr "Ngày này không còn khả dụng. Vui lòng chọn ngày khác."
 
@@ -10992,7 +10916,7 @@ msgstr "Liên kết này không còn hợp lệ"
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Thông báo này sẽ được bao gồm trong phần chân trang của tất cả các email được gửi từ sự kiện này"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:105
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:110
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "Thông báo này sẽ chỉ được hiển thị nếu đơn hàng được hoàn thành thành công. Đơn chờ thanh toán sẽ không hiển thị thông báo này."
 
@@ -11104,7 +11028,7 @@ msgstr "Tốc độ"
 msgid "Thu"
 msgstr "Thứ 5"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Thursday"
 msgstr "Thứ Năm"
 
@@ -11122,11 +11046,6 @@ msgstr "vé"
 #: src/components/modals/CreateAttendeeModal/index.tsx:248
 msgid "Ticket"
 msgstr "Vé"
-
-#: src/components/routes/event/TicketDesigner/index.tsx:107
-#: src/components/common/CheckIn/AttendeeList.tsx:83
-#~ msgid "Ticket Cancelled"
-#~ msgstr "Vé đã hủy"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:111
 msgid "Ticket Design"
@@ -11201,7 +11120,7 @@ msgstr "Giá vé"
 msgid "Ticket resent successfully"
 msgstr "Vé đã được gửi lại thành công"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:439
+#: src/components/routes/product-widget/SelectProducts/index.tsx:436
 msgid "Ticket sales have ended for this event"
 msgstr "Việc bán vé cho sự kiện này đã kết thúc"
 
@@ -11271,6 +11190,10 @@ msgstr "Thời gian"
 msgid "Time left:"
 msgstr "Thời gian còn lại:"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
+msgid "Times shown in {timezoneAbbr}"
+msgstr "Giờ hiển thị theo {timezoneAbbr}"
+
 #: src/components/common/PromoCodeTable/index.tsx:71
 msgid "Times used"
 msgstr "Thời gian được sử dụng"
@@ -11306,8 +11229,6 @@ msgstr "Để tăng giới hạn của bạn, hãy liên hệ với chúng tôi 
 #: src/components/common/PeriodSelector/index.tsx:30
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:120
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:88
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:241
 msgid "Today"
 msgstr "Hôm nay"
 
@@ -11316,7 +11237,6 @@ msgid "Toggle columns"
 msgstr "Chuyển đổi cột"
 
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:46
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:90
 msgid "Tomorrow"
 msgstr "Ngày mai"
 
@@ -11457,15 +11377,11 @@ msgstr "Thử email khác"
 msgid "Try Hi.Events Free"
 msgstr "Dùng thử Hi.Events miễn phí"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Tu"
-msgstr "T3"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:47
 msgid "Tue"
 msgstr "Thứ 3"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Tuesday"
 msgstr "Thứ Ba"
 
@@ -11520,7 +11436,7 @@ msgstr "Không thể kiểm tra người tham dự"
 msgid "Unable to create product. Please check the your details"
 msgstr "Không thể tạo sản phẩm. Vui lòng kiểm tra thông tin của bạn"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:234
+#: src/components/routes/product-widget/SelectProducts/index.tsx:232
 msgid "Unable to create product. Please check your details"
 msgstr "Không thể tạo sản phẩm. Vui lòng kiểm tra thông tin của bạn"
 
@@ -11544,7 +11460,7 @@ msgstr "Không thể tham gia danh sách chờ"
 msgid "Unable to load attendee details."
 msgstr "Không tải được thông tin khách."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:281
+#: src/components/routes/product-widget/SelectProducts/index.tsx:279
 msgid "Unable to load products for this date. Please try again."
 msgstr "Không thể tải sản phẩm cho ngày này. Vui lòng thử lại."
 
@@ -11602,7 +11518,7 @@ msgstr "Người tham dự không xác định"
 msgid "Unlimited"
 msgstr "Không giới hạn"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:683
+#: src/components/routes/product-widget/SelectProducts/index.tsx:509
 msgid "Unlimited available"
 msgstr "Không giới hạn có sẵn"
 
@@ -11615,17 +11531,13 @@ msgid "Unnamed"
 msgstr "Không có tên"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:522
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:508
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:522
 msgid "Unnamed location"
 msgstr "Địa điểm không tên"
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:32
 msgid "Unpaid Order"
 msgstr "Đơn hàng chưa thanh toán"
-
-#: src/components/routes/event/EventDashboard/index.tsx:214
-#~ msgid "Unpublish Event"
-#~ msgstr "Hủy công bố sự kiện"
 
 #: src/components/common/AdminAccountsTable/index.tsx:101
 msgid "Untrusted"
@@ -11768,7 +11680,11 @@ msgstr "Sử dụng phiên bản làm mờ của ảnh bìa làm nền"
 msgid "Use cover image"
 msgstr "Sử dụng hình ảnh bìa"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:49
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:619
+msgid "Use event default"
+msgstr "Dùng mặc định của sự kiện"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:53
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:40
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Sử dụng thông tin đơn hàng cho tất cả người tham dự. Tên và email của người tham dự sẽ khớp với thông tin người mua."
@@ -11910,7 +11826,7 @@ msgstr "VAT: chưa đăng ký"
 
 #: src/components/modals/LocationEditModal/index.tsx:110
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:555
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:541
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:237
 msgid "Venue Name"
 msgstr "Tên địa điểm"
@@ -12118,10 +12034,6 @@ msgstr "Đã kích hoạt danh sách chờ"
 msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
 msgstr "Cảnh báo: Đây là cấu hình mặc định của hệ thống. Thay đổi sẽ ảnh hưởng đến tất cả các tài khoản không được chỉ định cấu hình cụ thể."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "We"
-msgstr "T4"
-
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:89
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Chúng tôi không thể xử lý thanh toán của bạn. Vui lòng thử lại hoặc liên hệ với ban tổ chức."
@@ -12212,7 +12124,7 @@ msgid "We'll notify you by email if a spot becomes available for {productDisplay
 msgstr "Chúng tôi sẽ thông báo cho bạn qua email nếu có chỗ trống cho {productDisplayName}."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:292
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:326
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "Chúng tôi sẽ mở trình soạn tin nhắn với một mẫu được điền sẵn sau khi lưu. Bạn xem lại và gửi — không có gì được gửi tự động."
 
@@ -12231,11 +12143,6 @@ msgstr "Chúng tôi đang xử lý đơn hàng của bạn. Đợi một chút..
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:92
 msgid "We've made changes to the schedule for \"{title}\" — {description} affecting {affectedCount} session(s)."
 msgstr "Chúng tôi đã thực hiện thay đổi đối với lịch trình của \"{title}\" — {description} ảnh hưởng đến {affectedCount} buổi."
-
-#: src/components/routes/welcome/index.tsx:146
-#: src/components/routes/event/EventDashboard/index.tsx:138
-#~ msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
-#~ msgstr "Chúng tôi đã chuyển trụ sở chính đến Ireland. Do đó, chúng tôi cần bạn kết nối lại tài khoản Stripe. Quy trình nhanh này chỉ mất vài phút. Doanh số và dữ liệu hiện tại của bạn hoàn toàn không bị ảnh hưởng."
 
 #: src/components/routes/welcome/index.tsx:147
 msgid "We've sent a 5-digit verification code to:"
@@ -12293,7 +12200,7 @@ msgstr "Trang web"
 msgid "Wed"
 msgstr "Thứ 4"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Wednesday"
 msgstr "Thứ Tư"
 
@@ -12301,12 +12208,8 @@ msgstr "Thứ Tư"
 msgid "week"
 msgstr "tuần"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
-#~ msgid "Week"
-#~ msgstr "Tuần"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:57
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Weekly"
 msgstr "Hàng tuần"
 
@@ -12470,7 +12373,7 @@ msgstr "Khi check-in mở"
 msgid "When customers purchase tickets, their orders will appear here."
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:136
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr ""
 
@@ -12566,7 +12469,7 @@ msgid "Year to date"
 msgstr "Từ đầu năm đến nay"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:59
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Yearly"
 msgstr "Hàng năm"
 
@@ -12756,7 +12659,7 @@ msgstr "Bạn đã được thêm vào danh sách chờ!"
 msgid "You've been offered a spot!"
 msgstr "Bạn đã được mời một suất!"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:301
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:315
 msgid "You've changed the session time"
 msgstr "Bạn đã thay đổi thời gian buổi"
 
@@ -12807,15 +12710,6 @@ msgstr "Yêu cầu email của bạn thay đổi thành <0>{0}</0> đang chờ x
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:48
 msgid "Your event is live!"
 msgstr "Sự kiện của bạn đã hoạt động!"
-
-#: src/components/common/OrdersTable/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:194
-#~ msgid "Your event must be live before you can sell tickets to attendees."
-#~ msgstr "Sự kiện của bạn phải được phát trực tiếp trước khi bạn có thể bán vé cho người tham dự."
-
-#: src/components/layouts/AuthLayout/index.tsx:47
-#~ msgid "Your logo, colors, and style on every page"
-#~ msgstr "Logo, màu sắc và phong cách của bạn trên mọi trang"
 
 #: src/components/common/OrdersTable/index.tsx:87
 msgid "Your message has been sent"
@@ -12937,7 +12831,7 @@ msgstr "mã zip / bưu điện"
 #: src/components/common/CheckoutQuestion/index.tsx:170
 #: src/components/modals/LocationEditModal/index.tsx:122
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:567
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:553
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:267
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:196
 msgid "Zip or Postal Code"
@@ -12946,7 +12840,3 @@ msgstr "mã zip hoặc bưu điện"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:555
 msgid "ZIP or Postal Code"
 msgstr "mã zip hoặc bưu điện"
-
-#: src/components/common/PoweredByFooter/index.tsx:60
-#~ msgid "Σχεδιάστηκε από το Δήμο Ορεστιάδας, βασισμένο στο"
-#~ msgstr ""

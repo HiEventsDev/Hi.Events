@@ -256,37 +256,6 @@
     }
   }
 
-  .hi-selected-date-banner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
-    color: var(--widget-primary-text-color, inherit);
-  }
-
-  .hi-selected-date-text {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .hi-selected-date-change {
-    flex-shrink: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--widget-primary-color, #228be6) !important;
-    text-decoration: underline;
-  }
-
-  // Absolutely-positioned loading indicator that floats over the products
-  // while a date-switch refetch is in flight. Replaces the previous inline
-  // "Loading products..." block that caused layout shift on mount/unmount.
-  // The parent (.hi-product-category-rows) is set to position: relative
-  // inline, and the products themselves get opacity: 0.5 to signal updating.
   .hi-occurrence-loading-overlay {
     position: absolute;
     top: 8px;

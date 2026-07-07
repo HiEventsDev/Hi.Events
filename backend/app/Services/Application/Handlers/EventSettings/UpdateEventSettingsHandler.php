@@ -95,6 +95,9 @@ class UpdateEventSettingsHandler
                     // Self-service settings
                     'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
 
+                    // Occurrence capacity display
+                    'show_available_occurrence_capacity' => $settings->show_available_occurrence_capacity,
+
                     // Waitlist settings
                     'waitlist_auto_process' => $settings->waitlist_auto_process,
                     'waitlist_offer_timeout_minutes' => $settings->waitlist_offer_timeout_minutes,

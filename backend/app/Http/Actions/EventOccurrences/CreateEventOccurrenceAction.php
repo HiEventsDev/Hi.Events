@@ -38,6 +38,7 @@ class CreateEventOccurrenceAction extends BaseAction
                 end_date: $endDate ? DateHelper::convertToUTC($endDate, $timezone) : null,
                 capacity: $request->validated('capacity'),
                 label: $request->validated('label'),
+                show_available_capacity: $request->validated('show_available_capacity'),
                 is_overridden: true,
                 event_location: $eventLocationPayload !== null ? EventLocationData::fromArray($eventLocationPayload) : null,
             )

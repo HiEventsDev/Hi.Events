@@ -32,7 +32,9 @@ class EventResourcePublicTest extends TestCase
             ->setEventOccurrences($occurrences);
 
         $payload = (new EventResourcePublic($event))->toArray(new Request);
-        $resolvedOccurrences = $payload['occurrences']->resolve(new Request);
+        $resolvedOccurrences = $payload['occurrences']
+            ->map(fn ($occurrence) => $occurrence->resolve(new Request))
+            ->all();
 
         $this->assertCount(201, $resolvedOccurrences);
         $this->assertTrue(
@@ -60,7 +62,9 @@ class EventResourcePublicTest extends TestCase
             ->setEventOccurrences(collect([$pastOccurrence]));
 
         $payload = (new EventResourcePublic($event))->toArray(new Request);
-        $resolvedOccurrences = $payload['occurrences']->resolve(new Request);
+        $resolvedOccurrences = $payload['occurrences']
+            ->map(fn ($occurrence) => $occurrence->resolve(new Request))
+            ->all();
 
         $this->assertCount(1, $resolvedOccurrences);
         $this->assertSame(10, $resolvedOccurrences[0]['id']);

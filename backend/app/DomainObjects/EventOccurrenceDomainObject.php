@@ -164,6 +164,11 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
         return max(0, $this->getCapacity() - $this->getUsedCapacity());
     }
 
+    public function shouldShowAvailableCapacity(bool $eventLevelDefault): bool
+    {
+        return $this->getShowAvailableCapacity() ?? $eventLevelDefault;
+    }
+
     public function setEventLocation(?EventLocationDomainObject $eventLocation): self
     {
         $this->eventLocation = $eventLocation;

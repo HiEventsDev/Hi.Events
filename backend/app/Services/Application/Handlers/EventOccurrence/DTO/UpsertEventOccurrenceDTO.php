@@ -13,6 +13,7 @@ class UpsertEventOccurrenceDTO extends BaseDataObject
         public readonly ?string $end_date = null,
         public readonly ?int $capacity = null,
         public readonly ?string $label = null,
+        public readonly ?bool $show_available_capacity = null,
         public readonly bool $is_overridden = false,
         public readonly ?int $id = null,
         public readonly ?EventLocationData $event_location = null,

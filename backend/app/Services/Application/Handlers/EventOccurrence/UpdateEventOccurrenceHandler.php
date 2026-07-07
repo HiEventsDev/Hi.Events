@@ -91,6 +91,7 @@ class UpdateEventOccurrenceHandler
                 EventOccurrenceDomainObjectAbstract::END_DATE => $dto->end_date,
                 EventOccurrenceDomainObjectAbstract::CAPACITY => $dto->capacity,
                 EventOccurrenceDomainObjectAbstract::LABEL => $dto->label,
+                EventOccurrenceDomainObjectAbstract::SHOW_AVAILABLE_CAPACITY => $dto->show_available_capacity,
                 EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => $isOverride,
                 EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID => $newEventLocationId,
             ];

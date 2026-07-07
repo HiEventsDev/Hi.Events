@@ -60,7 +60,7 @@ msgstr "{0} <0>desmarcado</0> com sucesso"
 msgid "{0} Active Webhooks"
 msgstr "{0} webhooks ativos"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:688
+#: src/components/routes/product-widget/SelectProducts/index.tsx:514
 msgid "{0} available"
 msgstr "{0} disponível"
 
@@ -69,7 +69,6 @@ msgid "{0} created successfully"
 msgstr "{0} criado com sucesso"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:399
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:471
 msgid "{0} left"
 msgstr "{0} restante"
 
@@ -85,10 +84,6 @@ msgstr "{0} de {1} lugares ocupados."
 #: src/components/routes/events/Dashboard/index.tsx:141
 msgid "{0} organizers"
 msgstr "{0} organizadores"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:375
-msgid "{0} spots left"
-msgstr "{0} lugares restantes"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:602
 msgid "{0} tickets"
@@ -110,13 +105,17 @@ msgstr "{activeCount} ativos"
 msgid "{appName} logo"
 msgstr "Logo {appName}"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:307
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:321
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr "{attendeeCount} participantes estão registados para esta sessão."
 
 #: src/components/common/EventCard/index.tsx:146
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} de {totalCount} disponíveis"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "{capacity} spots left"
+msgstr "Restam {capacity} lugares"
 
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:55
 msgid "{checkedIn} / {total} checked in"
@@ -166,6 +165,11 @@ msgstr "Primeiro evento de {organizerName}"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:109
 msgid "{productCount} ticket types configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "{slotCount} times available"
+msgstr "{slotCount} horários disponíveis"
 
 #: src/components/common/EventCard/index.tsx:142
 msgid "{totalCount} ticket types"
@@ -234,7 +238,7 @@ msgstr "1 webhook ativo"
 msgid "1 attendee is registered across the affected sessions."
 msgstr "1 participante está registado nas sessões afetadas."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:320
 msgid "1 attendee is registered for this session."
 msgstr "1 participante está registado para esta sessão."
 
@@ -265,6 +269,11 @@ msgstr "1 tipo de bilhete"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:108
 msgid "1 ticket type configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "1 time available"
+msgstr "1 horário disponível"
 
 #: src/components/modals/SendMessageModal/index.tsx:127
 msgid "1 week before event"
@@ -574,7 +583,7 @@ msgstr "Adicione os dados de ligação para o evento online."
 msgid "Add custom questions to collect additional information during checkout"
 msgstr "Adicione perguntas personalizadas para coletar informações adicionais durante o checkout"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Add Date"
 msgstr "Adicionar Data"
 
@@ -700,7 +709,7 @@ msgstr "Endereço Linha 1"
 
 #: src/components/modals/LocationEditModal/index.tsx:114
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:559
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:545
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:559
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:243
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:172
 #: src/components/routes/product-widget/CollectInformation/index.tsx:525
@@ -714,7 +723,7 @@ msgstr "Endereço linha 2"
 
 #: src/components/modals/LocationEditModal/index.tsx:115
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:560
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:546
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:560
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:248
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:177
 #: src/components/routes/product-widget/CollectInformation/index.tsx:530
@@ -890,7 +899,7 @@ msgstr "Permitir que participantes associados a pedidos não pagos façam check-
 msgid "Allow attendees to update their ticket information (name, email) via a secure link sent with their order confirmation."
 msgstr "Permitir que os participantes atualizem suas informações de bilhete (nome, e-mail) através de um link seguro enviado com a confirmação do pedido."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:135
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:140
 msgid "Allow buyers to copy their details to all attendees"
 msgstr ""
 
@@ -1015,7 +1024,7 @@ msgstr "Quaisquer perguntas dos portadores de produtos serão enviadas para este
 msgid "Appearance"
 msgstr "Aparência"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:790
+#: src/components/routes/product-widget/SelectProducts/index.tsx:606
 msgid "applied"
 msgstr "aplicado"
 
@@ -1047,7 +1056,7 @@ msgstr "Aplicar"
 msgid "Apply Changes"
 msgstr "Aplicar Alterações"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:818
+#: src/components/routes/product-widget/SelectProducts/index.tsx:635
 msgid "Apply Promo Code"
 msgstr "Aplicar código promocional"
 
@@ -1133,7 +1142,7 @@ msgstr "Tem certeza de que deseja cancelar este participante? Isso anulará o in
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:59
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:36
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:337
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
 msgid "Are you sure you want to cancel this date? Affected attendees will be notified by email."
 msgstr "Tem a certeza de que pretende cancelar esta data? Os participantes afetados serão notificados por e-mail."
 
@@ -1202,7 +1211,7 @@ msgstr "Tem certeza de que deseja tornar este organizador público? Isso tornar�
 msgid "Are you sure you want to offer a spot to this person? They will receive an email notification."
 msgstr "Tem a certeza de que pretende oferecer um lugar a esta pessoa? Receberá uma notificação por e-mail."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:372
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:386
 msgid "Are you sure you want to permanently delete this date? This cannot be undone."
 msgstr "Tem a certeza de que pretende eliminar permanentemente esta data? Esta ação não pode ser anulada."
 
@@ -1350,7 +1359,7 @@ msgstr "E-mail do participante"
 msgid "Attendee Information"
 msgstr "Informações do participante"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
 msgid "Attendee information collection"
 msgstr "Recolha de informações do participante"
 
@@ -1484,6 +1493,10 @@ msgstr "Redimensionar automaticamente a altura do widget com base no conteúdo. 
 msgid "Available"
 msgstr "Disponível"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:193
+msgid "Available times on {dayName}"
+msgstr "Horários disponíveis em {dayName}"
+
 #: src/components/modals/RefundOrderModal/index.tsx:93
 msgid "Available to Refund"
 msgstr "Disponível para reembolso"
@@ -1533,17 +1546,9 @@ msgstr "Awesome Events Lda."
 msgid "Awesome Organizer Ltd."
 msgstr "Impressionante Organizador Ltd."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:329
-msgid "Back"
-msgstr "Voltar"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
 msgid "Back to Accounts"
 msgstr "Voltar para Contas"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:326
-msgid "Back to calendar"
-msgstr "Voltar ao calendário"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:144
 #: src/components/routes/product-widget/CollectInformation/index.tsx:336
@@ -1704,10 +1709,6 @@ msgstr "Tipo de cálculo"
 msgid "Calendar"
 msgstr "Calendário"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:545
-msgid "Calendar view"
-msgstr "Vista de calendário"
-
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:261
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:190
 msgid "California"
@@ -1745,7 +1746,7 @@ msgstr "Check-in indisponível"
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
 #: src/components/routes/organizer/Locations/index.tsx:40
@@ -1769,9 +1770,9 @@ msgstr "Cancelar todos os produtos e devolvê-los ao conjunto disponível"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:32
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:333
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:615
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:347
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:656
 msgid "Cancel Date"
 msgstr "Cancelar Data"
 
@@ -1815,7 +1816,8 @@ msgstr "Cancelamento"
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:425
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:368
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:137
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:99
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -1829,7 +1831,7 @@ msgid "Cannot delete the system default configuration"
 msgstr "Não é possível excluir a configuração padrão do sistema"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:577
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:591
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:830
 msgid "Capacity"
 msgstr "Capacidade"
@@ -1854,7 +1856,7 @@ msgstr "Gestão de capacidade"
 msgid "Capacity Management"
 msgstr "Gestão de capacidade"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:121
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:132
 msgid "Capacity must be 0 or greater"
 msgstr "A capacidade deve ser 0 ou superior"
 
@@ -1887,10 +1889,6 @@ msgstr "Categoria"
 msgid "Category Created Successfully"
 msgstr "Categoria Criada com Sucesso"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:598
-msgid "Change"
-msgstr "Alterar"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
 msgid "Change duration"
 msgstr "Alterar duração"
@@ -1902,6 +1900,10 @@ msgstr "Alterar a senha"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:37
 msgid "Change the attendee limit"
 msgstr "Alterar o limite de participantes"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:256
+msgid "Change time"
+msgstr "Alterar horário"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:100
 msgid "Change waitlist settings"
@@ -2086,7 +2088,7 @@ msgstr "Registado"
 msgid "Checkout"
 msgstr "Finalizar compra"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:89
 msgid "Checkout Settings"
 msgstr "Configurações de check-out"
 
@@ -2150,7 +2152,7 @@ msgstr "Escolha quem paga a taxa da plataforma. Isso não afeta as taxas adicion
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/modals/LocationEditModal/index.tsx:118
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:563
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:549
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:563
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:184
 #: src/components/routes/product-widget/CollectInformation/index.tsx:539
@@ -2195,7 +2197,7 @@ msgstr "Clique para reabrir para novas vendas"
 msgid "Click to view notes"
 msgstr "Clique para ver as notas"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:823
+#: src/components/routes/product-widget/SelectProducts/index.tsx:641
 msgid "close"
 msgstr "fechar"
 
@@ -2204,7 +2206,7 @@ msgstr "fechar"
 #: src/components/modals/JoinWaitlistModal/index.tsx:105
 #: src/components/modals/JoinWaitlistModal/index.tsx:132
 #: src/components/modals/RefundOrderModal/index.tsx:163
-#: src/components/routes/product-widget/SelectProducts/index.tsx:824
+#: src/components/routes/product-widget/SelectProducts/index.tsx:642
 msgid "Close"
 msgstr "Fechar"
 
@@ -2253,7 +2255,7 @@ msgstr "Colabore com sua equipe para criar eventos incríveis juntos."
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Recolher este produto quando a página do evento for carregada inicialmente"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:43
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:34
 msgid "Collect attendee details for each ticket purchased."
 msgstr "Recolher detalhes do participante para cada bilhete adquirido."
@@ -2321,19 +2323,6 @@ msgstr "Concluir pagamento"
 msgid "Complete Stripe setup"
 msgstr "Concluir a configuração do Stripe"
 
-#: src/components/common/StripeConnectButton/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Complete Stripe Setup"
-#~ msgstr "Concluir configuração do Stripe"
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:115
-#~ msgid "Complete the setup below to continue"
-#~ msgstr "Complete a configuração abaixo para continuar"
-
-#: src/components/routes/event/EventDashboard/index.tsx:171
-#~ msgid "Complete these steps to start selling tickets for your event."
-#~ msgstr "Complete estas etapas para começar a vender ingressos para o seu evento."
-
 #: src/components/routes/product-widget/CollectInformation/index.tsx:419
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "Conclua a sua encomenda para garantir os seus bilhetes. Esta oferta é limitada no tempo, por isso não espere demasiado."
@@ -2374,7 +2363,7 @@ msgstr "Compor"
 
 #: src/components/modals/LocationEditModal/index.tsx:111
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:556
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:542
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:556
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:238
 msgid "Conference Center"
 msgstr "Centro de conferências"
@@ -2483,21 +2472,9 @@ msgstr "Confirmando endereço de e-mail..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Parabéns! O seu evento está agora visível para o público."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:235
-#~ msgid "Connect & Upgrade"
-#~ msgstr "Conectar e atualizar"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:85
 msgid "Connect bank"
 msgstr ""
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:653
-#~ msgid "Connect Documentation"
-#~ msgstr "Documentação de conexão"
-
-#: src/components/routes/event/EventDashboard/index.tsx:236
-#~ msgid "Connect payment processing"
-#~ msgstr "Conectar processamento de pagamento"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:369
 #: src/components/modals/SendMessageModal/index.tsx:312
@@ -2516,10 +2493,6 @@ msgstr "Conecte o Stripe para ativar mensagens"
 msgid "Connect Stripe to receive ticket payments directly to your bank account."
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Connect to Stripe"
-#~ msgstr "Conectar ao Stripe"
-
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:210
 msgid "Connect with Stripe"
 msgstr "Conecte-se com Stripe"
@@ -2529,12 +2502,12 @@ msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr ""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:578
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:566
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:580
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:214
 msgid "Connection Details"
 msgstr "Detalhes da conexão"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:127
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:138
 msgid "Connection details are required for online dates"
 msgstr ""
 
@@ -2564,7 +2537,7 @@ msgstr "E-mail de contato para suporte"
 
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
-#: src/components/routes/product-widget/SelectProducts/index.tsx:770
+#: src/components/routes/product-widget/SelectProducts/index.tsx:590
 msgid "Continue"
 msgstr "Continuar"
 
@@ -2579,7 +2552,7 @@ msgstr "Texto do botão Continuar"
 msgid "Continue Setup"
 msgstr "Continuar configuração"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:537
+#: src/components/routes/product-widget/SelectProducts/index.tsx:737
 msgid "Continue to Checkout"
 msgstr "Continuar para o pagamento"
 
@@ -2713,7 +2686,7 @@ msgstr "Não foi possível obter os detalhes da morada"
 msgid "Could not save address"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:281
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:295
 msgid "Could not save date"
 msgstr "Não foi possível guardar a data"
 
@@ -2730,7 +2703,7 @@ msgstr ""
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/modals/LocationEditModal/index.tsx:127
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:568
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:568
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:274
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:202
 #: src/components/routes/product-widget/CollectInformation/index.tsx:560
@@ -2868,7 +2841,7 @@ msgstr "Criar modelos de e-mail personalizados para este evento que substituem o
 msgid "Create Custom Template"
 msgstr "Criar modelo personalizado"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 msgid "Create Date"
 msgstr "Criar Data"
 
@@ -3081,7 +3054,7 @@ msgstr "Personalize as configurações de e-mail e notificação deste evento"
 msgid "Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization."
 msgstr "Personalize os e-mails enviados aos seus clientes usando modelos Liquid. Estes modelos serão usados como padrões para todos os eventos em sua organização."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:85
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
 msgid "Customize the event homepage and checkout messaging"
 msgstr "Personalize a página inicial do evento e as mensagens de checkout"
 
@@ -3119,7 +3092,7 @@ msgid "Customize your organizer page appearance"
 msgstr "Personalize a aparência da sua página de organizador"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:56
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Daily"
 msgstr "Diário"
 
@@ -3153,7 +3126,7 @@ msgstr "Zona de perigo"
 
 #: src/components/common/AttendeeTable/index.tsx:387
 #: src/components/common/DangerZone/index.tsx:30
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:602
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:643
 #: src/components/routes/event/Settings/index.tsx:98
 #: src/components/routes/organizer/Settings/index.tsx:79
 msgid "Danger Zone"
@@ -3182,7 +3155,7 @@ msgid "Date"
 msgstr "Data"
 
 #: src/components/common/AttendeeTicket/index.tsx:94
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:459
 msgid "Date & Time"
 msgstr "Data e hora"
 
@@ -3196,11 +3169,11 @@ msgstr "Cancelamento de Data"
 msgid "Date cancelled"
 msgstr "Data cancelada"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:356
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:370
 msgid "Date cancelled successfully"
 msgstr "Data cancelada com sucesso"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:261
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:275
 msgid "Date created successfully"
 msgstr "Data criada com sucesso"
 
@@ -3210,7 +3183,7 @@ msgstr "Data criada com sucesso"
 msgid "Date deleted"
 msgstr "Data eliminada"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:380
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:394
 msgid "Date deleted successfully"
 msgstr "Data eliminada com sucesso"
 
@@ -3233,13 +3206,17 @@ msgstr "Data reativada"
 msgid "Date reopened for new sales"
 msgstr "Data reaberta para novas vendas"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:260
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:274
 msgid "Date updated successfully"
 msgstr "Data atualizada com sucesso"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:105
 msgid "Dates are managed per occurrence"
 msgstr "As datas são geridas por ocorrência"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:489
+msgid "Dates with sessions"
+msgstr "Datas com sessões"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:93
 msgid "day"
@@ -3349,8 +3326,8 @@ msgstr "Excluir Lista de Registro"
 msgid "Delete code"
 msgstr "Excluir código"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:369
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:629
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:383
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:670
 msgid "Delete Date"
 msgstr "Eliminar Data"
 
@@ -3377,7 +3354,7 @@ msgstr "Eliminar localização"
 msgid "Delete Organizer"
 msgstr "Eliminar organizador"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Delete Permanently"
 msgstr "Eliminar Permanentemente"
 
@@ -3425,7 +3402,7 @@ msgstr "Elementos de Design"
 
 #: src/components/common/ProgressStepper/index.tsx:18
 #: src/components/common/ProgressStepper/index.tsx:23
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:419
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:433
 msgid "Details"
 msgstr "Detalhes"
 
@@ -3433,7 +3410,7 @@ msgstr "Detalhes"
 msgid "Didn't receive the code?"
 msgstr "Não recebeu o código?"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:484
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:498
 msgid "Different location"
 msgstr "Localização diferente"
 
@@ -3474,13 +3451,17 @@ msgstr "Dispensar"
 msgid "Dismiss setup checklist"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:554
+#: src/components/routes/product-widget/SelectProducts/index.tsx:754
 msgid "Dismiss this message"
 msgstr "Dispensar esta mensagem"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:129
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:134
 msgid "Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer."
 msgstr "Exibe uma caixa de seleção permitindo que os clientes optem por receber comunicações de marketing deste organizador de eventos."
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:149
+msgid "Display how many spots are left on each date in the ticket widget. You can override this for individual dates. Sold-out dates are always labelled."
+msgstr "Mostre quantos lugares restam em cada data no widget de bilhetes. Pode substituir isto para datas individuais. As datas esgotadas são sempre assinaladas."
 
 #: src/components/modals/LocationEditModal/index.tsx:104
 msgid "Display name"
@@ -3573,7 +3554,7 @@ msgstr ""
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Duplicate Date"
 msgstr "Duplicar Data"
 
@@ -3608,7 +3589,7 @@ msgid "e.g. 180 (3 hours)"
 msgstr "ex. 180 (3 horas)"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:477
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:462
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:476
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:733
 msgid "e.g. Morning Session"
 msgstr "ex.: Sessão da Manhã"
@@ -3702,7 +3683,7 @@ msgstr "Editar código"
 msgid "Edit Configuration"
 msgstr "Editar Configuração"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Edit Date"
 msgstr "Editar Data"
 
@@ -3957,7 +3938,7 @@ msgstr "Fim"
 
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:133
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:457
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:471
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
 msgid "End Date"
 msgstr "Data de término"
@@ -3967,7 +3948,7 @@ msgid "End Date & Time (optional)"
 msgstr "Data e hora de término (opcional)"
 
 #: src/components/modals/CreateEventModal/index.tsx:47
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:115
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:126
 #: src/components/routes/welcome/index.tsx:252
 msgid "End date must be after start date"
 msgstr "A data de término deve ser posterior à data de início"
@@ -4382,29 +4363,29 @@ msgstr "Desempenho de Eventos"
 msgid "Events Starting in Next 24 Hours"
 msgstr "Eventos a Iniciar nas Próximas 24 Horas"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0}"
 msgstr "A cada {0}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Every {0} days"
 msgstr "A cada {0} dias"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Every {0} months"
 msgstr "A cada {0} meses"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Every {0} weeks"
 msgstr "A cada {0} semanas"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0} weeks on {1}"
 msgstr "A cada {0} semanas em {1}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Every {0} years"
 msgstr "A cada {0} anos"
 
@@ -4517,7 +4498,7 @@ msgstr "Falha ao cancelar participante"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:78
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:58
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:374
 msgid "Failed to cancel date"
 msgstr "Falha ao cancelar data"
 
@@ -4560,7 +4541,7 @@ msgstr "Falha ao excluir configuração"
 msgid "Failed to delete date"
 msgstr "Falha ao eliminar data"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:384
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:398
 msgid "Failed to delete date. It may have existing orders."
 msgstr "Falha ao eliminar a data. Poderá ter encomendas associadas."
 
@@ -4885,25 +4866,13 @@ msgstr "Primeiro"
 msgid "First 30 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:282
-#~ msgid "First 30 days from event start"
-#~ msgstr "Primeiros 30 dias desde o início do evento"
-
 #: src/components/common/PeriodSelector/index.tsx:40
 msgid "First 7 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
-#~ msgid "First 7 days from event start"
-#~ msgstr "Primeiros 7 dias desde o início do evento"
-
 #: src/components/common/PeriodSelector/index.tsx:44
 msgid "First 90 days"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:290
-#~ msgid "First 90 days from event start"
-#~ msgstr "Primeiros 90 dias desde o início do evento"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "First attendee"
@@ -5002,10 +4971,6 @@ msgstr "Esqueceu sua senha?"
 msgid "Fourth"
 msgstr "Quarto"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Fr"
-msgstr "Sex"
-
 #: src/components/common/AttendeeTicket/index.tsx:82
 #: src/components/common/Currency/index.tsx:90
 #: src/components/common/OrderSummary/index.tsx:58
@@ -5037,7 +5002,7 @@ msgstr "Frequência"
 msgid "Fri"
 msgstr "Sex"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Friday"
 msgstr "Sexta-feira"
 
@@ -5048,10 +5013,6 @@ msgstr "Propriedade total dos dados"
 #: src/components/common/PeriodSelector/index.tsx:46
 msgid "Full event"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:298
-#~ msgid "Full event duration"
-#~ msgstr "Duração completa do evento"
 
 #: src/components/modals/RefundOrderModal/index.tsx:110
 msgid "Full refund"
@@ -5133,8 +5094,8 @@ msgstr "GitHub"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
 #: src/components/routes/event/OccurrencesTab/index.tsx:222
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Go Back"
 msgstr "Voltar"
 
@@ -5211,7 +5172,7 @@ msgstr "Convidados"
 msgid "Happening now"
 msgstr "A decorrer agora"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:785
+#: src/components/routes/product-widget/SelectProducts/index.tsx:601
 msgid "Have a promo code?"
 msgstr "Tem um código promocional?"
 
@@ -5239,11 +5200,6 @@ msgstr "Aqui está o componente React que você pode usar para incorporar o widg
 #: src/components/common/AffiliateTable/index.tsx:230
 msgid "Here is your affiliate link"
 msgstr "Aqui está o seu link de afiliado"
-
-#: src/components/routes/event/EventDashboard/index.tsx:223
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
-#~ msgid "Here's what to expect:"
-#~ msgstr "Aqui está o que esperar:"
 
 #: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Hi {0} 👋"
@@ -5280,8 +5236,9 @@ msgstr "Escondido da vista do público"
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "As perguntas ocultas são visíveis apenas para o organizador do evento e não para o cliente."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:738
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:621
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:564
 msgid "Hide"
 msgstr "Esconder"
 
@@ -5320,10 +5277,6 @@ msgstr "Ocultar produto quando esgotado"
 #: src/components/routes/event/TicketDesigner/index.tsx:194
 msgid "Hide the date"
 msgstr "Ocultar a data"
-
-#: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:93
-#~ msgid "Hide the getting started page from the sidebar"
-#~ msgstr "Oculte a página de primeiros passos da barra lateral"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:37
 msgid "Hide this category?"
@@ -5403,7 +5356,7 @@ msgstr "Quanto tempo um cliente tem para concluir a compra após receber uma ofe
 msgid "How long does the schedule run?"
 msgstr "Durante quanto tempo decorre a programação?"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:127
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Quantos minutos o cliente tem para concluir o pedido. Recomendamos pelo menos 15 minutos"
 
@@ -5460,7 +5413,7 @@ msgstr "Concordo com os <0>termos e condições</0>"
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Confirmo que esta é uma mensagem transacional relacionada com este evento"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:509
+#: src/components/routes/product-widget/SelectProducts/index.tsx:709
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Se uma nova aba não abriu automaticamente, clique no botão abaixo para continuar para o pagamento."
 
@@ -5532,10 +5485,6 @@ msgstr "Aviso importante"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:77
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Importante: Alterar o seu endereço de e-mail atualizará o link de acesso a este pedido. Será redirecionado para o novo link do pedido após guardar."
-
-#: src/components/routes/event/EventDashboard/index.tsx:137
-#~ msgid "Important: Stripe reconnection required"
-#~ msgstr "Importante: Reconexão Stripe necessária"
 
 #: src/components/routes/admin/Dashboard/index.tsx:44
 msgid "In {diffHours} hours"
@@ -5809,7 +5758,7 @@ msgid "Keep the profit."
 msgstr "Fica com o lucro."
 
 #: src/components/forms/ProductForm/index.tsx:93
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:461
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:475
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:730
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
 msgid "Label"
@@ -5941,7 +5890,7 @@ msgstr "Latitude da localização resolvida"
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Deixe em branco para usar a palavra padrão \"Fatura\""
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:595
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:835
 msgid "Leave empty for unlimited"
 msgstr "Deixar em branco para ilimitado"
@@ -5954,7 +5903,7 @@ msgstr "Deixe em branco para aplicar esta lista de check-in a todas as sessões"
 msgid "Leave on to cover every ticket on the event. Turn off to pick specific tickets."
 msgstr "Mantenha ativo para abranger todos os bilhetes do evento. Desative para escolher bilhetes específicos."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:325
 msgid "Let them know about the change"
 msgstr "Avise-os da alteração"
 
@@ -5986,10 +5935,6 @@ msgstr "Link para detalhes do pedido"
 msgid "Link to ticket"
 msgstr "Link para o ingresso"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
-#~ msgid "Link your Stripe account to receive funds from ticket sales."
-#~ msgstr "Conecte sua conta Stripe para receber fundos das vendas de ingressos."
-
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:61
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -6001,10 +5946,6 @@ msgstr "Links permitidos"
 #: src/components/routes/event/OccurrencesTab/index.tsx:470
 msgid "List"
 msgstr "Lista"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
-msgid "List view"
-msgstr "Vista de lista"
 
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/layouts/AuthLayout/index.tsx:78
@@ -6061,7 +6002,7 @@ msgstr "Carregando..."
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:507
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:477
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:491
 #: src/components/routes/event/Settings/index.tsx:52
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:200
 #: src/components/routes/my-tickets/index.tsx:90
@@ -6172,10 +6113,6 @@ msgstr ""
 #: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
 msgstr "Torne esta pergunta obrigatória"
-
-#: src/components/routes/event/EventDashboard/index.tsx:192
-#~ msgid "Make your event live"
-#~ msgstr "Torne seu evento ao vivo"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:140
 #: src/components/common/CheckInListList/index.tsx:143
@@ -6409,10 +6346,6 @@ msgstr "Diversos"
 msgid "Miscellaneous Settings"
 msgstr "Configurações Diversas"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Mo"
-msgstr "Seg"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:492
 msgid "Mode"
 msgstr "Modo"
@@ -6421,7 +6354,7 @@ msgstr "Modo"
 msgid "Mon"
 msgstr "Seg"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Monday"
 msgstr "Segunda-feira"
 
@@ -6442,7 +6375,7 @@ msgid "Month"
 msgstr "Mês"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:58
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Monthly"
 msgstr "Mensal"
 
@@ -6579,7 +6512,7 @@ msgid "New label"
 msgstr "Novo rótulo"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:510
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:496
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:510
 msgid "New location"
 msgstr "Nova localização"
 
@@ -6720,7 +6653,7 @@ msgstr "Nenhum dado para mostrar. Por favor, selecione um intervalo de datas"
 msgid "No date added"
 msgstr "Sem data adicionada"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:309
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:483
 msgid "No dates available this month. Try navigating to another month."
 msgstr "Não há datas disponíveis este mês. Experimente navegar para outro mês."
 
@@ -6930,7 +6863,7 @@ msgid "No results"
 msgstr "Nenhum resultado"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "No saved locations yet"
 msgstr "Ainda não existem localizações guardadas"
 
@@ -7033,7 +6966,7 @@ msgstr "Nada para mostrar ainda"
 msgid "Notification Settings"
 msgstr "Configurações de notificação"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:616
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:657
 msgid "Notify attendees and stop sales"
 msgstr "Notificar os participantes e suspender vendas"
 
@@ -7222,7 +7155,7 @@ msgstr "Em andamento"
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:60
 #: src/components/routes/event/OccurrencesTab/index.tsx:316
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:485
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:499
 #: src/components/routes/my-tickets/index.tsx:56
 #: src/components/routes/product-widget/Payment/index.tsx:123
 msgid "Online"
@@ -7263,6 +7196,10 @@ msgstr "Detalhes da ligação do evento online"
 msgid "Online Event Details"
 msgstr "Detalhes do evento on-line"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "Only {capacity} left"
+msgstr "Apenas {capacity} restantes"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:74
 msgid "Only account administrators can delete or archive events. Contact your account admin for assistance."
 msgstr "Apenas os administradores da conta podem eliminar ou arquivar eventos. Contacte o administrador da sua conta para obter ajuda."
@@ -7278,6 +7215,10 @@ msgstr "Enviar apenas para pedidos com esses status"
 #: src/components/routes/event/TicketDesigner/index.tsx:192
 msgid "Only show start date and time"
 msgstr "Mostrar apenas a data e hora de início"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:601
+msgid "Only tickets count toward capacity"
+msgstr "Apenas os bilhetes contam para a capacidade"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:311
 msgid "Only visible with promo code"
@@ -7533,7 +7474,7 @@ msgstr "Status dos pedidos"
 msgid "Order Summary"
 msgstr "resumo do pedido"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Order timeout"
 msgstr "Tempo limite do pedido"
 
@@ -7590,7 +7531,7 @@ msgstr "Pedidos exportados"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:68
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:45
 #: src/components/routes/event/OccurrencesTab/index.tsx:217
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:346
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
 msgid "Orders spanning multiple dates will be flagged for manual review."
 msgstr "As encomendas que abrangem várias datas serão sinalizadas para revisão manual."
 
@@ -7983,12 +7924,12 @@ msgstr "Por participante"
 msgid "per min"
 msgstr "por min"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
 msgid "Per order"
 msgstr "Por pedido"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:41
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:45
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Per ticket"
 msgstr "Por bilhete"
@@ -8031,7 +7972,7 @@ msgstr "Eliminar permanentemente este evento e todos os dados associados."
 msgid "Permanently delete this organizer and all its events."
 msgstr "Eliminar permanentemente este organizador e todos os seus eventos."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:630
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:671
 msgid "Permanently remove this date"
 msgstr "Remover esta data permanentemente"
 
@@ -8044,7 +7985,7 @@ msgid "Phone"
 msgstr "Telefone"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "Pick a location"
 msgstr "Escolher uma localização"
 
@@ -8127,7 +8068,7 @@ msgstr "Verifique seu e-mail para confirmar seu endereço de e-mail"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Por favor, verifique o seu bilhete para confirmar a nova hora. Os seus bilhetes continuam válidos — não é necessária qualquer ação a menos que as novas horas não lhe sejam convenientes. Responda a este e-mail se tiver alguma dúvida."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:500
+#: src/components/routes/product-widget/SelectProducts/index.tsx:700
 msgid "Please continue in the new tab"
 msgstr "Continue na nova aba"
 
@@ -8176,7 +8117,7 @@ msgstr "Por favor, reinicie o processo de compra."
 msgid "Please return to the event page to start over."
 msgstr "Por favor, volte para a página do evento para recomeçar."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:395
+#: src/components/routes/product-widget/SelectProducts/index.tsx:392
 msgid "Please select a date and time"
 msgstr "Por favor, selecione uma data e hora"
 
@@ -8188,7 +8129,7 @@ msgstr "Por favor, selecione um intervalo de datas"
 msgid "Please select an image."
 msgstr "Por favor, selecione uma imagem."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:417
+#: src/components/routes/product-widget/SelectProducts/index.tsx:414
 msgid "Please select at least one product"
 msgstr "Por favor, selecione pelo menos um produto"
 
@@ -8239,7 +8180,7 @@ msgstr "Português"
 msgid "Position"
 msgstr "Posição"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
 msgid "Post Checkout message"
 msgstr "Mensagem pós-check-out"
 
@@ -8252,7 +8193,7 @@ msgstr "Mensagem Pós-Checkout"
 msgid "Powered by"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:95
 msgid "Pre Checkout message"
 msgstr "Mensagem pré-checkout"
 
@@ -8390,7 +8331,7 @@ msgstr "Vendas de Produtos"
 msgid "Product sales, revenue, and tax breakdown"
 msgstr "Detalhamento das vendas de produtos, receitas e impostos"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:646
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:687
 msgid "Product settings cannot be edited for cancelled dates."
 msgstr "As definições do produto não podem ser editadas para datas canceladas."
 
@@ -8417,7 +8358,7 @@ msgstr "Produto(s)"
 
 #: src/components/common/PromoCodeTable/index.tsx:72
 #: src/components/modals/DuplicateEventModal/index.tsx:49
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:423
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:437
 msgid "Products"
 msgstr "Produtos"
 
@@ -8451,7 +8392,7 @@ msgstr "Perfil atualizado com sucesso"
 msgid "Progress"
 msgstr "Progresso"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:341
+#: src/components/routes/product-widget/SelectProducts/index.tsx:338
 msgid "Promo {promo_code} code applied"
 msgstr "Código promocional {promo_code} aplicado"
 
@@ -8527,10 +8468,6 @@ msgstr "Fornecedor"
 msgid "Publish"
 msgstr "Publicar"
 
-#: src/components/routes/event/EventDashboard/index.tsx:203
-#~ msgid "Publish Event"
-#~ msgstr "Publicar Evento"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:127
 msgid "Publish your event"
 msgstr ""
@@ -8566,10 +8503,6 @@ msgstr "Qtd."
 #: src/components/forms/ProductForm/index.tsx:334
 msgid "Quantity Available"
 msgstr "Quantidade Disponível"
-
-#: src/components/routes/event/EventDashboard/index.tsx:291
-#~ msgid "Quarter"
-#~ msgstr "Trimestre"
 
 #: src/components/forms/CheckInListForm/index.tsx:222
 msgid "Question answers"
@@ -8643,10 +8576,6 @@ msgstr "Análise em tempo real"
 msgid "Receive product updates from {0}."
 msgstr "Receber atualizações de produtos do {0}."
 
-#: src/components/routes/event/EventDashboard/index.tsx:267
-#~ msgid "Recent"
-#~ msgstr "Recente"
-
 #: src/components/routes/admin/Dashboard/index.tsx:389
 msgid "Recent Account Signups"
 msgstr "Registos de contas recentes"
@@ -8698,10 +8627,6 @@ msgstr "Os destinatários ficam disponíveis após o envio da mensagem"
 msgid "Recommended"
 msgstr "Recomendado"
 
-#: src/components/routes/event/EventDashboard/index.tsx:143
-#~ msgid "Reconnect Stripe →"
-#~ msgstr "Reconectar Stripe →"
-
 #: src/components/common/EventCard/index.tsx:221
 #: src/components/common/EventCard/index.tsx:334
 msgid "Recurring"
@@ -8738,7 +8663,7 @@ msgstr "Reembolsar todas as encomendas destas datas"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:67
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:44
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:345
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:359
 msgid "Refund all orders for this date"
 msgstr "Reembolsar todas as encomendas desta data"
 
@@ -8825,14 +8750,14 @@ msgstr "Usos restantes"
 msgid "Reminder scheduled"
 msgstr "Lembrete agendado"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:794
+#: src/components/routes/product-widget/SelectProducts/index.tsx:611
 msgid "remove"
 msgstr "remover"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
 #: src/components/common/WaitlistTable/index.tsx:79
 #: src/components/common/WaitlistTable/index.tsx:114
-#: src/components/routes/product-widget/SelectProducts/index.tsx:795
+#: src/components/routes/product-widget/SelectProducts/index.tsx:612
 msgid "Remove"
 msgstr "Remover"
 
@@ -9057,10 +8982,6 @@ msgstr "Papel"
 msgid "Run until a specific date"
 msgstr "Decorrer até uma data específica"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Sa"
-msgstr "Sáb"
-
 #: src/components/forms/ProductForm/index.tsx:112
 #: src/components/forms/ProductForm/index.tsx:492
 msgid "Sale End Date"
@@ -9131,7 +9052,7 @@ msgstr "Vendas, pedidos e métricas de desempenho para todos os eventos"
 msgid "Sales:"
 msgstr "Vendas:"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:497
 msgid "Same as event"
 msgstr "Igual ao evento"
 
@@ -9153,17 +9074,17 @@ msgstr "São Francisco"
 msgid "Sat"
 msgstr "Sáb"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Saturday"
 msgstr "Sábado"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:150
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:155
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:288
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
@@ -9184,7 +9105,7 @@ msgstr "Salvar"
 #: src/components/modals/ManageOrderModal/index.tsx:175
 #: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/event/HomepageDesigner/index.tsx:293
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:266
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:305
 msgid "Save Changes"
@@ -9227,12 +9148,12 @@ msgid "Save VAT Settings"
 msgstr "Guardar Definições de IVA"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:509
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:495
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:509
 msgid "Saved location"
 msgstr "Localização guardada"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:517
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:503
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Saved locations"
 msgstr "Localizações guardadas"
 
@@ -9429,9 +9350,13 @@ msgstr "Selecionar {0}"
 msgid "Select a category"
 msgstr "Selecione uma categoria"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:529
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:530
 msgid "Select a Date & Time"
 msgstr "Selecione uma Data e Hora"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:168
+msgid "Select a date to see available times"
+msgstr "Selecione uma data para ver os horários disponíveis"
 
 #: src/components/routes/event/messages.tsx:340
 msgid "Select a message to view its contents"
@@ -9440,10 +9365,6 @@ msgstr "Selecione uma mensagem para ver o seu conteúdo"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 msgid "Select a tier"
 msgstr "Selecionar um nível"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:320
-msgid "Select a time"
-msgstr "Selecione uma hora"
 
 #: src/components/common/AdminUsersTable/index.tsx:100
 msgid "Select Account"
@@ -9576,12 +9497,17 @@ msgstr "selecionada(s)"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:208
 #: src/components/common/PlatformFeesSettings/index.tsx:231
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:113
 msgid "Selected"
 msgstr "Selecionado"
 
 #: src/components/layouts/AuthLayout/index.tsx:49
 msgid "Sell out your event."
 msgstr "Esgote o seu evento."
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:604
+msgid "Selling a physical product? Cap its quantity on the <0>products page</0> instead."
+msgstr "Vende um produto físico? Limite a quantidade na <0>página de produtos</0>."
 
 #: src/components/forms/ProductForm/index.tsx:554
 msgid "Selling fast 🔥"
@@ -9856,6 +9782,10 @@ msgstr "Deslocar horas"
 msgid "Shifted times for {count} date(s)"
 msgstr "Horas deslocadas em {count} data(s)"
 
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:620
+msgid "Show"
+msgstr "Mostrar"
+
 #: src/components/forms/CheckInListForm/index.tsx:154
 msgid "Show advanced options"
 msgstr "Mostrar opções avançadas"
@@ -9880,7 +9810,7 @@ msgstr "Mostrar todo o intervalo de datas"
 msgid "Show fewer platforms"
 msgstr "Mostrar menos plataformas"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:133
 msgid "Show marketing opt-in checkbox"
 msgstr "Mostrar caixa de seleção de opt-in de marketing"
 
@@ -9888,14 +9818,10 @@ msgstr "Mostrar caixa de seleção de opt-in de marketing"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Mostrar caixa de seleção de opt-in de marketing por padrão"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:737
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:563
 msgid "Show more"
 msgstr "Mostre mais"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:491
-msgid "Show more dates"
-msgstr "Mostrar mais datas"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:233
 msgid "Show more platforms"
@@ -9908,6 +9834,14 @@ msgstr "Mostrar detalhes a pessoal sem sessão"
 #: src/components/forms/CheckInListForm/index.tsx:230
 msgid "Show question answers to non-logged-in staff"
 msgstr "Mostrar respostas a pessoal sem sessão"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:148
+msgid "Show remaining capacity on event dates"
+msgstr "Mostrar a capacidade restante nas datas do evento"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:613
+msgid "Show remaining capacity to buyers"
+msgstr "Mostrar a capacidade restante aos compradores"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:61
 msgid "Show tax and fees separately"
@@ -9934,11 +9868,11 @@ msgstr "A mostrar as primeiras {0} — as restantes {1} sessão(ões) continuar�
 msgid "Shown to staff the first time they open the check-in page."
 msgstr "Mostrado ao pessoal na primeira vez que abre a página."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:107
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "Mostrado ao cliente após o checkout, na página de resumo do pedido."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
 msgid "Shown to the customer before they checkout"
 msgstr "Mostrado ao cliente antes de finalizar a compra"
 
@@ -9998,6 +9932,10 @@ msgstr "Links sociais e site"
 msgid "Sold"
 msgstr "Vendido"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:403
+msgid "sold out"
+msgstr "esgotado"
+
 #: src/components/common/EventCard/index.tsx:138
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:52
@@ -10008,8 +9946,8 @@ msgstr "Vendido"
 #: src/components/layouts/EventHomepage/index.tsx:200
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:218
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:371
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:467
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:140
 msgid "Sold Out"
 msgstr "Vendido"
 
@@ -10054,12 +9992,7 @@ msgstr "Algo correu mal. Por favor, tente novamente mais tarde."
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Por favor, tente novamente."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
-#: src/components/routes/event/EventDashboard/index.tsx:139
-#~ msgid "Sorry for the inconvenience."
-#~ msgstr "Desculpe o inconveniente."
-
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
+#: src/components/routes/product-widget/SelectProducts/index.tsx:423
 msgid "Sorry, this promo code is not recognized"
 msgstr "Desculpe, este código promocional não é reconhecido"
 
@@ -10101,7 +10034,7 @@ msgstr "Iniciar check-in"
 
 #: src/components/common/AdminEventsTable/index.tsx:96
 #: src/components/modals/DuplicateEventModal/index.tsx:128
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:451
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:465
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:122
 msgid "Start Date"
 msgstr "Data de início"
@@ -10114,7 +10047,7 @@ msgstr "Data e hora de início"
 msgid "Start Date & Time"
 msgstr "Data e hora de início"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:112
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:123
 #: src/components/routes/welcome/index.tsx:247
 msgid "Start date is required"
 msgstr "A data de início é obrigatória"
@@ -10160,7 +10093,7 @@ msgstr "Começa amanhã"
 #: src/components/common/CheckoutQuestion/index.tsx:165
 #: src/components/modals/LocationEditModal/index.tsx:119
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:564
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:550
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:260
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:189
 #: src/components/routes/product-widget/CollectInformation/index.tsx:545
@@ -10255,10 +10188,6 @@ msgstr "O Stripe vai precisar de mais alguns dados em breve"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:230
 msgid "Stripe will walk you through a few quick questions to finish setup."
 msgstr "O Stripe vai conduzir-te através de algumas perguntas rápidas para concluir a configuração."
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Su"
-msgstr "Dom"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:452
@@ -10379,7 +10308,7 @@ msgstr "Predefinições de Evento Atualizadas com Sucesso"
 msgid "Successfully Updated Homepage Design"
 msgstr "Design da página inicial atualizado com sucesso"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:73
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:78
 msgid "Successfully Updated Homepage Settings"
 msgstr "Configurações da página inicial atualizadas com sucesso"
 
@@ -10468,7 +10397,7 @@ msgstr "Festival de Música de Verão 2025"
 msgid "Sun"
 msgstr "Dom"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Sunday"
 msgstr "Domingo"
 
@@ -10627,10 +10556,6 @@ msgstr "Termos de serviço"
 msgid "Text may be hard to read"
 msgstr "O texto pode ser difícil de ler"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Th"
-msgstr "Qui"
-
 #: src/components/routes/event/TicketDesigner/index.tsx:166
 msgid "Thank you for attending!"
 msgstr "Obrigado por participar!"
@@ -10640,8 +10565,8 @@ msgstr "Obrigado por participar!"
 msgid "Thanks,"
 msgstr "Obrigado,"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:248
-#: src/components/routes/product-widget/SelectProducts/index.tsx:349
+#: src/components/routes/product-widget/SelectProducts/index.tsx:246
+#: src/components/routes/product-widget/SelectProducts/index.tsx:346
 msgid "That promo code is invalid"
 msgstr "Esse código promocional é inválido"
 
@@ -10728,7 +10653,7 @@ msgstr "O idioma do cliente"
 msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
 msgstr "O máximo é de {MAX_PREVIEW} sessões. Por favor, reduza o intervalo de datas, a frequência ou o número de sessões por dia."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:722
+#: src/components/routes/product-widget/SelectProducts/index.tsx:548
 msgid "The maximum number of products for {0}is {1}"
 msgstr "O número máximo de produtos para {0} é {1}"
 
@@ -10800,15 +10725,15 @@ msgstr "Teatro"
 msgid "Theme & Colors"
 msgstr "Tema e cores"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:445
+#: src/components/routes/product-widget/SelectProducts/index.tsx:442
 msgid "There are no products available for this event"
 msgstr "Não há produtos disponíveis para este evento"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:645
+#: src/components/routes/product-widget/SelectProducts/index.tsx:471
 msgid "There are no products available in this category"
 msgstr "Não há produtos disponíveis nesta categoria"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:442
+#: src/components/routes/product-widget/SelectProducts/index.tsx:439
 msgid "There are no upcoming dates for this event"
 msgstr "Não há próximas datas para este evento"
 
@@ -10832,7 +10757,7 @@ msgstr "Houve um erro ao enviar a sua mensagem"
 msgid "These are the default prices and quantities across all dates. Sale dates on tiers apply globally. You can override prices and quantities for individual dates on the <0>Occurrence Schedule page</0>."
 msgstr "Estes são os preços e quantidades predefinidos para todas as datas. As datas de venda nos níveis aplicam-se globalmente. Pode substituir preços e quantidades para datas individuais na <0>página de Programação de Sessões</0>."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
 msgid "These details are shown on the attendee's ticket and order summary for this date only."
 msgstr "Estes detalhes são apresentados no bilhete do participante e no resumo da encomenda apenas para esta data."
 
@@ -10910,15 +10835,15 @@ msgstr "Esta combinação de cores pode ser difícil de ler para alguns utilizad
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:40
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:341
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:355
 msgid "This date has {orderCount} order(s) that will be affected."
 msgstr "Esta data tem {orderCount} encomenda(s) que serão afetadas."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:435
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:449
 msgid "This date has been cancelled. You can still delete it to remove it permanently."
 msgstr "Esta data foi cancelada. Ainda assim, pode eliminá-la para a remover permanentemente."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:469
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
 msgid "This date is in the past. It will be created but won't be visible to attendees under upcoming dates."
 msgstr "Esta data está no passado. Será criada, mas não ficará visível para os participantes nas próximas datas."
 
@@ -10926,7 +10851,7 @@ msgstr "Esta data está no passado. Será criada, mas não ficará visível para
 msgid "This date is marked sold out."
 msgstr "Esta data está marcada como esgotada."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:401
+#: src/components/routes/product-widget/SelectProducts/index.tsx:398
 msgid "This date is no longer available. Please select another date."
 msgstr "Esta data já não está disponível. Por favor, selecione outra data."
 
@@ -10991,7 +10916,7 @@ msgstr "Este link já não é válido"
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Esta mensagem será incluída no rodapé de todos os e-mails enviados deste evento"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:105
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:110
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "Esta mensagem só será mostrada se o pedido for concluído com sucesso. Pedidos aguardando pagamento não mostrarão esta mensagem."
 
@@ -11103,7 +11028,7 @@ msgstr "Ritmo"
 msgid "Thu"
 msgstr "Qui"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Thursday"
 msgstr "Quinta-feira"
 
@@ -11121,11 +11046,6 @@ msgstr "bilhete"
 #: src/components/modals/CreateAttendeeModal/index.tsx:248
 msgid "Ticket"
 msgstr "Bilhete"
-
-#: src/components/routes/event/TicketDesigner/index.tsx:107
-#: src/components/common/CheckIn/AttendeeList.tsx:83
-#~ msgid "Ticket Cancelled"
-#~ msgstr "Bilhete Cancelado"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:111
 msgid "Ticket Design"
@@ -11200,7 +11120,7 @@ msgstr "Preço do ingresso"
 msgid "Ticket resent successfully"
 msgstr "Bilhete reenviado com sucesso"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:439
+#: src/components/routes/product-widget/SelectProducts/index.tsx:436
 msgid "Ticket sales have ended for this event"
 msgstr "A venda de bilhetes para este evento terminou"
 
@@ -11270,6 +11190,10 @@ msgstr "Hora"
 msgid "Time left:"
 msgstr "Tempo restante:"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
+msgid "Times shown in {timezoneAbbr}"
+msgstr "Horários mostrados em {timezoneAbbr}"
+
 #: src/components/common/PromoCodeTable/index.tsx:71
 msgid "Times used"
 msgstr "Tempos usados"
@@ -11305,8 +11229,6 @@ msgstr "Para aumentar os seus limites, contacte-nos em"
 #: src/components/common/PeriodSelector/index.tsx:30
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:120
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:88
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:241
 msgid "Today"
 msgstr "Hoje"
 
@@ -11315,7 +11237,6 @@ msgid "Toggle columns"
 msgstr "Alternar colunas"
 
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:46
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:90
 msgid "Tomorrow"
 msgstr "Amanhã"
 
@@ -11456,15 +11377,11 @@ msgstr "Tentar outro e-mail"
 msgid "Try Hi.Events Free"
 msgstr "Experimente o Hi.Events gratuitamente"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Tu"
-msgstr "Ter"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:47
 msgid "Tue"
 msgstr "Ter"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Tuesday"
 msgstr "Terça-feira"
 
@@ -11519,7 +11436,7 @@ msgstr "Não foi possível retirar o participante"
 msgid "Unable to create product. Please check the your details"
 msgstr "Não foi possível criar o produto. Por favor, verifique seus detalhes"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:234
+#: src/components/routes/product-widget/SelectProducts/index.tsx:232
 msgid "Unable to create product. Please check your details"
 msgstr "Não foi possível criar o produto. Por favor, verifique seus detalhes"
 
@@ -11543,7 +11460,7 @@ msgstr "Não foi possível entrar na lista de espera"
 msgid "Unable to load attendee details."
 msgstr "Não é possível carregar os detalhes do participante."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:281
+#: src/components/routes/product-widget/SelectProducts/index.tsx:279
 msgid "Unable to load products for this date. Please try again."
 msgstr "Não foi possível carregar os produtos para esta data. Por favor, tente novamente."
 
@@ -11601,7 +11518,7 @@ msgstr "Participante desconhecido"
 msgid "Unlimited"
 msgstr "Ilimitado"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:683
+#: src/components/routes/product-widget/SelectProducts/index.tsx:509
 msgid "Unlimited available"
 msgstr "Ilimitado disponível"
 
@@ -11614,17 +11531,13 @@ msgid "Unnamed"
 msgstr "Sem nome"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:522
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:508
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:522
 msgid "Unnamed location"
 msgstr "Localização sem nome"
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:32
 msgid "Unpaid Order"
 msgstr "Pedido não pago"
-
-#: src/components/routes/event/EventDashboard/index.tsx:214
-#~ msgid "Unpublish Event"
-#~ msgstr "Despublicar Evento"
 
 #: src/components/common/AdminAccountsTable/index.tsx:101
 msgid "Untrusted"
@@ -11767,7 +11680,11 @@ msgstr "Use uma versão desfocada da imagem da capa como plano de fundo"
 msgid "Use cover image"
 msgstr "Usar imagem de capa"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:49
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:619
+msgid "Use event default"
+msgstr "Usar predefinição do evento"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:53
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:40
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Usar detalhes do pedido para todos os participantes. Os nomes e e-mails dos participantes corresponderão às informações do comprador."
@@ -11909,7 +11826,7 @@ msgstr "IVA: não registado"
 
 #: src/components/modals/LocationEditModal/index.tsx:110
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:555
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:541
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:237
 msgid "Venue Name"
 msgstr "Nome do local"
@@ -12117,10 +12034,6 @@ msgstr "Lista de espera acionada"
 msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
 msgstr "Aviso: Esta é a configuração padrão do sistema. As alterações afetarão todas as contas que não tenham uma configuração específica atribuída."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "We"
-msgstr "Qua"
-
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:89
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Não foi possível processar seu pagamento. Tente novamente ou entre em contato com o suporte."
@@ -12211,7 +12124,7 @@ msgid "We'll notify you by email if a spot becomes available for {productDisplay
 msgstr "Notificá-lo-emos por e-mail se ficar disponível um lugar para {productDisplayName}."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:292
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:326
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "Após guardar, abriremos um compositor de mensagens com um modelo pré-preenchido. Você revê e envia — nada é enviado automaticamente."
 
@@ -12230,11 +12143,6 @@ msgstr "Estamos processando seu pedido. Por favor, aguarde..."
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:92
 msgid "We've made changes to the schedule for \"{title}\" — {description} affecting {affectedCount} session(s)."
 msgstr "Fizemos alterações à programação de \"{title}\" — {description} afetando {affectedCount} sessão(ões)."
-
-#: src/components/routes/welcome/index.tsx:146
-#: src/components/routes/event/EventDashboard/index.tsx:138
-#~ msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
-#~ msgstr "Mudámos a nossa sede para a Irlanda. Como resultado, precisamos que reconecte a sua conta Stripe. Este processo rápido demora apenas alguns minutos. As suas vendas e dados existentes permanecem completamente inalterados."
 
 #: src/components/routes/welcome/index.tsx:147
 msgid "We've sent a 5-digit verification code to:"
@@ -12292,7 +12200,7 @@ msgstr "Site"
 msgid "Wed"
 msgstr "Qua"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Wednesday"
 msgstr "Quarta-feira"
 
@@ -12300,12 +12208,8 @@ msgstr "Quarta-feira"
 msgid "week"
 msgstr "semana"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
-#~ msgid "Week"
-#~ msgstr "Semana"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:57
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Weekly"
 msgstr "Semanal"
 
@@ -12469,7 +12373,7 @@ msgstr "Quando abre o check-in"
 msgid "When customers purchase tickets, their orders will appear here."
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:136
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr ""
 
@@ -12565,7 +12469,7 @@ msgid "Year to date"
 msgstr "Ano até agora"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:59
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Yearly"
 msgstr "Anual"
 
@@ -12755,7 +12659,7 @@ msgstr "Está na lista de espera!"
 msgid "You've been offered a spot!"
 msgstr "Foi-lhe oferecido um lugar!"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:301
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:315
 msgid "You've changed the session time"
 msgstr "Alterou a hora da sessão"
 
@@ -12806,15 +12710,6 @@ msgstr "Sua solicitação de e-mail para <0>{0}</0> está pendente. Por favor, v
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:48
 msgid "Your event is live!"
 msgstr "O seu evento está online!"
-
-#: src/components/common/OrdersTable/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:194
-#~ msgid "Your event must be live before you can sell tickets to attendees."
-#~ msgstr "Seu evento deve estar ativo antes que você possa vender ingressos para os participantes."
-
-#: src/components/layouts/AuthLayout/index.tsx:47
-#~ msgid "Your logo, colors, and style on every page"
-#~ msgstr "O seu logotipo, cores e estilo em cada página"
 
 #: src/components/common/OrdersTable/index.tsx:87
 msgid "Your message has been sent"
@@ -12936,7 +12831,7 @@ msgstr "CEP / Código Postal"
 #: src/components/common/CheckoutQuestion/index.tsx:170
 #: src/components/modals/LocationEditModal/index.tsx:122
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:567
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:553
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:267
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:196
 msgid "Zip or Postal Code"
@@ -12945,7 +12840,3 @@ msgstr "CEP ou Código postal"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:555
 msgid "ZIP or Postal Code"
 msgstr "CEP ou Código Postal"
-
-#: src/components/common/PoweredByFooter/index.tsx:60
-#~ msgid "Σχεδιάστηκε από το Δήμο Ορεστιάδας, βασισμένο στο"
-#~ msgstr ""

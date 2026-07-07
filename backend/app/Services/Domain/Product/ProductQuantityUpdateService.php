@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Product;
 
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -89,7 +90,9 @@ class ProductQuantityUpdateService
             $this->increaseQuantitySold(
                 $orderItem->getProductPriceId(),
                 $orderItem->getQuantity(),
-                $orderItem->getEventOccurrenceId(),
+                $orderItem->getProductType() === ProductType::TICKET->name
+                    ? $orderItem->getEventOccurrenceId()
+                    : null,
             );
         }
     }

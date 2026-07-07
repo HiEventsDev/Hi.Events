@@ -26,7 +26,7 @@ export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'c
 /**
  * Safely get a supported locale, falling back to 'en' if not supported.
  */
-const getSafeLocale = (locale?: string): SupportedLocales => {
+export const getSafeLocale = (locale?: string): SupportedLocales => {
     if (locale && locale in localeFormats) {
         return locale as SupportedLocales;
     }

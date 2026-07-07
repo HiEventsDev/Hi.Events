@@ -12,16 +12,25 @@ use Illuminate\Http\Request;
  */
 class EventOccurrenceResourcePublic extends BaseResource
 {
+    public function __construct($resource, private readonly bool $eventLevelShowCapacity = false)
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray(Request $request): array
     {
+        $showCapacity = $this->shouldShowAvailableCapacity($this->eventLevelShowCapacity);
+
         return [
             'id' => $this->getId(),
             'event_id' => $this->getEventId(),
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
             'status' => $this->getStatus(),
-            'capacity' => $this->getCapacity(),
-            'available_capacity' => $this->getAvailableCapacity(),
+            $this->mergeWhen($showCapacity, fn () => [
+                'capacity' => $this->getCapacity(),
+                'available_capacity' => $this->getAvailableCapacity(),
+            ]),
             'label' => $this->getLabel(),
             'is_past' => $this->isPast(),
             'is_future' => $this->isFuture(),

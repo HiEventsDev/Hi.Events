@@ -24,6 +24,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const SHOW_AVAILABLE_CAPACITY = 'show_available_capacity';
 
     protected int $id;
     protected int $event_id;
@@ -39,6 +40,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected ?bool $show_available_capacity = null;
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'show_available_capacity' => $this->show_available_capacity ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setShowAvailableCapacity(?bool $show_available_capacity): self
+    {
+        $this->show_available_capacity = $show_available_capacity;
+        return $this;
+    }
+
+    public function getShowAvailableCapacity(): ?bool
+    {
+        return $this->show_available_capacity;
     }
 }

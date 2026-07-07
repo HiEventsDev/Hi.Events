@@ -60,7 +60,7 @@ msgstr "{0} <0>başarıyla check-out yaptı</0>"
 msgid "{0} Active Webhooks"
 msgstr "{0} Aktif Webhook"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:688
+#: src/components/routes/product-widget/SelectProducts/index.tsx:514
 msgid "{0} available"
 msgstr "{0} mevcut"
 
@@ -69,7 +69,6 @@ msgid "{0} created successfully"
 msgstr "{0} başarıyla oluşturuldu"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:399
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:471
 msgid "{0} left"
 msgstr "{0} kaldı"
 
@@ -85,10 +84,6 @@ msgstr "{1} koltuğun {0} tanesi dolu."
 #: src/components/routes/events/Dashboard/index.tsx:141
 msgid "{0} organizers"
 msgstr "{0} organizatör"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:375
-msgid "{0} spots left"
-msgstr "{0} yer kaldı"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:602
 msgid "{0} tickets"
@@ -110,13 +105,17 @@ msgstr "{activeCount} etkin"
 msgid "{appName} logo"
 msgstr "{appName} logosu"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:307
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:321
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr "Bu oturum için {attendeeCount} katılımcı kayıtlı."
 
 #: src/components/common/EventCard/index.tsx:146
 msgid "{availableCount} of {totalCount} available"
 msgstr "{totalCount} arasından {availableCount} mevcut"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "{capacity} spots left"
+msgstr "{capacity} yer kaldı"
 
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:55
 msgid "{checkedIn} / {total} checked in"
@@ -166,6 +165,11 @@ msgstr "{organizerName}'ın ilk etkinliği"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:109
 msgid "{productCount} ticket types configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "{slotCount} times available"
+msgstr "{slotCount} saat mevcut"
 
 #: src/components/common/EventCard/index.tsx:142
 msgid "{totalCount} ticket types"
@@ -234,7 +238,7 @@ msgstr "1 Aktif Webhook"
 msgid "1 attendee is registered across the affected sessions."
 msgstr "Etkilenen oturumlar genelinde 1 katılımcı kayıtlı."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:320
 msgid "1 attendee is registered for this session."
 msgstr "Bu oturum için 1 katılımcı kayıtlı."
 
@@ -265,6 +269,11 @@ msgstr "1 bilet türü"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:108
 msgid "1 ticket type configured"
 msgstr ""
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:189
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:405
+msgid "1 time available"
+msgstr "1 saat mevcut"
 
 #: src/components/modals/SendMessageModal/index.tsx:127
 msgid "1 week before event"
@@ -574,7 +583,7 @@ msgstr "Çevrimiçi etkinlik için bağlantı bilgilerini ekleyin."
 msgid "Add custom questions to collect additional information during checkout"
 msgstr "Ödeme sırasında ek bilgi toplamak için özel sorular ekleyin"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Add Date"
 msgstr "Tarih Ekle"
 
@@ -700,7 +709,7 @@ msgstr "Adres satırı 1"
 
 #: src/components/modals/LocationEditModal/index.tsx:114
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:559
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:545
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:559
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:243
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:172
 #: src/components/routes/product-widget/CollectInformation/index.tsx:525
@@ -714,7 +723,7 @@ msgstr "Adres satırı 2"
 
 #: src/components/modals/LocationEditModal/index.tsx:115
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:560
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:546
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:560
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:248
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:177
 #: src/components/routes/product-widget/CollectInformation/index.tsx:530
@@ -890,7 +899,7 @@ msgstr "Ödenmemiş siparişlerle ilişkili katılımcıların check-in yapması
 msgid "Allow attendees to update their ticket information (name, email) via a secure link sent with their order confirmation."
 msgstr "Katılımcıların sipariş onayıyla gönderilen güvenli bir bağlantı üzerinden bilet bilgilerini (ad, e-posta) güncellemelerine izin verin."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:135
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:140
 msgid "Allow buyers to copy their details to all attendees"
 msgstr ""
 
@@ -1015,7 +1024,7 @@ msgstr "Ürün sahiplerinden gelen tüm sorular bu e-posta adresine gönderilece
 msgid "Appearance"
 msgstr "Görünüm"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:790
+#: src/components/routes/product-widget/SelectProducts/index.tsx:606
 msgid "applied"
 msgstr "uygulandı"
 
@@ -1047,7 +1056,7 @@ msgstr "Uygula"
 msgid "Apply Changes"
 msgstr "Değişiklikleri Uygula"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:818
+#: src/components/routes/product-widget/SelectProducts/index.tsx:635
 msgid "Apply Promo Code"
 msgstr "Promosyon Kodunu Uygula"
 
@@ -1133,7 +1142,7 @@ msgstr "Bu katılımcıyı iptal etmek istediğinizden emin misiniz? Bu işlem b
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:59
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:36
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:337
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
 msgid "Are you sure you want to cancel this date? Affected attendees will be notified by email."
 msgstr "Bu tarihi iptal etmek istediğinize emin misiniz? Etkilenen katılımcılar e-posta ile bilgilendirilecektir."
 
@@ -1202,7 +1211,7 @@ msgstr "Bu organizatörü herkese açık yapmak istediğinizden emin misiniz? Bu
 msgid "Are you sure you want to offer a spot to this person? They will receive an email notification."
 msgstr "Bu kişiye bir yer teklif etmek istediğinizden emin misiniz? E-posta bildirimi alacaklardır."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:372
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:386
 msgid "Are you sure you want to permanently delete this date? This cannot be undone."
 msgstr "Bu tarihi kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
 
@@ -1350,7 +1359,7 @@ msgstr "Katılımcı E-postası"
 msgid "Attendee Information"
 msgstr "Katılımcı Bilgileri"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:116
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
 msgid "Attendee information collection"
 msgstr "Katılımcı bilgi toplama"
 
@@ -1484,6 +1493,10 @@ msgstr "Widget yüksekliğini içeriğe göre otomatik olarak boyutlandırır. D
 msgid "Available"
 msgstr "Mevcut"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:193
+msgid "Available times on {dayName}"
+msgstr "{dayName} için uygun saatler"
+
 #: src/components/modals/RefundOrderModal/index.tsx:93
 msgid "Available to Refund"
 msgstr "İade Edilebilir"
@@ -1533,17 +1546,9 @@ msgstr "Harika Etkinlikler Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Harika Organizatör Ltd."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:329
-msgid "Back"
-msgstr "Geri"
-
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
 msgid "Back to Accounts"
 msgstr "Hesaplara Dön"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:326
-msgid "Back to calendar"
-msgstr "Takvime geri dön"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:144
 #: src/components/routes/product-widget/CollectInformation/index.tsx:336
@@ -1704,10 +1709,6 @@ msgstr "Hesaplama Türü"
 msgid "Calendar"
 msgstr "Takvim"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:545
-msgid "Calendar view"
-msgstr "Takvim görünümü"
-
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:261
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:190
 msgid "California"
@@ -1745,7 +1746,7 @@ msgstr "Giriş yapılamıyor"
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
 #: src/components/routes/organizer/Locations/index.tsx:40
@@ -1769,9 +1770,9 @@ msgstr "Tüm ürünleri iptal et ve havuza geri bırak"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:32
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:333
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:615
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:347
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:656
 msgid "Cancel Date"
 msgstr "Tarihi İptal Et"
 
@@ -1815,7 +1816,8 @@ msgstr "İptal"
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:425
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:368
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:137
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:99
 msgid "Cancelled"
 msgstr "İptal Edildi"
@@ -1829,7 +1831,7 @@ msgid "Cannot delete the system default configuration"
 msgstr "Sistem varsayılan yapılandırması silinemez"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:577
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:591
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:830
 msgid "Capacity"
 msgstr "Kapasite"
@@ -1854,7 +1856,7 @@ msgstr "Kapasite yönetimi"
 msgid "Capacity Management"
 msgstr "Kapasite yönetimi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:121
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:132
 msgid "Capacity must be 0 or greater"
 msgstr "Kapasite 0 veya daha büyük olmalıdır"
 
@@ -1887,10 +1889,6 @@ msgstr "Kategori"
 msgid "Category Created Successfully"
 msgstr "Kategori Başarıyla Oluşturuldu"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:598
-msgid "Change"
-msgstr "Değiştir"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
 msgid "Change duration"
 msgstr "Süreyi değiştir"
@@ -1902,6 +1900,10 @@ msgstr "Şifre değiştir"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:37
 msgid "Change the attendee limit"
 msgstr "Katılımcı limitini değiştir"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:256
+msgid "Change time"
+msgstr "Saati değiştir"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:100
 msgid "Change waitlist settings"
@@ -2086,7 +2088,7 @@ msgstr "Giriş Yapıldı"
 msgid "Checkout"
 msgstr "Ödeme"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:89
 msgid "Checkout Settings"
 msgstr "Ödeme Ayarları"
 
@@ -2150,7 +2152,7 @@ msgstr "Platform ücretini kimin ödeyeceğini seçin. Bu, hesap ayarlarınızda
 #: src/components/common/CheckoutQuestion/index.tsx:162
 #: src/components/modals/LocationEditModal/index.tsx:118
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:563
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:549
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:563
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:184
 #: src/components/routes/product-widget/CollectInformation/index.tsx:539
@@ -2195,7 +2197,7 @@ msgstr "Yeni satışlara açmak için tıklayın"
 msgid "Click to view notes"
 msgstr "Notları görüntülemek için tıklayın"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:823
+#: src/components/routes/product-widget/SelectProducts/index.tsx:641
 msgid "close"
 msgstr "kapat"
 
@@ -2204,7 +2206,7 @@ msgstr "kapat"
 #: src/components/modals/JoinWaitlistModal/index.tsx:105
 #: src/components/modals/JoinWaitlistModal/index.tsx:132
 #: src/components/modals/RefundOrderModal/index.tsx:163
-#: src/components/routes/product-widget/SelectProducts/index.tsx:824
+#: src/components/routes/product-widget/SelectProducts/index.tsx:642
 msgid "Close"
 msgstr "Kapat"
 
@@ -2253,7 +2255,7 @@ msgstr "Birlikte harika etkinlikler oluşturmak için ekibinizle işbirliği yap
 msgid "Collapse this product when the event page is initially loaded"
 msgstr "Etkinlik sayfası ilk yüklendiğinde bu ürünü daralt"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:43
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:34
 msgid "Collect attendee details for each ticket purchased."
 msgstr "Satın alınan her bilet için katılımcı bilgilerini toplayın."
@@ -2321,20 +2323,6 @@ msgstr "Ödemeyi Tamamla"
 msgid "Complete Stripe setup"
 msgstr "Stripe kurulumunu tamamla"
 
-#: src/components/routes/product-widget/CollectInformation/index.tsx:418
-#: src/components/common/StripeConnectButton/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Complete Stripe Setup"
-#~ msgstr "Stripe Kurulumunu Tamamla"
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:115
-#~ msgid "Complete the setup below to continue"
-#~ msgstr "Devam etmek için aşağıdaki kurulumu tamamlayın"
-
-#: src/components/routes/event/EventDashboard/index.tsx:171
-#~ msgid "Complete these steps to start selling tickets for your event."
-#~ msgstr "Etkinliğiniz için bilet satmaya başlamak için bu adımları tamamlayın."
-
 #: src/components/routes/product-widget/CollectInformation/index.tsx:419
 msgid "Complete your order to secure your tickets. This offer is time-limited, so don't wait too long."
 msgstr "Biletlerinizi güvence altına almak için siparişinizi tamamlayın. Bu teklif süre sınırlıdır, çok beklemeyin."
@@ -2375,7 +2363,7 @@ msgstr "Oluştur"
 
 #: src/components/modals/LocationEditModal/index.tsx:111
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:556
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:542
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:556
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:238
 msgid "Conference Center"
 msgstr "Konferans Merkezi"
@@ -2484,21 +2472,9 @@ msgstr "E-posta adresi onaylanıyor..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Tebrikler! Etkinliğiniz artık herkese açık."
 
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:235
-#~ msgid "Connect & Upgrade"
-#~ msgstr "Bağlan ve Yükselt"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:85
 msgid "Connect bank"
 msgstr ""
-
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:653
-#~ msgid "Connect Documentation"
-#~ msgstr "Dokümantasyonu Bağla"
-
-#: src/components/routes/event/EventDashboard/index.tsx:236
-#~ msgid "Connect payment processing"
-#~ msgstr "Ödeme işlemeyi bağla"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:369
 #: src/components/modals/SendMessageModal/index.tsx:312
@@ -2517,10 +2493,6 @@ msgstr "Mesajlaşmayı etkinleştirmek için Stripe'ı bağlayın"
 msgid "Connect Stripe to receive ticket payments directly to your bank account."
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:249
-#~ msgid "Connect to Stripe"
-#~ msgstr "Stripe'a Bağlan"
-
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:210
 msgid "Connect with Stripe"
 msgstr "Stripe ile Bağlan"
@@ -2530,12 +2502,12 @@ msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr ""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:578
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:566
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:580
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:214
 msgid "Connection Details"
 msgstr "Bağlantı Detayları"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:127
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:138
 msgid "Connection details are required for online dates"
 msgstr ""
 
@@ -2565,7 +2537,7 @@ msgstr "Destek için iletişim e-postası"
 
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
-#: src/components/routes/product-widget/SelectProducts/index.tsx:770
+#: src/components/routes/product-widget/SelectProducts/index.tsx:590
 msgid "Continue"
 msgstr "Devam Et"
 
@@ -2580,7 +2552,7 @@ msgstr "Devam Butonu Metni"
 msgid "Continue Setup"
 msgstr "Kuruluma Devam Et"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:537
+#: src/components/routes/product-widget/SelectProducts/index.tsx:737
 msgid "Continue to Checkout"
 msgstr "Ödemeye Devam Et"
 
@@ -2714,7 +2686,7 @@ msgstr "Adres bilgileri alınamadı"
 msgid "Could not save address"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:281
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:295
 msgid "Could not save date"
 msgstr "Tarih kaydedilemedi"
 
@@ -2731,7 +2703,7 @@ msgstr ""
 #: src/components/common/CheckoutQuestion/index.tsx:174
 #: src/components/modals/LocationEditModal/index.tsx:127
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:568
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:568
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:274
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:202
 #: src/components/routes/product-widget/CollectInformation/index.tsx:560
@@ -2869,7 +2841,7 @@ msgstr "Organizatör varsayılanlarını geçersiz kılan bu etkinlik için öze
 msgid "Create Custom Template"
 msgstr "Özel Şablon Oluştur"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 msgid "Create Date"
 msgstr "Tarih Oluştur"
 
@@ -3082,7 +3054,7 @@ msgstr "Bu etkinlik için e-posta ve bildirim ayarlarını özelleştirin"
 msgid "Customize the emails sent to your customers using Liquid templating. These templates will be used as defaults for all events in your organization."
 msgstr "Liquid şablonu kullanarak müşterilerinize gönderilen e-postaları özelleştirin. Bu şablonlar kuruluşunuzdaki tüm etkinlikler için varsayılan olarak kullanılacaktır."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:85
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
 msgid "Customize the event homepage and checkout messaging"
 msgstr "Etkinlik ana sayfası ve ödeme mesajlarını özelleştirin"
 
@@ -3120,7 +3092,7 @@ msgid "Customize your organizer page appearance"
 msgstr "Organizatör sayfanızın görünümünü özelleştirin"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:56
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Daily"
 msgstr "Günlük"
 
@@ -3154,7 +3126,7 @@ msgstr "Tehlike bölgesi"
 
 #: src/components/common/AttendeeTable/index.tsx:387
 #: src/components/common/DangerZone/index.tsx:30
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:602
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:643
 #: src/components/routes/event/Settings/index.tsx:98
 #: src/components/routes/organizer/Settings/index.tsx:79
 msgid "Danger Zone"
@@ -3183,7 +3155,7 @@ msgid "Date"
 msgstr "Tarih"
 
 #: src/components/common/AttendeeTicket/index.tsx:94
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:459
 msgid "Date & Time"
 msgstr "Tarih ve Saat"
 
@@ -3197,11 +3169,11 @@ msgstr "Tarih İptali"
 msgid "Date cancelled"
 msgstr "Tarih iptal edildi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:356
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:370
 msgid "Date cancelled successfully"
 msgstr "Tarih başarıyla iptal edildi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:261
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:275
 msgid "Date created successfully"
 msgstr "Tarih başarıyla oluşturuldu"
 
@@ -3211,7 +3183,7 @@ msgstr "Tarih başarıyla oluşturuldu"
 msgid "Date deleted"
 msgstr "Tarih silindi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:380
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:394
 msgid "Date deleted successfully"
 msgstr "Tarih başarıyla silindi"
 
@@ -3234,13 +3206,17 @@ msgstr "Tarih yeniden etkinleştirildi"
 msgid "Date reopened for new sales"
 msgstr "Tarih yeni satışlara yeniden açıldı"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:260
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:274
 msgid "Date updated successfully"
 msgstr "Tarih başarıyla güncellendi"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:105
 msgid "Dates are managed per occurrence"
 msgstr "Tarihler her tekrar için ayrı yönetilir"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:489
+msgid "Dates with sessions"
+msgstr "Oturumların olduğu tarihler"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:93
 msgid "day"
@@ -3350,8 +3326,8 @@ msgstr "Check-In Listesini Sil"
 msgid "Delete code"
 msgstr "Kodu sil"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:369
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:629
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:383
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:670
 msgid "Delete Date"
 msgstr "Tarihi Sil"
 
@@ -3378,7 +3354,7 @@ msgstr "Konumu sil"
 msgid "Delete Organizer"
 msgstr "Organizatörü Sil"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Delete Permanently"
 msgstr "Kalıcı Olarak Sil"
 
@@ -3426,7 +3402,7 @@ msgstr "Tasarım Öğeleri"
 
 #: src/components/common/ProgressStepper/index.tsx:18
 #: src/components/common/ProgressStepper/index.tsx:23
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:419
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:433
 msgid "Details"
 msgstr "Detaylar"
 
@@ -3434,7 +3410,7 @@ msgstr "Detaylar"
 msgid "Didn't receive the code?"
 msgstr "Kodu almadınız mı?"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:484
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:498
 msgid "Different location"
 msgstr "Farklı konum"
 
@@ -3475,13 +3451,17 @@ msgstr "Kapat"
 msgid "Dismiss setup checklist"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:554
+#: src/components/routes/product-widget/SelectProducts/index.tsx:754
 msgid "Dismiss this message"
 msgstr "Bu mesajı kapat"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:129
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:134
 msgid "Display a checkbox allowing customers to opt-in to receive marketing communications from this event organizer."
 msgstr "Müşterilerin bu etkinlik organizatöründen pazarlama iletişimi almayı kabul etmelerini sağlayan bir onay kutusu göster."
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:149
+msgid "Display how many spots are left on each date in the ticket widget. You can override this for individual dates. Sold-out dates are always labelled."
+msgstr "Bilet widget'ında her tarih için kalan yer sayısını gösterin. Bunu tek tek tarihler için geçersiz kılabilirsiniz. Tükenen tarihler her zaman etiketlenir."
 
 #: src/components/modals/LocationEditModal/index.tsx:104
 msgid "Display name"
@@ -3574,7 +3554,7 @@ msgstr ""
 msgid "Duplicate"
 msgstr "Çoğalt"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Duplicate Date"
 msgstr "Tarihi Çoğalt"
 
@@ -3609,7 +3589,7 @@ msgid "e.g. 180 (3 hours)"
 msgstr "ör. 180 (3 saat)"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:477
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:462
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:476
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:733
 msgid "e.g. Morning Session"
 msgstr "örn. Sabah Oturumu"
@@ -3703,7 +3683,7 @@ msgstr "Kodu Düzenle"
 msgid "Edit Configuration"
 msgstr "Yapılandırmayı Düzenle"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:413
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:427
 msgid "Edit Date"
 msgstr "Tarihi Düzenle"
 
@@ -3958,7 +3938,7 @@ msgstr "Bitiş"
 
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:133
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:457
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:471
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
 msgid "End Date"
 msgstr "Bitiş Tarihi"
@@ -3968,7 +3948,7 @@ msgid "End Date & Time (optional)"
 msgstr "Bitiş Tarihi ve Saati (isteğe bağlı)"
 
 #: src/components/modals/CreateEventModal/index.tsx:47
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:115
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:126
 #: src/components/routes/welcome/index.tsx:252
 msgid "End date must be after start date"
 msgstr "Bitiş tarihi başlangıç tarihinden sonra olmalıdır"
@@ -4383,29 +4363,29 @@ msgstr "Etkinlik Performansı"
 msgid "Events Starting in Next 24 Hours"
 msgstr "Önümüzdeki 24 Saat İçinde Başlayan Etkinlikler"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0}"
 msgstr "Her {0}"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
 msgid "Every {0} days"
 msgstr "Her {0} günde bir"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Every {0} months"
 msgstr "Her {0} ayda bir"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Every {0} weeks"
 msgstr "Her {0} haftada bir"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:28
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:29
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Every {0} weeks on {1}"
 msgstr "Her {0} haftada bir {1} günü"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Every {0} years"
 msgstr "Her {0} yılda bir"
 
@@ -4518,7 +4498,7 @@ msgstr "Katılımcı iptal edilemedi"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:78
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:58
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:374
 msgid "Failed to cancel date"
 msgstr "Tarih iptal edilemedi"
 
@@ -4561,7 +4541,7 @@ msgstr "Yapılandırma silinemedi"
 msgid "Failed to delete date"
 msgstr "Tarih silinemedi"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:384
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:398
 msgid "Failed to delete date. It may have existing orders."
 msgstr "Tarih silinemedi. Mevcut siparişleri olabilir."
 
@@ -4886,25 +4866,13 @@ msgstr "İlk"
 msgid "First 30 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:282
-#~ msgid "First 30 days from event start"
-#~ msgstr "Etkinlik başlangıcından itibaren ilk 30 gün"
-
 #: src/components/common/PeriodSelector/index.tsx:40
 msgid "First 7 days"
 msgstr ""
 
-#: src/components/routes/event/EventDashboard/index.tsx:274
-#~ msgid "First 7 days from event start"
-#~ msgstr "Etkinlik başlangıcından itibaren ilk 7 gün"
-
 #: src/components/common/PeriodSelector/index.tsx:44
 msgid "First 90 days"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:290
-#~ msgid "First 90 days from event start"
-#~ msgstr "Etkinlik başlangıcından itibaren ilk 90 gün"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:506
 msgid "First attendee"
@@ -5003,10 +4971,6 @@ msgstr "Şifrenizi mi unuttunuz?"
 msgid "Fourth"
 msgstr "Dördüncü"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Fr"
-msgstr "Cu"
-
 #: src/components/common/AttendeeTicket/index.tsx:82
 #: src/components/common/Currency/index.tsx:90
 #: src/components/common/OrderSummary/index.tsx:58
@@ -5038,7 +5002,7 @@ msgstr "Sıklık"
 msgid "Fri"
 msgstr "Cum"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Friday"
 msgstr "Cuma"
 
@@ -5049,10 +5013,6 @@ msgstr "Tam veri sahipliği"
 #: src/components/common/PeriodSelector/index.tsx:46
 msgid "Full event"
 msgstr ""
-
-#: src/components/routes/event/EventDashboard/index.tsx:298
-#~ msgid "Full event duration"
-#~ msgstr "Etkinliğin tam süresi"
 
 #: src/components/modals/RefundOrderModal/index.tsx:110
 msgid "Full refund"
@@ -5134,8 +5094,8 @@ msgstr "GitHub"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:73
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:50
 #: src/components/routes/event/OccurrencesTab/index.tsx:222
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:351
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:375
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:365
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:389
 msgid "Go Back"
 msgstr "Geri Dön"
 
@@ -5212,7 +5172,7 @@ msgstr "Misafirler"
 msgid "Happening now"
 msgstr "Şu anda gerçekleşiyor"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:785
+#: src/components/routes/product-widget/SelectProducts/index.tsx:601
 msgid "Have a promo code?"
 msgstr "Promosyon kodunuz var mı?"
 
@@ -5240,11 +5200,6 @@ msgstr "İşte widget'ı uygulamanıza yerleştirmek için kullanabileceğiniz R
 #: src/components/common/AffiliateTable/index.tsx:230
 msgid "Here is your affiliate link"
 msgstr "Bağlı kuruluş bağlantınız burada"
-
-#: src/components/routes/event/EventDashboard/index.tsx:223
-#: src/components/routes/account/ManageAccount/sections/PaymentSettings/index.tsx:84
-#~ msgid "Here's what to expect:"
-#~ msgstr "Neleri beklemelisiniz:"
 
 #: src/components/routes/event/EventDashboard/index.tsx:223
 msgid "Hi {0} 👋"
@@ -5281,8 +5236,9 @@ msgstr "Halk görünümünden gizli"
 msgid "Hidden questions are only visible to the event organizer and not to the customer."
 msgstr "Gizli sorular yalnızca etkinlik organizatörü tarafından görülebilir, müşteri tarafından görülemez."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:738
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:621
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:564
 msgid "Hide"
 msgstr "Gizle"
 
@@ -5321,10 +5277,6 @@ msgstr "Tükendiğinde ürünü gizle"
 #: src/components/routes/event/TicketDesigner/index.tsx:194
 msgid "Hide the date"
 msgstr "Tarihi gizle"
-
-#: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:93
-#~ msgid "Hide the getting started page from the sidebar"
-#~ msgstr "Başlarken sayfasını kenar çubuğundan gizle"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:37
 msgid "Hide this category?"
@@ -5404,7 +5356,7 @@ msgstr "Bir müşterinin teklif aldıktan sonra satın almayı tamamlaması gere
 msgid "How long does the schedule run?"
 msgstr "Program ne kadar sürüyor?"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:127
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Müşterinin siparişini tamamlamak için kaç dakikası var. En az 15 dakika öneriyoruz"
 
@@ -5461,7 +5413,7 @@ msgstr "<0>Şartlar ve koşulları</0> kabul ediyorum"
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Bunun bu etkinlikle ilgili işlemsel bir mesaj olduğunu onaylıyorum"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:509
+#: src/components/routes/product-widget/SelectProducts/index.tsx:709
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Yeni bir sekme otomatik olarak açılmadıysa, ödemeye devam etmek için lütfen aşağıdaki düğmeyi tıklayın."
 
@@ -5533,10 +5485,6 @@ msgstr "Önemli Uyarı"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:77
 msgid "Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving."
 msgstr "Önemli: E-posta adresinizi değiştirmek, bu siparişe erişim bağlantısını güncelleyecektir. Kaydettikten sonra yeni sipariş bağlantısına yönlendirileceksiniz."
-
-#: src/components/routes/event/EventDashboard/index.tsx:137
-#~ msgid "Important: Stripe reconnection required"
-#~ msgstr "Önemli: Stripe yeniden bağlantısı gerekli"
 
 #: src/components/routes/admin/Dashboard/index.tsx:44
 msgid "In {diffHours} hours"
@@ -5810,7 +5758,7 @@ msgid "Keep the profit."
 msgstr "Kârı koruyun."
 
 #: src/components/forms/ProductForm/index.tsx:93
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:461
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:475
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:730
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
 msgid "Label"
@@ -5942,7 +5890,7 @@ msgstr "Çözümlenmiş konumun enlemi"
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Varsayılan \"Fatura\" kelimesini kullanmak için boş bırakın"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:595
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:835
 msgid "Leave empty for unlimited"
 msgstr "Sınırsız için boş bırakın"
@@ -5955,7 +5903,7 @@ msgstr "Bu giriş listesini tüm oturumlara uygulamak için boş bırakın"
 msgid "Leave on to cover every ticket on the event. Turn off to pick specific tickets."
 msgstr "Etkinlikteki tüm biletleri kapsayacak şekilde açık bırakın. Belirli biletleri seçmek için kapatın."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:325
 msgid "Let them know about the change"
 msgstr "Onlara değişikliği bildirin"
 
@@ -5987,10 +5935,6 @@ msgstr "Sipariş detaylarına bağlantı"
 msgid "Link to ticket"
 msgstr "Bilete bağlantı"
 
-#: src/components/routes/event/EventDashboard/index.tsx:238
-#~ msgid "Link your Stripe account to receive funds from ticket sales."
-#~ msgstr "Bilet satışlarından gelir almak için Stripe hesabınızı bağlayın."
-
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:61
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -6002,10 +5946,6 @@ msgstr "Bağlantılara İzin Verildi"
 #: src/components/routes/event/OccurrencesTab/index.tsx:470
 msgid "List"
 msgstr "Liste"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
-msgid "List view"
-msgstr "Liste görünümü"
 
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/layouts/AuthLayout/index.tsx:78
@@ -6062,7 +6002,7 @@ msgstr "Yükleniyor..."
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:31
 #: src/components/common/Editor/Controls/InsertLiquidVariableControl.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:507
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:477
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:491
 #: src/components/routes/event/Settings/index.tsx:52
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:200
 #: src/components/routes/my-tickets/index.tsx:90
@@ -6173,10 +6113,6 @@ msgstr ""
 #: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
 msgstr "Bu soruyu zorunlu kıl"
-
-#: src/components/routes/event/EventDashboard/index.tsx:192
-#~ msgid "Make your event live"
-#~ msgstr "Etkinliğinizi canlı yapın"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:140
 #: src/components/common/CheckInListList/index.tsx:143
@@ -6410,10 +6346,6 @@ msgstr "Çeşitli"
 msgid "Miscellaneous Settings"
 msgstr "Çeşitli Ayarlar"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Mo"
-msgstr "Pt"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:492
 msgid "Mode"
 msgstr "Mod"
@@ -6422,7 +6354,7 @@ msgstr "Mod"
 msgid "Mon"
 msgstr "Pzt"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Monday"
 msgstr "Pazartesi"
 
@@ -6443,7 +6375,7 @@ msgid "Month"
 msgstr "Ay"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:58
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Monthly"
 msgstr "Aylık"
 
@@ -6580,7 +6512,7 @@ msgid "New label"
 msgstr "Yeni etiket"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:510
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:496
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:510
 msgid "New location"
 msgstr "Yeni konum"
 
@@ -6721,7 +6653,7 @@ msgstr "Gösterilecek veri yok. Lütfen bir tarih aralığı seçin"
 msgid "No date added"
 msgstr "Tarih eklenmedi"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:309
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:483
 msgid "No dates available this month. Try navigating to another month."
 msgstr "Bu ay için uygun tarih yok. Başka bir aya geçmeyi deneyin."
 
@@ -6931,7 +6863,7 @@ msgid "No results"
 msgstr "Sonuç yok"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "No saved locations yet"
 msgstr "Henüz kayıtlı konum yok"
 
@@ -7034,7 +6966,7 @@ msgstr "Henüz gösterilecek bir şey yok"
 msgid "Notification Settings"
 msgstr "Bildirim Ayarları"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:616
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:657
 msgid "Notify attendees and stop sales"
 msgstr "Katılımcıları bilgilendir ve satışları durdur"
 
@@ -7223,7 +7155,7 @@ msgstr "Devam Eden"
 #: src/components/common/EventCard/index.tsx:114
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:60
 #: src/components/routes/event/OccurrencesTab/index.tsx:316
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:485
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:499
 #: src/components/routes/my-tickets/index.tsx:56
 #: src/components/routes/product-widget/Payment/index.tsx:123
 msgid "Online"
@@ -7264,6 +7196,10 @@ msgstr "Çevrimiçi etkinlik bağlantı detayları"
 msgid "Online Event Details"
 msgstr "Online Etkinlik Detayları"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:105
+msgid "Only {capacity} left"
+msgstr "Yalnızca {capacity} kaldı"
+
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:74
 msgid "Only account administrators can delete or archive events. Contact your account admin for assistance."
 msgstr "Yalnızca hesap yöneticileri etkinlikleri silebilir veya arşivleyebilir. Yardım için hesap yöneticinizle iletişime geçin."
@@ -7279,6 +7215,10 @@ msgstr "Yalnızca bu durumlara sahip siparişlere gönder"
 #: src/components/routes/event/TicketDesigner/index.tsx:192
 msgid "Only show start date and time"
 msgstr "Yalnızca başlangıç tarihini ve saatini göster"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:601
+msgid "Only tickets count toward capacity"
+msgstr "Kapasiteye yalnızca biletler dahildir"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:311
 msgid "Only visible with promo code"
@@ -7534,7 +7474,7 @@ msgstr "Sipariş durumları"
 msgid "Order Summary"
 msgstr "Sipariş Özeti"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:121
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:126
 msgid "Order timeout"
 msgstr "Sipariş zaman aşımı"
 
@@ -7591,7 +7531,7 @@ msgstr "Siparişler Dışa Aktarıldı"
 #: src/components/routes/event/OccurrenceDetail/index.tsx:68
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:45
 #: src/components/routes/event/OccurrencesTab/index.tsx:217
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:346
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:360
 msgid "Orders spanning multiple dates will be flagged for manual review."
 msgstr "Birden fazla tarihi kapsayan siparişler manuel inceleme için işaretlenecektir."
 
@@ -7984,12 +7924,12 @@ msgstr "Katılımcı Başına"
 msgid "per min"
 msgstr "dakikada"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:47
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:51
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
 msgid "Per order"
 msgstr "Sipariş başına"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:41
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:45
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:32
 msgid "Per ticket"
 msgstr "Bilet başına"
@@ -8032,7 +7972,7 @@ msgstr "Bu etkinliği ve tüm ilgili verileri kalıcı olarak silin."
 msgid "Permanently delete this organizer and all its events."
 msgstr "Bu organizatörü ve tüm etkinliklerini kalıcı olarak silin."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:630
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:671
 msgid "Permanently remove this date"
 msgstr "Bu tarihi kalıcı olarak kaldır"
 
@@ -8045,7 +7985,7 @@ msgid "Phone"
 msgstr "Telefon"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:518
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:504
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:518
 msgid "Pick a location"
 msgstr "Bir konum seçin"
 
@@ -8128,7 +8068,7 @@ msgstr "E-posta adresinizi onaylamak için lütfen e-postanızı kontrol edin"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Güncellenmiş saat için lütfen biletinizi kontrol edin. Biletleriniz hâlâ geçerli — yeni saatler size uymadıkça herhangi bir işlem yapmanıza gerek yok. Sorularınız varsa bu e-postayı yanıtlayın."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:500
+#: src/components/routes/product-widget/SelectProducts/index.tsx:700
 msgid "Please continue in the new tab"
 msgstr "Lütfen yeni sekmede devam edin"
 
@@ -8177,7 +8117,7 @@ msgstr "Lütfen ödeme işlemini yeniden başlatın."
 msgid "Please return to the event page to start over."
 msgstr "Baştan başlamak için lütfen etkinlik sayfasına dönün."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:395
+#: src/components/routes/product-widget/SelectProducts/index.tsx:392
 msgid "Please select a date and time"
 msgstr "Lütfen bir tarih ve saat seçin"
 
@@ -8189,7 +8129,7 @@ msgstr "Lütfen bir tarih aralığı seçin"
 msgid "Please select an image."
 msgstr "Lütfen bir görsel seçin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:417
+#: src/components/routes/product-widget/SelectProducts/index.tsx:414
 msgid "Please select at least one product"
 msgstr "Lütfen en az bir ürün seçin"
 
@@ -8240,7 +8180,7 @@ msgstr "Portekizce"
 msgid "Position"
 msgstr "Konum"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
 msgid "Post Checkout message"
 msgstr "Ödeme sonrası mesaj"
 
@@ -8253,7 +8193,7 @@ msgstr "Ödeme Sonrası Mesajı"
 msgid "Powered by"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:90
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:95
 msgid "Pre Checkout message"
 msgstr "Ödeme öncesi mesaj"
 
@@ -8391,7 +8331,7 @@ msgstr "Ürün Satışları"
 msgid "Product sales, revenue, and tax breakdown"
 msgstr "Ürün satışları, gelir ve vergi dökümü"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:646
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:687
 msgid "Product settings cannot be edited for cancelled dates."
 msgstr "İptal edilen tarihler için ürün ayarları düzenlenemez."
 
@@ -8418,7 +8358,7 @@ msgstr "Ürün(ler)"
 
 #: src/components/common/PromoCodeTable/index.tsx:72
 #: src/components/modals/DuplicateEventModal/index.tsx:49
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:423
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:437
 msgid "Products"
 msgstr "Ürünler"
 
@@ -8452,7 +8392,7 @@ msgstr "Profil başarıyla güncellendi"
 msgid "Progress"
 msgstr "İlerleme"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:341
+#: src/components/routes/product-widget/SelectProducts/index.tsx:338
 msgid "Promo {promo_code} code applied"
 msgstr "Promosyon {promo_code} kodu uygulandı"
 
@@ -8528,10 +8468,6 @@ msgstr "Sağlayıcı"
 msgid "Publish"
 msgstr "Yayınla"
 
-#: src/components/routes/event/EventDashboard/index.tsx:203
-#~ msgid "Publish Event"
-#~ msgstr "Etkinliği Yayınla"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:127
 msgid "Publish your event"
 msgstr ""
@@ -8567,10 +8503,6 @@ msgstr "Adet"
 #: src/components/forms/ProductForm/index.tsx:334
 msgid "Quantity Available"
 msgstr "Mevcut Miktar"
-
-#: src/components/routes/event/EventDashboard/index.tsx:291
-#~ msgid "Quarter"
-#~ msgstr "Çeyrek"
 
 #: src/components/forms/CheckInListForm/index.tsx:222
 msgid "Question answers"
@@ -8644,10 +8576,6 @@ msgstr "Gerçek zamanlı analitik"
 msgid "Receive product updates from {0}."
 msgstr "{0}'ten ürün güncellemeleri alın."
 
-#: src/components/routes/event/EventDashboard/index.tsx:267
-#~ msgid "Recent"
-#~ msgstr "Son"
-
 #: src/components/routes/admin/Dashboard/index.tsx:389
 msgid "Recent Account Signups"
 msgstr "Son Hesap Kayıtları"
@@ -8699,10 +8627,6 @@ msgstr "Alıcılar mesaj gönderildikten sonra görüntülenebilir"
 msgid "Recommended"
 msgstr "Önerilen"
 
-#: src/components/routes/event/EventDashboard/index.tsx:143
-#~ msgid "Reconnect Stripe →"
-#~ msgstr "Stripe'ı Yeniden Bağla →"
-
 #: src/components/common/EventCard/index.tsx:221
 #: src/components/common/EventCard/index.tsx:334
 msgid "Recurring"
@@ -8739,7 +8663,7 @@ msgstr "Bu tarihler için tüm siparişleri iade et"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:67
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:44
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:345
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:359
 msgid "Refund all orders for this date"
 msgstr "Bu tarih için tüm siparişleri iade et"
 
@@ -8826,14 +8750,14 @@ msgstr "Kalan Kullanım"
 msgid "Reminder scheduled"
 msgstr "Hatırlatıcı zamanlandı"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:794
+#: src/components/routes/product-widget/SelectProducts/index.tsx:611
 msgid "remove"
 msgstr "kaldır"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
 #: src/components/common/WaitlistTable/index.tsx:79
 #: src/components/common/WaitlistTable/index.tsx:114
-#: src/components/routes/product-widget/SelectProducts/index.tsx:795
+#: src/components/routes/product-widget/SelectProducts/index.tsx:612
 msgid "Remove"
 msgstr "Kaldır"
 
@@ -9058,10 +8982,6 @@ msgstr "Rol"
 msgid "Run until a specific date"
 msgstr "Belirli bir tarihe kadar çalıştır"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Sa"
-msgstr "Ct"
-
 #: src/components/forms/ProductForm/index.tsx:112
 #: src/components/forms/ProductForm/index.tsx:492
 msgid "Sale End Date"
@@ -9132,7 +9052,7 @@ msgstr "Tüm etkinlikler için satışlar, siparişler ve performans metrikleri"
 msgid "Sales:"
 msgstr "Satışlar:"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:497
 msgid "Same as event"
 msgstr "Etkinlikle aynı"
 
@@ -9154,17 +9074,17 @@ msgstr "San Francisco"
 msgid "Sat"
 msgstr "Cmt"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Saturday"
 msgstr "Cumartesi"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:297
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:317
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:331
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:150
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:155
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:288
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:265
@@ -9185,7 +9105,7 @@ msgstr "Kaydet"
 #: src/components/modals/ManageOrderModal/index.tsx:175
 #: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/event/HomepageDesigner/index.tsx:293
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:593
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:634
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:266
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:305
 msgid "Save Changes"
@@ -9228,12 +9148,12 @@ msgid "Save VAT Settings"
 msgstr "KDV Ayarlarını Kaydet"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:509
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:495
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:509
 msgid "Saved location"
 msgstr "Kayıtlı konum"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:517
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:503
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Saved locations"
 msgstr "Kayıtlı konumlar"
 
@@ -9430,9 +9350,13 @@ msgstr "{0} seç"
 msgid "Select a category"
 msgstr "Bir kategori seçin"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:529
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:530
 msgid "Select a Date & Time"
 msgstr "Tarih ve Saat Seçin"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:168
+msgid "Select a date to see available times"
+msgstr "Uygun saatleri görmek için bir tarih seçin"
 
 #: src/components/routes/event/messages.tsx:340
 msgid "Select a message to view its contents"
@@ -9441,10 +9365,6 @@ msgstr "İçeriğini görüntülemek için bir mesaj seçin"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 msgid "Select a tier"
 msgstr "Bir seviye seçin"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:320
-msgid "Select a time"
-msgstr "Bir saat seçin"
 
 #: src/components/common/AdminUsersTable/index.tsx:100
 msgid "Select Account"
@@ -9577,12 +9497,17 @@ msgstr "seçildi"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:208
 #: src/components/common/PlatformFeesSettings/index.tsx:231
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:113
 msgid "Selected"
 msgstr "Seçildi"
 
 #: src/components/layouts/AuthLayout/index.tsx:49
 msgid "Sell out your event."
 msgstr "Etkinliğinizin biletlerini tüketin."
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:604
+msgid "Selling a physical product? Cap its quantity on the <0>products page</0> instead."
+msgstr "Fiziksel bir ürün mü satıyorsunuz? Bunun yerine miktarını <0>ürünler sayfasında</0> sınırlayın."
 
 #: src/components/forms/ProductForm/index.tsx:554
 msgid "Selling fast 🔥"
@@ -9857,6 +9782,10 @@ msgstr "Saatleri kaydır"
 msgid "Shifted times for {count} date(s)"
 msgstr "{count} tarih için saatler kaydırıldı"
 
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:620
+msgid "Show"
+msgstr "Göster"
+
 #: src/components/forms/CheckInListForm/index.tsx:154
 msgid "Show advanced options"
 msgstr "Gelişmiş seçenekleri göster"
@@ -9881,7 +9810,7 @@ msgstr "Tüm tarih aralığını göster"
 msgid "Show fewer platforms"
 msgstr "Daha az platform göster"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:133
 msgid "Show marketing opt-in checkbox"
 msgstr "Pazarlama onay kutusunu göster"
 
@@ -9889,14 +9818,10 @@ msgstr "Pazarlama onay kutusunu göster"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Varsayılan olarak pazarlama onay kutusunu göster"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:636
-#: src/components/routes/product-widget/SelectProducts/index.tsx:737
+#: src/components/routes/product-widget/SelectProducts/index.tsx:462
+#: src/components/routes/product-widget/SelectProducts/index.tsx:563
 msgid "Show more"
 msgstr "Daha fazla göster"
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:491
-msgid "Show more dates"
-msgstr "Daha fazla tarih göster"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:233
 msgid "Show more platforms"
@@ -9909,6 +9834,14 @@ msgstr "Oturum açmamış personele sipariş ayrıntılarını göster"
 #: src/components/forms/CheckInListForm/index.tsx:230
 msgid "Show question answers to non-logged-in staff"
 msgstr "Oturum açmamış personele cevapları göster"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:148
+msgid "Show remaining capacity on event dates"
+msgstr "Etkinlik tarihlerinde kalan kapasiteyi göster"
+
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:613
+msgid "Show remaining capacity to buyers"
+msgstr "Kalan kapasiteyi alıcılara göster"
 
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:61
 msgid "Show tax and fees separately"
@@ -9935,11 +9868,11 @@ msgstr "İlk {0} gösteriliyor — mesaj gönderildiğinde kalan {1} oturum da y
 msgid "Shown to staff the first time they open the check-in page."
 msgstr "Personele sayfa ilk açıldığında gösterilir."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:102
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:107
 msgid "Shown to the customer after they checkout, on the order summary page."
 msgstr "Müşteriye ödeme yaptıktan sonra sipariş özeti sayfasında gösterilir."
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:97
 msgid "Shown to the customer before they checkout"
 msgstr "Müşteriye ödeme yapmadan önce gösterilir"
 
@@ -9999,6 +9932,10 @@ msgstr "Sosyal Bağlantılar ve Web Sitesi"
 msgid "Sold"
 msgstr "Satıldı"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:403
+msgid "sold out"
+msgstr "tükendi"
+
 #: src/components/common/EventCard/index.tsx:138
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:52
@@ -10009,8 +9946,8 @@ msgstr "Tükendi"
 #: src/components/layouts/EventHomepage/index.tsx:200
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:218
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:371
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:467
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:108
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:140
 msgid "Sold Out"
 msgstr "Tükendi"
 
@@ -10055,12 +9992,7 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 msgid "Something went wrong. Please try again."
 msgstr "Bir şeyler yanlış gitti. Lütfen tekrar deneyin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
-#: src/components/routes/event/EventDashboard/index.tsx:139
-#~ msgid "Sorry for the inconvenience."
-#~ msgstr "Rahatsızlık için özür dileriz."
-
-#: src/components/routes/product-widget/SelectProducts/index.tsx:426
+#: src/components/routes/product-widget/SelectProducts/index.tsx:423
 msgid "Sorry, this promo code is not recognized"
 msgstr "Üzgünüz, bu promosyon kodu tanınmıyor"
 
@@ -10102,7 +10034,7 @@ msgstr "Giriş kontrolünü başlat"
 
 #: src/components/common/AdminEventsTable/index.tsx:96
 #: src/components/modals/DuplicateEventModal/index.tsx:128
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:451
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:465
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:122
 msgid "Start Date"
 msgstr "Başlangıç Tarihi"
@@ -10115,7 +10047,7 @@ msgstr "Başlangıç tarihi ve saati"
 msgid "Start Date & Time"
 msgstr "Başlangıç Tarihi ve Saati"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:112
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:123
 #: src/components/routes/welcome/index.tsx:247
 msgid "Start date is required"
 msgstr "Başlangıç tarihi gerekli"
@@ -10161,7 +10093,7 @@ msgstr "Yarın başlıyor"
 #: src/components/common/CheckoutQuestion/index.tsx:165
 #: src/components/modals/LocationEditModal/index.tsx:119
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:564
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:550
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:260
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:189
 #: src/components/routes/product-widget/CollectInformation/index.tsx:545
@@ -10256,10 +10188,6 @@ msgstr "Stripe yakında birkaç bilgi daha isteyecek"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:230
 msgid "Stripe will walk you through a few quick questions to finish setup."
 msgstr "Stripe, kurulumu tamamlamak için sana birkaç kısa soru yöneltecek."
-
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Su"
-msgstr "Pz"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:452
@@ -10380,7 +10308,7 @@ msgstr "Etkinlik Varsayılanları Başarıyla Güncellendi"
 msgid "Successfully Updated Homepage Design"
 msgstr "Ana Sayfa Tasarımı Başarıyla Güncellendi"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:73
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:78
 msgid "Successfully Updated Homepage Settings"
 msgstr "Ana Sayfa Ayarları Başarıyla Güncellendi"
 
@@ -10469,7 +10397,7 @@ msgstr "Yaz Müzik Festivali 2025"
 msgid "Sun"
 msgstr "Paz"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Sunday"
 msgstr "Pazar"
 
@@ -10628,10 +10556,6 @@ msgstr "Hizmet Koşulları"
 msgid "Text may be hard to read"
 msgstr "Metin okunması zor olabilir"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Th"
-msgstr "Pe"
-
 #: src/components/routes/event/TicketDesigner/index.tsx:166
 msgid "Thank you for attending!"
 msgstr "Katıldığınız için teşekkürler!"
@@ -10641,8 +10565,8 @@ msgstr "Katıldığınız için teşekkürler!"
 msgid "Thanks,"
 msgstr "Teşekkürler,"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:248
-#: src/components/routes/product-widget/SelectProducts/index.tsx:349
+#: src/components/routes/product-widget/SelectProducts/index.tsx:246
+#: src/components/routes/product-widget/SelectProducts/index.tsx:346
 msgid "That promo code is invalid"
 msgstr "Bu promosyon kodu geçersiz"
 
@@ -10729,7 +10653,7 @@ msgstr "Müşterinin dili"
 msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
 msgstr "Maksimum {MAX_PREVIEW} oturumdur. Lütfen tarih aralığını, sıklığı veya günlük oturum sayısını azaltın."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:722
+#: src/components/routes/product-widget/SelectProducts/index.tsx:548
 msgid "The maximum number of products for {0}is {1}"
 msgstr "{0} için maksimum ürün sayısı {1}"
 
@@ -10801,15 +10725,15 @@ msgstr "Tiyatro"
 msgid "Theme & Colors"
 msgstr "Tema ve Renkler"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:445
+#: src/components/routes/product-widget/SelectProducts/index.tsx:442
 msgid "There are no products available for this event"
 msgstr "Bu etkinlik için mevcut ürün yok"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:645
+#: src/components/routes/product-widget/SelectProducts/index.tsx:471
 msgid "There are no products available in this category"
 msgstr "Bu kategoride mevcut ürün yok"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:442
+#: src/components/routes/product-widget/SelectProducts/index.tsx:439
 msgid "There are no upcoming dates for this event"
 msgstr "Bu etkinlik için yaklaşan tarih yok"
 
@@ -10833,7 +10757,7 @@ msgstr "Mesajınız gönderilirken bir hata oluştu"
 msgid "These are the default prices and quantities across all dates. Sale dates on tiers apply globally. You can override prices and quantities for individual dates on the <0>Occurrence Schedule page</0>."
 msgstr "Bunlar, tüm tarihlerdeki varsayılan fiyatlar ve miktarlardır. Kademelerdeki satış tarihleri genel olarak uygulanır. <0>Oturum Programı sayfasında</0> tek tek tarihler için fiyatları ve miktarları geçersiz kılabilirsiniz."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:581
 msgid "These details are shown on the attendee's ticket and order summary for this date only."
 msgstr "Bu detaylar yalnızca bu tarih için katılımcının biletinde ve sipariş özetinde gösterilir."
 
@@ -10911,15 +10835,15 @@ msgstr "Bu renk kombinasyonu bazı kullanıcılar için okunması zor olabilir"
 
 #: src/components/routes/event/OccurrenceDetail/index.tsx:63
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:40
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:341
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:355
 msgid "This date has {orderCount} order(s) that will be affected."
 msgstr "Bu tarihin etkilenecek {orderCount} siparişi var."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:435
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:449
 msgid "This date has been cancelled. You can still delete it to remove it permanently."
 msgstr "Bu tarih iptal edildi. Kalıcı olarak kaldırmak için yine de silebilirsiniz."
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:469
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:483
 msgid "This date is in the past. It will be created but won't be visible to attendees under upcoming dates."
 msgstr "Bu tarih geçmişte. Oluşturulacak ancak yaklaşan tarihler altında katılımcılara görünmeyecek."
 
@@ -10927,7 +10851,7 @@ msgstr "Bu tarih geçmişte. Oluşturulacak ancak yaklaşan tarihler altında ka
 msgid "This date is marked sold out."
 msgstr "Bu tarih tükendi olarak işaretlendi."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:401
+#: src/components/routes/product-widget/SelectProducts/index.tsx:398
 msgid "This date is no longer available. Please select another date."
 msgstr "Bu tarih artık mevcut değil. Lütfen başka bir tarih seçin."
 
@@ -10992,7 +10916,7 @@ msgstr "Bu bağlantı artık geçerli değil"
 msgid "This message will be included in the footer of all emails sent from this event"
 msgstr "Bu mesaj bu etkinlikten gönderilen tüm e-postaların altbilgisinde yer alacak"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:105
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:110
 msgid "This message will only be shown if order is completed successfully. Orders awaiting payment will not show this message"
 msgstr "Bu mesaj sadece sipariş başarılı bir şekilde tamamlandığında gösterilecek. Ödeme bekleyen siparişlerde bu mesaj gösterilmeyecek"
 
@@ -11104,7 +11028,7 @@ msgstr "Hız"
 msgid "Thu"
 msgstr "Per"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:18
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:24
 msgid "Thursday"
 msgstr "Perşembe"
 
@@ -11122,11 +11046,6 @@ msgstr "bilet"
 #: src/components/modals/CreateAttendeeModal/index.tsx:248
 msgid "Ticket"
 msgstr "Bilet"
-
-#: src/components/routes/event/TicketDesigner/index.tsx:107
-#: src/components/common/CheckIn/AttendeeList.tsx:83
-#~ msgid "Ticket Cancelled"
-#~ msgstr "Bilet İptal Edildi"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:111
 msgid "Ticket Design"
@@ -11201,7 +11120,7 @@ msgstr "Bilet Fiyatı"
 msgid "Ticket resent successfully"
 msgstr "Bilet başarıyla yeniden gönderildi"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:439
+#: src/components/routes/product-widget/SelectProducts/index.tsx:436
 msgid "Ticket sales have ended for this event"
 msgstr "Bu etkinlik için bilet satışı sona erdi"
 
@@ -11271,6 +11190,10 @@ msgstr "Saat"
 msgid "Time left:"
 msgstr "Kalan süre:"
 
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:538
+msgid "Times shown in {timezoneAbbr}"
+msgstr "Saatler {timezoneAbbr} olarak gösteriliyor"
+
 #: src/components/common/PromoCodeTable/index.tsx:71
 msgid "Times used"
 msgstr "Kullanım sayısı"
@@ -11306,8 +11229,6 @@ msgstr "Limitinizi artırmak için bizimle iletişime geçin"
 #: src/components/common/PeriodSelector/index.tsx:30
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:120
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:43
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:88
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:241
 msgid "Today"
 msgstr "Bugün"
 
@@ -11316,7 +11237,6 @@ msgid "Toggle columns"
 msgstr "Sütunları değiştir"
 
 #: src/components/routes/event/OccurrencesTab/GroupedOccurrenceTable/index.tsx:46
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:90
 msgid "Tomorrow"
 msgstr "Yarın"
 
@@ -11457,15 +11377,11 @@ msgstr "Başka bir e-posta deneyin"
 msgid "Try Hi.Events Free"
 msgstr "Hi.Events'i Ücretsiz Deneyin"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "Tu"
-msgstr "Sa"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:47
 msgid "Tue"
 msgstr "Sal"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Tuesday"
 msgstr "Salı"
 
@@ -11520,7 +11436,7 @@ msgstr "Katılımcı check-out'u yapılamadı"
 msgid "Unable to create product. Please check the your details"
 msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:234
+#: src/components/routes/product-widget/SelectProducts/index.tsx:232
 msgid "Unable to create product. Please check your details"
 msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
@@ -11544,7 +11460,7 @@ msgstr "Bekleme listesine katılınamadı"
 msgid "Unable to load attendee details."
 msgstr "Katılımcı ayrıntıları yüklenemedi."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:281
+#: src/components/routes/product-widget/SelectProducts/index.tsx:279
 msgid "Unable to load products for this date. Please try again."
 msgstr "Bu tarih için ürünler yüklenemedi. Lütfen tekrar deneyin."
 
@@ -11602,7 +11518,7 @@ msgstr "Bilinmeyen Katılımcı"
 msgid "Unlimited"
 msgstr "Sınırsız"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:683
+#: src/components/routes/product-widget/SelectProducts/index.tsx:509
 msgid "Unlimited available"
 msgstr "Sınırsız mevcut"
 
@@ -11615,17 +11531,13 @@ msgid "Unnamed"
 msgstr "Adsız"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:522
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:508
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:522
 msgid "Unnamed location"
 msgstr "İsimsiz konum"
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:32
 msgid "Unpaid Order"
 msgstr "Ödenmemiş Sipariş"
-
-#: src/components/routes/event/EventDashboard/index.tsx:214
-#~ msgid "Unpublish Event"
-#~ msgstr "Etkinliği Yayından Kaldır"
 
 #: src/components/common/AdminAccountsTable/index.tsx:101
 msgid "Untrusted"
@@ -11768,7 +11680,11 @@ msgstr "Kapak resminin bulanıklaştırılmış halini arkaplan olarak kullan"
 msgid "Use cover image"
 msgstr "Kapak resmini kullan"
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:49
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:619
+msgid "Use event default"
+msgstr "Etkinlik varsayılanını kullan"
+
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:53
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:40
 msgid "Use order details for all attendees. Attendee names and emails will match the buyer's information."
 msgstr "Tüm katılımcılar için sipariş bilgilerini kullanın. Katılımcı isimleri ve e-postaları alıcının bilgileriyle eşleşecektir."
@@ -11910,7 +11826,7 @@ msgstr "KDV: kayıtlı değil"
 
 #: src/components/modals/LocationEditModal/index.tsx:110
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:555
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:541
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:237
 msgid "Venue Name"
 msgstr "Mekan Adı"
@@ -12118,10 +12034,6 @@ msgstr "Bekleme listesi tetiklendi"
 msgid "Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned."
 msgstr "Uyarı: Bu sistem varsayılan yapılandırmasıdır. Değişiklikler, belirli bir yapılandırması atanmamış tüm hesapları etkileyecektir."
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:206
-msgid "We"
-msgstr "Ça"
-
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:89
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Ödemenizi işleyemedik. Lütfen tekrar deneyin veya destek ile iletişime geçin."
@@ -12212,7 +12124,7 @@ msgid "We'll notify you by email if a spot becomes available for {productDisplay
 msgstr "{productDisplayName} için bir yer açılırsa size e-posta ile haber vereceğiz."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:292
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:326
 msgid "We'll open a message composer with a pre-filled template after saving. You review and send it — nothing is sent automatically."
 msgstr "Kaydettikten sonra önceden doldurulmuş bir şablonla bir mesaj oluşturucu açacağız. Siz inceleyip gönderin — hiçbir şey otomatik olarak gönderilmez."
 
@@ -12231,11 +12143,6 @@ msgstr "Siparişinizi işliyoruz. Lütfen bekleyin..."
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:92
 msgid "We've made changes to the schedule for \"{title}\" — {description} affecting {affectedCount} session(s)."
 msgstr "\"{title}\" programında değişiklikler yaptık — {description}, {affectedCount} oturumu etkiliyor."
-
-#: src/components/routes/welcome/index.tsx:146
-#: src/components/routes/event/EventDashboard/index.tsx:138
-#~ msgid "We've relocated our headquarters to Ireland. As a result, we need you to reconnect your Stripe account. This quick process takes just a few minutes. Your sales and existing data remain completely unaffected."
-#~ msgstr "Genel merkezimizi İrlanda'ya taşıdık. Bunun sonucunda Stripe hesabınızı yeniden bağlamanız gerekiyor. Bu hızlı işlem sadece birkaç dakika sürer. Satışlarınız ve mevcut verileriniz tamamen etkilenmeden kalır."
 
 #: src/components/routes/welcome/index.tsx:147
 msgid "We've sent a 5-digit verification code to:"
@@ -12293,7 +12200,7 @@ msgstr "Web Sitesi"
 msgid "Wed"
 msgstr "Çar"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:17
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:23
 msgid "Wednesday"
 msgstr "Çarşamba"
 
@@ -12301,12 +12208,8 @@ msgstr "Çarşamba"
 msgid "week"
 msgstr "hafta"
 
-#: src/components/routes/event/EventDashboard/index.tsx:275
-#~ msgid "Week"
-#~ msgstr "Hafta"
-
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:57
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Weekly"
 msgstr "Haftalık"
 
@@ -12470,7 +12373,7 @@ msgstr "Giriş açıldığında"
 msgid "When customers purchase tickets, their orders will appear here."
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:136
+#: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr ""
 
@@ -12566,7 +12469,7 @@ msgid "Year to date"
 msgstr "Yıl başından beri"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:59
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:34
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:40
 msgid "Yearly"
 msgstr "Yıllık"
 
@@ -12756,7 +12659,7 @@ msgstr "Bekleme listesine eklendi!"
 msgid "You've been offered a spot!"
 msgstr "Size bir yer teklif edildi!"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:301
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:315
 msgid "You've changed the session time"
 msgstr "Oturum saatini değiştirdiniz"
 
@@ -12807,15 +12710,6 @@ msgstr "<0>{0}</0> adresine e-posta değişiklik talebiniz beklemede. Onaylamak 
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:48
 msgid "Your event is live!"
 msgstr "Etkinliğiniz yayında!"
-
-#: src/components/common/OrdersTable/index.tsx:87
-#: src/components/routes/event/EventDashboard/index.tsx:194
-#~ msgid "Your event must be live before you can sell tickets to attendees."
-#~ msgstr "Katılımcılara bilet satmadan önce etkinliğinizin canlı olması gerekir."
-
-#: src/components/layouts/AuthLayout/index.tsx:47
-#~ msgid "Your logo, colors, and style on every page"
-#~ msgstr "Her sayfada logonuz, renkleriniz ve tarzınız"
 
 #: src/components/common/OrdersTable/index.tsx:87
 msgid "Your message has been sent"
@@ -12937,7 +12831,7 @@ msgstr "Posta Kodu"
 #: src/components/common/CheckoutQuestion/index.tsx:170
 #: src/components/modals/LocationEditModal/index.tsx:122
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:567
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:553
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:267
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:196
 msgid "Zip or Postal Code"
@@ -12946,7 +12840,3 @@ msgstr "Posta Kodu"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:555
 msgid "ZIP or Postal Code"
 msgstr "Posta Kodu"
-
-#: src/components/common/PoweredByFooter/index.tsx:60
-#~ msgid "Σχεδιάστηκε από το Δήμο Ορεστιάδας, βασισμένο στο"
-#~ msgstr ""

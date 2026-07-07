@@ -274,6 +274,9 @@ export interface EventSettings {
     // Waitlist settings
     waitlist_auto_process?: boolean;
     waitlist_offer_timeout_minutes?: number | null;
+
+    // Occurrence capacity display
+    show_available_occurrence_capacity?: boolean;
 }
 
 export interface VenueAddress {
@@ -447,6 +450,7 @@ export interface EventOccurrence {
     used_capacity?: number;
     available_capacity?: number | null;
     label?: string;
+    show_available_capacity?: boolean | null;
     is_overridden?: boolean;
     is_past?: boolean;
     is_future?: boolean;
@@ -478,6 +482,7 @@ export interface UpsertEventOccurrenceRequest {
     capacity?: number | null;
     label?: string;
     status?: string;
+    show_available_capacity?: boolean | null;
     event_location?: UpsertEventLocationPayload | null;
     clear_event_location?: boolean;
 }

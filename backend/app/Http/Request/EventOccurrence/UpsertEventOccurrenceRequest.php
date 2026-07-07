@@ -20,6 +20,7 @@ class UpsertEventOccurrenceRequest extends BaseRequest
             'end_date' => ['nullable', 'date', 'after:start_date'],
             'capacity' => ['nullable', 'integer', 'min:0'],
             'label' => ['nullable', 'string', 'max:255'],
+            'show_available_capacity' => ['nullable', 'boolean'],
             'event_location' => ['nullable', 'array'],
             'event_location.type' => ['required_with:event_location', Rule::in(LocationType::valuesArray())],
             'event_location.location_id' => [

@@ -56,6 +56,7 @@ class CreateEventOccurrenceHandler
                 EventOccurrenceDomainObjectAbstract::CAPACITY => $dto->capacity,
                 EventOccurrenceDomainObjectAbstract::USED_CAPACITY => 0,
                 EventOccurrenceDomainObjectAbstract::LABEL => $dto->label,
+                EventOccurrenceDomainObjectAbstract::SHOW_AVAILABLE_CAPACITY => $dto->show_available_capacity,
                 EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => $dto->is_overridden,
                 EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID => $eventLocationId,
             ]);

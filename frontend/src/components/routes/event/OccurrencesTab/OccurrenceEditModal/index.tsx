@@ -1,8 +1,8 @@
-import {t} from "@lingui/macro";
-import {Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
+import {t, Trans} from "@lingui/macro";
+import {Anchor, Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {useEffect, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
 import {
@@ -19,6 +19,7 @@ import {
 } from "@tabler/icons-react";
 import {Modal} from "../../../../common/Modal";
 import {InputGroup} from "../../../../common/InputGroup";
+import {Callout} from "../../../../common/Callout";
 import {
     EventOccurrence,
     EventOccurrenceStatus,
@@ -56,6 +57,14 @@ interface OccurrenceEditModalProps extends GenericModalProps {
     defaultDate?: string;
 }
 
+type CapacityVisibility = 'inherit' | 'show' | 'hide';
+
+const capacityVisibilityToForm = (value?: boolean | null): CapacityVisibility =>
+    value === true ? 'show' : value === false ? 'hide' : 'inherit';
+
+const capacityVisibilityToPayload = (value: CapacityVisibility): boolean | null =>
+    value === 'show' ? true : value === 'hide' ? false : null;
+
 export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defaultDate}: OccurrenceEditModalProps) => {
     const {eventId} = useParams();
     const isEditing = !!occurrenceId;
@@ -79,6 +88,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         end_date: string;
         capacity: number | null;
         label: string;
+        show_available_capacity: 'inherit' | 'show' | 'hide';
         online_event_connection_details: string;
         location_mode: 'inherit' | 'override' | 'online';
         location_picker: LocationPickerMode;
@@ -93,6 +103,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             end_date: '',
             capacity: null,
             label: '',
+            show_available_capacity: 'inherit',
             online_event_connection_details: '',
             location_mode: 'inherit',
             location_picker: 'saved',
@@ -147,6 +158,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 end_date: utcToTz(occurrence.end_date, event.timezone) || '',
                 capacity: occurrence.capacity ?? null,
                 label: occurrence.label || '',
+                show_available_capacity: capacityVisibilityToForm(occurrence.show_available_capacity),
                 online_event_connection_details: eventLocation?.online_event_connection_details ?? '',
                 location_mode: mode,
                 location_picker: occLocationId ? 'saved' : 'new',
@@ -177,6 +189,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 end_date: utcToTz(duplicateFrom.end_date, event.timezone) || '',
                 capacity: duplicateFrom.capacity ?? null,
                 label: duplicateFrom.label || '',
+                show_available_capacity: capacityVisibilityToForm(duplicateFrom.show_available_capacity),
             });
         }
     }, [duplicateFrom, event]);
@@ -251,6 +264,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 end_date: normalisedEnd,
                 capacity: values.capacity,
                 label: values.label,
+                show_available_capacity: capacityVisibilityToPayload(values.show_available_capacity),
                 ...(eventLocationPayload ? {event_location: eventLocationPayload} : {}),
                 ...(clearEventLocation ? {clear_event_location: true} : {}),
             };
@@ -581,6 +595,33 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     placeholder={t`Leave empty for unlimited`}
                                     min={0}
                                     allowNegative={false}
+                                />
+                                <Callout
+                                    variant="info"
+                                    title={t`Only tickets count toward capacity`}
+                                    style={{marginTop: 12}}
+                                >
+                                    <Trans>
+                                        Selling a physical product? Cap its quantity on the{" "}
+                                        <Anchor component={Link} to={`/manage/event/${eventId}/products`} target="_blank" inherit>
+                                            products page
+                                        </Anchor>{" "}
+                                        instead.
+                                    </Trans>
+                                </Callout>
+                                <Text size="sm" fw={500} mt="md" mb={6}>
+                                    {t`Show remaining capacity to buyers`}
+                                </Text>
+                                <SegmentedControl
+                                    fullWidth
+                                    size="sm"
+                                    data={[
+                                        {label: t`Use event default`, value: 'inherit'},
+                                        {label: t`Show`, value: 'show'},
+                                        {label: t`Hide`, value: 'hide'},
+                                    ]}
+                                    value={form.values.show_available_capacity}
+                                    onChange={(value) => form.setFieldValue('show_available_capacity', value as CapacityVisibility)}
                                 />
                             </div>
 

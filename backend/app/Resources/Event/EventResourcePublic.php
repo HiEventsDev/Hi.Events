@@ -88,12 +88,15 @@ class EventResourcePublic extends BaseResource
                 condition: ! is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),
                 // Cap is enforced by GetPublicEventHandler; do not re-cap here
                 // or shared/checkout links past the cap silently drop out.
-                value: fn () => EventOccurrenceResourcePublic::collection(
-                    $this->getEventOccurrences()
+                value: function () use ($isRecurring) {
+                    $showCapacity = $this->getEventSettings()?->getShowAvailableOccurrenceCapacity() ?? false;
+
+                    return $this->getEventOccurrences()
                         ->filter(fn (EventOccurrenceDomainObject $occ) => ! $occ->isCancelled() && (! $isRecurring || ! $occ->isPast()))
                         ->sortBy(fn (EventOccurrenceDomainObject $occ) => $occ->getStartDate())
                         ->values()
-                ),
+                        ->map(fn (EventOccurrenceDomainObject $occ) => new EventOccurrenceResourcePublic($occ, $showCapacity));
+                },
             ),
         ];
     }

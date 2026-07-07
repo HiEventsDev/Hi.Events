@@ -81,6 +81,9 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Self-service settings
         public readonly bool $allow_attendee_self_edit = false,
 
+        // Occurrence capacity display
+        public readonly bool $show_available_occurrence_capacity = false,
+
         // Waitlist settings
         public readonly ?bool $waitlist_auto_process = null,
         public readonly ?int $waitlist_offer_timeout_minutes = null,

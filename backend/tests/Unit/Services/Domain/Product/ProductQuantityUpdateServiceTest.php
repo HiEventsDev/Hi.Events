@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Domain\Product;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -234,6 +235,41 @@ class ProductQuantityUpdateServiceTest extends TestCase
             ->shouldReceive('findById')
             ->with(5)
             ->andReturn($occurrence);
+
+        $this->service->updateQuantitiesFromOrder($order);
+    }
+
+    public function test_update_quantities_from_order_skips_occurrence_capacity_for_general_products(): void
+    {
+        $orderItem = (new OrderItemDomainObject)
+            ->setId(1)
+            ->setProductPriceId(100)
+            ->setQuantity(2)
+            ->setProductType(ProductType::GENERAL->name)
+            ->setEventOccurrenceId(5);
+
+        $order = (new OrderDomainObject)
+            ->setOrderItems(new Collection([$orderItem]));
+
+        $price = Mockery::mock(ProductPriceDomainObject::class);
+        $price->shouldReceive('getProductId')->andReturn(10);
+
+        $this->productPriceRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['id' => 100])
+            ->andReturn($price);
+
+        $this->productRepository
+            ->shouldReceive('getCapacityAssignmentsByProductId')
+            ->with(10)
+            ->andReturn(collect());
+
+        $this->productPriceRepository
+            ->shouldReceive('updateWhere')
+            ->once();
+
+        $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->occurrenceRepository->shouldNotReceive('findById');
 
         $this->service->updateQuantitiesFromOrder($order);
     }

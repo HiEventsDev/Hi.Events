@@ -4,10 +4,17 @@
   .hi-occurrence-selector-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 6px 16px;
     margin-bottom: 16px;
+  }
+
+  .hi-occurrence-selector-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
 
   .hi-occurrence-selector-title {
@@ -20,60 +27,316 @@
   .hi-occurrence-selector-summary {
     font-size: 0.8rem;
     color: color-mix(in srgb, var(--widget-primary-text-color, #666) 70%, transparent);
-    width: 100%;
-    order: 3;
   }
 
-  .hi-occurrence-view-toggle {
-    display: flex;
-    gap: 4px;
-    background: color-mix(in srgb, var(--widget-primary-color, #888) 10%, transparent);
-    border-radius: 6px;
-    padding: 3px;
-  }
-
-  .hi-view-toggle-btn {
-    padding: 4px 8px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    color: var(--widget-primary-text-color, #666);
-    transition: all 0.15s ease;
-
-    &.active {
-      background: var(--widget-primary-color, #228be6);
-      color: var(--widget-secondary-text-color, #fff);
-    }
+  .hi-occurrence-timezone {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: color-mix(in srgb, var(--widget-primary-text-color, #666) 80%, transparent);
+    background: color-mix(in srgb, var(--widget-primary-color, #888) 8%, transparent);
   }
 }
 
-/* Calendar View */
-.hi-calendar-view {
-  // Positioning context for the time-slots overlay so the panel sits visually
-  // over the entire calendar — including the month-nav header — instead of
-  // leaving it sticking out above the panel.
+/* Two-pane body: time list + calendar */
+.hi-occurrence-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* ---------- Time-slot panel ---------- */
+.hi-slot-panel {
+  flex: 1;
+  min-width: 0;
+  order: 1;
+  align-self: stretch;
+
+  @media (max-width: 767px) {
+    order: 2;
+    width: 100%;
+  }
+}
+
+.hi-slot-panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hi-slot-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  color: var(--widget-primary-text-color, inherit);
+}
+
+.hi-slot-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.hi-slot-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hi-slot-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 52px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
+}
+
+.hi-slot-badge-month {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #444) 75%, transparent);
+}
+
+.hi-slot-badge-day {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--widget-primary-text-color, inherit);
+}
+
+.hi-slot-header-text {
+  min-width: 0;
+}
+
+.hi-slot-header-day {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--widget-primary-text-color, inherit);
+}
+
+.hi-slot-header-count {
+  font-size: 0.78rem;
+  margin-top: 1px;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 65%, transparent);
+}
+
+.hi-slot-header-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 78%, transparent);
+}
+
+.hi-slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 2px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--widget-primary-text-color, #888) 18%, transparent);
+    border-radius: 999px;
+  }
+}
+
+.hi-time-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid color-mix(in srgb, var(--widget-primary-color, #888) 20%, transparent);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  color: var(--widget-primary-text-color, inherit);
+
+  &:hover:not(.hi-time-slot-disabled) {
+    border-color: var(--widget-primary-color, #228be6);
+    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 8%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--widget-primary-color, #228be6);
+    outline-offset: 2px;
+  }
+
+  &.hi-time-slot-selected {
+    border-color: var(--widget-primary-color, #228be6);
+    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 12%, transparent);
+  }
+
+  &.hi-time-slot-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 767px) {
+    padding: 14px;
+    min-height: 52px;
+  }
+}
+
+.hi-time-slot-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.hi-time-slot-time-text {
+  white-space: nowrap;
+}
+
+.hi-time-slot-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+  background: color-mix(in srgb, var(--widget-primary-color, #228be6) 16%, transparent);
+  color: var(--widget-primary-color, #228be6);
+}
+
+.hi-time-slot-meta {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.hi-time-slot-cancelled {
+  color: #e03131;
+  text-decoration: line-through;
+}
+
+.hi-time-slot-sold-out {
+  color: #e03131;
+  font-weight: 600;
+}
+
+.hi-time-slot-spots {
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 70%, transparent);
+}
+
+.hi-time-slot-spots-low {
+  color: #e03131;
+  font-weight: 600;
+}
+
+/* ---------- Products pane (tickets rendered beside the calendar) ---------- */
+.hi-products-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.hi-time-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.hi-time-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--widget-primary-color, #888) 28%, transparent);
+  color: var(--widget-primary-text-color, inherit);
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: var(--widget-primary-color, #228be6);
+    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 8%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--widget-primary-color, #228be6);
+    outline-offset: 2px;
+  }
+
+  &.hi-time-chip-active {
+    background: var(--widget-primary-color, #228be6);
+    border-color: var(--widget-primary-color, #228be6);
+    color: var(--widget-secondary-text-color, #fff);
+  }
+}
+
+.hi-products-slot {
   position: relative;
 
-  .hi-calendar-stage {
-    transition: opacity 0.18s ease;
+  &.hi-products-slot-loading {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+}
 
-    &.hi-calendar-stage-inert {
-      pointer-events: none;
-    }
+/* ---------- Calendar panel ---------- */
+.hi-calendar-panel {
+  order: 2;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: min-content;
+  justify-content: start;
+
+  @media (max-width: 767px) {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 
-  .hi-calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
+  .hi-occurrence-datepicker {
+    max-width: 100%;
   }
 
-  .hi-calendar-nav {
-    padding: 4px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
+  .hi-calendar-no-dates,
+  .hi-calendar-legend {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .hi-dp-header {
+    margin-bottom: 6px;
+  }
+
+  .hi-dp-level {
+    font-weight: 600;
     color: var(--widget-primary-text-color, inherit);
 
     &:hover {
@@ -81,414 +344,147 @@
     }
   }
 
-  .hi-calendar-month-label {
-    font-weight: 600;
-    font-size: 0.95rem;
+  .hi-dp-nav {
     color: var(--widget-primary-text-color, inherit);
+
+    &:hover {
+      background: color-mix(in srgb, var(--widget-primary-color, #888) 10%, transparent);
+    }
   }
 
-  .hi-calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-  }
-
-  .hi-calendar-day-name {
-    text-align: center;
-    font-size: 0.75rem;
+  .hi-dp-weekday {
     font-weight: 600;
-    color: var(--widget-primary-text-color, #888);
-    opacity: 0.6;
-    padding: 4px 0;
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--widget-primary-text-color, #888) 60%, transparent);
   }
 
-  .hi-calendar-cell {
-    aspect-ratio: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
+  .hi-dp-day {
+    color: var(--widget-primary-text-color, inherit);
     border-radius: 8px;
-    position: relative;
-    color: var(--widget-primary-text-color, inherit);
-    transition: all 0.15s ease;
-    min-height: 44px;
+    font-weight: 500;
 
-    &.hi-calendar-cell-empty {
-      pointer-events: none;
+    &:hover {
+      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
     }
 
-    &.hi-calendar-cell-past {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-
-    &.hi-calendar-cell-today:not(.hi-calendar-cell-selected) {
+    &[data-today]:not([data-selected]) {
       box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--widget-primary-color, #228be6) 40%, transparent);
     }
 
-    &.hi-calendar-cell-has-events {
-      font-weight: 600;
-      cursor: pointer;
-      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 6%, transparent);
+    &[data-selected] {
+      background: var(--widget-primary-color, #228be6);
+      color: var(--widget-secondary-text-color, #fff);
 
       &:hover {
-        background: color-mix(in srgb, var(--widget-primary-color, #228be6) 12%, transparent);
+        background: var(--widget-primary-color, #228be6);
       }
     }
 
-    &.hi-calendar-cell-selected {
-      background: var(--widget-primary-color, #228be6);
-      color: var(--widget-secondary-text-color, #fff);
+    &[data-disabled] {
+      opacity: 0.35;
     }
 
-    &:not(.hi-calendar-cell-has-events):not(.hi-calendar-cell-empty):not(.hi-calendar-cell-past) {
-      opacity: 0.4;
-      pointer-events: none;
+    &[data-sold-out]:not([data-selected]) {
+      opacity: 0.7;
     }
   }
 
-  .hi-calendar-day-number {
-    line-height: 1;
-  }
-
-  .hi-calendar-count {
-    font-size: 0.55rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-top: 2px;
-    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 15%, transparent);
-    padding: 1px 5px;
+  .hi-dp-picker-control {
+    color: var(--widget-primary-text-color, inherit);
     border-radius: 8px;
-
-    @media (max-width: 480px) {
-      font-size: 0.65rem;
-      min-width: 14px;
-      min-height: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
-  .hi-calendar-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--widget-primary-color, #228be6);
-    margin-top: 2px;
-  }
-
-  // Solid panel that covers the WHOLE calendar view (month nav + grid) so the
-  // user is in a clean "pick a time" mode without the underlying calendar
-  // header peeking out. Hardcoded white because --widget-background-color can
-  // be translucent or unset on themed widgets, which would let the calendar
-  // bleed through.
-  .hi-time-slots-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-radius: 8px;
-    animation: hi-time-slots-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    transform-origin: top center;
-  }
-
-  .hi-time-slots-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 4px 4px 12px;
-    border-bottom: 1px solid color-mix(in srgb, var(--widget-primary-text-color, #888) 10%, transparent);
-    margin-bottom: 8px;
-  }
-
-  .hi-time-slots-back {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px 6px 6px;
-    border-radius: 6px;
-    font-size: 0.85rem;
     font-weight: 500;
-    color: var(--widget-primary-text-color, #444);
-    transition: background 0.12s ease;
 
     &:hover {
-      background: color-mix(in srgb, var(--widget-primary-color, #888) 10%, transparent);
+      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
     }
 
-    &:active {
-      background: color-mix(in srgb, var(--widget-primary-color, #888) 16%, transparent);
-    }
-  }
-
-  .hi-time-slots-label {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    gap: 8px;
-    overflow: hidden;
-  }
-
-  .hi-time-slots-date {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--widget-primary-text-color, inherit);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .hi-time-slots-tz {
-    font-weight: 400;
-    font-size: 0.75rem;
-    opacity: 0.5;
-    flex-shrink: 0;
-  }
-
-  .hi-time-slots-list {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 2px; // breathing room for the scrollbar on overflow
-  }
-
-  @keyframes hi-time-slots-enter {
-    from {
-      opacity: 0;
-      transform: translateY(6px) scale(0.99);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  // Touch-friendly sizing on small screens.
-  @media (max-width: 480px) {
-    .hi-time-slots-back {
-      padding: 8px 12px 8px 8px;
-      font-size: 0.9rem;
+    &[data-today]:not([data-selected]) {
+      box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--widget-primary-color, #228be6) 40%, transparent);
     }
 
-    .hi-time-slot {
-      padding: 12px;
-      min-height: 48px;
-    }
-  }
+    &[data-selected] {
+      background: var(--widget-primary-color, #228be6);
+      color: var(--widget-secondary-text-color, #fff);
 
-  .hi-time-slot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid color-mix(in srgb, var(--widget-primary-color, #888) 20%, transparent);
-    border-radius: 8px;
-    margin-bottom: 6px;
-    transition: all 0.15s ease;
-    color: var(--widget-primary-text-color, inherit);
-
-    &:hover:not(.hi-time-slot-disabled) {
-      border-color: var(--widget-primary-color, #228be6);
-      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 8%, transparent);
+      &:hover {
+        background: var(--widget-primary-color, #228be6);
+      }
     }
 
-    &.hi-time-slot-selected {
-      border-color: var(--widget-primary-color, #228be6);
-      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 12%, transparent);
+    &[data-disabled] {
+      opacity: 0.35;
     }
-
-    &.hi-time-slot-disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-  }
-
-  .hi-time-slot-time {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
-  .hi-time-slot-suffix {
-    font-weight: 400;
-    opacity: 0.7;
-  }
-
-  .hi-time-slot-meta {
-    font-size: 0.8rem;
-  }
-
-  .hi-time-slot-cancelled {
-    color: #e03131;
-    text-decoration: line-through;
-  }
-
-  .hi-time-slot-sold-out {
-    color: #e03131;
-    font-weight: 600;
-  }
-
-  .hi-time-slot-spots {
-    opacity: 0.7;
-  }
-
-  .hi-calendar-no-dates {
-    margin-top: 16px;
-    padding: 12px;
-    text-align: center;
-    font-size: 0.85rem;
-    opacity: 0.6;
-    color: var(--widget-primary-text-color, inherit);
   }
 }
 
-/* List View */
-.hi-list-view {
-  display: flex;
+.hi-day {
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
-  gap: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  line-height: 1;
+}
 
-  .hi-list-timezone {
-    font-size: 0.75rem;
-    opacity: 0.5;
-    text-align: right;
-    margin-bottom: 8px;
-    color: var(--widget-primary-text-color, inherit);
+.hi-day-number {
+  line-height: 1;
+}
+
+.hi-day-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--widget-primary-color, #228be6);
+
+  [data-selected] & {
+    background: var(--widget-secondary-text-color, #fff);
   }
+}
 
-  .hi-list-date-group {
-    margin-bottom: 4px;
+.hi-day-sold-out-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--widget-primary-text-color, #888) 40%, transparent);
+}
+
+.hi-day-count {
+  font-size: 0.55rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--widget-primary-color, #228be6) 18%, transparent);
+  color: var(--widget-primary-color, #228be6);
+
+  [data-selected] & {
+    background: color-mix(in srgb, var(--widget-secondary-text-color, #fff) 28%, transparent);
+    color: var(--widget-secondary-text-color, #fff);
   }
+}
 
-  .hi-list-date-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 4px 6px;
-  }
+.hi-calendar-no-dates {
+  margin-top: 12px;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  color: var(--widget-primary-text-color, inherit);
+}
 
-  .hi-list-date-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--widget-primary-text-color, inherit);
-    opacity: 0.7;
-  }
+.hi-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 60%, transparent);
+}
 
-  .hi-list-date-count {
-    font-size: 0.65rem;
-    font-weight: 700;
-    background: color-mix(in srgb, var(--widget-primary-color, #888) 15%, transparent);
-    color: var(--widget-primary-text-color, inherit);
-    padding: 1px 6px;
-    border-radius: 10px;
-    opacity: 0.6;
-  }
-
-  .hi-occurrence-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border: 2px solid color-mix(in srgb, var(--widget-primary-color, #888) 20%, transparent);
-    border-radius: 8px;
-    width: 100%;
-    transition: all 0.15s ease;
-    color: var(--widget-primary-text-color, inherit);
-    margin-bottom: 6px;
-
-    &:hover:not(.hi-occurrence-item-sold-out) {
-      border-color: var(--widget-primary-color, #228be6);
-      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 8%, transparent);
-    }
-
-    &.hi-occurrence-item-selected {
-      border-color: var(--widget-primary-color, #228be6);
-      background: color-mix(in srgb, var(--widget-primary-color, #228be6) 12%, transparent);
-    }
-
-    &.hi-occurrence-item-sold-out {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
-
-  .hi-occurrence-sold-out-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #e03131;
-  }
-
-  .hi-occurrence-date-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 42px;
-    padding: 4px 8px;
-    background: color-mix(in srgb, var(--widget-primary-color, #228be6) 10%, transparent);
-    border-radius: 6px;
-  }
-
-  .hi-occurrence-month {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    line-height: 1;
-  }
-
-  .hi-occurrence-day {
-    font-size: 1.1rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .hi-occurrence-details {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .hi-occurrence-time {
-    font-size: 0.85rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .hi-occurrence-label {
-    font-weight: 400;
-    opacity: 0.7;
-  }
-
-  .hi-occurrence-status {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .hi-occurrence-spots {
-    font-size: 0.75rem;
-    opacity: 0.7;
-  }
-
-  .hi-occurrence-check {
-    color: var(--widget-primary-color, #228be6);
-  }
-
-  .hi-occurrence-load-more {
-    margin-top: 4px;
-    color: var(--widget-primary-color, #228be6) !important;
-  }
+.hi-calendar-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--widget-primary-color, #228be6);
 }

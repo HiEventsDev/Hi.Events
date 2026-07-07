@@ -27,6 +27,7 @@ class EventOccurrenceResource extends BaseResource
             'used_capacity' => $this->getUsedCapacity(),
             'available_capacity' => $this->getAvailableCapacity(),
             'label' => $this->getLabel(),
+            'show_available_capacity' => $this->getShowAvailableCapacity(),
             'is_overridden' => $this->getIsOverridden(),
             'is_past' => $this->isPast(),
             'is_future' => $this->isFuture(),

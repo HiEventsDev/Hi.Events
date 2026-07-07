@@ -3,12 +3,13 @@ import {Button, NumberInput, Switch} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
-import {EventSettings} from "../../../../../../types.ts";
+import {EventSettings, EventType} from "../../../../../../types.ts";
 import {Card} from "../../../../../common/Card";
 import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
+import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
 import {Editor} from "../../../../../common/Editor";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
@@ -18,6 +19,8 @@ import {IconUser, IconUsers} from "@tabler/icons-react";
 export const HomepageAndCheckoutSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
+    const eventQuery = useGetEvent(eventId);
+    const isRecurringEvent = eventQuery.data?.type === EventType.RECURRING;
     const updateMutation = useUpdateEventSettings();
     const form = useForm({
         initialValues: {
@@ -27,6 +30,7 @@ export const HomepageAndCheckoutSettings = () => {
             attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
             show_marketing_opt_in: true,
             allow_copy_details_to_all_attendees: true,
+            show_available_occurrence_capacity: false,
         },
         transformValues: (values) => ({
             ...values,
@@ -60,6 +64,7 @@ export const HomepageAndCheckoutSettings = () => {
                 attendee_details_collection_method: eventSettingsQuery.data.attendee_details_collection_method || 'PER_TICKET',
                 show_marketing_opt_in: eventSettingsQuery.data.show_marketing_opt_in ?? true,
                 allow_copy_details_to_all_attendees: eventSettingsQuery.data.allow_copy_details_to_all_attendees ?? true,
+                show_available_occurrence_capacity: eventSettingsQuery.data.show_available_occurrence_capacity ?? false,
             });
         }
     }, [eventSettingsQuery.isFetched]);
@@ -136,6 +141,15 @@ export const HomepageAndCheckoutSettings = () => {
                         description={t`When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the "All attendees" option; buyers can still copy to the first attendee, and the rest must be entered individually.`}
                         {...form.getInputProps('allow_copy_details_to_all_attendees', {type: 'checkbox'})}
                     />
+
+                    {isRecurringEvent && (
+                        <Switch
+                            mt="md"
+                            label={t`Show remaining capacity on event dates`}
+                            description={t`Display how many spots are left on each date in the ticket widget. You can override this for individual dates. Sold-out dates are always labelled.`}
+                            {...form.getInputProps('show_available_occurrence_capacity', {type: 'checkbox'})}
+                        />
+                    )}
 
                     <Button loading={updateMutation.isPending} type={'submit'}>
                         {t`Save`}
