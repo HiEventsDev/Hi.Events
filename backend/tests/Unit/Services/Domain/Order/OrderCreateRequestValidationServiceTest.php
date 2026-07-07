@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -19,6 +20,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\MockInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 
 class OrderCreateRequestValidationServiceTest extends TestCase
@@ -235,6 +237,180 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testHiddenProductIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Hidden VIP'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isHidden: true,
+        );
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $priceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(NotFoundHttpException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
+    public function testProductHiddenWithoutPromoCodeIsRejectedWhenNoPromoCodeSupplied(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Promo Only'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isHiddenWithoutPromoCode: true,
+        );
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $priceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(NotFoundHttpException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
+    public function testProductHiddenWithoutPromoCodeIsAllowedWithMatchingPromoCode(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Promo Only'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isHiddenWithoutPromoCode: true,
+        );
+
+        $promoCode = Mockery::mock(PromoCodeDomainObject::class);
+        $promoCode->shouldReceive('isValid')->andReturn(true);
+        $promoCode->shouldReceive('appliesToProduct')->andReturn(true);
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->andReturn($promoCode);
+
+        $data = [
+            'promo_code' => 'UNLOCK',
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $priceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData($eventId, $data);
+        $this->assertTrue(true);
+    }
+
+    public function testProductHiddenWithoutPromoCodeIsRejectedWhenPromoCodeDoesNotApply(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Promo Only'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isHiddenWithoutPromoCode: true,
+        );
+
+        $promoCode = Mockery::mock(PromoCodeDomainObject::class);
+        $promoCode->shouldReceive('isValid')->andReturn(true);
+        $promoCode->shouldReceive('appliesToProduct')->andReturn(false);
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->andReturn($promoCode);
+
+        $data = [
+            'promo_code' => 'WRONGPRODUCT',
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $priceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(NotFoundHttpException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
+    public function testHiddenPriceTierIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $visiblePriceId = 101;
+        $hiddenPriceId = 102;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$visiblePriceId, $hiddenPriceId],
+            priceLabels: ['General', 'Hidden VIP'],
+            availabilities: [
+                ['price_id' => $visiblePriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+                ['price_id' => $hiddenPriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            hiddenPriceIds: [$hiddenPriceId],
+        );
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $hiddenPriceId, 'quantity' => 1],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
     private function setupMocks(
         int   $eventId,
         int   $productId,
@@ -243,6 +419,9 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         array $availabilities,
         ?Collection $capacities = null,
         array $extraAvailabilities = [],
+        bool $isHidden = false,
+        bool $isHiddenWithoutPromoCode = false,
+        array $hiddenPriceIds = [],
     ): void
     {
         $event = Mockery::mock(EventDomainObject::class);
@@ -257,6 +436,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             $price = Mockery::mock(ProductPriceDomainObject::class);
             $price->shouldReceive('getId')->andReturn($priceId);
             $price->shouldReceive('getLabel')->andReturn($priceLabels[$i] ?? null);
+            $price->shouldReceive('getIsHidden')->andReturn(in_array($priceId, $hiddenPriceIds, true));
             $productPrices->push($price);
         }
 
@@ -269,6 +449,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('isSoldOut')->andReturn(false);
         $product->shouldReceive('getType')->andReturn(ProductPriceType::TIERED->name);
         $product->shouldReceive('getProductPrices')->andReturn($productPrices);
+        $product->shouldReceive('getIsHidden')->andReturn($isHidden);
+        $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn($isHiddenWithoutPromoCode);
 
         $this->productRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->productRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$product]));
