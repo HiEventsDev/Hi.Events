@@ -8,6 +8,7 @@ use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
@@ -71,7 +72,7 @@ readonly class UpdateEventHandler
 
         $this->eventRepository->updateWhere(
             attributes: [
-                'title' => $eventData->title,
+                'title' => StringHelper::stripControlCharacters($eventData->title),
                 'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
                 'start_date' => DateHelper::convertToUTC($eventData->start_date, $eventData->timezone),
                 'end_date' => $eventData->end_date
