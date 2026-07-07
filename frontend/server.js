@@ -12,6 +12,7 @@ import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
 import "dotenv/config";
 import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
+import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
 
 installGlobals();
 
@@ -59,7 +60,7 @@ async function main() {
                 envVars[key] = process.env[key];
             }
         }
-        return JSON.stringify(envVars);
+        return htmlSafeJsonStringify(envVars);
     };
 
     app.get('/robots.txt', (req, res) => {
@@ -98,7 +99,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 { req, res },
                 ssrManifest
             );
-            const stringifiedState = JSON.stringify(dehydratedState);
+            const stringifiedState = htmlSafeJsonStringify(dehydratedState);
 
             const helmetHtml = Object.values(helmetContext.helmet || {})
                 .map((value) => value.toString() || "")
@@ -114,11 +115,11 @@ Sitemap: ${frontendUrl}/sitemap.xml
             }
 
             const html = template
-                .replace("<!--head-snippets-->", headSnippets.join("\n"))
-                .replace("<!--app-html-->", appHtml)
-                .replace("<!--dehydrated-state-->", `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
-                .replace("<!--environment-variables-->", envVariablesHtml)
-                .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, helmetHtml);
+                .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
+                .replace("<!--app-html-->", () => appHtml)
+                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
+                .replace("<!--environment-variables-->", () => envVariablesHtml)
+                .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
 
             res.setHeader("Content-Type", "text/html");
             return res.status(200).end(html);
