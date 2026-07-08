@@ -81,17 +81,24 @@ export const PaymentAndInvoicingSettings = () => {
 
     const paymentOptions = [
         {
-            value: "STRIPE",
+            value: 'STRIPE',
             label: t`Stripe`,
-            description: t`Accept credit card payments with Stripe`
+            description: t`Accept credit card payments with Stripe`,
+            group: 'ONLINE',
         },
         {
-            value: "OFFLINE",
+            value: 'RAZORPAY',
+            label: t`Razorpay`,
+            description: t`Accept credit card payments with Razorpay`,
+            group: 'ONLINE',
+        },
+        {
+            value: 'OFFLINE',
             label: t`Offline Payments`,
-            description: t`Accept bank transfers, checks, or other offline payment methods`
+            description: t`Accept bank transfers, checks, or other offline payment methods`,
+            group: 'OFFLINE',
         },
     ];
-
     return (
         <Card>
             <HeadingWithDescription
@@ -103,25 +110,70 @@ export const PaymentAndInvoicingSettings = () => {
                     <Stack gap="xl">
                         <Paper withBorder p="md" radius="md">
                             <Text size="lg" fw={500} mb="md">{t`Payment Methods`}</Text>
-                            {paymentOptions.map((option) => (
-                                <Checkbox
-                                    key={option.value}
-                                    label={option.label}
-                                    description={option.description}
-                                    checked={form.values.payment_providers?.includes(option.value as PaymentProvider)}
-                                    onChange={(event) => {
-                                        const checked = event.currentTarget.checked;
-                                        const currentValues = form.values.payment_providers || [];
-                                        form.setFieldValue(
-                                            'payment_providers',
-                                            checked
-                                                ? [...currentValues, option.value as PaymentProvider]
-                                                : currentValues.filter(v => v !== option.value)
-                                        );
-                                    }}
-                                    mb="sm"
-                                />
-                            ))}
+                            <Stack gap="xl">
+                                {/* Online Payments Section */}
+                                <Paper withBorder p="md" radius="md">
+                                    <Text fw={600} mb={4}>{t`Online Payments`}</Text>
+                                    <Text size="sm" c="dimmed" mb="md">
+                                        {t`Accept online payments via third-party payment providers`}
+                                    </Text>
+                                    
+                                    <Stack gap="xs">
+                                        {paymentOptions
+                                            .filter(option => option.group === "ONLINE")
+                                            .map((option) => (
+                                                <Checkbox
+                                                    key={option.value}
+                                                    label={option.label}
+                                                    description={option.description}
+                                                    checked={form.values.payment_providers?.includes(option.value as PaymentProvider)}
+                                                    onChange={(event) => {
+                                                        const checked = event.currentTarget.checked;
+                                                        const currentValues = form.values.payment_providers || [];
+                                                        
+                                                        if (checked) {
+                                                            const filtered = currentValues.filter(
+                                                                v => v !== "STRIPE" && v !== "RAZORPAY"
+                                                            );
+                                                            form.setFieldValue('payment_providers', [...filtered, option.value as PaymentProvider]);
+                                                        } else {
+                                                            form.setFieldValue(
+                                                                'payment_providers',
+                                                                currentValues.filter(v => v !== option.value)
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                    </Stack>
+                                </Paper>
+                                
+                                {/* Offline Payments Section */}
+                                <Paper withBorder p="md" radius="md">
+                                    <Checkbox
+                                        label={
+                                            <div>
+                                                <Text fw={600}>{t`Offline Payments`}</Text>
+                                                <Text size="sm" c="dimmed">
+                                                    {t`Accept bank transfers, checks, or other offline payment methods`}
+                                                </Text>
+                                            </div>
+                                        }
+                                        checked={form.values.payment_providers?.includes("OFFLINE")}
+                                        onChange={(event) => {
+                                            const checked = event.currentTarget.checked;
+                                            const currentValues = form.values.payment_providers || [];
+                                            form.setFieldValue(
+                                                'payment_providers',
+                                                checked
+                                                    ? [...currentValues, "OFFLINE"]
+                                                    : currentValues.filter(v => v !== "OFFLINE")
+                                            );
+                                        }}
+                                    />
+                                </Paper>
+                            </Stack>
                             {form.errors["payment_providers"] && (
                                 <Text c="red">{form.errors["payment_providers"]}</Text>
                             )}

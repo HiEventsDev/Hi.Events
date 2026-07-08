@@ -9,5 +9,5 @@ use HiEvents\DomainObjects\OrderRefundDomainObject;
  */
 interface OrderRefundRepositoryInterface extends RepositoryInterface
 {
-
+    public function getTotalRefundedForOrder(int $orderId): float;
 }

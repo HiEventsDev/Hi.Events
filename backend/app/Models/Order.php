@@ -21,6 +21,11 @@ class Order extends BaseModel
         return $this->hasOne(StripePayment::class);
     }
 
+    public function razorpay_order(): HasOne
+    {
+        return $this->hasOne(RazorpayOrder::class);
+    }
+
     public function order_items(): HasMany
     {
         return $this->hasMany(OrderItem::class);

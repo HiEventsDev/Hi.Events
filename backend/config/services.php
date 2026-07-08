@@ -52,4 +52,12 @@ return [
     'open_exchange_rates' => [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
     ],
+
+    'razorpay' => [
+        'key_id' => env('RAZORPAY_KEY_ID'),
+        'key_secret' => env('RAZORPAY_KEY_SECRET'),
+        'webhook_secret' => env('RAZORPAY_WEBHOOK_SECRET'),
+        'application_fee_enabled' => env('RAZORPAY_APPLICATION_FEE_ENABLED', true),
+        'platform_account_id' => env('RAZORPAY_PLATFORM_ACCOUNT_ID'),
+    ],
 ];

@@ -20,4 +20,9 @@ class OrderRefundRepository extends BaseRepository implements OrderRefundReposit
     {
         return OrderRefundDomainObject::class;
     }
+
+    public function getTotalRefundedForOrder(int $orderId): float
+    {
+        return (float) $this->model->where('order_id', $orderId)->sum('amount');
+    }
 }

@@ -9,5 +9,9 @@ enum OrderPaymentStatus
     case AWAITING_OFFLINE_PAYMENT;
     case PAYMENT_FAILED;
     case PAYMENT_RECEIVED;
+
+    case REFUNDED;
+
+    case PARTIALLY_REFUNDED;
 }
 
