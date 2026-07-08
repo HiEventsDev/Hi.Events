@@ -45,7 +45,6 @@ class OrderResourcePublic extends BaseResource
                 fn() => new EventResourcePublic(
                     resource: $this->getEvent(),
                     includePostCheckoutData: $this->getStatus() === OrderStatus::COMPLETED->name,
-                    orderContext: $this->resource instanceof OrderDomainObject ? $this->resource : null,
                 ),
             ),
             'latest_invoice' => $this->when(

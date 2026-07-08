@@ -7,9 +7,10 @@ import {t, Trans} from '@lingui/macro';
 
 interface LiquidTokenControlProps {
     templateType: EmailTemplateType;
+    excludeTokens?: string[];
 }
 
-export const LiquidTokenControl = ({templateType}: LiquidTokenControlProps) => {
+export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTokenControlProps) => {
     const {editor} = useRichTextEditorContext();
     const {data: tokensData, isLoading} = useGetEmailTemplateTokens(templateType);
 
@@ -31,7 +32,9 @@ export const LiquidTokenControl = ({templateType}: LiquidTokenControlProps) => {
         );
     }
 
-    const tokens = tokensData.tokens.filter(token => !token.token.startsWith('{% if'));
+    const tokens = tokensData.tokens.filter(token =>
+        !token.token.startsWith('{% if') && !excludeTokens.includes(token.token)
+    );
 
     return (
         <Menu shadow="md" width={380} position="bottom-start" withinPortal>

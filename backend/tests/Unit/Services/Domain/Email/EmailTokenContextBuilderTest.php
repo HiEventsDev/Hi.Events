@@ -21,7 +21,7 @@ class EmailTokenContextBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->contextBuilder = new EmailTokenContextBuilder();
+        $this->contextBuilder = app(EmailTokenContextBuilder::class);
     }
 
     public function test_builds_order_confirmation_context(): void
@@ -101,6 +101,70 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
     }
 
+    public function test_offline_payment_instructions_tokens_are_rendered_into_context(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings(
+            offlinePaymentInstructions: '<p>Use {{ order.number }} for {{ event.title }}</p>',
+        );
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $this->assertSame(
+            '<p>Use ORD-123456 for Amazing Event</p>',
+            $context['settings']['offline_payment_instructions'],
+        );
+    }
+
+    public function test_rendered_offline_payment_instructions_are_purified(): void
+    {
+        $order = $this->createMockOrder(firstName: '<script>alert("xss")</script>John');
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings(
+            offlinePaymentInstructions: '<p>Reference {{ order.first_name }}</p>',
+        );
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $this->assertStringNotContainsString('<script>', $context['settings']['offline_payment_instructions']);
+        $this->assertStringContainsString('John', $context['settings']['offline_payment_instructions']);
+    }
+
+    public function test_unrenderable_offline_payment_instructions_fall_back_to_raw_value(): void
+    {
+        $order = $this->createMockOrder();
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings(
+            offlinePaymentInstructions: '<p>{% unknown_tag %}</p>',
+        );
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $this->assertSame(
+            '<p>{% unknown_tag %}</p>',
+            $context['settings']['offline_payment_instructions'],
+        );
+    }
+
     public function test_whitelists_only_allowed_tokens_for_order_confirmation(): void
     {
         $order = $this->createMockOrder();
@@ -155,7 +219,7 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('title', $context['event']);
     }
 
-    private function createMockOrder(): OrderDomainObject
+    private function createMockOrder(string $firstName = 'John'): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [
             'getProductPriceId' => 123,
@@ -168,7 +232,7 @@ class EmailTokenContextBuilderTest extends TestCase
         return Mockery::mock(OrderDomainObject::class, [
             'getPublicId' => 'ORD-123456',
             'getTotalGross' => 9999,
-            'getFirstName' => 'John',
+            'getFirstName' => $firstName,
             'getLastName' => 'Doe',
             'getEmail' => 'john@example.com',
             'getCreatedAt' => '2024-01-15 10:30:00',
@@ -202,11 +266,11 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockEventSettings(): EventSettingDomainObject
+    private function createMockEventSettings(string $offlinePaymentInstructions = 'Pay by bank transfer'): EventSettingDomainObject
     {
         return Mockery::mock(EventSettingDomainObject::class, [
             'getSupportEmail' => 'support@event.com',
-            'getOfflinePaymentInstructions' => 'Pay by bank transfer',
+            'getOfflinePaymentInstructions' => $offlinePaymentInstructions,
             'getPostCheckoutMessage' => 'Thank you for your purchase!',
             'getLocationDetails' => null,
         ]);

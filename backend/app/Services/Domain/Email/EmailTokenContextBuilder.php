@@ -16,9 +16,19 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\Url;
 use HiEvents\Locale;
+use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use Throwable;
 
 class EmailTokenContextBuilder
 {
+    public function __construct(
+        private readonly LiquidTemplateRenderer $liquidTemplateRenderer,
+        private readonly HtmlPurifierService    $htmlPurifierService,
+    )
+    {
+    }
+
     public function buildOrderConfirmationContext(
         OrderDomainObject        $order,
         EventDomainObject        $event,
@@ -29,7 +39,7 @@ class EmailTokenContextBuilder
         $eventStartDate = new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone()));
         $eventEndDate = $event->getEndDate() ? new Carbon(DateHelper::convertFromUTC($event->getEndDate(), $event->getTimezone())) : null;
 
-        return [
+        $context = [
             // Event object
             'event' => [
                 'title' => $event->getTitle(),
@@ -75,6 +85,27 @@ class EmailTokenContextBuilder
                 'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
             ],
         ];
+
+        $context['settings']['offline_payment_instructions'] = $this->renderOfflinePaymentInstructions($context);
+
+        return $context;
+    }
+
+    private function renderOfflinePaymentInstructions(array $context): string
+    {
+        $instructions = $context['settings']['offline_payment_instructions'];
+
+        if ($instructions === '') {
+            return $instructions;
+        }
+
+        try {
+            $rendered = $this->liquidTemplateRenderer->render($instructions, $context);
+
+            return $this->htmlPurifierService->purify($rendered) ?? $instructions;
+        } catch (Throwable) {
+            return $instructions;
+        }
     }
 
     public function buildAttendeeTicketContext(

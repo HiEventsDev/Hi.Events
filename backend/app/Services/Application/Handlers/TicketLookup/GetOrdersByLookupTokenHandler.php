@@ -23,6 +23,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Services\Application\Handlers\TicketLookup\DTO\GetOrdersByLookupTokenDTO;
+use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
 use Illuminate\Support\Collection;
 
 class GetOrdersByLookupTokenHandler
@@ -30,6 +31,7 @@ class GetOrdersByLookupTokenHandler
     public function __construct(
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly OrderRepositoryInterface $orderRepository,
+        private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
     ) {
     }
 
@@ -41,7 +43,8 @@ class GetOrdersByLookupTokenHandler
     {
         $tokenRecord = $this->validateAndFetchToken($dto->token);
 
-        return $this->getOrdersForEmail($tokenRecord->getEmail());
+        return $this->getOrdersForEmail($tokenRecord->getEmail())
+            ->each(fn(OrderDomainObject $order) => $this->offlinePaymentInstructionsRenderService->renderForOrder($order));
     }
 
     /**
