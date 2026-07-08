@@ -37,6 +37,7 @@ import {IconChevronRight, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
+import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -150,16 +151,29 @@ const SelectProducts = (props: SelectProductsProps) => {
         onSuccess: (data) => queryClient.invalidateQueries()
             .then(() => {
                 const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
+
+                // Forward checkout-prefill params (name/email/lock) from the event page
+                // to the details step, since this navigation would otherwise drop them.
+                const sourceParams = new URLSearchParams(window.location.search);
+                const prefillParams = new URLSearchParams();
+                CHECKOUT_PREFILL_PARAM_KEYS.forEach((key) => {
+                    const value = sourceParams.get(key);
+                    if (value !== null) {
+                        prefillParams.set(key, value);
+                    }
+                });
+                const prefillQuery = prefillParams.toString();
+
                 if (props.widgetMode === 'embedded') {
-                    window.open(
-                        url + '?session_identifier=' + data.data.session_identifier + '&utm_source=embedded_widget',
-                        '_blank'
-                    );
+                    const embeddedQuery = 'session_identifier=' + data.data.session_identifier
+                        + '&utm_source=embedded_widget'
+                        + (prefillQuery ? '&' + prefillQuery : '');
+                    window.open(url + '?' + embeddedQuery, '_blank');
                     setOrderInProcessOverlayVisible(true);
                     return;
                 }
 
-                return navigate(url);
+                return navigate(url + (prefillQuery ? '?' + prefillQuery : ''));
             }),
 
         onError: (error: any) => {
