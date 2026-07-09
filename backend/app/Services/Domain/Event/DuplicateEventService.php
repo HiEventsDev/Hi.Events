@@ -22,6 +22,7 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\WebhookDomainObject;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -89,7 +90,7 @@ class DuplicateEventService
             $event = $this->getEventWithRelations($eventId, $accountId);
 
             $event
-                ->setTitle($title)
+                ->setTitle(StringHelper::stripControlCharacters($title))
                 ->setDescription($this->purifier->purify($description))
                 ->setStatus(EventStatus::DRAFT->name);
 

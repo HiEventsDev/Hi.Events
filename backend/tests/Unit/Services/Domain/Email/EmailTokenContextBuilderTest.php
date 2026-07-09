@@ -25,7 +25,7 @@ class EmailTokenContextBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->contextBuilder = new EmailTokenContextBuilder;
+        $this->contextBuilder = app(EmailTokenContextBuilder::class);
     }
 
     protected function tearDown(): void

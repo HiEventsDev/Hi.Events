@@ -11,6 +11,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
 abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, ValidatorAwareRule
@@ -78,9 +79,15 @@ abstract class BaseQuestionRule implements ValidationRule, DataAwareRule, Valida
         $productPrices = new Collection;
         $this->products->each(fn (ProductDomainObject $product) => $productPrices->push(...$product->getProductPrices()));
 
-        /** @var ProductPriceDomainObject $productPrice */
+        /** @var ProductPriceDomainObject|null $productPrice */
         $productPrice = $productPrices
             ->first(fn (ProductPriceDomainObject $productPrice) => $productPrice->getId() === $productPriceId);
+
+        if ($productPrice === null) {
+            throw ValidationException::withMessages([
+                __('This product is outdated. Please reload the page.'),
+            ]);
+        }
 
         return $productPrice->getProductId();
     }

@@ -5,6 +5,7 @@ import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.
 import {utcToTz} from "../../../utilites/dates.ts";
 import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
+import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
 
 interface EventDocumentHeadProps {
     event: Event;
@@ -129,7 +130,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             <link rel="canonical" href={url}/>
 
             <script type="application/ld+json">
-                {JSON.stringify(schemaOrgJSONLD)}
+                {htmlSafeJsonStringify(schemaOrgJSONLD)}
             </script>
         </Helmet>
     );

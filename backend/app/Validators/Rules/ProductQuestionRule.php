@@ -29,7 +29,13 @@ class ProductQuestionRule extends BaseQuestionRule
     protected function validateRequiredQuestionArePresent(Collection $orderProducts): void
     {
         foreach ($orderProducts as $productData) {
-            $productId = $this->getProductIdFromProductPriceId($productData['product_price_id']);
+            if (! isset($productData['product_price_id']) || ! is_numeric($productData['product_price_id'])) {
+                throw ValidationException::withMessages([
+                    __('This product is outdated. Please reload the page.'),
+                ]);
+            }
+
+            $productId = $this->getProductIdFromProductPriceId((int) $productData['product_price_id']);
             $questions = $productData['questions'] ?? [];
 
             $requiredQuestionIds = $this->questions

@@ -40,6 +40,8 @@ export const LanguageSwitcher = () => {
                 return t`Polish`;
             case "se":
                 return t`Swedish`;
+            case "sk":
+                return t`Slovak`;
             case "el":
                 return t`Greek`;
             default:

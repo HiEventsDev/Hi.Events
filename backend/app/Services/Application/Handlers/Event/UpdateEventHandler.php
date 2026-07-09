@@ -11,6 +11,7 @@ use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -66,7 +67,7 @@ readonly class UpdateEventHandler
         }
 
         $attributes = [
-            'title' => $eventData->title,
+            'title' => StringHelper::stripControlCharacters($eventData->title),
             'category' => $eventData->category?->value ?? $existingEvent->getCategory(),
             'description' => $this->purifier->purify($eventData->description),
             'timezone' => $eventData->timezone ?? $existingEvent->getTimezone(),

@@ -14,6 +14,7 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
+use HiEvents\Helper\StringHelper;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -118,7 +119,7 @@ class CreateEventService
     private function handleEventCreate(EventDomainObject $eventData, ?string $startDate = null, ?string $endDate = null): EventDomainObject
     {
         $event = $this->eventRepository->create([
-            'title' => $eventData->getTitle(),
+            'title' => StringHelper::stripControlCharacters($eventData->getTitle()),
             'organizer_id' => $eventData->getOrganizerId(),
             'description' => $this->purifier->purify($eventData->getDescription()),
             'timezone' => $eventData->getTimezone(),

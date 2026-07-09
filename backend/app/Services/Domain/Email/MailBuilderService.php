@@ -16,12 +16,14 @@ use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
 
 class MailBuilderService
 {
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService,
         private readonly EmailTokenContextBuilder $tokenContextBuilder,
+        private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
     ) {}
 
     public function buildAttendeeTicketMail(
@@ -67,6 +69,10 @@ class MailBuilderService
             $organizer,
             $occurrence,
         );
+
+        if (! $renderedTemplate) {
+            $this->offlinePaymentInstructionsRenderService->render($order, $event, $organizer, $eventSettings);
+        }
 
         return new OrderSummary(
             order: $order,

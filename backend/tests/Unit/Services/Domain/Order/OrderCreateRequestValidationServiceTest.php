@@ -475,6 +475,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
     {
         $price = Mockery::mock(ProductPriceDomainObject::class);
         $price->shouldReceive('getId')->andReturn($priceId);
+        $price->shouldReceive('getIsHidden')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn($productId);
@@ -487,6 +488,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('isSoldOut')->andReturn(false);
         $product->shouldReceive('getProductPrices')->andReturn(collect([$price]));
         $product->shouldReceive('getProductType')->andReturn('TICKET');
+        $product->shouldReceive('getIsHidden')->andReturn(false);
+        $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
 
         $this->productRepository
             ->shouldReceive('loadRelation')->andReturnSelf();

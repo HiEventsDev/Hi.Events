@@ -19,6 +19,9 @@ use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\Url;
 use HiEvents\Locale;
+use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use Throwable;
 
 class EmailTokenContextBuilder
 {
@@ -28,6 +31,11 @@ class EmailTokenContextBuilder
      * directly off the domain objects with no lazy-load fallback — invoking from
      * a tight loop without preloads will N+1.
      */
+    public function __construct(
+        private readonly LiquidTemplateRenderer $liquidTemplateRenderer,
+        private readonly HtmlPurifierService $htmlPurifierService,
+    ) {}
+
     public function buildOrderConfirmationContext(
         OrderDomainObject $order,
         EventDomainObject $event,
@@ -44,7 +52,7 @@ class EmailTokenContextBuilder
         $eventLocation = $occurrence?->getEventLocation() ?? $event->getEventLocation();
         $structuredAddress = $this->extractStructuredAddress($eventLocation);
 
-        return [
+        $context = [
             'event' => [
                 'title' => $event->getTitle().($occurrence?->getLabel() ? ' - '.$occurrence->getLabel() : ''),
                 'date' => $eventStartDate?->format('F j, Y') ?? '',
@@ -96,6 +104,27 @@ class EmailTokenContextBuilder
                 'label' => $occurrence?->getLabel() ?? '',
             ],
         ];
+
+        $context['settings']['offline_payment_instructions'] = $this->renderOfflinePaymentInstructions($context);
+
+        return $context;
+    }
+
+    private function renderOfflinePaymentInstructions(array $context): string
+    {
+        $instructions = $context['settings']['offline_payment_instructions'];
+
+        if ($instructions === '') {
+            return $instructions;
+        }
+
+        try {
+            $rendered = $this->liquidTemplateRenderer->render($instructions, $context);
+
+            return $this->htmlPurifierService->purify($rendered) ?? $instructions;
+        } catch (Throwable) {
+            return $instructions;
+        }
     }
 
     public function buildAttendeeTicketContext(

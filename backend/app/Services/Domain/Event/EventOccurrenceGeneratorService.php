@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Domain\Event;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
@@ -31,8 +32,11 @@ class EventOccurrenceGeneratorService
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $event->getId(),
         ]);
 
+        // Hydrated domain objects serialize start_date in ISO-8601 while rule
+        // candidates use `Y-m-d H:i:s` — normalize both sides to UTC
+        // `Y-m-d H:i:s` or existing occurrences never match on regeneration.
         $existingByStartDate = collect($existingOccurrences)->keyBy(
-            fn (EventOccurrenceDomainObject $occ) => $occ->getStartDate()
+            fn (EventOccurrenceDomainObject $occ) => Carbon::parse($occ->getStartDate())->utc()->toDateTimeString()
         );
 
         $existingIds = collect($existingOccurrences)
@@ -50,7 +54,7 @@ class EventOccurrenceGeneratorService
         $matchedExistingIds = [];
 
         foreach ($candidates as $candidate) {
-            $startDateKey = $candidate['start']->toDateTimeString();
+            $startDateKey = $candidate['start']->copy()->utc()->toDateTimeString();
 
             $existing = $existingByStartDate->get($startDateKey);
 

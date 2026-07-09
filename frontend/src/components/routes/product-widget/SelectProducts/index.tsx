@@ -46,6 +46,7 @@ import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../.
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {OccurrenceSelector} from "../OccurrenceSelector";
+import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -188,7 +189,19 @@ const SelectProducts = (props: SelectProductsProps) => {
         onSuccess: (data) => queryClient.invalidateQueries()
             .then(() => {
                 const sessionId = data.data.session_identifier;
-                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId);
+
+                // Forward checkout-prefill params (name/email/lock) from the event page
+                // to the details step, since this navigation would otherwise drop them.
+                const sourceParams = new URLSearchParams(window.location.search);
+                const prefillParams: Record<string, string> = {};
+                CHECKOUT_PREFILL_PARAM_KEYS.forEach((key) => {
+                    const value = sourceParams.get(key);
+                    if (value !== null) {
+                        prefillParams[key] = value;
+                    }
+                });
+
+                const pathWithSession = buildCheckoutPath(eventId, data.data.short_id, sessionId, prefillParams);
 
                 if (sessionId) {
                     setCheckoutSessionIdentifier(String(data.data.short_id), sessionId);
@@ -199,7 +212,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                     if (!parentSupportsModal) {
                         window.open(
-                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {utm_source: 'embedded_widget'}),
+                            buildCheckoutPath(eventId, data.data.short_id, sessionId, {...prefillParams, utm_source: 'embedded_widget'}),
                             '_blank',
                             'noopener,noreferrer'
                         );

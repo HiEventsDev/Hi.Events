@@ -49,7 +49,7 @@ class OrderCreateRequestValidationService
         $data = $this->normalizeOccurrenceIds($event, $data);
 
         $this->validateTypes($data);
-        $this->validatePromoCode($eventId, $data);
+        $promoCode = $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
         $this->validateOccurrence($eventId, $data);
 
@@ -68,7 +68,7 @@ class OrderCreateRequestValidationService
         // — previously this used only the event-wide snapshot, letting the
         // validator wave through orders the handler would later reject (causing
         // confusing two-step failures during checkout).
-        $this->validateProductDetailsPerOccurrence($event, $data);
+        $this->validateProductDetailsPerOccurrence($event, $data, $promoCode);
 
         return $data;
     }
@@ -128,7 +128,7 @@ class OrderCreateRequestValidationService
      * occurrence, so this is a single iteration with the same per-occurrence
      * data the order handler uses.
      */
-    private function validateProductDetailsPerOccurrence(EventDomainObject $event, array $data): void
+    private function validateProductDetailsPerOccurrence(EventDomainObject $event, array $data, ?PromoCodeDomainObject $promoCode): void
     {
         $eventWideAvailability = $this->availableProductQuantities;
         $productsByOccurrence = collect($data['products'])->groupBy('event_occurrence_id');
@@ -154,6 +154,7 @@ class OrderCreateRequestValidationService
                         is_int($productIndex) ? $productIndex : 0,
                         $productAndQuantities,
                         $allProducts,
+                        $promoCode,
                     );
                 }
             }
@@ -166,20 +167,24 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validatePromoCode(int $eventId, array $data): void
+    private function validatePromoCode(int $eventId, array $data): ?PromoCodeDomainObject
     {
-        if (isset($data['promo_code'])) {
-            $promoCode = $this->promoCodeRepository->findFirstWhere([
-                PromoCodeDomainObjectAbstract::CODE => strtolower(trim($data['promo_code'])),
-                PromoCodeDomainObjectAbstract::EVENT_ID => $eventId,
-            ]);
-
-            if (! $promoCode) {
-                throw ValidationException::withMessages([
-                    'promo_code' => __('This promo code is invalid'),
-                ]);
-            }
+        if (! isset($data['promo_code'])) {
+            return null;
         }
+
+        $promoCode = $this->promoCodeRepository->findFirstWhere([
+            PromoCodeDomainObjectAbstract::CODE => strtolower(trim($data['promo_code'])),
+            PromoCodeDomainObjectAbstract::EVENT_ID => $eventId,
+        ]);
+
+        if (! $promoCode) {
+            throw ValidationException::withMessages([
+                'promo_code' => __('This promo code is invalid'),
+            ]);
+        }
+
+        return $promoCode->isValid() ? $promoCode : null;
     }
 
     /**
@@ -261,7 +266,7 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateSingleProductDetails(EventDomainObject $event, int $productIndex, array $productAndQuantities, $products): void
+    private function validateSingleProductDetails(EventDomainObject $event, int $productIndex, array $productAndQuantities, $products, ?PromoCodeDomainObject $promoCode = null): void
     {
         $productId = $productAndQuantities['product_id'];
         $totalQuantity = collect($productAndQuantities['quantities'])->sum('quantity');
@@ -280,6 +285,11 @@ class OrderCreateRequestValidationService
             event: $event,
             productId: $productId,
             product: $product
+        );
+
+        $this->validateProductVisibility(
+            product: $product,
+            promoCode: $promoCode
         );
 
         $this->validateProductQuantity(
@@ -306,6 +316,21 @@ class OrderCreateRequestValidationService
             productAndQuantities: $productAndQuantities,
             product: $product
         );
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    private function validateProductVisibility(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode): void
+    {
+        if ($product->getIsHidden()) {
+            throw new NotFoundHttpException(sprintf('Product ID %d not found', $product->getId()));
+        }
+
+        if ($product->getIsHiddenWithoutPromoCode()
+            && ! ($promoCode && $promoCode->appliesToProduct($product))) {
+            throw new NotFoundHttpException(sprintf('Product ID %d not found', $product->getId()));
+        }
     }
 
     /**
@@ -418,8 +443,16 @@ class OrderCreateRequestValidationService
                 ]);
             }
 
-            $validPriceIds = $product->getProductPrices()?->map(fn (ProductPriceDomainObject $price) => $price->getId());
+            $productPrices = $product->getProductPrices();
+            $validPriceIds = $productPrices?->map(fn (ProductPriceDomainObject $price) => $price->getId());
             if (! in_array($priceId, $validPriceIds->toArray(), true)) {
+                $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
+
+                continue;
+            }
+
+            $selectedPrice = $productPrices?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $priceId);
+            if ((int) $quantity > 0 && $selectedPrice?->getIsHidden()) {
                 $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
             }
         }
