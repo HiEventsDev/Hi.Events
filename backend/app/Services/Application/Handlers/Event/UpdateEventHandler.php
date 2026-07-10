@@ -6,6 +6,7 @@ namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
@@ -120,10 +121,12 @@ readonly class UpdateEventHandler
 
     private function getUpdateEvent(UpdateEventDTO $eventData): EventDomainObject
     {
-        $event = $this->eventRepository->findFirstWhere([
-            'id' => $eventData->id,
-            'account_id' => $eventData->account_id,
-        ]);
+        $event = $this->eventRepository
+            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->findFirstWhere([
+                'id' => $eventData->id,
+                'account_id' => $eventData->account_id,
+            ]);
 
         $this->dispatcher->dispatchEvent(new EventUpdateEvent($event));
 

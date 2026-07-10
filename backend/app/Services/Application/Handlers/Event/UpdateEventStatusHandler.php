@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
@@ -61,10 +62,12 @@ readonly class UpdateEventStatusHandler
             'status' => $updateEventStatusDTO->status,
         ]);
 
-        $event = $this->eventRepository->findFirstWhere([
-            'id' => $updateEventStatusDTO->eventId,
-            'account_id' => $updateEventStatusDTO->accountId,
-        ]);
+        $event = $this->eventRepository
+            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->findFirstWhere([
+                'id' => $updateEventStatusDTO->eventId,
+                'account_id' => $updateEventStatusDTO->accountId,
+            ]);
 
         $eventType = $updateEventStatusDTO->status === EventStatus::ARCHIVED->name
             ? DomainEventType::EVENT_ARCHIVED

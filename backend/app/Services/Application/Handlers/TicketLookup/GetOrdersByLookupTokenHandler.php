@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\TicketLookup;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -102,6 +103,9 @@ class GetOrdersByLookupTokenHandler
                     ),
                     new Relationship(
                         domainObject: ImageDomainObject::class,
+                    ),
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
                     ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME

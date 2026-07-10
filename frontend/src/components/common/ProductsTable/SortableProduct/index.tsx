@@ -33,6 +33,7 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import {useDeleteProduct} from "../../../../mutations/useDeleteProduct.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {SortArrows} from "../../SortArrows";
@@ -64,15 +65,19 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
     }
 
     const handleDeleteProduct = (productId: IdParam, eventId: IdParam) => {
-        deleteMutation.mutate({productId, eventId}, {
-            onSuccess: () => {
-                showSuccess(t`Product deleted successfully`);
-            },
-            onError: (error: any) => {
-                if (error.response?.status === 409) {
-                    showError(error.response.data.message || t`This product cannot be deleted because it is associated with an order. You can hide it instead.`);
+        confirmationDialog(t`Delete this product? This cannot be undone.`, () => {
+            deleteMutation.mutate({productId, eventId}, {
+                onSuccess: () => {
+                    showSuccess(t`Product deleted successfully`);
+                },
+                onError: (error: any) => {
+                    if (error.response?.status === 409) {
+                        showError(error.response.data.message || t`This product cannot be deleted because it is associated with an order. You can hide it instead.`);
+                    } else {
+                        showError(error.response?.data?.message || t`Failed to delete product. Please try again.`);
+                    }
                 }
-            }
+            });
         });
     }
 

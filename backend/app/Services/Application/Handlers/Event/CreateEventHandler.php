@@ -6,6 +6,7 @@ namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\Enums\EventCategory;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
@@ -95,6 +96,13 @@ class CreateEventHandler
         DispatchEventWebhookJob::dispatch(
             $newEvent->getId(),
             DomainEventType::EVENT_CREATED,
+        );
+
+        $newEvent->setEventOccurrences(
+            $this->eventRepository
+                ->loadRelation(EventOccurrenceDomainObject::class)
+                ->findById($newEvent->getId())
+                ->getEventOccurrences()
         );
 
         return $newEvent;

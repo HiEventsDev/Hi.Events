@@ -77,7 +77,7 @@ const OrderCard = ({order}: { order: Order }) => {
                         <IconCalendarEvent size={18} style={{color: 'var(--mantine-color-gray-6)'}}/>
                         <div>
                             <Text size="xs" c="dimmed">{t`Event Date`}</Text>
-                            <Text size="sm"><EventDateRange event={event}/></Text>
+                            <Text size="sm"><EventDateRange event={event} occurrence={occurrence ?? undefined}/></Text>
                         </div>
                     </Group>
                 </div>

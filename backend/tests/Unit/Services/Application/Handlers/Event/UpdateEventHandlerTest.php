@@ -43,6 +43,7 @@ class UpdateEventHandlerTest extends TestCase
         Bus::fake();
 
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->purifier = Mockery::mock(HtmlPurifierService::class);

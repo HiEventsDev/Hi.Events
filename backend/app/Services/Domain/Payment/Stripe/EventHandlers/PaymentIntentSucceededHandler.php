@@ -214,6 +214,23 @@ class PaymentIntentSucceededHandler
             );
         }
 
+        if (in_array($stripePayment->getOrder()?->getStatus(), [
+            OrderStatus::CANCELLED->name,
+            OrderStatus::ABANDONED->name,
+        ], true)) {
+            $this->refundExpiredOrderService->refundExpiredOrder(
+                paymentIntent: $paymentIntent,
+                stripePayment: $stripePayment,
+                order: $stripePayment->getOrder(),
+            );
+
+            throw new CannotAcceptPaymentException(
+                __('Payment was successful, but the order is no longer valid. Order: :id', [
+                    'id' => $stripePayment->getOrderId(),
+                ])
+            );
+        }
+
         $this->handleExpiredOrder($stripePayment, $paymentIntent);
     }
 

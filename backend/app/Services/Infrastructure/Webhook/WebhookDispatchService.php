@@ -43,7 +43,9 @@ class WebhookDispatchService
 
     public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
     {
-        $event = $this->eventRepository->findById($eventId);
+        $event = $this->eventRepository
+            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->findById($eventId);
 
         $this->dispatchWebhook(
             eventType: $eventType,
