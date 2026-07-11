@@ -234,4 +234,17 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'D MMM YYYY HH:mm'
     },
+    'ko': {
+        fullDateTime: 'YYYY년 M월 D일 (ddd) A h:mm',
+        shortDateTime: 'YYYY년 M월 D일 A h:mm',
+        shortDate: 'YYYY년 M월 D일',
+        chartDate: 'M월 D일',
+        dayMonthTime: 'M월 D일 A h:mm',
+        monthShort: 'M월',
+        dayOfMonth: 'D일',
+        dayName: 'M월 D일 dddd',
+        timeOnly: 'A h:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY년 M월 D일 A h:mm'
+    },
 };

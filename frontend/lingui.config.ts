@@ -20,7 +20,7 @@ const config: LinguiConfig = {
         "sk", // Slovak
         "el", // Greek
         // "ja", // Japanese
-        // "ko", // Korean
+        "ko", // Korean
         // "id", // Indonesian
         "zh-hk", // Cantonese Chinese (Hong Kong)
         // "cs", // Czech
