@@ -13,6 +13,7 @@ BOLD='\033[1m'
 DIM='\033[2m'
 NC='\033[0m' # No Color
 CERTS_DIR="./certs"
+CERTS_GENERATED=false
 
 print_banner() {
     echo ""
@@ -73,7 +74,11 @@ mkdir -p "$CERTS_DIR"
 generate_unsigned_certs() {
     if [ ! -f "$CERTS_DIR/localhost.crt" ] || [ ! -f "$CERTS_DIR/localhost.key" ]; then
         step "Generating unsigned SSL certificates"
-        openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$CERTS_DIR/localhost.key" -out "$CERTS_DIR/localhost.crt" -subj "/CN=localhost" > /dev/null 2>&1
+        if ! openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$CERTS_DIR/localhost.key" -out "$CERTS_DIR/localhost.crt" -subj "/CN=localhost" -addext "subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1" > /dev/null 2>&1; then
+            fail "Certificate generation failed"
+            exit 1
+        fi
+        CERTS_GENERATED=true
         ok "Certificates generated"
     else
         ok "SSL certificates already exist"
@@ -89,7 +94,11 @@ generate_signed_certs() {
             exit 1
         else
             step "Generating signed SSL certificates with mkcert"
-            mkcert -key-file "$CERTS_DIR/localhost.key" -cert-file "$CERTS_DIR/localhost.crt" localhost 127.0.0.1 ::1 > /dev/null 2>&1
+            if ! mkcert -key-file "$CERTS_DIR/localhost.key" -cert-file "$CERTS_DIR/localhost.crt" localhost 127.0.0.1 ::1 > /dev/null 2>&1; then
+                fail "Certificate generation failed"
+                exit 1
+            fi
+            CERTS_GENERATED=true
             ok "Certificates generated"
         fi
     else
@@ -153,6 +162,12 @@ if ! $COMPOSE_CMD up -d; then
     exit 1
 fi
 ok "Services started"
+
+if [ "$CERTS_GENERATED" = true ]; then
+    step "Restarting nginx to load the new certificates"
+    $COMPOSE_CMD restart nginx > /dev/null 2>&1
+    ok "nginx restarted"
+fi
 
 step "Running composer install in the backend service"
 if ! $COMPOSE_CMD exec -T backend composer install \

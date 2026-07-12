@@ -2,7 +2,8 @@ import {useEffect, useRef, useState} from "react";
 import {Dropzone, FileRejection, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useUploadImage} from "../../../mutations/useUploadImage.ts";
 import {useDeleteImage} from "../../../mutations/useDeleteImage.ts";
-import {showSuccess} from "../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {ActionIcon, Button, Group, Loader, Text} from "@mantine/core";
 import {IconReplace, IconTrash, IconUpload} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -112,25 +113,28 @@ export const ImageUploadDropzone = ({
     const handleDelete = () => {
         if (!previewImage || !imageId) return;
 
-        setLoading(true);
-        setErrors([]);
+        confirmationDialog(t`Are you sure you want to delete this image?`, () => {
+            setLoading(true);
+            setErrors([]);
 
-        deleteImage.mutate(
-            {imageId},
-            {
-                onSuccess: () => {
-                    setPreviewImage(null);
-                    setImageId(null);
-                    showSuccess(t`Image deleted successfully`);
-                    setErrors([]);
-                    onDeleteSuccess?.();
-                },
-                onError: (error) => {
-                    console.error(error);
-                },
-                onSettled: () => setLoading(false),
-            }
-        );
+            deleteImage.mutate(
+                {imageId},
+                {
+                    onSuccess: () => {
+                        setPreviewImage(null);
+                        setImageId(null);
+                        showSuccess(t`Image deleted successfully`);
+                        setErrors([]);
+                        onDeleteSuccess?.();
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        showError(t`Something went wrong while deleting the image. Please try again.`);
+                    },
+                    onSettled: () => setLoading(false),
+                }
+            );
+        });
     };
 
     const handleReplace = () => {

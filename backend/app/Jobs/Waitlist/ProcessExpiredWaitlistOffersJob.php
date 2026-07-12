@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,6 +28,7 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
         OrderRepositoryInterface $orderRepository,
         ProductPriceRepositoryInterface $productPriceRepository,
         DatabaseManager $databaseManager,
+        StripePaymentsRepositoryInterface $stripePaymentsRepository,
     ): void {
         $expiredEntries = $repository->findWhere([
             'status' => WaitlistEntryStatus::OFFERED->name,
@@ -36,7 +38,7 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
 
         foreach ($expiredEntries as $entry) {
             try {
-                $databaseManager->transaction(function () use ($entry, $repository, $orderRepository) {
+                $databaseManager->transaction(function () use ($entry, $repository, $orderRepository, $stripePaymentsRepository) {
                     $lockedEntry = $repository->findByIdLocked($entry->getId());
 
                     if ($lockedEntry === null || $lockedEntry->getStatus() !== WaitlistEntryStatus::OFFERED->name) {
@@ -44,10 +46,24 @@ class ProcessExpiredWaitlistOffersJob implements ShouldQueue
                     }
 
                     if ($lockedEntry->getOrderId() !== null) {
-                        $orderRepository->deleteWhere([
-                            'id' => $lockedEntry->getOrderId(),
-                            'status' => OrderStatus::RESERVED->name,
-                        ]);
+                        $orderHasStripePayment = $stripePaymentsRepository->countWhere([
+                            'order_id' => $lockedEntry->getOrderId(),
+                        ]) > 0;
+
+                        if ($orderHasStripePayment) {
+                            $orderRepository->updateWhere(
+                                attributes: ['status' => OrderStatus::ABANDONED->name],
+                                where: [
+                                    'id' => $lockedEntry->getOrderId(),
+                                    'status' => OrderStatus::RESERVED->name,
+                                ],
+                            );
+                        } else {
+                            $orderRepository->deleteWhere([
+                                'id' => $lockedEntry->getOrderId(),
+                                'status' => OrderStatus::RESERVED->name,
+                            ]);
+                        }
                     }
 
                     $repository->updateWhere(

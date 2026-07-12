@@ -66,9 +66,18 @@ class AffiliateRepository extends BaseRepository implements AffiliateRepositoryI
 
     public function incrementSales(int $affiliateId, float $amount): void
     {
-        $this->model->where('id', $affiliateId)
+        $this->runQuery(fn () => $this->model->where('id', $affiliateId)
             ->increment('total_sales', 1, [
                 'total_sales_gross' => $this->db->raw('total_sales_gross + '.$amount),
-            ]);
+            ]));
+    }
+
+    public function decrementSales(int $affiliateId, float $amount): void
+    {
+        $this->runQuery(fn () => $this->model->where('id', $affiliateId)
+            ->update([
+                'total_sales' => $this->db->raw('GREATEST(0, total_sales - 1)'),
+                'total_sales_gross' => $this->db->raw('GREATEST(0, total_sales_gross - '.$amount.')'),
+            ]));
     }
 }

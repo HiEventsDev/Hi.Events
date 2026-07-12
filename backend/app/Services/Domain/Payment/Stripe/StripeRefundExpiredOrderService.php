@@ -66,12 +66,12 @@ readonly class StripeRefundExpiredOrderService
         $this->mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
-            ->send(new PaymentSuccessButOrderExpiredMail(
+            ->send((new PaymentSuccessButOrderExpiredMail(
                 order: $order,
                 event: $event,
                 eventSettings: $event->getEventSettings(),
                 organizer: $event->getOrganizer(),
-            ));
+            ))->beforeCommit());
 
         $this->logger->info('Refunded expired order', [
             'order_id' => $order->getId(),

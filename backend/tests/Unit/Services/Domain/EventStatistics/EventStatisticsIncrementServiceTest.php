@@ -216,13 +216,15 @@ class EventStatisticsIncrementServiceTest extends TestCase
 
         // Expect incrementing promo code usage
         $this->promoCodeRepository
-            ->shouldReceive('increment')
-            ->with($promoCodeId, PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT)
-            ->once();
-
-        $this->promoCodeRepository
-            ->shouldReceive('increment')
-            ->with($promoCodeId, PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT, 3)
+            ->shouldReceive('incrementEach')
+            ->with(
+                [
+                    PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT => 1,
+                    PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT => 3,
+                ],
+                [],
+                ['id' => $promoCodeId],
+            )
             ->once();
 
         // Expect incrementing product statistics

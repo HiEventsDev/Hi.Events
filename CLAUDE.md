@@ -43,6 +43,26 @@ cd docker/development
 ./start-dev.sh --certs=signed      # Signed certs with mkcert
 ```
 
+### API smoke-testing (after backend changes)
+
+Unit tests miss wiring bugs — exercise changed endpoints against the dev stack. Base URL `https://localhost:8443/api` (self-signed — `curl -sk`). Endpoints are defined in `backend/routes/api.php`.
+
+```bash
+# Verified SUPERADMIN account + organizer + LIVE single/recurring events + products
+# (paid has waitlist) + promo + affiliate; prints ids and a Bearer token:
+docker compose -f docker-compose.dev.yml exec backend php artisan dev:bootstrap
+
+# Manual token (`token` field → `Authorization: Bearer <token>`):
+curl -sk -X POST https://localhost:8443/api/auth/login -H "Content-Type: application/json" -d '{"email":"<email>","password":"<password>"}'
+```
+
+Gotchas:
+- Product upsert requires `product_type` (TICKET/GENERAL), `type` (FREE/PAID/DONATION/TIERED) and `product_category_id`
+- Promo create requires `applicable_product_ids: []` (empty = all products)
+- Public order complete requires `email_confirmation` on the order and on each product entry
+- Publishing needs `accounts.account_verified_at`; `/admin/*` needs role `SUPERADMIN` (`dev:bootstrap` handles both)
+- Emails land in Mailpit at `http://localhost:8025` (`/api/v1/search?query=to:<addr>`)
+
 ## Development Guidelines
 
 ### Comments — hard rule for all code (backend, frontend, SCSS)
@@ -88,6 +108,12 @@ cd docker/development
 
 #### Repository Pattern
 - Favour existing repository methods over creating bespoke ones. E.g., use `findFirstWhere(['event_id' => $eventId])` instead of creating `findByEventId`
+- Bespoke repository methods must wrap their query in `runQuery()` — it is the single point that resets `$this->model`/`$this->eagerLoads` after each call
+- `increment()`/`decrement()` are `findOrFail`-based and throw for soft-deleted rows; use the where-based `incrementEach()`/`decrementEach()` when the target row may have been deleted (e.g. a promo code deleted after orders used it)
+
+#### Mail & side effects
+- `BaseMail` is queued **and** `afterCommit()` — a mail sent inside a DB transaction that rolls back is silently discarded. Chain `->beforeCommit()` on the mailable when the send must survive a deliberate rollback (e.g. refund-and-reject webhook paths)
+- Promo usage, `products.sales_volume` and affiliate sales counters increment only when an order **completes** — any decrement must be gated on `isOrderCompleted()` (or equivalent) to stay symmetric
 
 #### Database & Migrations
 - **DO** use auto-incrementing integer IDs (`$table->id()`), not UUIDs

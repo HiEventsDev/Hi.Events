@@ -292,6 +292,27 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->service->createEntry($dto, $eventSettings, $product);
     }
 
+    public function test_throws_exception_when_product_waitlist_was_never_enabled(): void
+    {
+        $dto = new CreateWaitlistEntryDTO(
+            event_id: 1,
+            product_price_id: 10,
+            email: 'test@example.com',
+            first_name: 'Test',
+            last_name: 'User',
+        );
+
+        $eventSettings = new EventSettingDomainObject;
+
+        $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('getWaitlistEnabled')->andReturn(null);
+
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('Waitlist is not enabled for this product');
+
+        $this->service->createEntry($dto, $eventSettings, $product);
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();

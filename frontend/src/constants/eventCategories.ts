@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 
-export const EventCategories = [
+export const getEventCategories = () => [
     {id: 'NIGHTLIFE', name: t`Nightlife`, emoji: '🪩'},
     {id: 'FESTIVAL', name: t`Festival`, emoji: '🎪'},
     {id: 'SEASONAL', name: t`Seasonal`, emoji: '🎊'},

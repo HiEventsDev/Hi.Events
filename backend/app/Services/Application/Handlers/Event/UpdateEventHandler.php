@@ -6,7 +6,9 @@ namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
@@ -14,6 +16,7 @@ use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -122,7 +125,14 @@ readonly class UpdateEventHandler
     private function getUpdateEvent(UpdateEventDTO $eventData): EventDomainObject
     {
         $event = $this->eventRepository
-            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ], name: 'event_location'),
+            ]))
             ->findFirstWhere([
                 'id' => $eventData->id,
                 'account_id' => $eventData->account_id,

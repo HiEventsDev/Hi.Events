@@ -409,21 +409,19 @@ class EventStatisticsIncrementService
             return;
         }
 
-        $this->promoCodeRepository->increment(
-            id: $order->getPromoCodeId(),
-            column: PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT,
-        );
-
         $attendeeCount = $order->getOrderItems()
             ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
+        $columns = [PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT => 1];
+
         if ($attendeeCount > 0) {
-            $this->promoCodeRepository->increment(
-                id: $order->getPromoCodeId(),
-                column: PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT,
-                amount: $attendeeCount,
-            );
+            $columns[PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT] = $attendeeCount;
         }
+
+        $this->promoCodeRepository->incrementEach(
+            columns: $columns,
+            where: ['id' => $order->getPromoCodeId()],
+        );
 
         $this->logger->info(
             'Promo code usage incremented',

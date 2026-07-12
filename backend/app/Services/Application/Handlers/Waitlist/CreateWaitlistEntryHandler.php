@@ -59,10 +59,15 @@ class CreateWaitlistEntryHandler
                 ->first();
 
             if ($occurrence !== null) {
-                $dto = CreateWaitlistEntryDTO::fromArray(array_merge(
-                    $dto->toArray(),
-                    ['event_occurrence_id' => $occurrence->getId()],
-                ));
+                $dto = new CreateWaitlistEntryDTO(
+                    event_id: $dto->event_id,
+                    product_price_id: $dto->product_price_id,
+                    email: $dto->email,
+                    first_name: $dto->first_name,
+                    last_name: $dto->last_name,
+                    locale: $dto->locale,
+                    event_occurrence_id: $occurrence->getId(),
+                );
             }
         }
 

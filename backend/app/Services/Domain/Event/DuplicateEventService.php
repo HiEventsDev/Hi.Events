@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\AffiliateDomainObject;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
@@ -501,11 +502,11 @@ class DuplicateEventService
      */
     private function cloneOccurrences(EventDomainObject $event, int $newEventId): array
     {
-        $now = now()->toDateTimeString();
+        $now = now()->utc();
         $oldToNewOccurrenceMap = [];
 
         $event->getEventOccurrences()
-            ?->filter(fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getStartDate() >= $now
+            ?->filter(fn (EventOccurrenceDomainObject $occurrence) => Carbon::parse($occurrence->getStartDate())->utc()->gte($now)
                 && $occurrence->getStatus() !== EventOccurrenceStatus::CANCELLED->name
             )
             ->each(function (EventOccurrenceDomainObject $occurrence) use ($newEventId, &$oldToNewOccurrenceMap) {

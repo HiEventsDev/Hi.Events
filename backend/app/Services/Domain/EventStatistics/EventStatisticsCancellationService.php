@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace HiEvents\Services\Domain\EventStatistics;
 
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\EventStatisticsVersionMismatchException;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -34,6 +39,9 @@ class EventStatisticsCancellationService
         private readonly LoggerInterface $logger,
         private readonly DatabaseManager $databaseManager,
         private readonly Retrier $retrier,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
     ) {}
 
     /**
@@ -91,6 +99,12 @@ class EventStatisticsCancellationService
                     // Decrement occurrence statistics
                     $this->decrementOccurrenceStatistics($order);
                     $this->decrementOccurrenceDailyStatistics($order);
+
+                    if ($order->isOrderCompleted()) {
+                        $this->decrementPromoCodeUsage($order);
+                        $this->decrementProductSalesVolume($order);
+                        $this->decrementAffiliateSales($order);
+                    }
 
                     // Mark statistics as decremented
                     $this->markStatisticsAsDecremented($order);
@@ -588,6 +602,59 @@ class EventStatisticsCancellationService
                 'Occurrence daily statistics version mismatch for occurrence '.$occurrenceId
             );
         }
+    }
+
+    private function decrementPromoCodeUsage(OrderDomainObject $order): void
+    {
+        if ($order->getPromoCodeId() === null) {
+            return;
+        }
+
+        $attendeeCount = $order->getOrderItems()
+            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
+
+        $columns = [PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT => 1];
+
+        if ($attendeeCount > 0) {
+            $columns[PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT] = $attendeeCount;
+        }
+
+        $this->promoCodeRepository->decrementEach(
+            where: ['id' => $order->getPromoCodeId()],
+            columns: $columns,
+        );
+
+        $this->logger->info(
+            'Promo code usage decremented for cancelled order',
+            [
+                'promo_code_id' => $order->getPromoCodeId(),
+                'order_id' => $order->getId(),
+                'attendee_count' => $attendeeCount,
+            ]
+        );
+    }
+
+    private function decrementProductSalesVolume(OrderDomainObject $order): void
+    {
+        foreach ($order->getOrderItems() ?? [] as $orderItem) {
+            $this->productRepository->decrement(
+                $orderItem->getProductId(),
+                ProductDomainObjectAbstract::SALES_VOLUME,
+                $orderItem->getTotalBeforeAdditions(),
+            );
+        }
+    }
+
+    private function decrementAffiliateSales(OrderDomainObject $order): void
+    {
+        if ($order->getAffiliateId() === null) {
+            return;
+        }
+
+        $this->affiliateRepository->decrementSales(
+            affiliateId: $order->getAffiliateId(),
+            amount: $order->getTotalGross(),
+        );
     }
 
     /**

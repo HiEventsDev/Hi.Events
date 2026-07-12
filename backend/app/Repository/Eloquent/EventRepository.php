@@ -6,6 +6,7 @@ namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
@@ -131,9 +132,8 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         $now = now();
         $next24Hours = now()->addDay();
 
-        return $this->handleResults($this->model
+        $this->model = $this->model
             ->select('events.*')
-            ->with(['account', 'organizer'])
             ->whereExists(function ($query) use ($now, $next24Hours) {
                 $query->select(DB::raw(1))
                     ->from('event_occurrences')
@@ -146,8 +146,13 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             ->whereIn(EventDomainObjectAbstract::STATUS, [
                 EventStatus::LIVE->name,
             ])
-            ->orderBy(EventDomainObjectAbstract::CREATED_AT, 'desc')
-            ->paginate($perPage));
+            ->orderBy(EventDomainObjectAbstract::CREATED_AT, 'desc');
+
+        $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
+        $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
+        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
+
+        return $this->paginate($perPage);
     }
 
     public function getAllEventsForAdmin(
@@ -178,6 +183,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
         $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
         $this->loadRelation(new Relationship(EventStatisticDomainObject::class, name: 'event_statistics'));
+        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
 
         return $this->paginate($perPage);
     }

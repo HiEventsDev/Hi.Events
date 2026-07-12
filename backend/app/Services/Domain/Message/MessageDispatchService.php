@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Jobs\Event\SendMessagesJob;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +18,7 @@ class MessageDispatchService
 {
     public function __construct(
         private readonly MessageRepositoryInterface $messageRepository,
+        private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
     ) {}
 
     public function dispatchMessage(MessageDomainObject $message, MessageStatus $expectedStatus = MessageStatus::SCHEDULED): void
@@ -30,6 +32,18 @@ class MessageDispatchService
             ]);
             $this->messageRepository->updateFromArray($message->getId(), [
                 'status' => MessageStatus::FAILED->name,
+            ]);
+
+            return;
+        }
+
+        if ($this->isForCancelledOccurrence($message)) {
+            Log::info('Message is scoped to a cancelled or deleted occurrence, marking as CANCELLED', [
+                'message_id' => $message->getId(),
+                'event_occurrence_id' => $message->getEventOccurrenceId(),
+            ]);
+            $this->messageRepository->updateFromArray($message->getId(), [
+                'status' => MessageStatus::CANCELLED->name,
             ]);
 
             return;
@@ -77,5 +91,18 @@ class MessageDispatchService
             );
             throw $e;
         }
+    }
+
+    private function isForCancelledOccurrence(MessageDomainObject $message): bool
+    {
+        $occurrenceId = $message->getEventOccurrenceId();
+
+        if ($occurrenceId === null) {
+            return false;
+        }
+
+        $occurrence = $this->eventOccurrenceRepository->findFirstWhere(['id' => $occurrenceId]);
+
+        return $occurrence === null || $occurrence->isCancelled();
     }
 }

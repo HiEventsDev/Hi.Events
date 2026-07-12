@@ -2,8 +2,10 @@
 
 namespace HiEvents\Services\Application\Handlers\Attendee;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -37,6 +39,11 @@ readonly class ResendAttendeeTicketHandler
             ], name: 'order'))
             ->loadRelation(new Relationship(
                 domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ], name: 'event_location'),
+                ],
                 name: 'event_occurrence',
             ))
             ->findFirstWhere([
@@ -55,6 +62,9 @@ readonly class ResendAttendeeTicketHandler
         $event = $this->eventRepository
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(EventSettingDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
             ->findById($resendAttendeeProductDTO->eventId);
 
         $this->sendAttendeeProductService->send(

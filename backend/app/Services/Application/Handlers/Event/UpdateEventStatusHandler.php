@@ -3,10 +3,13 @@
 namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
@@ -63,7 +66,14 @@ readonly class UpdateEventStatusHandler
         ]);
 
         $event = $this->eventRepository
-            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ], name: 'event_location'),
+            ]))
             ->findFirstWhere([
                 'id' => $updateEventStatusDTO->eventId,
                 'account_id' => $updateEventStatusDTO->accountId,

@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;

@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -102,6 +103,12 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             ])
             ->andReturn(new Collection([$attendeeA, $attendeeB, $attendeeC]));
 
+        // All three attendees are on a COMPLETED order → inventory was incremented → decrement.
+        $this->orderRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', [1000])
+            ->andReturn(new Collection([$this->makeOrder(id: 1000)]));
+
         $this->attendeeRepository
             ->shouldReceive('updateWhere')
             ->once()
@@ -170,13 +177,45 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             }))
             ->andReturn(new Collection([$attendee]));
 
+        // Offline orders hold inventory but are not yet counted in statistics.
+        $this->orderRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', [1000])
+            ->andReturn(new Collection([$this->makeOrder(id: 1000, status: OrderStatus::AWAITING_OFFLINE_PAYMENT->name)]));
+
         $this->attendeeRepository->shouldReceive('updateWhere')->once();
         $this->productQuantityService->shouldReceive('decreaseQuantitySold')->once();
         $this->domainEventDispatcherService->shouldReceive('dispatch')->once();
+        $this->statisticsCancellationService->shouldNotReceive('decrementForCancelledAttendee');
 
         $this->service->cancelForOccurrence(1, 10);
 
         Event::assertDispatched(CapacityChangedEvent::class);
+    }
+
+    public function test_does_not_decrement_inventory_for_reserved_order_attendees(): void
+    {
+        // Reserved-order attendees never incremented inventory or statistics.
+        $attendee = $this->makeAttendee(id: 501, productId: 9, productPriceId: 90, orderId: 7000);
+
+        $this->attendeeRepository
+            ->shouldReceive('findWhere')
+            ->andReturn(new Collection([$attendee]));
+
+        $this->orderRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', [7000])
+            ->andReturn(new Collection([$this->makeOrder(id: 7000, status: OrderStatus::RESERVED->name)]));
+
+        $this->attendeeRepository->shouldReceive('updateWhere')->once();
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->once();
+
+        $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
+        $this->statisticsCancellationService->shouldNotReceive('decrementForCancelledAttendee');
+
+        $this->service->cancelForOccurrence(1, 10);
+
+        Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
     public function test_decrements_attendee_statistics_grouped_by_source_order(): void
@@ -289,11 +328,12 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         return $attendee;
     }
 
-    private function makeOrder(int $id, string $createdAt = '2026-01-01 12:00:00'): MockInterface
+    private function makeOrder(int $id, string $createdAt = '2026-01-01 12:00:00', ?string $status = null): MockInterface
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn($id);
         $order->shouldReceive('getCreatedAt')->andReturn($createdAt);
+        $order->shouldReceive('getStatus')->andReturn($status ?? OrderStatus::COMPLETED->name);
 
         return $order;
     }

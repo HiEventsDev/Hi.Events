@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -68,7 +69,20 @@ class CancelOccurrenceAttendeesService
             ],
         );
 
-        $soldCountsByProductPrice = $attendees
+        $ordersById = $this->orderRepository
+            ->findWhereIn('id', $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getOrderId())->unique()->values()->all())
+            ->keyBy(fn (OrderDomainObject $order) => $order->getId());
+
+        $inventoryBackedAttendees = $attendees->filter(function (AttendeeDomainObject $attendee) use ($ordersById) {
+            $order = $ordersById->get($attendee->getOrderId());
+
+            return $order !== null && in_array($order->getStatus(), [
+                OrderStatus::COMPLETED->name,
+                OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+            ], true);
+        });
+
+        $soldCountsByProductPrice = $inventoryBackedAttendees
             ->map(fn (AttendeeDomainObject $attendee) => $attendee->getProductPriceId())
             ->countBy();
 
@@ -86,7 +100,13 @@ class CancelOccurrenceAttendeesService
         // attendees that are already CANCELLED, finds zero "active" rows, and
         // decrements by zero — leaving attendees_registered inflated. Grouped
         // by order to amortise the per-order date lookup and version bumps.
-        $this->decrementStatisticsForCancelledAttendees($eventId, $occurrenceId, $attendees);
+        $statsBackedAttendees = $attendees->filter(function (AttendeeDomainObject $attendee) use ($ordersById) {
+            $order = $ordersById->get($attendee->getOrderId());
+
+            return $order !== null && $order->getStatus() === OrderStatus::COMPLETED->name;
+        });
+
+        $this->decrementStatisticsForCancelledAttendees($eventId, $occurrenceId, $statsBackedAttendees, $ordersById);
 
         foreach ($attendees as $attendee) {
             $this->domainEventDispatcherService->dispatch(new AttendeeEvent(
@@ -95,7 +115,7 @@ class CancelOccurrenceAttendeesService
             ));
         }
 
-        $productIds = $attendees
+        $productIds = $inventoryBackedAttendees
             ->map(fn (AttendeeDomainObject $attendee) => $attendee->getProductId())
             ->unique()
             ->values()
@@ -123,26 +143,20 @@ class CancelOccurrenceAttendeesService
      * raised exception here would roll the cancel transaction back.
      *
      * @param  Collection<int, AttendeeDomainObject>  $attendees
+     * @param  Collection<int, OrderDomainObject>  $ordersById
      */
     private function decrementStatisticsForCancelledAttendees(
         int $eventId,
         int $occurrenceId,
         Collection $attendees,
+        Collection $ordersById,
     ): void {
         $countsByOrderId = $attendees
             ->groupBy(fn (AttendeeDomainObject $attendee) => $attendee->getOrderId())
             ->map->count();
 
-        $orderIds = $countsByOrderId->keys()->all();
-        if (empty($orderIds)) {
-            return;
-        }
-
-        $orders = $this->orderRepository->findWhereIn('id', $orderIds)
-            ->keyBy(fn (OrderDomainObject $order) => $order->getId());
-
         foreach ($countsByOrderId as $orderId => $attendeeCount) {
-            $order = $orders->get((int) $orderId);
+            $order = $ordersById->get((int) $orderId);
             if ($order === null) {
                 continue;
             }

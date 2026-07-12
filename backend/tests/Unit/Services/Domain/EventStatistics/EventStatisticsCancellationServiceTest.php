@@ -8,12 +8,15 @@ use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
 use Illuminate\Database\DatabaseManager;
@@ -41,6 +44,12 @@ class EventStatisticsCancellationServiceTest extends TestCase
 
     private MockInterface|Retrier $retrier;
 
+    private MockInterface|PromoCodeRepositoryInterface $promoCodeRepository;
+
+    private MockInterface|ProductRepositoryInterface $productRepository;
+
+    private MockInterface|AffiliateRepositoryInterface $affiliateRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -56,6 +65,9 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
         $this->retrier = Mockery::mock(Retrier::class);
+        $this->promoCodeRepository = Mockery::mock(PromoCodeRepositoryInterface::class);
+        $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
+        $this->affiliateRepository = Mockery::mock(AffiliateRepositoryInterface::class);
 
         $this->service = new EventStatisticsCancellationService(
             $this->eventStatisticsRepository,
@@ -66,7 +78,10 @@ class EventStatisticsCancellationServiceTest extends TestCase
             $this->orderRepository,
             $this->logger,
             $this->databaseManager,
-            $this->retrier
+            $this->retrier,
+            $this->promoCodeRepository,
+            $this->productRepository,
+            $this->affiliateRepository,
         );
     }
 
@@ -80,10 +95,14 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $ticketOrderItem1 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem1->shouldReceive('getQuantity')->andReturn(2);
         $ticketOrderItem1->shouldReceive('getEventOccurrenceId')->andReturnNull();
+        $ticketOrderItem1->shouldReceive('getProductId')->andReturn(7);
+        $ticketOrderItem1->shouldReceive('getTotalBeforeAdditions')->andReturn(20.0);
 
         $ticketOrderItem2 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem2->shouldReceive('getQuantity')->andReturn(1);
         $ticketOrderItem2->shouldReceive('getEventOccurrenceId')->andReturnNull();
+        $ticketOrderItem2->shouldReceive('getProductId')->andReturn(8);
+        $ticketOrderItem2->shouldReceive('getTotalBeforeAdditions')->andReturn(10.0);
 
         $orderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
         $ticketOrderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
@@ -96,6 +115,18 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $order->shouldReceive('getOrderItems')->andReturn($orderItems);
         $order->shouldReceive('getTicketOrderItems')->andReturn($ticketOrderItems);
         $order->shouldReceive('getStatisticsDecrementedAt')->andReturnNull();
+        $order->shouldReceive('isOrderCompleted')->andReturnTrue();
+        $order->shouldReceive('getPromoCodeId')->andReturn(55);
+        $order->shouldReceive('getAffiliateId')->andReturn(99);
+        $order->shouldReceive('getTotalGross')->andReturn(100.0);
+
+        // Promo usage, per-product sales volume and the affiliate sale are all reversed.
+        $this->promoCodeRepository
+            ->shouldReceive('decrementEach')
+            ->once()
+            ->with(['id' => 55], ['order_usage_count' => 1, 'attendee_usage_count' => 3]);
+        $this->productRepository->shouldReceive('decrement')->twice();
+        $this->affiliateRepository->shouldReceive('decrementSales')->once()->with(99, 100.0);
 
         // Mock order repository to return order with relations
         $this->orderRepository
@@ -217,6 +248,64 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->logger->shouldReceive('info')->atLeast()->once();
 
         // Execute
+        $this->service->decrementForCancelledOrder($order);
+
+        $this->assertTrue(true);
+    }
+
+    public function test_never_completed_order_does_not_reverse_promo_product_or_affiliate_counters(): void
+    {
+        $eventId = 1;
+        $orderId = 456;
+        $orderDate = '2024-01-15 10:30:00';
+
+        $orderItem = Mockery::mock(OrderItemDomainObject::class);
+        $orderItem->shouldReceive('getQuantity')->andReturn(1);
+        $orderItem->shouldReceive('getEventOccurrenceId')->andReturnNull();
+
+        $order = Mockery::mock(OrderDomainObject::class);
+        $order->shouldReceive('getEventId')->andReturn($eventId);
+        $order->shouldReceive('getId')->andReturn($orderId);
+        $order->shouldReceive('getCreatedAt')->andReturn($orderDate);
+        $order->shouldReceive('getOrderItems')->andReturn(new Collection([$orderItem]));
+        $order->shouldReceive('getStatisticsDecrementedAt')->andReturnNull();
+        $order->shouldReceive('isOrderCompleted')->andReturnFalse();
+
+        $this->promoCodeRepository->shouldNotReceive('decrementEach');
+        $this->productRepository->shouldNotReceive('decrement');
+        $this->affiliateRepository->shouldNotReceive('decrementSales');
+
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('findById')->with($orderId)->andReturn($order);
+
+        $eventStatistics = Mockery::mock(EventStatisticDomainObject::class);
+        $eventStatistics->shouldReceive('getId')->andReturn(1);
+        $eventStatistics->shouldReceive('getAttendeesRegistered')->andReturn(10);
+        $eventStatistics->shouldReceive('getProductsSold')->andReturn(15);
+        $eventStatistics->shouldReceive('getOrdersCreated')->andReturn(5);
+        $eventStatistics->shouldReceive('getOrdersCancelled')->andReturn(2);
+        $eventStatistics->shouldReceive('getVersion')->andReturn(5);
+
+        $eventDailyStatistic = Mockery::mock(EventDailyStatisticDomainObject::class);
+        $eventDailyStatistic->shouldReceive('getAttendeesRegistered')->andReturn(8);
+        $eventDailyStatistic->shouldReceive('getProductsSold')->andReturn(12);
+        $eventDailyStatistic->shouldReceive('getOrdersCreated')->andReturn(4);
+        $eventDailyStatistic->shouldReceive('getOrdersCancelled')->andReturn(1);
+        $eventDailyStatistic->shouldReceive('getVersion')->andReturn(3);
+
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection);
+
+        $this->retrier->shouldReceive('retry')->andReturnUsing(fn ($callableAction) => $callableAction(1));
+        $this->databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
+
+        $this->eventStatisticsRepository->shouldReceive('findFirstWhere')->andReturn($eventStatistics);
+        $this->eventStatisticsRepository->shouldReceive('updateWhere')->andReturn(1);
+        $this->eventDailyStatisticRepository->shouldReceive('findFirstWhere')->andReturn($eventDailyStatistic);
+        $this->eventDailyStatisticRepository->shouldReceive('updateWhere')->andReturn(1);
+
+        $this->orderRepository->shouldReceive('updateFromArray')->once();
+        $this->logger->shouldReceive('info')->atLeast()->once();
+
         $this->service->decrementForCancelledOrder($order);
 
         $this->assertTrue(true);

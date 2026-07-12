@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
-use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -19,9 +18,6 @@ class InvoiceCreateService
         private readonly InvoiceRepositoryInterface $invoiceRepository,
     ) {}
 
-    /**
-     * @throws ResourceConflictException
-     */
     public function createInvoiceForOrder(int $orderId): InvoiceDomainObject
     {
         $existingInvoice = $this->invoiceRepository->findFirstWhere([
@@ -29,7 +25,7 @@ class InvoiceCreateService
         ]);
 
         if ($existingInvoice) {
-            throw new ResourceConflictException(__('Invoice already exists'));
+            return $existingInvoice;
         }
 
         $order = $this->orderRepository

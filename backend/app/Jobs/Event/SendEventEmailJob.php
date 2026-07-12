@@ -49,12 +49,20 @@ class SendEventEmailJob implements ShouldQueue
             throw $exception;
         }
 
-        $outgoingMessageRepository->create([
-            OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
-            OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
-            OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::SENT->name,
-            OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
-            OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
-        ]);
+        try {
+            $outgoingMessageRepository->create([
+                OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
+                OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
+                OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::SENT->name,
+                OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
+                OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
+            ]);
+        } catch (Throwable $exception) {
+            logger()?->error('Failed to record sent event email', [
+                'message_id' => $this->messageData->id,
+                'recipient' => $this->email,
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 }

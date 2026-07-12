@@ -17,7 +17,7 @@ import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorR
 import {currenciesMap} from "../../../../../../../data/currencies.ts";
 import {timezones} from "../../../../../../../data/timezones.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {EventCategories} from "../../../../../../constants/eventCategories.ts";
+import {getEventCategories} from "../../../../../../constants/eventCategories.ts";
 
 export const EventDetailsForm = () => {
     const {eventId} = useParams();
@@ -86,7 +86,7 @@ export const EventDetailsForm = () => {
                         {...form.getInputProps('category')}
                         label={t`Category`}
                         placeholder={t`Select a category`}
-                        data={EventCategories.map((category) => ({
+                        data={getEventCategories().map((category) => ({
                             value: category.id,
                             label: `${category.emoji} ${category.name}`,
                         }))}

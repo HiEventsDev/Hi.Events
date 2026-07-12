@@ -61,7 +61,7 @@ class CreateWaitlistEntryService
      */
     private function validateWaitlistEnabled(ProductDomainObject $product): void
     {
-        if ($product->getWaitlistEnabled() === false) {
+        if ($product->getWaitlistEnabled() !== true) {
             throw new ResourceConflictException(__('Waitlist is not enabled for this product'));
         }
     }

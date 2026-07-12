@@ -32,6 +32,7 @@ class UpdateEventLocationHandlerTest extends TestCase
         parent::setUp();
 
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
+        $this->eventRepository->shouldReceive('loadRelation')->zeroOrMoreTimes()->andReturnSelf()->byDefault();
         $this->eventLocationUpserter = Mockery::mock(EventLocationUpserter::class);
         $this->eventLocationCleaner = Mockery::mock(EventLocationCleaner::class);
 

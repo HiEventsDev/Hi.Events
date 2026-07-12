@@ -2,7 +2,10 @@
 
 namespace Tests\Unit\Services\Domain\Payment\Stripe\EventHandlers;
 
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
@@ -10,6 +13,7 @@ use HiEvents\Exceptions\CannotAcceptPaymentException;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
@@ -51,6 +55,8 @@ class PaymentIntentSucceededHandlerTest extends TestCase
 
     private StripePaymentsRepository|MockInterface $stripePaymentsRepository;
 
+    private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
+
     private RefundCallLog $refundLog;
 
     private PaymentIntentSucceededHandler $handler;
@@ -61,6 +67,7 @@ class PaymentIntentSucceededHandlerTest extends TestCase
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->stripePaymentsRepository = Mockery::mock(StripePaymentsRepository::class);
+        $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->refundLog = new RefundCallLog;
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
@@ -68,6 +75,7 @@ class PaymentIntentSucceededHandlerTest extends TestCase
 
         $cache = Mockery::mock(Repository::class);
         $cache->shouldReceive('has')->andReturn(false);
+        $cache->shouldReceive('put')->andReturnTrue();
 
         $this->handler = new PaymentIntentSucceededHandler(
             $this->orderRepository,
@@ -82,6 +90,7 @@ class PaymentIntentSucceededHandlerTest extends TestCase
             Mockery::mock(DomainEventDispatcherService::class),
             Mockery::mock(OrderApplicationFeeService::class),
             Mockery::mock(EventSettingsRepositoryInterface::class),
+            $this->occurrenceRepository,
         );
     }
 
@@ -120,6 +129,43 @@ class PaymentIntentSucceededHandlerTest extends TestCase
         }
 
         $this->assertSame([], $this->refundLog->orderIds, 'An already-paid order must not be refunded on a duplicate webhook');
+    }
+
+    public function test_late_payment_on_a_cancelled_occurrence_is_refunded_and_rejected(): void
+    {
+        $orderItem = (new OrderItemDomainObject)->setEventOccurrenceId(5);
+
+        $order = (new OrderDomainObject)
+            ->setId(1)
+            ->setStatus(OrderStatus::RESERVED->name)
+            ->setPaymentStatus(OrderPaymentStatus::AWAITING_PAYMENT->name);
+        $order->setOrderItems(collect([$orderItem]));
+
+        $stripePayment = (new StripePaymentDomainObject)
+            ->setOrderId(1)
+            ->setPaymentIntentId('pi_test')
+            ->setOrder($order);
+
+        $this->stripePaymentsRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->stripePaymentsRepository->shouldReceive('findFirstWhere')->andReturn($stripePayment);
+
+        $cancelledOccurrence = (new EventOccurrenceDomainObject)->setStatus(EventOccurrenceStatus::CANCELLED->name);
+        $this->occurrenceRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', [5])
+            ->andReturn(collect([$cancelledOccurrence]));
+
+        // The order must not be completed on the reject path.
+        $this->orderRepository->shouldNotReceive('updateFromArray');
+
+        try {
+            $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']));
+            $this->fail('Expected CannotAcceptPaymentException was not thrown');
+        } catch (CannotAcceptPaymentException) {
+            // expected
+        }
+
+        $this->assertSame([1], $this->refundLog->orderIds, 'A late payment on a cancelled occurrence should be refunded exactly once');
     }
 
     private function assertLatePaymentRefundedAndRejected(string $orderStatus): void

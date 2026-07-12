@@ -3,9 +3,12 @@
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\ReactivateOccurrenceHandler;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
@@ -23,6 +26,8 @@ class ReactivateOccurrenceHandlerTest extends TestCase
 
     private DatabaseManager|MockInterface $databaseManager;
 
+    private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
+
     private ReactivateOccurrenceHandler $handler;
 
     protected function setUp(): void
@@ -32,6 +37,7 @@ class ReactivateOccurrenceHandlerTest extends TestCase
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
+        $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
 
         $this->databaseManager->shouldReceive('transaction')
             ->andReturnUsing(fn ($callback) => $callback());
@@ -40,6 +46,7 @@ class ReactivateOccurrenceHandlerTest extends TestCase
             $this->occurrenceRepository,
             $this->exclusionService,
             $this->databaseManager,
+            $this->attendeeRepository,
         );
     }
 
@@ -61,6 +68,15 @@ class ReactivateOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository
             ->shouldReceive('findByIdLocked')->once()->with($occurrenceId)->andReturn($occurrence);
+
+        $this->attendeeRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([
+                AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
+                AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::CANCELLED->name,
+            ])
+            ->andReturn(0);
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -91,6 +107,35 @@ class ReactivateOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository
             ->shouldReceive('findByIdLocked')->once()->andReturn($occurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('updateFromArray');
+        $this->exclusionService->shouldNotReceive('removeExclusion');
+
+        $this->expectException(ValidationException::class);
+
+        $this->handler->handle($eventId, $occurrenceId);
+    }
+
+    public function test_blocks_reactivation_when_occurrence_has_cancelled_attendees(): void
+    {
+        $eventId = 1;
+        $occurrenceId = 10;
+
+        $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+        $occurrence->shouldReceive('getEventId')->andReturn($eventId);
+        $occurrence->shouldReceive('getStatus')->andReturn(EventOccurrenceStatus::CANCELLED->name);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findByIdLocked')->once()->with($occurrenceId)->andReturn($occurrence);
+
+        $this->attendeeRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([
+                AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
+                AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::CANCELLED->name,
+            ])
+            ->andReturn(3);
 
         $this->occurrenceRepository->shouldNotReceive('updateFromArray');
         $this->exclusionService->shouldNotReceive('removeExclusion');

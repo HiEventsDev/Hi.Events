@@ -3,7 +3,9 @@
 namespace HiEvents\Services\Infrastructure\Webhook;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
@@ -44,7 +46,14 @@ class WebhookDispatchService
     public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
     {
         $event = $this->eventRepository
-            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ], name: 'event_location'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ], name: 'event_location'),
+            ]))
             ->findById($eventId);
 
         $this->dispatchWebhook(

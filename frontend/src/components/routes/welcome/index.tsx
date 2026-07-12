@@ -19,7 +19,7 @@ import {IconCalendarRepeat, IconClock, IconMailCheck, IconSparkles} from "@table
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {DateTimePicker} from "@mantine/dates";
 import dayjs from "dayjs";
-import {EventCategories} from "../../../constants/eventCategories.ts";
+import {getEventCategories} from "../../../constants/eventCategories.ts";
 import {Callout} from "../../common/Callout";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
@@ -335,7 +335,7 @@ export const CreateEvent = ({progressInfo}: {
 
                                 {/* Desktop Grid */}
                                 <div className={classes.categoryGrid}>
-                                    {EventCategories.map((category) => (
+                                    {getEventCategories().map((category) => (
                                         <button
                                             key={category.id}
                                             type="button"
@@ -356,7 +356,7 @@ export const CreateEvent = ({progressInfo}: {
                                     <Select
                                         value={selectedCategory}
                                         onChange={(value) => handleCategorySelect(value || '')}
-                                        data={EventCategories.map((category) => ({
+                                        data={getEventCategories().map((category) => ({
                                             value: category.id,
                                             label: `${category.emoji} ${category.name}`,
                                         }))}

@@ -14,7 +14,7 @@ import classes from "./CreateEventModal.module.scss";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import dayjs from "dayjs";
 import {DateTimePicker} from "@mantine/dates";
-import {EventCategories} from "../../../constants/eventCategories.ts";
+import {getEventCategories} from "../../../constants/eventCategories.ts";
 import {Callout} from "../../common/Callout";
 import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
 
@@ -188,7 +188,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 {...form.getInputProps('category')}
                                 label={t`Event Category`}
                                 placeholder={t`Select a category`}
-                                data={EventCategories.map((category) => ({
+                                data={getEventCategories().map((category) => ({
                                     value: category.id,
                                     label: `${category.emoji} ${category.name}`,
                                 }))}

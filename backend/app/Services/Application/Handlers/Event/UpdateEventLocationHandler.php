@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventLocationDTO;
 use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
@@ -67,10 +71,19 @@ class UpdateEventLocationHandler
                 $this->eventLocationCleaner->deleteIfOrphaned($previousEventLocationId);
             }
 
-            return $this->eventRepository->findFirstWhere([
-                'id' => $dto->event_id,
-                'account_id' => $dto->account_id,
-            ]);
+            return $this->eventRepository
+                ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]))
+                ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ]))
+                ->findFirstWhere([
+                    'id' => $dto->event_id,
+                    'account_id' => $dto->account_id,
+                ]);
         });
     }
 }
