@@ -46,6 +46,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?EventLocationDomainObject $eventLocation = null;
 
+    private bool $upcomingOccurrencesSoldOut = false;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -188,6 +190,18 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function getEventOccurrences(): ?Collection
     {
         return $this->eventOccurrences;
+    }
+
+    public function setUpcomingOccurrencesSoldOut(bool $upcomingOccurrencesSoldOut): self
+    {
+        $this->upcomingOccurrencesSoldOut = $upcomingOccurrencesSoldOut;
+
+        return $this;
+    }
+
+    public function getUpcomingOccurrencesSoldOut(): bool
+    {
+        return $this->upcomingOccurrencesSoldOut;
     }
 
     public function getStartDate(): ?string

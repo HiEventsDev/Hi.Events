@@ -122,7 +122,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $this->occurrenceRepository
             ->shouldReceive('findFirstWhere')
-            ->andReturn($this->occurrence(EventOccurrenceStatus::SOLD_OUT->name));
+            ->andReturn($this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 10));
 
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('sold out');
@@ -132,7 +132,6 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_rejects_when_capacity_exceeded(): void
     {
-        // capacity 10, used 4, reserved 3 → available 3; request 5 → reject.
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
         $this->orderItemRepository
@@ -162,8 +161,6 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_override_capacity_bypasses_capacity_check_but_not_cancelled(): void
     {
-        // Override means capacity is ignored, but cancelled still blocks — there's
-        // no point overriding into a cancelled occurrence.
         $occurrence = $this->occurrence(EventOccurrenceStatus::CANCELLED->name, capacity: 1, usedCapacity: 0);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
 
@@ -180,11 +177,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_override_capacity_bypasses_sold_out_status(): void
     {
-        // SOLD_OUT is a capacity-derived status — ProductQuantityUpdateService
-        // flips it once used_capacity hits capacity. The override flag is
-        // specifically for the "full occurrence, organiser still wants to add
-        // someone" case, so it has to bypass SOLD_OUT too.
-        $occurrence = $this->occurrence(EventOccurrenceStatus::SOLD_OUT->name, capacity: 10, usedCapacity: 10);
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 10);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
         $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
 

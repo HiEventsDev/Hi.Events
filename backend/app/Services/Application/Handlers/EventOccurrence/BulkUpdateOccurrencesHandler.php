@@ -231,51 +231,10 @@ class BulkUpdateOccurrencesHandler
             ],
         );
 
-        if ($capacityChanged) {
-            $this->reconcileStatusForUniformCapacity(
-                ids: $ids,
-                newCapacity: $attributes[EventOccurrenceDomainObjectAbstract::CAPACITY],
-            );
-        }
-
         return new BulkUpdateOccurrencesResultDTO(
             updated_count: count($ids),
             updated_ids: $ids,
         );
-    }
-
-    /**
-     * @param  int[]  $ids
-     */
-    private function reconcileStatusForUniformCapacity(array $ids, ?int $newCapacity): void
-    {
-        $reopenWhere = [
-            [EventOccurrenceDomainObjectAbstract::ID, 'in', $ids],
-            [EventOccurrenceDomainObjectAbstract::STATUS, '=', EventOccurrenceStatus::SOLD_OUT->name],
-        ];
-        if ($newCapacity !== null) {
-            $reopenWhere[] = [EventOccurrenceDomainObjectAbstract::USED_CAPACITY, '<', $newCapacity];
-        }
-
-        $this->occurrenceRepository->updateWhere(
-            attributes: [
-                EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::ACTIVE->name,
-            ],
-            where: $reopenWhere,
-        );
-
-        if ($newCapacity !== null) {
-            $this->occurrenceRepository->updateWhere(
-                attributes: [
-                    EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::SOLD_OUT->name,
-                ],
-                where: [
-                    [EventOccurrenceDomainObjectAbstract::ID, 'in', $ids],
-                    [EventOccurrenceDomainObjectAbstract::STATUS, '=', EventOccurrenceStatus::ACTIVE->name],
-                    [EventOccurrenceDomainObjectAbstract::USED_CAPACITY, '>=', $newCapacity],
-                ],
-            );
-        }
     }
 
     private function applyPerRowUpdate(BulkUpdateOccurrencesDTO $dto, Collection $eligible, int $accountId): BulkUpdateOccurrencesResultDTO
@@ -307,17 +266,6 @@ class BulkUpdateOccurrencesHandler
             }
 
             if (! empty($attributes)) {
-                if (array_key_exists(EventOccurrenceDomainObjectAbstract::CAPACITY, $attributes)) {
-                    $reconciled = $this->reconcileCapacityStatus(
-                        currentStatus: $occurrence->getStatus(),
-                        newCapacity: $attributes[EventOccurrenceDomainObjectAbstract::CAPACITY],
-                        usedCapacity: $occurrence->getUsedCapacity() ?? 0,
-                    );
-                    if ($reconciled !== null) {
-                        $attributes[EventOccurrenceDomainObjectAbstract::STATUS] = $reconciled;
-                    }
-                }
-
                 $this->occurrenceRepository->updateWhere(
                     attributes: $attributes,
                     where: [EventOccurrenceDomainObjectAbstract::ID => $occurrence->getId()],
@@ -334,34 +282,6 @@ class BulkUpdateOccurrencesHandler
             updated_count: count($updatedIds),
             updated_ids: $updatedIds,
         );
-    }
-
-    private function reconcileCapacityStatus(
-        string $currentStatus,
-        ?int $newCapacity,
-        int $usedCapacity,
-    ): ?string {
-        if ($currentStatus === EventOccurrenceStatus::CANCELLED->name) {
-            return null;
-        }
-
-        if ($newCapacity === null) {
-            return $currentStatus === EventOccurrenceStatus::SOLD_OUT->name
-                ? EventOccurrenceStatus::ACTIVE->name
-                : null;
-        }
-
-        $shouldBeSoldOut = $usedCapacity >= $newCapacity;
-
-        if ($shouldBeSoldOut && $currentStatus !== EventOccurrenceStatus::SOLD_OUT->name) {
-            return EventOccurrenceStatus::SOLD_OUT->name;
-        }
-
-        if (! $shouldBeSoldOut && $currentStatus === EventOccurrenceStatus::SOLD_OUT->name) {
-            return EventOccurrenceStatus::ACTIVE->name;
-        }
-
-        return null;
     }
 
     private function buildUniformAttributes(BulkUpdateOccurrencesDTO $dto): array

@@ -507,14 +507,14 @@ class DuplicateEventService
 
         $event->getEventOccurrences()
             ?->filter(fn (EventOccurrenceDomainObject $occurrence) => Carbon::parse($occurrence->getStartDate())->utc()->gte($now)
-                && $occurrence->getStatus() !== EventOccurrenceStatus::CANCELLED->name
+                && ! $occurrence->isCancelled()
             )
             ->each(function (EventOccurrenceDomainObject $occurrence) use ($newEventId, &$oldToNewOccurrenceMap) {
                 $newOccurrence = $this->eventOccurrenceRepository->create([
                     'event_id' => $newEventId,
                     'start_date' => $occurrence->getStartDate(),
                     'end_date' => $occurrence->getEndDate(),
-                    'status' => $occurrence->getStatus(),
+                    'status' => EventOccurrenceStatus::ACTIVE->name,
                     'capacity' => $occurrence->getCapacity(),
                     'used_capacity' => 0,
                     'label' => $occurrence->getLabel(),

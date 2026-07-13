@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
-use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Exceptions\OrderHasNoItemsException;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -122,20 +121,6 @@ class ProductQuantityUpdateService
         ], [
             'id' => $occurrenceId,
         ]);
-
-        $occurrence = $this->occurrenceRepository->findById($occurrenceId);
-
-        if (
-            $occurrence->getStatus() === EventOccurrenceStatus::ACTIVE->name
-            && $occurrence->getCapacity() !== null
-            && $occurrence->getUsedCapacity() >= $occurrence->getCapacity()
-        ) {
-            $this->occurrenceRepository->updateWhere([
-                'status' => EventOccurrenceStatus::SOLD_OUT->name,
-            ], [
-                'id' => $occurrenceId,
-            ]);
-        }
     }
 
     private function decreaseOccurrenceUsedCapacity(int $occurrenceId, int $adjustment): void
@@ -145,20 +130,6 @@ class ProductQuantityUpdateService
         ], [
             'id' => $occurrenceId,
         ]);
-
-        $occurrence = $this->occurrenceRepository->findById($occurrenceId);
-
-        if (
-            $occurrence->getStatus() === EventOccurrenceStatus::SOLD_OUT->name
-            && $occurrence->getCapacity() !== null
-            && $occurrence->getUsedCapacity() < $occurrence->getCapacity()
-        ) {
-            $this->occurrenceRepository->updateWhere([
-                'status' => EventOccurrenceStatus::ACTIVE->name,
-            ], [
-                'id' => $occurrenceId,
-            ]);
-        }
     }
 
     /**

@@ -7,7 +7,6 @@ namespace HiEvents\Services\Application\Handlers\EventOccurrence;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
-use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -96,15 +95,6 @@ class UpdateEventOccurrenceHandler
                 EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID => $newEventLocationId,
             ];
 
-            $reconciledStatus = $this->reconcileCapacityStatus(
-                currentStatus: $occurrence->getStatus(),
-                newCapacity: $dto->capacity,
-                usedCapacity: $occurrence->getUsedCapacity() ?? 0,
-            );
-            if ($reconciledStatus !== null) {
-                $attributes[EventOccurrenceDomainObjectAbstract::STATUS] = $reconciledStatus;
-            }
-
             $updated = $this->occurrenceRepository->updateFromArray(
                 id: $occurrence->getId(),
                 attributes: $attributes,
@@ -116,34 +106,6 @@ class UpdateEventOccurrenceHandler
 
             return $updated;
         });
-    }
-
-    private function reconcileCapacityStatus(
-        string $currentStatus,
-        ?int $newCapacity,
-        int $usedCapacity,
-    ): ?string {
-        if ($currentStatus === EventOccurrenceStatus::CANCELLED->name) {
-            return null;
-        }
-
-        if ($newCapacity === null) {
-            return $currentStatus === EventOccurrenceStatus::SOLD_OUT->name
-                ? EventOccurrenceStatus::ACTIVE->name
-                : null;
-        }
-
-        $shouldBeSoldOut = $usedCapacity >= $newCapacity;
-
-        if ($shouldBeSoldOut && $currentStatus !== EventOccurrenceStatus::SOLD_OUT->name) {
-            return EventOccurrenceStatus::SOLD_OUT->name;
-        }
-
-        if (! $shouldBeSoldOut && $currentStatus === EventOccurrenceStatus::SOLD_OUT->name) {
-            return EventOccurrenceStatus::ACTIVE->name;
-        }
-
-        return null;
     }
 
     private function datesDiffer(?string $a, ?string $b): bool

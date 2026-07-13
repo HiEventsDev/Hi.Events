@@ -3,6 +3,7 @@
 namespace Tests\Unit\DomainObjects;
 
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use Tests\TestCase;
 
 class EventOccurrenceDomainObjectTest extends TestCase
@@ -52,5 +53,52 @@ class EventOccurrenceDomainObjectTest extends TestCase
         $occurrence->setUsedCapacity(15);
 
         $this->assertSame(0, $occurrence->getAvailableCapacity());
+    }
+
+    public function test_status_derives_sold_out_when_active_and_full(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+            ->setCapacity(10)
+            ->setUsedCapacity(10);
+
+        $this->assertSame(EventOccurrenceStatus::SOLD_OUT->name, $occurrence->getStatus());
+        $this->assertTrue($occurrence->isSoldOut());
+        $this->assertFalse($occurrence->isActive());
+    }
+
+    public function test_status_stays_active_while_capacity_remains(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+            ->setCapacity(10)
+            ->setUsedCapacity(9);
+
+        $this->assertSame(EventOccurrenceStatus::ACTIVE->name, $occurrence->getStatus());
+        $this->assertFalse($occurrence->isSoldOut());
+        $this->assertTrue($occurrence->isActive());
+    }
+
+    public function test_status_stays_active_when_capacity_unlimited(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+            ->setCapacity(null)
+            ->setUsedCapacity(500);
+
+        $this->assertSame(EventOccurrenceStatus::ACTIVE->name, $occurrence->getStatus());
+        $this->assertFalse($occurrence->isSoldOut());
+    }
+
+    public function test_cancelled_status_is_never_derived_to_sold_out(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStatus(EventOccurrenceStatus::CANCELLED->name)
+            ->setCapacity(10)
+            ->setUsedCapacity(10);
+
+        $this->assertSame(EventOccurrenceStatus::CANCELLED->name, $occurrence->getStatus());
+        $this->assertFalse($occurrence->isSoldOut());
+        $this->assertTrue($occurrence->isCancelled());
     }
 }

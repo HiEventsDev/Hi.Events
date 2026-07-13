@@ -109,6 +109,22 @@ class EventRepositoryTest extends TestCase
         $this->assertNotNull($event->getAccount());
     }
 
+    public function test_get_all_events_for_admin_sorts_by_earliest_occurrence_start_date(): void
+    {
+        $earlyId = $this->createEvent('Sort early '.uniqid());
+        $lateId = $this->createEvent('Sort late '.uniqid());
+        $this->createOccurrence($earlyId, now()->addDays(3), now()->addDays(3)->addHours(2));
+        $this->createOccurrence($lateId, now()->addDays(30), now()->addDays(30)->addHours(2));
+
+        $result = $this->app->make(EventRepository::class)
+            ->getAllEventsForAdmin(perPage: 100, sortBy: 'start_date', sortDirection: 'asc');
+
+        $ids = collect($result->items())->map(fn (EventDomainObject $e) => $e->getId())->all();
+
+        $this->assertLessThan(array_search($lateId, $ids, true), array_search($earlyId, $ids, true));
+        $this->assertLessThan(array_search($this->eventWithoutOccurrencesId, $ids, true), array_search($lateId, $ids, true));
+    }
+
     private function findEventIds(string $eventsStatus): array
     {
         $params = QueryParamsDTO::fromArray([

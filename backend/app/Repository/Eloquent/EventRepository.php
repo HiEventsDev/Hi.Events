@@ -174,11 +174,21 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             });
         }
 
-        $allowedSortColumns = ['title', 'created_at', 'updated_at'];
+        $allowedSortColumns = ['title', 'created_at', 'updated_at', 'start_date', 'end_date'];
         $sortColumn = in_array($sortBy, $allowedSortColumns, true) ? $sortBy : 'created_at';
-        $sortDir = in_array(strtolower($sortDirection), ['asc', 'desc']) ? $sortDirection : 'desc';
+        $sortDir = in_array(strtolower((string) $sortDirection), ['asc', 'desc'], true) ? strtolower($sortDirection) : 'desc';
 
-        $this->model = $this->model->orderBy($sortColumn, $sortDir);
+        if ($sortColumn === 'start_date') {
+            $this->model = $this->model->orderByRaw(
+                "(SELECT MIN(eo.start_date) FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL) {$sortDir} NULLS LAST"
+            );
+        } elseif ($sortColumn === 'end_date') {
+            $this->model = $this->model->orderByRaw(
+                "(SELECT MAX(COALESCE(eo.end_date, eo.start_date)) FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL) {$sortDir} NULLS LAST"
+            );
+        } else {
+            $this->model = $this->model->orderBy($sortColumn, $sortDir);
+        }
 
         $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
         $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));

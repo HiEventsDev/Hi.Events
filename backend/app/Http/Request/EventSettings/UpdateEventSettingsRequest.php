@@ -95,8 +95,9 @@ class UpdateEventSettingsRequest extends BaseRequest
             // Self-service settings
             'allow_attendee_self_edit' => ['boolean'],
 
-            // Occurrence capacity display
+            // Occurrence display
             'show_available_occurrence_capacity' => ['boolean'],
+            'hide_sold_out_occurrences' => ['boolean'],
 
             // Waitlist settings
             'waitlist_auto_process' => ['boolean'],

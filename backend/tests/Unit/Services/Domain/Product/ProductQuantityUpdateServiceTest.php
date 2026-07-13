@@ -274,7 +274,7 @@ class ProductQuantityUpdateServiceTest extends TestCase
         $this->service->updateQuantitiesFromOrder($order);
     }
 
-    public function test_increase_quantity_sold_sets_occurrence_to_sold_out_when_at_capacity(): void
+    public function test_increase_quantity_sold_only_updates_occurrence_used_capacity(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -303,30 +303,12 @@ class ProductQuantityUpdateServiceTest extends TestCase
                 ['id' => $occurrenceId],
             )
             ->once();
-
-        $occurrence = (new EventOccurrenceDomainObject)
-            ->setId($occurrenceId)
-            ->setCapacity(10)
-            ->setUsedCapacity(10)
-            ->setStatus(EventOccurrenceStatus::ACTIVE->name);
-
-        $this->occurrenceRepository
-            ->shouldReceive('findById')
-            ->with($occurrenceId)
-            ->andReturn($occurrence);
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateWhere')
-            ->with(
-                ['status' => EventOccurrenceStatus::SOLD_OUT->name],
-                ['id' => $occurrenceId],
-            )
-            ->once();
+        $this->occurrenceRepository->shouldNotReceive('findById');
 
         $this->service->increaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
-    public function test_increase_quantity_sold_does_not_set_sold_out_when_capacity_is_null(): void
+    public function test_decrease_quantity_sold_only_updates_occurrence_used_capacity(): void
     {
         $priceId = 100;
         $occurrenceId = 5;
@@ -355,166 +337,9 @@ class ProductQuantityUpdateServiceTest extends TestCase
                 ['id' => $occurrenceId],
             )
             ->once();
-
-        $occurrence = (new EventOccurrenceDomainObject)
-            ->setId($occurrenceId)
-            ->setCapacity(null)
-            ->setUsedCapacity(100)
-            ->setStatus(EventOccurrenceStatus::ACTIVE->name);
-
-        $this->occurrenceRepository
-            ->shouldReceive('findById')
-            ->with($occurrenceId)
-            ->andReturn($occurrence);
-
-        $this->service->increaseQuantitySold($priceId, 1, $occurrenceId);
-    }
-
-    public function test_decrease_quantity_sold_resets_occurrence_from_sold_out_to_active(): void
-    {
-        $priceId = 100;
-        $occurrenceId = 5;
-
-        $price = Mockery::mock(ProductPriceDomainObject::class);
-        $price->shouldReceive('getProductId')->andReturn(10);
-
-        $this->productPriceRepository
-            ->shouldReceive('findFirstWhere')
-            ->with(['id' => $priceId])
-            ->andReturn($price);
-
-        $this->productRepository
-            ->shouldReceive('getCapacityAssignmentsByProductId')
-            ->with(10)
-            ->andReturn(collect());
-
-        $this->productPriceRepository
-            ->shouldReceive('updateWhere')
-            ->once();
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateWhere')
-            ->with(
-                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
-                ['id' => $occurrenceId],
-            )
-            ->once();
-
-        $occurrence = (new EventOccurrenceDomainObject)
-            ->setId($occurrenceId)
-            ->setCapacity(10)
-            ->setUsedCapacity(9)
-            ->setStatus(EventOccurrenceStatus::SOLD_OUT->name);
-
-        $this->occurrenceRepository
-            ->shouldReceive('findById')
-            ->with($occurrenceId)
-            ->andReturn($occurrence);
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateWhere')
-            ->with(
-                ['status' => EventOccurrenceStatus::ACTIVE->name],
-                ['id' => $occurrenceId],
-            )
-            ->once();
+        $this->occurrenceRepository->shouldNotReceive('findById');
 
         $this->service->decreaseQuantitySold($priceId, 1, $occurrenceId);
-    }
-
-    public function test_decrease_quantity_sold_does_not_reset_non_sold_out_occurrence(): void
-    {
-        $priceId = 100;
-        $occurrenceId = 5;
-
-        $price = Mockery::mock(ProductPriceDomainObject::class);
-        $price->shouldReceive('getProductId')->andReturn(10);
-
-        $this->productPriceRepository
-            ->shouldReceive('findFirstWhere')
-            ->with(['id' => $priceId])
-            ->andReturn($price);
-
-        $this->productRepository
-            ->shouldReceive('getCapacityAssignmentsByProductId')
-            ->with(10)
-            ->andReturn(collect());
-
-        $this->productPriceRepository
-            ->shouldReceive('updateWhere')
-            ->once();
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateWhere')
-            ->with(
-                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
-                ['id' => $occurrenceId],
-            )
-            ->once();
-
-        $occurrence = (new EventOccurrenceDomainObject)
-            ->setId($occurrenceId)
-            ->setCapacity(10)
-            ->setUsedCapacity(5)
-            ->setStatus(EventOccurrenceStatus::ACTIVE->name);
-
-        $this->occurrenceRepository
-            ->shouldReceive('findById')
-            ->with($occurrenceId)
-            ->andReturn($occurrence);
-
-        $this->service->decreaseQuantitySold($priceId, 1, $occurrenceId);
-    }
-
-    public function test_increase_quantity_sold_does_not_override_cancelled_status(): void
-    {
-        $priceId = 100;
-        $occurrenceId = 5;
-
-        $price = Mockery::mock(ProductPriceDomainObject::class);
-        $price->shouldReceive('getProductId')->andReturn(10);
-
-        $this->productPriceRepository
-            ->shouldReceive('findFirstWhere')
-            ->with(['id' => $priceId])
-            ->andReturn($price);
-
-        $this->productRepository
-            ->shouldReceive('getCapacityAssignmentsByProductId')
-            ->with(10)
-            ->andReturn(collect());
-
-        $this->productPriceRepository
-            ->shouldReceive('updateWhere')
-            ->once();
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateWhere')
-            ->with(
-                Mockery::on(fn ($data) => array_key_exists('used_capacity', $data)),
-                ['id' => $occurrenceId],
-            )
-            ->once();
-
-        $occurrence = (new EventOccurrenceDomainObject)
-            ->setId($occurrenceId)
-            ->setCapacity(10)
-            ->setUsedCapacity(10)
-            ->setStatus(EventOccurrenceStatus::CANCELLED->name);
-
-        $this->occurrenceRepository
-            ->shouldReceive('findById')
-            ->with($occurrenceId)
-            ->andReturn($occurrence);
-
-        $this->occurrenceRepository
-            ->shouldNotReceive('updateWhere')
-            ->with(
-                ['status' => EventOccurrenceStatus::SOLD_OUT->name],
-                ['id' => $occurrenceId],
-            );
-
-        $this->service->increaseQuantitySold($priceId, 1, $occurrenceId);
     }
 
     protected function tearDown(): void

@@ -275,8 +275,9 @@ export interface EventSettings {
     waitlist_auto_process?: boolean;
     waitlist_offer_timeout_minutes?: number | null;
 
-    // Occurrence capacity display
+    // Occurrence display
     show_available_occurrence_capacity?: boolean;
+    hide_sold_out_occurrences?: boolean;
 }
 
 export interface VenueAddress {
@@ -534,6 +535,7 @@ export interface Event extends EventBase {
     statistics?: EventStatistics;
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
+    upcoming_occurrences_sold_out?: boolean;
 }
 
 export interface EventStatistics {

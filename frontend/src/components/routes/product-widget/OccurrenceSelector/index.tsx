@@ -81,6 +81,14 @@ const getActiveOccurrences = (occurrences: EventOccurrence[]): EventOccurrence[]
         occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
     );
 
+const capacityInfo = (occ: EventOccurrence): {label: string; low: boolean} | null => {
+    if (!isBookable(occ)) return null;
+    const capacity = occ.available_capacity;
+    if (capacity === null || capacity === undefined || capacity <= 0) return null;
+    const low = capacity <= LOW_AVAILABILITY_THRESHOLD;
+    return {label: low ? t`Only ${capacity} left` : t`${capacity} spots left`, low};
+};
+
 const SlotRow = ({
     occ,
     tz,
@@ -102,14 +110,9 @@ const SlotRow = ({
     const endTime = occ.end_date ? formatDateWithLocale(occ.end_date, 'timeOnly', tz, locale) : null;
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
 
-    const capacity = occ.available_capacity;
-    const hasCount = selectable && capacity !== null && capacity !== undefined && capacity > 0;
-    const low = hasCount && (capacity as number) <= LOW_AVAILABILITY_THRESHOLD;
-    const spotsLabel = hasCount
-        ? (low ? t`Only ${capacity} left` : t`${capacity} spots left`)
-        : null;
+    const spots = capacityInfo(occ);
 
-    const statusLabel = cancelled ? t`Cancelled` : soldOut ? t`Sold Out` : spotsLabel;
+    const statusLabel = cancelled ? t`Cancelled` : soldOut ? t`Sold Out` : spots?.label ?? null;
     const ariaLabel = [
         timeLabel,
         occ.label,
@@ -143,9 +146,9 @@ const SlotRow = ({
                 {soldOut && (
                     <span className="hi-time-slot-sold-out">{t`Sold Out`}</span>
                 )}
-                {hasCount && (
-                    <span className={`hi-time-slot-spots${low ? ' hi-time-slot-spots-low' : ''}`}>
-                        {spotsLabel}
+                {spots && (
+                    <span className={`hi-time-slot-spots${spots.low ? ' hi-time-slot-spots-low' : ''}`}>
+                        {spots.label}
                     </span>
                 )}
             </div>
@@ -227,7 +230,9 @@ const ProductsPane = ({
     isLoading?: boolean;
     children?: ReactNode;
 }) => {
-    const bookableSlots = daySlots.filter(isBookable);
+    const switcherSlots = daySlots.filter(
+        occ => isBookable(occ) || occ.status === EventOccurrenceStatus.SOLD_OUT
+    );
     const dayName = formatDateWithLocale(selectedOccurrence.start_date, 'dayName', tz, locale);
     const monthShort = formatDateWithLocale(selectedOccurrence.start_date, 'monthShort', tz, locale);
     const dayOfMonth = formatDateWithLocale(selectedOccurrence.start_date, 'dayOfMonth', tz, locale);
@@ -236,6 +241,7 @@ const ProductsPane = ({
         ? formatDateWithLocale(selectedOccurrence.end_date, 'timeOnly', tz, locale)
         : null;
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
+    const spots = capacityInfo(selectedOccurrence);
 
     return (
         <div className="hi-products-pane">
@@ -252,22 +258,34 @@ const ProductsPane = ({
                         {selectedOccurrence.label && (
                             <span className="hi-time-slot-label">{selectedOccurrence.label}</span>
                         )}
+                        {spots && (
+                            <span className={`hi-slot-header-spots${spots.low ? ' hi-slot-header-spots-low' : ''}`}>
+                                {spots.label}
+                            </span>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {bookableSlots.length > 1 && (
+            {switcherSlots.length > 1 && (
                 <div className="hi-time-switcher" role="group" aria-label={t`Change time`}>
-                    {bookableSlots.map(occ => {
+                    {switcherSlots.map(occ => {
                         const isSelected = sameId(occ.id, selectedOccurrence.id);
+                        const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
+                        const chipTime = formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale);
                         return (
                             <UnstyledButton
                                 key={occ.id}
-                                className={`hi-time-chip${isSelected ? ' hi-time-chip-active' : ''}`}
-                                aria-pressed={isSelected}
+                                className={`hi-time-chip${isSelected ? ' hi-time-chip-active' : ''}${soldOut ? ' hi-time-chip-sold-out' : ''}`}
+                                disabled={soldOut}
+                                aria-pressed={soldOut ? undefined : isSelected}
+                                aria-label={soldOut ? t`${chipTime}, Sold Out` : undefined}
                                 onClick={() => occ.id && onSelect(occ.id)}
                             >
-                                {formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale)}
+                                {chipTime}
+                                {soldOut && (
+                                    <span className="hi-time-chip-sold-out-label">{t`Sold Out`}</span>
+                                )}
                             </UnstyledButton>
                         );
                     })}

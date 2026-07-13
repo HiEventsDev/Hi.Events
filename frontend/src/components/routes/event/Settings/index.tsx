@@ -19,6 +19,7 @@ import {
     IconListCheck,
     IconMapPin,
     IconPercentage,
+    IconRepeat,
 } from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useEffect, useMemo, useState} from "react";
@@ -26,6 +27,7 @@ import {Card} from "../../../common/Card";
 import {PaymentAndInvoicingSettings} from "./Sections/PaymentSettings";
 import {PlatformFeesSettings} from "./Sections/PlatformFeesSettings";
 import {WaitlistSettings} from "./Sections/WaitlistSettings";
+import {RecurringEventSettings} from "./Sections/RecurringEventSettings";
 import {DangerZoneSettings} from "./Sections/DangerZoneSettings";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
@@ -59,6 +61,12 @@ export const Settings = () => {
                 icon: IconHome,
                 component: HomepageAndCheckoutSettings
             },
+            ...(isRecurring ? [{
+                id: 'recurring-event-settings',
+                label: t`Recurring Event`,
+                icon: IconRepeat,
+                component: RecurringEventSettings,
+            }] : []),
             {
                 id: 'seo-settings',
                 label: t`SEO`,

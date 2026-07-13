@@ -84,8 +84,9 @@ class EventSettingsResourcePublic extends JsonResource
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
 
-            // Occurrence capacity display
+            // Occurrence display
             'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),
+            'hide_sold_out_occurrences' => $this->getHideSoldOutOccurrences(),
 
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),

@@ -121,7 +121,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->expectExceptionMessage('sold out');
 
         $occurrence = $this->createOccurrence(
-            status: EventOccurrenceStatus::SOLD_OUT->name,
+            capacity: 10,
+            usedCapacity: 10,
         );
 
         $this->setupOccurrenceLookup(1, 10, $occurrence);

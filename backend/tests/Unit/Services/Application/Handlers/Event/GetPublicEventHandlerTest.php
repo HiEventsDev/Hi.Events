@@ -2,9 +2,11 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Event;
 
+use Closure;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
@@ -180,10 +182,6 @@ class GetPublicEventHandlerTest extends TestCase
 
     public function test_handle_keeps_requested_occurrence_outside_public_cap(): void
     {
-        // The production query loads MAX_PUBLIC_OCCURRENCES + 1 (= 201) rows so
-        // the handler can detect overflow without paginating the whole
-        // recurrence series. A direct link to occurrence 5000 must therefore
-        // be resolved via findFirstWhere() and stitched back into the payload.
         $linkedOccurrenceId = 5000;
         $data = new GetPublicEventDTO(
             eventId: 1,
@@ -203,9 +201,6 @@ class GetPublicEventHandlerTest extends TestCase
         $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
-        // findWhere has signature ($where, $columns, $orderAndDirections, $limit)
-        // — production passes the limit by name, but Mockery sees them as
-        // positional, so we need to assert against arg index 3.
         $this->occurrenceRepository
             ->shouldReceive('findWhere')
             ->once()
@@ -246,8 +241,168 @@ class GetPublicEventHandlerTest extends TestCase
                 fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getId() === $linkedOccurrenceId
             )
         );
-        // 200 capped + 1 linked appended = MAX_PUBLIC_OCCURRENCES + 1.
         $this->assertCount(GetPublicEventHandler::MAX_PUBLIC_OCCURRENCES + 1, $result->getEventOccurrences());
+    }
+
+    public function test_handle_excludes_sold_out_occurrences_when_recurring_event_hides_them(): void
+    {
+        $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: true, ipAddress: '127.0.0.1', promoCode: null);
+        $event = (new EventDomainObject)
+            ->setType(EventType::RECURRING->name)
+            ->setEventSettings((new EventSettingDomainObject)->setHideSoldOutOccurrences(true))
+            ->setProductCategories(collect());
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with(
+                m::on(static fn (array $where): bool => collect($where)->contains(
+                    static fn ($condition): bool => $condition instanceof Closure
+                )),
+                m::any(),
+                m::any(),
+                m::any(),
+            )
+            ->andReturn(collect());
+        $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
+        $this->eventPageViewIncrementService->shouldNotReceive('increment');
+
+        $result = $this->handler->handle($data);
+
+        $this->assertFalse($result->getUpcomingOccurrencesSoldOut());
+    }
+
+    public function test_handle_keeps_sold_out_occurrences_when_hiding_disabled(): void
+    {
+        $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: true, ipAddress: '127.0.0.1', promoCode: null);
+        $event = (new EventDomainObject)
+            ->setType(EventType::RECURRING->name)
+            ->setEventSettings((new EventSettingDomainObject)->setHideSoldOutOccurrences(false))
+            ->setProductCategories(collect());
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with(
+                m::on(static fn (array $where): bool => ! collect($where)->contains(
+                    static fn ($condition): bool => $condition instanceof Closure
+                )),
+                m::any(),
+                m::any(),
+                m::any(),
+            )
+            ->andReturn(collect());
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
+        $this->eventPageViewIncrementService->shouldNotReceive('increment');
+
+        $result = $this->handler->handle($data);
+
+        $this->assertFalse($result->getUpcomingOccurrencesSoldOut());
+    }
+
+    public function test_handle_ignores_requested_sold_out_occurrence_when_hidden(): void
+    {
+        $data = new GetPublicEventDTO(
+            eventId: 1,
+            isAuthenticated: true,
+            ipAddress: '127.0.0.1',
+            promoCode: null,
+            eventOccurrenceId: 50,
+        );
+        $event = (new EventDomainObject)
+            ->setType(EventType::RECURRING->name)
+            ->setEventSettings((new EventSettingDomainObject)->setHideSoldOutOccurrences(true))
+            ->setProductCategories(collect());
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
+        $this->occurrenceRepository->shouldReceive('findWhere')->once()->andReturn(collect());
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(m::on(static fn (array $where): bool => ($where[EventOccurrenceDomainObjectAbstract::ID] ?? null) === 50
+                && ($where[EventOccurrenceDomainObjectAbstract::EVENT_ID] ?? null) === 1
+                && collect($where)->contains(static fn ($condition): bool => $condition instanceof Closure)))
+            ->andReturnNull();
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(m::on(static fn (array $where): bool => ! array_key_exists(EventOccurrenceDomainObjectAbstract::ID, $where)
+                && collect($where)->contains(static fn ($condition): bool => $condition instanceof Closure)))
+            ->andReturn(
+                $this->makeOccurrence(50, '2027-01-01 10:00:00')->setCapacity(10)->setUsedCapacity(10)
+            );
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+
+        $capturedOccurrenceId = 'not-called';
+        $this->ticketFilterService
+            ->shouldReceive('filter')
+            ->once()
+            ->andReturnUsing(function (
+                Collection $productsCategories,
+                ?PromoCodeDomainObject $promoCode = null,
+                bool $hideSoldOutProducts = true,
+                ?int $eventOccurrenceId = null,
+            ) use (&$capturedOccurrenceId) {
+                $capturedOccurrenceId = $eventOccurrenceId;
+
+                return collect();
+            });
+        $this->eventPageViewIncrementService->shouldNotReceive('increment');
+
+        $result = $this->handler->handle($data);
+
+        $this->assertNull($capturedOccurrenceId);
+        $this->assertTrue($result->getUpcomingOccurrencesSoldOut());
+    }
+
+    public function test_handle_flags_upcoming_occurrences_sold_out_when_all_hidden(): void
+    {
+        $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: true, ipAddress: '127.0.0.1', promoCode: null);
+        $event = (new EventDomainObject)
+            ->setType(EventType::RECURRING->name)
+            ->setEventSettings((new EventSettingDomainObject)->setHideSoldOutOccurrences(true))
+            ->setProductCategories(collect());
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
+        $this->occurrenceRepository->shouldReceive('findWhere')->once()->andReturn(collect());
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(m::on(static fn (array $where): bool => ($where[EventOccurrenceDomainObjectAbstract::EVENT_ID] ?? null) === 1
+                && collect($where)->contains(
+                    static fn ($condition): bool => is_array($condition)
+                        && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::STATUS
+                        && ($condition[2] ?? null) === EventOccurrenceStatus::CANCELLED->name
+                )
+                && collect($where)->contains(
+                    static fn ($condition): bool => is_array($condition)
+                        && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::START_DATE
+                        && ($condition[1] ?? null) === '>='
+                )
+                && collect($where)->contains(static fn ($condition): bool => $condition instanceof Closure)))
+            ->andReturn(
+                $this->makeOccurrence(7, '2027-01-01 10:00:00')->setCapacity(10)->setUsedCapacity(10)
+            );
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
+        $this->eventPageViewIncrementService->shouldNotReceive('increment');
+
+        $result = $this->handler->handle($data);
+
+        $this->assertTrue($result->getUpcomingOccurrencesSoldOut());
     }
 
     private function setupEventRepositoryMock($event, $eventId): void

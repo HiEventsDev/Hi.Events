@@ -125,8 +125,9 @@ class PartialUpdateEventSettingsHandler
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
 
-                // Occurrence capacity display
+                // Occurrence display
                 'show_available_occurrence_capacity' => $eventSettingsDTO->settings['show_available_occurrence_capacity'] ?? $existingSettings->getShowAvailableOccurrenceCapacity(),
+                'hide_sold_out_occurrences' => $eventSettingsDTO->settings['hide_sold_out_occurrences'] ?? $existingSettings->getHideSoldOutOccurrences(),
 
                 // Waitlist settings
                 'waitlist_auto_process' => $eventSettingsDTO->settings['waitlist_auto_process'] ?? $existingSettings->getWaitlistAutoProcess(),

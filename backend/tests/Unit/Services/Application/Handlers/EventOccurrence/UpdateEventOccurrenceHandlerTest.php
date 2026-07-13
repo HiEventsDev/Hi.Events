@@ -268,11 +268,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_handle_does_not_write_status_when_capacity_unchanged_and_status_already_correct(): void
     {
-        // CANCELLED is owned by the dedicated cancel/reactivate handlers.
-        // For capacity-derived states (ACTIVE / SOLD_OUT) the handler only
-        // writes STATUS when the new ceiling actually changes which side of
-        // capacity the occurrence sits on. A label-only edit on an ACTIVE
-        // occurrence with no capacity change must leave STATUS untouched.
         $occurrenceId = 10;
         $eventId = 1;
 
@@ -306,77 +301,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    public function test_handle_reactivates_sold_out_occurrence_when_capacity_increases_above_used(): void
-    {
-        $occurrenceId = 10;
-        $eventId = 1;
-
-        $existing = $this->existingOccurrence(
-            id: $occurrenceId,
-            capacity: 50,
-            status: EventOccurrenceStatus::SOLD_OUT->name,
-            usedCapacity: 50,
-        );
-
-        $dto = new UpsertEventOccurrenceDTO(
-            event_id: $eventId,
-            start_date: '2026-06-01 10:00:00',
-            end_date: '2026-06-01 18:00:00',
-            capacity: 100, // raised — sold-out should clear
-        );
-
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateFromArray')
-            ->once()
-            ->with(
-                $occurrenceId,
-                Mockery::on(fn (array $attrs) => ($attrs[EventOccurrenceDomainObjectAbstract::STATUS] ?? null) === EventOccurrenceStatus::ACTIVE->name
-                    && $attrs[EventOccurrenceDomainObjectAbstract::CAPACITY] === 100),
-            )
-            ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
-
-        $result = $this->handler->handle($occurrenceId, $dto);
-        $this->assertNotNull($result);
-    }
-
-    public function test_handle_reactivates_sold_out_occurrence_when_capacity_cleared_to_unlimited(): void
-    {
-        $occurrenceId = 10;
-        $eventId = 1;
-
-        $existing = $this->existingOccurrence(
-            id: $occurrenceId,
-            capacity: 50,
-            status: EventOccurrenceStatus::SOLD_OUT->name,
-            usedCapacity: 50,
-        );
-
-        $dto = new UpsertEventOccurrenceDTO(
-            event_id: $eventId,
-            start_date: '2026-06-01 10:00:00',
-            end_date: '2026-06-01 18:00:00',
-            capacity: null,
-        );
-
-        $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
-
-        $this->occurrenceRepository
-            ->shouldReceive('updateFromArray')
-            ->once()
-            ->with(
-                $occurrenceId,
-                Mockery::on(fn (array $attrs) => ($attrs[EventOccurrenceDomainObjectAbstract::STATUS] ?? null) === EventOccurrenceStatus::ACTIVE->name
-                    && $attrs[EventOccurrenceDomainObjectAbstract::CAPACITY] === null),
-            )
-            ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
-
-        $result = $this->handler->handle($occurrenceId, $dto);
-        $this->assertNotNull($result);
-    }
-
-    public function test_handle_marks_active_occurrence_sold_out_when_capacity_drops_below_used(): void
+    public function test_handle_never_writes_status_when_capacity_crosses_used(): void
     {
         $occurrenceId = 10;
         $eventId = 1;
@@ -392,7 +317,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             event_id: $eventId,
             start_date: '2026-06-01 10:00:00',
             end_date: '2026-06-01 18:00:00',
-            capacity: 50, // below current usage
+            capacity: 50,
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
@@ -402,7 +327,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             ->once()
             ->with(
                 $occurrenceId,
-                Mockery::on(fn (array $attrs) => ($attrs[EventOccurrenceDomainObjectAbstract::STATUS] ?? null) === EventOccurrenceStatus::SOLD_OUT->name
+                Mockery::on(fn (array $attrs) => ! array_key_exists(EventOccurrenceDomainObjectAbstract::STATUS, $attrs)
                     && $attrs[EventOccurrenceDomainObjectAbstract::CAPACITY] === 50),
             )
             ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
@@ -413,10 +338,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_handle_does_not_write_status_for_cancelled_occurrence_even_when_capacity_changes(): void
     {
-        // CANCELLED is the load-bearing exception — its lifecycle is owned by
-        // the cancel/reactivate handlers. A capacity edit on a cancelled date
-        // (rare, but possible via direct API call) must not silently flip it
-        // back to ACTIVE.
         $occurrenceId = 10;
         $eventId = 1;
 

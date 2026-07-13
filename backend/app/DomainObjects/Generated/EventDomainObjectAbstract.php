@@ -16,6 +16,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const ORGANIZER_ID = 'organizer_id';
     final public const EVENT_LOCATION_ID = 'event_location_id';
     final public const TITLE = 'title';
+    final public const START_DATE = 'start_date';
+    final public const END_DATE = 'end_date';
     final public const DESCRIPTION = 'description';
     final public const STATUS = 'status';
     final public const LOCATION_DETAILS = 'location_details';
@@ -38,6 +40,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?int $organizer_id = null;
     protected ?int $event_location_id = null;
     protected string $title;
+    protected ?string $start_date = null;
+    protected ?string $end_date = null;
     protected ?string $description = null;
     protected ?string $status = null;
     protected array|string|null $location_details = null;
@@ -63,6 +67,8 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'organizer_id' => $this->organizer_id ?? null,
                     'event_location_id' => $this->event_location_id ?? null,
                     'title' => $this->title ?? null,
+                    'start_date' => $this->start_date ?? null,
+                    'end_date' => $this->end_date ?? null,
                     'description' => $this->description ?? null,
                     'status' => $this->status ?? null,
                     'location_details' => $this->location_details ?? null,
@@ -145,6 +151,28 @@ abstract class EventDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setStartDate(?string $start_date): self
+    {
+        $this->start_date = $start_date;
+        return $this;
+    }
+
+    public function getStartDate(): ?string
+    {
+        return $this->start_date;
+    }
+
+    public function setEndDate(?string $end_date): self
+    {
+        $this->end_date = $end_date;
+        return $this;
+    }
+
+    public function getEndDate(): ?string
+    {
+        return $this->end_date;
     }
 
     public function setDescription(?string $description): self

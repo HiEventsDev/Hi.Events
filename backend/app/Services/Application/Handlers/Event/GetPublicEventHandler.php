@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use Closure;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
@@ -67,6 +68,9 @@ class GetPublicEventHandler
             ], name: 'organizer'))
             ->findById($data->eventId);
 
+        $hideSoldOutOccurrences = $event->getType() === EventType::RECURRING->name
+            && ($event->getEventSettings()?->getHideSoldOutOccurrences() ?? false);
+
         $occurrenceWhere = [
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
             [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
@@ -76,8 +80,10 @@ class GetPublicEventHandler
             $occurrenceWhere[] = [EventOccurrenceDomainObjectAbstract::START_DATE, '>=', now()->toDateTimeString()];
         }
 
-        // +1 lets us detect overflow without loading the entire occurrence table for
-        // long-running recurring events (e.g. daily over multiple years).
+        if ($hideSoldOutOccurrences) {
+            $occurrenceWhere[] = self::hasRemainingCapacity();
+        }
+
         $occurrences = $this->occurrenceRepository
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
                 new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
@@ -90,34 +96,28 @@ class GetPublicEventHandler
                 limit: self::MAX_PUBLIC_OCCURRENCES + 1,
             );
 
-        // Resolve once: only honour the requested occurrence id if it actually
-        // belongs to this event. The caller can supply any id, and downstream
-        // ProductFilterService applies visibility/capacity rules for whichever
-        // id we pass — so a cross-event id would otherwise leak another event's
-        // visibility-altered product payload through this event's response.
         $verifiedOccurrence = null;
         if ($data->eventOccurrenceId !== null) {
             $verifiedOccurrence = $occurrences->first(
                 fn (EventOccurrenceDomainObject $o) => $o->getId() === $data->eventOccurrenceId
             );
             if ($verifiedOccurrence === null) {
+                $fallbackWhere = [
+                    EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
+                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
+                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+                ];
+
+                if ($hideSoldOutOccurrences) {
+                    $fallbackWhere[] = self::hasRemainingCapacity();
+                }
+
                 $verifiedOccurrence = $this->occurrenceRepository
                     ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
                         new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
                     ]))
-                    ->findFirstWhere([
-                        EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
-                        EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
-                        [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-                    ]);
+                    ->findFirstWhere($fallbackWhere);
             }
-            // The fallback above only filters out CANCELLED — drop past dates
-            // here too. Without this, a stale share/email link to a past date
-            // resolves successfully, drives `productFilterService->filter` for
-            // that occurrence, and then the storefront date picker (which hides
-            // past dates) leaves the user with occurrence-filtered products and
-            // no selectable date. Treat past-link as "no occurrence verified"
-            // and let the payload fall back to the event-wide product set.
             if ($verifiedOccurrence !== null && $verifiedOccurrence->isPast()) {
                 $verifiedOccurrence = null;
             }
@@ -129,16 +129,29 @@ class GetPublicEventHandler
             $occurrences = $occurrences->take(self::MAX_PUBLIC_OCCURRENCES)->values();
         }
 
-        // Append the verified occurrence when it isn't already in the public
-        // payload — covers two cases: (1) the linked occurrence was beyond the
-        // capped range for a long-running schedule, and (2) the requested id
-        // matched but only via the fallback ownership query (safety net).
         if ($verifiedOccurrence !== null
             && ! $occurrences->contains(fn (EventOccurrenceDomainObject $o) => $o->getId() === $verifiedOccurrenceId)) {
             $occurrences->push($verifiedOccurrence);
         }
 
         $event->setEventOccurrences($occurrences);
+
+        if ($hideSoldOutOccurrences && $occurrences->isEmpty()) {
+            $event->setUpcomingOccurrencesSoldOut(
+                $this->occurrenceRepository->findFirstWhere([
+                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
+                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+                    [EventOccurrenceDomainObjectAbstract::START_DATE, '>=', now()->toDateTimeString()],
+                    static function ($query): void {
+                        $query->whereColumn(
+                            EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
+                            '>=',
+                            EventOccurrenceDomainObjectAbstract::CAPACITY,
+                        );
+                    },
+                ]) !== null
+            );
+        }
 
         $promoCodeDomainObject = $this->promoCodeRepository->findFirstWhere([
             PromoCodeDomainObjectAbstract::EVENT_ID => $data->eventId,
@@ -158,5 +171,17 @@ class GetPublicEventHandler
             promoCode: $promoCodeDomainObject,
             eventOccurrenceId: $verifiedOccurrenceId,
         ));
+    }
+
+    private static function hasRemainingCapacity(): Closure
+    {
+        return static function ($query): void {
+            $query->whereNull(EventOccurrenceDomainObjectAbstract::CAPACITY)
+                ->orWhereColumn(
+                    EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
+                    '<',
+                    EventOccurrenceDomainObjectAbstract::CAPACITY,
+                );
+        };
     }
 }

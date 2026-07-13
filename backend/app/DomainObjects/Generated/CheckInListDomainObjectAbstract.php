@@ -37,9 +37,9 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected ?string $deleted_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
-    protected bool $public_show_attendee_notes = true;
-    protected bool $public_show_question_answers = true;
-    protected bool $public_show_order_details = true;
+    protected bool $public_show_attendee_notes = false;
+    protected bool $public_show_question_answers = false;
+    protected bool $public_show_order_details = false;
     protected bool $is_system_default = false;
 
     public function toArray(): array

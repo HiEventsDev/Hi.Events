@@ -25,8 +25,6 @@ class EventResourcePublic extends BaseResource
         mixed $resource,
         mixed $includePostCheckoutData = false,
     ) {
-        // Laravel passes a numeric collection key as the second arg during
-        // collection iteration; coerce to false unless the caller passed a bool.
         $this->includePostCheckoutData = is_bool($includePostCheckoutData)
             ? $includePostCheckoutData
             : false;
@@ -47,6 +45,7 @@ class EventResourcePublic extends BaseResource
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
             'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
+            'upcoming_occurrences_sold_out' => $this->getUpcomingOccurrencesSoldOut(),
             'type' => $this->getType(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
@@ -86,8 +85,6 @@ class EventResourcePublic extends BaseResource
             ),
             'occurrences' => $this->when(
                 condition: ! is_null($this->getEventOccurrences()) && $this->getEventOccurrences()->isNotEmpty(),
-                // Cap is enforced by GetPublicEventHandler; do not re-cap here
-                // or shared/checkout links past the cap silently drop out.
                 value: function () use ($isRecurring) {
                     $showCapacity = $this->getEventSettings()?->getShowAvailableOccurrenceCapacity() ?? false;
 

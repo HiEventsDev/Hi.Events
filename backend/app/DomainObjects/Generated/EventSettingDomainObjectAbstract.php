@@ -68,6 +68,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const WAITLIST_OFFER_TIMEOUT_MINUTES = 'waitlist_offer_timeout_minutes';
     final public const ALLOW_COPY_DETAILS_TO_ALL_ATTENDEES = 'allow_copy_details_to_all_attendees';
     final public const SHOW_AVAILABLE_OCCURRENCE_CAPACITY = 'show_available_occurrence_capacity';
+    final public const HIDE_SOLD_OUT_OCCURRENCES = 'hide_sold_out_occurrences';
 
     protected int $id;
     protected int $event_id;
@@ -127,6 +128,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?int $waitlist_offer_timeout_minutes = null;
     protected bool $allow_copy_details_to_all_attendees = true;
     protected bool $show_available_occurrence_capacity = false;
+    protected bool $hide_sold_out_occurrences = false;
 
     public function toArray(): array
     {
@@ -189,6 +191,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'waitlist_offer_timeout_minutes' => $this->waitlist_offer_timeout_minutes ?? null,
                     'allow_copy_details_to_all_attendees' => $this->allow_copy_details_to_all_attendees ?? null,
                     'show_available_occurrence_capacity' => $this->show_available_occurrence_capacity ?? null,
+                    'hide_sold_out_occurrences' => $this->hide_sold_out_occurrences ?? null,
                 ];
     }
 
@@ -829,5 +832,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getShowAvailableOccurrenceCapacity(): bool
     {
         return $this->show_available_occurrence_capacity;
+    }
+
+    public function setHideSoldOutOccurrences(bool $hide_sold_out_occurrences): self
+    {
+        $this->hide_sold_out_occurrences = $hide_sold_out_occurrences;
+        return $this;
+    }
+
+    public function getHideSoldOutOccurrences(): bool
+    {
+        return $this->hide_sold_out_occurrences;
     }
 }

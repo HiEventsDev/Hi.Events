@@ -466,7 +466,9 @@ const SelectProducts = (props: SelectProductsProps) => {
             return t`Ticket sales have ended for this event`;
         }
         if (isRecurring && activeOccurrences.length === 0) {
-            return t`There are no upcoming dates for this event`;
+            return event?.upcoming_occurrences_sold_out
+                ? t`This event is sold out`
+                : t`There are no upcoming dates for this event`;
         }
         if (!productAreAvailable) {
             return t`There are no products available for this event`;

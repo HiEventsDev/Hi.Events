@@ -128,6 +128,15 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
         return $this->eventOccurrenceStatistics;
     }
 
+    public function getStatus(): string
+    {
+        if ($this->isSoldOut()) {
+            return EventOccurrenceStatus::SOLD_OUT->name;
+        }
+
+        return parent::getStatus();
+    }
+
     public function isActive(): bool
     {
         return $this->getStatus() === EventOccurrenceStatus::ACTIVE->name;
@@ -135,12 +144,14 @@ class EventOccurrenceDomainObject extends EventOccurrenceDomainObjectAbstract im
 
     public function isCancelled(): bool
     {
-        return $this->getStatus() === EventOccurrenceStatus::CANCELLED->name;
+        return parent::getStatus() === EventOccurrenceStatus::CANCELLED->name;
     }
 
     public function isSoldOut(): bool
     {
-        return $this->getStatus() === EventOccurrenceStatus::SOLD_OUT->name;
+        return parent::getStatus() === EventOccurrenceStatus::ACTIVE->name
+            && $this->getCapacity() !== null
+            && $this->getUsedCapacity() >= $this->getCapacity();
     }
 
     public function isPast(): bool

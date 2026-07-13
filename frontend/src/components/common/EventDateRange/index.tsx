@@ -59,6 +59,10 @@ export const EventDateRange = ({event, occurrence}: EventDateRangeProps) => {
             );
         }
 
+        if (event.upcoming_occurrences_sold_out) {
+            return <span>{t`Sold out`}</span>;
+        }
+
         return <span>{t`No upcoming dates`}</span>;
     }
 

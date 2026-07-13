@@ -295,6 +295,39 @@
     border-color: var(--widget-primary-color, #228be6);
     color: var(--widget-secondary-text-color, #fff);
   }
+
+  &.hi-time-chip-sold-out {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--widget-primary-color, #888) 28%, transparent);
+      background: transparent;
+    }
+  }
+}
+
+.hi-time-chip-sold-out-label {
+  margin-left: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #e03131;
+}
+
+.hi-slot-header-spots {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--widget-primary-text-color, #666) 10%, transparent);
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 80%, transparent);
+
+  &.hi-slot-header-spots-low {
+    background: color-mix(in srgb, #e03131 12%, transparent);
+    color: #e03131;
+  }
 }
 
 .hi-products-slot {
