@@ -60,7 +60,7 @@ msgstr "{0} <0>sikeresen kijelentkezett</0>"
 msgid "{0} Active Webhooks"
 msgstr "{0} aktív webhook"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:546
+#: src/components/routes/product-widget/SelectProducts/index.tsx:547
 msgid "{0} available"
 msgstr "{0} elérhető"
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "{availableCount} of {totalCount} available"
 msgstr "{availableCount} / {totalCount} elérhető"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:89
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:90
 msgid "{capacity} spots left"
 msgstr "{capacity} hely maradt"
 
@@ -121,9 +121,13 @@ msgstr "{capacity} hely maradt"
 msgid "{checkedIn} / {total} checked in"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:282
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:304
 msgid "{chipTime}, Sold Out"
 msgstr "{chipTime}, elkelt"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:304
+msgid "{chipTime}, Sold Out, waitlist available"
+msgstr "{chipTime}, Elfogyott, várólista elérhető"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:224
 msgid "{completedCount} of {totalCount} steps complete"
@@ -170,8 +174,8 @@ msgstr "{organizerName} első eseménye"
 msgid "{productCount} ticket types configured"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:196
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:427
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:210
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:451
 msgid "{slotCount} times available"
 msgstr ""
 
@@ -274,8 +278,8 @@ msgstr "1 jegytípus"
 msgid "1 ticket type configured"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:196
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:427
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:210
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:451
 msgid "1 time available"
 msgstr ""
 
@@ -907,9 +911,13 @@ msgstr "Engedélyezi a résztvevőknek, hogy frissítsék jegyinformációikat (
 msgid "Allow buyers to copy their details to all attendees"
 msgstr "A vásárlók átmásolhatják adataikat az összes résztvevőhöz"
 
-#: src/components/forms/ProductForm/index.tsx:530
+#: src/components/forms/ProductForm/index.tsx:532
 msgid "Allow customers to join a waitlist when this product is sold out"
 msgstr "Lehetővé teszi az ügyfelek számára, hogy feliratkozzanak a várólistára, ha ez a termék elfogyott"
+
+#: src/components/forms/ProductForm/index.tsx:531
+msgid "Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date."
+msgstr "Lehetővé teszi az ügyfelek számára, hogy feliratkozzanak a várólistára, ha ez a termék elfogyott. Az ügyfelek egy adott dátumra iratkoznak fel a várólistára."
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:82
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:82
@@ -988,7 +996,7 @@ msgstr "Hiba történt az oldal betöltésekor"
 msgid "An optional description of this category to display on the event page."
 msgstr "A kategória opcionális leírása, amely az esemény oldalán jelenik meg."
 
-#: src/components/forms/ProductForm/index.tsx:553
+#: src/components/forms/ProductForm/index.tsx:555
 msgid "An optional message to display on the highlighted product, e.g. \"Selling fast 🔥\" or \"Best value\""
 msgstr "Opcionális üzenet a kiemelt termék megjelenítéséhez, pl. \"Gyorsan fogy 🔥\" vagy \"Legjobb ár\""
 
@@ -1028,7 +1036,7 @@ msgstr "A terméktulajdonosoktól érkező bármilyen kérdés erre az e-mail c�
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:638
+#: src/components/routes/product-widget/SelectProducts/index.tsx:639
 msgid "applied"
 msgstr "alkalmazva"
 
@@ -1060,7 +1068,7 @@ msgstr "Alkalmaz"
 msgid "Apply Changes"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:667
+#: src/components/routes/product-widget/SelectProducts/index.tsx:668
 msgid "Apply Promo Code"
 msgstr "Promóciós kód alkalmazása"
 
@@ -1475,11 +1483,11 @@ msgstr ""
 msgid "Auto Resize"
 msgstr "Automatikus átméretezés"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:89
+#: src/components/modals/OfferWaitlistModal/index.tsx:91
 msgid "Auto-offer is enabled"
 msgstr "Az automatikus ajánlat engedélyezve van"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:60
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:64
 msgid "Auto-Process Waitlist"
 msgstr "Várólista automatikus feldolgozása"
 
@@ -1487,7 +1495,7 @@ msgstr "Várólista automatikus feldolgozása"
 msgid "Automatically detected based on background color, but can be overridden"
 msgstr "Automatikusan észlelve a háttérszín alapján, de felülbírálható"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:61
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Automatikusan ajánljon jegyeket a következő személynek, amikor kapacitás szabadul fel. Ha letiltva, manuálisan dolgozhatja fel a várólistát a Várólista oldalról."
 
@@ -1495,11 +1503,11 @@ msgstr "Automatikusan ajánljon jegyeket a következő személynek, amikor kapac
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
 msgstr "Automatikusan átméretezi a widget magasságát a tartalom alapján. Ha le van tiltva, a widget kitölti a tároló magasságát."
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:165
+#: src/components/modals/OfferWaitlistModal/index.tsx:169
 msgid "Available"
 msgstr "Elérhető"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:200
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:214
 msgid "Available times on {dayName}"
 msgstr ""
 
@@ -1818,8 +1826,8 @@ msgstr "A törlés törli az összes ehhez a rendeléshez tartozó résztvevőt,
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:425
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:115
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:144
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:119
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:151
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:99
 msgid "Cancelled"
 msgstr "Törölve"
@@ -1907,11 +1915,11 @@ msgstr "Jelszó módosítása"
 msgid "Change the attendee limit"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:271
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:291
 msgid "Change time"
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:100
+#: src/components/modals/OfferWaitlistModal/index.tsx:102
 msgid "Change waitlist settings"
 msgstr "Várólistás beállítások módosítása"
 
@@ -2203,16 +2211,16 @@ msgstr ""
 msgid "Click to view notes"
 msgstr "Kattintson a jegyzet megtekintéséhez"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:673
+#: src/components/routes/product-widget/SelectProducts/index.tsx:674
 msgid "close"
 msgstr "bezárás"
 
 #: src/components/common/CookieConsentBanner/index.tsx:37
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:214
-#: src/components/modals/JoinWaitlistModal/index.tsx:105
-#: src/components/modals/JoinWaitlistModal/index.tsx:132
+#: src/components/modals/JoinWaitlistModal/index.tsx:116
+#: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:163
-#: src/components/routes/product-widget/SelectProducts/index.tsx:674
+#: src/components/routes/product-widget/SelectProducts/index.tsx:675
 msgid "Close"
 msgstr "Bezárás"
 
@@ -2537,7 +2545,7 @@ msgstr "Kapcsolattartási e-mail"
 
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
-#: src/components/routes/product-widget/SelectProducts/index.tsx:622
+#: src/components/routes/product-widget/SelectProducts/index.tsx:623
 msgid "Continue"
 msgstr "Folytatás"
 
@@ -2552,7 +2560,7 @@ msgstr "Folytatás gomb szövege"
 msgid "Continue Setup"
 msgstr "Beállítás folytatása"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:769
+#: src/components/routes/product-widget/SelectProducts/index.tsx:770
 msgid "Continue to Checkout"
 msgstr "Folytatás"
 
@@ -2713,6 +2721,11 @@ msgstr ""
 #: src/components/routes/product-widget/CollectInformation/index.tsx:587
 msgid "Country"
 msgstr "Ország"
+
+#: src/components/modals/OfferWaitlistModal/index.tsx:111
+#: src/components/modals/OfferWaitlistModal/index.tsx:136
+msgid "Counts include all upcoming dates. Each person is offered a spot for the date they joined for."
+msgstr "A számok az összes közelgő dátumot tartalmazzák. Mindenki arra a dátumra kap helyet, amelyre feliratkozott."
 
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:37
 msgid "Cover"
@@ -3191,7 +3204,7 @@ msgstr ""
 msgid "Dates are managed per occurrence"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:510
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:536
 msgid "Dates with sessions"
 msgstr ""
 
@@ -3436,7 +3449,7 @@ msgstr ""
 msgid "Dismiss setup checklist"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:786
+#: src/components/routes/product-widget/SelectProducts/index.tsx:787
 msgid "Dismiss this message"
 msgstr "Üzenet elvetése"
 
@@ -3569,7 +3582,7 @@ msgstr ""
 msgid "Dutch"
 msgstr "Holland"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:68
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:72
 msgid "e.g. 180 (3 hours)"
 msgstr "pl. 180 (3 óra)"
 
@@ -3591,7 +3604,7 @@ msgstr "pl. Fontos frissítés a jegyeiről"
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "pl. Alap, Prémium, Vállalati"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:131
+#: src/components/modals/OfferWaitlistModal/index.tsx:134
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Minden személy e-mailt kap egy foglalt hellyel a vásárlás befejezéséhez."
 
@@ -3763,7 +3776,7 @@ msgstr "Jogosult bejelentkezési listák"
 #: src/components/forms/AffiliateForm/index.tsx:89
 #: src/components/modals/EditUserModal/index.tsx:81
 #: src/components/modals/InviteUserModal/index.tsx:61
-#: src/components/modals/JoinWaitlistModal/index.tsx:173
+#: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
@@ -3907,7 +3920,7 @@ msgstr "Engedélyezze ezt a kapacitást, hogy leállítsa a termékértékesít�
 msgid "Enable this template for sending emails"
 msgstr "Sablon engedélyezése e-mailek küldéséhez"
 
-#: src/components/forms/ProductForm/index.tsx:532
+#: src/components/forms/ProductForm/index.tsx:534
 msgid "Enable Waitlist"
 msgstr "Várólista engedélyezése"
 
@@ -4513,7 +4526,7 @@ msgstr "Webhook betöltése sikertelen"
 msgid "Failed to offer spot"
 msgstr "Nem sikerült helyet felajánlani"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:70
+#: src/components/modals/OfferWaitlistModal/index.tsx:72
 msgid "Failed to offer tickets"
 msgstr "Nem sikerült jegyeket felajánlani"
 
@@ -4794,7 +4807,7 @@ msgstr "Keresztnév"
 #: src/components/common/QuestionsTable/index.tsx:251
 #: src/components/modals/EditUserModal/index.tsx:72
 #: src/components/modals/InviteUserModal/index.tsx:57
-#: src/components/modals/JoinWaitlistModal/index.tsx:163
+#: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:90
 #: src/components/routes/product-widget/CollectInformation/index.tsx:463
@@ -4805,7 +4818,7 @@ msgstr "Keresztnév"
 msgid "First Name"
 msgstr "Keresztnév"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:47
+#: src/components/modals/JoinWaitlistModal/index.tsx:56
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:29
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:29
 msgid "First name is required"
@@ -5069,7 +5082,7 @@ msgstr "Résztvevők"
 msgid "Happening now"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:633
+#: src/components/routes/product-widget/SelectProducts/index.tsx:634
 msgid "Have a promo code?"
 msgstr "Van promóciós kódja?"
 
@@ -5134,8 +5147,8 @@ msgid "Hidden questions are only visible to the event organizer and not to the c
 msgstr "A rejtett kérdések csak az eseményszervező számára láthatók, az ügyfél számára nem."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:621
-#: src/components/routes/product-widget/SelectProducts/index.tsx:494
-#: src/components/routes/product-widget/SelectProducts/index.tsx:596
+#: src/components/routes/product-widget/SelectProducts/index.tsx:495
+#: src/components/routes/product-widget/SelectProducts/index.tsx:597
 msgid "Hide"
 msgstr "Elrejtés"
 
@@ -5199,15 +5212,15 @@ msgstr "Szint elrejtése a felhasználók elől"
 msgid "Hiding a product will prevent users from seeing it on the event page."
 msgstr "Egy termék elrejtése megakadályozza, hogy a felhasználók lássák azt az eseményoldalon."
 
-#: src/components/forms/ProductForm/index.tsx:540
+#: src/components/forms/ProductForm/index.tsx:542
 msgid "Highlight"
 msgstr "Kiemelés"
 
-#: src/components/forms/ProductForm/index.tsx:552
+#: src/components/forms/ProductForm/index.tsx:554
 msgid "Highlight Message"
 msgstr "Kiemelt üzenet"
 
-#: src/components/forms/ProductForm/index.tsx:545
+#: src/components/forms/ProductForm/index.tsx:547
 msgid "Highlight this product"
 msgstr "Termék kiemelése"
 
@@ -5216,7 +5229,7 @@ msgstr "Termék kiemelése"
 msgid "Highlighted"
 msgstr "Kiemelt"
 
-#: src/components/forms/ProductForm/index.tsx:546
+#: src/components/forms/ProductForm/index.tsx:548
 msgid "Highlighted products will have a different background color to make them stand out on the event page."
 msgstr "A kiemelt termékek eltérő háttérszínnel jelennek meg, hogy kiemelkedjenek az esemény oldalán."
 
@@ -5249,7 +5262,7 @@ msgstr "Homer"
 msgid "Hours"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:67
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:71
 msgid "How long a customer has to complete their purchase after receiving an offer. Leave empty for no timeout."
 msgstr "Mennyi ideje van az ügyfélnek a vásárlás befejezésére az ajánlat kézhezvétele után. Hagyja üresen, ha nincs időkorlát."
 
@@ -5297,7 +5310,7 @@ msgstr "Magyar"
 msgid "I acknowledge my responsibilities as a data controller"
 msgstr "Elismerem az adatkezelői felelősségeimet"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:179
+#: src/components/modals/JoinWaitlistModal/index.tsx:195
 msgid "I agree to receive email notifications related to this event"
 msgstr "Elfogadom az eseménnyel kapcsolatos e-mail értesítések fogadását"
 
@@ -5309,7 +5322,7 @@ msgstr "Elfogadom az <0>általános szerződési feltételeket</0>"
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Megerősítem, hogy ez egy tranzakciós üzenet az eseményhez kapcsolódóan"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:741
+#: src/components/routes/product-widget/SelectProducts/index.tsx:742
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Ha nem nyílt meg automatikusan új lap, kérjük, kattintson az alábbi gombra a fizetés folytatásához."
 
@@ -5603,11 +5616,11 @@ msgid "Join from anywhere"
 msgstr "Csatlakozzon bárhonnan"
 
 #: src/components/common/JoinWaitlistButton/index.tsx:31
-#: src/components/modals/JoinWaitlistModal/index.tsx:191
+#: src/components/modals/JoinWaitlistModal/index.tsx:207
 msgid "Join Waitlist"
 msgstr "Csatlakozás a várólistához"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:145
+#: src/components/modals/JoinWaitlistModal/index.tsx:156
 msgid "Join Waitlist for {productDisplayName}"
 msgstr "Csatlakozás a várólistához: {productDisplayName}"
 
@@ -5725,7 +5738,7 @@ msgstr "Vezetéknév"
 #: src/components/common/QuestionsTable/index.tsx:252
 #: src/components/modals/EditUserModal/index.tsx:73
 #: src/components/modals/InviteUserModal/index.tsx:58
-#: src/components/modals/JoinWaitlistModal/index.tsx:168
+#: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:96
 #: src/components/routes/product-widget/CollectInformation/index.tsx:470
@@ -6033,7 +6046,7 @@ msgstr "A kötelező kérdésekre válaszolni kell, mielőtt az ügyfél fizethe
 msgid "Manual"
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:106
+#: src/components/modals/OfferWaitlistModal/index.tsx:108
 msgid "Manual offer"
 msgstr "Manuális ajánlat"
 
@@ -6166,7 +6179,7 @@ msgstr "Minimum megrendelésenként"
 msgid "Minimum Price"
 msgstr "Minimális ár"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:71
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:75
 msgid "minutes"
 msgstr "perc"
 
@@ -6433,7 +6446,7 @@ msgstr "Nem található hozzárendelési adat"
 msgid "No capabilities reported by Stripe yet."
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:189
+#: src/components/modals/OfferWaitlistModal/index.tsx:193
 msgid "No capacity"
 msgstr "Nincs kapacitás"
 
@@ -6484,7 +6497,7 @@ msgstr "Nincs megjeleníthető adat. Kérjük, válasszon dátumtartományt."
 msgid "No date added"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:504
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:530
 msgid "No dates available this month. Try navigating to another month."
 msgstr ""
 
@@ -6643,7 +6656,7 @@ msgstr "Nincsenek termékek ebben a kategóriában."
 msgid "No products configured for this event."
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:136
+#: src/components/modals/OfferWaitlistModal/index.tsx:140
 msgid "No products have waiting entries"
 msgstr "Nincs várólistás bejegyzéssel rendelkező termék"
 
@@ -6722,7 +6735,7 @@ msgstr "Nem adtak hozzá adókat vagy díjakat."
 msgid "No Tickets Found"
 msgstr "Nem találhatók jegyek"
 
-#: src/components/common/EventDateRange/index.tsx:62
+#: src/components/common/EventDateRange/index.tsx:66
 msgid "No upcoming dates"
 msgstr ""
 
@@ -6863,7 +6876,7 @@ msgid "of"
 msgstr "/"
 
 #: src/components/common/WaitlistTable/index.tsx:135
-#: src/components/modals/OfferWaitlistModal/index.tsx:223
+#: src/components/modals/OfferWaitlistModal/index.tsx:227
 msgid "Offer"
 msgstr "Felajánlás"
 
@@ -6871,13 +6884,13 @@ msgstr "Felajánlás"
 msgid "Offer Spot"
 msgstr "Hely felajánlása"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:84
-#: src/components/modals/OfferWaitlistModal/index.tsx:128
+#: src/components/modals/OfferWaitlistModal/index.tsx:86
+#: src/components/modals/OfferWaitlistModal/index.tsx:131
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:134
 msgid "Offer Tickets"
 msgstr "Jegyek felajánlása"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:66
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:70
 msgid "Offer Timeout"
 msgstr "Ajánlat időkorlát"
 
@@ -6887,8 +6900,8 @@ msgstr "Ajánlat időkorlát"
 msgid "Offered"
 msgstr "Felajánlva"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:93
-#: src/components/modals/OfferWaitlistModal/index.tsx:132
+#: src/components/modals/OfferWaitlistModal/index.tsx:95
+#: src/components/modals/OfferWaitlistModal/index.tsx:135
 msgid "Offers expire after {timeoutHours} hours."
 msgstr "Az ajánlatok {timeoutHours} óra után lejárnak."
 
@@ -6987,7 +7000,7 @@ msgstr "Online esemény"
 msgid "Online Event Details"
 msgstr "Online esemény részletei"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:89
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:90
 msgid "Only {capacity} left"
 msgstr "Már csak {capacity} maradt"
 
@@ -7780,7 +7793,7 @@ msgstr "Kérjük, ellenőrizze e-mail címét az e-mail cím megerősítéséhez
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:732
+#: src/components/routes/product-widget/SelectProducts/index.tsx:733
 msgid "Please continue in the new tab"
 msgstr "Kérjük, folytassa az új lapon."
 
@@ -7792,7 +7805,7 @@ msgstr "Kérjük, hozzon létre egy terméket."
 msgid "Please create a ticket"
 msgstr "Kérjük, hozzon létre egy jegyet."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:48
+#: src/components/modals/JoinWaitlistModal/index.tsx:57
 msgid "Please enter a valid email address"
 msgstr "Kérjük, adjon meg egy érvényes e-mail címet"
 
@@ -7829,7 +7842,7 @@ msgstr "Kérjük, indítsa újra a pénztári folyamatot."
 msgid "Please return to the event page to start over."
 msgstr "Kérjük, térjen vissza az esemény oldalára az újrakezdéshez."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:421
+#: src/components/routes/product-widget/SelectProducts/index.tsx:422
 msgid "Please select a date and time"
 msgstr ""
 
@@ -7841,7 +7854,7 @@ msgstr "Kérjük, válasszon dátumtartományt"
 msgid "Please select an image."
 msgstr "Kérjük, válasszon egy képet."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:444
+#: src/components/routes/product-widget/SelectProducts/index.tsx:445
 msgid "Please select at least one product"
 msgstr "Kérjük, válasszon ki legalább egy terméket."
 
@@ -7996,7 +8009,7 @@ msgstr "Rendelés feldolgozása"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:487
 #: src/components/common/WaitlistTable/index.tsx:173
 #: src/components/modals/ManageAttendeeModal/index.tsx:119
-#: src/components/modals/OfferWaitlistModal/index.tsx:163
+#: src/components/modals/OfferWaitlistModal/index.tsx:167
 msgid "Product"
 msgstr "Termék"
 
@@ -8095,7 +8108,7 @@ msgstr "Profil sikeresen frissítve"
 msgid "Progress"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:367
+#: src/components/routes/product-widget/SelectProducts/index.tsx:368
 msgid "Promo {promo_code} code applied"
 msgstr "Promóciós kód {promo_code} alkalmazva"
 
@@ -8198,7 +8211,7 @@ msgstr "QR kód"
 msgid "QR code check-in"
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:166
+#: src/components/modals/OfferWaitlistModal/index.tsx:170
 msgid "Qty"
 msgstr "Menny."
 
@@ -8454,14 +8467,14 @@ msgstr "Fennmaradó felhasználások"
 msgid "Reminder scheduled"
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:643
+#: src/components/routes/product-widget/SelectProducts/index.tsx:644
 msgid "remove"
 msgstr "eltávolítás"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:146
 #: src/components/common/WaitlistTable/index.tsx:79
 #: src/components/common/WaitlistTable/index.tsx:114
-#: src/components/routes/product-widget/SelectProducts/index.tsx:644
+#: src/components/routes/product-widget/SelectProducts/index.tsx:645
 msgid "Remove"
 msgstr "Eltávolítás"
 
@@ -8794,7 +8807,7 @@ msgstr ""
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:275
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:72
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:76
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:80
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:208
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:132
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:103
@@ -9055,11 +9068,11 @@ msgstr "Válasszon {0}"
 msgid "Select a category"
 msgstr "Válasszon egy kategóriát"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:551
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:578
 msgid "Select a Date & Time"
 msgstr ""
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:175
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:187
 msgid "Select a date to see available times"
 msgstr ""
 
@@ -9202,7 +9215,7 @@ msgstr ""
 
 #: src/components/common/PlatformFeesSettings/index.tsx:208
 #: src/components/common/PlatformFeesSettings/index.tsx:231
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:120
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:127
 msgid "Selected"
 msgstr "Kiválasztva"
 
@@ -9214,7 +9227,7 @@ msgstr ""
 msgid "Selling a physical product? Cap its quantity on the <0>products page</0> instead."
 msgstr ""
 
-#: src/components/forms/ProductForm/index.tsx:554
+#: src/components/forms/ProductForm/index.tsx:556
 msgid "Selling fast 🔥"
 msgstr "Gyorsan fogy 🔥"
 
@@ -9516,8 +9529,8 @@ msgstr "Marketing opt-in jelölőnégyzet megjelenítése"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Marketing opt-in jelölőnégyzet alapértelmezés szerinti megjelenítése"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:494
-#: src/components/routes/product-widget/SelectProducts/index.tsx:595
+#: src/components/routes/product-widget/SelectProducts/index.tsx:495
+#: src/components/routes/product-widget/SelectProducts/index.tsx:596
 msgid "Show more"
 msgstr "Több mutatása"
 
@@ -9634,13 +9647,15 @@ msgstr "Közösségi linkek és weboldal"
 msgid "Sold"
 msgstr "Eladva"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:425
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:449
 msgid "sold out"
 msgstr ""
 
 #: src/components/common/EventCard/index.tsx:138
+#: src/components/common/EventDateRange/index.tsx:63
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:52
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:209
 msgid "Sold out"
 msgstr "Elfogyott"
 
@@ -9648,11 +9663,16 @@ msgstr "Elfogyott"
 #: src/components/layouts/EventHomepage/index.tsx:200
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:218
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:115
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:147
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:287
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:121
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:154
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:284
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:310
 msgid "Sold Out"
 msgstr "Elfogyott"
+
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:121
+msgid "Sold Out, waitlist available"
+msgstr "Elfogyott, várólista elérhető"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:299
 msgid "Some details are hidden from public access. Log in to view everything."
@@ -9686,7 +9706,7 @@ msgstr "Valami hiba történt! Kérjük, próbálja újra."
 msgid "Something went wrong."
 msgstr "Valami hiba történt."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:129
+#: src/components/modals/JoinWaitlistModal/index.tsx:140
 msgid "Something went wrong. Please try again later."
 msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 
@@ -9699,7 +9719,7 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 msgid "Something went wrong. Please try again."
 msgstr "Valami hiba történt. Kérjük, próbálja újra."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:453
+#: src/components/routes/product-widget/SelectProducts/index.tsx:454
 msgid "Sorry, this promo code is not recognized"
 msgstr "Sajnáljuk, ez a promóciós kód nem felismerhető."
 
@@ -9954,11 +9974,11 @@ msgstr "Termék sikeresen másolva"
 msgid "Successfully offered a spot"
 msgstr "Hely sikeresen felajánlva"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:65
+#: src/components/modals/OfferWaitlistModal/index.tsx:67
 msgid "Successfully offered tickets to {count} people"
 msgstr "Sikeresen felajánlva jegyek {count} személynek"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:64
+#: src/components/modals/OfferWaitlistModal/index.tsx:66
 msgid "Successfully offered tickets to 1 person"
 msgstr "Sikeresen felajánlva jegyek 1 személynek"
 
@@ -10053,7 +10073,7 @@ msgstr "Keresőoptimalizálási beállítások sikeresen frissítve"
 msgid "Successfully Updated SEO Settings"
 msgstr "Keresőoptimalizálási beállítások sikeresen frissítve"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:40
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:44
 msgid "Successfully Updated Settings"
 msgstr "Beállítások sikeresen frissítve"
 
@@ -10260,7 +10280,7 @@ msgid "Thanks,"
 msgstr ""
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:260
-#: src/components/routes/product-widget/SelectProducts/index.tsx:375
+#: src/components/routes/product-widget/SelectProducts/index.tsx:376
 msgid "That promo code is invalid"
 msgstr "Ez a promóciós kód érvénytelen."
 
@@ -10327,7 +10347,7 @@ msgstr "A link, amire kattintott, érvénytelen."
 msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:580
+#: src/components/routes/product-widget/SelectProducts/index.tsx:581
 msgid "The maximum number of products for {0}is {1}"
 msgstr "A termékek maximális száma {0} számára {1}"
 
@@ -10399,15 +10419,15 @@ msgstr "Színház"
 msgid "Theme & Colors"
 msgstr "Téma és színek"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:474
+#: src/components/routes/product-widget/SelectProducts/index.tsx:475
 msgid "There are no products available for this event"
 msgstr "Nincsenek elérhető termékek ehhez az eseményhez."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:503
+#: src/components/routes/product-widget/SelectProducts/index.tsx:504
 msgid "There are no products available in this category"
 msgstr "Nincsenek elérhető termékek ebben a kategóriában."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:471
+#: src/components/routes/product-widget/SelectProducts/index.tsx:472
 msgid "There are no upcoming dates for this event"
 msgstr ""
 
@@ -10525,7 +10545,7 @@ msgstr ""
 msgid "This date is marked sold out."
 msgstr ""
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:427
+#: src/components/routes/product-widget/SelectProducts/index.tsx:428
 msgid "This date is no longer available. Please select another date."
 msgstr ""
 
@@ -10545,7 +10565,7 @@ msgstr ""
 msgid "This event is not published yet"
 msgstr "Ez az esemény még nem került közzétételre."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:470
+#: src/components/routes/product-widget/SelectProducts/index.tsx:471
 msgid "This event is sold out"
 msgstr "Erre az eseményre minden jegy elkelt"
 
@@ -10779,7 +10799,7 @@ msgstr "Jegyár"
 msgid "Ticket resent successfully"
 msgstr "Jegy sikeresen újraküldve"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:466
+#: src/components/routes/product-widget/SelectProducts/index.tsx:467
 msgid "Ticket sales have ended for this event"
 msgstr ""
 
@@ -10805,7 +10825,7 @@ msgstr "Jegyek"
 msgid "Tickets & Products"
 msgstr "Jegyek és termékek"
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:92
+#: src/components/modals/OfferWaitlistModal/index.tsx:94
 msgid "Tickets are automatically offered to waitlisted customers when capacity becomes available."
 msgstr "A jegyek automatikusan felajánlásra kerülnek a várólistán lévő ügyfeleknek, amikor felszabadul a kapacitás."
 
@@ -10845,7 +10865,7 @@ msgstr ""
 msgid "Time left:"
 msgstr "Hátralévő idő:"
 
-#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:559
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:586
 msgid "Times shown in {timezoneAbbr}"
 msgstr ""
 
@@ -11089,7 +11109,7 @@ msgstr "Nem sikerült másolni a terméket. Kérjük, ellenőrizze adatait."
 msgid "Unable to fetch attendee"
 msgstr "Nem sikerült lekérni a résztvevőt."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:126
+#: src/components/modals/JoinWaitlistModal/index.tsx:137
 msgid "Unable to join waitlist"
 msgstr "Nem sikerült csatlakozni a várólistához"
 
@@ -11144,14 +11164,14 @@ msgstr "Ismeretlen résztvevő"
 #: src/components/forms/ProductForm/index.tsx:99
 #: src/components/forms/ProductForm/index.tsx:331
 #: src/components/forms/PromoCodeForm/index.tsx:117
-#: src/components/modals/OfferWaitlistModal/index.tsx:191
+#: src/components/modals/OfferWaitlistModal/index.tsx:195
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:172
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
 msgid "Unlimited"
 msgstr "Korlátlan"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:541
+#: src/components/routes/product-widget/SelectProducts/index.tsx:542
 msgid "Unlimited available"
 msgstr "Korlátlanul elérhető"
 
@@ -11630,7 +11650,7 @@ msgstr "VK"
 
 #: src/components/common/WaitlistStats/index.tsx:12
 #: src/components/common/WaitlistTable/index.tsx:25
-#: src/components/modals/OfferWaitlistModal/index.tsx:164
+#: src/components/modals/OfferWaitlistModal/index.tsx:168
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:116
 msgid "Waiting"
 msgstr "Várakozik"
@@ -11646,8 +11666,9 @@ msgstr ""
 #: src/components/layouts/AuthLayout/index.tsx:24
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/routes/event/Settings/index.tsx:94
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:51
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:73
+#: src/components/routes/product-widget/OccurrenceSelector/index.tsx:157
 msgid "Waitlist"
 msgstr "Várólista"
 
@@ -11752,7 +11773,11 @@ msgstr "Nem sikerült megerősíteni a fizetését. Kérjük, próbálja újra, 
 msgid "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
 msgstr "Több próbálkozás után sem tudtuk érvényesíteni az ÁFA számát. A háttérben folytatjuk a próbálkozást. Kérjük, nézzen vissza később."
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:102
+#: src/components/modals/JoinWaitlistModal/index.tsx:112
+msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
+msgstr "E-mailben értesítjük, ha hely szabadul fel a(z) {productDisplayName} számára ekkor: {occurrenceDate}."
+
+#: src/components/modals/JoinWaitlistModal/index.tsx:113
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName}."
 msgstr "E-mailben értesítjük, ha hely szabadul fel a(z) {productDisplayName} számára."
 
@@ -11954,9 +11979,13 @@ msgstr "Amikor egy termék törölve lett"
 msgid "When a product is updated"
 msgstr "Amikor egy termék frissül"
 
-#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:52
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:58
 msgid "When a product sells out, customers can join a waitlist to be notified when spots become available."
 msgstr "Amikor egy termék elfogy, az ügyfelek csatlakozhatnak egy várólistához, hogy értesítést kapjanak, amikor helyek szabadulnak fel."
+
+#: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:57
+msgid "When a product sells out, customers can join a waitlist to be notified when spots become available. Customers join the waitlist for a specific date, and offers are made per date."
+msgstr "Amikor egy termék elfogy, az ügyfelek csatlakozhatnak egy várólistához, hogy értesítést kapjanak, amikor helyek szabadulnak fel. Az ügyfelek egy adott dátumra iratkoznak fel a várólistára, és az ajánlatok dátumonként történnek."
 
 #: src/components/forms/WebhookForm/index.tsx:117
 msgid "When an attendee is cancelled"
@@ -12068,7 +12097,7 @@ msgstr "Dolgozik"
 #: src/components/modals/EditProductModal/index.tsx:114
 #: src/components/modals/EditPromoCodeModal/index.tsx:84
 #: src/components/modals/EditQuestionModal/index.tsx:101
-#: src/components/modals/JoinWaitlistModal/index.tsx:190
+#: src/components/modals/JoinWaitlistModal/index.tsx:206
 #: src/components/modals/ManageAttendeeModal/index.tsx:231
 #: src/components/modals/ManageOrderModal/index.tsx:175
 #: src/components/routes/auth/Register/index.tsx:137
@@ -12151,7 +12180,7 @@ msgstr "Létrehozhat egy promóciós kódot, amely ezt a terméket célozza meg 
 msgid "You can override this for individual dates later."
 msgstr ""
 
-#: src/components/modals/OfferWaitlistModal/index.tsx:108
+#: src/components/modals/OfferWaitlistModal/index.tsx:110
 msgid "You can still manually offer tickets if needed."
 msgstr "Szükség esetén továbbra is manuálisan ajánlhat fel jegyeket."
 
@@ -12216,7 +12245,7 @@ msgstr "El kell ismernie, hogy ez az e-mail nem promóciós."
 msgid "You must acknowledge your responsibilities before saving"
 msgstr "El kell ismernie felelősségeit a mentés előtt"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:49
+#: src/components/modals/JoinWaitlistModal/index.tsx:58
 msgid "You must agree to receive messages"
 msgstr "Hozzá kell járulnia az üzenetek fogadásához"
 
@@ -12280,7 +12309,11 @@ msgstr ""
 msgid "You're going to {0}!"
 msgstr "El fog menni ide: {0}!"
 
-#: src/components/modals/JoinWaitlistModal/index.tsx:99
+#: src/components/modals/JoinWaitlistModal/index.tsx:173
+msgid "You're joining the waitlist for {occurrenceDate}."
+msgstr "Ön a következő dátumra iratkozik fel a várólistára: {occurrenceDate}."
+
+#: src/components/modals/JoinWaitlistModal/index.tsx:108
 msgid "You're on the waitlist!"
 msgstr "Felkerült a várólistára!"
 

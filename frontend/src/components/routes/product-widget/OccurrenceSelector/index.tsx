@@ -62,6 +62,7 @@ interface OccurrenceSelectorProps {
      */
     productSlot?: ReactNode;
     isProductsLoading?: boolean;
+    waitlistAvailable?: boolean;
 }
 
 const dateKey = (occ: EventOccurrence, tz: string): string =>
@@ -95,16 +96,18 @@ const SlotRow = ({
     locale,
     selected,
     onSelect,
+    waitlistAvailable,
 }: {
     occ: EventOccurrence;
     tz: string;
     locale: string;
     selected: boolean;
     onSelect: (occurrenceId: IdParam) => void;
+    waitlistAvailable?: boolean;
 }) => {
-    const selectable = isBookable(occ);
     const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
     const cancelled = occ.status === EventOccurrenceStatus.CANCELLED;
+    const selectable = isBookable(occ) || (soldOut && !!waitlistAvailable);
 
     const startTime = formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale);
     const endTime = occ.end_date ? formatDateWithLocale(occ.end_date, 'timeOnly', tz, locale) : null;
@@ -112,7 +115,11 @@ const SlotRow = ({
 
     const spots = capacityInfo(occ);
 
-    const statusLabel = cancelled ? t`Cancelled` : soldOut ? t`Sold Out` : spots?.label ?? null;
+    const statusLabel = cancelled
+        ? t`Cancelled`
+        : soldOut
+            ? (selectable ? t`Sold Out, waitlist available` : t`Sold Out`)
+            : spots?.label ?? null;
     const ariaLabel = [
         timeLabel,
         occ.label,
@@ -146,6 +153,9 @@ const SlotRow = ({
                 {soldOut && (
                     <span className="hi-time-slot-sold-out">{t`Sold Out`}</span>
                 )}
+                {soldOut && selectable && (
+                    <span className="hi-time-slot-waitlist">{t`Waitlist`}</span>
+                )}
                 {spots && (
                     <span className={`hi-time-slot-spots${spots.low ? ' hi-time-slot-spots-low' : ''}`}>
                         {spots.label}
@@ -162,12 +172,14 @@ const TimeSlotList = ({
     locale,
     selectedOccurrenceId,
     onSelect,
+    waitlistAvailable,
 }: {
     slots: EventOccurrence[];
     tz: string;
     locale: string;
     selectedOccurrenceId?: IdParam;
     onSelect: (occurrenceId: IdParam) => void;
+    waitlistAvailable?: boolean;
 }) => {
     if (slots.length === 0) {
         return (
@@ -178,7 +190,7 @@ const TimeSlotList = ({
     }
 
     const first = slots[0];
-    const slotCount = slots.length;
+    const slotCount = slots.filter(isBookable).length;
     const dayName = formatDateWithLocale(first.start_date, 'dayName', tz, locale);
     const monthShort = formatDateWithLocale(first.start_date, 'monthShort', tz, locale);
     const dayOfMonth = formatDateWithLocale(first.start_date, 'dayOfMonth', tz, locale);
@@ -193,7 +205,9 @@ const TimeSlotList = ({
                 <div className="hi-slot-header-text">
                     <div className="hi-slot-header-day">{dayName}</div>
                     <div className="hi-slot-header-count">
-                        {slots.length === 1 ? t`1 time available` : t`${slotCount} times available`}
+                        {slotCount === 0
+                            ? t`Sold out`
+                            : slotCount === 1 ? t`1 time available` : t`${slotCount} times available`}
                     </div>
                 </div>
             </div>
@@ -206,6 +220,7 @@ const TimeSlotList = ({
                         locale={locale}
                         selected={sameId(selectedOccurrenceId, occ.id)}
                         onSelect={onSelect}
+                        waitlistAvailable={waitlistAvailable}
                     />
                 ))}
             </div>
@@ -220,6 +235,7 @@ const ProductsPane = ({
     locale,
     onSelect,
     isLoading,
+    waitlistAvailable,
     children,
 }: {
     daySlots: EventOccurrence[];
@@ -228,6 +244,7 @@ const ProductsPane = ({
     locale: string;
     onSelect: (occurrenceId: IdParam) => void;
     isLoading?: boolean;
+    waitlistAvailable?: boolean;
     children?: ReactNode;
 }) => {
     const switcherSlots = daySlots.filter(
@@ -263,6 +280,9 @@ const ProductsPane = ({
                                 {spots.label}
                             </span>
                         )}
+                        {selectedOccurrence.status === EventOccurrenceStatus.SOLD_OUT && (
+                            <span className="hi-slot-header-sold-out">{t`Sold Out`}</span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -272,14 +292,17 @@ const ProductsPane = ({
                     {switcherSlots.map(occ => {
                         const isSelected = sameId(occ.id, selectedOccurrence.id);
                         const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
+                        const chipDisabled = soldOut && !waitlistAvailable;
                         const chipTime = formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale);
                         return (
                             <UnstyledButton
                                 key={occ.id}
                                 className={`hi-time-chip${isSelected ? ' hi-time-chip-active' : ''}${soldOut ? ' hi-time-chip-sold-out' : ''}`}
-                                disabled={soldOut}
-                                aria-pressed={soldOut ? undefined : isSelected}
-                                aria-label={soldOut ? t`${chipTime}, Sold Out` : undefined}
+                                disabled={chipDisabled}
+                                aria-pressed={chipDisabled ? undefined : isSelected}
+                                aria-label={soldOut
+                                    ? (chipDisabled ? t`${chipTime}, Sold Out` : t`${chipTime}, Sold Out, waitlist available`)
+                                    : undefined}
                                 onClick={() => occ.id && onSelect(occ.id)}
                             >
                                 {chipTime}
@@ -311,6 +334,7 @@ const OccurrencePicker = ({
     activeOccurrences,
     productSlot,
     isProductsLoading,
+    waitlistAvailable,
 }: OccurrenceSelectorProps & {activeOccurrences: EventOccurrence[]}) => {
     const tz = event.timezone;
     const locale = getSafeLocale(getClientLocale());
@@ -438,6 +462,7 @@ const OccurrencePicker = ({
                         locale={locale}
                         onSelect={onSelect}
                         isLoading={isProductsLoading}
+                        waitlistAvailable={waitlistAvailable}
                     >
                         {productSlot}
                     </ProductsPane>
@@ -452,6 +477,7 @@ const OccurrencePicker = ({
                         locale={locale}
                         selectedOccurrenceId={selectedOccurrenceId}
                         onSelect={onSelect}
+                        waitlistAvailable={waitlistAvailable}
                     />
                 )}
             </div>
@@ -521,6 +547,7 @@ export const OccurrenceSelector = ({
     colors,
     productSlot,
     isProductsLoading,
+    waitlistAvailable,
 }: OccurrenceSelectorProps) => {
     const occurrences = event.occurrences || [];
     const activeOccurrences = getActiveOccurrences(occurrences).sort(byStartDate);
@@ -568,6 +595,7 @@ export const OccurrenceSelector = ({
                 activeOccurrences={activeOccurrences}
                 productSlot={productSlot}
                 isProductsLoading={isProductsLoading}
+                waitlistAvailable={waitlistAvailable}
             />
         </div>
     );

@@ -249,6 +249,18 @@
   font-weight: 600;
 }
 
+.hi-time-slot-waitlist {
+  margin-left: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--widget-primary-color, #228be6) 14%, transparent);
+  color: var(--widget-primary-color, #228be6);
+}
+
 .hi-time-slot-spots {
   color: color-mix(in srgb, var(--widget-primary-text-color, #666) 70%, transparent);
 }
@@ -298,11 +310,14 @@
 
   &.hi-time-chip-sold-out {
     opacity: 0.6;
-    cursor: not-allowed;
 
-    &:hover {
-      border-color: color-mix(in srgb, var(--widget-primary-color, #888) 28%, transparent);
-      background: transparent;
+    &:disabled {
+      cursor: not-allowed;
+
+      &:hover {
+        border-color: color-mix(in srgb, var(--widget-primary-color, #888) 28%, transparent);
+        background: transparent;
+      }
     }
   }
 }
@@ -328,6 +343,16 @@
     background: color-mix(in srgb, #e03131 12%, transparent);
     color: #e03131;
   }
+}
+
+.hi-slot-header-sold-out {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: color-mix(in srgb, #e03131 12%, transparent);
+  color: #e03131;
 }
 
 .hi-products-slot {

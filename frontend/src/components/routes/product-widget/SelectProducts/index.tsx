@@ -349,6 +349,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const productCategories = event?.product_categories || [];
     const productAreAvailable = productCategories && productCategories.some(category => !!category?.products?.length);
     const products: Product[] = productCategories.reduce((acc: Product[], category) => acc.concat(category.products ?? []), []);
+    const waitlistAvailable = products.some(product => product.waitlist_enabled);
 
     const selectedProductQuantitySum = useMemo(() => {
         let total = 0;
@@ -802,6 +803,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
                             productSlot={<>{productFormSection}{promoSection}</>}
+                            waitlistAvailable={waitlistAvailable}
                         />
                     ) : (
                         productFormSection

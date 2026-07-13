@@ -160,6 +160,7 @@ export const SoldOutWaitlist = () => {
                     eventSettings={eventSettings}
                     stats={stats}
                     eventOccurrenceId={selectedOccurrenceId}
+                    isRecurring={isRecurring}
                 />
             )}
         </PageBody>

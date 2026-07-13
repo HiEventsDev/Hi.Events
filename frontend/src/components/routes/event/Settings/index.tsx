@@ -85,16 +85,12 @@ export const Settings = () => {
                 icon: IconAdjustments,
                 component: MiscSettings
             },
-            // Waitlist isn't occurrence-aware yet — offer generation assumes
-            // product-level availability and would fire against aggregated
-            // capacity on recurring events. Hide it for recurring, same pattern
-            // as Capacity Management.
-            ...(!isRecurring ? [{
+            {
                 id: 'waitlist-settings',
                 label: t`Waitlist`,
                 icon: IconListCheck,
                 component: WaitlistSettings,
-            }] : []),
+            },
             {
                 id: 'payment-settings',
                 label: t`Payment & Invoicing`,

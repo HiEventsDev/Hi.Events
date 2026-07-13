@@ -527,7 +527,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             />
 
                             <Switch
-                                description={t`Allow customers to join a waitlist when this product is sold out`}
+                                description={isRecurring
+                                    ? t`Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date.`
+                                    : t`Allow customers to join a waitlist when this product is sold out`}
                                 {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
                                 label={t`Enable Waitlist`}
                             />

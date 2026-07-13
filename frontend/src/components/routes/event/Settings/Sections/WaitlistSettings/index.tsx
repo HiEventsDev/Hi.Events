@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, NumberInput, Switch, Text} from "@mantine/core";
+import {Button, NumberInput, Switch} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -8,10 +8,14 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useUpdateEventSettings} from "../../../../../../mutations/useUpdateEventSettings.ts";
 import {useGetEventSettings} from "../../../../../../queries/useGetEventSettings.ts";
+import {useGetEvent} from "../../../../../../queries/useGetEvent.ts";
+import {EventType} from "../../../../../../types.ts";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 
 export const WaitlistSettings = () => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
+    const isRecurring = event?.type === EventType.RECURRING;
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
     const form = useForm({
@@ -49,9 +53,9 @@ export const WaitlistSettings = () => {
         <Card>
             <HeadingWithDescription
                 heading={t`Waitlist`}
-                description={t`When a product sells out, customers can join a waitlist to be notified when spots become available.
-
-`}
+                description={isRecurring
+                    ? t`When a product sells out, customers can join a waitlist to be notified when spots become available. Customers join the waitlist for a specific date, and offers are made per date.`
+                    : t`When a product sells out, customers can join a waitlist to be notified when spots become available.`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <fieldset disabled={eventSettingsQuery.isLoading || updateMutation.isPending}>
