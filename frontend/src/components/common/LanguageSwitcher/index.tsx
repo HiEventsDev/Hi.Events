@@ -44,6 +44,8 @@ export const LanguageSwitcher = () => {
                 return t`Slovak`;
             case "el":
                 return t`Greek`;
+            case "cs":
+                return t`Czech`;
             default:
                 // Defensive fallback: if a new locale is added to SupportedLocales
                 // but not handled here, return the locale code itself rather than
