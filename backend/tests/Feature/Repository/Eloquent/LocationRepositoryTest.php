@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Repository\Eloquent;
+namespace Tests\Feature\Repository\Eloquent;
 
 use HiEvents\Models\User;
 use HiEvents\Repository\Eloquent\LocationRepository;

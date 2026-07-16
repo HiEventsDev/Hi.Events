@@ -12,8 +12,11 @@ use Illuminate\Http\Request;
  */
 class EventOccurrenceResourcePublic extends BaseResource
 {
-    public function __construct($resource, private readonly bool $eventLevelShowCapacity = false)
-    {
+    public function __construct(
+        $resource,
+        private readonly bool $eventLevelShowCapacity = false,
+        private readonly bool $includeOnlineConnectionDetails = false,
+    ) {
         parent::__construct($resource);
     }
 
@@ -37,7 +40,7 @@ class EventOccurrenceResourcePublic extends BaseResource
             'is_active' => $this->isActive(),
             'event_location' => $this->when(
                 condition: $this->getEventLocation() !== null,
-                value: fn () => new EventLocationResourcePublic($this->getEventLocation(), false),
+                value: fn () => new EventLocationResourcePublic($this->getEventLocation(), $this->includeOnlineConnectionDetails),
             ),
         ];
     }

@@ -15,4 +15,8 @@ interface GeoProviderInterface
     public function autocomplete(string $query, ?string $locale = null, ?string $country = null): array;
 
     public function getPlaceDetails(string $providerPlaceId, ?string $locale = null): ?GeoPlaceDTO;
+
+    public function getCachedRawPlaceDetails(?string $providerPlaceId): ?array;
+
+    public function isAvailable(): bool;
 }

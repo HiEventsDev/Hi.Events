@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace HiEvents\DataTransferObjects;
 
-use Spatie\LaravelData\Data;
-
-class AddressDTO extends Data
+class AddressDTO extends BaseDataObject
 {
     public function __construct(
         public readonly ?string $venue_name = null,

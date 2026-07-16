@@ -7,6 +7,7 @@ namespace HiEvents\Http\Actions\Locations;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Location\GeoSuggestionResource;
 use HiEvents\Services\Application\Handlers\Location\GeoAutocompleteHandler;
 use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException;
 use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderQuotaExceededException;
@@ -47,8 +48,9 @@ class GeoAutocompleteAction extends BaseAction
             );
         }
 
-        return $this->jsonResponse([
-            'data' => array_map(fn ($s) => $s->toArray(), $suggestions),
-        ]);
+        return $this->resourceResponse(
+            resource: GeoSuggestionResource::class,
+            data: collect($suggestions),
+        );
     }
 }

@@ -1,150 +1,83 @@
 import {t} from "@lingui/macro";
-import {ActionIcon, Box, Card, Group, Stack, Table, Text} from "@mantine/core";
-import {modals} from "@mantine/modals";
-import {IconMapPin, IconPencil, IconTrash} from "@tabler/icons-react";
+import {Button} from "@mantine/core";
+import {IconPlus} from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
-import {useState} from "react";
 import {useParams} from "react-router";
 import {useGetOrganizerLocations} from "../../../../queries/useGetOrganizerLocations.ts";
-import {useDeleteLocation} from "../../../../mutations/useDeleteLocation.ts";
-import {IdParam, Location} from "../../../../types.ts";
+import {IdParam, QueryFilters} from "../../../../types.ts";
 import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
+import {ToolBar} from "../../../common/ToolBar";
+import {SearchBarWrapper} from "../../../common/SearchBar";
+import {SortSelector} from "../../../common/SortSelector";
+import {Pagination} from "../../../common/Pagination";
 import {TableSkeleton} from "../../../common/TableSkeleton";
-import {formatAddress} from "../../../../utilites/addressUtilities.ts";
-import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {LocationsTable} from "../../../common/LocationsTable";
+import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {LocationEditModal} from "../../../modals/LocationEditModal";
 
 export default function Locations() {
     const {organizerId} = useParams();
-    const locationsQuery = useGetOrganizerLocations(organizerId as IdParam);
-    const deleteMutation = useDeleteLocation();
-    const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
-    const [editTarget, setEditTarget] = useState<Location | null>(null);
-
-    const locations = locationsQuery.data?.data ?? [];
-
-    const handleEdit = (location: Location | null) => {
-        setEditTarget(location);
-        openEditModal();
-    };
-
-    const handleDelete = (location: Location) => {
-        modals.openConfirmModal({
-            title: t`Delete location`,
-            children: (
-                <Text size="sm">
-                    {t`Delete "${location.name ?? location.structured_address?.venue_name ?? formatAddress(location.structured_address ?? {})}"? Locations referenced by events, occurrences, or set as an organizer's address can't be deleted.`}
-                </Text>
-            ),
-            labels: {confirm: t`Delete`, cancel: t`Cancel`},
-            confirmProps: {color: "red"},
-            onConfirm: () => {
-                deleteMutation.mutate(
-                    {organizerId: organizerId as IdParam, locationId: location.id as IdParam},
-                    {
-                        onSuccess: () => showSuccess(t`Location deleted`),
-                        onError: (error: any) =>
-                            showError(error?.response?.data?.message ?? t`Could not delete location`),
-                    },
-                );
-            },
-        });
-    };
+    const [searchParams, setSearchParams] = useFilterQueryParamSync();
+    const locationsQuery = useGetOrganizerLocations(organizerId as IdParam, searchParams as QueryFilters);
+    const locations = locationsQuery.data?.data;
+    const pagination = locationsQuery.data?.meta;
+    const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
 
     return (
         <PageBody>
-            <PageTitle>{t`Locations`}</PageTitle>
-            <Box>
-                <Card>
-                    <Group justify="space-between" mb="md">
-                        <Stack gap={2}>
-                            <Text fw={600}>{t`Saved Locations`}</Text>
-                            <Text size="sm" c="dimmed">
-                                {t`Reusable venues for your events. Locations created from the autocomplete are saved here automatically.`}
-                            </Text>
-                        </Stack>
-                        <ActionIcon
-                            color="green"
-                            size="lg"
-                            onClick={() => handleEdit(null)}
-                            aria-label={t`Add location`}
-                        >
-                            <IconMapPin size={18}/>
-                        </ActionIcon>
-                    </Group>
+            <PageTitle
+                subheading={t`Reusable venues for your events. Locations created from the autocomplete are saved here automatically.`}
+            >{t`Locations`}</PageTitle>
+            <ToolBar
+                searchComponent={() => (
+                    <SearchBarWrapper
+                        placeholder={t`Search by name or address...`}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />
+                )}
+                filterComponent={pagination?.allowed_sorts ? (
+                    <SortSelector
+                        selected={searchParams.sortBy && searchParams.sortDirection
+                            ? searchParams.sortBy + ':' + searchParams.sortDirection
+                            : pagination.default_sort + ':' + pagination.default_sort_direction}
+                        options={pagination.allowed_sorts}
+                        onSortSelect={(key, sortDirection) => {
+                            setSearchParams({sortBy: key, sortDirection});
+                        }}
+                    />
+                ) : undefined}
+                resultCount={pagination?.total}
+                resultLabel={t`locations`}
+            >
+                <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                    {t`Add Location`}
+                </Button>
+            </ToolBar>
 
-                    <TableSkeleton isVisible={locationsQuery.isLoading}/>
+            <TableSkeleton isVisible={!locations}/>
 
-                    {!locationsQuery.isLoading && locations.length === 0 && (
-                        <Text c="dimmed" size="sm">
-                            {t`No saved locations yet. They'll appear here as you create events with addresses.`}
-                        </Text>
-                    )}
+            {locations && (
+                <LocationsTable
+                    locations={locations}
+                    openCreateModal={openCreateModal}
+                />
+            )}
 
-                    {!locationsQuery.isLoading && locations.length > 0 && (
-                        <Table verticalSpacing="sm">
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>{t`Name`}</Table.Th>
-                                    <Table.Th>{t`Address`}</Table.Th>
-                                    <Table.Th>{t`Provider`}</Table.Th>
-                                    <Table.Th>{t`Actions`}</Table.Th>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {locations.map((loc) => (
-                                    <Table.Tr key={String(loc.id)}>
-                                        <Table.Td>
-                                            <Text fw={500}>
-                                                {loc.name ?? loc.structured_address?.venue_name ?? t`Unnamed`}
-                                            </Text>
-                                        </Table.Td>
-                                        <Table.Td>
-                                            <Text size="sm" c="dimmed">
-                                                {loc.structured_address ? formatAddress(loc.structured_address) : ""}
-                                            </Text>
-                                        </Table.Td>
-                                        <Table.Td>
-                                            <Text size="sm" c="dimmed">
-                                                {loc.provider ?? t`Manual`}
-                                            </Text>
-                                        </Table.Td>
-                                        <Table.Td>
-                                            <Group gap="xs">
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    onClick={() => handleEdit(loc)}
-                                                    aria-label={t`Edit location`}
-                                                >
-                                                    <IconPencil size={16}/>
-                                                </ActionIcon>
-                                                <ActionIcon
-                                                    variant="subtle"
-                                                    color="red"
-                                                    onClick={() => handleDelete(loc)}
-                                                    aria-label={t`Delete location`}
-                                                >
-                                                    <IconTrash size={16}/>
-                                                </ActionIcon>
-                                            </Group>
-                                        </Table.Td>
-                                    </Table.Tr>
-                                ))}
-                            </Table.Tbody>
-                        </Table>
-                    )}
-                </Card>
-            </Box>
+            {!!locations?.length && (
+                <Pagination
+                    value={searchParams.pageNumber}
+                    onChange={(value) => setSearchParams({pageNumber: value})}
+                    total={Number(pagination?.last_page)}
+                />
+            )}
 
-            {editModalOpen && (
+            {createModalOpen && (
                 <LocationEditModal
-                    onClose={() => {
-                        setEditTarget(null);
-                        closeEditModal();
-                    }}
+                    onClose={closeCreateModal}
                     organizerId={organizerId as IdParam}
-                    location={editTarget}
+                    location={null}
                 />
             )}
         </PageBody>

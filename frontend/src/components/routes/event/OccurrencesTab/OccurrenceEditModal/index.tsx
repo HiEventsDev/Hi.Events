@@ -1,5 +1,5 @@
 import {t, Trans} from "@lingui/macro";
-import {Anchor, Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
+import {Anchor, Button, Checkbox, NumberInput, Radio, SegmentedControl, Tabs, Text, TextInput, UnstyledButton} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
 import {Link, useParams} from "react-router";
@@ -24,18 +24,15 @@ import {
     EventOccurrence,
     EventOccurrenceStatus,
     GenericModalProps,
-    GeoPlace,
     IdParam,
     LocationType,
     UpsertEventOccurrenceRequest,
-    VenueAddress,
 } from "../../../../../types.ts";
-import {AddressAutocomplete} from "../../../../common/AddressAutocomplete";
 import {Editor} from "../../../../common/Editor";
+import {LocationPicker, LocationPickerValue} from "../../../../common/LocationPicker";
 import {useCreateLocation} from "../../../../../mutations/useCreateLocation.ts";
 import {useGetEventOccurrence} from "../../../../../queries/useGetEventOccurrence.ts";
-import {useGetOrganizerLocations} from "../../../../../queries/useGetOrganizerLocations.ts";
-import {formatAddress} from "../../../../../utilites/addressUtilities.ts";
+import {isAddressSet, sameAddress} from "../../../../../utilites/addressUtilities.ts";
 import {useCreateEventOccurrence} from "../../../../../mutations/useCreateEventOccurrence.ts";
 import {useUpdateEventOccurrence} from "../../../../../mutations/useUpdateEventOccurrence.ts";
 import {useCancelOccurrence} from "../../../../../mutations/useCancelOccurrence.ts";
@@ -78,10 +75,6 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     const deleteMutation = useDeleteEventOccurrence();
     const createLocationMutation = useCreateLocation();
     const organizerId = event?.organizer?.id ?? event?.organizer_id;
-    const savedLocationsQuery = useGetOrganizerLocations(organizerId, undefined, !!organizerId);
-    const savedLocations = savedLocationsQuery.data?.data ?? [];
-
-    type LocationPickerMode = 'saved' | 'new';
 
     type OccurrenceFormShape = {
         start_date: string;
@@ -91,10 +84,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         show_available_capacity: 'inherit' | 'show' | 'hide';
         online_event_connection_details: string;
         location_mode: 'inherit' | 'override' | 'online';
-        location_picker: LocationPickerMode;
-        saved_location_id: string | null;
-        override_address: VenueAddress;
-        override_latlng: {lat: number | null; lng: number | null; provider: string | null; placeId: string | null};
+        location: LocationPickerValue | null;
     };
 
     const form = useForm<OccurrenceFormShape>({
@@ -106,18 +96,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             show_available_capacity: 'inherit',
             online_event_connection_details: '',
             location_mode: 'inherit',
-            location_picker: 'saved',
-            saved_location_id: null,
-            override_address: {
-                venue_name: '',
-                address_line_1: '',
-                address_line_2: '',
-                city: '',
-                state_or_region: '',
-                zip_or_postal_code: '',
-                country: '',
-            },
-            override_latlng: {lat: null, lng: null, provider: null, placeId: null},
+            location: null,
         },
         validate: {
             start_date: (value) => !value ? t`Start date is required` : null,
@@ -136,6 +115,15 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             online_event_connection_details: (value, values) => {
                 if (values.location_mode === 'online' && (!value || isEmptyHtml(value))) {
                     return t`Connection details are required for online dates`;
+                }
+                return null;
+            },
+            location: (value, values) => {
+                if (values.location_mode !== 'override') {
+                    return null;
+                }
+                if (!value || (value.kind === 'new' && !isAddressSet(value.address))) {
+                    return t`Enter a venue name or address for in-person events`;
                 }
                 return null;
             },
@@ -161,23 +149,9 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                 show_available_capacity: capacityVisibilityToForm(occurrence.show_available_capacity),
                 online_event_connection_details: eventLocation?.online_event_connection_details ?? '',
                 location_mode: mode,
-                location_picker: occLocationId ? 'saved' : 'new',
-                saved_location_id: occLocationId ? String(occLocationId) : null,
-                override_address: occLocation?.structured_address ?? {
-                    venue_name: '',
-                    address_line_1: '',
-                    address_line_2: '',
-                    city: '',
-                    state_or_region: '',
-                    zip_or_postal_code: '',
-                    country: '',
-                },
-                override_latlng: {
-                    lat: occLocation?.latitude ?? null,
-                    lng: occLocation?.longitude ?? null,
-                    provider: occLocation?.provider ?? null,
-                    placeId: occLocation?.provider_place_id ?? null,
-                },
+                location: occLocationId && occLocation
+                    ? {kind: 'saved', location: {...occLocation, id: occLocation.id ?? occLocationId}}
+                    : null,
             });
         }
     }, [occurrence, event]);
@@ -200,8 +174,6 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
         }
     }, [defaultDate]);
 
-    // If the user opts in to notifying attendees, we stash what's needed to
-    // pre-fill the SendMessageModal and open it once the save succeeds.
     const [pendingNotification, setPendingNotification] = useState<{
         occurrence: EventOccurrence;
         newStartDate: string;
@@ -209,6 +181,36 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     } | null>(null);
 
     type OccurrenceFormValues = OccurrenceFormShape;
+
+    const resolveLocationId = async (value: LocationPickerValue): Promise<number | null> => {
+        if (value.kind === 'saved') {
+            return value.location.id ? Number(value.location.id) : null;
+        }
+
+        if (!organizerId || !isAddressSet(value.address)) {
+            return null;
+        }
+
+        const existingLocationId = occurrence?.event_location?.location_id ?? null;
+        const existingAddress = occurrence?.event_location?.location?.structured_address ?? null;
+        if (existingLocationId !== null && existingAddress !== null && sameAddress(existingAddress, value.address)) {
+            return existingLocationId;
+        }
+
+        const created = await createLocationMutation.mutateAsync({
+            organizerId,
+            payload: {
+                name: value.address.venue_name || null,
+                structured_address: value.address,
+                latitude: value.latitude,
+                longitude: value.longitude,
+                provider: value.provider,
+                provider_place_id: value.providerPlaceId,
+            },
+        });
+
+        return (created.data.id as number | undefined) ?? null;
+    };
 
     const submit = async (values: OccurrenceFormValues, notifyAfterSave: boolean) => {
         try {
@@ -223,31 +225,9 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                     online_event_connection_details: values.online_event_connection_details || null,
                 };
             } else if (values.location_mode === 'override') {
-                if (!organizerId) {
-                    throw new Error('No organizer context available');
-                }
-                let locationIdForOccurrence: number | null = null;
-                if (values.location_picker === 'saved') {
-                    if (!values.saved_location_id) {
-                        throw new Error('Pick a saved location or switch to "New location"');
-                    }
-                    locationIdForOccurrence = Number(values.saved_location_id);
-                } else {
-                    if (!values.override_address?.address_line_1 && !values.override_address?.venue_name && !values.override_address?.city) {
-                        throw new Error('Provide at least one address field for the override location');
-                    }
-                    const created = await createLocationMutation.mutateAsync({
-                        organizerId,
-                        payload: {
-                            name: values.override_address.venue_name || null,
-                            structured_address: values.override_address,
-                            latitude: values.override_latlng.lat,
-                            longitude: values.override_latlng.lng,
-                            provider: values.override_latlng.provider,
-                            provider_place_id: values.override_latlng.placeId,
-                        },
-                    });
-                    locationIdForOccurrence = (created.data.id as number | undefined) ?? null;
+                const locationIdForOccurrence = values.location ? await resolveLocationId(values.location) : null;
+                if (locationIdForOccurrence === null) {
+                    throw new Error(t`Enter a venue name or address for in-person events`);
                 }
                 eventLocationPayload = {
                     type: LocationType.InPerson,
@@ -298,8 +278,6 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
     };
 
     const handleSubmit = (values: OccurrenceFormValues) => {
-        // Only warn when editing an existing occurrence whose date/time actually
-        // changed AND someone has already registered.
         const attendeeCount = occurrence?.statistics?.attendees_registered ?? 0;
         const originalStart = occurrence && event ? utcToTz(occurrence.start_date, event.timezone) : '';
         const originalEnd = occurrence && event ? utcToTz(occurrence.end_date, event.timezone) : '';
@@ -307,9 +285,6 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             && (values.start_date !== originalStart || (values.end_date || '') !== (originalEnd || ''));
 
         if (dateChanged && attendeeCount > 0) {
-            // Wrap in a ref so the onConfirm closure can read the current checkbox
-            // value — modals.openConfirmModal doesn't have a built-in way to track
-            // inner form state.
             const notifyRef = {current: true};
             modals.openConfirmModal({
                 title: t`You've changed the session time`,
@@ -499,76 +474,14 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <Radio value="online" label={t`Online`}/>
                                 </Radio.Group>
 
-                                {form.values.location_mode === 'override' && (
+                                {form.values.location_mode === 'override' && organizerId && (
                                     <div style={{marginTop: 12}}>
-                                        <SegmentedControl
-                                            fullWidth
-                                            size="sm"
-                                            mb="sm"
-                                            data={[
-                                                {value: 'saved', label: t`Saved location`},
-                                                {value: 'new', label: t`New location`},
-                                            ]}
-                                            value={form.values.location_picker}
-                                            onChange={(value) => form.setFieldValue('location_picker', value as LocationPickerMode)}
+                                        <LocationPicker
+                                            organizerId={organizerId}
+                                            value={form.values.location}
+                                            onChange={(value) => form.setFieldValue('location', value)}
+                                            error={form.errors.location}
                                         />
-                                        {form.values.location_picker === 'saved' ? (
-                                            <Select
-                                                label={t`Saved locations`}
-                                                placeholder={savedLocations.length === 0 ? t`No saved locations yet` : t`Pick a location`}
-                                                disabled={savedLocations.length === 0}
-                                                data={savedLocations.map((loc) => ({
-                                                    value: String(loc.id),
-                                                    label: loc.name || loc.structured_address?.venue_name || formatAddress(loc.structured_address ?? {}) || t`Unnamed location`,
-                                                }))}
-                                                searchable
-                                                value={form.values.saved_location_id}
-                                                onChange={(value) => form.setFieldValue('saved_location_id', value)}
-                                            />
-                                        ) : (
-                                            <>
-                                                {organizerId && (
-                                                    <AddressAutocomplete
-                                                        organizerId={organizerId}
-                                                        country={form.values.override_address?.country || undefined}
-                                                        onPlaceSelected={(place: GeoPlace) => {
-                                                            form.setFieldValue('override_address', {
-                                                                venue_name: place.address.venue_name || '',
-                                                                address_line_1: place.address.address_line_1 || '',
-                                                                address_line_2: place.address.address_line_2 || '',
-                                                                city: place.address.city || '',
-                                                                state_or_region: place.address.state_or_region || '',
-                                                                zip_or_postal_code: place.address.zip_or_postal_code || '',
-                                                                country: place.address.country || '',
-                                                            });
-                                                            form.setFieldValue('override_latlng', {
-                                                                lat: place.latitude ?? null,
-                                                                lng: place.longitude ?? null,
-                                                                provider: place.provider,
-                                                                placeId: place.provider_place_id,
-                                                            });
-                                                        }}
-                                                    />
-                                                )}
-                                                <TextInput
-                                                    {...form.getInputProps('override_address.venue_name')}
-                                                    label={t`Venue Name`}
-                                                    placeholder={t`Conference Center`}
-                                                />
-                                                <InputGroup>
-                                                    <TextInput {...form.getInputProps('override_address.address_line_1')} label={t`Address Line 1`}/>
-                                                    <TextInput {...form.getInputProps('override_address.address_line_2')} label={t`Address Line 2`}/>
-                                                </InputGroup>
-                                                <InputGroup>
-                                                    <TextInput {...form.getInputProps('override_address.city')} label={t`City`}/>
-                                                    <TextInput {...form.getInputProps('override_address.state_or_region')} label={t`State or Region`}/>
-                                                </InputGroup>
-                                                <InputGroup>
-                                                    <TextInput {...form.getInputProps('override_address.zip_or_postal_code')} label={t`Zip or Postal Code`}/>
-                                                    <TextInput {...form.getInputProps('override_address.country')} label={t`Country`} maxLength={2} placeholder="IE"/>
-                                                </InputGroup>
-                                            </>
-                                        )}
                                     </div>
                                 )}
 

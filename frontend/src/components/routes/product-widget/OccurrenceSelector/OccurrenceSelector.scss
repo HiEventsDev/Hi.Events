@@ -151,6 +151,30 @@
   color: color-mix(in srgb, var(--widget-primary-text-color, #666) 78%, transparent);
 }
 
+.hi-slot-header-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 78%, transparent);
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.hi-slot-header-location-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--widget-primary-color, inherit);
+  }
+}
+
 .hi-slot-list {
   display: flex;
   flex-direction: column;
@@ -166,6 +190,31 @@
   &::-webkit-scrollbar-thumb {
     background: color-mix(in srgb, var(--widget-primary-text-color, #888) 18%, transparent);
     border-radius: 999px;
+  }
+}
+
+.hi-time-slot-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hi-time-slot-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.76rem;
+  color: color-mix(in srgb, var(--widget-primary-text-color, #666) 65%, transparent);
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

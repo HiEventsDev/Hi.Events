@@ -7,6 +7,7 @@ namespace HiEvents\Http\Actions\Locations;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
+use HiEvents\Resources\Location\GeoPlaceResource;
 use HiEvents\Services\Application\Handlers\Location\GeoPlaceDetailsHandler;
 use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderException;
 use HiEvents\Services\Infrastructure\Geo\Exception\GeoProviderQuotaExceededException;
@@ -48,9 +49,9 @@ class GeoPlaceDetailsAction extends BaseAction
             );
         }
 
-        $payload = $place->toArray();
-        unset($payload['raw_response']);
-
-        return $this->jsonResponse(['data' => $payload]);
+        return $this->resourceResponse(
+            resource: GeoPlaceResource::class,
+            data: $place,
+        );
     }
 }

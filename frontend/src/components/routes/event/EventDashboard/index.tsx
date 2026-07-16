@@ -24,7 +24,6 @@ import {NextOccurrenceHero} from "./NextOccurrenceHero";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {useGetEventProductCategories} from "../../../../queries/useGetProductCategories.ts";
-import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences.ts";
 import {PeriodSelector, PeriodPreset} from "../../../common/PeriodSelector";
@@ -74,7 +73,6 @@ export const EventDashboard = () => {
     const organizerId = event?.organizer_id ?? event?.organizer?.id;
     const {data: organizer} = useGetOrganizer(organizerId);
     const isStripeConnected = !!organizer?.stripe_connect_setup_complete;
-    const {data: eventSettings} = useGetEventSettings(eventId);
     const {data: productCategoriesResponse} = useGetEventProductCategories(eventId);
     const productCount = productCategoriesResponse?.data?.reduce(
         (sum, category) => sum + (category.products?.length ?? 0),
@@ -184,7 +182,7 @@ export const EventDashboard = () => {
         && event.status === 'LIVE'
         && (!isSaasMode || isStripeConnected)
         && productCount > 0
-        && hasEventDetails(event, eventSettings)
+        && hasEventDetails(event)
         && hasCoverImage
         && (!isRecurring || hasOccurrences)
         && (!isSaasMode || !!account?.is_account_email_confirmed);
@@ -233,7 +231,6 @@ export const EventDashboard = () => {
                 {shouldShowChecklist && (
                     <SetupChecklist
                         event={event}
-                        eventSettings={eventSettings}
                         organizer={organizer}
                         isStripeConnected={isStripeConnected}
                         productCount={productCount}

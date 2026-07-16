@@ -13,6 +13,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class AttendeeResourcePublic extends JsonResource
 {
+    public function __construct($resource, private readonly bool $includeOnlineConnectionDetails = false)
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -29,7 +34,10 @@ class AttendeeResourcePublic extends JsonResource
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'event_occurrence' => $this->when(
                 (bool) $this->getEventOccurrence(),
-                fn () => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
+                fn () => new EventOccurrenceResourcePublic(
+                    $this->getEventOccurrence(),
+                    includeOnlineConnectionDetails: $this->includeOnlineConnectionDetails,
+                ),
             ),
             'locale' => $this->getLocale(),
         ];

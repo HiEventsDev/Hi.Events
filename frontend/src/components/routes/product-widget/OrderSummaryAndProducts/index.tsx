@@ -25,8 +25,8 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrderPublic.ts";
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
-import {formatAddress, getGoogleMapsUrl} from "../../../../utilites/addressUtilities.ts";
-import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
+import {formatAddress} from "../../../../utilites/addressUtilities.ts";
+import {getEventLocationDisplay, resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
 import {showSuccess, showError} from "../../../../utilites/notifications.tsx";
 
@@ -309,20 +309,7 @@ const EventDetails = ({event, order}: { event: Event; order: Order }) => {
             ? `${venueName}${formattedAddress ? `, ${formattedAddress}` : ''}`
             : formattedAddress || null)
         : null;
-    const builtMapsUrl = (() => {
-        if (!isInPerson || !effective.location) return null;
-        const {latitude, longitude, structured_address} = effective.location;
-        if (latitude != null && longitude != null) {
-            return `https://www.google.com/maps?q=${latitude},${longitude}`;
-        }
-        if (structured_address) return getGoogleMapsUrl(structured_address) || null;
-        return null;
-    })();
-    const mapsUrl = builtMapsUrl
-        ?? event.settings?.maps_url
-        ?? (formattedAddress
-            ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formattedAddress)}`
-            : '');
+    const mapsUrl = getEventLocationDisplay(event, orderOccurrence)?.mapsUrl ?? '';
 
     return (
         <Card>

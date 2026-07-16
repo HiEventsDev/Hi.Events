@@ -76,4 +76,30 @@ class UpsertLocationRequestTest extends TestCase
         $this->assertFalse($validator->errors()->has('provider'));
         $this->assertFalse($validator->errors()->has('provider_place_id'));
     }
+
+    public function test_country_must_be_exactly_two_characters(): void
+    {
+        foreach (['I', 'IRL'] as $invalidCountry) {
+            $request = new UpsertLocationRequest;
+            $request->merge([
+                'structured_address' => ['venue_name' => 'Foo Hall', 'country' => $invalidCountry],
+            ]);
+
+            $validator = Validator::make($request->all(), $request->rules());
+
+            $this->assertTrue($validator->errors()->has('structured_address.country'));
+        }
+    }
+
+    public function test_two_character_country_is_accepted(): void
+    {
+        $request = new UpsertLocationRequest;
+        $request->merge([
+            'structured_address' => ['venue_name' => 'Foo Hall', 'country' => 'ie'],
+        ]);
+
+        $validator = Validator::make($request->all(), $request->rules());
+
+        $this->assertFalse($validator->errors()->has('structured_address.country'));
+    }
 }

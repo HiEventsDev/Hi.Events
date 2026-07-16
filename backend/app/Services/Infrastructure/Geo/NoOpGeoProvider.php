@@ -24,4 +24,14 @@ class NoOpGeoProvider implements GeoProviderInterface
 
         return null;
     }
+
+    public function getCachedRawPlaceDetails(?string $providerPlaceId): ?array
+    {
+        return null;
+    }
+
+    public function isAvailable(): bool
+    {
+        return false;
+    }
 }

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
  */
 class OrderItemResourcePublic extends BaseResource
 {
+    public function __construct($resource, private readonly bool $includeOnlineConnectionDetails = false)
+    {
+        parent::__construct($resource);
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -33,7 +38,10 @@ class OrderItemResourcePublic extends BaseResource
             'event_occurrence_id' => $this->getEventOccurrenceId(),
             'event_occurrence' => $this->when(
                 ! is_null($this->getEventOccurrence()),
-                fn () => new EventOccurrenceResourcePublic($this->getEventOccurrence()),
+                fn () => new EventOccurrenceResourcePublic(
+                    $this->getEventOccurrence(),
+                    includeOnlineConnectionDetails: $this->includeOnlineConnectionDetails,
+                ),
             ),
             'product' => $this->when((bool) $this->getProduct(), fn () => new ProductResourcePublic($this->getProduct())),
         ];

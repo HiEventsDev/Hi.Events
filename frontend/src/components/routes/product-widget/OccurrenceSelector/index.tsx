@@ -2,11 +2,12 @@ import {t} from "@lingui/macro";
 import {ReactNode, useEffect, useMemo, useRef, useState} from "react";
 import {Loader, UnstyledButton} from "@mantine/core";
 import {DatePicker, DatesProvider} from "@mantine/dates";
-import {IconCheck, IconClock} from "@tabler/icons-react";
+import {IconCheck, IconClock, IconMapPin} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {Event, EventOccurrence, EventOccurrenceStatus, EventType, IdParam, RecurrenceRule} from "../../../../types.ts";
+import {EventLocationDisplay, getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatDateWithLocale, getSafeLocale} from "../../../../utilites/dates.ts";
 import {localeFormats} from "../../../../utilites/dateLocales.ts";
 import {getClientLocale} from "../../../../locales.ts";
@@ -97,6 +98,7 @@ const SlotRow = ({
     selected,
     onSelect,
     waitlistAvailable,
+    locationDisplay,
 }: {
     occ: EventOccurrence;
     tz: string;
@@ -104,6 +106,7 @@ const SlotRow = ({
     selected: boolean;
     onSelect: (occurrenceId: IdParam) => void;
     waitlistAvailable?: boolean;
+    locationDisplay?: EventLocationDisplay | null;
 }) => {
     const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
     const cancelled = occ.status === EventOccurrenceStatus.CANCELLED;
@@ -114,6 +117,9 @@ const SlotRow = ({
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
 
     const spots = capacityInfo(occ);
+    const locationLabel = locationDisplay
+        ? (locationDisplay.isOnline ? t`Online` : locationDisplay.short)
+        : null;
 
     const statusLabel = cancelled
         ? t`Cancelled`
@@ -123,6 +129,7 @@ const SlotRow = ({
     const ariaLabel = [
         timeLabel,
         occ.label,
+        locationLabel,
         statusLabel,
         selected ? t`Selected` : null,
     ].filter(Boolean).join(', ');
@@ -141,10 +148,18 @@ const SlotRow = ({
                 if (selectable && occ.id) onSelect(occ.id);
             }}
         >
-            <div className="hi-time-slot-time">
-                {selected ? <IconCheck size={15}/> : <IconClock size={15}/>}
-                <span className="hi-time-slot-time-text">{timeLabel}</span>
-                {occ.label && <span className="hi-time-slot-label">{occ.label}</span>}
+            <div className="hi-time-slot-main">
+                <div className="hi-time-slot-time">
+                    {selected ? <IconCheck size={15}/> : <IconClock size={15}/>}
+                    <span className="hi-time-slot-time-text">{timeLabel}</span>
+                    {occ.label && <span className="hi-time-slot-label">{occ.label}</span>}
+                </div>
+                {locationLabel && (
+                    <div className="hi-time-slot-location">
+                        <IconMapPin size={12}/>
+                        <span>{locationLabel}</span>
+                    </div>
+                )}
             </div>
             <div className="hi-time-slot-meta">
                 {cancelled && (
@@ -166,7 +181,14 @@ const SlotRow = ({
     );
 };
 
+const locationDisplayKey = (display: EventLocationDisplay | null): string => {
+    if (!display) return 'none';
+    if (display.isOnline) return 'online';
+    return `${display.short ?? ''}|${display.full ?? ''}`;
+};
+
 const TimeSlotList = ({
+    event,
     slots,
     tz,
     locale,
@@ -174,6 +196,7 @@ const TimeSlotList = ({
     onSelect,
     waitlistAvailable,
 }: {
+    event: Event;
     slots: EventOccurrence[];
     tz: string;
     locale: string;
@@ -195,6 +218,10 @@ const TimeSlotList = ({
     const monthShort = formatDateWithLocale(first.start_date, 'monthShort', tz, locale);
     const dayOfMonth = formatDateWithLocale(first.start_date, 'dayOfMonth', tz, locale);
 
+    const slotDisplays = slots.map((occ) => getEventLocationDisplay(event, occ));
+    const locationsVary = new Set(slotDisplays.map(locationDisplayKey)).size > 1;
+    const sharedDisplay = locationsVary ? null : slotDisplays[0];
+
     return (
         <div className="hi-slot-panel-inner">
             <div className="hi-slot-header" aria-live="polite">
@@ -209,10 +236,29 @@ const TimeSlotList = ({
                             ? t`Sold out`
                             : slotCount === 1 ? t`1 time available` : t`${slotCount} times available`}
                     </div>
+                    {sharedDisplay && (
+                        <div className="hi-slot-header-location">
+                            <IconMapPin size={13}/>
+                            {sharedDisplay.isOnline ? (
+                                <span>{t`Online`}</span>
+                            ) : sharedDisplay.mapsUrl ? (
+                                <a
+                                    href={sharedDisplay.mapsUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hi-slot-header-location-link"
+                                >
+                                    {sharedDisplay.short}
+                                </a>
+                            ) : (
+                                <span>{sharedDisplay.short}</span>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="hi-slot-list" role="group" aria-label={t`Available times on ${dayName}`}>
-                {slots.map(occ => (
+                {slots.map((occ, index) => (
                     <SlotRow
                         key={occ.id}
                         occ={occ}
@@ -221,6 +267,7 @@ const TimeSlotList = ({
                         selected={sameId(selectedOccurrenceId, occ.id)}
                         onSelect={onSelect}
                         waitlistAvailable={waitlistAvailable}
+                        locationDisplay={locationsVary ? slotDisplays[index] : null}
                     />
                 ))}
             </div>
@@ -229,6 +276,7 @@ const TimeSlotList = ({
 };
 
 const ProductsPane = ({
+    event,
     daySlots,
     selectedOccurrence,
     tz,
@@ -238,6 +286,7 @@ const ProductsPane = ({
     waitlistAvailable,
     children,
 }: {
+    event: Event;
     daySlots: EventOccurrence[];
     selectedOccurrence: EventOccurrence;
     tz: string;
@@ -259,6 +308,7 @@ const ProductsPane = ({
         : null;
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
     const spots = capacityInfo(selectedOccurrence);
+    const locationDisplay = getEventLocationDisplay(event, selectedOccurrence);
 
     return (
         <div className="hi-products-pane">
@@ -284,6 +334,25 @@ const ProductsPane = ({
                             <span className="hi-slot-header-sold-out">{t`Sold Out`}</span>
                         )}
                     </div>
+                    {locationDisplay && (
+                        <div className="hi-slot-header-location">
+                            <IconMapPin size={13}/>
+                            {locationDisplay.isOnline ? (
+                                <span>{t`Online`}</span>
+                            ) : locationDisplay.mapsUrl ? (
+                                <a
+                                    href={locationDisplay.mapsUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hi-slot-header-location-link"
+                                >
+                                    {locationDisplay.short}
+                                </a>
+                            ) : (
+                                <span>{locationDisplay.short}</span>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -456,6 +525,7 @@ const OccurrencePicker = ({
             <div className="hi-slot-panel" ref={slotPanelRef}>
                 {showingProducts ? (
                     <ProductsPane
+                        event={event}
                         daySlots={focusedSlots}
                         selectedOccurrence={selectedOccurrence!}
                         tz={tz}
@@ -472,6 +542,7 @@ const OccurrencePicker = ({
                     </div>
                 ) : (
                     <TimeSlotList
+                        event={event}
                         slots={focusedSlots}
                         tz={tz}
                         locale={locale}

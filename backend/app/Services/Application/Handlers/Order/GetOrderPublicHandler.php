@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
@@ -11,6 +12,7 @@ use HiEvents\DomainObjects\Generated\OrganizerDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -81,6 +83,15 @@ class GetOrderPublicHandler
                     ),
                     new Relationship(
                         domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(
+                                domainObject: EventLocationDomainObject::class,
+                                nested: [
+                                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                                ],
+                                name: 'event_location',
+                            ),
+                        ],
                         name: 'event_occurrence',
                     ),
                 ],
@@ -91,6 +102,15 @@ class GetOrderPublicHandler
                 nested: [
                     new Relationship(
                         domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(
+                                domainObject: EventLocationDomainObject::class,
+                                nested: [
+                                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                                ],
+                                name: 'event_location',
+                            ),
+                        ],
                         name: 'event_occurrence',
                     ),
                 ],

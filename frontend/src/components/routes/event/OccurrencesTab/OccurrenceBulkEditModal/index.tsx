@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Checkbox, NumberInput, Radio, SegmentedControl, Select, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Checkbox, NumberInput, Radio, SegmentedControl, Stack, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
@@ -8,14 +8,13 @@ import {IconClock, IconMapPin, IconRuler, IconTag, IconUsers} from "@tabler/icon
 import {Modal} from "../../../../common/Modal";
 import {Callout} from "../../../../common/Callout";
 import {InputGroup} from "../../../../common/InputGroup";
-import {AddressAutocomplete} from "../../../../common/AddressAutocomplete";
 import {Editor} from "../../../../common/Editor";
-import {BulkUpdateOccurrencesRequest, EventOccurrence, EventOccurrenceStatus, GenericModalProps, GeoPlace, LocationType, MessageType, VenueAddress} from "../../../../../types.ts";
+import {LocationPicker, LocationPickerValue} from "../../../../common/LocationPicker";
+import {BulkUpdateOccurrencesRequest, EventOccurrence, EventOccurrenceStatus, GenericModalProps, LocationType, MessageType} from "../../../../../types.ts";
 import {useBulkUpdateOccurrences} from "../../../../../mutations/useBulkUpdateOccurrences.ts";
 import {useCreateLocation} from "../../../../../mutations/useCreateLocation.ts";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
-import {useGetOrganizerLocations} from "../../../../../queries/useGetOrganizerLocations.ts";
-import {formatAddress} from "../../../../../utilites/addressUtilities.ts";
+import {isAddressSet} from "../../../../../utilites/addressUtilities.ts";
 import {showSuccess, showError} from "../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {SendMessageModal} from "../../../../modals/SendMessageModal";
@@ -23,7 +22,6 @@ import {buildBulkRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceBulkEditModal.module.scss';
 
 type BulkAction = 'shift_times' | 'change_duration' | 'update_capacity' | 'update_label' | 'update_location';
-type LocationPickerMode = 'saved' | 'new' | 'clear';
 type BulkLocationMode = 'in_person' | 'online' | 'clear';
 
 interface OccurrenceBulkEditModalProps extends GenericModalProps {
@@ -44,8 +42,6 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
     const errorHandler = useFormErrorResponseHandler();
     const {data: event} = useGetEvent(eventId);
     const organizerId = event?.organizer_id;
-    const savedLocationsQuery = useGetOrganizerLocations(organizerId, undefined, !!organizerId);
-    const savedLocations = savedLocationsQuery.data?.data ?? [];
 
     const [pendingNotification, setPendingNotification] = useState<{
         occurrenceIds: number[];
@@ -65,23 +61,10 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
             label: '',
             clear_label: false,
             location_mode: 'in_person' as BulkLocationMode,
-            location_picker: 'saved' as LocationPickerMode,
-            saved_location_id: null as string | null,
-            override_address: {
-                venue_name: '',
-                address_line_1: '',
-                address_line_2: '',
-                city: '',
-                state_or_region: '',
-                zip_or_postal_code: '',
-                country: '',
-            } as VenueAddress,
-            override_latlng: {lat: null as number | null, lng: null as number | null, provider: null as string | null, placeId: null as string | null},
+            location: null as LocationPickerValue | null,
             online_event_connection_details: '',
             future_only: true,
             skip_overridden: true,
-            // 'loaded' = currently rendered dates only; 'matching' = every date in
-            // the event that satisfies the filter toggles (resolved server-side).
             scope: 'loaded' as 'loaded' | 'matching',
         },
     });
@@ -178,16 +161,17 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                 if (form.values.location_mode === 'clear') {
                     return {...base, clear_event_location: true};
                 }
-                if (form.values.location_picker === 'saved') {
-                    if (!form.values.saved_location_id) {
-                        showError(t`Choose a saved location to apply.`);
-                        return null;
-                    }
+                const location = form.values.location;
+                if (!location || (location.kind === 'new' && !isAddressSet(location.address))) {
+                    showError(t`Enter a venue name or address for in-person events`);
+                    return null;
+                }
+                if (location.kind === 'saved') {
                     return {
                         ...base,
                         event_location: {
                             type: LocationType.InPerson,
-                            location_id: Number(form.values.saved_location_id),
+                            location_id: Number(location.location.id),
                         },
                     };
                 }
@@ -195,20 +179,15 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                     showError(t`No organizer context available.`);
                     return null;
                 }
-                const addr = form.values.override_address;
-                if (!addr.address_line_1 && !addr.venue_name && !addr.city) {
-                    showError(t`Provide at least one address field for the new location.`);
-                    return null;
-                }
                 const created = await createLocationMutation.mutateAsync({
                     organizerId,
                     payload: {
-                        name: addr.venue_name || null,
-                        structured_address: addr,
-                        latitude: form.values.override_latlng.lat,
-                        longitude: form.values.override_latlng.lng,
-                        provider: form.values.override_latlng.provider,
-                        provider_place_id: form.values.override_latlng.placeId,
+                        name: location.address.venue_name || null,
+                        structured_address: location.address,
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        provider: location.provider,
+                        provider_place_id: location.providerPlaceId,
                     },
                 });
                 return {
@@ -237,8 +216,6 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                 };
                 showSuccess(actionLabels[selectedAction!] || t`Updated ${count} date(s)`);
 
-                // Use server-returned ids: the client list doesn't include
-                // occurrences outside the loaded page/window.
                 const updatedIds = response.updated_ids ?? [];
                 if (notifyAfterSave && updatedIds.length > 0 && selectedAction) {
                     setPendingNotification({
@@ -269,8 +246,6 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
         }
         if (!data) return;
 
-        // Date/time changes never notify automatically — require the organizer
-        // to acknowledge attendee impact and opt in to the follow-up message.
         const changesDateOrTime = selectedAction === 'shift_times' || selectedAction === 'change_duration';
         const shouldConfirm = changesDateOrTime && (isAllMatching || loadedAffectedAttendees > 0);
         if (shouldConfirm) {
@@ -500,76 +475,12 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                                 </Stack>
                             </Radio.Group>
 
-                            {form.values.location_mode === 'in_person' && (
-                                <>
-                                    <SegmentedControl
-                                        fullWidth
-                                        size="sm"
-                                        data={[
-                                            {value: 'saved', label: t`Saved location`},
-                                            {value: 'new', label: t`New location`},
-                                        ]}
-                                        value={form.values.location_picker}
-                                        onChange={(value) => form.setFieldValue('location_picker', value as LocationPickerMode)}
-                                    />
-                                    {form.values.location_picker === 'saved' ? (
-                                        <Select
-                                            label={t`Saved locations`}
-                                            placeholder={savedLocations.length === 0 ? t`No saved locations yet` : t`Pick a location`}
-                                            disabled={savedLocations.length === 0}
-                                            data={savedLocations.map((loc) => ({
-                                                value: String(loc.id),
-                                                label: loc.name || loc.structured_address?.venue_name || formatAddress(loc.structured_address ?? {}) || t`Unnamed location`,
-                                            }))}
-                                            searchable
-                                            value={form.values.saved_location_id}
-                                            onChange={(value) => form.setFieldValue('saved_location_id', value)}
-                                        />
-                                    ) : (
-                                        <>
-                                            {organizerId && (
-                                                <AddressAutocomplete
-                                                    organizerId={organizerId}
-                                                    country={form.values.override_address.country || undefined}
-                                                    onPlaceSelected={(place: GeoPlace) => {
-                                                        form.setFieldValue('override_address', {
-                                                            venue_name: place.address.venue_name || '',
-                                                            address_line_1: place.address.address_line_1 || '',
-                                                            address_line_2: place.address.address_line_2 || '',
-                                                            city: place.address.city || '',
-                                                            state_or_region: place.address.state_or_region || '',
-                                                            zip_or_postal_code: place.address.zip_or_postal_code || '',
-                                                            country: place.address.country || '',
-                                                        });
-                                                        form.setFieldValue('override_latlng', {
-                                                            lat: place.latitude ?? null,
-                                                            lng: place.longitude ?? null,
-                                                            provider: place.provider,
-                                                            placeId: place.provider_place_id,
-                                                        });
-                                                    }}
-                                                />
-                                            )}
-                                            <TextInput
-                                                {...form.getInputProps('override_address.venue_name')}
-                                                label={t`Venue Name`}
-                                                placeholder={t`Conference Center`}
-                                            />
-                                            <InputGroup>
-                                                <TextInput {...form.getInputProps('override_address.address_line_1')} label={t`Address Line 1`}/>
-                                                <TextInput {...form.getInputProps('override_address.address_line_2')} label={t`Address Line 2`}/>
-                                            </InputGroup>
-                                            <InputGroup>
-                                                <TextInput {...form.getInputProps('override_address.city')} label={t`City`}/>
-                                                <TextInput {...form.getInputProps('override_address.state_or_region')} label={t`State or Region`}/>
-                                            </InputGroup>
-                                            <InputGroup>
-                                                <TextInput {...form.getInputProps('override_address.zip_or_postal_code')} label={t`Zip or Postal Code`}/>
-                                                <TextInput {...form.getInputProps('override_address.country')} label={t`Country`} maxLength={2} placeholder="IE"/>
-                                            </InputGroup>
-                                        </>
-                                    )}
-                                </>
+                            {form.values.location_mode === 'in_person' && organizerId && (
+                                <LocationPicker
+                                    organizerId={organizerId}
+                                    value={form.values.location}
+                                    onChange={(value) => form.setFieldValue('location', value)}
+                                />
                             )}
 
                             {form.values.location_mode === 'online' && (

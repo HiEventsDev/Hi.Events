@@ -10,6 +10,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\Location\DeleteLocationHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class DeleteLocationAction extends BaseAction
 {
@@ -17,7 +18,7 @@ class DeleteLocationAction extends BaseAction
         private readonly DeleteLocationHandler $handler,
     ) {}
 
-    public function __invoke(int $organizerId, int $locationId): JsonResponse
+    public function __invoke(int $organizerId, int $locationId): Response|JsonResponse
     {
         $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 

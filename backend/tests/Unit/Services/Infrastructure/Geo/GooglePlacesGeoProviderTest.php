@@ -190,7 +190,61 @@ class GooglePlacesGeoProviderTest extends TestCase
 
         $this->assertNotNull($first);
         $this->assertNotNull($second);
-        // One upstream call, not two — the second resolves from cache.
         Http::assertSentCount(1);
+    }
+
+    public function test_cached_raw_place_details_available_after_lookup_without_extra_requests(): void
+    {
+        Http::fake([
+            'places.googleapis.com/v1/places/*' => Http::response([
+                'id' => 'ChIJ-raw',
+                'displayName' => ['text' => 'Raw Place'],
+                'types' => ['establishment'],
+                'addressComponents' => [
+                    ['types' => ['country'], 'shortText' => 'IE', 'longText' => 'Ireland'],
+                ],
+            ], 200),
+        ]);
+
+        $provider = $this->makeProvider();
+        $provider->getPlaceDetails('ChIJ-raw');
+
+        $raw = $provider->getCachedRawPlaceDetails('ChIJ-raw');
+
+        $this->assertSame('ChIJ-raw', $raw['id']);
+        Http::assertSentCount(1);
+    }
+
+    public function test_cached_raw_place_details_shared_across_locales(): void
+    {
+        Http::fake([
+            'places.googleapis.com/v1/places/*' => Http::response([
+                'id' => 'ChIJ-locale',
+                'displayName' => ['text' => 'Locale Place'],
+                'types' => ['establishment'],
+                'addressComponents' => [
+                    ['types' => ['country'], 'shortText' => 'DE', 'longText' => 'Germany'],
+                ],
+            ], 200),
+        ]);
+
+        $provider = $this->makeProvider();
+        $provider->getPlaceDetails('ChIJ-locale', locale: 'de');
+
+        $this->assertSame('ChIJ-locale', $provider->getCachedRawPlaceDetails('ChIJ-locale')['id']);
+        Http::assertSentCount(1);
+    }
+
+    public function test_cached_raw_place_details_returns_null_when_never_fetched(): void
+    {
+        $provider = $this->makeProvider();
+
+        $this->assertNull($provider->getCachedRawPlaceDetails('ChIJ-unknown'));
+        $this->assertNull($provider->getCachedRawPlaceDetails(null));
+    }
+
+    public function test_is_available(): void
+    {
+        $this->assertTrue($this->makeProvider()->isAvailable());
     }
 }

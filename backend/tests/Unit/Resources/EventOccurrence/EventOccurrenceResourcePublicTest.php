@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Resources\EventOccurrence;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use Illuminate\Http\Request;
 use Tests\TestCase;
@@ -88,5 +90,63 @@ class EventOccurrenceResourcePublicTest extends TestCase
 
         $this->assertSame('ACTIVE', $result['status']);
         $this->assertSame('Morning', $result['label']);
+    }
+
+    private function onlineLocation(): EventLocationDomainObject
+    {
+        $eventLocation = new EventLocationDomainObject;
+        $eventLocation->setType('ONLINE');
+        $eventLocation->setOnlineEventConnectionDetails('<p>Zoom link</p>');
+
+        return $eventLocation;
+    }
+
+    public function test_event_location_is_absent_when_not_loaded(): void
+    {
+        $result = $this->serialize($this->occurrence(null), null);
+
+        $this->assertArrayNotHasKey('event_location', $result);
+    }
+
+    public function test_in_person_event_location_includes_venue(): void
+    {
+        $location = new LocationDomainObject;
+        $location->setName('Grand Hall');
+        $location->setStructuredAddress(['venue_name' => 'Grand Hall', 'city' => 'Dublin']);
+
+        $eventLocation = new EventLocationDomainObject;
+        $eventLocation->setType('IN_PERSON');
+        $eventLocation->setLocation($location);
+
+        $occurrence = $this->occurrence(null);
+        $occurrence->setEventLocation($eventLocation);
+
+        $result = json_decode(json_encode($this->serialize($occurrence, null)), true);
+
+        $this->assertSame('IN_PERSON', $result['event_location']['type']);
+        $this->assertSame('Grand Hall', $result['event_location']['location']['name']);
+        $this->assertSame('Dublin', $result['event_location']['location']['structured_address']['city']);
+    }
+
+    public function test_online_connection_details_are_hidden_by_default(): void
+    {
+        $occurrence = $this->occurrence(null);
+        $occurrence->setEventLocation($this->onlineLocation());
+
+        $result = json_decode(json_encode($this->serialize($occurrence, null)), true);
+
+        $this->assertSame('ONLINE', $result['event_location']['type']);
+        $this->assertArrayNotHasKey('online_event_connection_details', $result['event_location']);
+    }
+
+    public function test_online_connection_details_are_included_when_flagged(): void
+    {
+        $occurrence = $this->occurrence(null);
+        $occurrence->setEventLocation($this->onlineLocation());
+
+        $resource = new EventOccurrenceResourcePublic($occurrence, false, true);
+        $result = json_decode(json_encode($resource->resolve(Request::create('/'))), true);
+
+        $this->assertSame('<p>Zoom link</p>', $result['event_location']['online_event_connection_details']);
     }
 }

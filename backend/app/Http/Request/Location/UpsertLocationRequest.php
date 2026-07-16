@@ -21,7 +21,7 @@ class UpsertLocationRequest extends BaseRequest
             'structured_address.city' => ['nullable', 'string', 'max:85'],
             'structured_address.state_or_region' => ['nullable', 'string', 'max:85'],
             'structured_address.zip_or_postal_code' => ['nullable', 'string', 'max:85'],
-            'structured_address.country' => ['nullable', 'string', 'max:2'],
+            'structured_address.country' => ['nullable', 'string', 'size:2'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'provider' => [

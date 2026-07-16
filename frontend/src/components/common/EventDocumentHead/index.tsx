@@ -3,7 +3,7 @@ import {Helmet} from "react-helmet-async";
 import {Event, LocationType} from "../../../types";
 import {eventCoverImageUrl, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {utcToTz} from "../../../utilites/dates.ts";
-import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
 
@@ -22,16 +22,8 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const startDate = utcToTz(new Date(event.start_date), event.timezone);
     const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
 
-    const occurrences = event.occurrences ?? [];
-    const resolvedList = occurrences.length > 0
-        ? occurrences.map(o => resolveEventLocation(event, o))
-        : [resolveEventLocation(event, null)];
-    const types = new Set<string>();
-    for (const r of resolvedList) {
-        if (r) types.add(r.type);
-    }
-    const effective = resolvedList[0];
-    const hasMixedModes = types.size > 1;
+    const locationSummary = summariseEventLocations(event);
+    const effective = locationSummary.kind === 'single' ? locationSummary.eventLocation : null;
     const structuredAddress = effective?.type === LocationType.InPerson ? effective.location?.structured_address : null;
 
     const address = structuredAddress ? {
@@ -71,11 +63,16 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
         ...(geo ? {geo} : {}),
     } : {};
 
-    const eventAttendanceMode = hasMixedModes
+    const attendanceType = locationSummary.kind === 'single'
+        ? locationSummary.eventLocation.type
+        : locationSummary.kind === 'varied' && locationSummary.types.length === 1
+            ? locationSummary.types[0]
+            : null;
+    const eventAttendanceMode = locationSummary.kind === 'varied' && locationSummary.types.length > 1
         ? "https://schema.org/MixedEventAttendanceMode"
-        : effective?.type === LocationType.Online
+        : attendanceType === LocationType.Online
             ? "https://schema.org/OnlineEventAttendanceMode"
-            : effective?.type === LocationType.InPerson
+            : attendanceType === LocationType.InPerson
                 ? "https://schema.org/OfflineEventAttendanceMode"
                 : undefined;
 

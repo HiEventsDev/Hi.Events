@@ -11,7 +11,7 @@ import {getProductsFromEvent} from "../../../../utilites/helpers.ts";
 import {ShareComponent} from "../../../common/ShareIcon";
 import dayjs from "dayjs";
 import {IconCalendar, IconClock, IconMapPin, IconTicket, IconWifi} from '@tabler/icons-react';
-import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
+import {summariseEventLocations} from "../../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
 
 interface EventCardProps {
@@ -39,30 +39,18 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     const endDay = event.end_date ? formatDateWithLocale(event.end_date, "dayOfMonth", event.timezone) : null;
 
     const coverImage = event.images?.find(img => img.type === 'EVENT_COVER');
-    const occurrences = event.occurrences ?? [];
-    const resolvedList = occurrences.length > 0
-        ? occurrences.map(o => resolveEventLocation(event, o))
-        : [resolveEventLocation(event, null)];
-    const types = new Set<string>();
-    const locationIds = new Set<string>();
-    for (const r of resolvedList) {
-        if (r) {
-            types.add(r.type);
-            if (r.location_id != null) locationIds.add(String(r.location_id));
-        }
-    }
-    const effective = resolvedList[0];
-    const hasMixedModes = types.size > 1;
-    const hasMultipleLocations = locationIds.size > 1;
-    const isOnlineEvent = effective?.type === LocationType.Online;
+    const locationSummary = summariseEventLocations(event);
+    const isOnlineEvent = locationSummary.kind === 'single' && locationSummary.eventLocation.type === LocationType.Online;
     const locationLabel: string | null = (() => {
-        if (hasMixedModes) return t`Online & in-person`;
-        if (isOnlineEvent) return t`Online`;
-        if (hasMultipleLocations) return t`Multiple locations`;
-        if (effective?.type !== LocationType.InPerson) return null;
-        const city = effective.location?.structured_address?.city;
-        const venueName = effective.location?.name || effective.location?.structured_address?.venue_name;
-        const formatted = effective.location?.structured_address ? formatAddress(effective.location.structured_address) : '';
+        if (locationSummary.kind === 'none') return null;
+        if (locationSummary.kind === 'varied') {
+            return locationSummary.types.length > 1 ? t`Online & in-person` : t`Multiple locations`;
+        }
+        const eventLocation = locationSummary.eventLocation;
+        if (eventLocation.type === LocationType.Online) return t`Online`;
+        const city = eventLocation.location?.structured_address?.city;
+        const venueName = eventLocation.location?.name || eventLocation.location?.structured_address?.venue_name;
+        const formatted = eventLocation.location?.structured_address ? formatAddress(eventLocation.location.structured_address) : '';
         return venueName ?? city ?? (formatted ? formatted : null);
     })();
     const location = !isOnlineEvent ? locationLabel : null;

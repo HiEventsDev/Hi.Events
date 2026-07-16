@@ -1,7 +1,7 @@
 import {Button} from "@mantine/core";
 import {IconCheck, IconCircle, IconCircleCheck, IconX} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
-import {Account, Event, EventSettings, EventType, Image, Organizer, User} from "../../../../types.ts";
+import {Account, Event, EventType, Image, Organizer, User} from "../../../../types.ts";
 import {BouncingEmoji} from "../../../common/BouncingEmoji";
 import {useResendEmailConfirmation} from "../../../../mutations/useResendEmailConfirmation.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
@@ -9,7 +9,6 @@ import classes from "./SetupChecklist.module.scss";
 
 interface SetupChecklistProps {
     event: Event;
-    eventSettings: EventSettings | undefined;
     organizer: Organizer | undefined;
     isStripeConnected: boolean;
     productCount: number;
@@ -28,22 +27,10 @@ interface SetupChecklistProps {
     showCongratsHeader?: boolean;
 }
 
-export const hasEventDetails = (event: Event, eventSettings: EventSettings | undefined): boolean => {
+export const hasEventDetails = (event: Event): boolean => {
     const description = event.description?.trim() ?? '';
-    if (description.length === 0) {
-        return false;
-    }
 
-    if (eventSettings?.is_online_event) {
-        return true;
-    }
-
-    const venue = eventSettings?.location_details;
-    return [
-        venue?.venue_name,
-        venue?.address_line_1,
-        venue?.city,
-    ].some((v) => v && v.trim().length > 0);
+    return description.length > 0 && !!event.event_location;
 };
 
 type ActionStyle = 'primary' | 'secondary';
@@ -62,7 +49,6 @@ interface Step {
 
 export const SetupChecklist = ({
                                    event,
-                                   eventSettings,
                                    organizer,
                                    isStripeConnected,
                                    productCount,
@@ -150,7 +136,7 @@ export const SetupChecklist = ({
             title: t`Add event details`,
             helperIncomplete: t`Add a description and venue so attendees know what to expect`,
             helperComplete: t`Description and venue added`,
-            complete: hasEventDetails(event, eventSettings),
+            complete: hasEventDetails(event),
             actionLabel: t`Add details`,
             actionStyle: 'secondary',
             onAction: onEditDetails,

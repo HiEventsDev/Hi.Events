@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Location\DTO\UpsertLocationDTO;
 use HiEvents\Services\Domain\Location\LocationDataSanitizer;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Throwable;
 
 class CreateLocationHandler
@@ -26,36 +27,46 @@ class CreateLocationHandler
      */
     public function handle(UpsertLocationDTO $dto): LocationDomainObject
     {
-        return $this->databaseManager->transaction(function () use ($dto) {
-            if ($dto->provider !== null && $dto->provider_place_id !== null) {
-                $existing = $this->locationRepository->findFirstWhere([
-                    LocationDomainObjectAbstract::ORGANIZER_ID => $dto->organizer_id,
-                    LocationDomainObjectAbstract::ACCOUNT_ID => $dto->account_id,
-                    LocationDomainObjectAbstract::PROVIDER => $dto->provider,
-                    LocationDomainObjectAbstract::PROVIDER_PLACE_ID => $dto->provider_place_id,
-                ]);
+        try {
+            return $this->databaseManager->transaction(fn () => $this->createOrReuse($dto));
+        } catch (UniqueConstraintViolationException $exception) {
+            return $this->findExistingProviderPlace($dto) ?? throw $exception;
+        }
+    }
 
-                // Reuse the saved row as-is. Mutating it here would silently
-                // rename or move locations already linked from other events or
-                // an organizer's saved address. Edits must go through
-                // UpdateLocationHandler with an explicit location ID.
-                if ($existing !== null) {
-                    return $existing;
-                }
-            }
+    private function createOrReuse(UpsertLocationDTO $dto): LocationDomainObject
+    {
+        $existing = $this->findExistingProviderPlace($dto);
 
-            return $this->locationRepository->create([
-                LocationDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::LOCATION_PREFIX),
-                LocationDomainObjectAbstract::ACCOUNT_ID => $dto->account_id,
-                LocationDomainObjectAbstract::ORGANIZER_ID => $dto->organizer_id,
-                LocationDomainObjectAbstract::NAME => $this->sanitizer->sanitizeText($dto->name),
-                LocationDomainObjectAbstract::STRUCTURED_ADDRESS => $this->sanitizer->sanitizeAddress($dto->structured_address->toArray()),
-                LocationDomainObjectAbstract::LATITUDE => $dto->latitude,
-                LocationDomainObjectAbstract::LONGITUDE => $dto->longitude,
-                LocationDomainObjectAbstract::PROVIDER => $dto->provider,
-                LocationDomainObjectAbstract::PROVIDER_PLACE_ID => $dto->provider_place_id,
-                LocationDomainObjectAbstract::RAW_PROVIDER_RESPONSE => $this->sanitizer->fetchRawProviderResponse($dto->provider, $dto->provider_place_id),
-            ]);
-        });
+        if ($existing !== null) {
+            return $existing;
+        }
+
+        return $this->locationRepository->create([
+            LocationDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::LOCATION_PREFIX),
+            LocationDomainObjectAbstract::ACCOUNT_ID => $dto->account_id,
+            LocationDomainObjectAbstract::ORGANIZER_ID => $dto->organizer_id,
+            LocationDomainObjectAbstract::NAME => $this->sanitizer->sanitizeText($dto->name),
+            LocationDomainObjectAbstract::STRUCTURED_ADDRESS => $this->sanitizer->sanitizeAddress($dto->structured_address->toArray()),
+            LocationDomainObjectAbstract::LATITUDE => $dto->latitude,
+            LocationDomainObjectAbstract::LONGITUDE => $dto->longitude,
+            LocationDomainObjectAbstract::PROVIDER => $dto->provider,
+            LocationDomainObjectAbstract::PROVIDER_PLACE_ID => $dto->provider_place_id,
+            LocationDomainObjectAbstract::RAW_PROVIDER_RESPONSE => $this->sanitizer->cachedRawProviderResponse($dto->provider, $dto->provider_place_id),
+        ]);
+    }
+
+    private function findExistingProviderPlace(UpsertLocationDTO $dto): ?LocationDomainObject
+    {
+        if ($dto->provider === null || $dto->provider_place_id === null) {
+            return null;
+        }
+
+        return $this->locationRepository->findFirstWhere([
+            LocationDomainObjectAbstract::ORGANIZER_ID => $dto->organizer_id,
+            LocationDomainObjectAbstract::ACCOUNT_ID => $dto->account_id,
+            LocationDomainObjectAbstract::PROVIDER => $dto->provider,
+            LocationDomainObjectAbstract::PROVIDER_PLACE_ID => $dto->provider_place_id,
+        ]);
     }
 }

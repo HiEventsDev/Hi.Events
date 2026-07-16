@@ -28,7 +28,7 @@ class GooglePlacesGeoProvider implements GeoProviderInterface
 
     private const REQUEST_TIMEOUT_SECONDS = 8;
 
-    private const PLACE_DETAILS_CACHE_TTL_SECONDS = 86400 * 7; // 7 days — place IDs are stable.
+    private const PLACE_DETAILS_CACHE_TTL_SECONDS = 86400 * 7;
 
     public function __construct(
         private readonly string $apiKey,
@@ -105,9 +105,6 @@ class GooglePlacesGeoProvider implements GeoProviderInterface
             return null;
         }
 
-        // Place IDs are stable upstream — Google explicitly recommends caching
-        // place-details responses to cut API costs. Cache the parsed payload
-        // (not the DTO, since some fields are derived).
         $cacheKey = $this->placeDetailsCacheKey($providerPlaceId, $locale);
         $payload = $this->cache->get($cacheKey);
 
@@ -119,7 +116,25 @@ class GooglePlacesGeoProvider implements GeoProviderInterface
             $this->cache->put($cacheKey, $payload, self::PLACE_DETAILS_CACHE_TTL_SECONDS);
         }
 
+        $this->cache->put($this->rawPlaceDetailsCacheKey($providerPlaceId), $payload, self::PLACE_DETAILS_CACHE_TTL_SECONDS);
+
         return $this->mapToGeoPlaceDTO($payload, $providerPlaceId);
+    }
+
+    public function getCachedRawPlaceDetails(?string $providerPlaceId): ?array
+    {
+        if ($providerPlaceId === null || $providerPlaceId === '') {
+            return null;
+        }
+
+        $payload = $this->cache->get($this->rawPlaceDetailsCacheKey($providerPlaceId));
+
+        return is_array($payload) ? $payload : null;
+    }
+
+    public function isAvailable(): bool
+    {
+        return true;
     }
 
     private function fetchPlaceDetailsPayload(string $providerPlaceId, ?string $locale): ?array
@@ -176,6 +191,11 @@ class GooglePlacesGeoProvider implements GeoProviderInterface
     private function placeDetailsCacheKey(string $providerPlaceId, ?string $locale): string
     {
         return 'geo:place_details:'.self::PROVIDER_NAME.':'.$providerPlaceId.':'.($locale ?? '');
+    }
+
+    private function rawPlaceDetailsCacheKey(string $providerPlaceId): string
+    {
+        return 'geo:place_details_raw:'.self::PROVIDER_NAME.':'.$providerPlaceId;
     }
 
     private function isQuotaResponse(int $status, mixed $body): bool

@@ -23,7 +23,7 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {formatDateWithLocale, isValidDate, relativeDate} from "../../../utilites/dates.ts";
 import {Card} from "../Card";
-import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 
 const placeholderGradients = [
@@ -94,29 +94,16 @@ export function EventCard({event, compact = false}: EventCardProps) {
     };
 
     const getLocationText = () => {
-        const occurrences = event.occurrences ?? [];
-        const resolvedList = occurrences.length > 0
-            ? occurrences.map(o => resolveEventLocation(event, o))
-            : [resolveEventLocation(event, null)];
-
-        const types = new Set<string>();
-        const locationIds = new Set<string>();
-        for (const r of resolvedList) {
-            if (r) {
-                types.add(r.type);
-                if (r.location_id != null) locationIds.add(String(r.location_id));
-            }
+        const locationSummary = summariseEventLocations(event);
+        if (locationSummary.kind === 'none') return null;
+        if (locationSummary.kind === 'varied') {
+            return locationSummary.types.length > 1 ? t`Online & in-person` : t`Multiple locations`;
         }
-
-        const first = resolvedList[0];
-        if (!first) return null;
-        if (types.size > 1) return t`Online & in-person`;
-        if (first.type === LocationType.Online) return t`Online`;
-        if (locationIds.size > 1) return t`Multiple locations`;
-        if (first.type !== LocationType.InPerson) return null;
-        const city = first.location?.structured_address?.city;
-        const venueName = first.location?.name || first.location?.structured_address?.venue_name;
-        const formatted = first.location?.structured_address ? formatAddress(first.location.structured_address) : '';
+        const eventLocation = locationSummary.eventLocation;
+        if (eventLocation.type === LocationType.Online) return t`Online`;
+        const city = eventLocation.location?.structured_address?.city;
+        const venueName = eventLocation.location?.name || eventLocation.location?.structured_address?.venue_name;
+        const formatted = eventLocation.location?.structured_address ? formatAddress(eventLocation.location.structured_address) : '';
         return venueName ?? city ?? (formatted ? formatted : null);
     };
 

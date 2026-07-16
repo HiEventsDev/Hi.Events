@@ -4,7 +4,7 @@ import "../../../styles/widget/default.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, EventOccurrence, EventType, LocationType, OrganizerStatus} from "../../../types.ts";
+import {Event, EventOccurrence, EventType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -25,12 +25,8 @@ import {t} from "@lingui/macro";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {ContactOrganizerModal} from "../../common/ContactOrganizerModal";
 import {socialMediaConfig} from "../../../constants/socialMediaConfig";
-import {
-    formatAddress,
-    getGoogleMapsUrl,
-    getShortLocationDisplay
-} from "../../../utilites/addressUtilities.ts";
-import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {getGoogleMapsUrl, getShortLocationDisplay} from "../../../utilites/addressUtilities.ts";
+import {buildEventLocationDisplay, summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {StatusToggle} from "../../common/StatusToggle";
 import {getConfig} from "../../../utilites/config.ts";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
@@ -146,35 +142,17 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const organizerLogo = imageUrl('ORGANIZER_LOGO', organizer?.images);
     const organizerLocation = organizer?.location?.structured_address;
     const websiteUrl = organizer?.website;
-    const occurrences = event.occurrences ?? [];
-    const resolvedList = occurrences.length > 0
-        ? occurrences.map(o => resolveEventLocation(event, o))
-        : [resolveEventLocation(event, null)];
-    const types = new Set<string>();
-    const locationIds = new Set<string>();
-    for (const r of resolvedList) {
-        if (r) {
-            types.add(r.type);
-            if (r.location_id != null) locationIds.add(String(r.location_id));
-        }
-    }
-    const effective = resolvedList[0];
-    const hasMixedModes = types.size > 1;
-    const hasMultipleLocations = locationIds.size > 1;
-    const isOnlineEvent = effective?.type === LocationType.Online;
-    const venueName = effective?.type === LocationType.InPerson
-        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+    const locationSummary = summariseEventLocations(event);
+    const singleLocationDisplay = locationSummary.kind === 'single'
+        ? buildEventLocationDisplay(event, locationSummary.eventLocation, locationSummary.isEventDefault)
         : null;
-    const formattedAddress = effective?.type === LocationType.InPerson && effective.location?.structured_address
-        ? formatAddress(effective.location.structured_address)
-        : '';
-    const locationDetails = effective?.type === LocationType.InPerson
-        ? effective.location?.structured_address ?? null
-        : null;
-    const hasLocation = !hasMixedModes
-        && !hasMultipleLocations
-        && effective?.type === LocationType.InPerson
-        && Boolean(locationDetails);
+    const hasMixedModes = locationSummary.kind === 'varied' && locationSummary.types.length > 1;
+    const hasMultipleLocations = locationSummary.kind === 'varied' && locationSummary.types.length === 1;
+    const isOnlineEvent = singleLocationDisplay?.isOnline === true;
+    const hasLocation = singleLocationDisplay !== null && !singleLocationDisplay.isOnline;
+    const venueName = singleLocationDisplay?.venueName ?? null;
+    const formattedAddress = singleLocationDisplay?.full ?? '';
+    const mapUrl = singleLocationDisplay?.mapsUrl ?? null;
     const multipleLocationsLabel = hasMultipleLocations ? t`Multiple locations` : null;
     const mixedModesLabel = hasMixedModes ? t`Online & in-person — see schedule` : null;
 
@@ -208,16 +186,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     };
 
     const statusBadge = getStatusBadge();
-
-    const mapUrl = (() => {
-        if (effective?.type !== LocationType.InPerson || !effective.location) return null;
-        const {latitude, longitude, structured_address} = effective.location;
-        if (latitude != null && longitude != null) {
-            return `https://www.google.com/maps?q=${latitude},${longitude}`;
-        }
-        if (structured_address) return getGoogleMapsUrl(structured_address) || null;
-        return null;
-    })();
 
     return (
         <>
