@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\EmailTemplate;
 
 use HiEvents\DomainObjects\EmailTemplateDomainObject;
+use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\Exceptions\EmailTemplateNotFoundException;
 use HiEvents\Exceptions\EmailTemplateValidationException;
 use HiEvents\Exceptions\InvalidEmailTemplateException;
@@ -17,8 +18,7 @@ class UpdateEmailTemplateHandler
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
         private readonly EmailTemplateService $emailTemplateService,
         private readonly HtmlPurifierService $purifier,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws EmailTemplateValidationException
@@ -27,12 +27,12 @@ class UpdateEmailTemplateHandler
      */
     public function handle(UpsertEmailTemplateDTO $dto): EmailTemplateDomainObject
     {
-        if (!$dto->id) {
+        if (! $dto->id) {
             throw new InvalidEmailTemplateException('Template ID is required for update');
         }
 
         $validation = $this->emailTemplateService->validateTemplate($dto->subject, $dto->body);
-        if (!$validation['valid']) {
+        if (! $validation['valid']) {
             $exception = new EmailTemplateValidationException('Template validation failed');
             $exception->validationErrors = $validation['errors'];
             throw $exception;
@@ -43,16 +43,32 @@ class UpdateEmailTemplateHandler
             'account_id' => $dto->account_id,
         ]);
 
-        if (!$template) {
+        if (! $template) {
             throw new EmailTemplateNotFoundException('Email template not found');
         }
 
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [
             'subject' => $dto->subject,
             'body' => $this->purifier->purify($dto->body),
-            'cta' => $dto->cta,
+            'cta' => $this->resolveCta($dto->cta, $template->getTemplateType()),
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,
         ]);
+    }
+
+    private function resolveCta(?array $cta, string $templateType): ?array
+    {
+        if ($cta === null) {
+            return null;
+        }
+
+        $defaultCta = $this->emailTemplateService->getDefaultTemplate(
+            EmailTemplateType::from($templateType)
+        )['cta'] ?? null;
+
+        return [
+            'label' => $cta['label'] ?? $defaultCta['label'] ?? '',
+            'url_token' => $defaultCta['url_token'] ?? ($cta['url_token'] ?? null),
+        ];
     }
 }
