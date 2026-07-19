@@ -242,11 +242,9 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
             return null;
         }
 
-        $now = Carbon::now();
-
         $nextOccurrence = $this->eventOccurrences
             ->filter(fn (EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name)
-            ->filter(fn (EventOccurrenceDomainObject $o) => Carbon::parse($o->getStartDate(), 'UTC')->isFuture())
+            ->filter(fn (EventOccurrenceDomainObject $o) => ! $o->isPast())
             ->sortBy(fn (EventOccurrenceDomainObject $o) => $o->getStartDate())
             ->first();
 

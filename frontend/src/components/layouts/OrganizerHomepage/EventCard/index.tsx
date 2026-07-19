@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router";
 import {Event, LocationType} from "../../../../types.ts";
 import classes from './EventCard.module.scss';
-import {formatDateWithLocale} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, isSameDayInTimezone} from "../../../../utilites/dates.ts";
 import {t} from "@lingui/macro";
 import {isLightColor} from "@mantine/core";
 import {formatCurrency} from "../../../../utilites/currency.ts";
@@ -27,14 +27,13 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     const emojiIndex = event.id ? Number(event.id) % placeholderEmojis.length : 0;
     const placeholderEmoji = placeholderEmojis[emojiIndex];
 
-    // Format dates using the event's timezone
     const startMonth = formatDateWithLocale(event.start_date, "monthShort", event.timezone);
     const startDay = formatDateWithLocale(event.start_date, "dayOfMonth", event.timezone);
     const startTime = formatDateWithLocale(event.start_date, "timeOnly", event.timezone);
     const endTime = event.end_date ? formatDateWithLocale(event.end_date, "timeOnly", event.timezone) : null;
     const prettyTimezone = formatDateWithLocale(event.start_date, "timezone", event.timezone);
 
-    const isSameDay = event.end_date && event.start_date.substring(0, 10) === event.end_date.substring(0, 10);
+    const isSameDay = !!event.end_date && isSameDayInTimezone(event.start_date, event.end_date, event.timezone);
     const endMonth = event.end_date ? formatDateWithLocale(event.end_date, "monthShort", event.timezone) : null;
     const endDay = event.end_date ? formatDateWithLocale(event.end_date, "dayOfMonth", event.timezone) : null;
 
@@ -55,16 +54,13 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     })();
     const location = !isOnlineEvent ? locationLabel : null;
 
-    // Check if event is live
     const now = dayjs();
     const startDate = dayjs(event.start_date);
     const endDate = event.end_date ? dayjs(event.end_date) : startDate.add(2, 'hour');
     const isLive = now.isAfter(startDate) && now.isBefore(endDate);
 
-    // Get products from event categories
     const products = getProductsFromEvent(event) || [];
 
-    // Calculate price range from products
     let lowestPrice: number | null = null;
     let highestPrice: number | null = null;
 
@@ -95,7 +91,6 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
     return (
         <Link to={eventPath} className={classes.eventCardLink}>
             <article className={classes.eventCard}>
-                {/* Image Section */}
                 <div className={classes.eventImage}>
                     <div className={classes.imageWrapper}>
                         {coverImage ? (
@@ -118,7 +113,6 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                             </div>
                         )}
 
-                        {/* Floating elements on image */}
                         <div className={classes.imageOverlay}>
                             {isLive && (
                                 <div className={classes.liveIndicator}>
@@ -144,7 +138,6 @@ export const EventCard: React.FC<EventCardProps> = ({event, primaryColor = '#8b5
                     </div>
                 </div>
 
-                {/* Content Section */}
                 <div className={classes.eventContent}>
                     <div className={classes.eventHeader}>
                         <h3 className={classes.eventTitle}>{event.title}</h3>

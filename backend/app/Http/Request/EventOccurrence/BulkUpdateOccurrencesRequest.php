@@ -21,14 +21,12 @@ class BulkUpdateOccurrencesRequest extends BaseRequest
             'future_only' => ['nullable', 'boolean'],
             'skip_overridden' => ['nullable', 'boolean'],
             'refund_orders' => ['nullable', 'boolean'],
-            // Caller must either name occurrence_ids explicitly or set
-            // apply_to_all=true. An absent set is rejected by withValidator().
             'apply_to_all' => ['nullable', 'boolean'],
             'occurrence_ids' => ['array'],
             'occurrence_ids.*' => ['integer'],
             'label' => ['nullable', 'string', 'max:255'],
             'clear_label' => ['nullable', 'boolean'],
-            'duration_minutes' => ['nullable', 'integer', 'min:1'],
+            'duration_minutes' => ['nullable', 'integer', 'min:1', 'max:10080'],
             'event_location' => ['nullable', 'array'],
             'event_location.type' => ['required_with:event_location', Rule::in(LocationType::valuesArray())],
             'event_location.location_id' => [

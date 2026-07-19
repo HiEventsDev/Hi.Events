@@ -45,4 +45,32 @@ class BulkUpdateOccurrencesRequestTest extends TestCase
 
         $this->assertFalse($validator->errors()->has('event_location.location_id'));
     }
+
+    public function test_duration_minutes_rejects_values_above_seven_days(): void
+    {
+        $request = new BulkUpdateOccurrencesRequest;
+        $request->merge([
+            'action' => BulkOccurrenceAction::UPDATE->value,
+            'apply_to_all' => true,
+            'duration_minutes' => 10081,
+        ]);
+
+        $validator = Validator::make($request->all(), $request->rules(), $request->messages());
+
+        $this->assertTrue($validator->errors()->has('duration_minutes'));
+    }
+
+    public function test_duration_minutes_accepts_seven_days(): void
+    {
+        $request = new BulkUpdateOccurrencesRequest;
+        $request->merge([
+            'action' => BulkOccurrenceAction::UPDATE->value,
+            'apply_to_all' => true,
+            'duration_minutes' => 10080,
+        ]);
+
+        $validator = Validator::make($request->all(), $request->rules(), $request->messages());
+
+        $this->assertFalse($validator->errors()->has('duration_minutes'));
+    }
 }

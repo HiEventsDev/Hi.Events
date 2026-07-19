@@ -1,6 +1,6 @@
 import {t} from "@lingui/macro";
 import {Event, EventOccurrence, EventOccurrenceStatus, EventType} from "../../../types.ts";
-import {formatDateWithLocale} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, isSameDayInTimezone} from "../../../utilites/dates.ts";
 
 interface EventDateRangeProps {
     event: Event;
@@ -8,7 +8,7 @@ interface EventDateRangeProps {
 }
 
 const formatRange = (startDate: string, endDate: string | undefined, tz: string) => {
-    const isSameDay = endDate && startDate.substring(0, 10) === endDate.substring(0, 10);
+    const isSameDay = !!endDate && isSameDayInTimezone(startDate, endDate, tz);
     const timezone = formatDateWithLocale(startDate, "timezone", tz);
 
     if (isSameDay) {

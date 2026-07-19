@@ -144,7 +144,9 @@ class ReportServiceTest extends TestCase
         $this->queryBuilder->shouldReceive('select')
             ->once()
             ->with(
-                Mockery::on(fn ($sql) => str_contains($sql, 'event_occurrences') && str_contains($sql, 'event_occurrence_statistics')),
+                Mockery::on(fn ($sql) => str_contains($sql, 'event_occurrences')
+                    && str_contains($sql, 'event_occurrence_statistics')
+                    && str_contains($sql, 'COALESCE(eo.end_date, eo.start_date) >= :start_date')),
                 Mockery::on(fn ($bindings) => $bindings['event_id'] === 1
                     && isset($bindings['start_date'])
                     && isset($bindings['end_date'])),

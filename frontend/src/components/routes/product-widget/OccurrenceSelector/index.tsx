@@ -8,7 +8,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {Event, EventOccurrence, EventOccurrenceStatus, EventType, IdParam, RecurrenceRule} from "../../../../types.ts";
 import {EventLocationDisplay, getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
-import {formatDateWithLocale, getSafeLocale} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getSafeLocale} from "../../../../utilites/dates.ts";
 import {localeFormats} from "../../../../utilites/dateLocales.ts";
 import {getClientLocale} from "../../../../locales.ts";
 import './OccurrenceSelector.scss';
@@ -56,11 +56,6 @@ interface OccurrenceSelectorProps {
         secondaryText?: string;
         background?: string;
     };
-    /**
-     * The product/ticket form for the currently-selected occurrence. Rendered in
-     * the content pane (beside the persistent calendar) once an occurrence on the
-     * focused date is selected, so picking tickets never leaves the calendar view.
-     */
     productSlot?: ReactNode;
     isProductsLoading?: boolean;
     waitlistAvailable?: boolean;
@@ -111,9 +106,10 @@ const SlotRow = ({
     const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
     const cancelled = occ.status === EventOccurrenceStatus.CANCELLED;
     const selectable = isBookable(occ) || (soldOut && !!waitlistAvailable);
+    const inProgress = !cancelled && !occ.is_past && dayjs.utc(occ.start_date).isBefore(dayjs());
 
     const startTime = formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale);
-    const endTime = occ.end_date ? formatDateWithLocale(occ.end_date, 'timeOnly', tz, locale) : null;
+    const endTime = occ.end_date ? formatOccurrenceEnd(occ.end_date, occ.start_date, tz, locale) : null;
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
 
     const spots = capacityInfo(occ);
@@ -128,6 +124,7 @@ const SlotRow = ({
             : spots?.label ?? null;
     const ariaLabel = [
         timeLabel,
+        inProgress ? t`In progress` : null,
         occ.label,
         locationLabel,
         statusLabel,
@@ -162,6 +159,9 @@ const SlotRow = ({
                 )}
             </div>
             <div className="hi-time-slot-meta">
+                {inProgress && (
+                    <span className="hi-time-slot-in-progress">{t`In progress`}</span>
+                )}
                 {cancelled && (
                     <span className="hi-time-slot-cancelled">{t`Cancelled`}</span>
                 )}
@@ -304,7 +304,7 @@ const ProductsPane = ({
     const dayOfMonth = formatDateWithLocale(selectedOccurrence.start_date, 'dayOfMonth', tz, locale);
     const startTime = formatDateWithLocale(selectedOccurrence.start_date, 'timeOnly', tz, locale);
     const endTime = selectedOccurrence.end_date
-        ? formatDateWithLocale(selectedOccurrence.end_date, 'timeOnly', tz, locale)
+        ? formatOccurrenceEnd(selectedOccurrence.end_date, selectedOccurrence.start_date, tz, locale)
         : null;
     const timeLabel = `${startTime}${endTime ? ` – ${endTime}` : ''}`;
     const spots = capacityInfo(selectedOccurrence);
@@ -490,6 +490,7 @@ const OccurrencePicker = ({
     }, [focusedDate]);
 
     const todayKey = dayjs().tz(tz).format('YYYY-MM-DD');
+    const minDateKey = [todayKey, ...calendarDays].reduce((min, key) => (key < min ? key : min));
     const focusedSlots = occurrencesByDate[focusedDate] || [];
 
     const selectedOccurrence = selectedOccurrenceId
@@ -564,7 +565,7 @@ const OccurrencePicker = ({
                         }}
                         date={displayedMonth}
                         onDateChange={setDisplayedMonth}
-                        minDate={todayKey}
+                        minDate={minDateKey}
                         allowDeselect={false}
                         highlightToday
                         hideOutsideDates

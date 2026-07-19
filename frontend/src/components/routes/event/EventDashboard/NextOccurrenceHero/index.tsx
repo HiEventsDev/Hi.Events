@@ -14,7 +14,7 @@ import timezone from "dayjs/plugin/timezone";
 import {Event, EventOccurrence, EventOccurrenceStatus, IdParam} from "../../../../../types.ts";
 import {useGetEventOccurrence} from "../../../../../queries/useGetEventOccurrence.ts";
 import {useOccurrenceCheckIn} from "../../../../../hooks/useOccurrenceCheckIn.tsx";
-import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../../utilites/dates.ts";
 import classes from "./NextOccurrenceHero.module.scss";
 
 dayjs.extend(utc);
@@ -31,7 +31,6 @@ interface Countdown {
     state: UrgencyState;
     primary: string;
     secondary?: string;
-    /** How often to re-render — tighter windows tick faster. */
     tickMs: number;
 }
 
@@ -39,7 +38,6 @@ const computeCountdown = (occurrence: EventOccurrence, tz: string, now: dayjs.Da
     const start = dayjs.utc(occurrence.start_date).tz(tz);
     const end = occurrence.end_date ? dayjs.utc(occurrence.end_date).tz(tz) : null;
 
-    // Live — between start and end (or start and start+8h if no end).
     const effectiveEnd = end ?? start.add(8, 'hour');
     if (now.isAfter(start) && now.isBefore(effectiveEnd)) {
         return {
@@ -50,7 +48,6 @@ const computeCountdown = (occurrence: EventOccurrence, tz: string, now: dayjs.Da
         };
     }
 
-    // Just wrapped — within an hour of ending, so "you just wrapped!"
     if (end && now.isAfter(end) && now.diff(end, 'hour') < 1) {
         return {
             state: 'wrapping',
@@ -65,7 +62,6 @@ const computeCountdown = (occurrence: EventOccurrence, tz: string, now: dayjs.Da
     const diffHours = start.diff(now, 'hour');
     const diffDays = start.diff(now, 'day');
 
-    // Imminent: under an hour → live ticking
     if (diffMs < 60 * 60 * 1000) {
         if (diffMinutes < 1) {
             const seconds = Math.max(0, Math.floor(diffMs / 1000));
@@ -82,7 +78,6 @@ const computeCountdown = (occurrence: EventOccurrence, tz: string, now: dayjs.Da
         };
     }
 
-    // Today or tomorrow
     if (diffHours < 24) {
         const h = Math.floor(diffMs / (1000 * 60 * 60));
         const m = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
@@ -93,7 +88,6 @@ const computeCountdown = (occurrence: EventOccurrence, tz: string, now: dayjs.Da
         };
     }
 
-    // > 24h: days countdown
     return {
         state: 'future',
         primary: diffDays === 1 ? t`Starts tomorrow` : t`Starts in ${diffDays} days`,
@@ -105,7 +99,6 @@ const pickNextOccurrence = (occurrences: EventOccurrence[] | undefined): EventOc
     if (!occurrences || occurrences.length === 0) return null;
     const now = dayjs();
 
-    // Prefer an in-progress occurrence so mid-event views surface the live one.
     const live = occurrences
         .filter(o => o.status === EventOccurrenceStatus.ACTIVE)
         .find(o => {
@@ -127,7 +120,6 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
 
     const nextOccurrence = useMemo(() => pickNextOccurrence(event.occurrences), [event.occurrences]);
 
-    // Fetch fresh stats so the capacity bar reflects reality on every view.
     const occurrenceQuery = useGetEventOccurrence(eventId, nextOccurrence?.id);
     const occurrence = occurrenceQuery.data ?? nextOccurrence;
 
@@ -139,7 +131,6 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
         [occurrence, tz, now],
     );
 
-    // Tick rate matches urgency — 1s under a minute, 60s otherwise.
     useEffect(() => {
         if (!countdown) return;
         const id = setInterval(() => setNow(dayjs()), countdown.tickMs);
@@ -159,12 +150,10 @@ export const NextOccurrenceHero = ({event, eventId}: NextOccurrenceHeroProps) =>
     const capacity = occurrence.capacity ?? 0;
     const percent = capacity > 0 ? Math.min(100, Math.round((registered / capacity) * 100)) : 0;
 
-    // dayName already includes the date ("Thursday, April 23"); fall back to
-    // shortDate for locales where it returns empty.
     const dateLine = formatDateWithLocale(occurrence.start_date, 'dayName', tz)
         || formatDateWithLocale(occurrence.start_date, 'shortDate', tz);
     const timeLine = formatDateWithLocale(occurrence.start_date, 'timeOnly', tz)
-        + (occurrence.end_date ? ' – ' + formatDateWithLocale(occurrence.end_date, 'timeOnly', tz) : '');
+        + (occurrence.end_date ? ' – ' + formatOccurrenceEnd(occurrence.end_date, occurrence.start_date, tz) : '');
 
     const labelText = countdown.state === 'live'
         ? t`Happening now`

@@ -301,4 +301,56 @@ class EventDomainObjectTest extends TestCase
 
         $this->assertFalse($event->isRecurring());
     }
+
+    public function test_get_next_occurrence_start_date_includes_running_occurrence(): void
+    {
+        $runningStart = Carbon::now()->subDay()->toDateTimeString();
+        $futureStart = Carbon::now()->addDays(3)->toDateTimeString();
+
+        $occurrences = collect([
+            $this->createOccurrence($futureStart, Carbon::now()->addDays(3)->addHours(2)->toDateTimeString()),
+            $this->createOccurrence($runningStart, Carbon::now()->addDay()->toDateTimeString()),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals($runningStart, $event->getNextOccurrenceStartDate());
+    }
+
+    public function test_get_next_occurrence_start_date_skips_ended_and_cancelled_occurrences(): void
+    {
+        $futureStart = Carbon::now()->addDays(3)->toDateTimeString();
+
+        $occurrences = collect([
+            $this->createOccurrence(
+                Carbon::now()->subDays(2)->toDateTimeString(),
+                Carbon::now()->subDay()->toDateTimeString(),
+            ),
+            $this->createOccurrence(Carbon::now()->subHours(3)->toDateTimeString()),
+            $this->createOccurrence(
+                Carbon::now()->addDay()->toDateTimeString(),
+                null,
+                EventOccurrenceStatus::CANCELLED->name,
+            ),
+            $this->createOccurrence($futureStart),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals($futureStart, $event->getNextOccurrenceStartDate());
+    }
+
+    public function test_get_next_occurrence_start_date_returns_null_when_all_ended(): void
+    {
+        $occurrences = collect([
+            $this->createOccurrence(
+                Carbon::now()->subDays(2)->toDateTimeString(),
+                Carbon::now()->subDay()->toDateTimeString(),
+            ),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertNull($event->getNextOccurrenceStartDate());
+    }
 }

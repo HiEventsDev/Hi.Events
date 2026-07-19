@@ -24,7 +24,7 @@ import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {EventOccurrence, EventOccurrenceStatus, MessageType, QueryFilterFields, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {formatDateWithLocale} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../utilites/dates.ts";
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal} from "./OccurrenceEditModal";
@@ -292,7 +292,7 @@ const OccurrencesTab = () => {
                     if (!event) return null;
                     const startTime = formatDateWithLocale(occ.start_date, 'timeOnly', event.timezone);
                     const endTime = occ.end_date
-                        ? formatDateWithLocale(occ.end_date, 'timeOnly', event.timezone)
+                        ? formatOccurrenceEnd(occ.end_date, occ.start_date, event.timezone)
                         : null;
                     const locationDisplay = getEventLocationDisplay(event, occ);
                     return (

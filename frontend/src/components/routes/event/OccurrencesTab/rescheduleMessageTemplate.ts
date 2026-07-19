@@ -8,37 +8,17 @@ import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-/**
- * Shared templates for the "notify attendees" follow-up when an organizer
- * reschedules an occurrence. Two concerns this module handles carefully:
- *
- * 1. **Output format is HTML, not plain text.** The SendMessageModal uses a
- *    TipTap rich-text editor — plain-text newlines collapse into a single
- *    paragraph. Emails render the body via `{!! $message !!}` so HTML flows
- *    through end-to-end.
- *
- * 2. **Date format input differs between "old" and "new" values.** The old
- *    occurrence's start_date is a UTC string from the API; the new start/end
- *    come from the form as event-tz-local strings (YYYY-MM-DDTHH:mm, no tz
- *    marker). We format each appropriately so neither ends up double-offset.
- */
-
 const escape = (value: string): string =>
     value
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-/**
- * Subject column is capped at 100 chars on the backend. Our template adds ~40
- * chars of fixed overhead, so clip the event title for the subject line only.
- */
 const clipForSubject = (title: string, maxTitleLength = 55): string =>
     title.length <= maxTitleLength
         ? title
         : title.slice(0, maxTitleLength - 1).trimEnd() + '…';
 
-/** Format a naive local-tz datetime string (YYYY-MM-DDTHH:mm) in the event tz. */
 const formatLocal = (localString: string, tz: string): string =>
     dayjs.tz(localString, tz).format('MMM D, YYYY · h:mm A');
 
@@ -54,7 +34,11 @@ export const buildSingleRescheduleTemplate = (
     const tz = event.timezone;
     const oldStart = formatDateWithLocale(oldOccurrence.start_date, 'shortDateTime', tz);
     const newStart = formatLocal(newStartDate, tz);
-    const newEnd = newEndDate ? formatLocalTime(newEndDate, tz) : null;
+    const newEnd = newEndDate
+        ? (newEndDate.substring(0, 10) === newStartDate.substring(0, 10)
+            ? formatLocalTime(newEndDate, tz)
+            : formatLocal(newEndDate, tz))
+        : null;
     const newWhen = newEnd ? `${newStart} – ${newEnd}` : newStart;
 
     const title = escape(event.title);
@@ -63,7 +47,6 @@ export const buildSingleRescheduleTemplate = (
     const subjectTitle = clipForSubject(event.title);
     const subject = t`Update: ${subjectTitle} — session time changed`;
 
-    // Built as HTML so TipTap renders paragraphs and the email preserves them.
     const message = [
         `<p>${t`Hi,`}</p>`,
         `<p>${t`The session for "${title}" originally scheduled for ${escape(oldStart)} has been rescheduled.`}</p>`,

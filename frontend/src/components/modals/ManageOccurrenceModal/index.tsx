@@ -14,7 +14,7 @@ import {ShareModal} from "../ShareModal";
 import {OccurrenceEditModal} from "../../routes/event/OccurrencesTab/OccurrenceEditModal";
 import {OccurrenceActionBar, OccurrenceMenuActions} from "../../routes/event/OccurrencesTab/OccurrenceMenu";
 import {statusLabel} from "../../routes/event/OccurrencesTab/OccurrenceMenu";
-import {formatDateWithLocale} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd} from "../../../utilites/dates.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
@@ -113,7 +113,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
 
     const startFormatted = formatDateWithLocale(occurrence.start_date, 'fullDateTime', event.timezone);
     const endFormatted = occurrence.end_date
-        ? formatDateWithLocale(occurrence.end_date, 'timeOnly', event.timezone)
+        ? formatOccurrenceEnd(occurrence.end_date, occurrence.start_date, event.timezone)
         : null;
     const locationDisplay = getEventLocationDisplay(event, occurrence);
 

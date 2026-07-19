@@ -49,9 +49,9 @@ class EventOccurrenceRepository extends BaseRepository implements EventOccurrenc
             if ($timePeriod) {
                 $now = now()->toDateTimeString();
                 if ($timePeriod->value === 'upcoming') {
-                    $this->model = $this->model->where('start_date', '>=', $now);
+                    $this->model = $this->model->whereRaw('COALESCE(end_date, start_date) >= ?', [$now]);
                 } elseif ($timePeriod->value === 'past') {
-                    $this->model = $this->model->where('start_date', '<', $now);
+                    $this->model = $this->model->whereRaw('COALESCE(end_date, start_date) < ?', [$now]);
                 }
             }
         }

@@ -116,8 +116,8 @@ class GetPublicEventHandlerTest extends TestCase
             ->once()
             ->with(
                 m::on(static fn (array $where): bool => ! collect($where)->contains(
-                    fn ($condition): bool => is_array($condition)
-                        && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::START_DATE
+                    fn ($condition): bool => $condition instanceof Closure
+                        || (is_array($condition) && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::START_DATE)
                 )),
                 m::any(),
                 m::any(),
@@ -259,9 +259,9 @@ class GetPublicEventHandlerTest extends TestCase
             ->shouldReceive('findWhere')
             ->once()
             ->with(
-                m::on(static fn (array $where): bool => collect($where)->contains(
+                m::on(static fn (array $where): bool => collect($where)->filter(
                     static fn ($condition): bool => $condition instanceof Closure
-                )),
+                )->count() === 2),
                 m::any(),
                 m::any(),
                 m::any(),
@@ -292,9 +292,13 @@ class GetPublicEventHandlerTest extends TestCase
             ->shouldReceive('findWhere')
             ->once()
             ->with(
-                m::on(static fn (array $where): bool => ! collect($where)->contains(
+                m::on(static fn (array $where): bool => collect($where)->filter(
                     static fn ($condition): bool => $condition instanceof Closure
-                )),
+                )->count() === 1
+                    && ! collect($where)->contains(
+                        static fn ($condition): bool => is_array($condition)
+                            && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::START_DATE
+                    )),
                 m::any(),
                 m::any(),
                 m::any(),
@@ -387,12 +391,7 @@ class GetPublicEventHandlerTest extends TestCase
                         && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::STATUS
                         && ($condition[2] ?? null) === EventOccurrenceStatus::CANCELLED->name
                 )
-                && collect($where)->contains(
-                    static fn ($condition): bool => is_array($condition)
-                        && ($condition[0] ?? null) === EventOccurrenceDomainObjectAbstract::START_DATE
-                        && ($condition[1] ?? null) === '>='
-                )
-                && collect($where)->contains(static fn ($condition): bool => $condition instanceof Closure)))
+                && collect($where)->filter(static fn ($condition): bool => $condition instanceof Closure)->count() === 2))
             ->andReturn(
                 $this->makeOccurrence(7, '2027-01-01 10:00:00')->setCapacity(10)->setUsedCapacity(10)
             );

@@ -74,6 +74,33 @@ class EventRepositoryTest extends TestCase
         $this->assertNotContains($this->eventWithFutureOccurrenceId, $ids);
     }
 
+    public function test_running_multi_day_occurrence_keeps_event_upcoming(): void
+    {
+        $eventId = $this->createEvent('Running multi-day '.uniqid());
+        $this->createOccurrence($eventId, now()->subDay(), now()->addDay());
+
+        $this->assertContains($eventId, $this->findEventIds('upcoming'));
+        $this->assertNotContains($eventId, $this->findEventIds('ended'));
+    }
+
+    public function test_null_end_occurrence_with_past_start_marks_event_ended(): void
+    {
+        $eventId = $this->createEvent('Null end past start '.uniqid());
+        $this->createOccurrence($eventId, now()->subDay(), null);
+
+        $this->assertContains($eventId, $this->findEventIds('ended'));
+        $this->assertNotContains($eventId, $this->findEventIds('upcoming'));
+    }
+
+    public function test_null_end_occurrence_with_future_start_keeps_event_upcoming(): void
+    {
+        $eventId = $this->createEvent('Null end future start '.uniqid());
+        $this->createOccurrence($eventId, now()->addDay(), null);
+
+        $this->assertContains($eventId, $this->findEventIds('upcoming'));
+        $this->assertNotContains($eventId, $this->findEventIds('ended'));
+    }
+
     public function test_get_all_events_for_admin_hydrates_occurrence_dates(): void
     {
         $title = 'Admin hydration event '.uniqid();
@@ -173,7 +200,7 @@ class EventRepositoryTest extends TestCase
             'short_id' => 'occ_'.uniqid(),
             'event_id' => $eventId,
             'start_date' => $startDate->toDateTimeString(),
-            'end_date' => $endDate->toDateTimeString(),
+            'end_date' => $endDate?->toDateTimeString(),
             'status' => 'ACTIVE',
             'used_capacity' => 0,
             'is_overridden' => false,

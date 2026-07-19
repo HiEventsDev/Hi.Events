@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\DomainObjects;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use Tests\TestCase;
@@ -100,5 +101,34 @@ class EventOccurrenceDomainObjectTest extends TestCase
         $this->assertSame(EventOccurrenceStatus::CANCELLED->name, $occurrence->getStatus());
         $this->assertFalse($occurrence->isSoldOut());
         $this->assertTrue($occurrence->isCancelled());
+    }
+
+    public function test_is_past_is_false_while_occurrence_is_running(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStartDate(Carbon::now('UTC')->subDay()->toDateTimeString())
+            ->setEndDate(Carbon::now('UTC')->addHour()->toDateTimeString());
+
+        $this->assertFalse($occurrence->isPast());
+    }
+
+    public function test_is_past_is_true_once_end_date_passes(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setStartDate(Carbon::now('UTC')->subDays(2)->toDateTimeString())
+            ->setEndDate(Carbon::now('UTC')->subDay()->toDateTimeString());
+
+        $this->assertTrue($occurrence->isPast());
+    }
+
+    public function test_is_past_falls_back_to_start_date_when_end_is_null(): void
+    {
+        $started = (new EventOccurrenceDomainObject)
+            ->setStartDate(Carbon::now('UTC')->subHour()->toDateTimeString());
+        $upcoming = (new EventOccurrenceDomainObject)
+            ->setStartDate(Carbon::now('UTC')->addHour()->toDateTimeString());
+
+        $this->assertTrue($started->isPast());
+        $this->assertFalse($upcoming->isPast());
     }
 }

@@ -13,6 +13,7 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -70,8 +71,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $this->eventLocationCleaner = Mockery::mock(EventLocationCleaner::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
-        // The handler always fetches the event up front; default-mock it to a
-        // mock with accountId 7 so all tests get a consistent event lookup.
         $this->event = Mockery::mock(EventDomainObject::class);
         $this->event->shouldReceive('getAccountId')->andReturn(7)->byDefault();
 
@@ -80,8 +79,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->andReturn($this->event)
             ->byDefault();
 
-        // Default: no attendees on any occurrence. Delete-path tests that need
-        // to assert the attendee guard override this expectation.
         $this->attendeeRepository
             ->shouldReceive('findWhereIn')
             ->byDefault()
@@ -90,22 +87,13 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $this->databaseManager->shouldReceive('transaction')
             ->andReturnUsing(fn ($callback) => $callback());
 
-        // Default: exclusion update is a no-op. The DELETE branch overrides this
-        // to assert the call.
         $this->exclusionService->shouldReceive('addExclusions')->byDefault();
 
-        // Default: waitlist cleanup is a no-op. Tests targeting the cleanup
-        // branch override this expectation.
         $this->waitlistEntryRepository
             ->shouldReceive('updateWhere')
             ->byDefault()
             ->andReturn(0);
 
-        // Capacity edits trigger SOLD_OUT/ACTIVE reconciliation via two extra
-        // scoped updateWheres on top of the main attribute update. They're
-        // a side effect — each test still asserts its specific main updateWhere
-        // explicitly, so default the reconciliation to a no-op here so it
-        // doesn't trigger NoMatchingExpectationException for unrelated tests.
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->with(
@@ -155,8 +143,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->once()
             ->andReturn(new Collection([$futureOccurrence, $pastOccurrence, $overriddenOccurrence]));
 
-        // Capacity changes pin the occurrence as overridden so future regenerates
-        // don't reset it back to the rule's default.
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->once()
@@ -175,7 +161,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_handle_shifts_time_by_minutes(): void
     {
-        // Occurrence stored as 09:00 UTC, shift forward by 60 minutes → 10:00 UTC
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::UPDATE,
@@ -212,8 +197,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_time_shift_pins_as_overridden_so_regenerate_doesnt_revert_it(): void
     {
-        // Without is_overridden, the next regenerate would treat the shifted
-        // occurrence as stale (no candidate at its new time) and delete it.
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::UPDATE,
@@ -245,7 +228,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_handle_shifts_time_backwards(): void
     {
-        // Shift backward by 30 minutes: 14:00 → 13:30, 16:00 → 15:30
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::UPDATE,
@@ -349,6 +331,68 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $result = $this->handler->handle($dto);
 
         $this->assertEquals(1, $result->updated_count);
+    }
+
+    public function test_handle_sets_end_date_from_duration_minutes(): void
+    {
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::UPDATE,
+            timezone: 'UTC',
+            future_only: false,
+            skip_overridden: false,
+            apply_to_all: true,
+            duration_minutes: 2880,
+        );
+
+        $occurrence = $this->createOccurrenceMock(10, false, false, '2026-03-01 14:00:00', '2026-03-01 16:00:00');
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([$occurrence]));
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                Mockery::on(function ($attributes) {
+                    return $attributes[EventOccurrenceDomainObjectAbstract::END_DATE] === '2026-03-03 14:00:00'
+                        && ! array_key_exists(EventOccurrenceDomainObjectAbstract::START_DATE, $attributes)
+                        && $attributes[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] === true;
+                }),
+                [EventOccurrenceDomainObjectAbstract::ID => 10]
+            );
+
+        $result = $this->handler->handle($dto);
+
+        $this->assertEquals(1, $result->updated_count);
+    }
+
+    public function test_handle_rejects_shift_that_inverts_dates(): void
+    {
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::UPDATE,
+            timezone: 'UTC',
+            end_time_shift: -180,
+            future_only: false,
+            skip_overridden: false,
+            apply_to_all: true,
+        );
+
+        $occurrence = $this->createOccurrenceMock(10, false, false, '2026-03-01 14:00:00', '2026-03-01 16:00:00');
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([$occurrence]));
+
+        $this->occurrenceRepository->shouldNotReceive('updateWhere');
+
+        $this->expectException(InvalidOccurrenceDatesException::class);
+
+        $this->handler->handle($dto);
     }
 
     public function test_handle_cancels_all_future_occurrences_via_job(): void
@@ -538,8 +582,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->once()
             ->andReturn(new Collection([$occNoOrders, $occWithOrders]));
 
-        // Batched: a single findWhereIn returns one row per occurrence-with-orders.
-        // Occurrence 11 has orders, occurrence 10 doesn't.
         $orderItem11 = Mockery::mock(OrderItemDomainObject::class);
         $orderItem11->shouldReceive('getEventOccurrenceId')->andReturn(11);
 
@@ -570,9 +612,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_handle_skips_deletion_for_occurrences_with_attendees_but_no_orders(): void
     {
-        // Mirrors the single-delete handler's attendee guard. Attendees can
-        // exist without order_items in legacy/imported data, so checking only
-        // orders would soft-delete an occurrence that still has live attendees.
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::DELETE,
@@ -590,7 +629,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->once()
             ->andReturn(new Collection([$occClean, $occWithAttendees]));
 
-        // Batched orders lookup: no occurrences have orders.
         $this->orderItemRepository
             ->shouldReceive('findWhereIn')
             ->once()
@@ -601,8 +639,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             })
             ->andReturn(new Collection);
 
-        // Override default attendee no-op: occurrence 11 has attendees and
-        // must be excluded from the delete batch even though it has no orders.
         $attendee11 = Mockery::mock(AttendeeDomainObject::class);
         $attendee11->shouldReceive('getEventOccurrenceId')->andReturn(11);
 
@@ -646,9 +682,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_per_occurrence_fork_when_event_location_supplied(): void
     {
-        // Fork-per-override: every targeted occurrence gets its OWN freshly-created
-        // EventLocation row, even if some already had overrides. Three occurrences →
-        // three calls to createForEvent (no shared rows across the batch).
         $locationData = new EventLocationData(
             type: LocationType::IN_PERSON,
             location_id: 42,
@@ -673,7 +706,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->once()
             ->andReturn(new Collection([$occ1, $occ2, $occ3]));
 
-        // Fork-per-override: createForEvent must be called THREE times.
         $newLocations = [
             $this->makeEventLocationMock(501),
             $this->makeEventLocationMock(502),
@@ -686,11 +718,8 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->with(1, 7, $locationData)
             ->andReturn($newLocations[0], $newLocations[1], $newLocations[2]);
 
-        // updateInPlace must NOT be called even though one occurrence already had
-        // an FK — fork-per-override semantics.
         $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
 
-        // Each row gets its own per-row update with its new FK.
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->times(3)
@@ -700,7 +729,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
                 Mockery::any(),
             );
 
-        // Occ 11's previous FK (200) is now orphan-candidate → cleaner runs for it.
         $this->eventLocationCleaner
             ->shouldReceive('deleteIfOrphaned')
             ->once()
@@ -713,8 +741,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     public function test_clears_overrides_and_cleans_up_orphans(): void
     {
-        // clear_event_location on 3 occurrences, 2 of which had FKs → 2 cleanup
-        // calls.
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::UPDATE,
@@ -737,7 +763,6 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $this->eventLocationUpserter->shouldNotReceive('createForEvent');
         $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
 
-        // Two FK-bearing rows hit the clear branch and get updateWhere(...EVENT_LOCATION_ID=null...).
         $this->occurrenceRepository
             ->shouldReceive('updateWhere')
             ->times(2)
@@ -755,15 +780,11 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
         $result = $this->handler->handle($dto);
 
-        // Only the 2 FK-bearing rows produced an update; the no-FK occurrence
-        // contributes no attributes so it's skipped.
         $this->assertEquals(2, $result->updated_count);
     }
 
     public function test_no_op_when_no_location_keys_in_payload(): void
     {
-        // No event_location and no clear_event_location → no upserter or cleaner
-        // calls. (Capacity update still runs through the uniform path.)
         $dto = new BulkUpdateOccurrencesDTO(
             event_id: 1,
             action: BulkOccurrenceAction::UPDATE,

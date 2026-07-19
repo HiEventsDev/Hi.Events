@@ -77,7 +77,7 @@ class GetPublicEventHandler
         ];
 
         if ($event->getType() === EventType::RECURRING->name) {
-            $occurrenceWhere[] = [EventOccurrenceDomainObjectAbstract::START_DATE, '>=', now()->toDateTimeString()];
+            $occurrenceWhere[] = self::isNotEnded();
         }
 
         if ($hideSoldOutOccurrences) {
@@ -141,7 +141,7 @@ class GetPublicEventHandler
                 $this->occurrenceRepository->findFirstWhere([
                     EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
                     [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-                    [EventOccurrenceDomainObjectAbstract::START_DATE, '>=', now()->toDateTimeString()],
+                    self::isNotEnded(),
                     static function ($query): void {
                         $query->whereColumn(
                             EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
@@ -182,6 +182,20 @@ class GetPublicEventHandler
                     '<',
                     EventOccurrenceDomainObjectAbstract::CAPACITY,
                 );
+        };
+    }
+
+    private static function isNotEnded(): Closure
+    {
+        return static function ($query): void {
+            $query->whereRaw(
+                sprintf(
+                    'COALESCE(%s, %s) >= ?',
+                    EventOccurrenceDomainObjectAbstract::END_DATE,
+                    EventOccurrenceDomainObjectAbstract::START_DATE,
+                ),
+                [now()->toDateTimeString()],
+            );
         };
     }
 }

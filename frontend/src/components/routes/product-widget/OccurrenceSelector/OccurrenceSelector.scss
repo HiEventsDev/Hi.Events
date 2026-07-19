@@ -310,6 +310,21 @@
   color: var(--widget-primary-color, #228be6);
 }
 
+.hi-time-slot-in-progress {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--widget-primary-color, #228be6) 14%, transparent);
+  color: var(--widget-primary-color, #228be6);
+
+  &:not(:last-child) {
+    margin-right: 6px;
+  }
+}
+
 .hi-time-slot-spots {
   color: color-mix(in srgb, var(--widget-primary-text-color, #666) 70%, transparent);
 }

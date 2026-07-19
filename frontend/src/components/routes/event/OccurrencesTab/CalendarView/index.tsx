@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {EventOccurrence} from "../../../../../types.ts";
-import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../../utilites/dates.ts";
 import {OccurrenceMenuItems, OccurrenceMenuActions} from "../OccurrenceMenu";
 import classes from "./CalendarView.module.scss";
 
@@ -148,7 +148,7 @@ export const CalendarView = ({
                         {selectedOccurrences.map(occ => {
                             const startTime = formatDateWithLocale(occ.start_date, 'timeOnly', eventTimezone);
                             const endTime = occ.end_date
-                                ? formatDateWithLocale(occ.end_date, 'timeOnly', eventTimezone)
+                                ? formatOccurrenceEnd(occ.end_date, occ.start_date, eventTimezone)
                                 : null;
 
                             return (

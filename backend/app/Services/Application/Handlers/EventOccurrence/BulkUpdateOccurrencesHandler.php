@@ -14,6 +14,7 @@ use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -45,6 +46,7 @@ class BulkUpdateOccurrencesHandler
     ) {}
 
     /**
+     * @throws InvalidOccurrenceDatesException
      * @throws Throwable
      */
     public function handle(BulkUpdateOccurrencesDTO $dto): BulkUpdateOccurrencesResultDTO
@@ -116,7 +118,6 @@ class BulkUpdateOccurrencesHandler
             return new BulkUpdateOccurrencesResultDTO(updated_count: 0, updated_ids: []);
         }
 
-        // Attendees can exist without order items (imports/legacy), so both checks must run.
         $idsWithOrders = $this->orderItemRepository
             ->findWhereIn(
                 field: OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID,
@@ -329,6 +330,10 @@ class BulkUpdateOccurrencesHandler
             $startEndChanged = true;
         }
 
+        if ($startEndChanged) {
+            $this->guardResultingDates($attributes, $occurrence, $dto->timezone);
+        }
+
         if ($startEndChanged
             || array_key_exists(EventOccurrenceDomainObjectAbstract::CAPACITY, $attributes)
         ) {
@@ -336,6 +341,23 @@ class BulkUpdateOccurrencesHandler
         }
 
         return $attributes;
+    }
+
+    /**
+     * @throws InvalidOccurrenceDatesException
+     */
+    private function guardResultingDates(array $attributes, EventOccurrenceDomainObject $occurrence, string $timezone): void
+    {
+        $start = $attributes[EventOccurrenceDomainObjectAbstract::START_DATE] ?? $occurrence->getStartDate();
+        $end = $attributes[EventOccurrenceDomainObjectAbstract::END_DATE] ?? $occurrence->getEndDate();
+
+        if ($end !== null && Carbon::parse($end, 'UTC')->lessThanOrEqualTo(Carbon::parse($start, 'UTC'))) {
+            throw new InvalidOccurrenceDatesException(
+                __('This update would make the occurrence starting :start end before it starts. Adjust the time shift or duration.', [
+                    'start' => Carbon::parse($occurrence->getStartDate(), 'UTC')->setTimezone($timezone)->format('M j, Y g:i A'),
+                ]),
+            );
+        }
     }
 
     private function collectIds(Collection $eligible): array

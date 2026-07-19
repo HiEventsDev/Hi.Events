@@ -228,7 +228,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
             },
             onError: (error: any) => {
                 if (error?.response?.status === 422) {
-                    errorHandler(form, error);
+                    errorHandler(form, error, error?.response?.data?.message);
                 } else {
                     showError(error?.response?.data?.message || t`Bulk update failed.`);
                 }
@@ -410,7 +410,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                                     label={t`Hours`}
                                     {...form.getInputProps('duration_hours')}
                                     min={0}
-                                    max={23}
+                                    max={168}
                                     allowNegative={false}
                                 />
                                 <NumberInput

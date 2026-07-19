@@ -83,10 +83,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                                     ->from('event_occurrences')
                                     ->whereColumn('event_occurrences.event_id', 'events.id')
                                     ->whereNull('event_occurrences.deleted_at')
-                                    ->where(function ($q) {
-                                        $q->whereNull('event_occurrences.end_date')
-                                            ->orWhere('event_occurrences.end_date', '>=', now());
-                                    });
+                                    ->whereRaw('COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?', [now()]);
                             });
                     });
             };
@@ -107,10 +104,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                             ->from('event_occurrences')
                             ->whereColumn('event_occurrences.event_id', 'events.id')
                             ->whereNull('event_occurrences.deleted_at')
-                            ->where(function ($q) {
-                                $q->whereNull('event_occurrences.end_date')
-                                    ->orWhere('event_occurrences.end_date', '>=', now());
-                            });
+                            ->whereRaw('COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?', [now()]);
                     });
             };
         }
