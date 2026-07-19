@@ -23,45 +23,68 @@ use Illuminate\Support\Collection;
 class ProductFilterService
 {
     private ?AccountConfigurationDomainObject $accountConfiguration = null;
+
     private ?EventSettingDomainObject $eventSettings = null;
+
     private ?string $eventCurrency = null;
 
     public function __construct(
-        private readonly TaxAndFeeCalculationService            $taxCalculationService,
-        private readonly ProductPriceService                    $productPriceService,
+        private readonly TaxAndFeeCalculationService $taxCalculationService,
+        private readonly ProductPriceService $productPriceService,
         private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
-        private readonly OrderPlatformFeePassThroughService     $platformFeeService,
-        private readonly AccountRepositoryInterface             $accountRepository,
-        private readonly EventRepositoryInterface               $eventRepository,
-    )
-    {
-    }
+        private readonly OrderPlatformFeePassThroughService $platformFeeService,
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
-     * @param Collection<ProductCategoryDomainObject> $productsCategories
-     * @param PromoCodeDomainObject|null $promoCode
-     * @param bool $hideSoldOutProducts
-     * @param bool $hideHiddenCategories
+     * @param  Collection<ProductCategoryDomainObject>  $productsCategories
      * @return Collection<ProductCategoryDomainObject>
      */
     public function filter(
-        Collection             $productsCategories,
+        Collection $productsCategories,
         ?PromoCodeDomainObject $promoCode = null,
-        bool                   $hideSoldOutProducts = true,
-        bool                   $hideHiddenCategories = true,
-    ): Collection
-    {
+        bool $hideSoldOutProducts = true,
+        bool $hideHiddenCategories = true,
+    ): Collection {
         if ($productsCategories->isEmpty()) {
             return $productsCategories;
         }
 
         $products = $productsCategories
-            ->flatMap(fn(ProductCategoryDomainObject $category) => $category->getProducts());
+            ->flatMap(fn (ProductCategoryDomainObject $category) => $category->getProducts());
 
         if ($products->isEmpty()) {
             return $hideHiddenCategories
-                ? $productsCategories->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
+                ? $productsCategories->reject(fn (ProductCategoryDomainObject $category) => $category->getIsHidden())
                 : $productsCategories;
+        }
+
+        $filteredProducts = $this->filterProducts($products, $promoCode, $hideSoldOutProducts);
+
+        $filteredCategories = $hideHiddenCategories
+            ? $productsCategories->reject(fn (ProductCategoryDomainObject $category) => $category->getIsHidden())
+            : $productsCategories;
+
+        return $filteredCategories
+            ->each(fn (ProductCategoryDomainObject $category) => $category->setProducts(
+                $filteredProducts->where(
+                    static fn (ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
+                )
+            ));
+    }
+
+    /**
+     * @param  Collection<ProductDomainObject>  $products
+     * @return Collection<ProductDomainObject>
+     */
+    public function filterProducts(
+        Collection $products,
+        ?PromoCodeDomainObject $promoCode = null,
+        bool $hideSoldOutProducts = true,
+    ): Collection {
+        if ($products->isEmpty()) {
+            return $products;
         }
 
         $eventId = $products->first()->getEventId();
@@ -71,21 +94,10 @@ class ProductFilterService
             ->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities($eventId);
 
-        $filteredProducts = $products
-            ->map(fn(ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode))
-            ->reject(fn(ProductDomainObject $product) => $this->filterProduct($product, $promoCode, $hideSoldOutProducts))
-            ->each(fn(ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts));
-
-        $filteredCategories = $hideHiddenCategories
-            ? $productsCategories->reject(fn(ProductCategoryDomainObject $category) => $category->getIsHidden())
-            : $productsCategories;
-
-        return $filteredCategories
-            ->each(fn(ProductCategoryDomainObject $category) => $category->setProducts(
-                $filteredProducts->where(
-                    static fn(ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
-                )
-            ));
+        return $products
+            ->map(fn (ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode))
+            ->reject(fn (ProductDomainObject $product) => $this->filterProduct($product, $promoCode, $hideSoldOutProducts))
+            ->each(fn (ProductDomainObject $product) => $this->processProductPrices($product, $hideSoldOutProducts));
     }
 
     private function loadAccountConfiguration(int $eventId): void
@@ -109,10 +121,10 @@ class ProductFilterService
 
     private function isHiddenByPromoCode(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode): bool
     {
-        return $product->getIsHiddenWithoutPromoCode() && !(
-                $promoCode
-                && $promoCode->appliesToProduct($product)
-            );
+        return $product->getIsHiddenWithoutPromoCode() && ! (
+            $promoCode
+            && $promoCode->appliesToProduct($product)
+        );
     }
 
     private function shouldProductBeDiscounted(?PromoCodeDomainObject $promoCode, ProductDomainObject $product): bool
@@ -127,17 +139,13 @@ class ProductFilterService
     }
 
     /**
-     * @param PromoCodeDomainObject|null $promoCode
-     * @param ProductDomainObject $product
-     * @param Collection<AvailableProductQuantitiesDTO> $productQuantities
-     * @return ProductDomainObject
+     * @param  Collection<AvailableProductQuantitiesDTO>  $productQuantities
      */
     private function processProduct(
-        ProductDomainObject    $product,
-        Collection             $productQuantities,
+        ProductDomainObject $product,
+        Collection $productQuantities,
         ?PromoCodeDomainObject $promoCode = null,
-    ): ProductDomainObject
-    {
+    ): ProductDomainObject {
         if ($this->shouldProductBeDiscounted($promoCode, $product)) {
             $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $promoCode) {
                 $price->setPriceBeforeDiscount($price->getPrice());
@@ -156,7 +164,7 @@ class ProductFilterService
         $productQuantities->each(function (AvailableProductQuantitiesDTO $quantity) use ($product) {
             if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->product_id === $product->getId()) {
                 $product->setQuantityAvailable(
-                    $quantity->capacities->min(fn(CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
+                    $quantity->capacities->min(fn (CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
                 );
             }
         });
@@ -165,11 +173,10 @@ class ProductFilterService
     }
 
     private function filterProduct(
-        ProductDomainObject    $product,
+        ProductDomainObject $product,
         ?PromoCodeDomainObject $promoCode = null,
-        bool                   $hideSoldOutProducts = true,
-    ): bool
-    {
+        bool $hideSoldOutProducts = true,
+    ): bool {
         $hidden = false;
 
         if ($this->isHiddenByPromoCode($product, $promoCode)) {
@@ -202,7 +209,7 @@ class ProductFilterService
 
     private function processProductPrice(ProductDomainObject $product, ProductPriceDomainObject $price): void
     {
-        if (!$price->isFree()) {
+        if (! $price->isFree()) {
             $taxAndFees = $this->taxCalculationService
                 ->calculateTaxAndFeesForProductPrice($product, $price);
 
@@ -244,11 +251,11 @@ class ProductFilterService
         $existingTaxesAndFees = $product->getTaxAndFees() ?? collect();
 
         $hasPlatformFee = $existingTaxesAndFees->contains(
-            fn(TaxAndFeesDomainObject $fee) => $fee->getId() === OrderPlatformFeePassThroughService::PLATFORM_FEE_ID
+            fn (TaxAndFeesDomainObject $fee) => $fee->getId() === OrderPlatformFeePassThroughService::PLATFORM_FEE_ID
         );
 
-        if (!$hasPlatformFee) {
-            $platformFeeDomainObject = (new TaxAndFeesDomainObject())
+        if (! $hasPlatformFee) {
+            $platformFeeDomainObject = (new TaxAndFeesDomainObject)
                 ->setId(OrderPlatformFeePassThroughService::PLATFORM_FEE_ID)
                 ->setAccountId(0)
                 ->setName(OrderPlatformFeePassThroughService::getPlatformFeeName())
@@ -261,14 +268,13 @@ class ProductFilterService
     }
 
     private function filterProductPrice(
-        ProductDomainObject      $product,
+        ProductDomainObject $product,
         ProductPriceDomainObject $price,
-        bool                     $hideSoldOutProducts = true
-    ): bool
-    {
+        bool $hideSoldOutProducts = true
+    ): bool {
         $hidden = false;
 
-        if (!$product->isTieredType()) {
+        if (! $product->isTieredType()) {
             return false;
         }
 
@@ -299,23 +305,23 @@ class ProductFilterService
     {
         $product->setProductPrices(
             $product->getProductPrices()
-                ?->each(fn(ProductPriceDomainObject $price) => $this->processProductPrice($product, $price))
-                ->reject(fn(ProductPriceDomainObject $price) => $this->filterProductPrice($product, $price, $hideSoldOutProducts))
+                ?->each(fn (ProductPriceDomainObject $price) => $this->processProductPrice($product, $price))
+                ->reject(fn (ProductPriceDomainObject $price) => $this->filterProductPrice($product, $price, $hideSoldOutProducts))
         );
     }
 
     private function getPriceAvailability(ProductPriceDomainObject $price, ProductDomainObject $product): bool
     {
         if ($product->isTieredType()) {
-            return !$price->isSoldOut()
-                && !$price->isBeforeSaleStartDate()
-                && !$price->isAfterSaleEndDate()
-                && !$price->getIsHidden();
+            return ! $price->isSoldOut()
+                && ! $price->isBeforeSaleStartDate()
+                && ! $price->isAfterSaleEndDate()
+                && ! $price->getIsHidden();
         }
 
-        return !$product->isSoldOut()
-            && !$product->isBeforeSaleStartDate()
-            && !$product->isAfterSaleEndDate()
-            && !$product->getIsHidden();
+        return ! $product->isSoldOut()
+            && ! $product->isBeforeSaleStartDate()
+            && ! $product->isAfterSaleEndDate()
+            && ! $product->getIsHidden();
     }
 }
