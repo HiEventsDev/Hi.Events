@@ -193,16 +193,16 @@ export const localeFormats: Record<SupportedLocales, {
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
     'pl': {
-        fullDateTime: 'ddd, D MMM YYYY HH:mm',
-        shortDateTime: 'D MMM YYYY HH:mm',
-        shortDate: 'D MMM YYYY',
-        chartDate: 'D MMM',
+        fullDateTime: 'ddd D. MMM YYYY HH:mm',
+        shortDateTime: 'D. MMM YYYY HH:mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
         monthShort: 'MMM',
-        dayOfMonth: 'D',
-        dayName: 'dddd, D MMMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
         timeOnly: 'HH:mm',
         timezone: 'z',
-        dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
+        dateTimePicker: 'D. MMM YYYY HH:mm'
     },
     'se': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
