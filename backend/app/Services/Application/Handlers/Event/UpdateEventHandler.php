@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DataTransferObjects\AttributesDTO;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
@@ -83,6 +84,9 @@ readonly class UpdateEventHandler
                 'currency' => $eventData->currency ?? $existingEvent->getCurrency(),
                 'location' => $eventData->location,
                 'location_details' => $eventData->location_details?->toArray(),
+                'attributes' => $eventData->attributes
+                    ? $eventData->attributes->map(fn(AttributesDTO $a) => $a->toArray())->all()
+                    : $existingEvent->getAttributes(),
             ],
             where: [
                 'id' => $eventData->id,
