@@ -253,6 +253,13 @@ export const router: RouteObject[] = [
                         }
                     },
                     {
+                        path: "email-settings",
+                        async lazy() {
+                            const EmailSettings = await import("./components/routes/account/ManageAccount/sections/EmailSettings");
+                            return { Component: EmailSettings.default };
+                        }
+                    },
+                    {
                         path: "users",
                         async lazy() {
                             const Users = await import("./components/routes/account/ManageAccount/sections/Users");
@@ -622,6 +629,20 @@ export const router: RouteObject[] = [
             return { Component: MyTickets.default };
         },
         errorElement: <ErrorPage />,
-    }
+    },
+    {
+        path: "/admin/approve-account",
+        async lazy() {
+            const ApproveAccount = await import("./components/routes/admin/ApproveAccount");
+            return { Component: ApproveAccount.default };
+        },
+    },
+    {
+        path: "/auth/pending-approval",
+        async lazy() {
+            const PendingApproval = await import("./components/routes/auth/PendingApproval");
+            return { Component: PendingApproval.default };
+        },
+    },
 ];
 

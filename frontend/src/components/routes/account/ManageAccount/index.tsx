@@ -1,7 +1,7 @@
 import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
-import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@tabler/icons-react";
+import {IconAdjustmentsCog, IconCreditCard, IconMail, IconReceiptTax, IconUsers} from "@tabler/icons-react";
 import {Outlet, useLocation, useNavigate} from "react-router";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
@@ -26,6 +26,12 @@ export const ManageAccount = () => {
                         <Tabs.Tab value="taxes-and-fees" leftSection={<IconReceiptTax/>}>
                             {t`Tax & Fees`}
                         </Tabs.Tab>
+
+                        {isUserAdmin && (
+                            <Tabs.Tab value="email-settings" leftSection={<IconMail/>}>
+                                {t`Email`}
+                            </Tabs.Tab>
+                        )}
 
                         {isUserAdmin && (
                             <Tabs.Tab value="users" leftSection={<IconUsers/>}>

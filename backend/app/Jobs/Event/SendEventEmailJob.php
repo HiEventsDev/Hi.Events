@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Domain\Mail\AccountMailerFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,6 +25,7 @@ class SendEventEmailJob implements ShouldQueue
         private readonly string         $toName,
         private readonly EventMessage   $eventMessage,
         private readonly SendMessageDTO $messageData,
+        private readonly int            $accountId,
     )
     {
     }
@@ -34,10 +36,13 @@ class SendEventEmailJob implements ShouldQueue
     public function handle(
         Mailer                             $mailer,
         OutgoingMessageRepositoryInterface $outgoingMessageRepository,
+        AccountMailerFactory               $accountMailerFactory,
     ): void
     {
+        $resolvedMailer = $accountMailerFactory->forAccount($this->accountId);
+
         try {
-            $mailer
+            $resolvedMailer
                 ->to($this->email, $this->toName)
                 ->send($this->eventMessage);
         } catch (Throwable $exception) {

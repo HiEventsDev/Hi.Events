@@ -1,6 +1,10 @@
 <?php
 
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\GetAccountEmailSettingAction;
+use HiEvents\Http\Actions\Accounts\EmailSetting\UpsertAccountEmailSettingAction;
+use HiEvents\Http\Actions\Accounts\Approval\ApproveAccountAction;
+use HiEvents\Http\Actions\Accounts\Approval\ResendApprovalRequestAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\CreateStripeConnectAccountAction;
 use HiEvents\Http\Actions\Accounts\Stripe\GetStripeConnectAccountsAction;
@@ -238,6 +242,10 @@ $router->prefix('/auth')->group(
     }
 );
 
+// Account Approval (public - magic link from admin email)
+$router->get('/accounts/approve', ApproveAccountAction::class)->name('accounts.approve');
+$router->post('/accounts/resend-approval', ResendApprovalRequestAction::class)->middleware('throttle:3,10')->name('accounts.resend-approval');
+
 /**
  * Logged In Routes
  */
@@ -271,6 +279,10 @@ $router->middleware(['auth:api'])->group(
         // VAT Settings
         $router->get('/accounts/{account_id}/vat-settings', GetAccountVatSettingAction::class);
         $router->post('/accounts/{account_id}/vat-settings', UpsertAccountVatSettingAction::class);
+
+        // Email Settings
+        $router->get('/accounts/{account_id}/email-settings', GetAccountEmailSettingAction::class);
+        $router->post('/accounts/{account_id}/email-settings', UpsertAccountEmailSettingAction::class);
 
         // Organizers
         $router->post('/organizers', CreateOrganizerAction::class);

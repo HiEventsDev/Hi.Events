@@ -19,7 +19,11 @@ use HiEvents\Services\Application\Handlers\Account\DTO\CreateAccountDTO;
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountConfigurationDoesNotExist;
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
 use HiEvents\Services\Domain\Account\AccountUserAssociationService;
+use HiEvents\Mail\Account\AccountApprovalRequestEmail;
 use HiEvents\Services\Domain\User\EmailConfirmationService;
+use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
+use Illuminate\Contracts\Mail\Mailer;
+use Carbon\Carbon;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;
@@ -41,6 +45,8 @@ class CreateAccountHandler
         private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
         private readonly AccountAttributionRepositoryInterface   $accountAttributionRepository,
         private readonly LoggerInterface                         $logger,
+        private readonly EncryptedPayloadService                 $encryptedPayloadService,
+        private readonly Mailer                                  $mailer,
     )
     {
     }
@@ -64,7 +70,8 @@ class CreateAccountHandler
                 'name' => $accountData->first_name . ($accountData->last_name ? ' ' . $accountData->last_name : ''),
                 'email' => strtolower($accountData->email),
                 'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
-                'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'account_verified_at' => ($isSaasMode || $this->requiresApproval()) ? null : now()->toDateTimeString(),
+                'approved_at' => $this->requiresApproval() ? null : now()->toDateTimeString(),
                 'account_configuration_id' => $this->getAccountConfigurationId($accountData),
                 'account_messaging_tier_id' => $this->getDefaultMessagingTierId(),
             ]);
@@ -75,7 +82,7 @@ class CreateAccountHandler
                 'first_name' => $accountData->first_name,
                 'last_name' => $accountData->last_name,
                 'timezone' => $this->getTimezone($accountData),
-                'email_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
+                'email_verified_at' => ($isSaasMode || $this->requiresApproval()) ? null : now()->toDateTimeString(),
                 'locale' => $accountData->locale,
                 'marketing_opted_in_at' => $accountData->marketing_opt_in ? now()->toDateTimeString() : null,
             ]);
@@ -105,7 +112,11 @@ class CreateAccountHandler
                 ]);
             }
 
-            $this->emailConfirmationService->sendConfirmation($user, $account->getId());
+            if ($this->requiresApproval()) {
+                $this->sendApprovalRequestToAdmin($user, $account);
+            } else {
+                $this->emailConfirmationService->sendConfirmation($user, $account->getId());
+            }
 
             return $account;
         });
@@ -264,5 +275,34 @@ class CreateAccountHandler
     {
         // Self-hosted instances get Premium tier, SaaS gets Untrusted
         return $this->config->get('app.is_hi_events') ? 1 : 3;
+    }
+
+    private function requiresApproval(): bool
+    {
+        return (bool) $this->config->get('app.require_account_approval', false);
+    }
+
+    private function sendApprovalRequestToAdmin(UserDomainObject $user, AccountDomainObject $account): void
+    {
+        $adminEmail = $this->config->get('app.admin_email');
+        if (!$adminEmail) {
+            $this->logger->error('APP_ADMIN_EMAIL not configured but account approval is required');
+            return;
+        }
+
+        $token = $this->encryptedPayloadService->encryptPayload([
+            'account_id' => $account->getId(),
+        ], Carbon::now()->addDays(30));
+
+        $approveUrl = config('app.frontend_url') . '/admin/approve-account?token=' . urlencode($token);
+
+        $this->mailer
+            ->to($adminEmail)
+            ->send(new AccountApprovalRequestEmail($user, $account, $approveUrl));
+
+        $this->logger->info('Account approval request sent to admin', [
+            'account_id' => $account->getId(),
+            'admin_email' => $adminEmail,
+        ]);
     }
 }

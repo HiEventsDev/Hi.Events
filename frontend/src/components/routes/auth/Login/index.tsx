@@ -11,8 +11,9 @@ import {t, Trans} from "@lingui/macro";
 import {useEffect, useState} from "react";
 import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
 import {useSendTicketLookupEmail} from "../../../../mutations/useSendTicketLookupEmail.ts";
-import {showError} from "../../../../utilites/notifications.tsx";
+import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {IconTicket, IconChevronDown} from "@tabler/icons-react";
+import {api} from "../../../../api/client.ts";
 
 const Login = () => {
     const location = useLocation();
@@ -24,6 +25,8 @@ const Login = () => {
         }
     });
     const [showChooseAccount, setShowChooseAccount] = useState(false);
+    const [pendingApproval, setPendingApproval] = useState(false);
+    const [resendingApproval, setResendingApproval] = useState(false);
     const [ticketLookupOpen, setTicketLookupOpen] = useState(false);
 
     const ticketLookupForm = useForm({
@@ -37,6 +40,7 @@ const Login = () => {
         mutationFn: (userData: LoginData) => authClient.login(userData),
 
         onSuccess: (response: LoginResponse) => {
+            setPendingApproval(false);
             if (response.token) {
                 redirectToPreviousUrl();
                 return;
@@ -48,14 +52,35 @@ const Login = () => {
             }
         },
 
-        onError: () => {
-            notifications.show({
-                message: t`Please check your email and password and try again`,
-                color: 'red',
-                position: 'top-center',
-            });
+        onError: (error: any) => {
+            const message = error?.response?.data?.message
+                || t`Please check your email and password and try again`;
+
+            // Check if this is a pending approval error
+            if (message.toLowerCase().includes('pending approval') || message.toLowerCase().includes('awaiting approval')) {
+                setPendingApproval(true);
+            } else {
+                setPendingApproval(false);
+                notifications.show({
+                    message,
+                    color: 'red',
+                    position: 'top-center',
+                });
+            }
         }
     });
+
+    const handleResendApproval = async () => {
+        setResendingApproval(true);
+        try {
+            await api.post('/accounts/resend-approval', { email: form.values.email });
+            showSuccess(t`A new approval request has been sent to the administrator.`);
+        } catch {
+            showError(t`Something went wrong. Please try again.`);
+        } finally {
+            setResendingApproval(false);
+        }
+    };
 
     const ticketLookupMutation = useSendTicketLookupEmail();
 
@@ -100,9 +125,39 @@ const Login = () => {
                                    required
                                    mt="md"
                     />
-                    <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
+                    <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending}
+                            mt="lg">
                         {isPending ? t`Logging in` : t`Log in`}
                     </Button>
+
+                    {pendingApproval && (
+                        <div style={{
+                            marginTop: '1rem',
+                            padding: '1rem',
+                            backgroundColor: 'var(--mantine-color-orange-0)',
+                            borderRadius: '8px',
+                            border: '1px solid var(--mantine-color-orange-3)',
+                            textAlign: 'center',
+                        }}>
+                            <p style={{margin: '0 0 0.5rem 0', fontWeight: 500}}>
+                                {t`Your account is pending admin approval.`}
+                            </p>
+                            <p style={{margin: '0 0 0.75rem 0', fontSize: '0.875rem', color: '#666'}}>
+                                {t`You will receive an email once your account has been approved.`}
+                            </p>
+                            <Button
+                                variant="light"
+                                color="orange"
+                                size="sm"
+                                onClick={handleResendApproval}
+                                loading={resendingApproval}
+                                disabled={resendingApproval}
+                            >
+                                {t`Resend Approval Request`}
+                            </Button>
+                        </div>
+                    )}
+
                     <p>
                         <NavLink to={`/auth/forgot-password`}>
                             {t`Forgot password?`}

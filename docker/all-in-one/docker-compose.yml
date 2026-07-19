@@ -19,6 +19,8 @@ services:
       - APP_FRONTEND_URL=${APP_FRONTEND_URL}
       - JWT_SECRET=${JWT_SECRET}
       - APP_DISABLE_REGISTRATION=${APP_DISABLE_REGISTRATION}
+      - APP_REQUIRE_ACCOUNT_APPROVAL=${APP_REQUIRE_ACCOUNT_APPROVAL:-false}
+      - APP_ADMIN_EMAIL=${APP_ADMIN_EMAIL:-}
       - APP_SAAS_MODE_ENABLED=${APP_SAAS_MODE_ENABLED}
       - APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT=${APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT}
       - APP_SAAS_STRIPE_APPLICATION_FEE_FIXED=${APP_SAAS_STRIPE_APPLICATION_FEE_FIXED}
@@ -45,7 +47,8 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - WEBHOOK_QUEUE_NAME=webhook-queue
-
+    volumes:
+      - appdata:/app/backend/storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -81,3 +84,4 @@ services:
 volumes:
   pgdata:
   redisdata:
+  appdata:

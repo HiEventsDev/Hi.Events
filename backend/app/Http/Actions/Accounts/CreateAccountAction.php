@@ -82,6 +82,14 @@ class CreateAccountAction extends BaseAuthAction
             );
         }
 
+        // If account approval is required, don't auto-login — return a pending message
+        if (config('app.require_account_approval') && $accountData->getApprovedAt() === null) {
+            return $this->jsonResponse([
+                'message' => __('Your account has been created and is pending admin approval. You will receive an email once approved.'),
+                'pending_approval' => true,
+            ], ResponseCodes::HTTP_CREATED);
+        }
+
         try {
             $loginResponse = $this->loginHandler->handle(new LoginCredentialsDTO(
                 email: $accountData->getEmail(),

@@ -17,14 +17,13 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Attendee\SendAttendeeTicketService;
 use HiEvents\Services\Domain\Email\MailBuilderService;
-use Illuminate\Mail\Mailer;
 
 class SendOrderDetailsService
 {
     public function __construct(
         private readonly EventRepositoryInterface  $eventRepository,
         private readonly OrderRepositoryInterface  $orderRepository,
-        private readonly Mailer                    $mailer,
+        private readonly AccountMailerFactory      $accountMailerFactory,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
         private readonly MailBuilderService        $mailBuilderService,
     )
@@ -44,13 +43,15 @@ class SendOrderDetailsService
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->findById($order->getEventId());
 
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
         if ($order->isOrderCompleted() || $order->isOrderAwaitingOfflinePayment()) {
-            $this->sendOrderSummaryEmails($order, $event);
+            $this->sendOrderSummaryEmails($order, $event, $mailer);
             $this->sendAttendeeTicketEmails($order, $event);
         }
 
         if ($order->isOrderFailed()) {
-            $this->mailer
+            $mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
                 ->send(new OrderFailed(
@@ -70,6 +71,8 @@ class SendOrderDetailsService
         ?InvoiceDomainObject     $invoice = null
     ): void
     {
+        $mailer = $this->accountMailerFactory->forAccount($event->getAccountId());
+
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
             $order,
             $event,
@@ -78,7 +81,7 @@ class SendOrderDetailsService
             $invoice
         );
 
-        $this->mailer
+        $mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
             ->send($mail);
@@ -104,7 +107,11 @@ class SendOrderDetailsService
         }
     }
 
-    private function sendOrderSummaryEmails(OrderDomainObject $order, EventDomainObject $event): void
+    private function sendOrderSummaryEmails(
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        \Illuminate\Contracts\Mail\Mailer $mailer,
+    ): void
     {
         $this->sendCustomerOrderSummary(
             order: $order,
@@ -118,7 +125,7 @@ class SendOrderDetailsService
             return;
         }
 
-        $this->mailer
+        $mailer
             ->to($event->getOrganizer()->getEmail())
             ->send(new OrderSummaryForOrganizer($order, $event));
     }

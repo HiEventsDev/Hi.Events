@@ -1,13 +1,56 @@
 <x-mail::layout>
     {{-- Header --}}
     <x-slot:header>
-        <x-mail::header :url="config('app.email_logo_link_url')">
-            @if($appLogo = config('app.email_logo_url'))
-                <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}"
-                     style="max-width: 300px;">
+@php
+            $logoPath = null;
+            $organizerName = null;
+            $organizerId = null;
+            
+            // 1. Resolve organizer ID from active variables or fallback request contexts
+            if (isset($event) && $event->organizer) {
+                $organizerId = $event->organizer->id;
+                $organizerName = $event->organizer->name;
+            } elseif (isset($order) && $order->event && $order->event->organizer) {
+                $organizerId = $order->event->organizer->id;
+                $organizerName = $order->event->organizer->name;
+            } else {
+                $eventId = request()->route('event_id') ?? request()->input('event_id') ?? ($order->event_id ?? null);
+                if ($eventId) {
+                    $dbEvent = \DB::table('events')->where('id', $eventId)->first();
+                    if ($dbEvent) {
+                        $organizerId = $dbEvent->organizer_id;
+                    }
+                }
+            }
+
+            // 2. Fetch the true asset path from the custom images ledger if an organizer was resolved
+            if ($organizerId) {
+                if (!$organizerName) {
+                    $dbOrg = \DB::table('organizers')->where('id', $organizerId)->first();
+                    $organizerName = $dbOrg->name ?? null;
+                }
+                
+                $dbImage = \DB::table('images')
+                    ->where('entity_id', $organizerId)
+                    ->where('entity_type', 'HiEvents\DomainObjects\OrganizerDomainObject')
+                    ->first();
+                    
+                if ($dbImage) {
+                    $logoPath = $dbImage->path;
+                }
+            }
+        @endphp
+
+        <x-mail::header :url="config('app.frontend_url')">
+            @if($logoPath)
+                {{-- Render the true dynamic tenant organizer logo asset link --}}
+                <img src="{{ config('app.frontend_url') }}/storage/{{ $logoPath }}" class="logo" alt="{{ $organizerName }}" style="max-width: 300px;">
+            @elseif($appLogo = config('app.email_logo_url'))
+                {{-- Fallback to global setting --}}
+                <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}" style="max-width: 300px;">
             @else
-                <img src="{{ config('app.frontend_url') }}/logos/hi-events-stacked-light.png" class="logo" alt="{{ config('app.name') }}"
-                     style="max-width: 300px;">
+                {{-- Clean fallback typography --}}
+		<h2 style="margin:0; font-family: sans-serif; color: #333333;">{{ $organizerName ?? env('VITE_APP_NAME', 'Hi.Events') }}</h2>
             @endif
         </x-mail::header>
     </x-slot:header>

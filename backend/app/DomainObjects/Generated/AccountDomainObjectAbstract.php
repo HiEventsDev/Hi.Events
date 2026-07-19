@@ -24,6 +24,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const SHORT_ID = 'short_id';
     final public const STRIPE_CONNECT_SETUP_COMPLETE = 'stripe_connect_setup_complete';
     final public const ACCOUNT_VERIFIED_AT = 'account_verified_at';
+    final public const APPROVED_AT = 'approved_at';
     final public const STRIPE_CONNECT_ACCOUNT_TYPE = 'stripe_connect_account_type';
     final public const IS_MANUALLY_VERIFIED = 'is_manually_verified';
     final public const COUNTRY = 'country';
@@ -42,6 +43,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected string $short_id;
     protected ?bool $stripe_connect_setup_complete = false;
     protected ?string $account_verified_at = null;
+    protected ?string $approved_at = null;
     protected ?string $stripe_connect_account_type = null;
     protected bool $is_manually_verified = false;
     protected ?string $country = null;
@@ -63,6 +65,7 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'short_id' => $this->short_id ?? null,
                     'stripe_connect_setup_complete' => $this->stripe_connect_setup_complete ?? null,
                     'account_verified_at' => $this->account_verified_at ?? null,
+                    'approved_at' => $this->approved_at ?? null,
                     'stripe_connect_account_type' => $this->stripe_connect_account_type ?? null,
                     'is_manually_verified' => $this->is_manually_verified ?? null,
                     'country' => $this->country ?? null,
@@ -221,6 +224,18 @@ abstract class AccountDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getAccountVerifiedAt(): ?string
     {
         return $this->account_verified_at;
+    }
+
+
+    public function setApprovedAt(?string $approved_at): self
+    {
+        $this->approved_at = $approved_at;
+        return $this;
+    }
+
+    public function getApprovedAt(): ?string
+    {
+        return $this->approved_at;
     }
 
     public function setStripeConnectAccountType(?string $stripe_connect_account_type): self
