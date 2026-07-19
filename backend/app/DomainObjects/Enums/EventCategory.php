@@ -5,28 +5,30 @@ namespace HiEvents\DomainObjects\Enums;
 enum EventCategory: string
 {
     use BaseEnum;
-
-    // Community
-    case SOCIAL = 'SOCIAL';
-    case FOOD_DRINK = 'FOOD_DRINK';
-    case CHARITY = 'CHARITY';
-
-    // Creative & Culture
-    case MUSIC = 'MUSIC';
-    case ART = 'ART';
-    case COMEDY = 'COMEDY';
-    case THEATER = 'THEATER';
-
-    // Professional & Learning
-    case BUSINESS = 'BUSINESS';
-    case TECH = 'TECH';
-    case EDUCATION = 'EDUCATION';
+    
+    case BASSHOUSE = 'BASSHOUSE';
+    case BOUNCE = 'BOUNCE';
+    case BOUNCYTECHNO = 'BOUNCYTECHNO';
+    case DRUMBASS = 'DRUMBASS';
+    case EDM = 'EDM';
+    case GOA = 'GOA';
+    case GROOVEBOUNCE = 'GROOVEBOUNCE';
+    case HARDTECHNO = 'HARDTECHNO';
+    case HARDCOREUPTEMPO = 'HARDCOREUPTEMPO';
+    case HARDSTYLE = 'HARDSTYLE';
+    case RAWSTYLE = 'RAWSTYLE';
+    case HOUSEMUSIC = 'HOUSEMUSIC';
+    case MELODICHOUSE = 'MELODICHOUSE';
+    case MIXEDMUSIC = 'MIXEDMUSIC';
+    case NEOTRANCE = 'NEOTRANCE';
+    case SCHRANZ = 'SCHRANZ';
+    case TECHHOUSE = 'TECHHOUSE';
+    case TECHNO = 'TECHNO';
+    case TEKK = 'TEKK';
+    case TRANCEMUSIC = 'TRANCEMUSIC';
+    case UKG = 'UKG';
     case WORKSHOP = 'WORKSHOP';
-
-    // Leisure & Nightlife
-    case SPORTS = 'SPORTS';
-    case FESTIVAL = 'FESTIVAL';
-    case NIGHTLIFE = 'NIGHTLIFE';
+    case INDUSTRIAL = 'INDUSTRIAL';
 
     // Catch-all
     case OTHER = 'OTHER';
@@ -34,42 +36,58 @@ enum EventCategory: string
     public function label(): string
     {
         return match ($this) {
-            self::SOCIAL => __('Social'),
-            self::FOOD_DRINK => __('Food & Drink'),
-            self::CHARITY => __('Charity'),
-            self::MUSIC => __('Music'),
-            self::ART => __('Art'),
-            self::COMEDY => __('Comedy'),
-            self::THEATER => __('Theater'),
-            self::BUSINESS => __('Business'),
-            self::TECH => __('Tech'),
-            self::EDUCATION => __('Education'),
-            self::WORKSHOP => __('Workshop'),
-            self::SPORTS => __('Sports'),
-            self::FESTIVAL => __('Festival'),
-            self::NIGHTLIFE => __('Nightlife'),
-            self::OTHER => __('Other'),
+            self::BASSHOUSE => __('BASS HOUSE'),
+            self::BOUNCE => __('BOUNCE'),
+            self::BOUNCYTECHNO => __('BOUNCY TECHNO'),
+            self::DRUMBASS => __('DRUM & BASS'),
+            self::EDM => __('EDM'),
+            self::GOA => __('GOA'),
+            self::GROOVEBOUNCE => __('GROOVE & BOUNCE'),
+            self::HARDTECHNO => __('HARDTECHNO'),
+            self::HARDCOREUPTEMPO => __('HARDCORE & UPTEMPO'),
+            self::HARDSTYLE => __('HARDSTYLE'),
+            self::RAWSTYLE => __('RAWSTYLE'),
+            self::HOUSEMUSIC => __('HOUSE MUSIC'),
+            self::MELODICHOUSE => __('MELODIC HOUSE'),
+            self::MIXEDMUSIC => __('MIXED MUSIC'),
+            self::NEOTRANCE => __('NEOTRANCE'),
+            self::SCHRANZ => __('SCHRANZ'),
+            self::TECHHOUSE => __('TECH HOUSE'),
+            self::TECHNO => __('TECHNO'),
+            self::TEKK => __('TEKK'),
+            self::TRANCEMUSIC => __('TRANCE MUSIC'),
+            self::UKG => __('UKG'),
+            self::WORKSHOP => __('WORKSHOP'),
+            self::INDUSTRIAL => __('INDUSTRIAL'),
         };
     }
 
     public function emoji(): string
     {
         return match ($this) {
-            self::SOCIAL => '🤝',
-            self::FOOD_DRINK => '🍽️',
-            self::CHARITY => '🎗️',
-            self::MUSIC => '🎵',
-            self::ART => '🎨',
-            self::COMEDY => '😂',
-            self::THEATER => '🎭',
-            self::BUSINESS => '💼',
-            self::TECH => '💻',
-            self::EDUCATION => '📚',
-            self::WORKSHOP => '🛠️',
-            self::SPORTS => '⚽',
-            self::FESTIVAL => '🎉',
-            self::NIGHTLIFE => '🪩',
-            self::OTHER => '📝',
+            self::BASSHOUSE => '🎵',
+            self::BOUNCE => '🎵',
+            self::BOUNCYTECHNO => '🎵',
+            self::DRUMBASS => '🎵',
+            self::EDM => '🎵',
+            self::GOA => '🎵',
+            self::GROOVEBOUNCE => '🎵',
+            self::HARDTECHNO => '🎵',
+            self::HARDCOREUPTEMPO => '🎵',
+            self::HARDSTYLE => '🎵',
+            self::RAWSTYLE => '🎵',
+            self::HOUSEMUSIC => '🎵',
+            self::MELODICHOUSE => '🎵',
+            self::MIXEDMUSIC => '🎵',
+            self::NEOTRANCE => '🎵',
+            self::SCHRANZ => '🎵',
+            self::TECHHOUSE => '🎵',
+            self::TECHNO => '🎵',
+            self::TEKK => '🎵',
+            self::TRANCEMUSIC => '🎵',
+            self::UKG => '🎵',
+            self::WORKSHOP => '🎵',
+            self::INDUSTRIAL => '🎵',
         };
     }
 }
