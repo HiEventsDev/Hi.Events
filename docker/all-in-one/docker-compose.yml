@@ -45,7 +45,8 @@ services:
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - WEBHOOK_QUEUE_NAME=webhook-queue
-
+    volumes:
+      - appdata:/app/backend/storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -81,3 +82,4 @@ services:
 volumes:
   pgdata:
   redisdata:
+  appdata:
