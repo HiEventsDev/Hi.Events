@@ -48,6 +48,7 @@ const buildRecurrenceSummary = (rule?: RecurrenceRule): string | null => {
 interface OccurrenceSelectorProps {
     event: Event;
     selectedOccurrenceId?: IdParam;
+    pendingInitialOccurrenceId?: IdParam;
     onSelect: (occurrenceId: IdParam) => void;
     colors?: {
         primary?: string;
@@ -69,6 +70,9 @@ const byStartDate = (a: EventOccurrence, b: EventOccurrence): number =>
 
 const isBookable = (occ: EventOccurrence): boolean =>
     occ.status === EventOccurrenceStatus.ACTIVE && !occ.is_past;
+
+const isSelectable = (occ: EventOccurrence, waitlistAvailable?: boolean): boolean =>
+    isBookable(occ) || (occ.status === EventOccurrenceStatus.SOLD_OUT && !!waitlistAvailable);
 
 const sameId = (a?: IdParam, b?: IdParam): boolean =>
     a !== undefined && a !== null && b !== undefined && b !== null && Number(a) === Number(b);
@@ -105,7 +109,7 @@ const SlotRow = ({
 }) => {
     const soldOut = occ.status === EventOccurrenceStatus.SOLD_OUT;
     const cancelled = occ.status === EventOccurrenceStatus.CANCELLED;
-    const selectable = isBookable(occ) || (soldOut && !!waitlistAvailable);
+    const selectable = isSelectable(occ, waitlistAvailable);
     const inProgress = !cancelled && !occ.is_past && dayjs.utc(occ.start_date).isBefore(dayjs());
 
     const startTime = formatDateWithLocale(occ.start_date, 'timeOnly', tz, locale);
@@ -399,6 +403,7 @@ const ProductsPane = ({
 const OccurrencePicker = ({
     event,
     selectedOccurrenceId,
+    pendingInitialOccurrenceId,
     onSelect,
     activeOccurrences,
     productSlot,
@@ -460,12 +465,28 @@ const OccurrencePicker = ({
     }, [selectedOccurrenceId]);
 
     useEffect(() => {
+        if (selectedOccurrenceId || pendingInitialOccurrenceId) {
+            return;
+        }
         const bookable = (occurrencesByDate[focusedDate] || []).filter(isBookable);
-        if (bookable.length === 1 && bookable[0].id && !sameId(selectedOccurrenceId, bookable[0].id)) {
+        if (bookable.length === 1 && bookable[0].id) {
             onSelect(bookable[0].id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focusedDate, occurrencesByDate, selectedOccurrenceId]);
+    }, [focusedDate, occurrencesByDate, selectedOccurrenceId, pendingInitialOccurrenceId]);
+
+    const focusDay = (day: string) => {
+        setFocusedDate(day);
+        const daySlots = occurrencesByDate[day] || [];
+        const currentSelection = daySlots.find(o => sameId(o.id, selectedOccurrenceId));
+        if (currentSelection && isSelectable(currentSelection, waitlistAvailable)) {
+            return;
+        }
+        const bookable = daySlots.filter(isBookable);
+        if (bookable.length === 1 && bookable[0].id) {
+            onSelect(bookable[0].id);
+        }
+    };
 
     const slotPanelRef = useRef<HTMLDivElement>(null);
     const skipFirstScroll = useRef(true);
@@ -561,7 +582,7 @@ const OccurrencePicker = ({
                         size="md"
                         value={focusedDate}
                         onChange={(value) => {
-                            if (value) setFocusedDate(value);
+                            if (value) focusDay(value);
                         }}
                         date={displayedMonth}
                         onDateChange={setDisplayedMonth}
@@ -615,6 +636,7 @@ const OccurrencePicker = ({
 export const OccurrenceSelector = ({
     event,
     selectedOccurrenceId,
+    pendingInitialOccurrenceId,
     onSelect,
     colors,
     productSlot,
@@ -663,6 +685,7 @@ export const OccurrenceSelector = ({
             <OccurrencePicker
                 event={event}
                 selectedOccurrenceId={selectedOccurrenceId}
+                pendingInitialOccurrenceId={pendingInitialOccurrenceId}
                 onSelect={onSelect}
                 activeOccurrences={activeOccurrences}
                 productSlot={productSlot}

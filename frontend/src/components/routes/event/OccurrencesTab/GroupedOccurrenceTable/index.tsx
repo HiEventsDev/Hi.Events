@@ -34,15 +34,15 @@ interface GroupedOccurrenceTableProps {
     rowStyle?: (occ: EventOccurrence) => CSSProperties | undefined;
 }
 
-const formatDateHeader = (dateKey: string): string => {
+const formatDateHeader = (dateKey: string, eventTimezone: string): string => {
     const date = dayjs(dateKey);
-    const today = dayjs().startOf('day');
-    const tomorrow = today.add(1, 'day');
+    const todayKey = dayjs().tz(eventTimezone).format('YYYY-MM-DD');
+    const tomorrowKey = dayjs().tz(eventTimezone).add(1, 'day').format('YYYY-MM-DD');
 
-    if (date.isSame(today, 'day')) {
+    if (dateKey === todayKey) {
         return t`Today` + ' — ' + date.format('dddd, MMMM D, YYYY');
     }
-    if (date.isSame(tomorrow, 'day')) {
+    if (dateKey === tomorrowKey) {
         return t`Tomorrow` + ' — ' + date.format('dddd, MMMM D, YYYY');
     }
     return date.format('dddd, MMMM D, YYYY');
@@ -65,7 +65,7 @@ export const GroupedOccurrenceTable = ({
         });
         return Array.from(map.entries()).map(([dateKey, occs]) => ({
             dateKey,
-            label: formatDateHeader(dateKey),
+            label: formatDateHeader(dateKey, eventTimezone),
             occurrences: occs,
         }));
     }, [occurrences, eventTimezone]);

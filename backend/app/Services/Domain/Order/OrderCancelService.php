@@ -4,8 +4,10 @@ namespace HiEvents\Services\Domain\Order;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
@@ -17,6 +19,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\Waitlist\RevertWaitlistOffersForCancelledOrderService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
@@ -35,6 +38,7 @@ class OrderCancelService
         private readonly ProductQuantityUpdateService $productQuantityService,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly EventStatisticsCancellationService $eventStatisticsCancellationService,
+        private readonly RevertWaitlistOffersForCancelledOrderService $revertWaitlistOffersService,
     ) {}
 
     /**
@@ -43,27 +47,14 @@ class OrderCancelService
     public function cancelOrder(OrderDomainObject $order): void
     {
         $this->databaseManager->transaction(function () use ($order) {
-            // Order of operations matters here. We must decrement the stats first.
             $this->eventStatisticsCancellationService->decrementForCancelledOrder($order);
 
             $this->adjustProductQuantities($order);
             $this->cancelAttendees($order);
             $this->updateOrderStatus($order);
+            $capacityEvents = $this->revertWaitlistOffersService->revertOffersForOrder($order->getId());
 
-            $event = $this->eventRepository
-                ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
-                ->loadRelation(EventSettingDomainObject::class)
-                ->findById($order->getEventId());
-
-            $this->mailer
-                ->to($order->getEmail())
-                ->locale($order->getLocale())
-                ->send(new OrderCancelled(
-                    order: $order,
-                    event: $event,
-                    organizer: $event->getOrganizer(),
-                    eventSettings: $event->getEventSettings(),
-                ));
+            $this->sendOrderCancelledEmail($order);
 
             $this->domainEventDispatcherService->dispatch(
                 new OrderEvent(
@@ -73,7 +64,35 @@ class OrderCancelService
             );
 
             $this->dispatchCapacityChangedEvents($order);
+
+            $this->databaseManager->connection()->afterCommit(static function () use ($capacityEvents) {
+                foreach ($capacityEvents as $capacityEvent) {
+                    event($capacityEvent);
+                }
+            });
         });
+    }
+
+    private function sendOrderCancelledEmail(OrderDomainObject $order): void
+    {
+        if ($order->getEmail() === null) {
+            return;
+        }
+
+        $event = $this->eventRepository
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
+            ->loadRelation(EventSettingDomainObject::class)
+            ->findById($order->getEventId());
+
+        $this->mailer
+            ->to($order->getEmail())
+            ->locale($order->getLocale())
+            ->send(new OrderCancelled(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+            ));
     }
 
     private function cancelAttendees(OrderDomainObject $order): void
@@ -111,6 +130,30 @@ class OrderCancelService
                 (int) $productPriceId,
                 $count,
                 $eventOccurrenceId ? (int) $eventOccurrenceId : null,
+            );
+        }
+
+        $this->restoreNonTicketQuantities($order);
+    }
+
+    private function restoreNonTicketQuantities(OrderDomainObject $order): void
+    {
+        if (! $order->isOrderCompleted() && ! $order->isOrderAwaitingOfflinePayment()) {
+            return;
+        }
+
+        $orderWithItems = $this->orderRepository
+            ->loadRelation(OrderItemDomainObject::class)
+            ->findById($order->getId());
+
+        foreach ($orderWithItems->getOrderItems() ?? [] as $orderItem) {
+            if ($orderItem->getProductType() === ProductType::TICKET->name) {
+                continue;
+            }
+
+            $this->productQuantityService->decreaseQuantitySold(
+                $orderItem->getProductPriceId(),
+                $orderItem->getQuantity(),
             );
         }
     }

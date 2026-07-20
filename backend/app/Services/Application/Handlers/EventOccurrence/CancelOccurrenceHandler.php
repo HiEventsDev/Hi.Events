@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Jobs\Occurrence\SendOccurrenceCancellationEmailJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
@@ -32,10 +33,9 @@ class CancelOccurrenceHandler
     public function handle(int $eventId, int $occurrenceId, bool $refundOrders = false): EventOccurrenceDomainObject
     {
         $wasCancelled = false;
+        $cancelledAttendeeIds = [];
 
-        $updated = $this->databaseManager->transaction(function () use ($eventId, $occurrenceId, &$wasCancelled) {
-            // Lock to prevent concurrent cancels from double-dispatching refund
-            // and notification side-effects below.
+        $updated = $this->databaseManager->transaction(function () use ($eventId, $occurrenceId, &$wasCancelled, &$cancelledAttendeeIds) {
             $occurrence = $this->occurrenceRepository->findByIdLocked($occurrenceId);
 
             if (! $occurrence || $occurrence->getEventId() !== $eventId) {
@@ -51,14 +51,15 @@ class CancelOccurrenceHandler
                 return $occurrence;
             }
 
+            $cancelledAttendeeIds = $this->cancelAttendeesService->cancelForOccurrence($eventId, $occurrenceId);
+
             $updated = $this->occurrenceRepository->updateFromArray(
                 id: $occurrenceId,
                 attributes: [
                     EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                    EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => count($cancelledAttendeeIds),
                 ],
             );
-
-            $this->cancelAttendeesService->cancelForOccurrence($eventId, $occurrenceId);
 
             $this->exclusionService->addExclusions($eventId, [$occurrence->getStartDate()]);
 
@@ -68,6 +69,8 @@ class CancelOccurrenceHandler
         });
 
         if ($wasCancelled) {
+            SendOccurrenceCancellationEmailJob::dispatchChunked($eventId, $occurrenceId, $cancelledAttendeeIds, $refundOrders);
+
             event(new OccurrenceCancelledEvent(
                 eventId: $eventId,
                 occurrenceId: $occurrenceId,

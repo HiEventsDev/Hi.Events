@@ -81,10 +81,6 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_rejects_past_occurrence(): void
     {
-        // Public payload filters past occurrences out, but a stale client or a
-        // direct API caller could still post one — guard belongs at the
-        // eligibility chokepoint so public checkout, manual attendee creation
-        // and any future caller all inherit it.
         $occurrence = $this->occurrence(
             status: EventOccurrenceStatus::ACTIVE->name,
             startDate: '2020-01-01 10:00:00',
@@ -99,9 +95,6 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_rejects_past_occurrence_even_with_capacity_override(): void
     {
-        // Organisers using the override flag to manually add an attendee should
-        // still not be able to issue tickets for a session that has ended —
-        // override only bypasses capacity, not time/status gates.
         $occurrence = $this->occurrence(
             status: EventOccurrenceStatus::ACTIVE->name,
             startDate: '2020-01-01 10:00:00',
@@ -143,6 +136,109 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
         $this->expectExceptionMessage('capacity');
 
         $this->service->assertOccurrencePurchasable(eventId: 1, occurrenceId: 10, additionalQuantity: 5);
+    }
+
+    public function test_zero_additional_quantity_skips_capacity_check(): void
+    {
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
+        $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
+        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+
+        $result = $this->service->assertOccurrencePurchasable(
+            eventId: 1,
+            occurrenceId: 10,
+            additionalQuantity: 0,
+        );
+
+        $this->assertSame($occurrence, $result);
+    }
+
+    public function test_zero_additional_quantity_skips_sold_out_gate(): void
+    {
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 10);
+        $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
+        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+
+        $result = $this->service->assertOccurrencePurchasable(
+            eventId: 1,
+            occurrenceId: 10,
+            additionalQuantity: 0,
+        );
+
+        $this->assertSame($occurrence, $result);
+    }
+
+    public function test_zero_additional_quantity_still_rejects_cancelled_occurrence(): void
+    {
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($this->occurrence(EventOccurrenceStatus::CANCELLED->name));
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('cancelled');
+
+        $this->service->assertOccurrencePurchasable(eventId: 1, occurrenceId: 10, additionalQuantity: 0);
+    }
+
+    public function test_zero_additional_quantity_still_rejects_past_occurrence(): void
+    {
+        $this->occurrenceRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($this->occurrence(EventOccurrenceStatus::ACTIVE->name, startDate: '2020-01-01 10:00:00'));
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('already ended');
+
+        $this->service->assertOccurrencePurchasable(eventId: 1, occurrenceId: 10, additionalQuantity: 0);
+    }
+
+    public function test_uses_preloaded_occurrence_and_reserved_quantity_without_queries(): void
+    {
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
+        $this->occurrenceRepository->shouldNotReceive('findFirstWhere');
+        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+
+        $result = $this->service->assertOccurrencePurchasable(
+            eventId: 1,
+            occurrenceId: 10,
+            additionalQuantity: 3,
+            occurrence: $occurrence,
+            reservedQuantity: 3,
+        );
+
+        $this->assertSame($occurrence, $result);
+    }
+
+    public function test_preloaded_reserved_quantity_counts_against_capacity(): void
+    {
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
+        $this->occurrenceRepository->shouldNotReceive('findFirstWhere');
+        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('capacity');
+
+        $this->service->assertOccurrencePurchasable(
+            eventId: 1,
+            occurrenceId: 10,
+            additionalQuantity: 4,
+            occurrence: $occurrence,
+            reservedQuantity: 3,
+        );
+    }
+
+    public function test_preloaded_occurrence_from_other_event_is_rejected(): void
+    {
+        $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name)->setEventId(2);
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('not found');
+
+        $this->service->assertOccurrencePurchasable(
+            eventId: 1,
+            occurrenceId: 10,
+            occurrence: $occurrence,
+        );
     }
 
     public function test_allows_purchase_within_capacity(): void
@@ -193,12 +289,9 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
     public function test_override_capacity_allows_exceeding_capacity_for_active_occurrence(): void
     {
-        // capacity 1, request 50, with override: should pass.
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 1, usedCapacity: 5);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
 
-        // Capacity check is short-circuited so reserved-quantity lookup must
-        // never run — keeps the override path cheap.
         $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
@@ -247,7 +340,6 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
             ->shouldReceive('findWhereIn')
             ->andReturn(collect());
 
-        // No exception means all products are allowed (default-visible).
         $this->service->assertProductsVisibleOnOccurrence(occurrenceId: 10, productIds: [1, 2, 3]);
         $this->assertTrue(true);
     }
@@ -265,13 +357,11 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('not available for this occurrence');
 
-        // Product 99 is not in the allow-list.
         $this->service->assertProductsVisibleOnOccurrence(occurrenceId: 10, productIds: [1, 99]);
     }
 
     public function test_product_visibility_no_op_for_empty_product_list(): void
     {
-        // Edge case: empty product list shouldn't even hit the repository.
         $this->visibilityRepository->shouldNotReceive('findWhereIn');
 
         $this->service->assertProductsVisibleOnOccurrence(occurrenceId: 10, productIds: []);

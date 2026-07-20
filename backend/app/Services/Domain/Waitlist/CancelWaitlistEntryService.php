@@ -65,7 +65,7 @@ class CancelWaitlistEntryService
     /**
      * @throws ResourceConflictException
      */
-    private function cancelEntry(WaitlistEntryDomainObject $entry): WaitlistEntryDomainObject
+    public function cancelEntry(WaitlistEntryDomainObject $entry): WaitlistEntryDomainObject
     {
         if (! in_array($entry->getStatus(), [
             WaitlistEntryStatus::WAITING->name,

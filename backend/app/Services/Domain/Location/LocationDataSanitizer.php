@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace HiEvents\Services\Domain\Location;
 
 use HiEvents\Services\Infrastructure\Geo\GeoProviderInterface;
-use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class LocationDataSanitizer
 {
+    private const CONTROL_CHARACTERS_PATTERN = '/[\x{0000}-\x{001F}\x{007F}-\x{009F}\x{2028}\x{2029}]+/u';
+
     public function __construct(
-        private readonly HtmlPurifierService $purifier,
         private readonly GeoProviderInterface $geoProvider,
     ) {}
 
@@ -20,7 +20,9 @@ class LocationDataSanitizer
             return null;
         }
 
-        return strip_tags($this->purifier->purify($value));
+        $spaced = preg_replace(self::CONTROL_CHARACTERS_PATTERN, ' ', $value) ?? $value;
+
+        return trim(preg_replace('/ {2,}/', ' ', $spaced) ?? $spaced);
     }
 
     public function sanitizeAddress(array $address): array

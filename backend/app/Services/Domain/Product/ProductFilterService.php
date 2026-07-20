@@ -56,10 +56,36 @@ class ProductFilterService
         $products = $productsCategories
             ->flatMap(fn (ProductCategoryDomainObject $category) => $category->getProducts());
 
+        $filteredCategories = $hideHiddenCategories
+            ? $productsCategories->reject(fn (ProductCategoryDomainObject $category) => $category->getIsHidden())
+            : $productsCategories;
+
         if ($products->isEmpty()) {
-            return $hideHiddenCategories
-                ? $productsCategories->reject(fn (ProductCategoryDomainObject $category) => $category->getIsHidden())
-                : $productsCategories;
+            return $filteredCategories;
+        }
+
+        $filteredProducts = $this->filterProducts($products, $promoCode, $hideSoldOutProducts, $eventOccurrenceId);
+
+        return $filteredCategories
+            ->each(fn (ProductCategoryDomainObject $category) => $category->setProducts(
+                $filteredProducts->where(
+                    static fn (ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
+                )
+            ));
+    }
+
+    /**
+     * @param  Collection<ProductDomainObject>  $products
+     * @return Collection<ProductDomainObject>
+     */
+    public function filterProducts(
+        Collection $products,
+        ?PromoCodeDomainObject $promoCode = null,
+        bool $hideSoldOutProducts = true,
+        ?int $eventOccurrenceId = null,
+    ): Collection {
+        if ($products->isEmpty()) {
+            return $products;
         }
 
         $eventId = $products->first()->getEventId();
@@ -78,16 +104,7 @@ class ProductFilterService
             $filteredProducts = $this->filterByOccurrenceVisibility($filteredProducts, $eventOccurrenceId);
         }
 
-        $filteredCategories = $hideHiddenCategories
-            ? $productsCategories->reject(fn (ProductCategoryDomainObject $category) => $category->getIsHidden())
-            : $productsCategories;
-
-        return $filteredCategories
-            ->each(fn (ProductCategoryDomainObject $category) => $category->setProducts(
-                $filteredProducts->where(
-                    static fn (ProductDomainObject $product) => $product->getProductCategoryId() === $category->getId()
-                )
-            ));
+        return $filteredProducts->values();
     }
 
     private function loadAccountConfiguration(int $eventId): void

@@ -153,6 +153,16 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
     const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
+    const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
+        if (props.initialOccurrenceId) {
+            return props.initialOccurrenceId;
+        }
+        if (typeof window === 'undefined') {
+            return undefined;
+        }
+        const occurrenceIdFromUrl = new URLSearchParams(window.location.search).get('occurrence_id');
+        return occurrenceIdFromUrl ? Number(occurrenceIdFromUrl) : undefined;
+    });
 
     const {onSelectedOccurrenceChange} = props;
     useEffect(() => {
@@ -307,7 +317,13 @@ const SelectProducts = (props: SelectProductsProps) => {
         occurrenceEventRefetchMutation.mutate(occId);
     };
 
+    const initialOccurrenceAppliedRef = useRef(false);
     useEffect(() => {
+        if (initialOccurrenceAppliedRef.current) {
+            return;
+        }
+        initialOccurrenceAppliedRef.current = true;
+
         let autoSelectedOccId: number | null = null;
 
         const selectableOccurrences = activeOccurrences;
@@ -316,23 +332,10 @@ const SelectProducts = (props: SelectProductsProps) => {
             autoSelectedOccId = Number(selectableOccurrences[0].id);
         }
 
-        if (props.initialOccurrenceId) {
-            const valid = selectableOccurrences.some(o => Number(o.id) === props.initialOccurrenceId);
+        if (pendingInitialOccurrenceId) {
+            const valid = selectableOccurrences.some(o => Number(o.id) === pendingInitialOccurrenceId);
             if (valid) {
-                autoSelectedOccId = props.initialOccurrenceId;
-            }
-        }
-
-        if (!props.initialOccurrenceId) {
-            const occurrenceIdFromUrl = new URLSearchParams(
-                typeof window !== 'undefined' ? window.location.search : ''
-            ).get('occurrence_id');
-            if (occurrenceIdFromUrl) {
-                const occId = Number(occurrenceIdFromUrl);
-                const valid = selectableOccurrences.some(o => Number(o.id) === occId);
-                if (valid) {
-                    autoSelectedOccId = occId;
-                }
+                autoSelectedOccId = pendingInitialOccurrenceId;
             }
         }
 
@@ -344,6 +347,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                 setSelectedOccurrenceId(autoSelectedOccId);
             }
         }
+
+        setPendingInitialOccurrenceId(undefined);
     }, [event?.occurrences]);
 
     const productCategories = event?.product_categories || [];
@@ -799,6 +804,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                         <OccurrenceSelector
                             event={event}
                             selectedOccurrenceId={selectedOccurrenceId}
+                            pendingInitialOccurrenceId={pendingInitialOccurrenceId}
                             onSelect={(id) => selectOccurrence(Number(id))}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}

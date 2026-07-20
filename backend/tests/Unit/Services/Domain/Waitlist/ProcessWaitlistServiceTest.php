@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\Waitlist;
 
 use HiEvents\DomainObjects\Enums\EventType;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -70,11 +71,6 @@ class ProcessWaitlistServiceTest extends TestCase
         $this->eventOccurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->eligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
 
-        // Default to "always eligible" for the existing happy-path tests; the
-        // dedicated past/cancelled/visibility tests override these on the spy.
-        // assertOccurrencePurchasable's return type is the loaded domain object,
-        // so we need a real instance — null would TypeError before the test
-        // assertion can run.
         $defaultEligibilityOccurrence = new EventOccurrenceDomainObject;
         $defaultEligibilityOccurrence->setId(50);
         $defaultEligibilityOccurrence->setEventId(1);
@@ -89,9 +85,6 @@ class ProcessWaitlistServiceTest extends TestCase
             ->andReturnNull()
             ->byDefault();
 
-        // The eligibility helper looks up the productPrice to feed the visibility
-        // check; tests that don't reach offerEntry don't bother re-mocking this
-        // path so we provide a benign default that resolves to a synthetic price.
         $defaultProductPrice = new ProductPriceDomainObject;
         $defaultProductPrice->setId(0);
         $defaultProductPrice->setProductId(0);
@@ -169,6 +162,7 @@ class ProcessWaitlistServiceTest extends TestCase
                         quantity_available: $quantityAvailable,
                         quantity_reserved: 0,
                         initial_quantity_available: $quantityAvailable,
+                        product_type: ProductType::TICKET->name,
                     ),
                 ])
             ));

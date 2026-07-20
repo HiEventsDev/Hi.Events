@@ -34,6 +34,7 @@ class EmailTokenContextBuilder
     public function __construct(
         private readonly LiquidTemplateRenderer $liquidTemplateRenderer,
         private readonly HtmlPurifierService $htmlPurifierService,
+        private readonly EmailContextHtmlEscaper $contextHtmlEscaper,
     ) {}
 
     public function buildOrderConfirmationContext(
@@ -119,7 +120,7 @@ class EmailTokenContextBuilder
         }
 
         try {
-            $rendered = $this->liquidTemplateRenderer->render($instructions, $context);
+            $rendered = $this->liquidTemplateRenderer->render($instructions, $this->contextHtmlEscaper->escape($context));
 
             return $this->htmlPurifierService->purify($rendered) ?? $instructions;
         } catch (Throwable) {

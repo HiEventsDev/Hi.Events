@@ -68,11 +68,6 @@ class CreateAttendeeHandler
     {
         $attendeeDTO = $this->resolveOccurrenceId($attendeeDTO);
 
-        // Same eligibility checks the public checkout runs — manual creation
-        // previously bypassed every one of these, letting organisers issue
-        // tickets against cancelled or sold-out occurrences and ignore product
-        // visibility rules. The override_capacity flag opts out of the capacity
-        // check only and is audited below.
         $this->occurrenceEligibilityService->assertOccurrencePurchasable(
             eventId: $attendeeDTO->event_id,
             occurrenceId: $attendeeDTO->event_occurrence_id,
@@ -119,10 +114,6 @@ class CreateAttendeeHandler
 
             $orderItem = $this->createOrderItem($attendeeDTO, $order, $product, $productPriceId);
 
-            // Use the resolved $productPriceId (not $attendeeDTO->product_price_id)
-            // so the attendee row and inventory adjustment match the order item.
-            // The DTO field is nullable — direct API callers can omit it and
-            // getProductPriceId() falls back to the product's first price.
             $attendee = $this->createAttendee($order, $attendeeDTO, $productPriceId);
 
             $this->orderManagementService->updateOrderTotals($order, collect([$orderItem]));
@@ -253,6 +244,7 @@ class CreateAttendeeHandler
                 OrderItemDomainObjectAbstract::ORDER_ID => $order->getId(),
                 OrderItemDomainObjectAbstract::ITEM_NAME => $product->getTitle(),
                 OrderItemDomainObjectAbstract::PRODUCT_PRICE_ID => $productPriceId,
+                OrderItemDomainObjectAbstract::PRODUCT_TYPE => $product->getProductType(),
                 OrderItemDomainObjectAbstract::TAXES_AND_FEES_ROLLUP => $this->taxAndFeeRollupService->getRollUp(),
                 OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             ]

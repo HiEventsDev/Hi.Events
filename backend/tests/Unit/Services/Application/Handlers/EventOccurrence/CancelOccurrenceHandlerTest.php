@@ -7,11 +7,13 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Jobs\Occurrence\SendOccurrenceCancellationEmailJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\CancelOccurrenceHandler;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Mockery\MockInterface;
@@ -34,6 +36,7 @@ class CancelOccurrenceHandlerTest extends TestCase
         parent::setUp();
 
         Event::fake();
+        Bus::fake();
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
@@ -57,12 +60,13 @@ class CancelOccurrenceHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    private function expectAttendeeCancelCalled(int $eventId, int $occurrenceId): void
+    private function expectAttendeeCancelCalled(int $eventId, int $occurrenceId, array $cancelledAttendeeIds = []): void
     {
         $this->cancelAttendeesService
             ->shouldReceive('cancelForOccurrence')
             ->once()
-            ->with($eventId, $occurrenceId);
+            ->with($eventId, $occurrenceId)
+            ->andReturn($cancelledAttendeeIds);
     }
 
     public function test_handle_sets_status_to_cancelled(): void
@@ -84,9 +88,10 @@ class CancelOccurrenceHandlerTest extends TestCase
             ->once()
             ->with($occurrenceId, [
                 EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => 2,
             ])
             ->andReturn($updatedOccurrence);
-        $this->expectAttendeeCancelCalled($eventId, $occurrenceId);
+        $this->expectAttendeeCancelCalled($eventId, $occurrenceId, [101, 102]);
         $this->exclusionService
             ->shouldReceive('addExclusions')
             ->once()
@@ -97,7 +102,15 @@ class CancelOccurrenceHandlerTest extends TestCase
         $this->assertSame($updatedOccurrence, $result);
 
         Event::assertDispatched(OccurrenceCancelledEvent::class, function ($e) use ($eventId, $occurrenceId) {
-            return $e->eventId === $eventId && $e->occurrenceId === $occurrenceId;
+            return $e->eventId === $eventId
+                && $e->occurrenceId === $occurrenceId;
+        });
+
+        Bus::assertDispatched(SendOccurrenceCancellationEmailJob::class, function (SendOccurrenceCancellationEmailJob $job) use ($eventId, $occurrenceId) {
+            return $job->eventId === $eventId
+                && $job->occurrenceId === $occurrenceId
+                && $job->attendeeIds === [101, 102]
+                && $job->refundOrders === false;
         });
     }
 
@@ -243,6 +256,7 @@ class CancelOccurrenceHandlerTest extends TestCase
         $this->assertSame($occurrence, $result);
 
         Event::assertNotDispatched(OccurrenceCancelledEvent::class);
+        Bus::assertNotDispatched(SendOccurrenceCancellationEmailJob::class);
     }
 
     public function test_delegates_attendee_cancellation_to_service(): void
@@ -263,11 +277,14 @@ class CancelOccurrenceHandlerTest extends TestCase
         $this->cancelAttendeesService
             ->shouldReceive('cancelForOccurrence')
             ->once()
-            ->with($eventId, $occurrenceId);
+            ->with($eventId, $occurrenceId)
+            ->andReturn([]);
 
         $this->exclusionService->shouldReceive('addExclusions')->once();
 
         $result = $this->handler->handle($eventId, $occurrenceId);
         $this->assertNotNull($result);
+
+        Bus::assertNotDispatched(SendOccurrenceCancellationEmailJob::class);
     }
 }

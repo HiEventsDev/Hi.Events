@@ -26,13 +26,15 @@ class OccurrencePurchaseEligibilityService
         int $occurrenceId,
         int $additionalQuantity = 1,
         bool $overrideCapacity = false,
+        ?EventOccurrenceDomainObject $occurrence = null,
+        ?int $reservedQuantity = null,
     ): EventOccurrenceDomainObject {
-        $occurrence = $this->occurrenceRepository->findFirstWhere([
+        $occurrence ??= $this->occurrenceRepository->findFirstWhere([
             'id' => $occurrenceId,
             'event_id' => $eventId,
         ]);
 
-        if ($occurrence === null) {
+        if ($occurrence === null || $occurrence->getEventId() !== $eventId) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => __('The specified event occurrence was not found'),
             ]);
@@ -58,7 +60,11 @@ class OccurrencePurchaseEligibilityService
             ]);
         }
 
-        if (! $overrideCapacity && $occurrence->isSoldOut()) {
+        if ($overrideCapacity || $additionalQuantity <= 0) {
+            return $occurrence;
+        }
+
+        if ($occurrence->isSoldOut()) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => $this->purchasabilityMessage(
                     $eventId,
@@ -68,9 +74,9 @@ class OccurrencePurchaseEligibilityService
             ]);
         }
 
-        if (! $overrideCapacity && $occurrence->getCapacity() !== null) {
-            $reservedForOccurrence = $this->orderItemRepository
-                ->getReservedQuantityForOccurrence($occurrenceId);
+        if ($occurrence->getCapacity() !== null) {
+            $reservedForOccurrence = $reservedQuantity
+                ?? $this->orderItemRepository->getReservedQuantityForOccurrence($occurrenceId);
 
             $available = $occurrence->getCapacity() - $occurrence->getUsedCapacity() - $reservedForOccurrence;
             if ($additionalQuantity > $available) {

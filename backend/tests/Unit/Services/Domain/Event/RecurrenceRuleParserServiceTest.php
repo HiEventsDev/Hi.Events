@@ -232,6 +232,32 @@ class RecurrenceRuleParserServiceTest extends TestCase
         $this->assertEquals('2025-04-15', $result[3]['start']->format('Y-m-d'));
     }
 
+    public function test_monthly_by_day_of_month_unsorted_days_match_sorted_days(): void
+    {
+        $baseRule = [
+            'frequency' => 'monthly',
+            'interval' => 1,
+            'monthly_pattern' => 'by_day_of_month',
+            'times_of_day' => ['10:00'],
+            'range' => [
+                'type' => 'until',
+                'until' => '2026-11-10',
+                'start' => '2026-06-01',
+            ],
+        ];
+
+        $unsorted = $this->service->parse(array_merge($baseRule, ['days_of_month' => [15, 1]]), 'UTC');
+        $sorted = $this->service->parse(array_merge($baseRule, ['days_of_month' => [1, 15]]), 'UTC');
+
+        $unsortedDates = $unsorted->pluck('start')->map(fn ($d) => $d->format('Y-m-d'))->toArray();
+        $sortedDates = $sorted->pluck('start')->map(fn ($d) => $d->format('Y-m-d'))->toArray();
+
+        $this->assertCount(11, $unsorted);
+        $this->assertEquals($sortedDates, $unsortedDates);
+        $this->assertContains('2026-11-01', $unsortedDates);
+        $this->assertNotContains('2026-11-15', $unsortedDates);
+    }
+
     // ─── Monthly by Day of Week with Week Position ─────────────────────
 
     public function test_monthly_by_day_of_week_first_monday(): void
@@ -761,6 +787,110 @@ class RecurrenceRuleParserServiceTest extends TestCase
                 'Results should be sorted by start date'
             );
         }
+    }
+
+    public function test_excluded_occurrence_removes_matching_additional_date(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                ['date' => '2025-04-01', 'time' => '20:00'],
+                ['date' => '2025-05-15', 'time' => '11:00'],
+            ],
+            'excluded_occurrences' => ['2025-04-01 20:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 2,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $starts = $result->pluck('start')->map(fn ($d) => $d->format('Y-m-d H:i'))->toArray();
+
+        $this->assertCount(3, $result);
+        $this->assertNotContains('2025-04-01 20:00', $starts);
+        $this->assertContains('2025-05-15 11:00', $starts);
+        $this->assertContains('2025-03-01 10:00', $starts);
+        $this->assertContains('2025-03-02 10:00', $starts);
+    }
+
+    public function test_excluded_date_does_not_remove_additional_date_on_same_day(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                ['date' => '2025-04-01', 'time' => '20:00'],
+            ],
+            'excluded_dates' => ['2025-04-01'],
+            'range' => [
+                'type' => 'count',
+                'count' => 2,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $starts = $result->pluck('start')->map(fn ($d) => $d->format('Y-m-d H:i'))->toArray();
+
+        $this->assertCount(3, $result);
+        $this->assertContains('2025-04-01 20:00', $starts);
+    }
+
+    public function test_offset_bearing_additional_date_matches_exclusion_in_event_timezone(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                ['date' => '2025-04-02T02:00:00Z', 'time' => '20:00'],
+            ],
+            'excluded_occurrences' => ['2025-04-01 20:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 1,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'America/New_York');
+
+        $starts = $result->pluck('start')->map(fn ($d) => $d->format('Y-m-d H:i'))->toArray();
+
+        $this->assertCount(1, $result);
+        $this->assertNotContains('2025-04-02 00:00', $starts);
+    }
+
+    public function test_excluded_occurrences_apply_to_rule_slots_and_additional_dates_together(): void
+    {
+        $rule = [
+            'frequency' => 'daily',
+            'interval' => 1,
+            'times_of_day' => ['10:00'],
+            'additional_dates' => [
+                ['date' => '2025-04-01', 'time' => '20:00'],
+                ['date' => '2025-04-02', 'time' => '20:00'],
+            ],
+            'excluded_occurrences' => ['2025-03-02 10:00', '2025-04-01 20:00'],
+            'range' => [
+                'type' => 'count',
+                'count' => 3,
+                'start' => '2025-03-01',
+            ],
+        ];
+
+        $result = $this->service->parse($rule, 'UTC');
+
+        $starts = $result->pluck('start')->map(fn ($d) => $d->format('Y-m-d H:i'))->toArray();
+
+        $this->assertEquals(['2025-03-01 10:00', '2025-03-03 10:00', '2025-04-02 20:00'], $starts);
     }
 
     public function test_additional_dates_default_time_to_midnight(): void

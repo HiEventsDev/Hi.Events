@@ -212,7 +212,7 @@ echo ""
 step "Background workers"
 
 if ask_yes_no "Start the queue worker?" "y"; then
-    $COMPOSE_CMD exec -d backend php artisan queue:work --queue=default,webhook-queue --sleep=3 --tries=3 --timeout=60
+    $COMPOSE_CMD exec -d backend php artisan queue:work --queue=default,webhook-queue,occurrences --sleep=3 --tries=3 --timeout=60
     ok "Queue worker started (detached)"
 else
     info "Skipped queue worker — start it later with:"

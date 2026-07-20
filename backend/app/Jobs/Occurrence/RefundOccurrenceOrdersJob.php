@@ -33,7 +33,9 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
         public readonly int $eventId,
         public readonly int $occurrenceId,
     ) {
-        $this->onQueue('occurrences');
+        if (config('queue.occurrences_queue_name') !== null) {
+            $this->onQueue(config('queue.occurrences_queue_name'));
+        }
     }
 
     public function uniqueId(): string
@@ -55,9 +57,6 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        // Only refund orders that haven't already had a refund started. Skipping rows where
-        // refund_status is set guards against duplicate Stripe refunds on job retry when a
-        // previous attempt crashed between the Stripe API call and the refund_status write.
         $refundableOrders = DB::table('orders')
             ->whereIn('id', $orderIds)
             ->where('status', OrderStatus::COMPLETED->name)
@@ -86,10 +85,6 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
                     'cancelled_occurrence_id' => $this->occurrenceId,
                 ]);
 
-                // Surface the skip on the order's audit log so admins see it in
-                // the order's history and can issue a manual partial refund.
-                // Wrapped: audit-log failure shouldn't derail the rest of the
-                // batch (other orders are still queued for refund/skip below).
                 try {
                     $auditLogRepository->create([
                         'event_id' => $this->eventId,

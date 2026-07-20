@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\Order;
 use Exception;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
@@ -22,6 +23,7 @@ use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityServic
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
+use HiEvents\Services\Domain\Product\ProductPriceService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -38,6 +40,7 @@ class OrderCreateRequestValidationService
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly AvailableProductQuantitiesFetchService $fetchAvailableProductQuantitiesService,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
+        private readonly ProductPriceService $productPriceService,
     ) {}
 
     /**
@@ -54,8 +57,6 @@ class OrderCreateRequestValidationService
         $this->validateProductSelection($data);
         $this->validateOccurrence($eventId, $data);
 
-        // Event-wide snapshot is still needed for `validateOverallCapacity`
-        // (event-level capacity assignments).
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities(
                 $event->getId(),
@@ -64,11 +65,6 @@ class OrderCreateRequestValidationService
 
         $this->validateOverallCapacity($event, $data);
 
-        // Re-fetch availability per occurrence so the product-quantity check
-        // matches what `CreateOrderHandler::validateProductAvailability` enforces
-        // — previously this used only the event-wide snapshot, letting the
-        // validator wave through orders the handler would later reject (causing
-        // confusing two-step failures during checkout).
         $this->validateProductDetailsPerOccurrence($event, $data, $promoCode);
 
         return $data;
@@ -123,12 +119,6 @@ class OrderCreateRequestValidationService
             ->first();
     }
 
-    /**
-     * Walk each occurrence's product group and validate against availability
-     * scoped to that occurrence. For non-recurring events there's only one
-     * occurrence, so this is a single iteration with the same per-occurrence
-     * data the order handler uses.
-     */
     private function validateProductDetailsPerOccurrence(EventDomainObject $event, array $data, ?PromoCodeDomainObject $promoCode): void
     {
         $eventWideAvailability = $this->availableProductQuantities;
@@ -145,6 +135,8 @@ class OrderCreateRequestValidationService
                             : null,
                     );
 
+                $occurrenceRequestedQuantities = $this->sumRequestedQuantities($products->all());
+
                 foreach ($products as $productAndQuantities) {
                     $allProducts = $this->getProducts(['products' => [$productAndQuantities]]);
                     $productIndex = collect($data['products'])->search(
@@ -156,12 +148,61 @@ class OrderCreateRequestValidationService
                         $productAndQuantities,
                         $allProducts,
                         $promoCode,
+                        $occurrenceRequestedQuantities,
                     );
                 }
             }
         } finally {
-            // Restore so any subsequent caller sees the event-wide snapshot.
             $this->availableProductQuantities = $eventWideAvailability;
+        }
+
+        if ($productsByOccurrence->count() > 1) {
+            $this->validateRequestedQuantitiesAcrossOccurrences($data);
+        }
+    }
+
+    /**
+     * @return array<int, array<int, int>>
+     */
+    private function sumRequestedQuantities(array $productLines): array
+    {
+        $requestedQuantities = [];
+        foreach ($productLines as $line) {
+            foreach ($line['quantities'] as $quantity) {
+                if ($quantity['quantity'] <= 0) {
+                    continue;
+                }
+
+                $requestedQuantities[$line['product_id']][$quantity['price_id']] =
+                    ($requestedQuantities[$line['product_id']][$quantity['price_id']] ?? 0) + $quantity['quantity'];
+            }
+        }
+
+        return $requestedQuantities;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateRequestedQuantitiesAcrossOccurrences(array $data): void
+    {
+        $requestedQuantities = $this->sumRequestedQuantities($data['products']);
+        $products = $this->getProducts($data);
+        $productLines = collect($data['products']);
+
+        foreach ($requestedQuantities as $productId => $priceQuantities) {
+            $product = $products->first(fn (ProductDomainObject $p) => $p->getId() === $productId);
+            $productIndex = $productLines->search(fn ($line) => (int) $line['product_id'] === $productId);
+
+            $this->validateProductPricesQuantity(
+                quantities: collect($priceQuantities)
+                    ->map(fn ($quantity, $priceId) => ['price_id' => $priceId, 'quantity' => $quantity])
+                    ->values()
+                    ->all(),
+                product: $product,
+                productIndex: is_int($productIndex) ? $productIndex : 0,
+                requestedQuantities: $requestedQuantities,
+            );
         }
     }
 
@@ -227,6 +268,7 @@ class OrderCreateRequestValidationService
     private function validateOccurrence(int $eventId, array $data): void
     {
         $productsByOccurrence = collect($data['products'])->groupBy('event_occurrence_id');
+        $ticketProductIds = $this->getTicketProductIds($data);
 
         foreach ($productsByOccurrence as $occurrenceId => $products) {
             if ($occurrenceId === null || $occurrenceId === '') {
@@ -236,6 +278,7 @@ class OrderCreateRequestValidationService
             }
 
             $totalQuantityRequested = (int) $products
+                ->filter(fn ($product) => in_array((int) $product['product_id'], $ticketProductIds, true))
                 ->sum(fn ($product) => collect($product['quantities'])->sum('quantity'));
 
             $this->occurrenceEligibilityService->assertOccurrencePurchasable(
@@ -253,6 +296,18 @@ class OrderCreateRequestValidationService
     }
 
     /**
+     * @return int[]
+     */
+    private function getTicketProductIds(array $data): array
+    {
+        return $this->getProducts($data)
+            ->filter(fn (ProductDomainObject $product) => $product->getProductType() === ProductType::TICKET->name)
+            ->map(fn (ProductDomainObject $product) => $product->getId())
+            ->values()
+            ->all();
+    }
+
+    /**
      * @throws Exception
      */
     private function getProducts(array $data): Collection
@@ -267,7 +322,7 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateSingleProductDetails(EventDomainObject $event, int $productIndex, array $productAndQuantities, $products, ?PromoCodeDomainObject $promoCode = null): void
+    private function validateSingleProductDetails(EventDomainObject $event, int $productIndex, array $productAndQuantities, $products, ?PromoCodeDomainObject $promoCode, array $requestedQuantities): void
     {
         $productId = $productAndQuantities['product_id'];
         $totalQuantity = collect($productAndQuantities['quantities'])->sum('quantity');
@@ -296,7 +351,8 @@ class OrderCreateRequestValidationService
         $this->validateProductQuantity(
             productIndex: $productIndex,
             productAndQuantities: $productAndQuantities,
-            product: $product
+            product: $product,
+            requestedQuantities: $requestedQuantities,
         );
 
         $this->validateProductTypeAndPrice(
@@ -337,9 +393,11 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateProductQuantity(int $productIndex, array $productAndQuantities, ProductDomainObject $product): void
+    private function validateProductQuantity(int $productIndex, array $productAndQuantities, ProductDomainObject $product, array $requestedQuantities): void
     {
-        $totalQuantity = collect($productAndQuantities['quantities'])->sum('quantity');
+        $totalQuantity = isset($requestedQuantities[$product->getId()])
+            ? array_sum($requestedQuantities[$product->getId()])
+            : (int) collect($productAndQuantities['quantities'])->sum('quantity');
         $maxPerOrder = (int) $product->getMaxPerOrder() ?: 100;
 
         $capacityMaximum = $this->availableProductQuantities
@@ -354,7 +412,6 @@ class OrderCreateRequestValidationService
             ->first(fn (AvailableProductQuantitiesDTO $price) => $price->product_id === $product->getId())
             ->quantity_available;
 
-        // if there are fewer products available than the configured minimum, we allow less than the minimum to be purchased
         $minPerOrder = min((int) $product->getMinPerOrder() ?: 1,
             $capacityMaximum ?: $maxPerOrder,
             $productAvailableQuantity ?: $maxPerOrder);
@@ -362,7 +419,8 @@ class OrderCreateRequestValidationService
         $this->validateProductPricesQuantity(
             quantities: $productAndQuantities['quantities'],
             product: $product,
-            productIndex: $productIndex
+            productIndex: $productIndex,
+            requestedQuantities: $requestedQuantities,
         );
 
         if ($totalQuantity > $maxPerOrder) {
@@ -402,8 +460,14 @@ class OrderCreateRequestValidationService
     ): void {
         if ($product->getType() === ProductPriceType::DONATION->name) {
             $price = $productAndQuantities['quantities'][0]['price'] ?? 0;
-            if ($price < $product->getPrice()) {
-                $formattedPrice = Currency::format($product->getPrice(), $event->getCurrency());
+            $occurrenceId = $productAndQuantities['event_occurrence_id'] ?? null;
+            $minimumPrice = $this->productPriceService->getDonationMinimumPrice(
+                product: $product,
+                priceId: (int) $productAndQuantities['quantities'][0]['price_id'],
+                eventOccurrenceId: $occurrenceId ? (int) $occurrenceId : null,
+            );
+            if ($price < $minimumPrice) {
+                $formattedPrice = Currency::format($minimumPrice, $event->getCurrency());
                 throw ValidationException::withMessages([
                     "products.$productIndex.quantities.0.price" => __('The minimum amount is :price', ['price' => $formattedPrice]),
                 ]);
@@ -466,7 +530,7 @@ class OrderCreateRequestValidationService
     /**
      * @throws ValidationException
      */
-    private function validateProductPricesQuantity(array $quantities, ProductDomainObject $product, int $productIndex): void
+    private function validateProductPricesQuantity(array $quantities, ProductDomainObject $product, int $productIndex, array $requestedQuantities): void
     {
         foreach ($quantities as $productQuantity) {
             if ($productQuantity['quantity'] === 0) {
@@ -483,7 +547,10 @@ class OrderCreateRequestValidationService
             $productPrice = $product->getProductPrices()
                 ?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $productQuantity['price_id']);
 
-            if ($productQuantity['quantity'] > $numberAvailable) {
+            $requestedQuantity = $requestedQuantities[$product->getId()][$productQuantity['price_id']]
+                ?? $productQuantity['quantity'];
+
+            if ($requestedQuantity > $numberAvailable) {
                 if ($numberAvailable === 0) {
                     throw ValidationException::withMessages([
                         "products.$productIndex" => __('The product :product is sold out', [
@@ -507,11 +574,6 @@ class OrderCreateRequestValidationService
      */
     private function validateOverallCapacity(EventDomainObject $event, array $data): void
     {
-        // Capacity assignments are deliberately not enforced for recurring
-        // events — capacity is modelled per-occurrence on the recurrence side
-        // and the assignment itself spans every session, which makes a single
-        // shared total meaningless for a series. Per-occurrence capacity is
-        // still validated in OccurrencePurchaseEligibilityService.
         if ($event->isRecurring()) {
             return;
         }

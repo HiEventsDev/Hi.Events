@@ -11,6 +11,7 @@ class LocationOwnershipValidator
 {
     public function __construct(
         private readonly LocationRepositoryInterface $locationRepository,
+        private readonly LocationLockService $locationLockService,
     ) {}
 
     /**
@@ -21,6 +22,8 @@ class LocationOwnershipValidator
         if ($locationId === null) {
             return;
         }
+
+        $this->locationLockService->acquireSharedTransactionLock($locationId);
 
         $location = $this->locationRepository->findFirstWhere([
             'id' => $locationId,

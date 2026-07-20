@@ -8,6 +8,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Location\DeleteLocationHandler;
+use HiEvents\Services\Domain\Location\LocationLockService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -20,6 +21,8 @@ class DeleteLocationHandlerTest extends TestCase
 
     private LocationRepositoryInterface|MockInterface $locationRepository;
 
+    private LocationLockService|MockInterface $locationLockService;
+
     private DeleteLocationHandler $handler;
 
     protected function setUp(): void
@@ -27,14 +30,20 @@ class DeleteLocationHandlerTest extends TestCase
         parent::setUp();
 
         $this->locationRepository = Mockery::mock(LocationRepositoryInterface::class);
+        $this->locationLockService = Mockery::mock(LocationLockService::class);
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
-        $this->handler = new DeleteLocationHandler($this->locationRepository, $databaseManager);
+        $this->handler = new DeleteLocationHandler(
+            $this->locationRepository,
+            $databaseManager,
+            $this->locationLockService,
+        );
     }
 
     public function test_deletes_unreferenced_location(): void
     {
+        $this->expectLockAcquired();
         $this->expectLocationLookup(Mockery::mock(LocationDomainObject::class));
         $this->locationRepository->shouldReceive('isReferenced')->with(3)->andReturn(false);
         $this->locationRepository
@@ -47,6 +56,7 @@ class DeleteLocationHandlerTest extends TestCase
 
     public function test_throws_when_location_not_found(): void
     {
+        $this->expectLockAcquired();
         $this->expectLocationLookup(null);
 
         $this->expectException(ResourceNotFoundException::class);
@@ -55,12 +65,21 @@ class DeleteLocationHandlerTest extends TestCase
 
     public function test_throws_conflict_when_location_is_referenced(): void
     {
+        $this->expectLockAcquired();
         $this->expectLocationLookup(Mockery::mock(LocationDomainObject::class));
         $this->locationRepository->shouldReceive('isReferenced')->with(3)->andReturn(true);
         $this->locationRepository->shouldNotReceive('deleteWhere');
 
         $this->expectException(ResourceConflictException::class);
         $this->handler->handle(10, 5, 3);
+    }
+
+    private function expectLockAcquired(): void
+    {
+        $this->locationLockService
+            ->shouldReceive('acquireExclusiveTransactionLock')
+            ->once()
+            ->with(3);
     }
 
     private function expectLocationLookup(?LocationDomainObject $location): void
