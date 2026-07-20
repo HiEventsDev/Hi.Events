@@ -1,14 +1,13 @@
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {IconCalendar} from "@tabler/icons-react";
-import {Event} from "../../../types.ts";
-import {OccurrenceDateOverride} from "../../../utilites/calendar.ts";
+import {Event, EventOccurrence} from "../../../types.ts";
 import {CalendarOptionsPopover} from "../CalendarOptionsPopover";
 import classes from './AddToCalendarCTA.module.scss';
 
 interface AddToCalendarCTAProps {
     event: Event;
-    occurrence?: OccurrenceDateOverride;
+    occurrence?: EventOccurrence;
 }
 
 export const AddToCalendarCTA = ({event, occurrence}: AddToCalendarCTAProps) => {

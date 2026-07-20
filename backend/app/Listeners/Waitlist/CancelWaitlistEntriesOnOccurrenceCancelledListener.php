@@ -5,6 +5,7 @@ namespace HiEvents\Listeners\Waitlist;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\OccurrenceCancelledEvent;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\Waitlist\CancelWaitlistEntryService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,6 +37,11 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListener implements ShouldQueue
             'status' => WaitlistEntryStatus::OFFERED->name,
         ]);
 
-        $offeredEntries->each(fn (WaitlistEntryDomainObject $entry) => $this->cancelWaitlistEntryService->cancelEntry($entry));
+        $offeredEntries->each(function (WaitlistEntryDomainObject $entry) {
+            try {
+                $this->cancelWaitlistEntryService->cancelEntry($entry);
+            } catch (ResourceConflictException) {
+            }
+        });
     }
 }

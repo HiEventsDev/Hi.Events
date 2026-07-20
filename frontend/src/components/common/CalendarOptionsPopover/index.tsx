@@ -1,13 +1,13 @@
 import {t} from "@lingui/macro";
 import {Button, Popover, Stack, Text} from "@mantine/core";
 import {IconBrandGoogle, IconDownload} from "@tabler/icons-react";
-import {Event} from "../../../types.ts";
-import {createGoogleCalendarUrl, downloadICSFile, OccurrenceDateOverride} from "../../../utilites/calendar.ts";
+import {Event, EventOccurrence} from "../../../types.ts";
+import {createGoogleCalendarUrl, downloadICSFile} from "../../../utilites/calendar.ts";
 import {ReactNode} from "react";
 
 interface CalendarOptionsPopoverProps {
     event: Event;
-    occurrence?: OccurrenceDateOverride;
+    occurrence?: EventOccurrence;
     children: ReactNode;
 }
 

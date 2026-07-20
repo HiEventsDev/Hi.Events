@@ -5,6 +5,7 @@ namespace Tests\Unit\Listeners\Waitlist;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\OccurrenceCancelledEvent;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Listeners\Waitlist\CancelWaitlistEntriesOnOccurrenceCancelledListener;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Domain\Waitlist\CancelWaitlistEntryService;
@@ -36,6 +37,37 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    public function test_entry_that_became_uncancellable_does_not_stop_remaining_cancellations(): void
+    {
+        $purchasedEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+        $offeredEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+
+        $this->waitlistEntryRepository->shouldReceive('updateWhere')->once();
+        $this->waitlistEntryRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$purchasedEntry, $offeredEntry]));
+
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($purchasedEntry)
+            ->andThrow(new ResourceConflictException('This waitlist entry cannot be cancelled'));
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($offeredEntry)
+            ->andReturn($offeredEntry);
+
+        $this->listener->handle(new OccurrenceCancelledEvent(
+            eventId: 1,
+            occurrenceId: 10,
+            refundOrders: true,
+        ));
+
+        $this->assertTrue(true);
     }
 
     public function test_bulk_cancels_waiting_entries_only(): void

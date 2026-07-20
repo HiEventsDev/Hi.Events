@@ -23,6 +23,14 @@ export const AddressSettings = () => {
         initialValues: {
             location: null as LocationPickerValue | null,
         },
+        validate: {
+            location: (value) => {
+                if (value && value.kind === 'new' && !isAddressSet(value.address)) {
+                    return t`Enter a venue name or address`;
+                }
+                return null;
+            },
+        },
     });
     const formErrorHandle = useFormErrorResponseHandler();
 
@@ -102,6 +110,7 @@ export const AddressSettings = () => {
                             organizerId={organizerId}
                             value={form.values.location}
                             onChange={(value) => form.setFieldValue('location', value)}
+                            error={form.errors.location}
                             clearable
                         />
                     )}

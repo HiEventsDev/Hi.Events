@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Jobs\Occurrence;
 
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -49,15 +50,29 @@ class BulkCancelOccurrencesJob implements ShouldQueue
 
         foreach ($this->occurrenceIds as $occurrenceId) {
             try {
-                $cancelResult = DB::transaction(function () use ($occurrenceRepository, $cancelAttendeesService, $occurrenceId) {
+                $cancelResult = DB::transaction(function () use ($occurrenceRepository, $exclusionService, $cancelAttendeesService, $occurrenceId) {
                     $occurrence = $occurrenceRepository->findByIdLocked($occurrenceId);
 
-                    if (
-                        ! $occurrence
-                        || $occurrence->getEventId() !== $this->eventId
-                        || $occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name
-                    ) {
+                    if (! $occurrence || $occurrence->getEventId() !== $this->eventId) {
                         return null;
+                    }
+
+                    if ($occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name) {
+                        if ($this->attempts() <= 1 || $occurrence->getCancelledAttendeesCount() !== null) {
+                            return null;
+                        }
+
+                        $exclusionService->addExclusions($this->eventId, [$occurrence->getStartDate()]);
+
+                        return [
+                            'start_date' => $occurrence->getStartDate(),
+                            'cancelled_attendee_ids' => DB::table('attendees')
+                                ->where('event_occurrence_id', $occurrenceId)
+                                ->where('status', AttendeeStatus::CANCELLED->name)
+                                ->whereNull('deleted_at')
+                                ->pluck('id')
+                                ->all(),
+                        ];
                     }
 
                     $cancelledAttendeeIds = $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
@@ -65,10 +80,11 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     $occurrenceRepository->updateWhere(
                         attributes: [
                             EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
-                            EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => count($cancelledAttendeeIds),
                         ],
                         where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
                     );
+
+                    $exclusionService->addExclusions($this->eventId, [$occurrence->getStartDate()]);
 
                     return [
                         'start_date' => $occurrence->getStartDate(),
@@ -98,6 +114,13 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     occurrenceId: $occurrenceId,
                 ));
 
+                $occurrenceRepository->updateWhere(
+                    attributes: [
+                        EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => count($cancelResult['cancelled_attendee_ids']),
+                    ],
+                    where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
+                );
+
                 $cancelledStartDates[] = $cancelResult['start_date'];
             } catch (Throwable $e) {
                 $failedIds[] = $occurrenceId;
@@ -107,10 +130,6 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     'error' => $e->getMessage(),
                 ]);
             }
-        }
-
-        if (! empty($cancelledStartDates)) {
-            DB::transaction(fn () => $exclusionService->addExclusions($this->eventId, $cancelledStartDates));
         }
 
         $context = [
