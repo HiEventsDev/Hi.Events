@@ -53,13 +53,8 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->statisticsCancellationService = Mockery::mock(EventStatisticsCancellationService::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
 
-        // Default the logger to a permissive spy — only the failure path test
-        // overrides it with a strict expectation.
         $this->logger->shouldReceive('error')->zeroOrMoreTimes()->byDefault();
 
-        // Default the stats service / order repo to no-op (orderRepository
-        // returns no orders → no decrement calls). Tests that exercise the
-        // happy path provide explicit expectations that take precedence.
         $this->orderRepository
             ->shouldReceive('findWhereIn')
             ->zeroOrMoreTimes()
@@ -103,7 +98,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             ])
             ->andReturn(new Collection([$attendeeA, $attendeeB, $attendeeC]));
 
-        // All three attendees are on a COMPLETED order → inventory was incremented → decrement.
         $this->orderRepository
             ->shouldReceive('findWhereIn')
             ->with('id', [1000])
@@ -120,7 +114,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
                 ],
             );
 
-        // Price 70 × 2 + price 80 × 1 = two grouped decrement calls.
         $this->productQuantityService
             ->shouldReceive('decreaseQuantitySold')->once()->with(70, 2, $occurrenceId);
         $this->productQuantityService
@@ -132,7 +125,10 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             ->with(Mockery::on(fn (AttendeeEvent $e) => $e->type === DomainEventType::ATTENDEE_CANCELLED
                 && in_array($e->attendeeId, [101, 102, 103], true)));
 
-        $this->service->cancelForOccurrence($eventId, $occurrenceId);
+        $result = $this->service->cancelForOccurrence($eventId, $occurrenceId);
+
+        $this->assertSame([101, 102, 103], $result['attendee_ids']);
+        $this->assertSame(3, $result['sales_backed_count']);
 
         Event::assertDispatched(
             CapacityChangedEvent::class,
@@ -154,15 +150,15 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
         $this->domainEventDispatcherService->shouldNotReceive('dispatch');
 
-        $this->service->cancelForOccurrence(1, 10);
+        $result = $this->service->cancelForOccurrence(1, 10);
+
+        $this->assertSame(['attendee_ids' => [], 'sales_backed_count' => 0], $result);
 
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
     public function test_also_cancels_awaiting_payment_attendees(): void
     {
-        // Offline-payment attendees occupy a seat but have status AWAITING_PAYMENT.
-        // They must be cancelled too when the occurrence is cancelled.
         $attendee = $this->makeAttendee(id: 201, productId: 5, productPriceId: 50);
 
         $this->attendeeRepository
@@ -177,7 +173,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             }))
             ->andReturn(new Collection([$attendee]));
 
-        // Offline orders hold inventory but are not yet counted in statistics.
         $this->orderRepository
             ->shouldReceive('findWhereIn')
             ->with('id', [1000])
@@ -195,7 +190,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
     public function test_does_not_decrement_inventory_for_reserved_order_attendees(): void
     {
-        // Reserved-order attendees never incremented inventory or statistics.
         $attendee = $this->makeAttendee(id: 501, productId: 9, productPriceId: 90, orderId: 7000);
 
         $this->attendeeRepository
@@ -213,24 +207,53 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
         $this->statisticsCancellationService->shouldNotReceive('decrementForCancelledAttendee');
 
-        $this->service->cancelForOccurrence(1, 10);
+        $result = $this->service->cancelForOccurrence(1, 10);
+
+        $this->assertSame([501], $result['attendee_ids']);
+        $this->assertSame(0, $result['sales_backed_count']);
 
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
+    public function test_sales_backed_count_only_counts_inventory_backed_attendees(): void
+    {
+        $completedAttendee = $this->makeAttendee(id: 601, productId: 3, productPriceId: 30, orderId: 8000);
+        $reservedAttendee = $this->makeAttendee(id: 602, productId: 3, productPriceId: 30, orderId: 8001);
+
+        $this->attendeeRepository
+            ->shouldReceive('findWhere')
+            ->andReturn(new Collection([$completedAttendee, $reservedAttendee]));
+
+        $this->orderRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', Mockery::on(function ($ids) {
+                if (! is_array($ids)) {
+                    return false;
+                }
+                sort($ids);
+
+                return $ids === [8000, 8001];
+            }))
+            ->andReturn(new Collection([
+                $this->makeOrder(id: 8000, status: OrderStatus::COMPLETED->name),
+                $this->makeOrder(id: 8001, status: OrderStatus::RESERVED->name),
+            ]));
+
+        $this->attendeeRepository->shouldReceive('updateWhere')->once();
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->once()->with(30, 1, 10);
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->twice();
+
+        $result = $this->service->cancelForOccurrence(1, 10);
+
+        $this->assertSame([601, 602], $result['attendee_ids']);
+        $this->assertSame(1, $result['sales_backed_count']);
+    }
+
     public function test_decrements_attendee_statistics_grouped_by_source_order(): void
     {
-        // Regression: bulk occurrence cancel previously cancelled attendees +
-        // adjusted inventory but skipped the per-attendee statistics decrement
-        // PartialEditAttendeeHandler runs. The later refund flow's order-level
-        // decrement looked at currently-active attendees (zero) and decremented
-        // attendees_registered by zero — leaving stats inflated. We now group
-        // by source order and call the stats service once per order so daily
-        // statistics for the right order date are touched.
         $eventId = 5;
         $occurrenceId = 50;
 
-        // Two attendees on order 1000 (different products), one on order 1001.
         $a1 = $this->makeAttendee(id: 301, productId: 1, productPriceId: 11, orderId: 1000);
         $a2 = $this->makeAttendee(id: 302, productId: 2, productPriceId: 22, orderId: 1000);
         $a3 = $this->makeAttendee(id: 303, productId: 1, productPriceId: 11, orderId: 1001);
@@ -245,8 +268,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $order1000 = $this->makeOrder(id: 1000, createdAt: '2026-01-15 09:00:00');
         $order1001 = $this->makeOrder(id: 1001, createdAt: '2026-01-20 14:30:00');
 
-        // Order ids are unique-collected before the lookup so order doesn't
-        // matter — assert set membership.
         $this->orderRepository
             ->shouldReceive('findWhereIn')
             ->once()
@@ -261,8 +282,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             }))
             ->andReturn(new Collection([$order1000, $order1001]));
 
-        // Mockery's `with()` matches positionally — named-arg calls in the
-        // service translate to positional under the hood, so assert that way.
         $this->statisticsCancellationService
             ->shouldReceive('decrementForCancelledAttendee')
             ->once()
@@ -274,17 +293,11 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
         $this->service->cancelForOccurrence($eventId, $occurrenceId);
 
-        // Mockery::close() in tearDown verifies the call expectations above.
-        // Add a matching PHPUnit assertion so the test isn't marked risky.
         $this->assertTrue(true);
     }
 
     public function test_logs_and_continues_when_statistics_decrement_throws(): void
     {
-        // Stats reconciliation failures must not roll back the attendee cancel
-        // — attendees are already updated, inventory is already adjusted, and
-        // a stats discrepancy is recoverable. The service swallows the error
-        // and logs so on-call can spot drift.
         $attendee = $this->makeAttendee(id: 401, productId: 1, productPriceId: 11, orderId: 5000);
         $this->attendeeRepository
             ->shouldReceive('findWhere')
@@ -312,8 +325,6 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
         $this->service->cancelForOccurrence(1, 10);
 
-        // Mockery verifies the logger + decrement expectations on close;
-        // pair with a PHPUnit assertion so the test isn't marked risky.
         $this->assertTrue(true);
     }
 

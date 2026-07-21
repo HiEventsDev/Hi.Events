@@ -232,6 +232,7 @@ export const Messages = () => {
                             size="compact-sm"
                             onClick={openSendModal}
                             leftSection={<IconSend size={14}/>}
+                            data-testid="message-compose-button"
                         >
                             {t`Compose`}
                         </Button>

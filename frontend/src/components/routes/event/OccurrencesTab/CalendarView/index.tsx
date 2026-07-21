@@ -70,7 +70,7 @@ export const CalendarView = ({
         return days;
     }, [currentMonth]);
 
-    const todayStr = dayjs().format('YYYY-MM-DD');
+    const todayStr = dayjs().tz(eventTimezone).format('YYYY-MM-DD');
 
     const dayNames = useMemo(() => {
         const start = dayjs().startOf('week').add(1, 'day');

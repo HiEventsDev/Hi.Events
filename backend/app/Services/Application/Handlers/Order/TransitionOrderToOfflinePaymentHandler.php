@@ -15,6 +15,7 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -29,6 +30,7 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly DatabaseManager $databaseManager,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
     ) {}
@@ -58,6 +60,8 @@ class TransitionOrderToOfflinePaymentHandler
             ]);
 
             $this->validateOfflinePayment($order, $eventSettings);
+
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $this->updateOrderStatuses($order->getId());
 

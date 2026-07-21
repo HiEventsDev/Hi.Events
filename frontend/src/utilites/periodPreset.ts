@@ -11,6 +11,12 @@ const formatDate = (d: Date): string => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 };
 
+const startOfDay = (d: Date): Date =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
+
+const endOfDay = (d: Date): Date =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59);
+
 const parseEventDate = (raw: string | undefined | null): Date | null => {
     if (!raw) return null;
     const normalized = raw.includes('T') ? raw : raw.replace(' ', 'T');
@@ -64,7 +70,7 @@ export const periodPresetToDateRange = (preset: PeriodPreset, event?: Event): Da
                 break;
             }
         }
-        return {startDate: formatDate(start), endDate: formatDate(end)};
+        return {startDate: formatDate(startOfDay(start)), endDate: formatDate(endOfDay(end))};
     }
 
     const end = new Date(now);
@@ -93,7 +99,7 @@ export const periodPresetToDateRange = (preset: PeriodPreset, event?: Event): Da
             start.setDate(start.getDate() - 30);
     }
 
-    return {startDate: formatDate(start), endDate: formatDate(end)};
+    return {startDate: formatDate(startOfDay(start)), endDate: formatDate(endOfDay(end))};
 };
 
 export const previousPeriodRange = (current: DateRange): DateRange => {

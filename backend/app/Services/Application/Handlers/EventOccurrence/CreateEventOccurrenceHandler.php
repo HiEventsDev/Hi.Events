@@ -12,8 +12,10 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
+use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class CreateEventOccurrenceHandler
@@ -31,6 +33,20 @@ class CreateEventOccurrenceHandler
     public function handle(UpsertEventOccurrenceDTO $dto): EventOccurrenceDomainObject
     {
         return $this->databaseManager->transaction(function () use ($dto) {
+            $existingOccurrenceCount = $this->occurrenceRepository->countWhere([
+                EventOccurrenceDomainObjectAbstract::EVENT_ID => $dto->event_id,
+            ]);
+
+            if ($existingOccurrenceCount >= RecurrenceRuleParserService::MAX_OCCURRENCES) {
+                throw ValidationException::withMessages([
+                    'occurrence' => [
+                        __('This event has reached the maximum of :max occurrences.', [
+                            'max' => RecurrenceRuleParserService::MAX_OCCURRENCES,
+                        ]),
+                    ],
+                ]);
+            }
+
             $eventLocationId = null;
 
             if ($dto->event_location !== null) {

@@ -5,7 +5,6 @@ namespace HiEvents\Jobs\Occurrence;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
-use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -26,16 +25,30 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private const ATTENDEE_CHUNK_SIZE = 500;
+
+    private const DISPATCH_CHUNK_SIZE = 1000;
+
     public int $tries = 3;
 
     public int $backoff = 30;
 
     public function __construct(
-        private readonly int $eventId,
-        private readonly int $occurrenceId,
-        private readonly bool $refundOrders = false,
+        public readonly int $eventId,
+        public readonly int $occurrenceId,
+        public readonly array $attendeeIds,
+        public readonly bool $refundOrders = false,
     ) {
-        $this->onQueue('occurrences');
+        if (config('queue.occurrences_queue_name') !== null) {
+            $this->onQueue(config('queue.occurrences_queue_name'));
+        }
+    }
+
+    public static function dispatchChunked(int $eventId, int $occurrenceId, array $attendeeIds, bool $refundOrders): void
+    {
+        foreach (array_chunk($attendeeIds, self::DISPATCH_CHUNK_SIZE) as $attendeeIdChunk) {
+            self::dispatch($eventId, $occurrenceId, $attendeeIdChunk, $refundOrders);
+        }
     }
 
     public function handle(
@@ -45,6 +58,10 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
         Mailer $mailer,
         MailBuilderService $mailBuilderService,
     ): void {
+        if ($this->attendeeIds === []) {
+            return;
+        }
+
         $occurrence = $occurrenceRepository
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, nested: [
                 new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
@@ -59,42 +76,32 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
             ], name: 'event_location'))
             ->findById($this->eventId);
 
-        // Intentionally does NOT filter out CANCELLED attendees:
-        // CancelOccurrenceHandler now marks attendees as CANCELLED inside the
-        // same transaction that fires this job's event — a status filter here
-        // would exclude the very attendees we need to notify. Anyone tied to
-        // this occurrence by FK gets the cancellation email. Dedup by email
-        // address below handles shared-email attendees.
-        $attendees = $attendeeRepository->findWhere([
-            AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $this->occurrenceId,
-        ]);
-
-        if ($attendees->isEmpty()) {
-            return;
-        }
-
         $sentEmails = [];
 
-        $attendees->each(function (AttendeeDomainObject $attendee) use ($mailer, $mailBuilderService, $event, $occurrence, &$sentEmails) {
-            if (in_array($attendee->getEmail(), $sentEmails, true)) {
-                return;
-            }
+        foreach (array_chunk($this->attendeeIds, self::ATTENDEE_CHUNK_SIZE) as $attendeeIdChunk) {
+            $attendees = $attendeeRepository->findWhereIn('id', $attendeeIdChunk);
 
-            $sentEmails[] = $attendee->getEmail();
+            $attendees->each(function (AttendeeDomainObject $attendee) use ($mailer, $mailBuilderService, $event, $occurrence, &$sentEmails) {
+                if (in_array($attendee->getEmail(), $sentEmails, true)) {
+                    return;
+                }
 
-            $mail = $mailBuilderService->buildOccurrenceCancellationMail(
-                event: $event,
-                occurrence: $occurrence,
-                organizer: $event->getOrganizer(),
-                eventSettings: $event->getEventSettings(),
-                refundOrders: $this->refundOrders,
-            );
+                $sentEmails[] = $attendee->getEmail();
 
-            $mailer
-                ->to($attendee->getEmail())
-                ->locale($attendee->getLocale())
-                ->send($mail);
-        });
+                $mail = $mailBuilderService->buildOccurrenceCancellationMail(
+                    event: $event,
+                    occurrence: $occurrence,
+                    organizer: $event->getOrganizer(),
+                    eventSettings: $event->getEventSettings(),
+                    refundOrders: $this->refundOrders,
+                );
+
+                $mailer
+                    ->to($attendee->getEmail())
+                    ->locale($attendee->getLocale())
+                    ->send($mail);
+            });
+        }
 
         Log::info('Sent occurrence cancellation emails', [
             'event_id' => $this->eventId,

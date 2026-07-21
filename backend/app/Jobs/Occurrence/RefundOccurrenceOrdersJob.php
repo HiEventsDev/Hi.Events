@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Enums\OrderAuditAction;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
@@ -33,7 +34,9 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
         public readonly int $eventId,
         public readonly int $occurrenceId,
     ) {
-        $this->onQueue('occurrences');
+        if (config('queue.occurrences_queue_name') !== null) {
+            $this->onQueue(config('queue.occurrences_queue_name'));
+        }
     }
 
     public function uniqueId(): string
@@ -55,9 +58,6 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        // Only refund orders that haven't already had a refund started. Skipping rows where
-        // refund_status is set guards against duplicate Stripe refunds on job retry when a
-        // previous attempt crashed between the Stripe API call and the refund_status write.
         $refundableOrders = DB::table('orders')
             ->whereIn('id', $orderIds)
             ->where('status', OrderStatus::COMPLETED->name)
@@ -86,32 +86,10 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
                     'cancelled_occurrence_id' => $this->occurrenceId,
                 ]);
 
-                // Surface the skip on the order's audit log so admins see it in
-                // the order's history and can issue a manual partial refund.
-                // Wrapped: audit-log failure shouldn't derail the rest of the
-                // batch (other orders are still queued for refund/skip below).
-                try {
-                    $auditLogRepository->create([
-                        'event_id' => $this->eventId,
-                        'order_id' => $order->id,
-                        'attendee_id' => null,
-                        'action' => OrderAuditAction::AUTOMATIC_REFUND_SKIPPED->value,
-                        'old_values' => null,
-                        'new_values' => [
-                            'cancelled_occurrence_id' => $this->occurrenceId,
-                            'reason' => 'order spans multiple occurrences',
-                        ],
-                        'changed_fields' => null,
-                        'ip_address' => null,
-                        'user_agent' => null,
-                    ]);
-                } catch (Throwable $e) {
-                    Log::error('Failed to write refund-skipped audit log entry', [
-                        'order_id' => $order->id,
-                        'event_id' => $this->eventId,
-                        'error' => $e->getMessage(),
-                    ]);
-                }
+                $this->recordAuditLog($auditLogRepository, OrderAuditAction::AUTOMATIC_REFUND_SKIPPED, $order->id, [
+                    'cancelled_occurrence_id' => $this->occurrenceId,
+                    'reason' => 'order spans multiple occurrences',
+                ]);
 
                 continue;
             }
@@ -124,6 +102,18 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
                     notify_buyer: true,
                     cancel_order: true,
                 ));
+            } catch (RefundNotPossibleException $e) {
+                Log::warning('Skipping automatic refund for order that is not refundable', [
+                    'order_id' => $order->id,
+                    'event_id' => $this->eventId,
+                    'occurrence_id' => $this->occurrenceId,
+                    'reason' => $e->getMessage(),
+                ]);
+
+                $this->recordAuditLog($auditLogRepository, OrderAuditAction::AUTOMATIC_REFUND_SKIPPED, $order->id, [
+                    'cancelled_occurrence_id' => $this->occurrenceId,
+                    'reason' => $e->getMessage(),
+                ]);
             } catch (Throwable $e) {
                 Log::error('Failed to refund order for cancelled occurrence', [
                     'order_id' => $order->id,
@@ -132,29 +122,39 @@ class RefundOccurrenceOrdersJob implements ShouldBeUnique, ShouldQueue
                     'error' => $e->getMessage(),
                 ]);
 
-                try {
-                    $auditLogRepository->create([
-                        'event_id' => $this->eventId,
-                        'order_id' => $order->id,
-                        'attendee_id' => null,
-                        'action' => OrderAuditAction::AUTOMATIC_REFUND_FAILED->value,
-                        'old_values' => null,
-                        'new_values' => [
-                            'cancelled_occurrence_id' => $this->occurrenceId,
-                            'error' => $e->getMessage(),
-                        ],
-                        'changed_fields' => null,
-                        'ip_address' => null,
-                        'user_agent' => null,
-                    ]);
-                } catch (Throwable $auditError) {
-                    Log::error('Failed to write refund-failed audit log entry', [
-                        'order_id' => $order->id,
-                        'event_id' => $this->eventId,
-                        'error' => $auditError->getMessage(),
-                    ]);
-                }
+                $this->recordAuditLog($auditLogRepository, OrderAuditAction::AUTOMATIC_REFUND_FAILED, $order->id, [
+                    'cancelled_occurrence_id' => $this->occurrenceId,
+                    'error' => $e->getMessage(),
+                ]);
             }
+        }
+    }
+
+    private function recordAuditLog(
+        OrderAuditLogRepositoryInterface $auditLogRepository,
+        OrderAuditAction $action,
+        int $orderId,
+        array $newValues,
+    ): void {
+        try {
+            $auditLogRepository->create([
+                'event_id' => $this->eventId,
+                'order_id' => $orderId,
+                'attendee_id' => null,
+                'action' => $action->value,
+                'old_values' => null,
+                'new_values' => $newValues,
+                'changed_fields' => null,
+                'ip_address' => null,
+                'user_agent' => null,
+            ]);
+        } catch (Throwable $auditError) {
+            Log::error('Failed to write refund audit log entry', [
+                'order_id' => $orderId,
+                'event_id' => $this->eventId,
+                'action' => $action->value,
+                'error' => $auditError->getMessage(),
+            ]);
         }
     }
 

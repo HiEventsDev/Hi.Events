@@ -16,7 +16,7 @@
 {{ __('We\'re sorry to let you know that **:event** scheduled for **:date** has been cancelled.', ['event' => $event->getTitle(), 'date' => $formattedDate]) }}
 
 @if($refundOrders)
-{{ __('A refund for your order will be processed automatically. Please allow a few business days for the refund to appear on your statement.') }}
+{{ __('If your order is eligible, a refund will be processed automatically and may take a few business days to appear on your statement. If we are unable to process it automatically, our team will be in touch.') }}
 @else
 {{ __('If you have any questions about your order, please respond to this email.') }}
 @endif

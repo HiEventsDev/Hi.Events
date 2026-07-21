@@ -9,7 +9,9 @@ use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\UpdateOrganizerLocationDTO;
 use HiEvents\Services\Application\Handlers\Organizer\UpdateOrganizerLocationHandler;
+use HiEvents\Services\Domain\Location\LocationLockService;
 use HiEvents\Services\Domain\Location\LocationOwnershipValidator;
+use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -20,6 +22,8 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
 
     private LocationRepositoryInterface|MockInterface $locationRepository;
 
+    private LocationLockService|MockInterface $locationLockService;
+
     private UpdateOrganizerLocationHandler $handler;
 
     protected function setUp(): void
@@ -28,9 +32,14 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
 
         $this->organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
         $this->locationRepository = Mockery::mock(LocationRepositoryInterface::class);
+        $this->locationLockService = Mockery::mock(LocationLockService::class);
+        $databaseManager = Mockery::mock(DatabaseManager::class);
+        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
+
         $this->handler = new UpdateOrganizerLocationHandler(
             $this->organizerRepository,
-            new LocationOwnershipValidator($this->locationRepository),
+            new LocationOwnershipValidator($this->locationRepository, $this->locationLockService),
+            $databaseManager,
         );
     }
 
@@ -43,6 +52,11 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->with(['id' => 10, 'account_id' => 5])
             ->andReturn($organizer, $organizer);
+
+        $this->locationLockService
+            ->shouldReceive('acquireSharedTransactionLock')
+            ->once()
+            ->with(99);
 
         $this->locationRepository
             ->shouldReceive('findFirstWhere')
@@ -70,7 +84,7 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn($organizer);
 
-        // No location lookup should happen when clearing.
+        $this->locationLockService->shouldNotReceive('acquireSharedTransactionLock');
         $this->locationRepository->shouldNotReceive('findFirstWhere');
 
         $this->organizerRepository
@@ -95,14 +109,16 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
 
     public function test_throws_when_location_belongs_to_a_different_organizer_in_same_account(): void
     {
-        // The IDOR vector this fix was written for: caller supplies a location_id
-        // they don't own. The exists:locations,id rule on the request would let
-        // it through; the validator must reject it.
         $dto = new UpdateOrganizerLocationDTO(organizer_id: 10, account_id: 5, location_id: 99);
 
         $this->organizerRepository
             ->shouldReceive('findFirstWhere')
             ->andReturn(Mockery::mock(OrganizerDomainObject::class));
+
+        $this->locationLockService
+            ->shouldReceive('acquireSharedTransactionLock')
+            ->once()
+            ->with(99);
 
         $this->locationRepository
             ->shouldReceive('findFirstWhere')
@@ -118,14 +134,16 @@ class UpdateOrganizerLocationHandlerTest extends TestCase
 
     public function test_throws_when_location_belongs_to_a_different_account(): void
     {
-        // Cross-tenant attack: the location with this id exists, but on
-        // another account. The validator filter on account_id + organizer_id
-        // is what stops it.
         $dto = new UpdateOrganizerLocationDTO(organizer_id: 10, account_id: 5, location_id: 99);
 
         $this->organizerRepository
             ->shouldReceive('findFirstWhere')
             ->andReturn(Mockery::mock(OrganizerDomainObject::class));
+
+        $this->locationLockService
+            ->shouldReceive('acquireSharedTransactionLock')
+            ->once()
+            ->with(99);
 
         $this->locationRepository
             ->shouldReceive('findFirstWhere')

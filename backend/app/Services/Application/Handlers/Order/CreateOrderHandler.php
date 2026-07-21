@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Order;
 
 use HiEvents\DomainObjects\AffiliateDomainObject;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AffiliateDomainObjectAbstract;
@@ -17,11 +18,15 @@ use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
+use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -36,6 +41,7 @@ class CreateOrderHandler
         private readonly OrderManagementService $orderManagementService,
         private readonly OrderItemProcessingService $orderItemProcessingService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
+        private readonly OccurrencePurchaseEligibilityService $occurrencePurchaseEligibilityService,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -56,7 +62,6 @@ class CreateOrderHandler
 
             $this->validateEventStatus($event, $createOrderPublicDTO);
 
-            // Remove the session's stale reservations before promo usage is counted in getPromoCode()
             if ($deleteExistingOrdersForSession) {
                 $this->orderManagementService->deleteExistingOrders($eventId, $createOrderPublicDTO->session_identifier);
             }
@@ -144,24 +149,70 @@ class CreateOrderHandler
                     eventOccurrenceId: $occurrenceId ?: null,
                 );
 
-            foreach ($products as $product) {
-                foreach ($product->quantities as $priceQuantity) {
-                    if ($priceQuantity->quantity <= 0) {
-                        continue;
-                    }
+            if ($occurrenceId) {
+                $this->occurrencePurchaseEligibilityService->assertOccurrencePurchasable(
+                    eventId: $eventId,
+                    occurrenceId: (int) $occurrenceId,
+                    additionalQuantity: $this->sumTicketQuantities($products, $availability),
+                    occurrence: $availability->occurrence,
+                    reservedQuantity: $availability->occurrenceReservedQuantity,
+                );
+            }
 
-                    $available = $availability->productQuantities
-                        ->where('product_id', $product->product_id)
-                        ->where('price_id', $priceQuantity->price_id)
-                        ->first()?->quantity_available ?? 0;
+            $this->assertQuantitiesAvailable($products, $availability);
+        }
 
-                    if ($priceQuantity->quantity > $available) {
-                        throw ValidationException::withMessages([
-                            'products' => __('Not enough products available. Please try again.'),
-                        ]);
-                    }
+        if ($productsByOccurrence->count() > 1) {
+            $this->assertQuantitiesAvailable(
+                $createOrderPublicDTO->products,
+                $this->availableProductQuantitiesFetchService->getAvailableProductQuantities($eventId, ignoreCache: true),
+            );
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertQuantitiesAvailable(Collection $products, AvailableProductQuantitiesResponseDTO $availability): void
+    {
+        $requestedQuantities = [];
+        foreach ($products as $product) {
+            foreach ($product->quantities as $priceQuantity) {
+                if ($priceQuantity->quantity <= 0) {
+                    continue;
+                }
+
+                $requestedQuantities[$product->product_id][$priceQuantity->price_id] =
+                    ($requestedQuantities[$product->product_id][$priceQuantity->price_id] ?? 0) + $priceQuantity->quantity;
+            }
+        }
+
+        foreach ($requestedQuantities as $productId => $priceQuantities) {
+            foreach ($priceQuantities as $priceId => $requestedQuantity) {
+                $available = $availability->productQuantities
+                    ->where('product_id', $productId)
+                    ->where('price_id', $priceId)
+                    ->first()?->quantity_available ?? 0;
+
+                if ($requestedQuantity > $available) {
+                    throw ValidationException::withMessages([
+                        'products' => __('Not enough products available. Please try again.'),
+                    ]);
                 }
             }
         }
+    }
+
+    private function sumTicketQuantities(Collection $products, AvailableProductQuantitiesResponseDTO $availability): int
+    {
+        $ticketProductIds = $availability->productQuantities
+            ->filter(fn (AvailableProductQuantitiesDTO $dto) => $dto->product_type === ProductType::TICKET->name)
+            ->pluck('product_id')
+            ->unique()
+            ->all();
+
+        return (int) $products
+            ->filter(fn (DTO\ProductOrderDetailsDTO $product) => in_array($product->product_id, $ticketProductIds, true))
+            ->sum(fn (DTO\ProductOrderDetailsDTO $product) => $product->quantities->sum('quantity'));
     }
 }

@@ -69,7 +69,8 @@ class GetPublicEventHandler
             ->findById($data->eventId);
 
         $hideSoldOutOccurrences = $event->getType() === EventType::RECURRING->name
-            && ($event->getEventSettings()?->getHideSoldOutOccurrences() ?? false);
+            && ($event->getEventSettings()?->getHideSoldOutOccurrences() ?? false)
+            && ! $this->eventHasWaitlistEnabledProducts($event);
 
         $occurrenceWhere = [
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
@@ -171,6 +172,15 @@ class GetPublicEventHandler
             promoCode: $promoCodeDomainObject,
             eventOccurrenceId: $verifiedOccurrenceId,
         ));
+    }
+
+    private function eventHasWaitlistEnabledProducts(EventDomainObject $event): bool
+    {
+        return $event->getProductCategories()
+            ?->contains(
+                fn (ProductCategoryDomainObject $category) => $category->getProducts()
+                    ?->contains(fn (ProductDomainObject $product) => $product->getWaitlistEnabled() === true) ?? false
+            ) ?? false;
     }
 
     private static function hasRemainingCapacity(): Closure

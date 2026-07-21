@@ -91,7 +91,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $orderId = 123;
         $orderDate = '2024-01-15 10:30:00';
 
-        // Create mock order items
         $ticketOrderItem1 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem1->shouldReceive('getQuantity')->andReturn(2);
         $ticketOrderItem1->shouldReceive('getEventOccurrenceId')->andReturnNull();
@@ -107,7 +106,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $orderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
         $ticketOrderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
 
-        // Create mock order
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn($eventId);
         $order->shouldReceive('getId')->andReturn($orderId);
@@ -120,7 +118,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $order->shouldReceive('getAffiliateId')->andReturn(99);
         $order->shouldReceive('getTotalGross')->andReturn(100.0);
 
-        // Promo usage, per-product sales volume and the affiliate sale are all reversed.
         $this->promoCodeRepository
             ->shouldReceive('decrementEach')
             ->once()
@@ -128,7 +125,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $this->productRepository->shouldReceive('decrement')->twice();
         $this->affiliateRepository->shouldReceive('decrementSales')->once()->with(99, 100.0);
 
-        // Mock order repository to return order with relations
         $this->orderRepository
             ->shouldReceive('loadRelation')
             ->with(OrderItemDomainObject::class)
@@ -139,7 +135,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
             ->with($orderId)
             ->andReturn($order);
 
-        // Mock aggregate event statistics
         $eventStatistics = Mockery::mock(EventStatisticDomainObject::class);
         $eventStatistics->shouldReceive('getId')->andReturn(1);
         $eventStatistics->shouldReceive('getAttendeesRegistered')->andReturn(10);
@@ -148,7 +143,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $eventStatistics->shouldReceive('getOrdersCancelled')->andReturn(2);
         $eventStatistics->shouldReceive('getVersion')->andReturn(5);
 
-        // Mock daily event statistics
         $eventDailyStatistic = Mockery::mock(EventDailyStatisticDomainObject::class);
         $eventDailyStatistic->shouldReceive('getAttendeesRegistered')->andReturn(8);
         $eventDailyStatistic->shouldReceive('getProductsSold')->andReturn(12);
@@ -156,7 +150,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $eventDailyStatistic->shouldReceive('getOrdersCancelled')->andReturn(1);
         $eventDailyStatistic->shouldReceive('getVersion')->andReturn(3);
 
-        // Mock attendee repository to return 2 active attendees (1 was already cancelled)
         $activeAttendee1 = Mockery::mock(AttendeeDomainObject::class);
         $activeAttendee2 = Mockery::mock(AttendeeDomainObject::class);
         $this->attendeeRepository
@@ -168,37 +161,32 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->andReturn(new Collection([$activeAttendee1, $activeAttendee2]));
 
-        // Set up retrier to execute the action immediately
         $this->retrier
             ->shouldReceive('retry')
             ->andReturnUsing(function ($callableAction) {
                 return $callableAction(1);
             });
 
-        // Set up database transaction
         $this->databaseManager
             ->shouldReceive('transaction')
             ->andReturnUsing(function ($callback) {
                 return $callback();
             });
 
-        // Expect finding aggregate statistics
         $this->eventStatisticsRepository
             ->shouldReceive('findFirstWhere')
             ->with(['event_id' => $eventId])
             ->andReturn($eventStatistics);
 
-        // Expect updating aggregate statistics with decremented values
-        // Note: We use full order quantities for products_sold since products don't get "uncancelled"
         $this->eventStatisticsRepository
             ->shouldReceive('updateWhere')
             ->with(
                 [
-                    'attendees_registered' => 8,   // 10 - 2 (2 active attendees)
-                    'products_sold' => 12,          // 15 - 3 (full order quantities)
-                    'orders_created' => 4,          // 5 - 1
-                    'orders_cancelled' => 3,        // 2 + 1
-                    'version' => 6,                 // 5 + 1
+                    'attendees_registered' => 8,
+                    'products_sold' => 12,
+                    'orders_created' => 4,
+                    'orders_cancelled' => 3,
+                    'version' => 6,
                 ],
                 [
                     'id' => 1,
@@ -207,7 +195,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->andReturn(1);
 
-        // Expect finding daily statistics
         $this->eventDailyStatisticRepository
             ->shouldReceive('findFirstWhere')
             ->with([
@@ -216,17 +203,15 @@ class EventStatisticsCancellationServiceTest extends TestCase
             ])
             ->andReturn($eventDailyStatistic);
 
-        // Expect updating daily statistics with decremented values
-        // Note: We use full order quantities for products_sold since products don't get "uncancelled"
         $this->eventDailyStatisticRepository
             ->shouldReceive('updateWhere')
             ->with(
                 [
-                    'attendees_registered' => 6,   // 8 - 2 (2 active attendees)
-                    'products_sold' => 9,           // 12 - 3 (full order quantities)
-                    'orders_created' => 3,          // 4 - 1
-                    'orders_cancelled' => 2,        // 1 + 1
-                    'version' => 4,                 // 3 + 1
+                    'attendees_registered' => 6,
+                    'products_sold' => 9,
+                    'orders_created' => 3,
+                    'orders_cancelled' => 2,
+                    'version' => 4,
                 ],
                 [
                     'event_id' => $eventId,
@@ -236,7 +221,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->andReturn(1);
 
-        // Expect marking statistics as decremented
         $this->orderRepository
             ->shouldReceive('updateFromArray')
             ->with($orderId, Mockery::on(function ($data) {
@@ -244,66 +228,43 @@ class EventStatisticsCancellationServiceTest extends TestCase
             }))
             ->once();
 
-        // Expect logging
         $this->logger->shouldReceive('info')->atLeast()->once();
 
-        // Execute
         $this->service->decrementForCancelledOrder($order);
 
         $this->assertTrue(true);
     }
 
-    public function test_never_completed_order_does_not_reverse_promo_product_or_affiliate_counters(): void
+    public function test_never_completed_order_touches_no_statistics_but_is_marked_decremented(): void
     {
         $eventId = 1;
         $orderId = 456;
-        $orderDate = '2024-01-15 10:30:00';
-
-        $orderItem = Mockery::mock(OrderItemDomainObject::class);
-        $orderItem->shouldReceive('getQuantity')->andReturn(1);
-        $orderItem->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn($eventId);
         $order->shouldReceive('getId')->andReturn($orderId);
-        $order->shouldReceive('getCreatedAt')->andReturn($orderDate);
-        $order->shouldReceive('getOrderItems')->andReturn(new Collection([$orderItem]));
         $order->shouldReceive('getStatisticsDecrementedAt')->andReturnNull();
         $order->shouldReceive('isOrderCompleted')->andReturnFalse();
-
-        $this->promoCodeRepository->shouldNotReceive('decrementEach');
-        $this->productRepository->shouldNotReceive('decrement');
-        $this->affiliateRepository->shouldNotReceive('decrementSales');
 
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->orderRepository->shouldReceive('findById')->with($orderId)->andReturn($order);
 
-        $eventStatistics = Mockery::mock(EventStatisticDomainObject::class);
-        $eventStatistics->shouldReceive('getId')->andReturn(1);
-        $eventStatistics->shouldReceive('getAttendeesRegistered')->andReturn(10);
-        $eventStatistics->shouldReceive('getProductsSold')->andReturn(15);
-        $eventStatistics->shouldReceive('getOrdersCreated')->andReturn(5);
-        $eventStatistics->shouldReceive('getOrdersCancelled')->andReturn(2);
-        $eventStatistics->shouldReceive('getVersion')->andReturn(5);
+        $this->eventStatisticsRepository->shouldNotReceive('findFirstWhere');
+        $this->eventStatisticsRepository->shouldNotReceive('updateWhere');
+        $this->eventDailyStatisticRepository->shouldNotReceive('findFirstWhere');
+        $this->eventDailyStatisticRepository->shouldNotReceive('updateWhere');
+        $this->attendeeRepository->shouldNotReceive('findWhereIn');
+        $this->promoCodeRepository->shouldNotReceive('decrementEach');
+        $this->productRepository->shouldNotReceive('decrement');
+        $this->affiliateRepository->shouldNotReceive('decrementSales');
+        $this->retrier->shouldNotReceive('retry');
 
-        $eventDailyStatistic = Mockery::mock(EventDailyStatisticDomainObject::class);
-        $eventDailyStatistic->shouldReceive('getAttendeesRegistered')->andReturn(8);
-        $eventDailyStatistic->shouldReceive('getProductsSold')->andReturn(12);
-        $eventDailyStatistic->shouldReceive('getOrdersCreated')->andReturn(4);
-        $eventDailyStatistic->shouldReceive('getOrdersCancelled')->andReturn(1);
-        $eventDailyStatistic->shouldReceive('getVersion')->andReturn(3);
-
-        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection);
-
-        $this->retrier->shouldReceive('retry')->andReturnUsing(fn ($callableAction) => $callableAction(1));
-        $this->databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
-
-        $this->eventStatisticsRepository->shouldReceive('findFirstWhere')->andReturn($eventStatistics);
-        $this->eventStatisticsRepository->shouldReceive('updateWhere')->andReturn(1);
-        $this->eventDailyStatisticRepository->shouldReceive('findFirstWhere')->andReturn($eventDailyStatistic);
-        $this->eventDailyStatisticRepository->shouldReceive('updateWhere')->andReturn(1);
-
-        $this->orderRepository->shouldReceive('updateFromArray')->once();
+        $this->orderRepository
+            ->shouldReceive('updateFromArray')
+            ->once()
+            ->with($orderId, Mockery::on(function ($data) {
+                return array_key_exists('statistics_decremented_at', $data) && $data['statistics_decremented_at'] !== null;
+            }));
         $this->logger->shouldReceive('info')->atLeast()->once();
 
         $this->service->decrementForCancelledOrder($order);
@@ -317,13 +278,11 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $eventId = 1;
         $decrementedAt = '2024-01-15 09:00:00';
 
-        // Create mock order with statistics already decremented
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn($orderId);
         $order->shouldReceive('getEventId')->andReturn($eventId);
         $order->shouldReceive('getStatisticsDecrementedAt')->andReturn($decrementedAt);
 
-        // Mock order repository
         $this->orderRepository
             ->shouldReceive('loadRelation')
             ->with(OrderItemDomainObject::class)
@@ -334,7 +293,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
             ->with($orderId)
             ->andReturn($order);
 
-        // Expect logging that statistics were already decremented
         $this->logger
             ->shouldReceive('info')
             ->with(
@@ -347,12 +305,10 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->once();
 
-        // Should not call any update methods
         $this->eventStatisticsRepository->shouldNotReceive('updateWhere');
         $this->eventDailyStatisticRepository->shouldNotReceive('updateWhere');
         $this->orderRepository->shouldNotReceive('updateFromArray');
 
-        // Execute
         $this->service->decrementForCancelledOrder($order);
 
         $this->assertTrue(true);
@@ -364,47 +320,40 @@ class EventStatisticsCancellationServiceTest extends TestCase
         $orderDate = '2024-01-15 10:30:00';
         $attendeeCount = 2;
 
-        // Mock aggregate event statistics
         $eventStatistics = Mockery::mock(EventStatisticDomainObject::class);
         $eventStatistics->shouldReceive('getId')->andReturn(1);
         $eventStatistics->shouldReceive('getAttendeesRegistered')->andReturn(10);
         $eventStatistics->shouldReceive('getProductsSold')->andReturn(15);
         $eventStatistics->shouldReceive('getVersion')->andReturn(5);
 
-        // Mock daily event statistics
         $eventDailyStatistic = Mockery::mock(EventDailyStatisticDomainObject::class);
         $eventDailyStatistic->shouldReceive('getAttendeesRegistered')->andReturn(8);
         $eventDailyStatistic->shouldReceive('getProductsSold')->andReturn(12);
         $eventDailyStatistic->shouldReceive('getVersion')->andReturn(3);
 
-        // Set up retrier to execute the action immediately
         $this->retrier
             ->shouldReceive('retry')
             ->andReturnUsing(function ($callableAction) {
                 return $callableAction(1);
             });
 
-        // Set up database transaction
         $this->databaseManager
             ->shouldReceive('transaction')
             ->andReturnUsing(function ($callback) {
                 return $callback();
             });
 
-        // Expect finding aggregate statistics
         $this->eventStatisticsRepository
             ->shouldReceive('findFirstWhere')
             ->with(['event_id' => $eventId])
             ->andReturn($eventStatistics);
 
-        // Expect updating aggregate statistics with decremented values
-        // Note: products_sold should NOT be affected by individual attendee cancellations
         $this->eventStatisticsRepository
             ->shouldReceive('updateWhere')
             ->with(
                 [
-                    'attendees_registered' => 8,   // 10 - 2
-                    'version' => 6,                 // 5 + 1
+                    'attendees_registered' => 8,
+                    'version' => 6,
                 ],
                 [
                     'id' => 1,
@@ -413,7 +362,6 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->andReturn(1);
 
-        // Expect finding daily statistics
         $this->eventDailyStatisticRepository
             ->shouldReceive('findFirstWhere')
             ->with([
@@ -422,14 +370,12 @@ class EventStatisticsCancellationServiceTest extends TestCase
             ])
             ->andReturn($eventDailyStatistic);
 
-        // Expect updating daily statistics with decremented values
-        // Note: products_sold should NOT be affected by individual attendee cancellations
         $this->eventDailyStatisticRepository
             ->shouldReceive('updateWhere')
             ->with(
                 [
-                    'attendees_registered' => 6,   // 8 - 2
-                    'version' => 4,                 // 3 + 1
+                    'attendees_registered' => 6,
+                    'version' => 4,
                 ],
                 [
                     'event_id' => $eventId,
@@ -439,10 +385,8 @@ class EventStatisticsCancellationServiceTest extends TestCase
             )
             ->andReturn(1);
 
-        // Expect logging
-        $this->logger->shouldReceive('info')->twice(); // One for aggregate, one for daily
+        $this->logger->shouldReceive('info')->twice();
 
-        // Execute
         $this->service->decrementForCancelledAttendee($eventId, $orderDate, $attendeeCount);
 
         $this->assertTrue(true);

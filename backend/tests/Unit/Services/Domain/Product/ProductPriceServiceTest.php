@@ -105,6 +105,110 @@ class ProductPriceServiceTest extends TestCase
         $this->assertEquals(40.00, $result->price_before_discount);
     }
 
+    public function test_donation_keeps_donor_amount_above_override_minimum(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100, price: 50.00);
+
+        $override = Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class);
+        $override->shouldReceive('getPrice')->andReturn('25.00');
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->with([
+                'event_occurrence_id' => 5,
+                'product_price_id' => 100,
+            ])
+            ->andReturn($override);
+
+        $result = $this->service->getPrice($product, $orderDetail, null, 5);
+
+        $this->assertEquals(50.00, $result->price);
+    }
+
+    public function test_donation_enforces_override_as_minimum(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100, price: 10.00);
+
+        $override = Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class);
+        $override->shouldReceive('getPrice')->andReturn('25.00');
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn($override);
+
+        $result = $this->service->getPrice($product, $orderDetail, null, 5);
+
+        $this->assertEquals(25.00, $result->price);
+    }
+
+    public function test_donation_without_override_keeps_donor_amount(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100, price: 50.00);
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn(null);
+
+        $result = $this->service->getPrice($product, $orderDetail, null, 5);
+
+        $this->assertEquals(50.00, $result->price);
+    }
+
+    public function test_donation_without_override_enforces_product_price_minimum(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100, price: 5.00);
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn(null);
+
+        $result = $this->service->getPrice($product, $orderDetail, null, 5);
+
+        $this->assertEquals(10.00, $result->price);
+    }
+
+    public function test_donation_minimum_price_uses_override(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+
+        $override = Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class);
+        $override->shouldReceive('getPrice')->andReturn('25.00');
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->with([
+                'event_occurrence_id' => 5,
+                'product_price_id' => 100,
+            ])
+            ->andReturn($override);
+
+        $this->assertEquals(25.00, $this->service->getDonationMinimumPrice($product, 100, 5));
+    }
+
+    public function test_donation_minimum_price_falls_back_to_product_price(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+
+        $this->priceOverrideRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn(null);
+
+        $this->assertEquals(10.00, $this->service->getDonationMinimumPrice($product, 100, 5));
+    }
+
+    public function test_donation_minimum_price_without_occurrence_skips_override_lookup(): void
+    {
+        $product = $this->createProduct(ProductPriceType::DONATION->name, 10.00);
+
+        $this->priceOverrideRepository->shouldNotReceive('findFirstWhere');
+
+        $this->assertEquals(10.00, $this->service->getDonationMinimumPrice($product, 100, null));
+    }
+
     public function test_get_price_returns_free_for_free_product(): void
     {
         $product = $this->createProduct(ProductPriceType::FREE->name, 0.0);

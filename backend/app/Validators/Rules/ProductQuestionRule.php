@@ -59,7 +59,13 @@ class ProductQuestionRule extends BaseQuestionRule
         $validationMessages = [];
 
         foreach ($products as $productIndex => $productRequestData) {
-            $productDomainObject = $this->getProductDomainObject($productRequestData['product_id']);
+            if (! isset($productRequestData['product_id']) || ! is_numeric($productRequestData['product_id'])) {
+                throw ValidationException::withMessages([
+                    __('This product is outdated. Please reload the page.'),
+                ]);
+            }
+
+            $productDomainObject = $this->getProductDomainObject((int) $productRequestData['product_id']);
 
             if (! $productDomainObject) {
                 $validationMessages['products.'.$productIndex][] = __('This product is outdated. Please reload the page.');

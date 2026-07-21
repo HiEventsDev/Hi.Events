@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\EventStatistics;
 
 use HiEvents\DomainObjects\EventDailyStatisticDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDailyStatisticDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -14,6 +15,7 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Mockery;
 use Mockery\MockInterface;
@@ -23,6 +25,8 @@ use Tests\TestCase;
 
 class EventStatisticsRefundServiceTest extends TestCase
 {
+    private const REFUND_DATE = '2026-07-20';
+
     private EventStatisticsRefundService $service;
 
     private MockInterface|EventStatisticRepositoryInterface $eventStatisticsRepository;
@@ -40,6 +44,8 @@ class EventStatisticsRefundServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Carbon::setTestNow(self::REFUND_DATE.' 12:00:00');
 
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
         $this->eventDailyStatisticRepository = Mockery::mock(EventDailyStatisticRepositoryInterface::class);
@@ -137,7 +143,7 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->with([
                 'event_id' => $eventId,
-                'date' => '2024-01-15',
+                'date' => self::REFUND_DATE,
             ])
             ->andReturn($eventDailyStatistic);
 
@@ -152,7 +158,7 @@ class EventStatisticsRefundServiceTest extends TestCase
                 ],
                 [
                     'event_id' => $eventId,
-                    'date' => '2024-01-15',
+                    'date' => self::REFUND_DATE,
                 ]
             )
             ->once();
@@ -222,7 +228,7 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->with([
                 'event_id' => $eventId,
-                'date' => '2024-01-15',
+                'date' => self::REFUND_DATE,
             ])
             ->andReturn($eventDailyStatistic);
 
@@ -237,7 +243,7 @@ class EventStatisticsRefundServiceTest extends TestCase
                 ],
                 [
                     'event_id' => $eventId,
-                    'date' => '2024-01-15',
+                    'date' => self::REFUND_DATE,
                 ]
             )
             ->once();
@@ -276,7 +282,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->service->updateForRefund($order, $refundAmount);
     }
 
-    public function test_logs_warning_when_daily_statistics_not_found(): void
+    public function test_creates_daily_statistics_row_when_none_exists_for_refund_date(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -313,20 +319,25 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->with([
                 'event_id' => $eventId,
-                'date' => '2024-01-15',
+                'date' => self::REFUND_DATE,
             ])
             ->andReturnNull();
 
-        $this->logger
-            ->shouldReceive('warning')
-            ->with(
-                'Event daily statistics not found for refund',
-                [
-                    'event_id' => $eventId,
-                    'date' => '2024-01-15',
-                    'order_id' => $orderId,
-                ]
-            )
+        $this->eventDailyStatisticRepository
+            ->shouldReceive('create')
+            ->with([
+                'event_id' => $eventId,
+                'date' => self::REFUND_DATE,
+                'products_sold' => 0,
+                'attendees_registered' => 0,
+                'sales_total_gross' => -50.00,
+                'sales_total_before_additions' => 0,
+                'total_tax' => 0,
+                'total_fee' => 0,
+                'total_refunded' => 50.00,
+                'orders_created' => 0,
+                'orders_cancelled' => 0,
+            ])
             ->once();
 
         $this->logger->shouldReceive('info')->once();
@@ -369,6 +380,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $reloaded->shouldReceive('getOrderItems')->andReturn(new Collection([$item]));
         $reloaded->shouldReceive('getTotalGross')->andReturn(100.00);
         $reloaded->shouldReceive('getCreatedAt')->andReturn($orderDate);
+        $reloaded->shouldReceive('getEventId')->andReturn($eventId);
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
@@ -406,7 +418,7 @@ class EventStatisticsRefundServiceTest extends TestCase
                     && $this->isRawIncrement($attrs['total_refunded'] ?? null, 'total_refunded', '+')
                     && $this->isVersionBump($attrs['version'] ?? null)
                 ),
-                ['event_occurrence_id' => 50, 'date' => '2024-01-15']
+                ['event_occurrence_id' => 50, 'date' => self::REFUND_DATE]
             );
 
         $this->logger->shouldReceive('info')->twice();
@@ -438,6 +450,7 @@ class EventStatisticsRefundServiceTest extends TestCase
         $reloaded->shouldReceive('getOrderItems')->andReturn(new Collection([$itemA, $itemB]));
         $reloaded->shouldReceive('getTotalGross')->andReturn(200.00);
         $reloaded->shouldReceive('getCreatedAt')->andReturn($orderDate);
+        $reloaded->shouldReceive('getEventId')->andReturn($eventId);
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
@@ -469,12 +482,12 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->eventOccurrenceDailyStatisticRepository
             ->shouldReceive('updateWhere')
             ->once()
-            ->with(Mockery::any(), ['event_occurrence_id' => 100, 'date' => '2024-02-20']);
+            ->with(Mockery::any(), ['event_occurrence_id' => 100, 'date' => self::REFUND_DATE]);
 
         $this->eventOccurrenceDailyStatisticRepository
             ->shouldReceive('updateWhere')
             ->once()
-            ->with(Mockery::any(), ['event_occurrence_id' => 200, 'date' => '2024-02-20']);
+            ->with(Mockery::any(), ['event_occurrence_id' => 200, 'date' => self::REFUND_DATE]);
 
         $this->logger->shouldReceive('info')->twice();
 
@@ -562,6 +575,10 @@ class EventStatisticsRefundServiceTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn($eventDailyStatistic);
         $this->eventDailyStatisticRepository->shouldReceive('updateWhere')->once();
+
+        $this->eventOccurrenceDailyStatisticRepository
+            ->shouldReceive('findFirstWhere')
+            ->andReturn(Mockery::mock(EventOccurrenceDailyStatisticDomainObject::class));
     }
 
     private function makeBaseOrderMock(int $eventId, int $orderId, string $orderDate, float $totalGross): MockInterface
@@ -611,6 +628,7 @@ class EventStatisticsRefundServiceTest extends TestCase
 
     protected function tearDown(): void
     {
+        Carbon::setTestNow();
         Mockery::close();
         parent::tearDown();
     }

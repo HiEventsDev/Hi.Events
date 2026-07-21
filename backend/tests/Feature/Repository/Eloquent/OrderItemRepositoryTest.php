@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Repository\Eloquent;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Models\User;
 use HiEvents\Repository\Eloquent\OrderItemRepository;
@@ -11,14 +12,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Integration test for OrderItemRepository::getReservedQuantityForOccurrence().
- *
- * Exercises the real production schema. Uses User::factory()->withAccount() to bootstrap
- * an account + user, then raw DB inserts for the rest of the FK chain so the test does not
- * depend on factories that the codebase does not yet provide for organizers / events /
- * products / orders. The DatabaseTransactions trait rolls everything back per test.
- */
 class OrderItemRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -43,7 +36,6 @@ class OrderItemRepositoryTest extends TestCase
 
         $this->repository = $this->app->make(OrderItemRepository::class);
 
-        // Bootstrap account + user via factory.
         $user = User::factory()->withAccount()->create();
         $this->accountId = $user->accounts()->first()->id;
 
@@ -201,6 +193,23 @@ class OrderItemRepositoryTest extends TestCase
         $this->assertSame(7, $this->repository->getReservedQuantityForOccurrence($this->otherOccurrenceId));
     }
 
+    public function test_ignores_general_product_order_items(): void
+    {
+        $this->insertOrderWithItems(
+            status: OrderStatus::RESERVED->name,
+            reservedUntil: now()->addHour(),
+            occurrenceQuantities: [$this->occurrenceId => 9],
+            productType: ProductType::GENERAL->name,
+        );
+        $this->insertOrderWithItems(
+            status: OrderStatus::RESERVED->name,
+            reservedUntil: now()->addHour(),
+            occurrenceQuantities: [$this->occurrenceId => 2],
+        );
+
+        $this->assertSame(2, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+    }
+
     public function test_ignores_soft_deleted_order_items(): void
     {
         $orderId = DB::table('orders')->insertGetId([
@@ -214,7 +223,6 @@ class OrderItemRepositoryTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        // One live item (counts), one soft-deleted item (does not).
         DB::table('order_items')->insert([
             'order_id' => $orderId,
             'product_id' => $this->productId,
@@ -247,6 +255,7 @@ class OrderItemRepositoryTest extends TestCase
         \DateTimeInterface $reservedUntil,
         array $occurrenceQuantities,
         ?\DateTimeInterface $deletedAt = null,
+        string $productType = ProductType::TICKET->name,
     ): int {
         $orderId = DB::table('orders')->insertGetId([
             'short_id' => 'ord_'.uniqid(),
@@ -265,6 +274,7 @@ class OrderItemRepositoryTest extends TestCase
                 'order_id' => $orderId,
                 'product_id' => $this->productId,
                 'product_price_id' => $this->productPriceId,
+                'product_type' => $productType,
                 'event_occurrence_id' => $occurrenceId,
                 'quantity' => $quantity,
                 'price' => 10.00,

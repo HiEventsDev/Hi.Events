@@ -65,7 +65,6 @@ const OccurrenceDetail = () => {
                     )}
                     <Checkbox
                         label={t`Refund all orders for this date`}
-                        description={t`Orders spanning multiple dates will be flagged for manual review.`}
                         onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
                     />
                 </>

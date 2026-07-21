@@ -42,7 +42,6 @@ export const openCancelOccurrenceDialog = ({
                 )}
                 <Checkbox
                     label={t`Refund all orders for this date`}
-                    description={t`Orders spanning multiple dates will be flagged for manual review.`}
                     onChange={(e) => { refund = e.currentTarget.checked; }}
                 />
             </>

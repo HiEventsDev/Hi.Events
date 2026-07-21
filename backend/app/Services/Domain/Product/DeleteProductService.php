@@ -33,7 +33,7 @@ class DeleteProductService
         $this->databaseManager->transaction(function () use ($productId, $eventId) {
             if ($this->productRepository->hasAssociatedOrders($productId)) {
                 throw new CannotDeleteEntityException(
-                    __('You cannot delete this product because it has orders associated with it. You can hide it instead.')
+                    __('You cannot delete this product because it has orders associated with it or is reserved by a checkout in progress. You can hide it instead.')
                 );
             }
 

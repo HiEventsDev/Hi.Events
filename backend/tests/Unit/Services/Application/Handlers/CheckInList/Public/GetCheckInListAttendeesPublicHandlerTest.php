@@ -8,6 +8,7 @@ use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeesPublicHandler;
+use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Mockery as m;
@@ -31,6 +32,7 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
         $this->handler = new GetCheckInListAttendeesPublicHandler(
             $this->attendeeRepository,
             $this->checkInListRepository,
+            new CheckInListActivityValidator,
         );
     }
 

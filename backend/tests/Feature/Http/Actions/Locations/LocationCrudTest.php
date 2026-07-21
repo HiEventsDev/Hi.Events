@@ -69,6 +69,92 @@ class LocationCrudTest extends TestCase
         )->json('data')));
     }
 
+    public function test_create_preserves_ampersands_in_plain_text_fields(): void
+    {
+        $create = $this->postJson("/organizers/{$this->organizerId}/locations", [
+            'name' => 'Barnes & Noble',
+            'structured_address' => ['venue_name' => 'Tom & Jerry', 'city' => 'Dublin', 'country' => 'IE'],
+        ], $this->authHeaders());
+
+        $create->assertStatus(ResponseCodes::HTTP_CREATED);
+        $this->assertSame('Barnes & Noble', $create->json('data.name'));
+        $this->assertSame('Tom & Jerry', $create->json('data.structured_address.venue_name'));
+
+        $list = $this->getJson("/organizers/{$this->organizerId}/locations", $this->authHeaders());
+        $this->assertSame('Barnes & Noble', $list->json('data.0.name'));
+        $this->assertSame('Tom & Jerry', $list->json('data.0.structured_address.venue_name'));
+    }
+
+    public function test_create_stores_angle_brackets_and_markup_verbatim(): void
+    {
+        $create = $this->postJson("/organizers/{$this->organizerId}/locations", [
+            'name' => '<script>alert(1)</script>Cafe',
+            'structured_address' => ['venue_name' => 'I <3 NY', 'city' => 'Dublin', 'country' => 'IE'],
+        ], $this->authHeaders());
+
+        $create->assertStatus(ResponseCodes::HTTP_CREATED);
+        $this->assertSame('<script>alert(1)</script>Cafe', $create->json('data.name'));
+        $this->assertSame('I <3 NY', $create->json('data.structured_address.venue_name'));
+
+        $list = $this->getJson("/organizers/{$this->organizerId}/locations", $this->authHeaders());
+        $this->assertSame('<script>alert(1)</script>Cafe', $list->json('data.0.name'));
+        $this->assertSame('I <3 NY', $list->json('data.0.structured_address.venue_name'));
+    }
+
+    public function test_create_accepts_numeric_string_coordinates(): void
+    {
+        $create = $this->postJson("/organizers/{$this->organizerId}/locations", [
+            'name' => 'Quoted Coords',
+            'structured_address' => ['city' => 'Dublin', 'country' => 'IE'],
+            'latitude' => '45.5',
+            'longitude' => '-122.1',
+        ], $this->authHeaders());
+
+        $create->assertStatus(ResponseCodes::HTTP_CREATED);
+        $this->assertEqualsWithDelta(45.5, (float) $create->json('data.latitude'), 0.000001);
+        $this->assertEqualsWithDelta(-122.1, (float) $create->json('data.longitude'), 0.000001);
+    }
+
+    public function test_form_encoded_create_accepts_coordinates(): void
+    {
+        $create = $this->post("/organizers/{$this->organizerId}/locations", [
+            'name' => 'Form Encoded',
+            'structured_address' => ['city' => 'Dublin', 'country' => 'IE'],
+            'latitude' => '45.5',
+            'longitude' => '-122.1',
+        ], array_merge($this->authHeaders(), ['Accept' => 'application/json']));
+
+        $create->assertStatus(ResponseCodes::HTTP_CREATED);
+        $this->assertEqualsWithDelta(45.5, (float) $create->json('data.latitude'), 0.000001);
+    }
+
+    public function test_update_accepts_numeric_string_coordinates(): void
+    {
+        $locationId = $this->postJson("/organizers/{$this->organizerId}/locations", [
+            'structured_address' => ['city' => 'Dublin', 'country' => 'IE'],
+        ], $this->authHeaders())->json('data.id');
+
+        $update = $this->putJson("/organizers/{$this->organizerId}/locations/{$locationId}", [
+            'structured_address' => ['city' => 'Dublin', 'country' => 'IE'],
+            'latitude' => '53.35',
+            'longitude' => '-6.26',
+        ], $this->authHeaders());
+
+        $update->assertStatus(ResponseCodes::HTTP_OK);
+        $this->assertEqualsWithDelta(53.35, (float) $update->json('data.latitude'), 0.000001);
+    }
+
+    public function test_autocomplete_with_array_query_parameter_returns_empty_results(): void
+    {
+        $response = $this->getJson(
+            "/organizers/{$this->organizerId}/locations/autocomplete?query[]=x",
+            $this->authHeaders(),
+        );
+
+        $response->assertStatus(ResponseCodes::HTTP_OK);
+        $this->assertSame([], $response->json('data'));
+    }
+
     public function test_create_without_any_address_field_fails_validation(): void
     {
         $response = $this->postJson("/organizers/{$this->organizerId}/locations", [

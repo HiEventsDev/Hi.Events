@@ -24,13 +24,16 @@ class CreateLocationAction extends BaseAction
     {
         $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
+        $latitude = $request->validated('latitude');
+        $longitude = $request->validated('longitude');
+
         $location = $this->handler->handle(new UpsertLocationDTO(
             organizer_id: $organizerId,
             account_id: $this->getAuthenticatedAccountId(),
             name: $request->validated('name'),
             structured_address: AddressDTO::from($request->validated('structured_address')),
-            latitude: $request->validated('latitude'),
-            longitude: $request->validated('longitude'),
+            latitude: $latitude === null ? null : (float) $latitude,
+            longitude: $longitude === null ? null : (float) $longitude,
             provider: $request->validated('provider'),
             provider_place_id: $request->validated('provider_place_id'),
         ));

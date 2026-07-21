@@ -26,7 +26,6 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -50,7 +49,7 @@ class MarkOrderAsPaidService
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderApplicationFeeService $orderApplicationFeeService,
         private readonly SendOrderDetailsService $sendOrderDetailsService,
-        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
     ) {}
 
     /**
@@ -88,11 +87,7 @@ class MarkOrderAsPaidService
                 throw new ResourceConflictException(__('Order is not awaiting offline payment'));
             }
 
-            // Mirror CompleteOrderHandler::validateOccurrenceStatus — an offline
-            // order can sit AWAITING_OFFLINE_PAYMENT for days and have its
-            // sessions cancelled or pass into the past in the meantime. Marking
-            // it paid would otherwise issue ACTIVE attendees for a dead date.
-            $this->validateOccurrenceStatus($order);
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $this->updateOrderStatus($orderId);
 
@@ -149,34 +144,6 @@ class MarkOrderAsPaidService
 
             return $updatedOrder;
         });
-    }
-
-    /**
-     * @throws ResourceConflictException
-     */
-    private function validateOccurrenceStatus(OrderDomainObject $order): void
-    {
-        $occurrenceIds = $order->getOrderItems()
-            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrenceId())
-            ->filter()
-            ->unique()
-            ->values();
-
-        if ($occurrenceIds === null || $occurrenceIds->isEmpty()) {
-            return;
-        }
-
-        $occurrences = $this->occurrenceRepository->findWhereIn('id', $occurrenceIds->toArray());
-
-        foreach ($occurrences as $occurrence) {
-            if ($occurrence->isCancelled()) {
-                throw new ResourceConflictException(__('This event date has been cancelled'));
-            }
-
-            if ($occurrence->isPast()) {
-                throw new ResourceConflictException(__('This event date has already ended'));
-            }
-        }
     }
 
     private function updateOrderInvoice(int $orderId): void

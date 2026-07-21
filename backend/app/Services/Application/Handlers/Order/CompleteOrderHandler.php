@@ -27,7 +27,6 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
@@ -37,6 +36,7 @@ use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreatedProductDataDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -63,7 +63,7 @@ class CompleteOrderHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
         private readonly CheckoutSessionManagementService $sessionManagementService,
-        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
     ) {}
 
     /**
@@ -81,7 +81,7 @@ class CompleteOrderHandler
 
             $order = $this->getOrder($orderShortId);
 
-            $this->validateOccurrenceStatus($order);
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $updatedOrder = $this->updateOrder($order, $orderDTO);
 
@@ -286,37 +286,6 @@ class CompleteOrderHandler
 
         if ($order->getStatus() !== OrderStatus::RESERVED->name) {
             throw new ResourceConflictException(__('This order has already been processed'));
-        }
-    }
-
-    /**
-     * @throws ResourceConflictException
-     */
-    private function validateOccurrenceStatus(OrderDomainObject $order): void
-    {
-        $occurrenceIds = $order->getOrderItems()
-            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrenceId())
-            ->filter()
-            ->unique()
-            ->values();
-
-        if ($occurrenceIds === null || $occurrenceIds->isEmpty()) {
-            return;
-        }
-
-        $occurrences = $this->occurrenceRepository->findWhereIn('id', $occurrenceIds->toArray());
-
-        foreach ($occurrences as $occurrence) {
-            if ($occurrence->isCancelled()) {
-                throw new ResourceConflictException(__('This event date has been cancelled'));
-            }
-
-            // Reservation could have been created before the occurrence ended
-            // — re-check on completion so a reserved order cannot age into a
-            // valid purchase for a session that has since passed.
-            if ($occurrence->isPast()) {
-                throw new ResourceConflictException(__('This event date has already ended'));
-            }
         }
     }
 

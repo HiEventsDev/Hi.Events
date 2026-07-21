@@ -17,6 +17,7 @@ use HiEvents\Models\CheckInList;
 use HiEvents\Models\Product;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use RuntimeException;
@@ -252,15 +253,26 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function hasAssociatedOrders(int $productId): bool
     {
-        return $this->db->table('order_items')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->whereIn('orders.status', [
-                OrderStatus::COMPLETED->name,
-                OrderStatus::CANCELLED->name,
-                OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
-            ])
-            ->where('order_items.product_id', $productId)
-            ->exists();
+        return $this->runQuery(
+            fn () => $this->db->table('order_items')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->where('order_items.product_id', $productId)
+                ->where(static function (QueryBuilder $query) {
+                    $query
+                        ->whereIn('orders.status', [
+                            OrderStatus::COMPLETED->name,
+                            OrderStatus::CANCELLED->name,
+                            OrderStatus::AWAITING_OFFLINE_PAYMENT->name,
+                        ])
+                        ->orWhere(static function (QueryBuilder $reserved) {
+                            $reserved
+                                ->where('orders.status', OrderStatus::RESERVED->name)
+                                ->where('orders.reserved_until', '>', now())
+                                ->whereNull('orders.deleted_at');
+                        });
+                })
+                ->exists()
+        );
     }
 
     public function getModel(): string

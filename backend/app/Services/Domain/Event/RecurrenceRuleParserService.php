@@ -37,13 +37,6 @@ class RecurrenceRuleParserService
         $timeSlots = $this->normalizeTimeSlots($rawTimes, $fallbackDuration);
 
         $rangeType = $rule['range']['type'] ?? 'count';
-        // For `until` ranges we ask the generator for one more date than the
-        // hard cap so the overflow check below (`> MAX_OCCURRENCES`) can
-        // actually fire on a single-timeslot rule that would otherwise stop
-        // exactly at MAX. Without this, a daily/until rule that resolves to
-        // 1500 dates silently truncates to 1200 and the handler's overflow
-        // guard never sees a value > MAX. For `count` ranges the user has
-        // explicitly named a number — generate exactly that many.
         $maxCount = $rangeType === 'count'
             ? ($rule['range']['count'] ?? 10)
             : self::MAX_OCCURRENCES + 1;
@@ -55,9 +48,6 @@ class RecurrenceRuleParserService
 
         foreach ($dates as $date) {
             foreach ($timeSlots as $slot) {
-                // Allow one candidate beyond MAX so the caller's `> MAX` overflow
-                // check can fire — without this the parser silently truncated
-                // to exactly MAX and the validation in the handler was dead.
                 if ($candidates->count() > self::MAX_OCCURRENCES) {
                     break 2;
                 }
@@ -92,7 +82,7 @@ class RecurrenceRuleParserService
                 throw new InvalidRecurrenceRuleException(__('Additional recurrence dates must include a date'));
             }
 
-            $addDate = CarbonImmutable::parse($additional['date'], $timezone);
+            $addDate = CarbonImmutable::parse($additional['date'], $timezone)->setTimezone($timezone);
             $additionalTime = $additional['time'] ?? '00:00';
             if (! preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $additionalTime)) {
                 throw new InvalidRecurrenceRuleException(
@@ -101,6 +91,10 @@ class RecurrenceRuleParserService
             }
             $parts = explode(':', $additionalTime);
             $start = $addDate->setTime((int) $parts[0], (int) $parts[1], 0);
+            if ($excludedOccurrences->contains($start->format('Y-m-d H:i'))) {
+                continue;
+            }
+
             $end = $fallbackDuration ? $start->addMinutes($fallbackDuration) : null;
 
             $startUtc = $start->setTimezone('UTC');
@@ -222,9 +216,6 @@ class RecurrenceRuleParserService
             'sunday' => Carbon::SUNDAY,
         ];
 
-        // Bare ->filter() drops "falsy" values, which includes Carbon::SUNDAY (= 0),
-        // so a weekly Sunday rule was silently producing zero dates. Compare to
-        // null explicitly to keep Sunday in the set.
         $dayNumbers = collect($daysOfWeek)
             ->map(fn (string $day) => $dayMap[strtolower($day)] ?? null)
             ->filter(fn (?int $dayNumber) => $dayNumber !== null)
@@ -288,7 +279,7 @@ class RecurrenceRuleParserService
         ?CarbonImmutable $untilDate,
     ): Collection {
         $dates = collect();
-        $daysOfMonth = $rule['days_of_month'] ?? [1];
+        $daysOfMonth = collect($rule['days_of_month'] ?? [1])->sort()->values();
         $startDate = $this->getStartDate($rule, $timezone);
         $current = $startDate->startOfMonth();
         $safetyLimit = $maxCount * 4;
@@ -382,11 +373,6 @@ class RecurrenceRuleParserService
     ): ?CarbonImmutable {
         $firstOfMonth = $monthStart->startOfMonth();
 
-        // The day-of-week constants on Carbon (e.g. Carbon::SUNDAY = 0) follow
-        // PHP's date('w') convention, NOT ISO-8601. dayOfWeekIso returns 1..7
-        // (Sun = 7), which never equals 0 — that mismatch turned monthly nth/last
-        // Sunday rules into infinite loops walking days that never matched.
-        // dayOfWeek returns 0..6 and lines up with the Carbon::SUNDAY constant.
         if ($weekPosition === -1) {
             $lastOfMonth = $firstOfMonth->endOfMonth();
             $candidate = $lastOfMonth;

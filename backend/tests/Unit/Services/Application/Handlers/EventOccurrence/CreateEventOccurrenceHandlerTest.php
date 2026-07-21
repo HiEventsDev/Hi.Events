@@ -12,10 +12,12 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\CreateEventOccurrenceHandler;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
+use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -76,6 +78,12 @@ class CreateEventOccurrenceHandlerTest extends TestCase
         $this->eventRepository->shouldNotReceive('findById');
 
         $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->andReturn(5);
+
+        $this->occurrenceRepository
             ->shouldReceive('create')
             ->once()
             ->with(Mockery::on(function (array $attrs) {
@@ -114,6 +122,12 @@ class CreateEventOccurrenceHandlerTest extends TestCase
 
         $createdEventLocation = Mockery::mock(EventLocationDomainObject::class);
         $createdEventLocation->shouldReceive('getId')->andReturn(99);
+
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->andReturn(5);
 
         $this->eventRepository
             ->shouldReceive('findById')
@@ -162,6 +176,12 @@ class CreateEventOccurrenceHandlerTest extends TestCase
         $createdEventLocation = Mockery::mock(EventLocationDomainObject::class);
         $createdEventLocation->shouldReceive('getId')->andReturn(123);
 
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->andReturn(5);
+
         $this->eventRepository
             ->shouldReceive('findById')
             ->once()
@@ -206,6 +226,12 @@ class CreateEventOccurrenceHandlerTest extends TestCase
             ),
         );
 
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 999])
+            ->andReturn(5);
+
         $this->eventRepository
             ->shouldReceive('findById')
             ->once()
@@ -216,6 +242,31 @@ class CreateEventOccurrenceHandlerTest extends TestCase
         $this->occurrenceRepository->shouldNotReceive('create');
 
         $this->expectException(ModelNotFoundException::class);
+
+        $this->handler->handle($dto);
+    }
+
+    public function test_throws_and_does_not_create_when_occurrence_cap_reached(): void
+    {
+        $dto = new UpsertEventOccurrenceDTO(
+            event_id: 1,
+            start_date: '2026-06-01 10:00:00',
+            end_date: '2026-06-01 18:00:00',
+            capacity: 100,
+            label: 'Morning Session',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('countWhere')
+            ->once()
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->andReturn(RecurrenceRuleParserService::MAX_OCCURRENCES);
+
+        $this->occurrenceRepository->shouldNotReceive('create');
+        $this->eventRepository->shouldNotReceive('findById');
+        $this->eventLocationUpserter->shouldNotReceive('createForEvent');
+
+        $this->expectException(ValidationException::class);
 
         $this->handler->handle($dto);
     }

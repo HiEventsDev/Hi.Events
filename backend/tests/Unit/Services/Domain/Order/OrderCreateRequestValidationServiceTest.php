@@ -20,6 +20,7 @@ use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
+use HiEvents\Services\Domain\Product\ProductPriceService;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -42,6 +43,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
     private OrderItemRepositoryInterface|MockInterface $orderItemRepository;
 
+    private ProductPriceService|MockInterface $productPriceService;
+
     private OrderCreateRequestValidationService $service;
 
     protected function setUp(): void
@@ -55,16 +58,13 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->visibilityRepository = Mockery::mock(ProductOccurrenceVisibilityRepositoryInterface::class);
         $this->orderItemRepository = Mockery::mock(OrderItemRepositoryInterface::class);
+        $this->productPriceService = Mockery::mock(ProductPriceService::class);
 
-        // Default: no visibility rules → all products visible. Individual tests can
-        // override this expectation when they want to exercise the visibility check.
         $this->visibilityRepository
             ->shouldReceive('findWhereIn')
             ->byDefault()
             ->andReturn(collect());
 
-        // Default: no reserved orders. Tests that exercise capacity-vs-reservation
-        // logic can override this expectation.
         $this->orderItemRepository
             ->shouldReceive('getReservedQuantityForOccurrence')
             ->byDefault()
@@ -80,10 +80,17 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->byDefault()
             ->andReturn(1);
 
-        // Build the real eligibility service from the same mocked repositories
-        // — keeps the existing tests as integration-style verification that the
-        // validator + eligibility service compose correctly without doubling up
-        // on Mockery setup.
+        $this->productRepository
+            ->shouldReceive('loadRelation')
+            ->byDefault()
+            ->andReturnSelf();
+
+        $this->productRepository
+            ->shouldReceive('findWhereIn')
+            ->byDefault()
+            ->andReturnUsing(fn ($field, $ids) => collect($ids)
+                ->map(fn ($id) => $this->createTicketProductStub((int) $id)));
+
         $eligibilityService = new OccurrencePurchaseEligibilityService(
             $this->occurrenceRepository,
             $this->orderItemRepository,
@@ -97,6 +104,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             $this->occurrenceRepository,
             $this->availabilityService,
             $eligibilityService,
+            $this->productPriceService,
         );
     }
 
@@ -148,6 +156,25 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $data = $this->createRequestData(10, quantity: 5);
 
         $this->service->validateRequestData(1, $data);
+    }
+
+    public function test_general_products_do_not_consume_occurrence_capacity(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+            capacity: 10,
+            usedCapacity: 8,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, productType: 'GENERAL');
+
+        $data = $this->createRequestData(10, quantity: 5);
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
     }
 
     public function test_accepts_active_occurrence_with_sufficient_capacity(): void
@@ -255,8 +282,6 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->setupOccurrenceLookup(1, 10, $occurrence);
         $this->setupEventLookup(1);
 
-        // Visibility rules exist for occurrence 10 but product 10 is NOT in the visible set,
-        // so the order must be rejected even though all other validation would pass.
         $visibilityRule = (new ProductOccurrenceVisibilityDomainObject)
             ->setEventOccurrenceId(10)
             ->setProductId(99);
@@ -295,16 +320,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * Regression guard for the perf fix: an order that spans multiple occurrences must
-     * resolve all visibility rules in a single batched query (findWhereIn) instead of
-     * one query per occurrence (the original N+1 implementation).
-     */
     public function test_enforces_per_occurrence_visibility_for_multi_occurrence_order(): void
     {
-        // Cart contains product 10 on occurrence 10 and product 20 on occurrence 20.
-        // Visibility allows product 10 on occurrence 10 but blocks product 20 on
-        // occurrence 20 — processing reaches the second occurrence and throws.
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('not available for this occurrence');
 
@@ -332,10 +349,6 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->setEventOccurrenceId(20)
             ->setProductId(99);
 
-        // OccurrencePurchaseEligibilityService asks for one occurrence at a time —
-        // simpler API at the cost of N visibility lookups. Acceptable trade-off
-        // for the manual-attendee path; revisit if multi-occurrence orders become
-        // a hot path.
         $this->visibilityRepository
             ->shouldReceive('findWhereIn')
             ->with('event_occurrence_id', [10])
@@ -383,7 +396,6 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->setupAvailability(1);
         $this->setupProducts(1, 10, 100);
 
-        // No visibility rules for either occurrence → both products allowed.
         $this->visibilityRepository
             ->shouldReceive('findWhereIn')
             ->with('event_occurrence_id', [10])
@@ -393,8 +405,6 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->with('event_occurrence_id', [20])
             ->andReturn(collect());
 
-        // Product 10 sells on both occurrences in this scenario; product details are
-        // identical so the existing single-product setup is sufficient.
         $data = [
             'products' => [
                 [
@@ -412,6 +422,340 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $this->service->validateRequestData(1, $data);
         $this->assertTrue(true);
+    }
+
+    public function test_rejects_donation_below_occurrence_override_floor(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, type: 'DONATION');
+
+        $this->productPriceService
+            ->shouldReceive('getDonationMinimumPrice')
+            ->with(Mockery::type(ProductDomainObject::class), 100, 10)
+            ->andReturn(25.0);
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('minimum amount');
+
+        $this->service->validateRequestData(1, $this->createRequestData(10, price: 15.0));
+    }
+
+    public function test_accepts_donation_at_effective_floor(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, type: 'DONATION');
+
+        $this->productPriceService
+            ->shouldReceive('getDonationMinimumPrice')
+            ->with(Mockery::type(ProductDomainObject::class), 100, 10)
+            ->andReturn(25.0);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10, price: 25.0));
+        $this->assertTrue(true);
+    }
+
+    public function test_accepts_general_only_cart_on_sold_out_occurrence(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+            capacity: 10,
+            usedCapacity: 10,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, productType: 'GENERAL');
+
+        $this->service->validateRequestData(1, $this->createRequestData(10, quantity: 2));
+        $this->assertTrue(true);
+    }
+
+    public function test_rejects_duplicate_product_price_lines_exceeding_available_stock(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1, available: 4);
+        $this->setupProducts(1, 10, 100);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('maximum number of products available');
+
+        $this->service->validateRequestData(1, $data);
+    }
+
+    public function test_accepts_duplicate_product_price_lines_within_available_stock(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
+    public function test_rejects_same_price_across_occurrences_exceeding_available_stock(): void
+    {
+        $occurrence10 = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $occurrence20 = (new EventOccurrenceDomainObject)
+            ->setId(20)
+            ->setEventId(1)
+            ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+            ->setCapacity(null)
+            ->setUsedCapacity(0)
+            ->setStartDate(Carbon::now()->addMonths(2)->toDateTimeString());
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence10);
+        $this->setupOccurrenceLookup(1, 20, $occurrence20);
+        $this->setupEventLookup(1, isRecurring: true);
+        $this->setupAvailability(1, available: 4);
+        $this->setupProducts(1, 10, 100);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 20,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('maximum number of products available');
+
+        $this->service->validateRequestData(1, $data);
+    }
+
+    public function test_rejects_duplicate_lines_exceeding_max_per_order(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, maxPerOrder: 10);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 6]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 6]],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('maximum number of products available for Test Products is 10');
+
+        $this->service->validateRequestData(1, $data);
+    }
+
+    public function test_accepts_duplicate_lines_within_max_per_order(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, maxPerOrder: 10);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 5]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 5]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
+    public function test_accepts_duplicate_lines_combining_to_meet_min_per_order(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, minPerOrder: 5);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 3]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 2]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
+    public function test_rejects_duplicate_lines_combining_below_min_per_order(): void
+    {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, minPerOrder: 5);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 2]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 2]],
+                ],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('must order at least');
+
+        $this->service->validateRequestData(1, $data);
+    }
+
+    public function test_max_per_order_applies_per_occurrence_for_recurring_events(): void
+    {
+        $occurrence10 = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+        );
+
+        $occurrence20 = (new EventOccurrenceDomainObject)
+            ->setId(20)
+            ->setEventId(1)
+            ->setStatus(EventOccurrenceStatus::ACTIVE->name)
+            ->setCapacity(null)
+            ->setUsedCapacity(0)
+            ->setStartDate(Carbon::now()->addMonths(2)->toDateTimeString());
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence10);
+        $this->setupOccurrenceLookup(1, 20, $occurrence20);
+        $this->setupEventLookup(1, isRecurring: true);
+        $this->setupAvailability(1);
+        $this->setupProducts(1, 10, 100, maxPerOrder: 10);
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 6]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 20,
+                    'quantities' => [['price_id' => 100, 'quantity' => 6]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
+    private function createTicketProductStub(int $id): ProductDomainObject|MockInterface
+    {
+        $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('getId')->andReturn($id);
+        $product->shouldReceive('getProductType')->andReturn('TICKET');
+
+        return $product;
     }
 
     private function createOccurrence(
@@ -444,6 +788,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getId')->andReturn($eventId);
         $event->shouldReceive('isRecurring')->andReturn($isRecurring);
+        $event->shouldReceive('getCurrency')->andReturn('USD');
 
         $this->eventRepository
             ->shouldReceive('findById')
@@ -461,6 +806,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
                         'product_id' => 10,
                         'price_id' => 100,
                         'product_title' => 'Test Product',
+                        'product_type' => 'TICKET',
                         'price_label' => null,
                         'quantity_available' => $available,
                         'quantity_reserved' => 0,
@@ -472,23 +818,24 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ));
     }
 
-    private function setupProducts(int $eventId, int $productId, int $priceId): void
+    private function setupProducts(int $eventId, int $productId, int $priceId, string $productType = 'TICKET', string $type = 'PAID', int $maxPerOrder = 10, int $minPerOrder = 1): void
     {
         $price = Mockery::mock(ProductPriceDomainObject::class);
         $price->shouldReceive('getId')->andReturn($priceId);
         $price->shouldReceive('getIsHidden')->andReturn(false);
+        $price->shouldReceive('getLabel')->andReturn(null);
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn($productId);
         $product->shouldReceive('getEventId')->andReturn($eventId);
         $product->shouldReceive('getTitle')->andReturn('Test Product');
-        $product->shouldReceive('getMaxPerOrder')->andReturn(10);
-        $product->shouldReceive('getMinPerOrder')->andReturn(1);
-        $product->shouldReceive('getType')->andReturn('PAID');
+        $product->shouldReceive('getMaxPerOrder')->andReturn($maxPerOrder);
+        $product->shouldReceive('getMinPerOrder')->andReturn($minPerOrder);
+        $product->shouldReceive('getType')->andReturn($type);
         $product->shouldReceive('getPrice')->andReturn(10.0);
         $product->shouldReceive('isSoldOut')->andReturn(false);
         $product->shouldReceive('getProductPrices')->andReturn(collect([$price]));
-        $product->shouldReceive('getProductType')->andReturn('TICKET');
+        $product->shouldReceive('getProductType')->andReturn($productType);
         $product->shouldReceive('getIsHidden')->andReturn(false);
         $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
 
@@ -500,19 +847,23 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->andReturn(collect([$product]));
     }
 
-    private function createRequestData(int $occurrenceId, int $productId = 10, int $priceId = 100, int $quantity = 1): array
+    private function createRequestData(int $occurrenceId, int $productId = 10, int $priceId = 100, int $quantity = 1, ?float $price = null): array
     {
+        $quantityData = [
+            'price_id' => $priceId,
+            'quantity' => $quantity,
+        ];
+
+        if ($price !== null) {
+            $quantityData['price'] = $price;
+        }
+
         return [
             'products' => [
                 [
                     'product_id' => $productId,
                     'event_occurrence_id' => $occurrenceId,
-                    'quantities' => [
-                        [
-                            'price_id' => $priceId,
-                            'quantity' => $quantity,
-                        ],
-                    ],
+                    'quantities' => [$quantityData],
                 ],
             ],
         ];

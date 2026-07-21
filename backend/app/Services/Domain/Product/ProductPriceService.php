@@ -70,24 +70,44 @@ class ProductPriceService
         );
     }
 
+    public function getDonationMinimumPrice(ProductDomainObject $product, int $priceId, ?int $eventOccurrenceId): float
+    {
+        return $this->getOverridePrice($priceId, $eventOccurrenceId) ?? $product->getPrice();
+    }
+
     private function determineProductPrice(ProductDomainObject $product, OrderProductPriceDTO $productOrderDetails, ?int $eventOccurrenceId = null): float
     {
-        if ($eventOccurrenceId !== null) {
-            $override = $this->priceOverrideRepository->findFirstWhere([
-                'event_occurrence_id' => $eventOccurrenceId,
-                'product_price_id' => $productOrderDetails->price_id,
-            ]);
+        if ($product->getType() === ProductPriceType::DONATION->name) {
+            return max(
+                $this->getDonationMinimumPrice($product, $productOrderDetails->price_id, $eventOccurrenceId),
+                $productOrderDetails->price,
+            );
+        }
 
-            if ($override !== null) {
-                return (float) $override->getPrice();
-            }
+        $overridePrice = $this->getOverridePrice($productOrderDetails->price_id, $eventOccurrenceId);
+
+        if ($overridePrice !== null) {
+            return $overridePrice;
         }
 
         return match ($product->getType()) {
-            ProductPriceType::DONATION->name => max($product->getPrice(), $productOrderDetails->price),
             ProductPriceType::PAID->name => $product->getPrice(),
             ProductPriceType::FREE->name => 0.00,
             ProductPriceType::TIERED->name => $product->getPriceById($productOrderDetails->price_id)?->getPrice()
         };
+    }
+
+    private function getOverridePrice(int $priceId, ?int $eventOccurrenceId): ?float
+    {
+        if ($eventOccurrenceId === null) {
+            return null;
+        }
+
+        $override = $this->priceOverrideRepository->findFirstWhere([
+            'event_occurrence_id' => $eventOccurrenceId,
+            'product_price_id' => $priceId,
+        ]);
+
+        return $override === null ? null : (float) $override->getPrice();
     }
 }

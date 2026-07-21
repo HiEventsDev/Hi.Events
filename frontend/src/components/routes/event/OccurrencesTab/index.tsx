@@ -214,7 +214,6 @@ const OccurrencesTab = () => {
                     </Text>
                     <Checkbox
                         label={t`Refund all orders for these dates`}
-                        description={t`Orders spanning multiple dates will be flagged for manual review.`}
                         onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
                     />
                 </>
@@ -233,8 +232,9 @@ const OccurrencesTab = () => {
                     },
                 }, {
                     onSuccess: (response) => {
-                        showSuccess(t`Cancelled ${response.updated_count} date(s)`);
+                        showSuccess(t`Cancelling ${response.updated_count} date(s). This may take a moment to complete.`);
                         setSelectedIds(new Set());
+                        setTimeout(() => occurrencesQuery.refetch(), 5000);
                     },
                     onError: (error: any) => showError(error?.response?.data?.message || t`Failed to cancel dates`),
                 });

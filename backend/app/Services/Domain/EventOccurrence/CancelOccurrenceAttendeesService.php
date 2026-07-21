@@ -22,15 +22,6 @@ use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/**
- * Shared attendee-cancellation step for occurrence cancels (single and bulk).
- *
- * When an occurrence is cancelled, its attendees should be marked CANCELLED
- * and seats returned to inventory — regardless of whether the organizer opted
- * into refunds. If this doesn't run, attendees stay ACTIVE with a FK pointing
- * at a cancelled occurrence, which breaks stats, check-in, and cross-occurrence
- * scanning on event-wide check-in lists.
- */
 class CancelOccurrenceAttendeesService
 {
     public function __construct(
@@ -43,12 +34,9 @@ class CancelOccurrenceAttendeesService
     ) {}
 
     /**
-     * Cancels ACTIVE and AWAITING_PAYMENT attendees tied to the occurrence,
-     * decrements per-occurrence quantities, and fires webhook + capacity events.
-     * Must be called inside a transaction so the status change is atomic with
-     * the occurrence cancel itself.
+     * @return array{attendee_ids: array<int, int>, sales_backed_count: int}
      */
-    public function cancelForOccurrence(int $eventId, int $occurrenceId): void
+    public function cancelForOccurrence(int $eventId, int $occurrenceId): array
     {
         $statusesToCancel = [AttendeeStatus::ACTIVE->name, AttendeeStatus::AWAITING_PAYMENT->name];
 
@@ -58,7 +46,7 @@ class CancelOccurrenceAttendeesService
         ]);
 
         if ($attendees->isEmpty()) {
-            return;
+            return ['attendee_ids' => [], 'sales_backed_count' => 0];
         }
 
         $this->attendeeRepository->updateWhere(
@@ -94,12 +82,6 @@ class CancelOccurrenceAttendeesService
             );
         }
 
-        // Mirror PartialEditAttendeeHandler's per-attendee stats decrement so
-        // attendees_registered tracks reality after a bulk occurrence cancel.
-        // Without this, the later refund flow's order-level decrement looks at
-        // attendees that are already CANCELLED, finds zero "active" rows, and
-        // decrements by zero — leaving attendees_registered inflated. Grouped
-        // by order to amortise the per-order date lookup and version bumps.
         $statsBackedAttendees = $attendees->filter(function (AttendeeDomainObject $attendee) use ($ordersById) {
             $order = $ordersById->get($attendee->getOrderId());
 
@@ -129,19 +111,14 @@ class CancelOccurrenceAttendeesService
                 eventOccurrenceId: $occurrenceId,
             ));
         }
+
+        return [
+            'attendee_ids' => $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->values()->all(),
+            'sales_backed_count' => $inventoryBackedAttendees->count(),
+        ];
     }
 
     /**
-     * Calls EventStatisticsCancellationService::decrementForCancelledAttendee
-     * once per source order, summing attendees in that order tied to the
-     * cancelled occurrence. The service needs the order's created_at to find
-     * the daily-statistics row to decrement.
-     *
-     * Intentionally swallows version-mismatch / not-found errors at this
-     * boundary: the attendees are already cancelled and inventory adjusted,
-     * and a stats discrepancy is recoverable through reconciliation but a
-     * raised exception here would roll the cancel transaction back.
-     *
      * @param  Collection<int, AttendeeDomainObject>  $attendees
      * @param  Collection<int, OrderDomainObject>  $ordersById
      */

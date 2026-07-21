@@ -34,7 +34,9 @@ class BulkCancelOccurrencesJob implements ShouldQueue
         public readonly array $occurrenceIds,
         public readonly bool $refundOrders = false,
     ) {
-        $this->onQueue('occurrences');
+        if (config('queue.occurrences_queue_name') !== null) {
+            $this->onQueue(config('queue.occurrences_queue_name'));
+        }
     }
 
     public function handle(
@@ -47,36 +49,45 @@ class BulkCancelOccurrencesJob implements ShouldQueue
 
         foreach ($this->occurrenceIds as $occurrenceId) {
             try {
-                // Each iteration runs in its own transaction so we can lock the occurrence
-                // row before checking its status. Without the lock, two concurrent bulk
-                // cancellations could both observe ACTIVE and dispatch the refund /
-                // notification side-effects twice.
-                $cancelledStartDate = DB::transaction(function () use ($occurrenceRepository, $cancelAttendeesService, $occurrenceId) {
+                $cancelResult = DB::transaction(function () use ($occurrenceRepository, $exclusionService, $cancelAttendeesService, $occurrenceId) {
                     $occurrence = $occurrenceRepository->findByIdLocked($occurrenceId);
 
-                    if (
-                        ! $occurrence
-                        || $occurrence->getEventId() !== $this->eventId
-                        || $occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name
-                    ) {
+                    if (! $occurrence || $occurrence->getEventId() !== $this->eventId) {
                         return null;
                     }
+
+                    if ($occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name) {
+                        return null;
+                    }
+
+                    $cancelResult = $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
 
                     $occurrenceRepository->updateWhere(
                         attributes: [
                             EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                            EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => $cancelResult['sales_backed_count'],
                         ],
                         where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
                     );
 
-                    $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
+                    $exclusionService->addExclusions($this->eventId, [$occurrence->getStartDate()]);
 
-                    return $occurrence->getStartDate();
+                    return [
+                        'start_date' => $occurrence->getStartDate(),
+                        'cancelled_attendee_ids' => $cancelResult['attendee_ids'],
+                    ];
                 });
 
-                if ($cancelledStartDate === null) {
+                if ($cancelResult === null) {
                     continue;
                 }
+
+                SendOccurrenceCancellationEmailJob::dispatchChunked(
+                    $this->eventId,
+                    $occurrenceId,
+                    $cancelResult['cancelled_attendee_ids'],
+                    $this->refundOrders,
+                );
 
                 event(new OccurrenceCancelledEvent(
                     eventId: $this->eventId,
@@ -89,7 +100,7 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     occurrenceId: $occurrenceId,
                 ));
 
-                $cancelledStartDates[] = $cancelledStartDate;
+                $cancelledStartDates[] = $cancelResult['start_date'];
             } catch (Throwable $e) {
                 $failedIds[] = $occurrenceId;
                 Log::error('Failed to cancel occurrence', [
@@ -98,10 +109,6 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     'error' => $e->getMessage(),
                 ]);
             }
-        }
-
-        if (! empty($cancelledStartDates)) {
-            DB::transaction(fn () => $exclusionService->addExclusions($this->eventId, $cancelledStartDates));
         }
 
         $context = [

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Generated\LocationDomainObjectAbstract;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
+use HiEvents\Services\Domain\Location\LocationLockService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -16,6 +17,7 @@ class DeleteLocationHandler
     public function __construct(
         private readonly LocationRepositoryInterface $locationRepository,
         private readonly DatabaseManager $databaseManager,
+        private readonly LocationLockService $locationLockService,
     ) {}
 
     /**
@@ -24,6 +26,8 @@ class DeleteLocationHandler
     public function handle(int $organizerId, int $accountId, int $locationId): void
     {
         $this->databaseManager->transaction(function () use ($organizerId, $accountId, $locationId) {
+            $this->locationLockService->acquireExclusiveTransactionLock($locationId);
+
             $location = $this->locationRepository->findFirstWhere([
                 LocationDomainObjectAbstract::ID => $locationId,
                 LocationDomainObjectAbstract::ORGANIZER_ID => $organizerId,

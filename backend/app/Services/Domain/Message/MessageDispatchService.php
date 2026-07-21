@@ -97,12 +97,40 @@ class MessageDispatchService
     {
         $occurrenceId = $message->getEventOccurrenceId();
 
-        if ($occurrenceId === null) {
+        if ($occurrenceId !== null) {
+            $occurrence = $this->eventOccurrenceRepository->findFirstWhere(['id' => $occurrenceId]);
+
+            return $occurrence === null || $occurrence->isCancelled();
+        }
+
+        $occurrenceIds = $this->getScheduledOccurrenceIds($message);
+
+        if ($occurrenceIds === []) {
             return false;
         }
 
-        $occurrence = $this->eventOccurrenceRepository->findFirstWhere(['id' => $occurrenceId]);
+        $liveOccurrences = $this->eventOccurrenceRepository->findWhereIn('id', $occurrenceIds);
 
-        return $occurrence === null || $occurrence->isCancelled();
+        foreach ($liveOccurrences as $occurrence) {
+            if (! $occurrence->isCancelled()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function getScheduledOccurrenceIds(MessageDomainObject $message): array
+    {
+        $sendData = $message->getSendData();
+        $sendDataArray = is_string($sendData) ? json_decode($sendData, true) : $sendData;
+
+        if (! is_array($sendDataArray)) {
+            return [];
+        }
+
+        $occurrenceIds = $sendDataArray['event_occurrence_ids'] ?? null;
+
+        return is_array($occurrenceIds) ? array_values(array_filter($occurrenceIds)) : [];
     }
 }

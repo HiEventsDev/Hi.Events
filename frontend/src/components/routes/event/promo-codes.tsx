@@ -54,7 +54,7 @@ export const PromoCodes = () => {
                     resultCount={pagination?.total}
                     resultLabel={t`promo codes`}
                 >
-                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>} data-testid="promo-code-create-button">
                         Create
                     </Button>
                 </ToolBar>

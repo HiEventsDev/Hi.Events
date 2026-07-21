@@ -3,6 +3,7 @@
 namespace HiEvents\Resources\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResourcePublic;
 use HiEvents\Resources\Product\ProductMinimalResourcePublic;
 use Illuminate\Http\Request;
@@ -13,13 +14,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class AttendeeResourcePublic extends JsonResource
 {
-    public function __construct($resource, private readonly bool $includeOnlineConnectionDetails = false)
+    public function __construct($resource, private readonly ?bool $includeOnlineConnectionDetails = null)
     {
         parent::__construct($resource);
     }
 
     public function toArray(Request $request): array
     {
+        $includeOnlineConnectionDetails = $this->includeOnlineConnectionDetails
+            ?? ($this->getStatus() === AttendeeStatus::ACTIVE->name);
+
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
@@ -36,7 +40,7 @@ class AttendeeResourcePublic extends JsonResource
                 (bool) $this->getEventOccurrence(),
                 fn () => new EventOccurrenceResourcePublic(
                     $this->getEventOccurrence(),
-                    includeOnlineConnectionDetails: $this->includeOnlineConnectionDetails,
+                    includeOnlineConnectionDetails: $includeOnlineConnectionDetails,
                 ),
             ),
             'locale' => $this->getLocale(),

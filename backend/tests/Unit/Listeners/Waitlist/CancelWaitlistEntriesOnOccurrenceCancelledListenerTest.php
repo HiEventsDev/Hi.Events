@@ -3,9 +3,12 @@
 namespace Tests\Unit\Listeners\Waitlist;
 
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Events\OccurrenceCancelledEvent;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Listeners\Waitlist\CancelWaitlistEntriesOnOccurrenceCancelledListener;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
+use HiEvents\Services\Domain\Waitlist\CancelWaitlistEntryService;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -14,6 +17,8 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
 {
     private WaitlistEntryRepositoryInterface|MockInterface $waitlistEntryRepository;
 
+    private CancelWaitlistEntryService|MockInterface $cancelWaitlistEntryService;
+
     private CancelWaitlistEntriesOnOccurrenceCancelledListener $listener;
 
     protected function setUp(): void
@@ -21,8 +26,10 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
         parent::setUp();
 
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
+        $this->cancelWaitlistEntryService = Mockery::mock(CancelWaitlistEntryService::class);
         $this->listener = new CancelWaitlistEntriesOnOccurrenceCancelledListener(
             $this->waitlistEntryRepository,
+            $this->cancelWaitlistEntryService,
         );
     }
 
@@ -32,12 +39,39 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_cancels_waiting_and_offered_entries_for_occurrence(): void
+    public function test_entry_that_became_uncancellable_does_not_stop_remaining_cancellations(): void
     {
-        // The listener bulk-updates by event + occurrence + status. Without
-        // this, capacity released by attendee cancellation would let those
-        // entries pass the per-entry capacity check and fire offer emails for
-        // an occurrence that no longer exists.
+        $purchasedEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+        $offeredEntry = Mockery::mock(WaitlistEntryDomainObject::class);
+
+        $this->waitlistEntryRepository->shouldReceive('updateWhere')->once();
+        $this->waitlistEntryRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$purchasedEntry, $offeredEntry]));
+
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($purchasedEntry)
+            ->andThrow(new ResourceConflictException('This waitlist entry cannot be cancelled'));
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($offeredEntry)
+            ->andReturn($offeredEntry);
+
+        $this->listener->handle(new OccurrenceCancelledEvent(
+            eventId: 1,
+            occurrenceId: 10,
+            refundOrders: true,
+        ));
+
+        $this->assertTrue(true);
+    }
+
+    public function test_bulk_cancels_waiting_entries_only(): void
+    {
         $eventId = 1;
         $occurrenceId = 10;
 
@@ -46,32 +80,27 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
             ->once()
             ->with(
                 Mockery::on(static function (array $attrs): bool {
-                    // Must mark CANCELLED *and* stamp cancelled_at. Without the
-                    // timestamp, bulk-cancelled entries are indistinguishable
-                    // from the historical-data cohort and break audit queries.
                     return ($attrs['status'] ?? null) === WaitlistEntryStatus::CANCELLED->name
                         && array_key_exists('cancelled_at', $attrs);
                 }),
-                Mockery::on(static function (array $where) use ($eventId, $occurrenceId): bool {
-                    // event_id, event_occurrence_id, status-in-clause must all be present.
-                    if (($where['event_id'] ?? null) !== $eventId) {
-                        return false;
-                    }
-                    if (($where['event_occurrence_id'] ?? null) !== $occurrenceId) {
-                        return false;
-                    }
-                    foreach ($where as $clause) {
-                        if (is_array($clause) && $clause[0] === 'status' && $clause[1] === 'in') {
-                            return $clause[2] === [
-                                WaitlistEntryStatus::WAITING->name,
-                                WaitlistEntryStatus::OFFERED->name,
-                            ];
-                        }
-                    }
-
-                    return false;
-                }),
+                [
+                    'event_id' => $eventId,
+                    'event_occurrence_id' => $occurrenceId,
+                    'status' => WaitlistEntryStatus::WAITING->name,
+                ],
             );
+
+        $this->waitlistEntryRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with([
+                'event_id' => $eventId,
+                'event_occurrence_id' => $occurrenceId,
+                'status' => WaitlistEntryStatus::OFFERED->name,
+            ])
+            ->andReturn(collect());
+
+        $this->cancelWaitlistEntryService->shouldNotReceive('cancelEntry');
 
         $this->listener->handle(new OccurrenceCancelledEvent(
             eventId: $eventId,
@@ -82,41 +111,38 @@ class CancelWaitlistEntriesOnOccurrenceCancelledListenerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_only_targets_waiting_and_offered_status(): void
+    public function test_offered_entries_are_cancelled_through_the_entry_service(): void
     {
-        // PURCHASED, OFFER_EXPIRED, and already-CANCELLED entries should not
-        // be touched — flipping a PURCHASED entry to CANCELLED would lose
-        // sale-attribution data.
-        $captured = null;
+        $eventId = 1;
+        $occurrenceId = 10;
+
+        $offeredEntry1 = Mockery::mock(WaitlistEntryDomainObject::class);
+        $offeredEntry2 = Mockery::mock(WaitlistEntryDomainObject::class);
+
+        $this->waitlistEntryRepository->shouldReceive('updateWhere')->once();
 
         $this->waitlistEntryRepository
-            ->shouldReceive('updateWhere')
+            ->shouldReceive('findWhere')
             ->once()
-            ->andReturnUsing(function (array $attrs, array $where) use (&$captured): int {
-                $captured = $where;
+            ->andReturn(collect([$offeredEntry1, $offeredEntry2]));
 
-                return 0;
-            });
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($offeredEntry1)
+            ->andReturn($offeredEntry1);
+        $this->cancelWaitlistEntryService
+            ->shouldReceive('cancelEntry')
+            ->once()
+            ->with($offeredEntry2)
+            ->andReturn($offeredEntry2);
 
         $this->listener->handle(new OccurrenceCancelledEvent(
-            eventId: 1,
-            occurrenceId: 10,
+            eventId: $eventId,
+            occurrenceId: $occurrenceId,
             refundOrders: true,
         ));
 
-        $statusClause = null;
-        foreach ($captured as $clause) {
-            if (is_array($clause) && $clause[0] === 'status') {
-                $statusClause = $clause;
-                break;
-            }
-        }
-
-        $this->assertNotNull($statusClause);
-        $this->assertSame('in', $statusClause[1]);
-        $this->assertEqualsCanonicalizing(
-            [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name],
-            $statusClause[2],
-        );
+        $this->assertTrue(true);
     }
 }

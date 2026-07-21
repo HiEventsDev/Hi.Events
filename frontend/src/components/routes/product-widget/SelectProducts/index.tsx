@@ -153,6 +153,16 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
     const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
+    const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
+        if (props.initialOccurrenceId) {
+            return props.initialOccurrenceId;
+        }
+        if (typeof window === 'undefined') {
+            return undefined;
+        }
+        const occurrenceIdFromUrl = new URLSearchParams(window.location.search).get('occurrence_id');
+        return occurrenceIdFromUrl ? Number(occurrenceIdFromUrl) : undefined;
+    });
 
     const {onSelectedOccurrenceChange} = props;
     useEffect(() => {
@@ -307,7 +317,18 @@ const SelectProducts = (props: SelectProductsProps) => {
         occurrenceEventRefetchMutation.mutate(occId);
     };
 
+    const clearSelectedOccurrence = () => {
+        selectedOccurrenceIdRef.current = undefined;
+        setSelectedOccurrenceId(undefined);
+    };
+
+    const initialOccurrenceAppliedRef = useRef(false);
     useEffect(() => {
+        if (initialOccurrenceAppliedRef.current) {
+            return;
+        }
+        initialOccurrenceAppliedRef.current = true;
+
         let autoSelectedOccId: number | null = null;
 
         const selectableOccurrences = activeOccurrences;
@@ -316,23 +337,10 @@ const SelectProducts = (props: SelectProductsProps) => {
             autoSelectedOccId = Number(selectableOccurrences[0].id);
         }
 
-        if (props.initialOccurrenceId) {
-            const valid = selectableOccurrences.some(o => Number(o.id) === props.initialOccurrenceId);
+        if (pendingInitialOccurrenceId) {
+            const valid = selectableOccurrences.some(o => Number(o.id) === pendingInitialOccurrenceId);
             if (valid) {
-                autoSelectedOccId = props.initialOccurrenceId;
-            }
-        }
-
-        if (!props.initialOccurrenceId) {
-            const occurrenceIdFromUrl = new URLSearchParams(
-                typeof window !== 'undefined' ? window.location.search : ''
-            ).get('occurrence_id');
-            if (occurrenceIdFromUrl) {
-                const occId = Number(occurrenceIdFromUrl);
-                const valid = selectableOccurrences.some(o => Number(o.id) === occId);
-                if (valid) {
-                    autoSelectedOccId = occId;
-                }
+                autoSelectedOccId = pendingInitialOccurrenceId;
             }
         }
 
@@ -344,6 +352,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                 setSelectedOccurrenceId(autoSelectedOccId);
             }
         }
+
+        setPendingInitialOccurrenceId(undefined);
     }, [event?.occurrences]);
 
     const productCategories = event?.product_categories || [];
@@ -471,7 +481,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 ? t`This event is sold out`
                 : t`There are no upcoming dates for this event`;
         }
-        if (!productAreAvailable) {
+        if (!productAreAvailable && !(isRecurring && activeOccurrences.length > 0)) {
             return t`There are no products available for this event`;
         }
         return null;
@@ -619,6 +629,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 )}
                 <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
                         type={"submit"}
+                        data-testid="checkout-continue-button"
                         loading={productMutation.isPending}>
                     {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
                 </Button>
@@ -681,6 +692,19 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
         </div>
     );
+
+    const noProductsForOccurrence = (
+        <div className={'hi-no-products'}>
+            <p className={'hi-no-products-message'}>
+                {t`There are no products available for this date. Please choose another date.`}
+            </p>
+            <Button type={'button'} variant={'outline'} onClick={clearSelectedOccurrence}>
+                {t`Choose another date`}
+            </Button>
+        </div>
+    );
+
+    const showRecurringSelector = isRecurring && activeOccurrences.length > 0;
 
     return (
         <div className={'hi-product-widget-container'}
@@ -790,7 +814,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </Modal>
             )}
-            {(event && productAreAvailable && !eventHasEnded && !(isRecurring && activeOccurrences.length === 0)) && (
+            {(event && !eventHasEnded && (showRecurringSelector || (!isRecurring && productAreAvailable))) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
@@ -799,10 +823,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                         <OccurrenceSelector
                             event={event}
                             selectedOccurrenceId={selectedOccurrenceId}
+                            pendingInitialOccurrenceId={pendingInitialOccurrenceId}
                             onSelect={(id) => selectOccurrence(Number(id))}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
-                            productSlot={<>{productFormSection}{promoSection}</>}
+                            productSlot={productAreAvailable
+                                ? <>{productFormSection}{promoSection}</>
+                                : noProductsForOccurrence}
                             waitlistAvailable={waitlistAvailable}
                         />
                     ) : (

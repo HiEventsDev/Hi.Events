@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 
 class GeoAutocompleteAction extends BaseAction
 {
-    private const MAX_QUERY_LENGTH = 200;
+    private const int MAX_QUERY_LENGTH = 200;
 
     public function __construct(
         private readonly GeoAutocompleteHandler $handler,
@@ -26,7 +26,8 @@ class GeoAutocompleteAction extends BaseAction
     {
         $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
-        $query = mb_substr((string) $request->query('query', ''), 0, self::MAX_QUERY_LENGTH);
+        $rawQuery = $request->query('query');
+        $query = mb_substr(is_string($rawQuery) ? $rawQuery : '', 0, self::MAX_QUERY_LENGTH);
         $locale = $request->query('locale');
         $country = $request->query('country');
 

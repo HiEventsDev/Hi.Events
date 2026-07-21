@@ -2,12 +2,6 @@ import {Event, EventOccurrence, LocationType} from "../types.ts";
 import {resolveEventLocation} from "./effectiveLocation.ts";
 import {formatAddress} from "./addressUtilities.ts";
 
-export interface OccurrenceDateOverride {
-    start_date: string;
-    end_date?: string;
-    label?: string;
-}
-
 const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): string => {
     const effective = resolveEventLocation(event, occurrence ?? null);
 
@@ -77,15 +71,12 @@ const foldICSLine = (line: string): string => {
     return chunks.join('\r\n ');
 };
 
-export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverride): string => {
+export const createICSContent = (event: Event, occurrence?: EventOccurrence): string => {
     const startDate = occurrence?.start_date || event.start_date;
     const endDate = occurrence?.end_date || event.end_date || startDate;
     const title = occurrence?.label
         ? `${event.title} - ${occurrence.label}`
         : event.title;
-    const matchingOccurrence = occurrence
-        ? event.occurrences?.find((o) => o.start_date === occurrence.start_date)
-        : null;
 
     return [
         'BEGIN:VCALENDAR',
@@ -97,7 +88,7 @@ export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverri
         `DTEND:${formatICSDate(endDate)}`,
         foldICSLine(`SUMMARY:${escapeICSText(title)}`),
         foldICSLine(`DESCRIPTION:${escapeICSText(stripHtml(event.description_preview || ''))}`),
-        foldICSLine(`LOCATION:${escapeICSText(getEventLocation(event, matchingOccurrence))}`),
+        foldICSLine(`LOCATION:${escapeICSText(getEventLocation(event, occurrence))}`),
         `DTSTAMP:${formatICSDate(new Date().toISOString())}`,
         `UID:${crypto.randomUUID()}@hi.events`,
         'END:VEVENT',
@@ -105,7 +96,7 @@ export const createICSContent = (event: Event, occurrence?: OccurrenceDateOverri
     ].join('\r\n');
 };
 
-export const downloadICSFile = (event: Event, occurrence?: OccurrenceDateOverride): void => {
+export const downloadICSFile = (event: Event, occurrence?: EventOccurrence): void => {
     const content = createICSContent(event, occurrence);
     const blob = new Blob([content], {type: 'text/calendar;charset=utf-8'});
     const link = document.createElement('a');
@@ -116,7 +107,7 @@ export const downloadICSFile = (event: Event, occurrence?: OccurrenceDateOverrid
     document.body.removeChild(link);
 };
 
-export const createGoogleCalendarUrl = (event: Event, occurrence?: OccurrenceDateOverride): string => {
+export const createGoogleCalendarUrl = (event: Event, occurrence?: EventOccurrence): string => {
     const formatGoogleDate = (date: string): string => {
         return new Date(date).toISOString().replace(/-|:|\.\d{3}/g, '');
     };
@@ -126,15 +117,12 @@ export const createGoogleCalendarUrl = (event: Event, occurrence?: OccurrenceDat
     const title = occurrence?.label
         ? `${event.title} - ${occurrence.label}`
         : event.title;
-    const matchingOccurrence = occurrence
-        ? event.occurrences?.find((o) => o.start_date === occurrence.start_date)
-        : null;
 
     const params = new URLSearchParams({
         action: 'TEMPLATE',
         text: title,
         details: event.description_preview || '',
-        location: getEventLocation(event, matchingOccurrence),
+        location: getEventLocation(event, occurrence),
         dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`
     });
 

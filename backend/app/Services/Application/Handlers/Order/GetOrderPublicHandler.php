@@ -130,6 +130,25 @@ class GetOrderPublicHandler
                     new Relationship(
                         domainObject: ImageDomainObject::class,
                     ),
+                    new Relationship(
+                        domainObject: EventLocationDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                        ],
+                        name: 'event_location',
+                    ),
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                        nested: [
+                            new Relationship(
+                                domainObject: EventLocationDomainObject::class,
+                                nested: [
+                                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                                ],
+                                name: 'event_location',
+                            ),
+                        ],
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ));

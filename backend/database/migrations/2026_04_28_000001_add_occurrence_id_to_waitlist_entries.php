@@ -30,6 +30,18 @@ return new class extends Migration
     public function down(): void
     {
         DB::statement('DROP INDEX IF EXISTS idx_unique_email_product_price_occ_status');
+
+        DB::statement("
+            DELETE FROM waitlist_entries
+            WHERE status IN ('WAITING', 'OFFERED')
+              AND id NOT IN (
+                  SELECT MIN(id)
+                  FROM waitlist_entries
+                  WHERE status IN ('WAITING', 'OFFERED')
+                  GROUP BY email, product_price_id, status
+              )
+        ");
+
         DB::statement("
             CREATE UNIQUE INDEX idx_unique_email_product_price_status
             ON waitlist_entries (email, product_price_id, status)

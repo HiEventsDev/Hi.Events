@@ -45,8 +45,6 @@ class EventStatisticsCancellationService
     ) {}
 
     /**
-     * Decrement statistics for a cancelled order (deterministic - only decrements once)
-     *
      * @throws EventStatisticsVersionMismatchException
      * @throws Throwable
      */
@@ -56,7 +54,6 @@ class EventStatisticsCancellationService
             ->loadRelation(OrderItemDomainObject::class)
             ->findById($order->getId());
 
-        // Check if statistics have already been decremented for this order
         if ($order->getStatisticsDecrementedAt() !== null) {
             $this->logger->info(
                 'Statistics already decremented for cancelled order',
@@ -66,6 +63,12 @@ class EventStatisticsCancellationService
                     'decremented_at' => $order->getStatisticsDecrementedAt(),
                 ]
             );
+
+            return;
+        }
+
+        if (! $order->isOrderCompleted()) {
+            $this->markStatisticsAsDecremented($order);
 
             return;
         }
@@ -87,26 +90,17 @@ class EventStatisticsCancellationService
                         return;
                     }
 
-                    // Calculate counts to decrement
                     $counts = $this->calculateDecrementCounts($order);
 
-                    // Decrement aggregate statistics
                     $this->decrementAggregateStatistics($order, $counts, $attempt);
-
-                    // Decrement daily statistics
                     $this->decrementDailyStatistics($order, $counts, $attempt);
-
-                    // Decrement occurrence statistics
                     $this->decrementOccurrenceStatistics($order);
                     $this->decrementOccurrenceDailyStatistics($order);
 
-                    if ($order->isOrderCompleted()) {
-                        $this->decrementPromoCodeUsage($order);
-                        $this->decrementProductSalesVolume($order);
-                        $this->decrementAffiliateSales($order);
-                    }
+                    $this->decrementPromoCodeUsage($order);
+                    $this->decrementProductSalesVolume($order);
+                    $this->decrementAffiliateSales($order);
 
-                    // Mark statistics as decremented
                     $this->markStatisticsAsDecremented($order);
                 });
             },
@@ -127,8 +121,6 @@ class EventStatisticsCancellationService
     }
 
     /**
-     * Decrement statistics for a cancelled attendee
-     *
      * @throws EventStatisticsVersionMismatchException
      * @throws Throwable
      */
@@ -162,12 +154,8 @@ class EventStatisticsCancellationService
         );
     }
 
-    /**
-     * Calculate the counts that need to be decremented from statistics
-     */
     private function calculateDecrementCounts(OrderDomainObject $order): array
     {
-        // Get attendees that are currently active or awaiting payment (not already cancelled)
         $activeAttendees = $this->attendeeRepository->findWhereIn(
             field: 'status',
             values: [AttendeeStatus::ACTIVE->name, AttendeeStatus::AWAITING_PAYMENT->name],
@@ -176,13 +164,9 @@ class EventStatisticsCancellationService
 
         $activeAttendeeCount = $activeAttendees->count();
 
-        // Products sold should be the full order quantities - products don't get "uncancelled"
-        // when individual attendees are cancelled, only when the entire order is cancelled
         $productsSold = $order->getOrderItems()
             ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity()) ?? 0;
 
-        // Attendees registered should only be the currently active attendees
-        // to avoid over-decrementing when some attendees were already cancelled individually
         $attendeesRegistered = $activeAttendeeCount;
 
         return [
@@ -193,8 +177,6 @@ class EventStatisticsCancellationService
     }
 
     /**
-     * Decrement aggregate event statistics for cancelled order
-     *
      * @throws EventStatisticsVersionMismatchException
      */
     private function decrementAggregateStatistics(OrderDomainObject $order, array $counts, int $attempt): void
@@ -245,8 +227,6 @@ class EventStatisticsCancellationService
     }
 
     /**
-     * Decrement aggregate event statistics for cancelled attendee
-     *
      * @throws EventStatisticsVersionMismatchException
      */
     private function decrementAggregateAttendeeStatistics(int $eventId, int $attendeeCount): void
@@ -259,8 +239,6 @@ class EventStatisticsCancellationService
             throw new ResourceNotFoundException('Event statistics not found for event '.$eventId);
         }
 
-        // Only decrement attendees_registered for individual attendee cancellations
-        // products_sold should NOT be affected as the product was still sold
         $updates = [
             'attendees_registered' => max(0, $eventStatistics->getAttendeesRegistered() - $attendeeCount),
             'version' => $eventStatistics->getVersion() + 1,
@@ -286,15 +264,13 @@ class EventStatisticsCancellationService
             [
                 'event_id' => $eventId,
                 'attendees_decremented' => $attendeeCount,
-                'products_affected' => 0, // Products sold not affected by individual attendee cancellations
+                'products_affected' => 0,
                 'new_version' => $eventStatistics->getVersion() + 1,
             ]
         );
     }
 
     /**
-     * Decrement daily event statistics for cancelled order
-     *
      * @throws EventStatisticsVersionMismatchException
      */
     private function decrementDailyStatistics(OrderDomainObject $order, array $counts, int $attempt): void
@@ -358,8 +334,6 @@ class EventStatisticsCancellationService
     }
 
     /**
-     * Decrement daily event statistics for cancelled attendee
-     *
      * @throws EventStatisticsVersionMismatchException
      */
     private function decrementDailyAttendeeStatistics(int $eventId, string $orderDate, int $attendeeCount): void
@@ -383,8 +357,6 @@ class EventStatisticsCancellationService
             return;
         }
 
-        // Only decrement attendees_registered for individual attendee cancellations
-        // products_sold should NOT be affected as the product was still sold
         $updates = [
             'attendees_registered' => max(0, $eventDailyStatistic->getAttendeesRegistered() - $attendeeCount),
             'version' => $eventDailyStatistic->getVersion() + 1,
@@ -412,7 +384,7 @@ class EventStatisticsCancellationService
                 'event_id' => $eventId,
                 'date' => $formattedDate,
                 'attendees_decremented' => $attendeeCount,
-                'products_affected' => 0, // Products sold not affected by individual attendee cancellations
+                'products_affected' => 0,
                 'new_version' => $eventDailyStatistic->getVersion() + 1,
             ]
         );
@@ -657,9 +629,6 @@ class EventStatisticsCancellationService
         );
     }
 
-    /**
-     * Mark that statistics have been decremented for this order
-     */
     private function markStatisticsAsDecremented(OrderDomainObject $order): void
     {
         $this->orderRepository->updateFromArray($order->getId(), [

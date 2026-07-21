@@ -11,6 +11,7 @@ use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
 use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
 use Illuminate\Database\DatabaseManager;
@@ -23,6 +24,7 @@ class UpdateEventOccurrenceHandler
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventLocationUpserter $eventLocationUpserter,
         private readonly EventLocationCleaner $eventLocationCleaner,
+        private readonly RecurrenceRuleExclusionService $exclusionService,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -77,10 +79,13 @@ class UpdateEventOccurrenceHandler
                 $eventLocationChanged = true;
             }
 
+            $originalStartDate = $occurrence->getStartDate();
+            $startDateChanged = $this->datesDiffer($dto->start_date, $originalStartDate);
+
             // `DateHelper::convertToUTC` normalizes to a different string than the
             // DB-hydrated value, so string compare alone always reports a change.
             $isOverride = $occurrence->getIsOverridden()
-                || $this->datesDiffer($dto->start_date, $occurrence->getStartDate())
+                || $startDateChanged
                 || $this->datesDiffer($dto->end_date, $occurrence->getEndDate())
                 || $dto->capacity !== $occurrence->getCapacity()
                 || $eventLocationChanged;
@@ -99,6 +104,10 @@ class UpdateEventOccurrenceHandler
                 id: $occurrence->getId(),
                 attributes: $attributes,
             );
+
+            if ($startDateChanged) {
+                $this->exclusionService->addExclusions($dto->event_id, [$originalStartDate]);
+            }
 
             if ($dto->clear_event_location && $previousEventLocationId !== null) {
                 $this->eventLocationCleaner->deleteIfOrphaned($previousEventLocationId);

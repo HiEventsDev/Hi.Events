@@ -17,7 +17,7 @@ import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {EventLifecycleStatus, EventStatus, EventType} from "../../../../types.ts";
 import {UpcomingOccurrences} from "./UpcomingOccurrences";
 import {NextOccurrenceHero} from "./NextOccurrenceHero";
@@ -55,7 +55,10 @@ export const EventDashboard = () => {
     }
     const [dateRangeOverride, setDateRange] = useState<PeriodPreset | null>(null);
     const effectiveDateRange: PeriodPreset = dateRangeOverride ?? defaultDateRangeRef.current ?? 'last_30_days';
-    const {startDate, endDate} = periodPresetToDateRange(effectiveDateRange, event);
+    const {startDate, endDate} = useMemo(
+        () => periodPresetToDateRange(effectiveDateRange, event),
+        [effectiveDateRange, event],
+    );
 
     const eventStatsQuery = useGetEventStats(eventId, {
         startDate,

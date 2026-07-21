@@ -146,10 +146,10 @@ class ReportServiceTest extends TestCase
             ->with(
                 Mockery::on(fn ($sql) => str_contains($sql, 'event_occurrences')
                     && str_contains($sql, 'event_occurrence_statistics')
-                    && str_contains($sql, 'COALESCE(eo.end_date, eo.start_date) >= :start_date')),
-                Mockery::on(fn ($bindings) => $bindings['event_id'] === 1
-                    && isset($bindings['start_date'])
-                    && isset($bindings['end_date'])),
+                    && str_contains($sql, 'WHERE eo.event_id = :event_id')
+                    && ! str_contains($sql, ':start_date')
+                    && ! str_contains($sql, ':end_date')),
+                Mockery::on(fn ($bindings) => $bindings === ['event_id' => 1]),
             )
             ->andReturn([
                 (object) ['occurrence_id' => 1, 'products_sold' => 5, 'total_gross' => 100],

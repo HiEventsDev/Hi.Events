@@ -54,22 +54,18 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('organizer', $context);
         $this->assertArrayHasKey('settings', $context);
 
-        // Test order context
         $this->assertEquals('ORD-123456', $context['order']['number']);
         $this->assertEquals('$9,999.00', $context['order']['total']);
         $this->assertEquals('John', $context['order']['first_name']);
         $this->assertEquals('Doe', $context['order']['last_name']);
         $this->assertEquals('john@example.com', $context['order']['email']);
 
-        // Test event context
         $this->assertEquals('Amazing Event', $context['event']['title']);
         $this->assertEquals('This is an amazing event', $context['event']['description']);
 
-        // Test organizer context
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
         $this->assertEquals('contact@organizer.com', $context['organizer']['email']);
 
-        // Test settings context
         $this->assertEquals('support@event.com', $context['settings']['support_email']);
     }
 
@@ -96,18 +92,14 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('event', $context);
         $this->assertArrayHasKey('organizer', $context);
 
-        // Test attendee context
         $this->assertEquals('Jane Smith', $context['attendee']['name']);
         $this->assertEquals('jane@example.com', $context['attendee']['email']);
 
-        // Test ticket context
         $this->assertEquals('General Admission', $context['ticket']['name']);
         $this->assertEquals('$4,999.00', $context['ticket']['price']);
 
-        // Test event context
         $this->assertEquals('Amazing Event', $context['event']['title']);
 
-        // Test organizer context
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
     }
 
@@ -161,6 +153,48 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertArrayHasKey('title', $context['event']);
     }
 
+    public function test_escapes_user_tokens_inside_offline_payment_instructions(): void
+    {
+        $order = $this->createMockOrder('<img src=x onerror=alert(1)>');
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = Mockery::mock(EventSettingDomainObject::class, [
+            'getSupportEmail' => 'support@event.com',
+            'getOfflinePaymentInstructions' => 'Dear {{ order.first_name }}, transfer via <a href="https://bank.example">bank</a>',
+            'getPostCheckoutMessage' => 'Thanks!',
+        ]);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $instructions = $context['settings']['offline_payment_instructions'];
+
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;', $instructions);
+        $this->assertStringNotContainsString('<img', $instructions);
+        $this->assertStringContainsString('bank.example', $instructions);
+    }
+
+    public function test_context_values_stay_raw_for_plain_text_rendering(): void
+    {
+        $order = $this->createMockOrder('<b>John</b>');
+        $event = $this->createMockEvent();
+        $organizer = $this->createMockOrganizer();
+        $eventSettings = $this->createMockEventSettings();
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order,
+            $event,
+            $organizer,
+            $eventSettings
+        );
+
+        $this->assertEquals('<b>John</b>', $context['order']['first_name']);
+    }
+
     public function test_occurrence_dates_override_event_dates(): void
     {
         $order = $this->createMockOrder();
@@ -199,9 +233,6 @@ class EmailTokenContextBuilderTest extends TestCase
 
     public function test_event_in_person_location_in_token_context(): void
     {
-        // Event has an in-person EventLocation with a venue → the location
-        // section of the context should reflect IN_PERSON with structured
-        // address and no online connection details.
         $order = $this->createMockOrder();
         $organizer = $this->createMockOrganizer();
         $eventSettings = $this->createMockEventSettings();
@@ -237,8 +268,6 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertIsArray($context['event_location']['structured_address']);
         $this->assertNotEmpty($context['event_location']['formatted_address']);
 
-        // The legacy event.location_details token is still expected to surface
-        // the same structured address.
         $this->assertSame(
             $context['event_location']['structured_address'],
             $context['event']['location_details'],
@@ -247,8 +276,6 @@ class EmailTokenContextBuilderTest extends TestCase
 
     public function test_event_online_location_in_token_context(): void
     {
-        // Online event → is_online flips true and online_connection_details
-        // surfaces. No structured address.
         $order = $this->createMockOrder();
         $organizer = $this->createMockOrganizer();
         $eventSettings = $this->createMockEventSettings();
@@ -277,9 +304,6 @@ class EmailTokenContextBuilderTest extends TestCase
 
     public function test_occurrence_event_location_overrides_event_event_location(): void
     {
-        // Occurrence has its own EventLocation override → the resolver walk
-        // (`$occurrence->getEventLocation() ?? $event->getEventLocation()`)
-        // must pick the occurrence's, not the event's.
         $order = $this->createMockOrder();
         $organizer = $this->createMockOrganizer();
         $eventSettings = $this->createMockEventSettings();
@@ -317,8 +341,6 @@ class EmailTokenContextBuilderTest extends TestCase
 
     public function test_occurrence_inherits_event_event_location_when_null(): void
     {
-        // Occurrence has no event_location override → the resolver walk falls
-        // through to the event's EventLocation.
         $order = $this->createMockOrder();
         $organizer = $this->createMockOrganizer();
         $eventSettings = $this->createMockEventSettings();
@@ -344,8 +366,6 @@ class EmailTokenContextBuilderTest extends TestCase
 
     public function test_safe_fallback_when_event_location_and_occurrence_location_both_null(): void
     {
-        // Both event and occurrence have no EventLocation → the builder
-        // emits a context with nullable fields rather than crashing.
         $order = $this->createMockOrder();
         $organizer = $this->createMockOrganizer();
         $eventSettings = $this->createMockEventSettings();
@@ -416,7 +436,7 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockOrder(): OrderDomainObject
+    private function createMockOrder(string $firstName = 'John'): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [
             'getProductPriceId' => 123,
@@ -429,7 +449,7 @@ class EmailTokenContextBuilderTest extends TestCase
         return Mockery::mock(OrderDomainObject::class, [
             'getPublicId' => 'ORD-123456',
             'getTotalGross' => 9999,
-            'getFirstName' => 'John',
+            'getFirstName' => $firstName,
             'getLastName' => 'Doe',
             'getEmail' => 'john@example.com',
             'getCreatedAt' => '2024-01-15 10:30:00',

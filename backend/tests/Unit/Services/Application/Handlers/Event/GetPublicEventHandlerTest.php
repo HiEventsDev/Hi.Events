@@ -8,6 +8,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductCategoryDomainObject;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -268,6 +270,44 @@ class GetPublicEventHandlerTest extends TestCase
             )
             ->andReturn(collect());
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
+        $this->eventPageViewIncrementService->shouldNotReceive('increment');
+
+        $result = $this->handler->handle($data);
+
+        $this->assertFalse($result->getUpcomingOccurrencesSoldOut());
+    }
+
+    public function test_handle_keeps_sold_out_occurrences_when_event_has_waitlist_enabled_products(): void
+    {
+        $data = new GetPublicEventDTO(eventId: 1, isAuthenticated: true, ipAddress: '127.0.0.1', promoCode: null);
+
+        $waitlistCategory = new ProductCategoryDomainObject;
+        $waitlistCategory->setProducts(collect([
+            (new ProductDomainObject)->setWaitlistEnabled(true),
+        ]));
+
+        $event = (new EventDomainObject)
+            ->setType(EventType::RECURRING->name)
+            ->setEventSettings((new EventSettingDomainObject)->setHideSoldOutOccurrences(true))
+            ->setProductCategories(collect([$waitlistCategory]));
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->occurrenceRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with($data->eventId)->andReturn($event);
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with(
+                m::on(static fn (array $where): bool => collect($where)->filter(
+                    static fn ($condition): bool => $condition instanceof Closure
+                )->count() === 1),
+                m::any(),
+                m::any(),
+                m::any(),
+            )
+            ->andReturn(collect());
         $this->promoCodeRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
         $this->ticketFilterService->shouldReceive('filter')->once()->withAnyArgs()->andReturn(collect());
         $this->eventPageViewIncrementService->shouldNotReceive('increment');

@@ -26,6 +26,8 @@ return new class extends Migration
         ];
         $quoted = implode(', ', array_map(fn ($v) => "'".$v."'", $originalValues));
 
+        DB::statement("UPDATE events SET category = 'OTHER' WHERE category IS NOT NULL AND category NOT IN ($quoted)");
+
         DB::statement('ALTER TABLE events DROP CONSTRAINT IF EXISTS events_category_check');
         DB::statement("ALTER TABLE events ADD CONSTRAINT events_category_check CHECK (category IN ($quoted))");
     }

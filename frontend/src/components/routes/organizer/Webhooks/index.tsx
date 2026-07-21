@@ -31,7 +31,7 @@ export default function Webhooks() {
             <Box>
                 <Card>
                     <Group justify="space-between">
-                        <Button color={'green'} rightSection={<IconPlus />} onClick={openCreateModal}>
+                        <Button color={'green'} rightSection={<IconPlus />} onClick={openCreateModal} data-testid="webhook-add-button">
                             {t`Add Webhook`}
                         </Button>
                         <Badge

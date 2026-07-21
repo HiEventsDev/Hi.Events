@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
@@ -97,6 +98,8 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
         $databaseManager->shouldReceive('statement')->andReturn(true);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
+        $occurrenceEligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
+
         $handler = new CreateOrderHandler(
             $eventRepository,
             $promoCodeRepository,
@@ -105,6 +108,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
             $orderManagementService,
             $orderItemProcessingService,
             $availabilityService,
+            $occurrenceEligibilityService,
             $databaseManager,
         );
 

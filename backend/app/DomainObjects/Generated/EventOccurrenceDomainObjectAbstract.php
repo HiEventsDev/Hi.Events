@@ -25,6 +25,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
     final public const SHOW_AVAILABLE_CAPACITY = 'show_available_capacity';
+    final public const CANCELLED_ATTENDEES_COUNT = 'cancelled_attendees_count';
 
     protected int $id;
     protected int $event_id;
@@ -41,6 +42,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
     protected ?bool $show_available_capacity = null;
+    protected ?int $cancelled_attendees_count = null;
 
     public function toArray(): array
     {
@@ -60,6 +62,7 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
                     'show_available_capacity' => $this->show_available_capacity ?? null,
+                    'cancelled_attendees_count' => $this->cancelled_attendees_count ?? null,
                 ];
     }
 
@@ -226,5 +229,16 @@ abstract class EventOccurrenceDomainObjectAbstract extends \HiEvents\DomainObjec
     public function getShowAvailableCapacity(): ?bool
     {
         return $this->show_available_capacity;
+    }
+
+    public function setCancelledAttendeesCount(?int $cancelled_attendees_count): self
+    {
+        $this->cancelled_attendees_count = $cancelled_attendees_count;
+        return $this;
+    }
+
+    public function getCancelledAttendeesCount(): ?int
+    {
+        return $this->cancelled_attendees_count;
     }
 }

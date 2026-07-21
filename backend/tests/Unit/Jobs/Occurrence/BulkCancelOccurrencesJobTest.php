@@ -6,9 +6,11 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
+use HiEvents\Jobs\Occurrence\SendOccurrenceCancellationEmailJob;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventOccurrence\CancelOccurrenceAttendeesService;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -28,13 +30,14 @@ class BulkCancelOccurrencesJobTest extends TestCase
         parent::setUp();
 
         Event::fake();
+        Bus::fake();
 
         DB::shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
         $this->cancelAttendeesService = Mockery::mock(CancelOccurrenceAttendeesService::class);
-        $this->cancelAttendeesService->shouldReceive('cancelForOccurrence')->byDefault();
+        $this->cancelAttendeesService->shouldReceive('cancelForOccurrence')->andReturn(['attendee_ids' => [], 'sales_backed_count' => 0])->byDefault();
         $this->exclusionService->shouldReceive('addExclusions')->byDefault();
     }
 
@@ -61,17 +64,30 @@ class BulkCancelOccurrencesJobTest extends TestCase
             ->once()
             ->andReturn($occ2);
 
-        $this->occurrenceRepository->shouldReceive('updateWhere')->twice();
+        $this->occurrenceRepository->shouldReceive('updateWhere')->times(2);
 
         $this->exclusionService
             ->shouldReceive('addExclusions')
             ->once()
-            ->with(1, ['2026-06-15 10:00:00', '2026-06-22 10:00:00']);
+            ->with(1, ['2026-06-15 10:00:00']);
+        $this->exclusionService
+            ->shouldReceive('addExclusions')
+            ->once()
+            ->with(1, ['2026-06-22 10:00:00']);
+
+        $this->cancelAttendeesService->shouldReceive('cancelForOccurrence')->with(1, 10)->andReturn(['attendee_ids' => [101, 102], 'sales_backed_count' => 2]);
 
         $job = new BulkCancelOccurrencesJob(1, [10, 20]);
         $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
         Event::assertDispatchedTimes(OccurrenceCancelledEvent::class, 2);
+
+        Bus::assertDispatchedTimes(SendOccurrenceCancellationEmailJob::class, 1);
+        Bus::assertDispatched(SendOccurrenceCancellationEmailJob::class, function (SendOccurrenceCancellationEmailJob $emailJob) {
+            return $emailJob->eventId === 1
+                && $emailJob->occurrenceId === 10
+                && $emailJob->attendeeIds === [101, 102];
+        });
     }
 
     public function test_handle_skips_already_cancelled_occurrences(): void
@@ -93,6 +109,7 @@ class BulkCancelOccurrencesJobTest extends TestCase
         $job->handle($this->occurrenceRepository, $this->exclusionService, $this->cancelAttendeesService);
 
         Event::assertNotDispatched(OccurrenceCancelledEvent::class);
+        Bus::assertNotDispatched(SendOccurrenceCancellationEmailJob::class);
     }
 
     public function test_it_skips_occurrences_not_belonging_to_event(): void
