@@ -24,6 +24,7 @@ use HiEvents\Services\Application\Handlers\Order\CompleteOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -103,7 +104,7 @@ class CompleteOrderHandlerTest extends TestCase
             $this->domainEventDispatcherService,
             $this->eventSettingsRepository,
             $this->sessionManagementService,
-            $this->occurrenceRepository,
+            new OccurrenceStatusValidator($this->occurrenceRepository),
         );
     }
 

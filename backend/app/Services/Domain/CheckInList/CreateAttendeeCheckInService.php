@@ -12,7 +12,6 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeCheckInDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Exceptions\CannotCheckInException;
-use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -33,6 +32,7 @@ class CreateAttendeeCheckInService
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
         private readonly ConnectionInterface $db,
         private readonly MarkOrderAsPaidService $markOrderAsPaidService,
+        private readonly CheckInListActivityValidator $checkInListActivityValidator,
     ) {}
 
     /**
@@ -47,7 +47,7 @@ class CreateAttendeeCheckInService
         Collection $attendeesAndActions
     ): CreateAttendeeCheckInsResponseDTO {
         $checkInList = $this->checkInListDataService->getCheckInList($checkInListUuid);
-        $this->validateCheckInListIsActive($checkInList);
+        $this->checkInListActivityValidator->assertActive($checkInList);
 
         $attendees = $this->fetchAttendees($attendeesAndActions);
         $eventSettings = $this->fetchEventSettings($checkInList->getEventId());
@@ -61,20 +61,6 @@ class CreateAttendeeCheckInService
             $existingCheckIns,
             $checkInUserIpAddress
         );
-    }
-
-    /**
-     * @throws CannotCheckInException
-     */
-    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
-    {
-        if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
-            throw new CannotCheckInException(__('Check-in list has expired'));
-        }
-
-        if ($checkInList->getActivatesAt() && DateHelper::utcDateIsFuture($checkInList->getActivatesAt())) {
-            throw new CannotCheckInException(__('Check-in list is not active yet'));
-        }
     }
 
     /**

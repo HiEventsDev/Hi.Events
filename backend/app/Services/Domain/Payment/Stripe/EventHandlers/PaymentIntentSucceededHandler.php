@@ -25,9 +25,9 @@ use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
@@ -56,7 +56,7 @@ class PaymentIntentSucceededHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly OrderApplicationFeeService $orderApplicationFeeService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
     ) {}
 
     /**
@@ -252,41 +252,19 @@ class PaymentIntentSucceededHandler
             );
         }
 
-        $this->validateOccurrenceStatus($stripePayment, $paymentIntent);
+        $order = $stripePayment->getOrder();
+
+        if ($order !== null && $this->occurrenceStatusValidator->findBlockingOccurrence($order) !== null) {
+            $this->rejectAndRefund(
+                $stripePayment,
+                $paymentIntent,
+                __('Payment was successful, but the event date is no longer available. Order: :id', [
+                    'id' => $stripePayment->getOrderId(),
+                ])
+            );
+        }
 
         $this->handleExpiredOrder($stripePayment, $paymentIntent);
-    }
-
-    /**
-     * @throws CannotAcceptPaymentException
-     */
-    private function validateOccurrenceStatus(
-        StripePaymentDomainObjectAbstract $stripePayment,
-        PaymentIntent $paymentIntent,
-    ): void {
-        $occurrenceIds = $stripePayment->getOrder()?->getOrderItems()
-            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrenceId())
-            ->filter()
-            ->unique()
-            ->values();
-
-        if ($occurrenceIds === null || $occurrenceIds->isEmpty()) {
-            return;
-        }
-
-        $occurrences = $this->occurrenceRepository->findWhereIn('id', $occurrenceIds->toArray());
-
-        foreach ($occurrences as $occurrence) {
-            if ($occurrence->isCancelled() || $occurrence->isPast()) {
-                $this->rejectAndRefund(
-                    $stripePayment,
-                    $paymentIntent,
-                    __('Payment was successful, but the event date is no longer available. Order: :id', [
-                        'id' => $stripePayment->getOrderId(),
-                    ])
-                );
-            }
-        }
     }
 
     private function updateAttendeeStatuses(OrderDomainObject $updatedOrder): void

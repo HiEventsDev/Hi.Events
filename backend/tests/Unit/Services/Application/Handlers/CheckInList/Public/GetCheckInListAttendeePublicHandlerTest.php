@@ -8,6 +8,7 @@ use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeePublicHandler;
+use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -30,7 +31,8 @@ class GetCheckInListAttendeePublicHandlerTest extends TestCase
 
         $this->handler = new GetCheckInListAttendeePublicHandler(
             $this->attendeeRepository,
-            $this->checkInListRepository
+            $this->checkInListRepository,
+            new CheckInListActivityValidator,
         );
     }
 

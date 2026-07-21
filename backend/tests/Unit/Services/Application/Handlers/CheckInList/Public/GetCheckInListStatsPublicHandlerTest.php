@@ -9,6 +9,7 @@ use HiEvents\Repository\DTO\CheckInListProductStatDTO;
 use HiEvents\Repository\DTO\CheckInListRecentCheckInDTO;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListStatsPublicHandler;
+use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
 use Mockery as m;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Tests\TestCase;
@@ -26,7 +27,8 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->checkInListRepository = m::mock(CheckInListRepositoryInterface::class);
 
         $this->handler = new GetCheckInListStatsPublicHandler(
-            $this->checkInListRepository
+            $this->checkInListRepository,
+            new CheckInListActivityValidator,
         );
     }
 

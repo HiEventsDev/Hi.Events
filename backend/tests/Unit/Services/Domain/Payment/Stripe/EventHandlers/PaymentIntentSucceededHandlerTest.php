@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
@@ -90,7 +91,7 @@ class PaymentIntentSucceededHandlerTest extends TestCase
             Mockery::mock(DomainEventDispatcherService::class),
             Mockery::mock(OrderApplicationFeeService::class),
             Mockery::mock(EventSettingsRepositoryInterface::class),
-            $this->occurrenceRepository,
+            new OccurrenceStatusValidator($this->occurrenceRepository),
         );
     }
 

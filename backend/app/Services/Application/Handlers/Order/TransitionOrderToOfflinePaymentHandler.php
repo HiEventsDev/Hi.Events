@@ -12,10 +12,10 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\UnauthorizedException;
-use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -30,7 +30,7 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly DatabaseManager $databaseManager,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
     ) {}
@@ -61,7 +61,7 @@ class TransitionOrderToOfflinePaymentHandler
 
             $this->validateOfflinePayment($order, $eventSettings);
 
-            $this->validateOccurrenceStatus($order);
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $this->updateOrderStatuses($order->getId());
 
@@ -115,34 +115,6 @@ class TransitionOrderToOfflinePaymentHandler
 
         if (collect($settings->getPaymentProviders())->contains(PaymentProviders::OFFLINE->value) === false) {
             throw new UnauthorizedException(__('Offline payments are not enabled for this event'));
-        }
-    }
-
-    /**
-     * @throws ResourceConflictException
-     */
-    private function validateOccurrenceStatus(OrderDomainObject $order): void
-    {
-        $occurrenceIds = $order->getOrderItems()
-            ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrenceId())
-            ->filter()
-            ->unique()
-            ->values();
-
-        if ($occurrenceIds === null || $occurrenceIds->isEmpty()) {
-            return;
-        }
-
-        $occurrences = $this->occurrenceRepository->findWhereIn('id', $occurrenceIds->toArray());
-
-        foreach ($occurrences as $occurrence) {
-            if ($occurrence->isCancelled()) {
-                throw new ResourceConflictException(__('This event date has been cancelled'));
-            }
-
-            if ($occurrence->isPast()) {
-                throw new ResourceConflictException(__('This event date has already ended'));
-            }
         }
     }
 }
