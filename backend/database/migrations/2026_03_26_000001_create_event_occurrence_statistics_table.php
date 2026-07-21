@@ -51,15 +51,15 @@ return new class extends Migration
             SELECT
                 es.event_id,
                 eo.id AS event_occurrence_id,
-                es.products_sold,
-                es.attendees_registered,
-                es.sales_total_gross,
-                es.sales_total_before_additions,
-                es.total_tax,
-                es.total_fee,
-                es.orders_created,
-                es.orders_cancelled,
-                es.total_refunded,
+                SUM(es.products_sold),
+                SUM(es.attendees_registered),
+                SUM(es.sales_total_gross),
+                SUM(es.sales_total_before_additions),
+                SUM(es.total_tax),
+                SUM(es.total_fee),
+                SUM(es.orders_created),
+                SUM(es.orders_cancelled),
+                SUM(es.total_refunded),
                 0 AS version,
                 NOW(),
                 NOW()
@@ -75,6 +75,7 @@ return new class extends Migration
                   SELECT COUNT(*) FROM event_occurrences eo2
                   WHERE eo2.event_id = es.event_id AND eo2.deleted_at IS NULL
               ) = 1
+            GROUP BY es.event_id, eo.id
         SQL);
     }
 

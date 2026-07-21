@@ -54,10 +54,10 @@ return new class extends Migration
             )
             SELECT
                 eds.event_id, eo.id, eds.date,
-                eds.products_sold, eds.attendees_registered,
-                eds.sales_total_gross, eds.sales_total_before_additions,
-                eds.total_tax, eds.total_fee,
-                eds.orders_created, eds.orders_cancelled, eds.total_refunded,
+                SUM(eds.products_sold), SUM(eds.attendees_registered),
+                SUM(eds.sales_total_gross), SUM(eds.sales_total_before_additions),
+                SUM(eds.total_tax), SUM(eds.total_fee),
+                SUM(eds.orders_created), SUM(eds.orders_cancelled), SUM(eds.total_refunded),
                 0, NOW(), NOW()
             FROM event_daily_statistics eds
             INNER JOIN event_occurrences eo ON eo.event_id = eds.event_id AND eo.deleted_at IS NULL
@@ -66,6 +66,7 @@ return new class extends Migration
                   SELECT COUNT(*) FROM event_occurrences eo2
                   WHERE eo2.event_id = eds.event_id AND eo2.deleted_at IS NULL
               ) = 1
+            GROUP BY eds.event_id, eo.id, eds.date
         SQL);
     }
 
