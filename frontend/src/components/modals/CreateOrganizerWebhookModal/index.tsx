@@ -68,7 +68,7 @@ export const CreateOrganizerWebhookModal = ({ onClose }: GenericModalProps) => {
                     readOnly
                     rightSection={<CopyButton value={secret}/>}
                 />
-                <Button fullWidth mt="xl" onClick={onClose}>
+                <Button fullWidth mt="xl" onClick={onClose} data-testid="webhook-done-button">
                     {t`Done`}
                 </Button>
             </Modal>
@@ -88,6 +88,7 @@ export const CreateOrganizerWebhookModal = ({ onClose }: GenericModalProps) => {
                     fullWidth
                     mt="xl"
                     loading={createMutation.isPending}
+                    data-testid="webhook-submit-button"
                 >
                     {t`Create Webhook`}
                 </Button>

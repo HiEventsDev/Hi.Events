@@ -71,7 +71,7 @@ export const CreateQuestionModal = ({onClose, onCompleted, defaultBelongsTo = 'O
         >
             <form onSubmit={form.onSubmit((values) => mutation.mutate(values as any as Question))}>
                 <QuestionForm form={form} productCategories={productCategories}/>
-                <Button loading={mutation.isPending} type="submit" fullWidth mt="xl">
+                <Button loading={mutation.isPending} type="submit" fullWidth mt="xl" data-testid="question-submit-button">
                     {mutation.isPending ? t`Working...` : t`Create Question`}
                 </Button>
             </form>

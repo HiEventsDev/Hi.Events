@@ -551,6 +551,7 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
                                     type={'submit'}
                                     leftSection={isScheduled ? <IconClock size={16}/> : <IconSend size={16}/>}
                                     disabled={!form.values.acknowledgement || !isAccountVerified || accountRequiresManualVerification}
+                                    data-testid="message-send-button"
                                 >
                                     {isScheduled ? t`Schedule Message` : (form.values.is_test ? t`Send Test` : t`Send Message`)}
                                 </Button>

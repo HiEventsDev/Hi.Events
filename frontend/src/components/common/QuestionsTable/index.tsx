@@ -220,6 +220,7 @@ const QuestionsList = ({
                     size="xs"
                     leftSection={<IconPlus size={14}/>}
                     onClick={onAddQuestion}
+                    data-testid="question-add-button-empty"
                 >
                     {t`Add Question`}
                 </Button>
@@ -474,6 +475,7 @@ export const QuestionsTable = ({questions}: QuestionsTableProp) => {
                         <Button
                             leftSection={<IconPlus size={16}/>}
                             onClick={openCreateModal}
+                            data-testid="question-add-button"
                         >
                             {t`Add Question`}
                         </Button>

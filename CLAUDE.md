@@ -149,6 +149,16 @@ Gotchas:
 - Use Mantine UI components for UI elements
 - Prefer SCSS modules over Mantine layout components for layout styling
 
+#### E2E Tests
+- There is a Playwright E2E suite in `e2e/` (see `e2e/README.md`). It runs the real stack (Laravel + SSR frontend + Postgres + Redis + Mailpit) in Docker.
+- **When you add or meaningfully change a user-facing flow, add or update an E2E spec for it where practical.** Follow the existing pattern: arrange data via the API/`factory`, drive only the flow under test through the UI with a thin page object, and assert on real page content (the created/edited item appears), not just a URL change. Tag fast, load-bearing checks with `@smoke`.
+- Not everything needs E2E — reserve it for real user journeys (create/edit/complete flows). Pure logic belongs in backend unit/feature tests instead.
+
+#### Test IDs (E2E)
+- Add a `data-testid` to interactive elements the E2E suite needs to drive — primarily **buttons** (open-modal triggers, submit/save), **menu items**, and **custom widgets with no accessible label** (e.g. `CustomSelect`, which takes a `dataTestId` prop that lands on its target and options). This is not required for every element: text inputs with a unique `<label>` are found by role/label instead, so don't add IDs there.
+- Convention: kebab-case `<feature>-<element>`, e.g. `promo-code-create-button`, `webhook-submit-button`, `product-edit-menu-item`. For `CustomSelect`, options are auto-derived as `<dataTestId>-option-<value>`.
+- Only add IDs for elements a test actually interacts with; don't blanket-annotate new UI.
+
 #### Error Handling
 - **DON'T** use `showNotification` from `@mantine/notifications`
 - **DO** use `showSuccess`, `showError` from `frontend/src/utilites/notifications.tsx`

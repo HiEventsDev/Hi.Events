@@ -629,6 +629,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 )}
                 <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
                         type={"submit"}
+                        data-testid="checkout-continue-button"
                         loading={productMutation.isPending}>
                     {props.continueButtonText || event?.settings?.continue_button_text || t`Continue`}
                 </Button>
