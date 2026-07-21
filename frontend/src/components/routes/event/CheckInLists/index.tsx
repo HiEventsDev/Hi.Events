@@ -63,6 +63,7 @@ const CheckInLists = () => {
                     leftSection={<IconPlus/>}
                     color={'green'}
                     size={'sm'}
+                    data-testid="checkin-list-create-button"
                     onClick={openCreateModal}>{t`Create Check-In List`}
                 </Button>
             </ToolBar>

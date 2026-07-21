@@ -152,6 +152,7 @@ export const WebhookForm = ({ form, isEventContext = false }: WebhookFormProps) 
                 required
                 form={form}
                 name="event_types"
+                dataTestId="webhook-event-types"
                 optionList={isEventContext
                     ? eventTypeOptions.filter(o => !EVENT_LEVEL_TYPES.includes(o.value as string))
                     : eventTypeOptions

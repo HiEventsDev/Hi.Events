@@ -462,6 +462,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                         size="xs"
                                         variant="subtle"
                                         className={classes.actionButton}
+                                        data-testid="product-manage-button"
                                     >
                                         <span className={classes.actionButtonText}>{t`Manage`}</span>
                                         <IconDotsVertical size={16} className={classes.actionButtonIcon}/>
@@ -483,6 +484,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                 <Menu.Item
                                     onClick={() => handleModalClick(product.id, editModal)}
                                     leftSection={<IconPencil size={14}/>}
+                                    data-testid="product-edit-menu-item"
                                 >
                                     <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
                                 </Menu.Item>

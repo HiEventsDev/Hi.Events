@@ -110,7 +110,7 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
                 <ProductForm product={product} form={form}/>
                 <LoadingMask/>
 
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending} data-testid="product-edit-submit-button">
                     {mutation.isPending ? t`Working...` : t`Edit Product`}
                 </Button>
             </form>

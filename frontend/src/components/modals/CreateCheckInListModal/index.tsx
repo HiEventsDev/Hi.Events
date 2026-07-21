@@ -107,6 +107,7 @@ export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateChe
                         fullWidth
                         loading={createMutation.isPending}
                         mt="md"
+                        data-testid="checkin-list-submit-button"
                     >
                         {t`Create Check-In List`}
                     </Button>
