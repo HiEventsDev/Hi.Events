@@ -34,7 +34,7 @@ class CancelOccurrenceAttendeesService
     ) {}
 
     /**
-     * @return array<int, int>
+     * @return array{attendee_ids: array<int, int>, sales_backed_count: int}
      */
     public function cancelForOccurrence(int $eventId, int $occurrenceId): array
     {
@@ -46,7 +46,7 @@ class CancelOccurrenceAttendeesService
         ]);
 
         if ($attendees->isEmpty()) {
-            return [];
+            return ['attendee_ids' => [], 'sales_backed_count' => 0];
         }
 
         $this->attendeeRepository->updateWhere(
@@ -112,7 +112,10 @@ class CancelOccurrenceAttendeesService
             ));
         }
 
-        return $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->values()->all();
+        return [
+            'attendee_ids' => $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getId())->values()->all(),
+            'sales_backed_count' => $inventoryBackedAttendees->count(),
+        ];
     }
 
     /**

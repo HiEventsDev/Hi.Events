@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Jobs\Occurrence;
 
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
-use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Events\OccurrenceCancelledEvent;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -58,28 +57,15 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     }
 
                     if ($occurrence->getStatus() === EventOccurrenceStatus::CANCELLED->name) {
-                        if ($this->attempts() <= 1 || $occurrence->getCancelledAttendeesCount() !== null) {
-                            return null;
-                        }
-
-                        $exclusionService->addExclusions($this->eventId, [$occurrence->getStartDate()]);
-
-                        return [
-                            'start_date' => $occurrence->getStartDate(),
-                            'cancelled_attendee_ids' => DB::table('attendees')
-                                ->where('event_occurrence_id', $occurrenceId)
-                                ->where('status', AttendeeStatus::CANCELLED->name)
-                                ->whereNull('deleted_at')
-                                ->pluck('id')
-                                ->all(),
-                        ];
+                        return null;
                     }
 
-                    $cancelledAttendeeIds = $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
+                    $cancelResult = $cancelAttendeesService->cancelForOccurrence($this->eventId, $occurrenceId);
 
                     $occurrenceRepository->updateWhere(
                         attributes: [
                             EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
+                            EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => $cancelResult['sales_backed_count'],
                         ],
                         where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
                     );
@@ -88,7 +74,7 @@ class BulkCancelOccurrencesJob implements ShouldQueue
 
                     return [
                         'start_date' => $occurrence->getStartDate(),
-                        'cancelled_attendee_ids' => $cancelledAttendeeIds,
+                        'cancelled_attendee_ids' => $cancelResult['attendee_ids'],
                     ];
                 });
 
@@ -113,13 +99,6 @@ class BulkCancelOccurrencesJob implements ShouldQueue
                     type: DomainEventType::OCCURRENCE_CANCELLED,
                     occurrenceId: $occurrenceId,
                 ));
-
-                $occurrenceRepository->updateWhere(
-                    attributes: [
-                        EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => count($cancelResult['cancelled_attendee_ids']),
-                    ],
-                    where: [EventOccurrenceDomainObjectAbstract::ID => $occurrenceId],
-                );
 
                 $cancelledStartDates[] = $cancelResult['start_date'];
             } catch (Throwable $e) {

@@ -42,12 +42,20 @@ class ValidateVatNumberJob implements ShouldQueue
             'attempt' => $this->attempts(),
         ]);
 
+        if (! $this->vatNumberIsCurrent($repository, $logger)) {
+            return;
+        }
+
         $repository->updateFromArray($this->vatSettingId, [
             'vat_validation_status' => VatValidationStatus::VALIDATING->value,
             'vat_validation_attempts' => $this->attempts(),
         ]);
 
         $result = $viesService->validateVatNumber($this->vatNumber);
+
+        if (! $this->vatNumberIsCurrent($repository, $logger)) {
+            return;
+        }
 
         if ($result->valid) {
             $logger->info('VAT validation successful', [
@@ -118,6 +126,10 @@ class ValidateVatNumberJob implements ShouldQueue
         ]);
 
         try {
+            if (! $this->vatNumberIsCurrent($repository, $logger)) {
+                return;
+            }
+
             $repository->updateFromArray($this->vatSettingId, [
                 'vat_validated' => false,
                 'vat_validation_status' => VatValidationStatus::FAILED->value,
@@ -152,6 +164,25 @@ class ValidateVatNumberJob implements ShouldQueue
         $attempt = $this->attempts() - 1;
 
         return $backoffs[$attempt] ?? end($backoffs);
+    }
+
+    private function vatNumberIsCurrent(
+        OrganizerVatSettingRepositoryInterface $repository,
+        LoggerInterface $logger,
+    ): bool {
+        $current = $repository->findFirstWhere(['id' => $this->vatSettingId]);
+
+        if ($current !== null && $current->getVatNumber() === $this->vatNumber) {
+            return true;
+        }
+
+        $logger->info('VAT validation result discarded - VAT number changed since validation started', [
+            'organizer_vat_setting_id' => $this->vatSettingId,
+            'vat_number' => $this->maskVatNumber($this->vatNumber),
+            'attempt' => $this->attempts(),
+        ]);
+
+        return false;
     }
 
     private function maskVatNumber(string $vatNumber): string

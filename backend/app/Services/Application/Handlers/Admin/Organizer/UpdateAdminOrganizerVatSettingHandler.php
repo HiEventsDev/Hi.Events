@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Admin\Organizer;
 
 use HiEvents\DataTransferObjects\UpdateAdminOrganizerVatSettingDTO;
 use HiEvents\DomainObjects\OrganizerVatSettingDomainObject;
+use HiEvents\DomainObjects\Status\VatValidationStatus;
 use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 
 class UpdateAdminOrganizerVatSettingHandler
@@ -16,11 +17,16 @@ class UpdateAdminOrganizerVatSettingHandler
     {
         $existing = $this->vatSettingRepository->findByOrganizerId($dto->organizerId);
 
+        $vatValidated = $dto->vatValidated ?? false;
+
         $data = [
             'organizer_id' => $dto->organizerId,
             'vat_registered' => $dto->vatRegistered,
             'vat_number' => $dto->vatNumber,
-            'vat_validated' => $dto->vatValidated ?? false,
+            'vat_validated' => $vatValidated,
+            'vat_validation_status' => $vatValidated
+                ? VatValidationStatus::VALID->value
+                : VatValidationStatus::PENDING->value,
             'business_name' => $dto->businessName,
             'business_address' => $dto->businessAddress,
             'vat_country_code' => $dto->vatCountryCode,

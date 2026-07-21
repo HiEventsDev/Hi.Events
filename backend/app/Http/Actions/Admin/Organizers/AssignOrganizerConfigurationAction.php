@@ -9,6 +9,7 @@ use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Admin\Organizer\AssignOrganizerConfigurationHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AssignOrganizerConfigurationAction extends BaseAction
 {
@@ -21,7 +22,11 @@ class AssignOrganizerConfigurationAction extends BaseAction
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $validated = $request->validate([
-            'configuration_id' => 'required|integer|exists:organizer_configurations,id',
+            'configuration_id' => [
+                'required',
+                'integer',
+                Rule::exists('organizer_configurations', 'id')->whereNull('deleted_at'),
+            ],
         ]);
 
         $this->handler->handle($organizerId, (int) $validated['configuration_id']);

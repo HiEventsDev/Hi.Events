@@ -127,7 +127,8 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
         $result = $this->service->cancelForOccurrence($eventId, $occurrenceId);
 
-        $this->assertSame([101, 102, 103], $result);
+        $this->assertSame([101, 102, 103], $result['attendee_ids']);
+        $this->assertSame(3, $result['sales_backed_count']);
 
         Event::assertDispatched(
             CapacityChangedEvent::class,
@@ -151,7 +152,7 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
         $result = $this->service->cancelForOccurrence(1, 10);
 
-        $this->assertSame([], $result);
+        $this->assertSame(['attendee_ids' => [], 'sales_backed_count' => 0], $result);
 
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
@@ -206,9 +207,46 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
         $this->statisticsCancellationService->shouldNotReceive('decrementForCancelledAttendee');
 
-        $this->service->cancelForOccurrence(1, 10);
+        $result = $this->service->cancelForOccurrence(1, 10);
+
+        $this->assertSame([501], $result['attendee_ids']);
+        $this->assertSame(0, $result['sales_backed_count']);
 
         Event::assertNotDispatched(CapacityChangedEvent::class);
+    }
+
+    public function test_sales_backed_count_only_counts_inventory_backed_attendees(): void
+    {
+        $completedAttendee = $this->makeAttendee(id: 601, productId: 3, productPriceId: 30, orderId: 8000);
+        $reservedAttendee = $this->makeAttendee(id: 602, productId: 3, productPriceId: 30, orderId: 8001);
+
+        $this->attendeeRepository
+            ->shouldReceive('findWhere')
+            ->andReturn(new Collection([$completedAttendee, $reservedAttendee]));
+
+        $this->orderRepository
+            ->shouldReceive('findWhereIn')
+            ->with('id', Mockery::on(function ($ids) {
+                if (! is_array($ids)) {
+                    return false;
+                }
+                sort($ids);
+
+                return $ids === [8000, 8001];
+            }))
+            ->andReturn(new Collection([
+                $this->makeOrder(id: 8000, status: OrderStatus::COMPLETED->name),
+                $this->makeOrder(id: 8001, status: OrderStatus::RESERVED->name),
+            ]));
+
+        $this->attendeeRepository->shouldReceive('updateWhere')->once();
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')->once()->with(30, 1, 10);
+        $this->domainEventDispatcherService->shouldReceive('dispatch')->twice();
+
+        $result = $this->service->cancelForOccurrence(1, 10);
+
+        $this->assertSame([601, 602], $result['attendee_ids']);
+        $this->assertSame(1, $result['sales_backed_count']);
     }
 
     public function test_decrements_attendee_statistics_grouped_by_source_order(): void

@@ -232,8 +232,9 @@ const OccurrencesTab = () => {
                     },
                 }, {
                     onSuccess: (response) => {
-                        showSuccess(t`Cancelled ${response.updated_count} date(s)`);
+                        showSuccess(t`Cancelling ${response.updated_count} date(s). This may take a moment to complete.`);
                         setSelectedIds(new Set());
+                        setTimeout(() => occurrencesQuery.refetch(), 5000);
                     },
                     onError: (error: any) => showError(error?.response?.data?.message || t`Failed to cancel dates`),
                 });

@@ -242,9 +242,14 @@ class BulkUpdateOccurrencesHandler
     {
         $updatedIds = [];
         $orphanCandidateIds = [];
+        $vacatedStartDates = [];
 
         foreach ($eligible as $occurrence) {
             $attributes = $this->buildPerRowAttributes($dto, $occurrence);
+
+            if (array_key_exists(EventOccurrenceDomainObjectAbstract::START_DATE, $attributes)) {
+                $vacatedStartDates[] = $occurrence->getStartDate();
+            }
 
             $previousEventLocationId = $occurrence->getEventLocationId();
 
@@ -277,6 +282,10 @@ class BulkUpdateOccurrencesHandler
 
         foreach (array_unique($orphanCandidateIds) as $eventLocationId) {
             $this->eventLocationCleaner->deleteIfOrphaned($eventLocationId);
+        }
+
+        if (! empty($vacatedStartDates)) {
+            $this->exclusionService->addExclusions($dto->event_id, $vacatedStartDates);
         }
 
         return new BulkUpdateOccurrencesResultDTO(

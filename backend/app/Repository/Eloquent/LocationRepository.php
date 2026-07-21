@@ -62,20 +62,28 @@ class LocationRepository extends BaseRepository implements LocationRepositoryInt
 
     public function isReferenced(int $locationId): bool
     {
-        $eventLocationCount = DB::table('event_locations')
-            ->where('location_id', $locationId)
-            ->whereNull('deleted_at')
-            ->count();
+        return $this->runQuery(function () use ($locationId) {
+            $liveEventLocationCount = DB::table('event_locations')
+                ->where('event_locations.location_id', $locationId)
+                ->whereNull('event_locations.deleted_at')
+                ->whereExists(function ($subQuery) {
+                    $subQuery->select(DB::raw(1))
+                        ->from('events')
+                        ->whereColumn('events.id', 'event_locations.event_id')
+                        ->whereNull('events.deleted_at');
+                })
+                ->count();
 
-        if ($eventLocationCount > 0) {
-            return true;
-        }
+            if ($liveEventLocationCount > 0) {
+                return true;
+            }
 
-        $organizerCount = DB::table('organizers')
-            ->where('location_id', $locationId)
-            ->whereNull('deleted_at')
-            ->count();
+            $organizerCount = DB::table('organizers')
+                ->where('location_id', $locationId)
+                ->whereNull('deleted_at')
+                ->count();
 
-        return $organizerCount > 0;
+            return $organizerCount > 0;
+        });
     }
 }

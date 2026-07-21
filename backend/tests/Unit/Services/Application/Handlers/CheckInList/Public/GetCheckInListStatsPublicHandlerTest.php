@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Application\Handlers\CheckInList\Public;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
+use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Repository\DTO\CheckedInAttendeesCountDTO;
 use HiEvents\Repository\DTO\CheckInListProductStatDTO;
 use HiEvents\Repository\DTO\CheckInListRecentCheckInDTO;
@@ -47,6 +48,8 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
 
         $this->checkInListRepository
             ->shouldReceive('findFirstWhere')
@@ -120,6 +123,8 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(99);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
 
         $this->checkInListRepository
             ->shouldReceive('findFirstWhere')->once()
@@ -150,6 +155,8 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
 
         $this->checkInListRepository
             ->shouldReceive('findFirstWhere')->once()
@@ -170,5 +177,49 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
         $this->handler->handle('short-id', 77);
 
         $this->assertTrue(true);
+    }
+
+    public function test_handle_throws_when_list_is_expired(): void
+    {
+        $checkInList = m::mock(CheckInListDomainObject::class);
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn('2020-01-01T00:00:00Z');
+        $checkInList->shouldReceive('getActivatesAt')->andReturn(null);
+
+        $this->checkInListRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(['short_id' => 'short-id'])
+            ->andReturn($checkInList);
+
+        $this->checkInListRepository->shouldReceive('getCheckedInAttendeeCountById')->never();
+        $this->checkInListRepository->shouldReceive('getPerProductCheckInStatsById')->never();
+        $this->checkInListRepository->shouldReceive('getRecentCheckInsById')->never();
+
+        $this->expectException(CannotCheckInException::class);
+
+        $this->handler->handle('short-id');
+    }
+
+    public function test_handle_throws_when_list_is_not_yet_active(): void
+    {
+        $checkInList = m::mock(CheckInListDomainObject::class);
+        $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);
+        $checkInList->shouldReceive('getExpiresAt')->andReturn(null);
+        $checkInList->shouldReceive('getActivatesAt')->andReturn('2100-01-01T00:00:00Z');
+
+        $this->checkInListRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(['short_id' => 'short-id'])
+            ->andReturn($checkInList);
+
+        $this->checkInListRepository->shouldReceive('getCheckedInAttendeeCountById')->never();
+        $this->checkInListRepository->shouldReceive('getPerProductCheckInStatsById')->never();
+        $this->checkInListRepository->shouldReceive('getRecentCheckInsById')->never();
+
+        $this->expectException(CannotCheckInException::class);
+
+        $this->handler->handle('short-id');
     }
 }

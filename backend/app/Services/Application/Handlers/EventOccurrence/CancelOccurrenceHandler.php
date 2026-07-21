@@ -51,13 +51,14 @@ class CancelOccurrenceHandler
                 return $occurrence;
             }
 
-            $cancelledAttendeeIds = $this->cancelAttendeesService->cancelForOccurrence($eventId, $occurrenceId);
+            $cancelResult = $this->cancelAttendeesService->cancelForOccurrence($eventId, $occurrenceId);
+            $cancelledAttendeeIds = $cancelResult['attendee_ids'];
 
             $updated = $this->occurrenceRepository->updateFromArray(
                 id: $occurrenceId,
                 attributes: [
                     EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
-                    EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => count($cancelledAttendeeIds),
+                    EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => $cancelResult['sales_backed_count'],
                 ],
             );
 

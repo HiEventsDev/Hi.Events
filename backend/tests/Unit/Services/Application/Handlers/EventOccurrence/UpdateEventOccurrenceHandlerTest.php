@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\UpdateEventOccurrenceHandler;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
 use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
 use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
@@ -31,6 +32,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     private EventLocationCleaner|MockInterface $eventLocationCleaner;
 
+    private RecurrenceRuleExclusionService|MockInterface $exclusionService;
+
     private DatabaseManager|MockInterface $databaseManager;
 
     private UpdateEventOccurrenceHandler $handler;
@@ -43,6 +46,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->eventLocationUpserter = Mockery::mock(EventLocationUpserter::class);
         $this->eventLocationCleaner = Mockery::mock(EventLocationCleaner::class);
+        $this->exclusionService = Mockery::mock(RecurrenceRuleExclusionService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
@@ -53,6 +57,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             $this->eventRepository,
             $this->eventLocationUpserter,
             $this->eventLocationCleaner,
+            $this->exclusionService,
             $this->databaseManager,
         );
     }
@@ -114,6 +119,11 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             ->with($occurrenceId, Mockery::on(fn (array $attrs) => $attrs[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] === true))
             ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
 
+        $this->exclusionService
+            ->shouldReceive('addExclusions')
+            ->once()
+            ->with($eventId, ['2026-06-01 10:00:00']);
+
         $result = $this->handler->handle($occurrenceId, $dto);
         $this->assertNotNull($result);
     }
@@ -134,6 +144,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -162,6 +174,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
 
+        $this->exclusionService->shouldNotReceive('addExclusions');
+
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
             ->once()
@@ -189,6 +203,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -219,6 +235,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -256,6 +274,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
 
+        $this->exclusionService->shouldNotReceive('addExclusions');
+
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
             ->once()
@@ -287,6 +307,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -322,6 +344,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
 
+        $this->exclusionService->shouldNotReceive('addExclusions');
+
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
             ->once()
@@ -356,6 +380,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->occurrenceRepository
             ->shouldReceive('updateFromArray')
@@ -400,6 +426,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         $createdEventLocation->shouldReceive('getId')->andReturn(500);
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->eventRepository
             ->shouldReceive('findById')
@@ -464,6 +492,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
 
+        $this->exclusionService->shouldNotReceive('addExclusions');
+
         $this->eventRepository
             ->shouldReceive('findById')
             ->once()
@@ -518,6 +548,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
 
+        $this->exclusionService->shouldNotReceive('addExclusions');
+
         $this->eventLocationUpserter->shouldNotReceive('createForEvent');
         $this->eventLocationUpserter->shouldNotReceive('updateInPlace');
 
@@ -558,6 +590,8 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         );
 
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn($existing);
+
+        $this->exclusionService->shouldNotReceive('addExclusions');
 
         $this->eventLocationUpserter->shouldNotReceive('createForEvent');
         $this->eventLocationUpserter->shouldNotReceive('updateInPlace');

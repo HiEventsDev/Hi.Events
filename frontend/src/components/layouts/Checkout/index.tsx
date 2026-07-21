@@ -141,10 +141,11 @@ const Checkout = () => {
     useEffect(() => {
         if (!isModal) return;
         if (isOrderReservedAndNotExpired) {
+            const parentOrigin = getParentOrigin();
             postToParent('hievents:checkout-progress', {
                 eventId,
                 orderShortId,
-                sessionId: getCheckoutSessionIdentifier(String(orderShortId)),
+                ...(parentOrigin ? {sessionId: getCheckoutSessionIdentifier(String(orderShortId))} : {}),
                 step: currentStep,
                 reservedUntil: order?.reserved_until ? utcDateToEpochMs(order.reserved_until) : null,
             });

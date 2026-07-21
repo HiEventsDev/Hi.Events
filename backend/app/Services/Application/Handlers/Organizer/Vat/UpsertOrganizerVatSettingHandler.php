@@ -52,11 +52,15 @@ class UpsertOrganizerVatSettingHandler
 
             if (preg_match('/^[A-Z]{2}[0-9A-Z]{8,15}$/', $vatNumber)) {
                 $vatNumberChanged = ! $existing || $existing->getVatNumber() !== $vatNumber;
+                $canRetryUnchanged = $existing && in_array($existing->getVatValidationStatus(), [
+                    VatValidationStatus::FAILED->value,
+                    VatValidationStatus::INVALID->value,
+                ], true);
 
                 $data['vat_number'] = $vatNumber;
                 $data['vat_country_code'] = substr($vatNumber, 0, 2);
 
-                if ($vatNumberChanged) {
+                if ($vatNumberChanged || $canRetryUnchanged) {
                     $shouldValidate = true;
                     $data = $this->trySyncValidation($vatNumber, $data);
                 }

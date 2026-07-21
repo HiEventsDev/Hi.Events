@@ -60,13 +60,16 @@ class CancelOccurrenceHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    private function expectAttendeeCancelCalled(int $eventId, int $occurrenceId, array $cancelledAttendeeIds = []): void
+    private function expectAttendeeCancelCalled(int $eventId, int $occurrenceId, array $cancelledAttendeeIds = [], int $salesBackedCount = 0): void
     {
         $this->cancelAttendeesService
             ->shouldReceive('cancelForOccurrence')
             ->once()
             ->with($eventId, $occurrenceId)
-            ->andReturn($cancelledAttendeeIds);
+            ->andReturn([
+                'attendee_ids' => $cancelledAttendeeIds,
+                'sales_backed_count' => $salesBackedCount,
+            ]);
     }
 
     public function test_handle_sets_status_to_cancelled(): void
@@ -88,10 +91,10 @@ class CancelOccurrenceHandlerTest extends TestCase
             ->once()
             ->with($occurrenceId, [
                 EventOccurrenceDomainObjectAbstract::STATUS => EventOccurrenceStatus::CANCELLED->name,
-                EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => 2,
+                EventOccurrenceDomainObjectAbstract::CANCELLED_ATTENDEES_COUNT => 5,
             ])
             ->andReturn($updatedOccurrence);
-        $this->expectAttendeeCancelCalled($eventId, $occurrenceId, [101, 102]);
+        $this->expectAttendeeCancelCalled($eventId, $occurrenceId, [101, 102], salesBackedCount: 5);
         $this->exclusionService
             ->shouldReceive('addExclusions')
             ->once()
@@ -278,7 +281,10 @@ class CancelOccurrenceHandlerTest extends TestCase
             ->shouldReceive('cancelForOccurrence')
             ->once()
             ->with($eventId, $occurrenceId)
-            ->andReturn([]);
+            ->andReturn([
+                'attendee_ids' => [],
+                'sales_backed_count' => 0,
+            ]);
 
         $this->exclusionService->shouldReceive('addExclusions')->once();
 

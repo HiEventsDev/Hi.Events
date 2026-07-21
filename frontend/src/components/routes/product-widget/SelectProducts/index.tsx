@@ -317,6 +317,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         occurrenceEventRefetchMutation.mutate(occId);
     };
 
+    const clearSelectedOccurrence = () => {
+        selectedOccurrenceIdRef.current = undefined;
+        setSelectedOccurrenceId(undefined);
+    };
+
     const initialOccurrenceAppliedRef = useRef(false);
     useEffect(() => {
         if (initialOccurrenceAppliedRef.current) {
@@ -476,7 +481,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 ? t`This event is sold out`
                 : t`There are no upcoming dates for this event`;
         }
-        if (!productAreAvailable) {
+        if (!productAreAvailable && !(isRecurring && activeOccurrences.length > 0)) {
             return t`There are no products available for this event`;
         }
         return null;
@@ -687,6 +692,19 @@ const SelectProducts = (props: SelectProductsProps) => {
         </div>
     );
 
+    const noProductsForOccurrence = (
+        <div className={'hi-no-products'}>
+            <p className={'hi-no-products-message'}>
+                {t`There are no products available for this date. Please choose another date.`}
+            </p>
+            <Button type={'button'} variant={'outline'} onClick={clearSelectedOccurrence}>
+                {t`Choose another date`}
+            </Button>
+        </div>
+    );
+
+    const showRecurringSelector = isRecurring && activeOccurrences.length > 0;
+
     return (
         <div className={'hi-product-widget-container'}
              ref={resizeRef}
@@ -795,7 +813,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     </div>
                 </Modal>
             )}
-            {(event && productAreAvailable && !eventHasEnded && !(isRecurring && activeOccurrences.length === 0)) && (
+            {(event && !eventHasEnded && (showRecurringSelector || (!isRecurring && productAreAvailable))) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>
                     <Input type={'hidden'} {...form.getInputProps('promo_code')} />
                     <Input type={'hidden'} {...form.getInputProps('affiliate_code')} />
@@ -808,7 +826,9 @@ const SelectProducts = (props: SelectProductsProps) => {
                             onSelect={(id) => selectOccurrence(Number(id))}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
-                            productSlot={<>{productFormSection}{promoSection}</>}
+                            productSlot={productAreAvailable
+                                ? <>{productFormSection}{promoSection}</>
+                                : noProductsForOccurrence}
                             waitlistAvailable={waitlistAvailable}
                         />
                     ) : (

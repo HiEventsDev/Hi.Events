@@ -7,14 +7,6 @@ use Illuminate\Support\Carbon;
 
 class OccurrenceSummaryReport extends AbstractReportService
 {
-    protected function getAdditionalBindings(Carbon $startDate, Carbon $endDate): array
-    {
-        return [
-            'start_date' => $startDate->toDateTimeString(),
-            'end_date' => $endDate->toDateTimeString(),
-        ];
-    }
-
     protected function getSqlQuery(Carbon $startDate, Carbon $endDate, ?int $occurrenceId = null): string
     {
         return <<<'SQL'
@@ -46,8 +38,6 @@ class OccurrenceSummaryReport extends AbstractReportService
             ) ci_stats ON ci_stats.event_occurrence_id = eo.id
             WHERE eo.event_id = :event_id
                 AND eo.deleted_at IS NULL
-                AND COALESCE(eo.end_date, eo.start_date) >= :start_date
-                AND eo.start_date <= :end_date
             ORDER BY eo.start_date
 SQL;
     }

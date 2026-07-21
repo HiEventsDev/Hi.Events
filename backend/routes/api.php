@@ -607,7 +607,8 @@ $router->prefix('/public')->group(
         $router->get('/color-themes', GetColorThemesAction::class);
 
         // Ticket Lookup
-        $router->post('/ticket-lookup', SendTicketLookupEmailAction::class);
+        $router->post('/ticket-lookup', SendTicketLookupEmailAction::class)
+            ->middleware('throttle:10,1');
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
 
         // Self-service order and attendee edits

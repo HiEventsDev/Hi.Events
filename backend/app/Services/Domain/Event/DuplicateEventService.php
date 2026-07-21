@@ -10,8 +10,11 @@ use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\QuestionBelongsTo;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\EventLocationDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -26,6 +29,7 @@ use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
@@ -61,6 +65,7 @@ class DuplicateEventService
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
         private readonly ProductOccurrenceVisibilityRepositoryInterface $visibilityRepository,
+        private readonly EventLocationRepositoryInterface $eventLocationRepository,
     ) {}
 
     /**
@@ -101,6 +106,8 @@ class DuplicateEventService
                 startDate: $startDate,
                 endDate: $endDate,
             );
+
+            $this->cloneEventLocation($event, $newEvent->getId());
 
             $oldToNewOccurrenceMap = [];
             if ($duplicateOccurrences && $event->getType() === EventType::RECURRING->name) {
@@ -183,6 +190,32 @@ class DuplicateEventService
             endDate: $endDate,
             eventSettings: $cloneEventSettings ? $event->getEventSettings() : null,
         );
+    }
+
+    private function cloneEventLocation(EventDomainObject $event, int $newEventId): void
+    {
+        $sourceLocation = $event->getEventLocation();
+        if ($sourceLocation === null) {
+            return;
+        }
+
+        $newLocation = $this->createClonedEventLocation($sourceLocation, $newEventId);
+
+        $this->eventRepository->updateWhere(
+            attributes: [EventDomainObjectAbstract::EVENT_LOCATION_ID => $newLocation->getId()],
+            where: [EventDomainObjectAbstract::ID => $newEventId],
+        );
+    }
+
+    private function createClonedEventLocation(EventLocationDomainObject $source, int $newEventId): EventLocationDomainObject
+    {
+        return $this->eventLocationRepository->create([
+            EventLocationDomainObjectAbstract::EVENT_ID => $newEventId,
+            EventLocationDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::EVENT_LOCATION_PREFIX),
+            EventLocationDomainObjectAbstract::TYPE => $source->getType(),
+            EventLocationDomainObjectAbstract::LOCATION_ID => $source->getLocationId(),
+            EventLocationDomainObjectAbstract::ONLINE_EVENT_CONNECTION_DETAILS => $source->getOnlineEventConnectionDetails(),
+        ]);
     }
 
     /**
@@ -438,7 +471,10 @@ class DuplicateEventService
     private function getEventWithRelations(string $eventId, string $accountId): EventDomainObject
     {
         return $this->eventRepository
-            ->loadRelation(EventOccurrenceDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location'))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location'),
+            ]))
             ->loadRelation(EventSettingDomainObject::class)
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
@@ -510,8 +546,14 @@ class DuplicateEventService
                 && ! $occurrence->isCancelled()
             )
             ->each(function (EventOccurrenceDomainObject $occurrence) use ($newEventId, &$oldToNewOccurrenceMap) {
+                $sourceLocation = $occurrence->getEventLocation();
+                $newLocationId = $sourceLocation !== null
+                    ? $this->createClonedEventLocation($sourceLocation, $newEventId)->getId()
+                    : null;
+
                 $newOccurrence = $this->eventOccurrenceRepository->create([
                     'event_id' => $newEventId,
+                    'event_location_id' => $newLocationId,
                     'start_date' => $occurrence->getStartDate(),
                     'end_date' => $occurrence->getEndDate(),
                     'status' => EventOccurrenceStatus::ACTIVE->name,
@@ -519,6 +561,7 @@ class DuplicateEventService
                     'used_capacity' => 0,
                     'label' => $occurrence->getLabel(),
                     'is_overridden' => $occurrence->getIsOverridden(),
+                    'show_available_capacity' => $occurrence->getShowAvailableCapacity(),
                     'short_id' => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
                 ]);
                 $oldToNewOccurrenceMap[$occurrence->getId()] = $newOccurrence->getId();

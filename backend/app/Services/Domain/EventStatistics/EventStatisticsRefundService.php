@@ -12,7 +12,6 @@ use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Values\MoneyValue;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -54,10 +53,10 @@ class EventStatisticsRefundService
         }
 
         $refundProportion = $refundAmount->toFloat() / $orderWithItems->getTotalGross();
-        $orderDate = (new Carbon($orderWithItems->getCreatedAt()))->format('Y-m-d');
+        $refundDate = now()->format('Y-m-d');
 
         $this->updateOccurrenceStatisticsForRefund($itemsByOccurrence, $refundProportion);
-        $this->updateOccurrenceDailyStatisticsForRefund($itemsByOccurrence, $refundProportion, $orderDate);
+        $this->updateOccurrenceDailyStatisticsForRefund($orderWithItems->getEventId(), $itemsByOccurrence, $refundProportion, $refundDate);
     }
 
     /**
@@ -114,27 +113,31 @@ class EventStatisticsRefundService
      */
     private function updateDailyStatisticsForRefund(OrderDomainObject $order, MoneyValue $refundAmount): void
     {
-        $orderDate = (new Carbon($order->getCreatedAt()))->format('Y-m-d');
+        $refundDate = now()->format('Y-m-d');
 
         $eventDailyStatistic = $this->eventDailyStatisticRepository->findFirstWhere([
             'event_id' => $order->getEventId(),
-            'date' => $orderDate,
+            'date' => $refundDate,
         ]);
 
         if ($eventDailyStatistic === null) {
-            $this->logger->warning(
-                'Event daily statistics not found for refund',
-                [
-                    'event_id' => $order->getEventId(),
-                    'date' => $orderDate,
-                    'order_id' => $order->getId(),
-                ]
-            );
+            $this->eventDailyStatisticRepository->create([
+                'event_id' => $order->getEventId(),
+                'date' => $refundDate,
+                'products_sold' => 0,
+                'attendees_registered' => 0,
+                'sales_total_gross' => -$refundAmount->toFloat(),
+                'sales_total_before_additions' => 0,
+                'total_tax' => 0,
+                'total_fee' => 0,
+                'total_refunded' => $refundAmount->toFloat(),
+                'orders_created' => 0,
+                'orders_cancelled' => 0,
+            ]);
 
             return;
         }
 
-        // Calculate the proportion of the refund to the total order amount
         $refundProportion = $refundAmount->toFloat() / $order->getTotalGross();
 
         // Adjust the total_tax and total_fee based on the refund proportion
@@ -152,7 +155,7 @@ class EventStatisticsRefundService
             attributes: $updates,
             where: [
                 'event_id' => $order->getEventId(),
-                'date' => $orderDate,
+                'date' => $refundDate,
             ]
         );
 
@@ -161,7 +164,7 @@ class EventStatisticsRefundService
             [
                 'event_id' => $order->getEventId(),
                 'order_id' => $order->getId(),
-                'date' => $orderDate,
+                'date' => $refundDate,
                 'refund_amount' => $refundAmount->toFloat(),
                 'refund_proportion' => $refundProportion,
                 'original_total_gross' => $eventDailyStatistic->getSalesTotalGross(),
@@ -212,14 +215,40 @@ class EventStatisticsRefundService
      *
      * @param  array<int, OrderItemDomainObject[]>  $itemsByOccurrence
      */
-    private function updateOccurrenceDailyStatisticsForRefund(array $itemsByOccurrence, float $refundProportion, string $orderDate): void
+    private function updateOccurrenceDailyStatisticsForRefund(int $eventId, array $itemsByOccurrence, float $refundProportion, string $refundDate): void
     {
         foreach ($itemsByOccurrence as $occurrenceId => $items) {
             $occurrenceGross = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalGross() ?? 0, $items));
             $occurrenceTax = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalTax() ?? 0, $items));
             $occurrenceFee = array_sum(array_map(fn (OrderItemDomainObject $i) => $i->getTotalServiceFee() ?? 0, $items));
 
-            $grossDelta = $this->formatDelta($occurrenceGross * $refundProportion);
+            $grossRefund = $occurrenceGross * $refundProportion;
+
+            $existing = $this->eventOccurrenceDailyStatisticRepository->findFirstWhere([
+                'event_occurrence_id' => $occurrenceId,
+                'date' => $refundDate,
+            ]);
+
+            if ($existing === null) {
+                $this->eventOccurrenceDailyStatisticRepository->create([
+                    'event_id' => $eventId,
+                    'event_occurrence_id' => $occurrenceId,
+                    'date' => $refundDate,
+                    'products_sold' => 0,
+                    'attendees_registered' => 0,
+                    'sales_total_gross' => 0,
+                    'sales_total_before_additions' => 0,
+                    'total_tax' => 0,
+                    'total_fee' => 0,
+                    'total_refunded' => $grossRefund,
+                    'orders_created' => 0,
+                    'orders_cancelled' => 0,
+                ]);
+
+                continue;
+            }
+
+            $grossDelta = $this->formatDelta($grossRefund);
             $taxDelta = $this->formatDelta($occurrenceTax * $refundProportion);
             $feeDelta = $this->formatDelta($occurrenceFee * $refundProportion);
 
@@ -233,7 +262,7 @@ class EventStatisticsRefundService
                 ],
                 where: [
                     'event_occurrence_id' => $occurrenceId,
-                    'date' => $orderDate,
+                    'date' => $refundDate,
                 ]
             );
         }

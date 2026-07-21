@@ -41,7 +41,9 @@ class UpdateProductVisibilityHandler
             );
         }
 
-        return $this->databaseManager->transaction(function () use ($dto) {
+        $selectedProductIds = array_map('intval', $dto->product_ids);
+
+        return $this->databaseManager->transaction(function () use ($dto, $selectedProductIds) {
             $this->visibilityRepository->deleteWhere([
                 ProductOccurrenceVisibilityDomainObjectAbstract::EVENT_OCCURRENCE_ID => $dto->event_occurrence_id,
             ]);
@@ -51,24 +53,20 @@ class UpdateProductVisibilityHandler
             ]);
 
             $allProductIds = $allProducts->map(fn ($product) => $product->getId())->sort()->values()->toArray();
-            $selectedProductIds = collect($dto->product_ids)->sort()->values()->toArray();
+            $sortedSelectedProductIds = collect($selectedProductIds)->sort()->values()->toArray();
 
-            $invalidIds = array_diff($selectedProductIds, $allProductIds);
+            $invalidIds = array_diff($sortedSelectedProductIds, $allProductIds);
             if (! empty($invalidIds)) {
                 throw new ResourceNotFoundException(
                     __('One or more product IDs do not belong to this event')
                 );
             }
 
-            if ($allProductIds === $selectedProductIds) {
+            if ($allProductIds === $sortedSelectedProductIds) {
                 return collect();
             }
 
-            // The request rule enforces `distinct`, but dedupe defensively in
-            // case a future caller bypasses request validation — the unique
-            // constraint on (event_occurrence_id, product_id) would otherwise
-            // surface as a 500 mid-batch.
-            foreach (array_unique($dto->product_ids) as $productId) {
+            foreach (array_unique($selectedProductIds) as $productId) {
                 $this->visibilityRepository->create([
                     ProductOccurrenceVisibilityDomainObjectAbstract::EVENT_OCCURRENCE_ID => $dto->event_occurrence_id,
                     ProductOccurrenceVisibilityDomainObjectAbstract::PRODUCT_ID => $productId,

@@ -464,12 +464,25 @@ const OccurrencePicker = ({
         setDisplayedMonth(dayjs(key).startOf('month').format('YYYY-MM-DD'));
     }, [selectedOccurrenceId]);
 
+    const clearedOccurrenceRef = useRef<IdParam | undefined>(undefined);
+    const previousSelectedRef = useRef<IdParam | undefined>(selectedOccurrenceId);
+    useEffect(() => {
+        if (previousSelectedRef.current && !selectedOccurrenceId) {
+            clearedOccurrenceRef.current = previousSelectedRef.current;
+        }
+        previousSelectedRef.current = selectedOccurrenceId;
+    }, [selectedOccurrenceId]);
+
+    useEffect(() => {
+        clearedOccurrenceRef.current = undefined;
+    }, [focusedDate]);
+
     useEffect(() => {
         if (selectedOccurrenceId || pendingInitialOccurrenceId) {
             return;
         }
         const bookable = (occurrencesByDate[focusedDate] || []).filter(isBookable);
-        if (bookable.length === 1 && bookable[0].id) {
+        if (bookable.length === 1 && bookable[0].id && !sameId(bookable[0].id, clearedOccurrenceRef.current)) {
             onSelect(bookable[0].id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
