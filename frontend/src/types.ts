@@ -736,6 +736,8 @@ export interface CheckInList {
     checked_in_attendees: number;
     is_expired: boolean;
     is_active: boolean;
+    is_password_protected: boolean;
+    password?: string | null;
     event_id: number;
     event?: Event;
     products: {
@@ -745,7 +747,7 @@ export interface CheckInList {
 }
 
 export type CheckInListRequest =
-    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active' | 'is_password_protected'>
     & {
     product_ids: IdParam[];
 };

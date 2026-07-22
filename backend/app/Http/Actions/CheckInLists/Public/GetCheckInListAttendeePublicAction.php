@@ -24,6 +24,7 @@ class GetCheckInListAttendeePublicAction extends BaseAction
             $attendee = $this->getCheckInListAttendeePublicHandler->handle(
                 shortId: $shortId,
                 attendeePublicId: $attendeePublicId,
+                password: $request->header('X-Check-In-List-Password'),
             );
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(

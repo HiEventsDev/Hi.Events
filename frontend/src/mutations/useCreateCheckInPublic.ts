@@ -7,18 +7,19 @@ export const useCreateCheckInPublic = (pagination: QueryFilters) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({checkInListShortId, attendeePublicId, action}: {
+        mutationFn: ({checkInListShortId, attendeePublicId, action, password}: {
             checkInListShortId: IdParam,
             attendeePublicId: IdParam,
-            action: 'check-in' | 'check-in-and-mark-order-as-paid'
+            action: 'check-in' | 'check-in-and-mark-order-as-paid',
+            password?: string,
         }) =>
-            publicCheckInClient.createCheckIn(checkInListShortId, attendeePublicId, action),
+            publicCheckInClient.createCheckIn(checkInListShortId, attendeePublicId, action, password),
 
-        onSuccess: (data, {checkInListShortId, action}) => {
+        onSuccess: (data, {checkInListShortId, action, password}) => {
             const markedAsPaid = action === 'check-in-and-mark-order-as-paid';
 
             queryClient.setQueryData(
-                [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination],
+                [GET_CHECK_IN_LIST_ATTENDEES_PUBLIC_QUERY_KEY, checkInListShortId, pagination, password],
                 (oldData: any) => {
                     if (!oldData?.data) return oldData;
 

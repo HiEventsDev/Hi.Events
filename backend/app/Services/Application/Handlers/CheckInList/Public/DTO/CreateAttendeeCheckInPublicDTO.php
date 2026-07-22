@@ -13,6 +13,7 @@ class CreateAttendeeCheckInPublicDTO extends Data
         public string     $checkInUserIpAddress,
         #[DataCollectionOf(AttendeeAndActionDTO::class)]
         public Collection $attendeesAndActions,
+        public ?string    $password = null,
     )
     {
     }

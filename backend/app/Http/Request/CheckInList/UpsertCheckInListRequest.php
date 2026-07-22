@@ -15,6 +15,7 @@ class UpsertCheckInListRequest extends BaseRequest
             'expires_at' => ['nullable', 'date'],
             'activates_at' => ['nullable', 'date'],
             'product_ids' => ['required', 'array', 'min:1'],
+            'password' => ['nullable', 'string', 'max:255'],
         ];
     }
 

@@ -29,6 +29,7 @@ class CreateAttendeeCheckInPublicAction extends BaseAction
                 'checkInListUuid' => $checkInListUuid,
                 'checkInUserIpAddress' => $request->ip(),
                 'attendeesAndActions' => $request->validated('attendees'),
+                'password' => $request->header('X-Check-In-List-Password'),
             ]));
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(

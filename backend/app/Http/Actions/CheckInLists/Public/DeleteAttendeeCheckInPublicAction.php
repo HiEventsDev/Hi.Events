@@ -29,6 +29,7 @@ class DeleteAttendeeCheckInPublicAction extends BaseAction
                 checkInListShortId: $checkInListShortId,
                 checkInShortId: $checkInShortId,
                 checkInUserIpAddress: $request->ip(),
+                password: $request->header('X-Check-In-List-Password'),
             ));
         } catch (CannotCheckInException $e) {
             return $this->errorResponse(

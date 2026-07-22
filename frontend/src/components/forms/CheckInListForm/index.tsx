@@ -1,4 +1,4 @@
-import {Alert, Textarea, TextInput} from "@mantine/core";
+import {Alert, Anchor, Group, PasswordInput, Textarea, TextInput} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {CheckInListRequest, ProductCategory, ProductType} from "../../../types.ts";
@@ -53,6 +53,27 @@ export const CheckInListForm = ({form, productCategories}: CheckInListFormProps)
                 placeholder={t`Add a description for this check-in list`}
                 description={t`Visible to check-in staff only. Helps identify this list during check-in.`}
                 minRows={2}
+            />
+
+            <PasswordInput
+                {...form.getInputProps('password')}
+                label={t`Password`}
+                placeholder={t`Enter a password to protect this list`}
+                description={
+                    <Group justify="space-between">
+                        <span>{t`Optional. If set, staff will be prompted for this password before they can access the list.`}</span>
+                        <Anchor component="button" type="button" size="xs" onClick={() => {
+                            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#";
+                            let password = "";
+                            for (let i = 0; i < 12; ++i) {
+                                password += charset.charAt(Math.floor(Math.random() * charset.length));
+                            }
+                            form.setFieldValue('password', password);
+                        }}>
+                            {t`Generate random password`}
+                        </Anchor>
+                    </Group>
+                }
             />
 
             <InputGroup>

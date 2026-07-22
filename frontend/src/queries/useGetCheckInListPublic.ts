@@ -4,12 +4,12 @@ import {IdParam} from "../types.ts";
 
 export const GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY = 'getCheckInListPublic';
 
-export const useGetCheckInListPublic = (checkInListShortId: IdParam) => {
+export const useGetCheckInListPublic = (checkInListShortId: IdParam, password?: string) => {
     return useQuery({
-        queryKey: [GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY, checkInListShortId],
+        queryKey: [GET_CHECK_IN_LIST_PUBLIC_QUERY_KEY, checkInListShortId, password],
 
         queryFn: async () => {
-            const data = await publicCheckInClient.getCheckInList(checkInListShortId);
+            const data = await publicCheckInClient.getCheckInList(checkInListShortId, password);
             return data;
         },
 

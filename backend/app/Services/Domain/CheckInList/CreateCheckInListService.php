@@ -45,6 +45,7 @@ class CreateCheckInListService
                     ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                     : null,
                 CheckInListDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+                CheckInListDomainObjectAbstract::PASSWORD => $checkInList->getPassword(),
             ]);
 
             $this->checkInListProductAssociationService->addCheckInListToProducts(

@@ -20,6 +20,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const DELETED_AT = 'deleted_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const PASSWORD = 'password';
 
     protected int $id;
     protected int $event_id;
@@ -31,6 +32,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected ?string $deleted_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected ?string $password = null;
 
     public function toArray(): array
     {
@@ -45,6 +47,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'deleted_at' => $this->deleted_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'password' => $this->password ?? null,
                 ];
     }
 
@@ -156,5 +159,16 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
     }
 }

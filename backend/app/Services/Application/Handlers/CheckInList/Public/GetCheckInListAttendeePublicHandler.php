@@ -4,42 +4,25 @@ namespace HiEvents\Services\Application\Handlers\CheckInList\Public;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
-use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
-use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\Exceptions\CannotCheckInException;
 use HiEvents\Helper\DateHelper;
-use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
-use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use HiEvents\Services\Domain\CheckInList\CheckInListDataService;
 
 class GetCheckInListAttendeePublicHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface    $attendeeRepository,
-        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly CheckInListDataService      $checkInListDataService,
     )
     {
     }
 
-    /**
-     * @throws CannotCheckInException
-     */
-    public function handle(string $shortId, string $attendeePublicId): AttendeeDomainObject
+    public function handle(string $shortId, string $attendeePublicId, ?string $password = null): AttendeeDomainObject
     {
-        $checkInList = $this->checkInListRepository
-            ->loadRelation(ProductDomainObject::class)
-            ->loadRelation(new Relationship(EventDomainObject::class, name: 'event'))
-            ->findFirstWhere([
-                CheckInListDomainObjectAbstract::SHORT_ID => $shortId,
-            ]);
-
-        if (!$checkInList) {
-            throw new ResourceNotFoundException(__('Check-in list not found'));
-        }
-
-        $this->validateCheckInListIsActive($checkInList);
+        $checkInList = $this->checkInListDataService->getCheckInList($shortId);
+        $this->validateCheckInListIsActiveAndAuthorized($checkInList, $password);
 
         return $this->attendeeRepository->findFirstWhere([
             'public_id' => $attendeePublicId,
@@ -47,12 +30,12 @@ class GetCheckInListAttendeePublicHandler
         ]);
     }
 
-    /**
-     * @todo - Move this to its own service. It's used 3 times
-     * @throws CannotCheckInException
-     */
-    private function validateCheckInListIsActive(CheckInListDomainObject $checkInList): void
+    private function validateCheckInListIsActiveAndAuthorized(CheckInListDomainObject $checkInList, ?string $password): void
     {
+        if ($checkInList->isPasswordProtected() && $checkInList->getPassword() !== $password) {
+            throw new CannotCheckInException(__('Invalid password provided'));
+        }
+
         if ($checkInList->getExpiresAt() && DateHelper::utcDateIsPast($checkInList->getExpiresAt())) {
             throw new CannotCheckInException(__('Check-in list has expired'));
         }

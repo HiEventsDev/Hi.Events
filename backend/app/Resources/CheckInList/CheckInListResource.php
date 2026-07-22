@@ -22,6 +22,8 @@ class CheckInListResource extends JsonResource
             'short_id' => $this->getShortId(),
             'total_attendees' => $this->getTotalAttendeesCount(),
             'checked_in_attendees' => $this->getCheckedInCount(),
+            'is_password_protected' => $this->isPasswordProtected(),
+            'password' => $this->getPassword(),
             $this->mergeWhen($this->getEvent() !== null, fn() => [
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
