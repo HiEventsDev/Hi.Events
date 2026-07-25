@@ -95,6 +95,9 @@ if [ "$SKIP_STACK" != "1" ]; then
     compose up -d --wait
   fi
 
+  echo "==> Preparing HTMLPurifier cache directory"
+  compose exec -T backend sh -c 'mkdir -p storage/app/htmlpurifier && chmod -R 775 storage/app/htmlpurifier && chown -R www-data:www-data storage/app/htmlpurifier'
+
   echo "==> Running migrations"
   compose exec -T backend php artisan migrate --force
 
