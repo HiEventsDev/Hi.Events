@@ -361,7 +361,7 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                     enableHiding: false,
                     cell: (info: CellContext<Attendee, unknown>) => (
                         <div className={classes.actionsMenu}>
-                            <ActionMenu itemsGroups={[
+                            <ActionMenu dataTestId="attendee-actions-trigger" itemsGroups={[
                                 {
                                     label: t`Actions`,
                                     items: [

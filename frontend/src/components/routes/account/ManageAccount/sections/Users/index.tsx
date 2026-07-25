@@ -146,6 +146,7 @@ const Users = () => {
                 subHeading={t`Manage your users and their permissions`}
                 buttonText={t`Invite User`}
                 buttonAction={openCreateModal}
+                buttonDataTestId="team-invite-button"
             />
 
             <Card style={{padding: 0, position: 'relative'}}>

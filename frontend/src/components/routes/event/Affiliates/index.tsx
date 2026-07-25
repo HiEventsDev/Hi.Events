@@ -96,6 +96,7 @@ const Affiliates = () => {
                 <Button
                     leftSection={<IconPlus/>}
                     color={'green'}
+                    data-testid="affiliate-create-button"
                     onClick={openCreateModal}>{t`Create Affiliate`}
                 </Button>
             </ToolBar>

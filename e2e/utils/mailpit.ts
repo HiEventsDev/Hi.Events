@@ -14,6 +14,14 @@ interface MailpitMessage {
   HTML: string;
 }
 
+const decodeHtmlEntities = (value: string): string =>
+  value
+    .replace(/&amp;/g, '&')
+    .replace(/&#0?39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+
 export class MailpitClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -53,6 +61,33 @@ export class MailpitClient {
       throw new Error(`Mailpit GET message/${id} → ${response.status()}: ${await response.text()}`);
     }
     return (await response.json()) as MailpitMessage;
+  }
+
+  async getLinks(id: string): Promise<string[]> {
+    const message = await this.getMessage(id);
+    const links: string[] = [];
+    const hrefPattern = /href="([^"]+)"/g;
+    let match: RegExpExecArray | null;
+    while ((match = hrefPattern.exec(message.HTML)) !== null) {
+      links.push(decodeHtmlEntities(match[1]));
+    }
+    return links;
+  }
+
+  async waitForLink(
+    toAddress: string,
+    pathPattern: RegExp,
+    opts: { timeoutMs?: number; subjectContains?: string } = {},
+  ): Promise<URL> {
+    const summary = await this.waitForMessage(toAddress, opts);
+    const links = await this.getLinks(summary.ID);
+    const href = links.find((link) => pathPattern.test(link));
+    if (!href) {
+      throw new Error(
+        `Email "${summary.Subject}" to ${toAddress} has no link matching ${pathPattern} (links: ${links.join(', ')})`,
+      );
+    }
+    return new URL(href);
   }
 
   async waitForVerificationCode(toAddress: string, opts: { timeoutMs?: number } = {}): Promise<string> {

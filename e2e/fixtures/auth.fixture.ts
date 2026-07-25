@@ -1,5 +1,5 @@
-import type { BrowserContextOptions } from '@playwright/test';
-import { cookieDomain } from '../utils/env';
+import type { Browser, BrowserContextOptions, Page } from '@playwright/test';
+import { BASE_URL, cookieDomain } from '../utils/env';
 
 export function buildStorageState(token: string): BrowserContextOptions['storageState'] {
   return {
@@ -17,4 +17,13 @@ export function buildStorageState(token: string): BrowserContextOptions['storage
     ],
     origins: [],
   };
+}
+
+export async function openAuthedPage(browser: Browser, token: string): Promise<Page> {
+  const context = await browser.newContext({
+    baseURL: BASE_URL,
+    ignoreHTTPSErrors: true,
+    storageState: buildStorageState(token),
+  });
+  return context.newPage();
 }

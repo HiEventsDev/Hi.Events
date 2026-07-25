@@ -18,4 +18,9 @@ class UpsertWebhookRequest extends BaseRequest
             'status' => ['nullable', Rule::in(WebhookStatus::valuesArray())],
         ];
     }
+
+    public function getStatus(): WebhookStatus
+    {
+        return WebhookStatus::fromName($this->validated('status') ?? WebhookStatus::ENABLED->name);
+    }
 }

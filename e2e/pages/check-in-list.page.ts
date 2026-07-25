@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 export class CheckInListPage {
   constructor(private readonly page: Page) {}
@@ -15,5 +15,22 @@ export class CheckInListPage {
 
     await this.page.getByRole('heading', { name: 'Check-In List Created' }).waitFor();
     await this.page.getByRole('button', { name: 'Done' }).click();
+  }
+
+  row(name: string): Locator {
+    return this.page.getByRole('row').filter({ hasText: name });
+  }
+
+  async openRowAction(name: string, action: string): Promise<void> {
+    await this.row(name).getByRole('button').click();
+    await this.page.getByRole('menuitem', { name: action }).click();
+  }
+
+  editNameInput(): Locator {
+    return this.page.getByRole('dialog').getByLabel(/^Name/);
+  }
+
+  async submitEdit(): Promise<void> {
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Edit Check-In List' }).click();
   }
 }

@@ -32,20 +32,29 @@ appears in its list/table, the edited value shows), not just a URL change.
 
 ### Hermetic stack (identical to CI) — one command
 
-`run-e2e.sh` builds the images, starts the stack behind nginx on `http://localhost:8123`,
-migrates, installs dependencies, runs the suite, and tears the stack down. This is exactly
-what CI runs.
+`run-e2e.sh` starts the stack behind nginx on `http://localhost:8123`, migrates,
+provisions the superadmin, installs dependencies, and runs the suite.
+
+**Locally it reuses a running healthy stack by default** (fast iteration) and leaves
+it up afterwards; a missing or broken stack is recreated cleanly. In CI every run
+recreates the stack from scratch.
 
 ```bash
-./e2e/run-e2e.sh                    # everything, then tear down
-./e2e/run-e2e.sh --keep-stack       # leave the stack running afterwards
-./e2e/run-e2e.sh --skip-stack       # run against an already-running stack
+./e2e/run-e2e.sh                    # reuse (or create) the stack, run everything
+./e2e/run-e2e.sh --fresh            # force a clean stack recreation first
+./e2e/run-e2e.sh --teardown         # tear the stack down after the run
+./e2e/run-e2e.sh --skip-stack       # run against an already-running stack (e.g. dev)
 ./e2e/run-e2e.sh --skip-deps        # skip npm ci / browser install (fast re-runs)
 ./e2e/run-e2e.sh -- --grep @smoke   # pass args through to `playwright test`
 ```
 
-Each run recreates a clean stack (`docker compose down` then `up`), so a previous
-partial or broken stack never leaks into the next run.
+**Reuse caveat:** `docker compose up` never rebuilds images. After changing
+`backend/` or `frontend/` source, rebuild before running:
+
+```bash
+docker compose -f docker/e2e/docker-compose.e2e.yml build backend frontend
+./e2e/run-e2e.sh --fresh
+```
 
 The hermetic stack is designed to run **alongside the dev stack** — it uses nginx on
 `8123` and Mailpit on `8225` (the dev stack uses `8443`/`8025`), and nothing else is
@@ -102,7 +111,24 @@ Copy `.env.example` to `.env` to override defaults. All are optional.
 | `E2E_BASE_URL`      | `http://localhost:8123`  | Public entry point of the stack under test           |
 | `MAILPIT_URL`       | `http://localhost:8225`  | Mailpit HTTP API, for email assertions (8225 so it coexists with the dev stack's 8025) |
 | `E2E_SAAS_MODE`     | `false`                  | Must match the backend's `APP_SAAS_MODE_ENABLED`     |
-| `STRIPE_PUBLIC_KEY` | _(unset)_                | Stripe test-mode key; when unset the Stripe spec skips |
+| `STRIPE_PUBLIC_KEY` | _(unset)_                | Stripe test-mode key; when unset the `@stripe` specs skip |
+
+### Stripe specs
+
+Tests that talk to the real Stripe test-mode API are tagged `@stripe` (paid checkout,
+decline/retry, refund) and skip unless `STRIPE_PUBLIC_KEY` is set. The stack must be
+**booted** with the keys (the backend needs `STRIPE_SECRET_KEY`, the frontend gets the
+publishable key via compose) — setting them only at test time is not enough.
+
+Easiest: put the test-mode keys in `e2e/.env` (gitignored; see `.env.example`) —
+`run-e2e.sh` loads it and passes them to the stack:
+
+```bash
+./e2e/run-e2e.sh --fresh --skip-deps -- --grep @stripe
+```
+
+(`--fresh` only the first time, so the containers boot with the keys; after that the
+reused stack keeps them.) Exported shell vars take precedence over `e2e/.env`.
 
 ## Writing a new spec
 
@@ -131,12 +157,26 @@ test('example', { tag: '@smoke' }, async ({ page, api, account }) => {
   (no UI login). Use it for organizer-facing flows.
 - **`page`** — the default unauthenticated page. Use it for public flows (checkout).
 - **`mailpit`** — client for asserting on outbound email.
+- **`publicApi`** — anonymous API context rooted at the API base URL, for buyer-side
+  public endpoints (`api/public-client.ts`: create/complete orders, join waitlist, …).
+- **`freshAccount`** — a brand-new account + organizer isolated to this test, with
+  `newAuthedPage()` for browsing as that account.
+- **`adminApi`** / **`superAdminPage`** — authenticated as the superadmin that
+  `run-e2e.sh` provisions via `php artisan dev:bootstrap`. If no superadmin exists
+  (e.g. `--skip-stack` against a stack that never provisioned one), these skip the
+  test locally and **hard-fail in CI** so admin coverage can't silently disappear.
 
-The `account` fixture is **worker-scoped** — one account + organizer is shared by every
-spec in a worker. Specs stay isolated by creating their own event per test (via the
-`factory`). If you add an **organizer-level** spec (like webhooks), don't assume a clean
-organizer — use unique values and assert your own row, or create a fresh organizer for
-that test.
+**Which isolation level to use:**
+
+- Event-scoped spec (products, orders, attendees, …) → shared `account` + a fresh
+  event per test via the `factory`.
+- Organizer-aggregate assertion (reports, settings, organizer webhooks, events list
+  contents) → `createFreshOrganizer(api)` — one API call, still on the shared account.
+- Account/auth-level mutation (team invites, password change, messaging tier,
+  impersonation target) → `freshAccount`.
+
+Don't default to `freshAccount` — worker-sharing the account is the main reason the
+suite is fast.
 
 ### Selector policy
 
@@ -169,8 +209,17 @@ targets non-SaaS platform-account charges until a seeded-connected-account helpe
 ## CI
 
 `.github/workflows/e2e.yml` builds the backend and frontend images (GHA layer cache),
-starts the stack, runs migrations, and executes the suite. The HTML report, traces, and
-stack logs are uploaded as artifacts on every run.
+starts the stack, runs migrations, provisions the superadmin, and executes the suite.
+The HTML report, traces, and stack logs are uploaded as artifacts on every run.
+
+Lanes:
+
+- **Pull requests** run the `@smoke` lane only (`--grep @smoke`) — one fast,
+  load-bearing check per feature area. Tag discipline matters: exactly one `@smoke`
+  test per area.
+- **Pushes to `main`/`develop`/release branches** and a **nightly cron** run the full
+  suite, sharded across two parallel jobs (each with its own hermetic stack).
+- Adding the **`full-e2e` label** to a PR forces the full sharded lane on that PR.
 
 The Stripe checkout spec runs only when the repository secrets `STRIPE_TEST_PUBLIC_KEY`
 and `STRIPE_TEST_SECRET_KEY` (Stripe **test-mode** keys) are set; otherwise it skips,

@@ -129,6 +129,7 @@ export const SoldOutWaitlist = () => {
                     size="sm"
                     color="green"
                     leftSection={<IconSend size={16}/>}
+                    data-testid="waitlist-offer-next-button"
                     onClick={openOfferModal}
                 >
                     {t`Offer Tickets`}

@@ -127,6 +127,7 @@ const AdminAccountsTable = ({accounts, onImpersonate, isLoading}: AdminAccountsT
                                                 <Button
                                                     size="xs"
                                                     variant="light"
+                                                    data-testid="admin-impersonate-menu-item"
                                                     onClick={() => onImpersonate(user.id, account.id)}
                                                     disabled={isLoading}
                                                 >

@@ -3,7 +3,6 @@
 namespace HiEvents\Http\Actions\Organizers\Webhooks;
 
 use HiEvents\DomainObjects\OrganizerDomainObject;
-use HiEvents\DomainObjects\Status\WebhookStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Webhook\UpsertWebhookRequest;
 use HiEvents\Resources\Webhook\WebhookResource;
@@ -30,7 +29,7 @@ class EditOrganizerWebhookAction extends BaseAction
                 organizerId: $organizerId,
                 userId: $this->getAuthenticatedUser()->getId(),
                 accountId: $this->getAuthenticatedAccountId(),
-                status: WebhookStatus::fromName($request->validated('status')),
+                status: $request->getStatus(),
             )
         );
 

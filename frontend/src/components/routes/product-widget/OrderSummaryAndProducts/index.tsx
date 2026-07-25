@@ -125,6 +125,7 @@ const GuestListItem = ({
                         <Tooltip label={t`Edit Attendee`}>
                             <ActionIcon
                                 variant="subtle"
+                                data-testid="attendee-edit-button"
                                 onClick={onEditClick}
                             >
                                 <IconEdit size={18}/>
@@ -133,6 +134,7 @@ const GuestListItem = ({
                         <Tooltip label={t`Resend Ticket`}>
                             <ActionIcon
                                 variant="subtle"
+                                data-testid="resend-ticket-button"
                                 onClick={onResendClick}
                             >
                                 <IconSend size={18}/>
@@ -235,7 +237,7 @@ const OrderDetails = ({
                         <span>{order.first_name} {order.last_name}</span>
                         {allowSelfEdit && order.status !== 'CANCELLED' && (
                             <Tooltip label={t`Edit`}>
-                                <ActionIcon size="xs" variant="subtle" onClick={onEditClick}>
+                                <ActionIcon size="xs" variant="subtle" data-testid="order-edit-button" onClick={onEditClick}>
                                     <IconEdit size={14}/>
                                 </ActionIcon>
                             </Tooltip>
@@ -256,7 +258,7 @@ const OrderDetails = ({
                         <span style={{wordBreak: 'break-all'}}>{order.email}</span>
                         {allowSelfEdit && order.status !== 'CANCELLED' && (
                             <Tooltip label={t`Resend Confirmation`}>
-                                <ActionIcon size="xs" variant="subtle" onClick={onResendClick}>
+                                <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
                                     <IconSend size={14}/>
                                 </ActionIcon>
                             </Tooltip>

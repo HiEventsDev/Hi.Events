@@ -10,21 +10,44 @@ on:
       - 'docker/e2e/**'
       - '.github/workflows/e2e.yml'
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - 'backend/**'
       - 'frontend/**'
       - 'e2e/**'
       - 'docker/e2e/**'
       - '.github/workflows/e2e.yml'
+  schedule:
+    - cron: '0 3 * * *'
 
 concurrency:
   group: e2e-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - id: set
+        env:
+          FULL: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-e2e') }}
+        run: |
+          if [ "$FULL" = "true" ]; then
+            echo 'matrix={"include":[{"name":"full-1","pw_args":"--shard=1/2"},{"name":"full-2","pw_args":"--shard=2/2"}]}' >> "$GITHUB_OUTPUT"
+          else
+            echo 'matrix={"include":[{"name":"smoke","pw_args":"--grep @smoke"}]}' >> "$GITHUB_OUTPUT"
+          fi
+
   e2e:
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
 
     env:
       COMPOSE_FILE: docker/e2e/docker-compose.e2e.yml
@@ -73,7 +96,7 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('e2e/package-lock.json') }}
 
       - name: Run E2E suite
-        run: ./e2e/run-e2e.sh
+        run: ./e2e/run-e2e.sh -- ${{ matrix.pw_args }}
 
       - name: Collect stack logs on failure
         if: failure()
@@ -83,7 +106,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.name }}
           path: |
             e2e/playwright-report/
             e2e/test-results/
