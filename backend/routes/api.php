@@ -559,7 +559,8 @@ $router->prefix('/public')->group(
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
-        $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class);
+        $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
+            ->middleware('throttle:5,1');
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
