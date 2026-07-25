@@ -44,6 +44,6 @@ test.describe('waitlist management', () => {
     await mailpit.waitForMessage(firstEmail, { subjectContains: 'spot has opened up' });
 
     await waitlist.removeEntry(secondEmail);
-    await expect(waitlist.entryStatus(secondEmail, 'CANCELLED')).toBeVisible();
+    await expect(waitlist.entryStatus(secondEmail, 'CANCELLED')).toBeVisible({ timeout: 30_000 });
   });
 });

@@ -32,6 +32,8 @@ test.describe('event lifecycle', () => {
     await authedPage.goto(`/manage/organizer/${account.organizerId}/events`);
     await authedPage.waitForLoadState('networkidle');
     await authedPage.getByPlaceholder('Search by event name...').fill(event.title);
+    await authedPage.waitForURL(/query=/);
+    await authedPage.waitForLoadState('networkidle');
 
     const sourceCard = authedPage
       .locator('a')
