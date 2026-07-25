@@ -434,7 +434,7 @@ const OccurrencesTab = () => {
                         <Menu shadow="md" width={200}>
                             <Menu.Target>
                                 <div className={classes.action}>
-                                    <Button size="xs" variant="transparent">
+                                    <Button size="xs" variant="transparent" data-testid="occurrence-actions-menu">
                                         <IconDotsVertical/>
                                     </Button>
                                 </div>

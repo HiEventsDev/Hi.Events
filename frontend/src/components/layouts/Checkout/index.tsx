@@ -363,6 +363,7 @@ const Checkout = () => {
                                                     label={t`Download Invoice`}>
                                                     <ActionIcon
                                                         variant="subtle"
+                                                        data-testid="download-invoice-button"
                                                         onClick={() => handleInvoiceDownload(order.latest_invoice as Invoice)}
                                                     >
                                                         <IconReceipt size={20}/>

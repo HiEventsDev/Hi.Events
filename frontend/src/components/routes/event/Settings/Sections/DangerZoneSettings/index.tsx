@@ -110,6 +110,7 @@ export const DangerZoneSettings = () => {
                             mt="sm"
                             color="red"
                             variant="outline"
+                            data-testid="event-delete-button"
                             onClick={handleDelete}
                             loading={deleteMutation.isPending}
                             disabled={!deletionStatus?.can_delete || isDeletionStatusLoading || !isDeleteConfirmed}

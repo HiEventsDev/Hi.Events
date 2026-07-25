@@ -249,7 +249,7 @@ const Attendees = () => {
                     resultCount={pagination?.total}
                     resultLabel={t`attendees`}
                 >
-                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>}>
+                    <Button color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
                         {t`Create`}
                     </Button>
 

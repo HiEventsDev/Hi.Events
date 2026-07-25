@@ -207,6 +207,7 @@ const EventLayout = () => {
                     {isEventFetched && (
                         <TopBarButton
                             onClick={handleStatusToggle}
+                            data-testid="event-status-toggle"
                             size="sm"
                             leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
                             rightSection={<IconChevronRight size={14}/>}

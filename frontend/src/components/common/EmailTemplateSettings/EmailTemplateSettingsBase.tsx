@@ -307,6 +307,7 @@ export const EmailTemplateSettingsBase = ({
                         <Button
                             size="xs"
                             leftSection={<IconPlus size={16}/>}
+                            data-testid="email-template-create-button"
                             onClick={() => handleCreateTemplate(type)}
                             disabled={isModifyDisabled}
                         >

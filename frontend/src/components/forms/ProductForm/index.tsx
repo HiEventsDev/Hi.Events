@@ -375,6 +375,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             className={classes.addTierButton}
                             size={'xs'}
                             variant={'light'}
+                            data-testid="product-add-tier-button"
                             leftSection={<IconPlus size={14}/>}
                             onClick={() =>
                                 form.insertListItem('prices', {

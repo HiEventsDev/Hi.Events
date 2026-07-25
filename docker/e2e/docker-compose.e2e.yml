@@ -12,7 +12,7 @@ services:
             APP_SAAS_MODE_ENABLED: '${E2E_SAAS_MODE:-false}'
             STRIPE_PUBLIC_KEY: '${STRIPE_PUBLIC_KEY:-}'
             STRIPE_SECRET_KEY: '${STRIPE_SECRET_KEY:-}'
-            STRIPE_WEBHOOK_SECRET: '${STRIPE_WEBHOOK_SECRET:-}'
+            STRIPE_WEBHOOK_SECRET: '${STRIPE_WEBHOOK_SECRET:-whsec_e2e_local_secret}'
         depends_on:
             pgsql:
                 condition: service_healthy

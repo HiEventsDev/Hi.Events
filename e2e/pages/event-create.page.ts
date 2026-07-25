@@ -11,20 +11,15 @@ export class EventCreatePage {
   async openCreateModal(): Promise<void> {
     const createNewMenu = this.page.getByRole('button', { name: 'Create new' });
     const blankSlateButton = this.page.getByRole('button', { name: /^Create event$/i });
+    const eventMenuItem = this.page.getByRole('menuitem', { name: 'Event' });
+    const eventNameField = this.page.getByLabel(/^Event Name/);
 
-    await Promise.race([
-      createNewMenu.waitFor({ state: 'visible' }).catch(() => undefined),
-      blankSlateButton.waitFor({ state: 'visible' }).catch(() => undefined),
-    ]);
-
-    if (await createNewMenu.isVisible().catch(() => false)) {
-      await createNewMenu.click();
-      await this.page.getByRole('menuitem', { name: 'Event' }).click();
-    } else {
-      await blankSlateButton.click();
+    await createNewMenu.or(blankSlateButton).first().click();
+    await eventMenuItem.or(eventNameField).first().waitFor({ state: 'visible' });
+    if (await eventMenuItem.isVisible()) {
+      await eventMenuItem.click();
     }
-
-    await this.page.getByLabel(/^Event Name/).waitFor({ state: 'visible' });
+    await eventNameField.waitFor({ state: 'visible' });
   }
 
   async createSingleEvent(details: { title: string; category?: string }): Promise<void> {

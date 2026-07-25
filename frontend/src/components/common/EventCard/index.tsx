@@ -151,6 +151,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
                     label: t`Duplicate event`,
                     icon: <IconCopy size={14}/>,
                     onClick: handleDuplicate,
+                    dataTestId: 'event-duplicate-menu-item',
                 },
                 {
                     label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,

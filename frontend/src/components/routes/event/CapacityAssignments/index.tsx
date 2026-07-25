@@ -58,6 +58,7 @@ const CapacityAssignments = () => {
                 <Button
                     leftSection={<IconPlus/>}
                     color={'green'}
+                    data-testid="capacity-create-button"
                     onClick={() => openCreateModal()}>{t`Create Capacity Assignment`}
                 </Button>
             </ToolBar>

@@ -21,6 +21,7 @@ export const JoinWaitlistButton = ({product, event, productPriceId, priceLabel, 
             <button
                 type="button"
                 className="hi-waitlist-button"
+                data-testid="join-waitlist-button"
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();

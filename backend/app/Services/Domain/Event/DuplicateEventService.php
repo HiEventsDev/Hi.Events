@@ -575,39 +575,41 @@ class DuplicateEventService
         array $oldProductToNewProductMap,
         array $oldPriceToNewPriceMap,
     ): void {
-        foreach ($oldToNewOccurrenceMap as $oldOccurrenceId => $newOccurrenceId) {
-            $priceOverrides = $this->priceOverrideRepository->findWhere([
-                'event_occurrence_id' => $oldOccurrenceId,
-            ]);
+        $oldOccurrenceIds = array_keys($oldToNewOccurrenceMap);
 
-            foreach ($priceOverrides as $override) {
-                $newPriceId = $oldPriceToNewPriceMap[$override->getProductPriceId()] ?? null;
-                if ($newPriceId === null) {
-                    continue;
-                }
-
-                $this->priceOverrideRepository->create([
-                    'event_occurrence_id' => $newOccurrenceId,
-                    'product_price_id' => $newPriceId,
-                    'price' => $override->getPrice(),
-                ]);
+        $priceOverrideInserts = [];
+        $priceOverrides = $this->priceOverrideRepository->findWhereIn('event_occurrence_id', $oldOccurrenceIds);
+        foreach ($priceOverrides as $override) {
+            $newPriceId = $oldPriceToNewPriceMap[$override->getProductPriceId()] ?? null;
+            if ($newPriceId === null) {
+                continue;
             }
 
-            $visibilityRecords = $this->visibilityRepository->findWhere([
-                'event_occurrence_id' => $oldOccurrenceId,
-            ]);
+            $priceOverrideInserts[] = [
+                'event_occurrence_id' => $oldToNewOccurrenceMap[$override->getEventOccurrenceId()],
+                'product_price_id' => $newPriceId,
+                'price' => $override->getPrice(),
+            ];
+        }
+        if ($priceOverrideInserts !== []) {
+            $this->priceOverrideRepository->insert($priceOverrideInserts);
+        }
 
-            foreach ($visibilityRecords as $visibility) {
-                $newProductId = $oldProductToNewProductMap[$visibility->getProductId()] ?? null;
-                if ($newProductId === null) {
-                    continue;
-                }
-
-                $this->visibilityRepository->create([
-                    'event_occurrence_id' => $newOccurrenceId,
-                    'product_id' => $newProductId,
-                ]);
+        $visibilityInserts = [];
+        $visibilityRecords = $this->visibilityRepository->findWhereIn('event_occurrence_id', $oldOccurrenceIds);
+        foreach ($visibilityRecords as $visibility) {
+            $newProductId = $oldProductToNewProductMap[$visibility->getProductId()] ?? null;
+            if ($newProductId === null) {
+                continue;
             }
+
+            $visibilityInserts[] = [
+                'event_occurrence_id' => $oldToNewOccurrenceMap[$visibility->getEventOccurrenceId()],
+                'product_id' => $newProductId,
+            ];
+        }
+        if ($visibilityInserts !== []) {
+            $this->visibilityRepository->insert($visibilityInserts);
         }
     }
 }

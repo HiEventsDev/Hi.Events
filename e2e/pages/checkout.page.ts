@@ -19,6 +19,36 @@ export class CheckoutPage {
     await input.fill(String(quantity));
   }
 
+  async setQuantityForProduct(productTitle: string, quantity: number): Promise<void> {
+    const row = this.page.locator('.hi-product-row').filter({ hasText: productTitle });
+    await row.locator('.hi-product-quantity-selector input').fill(String(quantity));
+  }
+
+  async applyPromoCode(code: string): Promise<void> {
+    await this.page.getByText('Have a promo code?').click();
+    await this.page.locator('.hi-promo-code-input').fill(code);
+    await this.page.getByTestId('promo-code-apply-button').click();
+  }
+
+  async answerTextQuestion(title: string, value: string): Promise<void> {
+    await this.page.getByLabel(new RegExp(`^${title}`)).fill(value);
+  }
+
+  async chooseRadioOption(option: string): Promise<void> {
+    await this.page.getByRole('radio', { name: option }).check();
+  }
+
+  async chooseOfflinePayment(): Promise<void> {
+    const offlineTab = this.page.getByRole('button', { name: 'Offline' });
+    if (await offlineTab.isVisible()) {
+      await offlineTab.click();
+    }
+    await this.page.getByTestId('offline-payment-button').click();
+    await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/);
+    await this.page.reload();
+    await this.page.waitForLoadState('networkidle');
+  }
+
   async continueToCheckout(): Promise<void> {
     await this.page.getByTestId('checkout-continue-button').click();
     await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
@@ -42,6 +72,7 @@ export class CheckoutPage {
   async completeFreeOrder(): Promise<void> {
     await this.page.getByRole('button', { name: 'Complete Order' }).click();
     await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/);
+    await this.page.reload();
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -50,17 +81,49 @@ export class CheckoutPage {
     await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/payment/);
   }
 
-  async payWithStripeTestCard(card = '4242424242424242'): Promise<void> {
+  async fillStripeCard(card = '4242424242424242'): Promise<void> {
     const stripeFrame = this.page.frameLocator('iframe[title="Secure payment input frame"]');
     await stripeFrame.getByPlaceholder('1234 1234 1234 1234').fill(card);
     await stripeFrame.getByPlaceholder('MM / YY').fill('12 / 34');
     await stripeFrame.getByPlaceholder('CVC').fill('123');
+    const country = stripeFrame.getByLabel('Country', { exact: true });
+    if (await country.count()) {
+      await country.selectOption({ label: 'United States' });
+    }
     const zip = stripeFrame.getByPlaceholder('12345');
     if (await zip.count()) {
       await zip.fill('12345');
     }
-    await this.page.getByRole('button', { name: /^Pay\b/ }).click();
-    await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/, { timeout: 30_000 });
-    await this.page.waitForLoadState('networkidle');
+  }
+
+  private async waitForStripeFrameToSettle(): Promise<void> {
+    const frame = this.page.locator('iframe[title="Secure payment input frame"]');
+    await this.page.waitForTimeout(500);
+    let previousHeight = -1;
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const height = (await frame.boundingBox())?.height ?? -1;
+      if (height === previousHeight) {
+        return;
+      }
+      previousHeight = height;
+      await this.page.waitForTimeout(250);
+    }
+  }
+
+  async clickPay(): Promise<void> {
+    await this.page.getByRole('heading', { name: 'Payment' }).click();
+    await this.waitForStripeFrameToSettle();
+    await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+  }
+
+  async payWithStripeTestCard(card = '4242424242424242'): Promise<void> {
+    await this.fillStripeCard(card);
+    await this.clickPay();
+    try {
+      await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 15_000 });
+    } catch {
+      await this.page.getByRole('button', { name: /^Pay\b/ }).dispatchEvent('click');
+      await this.page.waitForURL(/\/checkout\/\d+\/[^/]+\/(payment_return|summary)/, { timeout: 30_000 });
+    }
   }
 }

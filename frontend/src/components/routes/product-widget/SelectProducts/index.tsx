@@ -675,6 +675,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     }} mb={0} ref={promoRef}/>
                     <Button type="button" disabled={promoCodeEventRefetchMutation.isPending}
                             className={'hi-apply-promo-code-button'} variant={'outline'}
+                            data-testid="promo-code-apply-button"
                             onClick={handleApplyPromoCode}>
                         {t`Apply Promo Code`}
                     </Button>
