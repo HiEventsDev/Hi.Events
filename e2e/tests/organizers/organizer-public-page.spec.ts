@@ -38,7 +38,7 @@ test.describe('organizer public page', () => {
     await expect(page.getByText('Your message has been sent successfully!')).toBeVisible();
 
     const summary = await mailpit.waitForMessage(organizerEmail, { subjectContains: senderName });
-    expect(summary.Subject).toBe(`New message from ${senderName}`);
+    expect(summary.Subject).toBe(`New message from your organizer page`);
     const message = await mailpit.getMessage(summary.ID);
     expect(`${message.Text}\n${message.HTML}`).toContain(reference);
   });
