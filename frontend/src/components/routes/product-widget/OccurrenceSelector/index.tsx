@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {Event, EventOccurrence, EventOccurrenceStatus, EventType, IdParam, RecurrenceRule} from "../../../../types.ts";
+import {useGetEventOccurrencesPublic} from "../../../../queries/useGetEventOccurrencesPublic.ts";
 import {EventLocationDisplay, getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatDateWithLocale, formatOccurrenceEnd, getSafeLocale} from "../../../../utilites/dates.ts";
 import {localeFormats} from "../../../../utilites/dateLocales.ts";
@@ -49,7 +50,7 @@ interface OccurrenceSelectorProps {
     event: Event;
     selectedOccurrenceId?: IdParam;
     pendingInitialOccurrenceId?: IdParam;
-    onSelect: (occurrenceId: IdParam) => void;
+    onSelect: (occurrenceId: IdParam, occurrence?: EventOccurrence) => void;
     colors?: {
         primary?: string;
         primaryText?: string;
@@ -103,7 +104,7 @@ const SlotRow = ({
     tz: string;
     locale: string;
     selected: boolean;
-    onSelect: (occurrenceId: IdParam) => void;
+    onSelect: (occurrenceId: IdParam, occurrence?: EventOccurrence) => void;
     waitlistAvailable?: boolean;
     locationDisplay?: EventLocationDisplay | null;
 }) => {
@@ -146,7 +147,7 @@ const SlotRow = ({
             aria-pressed={selectable ? selected : undefined}
             aria-label={ariaLabel}
             onClick={() => {
-                if (selectable && occ.id) onSelect(occ.id);
+                if (selectable && occ.id) onSelect(occ.id, occ);
             }}
         >
             <div className="hi-time-slot-main">
@@ -205,7 +206,7 @@ const TimeSlotList = ({
     tz: string;
     locale: string;
     selectedOccurrenceId?: IdParam;
-    onSelect: (occurrenceId: IdParam) => void;
+    onSelect: (occurrenceId: IdParam, occurrence?: EventOccurrence) => void;
     waitlistAvailable?: boolean;
 }) => {
     if (slots.length === 0) {
@@ -295,7 +296,7 @@ const ProductsPane = ({
     selectedOccurrence: EventOccurrence;
     tz: string;
     locale: string;
-    onSelect: (occurrenceId: IdParam) => void;
+    onSelect: (occurrenceId: IdParam, occurrence?: EventOccurrence) => void;
     isLoading?: boolean;
     waitlistAvailable?: boolean;
     children?: ReactNode;
@@ -376,7 +377,7 @@ const ProductsPane = ({
                                 aria-label={soldOut
                                     ? (chipDisabled ? t`${chipTime}, Sold Out` : t`${chipTime}, Sold Out, waitlist available`)
                                     : undefined}
-                                onClick={() => occ.id && onSelect(occ.id)}
+                                onClick={() => occ.id && onSelect(occ.id, occ)}
                             >
                                 {chipTime}
                                 {soldOut && (
@@ -412,7 +413,43 @@ const OccurrencePicker = ({
 }: OccurrenceSelectorProps & {activeOccurrences: EventOccurrence[]}) => {
     const tz = event.timezone;
     const locale = getSafeLocale(getClientLocale());
-    const occurrences = event.occurrences || [];
+    const embeddedOccurrences = event.occurrences || [];
+
+    const defaultFocusedDate = () => {
+        if (selectedOccurrenceId) {
+            const occ = embeddedOccurrences.find(o => sameId(o.id, selectedOccurrenceId));
+            if (occ) return dateKey(occ, tz);
+        }
+        return dateKey(activeOccurrences[0], tz);
+    };
+
+    const [focusedDate, setFocusedDate] = useState<string>(defaultFocusedDate);
+    const [displayedMonth, setDisplayedMonth] = useState<string>(
+        () => dayjs(defaultFocusedDate()).startOf('month').format('YYYY-MM-DD')
+    );
+
+    const displayedYearMonth = displayedMonth.slice(0, 7);
+    const prevMonthKey = dayjs(displayedMonth).subtract(1, 'month').format('YYYY-MM');
+    const nextMonthKey = dayjs(displayedMonth).add(1, 'month').format('YYYY-MM');
+    const isMonthEmbedded = (monthKey: string) => event.occurrences_month === monthKey;
+
+    const prevMonthQuery = useGetEventOccurrencesPublic(event.id, prevMonthKey, tz, false);
+    const displayedMonthQuery = useGetEventOccurrencesPublic(event.id, displayedYearMonth, tz, !isMonthEmbedded(displayedYearMonth));
+    const nextMonthQuery = useGetEventOccurrencesPublic(event.id, nextMonthKey, tz, false);
+
+    const displayedMonthLoading = !isMonthEmbedded(displayedYearMonth) && displayedMonthQuery.isLoading;
+
+    const occurrences = useMemo(() => {
+        const merged = new Map<number, EventOccurrence>();
+        for (const monthData of [embeddedOccurrences, prevMonthQuery.data, displayedMonthQuery.data, nextMonthQuery.data]) {
+            for (const occ of monthData || []) {
+                if (occ.id !== undefined && occ.id !== null) {
+                    merged.set(Number(occ.id), occ);
+                }
+            }
+        }
+        return Array.from(merged.values());
+    }, [embeddedOccurrences, prevMonthQuery.data, displayedMonthQuery.data, nextMonthQuery.data]);
 
     const {occurrencesByDate, calendarDays, soldOutOnlyDays} = useMemo(() => {
         const byDate: Record<string, EventOccurrence[]> = {};
@@ -442,19 +479,6 @@ const OccurrencePicker = ({
         return {occurrencesByDate: byDate, calendarDays: shown, soldOutOnlyDays: soldOutOnly};
     }, [occurrences, tz]);
 
-    const defaultFocusedDate = () => {
-        if (selectedOccurrenceId) {
-            const occ = occurrences.find(o => sameId(o.id, selectedOccurrenceId));
-            if (occ) return dateKey(occ, tz);
-        }
-        return dateKey(activeOccurrences[0], tz);
-    };
-
-    const [focusedDate, setFocusedDate] = useState<string>(defaultFocusedDate);
-    const [displayedMonth, setDisplayedMonth] = useState<string>(
-        () => dayjs(defaultFocusedDate()).startOf('month').format('YYYY-MM-DD')
-    );
-
     useEffect(() => {
         if (!selectedOccurrenceId) return;
         const occ = occurrences.find(o => sameId(o.id, selectedOccurrenceId));
@@ -483,7 +507,7 @@ const OccurrencePicker = ({
         }
         const bookable = (occurrencesByDate[focusedDate] || []).filter(isBookable);
         if (bookable.length === 1 && bookable[0].id && !sameId(bookable[0].id, clearedOccurrenceRef.current)) {
-            onSelect(bookable[0].id);
+            onSelect(bookable[0].id, bookable[0]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [focusedDate, occurrencesByDate, selectedOccurrenceId, pendingInitialOccurrenceId]);
@@ -497,7 +521,7 @@ const OccurrencePicker = ({
         }
         const bookable = daySlots.filter(isBookable);
         if (bookable.length === 1 && bookable[0].id) {
-            onSelect(bookable[0].id);
+            onSelect(bookable[0].id, bookable[0]);
         }
     };
 
@@ -525,6 +549,9 @@ const OccurrencePicker = ({
 
     const todayKey = dayjs().tz(tz).format('YYYY-MM-DD');
     const minDateKey = [todayKey, ...calendarDays].reduce((min, key) => (key < min ? key : min));
+    const maxDateKey = event.last_occurrence_date
+        ? dayjs.utc(event.last_occurrence_date).tz(tz).format('YYYY-MM-DD')
+        : undefined;
     const focusedSlots = occurrencesByDate[focusedDate] || [];
 
     const selectedOccurrence = selectedOccurrenceId
@@ -537,7 +564,6 @@ const OccurrencePicker = ({
         productSlot && !showingProducts && focusedSlots.filter(isBookable).length === 1
     );
 
-    const displayedYearMonth = displayedMonth.slice(0, 7);
     const monthHasDates = useMemo(
         () => Array.from(calendarDays).some(key => key.startsWith(displayedYearMonth)),
         [calendarDays, displayedYearMonth]
@@ -588,7 +614,12 @@ const OccurrencePicker = ({
                 )}
             </div>
 
-            <div className="hi-calendar-panel">
+            <div className="hi-calendar-panel" aria-busy={displayedMonthLoading || undefined}>
+                {displayedMonthLoading && (
+                    <div className="hi-calendar-month-loading">
+                        <Loader size="sm" color="var(--widget-primary-color, #228be6)"/>
+                    </div>
+                )}
                 <DatesProvider settings={{locale, firstDayOfWeek: 1, consistentWeeks: true}}>
                     <DatePicker
                         className="hi-occurrence-datepicker"
@@ -600,6 +631,7 @@ const OccurrencePicker = ({
                         date={displayedMonth}
                         onDateChange={setDisplayedMonth}
                         minDate={minDateKey}
+                        maxDate={maxDateKey}
                         allowDeselect={false}
                         highlightToday
                         hideOutsideDates
@@ -631,7 +663,7 @@ const OccurrencePicker = ({
                     />
                 </DatesProvider>
 
-                {!monthHasDates && (
+                {!monthHasDates && !displayedMonthLoading && (
                     <div className="hi-calendar-no-dates">
                         {t`No dates available this month. Try navigating to another month.`}
                     </div>

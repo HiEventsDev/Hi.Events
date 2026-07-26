@@ -82,12 +82,29 @@ docker compose -f docker/e2e/docker-compose.e2e.yml down -v
 
 ### Against the running dev stack
 
-The suite is data-isolated (unique emails per run), so it can target the dev stack directly.
-Use `--skip-stack` so the script doesn't manage the e2e stack, and point it at the dev
-stack's URLs. Note it leaves test data behind in the dev database.
+The suite is data-isolated (unique emails per run), so it can target the dev stack directly —
+useful for testing uncommitted changes without rebuilding the hermetic images (the dev stack
+mounts source live). Note it leaves test data behind in the dev database.
+
+`E2E_SAAS_MODE=true` is required: the dev stack requires email verification, and the account
+fixture only confirms the code from Mailpit in SaaS mode. That also means a queue worker must
+be running to deliver the verification emails, and superadmin-dependent specs need the e2e
+superadmin provisioned once:
 
 ```bash
-E2E_BASE_URL=https://localhost:8443 MAILPIT_URL=http://localhost:8025 \
+cd docker/development
+docker compose -f docker-compose.dev.yml exec -d backend php artisan queue:work
+docker compose -f docker-compose.dev.yml exec backend php artisan dev:bootstrap \
+  --email=superadmin@e2e.test --password='SuperAdminPass123!'
+```
+
+Then run specs directly (from `e2e/`), or the whole suite via the script (from the repo root):
+
+```bash
+E2E_BASE_URL=https://localhost:8443 MAILPIT_URL=http://localhost:8025 E2E_SAAS_MODE=true \
+  npx playwright test tests/events/recurring-event-checkout.spec.ts
+
+E2E_BASE_URL=https://localhost:8443 MAILPIT_URL=http://localhost:8025 E2E_SAAS_MODE=true \
   ./e2e/run-e2e.sh --skip-stack --skip-deps
 ```
 

@@ -536,6 +536,8 @@ export interface Event extends EventBase {
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
     upcoming_occurrences_sold_out?: boolean;
+    last_occurrence_date?: string | null;
+    occurrences_month?: string | null;
 }
 
 export interface EventStatistics {

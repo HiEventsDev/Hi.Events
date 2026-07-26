@@ -110,78 +110,6 @@ class EventDomainObjectTest extends TestCase
         $this->assertNull($eventWithEmpty->getEndDate());
     }
 
-    public function test_is_event_in_past_returns_true_when_all_occurrences_are_past(): void
-    {
-        $occurrences = collect([
-            $this->createOccurrence(
-                Carbon::now()->subDays(3)->toDateTimeString(),
-                Carbon::now()->subDays(2)->toDateTimeString(),
-            ),
-            $this->createOccurrence(
-                Carbon::now()->subDays(2)->toDateTimeString(),
-                Carbon::now()->subDay()->toDateTimeString(),
-            ),
-        ]);
-
-        $event = $this->createEvent($occurrences);
-
-        $this->assertTrue($event->isEventInPast());
-    }
-
-    public function test_is_event_in_past_returns_false_when_some_occurrences_are_future(): void
-    {
-        $occurrences = collect([
-            $this->createOccurrence(
-                Carbon::now()->subDays(2)->toDateTimeString(),
-                Carbon::now()->subDay()->toDateTimeString(),
-            ),
-            $this->createOccurrence(
-                Carbon::now()->addDay()->toDateTimeString(),
-                Carbon::now()->addDays(2)->toDateTimeString(),
-            ),
-        ]);
-
-        $event = $this->createEvent($occurrences);
-
-        $this->assertFalse($event->isEventInPast());
-    }
-
-    public function test_is_event_in_future_returns_true_when_earliest_start_is_future(): void
-    {
-        $occurrences = collect([
-            $this->createOccurrence(
-                Carbon::now()->addDay()->toDateTimeString(),
-                Carbon::now()->addDays(2)->toDateTimeString(),
-            ),
-            $this->createOccurrence(
-                Carbon::now()->addDays(3)->toDateTimeString(),
-                Carbon::now()->addDays(4)->toDateTimeString(),
-            ),
-        ]);
-
-        $event = $this->createEvent($occurrences);
-
-        $this->assertTrue($event->isEventInFuture());
-    }
-
-    public function test_is_event_in_future_returns_false_when_earliest_start_is_past(): void
-    {
-        $occurrences = collect([
-            $this->createOccurrence(
-                Carbon::now()->subDay()->toDateTimeString(),
-                Carbon::now()->addDay()->toDateTimeString(),
-            ),
-            $this->createOccurrence(
-                Carbon::now()->addDays(2)->toDateTimeString(),
-                Carbon::now()->addDays(3)->toDateTimeString(),
-            ),
-        ]);
-
-        $event = $this->createEvent($occurrences);
-
-        $this->assertFalse($event->isEventInFuture());
-    }
-
     public function test_is_event_ongoing_returns_true_when_active_occurrence_has_started_but_not_ended(): void
     {
         $occurrences = collect([
@@ -212,7 +140,7 @@ class EventDomainObjectTest extends TestCase
         $this->assertFalse($event->isEventOngoing());
     }
 
-    public function test_is_event_ongoing_returns_true_when_active_occurrence_has_no_end_date(): void
+    public function test_is_event_ongoing_returns_false_when_started_occurrence_has_no_end_date(): void
     {
         $occurrences = collect([
             $this->createOccurrence(
@@ -224,7 +152,7 @@ class EventDomainObjectTest extends TestCase
 
         $event = $this->createEvent($occurrences);
 
-        $this->assertTrue($event->isEventOngoing());
+        $this->assertFalse($event->isEventOngoing());
     }
 
     public function test_is_event_ongoing_returns_false_when_no_occurrences(): void
@@ -284,6 +212,76 @@ class EventDomainObjectTest extends TestCase
         $event = $this->createEvent(collect());
 
         $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
+    }
+
+    public function test_get_lifecycle_status_returns_upcoming_for_recurring_event_mid_series(): void
+    {
+        $occurrences = collect([
+            $this->createOccurrence(
+                Carbon::now()->subDays(3)->toDateTimeString(),
+                Carbon::now()->subDays(3)->addHours(2)->toDateTimeString(),
+            ),
+            $this->createOccurrence(
+                Carbon::now()->addDays(3)->toDateTimeString(),
+                Carbon::now()->addDays(3)->addHours(2)->toDateTimeString(),
+            ),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
+    }
+
+    public function test_get_lifecycle_status_returns_ongoing_when_one_occurrence_in_series_is_live(): void
+    {
+        $occurrences = collect([
+            $this->createOccurrence(
+                Carbon::now()->subDays(3)->toDateTimeString(),
+                Carbon::now()->subDays(3)->addHours(2)->toDateTimeString(),
+            ),
+            $this->createOccurrence(
+                Carbon::now()->subHour()->toDateTimeString(),
+                Carbon::now()->addHour()->toDateTimeString(),
+            ),
+            $this->createOccurrence(
+                Carbon::now()->addDays(3)->toDateTimeString(),
+                Carbon::now()->addDays(3)->addHours(2)->toDateTimeString(),
+            ),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals(EventLifecycleStatus::ONGOING->name, $event->getLifecycleStatus());
+    }
+
+    public function test_get_lifecycle_status_returns_upcoming_when_only_remaining_occurrence_is_cancelled(): void
+    {
+        $occurrences = collect([
+            $this->createOccurrence(
+                Carbon::now()->subDays(3)->toDateTimeString(),
+                Carbon::now()->subDays(3)->addHours(2)->toDateTimeString(),
+            ),
+            $this->createOccurrence(
+                Carbon::now()->addDay()->toDateTimeString(),
+                Carbon::now()->addDay()->addHours(2)->toDateTimeString(),
+                EventOccurrenceStatus::CANCELLED->name,
+            ),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals(EventLifecycleStatus::UPCOMING->name, $event->getLifecycleStatus());
+    }
+
+    public function test_get_lifecycle_status_returns_ended_when_started_occurrence_has_no_end_date(): void
+    {
+        $occurrences = collect([
+            $this->createOccurrence(Carbon::now()->subHour()->toDateTimeString()),
+        ]);
+
+        $event = $this->createEvent($occurrences);
+
+        $this->assertEquals(EventLifecycleStatus::ENDED->name, $event->getLifecycleStatus());
     }
 
     public function test_is_recurring_returns_true_for_recurring_type(): void

@@ -98,14 +98,49 @@ export class PublicOccurrenceSelector {
     return this.page.locator('.hi-slot-header-day');
   }
 
+  monthHeader(): Locator {
+    return this.page.locator('.hi-dp-level');
+  }
+
   productsLoadingOverlay(): Locator {
     return this.page.locator('.hi-occurrence-loading-overlay');
   }
 
+  monthLoadingOverlay(): Locator {
+    return this.page.locator('.hi-calendar-month-loading');
+  }
+
+  async waitForMonthLoaded(): Promise<void> {
+    await this.monthLoadingOverlay().waitFor({ state: 'visible', timeout: 300 }).catch(() => {});
+    await this.monthLoadingOverlay().waitFor({ state: 'detached' });
+  }
+
+  async navigateToMonthOf(isoDate: string): Promise<void> {
+    const target = new Date(isoDate);
+    const targetIndex = target.getUTCFullYear() * 12 + target.getUTCMonth();
+    await this.calendar().waitFor();
+    await this.waitForMonthLoaded();
+    for (let attempt = 0; attempt < 24; attempt++) {
+      const header = (await this.monthHeader().innerText()).trim();
+      const displayed = new Date(header.replace(' ', ' 1, '));
+      const displayedIndex = displayed.getFullYear() * 12 + displayed.getMonth();
+      if (displayedIndex === targetIndex) return;
+      if (displayedIndex < targetIndex) {
+        await this.nextMonthButton().click();
+      } else {
+        await this.previousMonthButton().click();
+      }
+      await this.waitForMonthLoaded();
+    }
+    throw new Error(`Could not navigate the occurrence calendar to the month of ${isoDate}`);
+  }
+
   async selectDay(label: RegExp): Promise<void> {
     await this.calendar().waitFor();
+    await this.waitForMonthLoaded();
     for (let attempt = 0; attempt < 2 && (await this.dayButton(label).count()) === 0; attempt++) {
       await this.nextMonthButton().click();
+      await this.waitForMonthLoaded();
     }
     await this.dayButton(label).click();
   }

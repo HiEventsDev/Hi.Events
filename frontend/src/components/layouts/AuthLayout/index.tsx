@@ -4,17 +4,10 @@ import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {LanguageSwitcher} from "../../common/LanguageSwitcher";
-import {IconBellRinging, IconUsersGroup} from "@tabler/icons-react";
 import {useCallback, useRef} from "react";
 import {getConfig} from "../../../utilites/config.ts";
 import {isHiEvents} from "../../../utilites/helpers.ts";
 import {showInfo} from "../../../utilites/notifications.tsx";
-
-const tiers = [
-    {name: "VIP Pass",    count: "87/100",  fill: 0.87},
-    {name: "Early Bird",  count: "240/240", fill: 1.0},
-    {name: "General",     count: "512/750", fill: 0.68},
-];
 
 const tickerFeatures = [
     t`Recurring events`,
@@ -40,105 +33,78 @@ const FeaturePanel = () => {
 
     return (
         <div className={classes.rightPanel}>
-            <div className={classes.noise} />
-            <div className={classes.dotGrid} />
+            <div className={classes.noise}/>
+            <div className={classes.rings}/>
 
             <div className={classes.panelInner}>
-                <div className={classes.headingBlock}>
-                    <h1 className={classes.heroTitle}>
-                        <span className={classes.heroBold}>{t`Sell out your event.`}</span>
-                        <span className={classes.heroLight}>{t`Keep the profit.`}</span>
-                    </h1>
-                </div>
+                <h1 className={classes.heroTitle}>
+                    <span className={classes.heroBold}>{t`Sell out your event.`}</span>
+                    <span className={classes.heroLight}>{t`Keep the profit.`}</span>
+                </h1>
 
-                <div className={classes.dashStage} aria-hidden="true">
-                    {/* Secondary floating card — top right */}
-                    <div className={`${classes.floatCard} ${classes.floatCardTop}`}>
-                        <div className={classes.floatIcon}>
-                            <IconUsersGroup size={16} strokeWidth={2.2}/>
-                        </div>
-                        <div className={classes.floatBody}>
-                            <div className={classes.floatTitle}>{t`Waitlist triggered`}</div>
-                            <div className={classes.floatSub}>{t`12 tickets offered`}</div>
-                        </div>
-                    </div>
-
-                    {/* Main event dashboard card */}
-                    <div className={classes.dashCard}>
-                        <div className={classes.dashHeader}>
-                            <div className={classes.dashHeaderLeft}>
-                                <div className={classes.dashCover}/>
-                                <div>
-                                    <div className={classes.dashTitle}>Summer Synth Festival</div>
-                                    <div className={classes.dashTitleSub}>Sat, Aug 16 · Berlin</div>
+                <div className={classes.ticketScene} aria-hidden="true">
+                    <div className={classes.ticketGhost}/>
+                    <div className={classes.ticket}>
+                        <div className={classes.ticketInner}>
+                            <div className={classes.ticketMain}>
+                                <div className={classes.ticketTop}>
+                                    <span>Admit One</span>
+                                    <span>№ 000482</span>
                                 </div>
-                            </div>
-                            <div className={classes.dashBadge}>
-                                <span className={classes.dashBadgeDot}/>
-                                {t`Live`}
-                            </div>
-                        </div>
-
-                        <div className={classes.dashStatRow}>
-                            <div className={classes.dashStatBig}>$48,290</div>
-                            <div className={classes.dashStatTrend}>↗ 12.4%</div>
-                        </div>
-                        <div className={classes.dashStatLabel}>{t`Revenue today`}</div>
-
-                        <svg className={classes.dashChart} viewBox="0 0 280 48" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%"   style={{stopColor: "var(--mantine-color-primary-5)", stopOpacity: 0.35}}/>
-                                    <stop offset="100%" style={{stopColor: "var(--mantine-color-primary-5)", stopOpacity: 0}}/>
-                                </linearGradient>
-                            </defs>
-                            <path
-                                className={classes.dashChartFill}
-                                d="M 0 38 L 20 34 L 40 36 L 60 28 L 80 30 L 100 22 L 120 24 L 140 18 L 160 20 L 180 14 L 200 16 L 220 10 L 240 12 L 260 6 L 280 8 L 280 48 L 0 48 Z"
-                            />
-                            <path
-                                className={classes.dashChartLine}
-                                d="M 0 38 L 20 34 L 40 36 L 60 28 L 80 30 L 100 22 L 120 24 L 140 18 L 160 20 L 180 14 L 200 16 L 220 10 L 240 12 L 260 6 L 280 8"
-                            />
-                            <circle className={classes.dashChartDot} cx="280" cy="8" r="3.5"/>
-                        </svg>
-
-                        <div className={classes.dashTiers}>
-                            {tiers.map((tier, i) => (
-                                <div key={i} className={classes.dashTier}>
-                                    <div className={classes.dashTierName}>{tier.name}</div>
-                                    <div className={classes.dashTierBar}>
-                                        <div
-                                            className={classes.dashTierBarFill}
-                                            style={{["--fill" as string]: tier.fill, animationDelay: `${0.6 + i * 0.15}s`}}
-                                        />
+                                <div className={classes.ticketTitle}>Dublin Jazz Festival</div>
+                                <div className={classes.ticketMeta}>Sat, Aug 16 · 8:00 PM · Dublin</div>
+                                <div className={classes.ticketFields}>
+                                    <div className={classes.ticketField}>
+                                        <span>Door</span>
+                                        <strong>3</strong>
                                     </div>
-                                    <div className={classes.dashTierCount}>{tier.count}</div>
+                                    <div className={classes.ticketField}>
+                                        <span>Seat</span>
+                                        <strong>GA</strong>
+                                    </div>
+                                    <div className={classes.ticketField}>
+                                        <span>Price</span>
+                                        <strong>€89.00</strong>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-
-                        <div className={classes.dashFooter}>
-                            <div className={classes.dashAvatars}>
-                                <div className={`${classes.dashAvatar} ${classes.dashAvatar1}`}>MK</div>
-                                <div className={`${classes.dashAvatar} ${classes.dashAvatar2}`}>JS</div>
-                                <div className={`${classes.dashAvatar} ${classes.dashAvatar3}`}>AL</div>
-                                <div className={`${classes.dashAvatar} ${classes.dashAvatar4}`}>+</div>
+                                <div className={classes.barcode}/>
                             </div>
-                            <div className={classes.dashFooterText}>839 attendees</div>
+                            <div className={classes.ticketStub}>
+                                <span className={classes.stubLabel}>Admit One</span>
+                                <svg className={classes.stubQr} viewBox="0 0 25 25">
+                                    <path fillRule="evenodd" d="M0 0h7v7H0zm1 1v5h5V1z"/>
+                                    <rect x="2" y="2" width="3" height="3"/>
+                                    <path fillRule="evenodd" d="M18 0h7v7h-7zm1 1v5h5V1z"/>
+                                    <rect x="20" y="2" width="3" height="3"/>
+                                    <path fillRule="evenodd" d="M0 18h7v7H0zm1 1v5h5v-5z"/>
+                                    <rect x="2" y="20" width="3" height="3"/>
+                                    <rect x="9" y="0" width="2" height="2"/>
+                                    <rect x="13" y="2" width="2" height="2"/>
+                                    <rect x="10" y="5" width="2" height="2"/>
+                                    <rect x="15" y="5" width="2" height="2"/>
+                                    <rect x="0" y="9" width="2" height="2"/>
+                                    <rect x="4" y="10" width="2" height="2"/>
+                                    <rect x="8" y="9" width="3" height="3"/>
+                                    <rect x="13" y="10" width="2" height="2"/>
+                                    <rect x="17" y="9" width="2" height="2"/>
+                                    <rect x="21" y="10" width="2" height="2"/>
+                                    <rect x="2" y="14" width="2" height="2"/>
+                                    <rect x="7" y="13" width="2" height="2"/>
+                                    <rect x="11" y="14" width="2" height="2"/>
+                                    <rect x="15" y="13" width="3" height="3"/>
+                                    <rect x="20" y="14" width="2" height="2"/>
+                                    <rect x="9" y="18" width="2" height="2"/>
+                                    <rect x="13" y="19" width="2" height="2"/>
+                                    <rect x="18" y="18" width="2" height="2"/>
+                                    <rect x="22" y="19" width="2" height="2"/>
+                                    <rect x="10" y="22" width="3" height="2"/>
+                                    <rect x="16" y="22" width="2" height="2"/>
+                                </svg>
+                                <span className={classes.stubSeat}>GA — €89</span>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Secondary floating card — bottom left */}
-                    <div className={`${classes.floatCard} ${classes.floatCardBottom}`}>
-                        <div className={classes.floatIcon}>
-                            <IconBellRinging size={16} strokeWidth={2.2}/>
-                        </div>
-                        <div className={classes.floatBody}>
-                            <div className={classes.floatTitle}>{t`Reminder scheduled`}</div>
-                            <div className={classes.floatSub}>{t`Sending in 2d 4h`}</div>
-                        </div>
-                    </div>
+                    <div className={classes.stamp}>Sold Out</div>
                 </div>
             </div>
 
@@ -183,12 +149,16 @@ const AuthLayout = () => {
                     <main className={classes.container}>
                         <div className={classes.logo} onClick={handleLogoClick} style={{cursor: 'pointer'}}>
                             <img
-                                src={getConfig("VITE_APP_LOGO_DARK", "/logos/hi-events-stacked-light.svg")}
+                                src={getConfig("VITE_APP_LOGO_DARK", "/logos/hi-events-horizontal-light.svg")}
                                 alt={t`${getConfig("VITE_APP_NAME", "Hi.Events")} logo`}
                             />
                         </div>
-                        <div className={classes.wrapper}>
-                            <Outlet />
+                        <div className={classes.formArea}>
+                            <div className={classes.wrapper}>
+                                <Outlet />
+                            </div>
+                        </div>
+                        <div className={classes.panelFooter}>
                             {/*
                              * (c) Hi.Events Ltd 2025
                              *

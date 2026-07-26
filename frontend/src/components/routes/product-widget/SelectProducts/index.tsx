@@ -153,6 +153,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
     const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
+    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(undefined);
     const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
         if (props.initialOccurrenceId) {
             return props.initialOccurrenceId;
@@ -166,8 +167,10 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const {onSelectedOccurrenceChange} = props;
     useEffect(() => {
+        const lastSelected = lastSelectedOccurrenceRef.current;
         onSelectedOccurrenceChange?.(
             (event?.occurrences || []).find(o => Number(o.id) === selectedOccurrenceId)
+            ?? (lastSelected && Number(lastSelected.id) === selectedOccurrenceId ? lastSelected : undefined)
         );
     }, [selectedOccurrenceId, event?.occurrences, onSelectedOccurrenceChange]);
 
@@ -308,11 +311,12 @@ const SelectProducts = (props: SelectProductsProps) => {
         },
     });
 
-    const selectOccurrence = (occId: number) => {
+    const selectOccurrence = (occId: number, occurrence?: EventOccurrence) => {
         if (selectedOccurrenceIdRef.current === occId) {
             return;
         }
         selectedOccurrenceIdRef.current = occId;
+        lastSelectedOccurrenceRef.current = occurrence;
         setSelectedOccurrenceId(occId);
         occurrenceEventRefetchMutation.mutate(occId);
     };
@@ -433,7 +437,9 @@ const SelectProducts = (props: SelectProductsProps) => {
             return;
         }
         if (isRecurring && selectedOccurrenceId) {
-            const selectedOcc = activeOccurrences.find(o => Number(o.id) === selectedOccurrenceId);
+            const lastSelected = lastSelectedOccurrenceRef.current;
+            const selectedOcc = activeOccurrences.find(o => Number(o.id) === selectedOccurrenceId)
+                ?? (lastSelected && Number(lastSelected.id) === selectedOccurrenceId ? lastSelected : undefined);
             if (!selectedOcc || selectedOcc.status !== EventOccurrenceStatus.ACTIVE) {
                 showError(t`This date is no longer available. Please select another date.`);
                 selectedOccurrenceIdRef.current = undefined;
@@ -825,7 +831,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             event={event}
                             selectedOccurrenceId={selectedOccurrenceId}
                             pendingInitialOccurrenceId={pendingInitialOccurrenceId}
-                            onSelect={(id) => selectOccurrence(Number(id))}
+                            onSelect={(id, occurrence) => selectOccurrence(Number(id), occurrence)}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
                             productSlot={productAreAvailable

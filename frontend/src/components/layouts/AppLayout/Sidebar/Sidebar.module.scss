@@ -4,10 +4,9 @@
   display: flex;
   flex-direction: column;
   grid-area: sidebar;
-  background: linear-gradient(180deg, var(--mantine-color-primary-9), var(--mantine-color-secondary-9));
+  background: linear-gradient(180deg, var(--hi-ink) 0%, var(--hi-ink-deep) 100%);
   color: var(--hi-color-white);
   position: relative;
-  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
   height: 100vh;
 
   &.closed {
@@ -18,18 +17,23 @@
 
   .logo {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     position: relative;
     z-index: 1;
-    padding: 8px 0;
-    margin-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px 18px 12px;
+    margin-bottom: 4px;
     flex-shrink: 0;
 
     a {
       display: flex;
-      width: 100%;
+      justify-content: center;
+    }
+
+    img {
+      max-height: 36px;
+      max-width: 160px;
+      width: auto;
     }
   }
 
@@ -65,12 +69,13 @@
     }
 
     .sectionHeading {
-      padding: 16px 20px 8px;
-      font-size: 0.75rem;
+      padding: 18px 20px 6px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.625rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.16em;
+      color: color-mix(in srgb, white 45%, transparent);
     }
 
     a,
@@ -78,24 +83,23 @@
     .link {
       display: flex;
       align-items: center;
-      color: rgba(255, 255, 255, 0.85);
-      padding: 4px 10px;
+      color: color-mix(in srgb, white 78%, transparent);
+      padding: 7px 10px;
       text-decoration: none;
-      margin: 3px 10px;
-      border-radius: var(--hi-radius-md);
-      font-size: 0.9em;
+      margin: 2px 12px;
+      border-radius: var(--hi-radius-lg);
+      font-size: 0.875rem;
       font-weight: 500;
-      transition: all 0.2s ease;
+      transition: background-color 0.15s ease, color 0.15s ease;
       position: relative;
-      overflow: hidden;
       cursor: pointer;
-      width: calc(100% - 20px);
+      width: calc(100% - 24px);
       background: none;
       border: none;
       text-align: left;
 
       .navBadge {
-        background: var(--hi-primary);
+        background: var(--mantine-color-secondary-5);
         color: white;
         padding: 2px 6px;
         border-radius: 12px;
@@ -108,19 +112,6 @@
         margin-left: auto;
         background: #d97706;
         color: white;
-      }
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-        border-radius: 10px;
-        transition: width 0.25s ease;
-        z-index: -1;
       }
 
       &.loading {
@@ -138,31 +129,41 @@
       }
 
       &.linkActive {
-        background: rgba(255, 255, 255, 0.12);
+        background: color-mix(in srgb, white 11%, transparent);
         color: white;
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 3px;
+          height: 18px;
+          border-radius: 2px;
+          background: var(--mantine-color-secondary-5);
+        }
 
         .linkIcon {
-          color: rgba(255, 255, 255, 1);
+          color: white;
         }
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: color-mix(in srgb, white 7%, transparent);
         color: white;
-        transform: translateY(-1px);
-
-        &::before {
-          width: 100%;
-        }
       }
 
       svg {
         margin-right: 12px;
         min-width: 20px;
-        color: rgba(255, 255, 255, 0.7);
-        transition: color 0.2s ease;
+        color: color-mix(in srgb, white 55%, transparent);
+        transition: color 0.15s ease;
+      }
+
+      &:hover svg {
+        color: color-mix(in srgb, white 85%, transparent);
       }
     }
   }
@@ -193,7 +194,7 @@
   .sidebarClose {
     width: 24px;
     height: 24px;
-    color: rgba(255, 255, 255, 0.6);
+    color: color-mix(in srgb, white 55%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -201,12 +202,12 @@
     right: -2px;
     top: 50%;
     transform: translateY(-50%);
-    transition: all 0.2s ease;
+    transition: color 0.15s ease, transform 0.15s ease;
     z-index: 5;
     flex-shrink: 0;
 
     &:hover {
-      transform: translateY(-50%) scale(1.4);
+      transform: translateY(-50%) scale(1.2);
       color: white;
     }
 
@@ -214,7 +215,7 @@
       right: 16px;
       top: 28px;
       transform: none;
-      
+
       &:hover {
         transform: scale(1.1);
       }

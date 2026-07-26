@@ -2,7 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
-use Closure;
+use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
@@ -25,7 +25,9 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
+use HiEvents\Services\Application\Handlers\Event\DTO\PublicOccurrenceFetchResultDTO;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
+use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 
 class GetPublicEventHandler
@@ -38,6 +40,7 @@ class GetPublicEventHandler
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
         private readonly ProductFilterService $productFilterService,
         private readonly EventPageViewIncrementService $eventPageViewIncrementService,
+        private readonly PublicOccurrenceVisibilityService $occurrenceVisibilityService,
     ) {}
 
     public function handle(GetPublicEventDTO $data): EventDomainObject
@@ -68,89 +71,21 @@ class GetPublicEventHandler
             ], name: 'organizer'))
             ->findById($data->eventId);
 
-        $hideSoldOutOccurrences = $event->getType() === EventType::RECURRING->name
-            && ($event->getEventSettings()?->getHideSoldOutOccurrences() ?? false)
-            && ! $this->eventHasWaitlistEnabledProducts($event);
+        $isRecurring = $event->getType() === EventType::RECURRING->name;
+        $hideSoldOutOccurrences = $this->occurrenceVisibilityService->shouldHideSoldOutOccurrences($event);
+        $occurrenceWhere = $this->occurrenceVisibilityService->buildWhereConditions(
+            eventId: $data->eventId,
+            isRecurring: $isRecurring,
+            hideSoldOutOccurrences: $hideSoldOutOccurrences,
+        );
 
-        $occurrenceWhere = [
-            EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
-            [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-        ];
+        $verifiedOccurrence = $this->resolveVerifiedOccurrence($data, $hideSoldOutOccurrences);
 
-        if ($event->getType() === EventType::RECURRING->name) {
-            $occurrenceWhere[] = self::isNotEnded();
-        }
-
-        if ($hideSoldOutOccurrences) {
-            $occurrenceWhere[] = self::hasRemainingCapacity();
-        }
-
-        $occurrences = $this->occurrenceRepository
-            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
-                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
-            ]))
-            ->findWhere(
-                where: $occurrenceWhere,
-                orderAndDirections: [
-                    new OrderAndDirection(EventOccurrenceDomainObjectAbstract::START_DATE, 'asc'),
-                ],
-                limit: self::MAX_PUBLIC_OCCURRENCES + 1,
-            );
-
-        $verifiedOccurrence = null;
-        if ($data->eventOccurrenceId !== null) {
-            $verifiedOccurrence = $occurrences->first(
-                fn (EventOccurrenceDomainObject $o) => $o->getId() === $data->eventOccurrenceId
-            );
-            if ($verifiedOccurrence === null) {
-                $fallbackWhere = [
-                    EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
-                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
-                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-                ];
-
-                if ($hideSoldOutOccurrences) {
-                    $fallbackWhere[] = self::hasRemainingCapacity();
-                }
-
-                $verifiedOccurrence = $this->occurrenceRepository
-                    ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
-                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
-                    ]))
-                    ->findFirstWhere($fallbackWhere);
-            }
-            if ($verifiedOccurrence !== null && $verifiedOccurrence->isPast()) {
-                $verifiedOccurrence = null;
-            }
-        }
-
-        $verifiedOccurrenceId = $verifiedOccurrence?->getId();
-
-        if ($occurrences->count() > self::MAX_PUBLIC_OCCURRENCES) {
-            $occurrences = $occurrences->take(self::MAX_PUBLIC_OCCURRENCES)->values();
-        }
-
-        if ($verifiedOccurrence !== null
-            && ! $occurrences->contains(fn (EventOccurrenceDomainObject $o) => $o->getId() === $verifiedOccurrenceId)) {
-            $occurrences->push($verifiedOccurrence);
-        }
-
-        $event->setEventOccurrences($occurrences);
-
-        if ($hideSoldOutOccurrences && $occurrences->isEmpty()) {
-            $event->setUpcomingOccurrencesSoldOut(
-                $this->occurrenceRepository->findFirstWhere([
-                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
-                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
-                    self::isNotEnded(),
-                    static function ($query): void {
-                        $query->whereColumn(
-                            EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
-                            '>=',
-                            EventOccurrenceDomainObjectAbstract::CAPACITY,
-                        );
-                    },
-                ]) !== null
+        if ($isRecurring) {
+            $this->setRecurringEventOccurrences($event, $data->eventId, $occurrenceWhere, $hideSoldOutOccurrences, $verifiedOccurrence);
+        } else {
+            $event->setEventOccurrences(
+                $this->fetchOccurrences($occurrenceWhere, $verifiedOccurrence)->occurrences
             );
         }
 
@@ -170,42 +105,130 @@ class GetPublicEventHandler
         return $event->setProductCategories($this->productFilterService->filter(
             productsCategories: $event->getProductCategories(),
             promoCode: $promoCodeDomainObject,
-            eventOccurrenceId: $verifiedOccurrenceId,
+            eventOccurrenceId: $verifiedOccurrence?->getId(),
         ));
     }
 
-    private function eventHasWaitlistEnabledProducts(EventDomainObject $event): bool
-    {
-        return $event->getProductCategories()
-            ?->contains(
-                fn (ProductCategoryDomainObject $category) => $category->getProducts()
-                    ?->contains(fn (ProductDomainObject $product) => $product->getWaitlistEnabled() === true) ?? false
-            ) ?? false;
-    }
+    private function setRecurringEventOccurrences(
+        EventDomainObject $event,
+        int $eventId,
+        array $occurrenceWhere,
+        bool $hideSoldOutOccurrences,
+        ?EventOccurrenceDomainObject $verifiedOccurrence,
+    ): void {
+        $nextBookableWhere = $hideSoldOutOccurrences
+            ? $occurrenceWhere
+            : [...$occurrenceWhere, PublicOccurrenceVisibilityService::hasRemainingCapacity()];
 
-    private static function hasRemainingCapacity(): Closure
-    {
-        return static function ($query): void {
-            $query->whereNull(EventOccurrenceDomainObjectAbstract::CAPACITY)
-                ->orWhereColumn(
-                    EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
-                    '<',
-                    EventOccurrenceDomainObjectAbstract::CAPACITY,
-                );
-        };
-    }
+        $nextBookable = $this->findEdgeOccurrence($nextBookableWhere, 'asc');
+        $event->setNextOccurrenceStartDate($nextBookable?->getStartDate());
+        $event->setLastOccurrenceStartDate($this->findEdgeOccurrence($occurrenceWhere, 'desc')?->getStartDate());
 
-    private static function isNotEnded(): Closure
-    {
-        return static function ($query): void {
-            $query->whereRaw(
-                sprintf(
-                    'COALESCE(%s, %s) >= ?',
-                    EventOccurrenceDomainObjectAbstract::END_DATE,
-                    EventOccurrenceDomainObjectAbstract::START_DATE,
-                ),
-                [now()->toDateTimeString()],
+        $anchorOccurrence = $verifiedOccurrence ?? $nextBookable;
+        if ($anchorOccurrence === null && ! $hideSoldOutOccurrences) {
+            $anchorOccurrence = $this->findEdgeOccurrence($occurrenceWhere, 'asc');
+        }
+
+        $timezone = $event->getTimezone() ?: 'UTC';
+        $anchorMonthStart = Carbon::parse($anchorOccurrence?->getStartDate() ?? now(), 'UTC')
+            ->setTimezone($timezone)
+            ->startOfMonth();
+
+        $monthWhere = [
+            ...$occurrenceWhere,
+            [EventOccurrenceDomainObjectAbstract::START_DATE, '>=', $anchorMonthStart->copy()->utc()->toDateTimeString()],
+            [EventOccurrenceDomainObjectAbstract::START_DATE, '<=', $anchorMonthStart->copy()->endOfMonth()->utc()->toDateTimeString()],
+        ];
+
+        $result = $this->fetchOccurrences($monthWhere, $verifiedOccurrence);
+
+        $event->setEventOccurrences($result->occurrences);
+        $event->setOccurrencesMonth($result->truncated ? null : $anchorMonthStart->format('Y-m'));
+
+        if ($hideSoldOutOccurrences && $nextBookable === null) {
+            $event->setUpcomingOccurrencesSoldOut(
+                $this->occurrenceRepository->findFirstWhere([
+                    EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
+                    [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+                    PublicOccurrenceVisibilityService::isNotEnded(),
+                    static function ($query): void {
+                        $query->whereColumn(
+                            EventOccurrenceDomainObjectAbstract::USED_CAPACITY,
+                            '>=',
+                            EventOccurrenceDomainObjectAbstract::CAPACITY,
+                        );
+                    },
+                ]) !== null
             );
-        };
+        }
+    }
+
+    private function fetchOccurrences(array $where, ?EventOccurrenceDomainObject $verifiedOccurrence): PublicOccurrenceFetchResultDTO
+    {
+        $occurrences = $this->occurrenceRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->findWhere(
+                where: $where,
+                orderAndDirections: [
+                    new OrderAndDirection(EventOccurrenceDomainObjectAbstract::START_DATE, 'asc'),
+                ],
+                limit: self::MAX_PUBLIC_OCCURRENCES + 1,
+            );
+
+        $truncated = $occurrences->count() > self::MAX_PUBLIC_OCCURRENCES;
+        if ($truncated) {
+            $occurrences = $occurrences->take(self::MAX_PUBLIC_OCCURRENCES)->values();
+        }
+
+        if ($verifiedOccurrence !== null
+            && ! $occurrences->contains(fn (EventOccurrenceDomainObject $o) => $o->getId() === $verifiedOccurrence->getId())) {
+            $occurrences->push($verifiedOccurrence);
+        }
+
+        return new PublicOccurrenceFetchResultDTO($occurrences, $truncated);
+    }
+
+    private function findEdgeOccurrence(array $where, string $direction): ?EventOccurrenceDomainObject
+    {
+        return $this->occurrenceRepository
+            ->findWhere(
+                where: $where,
+                orderAndDirections: [
+                    new OrderAndDirection(EventOccurrenceDomainObjectAbstract::START_DATE, $direction),
+                ],
+                limit: 1,
+            )
+            ->first();
+    }
+
+    private function resolveVerifiedOccurrence(GetPublicEventDTO $data, bool $hideSoldOutOccurrences): ?EventOccurrenceDomainObject
+    {
+        if ($data->eventOccurrenceId === null) {
+            return null;
+        }
+
+        $where = [
+            EventOccurrenceDomainObjectAbstract::ID => $data->eventOccurrenceId,
+            EventOccurrenceDomainObjectAbstract::EVENT_ID => $data->eventId,
+            [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+        ];
+
+        if ($hideSoldOutOccurrences) {
+            $where[] = PublicOccurrenceVisibilityService::hasRemainingCapacity();
+        }
+
+        $verifiedOccurrence = $this->occurrenceRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->findFirstWhere($where);
+
+        if ($verifiedOccurrence !== null && $verifiedOccurrence->isPast()) {
+            return null;
+        }
+
+        return $verifiedOccurrence;
     }
 }

@@ -46,17 +46,19 @@ export const EventDateRange = ({event, occurrence}: EventDateRangeProps) => {
             .filter(o => o.status !== EventOccurrenceStatus.CANCELLED && !o.is_past)
             .sort((a, b) => a.start_date.localeCompare(b.start_date));
 
-        if (upcomingOccurrences.length > 0) {
-            const next = upcomingOccurrences[0];
-            if (upcomingOccurrences.length === 1) {
+        const nextStartDate = event.next_occurrence_start_date || upcomingOccurrences[0]?.start_date;
+
+        if (nextStartDate) {
+            const isSingleRemaining = upcomingOccurrences.length === 1
+                && (!event.last_occurrence_date || event.last_occurrence_date === nextStartDate);
+
+            if (isSingleRemaining) {
+                const next = upcomingOccurrences[0];
                 return formatRange(next.start_date, next.end_date, event.timezone);
             }
-            const nextFormatted = formatDateWithLocale(next.start_date, "shortDateTime", event.timezone);
-            return (
-                <span>
-                    {t`Next: ${nextFormatted}`} · {t`${upcomingOccurrences.length} upcoming dates`}
-                </span>
-            );
+
+            const nextFormatted = formatDateWithLocale(nextStartDate, "shortDateTime", event.timezone);
+            return <span>{t`Next: ${nextFormatted}`}</span>;
         }
 
         if (event.upcoming_occurrences_sold_out) {

@@ -19,8 +19,10 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
     const keywords = eventSettings?.seo_keywords;
     const image = eventCoverImageUrl(event);
     const url = eventHomepageUrl(event);
-    const startDate = utcToTz(new Date(event.start_date), event.timezone);
-    const endDate = event.end_date ? utcToTz(new Date(event.end_date), event.timezone) : undefined;
+    const seriesStartDate = event.next_occurrence_start_date || event.start_date;
+    const seriesEndDate = event.last_occurrence_date || event.end_date;
+    const startDate = utcToTz(new Date(seriesStartDate), event.timezone);
+    const endDate = seriesEndDate ? utcToTz(new Date(seriesEndDate), event.timezone) : undefined;
 
     const locationSummary = summariseEventLocations(event);
     const effective = locationSummary.kind === 'single' ? locationSummary.eventLocation : null;

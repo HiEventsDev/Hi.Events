@@ -344,7 +344,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
                                             <div className={classes.metaContent}>
                                                 <div className={classes.metaPrimary}>
-                                                    <EventDateRange event={event}/>
+                                                    <EventDateRange event={event} occurrence={selectedOccurrence}/>
                                                 </div>
                                                 {event.type === EventType.RECURRING && (
                                                     <div className={classes.metaSecondary}>
