@@ -6,64 +6,73 @@
 }
 
 .loginCard {
-  @include auth.auth-card;
-
   form {
     @include auth.auth-inputs;
     @include auth.auth-button;
   }
+}
 
-  // Forgot password link
-  p {
-    margin: 1rem 0 0;
-    text-align: center;
+.passwordLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1.25rem 0 0.375rem;
 
-    a {
-      font-size: 0.8125rem;
-      color: var(--hi-color-gray-dark);
-      font-weight: 500;
-      transition: color 0.2s ease;
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--hi-text);
+    cursor: pointer;
+  }
 
-      &:hover {
-        color: var(--mantine-color-secondary-5);
-      }
+  a {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--hi-color-text-muted);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--mantine-color-secondary-5);
     }
   }
 }
 
-// Ticket Lookup Section
 .ticketLookup {
   margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--hi-color-gray-2);
+  padding-top: 1.25rem;
+  border-top: 1.5px dashed var(--hi-color-gray-2);
 
   @include mixins.respond-below(sm) {
     margin-top: 1.5rem;
-    padding-top: 1.25rem;
+    padding-top: 1rem;
   }
 }
 
 .ticketLookupTrigger {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 0.5rem 0;
-  font-size: 0.8125rem;
+  padding: 0.375rem 0;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--hi-color-gray-dark);
-  transition: color 0.2s ease;
+  color: var(--hi-color-text-muted);
+  transition: color 0.15s ease;
   background: none;
   border: none;
   cursor: pointer;
 
   @include mixins.respond-below(sm) {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  span {
+    flex: 1;
+    text-align: left;
   }
 
   &:hover {
-    color: var(--mantine-color-secondary-5);
+    color: var(--hi-text);
   }
 
   &[data-expanded="true"] {
@@ -103,11 +112,12 @@
   }
 
   :global(.mantine-TextInput-input) {
-    border-radius: var(--hi-radius-md);
-    border: 1.5px solid var(--hi-color-gray-2);
-    padding: 0.625rem 0.875rem;
+    border-radius: var(--hi-radius-lg);
+    border: 1px solid var(--hi-color-gray-2);
+    padding: 0.5rem 0.875rem;
     font-size: 0.875rem;
-    background: white;
+    background: var(--hi-color-white);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
     @include mixins.respond-below(sm) {
       font-size: 1rem;
@@ -115,17 +125,22 @@
 
     &:focus {
       border-color: var(--mantine-color-secondary-5);
-      box-shadow: 0 0 0 3px var(--mantine-color-secondary-1);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--mantine-color-secondary-5) 12%, transparent);
+    }
+
+    &::placeholder {
+      color: var(--hi-color-text-tertiary);
     }
   }
 
   :global(.mantine-Button-root) {
     height: 38px;
-    border-radius: var(--hi-radius-md);
+    border-radius: var(--hi-radius-lg);
     font-weight: 600;
     font-size: 0.8125rem;
     padding: 0 1.25rem;
     white-space: nowrap;
+    border: none;
 
     @include mixins.respond-below(sm) {
       height: 44px;
@@ -139,22 +154,16 @@
 }
 
 .successMessage {
-  text-align: center;
-  padding: 1.25rem;
+  padding: 1rem 1.25rem;
   background: var(--hi-color-gray);
   border-radius: var(--hi-radius-lg);
-  border: 1px solid var(--hi-color-gray-2);
-
-  @include mixins.respond-below(sm) {
-    padding: 1rem;
-  }
+  border: 1px solid var(--hi-color-border);
 
   p {
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     font-size: 0.875rem;
     line-height: 1.6;
     color: var(--hi-text);
-    text-align: center;
 
     @include mixins.respond-below(sm) {
       font-size: 0.8125rem;
@@ -164,7 +173,8 @@
 
 .resetLink {
   font-size: 0.8125rem;
-  color: var(--hi-color-gray-dark);
+  font-weight: 500;
+  color: var(--hi-color-text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
   background: none;

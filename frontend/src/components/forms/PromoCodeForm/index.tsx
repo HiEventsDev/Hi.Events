@@ -1,9 +1,10 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Alert, Button, NumberInput, Select, TextInput} from "@mantine/core";
-import {IconAlertCircle, IconBulb, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
-import {ProductType, PromoCode, PromoCodeDiscountType} from "../../../types.ts";
+import {Button, Input, NumberInput, SegmentedControl, Select, TextInput} from "@mantine/core";
+import {IconBulb, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
+import {PromoCode, PromoCodeDiscountAppliesTo, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useParams} from "react-router";
+import {useEffect, useState} from "react";
 import {LoadingMask} from "../../common/LoadingMask";
 import {t} from "@lingui/macro";
 import {InputGroup} from "../../common/InputGroup";
@@ -11,20 +12,39 @@ import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {ProductSelector} from "../../common/ProductSelector";
 import {ShowForDesktop, ShowForMobile} from "../../common/Responsive/ShowHideComponents.tsx";
 import {Callout} from "../../common/Callout";
+import {AdvancedOptions} from "../../common/AdvancedOptions";
 
 interface PromoCodeFormProps {
     form: UseFormReturnType<PromoCode>,
 }
 
+const hasAdvancedValuesSet = (form: UseFormReturnType<PromoCode>): boolean => {
+    return !!(
+        (form.values.applicable_product_ids?.length ?? 0) > 0
+        || form.values.expiry_date
+        || form.values.max_allowed_usages
+    );
+};
+
 export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
     const {eventId} = useParams();
     const {data: event, data: {product_categories: productCategories} = {}} = useGetEvent(eventId);
+
+    const [showAdvanced, setShowAdvanced] = useState(() => hasAdvancedValuesSet(form));
+
+    useEffect(() => {
+        if (hasAdvancedValuesSet(form)) {
+            setShowAdvanced(true);
+        }
+    }, [form.values.applicable_product_ids, form.values.expiry_date, form.values.max_allowed_usages]);
+
+    const currencySymbol = getCurrencySymbol(event?.currency as string);
 
     const DiscountIcon = () => {
         if (form.values.discount_type === 'PERCENTAGE') {
             return <IconPercentage/>;
         }
-        return getCurrencySymbol(event?.currency as string);
+        return currencySymbol;
     };
 
     if (!event || !productCategories) {
@@ -64,14 +84,6 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                 rightSectionWidth={'auto'}
             />
 
-            <Callout
-                icon={<IconBulb size={18} stroke={2}/>}
-                variant="info"
-                title={t`Quick Tip`}
-            >
-                {t`A promo code with no discount can be used to reveal hidden products.`}
-            </Callout>
-
             <InputGroup>
                 <Select
                     {...form.getInputProps('discount_type')}
@@ -99,25 +111,68 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     placeholder="0.00"/>
             </InputGroup>
 
-            <ProductSelector
-                label={t`What products does this code apply to? (Applies to all by default)`}
-                placeholder="Select products"
-                icon={<IconTicket size="1rem"/>}
-                productCategories={productCategories}
-                form={form}
-                productFieldName="applicable_product_ids"
-            />
+            {form.values.discount_type === PromoCodeDiscountType.Fixed && (
+                <Input.Wrapper
+                    label={t`How is the discount applied?`}
+                    description={form.values.discount_applies_to === PromoCodeDiscountAppliesTo.Order
+                        ? t`The discount is deducted once from the order total.`
+                        : t`The discount is deducted from every eligible product. E.g., ${currencySymbol}10 off × 3 tickets = ${currencySymbol}30 off.`}
+                >
+                    <SegmentedControl
+                        fullWidth
+                        mt={4}
+                        value={form.values.discount_applies_to ?? PromoCodeDiscountAppliesTo.EachProduct}
+                        onChange={(value) => form.setFieldValue('discount_applies_to', value as PromoCodeDiscountAppliesTo)}
+                        data={[
+                            {
+                                value: PromoCodeDiscountAppliesTo.Order,
+                                label: t`Entire order`,
+                            },
+                            {
+                                value: PromoCodeDiscountAppliesTo.EachProduct,
+                                label: t`Each product`,
+                            },
+                        ]}
+                        data-testid="promo-code-discount-applies-to"
+                    />
+                </Input.Wrapper>
+            )}
 
-            <InputGroup>
-                <TextInput type={'datetime-local'}
-                           {...form.getInputProps('expiry_date')}
-                           label={t`Expiry Date`}
+            {form.values.discount_type === PromoCodeDiscountType.None && (
+                <Callout
+                    icon={<IconBulb size={18} stroke={2}/>}
+                    variant="info"
+                    title={t`Quick Tip`}
+                >
+                    {t`A promo code with no discount can be used to reveal hidden products.`}
+                </Callout>
+            )}
+
+            <AdvancedOptions
+                opened={showAdvanced}
+                onToggle={() => setShowAdvanced(v => !v)}
+                dataTestId="promo-code-advanced-toggle"
+            >
+                <ProductSelector
+                    label={t`What products does this code apply to? (Applies to all by default)`}
+                    placeholder={t`Select products`}
+                    icon={<IconTicket size="1rem"/>}
+                    productCategories={productCategories}
+                    form={form}
+                    productFieldName="applicable_product_ids"
                 />
-                <NumberInput min={1}
-                             placeholder={t`Unlimited`}
-                             {...form.getInputProps('max_allowed_usages')}
-                             label={t`How many times can this code be used?`}/>
-            </InputGroup>
+
+                <InputGroup>
+                    <TextInput type={'datetime-local'}
+                               {...form.getInputProps('expiry_date')}
+                               label={t`Expiry Date`}
+                    />
+                    <NumberInput min={1}
+                                 placeholder={t`Unlimited`}
+                                 {...form.getInputProps('max_allowed_usages')}
+                                 label={t`How many times can this code be used?`}/>
+                </InputGroup>
+            </AdvancedOptions>
         </>
     );
 };

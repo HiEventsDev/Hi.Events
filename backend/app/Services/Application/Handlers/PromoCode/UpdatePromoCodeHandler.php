@@ -62,6 +62,8 @@ readonly class UpdatePromoCodeHandler
                 ? 0.00
                 : (float) $promoCodeDTO->discount,
             PromoCodeDomainObjectAbstract::DISCOUNT_TYPE => $promoCodeDTO->discount_type?->name,
+            PromoCodeDomainObjectAbstract::DISCOUNT_APPLIES_TO => $promoCodeDTO->discount_applies_to?->name
+                ?? $promoCode->getDiscountAppliesTo(),
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCodeDTO->expiry_date
                 ? DateHelper::convertToUTC($promoCodeDTO->expiry_date, $event->getTimezone())
                 : null,

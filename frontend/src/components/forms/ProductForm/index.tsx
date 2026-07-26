@@ -63,7 +63,22 @@ interface ProductFormProps {
     event?: Event,
 }
 
+const hasQuantityValue = (value: unknown): boolean =>
+    value !== undefined && value !== null && value !== '';
+
+const SeriesQuantityWarning = ({eventId}: { eventId?: string | number }) => (
+    <Callout variant="warning" style={{marginBottom: 20}}>
+        <Trans>
+            This limits total sales across every date in your schedule combined — it is not a
+            per-date limit. To limit attendance for each date, set a capacity on the <NavLink
+            to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.
+        </Trans>
+    </Callout>
+);
+
 const ProductPriceTierForm = ({form, product, event}: ProductFormProps) => {
+    const isRecurringTicket = event?.type === EventType.RECURRING && form.values.product_type === 'TICKET';
+
     return form?.values?.prices?.map((price, index) => {
         const existingPrice = product?.prices?.find((p) => Number(p.id) === Number(price.id));
         const deleteDisabled = form?.values?.prices?.length === 1 || (existingPrice && Number(existingPrice?.quantity_sold) > 0);
@@ -98,8 +113,11 @@ const ProductPriceTierForm = ({form, product, event}: ProductFormProps) => {
                 <NumberInput
                     placeholder={t`Unlimited`}
                     {...form.getInputProps(`prices.${index}.initial_quantity_available`)}
-                    label={t`Quantity Available`}
+                    label={isRecurringTicket ? t`Total Quantity Across All Dates` : t`Quantity Available`}
                 />
+                {!product && isRecurringTicket && hasQuantityValue(price.initial_quantity_available) && (
+                    <SeriesQuantityWarning eventId={event?.id}/>
+                )}
                 <InputGroup>
                     <TextInput
                         type={'datetime-local'}
@@ -191,6 +209,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees} = useGetTaxesAndFees();
     const isRecurring = event?.type === EventType.RECURRING;
+    const isRecurringTicket = isRecurring && form.values.product_type === 'TICKET';
 
     const handleTaxOrFeeCreated = (taxOrFee: TaxAndFee) => {
         const currentIds = form.values.tax_and_fee_ids || [];
@@ -331,12 +350,13 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                      placeholder={t`Unlimited`}
                                      {...form.getInputProps('prices.0.initial_quantity_available')}
                                      label={<InputLabelWithHelp
-                                         label={t`Quantity Available`}
-                                         helpText={isRecurring ? (
+                                         label={isRecurringTicket ? t`Total Quantity Across All Dates` : t`Quantity Available`}
+                                         helpText={isRecurringTicket ? (
                                              <Trans>
                                                  <p>
-                                                     This is the default quantity across all dates. Each date's capacity
-                                                     can further limit availability on the <NavLink
+                                                     This is the total quantity available across every date in your
+                                                     schedule combined — not a per-date limit. To limit attendance for
+                                                     each date, set a capacity on the <NavLink
                                                      to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
                                                      page</NavLink>.
                                                  </p>
@@ -356,6 +376,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                      />}
                         />
                     </InputGroup>
+                    {!product && isRecurringTicket && hasQuantityValue(form.values.prices?.[0]?.initial_quantity_available) && (
+                        <SeriesQuantityWarning eventId={eventId}/>
+                    )}
                 </>
             )}
 
@@ -363,9 +386,10 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
                     {isRecurring && (
                         <Callout variant="info" style={{marginBottom: 10}}>
-                            <Trans>These are the default prices and quantities across all dates. Sale dates on tiers
-                                apply globally. You can override prices and quantities for individual dates on
-                                the <NavLink to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
+                            <Trans>These prices apply across all dates in your schedule, and tier quantities limit
+                                total sales across all dates combined. Sale dates on tiers apply globally. You can
+                                override prices for individual dates on the <NavLink
+                                    to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
                                     page</NavLink>.</Trans>
                         </Callout>
                     )}

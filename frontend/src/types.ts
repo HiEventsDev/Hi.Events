@@ -536,6 +536,8 @@ export interface Event extends EventBase {
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
     upcoming_occurrences_sold_out?: boolean;
+    last_occurrence_date?: string | null;
+    occurrences_month?: string | null;
 }
 
 export interface EventStatistics {
@@ -1181,6 +1183,7 @@ export interface PromoCode {
     expiry_date?: string;
     event_id?: number;
     discount_type?: PromoCodeDiscountType | null;
+    discount_applies_to?: PromoCodeDiscountAppliesTo;
     attendee_usage_count?: number;
     order_usage_count?: number;
     max_allowed_usages?: number | undefined;
@@ -1190,6 +1193,19 @@ export enum PromoCodeDiscountType {
     Percentage = 'PERCENTAGE',
     Fixed = 'FIXED',
     None = 'NONE',
+}
+
+export enum PromoCodeDiscountAppliesTo {
+    Order = 'ORDER',
+    EachProduct = 'EACH_PRODUCT',
+}
+
+export interface PromoCodeValidationResponse {
+    valid: boolean;
+    discount?: number;
+    discount_type?: PromoCodeDiscountType;
+    discount_applies_to?: PromoCodeDiscountAppliesTo;
+    applies_to_all_products?: boolean;
 }
 
 export enum TaxAndFeeType {

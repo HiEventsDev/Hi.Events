@@ -223,6 +223,7 @@ export interface CreatePromoCodePayload {
   code: string;
   discount_type: 'NONE' | 'FIXED' | 'PERCENTAGE';
   discount?: number;
+  discount_applies_to?: 'ORDER' | 'EACH_PRODUCT';
   applicable_product_ids?: number[];
   expiry_date?: string;
   max_allowed_usages?: number;

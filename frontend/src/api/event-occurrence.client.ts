@@ -126,9 +126,13 @@ export const eventOccurrenceClient = {
 };
 
 export const eventOccurrenceClientPublic = {
-    all: async (eventId: IdParam, pagination: QueryFilters) => {
-        const response = await publicApi.get<GenericPaginatedResponse<EventOccurrence>>(
-            `events/${eventId}/occurrences` + queryParamsHelper.buildQueryString(pagination)
+    all: async (eventId: IdParam, startDateFrom: string, startDateTo: string) => {
+        const params = new URLSearchParams({
+            start_date_from: startDateFrom,
+            start_date_to: startDateTo,
+        });
+        const response = await publicApi.get<GenericDataResponse<EventOccurrence[]>>(
+            `events/${eventId}/occurrences?${params.toString()}`
         );
         return response.data;
     },

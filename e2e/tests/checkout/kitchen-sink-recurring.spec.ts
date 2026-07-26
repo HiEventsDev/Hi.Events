@@ -46,16 +46,6 @@ const paneHeaderDay = (isoDate: string): string => {
   return `${weekday}, ${month} ${day}`;
 };
 
-async function revealDay(selector: PublicOccurrenceSelector, label: RegExp): Promise<void> {
-  await selector.calendar().waitFor();
-  for (let attempt = 0; attempt < 2 && (await selector.dayButton(label).count()) === 0; attempt++) {
-    await selector.nextMonthButton().click();
-  }
-  for (let attempt = 0; attempt < 4 && (await selector.dayButton(label).count()) === 0; attempt++) {
-    await selector.previousMonthButton().click();
-  }
-}
-
 async function arrangeRecurringKitchenSink(
   api: ApiClient,
   organizerId: number,
@@ -104,12 +94,11 @@ function buildCheckoutOptions(
 
     await expect(page.getByRole('heading', { name: 'Select a Date & Time' })).toBeVisible();
     for (const occurrence of occurrences) {
-      const label = dayButtonLabel(occurrence.start_date);
-      await revealDay(selector, label);
-      await expect(selector.dayButton(label)).toBeVisible();
+      await selector.navigateToMonthOf(occurrence.start_date);
+      await expect(selector.dayButton(dayButtonLabel(occurrence.start_date))).toBeVisible();
     }
 
-    await revealDay(selector, dayButtonLabel(first.start_date));
+    await selector.navigateToMonthOf(first.start_date);
     await expect(selector.slotHeaderDay()).toHaveText(paneHeaderDay(first.start_date));
     await expect(paneTime).toContainText(/7:00\s?PM/i);
     await expect(paneLocation).toHaveCount(0);
@@ -117,7 +106,7 @@ function buildCheckoutOptions(
     await expect(standardRow.getByText(BASE_STANDARD_INCLUSIVE)).toBeVisible();
 
     const secondLabel = dayButtonLabel(second.start_date);
-    await revealDay(selector, secondLabel);
+    await selector.navigateToMonthOf(second.start_date);
     await selector.dayButton(secondLabel).click();
     await expect(selector.slotHeaderDay()).toHaveText(paneHeaderDay(second.start_date));
     await expect(paneTime).toContainText(/7:00\s?PM/i);

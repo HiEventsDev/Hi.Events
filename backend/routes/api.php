@@ -93,6 +93,7 @@ use HiEvents\Http\Actions\EventOccurrences\DeletePriceOverrideAction;
 use HiEvents\Http\Actions\EventOccurrences\GenerateOccurrencesAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrenceAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesAction;
+use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesPublicAction;
 use HiEvents\Http\Actions\EventOccurrences\GetPriceOverridesAction;
 use HiEvents\Http\Actions\EventOccurrences\GetProductVisibilityAction;
 use HiEvents\Http\Actions\EventOccurrences\ReactivateOccurrenceAction;
@@ -555,6 +556,8 @@ $router->prefix('/public')->group(
     function (Router $router): void {
         // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
+        $router->get('/events/{event_id}/occurrences', GetEventOccurrencesPublicAction::class)
+            ->middleware('throttle:60,1');
 
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);

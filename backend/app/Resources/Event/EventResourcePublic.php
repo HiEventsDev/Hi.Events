@@ -46,6 +46,8 @@ class EventResourcePublic extends BaseResource
             'end_date' => $this->getEndDate(),
             'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
             'upcoming_occurrences_sold_out' => $this->getUpcomingOccurrencesSoldOut(),
+            'last_occurrence_date' => $this->when($isRecurring, fn () => $this->getLastOccurrenceStartDate()),
+            'occurrences_month' => $this->when($isRecurring, fn () => $this->getOccurrencesMonth()),
             'type' => $this->getType(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),

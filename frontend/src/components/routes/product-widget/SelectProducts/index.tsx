@@ -36,7 +36,18 @@ import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {ProductAvailabilityMessage} from "../../../common/ProductPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {Event, EventOccurrence, EventOccurrenceStatus, EventType, Product, ProductType} from "../../../../types.ts";
+import {
+    Event,
+    EventOccurrence,
+    EventOccurrenceStatus,
+    EventType,
+    Product,
+    ProductType,
+    PromoCodeDiscountAppliesTo,
+    PromoCodeDiscountType,
+    PromoCodeValidationResponse
+} from "../../../../types.ts";
+import {formatCurrency} from "../../../../utilites/currency.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconChevronRight, IconX} from "@tabler/icons-react"
@@ -106,6 +117,10 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
     const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
+    const [appliedPromoDetails, setAppliedPromoDetails] = useState<{
+        code: string;
+        response: PromoCodeValidationResponse;
+    } | null>(null);
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
 
@@ -153,6 +168,7 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<number | undefined>(undefined);
     const selectedOccurrenceIdRef = useRef<number | undefined>(undefined);
+    const lastSelectedOccurrenceRef = useRef<EventOccurrence | undefined>(undefined);
     const [pendingInitialOccurrenceId, setPendingInitialOccurrenceId] = useState<number | undefined>(() => {
         if (props.initialOccurrenceId) {
             return props.initialOccurrenceId;
@@ -166,8 +182,10 @@ const SelectProducts = (props: SelectProductsProps) => {
 
     const {onSelectedOccurrenceChange} = props;
     useEffect(() => {
+        const lastSelected = lastSelectedOccurrenceRef.current;
         onSelectedOccurrenceChange?.(
             (event?.occurrences || []).find(o => Number(o.id) === selectedOccurrenceId)
+            ?? (lastSelected && Number(lastSelected.id) === selectedOccurrenceId ? lastSelected : undefined)
         );
     }, [selectedOccurrenceId, event?.occurrences, onSelectedOccurrenceChange]);
 
@@ -270,6 +288,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                     showError(t`That promo code is invalid`);
                     return;
                 }
+
+                setAppliedPromoDetails({code: promoCode, response: validPromoCode});
             }
 
             const eventWithPromoCodeApplied = await eventsClientPublic.findByID(
@@ -308,11 +328,12 @@ const SelectProducts = (props: SelectProductsProps) => {
         },
     });
 
-    const selectOccurrence = (occId: number) => {
+    const selectOccurrence = (occId: number, occurrence?: EventOccurrence) => {
         if (selectedOccurrenceIdRef.current === occId) {
             return;
         }
         selectedOccurrenceIdRef.current = occId;
+        lastSelectedOccurrenceRef.current = occurrence;
         setSelectedOccurrenceId(occId);
         occurrenceEventRefetchMutation.mutate(occId);
     };
@@ -381,6 +402,36 @@ const SelectProducts = (props: SelectProductsProps) => {
     }, [form.values.promo_code])
 
     useEffect(() => {
+        const promoCode = form.values.promo_code;
+
+        if (!promoCode) {
+            setAppliedPromoDetails(null);
+            return;
+        }
+
+        if (appliedPromoDetails?.code === promoCode) {
+            return;
+        }
+
+        let cancelled = false;
+        promoCodeClientPublic.validateCode(eventId, promoCode)
+            .then((response) => {
+                if (!cancelled) {
+                    setAppliedPromoDetails(response.valid ? {code: promoCode, response} : null);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setAppliedPromoDetails(null);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [form.values.promo_code])
+
+    useEffect(() => {
         if (typeof props.promoCodeValid !== 'undefined') {
             if (!props.promoCodeValid) {
                 showError(t`That promo code is invalid`);
@@ -433,7 +484,9 @@ const SelectProducts = (props: SelectProductsProps) => {
             return;
         }
         if (isRecurring && selectedOccurrenceId) {
-            const selectedOcc = activeOccurrences.find(o => Number(o.id) === selectedOccurrenceId);
+            const lastSelected = lastSelectedOccurrenceRef.current;
+            const selectedOcc = activeOccurrences.find(o => Number(o.id) === selectedOccurrenceId)
+                ?? (lastSelected && Number(lastSelected.id) === selectedOccurrenceId ? lastSelected : undefined);
             if (!selectedOcc || selectedOcc.status !== EventOccurrenceStatus.ACTIVE) {
                 showError(t`This date is no longer available. Please select another date.`);
                 selectedOccurrenceIdRef.current = undefined;
@@ -647,7 +700,15 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
             {form.values.promo_code && (
                 <div className={'hi-promo-code-applied'}>
-                    <span><b>{form.values.promo_code}</b> {t`applied`}</span>
+                    <span>
+                        <b>{form.values.promo_code}</b>{' '}
+                        {(appliedPromoDetails?.response.discount_type === PromoCodeDiscountType.Fixed
+                            && appliedPromoDetails?.response.discount_applies_to === PromoCodeDiscountAppliesTo.Order
+                            && appliedPromoDetails?.response.applies_to_all_products
+                            && appliedPromoDetails?.response.discount)
+                            ? t`applied — ${formatCurrency(appliedPromoDetails.response.discount, event?.currency)} off your order`
+                            : t`applied`}
+                    </span>
                     <ActionIcon
                         type="button"
                         className={'hi-promo-code-applied-remove-icon-button'}
@@ -825,7 +886,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             event={event}
                             selectedOccurrenceId={selectedOccurrenceId}
                             pendingInitialOccurrenceId={pendingInitialOccurrenceId}
-                            onSelect={(id) => selectOccurrence(Number(id))}
+                            onSelect={(id, occurrence) => selectOccurrence(Number(id), occurrence)}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
                             productSlot={productAreAvailable

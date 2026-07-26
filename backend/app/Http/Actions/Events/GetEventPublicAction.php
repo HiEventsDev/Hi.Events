@@ -2,10 +2,6 @@
 
 namespace HiEvents\Http\Actions\Events;
 
-use HiEvents\DomainObjects\Enums\Role;
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\Status\EventStatus;
-use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicEventDTO;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
@@ -14,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 
-class GetEventPublicAction extends BaseAction
+class GetEventPublicAction extends BasePublicEventAction
 {
     public function __construct(
         private readonly GetPublicEventHandler $getPublicEventHandler,
@@ -40,27 +36,5 @@ class GetEventPublicAction extends BaseAction
         }
 
         return $this->resourceResponse(EventResourcePublic::class, $event);
-    }
-
-    private function canUserViewEvent(EventDomainObject $event): bool
-    {
-        if ($event->getStatus() === EventStatus::LIVE->name) {
-            return true;
-        }
-
-        if ($this->isUserAuthenticated() && $event->getAccountId() === $this->getAuthenticatedAccountId()) {
-            return true;
-        }
-
-        if ($this->isUserAuthenticated() && $this->getAuthenticatedUserRole() === Role::SUPERADMIN) {
-            $this->logger->debug(__('Superadmin user is viewing non-live event with ID :eventId', [
-                'eventId' => $event->getId(),
-                'accountId' => $this->getAuthenticatedAccountId(),
-            ]));
-
-            return true;
-        }
-
-        return false;
     }
 }

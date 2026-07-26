@@ -151,6 +151,11 @@ Gotchas:
 
 #### E2E Tests
 - There is a Playwright E2E suite in `e2e/` (see `e2e/README.md`). It runs the real stack (Laravel + SSR frontend + Postgres + Redis + Mailpit) in Docker.
+- **To test uncommitted changes, run specs against the dev stack** — the hermetic e2e stack bakes source into images and `docker compose up` never rebuilds them. From `e2e/`:
+  ```bash
+  E2E_BASE_URL=https://localhost:8443 MAILPIT_URL=http://localhost:8025 E2E_SAAS_MODE=true npx playwright test <spec>
+  ```
+  `E2E_SAAS_MODE=true` is required (the dev stack requires email verification; the fixture only confirms via Mailpit in SaaS mode), a queue worker must be running to deliver the verification emails, and superadmin-dependent specs need a one-time `php artisan dev:bootstrap --email=superadmin@e2e.test --password='SuperAdminPass123!'`. See "Against the running dev stack" in `e2e/README.md`.
 - **When you add or meaningfully change a user-facing flow, add or update an E2E spec for it where practical.** Follow the existing pattern: arrange data via the API/`factory`, drive only the flow under test through the UI with a thin page object, and assert on real page content (the created/edited item appears), not just a URL change. Tag fast, load-bearing checks with `@smoke`.
 - Not everything needs E2E — reserve it for real user journeys (create/edit/complete flows). Pure logic belongs in backend unit/feature tests instead.
 

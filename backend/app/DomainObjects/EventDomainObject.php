@@ -2,7 +2,6 @@
 
 namespace HiEvents\DomainObjects;
 
-use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
@@ -47,6 +46,12 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     private ?EventLocationDomainObject $eventLocation = null;
 
     private bool $upcomingOccurrencesSoldOut = false;
+
+    private ?string $nextOccurrenceStartDate = null;
+
+    private ?string $lastOccurrenceStartDate = null;
+
+    private ?string $occurrencesMonth = null;
 
     public static function getAllowedFilterFields(): array
     {
@@ -236,8 +241,43 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         );
     }
 
+    public function setNextOccurrenceStartDate(?string $nextOccurrenceStartDate): self
+    {
+        $this->nextOccurrenceStartDate = $nextOccurrenceStartDate;
+
+        return $this;
+    }
+
+    public function setLastOccurrenceStartDate(?string $lastOccurrenceStartDate): self
+    {
+        $this->lastOccurrenceStartDate = $lastOccurrenceStartDate;
+
+        return $this;
+    }
+
+    public function getLastOccurrenceStartDate(): ?string
+    {
+        return $this->lastOccurrenceStartDate;
+    }
+
+    public function setOccurrencesMonth(?string $occurrencesMonth): self
+    {
+        $this->occurrencesMonth = $occurrencesMonth;
+
+        return $this;
+    }
+
+    public function getOccurrencesMonth(): ?string
+    {
+        return $this->occurrencesMonth;
+    }
+
     public function getNextOccurrenceStartDate(): ?string
     {
+        if ($this->nextOccurrenceStartDate !== null) {
+            return $this->nextOccurrenceStartDate;
+        }
+
         if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
             return null;
         }
@@ -251,56 +291,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return $nextOccurrence?->getStartDate();
     }
 
-    public function isEventInPast(): bool
-    {
-        $endDate = $this->getEndDate();
-        if ($endDate === null) {
-            return false;
-        }
-
-        $parsed = Carbon::parse($endDate);
-        if ($this->getTimezone()) {
-            $parsed->setTimezone($this->getTimezone());
-        }
-
-        return $parsed->isPast();
-    }
-
-    public function isEventInFuture(): bool
-    {
-        $startDate = $this->getStartDate();
-        if ($startDate === null) {
-            return false;
-        }
-
-        $parsed = Carbon::parse($startDate);
-        if ($this->getTimezone()) {
-            $parsed->setTimezone($this->getTimezone());
-        }
-
-        return $parsed->isFuture();
-    }
-
     public function isEventOngoing(): bool
     {
         if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
             return false;
         }
 
-        foreach ($this->eventOccurrences as $occurrence) {
-            if ($occurrence->getStatus() !== EventOccurrenceStatus::ACTIVE->name) {
-                continue;
-            }
-
-            $start = Carbon::parse($occurrence->getStartDate(), 'UTC');
-            $end = $occurrence->getEndDate() ? Carbon::parse($occurrence->getEndDate(), 'UTC') : null;
-
-            if ($start->isPast() && ($end === null || $end->isFuture())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->eventOccurrences->contains(
+            fn (EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name
+                && ! $o->isFuture()
+                && ! $o->isPast()
+        );
     }
 
     public function getLifecycleStatus(): string
@@ -309,11 +310,17 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
             return EventLifecycleStatus::ONGOING->name;
         }
 
-        if ($this->isEventInFuture() || $this->getStartDate() === null) {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
             return EventLifecycleStatus::UPCOMING->name;
         }
 
-        return EventLifecycleStatus::ENDED->name;
+        $hasOccurrenceStillToCome = $this->eventOccurrences->contains(
+            fn (EventOccurrenceDomainObject $o) => ! $o->isPast()
+        );
+
+        return $hasOccurrenceStillToCome
+            ? EventLifecycleStatus::UPCOMING->name
+            : EventLifecycleStatus::ENDED->name;
     }
 
     public function isRecurring(): bool

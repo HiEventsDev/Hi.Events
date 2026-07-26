@@ -1,4 +1,4 @@
-import {GenericModalProps, PromoCode} from "../../../types.ts";
+import {GenericModalProps, PromoCode, PromoCodeDiscountAppliesTo} from "../../../types.ts";
 import {hasLength, useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -68,6 +68,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
             applicable_product_ids: promoCode.applicable_product_ids ? promoCode.applicable_product_ids.map((id) => id.toString()) : [],
             expiry_date: utcToTz(promoCode.expiry_date, event.timezone),
             discount_type: promoCode.discount_type,
+            discount_applies_to: promoCode.discount_applies_to ?? PromoCodeDiscountAppliesTo.EachProduct,
             max_allowed_usages: promoCode.max_allowed_usages || undefined,
         });
     }, [promoCode, event]);
@@ -80,7 +81,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <PromoCodeForm form={form}/>
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
+                <Button type="submit" fullWidth mt="lg" disabled={mutation.isPending}>
                     {mutation.isPending ? t`Working...` : t`Edit Promo Code`}
                 </Button>
             </form>

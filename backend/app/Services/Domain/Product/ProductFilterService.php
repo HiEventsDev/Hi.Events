@@ -142,6 +142,10 @@ class ProductFilterService
             return false;
         }
 
+        if ($promoCode?->isOrderLevelDiscount()) {
+            return false;
+        }
+
         return $promoCode
             && $promoCode->isDiscountCode()
             && $promoCode->appliesToProduct($product);

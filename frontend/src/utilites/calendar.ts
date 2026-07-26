@@ -71,12 +71,20 @@ const foldICSLine = (line: string): string => {
     return chunks.join('\r\n ');
 };
 
-export const createICSContent = (event: Event, occurrence?: EventOccurrence): string => {
+const getCalendarEntryDetails = (event: Event, occurrence?: EventOccurrence) => {
     const startDate = occurrence?.start_date || event.start_date;
-    const endDate = occurrence?.end_date || event.end_date || startDate;
+    const endDate = occurrence
+        ? (occurrence.end_date || occurrence.start_date)
+        : (event.end_date || startDate);
     const title = occurrence?.label
         ? `${event.title} - ${occurrence.label}`
         : event.title;
+
+    return {startDate, endDate, title};
+};
+
+export const createICSContent = (event: Event, occurrence?: EventOccurrence): string => {
+    const {startDate, endDate, title} = getCalendarEntryDetails(event, occurrence);
 
     return [
         'BEGIN:VCALENDAR',
@@ -112,11 +120,7 @@ export const createGoogleCalendarUrl = (event: Event, occurrence?: EventOccurren
         return new Date(date).toISOString().replace(/-|:|\.\d{3}/g, '');
     };
 
-    const startDate = occurrence?.start_date || event.start_date;
-    const endDate = occurrence?.end_date || event.end_date || startDate;
-    const title = occurrence?.label
-        ? `${event.title} - ${occurrence.label}`
-        : event.title;
+    const {startDate, endDate, title} = getCalendarEntryDetails(event, occurrence);
 
     const params = new URLSearchParams({
         action: 'TEMPLATE',

@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -97,12 +98,67 @@ class ProductPriceServiceTest extends TestCase
         $promoCode->shouldReceive('getDiscountType')->andReturn(PromoCodeDiscountTypeEnum::PERCENTAGE->name);
         $promoCode->shouldReceive('isFixedDiscount')->andReturn(false);
         $promoCode->shouldReceive('isPercentageDiscount')->andReturn(true);
+        $promoCode->shouldReceive('isOrderLevelDiscount')->andReturn(false);
         $promoCode->shouldReceive('getDiscount')->andReturn(10);
 
         $result = $this->service->getPrice($product, $orderDetail, $promoCode, 5);
 
         $this->assertEquals(36.00, $result->price);
         $this->assertEquals(40.00, $result->price_before_discount);
+    }
+
+    public function test_get_price_applies_fixed_per_product_discount_to_unit_price(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
+
+        $result = $this->service->getPrice(
+            $product,
+            $orderDetail,
+            $this->createFixedPromoCode(PromoCodeDiscountAppliesToEnum::EACH_PRODUCT),
+        );
+
+        $this->assertEquals(40.00, $result->price);
+        $this->assertEquals(50.00, $result->price_before_discount);
+    }
+
+    public function test_get_price_ignores_order_level_fixed_discount(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
+
+        $result = $this->service->getPrice(
+            $product,
+            $orderDetail,
+            $this->createFixedPromoCode(PromoCodeDiscountAppliesToEnum::ORDER),
+        );
+
+        $this->assertEquals(50.00, $result->price);
+        $this->assertNull($result->price_before_discount);
+    }
+
+    public function test_percentage_discount_stored_as_order_level_still_discounts_unit_price(): void
+    {
+        $product = $this->createProduct(ProductPriceType::PAID->name, 50.00);
+        $orderDetail = new OrderProductPriceDTO(quantity: 1, price_id: 100);
+
+        $promoCode = (new PromoCodeDomainObject)
+            ->setDiscountType(PromoCodeDiscountTypeEnum::PERCENTAGE->name)
+            ->setDiscountAppliesTo(PromoCodeDiscountAppliesToEnum::ORDER->name)
+            ->setDiscount(10.00);
+
+        $result = $this->service->getPrice($product, $orderDetail, $promoCode);
+
+        $this->assertEquals(45.00, $result->price);
+        $this->assertEquals(50.00, $result->price_before_discount);
+    }
+
+    private function createFixedPromoCode(PromoCodeDiscountAppliesToEnum $appliesTo): PromoCodeDomainObject
+    {
+        return (new PromoCodeDomainObject)
+            ->setDiscountType(PromoCodeDiscountTypeEnum::FIXED->name)
+            ->setDiscountAppliesTo($appliesTo->name)
+            ->setDiscount(10.00);
     }
 
     public function test_donation_keeps_donor_amount_above_override_minimum(): void
