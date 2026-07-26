@@ -14,7 +14,9 @@ test.describe('event lifecycle', () => {
     await expect(statusToggle).toContainText('Draft');
 
     await statusToggle.click();
-    await authedPage.getByRole('button', { name: 'Confirm' }).click();
+    await expect(authedPage.getByText('Ready to go live?')).toBeVisible();
+    await expect(authedPage.getByText('No tickets to sell')).toBeVisible();
+    await authedPage.getByTestId('publish-event-confirm-button').click();
 
     await expect(authedPage.getByText('Your event is live!')).toBeVisible();
     await authedPage.getByRole('button', { name: 'Done' }).click();

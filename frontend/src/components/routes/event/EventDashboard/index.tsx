@@ -14,9 +14,7 @@ import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
-import {useUpdateEventStatus} from "../../../../mutations/useUpdateEventStatus.ts";
-import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
-import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {useDisclosure} from "@mantine/hooks";
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {EventLifecycleStatus, EventStatus, EventType} from "../../../../types.ts";
 import {UpcomingOccurrences} from "./UpcomingOccurrences";
@@ -29,6 +27,9 @@ import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences
 import {PeriodSelector, PeriodPreset} from "../../../common/PeriodSelector";
 import {periodPresetToDateRange} from "../../../../utilites/periodPreset.ts";
 import {hasEventDetails, SetupChecklist} from "./SetupChecklist";
+import {PublishEventModal} from "../../../modals/PublishEventModal";
+import {EventLiveCelebrationModal} from "../../../modals/EventLiveCelebrationModal";
+import {eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 
 export const DashBoardSkeleton = () => {
     return (
@@ -68,7 +69,8 @@ export const EventDashboard = () => {
     const {data: eventStats} = eventStatsQuery;
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
-    const statusToggleMutation = useUpdateEventStatus();
+    const [publishModalOpened, {open: openPublishModal, close: closePublishModal}] = useDisclosure(false);
+    const [celebrationOpened, {open: openCelebration, close: closeCelebration}] = useDisclosure(false);
 
     const [isChecklistDismissed, setIsChecklistDismissed] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -121,29 +123,9 @@ export const EventDashboard = () => {
         }
     };
 
-    const handleStatusToggle = () => {
-        const newStatus = event?.status === 'LIVE' ? 'DRAFT' : 'LIVE';
-        const message = event?.status === 'LIVE'
-            ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
-            : t`Are you sure you want to make this event public? This will make the event visible to the public`;
-
-        confirmationDialog(message, () => {
-            statusToggleMutation.mutate({
-                eventId,
-                status: newStatus
-            }, {
-                onSuccess: () => {
-                    if (newStatus === 'LIVE') {
-                        trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
-                    }
-                    showSuccess(t`Event status updated`);
-                },
-                onError: (error: any) => {
-                    showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
-                }
-            });
-        })
-    }
+    const handlePublish = () => {
+        openPublishModal();
+    };
 
     const handleConnectStripe = () => {
         if (!organizerId) {
@@ -231,6 +213,27 @@ export const EventDashboard = () => {
             {!event && <DashBoardSkeleton/>}
 
             {event && (<>
+                {publishModalOpened && (
+                    <PublishEventModal
+                        opened={publishModalOpened}
+                        onClose={closePublishModal}
+                        event={event}
+                        onSuccess={() => {
+                            trackEvent(AnalyticsEvents.EVENT_PUBLISHED);
+                            closePublishModal();
+                            openCelebration();
+                        }}
+                    />
+                )}
+
+                <EventLiveCelebrationModal
+                    opened={celebrationOpened}
+                    onClose={closeCelebration}
+                    url={eventHomepageUrl(event)}
+                    eventTitle={event.title}
+                    eventId={String(event.id)}
+                />
+
                 {shouldShowChecklist && (
                     <SetupChecklist
                         event={event}
@@ -241,7 +244,7 @@ export const EventDashboard = () => {
                         eventImages={eventImages}
                         account={account}
                         me={me}
-                        onPublish={handleStatusToggle}
+                        onPublish={handlePublish}
                         onConnectStripe={handleConnectStripe}
                         onAddTickets={handleAddTickets}
                         onEditDetails={handleEditDetails}
