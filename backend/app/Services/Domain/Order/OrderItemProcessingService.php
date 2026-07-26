@@ -19,7 +19,10 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
+use HiEvents\Services\Domain\Order\DTO\OrderItemPricingLineDTO;
+use HiEvents\Services\Domain\Order\DTO\OrderLineDiscountAllocationDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\Product\DTO\PriceDTO;
 use HiEvents\Services\Domain\Product\ProductPriceService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
@@ -38,6 +41,7 @@ class OrderItemProcessingService
         private readonly ProductPriceService $productPriceService,
         private readonly OrderPlatformFeePassThroughService $platformFeeService,
         private readonly EventRepositoryInterface $eventRepository,
+        private readonly OrderDiscountAllocationService $orderDiscountAllocationService,
     ) {}
 
     /**
@@ -51,7 +55,29 @@ class OrderItemProcessingService
     ): Collection {
         $this->loadPlatformFeeConfiguration($event->getId());
 
-        $orderItems = collect();
+        $pricingLines = $this->buildPricingLines($productsOrderDetails, $event, $promoCode);
+
+        if ($promoCode?->isOrderLevelDiscount()) {
+            $pricingLines = $this->applyOrderLevelDiscount($pricingLines, $promoCode, $event->getCurrency());
+        }
+
+        return $pricingLines->map(function (OrderItemPricingLineDTO $line) use ($order, $event) {
+            return $this->orderRepository->addOrderItem(
+                $this->calculateOrderItemData($line, $order, $event->getCurrency())
+            );
+        });
+    }
+
+    /**
+     * @param  Collection<ProductOrderDetailsDTO>  $productsOrderDetails
+     * @return Collection<int, OrderItemPricingLineDTO>
+     */
+    private function buildPricingLines(
+        Collection $productsOrderDetails,
+        EventDomainObject $event,
+        ?PromoCodeDomainObject $promoCode,
+    ): Collection {
+        $pricingLines = collect();
 
         foreach ($productsOrderDetails as $productOrderDetail) {
             $product = $this->productRepository
@@ -70,16 +96,55 @@ class OrderItemProcessingService
 
             $eventOccurrenceId = $productOrderDetail->event_occurrence_id;
 
-            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($promoCode, $order, $orderItems, $product, $event, $eventOccurrenceId) {
+            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($pricingLines, $promoCode, $product, $eventOccurrenceId) {
                 if ($productPrice->quantity === 0) {
                     return;
                 }
-                $orderItemData = $this->calculateOrderItemData($product, $productPrice, $order, $promoCode, $event->getCurrency(), $eventOccurrenceId);
-                $orderItems->push($this->orderRepository->addOrderItem($orderItemData));
+                $pricingLines->push(new OrderItemPricingLineDTO(
+                    product: $product,
+                    product_price: $productPrice,
+                    prices: $this->productPriceService->getPrice($product, $productPrice, $promoCode, $eventOccurrenceId),
+                    event_occurrence_id: $eventOccurrenceId,
+                ));
             });
         }
 
-        return $orderItems;
+        return $pricingLines;
+    }
+
+    /**
+     * @param  Collection<int, OrderItemPricingLineDTO>  $pricingLines
+     * @return Collection<int, OrderItemPricingLineDTO>
+     */
+    private function applyOrderLevelDiscount(Collection $pricingLines, PromoCodeDomainObject $promoCode, string $currency): Collection
+    {
+        $allocations = $this->orderDiscountAllocationService->allocate($pricingLines, $promoCode, $currency);
+
+        return $pricingLines
+            ->flatMap(static function (OrderItemPricingLineDTO $line, int $index) use ($allocations) {
+                return collect($allocations[$index])->map(static function (OrderLineDiscountAllocationDTO $allocation) use ($line) {
+                    if ($allocation->per_unit_discount <= 0 && $allocation->quantity === $line->product_price->quantity) {
+                        return $line;
+                    }
+
+                    return new OrderItemPricingLineDTO(
+                        product: $line->product,
+                        product_price: new OrderProductPriceDTO(
+                            quantity: $allocation->quantity,
+                            price_id: $line->product_price->price_id,
+                            price: $line->product_price->price,
+                        ),
+                        prices: $allocation->per_unit_discount > 0
+                            ? new PriceDTO(
+                                price: Currency::round($line->prices->price - $allocation->per_unit_discount),
+                                price_before_discount: $line->prices->price,
+                            )
+                            : $line->prices,
+                        event_occurrence_id: $line->event_occurrence_id,
+                    );
+                });
+            })
+            ->values();
     }
 
     private function loadPlatformFeeConfiguration(int $eventId): void
@@ -103,16 +168,15 @@ class OrderItemProcessingService
     }
 
     private function calculateOrderItemData(
-        ProductDomainObject $product,
-        OrderProductPriceDTO $productPriceDetails,
+        OrderItemPricingLineDTO $line,
         OrderDomainObject $order,
-        ?PromoCodeDomainObject $promoCode,
         string $currency,
-        ?int $eventOccurrenceId = null,
     ): array {
-        $prices = $this->productPriceService->getPrice($product, $productPriceDetails, $promoCode, $eventOccurrenceId);
-        $priceWithDiscount = $prices->price;
-        $priceBeforeDiscount = $prices->price_before_discount;
+        $product = $line->product;
+        $productPriceDetails = $line->product_price;
+        $eventOccurrenceId = $line->event_occurrence_id;
+        $priceWithDiscount = $line->prices->price;
+        $priceBeforeDiscount = $line->prices->price_before_discount;
 
         $itemTotalWithDiscount = $priceWithDiscount * $productPriceDetails->quantity;
 

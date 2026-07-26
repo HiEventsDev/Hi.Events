@@ -44,6 +44,7 @@ class CreatePromoCodeService
                 ? 0.00
                 : $promoCode->getDiscount(),
             PromoCodeDomainObjectAbstract::DISCOUNT_TYPE => $promoCode->getDiscountType(),
+            PromoCodeDomainObjectAbstract::DISCOUNT_APPLIES_TO => $promoCode->getDiscountAppliesTo(),
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCode->getExpiryDate()
                 ? DateHelper::convertToUTC($promoCode->getExpiryDate(), $event->getTimezone())
                 : null,
