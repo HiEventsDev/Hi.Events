@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Enums\EventCategory;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
@@ -131,6 +132,7 @@ class BootstrapDevDataCommand extends Command
             discount: 10.0,
             expiry_date: null,
             max_allowed_usages: null,
+            discount_applies_to: PromoCodeDiscountAppliesToEnum::EACH_PRODUCT,
         ));
 
         $affiliate = $createAffiliateHandler->handle($singleEvent->getId(), $account->getId(), new UpsertAffiliateDTO(

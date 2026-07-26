@@ -23,6 +23,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
+    final public const DISCOUNT_APPLIES_TO = 'discount_applies_to';
 
     protected int $id;
     protected int $event_id;
@@ -37,6 +38,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected string $created_at;
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
+    protected string $discount_applies_to = 'EACH_PRODUCT';
 
     public function toArray(): array
     {
@@ -54,6 +56,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
+                    'discount_applies_to' => $this->discount_applies_to ?? null,
                 ];
     }
 
@@ -198,5 +201,16 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getDeletedAt(): ?string
     {
         return $this->deleted_at;
+    }
+
+    public function setDiscountAppliesTo(string $discount_applies_to): self
+    {
+        $this->discount_applies_to = $discount_applies_to;
+        return $this;
+    }
+
+    public function getDiscountAppliesTo(): string
+    {
+        return $this->discount_applies_to;
     }
 }

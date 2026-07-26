@@ -1,4 +1,4 @@
-import {Collapse, Select, Switch, Textarea, TextInput} from "@mantine/core";
+import {Select, Switch, Textarea, TextInput} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
 import {
@@ -11,9 +11,9 @@ import {
 import {InputGroup} from "../../common/InputGroup";
 import {ProductSelector} from "../../common/ProductSelector";
 import {Callout} from "../../common/Callout";
+import {AdvancedOptions} from "../../common/AdvancedOptions";
 import {useEffect, useMemo, useState} from "react";
 import {
-    IconChevronRight,
     IconClipboardText,
     IconEye,
     IconMessageCircleQuestion,
@@ -68,15 +68,12 @@ export const CheckInListForm = ({
         }));
     }, [activeOccurrences, timezone]);
 
-    // Open advanced panel automatically if editing a list that already uses any of those options.
     const [showAdvanced, setShowAdvanced] = useState(() => hasAdvancedValuesSet(form));
 
-    // UI mirror of "product_ids is empty" — default on for new lists.
     const [scopeToAll, setScopeToAll] = useState(
         () => !form.values.product_ids || form.values.product_ids.length === 0,
     );
 
-    // Reflect late-hydrated values (edit modal sets product_ids in an effect).
     useEffect(() => {
         const hasProducts = (form.values.product_ids?.length ?? 0) > 0;
         if (hasProducts && scopeToAll) setScopeToAll(false);
@@ -103,7 +100,6 @@ export const CheckInListForm = ({
                 placeholder={t`VIP check-in list`}
             />
 
-            {/* UI-only: empty product_ids = "covers every ticket" on the backend. */}
             <Switch
                 mt="sm"
                 label={t`Apply to all tickets`}
@@ -141,20 +137,7 @@ export const CheckInListForm = ({
                 />
             )}
 
-            <button
-                type="button"
-                className={classes.advancedToggle}
-                onClick={() => setShowAdvanced(v => !v)}
-                aria-expanded={showAdvanced}
-            >
-                <IconChevronRight
-                    size={14}
-                    className={`${classes.chevron} ${showAdvanced ? classes.chevronOpen : ""}`}
-                />
-                {showAdvanced ? t`Hide advanced options` : t`Show advanced options`}
-            </button>
-
-            <Collapse expanded={showAdvanced}>
+            <AdvancedOptions opened={showAdvanced} onToggle={() => setShowAdvanced(v => !v)}>
                 <Textarea
                     {...form.getInputProps('description')}
                     label={t`Description for check-in staff`}
@@ -249,7 +232,7 @@ export const CheckInListForm = ({
                         </label>
                     </div>
                 </div>
-            </Collapse>
+            </AdvancedOptions>
         </>
     );
 }

@@ -54,6 +54,10 @@ class ProductPriceService
             return new PriceDTO($price);
         }
 
+        if ($promoCode->isOrderLevelDiscount()) {
+            return new PriceDTO($price);
+        }
+
         if ($promoCode->isFixedDiscount()) {
             $discountPrice = Currency::round($price - $promoCode->getDiscount());
         } elseif ($promoCode->isPercentageDiscount()) {

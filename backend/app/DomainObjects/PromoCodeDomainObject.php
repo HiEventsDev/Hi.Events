@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
@@ -59,7 +60,6 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
 
     public function appliesToProduct(ProductDomainObject $product): bool
     {
-        // If there's no product IDs we apply the promo to all products
         if (! $this->getApplicableProductIds()) {
             return true;
         }
@@ -80,5 +80,11 @@ class PromoCodeDomainObject extends Generated\PromoCodeDomainObjectAbstract impl
     public function isNoDiscountCode(): bool
     {
         return $this->getDiscountType() === PromoCodeDiscountTypeEnum::NONE->name;
+    }
+
+    public function isOrderLevelDiscount(): bool
+    {
+        return $this->isFixedDiscount()
+            && $this->getDiscountAppliesTo() === PromoCodeDiscountAppliesToEnum::ORDER->name;
     }
 }

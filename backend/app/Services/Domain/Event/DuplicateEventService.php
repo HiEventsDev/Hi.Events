@@ -370,7 +370,8 @@ class DuplicateEventService
                     ->setDiscountType($promoCode->getDiscountType())
                     ->setDiscount($promoCode->getDiscount())
                     ->setExpiryDate($promoCode->getExpiryDate())
-                    ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages()),
+                    ->setMaxAllowedUsages($promoCode->getMaxAllowedUsages())
+                    ->setDiscountAppliesTo($promoCode->getDiscountAppliesTo()),
             );
         }
     }

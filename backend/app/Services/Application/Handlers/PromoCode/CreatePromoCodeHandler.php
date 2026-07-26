@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\PromoCode;
 
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Services\Application\Handlers\PromoCode\DTO\UpsertPromoCodeDTO;
@@ -29,6 +30,7 @@ readonly class CreatePromoCodeHandler
                 ->setExpiryDate($promoCodeDTO->expiry_date)
                 ->setMaxAllowedUsages($promoCodeDTO->max_allowed_usages)
                 ->setApplicableProductIds($promoCodeDTO->applicable_product_ids)
+                ->setDiscountAppliesTo(($promoCodeDTO->discount_applies_to ?? PromoCodeDiscountAppliesToEnum::EACH_PRODUCT)->name)
         );
     }
 }

@@ -36,7 +36,18 @@ import classNames from 'classnames';
 import '../../../../styles/widget/default.scss';
 import {ProductAvailabilityMessage} from "../../../common/ProductPriceAvailability";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
-import {Event, EventOccurrence, EventOccurrenceStatus, EventType, Product, ProductType} from "../../../../types.ts";
+import {
+    Event,
+    EventOccurrence,
+    EventOccurrenceStatus,
+    EventType,
+    Product,
+    ProductType,
+    PromoCodeDiscountAppliesTo,
+    PromoCodeDiscountType,
+    PromoCodeValidationResponse
+} from "../../../../types.ts";
+import {formatCurrency} from "../../../../utilites/currency.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconChevronRight, IconX} from "@tabler/icons-react"
@@ -106,6 +117,10 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
     const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
+    const [appliedPromoDetails, setAppliedPromoDetails] = useState<{
+        code: string;
+        response: PromoCodeValidationResponse;
+    } | null>(null);
 
     useEffect(() => sendHeightToIframeWidgets(), [resizeObserverRect.height]);
 
@@ -273,6 +288,8 @@ const SelectProducts = (props: SelectProductsProps) => {
                     showError(t`That promo code is invalid`);
                     return;
                 }
+
+                setAppliedPromoDetails({code: promoCode, response: validPromoCode});
             }
 
             const eventWithPromoCodeApplied = await eventsClientPublic.findByID(
@@ -382,6 +399,36 @@ const SelectProducts = (props: SelectProductsProps) => {
             showSuccess(t`Promo ${promo_code} code applied`);
             addQueryStringToUrl('promo_code', promo_code);
         }
+    }, [form.values.promo_code])
+
+    useEffect(() => {
+        const promoCode = form.values.promo_code;
+
+        if (!promoCode) {
+            setAppliedPromoDetails(null);
+            return;
+        }
+
+        if (appliedPromoDetails?.code === promoCode) {
+            return;
+        }
+
+        let cancelled = false;
+        promoCodeClientPublic.validateCode(eventId, promoCode)
+            .then((response) => {
+                if (!cancelled) {
+                    setAppliedPromoDetails(response.valid ? {code: promoCode, response} : null);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setAppliedPromoDetails(null);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
     }, [form.values.promo_code])
 
     useEffect(() => {
@@ -653,7 +700,15 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
             {form.values.promo_code && (
                 <div className={'hi-promo-code-applied'}>
-                    <span><b>{form.values.promo_code}</b> {t`applied`}</span>
+                    <span>
+                        <b>{form.values.promo_code}</b>{' '}
+                        {(appliedPromoDetails?.response.discount_type === PromoCodeDiscountType.Fixed
+                            && appliedPromoDetails?.response.discount_applies_to === PromoCodeDiscountAppliesTo.Order
+                            && appliedPromoDetails?.response.applies_to_all_products
+                            && appliedPromoDetails?.response.discount)
+                            ? t`applied — ${formatCurrency(appliedPromoDetails.response.discount, event?.currency)} off your order`
+                            : t`applied`}
+                    </span>
                     <ActionIcon
                         type="button"
                         className={'hi-promo-code-applied-remove-icon-button'}
