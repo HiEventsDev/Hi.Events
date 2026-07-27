@@ -1,0 +1,15 @@
+# Copy to .dev.vars for local `yarn dev:cf` / `wrangler dev`.
+#
+# Point both API URLs at your *existing* public Laravel API (Proxmox, VPS, etc.).
+# Include the `/api` suffix used by Hi.Events axios clients.
+# Workers cannot reach Docker-internal hosts like http://backend:80/api.
+#
+# Also allow this frontend origin in Laravel CORS_ALLOWED_ORIGINS
+# (e.g. http://localhost:8787) and set APP_FRONTEND_URL accordingly.
+
+VITE_API_URL_CLIENT=https://tickets.example.com/api
+VITE_API_URL_SERVER=https://tickets.example.com/api
+VITE_FRONTEND_URL=http://localhost:8787
+VITE_APP_NAME=Hi.Events
+# VITE_STRIPE_PUBLISHABLE_KEY=
+# VITE_FATHOM_SITE_ID=
