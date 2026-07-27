@@ -1,7 +1,5 @@
 import { ConfigKeys } from "../types.ts";
 import { isSsr } from "./helpers.ts";
-import process from "process";
-
 
 export const clientBuildEnv: { [K in ConfigKeys]: string } = {
     'VITE_APP_PRIMARY_COLOR': import.meta.env.VITE_APP_PRIMARY_COLOR,

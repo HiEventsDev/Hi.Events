@@ -1,20 +1,23 @@
-import express from "express";
-import {installGlobals} from "@remix-run/node";
-import process from "process";
-import {createServer as viteServer} from "vite";
-import compression from "compression";
+import {serve} from "@hono/node-server";
+import {serveStatic} from "@hono/node-server/serve-static";
+import {getRequestListener} from "@hono/node-server";
+import {compress} from "hono/compress";
+import {Hono} from "hono";
+import {createServer as createViteServer} from "vite";
+import {createServer as createHttpServer} from "node:http";
 import fs from "node:fs/promises";
-import sirv from "sirv";
-import cookieParser from "cookie-parser";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
+import process from "process";
 import "dotenv/config";
-import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
-import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
-
-installGlobals();
+import {
+    isStaticAssetPath,
+    pickViteEnv,
+    registerPublicRoutes,
+    registerSsrHandler,
+} from "./src/ssr/createApp.js";
 
 async function main() {
     const base = process.env.BASE || "/";
@@ -29,123 +32,79 @@ async function main() {
         ? await fs.readFile("./dist/client/index.html", "utf-8")
         : "";
 
-    const ssrManifest = isProduction
-        ? await fs.readFile("./dist/client/.vite/ssr-manifest.json", "utf-8")
-        : undefined;
-
-    const app = express();
-    app.use(cookieParser());
-
-    app.use('/.well-known', express.static(path.join(__dirname, 'public/.well-known')));
-
     let vite;
 
     if (!isProduction) {
-        vite = await viteServer({
-            server: { middlewareMode: true },
+        vite = await createViteServer({
+            server: {middlewareMode: true},
             appType: "custom",
             base,
         });
-
-        app.use(vite.middlewares);
-    } else {
-        app.use(compression());
-        app.use(base, sirv(path.join(__dirname, "./dist/client"), { extensions: [] }));
     }
 
-    const getViteEnvironmentVariables = () => {
-        const envVars = {};
-        for (const key in process.env) {
-            if (key.startsWith('VITE_')) {
-                envVars[key] = process.env[key];
-            }
-        }
-        return htmlSafeJsonStringify(envVars);
+    const dynamicImport = async (modulePath) => {
+        return import(
+            nodePath.isAbsolute(modulePath)
+                ? nodeUrl.pathToFileURL(modulePath).toString()
+                : modulePath
+        );
     };
 
-    app.get('/robots.txt', (req, res) => {
-        const frontendUrl = process.env.VITE_FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
-        const robotsTxt = `User-agent: *
-Allow: /
-
-Sitemap: ${frontendUrl}/sitemap.xml
-`;
-        res.setHeader('Content-Type', 'text/plain');
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-        res.status(200).send(robotsTxt);
-    });
-
-    app.get('/sitemap.xml', sitemapIndexHandler);
-    app.get('/sitemap-events-:page.xml', sitemapEventsHandler);
-    app.get('/sitemap-organizers-:page.xml', sitemapOrganizersHandler);
-
-    app.use("*", async (req, res) => {
-        const url = req.originalUrl.replace(base, "");
-
-        try {
-            let template;
-            let render;
-
+    const deps = {
+        base,
+        getPublicEnv: () => pickViteEnv(process.env),
+        getTemplate: async (_c, url) => {
             if (!isProduction) {
-                template = await fs.readFile(path.join(__dirname, "./index.html"), "utf-8");
-                template = await vite.transformIndexHtml(url, template);
-                render = (await vite.ssrLoadModule("/src/entry.server.tsx")).render;
-            } else {
-                template = templateHtml;
-                render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
+                let template = await fs.readFile(path.join(__dirname, "./index.html"), "utf-8");
+                return vite.transformIndexHtml(url, template);
             }
-
-            const { appHtml, dehydratedState, helmetContext } = await render(
-                { req, res },
-                ssrManifest
-            );
-            const stringifiedState = htmlSafeJsonStringify(dehydratedState);
-
-            const helmetHtml = Object.values(helmetContext.helmet || {})
-                .map((value) => value.toString() || "")
-                .join(" ");
-
-            const envVariablesHtml = `<script>window.hievents = ${getViteEnvironmentVariables()};</script>`;
-
-            const headSnippets = [];
-            if (process.env.VITE_FATHOM_SITE_ID) {
-                headSnippets.push(`
-                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${process.env.VITE_FATHOM_SITE_ID}" defer></script>
-            `);
+            return templateHtml;
+        },
+        getRender: async () => {
+            if (!isProduction) {
+                return (await vite.ssrLoadModule("/src/entry.server.tsx")).render;
             }
+            return (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
+        },
+    };
 
-            const html = template
-                .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
-                .replace("<!--app-html-->", () => appHtml)
-                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
-                .replace("<!--environment-variables-->", () => envVariablesHtml)
-                .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
+    const app = new Hono();
 
-            res.setHeader("Content-Type", "text/html");
-            return res.status(200).end(html);
-        } catch (error) {
-            if (error instanceof Response) {
-                if (error.status >= 300 && error.status < 400) {
-                    return res.redirect(error.status, error.headers.get("Location") || "/");
-                } else {
-                    return res.status(error.status).send(await error.text());
-                }
+    // Dynamic robots/sitemap before static files (public/robots.txt would otherwise win).
+    registerPublicRoutes(app, deps);
+
+    if (isProduction) {
+        app.use("*", compress());
+        app.use("/.well-known/*", serveStatic({root: "./public"}));
+
+        const clientStatic = serveStatic({root: "./dist/client"});
+        app.use("*", async (c, next) => {
+            const pathname = new URL(c.req.url).pathname;
+            if (!isStaticAssetPath(pathname)) {
+                return next();
             }
+            return clientStatic(c, next);
+        });
+    }
 
-            console.error(error);
-            res.status(500).send("Internal Server Error");
-        }
-    });
+    registerSsrHandler(app, deps);
 
-    app.listen(port, () => {
+    if (!isProduction) {
+        const listener = getRequestListener(app.fetch);
+        createHttpServer((req, res) => {
+            vite.middlewares(req, res, () => listener(req, res));
+        }).listen(port, () => {
+            console.info(`SSR Serving at http://localhost:${port}`);
+        });
+        return;
+    }
+
+    serve({
+        fetch: app.fetch,
+        port: Number(port),
+    }, () => {
         console.info(`SSR Serving at http://localhost:${port}`);
     });
-
-    const dynamicImport = async (path) => {
-        return import(
-            nodePath.isAbsolute(path) ? nodeUrl.pathToFileURL(path).toString() : path
-        );
-        
-    }
 }
+
 main();
