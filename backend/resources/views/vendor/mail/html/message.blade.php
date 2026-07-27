@@ -3,11 +3,9 @@
     <x-slot:header>
         <x-mail::header :url="config('app.email_logo_link_url')">
             @if($appLogo = config('app.email_logo_url'))
-                <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}"
-                     style="max-width: 300px;">
+                <img src="{{ $appLogo }}" class="logo" alt="{{ config('app.name') }}">
             @else
-                <img src="{{ config('app.frontend_url') }}/logos/hi-events-stacked-light.png" class="logo" alt="{{ config('app.name') }}"
-                     style="max-width: 300px;">
+                <img src="{{ config('app.frontend_url') }}/logos/hi-events-stacked-light.png" class="logo" alt="{{ config('app.name') }}">
             @endif
         </x-mail::header>
     </x-slot:header>

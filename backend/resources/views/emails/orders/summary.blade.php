@@ -41,7 +41,7 @@
 
 <p>
 
-# {{ __('Event Details') }}
+## {{ __('Event Details') }}
 **{{ __('Event Name:') }}** {{ $event->getTitle() }}
     <br>
 **{{ __('Date & Time:') }}** {{ __(':date at :time', ['date' => $displayDate, 'time' => $displayTime]) }}
@@ -55,14 +55,14 @@
 @if($eventSettings->getPostCheckoutMessage() && $order->isOrderCompleted())
 <p>
 
-# {{ __('Additional Information') }}
+## {{ __('Additional Information') }}
 
 {!! $eventSettings->getPostCheckoutMessage() !!}
 
 </p>
 @endif
 
-# {{ __('Order Summary') }}
+## {{ __('Order Summary') }}
 - **{{ __('Order Number:') }}** {{ $order->getPublicId() }}
 - **{{ __('Total Amount:') }}** {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
 
