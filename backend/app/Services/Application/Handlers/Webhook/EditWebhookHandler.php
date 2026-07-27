@@ -12,10 +12,8 @@ class EditWebhookHandler
 {
     public function __construct(
         private readonly WebhookRepositoryInterface $webhookRepository,
-        private readonly DatabaseManager            $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function handle(EditWebhookDTO $dto): WebhookDomainObject
     {
@@ -31,7 +29,7 @@ class EditWebhookHandler
             /** @var WebhookDomainObject $webhook */
             $webhook = $this->webhookRepository->findFirstWhere($where);
 
-            if (!$webhook) {
+            if (! $webhook) {
                 throw new ResourceNotFoundException(__(
                     key: 'Webhook not found for ID: :webhookId',
                     replace: [

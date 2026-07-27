@@ -16,9 +16,7 @@ class SendOrderDetailsEmailJob implements ShouldQueue
 
     public int $tries = 3;
 
-    public function __construct(private readonly OrderDomainObject $order)
-    {
-    }
+    public function __construct(private readonly OrderDomainObject $order) {}
 
     public function handle(SendOrderDetailsService $service): void
     {

@@ -9,8 +9,7 @@ class GetAvailableTokensHandler
 {
     public function __construct(
         private readonly LiquidTemplateRenderer $liquidRenderer
-    ) {
-    }
+    ) {}
 
     public function handle(EmailTemplateType $templateType): array
     {

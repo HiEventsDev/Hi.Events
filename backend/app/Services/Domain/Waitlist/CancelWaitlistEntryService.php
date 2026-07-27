@@ -11,6 +11,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
+use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use Illuminate\Database\DatabaseManager;
 
@@ -18,12 +19,11 @@ class CancelWaitlistEntryService
 {
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly ProductPriceRepositoryInterface  $productPriceRepository,
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly ProductPriceRepositoryInterface $productPriceRepository,
+        private readonly StripePaymentsRepositoryInterface $stripePaymentsRepository,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -67,9 +67,9 @@ class CancelWaitlistEntryService
     /**
      * @throws ResourceConflictException
      */
-    private function cancelEntry(WaitlistEntryDomainObject $entry): WaitlistEntryDomainObject
+    public function cancelEntry(WaitlistEntryDomainObject $entry): WaitlistEntryDomainObject
     {
-        if (!in_array($entry->getStatus(), [
+        if (! in_array($entry->getStatus(), [
             WaitlistEntryStatus::WAITING->name,
             WaitlistEntryStatus::OFFERED->name,
         ], true)) {
@@ -77,13 +77,36 @@ class CancelWaitlistEntryService
         }
 
         return $this->databaseManager->transaction(function () use ($entry) {
-            $wasOffered = $entry->getStatus() === WaitlistEntryStatus::OFFERED->name;
+            $lockedEntry = $this->waitlistEntryRepository->findByIdLocked($entry->getId());
 
-            if ($entry->getOrderId() !== null) {
-                $this->orderRepository->deleteWhere([
-                    'id' => $entry->getOrderId(),
-                    'status' => OrderStatus::RESERVED->name,
-                ]);
+            if ($lockedEntry === null || ! in_array($lockedEntry->getStatus(), [
+                WaitlistEntryStatus::WAITING->name,
+                WaitlistEntryStatus::OFFERED->name,
+            ], true)) {
+                throw new ResourceConflictException(__('This waitlist entry cannot be cancelled'));
+            }
+
+            $wasOffered = $lockedEntry->getStatus() === WaitlistEntryStatus::OFFERED->name;
+
+            if ($lockedEntry->getOrderId() !== null) {
+                $orderHasStripePayment = $this->stripePaymentsRepository->countWhere([
+                    'order_id' => $lockedEntry->getOrderId(),
+                ]) > 0;
+
+                if ($orderHasStripePayment) {
+                    $this->orderRepository->updateWhere(
+                        attributes: ['status' => OrderStatus::ABANDONED->name],
+                        where: [
+                            'id' => $lockedEntry->getOrderId(),
+                            'status' => OrderStatus::RESERVED->name,
+                        ],
+                    );
+                } else {
+                    $this->orderRepository->deleteWhere([
+                        'id' => $lockedEntry->getOrderId(),
+                        'status' => OrderStatus::RESERVED->name,
+                    ]);
+                }
             }
 
             $this->waitlistEntryRepository->updateWhere(
@@ -92,21 +115,22 @@ class CancelWaitlistEntryService
                     'cancelled_at' => now(),
                     'order_id' => null,
                 ],
-                where: ['id' => $entry->getId()],
+                where: ['id' => $lockedEntry->getId()],
             );
 
             if ($wasOffered) {
-                $productPrice = $this->productPriceRepository->findById($entry->getProductPriceId());
+                $productPrice = $this->productPriceRepository->findById($lockedEntry->getProductPriceId());
 
                 event(new CapacityChangedEvent(
-                    eventId: $entry->getEventId(),
+                    eventId: $lockedEntry->getEventId(),
                     direction: CapacityChangeDirection::INCREASED,
                     productId: $productPrice->getProductId(),
-                    productPriceId: $entry->getProductPriceId(),
+                    productPriceId: $lockedEntry->getProductPriceId(),
+                    eventOccurrenceId: $lockedEntry->getEventOccurrenceId(),
                 ));
             }
 
-            return $this->waitlistEntryRepository->findById($entry->getId());
+            return $this->waitlistEntryRepository->findById($lockedEntry->getId());
         });
     }
 }

@@ -140,6 +140,7 @@ const Payment = () => {
                         className={classes.continueButton}
                         loading={isLoading || isPaymentLoading}
                         onClick={handleSubmit}
+                        data-testid={activePaymentMethod === 'OFFLINE' ? 'offline-payment-button' : undefined}
                     >
                         {order?.is_payment_required ? (
                             <Group gap={8} wrap="nowrap">

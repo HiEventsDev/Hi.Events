@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CompleteOrderActionPublic extends BaseAction
 {
-    public function __construct(private readonly CompleteOrderHandler $orderService)
-    {
-    }
+    public function __construct(private readonly CompleteOrderHandler $orderService) {}
 
     public function __invoke(CompleteOrderRequest $request, int $eventId, string $orderShortId): JsonResponse
     {

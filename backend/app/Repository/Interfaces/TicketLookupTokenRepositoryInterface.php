@@ -7,6 +7,4 @@ use HiEvents\DomainObjects\TicketLookupTokenDomainObject;
 /**
  * @extends RepositoryInterface<TicketLookupTokenDomainObject>
  */
-interface TicketLookupTokenRepositoryInterface extends RepositoryInterface
-{
-}
+interface TicketLookupTokenRepositoryInterface extends RepositoryInterface {}

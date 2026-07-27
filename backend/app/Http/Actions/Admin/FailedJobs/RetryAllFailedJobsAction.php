@@ -13,8 +13,7 @@ class RetryAllFailedJobsAction extends BaseAction
 {
     public function __construct(
         private readonly RetryFailedJobHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): JsonResponse
     {

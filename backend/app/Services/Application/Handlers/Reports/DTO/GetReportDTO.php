@@ -8,11 +8,10 @@ use HiEvents\DomainObjects\Enums\ReportTypes;
 class GetReportDTO extends BaseDTO
 {
     public function __construct(
-        public readonly int         $eventId,
+        public readonly int $eventId,
         public readonly ReportTypes $reportType,
-        public readonly ?string     $startDate,
-        public readonly ?string     $endDate
-    )
-    {
-    }
+        public readonly ?string $startDate,
+        public readonly ?string $endDate,
+        public readonly ?int $occurrenceId = null,
+    ) {}
 }

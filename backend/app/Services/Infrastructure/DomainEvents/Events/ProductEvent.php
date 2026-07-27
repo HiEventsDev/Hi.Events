@@ -9,7 +9,5 @@ class ProductEvent extends BaseDomainEvent
     public function __construct(
         public DomainEventType $type,
         public int $productId,
-    )
-    {
-    }
+    ) {}
 }

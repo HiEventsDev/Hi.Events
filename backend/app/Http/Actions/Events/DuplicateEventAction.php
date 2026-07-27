@@ -13,9 +13,7 @@ use Throwable;
 
 class DuplicateEventAction extends BaseAction
 {
-    public function __construct(private readonly DuplicateEventHandler $handler)
-    {
-    }
+    public function __construct(private readonly DuplicateEventHandler $handler) {}
 
     /**
      * @throws Throwable
@@ -39,6 +37,7 @@ class DuplicateEventAction extends BaseAction
             duplicateTicketLogo: $request->validated('duplicate_ticket_logo'),
             duplicateWebhooks: $request->validated('duplicate_webhooks'),
             duplicateAffiliates: $request->validated('duplicate_affiliates'),
+            duplicateOccurrences: $request->validated('duplicate_occurrences') ?? true,
             description: $request->validated('description'),
             endDate: $request->validated('end_date'),
         ));

@@ -28,7 +28,7 @@ class ProductResource extends JsonResource
             'description' => $this->getDescription(),
             $this->mergeWhen(
                 condition: $this->getType() !== ProductPriceType::TIERED->name,
-                value: fn() => [
+                value: fn () => [
                     'price' => $this->getPrice(),
                 ]
             ),
@@ -49,16 +49,16 @@ class ProductResource extends JsonResource
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),
-            $this->mergeWhen((bool)$this->getProductPrices(), fn() => [
+            $this->mergeWhen((bool) $this->getProductPrices(), fn () => [
                 'is_sold_out' => $this->isSoldOut(),
             ]),
             'taxes_and_fees' => $this->when(
-                (bool)$this->getTaxAndFees(),
-                fn() => TaxAndFeeResource::collection($this->getTaxAndFees())
+                (bool) $this->getTaxAndFees(),
+                fn () => TaxAndFeeResource::collection($this->getTaxAndFees())
             ),
             'prices' => $this->when(
-                (bool)$this->getProductPrices(),
-                fn() => ProductPriceResource::collection($this->getProductPrices())
+                (bool) $this->getProductPrices(),
+                fn () => ProductPriceResource::collection($this->getProductPrices())
             ),
             'product_category_id' => $this->getProductCategoryId(),
             'is_highlighted' => $this->getIsHighlighted(),

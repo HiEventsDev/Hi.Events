@@ -10,6 +10,7 @@ use HiEvents\Exceptions\EmailTemplateValidationException;
 use HiEvents\Exceptions\InvalidEmailTemplateException;
 use HiEvents\Http\Resources\EmailTemplateResource;
 use HiEvents\Http\ResponseCodes;
+use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EmailTemplate\DTO\UpsertEmailTemplateDTO;
 use HiEvents\Services\Application\Handlers\EmailTemplate\UpdateEmailTemplateHandler;
 use Illuminate\Http\JsonResponse;
@@ -20,10 +21,9 @@ use Symfony\Component\HttpFoundation\Response;
 class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
-        private readonly UpdateEmailTemplateHandler $handler
-    )
-    {
-    }
+        private readonly UpdateEmailTemplateHandler $handler,
+        private readonly EmailTemplateRepositoryInterface $emailTemplateRepository,
+    ) {}
 
     /**
      * @throws ValidationException
@@ -41,15 +41,18 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
         $validated = $this->validateUpdateEmailTemplateRequest($request);
 
         try {
+            $existingTemplate = $this->emailTemplateRepository->findById($templateId);
+            $templateType = EmailTemplateType::from($existingTemplate->getTemplateType());
+
             $cta = [
                 'label' => $validated['ctaLabel'],
-                'url_token' => 'order.url', // This will be determined by template type during update
+                'url_token' => $templateType->ctaUrlToken(),
             ];
-            
+
             $template = $this->handler->handle(
                 new UpsertEmailTemplateDTO(
                     account_id: $this->getAuthenticatedAccountId(),
-                    template_type: EmailTemplateType::ORDER_CONFIRMATION, // This will be ignored in update
+                    template_type: $templateType,
                     subject: $validated['subject'],
                     body: $validated['body'],
                     organizer_id: null,

@@ -6,7 +6,6 @@ namespace HiEvents\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attendee extends BaseModel
@@ -26,6 +25,11 @@ class Attendee extends BaseModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function event_occurrence(): BelongsTo
+    {
+        return $this->belongsTo(EventOccurrence::class, 'event_occurrence_id');
     }
 
     public function check_ins(): HasMany

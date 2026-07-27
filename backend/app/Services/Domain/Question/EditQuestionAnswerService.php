@@ -14,10 +14,8 @@ class EditQuestionAnswerService
 {
     public function __construct(
         private readonly QuestionAnswerRepositoryInterface $questionAnswerRepository,
-        private readonly LoggerInterface                   $logger,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws InvalidAnswerException
@@ -44,7 +42,7 @@ class EditQuestionAnswerService
             throw new ResourceNotFoundException('Question answer does not belong to the event');
         }
 
-        if (!$question->isAnswerValid($answer)) {
+        if (! $question->isAnswerValid($answer)) {
             $this->logger->error('Invalid answer', [
                 'question_id' => $question->getId(),
                 'answer' => $answer,

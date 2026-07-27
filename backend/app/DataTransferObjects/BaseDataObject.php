@@ -13,7 +13,7 @@ abstract class BaseDataObject extends Data
      */
     public function wasProvided(string $propertyName): bool
     {
-        return property_exists($this, $propertyName) && !($this->{$propertyName} instanceof Optional);
+        return property_exists($this, $propertyName) && ! ($this->{$propertyName} instanceof Optional);
     }
 
     /**

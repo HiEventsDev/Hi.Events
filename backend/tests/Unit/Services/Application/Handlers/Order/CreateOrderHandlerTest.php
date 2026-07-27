@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Order;
 
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
@@ -10,16 +12,17 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
-use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -29,13 +32,23 @@ use Tests\TestCase;
 class CreateOrderHandlerTest extends TestCase
 {
     private EventRepositoryInterface|MockInterface $eventRepository;
+
     private PromoCodeRepositoryInterface|MockInterface $promoCodeRepository;
+
     private PromoCodeUsageValidationService|MockInterface $promoCodeUsageValidationService;
+
     private AffiliateRepositoryInterface|MockInterface $affiliateRepository;
+
     private OrderManagementService|MockInterface $orderManagementService;
+
     private OrderItemProcessingService|MockInterface $orderItemProcessingService;
+
     private AvailableProductQuantitiesFetchService|MockInterface $availabilityService;
+
+    private OccurrencePurchaseEligibilityService|MockInterface $occurrenceEligibilityService;
+
     private DatabaseManager|MockInterface $databaseManager;
+
     private CreateOrderHandler $handler;
 
     protected function setUp(): void
@@ -49,10 +62,15 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService = Mockery::mock(OrderManagementService::class);
         $this->orderItemProcessingService = Mockery::mock(OrderItemProcessingService::class);
         $this->availabilityService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
+        $this->occurrenceEligibilityService = Mockery::mock(OccurrencePurchaseEligibilityService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->byDefault()
+            ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
+
         $this->databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new CreateOrderHandler(
             $this->eventRepository,
@@ -62,6 +80,7 @@ class CreateOrderHandlerTest extends TestCase
             $this->orderManagementService,
             $this->orderItemProcessingService,
             $this->availabilityService,
+            $this->occurrenceEligibilityService,
             $this->databaseManager,
         );
     }
@@ -72,7 +91,7 @@ class CreateOrderHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testAcquiresAdvisoryLockBeforeCreatingOrder(): void
+    public function test_acquires_advisory_lock_before_creating_order(): void
     {
         $eventId = 42;
 
@@ -87,7 +106,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->assertInstanceOf(OrderDomainObject::class, $result);
     }
 
-    public function testThrowsWhenProductQuantityExceedsAvailability(): void
+    public function test_throws_when_product_quantity_exceeds_availability(): void
     {
         $eventId = 1;
 
@@ -97,18 +116,10 @@ class CreateOrderHandlerTest extends TestCase
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true)
+            ->with($eventId, true, Mockery::any())
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
-                    AvailableProductQuantitiesDTO::fromArray([
-                        'product_id' => 10,
-                        'price_id' => 100,
-                        'product_title' => 'Test',
-                        'price_label' => null,
-                        'quantity_available' => 2,
-                        'quantity_reserved' => 0,
-                        'initial_quantity_available' => 10,
-                    ]),
+                    $this->createAvailabilityDTO(10, 100, 2),
                 ]),
             ));
 
@@ -118,7 +129,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->handler->handle($eventId, $dto);
     }
 
-    public function testPassesWhenQuantityIsWithinAvailability(): void
+    public function test_passes_when_quantity_is_within_availability(): void
     {
         $eventId = 1;
 
@@ -131,7 +142,7 @@ class CreateOrderHandlerTest extends TestCase
         $this->assertInstanceOf(OrderDomainObject::class, $result);
     }
 
-    public function testSkipsZeroQuantityProducts(): void
+    public function test_skips_zero_quantity_products(): void
     {
         $eventId = 1;
 
@@ -144,6 +155,233 @@ class CreateOrderHandlerTest extends TestCase
         $this->assertInstanceOf(OrderDomainObject::class, $result);
     }
 
+    public function test_aggregates_ticket_quantities_per_occurrence_using_preloaded_occurrence_data(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->once()
+            ->with($eventId, 1, 6, false, $occurrence, 4)
+            ->andReturn($occurrence);
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->with($eventId, true, Mockery::any())
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createAvailabilityDTO(10, 100, 100),
+                    $this->createAvailabilityDTO(11, 101, 100),
+                    $this->createAvailabilityDTO(12, 102, 100, ProductType::GENERAL->name),
+                ]),
+                capacities: collect(),
+                occurrence: $occurrence,
+                occurrenceReservedQuantity: 4,
+            ));
+
+        $order = Mockery::mock(OrderDomainObject::class);
+        $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
+        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([Mockery::mock(OrderItemDomainObject::class)]));
+        $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
+
+        $dto = $this->createMultiLineOrderDTO([
+            [10, 100, 3, 1],
+            [11, 101, 3, 1],
+            [12, 102, 5, 1],
+        ]);
+
+        $result = $this->handler->handle($eventId, $dto);
+        $this->assertInstanceOf(OrderDomainObject::class, $result);
+    }
+
+    public function test_rejects_when_aggregate_occurrence_capacity_exceeded(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->with($eventId, true, Mockery::any())
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createAvailabilityDTO(10, 100, 100),
+                    $this->createAvailabilityDTO(11, 101, 100),
+                ]),
+                capacities: collect(),
+                occurrence: $occurrence,
+                occurrenceReservedQuantity: 6,
+            ));
+
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->once()
+            ->with($eventId, 1, 6, false, $occurrence, 6)
+            ->andThrow(ValidationException::withMessages([
+                'event_occurrence_id' => 'Not enough capacity available for this occurrence',
+            ]));
+
+        $this->orderManagementService->shouldNotReceive('createNewOrder');
+
+        $dto = $this->createMultiLineOrderDTO([
+            [10, 100, 3, 1],
+            [11, 101, 3, 1],
+        ]);
+
+        $this->expectException(ValidationException::class);
+        $this->handler->handle($eventId, $dto);
+    }
+
+    public function test_general_only_cart_asserts_occurrence_with_zero_additional_quantity(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $occurrence = Mockery::mock(EventOccurrenceDomainObject::class);
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->with($eventId, true, Mockery::any())
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createAvailabilityDTO(12, 102, 100, ProductType::GENERAL->name),
+                ]),
+                capacities: collect(),
+                occurrence: $occurrence,
+                occurrenceReservedQuantity: null,
+            ));
+
+        $this->occurrenceEligibilityService->shouldReceive('assertOccurrencePurchasable')
+            ->once()
+            ->with($eventId, 1, 0, false, $occurrence, null)
+            ->andReturn($occurrence);
+
+        $order = Mockery::mock(OrderDomainObject::class);
+        $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
+        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([Mockery::mock(OrderItemDomainObject::class)]));
+        $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
+
+        $dto = $this->createMultiLineOrderDTO([
+            [12, 102, 5, 1],
+        ]);
+
+        $result = $this->handler->handle($eventId, $dto);
+        $this->assertInstanceOf(OrderDomainObject::class, $result);
+    }
+
+    public function test_rejects_duplicate_product_price_lines_exceeding_availability(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createAvailabilityDTO(10, 100, 4),
+                ]),
+            ));
+
+        $this->orderManagementService->shouldNotReceive('createNewOrder');
+
+        $dto = $this->createMultiLineOrderDTO([
+            [10, 100, 3, 1],
+            [10, 100, 3, 1],
+        ]);
+
+        $this->expectException(ValidationException::class);
+        $this->handler->handle($eventId, $dto);
+    }
+
+    public function test_passes_when_duplicate_product_price_lines_fit_availability(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupSuccessfulOrderCreation($eventId, productId: 10, priceId: 100, available: 6);
+
+        $dto = $this->createMultiLineOrderDTO([
+            [10, 100, 3, 1],
+            [10, 100, 3, 1],
+        ]);
+
+        $result = $this->handler->handle($eventId, $dto);
+        $this->assertInstanceOf(OrderDomainObject::class, $result);
+    }
+
+    public function test_rejects_same_price_across_occurrences_exceeding_total_availability(): void
+    {
+        $eventId = 1;
+
+        $this->databaseManager->shouldReceive('statement')->andReturn(true);
+        $this->setupEventMock($eventId);
+        $this->orderManagementService->shouldReceive('deleteExistingOrders');
+
+        $this->availabilityService->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createAvailabilityDTO(10, 100, 4),
+                ]),
+            ));
+
+        $this->orderManagementService->shouldNotReceive('createNewOrder');
+
+        $dto = $this->createMultiLineOrderDTO([
+            [10, 100, 3, 1],
+            [10, 100, 3, 2],
+        ]);
+
+        $this->expectException(ValidationException::class);
+        $this->handler->handle($eventId, $dto);
+    }
+
+    private function createAvailabilityDTO(
+        int $productId,
+        int $priceId,
+        int $available,
+        string $productType = ProductType::TICKET->name,
+    ): AvailableProductQuantitiesDTO {
+        return AvailableProductQuantitiesDTO::fromArray([
+            'product_id' => $productId,
+            'price_id' => $priceId,
+            'product_title' => 'Test',
+            'product_type' => $productType,
+            'price_label' => null,
+            'quantity_available' => $available,
+            'quantity_reserved' => 0,
+            'initial_quantity_available' => 100,
+        ]);
+    }
+
+    private function createMultiLineOrderDTO(array $lines): CreateOrderPublicDTO
+    {
+        return CreateOrderPublicDTO::fromArray([
+            'is_user_authenticated' => false,
+            'session_identifier' => 'test-session',
+            'order_locale' => 'en',
+            'products' => collect($lines)->map(fn (array $line) => ProductOrderDetailsDTO::fromArray([
+                'product_id' => $line[0],
+                'event_occurrence_id' => $line[3],
+                'quantities' => collect([
+                    OrderProductPriceDTO::fromArray([
+                        'price_id' => $line[1],
+                        'quantity' => $line[2],
+                    ]),
+                ]),
+            ])),
+        ]);
+    }
+
     private function createOrderDTO(int $productId = 10, int $priceId = 100, int $quantity = 1): CreateOrderPublicDTO
     {
         return CreateOrderPublicDTO::fromArray([
@@ -153,6 +391,7 @@ class CreateOrderHandlerTest extends TestCase
             'products' => collect([
                 ProductOrderDetailsDTO::fromArray([
                     'product_id' => $productId,
+                    'event_occurrence_id' => 1,
                     'quantities' => collect([
                         OrderProductPriceDTO::fromArray([
                             'price_id' => $priceId,
@@ -183,25 +422,16 @@ class CreateOrderHandlerTest extends TestCase
         int $productId = 10,
         int $priceId = 100,
         int $available = 10,
-    ): void
-    {
+    ): void {
         $this->setupEventMock($eventId);
 
         $this->orderManagementService->shouldReceive('deleteExistingOrders');
 
         $this->availabilityService->shouldReceive('getAvailableProductQuantities')
-            ->with($eventId, true)
+            ->with($eventId, true, Mockery::any())
             ->andReturn(new AvailableProductQuantitiesResponseDTO(
                 productQuantities: collect([
-                    AvailableProductQuantitiesDTO::fromArray([
-                        'product_id' => $productId,
-                        'price_id' => $priceId,
-                        'product_title' => 'Test Product',
-                        'price_label' => null,
-                        'quantity_available' => $available,
-                        'quantity_reserved' => 0,
-                        'initial_quantity_available' => 100,
-                    ]),
+                    $this->createAvailabilityDTO($productId, $priceId, $available),
                 ]),
             ));
 

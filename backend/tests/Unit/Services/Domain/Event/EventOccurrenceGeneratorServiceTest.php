@@ -1,0 +1,917 @@
+<?php
+
+namespace Tests\Unit\Services\Domain\Event;
+
+use Carbon\CarbonImmutable;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
+use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
+use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
+use Mockery;
+use Mockery\MockInterface;
+use Tests\TestCase;
+
+class EventOccurrenceGeneratorServiceTest extends TestCase
+{
+    private EventOccurrenceGeneratorService $service;
+
+    private RecurrenceRuleParserService $ruleParser;
+
+    private EventOccurrenceRepositoryInterface $occurrenceRepository;
+
+    private WaitlistEntryRepositoryInterface|MockInterface $waitlistEntryRepository;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->ruleParser = Mockery::mock(RecurrenceRuleParserService::class);
+        $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
+        $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
+        $this->waitlistEntryRepository->shouldReceive('updateWhere')->byDefault();
+
+        $this->service = new EventOccurrenceGeneratorService(
+            $this->ruleParser,
+            $this->occurrenceRepository,
+            $this->waitlistEntryRepository,
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
+    private function mockDbBatchQuery(
+        array $occurrenceIdsWithOrders = [],
+        array $occurrenceIdsWithAttendees = [],
+    ): void {
+        $orderItemsBuilder = Mockery::mock(Builder::class);
+        $orderItemsBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('whereNull')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('distinct')->andReturnSelf();
+        $orderItemsBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithOrders));
+
+        $attendeesBuilder = Mockery::mock(Builder::class);
+        $attendeesBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('whereNull')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('distinct')->andReturnSelf();
+        $attendeesBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithAttendees));
+
+        DB::shouldReceive('table')
+            ->with('order_items')
+            ->andReturn($orderItemsBuilder);
+        DB::shouldReceive('table')
+            ->with('attendees')
+            ->andReturn($attendeesBuilder);
+    }
+
+    public function test_new_occurrences_are_created_when_none_exist(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+        $candidateEnd = CarbonImmutable::parse('2025-03-01 11:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => $candidateEnd, 'capacity' => 100],
+            ]));
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect());
+
+        $createdOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->with(Mockery::on(function ($arg) {
+                return $arg[EventOccurrenceDomainObjectAbstract::EVENT_ID] === 1
+                    && $arg[EventOccurrenceDomainObjectAbstract::START_DATE] === '2025-03-01 10:00:00'
+                    && $arg[EventOccurrenceDomainObjectAbstract::END_DATE] === '2025-03-01 11:00:00'
+                    && $arg[EventOccurrenceDomainObjectAbstract::STATUS] === EventOccurrenceStatus::ACTIVE->name
+                    && $arg[EventOccurrenceDomainObjectAbstract::CAPACITY] === 100
+                    && $arg[EventOccurrenceDomainObjectAbstract::USED_CAPACITY] === 0
+                    && $arg[EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN] === false;
+            }))
+            ->once()
+            ->andReturn($createdOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(10, $result->first()->getId());
+    }
+
+    public function test_multiple_new_occurrences_created(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidates = collect([
+            [
+                'start' => CarbonImmutable::parse('2025-03-01 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-01 11:00:00'),
+                'capacity' => 50,
+            ],
+            [
+                'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                'capacity' => 50,
+            ],
+        ]);
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn($candidates);
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect());
+
+        $occ1 = $this->createOccurrenceDomainObject(id: 10, startDate: '2025-03-01 10:00:00');
+        $occ2 = $this->createOccurrenceDomainObject(id: 11, startDate: '2025-03-02 10:00:00');
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->twice()
+            ->andReturn($occ1, $occ2);
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(2, $result);
+    }
+
+    public function test_existing_occurrence_without_orders_and_not_overridden_is_updated_in_place(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+        $candidateEnd = CarbonImmutable::parse('2025-03-01 12:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => $candidateEnd, 'capacity' => 200],
+            ]));
+
+        $existingOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$existingOccurrence]));
+
+        $this->mockDbBatchQuery([]);
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->with(
+                Mockery::on(function ($attributes) {
+                    return $attributes[EventOccurrenceDomainObjectAbstract::START_DATE] === '2025-03-01 10:00:00'
+                        && $attributes[EventOccurrenceDomainObjectAbstract::END_DATE] === '2025-03-01 12:00:00'
+                        && $attributes[EventOccurrenceDomainObjectAbstract::CAPACITY] === 200;
+                }),
+                [EventOccurrenceDomainObjectAbstract::ID => 5]
+            )
+            ->once();
+
+        $updatedOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 12:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findById')
+            ->with(5)
+            ->once()
+            ->andReturn($updatedOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('create');
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(5, $result->first()->getId());
+        $this->assertEquals('2025-03-01 12:00:00', $result->first()->getEndDate());
+    }
+
+    public function test_existing_occurrence_with_orders_is_not_modified(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+        $candidateEnd = CarbonImmutable::parse('2025-03-01 12:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => $candidateEnd, 'capacity' => 200],
+            ]));
+
+        $existingOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$existingOccurrence]));
+
+        $this->mockDbBatchQuery([5]);
+
+        $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->occurrenceRepository->shouldNotReceive('findById');
+        $this->occurrenceRepository->shouldNotReceive('create');
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(5, $result->first()->getId());
+        $this->assertEquals('2025-03-01 11:00:00', $result->first()->getEndDate());
+    }
+
+    public function test_existing_overridden_occurrence_is_not_modified(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+        $candidateEnd = CarbonImmutable::parse('2025-03-01 12:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => $candidateEnd, 'capacity' => 200],
+            ]));
+
+        $existingOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: true,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$existingOccurrence]));
+
+        $this->mockDbBatchQuery([]);
+
+        $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->occurrenceRepository->shouldNotReceive('findById');
+        $this->occurrenceRepository->shouldNotReceive('create');
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(5, $result->first()->getId());
+        $this->assertEquals('2025-03-01 11:00:00', $result->first()->getEndDate());
+    }
+
+    public function test_stale_occurrence_with_no_orders_and_not_overridden_is_soft_deleted(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                [
+                    'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                    'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                    'capacity' => 100,
+                ],
+            ]));
+
+        $staleOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$staleOccurrence]));
+
+        $this->mockDbBatchQuery([]);
+
+        $newOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-02 10:00:00',
+            endDate: '2025-03-02 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOccurrence);
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
+            ->once();
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(10, $result->first()->getId());
+    }
+
+    public function test_stale_occurrence_with_orders_is_marked_overridden_and_not_deleted(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                [
+                    'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                    'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                    'capacity' => 100,
+                ],
+            ]));
+
+        $staleWithOrders = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$staleWithOrders]));
+
+        $this->mockDbBatchQuery([5]);
+
+        $newOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-02 10:00:00',
+            endDate: '2025-03-02 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                [EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true],
+                [EventOccurrenceDomainObjectAbstract::ID => 5],
+            );
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(10, $result->first()->getId());
+    }
+
+    public function test_stale_occurrence_with_attendees_but_no_order_items_is_marked_overridden_and_not_deleted(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                [
+                    'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                    'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                    'capacity' => 100,
+                ],
+            ]));
+
+        $staleWithAttendees = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$staleWithAttendees]));
+
+        $this->mockDbBatchQuery(occurrenceIdsWithOrders: [], occurrenceIdsWithAttendees: [5]);
+
+        $newOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-02 10:00:00',
+            endDate: '2025-03-02 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                [EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true],
+                [EventOccurrenceDomainObjectAbstract::ID => 5],
+            );
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(10, $result->first()->getId());
+    }
+
+    public function test_stale_overridden_occurrence_is_not_deleted(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                [
+                    'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                    'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                    'capacity' => 100,
+                ],
+            ]));
+
+        $staleOverridden = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: true,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$staleOverridden]));
+
+        $this->mockDbBatchQuery([]);
+
+        $newOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-02 10:00:00',
+            endDate: '2025-03-02 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOccurrence);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+    }
+
+    public function test_mixed_scenario_with_new_updated_skipped_and_stale_occurrences(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidates = collect([
+            [
+                'start' => CarbonImmutable::parse('2025-03-01 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-01 11:00:00'),
+                'capacity' => 100,
+            ],
+            [
+                'start' => CarbonImmutable::parse('2025-03-02 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-02 11:00:00'),
+                'capacity' => 100,
+            ],
+            [
+                'start' => CarbonImmutable::parse('2025-03-03 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-03 11:00:00'),
+                'capacity' => 100,
+            ],
+            [
+                'start' => CarbonImmutable::parse('2025-03-05 10:00:00'),
+                'end' => CarbonImmutable::parse('2025-03-05 11:00:00'),
+                'capacity' => 100,
+            ],
+        ]);
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn($candidates);
+
+        $existingUpdatable = $this->createOccurrenceDomainObject(
+            id: 1, startDate: '2025-03-01 10:00:00', endDate: '2025-03-01 10:30:00', isOverridden: false,
+        );
+        $existingWithOrders = $this->createOccurrenceDomainObject(
+            id: 2, startDate: '2025-03-02 10:00:00', endDate: '2025-03-02 10:30:00', isOverridden: false,
+        );
+        $existingOverridden = $this->createOccurrenceDomainObject(
+            id: 3, startDate: '2025-03-03 10:00:00', endDate: '2025-03-03 10:30:00', isOverridden: true,
+        );
+        $existingStale = $this->createOccurrenceDomainObject(
+            id: 4, startDate: '2025-03-04 10:00:00', endDate: '2025-03-04 10:30:00', isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->with([EventOccurrenceDomainObjectAbstract::EVENT_ID => 1])
+            ->once()
+            ->andReturn(collect([$existingUpdatable, $existingWithOrders, $existingOverridden, $existingStale]));
+
+        $this->mockDbBatchQuery([2]);
+
+        $this->occurrenceRepository
+            ->shouldReceive('updateWhere')
+            ->with(
+                Mockery::on(function ($attributes) {
+                    return $attributes[EventOccurrenceDomainObjectAbstract::START_DATE] === '2025-03-01 10:00:00'
+                        && $attributes[EventOccurrenceDomainObjectAbstract::END_DATE] === '2025-03-01 11:00:00'
+                        && $attributes[EventOccurrenceDomainObjectAbstract::CAPACITY] === 100;
+                }),
+                [EventOccurrenceDomainObjectAbstract::ID => 1]
+            )
+            ->once();
+
+        $updatedOcc1 = $this->createOccurrenceDomainObject(
+            id: 1, startDate: '2025-03-01 10:00:00', endDate: '2025-03-01 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findById')
+            ->with(1)
+            ->once()
+            ->andReturn($updatedOcc1);
+
+        $newOcc = $this->createOccurrenceDomainObject(
+            id: 20, startDate: '2025-03-05 10:00:00', endDate: '2025-03-05 11:00:00',
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($newOcc);
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [4]]])
+            ->once();
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(4, $result);
+
+        $ids = $result->map(fn ($occ) => $occ->getId())->toArray();
+        $this->assertContains(1, $ids);
+        $this->assertContains(2, $ids);
+        $this->assertContains(3, $ids);
+        $this->assertContains(20, $ids);
+        $this->assertNotContains(4, $ids);
+    }
+
+    public function test_event_timezone_is_passed_to_parser(): void
+    {
+        $event = $this->createMockEvent(timezone: 'America/New_York');
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'America/New_York')
+            ->once()
+            ->andReturn(collect());
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect());
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_null_timezone_defaults_to_utc(): void
+    {
+        $event = $this->createMockEvent(timezone: null);
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect());
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect());
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_new_occurrence_with_null_end_date(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => null, 'capacity' => null],
+            ]));
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect());
+
+        $createdOccurrence = $this->createOccurrenceDomainObject(
+            id: 10,
+            startDate: '2025-03-01 10:00:00',
+            endDate: null,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('create')
+            ->with(Mockery::on(function ($arg) {
+                return $arg[EventOccurrenceDomainObjectAbstract::END_DATE] === null
+                    && $arg[EventOccurrenceDomainObjectAbstract::CAPACITY] === null;
+            }))
+            ->once()
+            ->andReturn($createdOccurrence);
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertNull($result->first()->getEndDate());
+    }
+
+    public function test_empty_candidates_with_existing_occurrences_deletes_stale(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect());
+
+        $staleOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$staleOccurrence]));
+
+        $this->mockDbBatchQuery([]);
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
+            ->once();
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_stale_occurrence_waitlist_entries_are_cancelled_before_deletion(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect());
+
+        $stale = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            isOverridden: false,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$stale]));
+
+        $this->mockDbBatchQuery([]);
+
+        $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
+        $this->waitlistEntryRepository
+            ->shouldReceive('updateWhere')
+            ->with(
+                ['status' => WaitlistEntryStatus::CANCELLED->name],
+                [
+                    ['event_id', 'in', [1]],
+                    ['event_occurrence_id', 'in', [5]],
+                    ['status', 'in', [
+                        WaitlistEntryStatus::WAITING->name,
+                        WaitlistEntryStatus::OFFERED->name,
+                    ]],
+                ],
+            )
+            ->once();
+
+        $this->service = new EventOccurrenceGeneratorService(
+            $this->ruleParser,
+            $this->occurrenceRepository,
+            $this->waitlistEntryRepository,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [5]]])
+            ->once();
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_empty_candidates_with_overridden_existing_occurrence_keeps_it(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect());
+
+        $overriddenOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            isOverridden: true,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$overriddenOccurrence]));
+
+        $this->mockDbBatchQuery([]);
+
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_existing_occurrence_with_orders_and_overridden_is_skipped(): void
+    {
+        $event = $this->createMockEvent();
+        $recurrenceRule = ['frequency' => 'daily'];
+
+        $candidateStart = CarbonImmutable::parse('2025-03-01 10:00:00');
+        $candidateEnd = CarbonImmutable::parse('2025-03-01 12:00:00');
+
+        $this->ruleParser
+            ->shouldReceive('parse')
+            ->with($recurrenceRule, 'UTC')
+            ->once()
+            ->andReturn(collect([
+                ['start' => $candidateStart, 'end' => $candidateEnd, 'capacity' => 200],
+            ]));
+
+        $existingOccurrence = $this->createOccurrenceDomainObject(
+            id: 5,
+            startDate: '2025-03-01 10:00:00',
+            endDate: '2025-03-01 11:00:00',
+            isOverridden: true,
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(collect([$existingOccurrence]));
+
+        $this->mockDbBatchQuery([5]);
+
+        $this->occurrenceRepository->shouldNotReceive('updateWhere');
+        $this->occurrenceRepository->shouldNotReceive('findById');
+
+        $result = $this->service->generate($event, $recurrenceRule);
+
+        $this->assertCount(1, $result);
+        $this->assertSame($existingOccurrence, $result->first());
+    }
+
+    private function createMockEvent(int $id = 1, ?string $timezone = 'UTC'): EventDomainObject
+    {
+        $mock = Mockery::mock(EventDomainObject::class);
+        $mock->shouldReceive('getId')->andReturn($id);
+        $mock->shouldReceive('getTimezone')->andReturn($timezone);
+
+        return $mock;
+    }
+
+    private function createOccurrenceDomainObject(
+        int $id,
+        string $startDate,
+        ?string $endDate = null,
+        bool $isOverridden = false,
+        ?int $capacity = null,
+        int $eventId = 1,
+    ): EventOccurrenceDomainObject {
+        $occ = new EventOccurrenceDomainObject;
+        $occ->setId($id);
+        $occ->setEventId($eventId);
+        $occ->setShortId('oc_test'.$id);
+        $occ->setStartDate($startDate);
+        $occ->setEndDate($endDate);
+        $occ->setIsOverridden($isOverridden);
+        $occ->setCapacity($capacity);
+
+        return $occ;
+    }
+}

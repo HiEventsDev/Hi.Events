@@ -9,17 +9,14 @@ class CapacityAssignmentProductAssociationService
 {
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
-        public readonly DatabaseManager             $databaseManager,
-    )
-    {
-    }
+        public readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function addCapacityToProducts(
-        int    $capacityAssignmentId,
+        int $capacityAssignmentId,
         ?array $productIds,
-        bool   $removePreviousAssignments = true
-    ): void
-    {
+        bool $removePreviousAssignments = true
+    ): void {
         $this->databaseManager->transaction(function () use ($capacityAssignmentId, $productIds, $removePreviousAssignments) {
             $this->associateProductsWithCapacityAssignment(
                 capacityAssignmentId: $capacityAssignmentId,
@@ -30,11 +27,10 @@ class CapacityAssignmentProductAssociationService
     }
 
     private function associateProductsWithCapacityAssignment(
-        int    $capacityAssignmentId,
+        int $capacityAssignmentId,
         ?array $productIds,
-        bool   $removePreviousAssignments = true
-    ): void
-    {
+        bool $removePreviousAssignments = true
+    ): void {
         if (empty($productIds)) {
             return;
         }

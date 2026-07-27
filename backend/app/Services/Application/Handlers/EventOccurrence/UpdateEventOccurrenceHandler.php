@@ -1,0 +1,129 @@
+<?php
+
+declare(strict_types=1);
+
+namespace HiEvents\Services\Application\Handlers\EventOccurrence;
+
+use Carbon\Carbon;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceNotFoundException;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\UpsertEventOccurrenceDTO;
+use HiEvents\Services\Domain\Event\RecurrenceRuleExclusionService;
+use HiEvents\Services\Domain\EventLocation\EventLocationCleaner;
+use HiEvents\Services\Domain\EventLocation\EventLocationUpserter;
+use Illuminate\Database\DatabaseManager;
+use Throwable;
+
+class UpdateEventOccurrenceHandler
+{
+    public function __construct(
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventLocationUpserter $eventLocationUpserter,
+        private readonly EventLocationCleaner $eventLocationCleaner,
+        private readonly RecurrenceRuleExclusionService $exclusionService,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
+
+    /**
+     * @throws Throwable
+     */
+    public function handle(int $occurrenceId, UpsertEventOccurrenceDTO $dto): EventOccurrenceDomainObject
+    {
+        return $this->databaseManager->transaction(function () use ($occurrenceId, $dto) {
+            $occurrence = $this->occurrenceRepository->findFirstWhere([
+                EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
+                EventOccurrenceDomainObjectAbstract::EVENT_ID => $dto->event_id,
+            ]);
+
+            if (! $occurrence) {
+                throw new ResourceNotFoundException(
+                    __('Occurrence :id not found for event :eventId', [
+                        'id' => $occurrenceId,
+                        'eventId' => $dto->event_id,
+                    ])
+                );
+            }
+
+            $previousEventLocationId = $occurrence->getEventLocationId();
+            $newEventLocationId = $previousEventLocationId;
+            $eventLocationChanged = false;
+
+            if ($dto->event_location !== null) {
+                $event = $this->eventRepository->findById($dto->event_id);
+                if ($event === null) {
+                    throw new ResourceNotFoundException(__('Event :id not found', ['id' => $dto->event_id]));
+                }
+
+                if ($previousEventLocationId === null) {
+                    $eventLocation = $this->eventLocationUpserter->createForEvent(
+                        eventId: $dto->event_id,
+                        accountId: $event->getAccountId(),
+                        data: $dto->event_location,
+                    );
+                    $newEventLocationId = $eventLocation->getId();
+                    $eventLocationChanged = true;
+                } else {
+                    $this->eventLocationUpserter->updateInPlace(
+                        eventLocationId: $previousEventLocationId,
+                        eventId: $dto->event_id,
+                        accountId: $event->getAccountId(),
+                        data: $dto->event_location,
+                    );
+                }
+            } elseif ($dto->clear_event_location && $previousEventLocationId !== null) {
+                $newEventLocationId = null;
+                $eventLocationChanged = true;
+            }
+
+            $originalStartDate = $occurrence->getStartDate();
+            $startDateChanged = $this->datesDiffer($dto->start_date, $originalStartDate);
+
+            $isOverride = $occurrence->getIsOverridden()
+                || $startDateChanged
+                || $this->datesDiffer($dto->end_date, $occurrence->getEndDate())
+                || $dto->capacity !== $occurrence->getCapacity()
+                || $eventLocationChanged;
+
+            $attributes = [
+                EventOccurrenceDomainObjectAbstract::START_DATE => $dto->start_date,
+                EventOccurrenceDomainObjectAbstract::END_DATE => $dto->end_date,
+                EventOccurrenceDomainObjectAbstract::CAPACITY => $dto->capacity,
+                EventOccurrenceDomainObjectAbstract::LABEL => $dto->label,
+                EventOccurrenceDomainObjectAbstract::SHOW_AVAILABLE_CAPACITY => $dto->show_available_capacity,
+                EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => $isOverride,
+                EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID => $newEventLocationId,
+            ];
+
+            $updated = $this->occurrenceRepository->updateFromArray(
+                id: $occurrence->getId(),
+                attributes: $attributes,
+            );
+
+            if ($startDateChanged) {
+                $this->exclusionService->addExclusions($dto->event_id, [$originalStartDate]);
+            }
+
+            if ($dto->clear_event_location && $previousEventLocationId !== null) {
+                $this->eventLocationCleaner->deleteIfOrphaned($previousEventLocationId);
+            }
+
+            return $updated;
+        });
+    }
+
+    private function datesDiffer(?string $a, ?string $b): bool
+    {
+        if ($a === null && $b === null) {
+            return false;
+        }
+        if ($a === null || $b === null) {
+            return true;
+        }
+
+        return ! Carbon::parse($a, 'UTC')->equalTo(Carbon::parse($b, 'UTC'));
+    }
+}

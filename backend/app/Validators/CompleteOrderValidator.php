@@ -22,20 +22,18 @@ use Illuminate\Routing\Route;
 class CompleteOrderValidator extends BaseValidator
 {
     public function __construct(
-        private readonly QuestionRepositoryInterface      $questionRepository,
-        private readonly ProductRepositoryInterface       $productRepository,
+        private readonly QuestionRepositoryInterface $questionRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly Route                            $route
-    )
-    {
-    }
+        private readonly Route $route
+    ) {}
 
     public function rules(): array
     {
         $questions = $this->questionRepository
             ->loadRelation(
                 new Relationship(ProductDomainObject::class, [
-                    new Relationship(ProductPriceDomainObject::class)
+                    new Relationship(ProductPriceDomainObject::class),
                 ])
             )
             ->findWhere(
@@ -43,11 +41,11 @@ class CompleteOrderValidator extends BaseValidator
             );
 
         $orderQuestions = $questions->filter(
-            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
+            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::ORDER->name
         );
 
         $productQuestions = $questions->filter(
-            fn(QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
+            fn (QuestionDomainObject $question) => $question->getBelongsTo() === QuestionBelongsTo::PRODUCT->name
         );
 
         $products = $this->productRepository
@@ -82,7 +80,7 @@ class CompleteOrderValidator extends BaseValidator
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
             ),
-            ...$addressRules
+            ...$addressRules,
         ];
     }
 

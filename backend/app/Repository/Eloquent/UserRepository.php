@@ -33,7 +33,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $accountUser = AccountUser::where('user_id', $userId)->where('account_id', $accountId)->first();
 
-        if (!$accountUser) {
+        if (! $accountUser) {
             throw new ResourceNotFoundException(__('User not found in this account'));
         }
 
@@ -59,7 +59,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         $users = $this->handleResults($users);
 
-        return $users->sortByDesc(fn(UserDomainObject $user) => $user->getUpdatedAt());
+        return $users->sortByDesc(fn (UserDomainObject $user) => $user->getUpdatedAt());
     }
 
     public function getAllUsersWithAccounts(?string $search, int $perPage): LengthAwarePaginator

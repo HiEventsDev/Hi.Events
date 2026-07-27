@@ -8,6 +8,7 @@ use HiEvents\Http\Request\Event\CreateEventRequest;
 use HiEvents\Resources\Event\EventResource;
 use HiEvents\Services\Application\Handlers\Event\CreateEventHandler;
 use HiEvents\Services\Application\Handlers\Event\DTO\CreateEventDTO;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -16,9 +17,7 @@ class CreateEventAction extends BaseAction
 {
     public function __construct(
         private readonly CreateEventHandler $createEventHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException|Throwable
@@ -27,11 +26,18 @@ class CreateEventAction extends BaseAction
     {
         $authorisedUser = $this->getAuthenticatedUser();
 
+        $validated = $request->validated();
+        $eventLocationPayload = $validated['event_location'] ?? null;
+        unset($validated['event_location']);
+
         $eventData = array_merge(
-            $request->validated(),
+            $validated,
             [
                 'account_id' => $this->getAuthenticatedAccountId(),
                 'user_id' => $authorisedUser->getId(),
+                'event_location' => $eventLocationPayload !== null
+                    ? EventLocationData::fromArray($eventLocationPayload)
+                    : null,
             ]
         );
 

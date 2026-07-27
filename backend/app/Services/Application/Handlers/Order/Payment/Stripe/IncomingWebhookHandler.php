@@ -10,6 +10,7 @@ use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\ChargeSucceededHandler
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentSucceededHandler;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PayoutPaidHandler;
+use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 use Illuminate\Cache\Repository;
 use Illuminate\Log\Logger;
 use JsonException;
@@ -19,7 +20,6 @@ use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Throwable;
 use UnexpectedValueException;
-use HiEvents\Services\Infrastructure\Stripe\StripeConfigurationService;
 
 class IncomingWebhookHandler
 {
@@ -37,18 +37,16 @@ class IncomingWebhookHandler
     ];
 
     public function __construct(
-        private readonly ChargeRefundUpdatedHandler    $refundEventHandlerService,
-        private readonly ChargeSucceededHandler        $chargeSucceededHandler,
+        private readonly ChargeRefundUpdatedHandler $refundEventHandlerService,
+        private readonly ChargeSucceededHandler $chargeSucceededHandler,
         private readonly PaymentIntentSucceededHandler $paymentIntentSucceededHandler,
-        private readonly PaymentIntentFailedHandler    $paymentIntentFailedHandler,
-        private readonly AccountUpdateHandler          $accountUpdateHandler,
-        private readonly PayoutPaidHandler             $payoutPaidHandler,
-        private readonly Logger                        $logger,
-        private readonly Repository                    $cache,
-        private readonly StripeConfigurationService    $stripeConfigurationService,
-    )
-    {
-    }
+        private readonly PaymentIntentFailedHandler $paymentIntentFailedHandler,
+        private readonly AccountUpdateHandler $accountUpdateHandler,
+        private readonly PayoutPaidHandler $payoutPaidHandler,
+        private readonly Logger $logger,
+        private readonly Repository $cache,
+        private readonly StripeConfigurationService $stripeConfigurationService,
+    ) {}
 
     /**
      * @throws SignatureVerificationException
@@ -60,7 +58,7 @@ class IncomingWebhookHandler
         try {
             $event = $this->constructEventWithValidPlatform($webhookDTO);
 
-            if (!in_array($event->type, self::$validEvents, true)) {
+            if (! in_array($event->type, self::$validEvents, true)) {
                 $this->logger->debug(__('Received a :event Stripe event, which has no handler', [
                     'event' => $event->type,
                 ]), [
@@ -81,7 +79,7 @@ class IncomingWebhookHandler
                 return;
             }
 
-            $this->logger->debug('Stripe event received: ' . $event->type, $event->data->object->toArray());
+            $this->logger->debug('Stripe event received: '.$event->type, $event->data->object->toArray());
 
             switch ($event->type) {
                 case Event::PAYMENT_INTENT_SUCCEEDED:
@@ -113,27 +111,27 @@ class IncomingWebhookHandler
             $this->markEventAsHandled($event);
         } catch (CannotAcceptPaymentException $exception) {
             $this->logger->error(
-                'Cannot accept payment: ' . $exception->getMessage(), [
+                'Cannot accept payment: '.$exception->getMessage(), [
                     'payload' => $webhookDTO->payload,
                 ]
             );
             throw $exception;
         } catch (SignatureVerificationException $exception) {
             $this->logger->error(
-                'Unable to verify Stripe signature: ' . $exception->getMessage(), [
+                'Unable to verify Stripe signature: '.$exception->getMessage(), [
                     'payload' => $webhookDTO->payload,
                 ]
             );
             throw $exception;
         } catch (UnexpectedValueException $exception) {
             $this->logger->error(
-                'Unexpected value in Stripe payload: ' . $exception->getMessage(), [
+                'Unexpected value in Stripe payload: '.$exception->getMessage(), [
                     'payload' => $webhookDTO->payload,
                 ]
             );
             throw $exception;
         } catch (Throwable $exception) {
-            $this->logger->error('Unhandled Stripe error: ' . $exception->getMessage(), [
+            $this->logger->error('Unhandled Stripe error: '.$exception->getMessage(), [
                 'payload' => $webhookDTO->payload,
             ]);
             throw $exception;
@@ -147,7 +145,7 @@ class IncomingWebhookHandler
 
         foreach ($webhookSecrets as $platform => $webhookSecret) {
             try {
-                if (!$webhookSecret) {
+                if (! $webhookSecret) {
                     continue;
                 }
 
@@ -157,7 +155,7 @@ class IncomingWebhookHandler
                     $webhookSecret
                 );
 
-                $this->logger->debug('Webhook validated with platform: ' . $platform, [
+                $this->logger->debug('Webhook validated with platform: '.$platform, [
                     'event_id' => $event->id,
                     'platform' => $platform,
                 ]);
@@ -165,6 +163,7 @@ class IncomingWebhookHandler
                 return $event;
             } catch (SignatureVerificationException $exception) {
                 $lastException = $exception;
+
                 continue;
             }
         }
@@ -174,7 +173,7 @@ class IncomingWebhookHandler
 
     private function hasEventBeenHandled(Event $event): bool
     {
-        return $this->cache->has('stripe_event_' . $event->id);
+        return $this->cache->has('stripe_event_'.$event->id);
     }
 
     private function handleChargeRefunded(Charge $charge): void
@@ -192,6 +191,6 @@ class IncomingWebhookHandler
             'event_id' => $event->id,
             'type' => $event->type,
         ]);
-        $this->cache->put('stripe_event_' . $event->id, true, now()->addMinutes(60));
+        $this->cache->put('stripe_event_'.$event->id, true, now()->addMinutes(60));
     }
 }

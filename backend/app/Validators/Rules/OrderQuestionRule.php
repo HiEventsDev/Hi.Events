@@ -14,13 +14,13 @@ class OrderQuestionRule extends BaseQuestionRule
     protected function validateRequiredQuestionArePresent(Collection $orderQuestions): void
     {
         $requiredQuestionIds = $this->questions
-            ->filter(fn(QuestionDomainObject $question) => $question->getRequired())
-            ->filter(fn(QuestionDomainObject $question) => !$question->getIsHidden())
-            ->map(fn(QuestionDomainObject $question) => $question->getId());
+            ->filter(fn (QuestionDomainObject $question) => $question->getRequired())
+            ->filter(fn (QuestionDomainObject $question) => ! $question->getIsHidden())
+            ->map(fn (QuestionDomainObject $question) => $question->getId());
 
         if (array_diff($requiredQuestionIds->toArray(), $orderQuestions->pluck('question_id')->toArray())) {
             throw ValidationException::withMessages([
-                'Required questions have not been answered. You may need to reload the page.'
+                'Required questions have not been answered. You may need to reload the page.',
             ]);
         }
     }
@@ -30,16 +30,17 @@ class OrderQuestionRule extends BaseQuestionRule
         $validationMessages = [];
         foreach ($questions as $index => $orderQuestion) {
             $questionDomainObject = $this->getQuestionDomainObject($orderQuestion['question_id']);
-            $key = 'order.questions.' . $index . '.response';
+            $key = 'order.questions.'.$index.'.response';
             $response = $orderQuestion['response'] ?? null;
             $answer = $response['answer'] ?? $response;
 
-            if (!$questionDomainObject) {
-                $validationMessages[$key . '.answer'][] = 'This question is outdated. Please reload the page.';
+            if (! $questionDomainObject) {
+                $validationMessages[$key.'.answer'][] = 'This question is outdated. Please reload the page.';
+
                 continue;
             }
 
-            if (is_null($response) && !$questionDomainObject->getRequired()) {
+            if (is_null($response) && ! $questionDomainObject->getRequired()) {
                 continue;
             }
 
@@ -47,8 +48,8 @@ class OrderQuestionRule extends BaseQuestionRule
                 $validationMessages = $this->validateRequiredFields($questionDomainObject, $response, $key, $validationMessages);
             }
 
-            if (!$questionDomainObject->isAnswerValid($answer)) {
-                $validationMessages[$key . '.answer'][] = 'Please select an option';
+            if (! $questionDomainObject->isAnswerValid($answer)) {
+                $validationMessages[$key.'.answer'][] = 'Please select an option';
             }
 
             $validationMessages = $this->validateResponseLength($questionDomainObject, $response, $key, $validationMessages);

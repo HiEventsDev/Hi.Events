@@ -29,20 +29,23 @@ class NoInternalUrlRule implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             $fail(__('The :attribute must be a valid URL.'));
+
             return;
         }
 
         $parsedUrl = parse_url($value);
-        if ($parsedUrl === false || !isset($parsedUrl['host'])) {
+        if ($parsedUrl === false || ! isset($parsedUrl['host'])) {
             $fail(__('The :attribute must be a valid URL.'));
+
             return;
         }
 
         $scheme = strtolower($parsedUrl['scheme'] ?? '');
-        if (!in_array($scheme, self::ALLOWED_SCHEMES, true)) {
+        if (! in_array($scheme, self::ALLOWED_SCHEMES, true)) {
             $fail(__('The :attribute must use http or https protocol.'));
+
             return;
         }
 
@@ -60,21 +63,25 @@ class NoInternalUrlRule implements ValidationRule
 
         if ($this->isBlockedHost($host)) {
             $fail(__('The :attribute cannot point to localhost or internal addresses.'));
+
             return;
         }
 
         if ($this->isBlockedTld($host)) {
             $fail(__('The :attribute cannot use reserved domain names.'));
+
             return;
         }
 
         if ($this->isCloudMetadataHost($host)) {
             $fail(__('The :attribute cannot point to cloud metadata endpoints.'));
+
             return;
         }
 
         if ($this->isPrivateIpAddress($host)) {
             $fail(__('The :attribute cannot point to private or internal IP addresses.'));
+
             return;
         }
     }
@@ -91,16 +98,18 @@ class NoInternalUrlRule implements ValidationRule
                 return true;
             }
         }
+
         return false;
     }
 
     private function isCloudMetadataHost(string $host): bool
     {
         foreach (self::CLOUD_METADATA_HOSTS as $metadataHost) {
-            if ($host === $metadataHost || str_ends_with($host, '.' . $metadataHost)) {
+            if ($host === $metadataHost || str_ends_with($host, '.'.$metadataHost)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -112,7 +121,7 @@ class NoInternalUrlRule implements ValidationRule
             return true;
         }
 
-        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        if (! filter_var($ip, FILTER_VALIDATE_IP)) {
             return true;
         }
 
@@ -137,6 +146,7 @@ class NoInternalUrlRule implements ValidationRule
                     return inet_ntop(substr($binary, 12));
                 }
             }
+
             return $host;
         }
 
@@ -155,12 +165,13 @@ class NoInternalUrlRule implements ValidationRule
     private function isWhitelistedHost(string $host): bool
     {
         $whitelistedHosts = Config::string('app.allowed_internal_webhook_hosts');
-        if (!empty($whitelistedHosts)) {
+        if (! empty($whitelistedHosts)) {
             $allowedList = array_filter(array_map('trim', explode(',', $whitelistedHosts)));
             if (in_array($host, $allowedList) || in_array(gethostbyname($host), $allowedList)) {
                 return true;
             }
         }
+
         return false;
     }
 }

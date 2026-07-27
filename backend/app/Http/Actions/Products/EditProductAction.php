@@ -20,9 +20,7 @@ class EditProductAction extends BaseAction
 {
     public function __construct(
         private readonly EditProductHandler $editProductHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

@@ -27,7 +27,7 @@ class MessagePendingReviewMail extends BaseMail
     {
         return new Envelope(
             subject: __('[Action Required] Message Pending Review - :subject', [
-                'subject' => $this->message->getSubject()
+                'subject' => $this->message->getSubject(),
             ]),
         );
     }
@@ -41,7 +41,7 @@ class MessagePendingReviewMail extends BaseMail
                 'event' => $this->event,
                 'account' => $this->account,
                 'failures' => $this->failures,
-                'reviewUrl' => config('app.frontend_url') . '/admin/messages?status=PENDING_REVIEW',
+                'reviewUrl' => config('app.frontend_url').'/admin/messages?status=PENDING_REVIEW',
             ]
         );
     }

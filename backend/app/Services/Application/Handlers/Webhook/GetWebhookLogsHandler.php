@@ -11,10 +11,8 @@ class GetWebhookLogsHandler
 {
     public function __construct(
         private readonly WebhookLogRepositoryInterface $webhookLogRepository,
-        private readonly WebhookRepositoryInterface    $webhookRepository,
-    )
-    {
-    }
+        private readonly WebhookRepositoryInterface $webhookRepository,
+    ) {}
 
     public function handle(int $webhookId, int $accountId, ?int $eventId = null, ?int $organizerId = null): LengthAwarePaginator
     {
@@ -30,7 +28,7 @@ class GetWebhookLogsHandler
             where: $where
         );
 
-        if (!$webhook) {
+        if (! $webhook) {
             throw new ResourceNotFoundException(__('Webhook not found'));
         }
 

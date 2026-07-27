@@ -7,6 +7,4 @@ use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 /**
  * @extends RepositoryInterface<TaxAndFeesDomainObject>
  */
-interface TaxAndFeeRepositoryInterface extends RepositoryInterface
-{
-}
+interface TaxAndFeeRepositoryInterface extends RepositoryInterface {}

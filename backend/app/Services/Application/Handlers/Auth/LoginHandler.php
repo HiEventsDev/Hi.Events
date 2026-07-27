@@ -10,11 +10,9 @@ use HiEvents\Services\Domain\Auth\LoginService;
 readonly class LoginHandler
 {
     public function __construct(
-        private LoginService                   $loginService,
+        private LoginService $loginService,
         private AccountUserRepositoryInterface $accountUserRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(LoginCredentialsDTO $loginCredentials): LoginResponse
     {

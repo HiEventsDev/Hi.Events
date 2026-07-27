@@ -8,7 +8,6 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Admin\DeleteConfigurationHandler;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -16,8 +15,7 @@ class DeleteConfigurationAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteConfigurationHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(int $configurationId): Response
     {

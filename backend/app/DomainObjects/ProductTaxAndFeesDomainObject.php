@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class ProductTaxAndFeesDomainObject extends Generated\ProductTaxAndFeesDomainObjectAbstract
-{
-}
+class ProductTaxAndFeesDomainObject extends Generated\ProductTaxAndFeesDomainObjectAbstract {}

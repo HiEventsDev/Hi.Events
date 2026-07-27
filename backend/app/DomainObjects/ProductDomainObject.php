@@ -3,8 +3,8 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
-use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\Constants;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use Illuminate\Support\Collection;
@@ -60,12 +60,13 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
     public function setTaxAndFees(Collection $taxes): ProductDomainObject
     {
         $this->taxAndFees = $taxes;
+
         return $this;
     }
 
     public function getTaxRates(): ?Collection
     {
-        return $this->getTaxAndFees()?->filter(fn(TaxAndFeesDomainObject $taxAndFee) => $taxAndFee->isTax());
+        return $this->getTaxAndFees()?->filter(fn (TaxAndFeesDomainObject $taxAndFee) => $taxAndFee->isTax());
     }
 
     public function getTaxAndFees(): ?Collection
@@ -75,34 +76,34 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     public function getFees(): ?Collection
     {
-        return $this->getTaxAndFees()?->filter(fn(TaxAndFeesDomainObject $taxAndFee) => $taxAndFee->isFee());
+        return $this->getTaxAndFees()?->filter(fn (TaxAndFeesDomainObject $taxAndFee) => $taxAndFee->isFee());
     }
 
     public function isSoldOut(): bool
     {
-        if (!$this->getProductPrices() || $this->getProductPrices()->isEmpty()) {
+        if (! $this->getProductPrices() || $this->getProductPrices()->isEmpty()) {
             return true;
         }
 
-        return $this->getProductPrices()->every(fn(ProductPriceDomainObject $price) => $price->isSoldOut());
+        return $this->getProductPrices()->every(fn (ProductPriceDomainObject $price) => $price->isSoldOut());
     }
 
     public function getQuantityAvailable(): int
     {
-        $availableCount = $this->getProductPrices()->sum(fn(ProductPriceDomainObject $price) => $price->getQuantityAvailable());
+        $availableCount = $this->getProductPrices()->sum(fn (ProductPriceDomainObject $price) => $price->getQuantityAvailable());
 
         if ($this->quantityAvailable !== null) {
             return min($availableCount, $this->quantityAvailable);
         }
 
-        if (!$this->getProductPrices() || $this->getProductPrices()->isEmpty()) {
+        if (! $this->getProductPrices() || $this->getProductPrices()->isEmpty()) {
             return 0;
         }
 
         // This is to address a case where prices have an unlimited quantity available and the user has
         // enabled show_quantity_remaining.
         if ($this->getShowQuantityRemaining()
-            && $this->getProductPrices()->first(fn(ProductPriceDomainObject $price) => $price->getQuantityAvailable() === null)) {
+            && $this->getProductPrices()->first(fn (ProductPriceDomainObject $price) => $price->getQuantityAvailable() === null)) {
             return Constants::INFINITE;
         }
 
@@ -118,16 +119,14 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     public function isBeforeSaleStartDate(): bool
     {
-        return (!is_null($this->getSaleStartDate())
-            && (new Carbon($this->getSaleStartDate()))->isFuture()
-        );
+        return ! is_null($this->getSaleStartDate())
+            && (new Carbon($this->getSaleStartDate()))->isFuture();
     }
 
     public function isAfterSaleEndDate(): bool
     {
-        return (!is_null($this->getSaleEndDate())
-            && (new Carbon($this->getSaleEndDate()))->isPast()
-        );
+        return ! is_null($this->getSaleEndDate())
+            && (new Carbon($this->getSaleEndDate()))->isPast();
     }
 
     public function isAvailable(): bool
@@ -137,10 +136,10 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
             return false;
         }
 
-        return !$this->isSoldOut()
-            && !$this->isBeforeSaleStartDate()
-            && !$this->isAfterSaleEndDate()
-            && !$this->getIsHidden();
+        return ! $this->isSoldOut()
+            && ! $this->isBeforeSaleStartDate()
+            && ! $this->isAfterSaleEndDate()
+            && ! $this->getIsHidden();
     }
 
     /**
@@ -160,8 +159,6 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     /**
      * All product types except TIERED have a single price, so we can just return the first price.
-     *
-     * @return float|null
      */
     public function getPrice(): ?float
     {
@@ -174,7 +171,7 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     public function getPriceById(int $priceId): ?ProductPriceDomainObject
     {
-        return $this->getProductPrices()?->first(fn(ProductPriceDomainObject $price) => $price->getId() === $priceId);
+        return $this->getProductPrices()?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $priceId);
     }
 
     public function isTieredType(): bool
@@ -200,7 +197,7 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
     public function getInitialQuantityAvailable(): ?int
     {
         if ($this->getType() === ProductPriceType::TIERED->name) {
-            return $this->getProductPrices()?->sum(fn(ProductPriceDomainObject $price) => $price->getInitialQuantityAvailable());
+            return $this->getProductPrices()?->sum(fn (ProductPriceDomainObject $price) => $price->getInitialQuantityAvailable());
         }
 
         return $this->getProductPrices()?->first()?->getInitialQuantityAvailable();
@@ -208,7 +205,7 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     public function getQuantitySold(): int
     {
-        return $this->getProductPrices()?->sum(fn(ProductPriceDomainObject $price) => $price->getQuantitySold()) ?? 0;
+        return $this->getProductPrices()?->sum(fn (ProductPriceDomainObject $price) => $price->getQuantitySold()) ?? 0;
     }
 
     public function setOffSaleReason(?string $offSaleReason): ProductDomainObject

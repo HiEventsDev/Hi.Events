@@ -6,6 +6,7 @@ use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
 use HiEvents\Http\Middleware\LogImpersonationMiddleware;
+use HiEvents\Http\Middleware\PreventRequestForgery;
 use HiEvents\Http\Middleware\PreventRequestsDuringMaintenance;
 use HiEvents\Http\Middleware\RedirectIfAuthenticated;
 use HiEvents\Http\Middleware\SetAccountContext;
@@ -14,7 +15,6 @@ use HiEvents\Http\Middleware\TrimStrings;
 use HiEvents\Http\Middleware\TrustProxies;
 use HiEvents\Http\Middleware\ValidateSignature;
 use HiEvents\Http\Middleware\VaporBinaryResponseMiddleware;
-use HiEvents\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -63,12 +63,12 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
+            PreventRequestForgery::class,
             SubstituteBindings::class,
         ],
 
         'api' => [
-            ThrottleRequests::class . ':api',
+            ThrottleRequests::class.':api',
             SubstituteBindings::class,
             SetAccountContext::class,
             SetUserLocaleMiddleware::class,

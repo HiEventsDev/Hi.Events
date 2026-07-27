@@ -19,10 +19,9 @@ class CreateTaxOrFeeHandler
 
     public function __construct(
         TaxAndFeeRepositoryInterface $taxRepository,
-        LoggerInterface              $logger,
-        DuplicateTaxService          $duplicateTaxService
-    )
-    {
+        LoggerInterface $logger,
+        DuplicateTaxService $duplicateTaxService
+    ) {
         $this->taxRepository = $taxRepository;
         $this->logger = $logger;
         $this->duplicateTaxService = $duplicateTaxService;

@@ -14,11 +14,9 @@ class DispatchProductWebhookJob
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int             $productId,
+        public int $productId,
         public DomainEventType $eventType,
-    )
-    {
-    }
+    ) {}
 
     public function handle(WebhookDispatchService $webhookDispatchService): void
     {

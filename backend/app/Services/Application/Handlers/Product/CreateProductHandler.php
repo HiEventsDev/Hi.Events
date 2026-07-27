@@ -17,18 +17,16 @@ use Throwable;
 class CreateProductHandler
 {
     public function __construct(
-        private readonly CreateProductService      $productCreateService,
+        private readonly CreateProductService $productCreateService,
         private readonly GetProductCategoryService $getProductCategoryService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(UpsertProductDTO $productsData): ProductDomainObject
     {
-        $productPrices = $productsData->prices->map(fn(ProductPriceDTO $price) => ProductPriceDomainObject::hydrateFromArray([
+        $productPrices = $productsData->prices->map(fn (ProductPriceDTO $price) => ProductPriceDomainObject::hydrateFromArray([
             ProductPriceDomainObjectAbstract::PRICE => $productsData->type === ProductPriceType::FREE ? 0.00 : $price->price,
             ProductPriceDomainObjectAbstract::LABEL => $price->label,
             ProductPriceDomainObjectAbstract::SALE_START_DATE => $price->sale_start_date,
@@ -43,7 +41,7 @@ class CreateProductHandler
         );
 
         return $this->productCreateService->createProduct(
-            product: (new ProductDomainObject())
+            product: (new ProductDomainObject)
                 ->setTitle($productsData->title)
                 ->setType($productsData->type->name)
                 ->setOrder($productsData->order)

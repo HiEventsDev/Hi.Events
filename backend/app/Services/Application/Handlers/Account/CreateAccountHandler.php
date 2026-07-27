@@ -30,20 +30,18 @@ use Throwable;
 class CreateAccountHandler
 {
     public function __construct(
-        private readonly UserRepositoryInterface                 $userRepository,
-        private readonly AccountRepositoryInterface              $accountRepository,
-        private readonly HashManager                             $hashManager,
-        private readonly DatabaseManager                         $databaseManager,
-        private readonly Repository                              $config,
-        private readonly EmailConfirmationService                $emailConfirmationService,
-        private readonly AccountUserAssociationService           $accountUserAssociationService,
-        private readonly AccountUserRepositoryInterface          $accountUserRepository,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly HashManager $hashManager,
+        private readonly DatabaseManager $databaseManager,
+        private readonly Repository $config,
+        private readonly EmailConfirmationService $emailConfirmationService,
+        private readonly AccountUserAssociationService $accountUserAssociationService,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
         private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
-        private readonly AccountAttributionRepositoryInterface   $accountAttributionRepository,
-        private readonly LoggerInterface                         $logger,
-    )
-    {
-    }
+        private readonly AccountAttributionRepositoryInterface $accountAttributionRepository,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     /**
      * @throws Throwable
@@ -51,17 +49,17 @@ class CreateAccountHandler
     public function handle(CreateAccountDTO $accountData): AccountDomainObject
     {
         if ($this->config->get('app.disable_registration')) {
-            throw new AccountRegistrationDisabledException();
+            throw new AccountRegistrationDisabledException;
         }
 
         $isSaasMode = $this->config->get('app.saas_mode_enabled');
-        $passwordHash = $this->hashManager->make($accountData->password);;
+        $passwordHash = $this->hashManager->make($accountData->password);
 
         return $this->databaseManager->transaction(function () use ($isSaasMode, $passwordHash, $accountData) {
             $account = $this->accountRepository->create([
                 'timezone' => $this->getTimezone($accountData),
                 'currency_code' => $this->getCurrencyCode($accountData),
-                'name' => $accountData->first_name . ($accountData->last_name ? ' ' . $accountData->last_name : ''),
+                'name' => $accountData->first_name.($accountData->last_name ? ' '.$accountData->last_name : ''),
                 'email' => strtolower($accountData->email),
                 'short_id' => IdHelper::shortId(IdHelper::ACCOUNT_PREFIX),
                 'account_verified_at' => $isSaasMode ? null : now()->toDateTimeString(),
@@ -235,7 +233,7 @@ class CreateAccountHandler
             return 'paid';
         }
 
-        if ($data->referrer_url !== null && !$this->isInternalReferrer($data->referrer_url)) {
+        if ($data->referrer_url !== null && ! $this->isInternalReferrer($data->referrer_url)) {
             return 'referral';
         }
 

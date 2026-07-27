@@ -15,8 +15,7 @@ class DeleteOrganizerEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(
         private readonly DeleteEmailTemplateHandler $handler
-    ) {
-    }
+    ) {}
 
     public function __invoke(int $organizerId, int $templateId): JsonResponse
     {

@@ -6,6 +6,7 @@ namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
@@ -17,6 +18,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends BaseRepository<EventDomainObject>
@@ -50,34 +52,61 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
     public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator
     {
-        if (!empty($params->query)) {
+        if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->where(EventDomainObjectAbstract::TITLE, 'ilike', '%' . $params->query . '%');
+                    ->where(EventDomainObjectAbstract::TITLE, 'ilike', '%'.$params->query.'%');
             };
         }
 
         $upcomingEventsFilter = $params->query_params->get('eventsStatus') === 'upcoming';
+        $endedEventsFilter = $params->query_params->get('eventsStatus') === 'ended';
 
-        if (!empty($params->filter_fields) && !$upcomingEventsFilter) {
+        if (! empty($params->filter_fields)) {
             $this->applyFilterFields($params, EventDomainObject::getAllowedFilterFields());
         }
 
-        // Apply custom filter for upcoming events, as it keeps things less complex on the front-end
         if ($upcomingEventsFilter) {
             $where[] = static function (Builder $builder) {
                 $builder
                     ->where(EventDomainObjectAbstract::STATUS, '!=', EventStatus::ARCHIVED->getName())
-                    ->where(function ($query) {
-                        $query->whereNull(EventDomainObjectAbstract::END_DATE)
-                            ->orWhere(EventDomainObjectAbstract::END_DATE, '>=', now());
+                    ->where(function (Builder $eventQuery) {
+                        $eventQuery
+                            ->whereNotExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('event_occurrences')
+                                    ->whereColumn('event_occurrences.event_id', 'events.id')
+                                    ->whereNull('event_occurrences.deleted_at');
+                            })
+                            ->orWhereExists(function ($query) {
+                                $query->select(DB::raw(1))
+                                    ->from('event_occurrences')
+                                    ->whereColumn('event_occurrences.event_id', 'events.id')
+                                    ->whereNull('event_occurrences.deleted_at')
+                                    ->whereRaw('COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?', [now()]);
+                            });
                     });
             };
+        }
 
-            $organizerId = $params->filter_fields->first(fn($filter) => $filter->field === EventDomainObjectAbstract::ORGANIZER_ID)?->value;
-            if ($organizerId) {
-                $this->model = $this->model->where(EventDomainObjectAbstract::ORGANIZER_ID, $organizerId);
-            }
+        if ($endedEventsFilter) {
+            $where[] = static function (Builder $builder) {
+                $builder
+                    ->where(EventDomainObjectAbstract::STATUS, '!=', EventStatus::ARCHIVED->getName())
+                    ->whereExists(function ($query) {
+                        $query->select(DB::raw(1))
+                            ->from('event_occurrences')
+                            ->whereColumn('event_occurrences.event_id', 'events.id')
+                            ->whereNull('event_occurrences.deleted_at');
+                    })
+                    ->whereNotExists(function ($query) {
+                        $query->select(DB::raw(1))
+                            ->from('event_occurrences')
+                            ->whereColumn('event_occurrences.event_id', 'events.id')
+                            ->whereNull('event_occurrences.deleted_at')
+                            ->whereRaw('COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?', [now()]);
+                    });
+            };
         }
 
         $this->model = $this->model->orderBy(
@@ -97,22 +126,33 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         $now = now();
         $next24Hours = now()->addDay();
 
-        return $this->handleResults($this->model
+        $this->model = $this->model
             ->select('events.*')
-            ->with(['account', 'organizer'])
-            ->where(EventDomainObjectAbstract::START_DATE, '>=', $now)
-            ->where(EventDomainObjectAbstract::START_DATE, '<=', $next24Hours)
+            ->whereExists(function ($query) use ($now, $next24Hours) {
+                $query->select(DB::raw(1))
+                    ->from('event_occurrences')
+                    ->whereColumn('event_occurrences.event_id', 'events.id')
+                    ->whereNull('event_occurrences.deleted_at')
+                    ->where('event_occurrences.start_date', '>=', $now)
+                    ->where('event_occurrences.start_date', '<=', $next24Hours)
+                    ->where('event_occurrences.status', 'ACTIVE');
+            })
             ->whereIn(EventDomainObjectAbstract::STATUS, [
                 EventStatus::LIVE->name,
             ])
-            ->orderBy(EventDomainObjectAbstract::START_DATE, 'asc')
-            ->paginate($perPage));
+            ->orderBy(EventDomainObjectAbstract::CREATED_AT, 'desc');
+
+        $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
+        $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
+        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
+
+        return $this->paginate($perPage);
     }
 
     public function getAllEventsForAdmin(
         ?string $search = null,
         int $perPage = 20,
-        ?string $sortBy = 'start_date',
+        ?string $sortBy = 'created_at',
         ?string $sortDirection = 'desc'
     ): LengthAwarePaginator {
         $this->model = $this->model
@@ -121,22 +161,33 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
         if ($search) {
             $this->model = $this->model->where(function ($q) use ($search) {
-                $q->where(EventDomainObjectAbstract::TITLE, 'ilike', '%' . $search . '%')
+                $q->where(EventDomainObjectAbstract::TITLE, 'ilike', '%'.$search.'%')
                     ->orWhereHas('organizer', function ($orgQuery) use ($search) {
-                        $orgQuery->where('name', 'ilike', '%' . $search . '%');
+                        $orgQuery->where('name', 'ilike', '%'.$search.'%');
                     });
             });
         }
 
-        $allowedSortColumns = ['start_date', 'end_date', 'title', 'created_at'];
-        $sortColumn = in_array($sortBy, $allowedSortColumns, true) ? $sortBy : 'start_date';
-        $sortDir = in_array(strtolower($sortDirection), ['asc', 'desc']) ? $sortDirection : 'desc';
+        $allowedSortColumns = ['title', 'created_at', 'updated_at', 'start_date', 'end_date'];
+        $sortColumn = in_array($sortBy, $allowedSortColumns, true) ? $sortBy : 'created_at';
+        $sortDir = in_array(strtolower((string) $sortDirection), ['asc', 'desc'], true) ? strtolower($sortDirection) : 'desc';
 
-        $this->model = $this->model->orderBy($sortColumn, $sortDir);
+        if ($sortColumn === 'start_date') {
+            $this->model = $this->model->orderByRaw(
+                "(SELECT MIN(eo.start_date) FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL) {$sortDir} NULLS LAST"
+            );
+        } elseif ($sortColumn === 'end_date') {
+            $this->model = $this->model->orderByRaw(
+                "(SELECT MAX(COALESCE(eo.end_date, eo.start_date)) FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL) {$sortDir} NULLS LAST"
+            );
+        } else {
+            $this->model = $this->model->orderBy($sortColumn, $sortDir);
+        }
 
         $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
         $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
         $this->loadRelation(new Relationship(EventStatisticDomainObject::class, name: 'event_statistics'));
+        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
 
         return $this->paginate($perPage);
     }
@@ -145,17 +196,26 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
     {
         return $this->handleResults($this->model
             ->select([
-                'events.' . EventDomainObjectAbstract::ID,
-                'events.' . EventDomainObjectAbstract::TITLE,
-                'events.' . EventDomainObjectAbstract::UPDATED_AT,
-                'events.' . EventDomainObjectAbstract::START_DATE,
+                'events.'.EventDomainObjectAbstract::ID,
+                'events.'.EventDomainObjectAbstract::TITLE,
+                'events.'.EventDomainObjectAbstract::UPDATED_AT,
             ])
             ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
-            ->where('events.' . EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
-            ->where('event_settings.' . EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
-            ->whereNull('events.' . EventDomainObjectAbstract::DELETED_AT)
-            ->orderBy('events.' . EventDomainObjectAbstract::ID)
+            ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
+            ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
+            ->orderBy('events.'.EventDomainObjectAbstract::ID)
             ->paginate($perPage, ['*'], 'page', $page));
+    }
+
+    public function findByIdLocked(int $id): EventDomainObject
+    {
+        $model = Event::query()
+            ->where('id', $id)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        return $this->handleSingleResult($model);
     }
 
     public function getSitemapEventCount(): int
@@ -163,9 +223,9 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return $this->model
             ->newQuery()
             ->join('event_settings', 'events.id', '=', 'event_settings.event_id')
-            ->where('events.' . EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
-            ->where('event_settings.' . EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
-            ->whereNull('events.' . EventDomainObjectAbstract::DELETED_AT)
+            ->where('events.'.EventDomainObjectAbstract::STATUS, EventStatus::LIVE->name)
+            ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
+            ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
             ->count();
     }
 }

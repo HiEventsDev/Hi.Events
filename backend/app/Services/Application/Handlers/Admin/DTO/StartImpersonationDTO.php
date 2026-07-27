@@ -10,7 +10,5 @@ class StartImpersonationDTO extends BaseDataObject
         public readonly int $userId,
         public readonly int $accountId,
         public readonly int $impersonatorId,
-    )
-    {
-    }
+    ) {}
 }

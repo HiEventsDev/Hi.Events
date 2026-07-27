@@ -13,9 +13,7 @@ class GetOrganizerReportHandler
 {
     public function __construct(
         private readonly OrganizerReportServiceFactory $reportServiceFactory,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetOrganizerReportDTO $reportData): Collection|PaginatedReportDTO
     {

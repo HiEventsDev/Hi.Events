@@ -1,5 +1,6 @@
 import {
     IconArrowLeft,
+    IconCalendarRepeat,
     IconChartPie,
     IconChevronRight,
     IconDashboard,
@@ -16,7 +17,6 @@ import {
     IconSend,
     IconSettings,
     IconShare,
-    IconStar,
     IconTicket,
     IconTrendingUp,
     IconUserQuestion,
@@ -29,6 +29,7 @@ import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings";
 import {useGetEventStats} from "../../../queries/useGetEventStats";
+import {useGeoStatus} from "../../../queries/useGeoStatus.ts";
 import Truncate from "../../common/Truncate";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
@@ -40,14 +41,18 @@ import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {ShareModal} from "../../modals/ShareModal";
 import {EventLiveCelebrationModal} from "../../modals/EventLiveCelebrationModal";
+import {PublishEventModal} from "../../modals/PublishEventModal";
 import {useDisclosure} from "@mantine/hooks";
 import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
+import {EventType} from "../../../types.ts";
+import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
+import {prettyDate} from "../../../utilites/dates.ts";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -55,16 +60,24 @@ const EventLayout = () => {
 
     const [opened, {open, close}] = useDisclosure(false);
     const [celebrationOpened, {open: openCelebration, close: closeCelebration}] = useDisclosure(false);
+    const [publishModalOpened, {open: openPublishModal, close: closePublishModal}] = useDisclosure(false);
 
     const statusToggleMutation = useUpdateEventStatus();
 
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
-    const {data: eventSettings, isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
+    const {isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventStats} = useGetEventStats(eventId);
     const {data: me} = useGetMe();
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const [emailConfirmationResent, setEmailConfirmationResent] = useState(false);
+    useGeoStatus();
+
+    const occurrenceIdFromUrl = useMemo(() => {
+        const match = location.pathname.match(/\/occurrences\/(\d+)$/);
+        return match ? match[1] : undefined;
+    }, [location.pathname]);
+    const {data: occurrence} = useGetEventOccurrence(eventId, occurrenceIdFromUrl);
 
     const handleEmailConfirmationResend = () => {
         resendEmailConfirmationMutation.mutate({
@@ -85,12 +98,6 @@ const EventLayout = () => {
 
         // 1. OVERVIEW
         {label: t`Overview`},
-        {
-            link: 'getting-started',
-            label: t`Getting Started`,
-            icon: IconStar,
-            showWhen: () => !eventSettings?.hide_getting_started_page
-        },
         {link: 'dashboard', label: t`Dashboard`, icon: IconDashboard},
         {
             link: 'reports',
@@ -101,6 +108,12 @@ const EventLayout = () => {
 
         // 2. EVENT SETUP
         {label: t`Setup & Design`},
+        {
+            link: 'occurrences',
+            label: t`Occurrence Schedule`,
+            icon: IconCalendarRepeat,
+            showWhen: () => event?.type === EventType.RECURRING,
+        },
         {link: 'settings', label: t`Event Settings`, icon: IconSettings},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
@@ -119,7 +132,12 @@ const EventLayout = () => {
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},
-        {link: 'capacity-assignments', label: t`Capacity Management`, icon: IconUsersGroup},
+        {
+            link: 'capacity-assignments',
+            label: t`Capacity Management`,
+            icon: IconUsersGroup,
+            showWhen: () => event?.type !== EventType.RECURRING,
+        },
 
         // 5. INTEGRATIONS
         {label: t`Integrations`},
@@ -143,28 +161,34 @@ const EventLayout = () => {
         {
             link: `/manage/event/${event?.id}`,
             content: <Truncate length={breadcrumbItemsWidth} text={event?.title} showTooltip={false}/>
-        }
+        },
+        ...(occurrenceIdFromUrl && occurrence ? [{
+            link: `/manage/event/${event?.id}/occurrences/${occurrenceIdFromUrl}`,
+            content: <Truncate
+                length={breadcrumbItemsWidth}
+                text={prettyDate(occurrence.start_date, event?.timezone || 'UTC') + (occurrence.label ? ` (${occurrence.label})` : '')}
+                showTooltip={false}
+            />
+        }] : []),
     ] : [
         {link: '#', content: '...'}
     ];
 
     const handleStatusToggle = () => {
-        const isGoingLive = event?.status !== 'LIVE';
-        const message = event?.status === 'LIVE'
-            ? t`Are you sure you want to make this event draft? This will make the event invisible to the public`
-            : t`Are you sure you want to make this event public? This will make the event visible to the public`;
+        if (event?.status !== 'LIVE') {
+            openPublishModal();
+            return;
+        }
+
+        const message = t`Are you sure you want to make this event draft? This will make the event invisible to the public`;
 
         confirmationDialog(message, () => {
             statusToggleMutation.mutate({
                 eventId,
-                status: event?.status === 'LIVE' ? 'DRAFT' : 'LIVE'
+                status: 'DRAFT'
             }, {
                 onSuccess: () => {
-                    if (isGoingLive) {
-                        openCelebration();
-                    } else {
-                        showSuccess(t`Event status updated`);
-                    }
+                    showSuccess(t`Event status updated`);
                 },
                 onError: (error: any) => {
                     showError(error?.response?.data?.message || t`Event status update failed. Please try again later`);
@@ -183,6 +207,7 @@ const EventLayout = () => {
                     {isEventFetched && (
                         <TopBarButton
                             onClick={handleStatusToggle}
+                            data-testid="event-status-toggle"
                             size="sm"
                             leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
                             rightSection={<IconChevronRight size={14}/>}
@@ -224,6 +249,18 @@ const EventLayout = () => {
                                 eventTitle={event.title}
                                 eventId={String(event.id)}
                             />
+
+                            {publishModalOpened && (
+                                <PublishEventModal
+                                    opened={publishModalOpened}
+                                    onClose={closePublishModal}
+                                    event={event}
+                                    onSuccess={() => {
+                                        closePublishModal();
+                                        openCelebration();
+                                    }}
+                                />
+                            )}
                         </>
                     )}
                 </div>

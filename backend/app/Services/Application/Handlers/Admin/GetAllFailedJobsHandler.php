@@ -15,7 +15,7 @@ class GetAllFailedJobsHandler
         $query = FailedJob::query();
 
         if ($dto->search) {
-            $searchTerm = '%' . $dto->search . '%';
+            $searchTerm = '%'.$dto->search.'%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('payload', 'ilike', $searchTerm)
                     ->orWhere('exception', 'ilike', $searchTerm);

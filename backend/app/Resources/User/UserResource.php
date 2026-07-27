@@ -38,10 +38,10 @@ class UserResource extends BaseResource
                 'is_impersonating' => true,
                 'impersonator_id' => $impersonatorId,
             ]),
-            $this->mergeWhen(config('app.enforce_email_confirmation_during_registration'), fn() => [
+            $this->mergeWhen(config('app.enforce_email_confirmation_during_registration'), fn () => [
                 'enforce_email_confirmation_during_registration' => true,
             ]),
-            $this->mergeWhen($this->getCurrentAccountUser() !== null, fn() => [
+            $this->mergeWhen($this->getCurrentAccountUser() !== null, fn () => [
                 'role' => $this->getCurrentAccountUser()?->getRole(),
                 'is_account_owner' => $this->getCurrentAccountUser()?->getIsAccountOwner(),
                 'last_login_at' => $this->getCurrentAccountUser()?->getLastLoginAt(),

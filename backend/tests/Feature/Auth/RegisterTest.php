@@ -17,7 +17,7 @@ class RegisterTest extends TestCase
 
     private const REGISTER_ROUTE = '/auth/register';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         AccountConfiguration::firstOrCreate(['id' => 1], [
@@ -35,7 +35,7 @@ class RegisterTest extends TestCase
     {
         $password = fake()->password(16);
         $user = User::factory()->password($password)->make([
-            'email' => fake()->unique()->safeEmail()
+            'email' => fake()->unique()->safeEmail(),
         ]);
         $account = Account::factory()->make();
 

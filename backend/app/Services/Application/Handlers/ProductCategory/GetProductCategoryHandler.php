@@ -15,9 +15,7 @@ class GetProductCategoryHandler
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $eventId, int $productCategoryId): ProductCategoryDomainObject
     {

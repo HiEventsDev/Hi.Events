@@ -11,7 +11,5 @@ class EventUpdateEvent
 
     public function __construct(
         private readonly EventDomainObject $event,
-    )
-    {
-    }
+    ) {}
 }

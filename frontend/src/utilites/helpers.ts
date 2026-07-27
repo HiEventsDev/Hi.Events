@@ -93,6 +93,51 @@ export const formatNumber = (number: number) => {
 
 export const isSsr = () => import.meta.env.SSR;
 
+export const safeSessionStorageGet = (key: string): string | null => {
+    if (isSsr()) return null;
+    try {
+        return window.sessionStorage.getItem(key);
+    } catch {
+        return null;
+    }
+};
+
+export const safeSessionStorageSet = (key: string, value: string): void => {
+    if (isSsr()) return;
+    try {
+        window.sessionStorage.setItem(key, value);
+    } catch {
+        return;
+    }
+};
+
+export const safeLocalStorageGet = (key: string): string | null => {
+    if (isSsr()) return null;
+    try {
+        return window.localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+};
+
+export const safeLocalStorageSet = (key: string, value: string): void => {
+    if (isSsr()) return;
+    try {
+        window.localStorage.setItem(key, value);
+    } catch {
+        return;
+    }
+};
+
+export const safeLocalStorageRemove = (key: string): void => {
+    if (isSsr()) return;
+    try {
+        window.localStorage.removeItem(key);
+    } catch {
+        return;
+    }
+};
+
 /**
  * (c) Hi.Events Ltd 2025
  *

@@ -8,9 +8,9 @@ use Tests\TestCase;
 
 class PartialUpdateOrganizerSettingsRequestTest extends TestCase
 {
-    public function testConsentMustBeAcknowledgedWhenPixelsAreEnabled(): void
+    public function test_consent_must_be_acknowledged_when_pixels_are_enabled(): void
     {
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [
                 ['provider' => 'facebook_pixel', 'pixel_id' => '1234567890', 'enabled' => true],
@@ -30,9 +30,9 @@ class PartialUpdateOrganizerSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has('tracking_consent_acknowledged'));
     }
 
-    public function testConsentNotRequiredWhenPixelsAreDisabled(): void
+    public function test_consent_not_required_when_pixels_are_disabled(): void
     {
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [
                 ['provider' => 'facebook_pixel', 'pixel_id' => '1234567890', 'enabled' => false],
@@ -52,9 +52,9 @@ class PartialUpdateOrganizerSettingsRequestTest extends TestCase
         $this->assertFalse($validator->errors()->has('tracking_consent_acknowledged'));
     }
 
-    public function testConsentNotRequiredWhenNoPixels(): void
+    public function test_consent_not_required_when_no_pixels(): void
     {
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [],
             'tracking_consent_acknowledged' => false,
@@ -72,9 +72,9 @@ class PartialUpdateOrganizerSettingsRequestTest extends TestCase
         $this->assertFalse($validator->errors()->has('tracking_consent_acknowledged'));
     }
 
-    public function testInvalidPixelIdIsRejected(): void
+    public function test_invalid_pixel_id_is_rejected(): void
     {
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [
                 ['provider' => 'facebook_pixel', 'pixel_id' => 'not-a-valid-id', 'enabled' => true],
@@ -94,11 +94,11 @@ class PartialUpdateOrganizerSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has('tracking_pixels.0.pixel_id'));
     }
 
-    public function testGtmBlockedInSaasMode(): void
+    public function test_gtm_blocked_in_saas_mode(): void
     {
         config(['app.saas_mode_enabled' => true]);
 
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [
                 ['provider' => 'google_tag_manager', 'pixel_id' => 'GTM-ABCDEF', 'enabled' => true],
@@ -118,11 +118,11 @@ class PartialUpdateOrganizerSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has('tracking_pixels.0.provider'));
     }
 
-    public function testGtmAllowedInSelfHostedMode(): void
+    public function test_gtm_allowed_in_self_hosted_mode(): void
     {
         config(['app.saas_mode_enabled' => false]);
 
-        $request = new PartialUpdateOrganizerSettingsRequest();
+        $request = new PartialUpdateOrganizerSettingsRequest;
         $request->merge([
             'tracking_pixels' => [
                 ['provider' => 'google_tag_manager', 'pixel_id' => 'GTM-ABCDEF', 'enabled' => true],

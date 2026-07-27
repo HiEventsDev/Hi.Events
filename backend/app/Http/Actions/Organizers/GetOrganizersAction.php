@@ -10,9 +10,7 @@ use Illuminate\Http\JsonResponse;
 
 class GetOrganizersAction extends BaseAction
 {
-    public function __construct(private readonly OrganizerRepositoryInterface $organizerRepository)
-    {
-    }
+    public function __construct(private readonly OrganizerRepositoryInterface $organizerRepository) {}
 
     public function __invoke(): JsonResponse
     {

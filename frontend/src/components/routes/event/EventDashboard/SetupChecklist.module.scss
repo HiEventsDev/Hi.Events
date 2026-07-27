@@ -1,0 +1,292 @@
+@use "../../../../styles/mixins.scss";
+
+.card {
+  position: relative;
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--hi-color-white);
+  border: 0.5px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-card);
+}
+
+.cardCongrats {
+  margin-top: 8px;
+  padding: 36px 36px 24px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--hi-accent-brand-soft) 0%, transparent 55%),
+    radial-gradient(100% 120% at 100% 100%, var(--hi-accent-brand-soft) 0%, transparent 60%),
+    var(--hi-color-white);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  border-color: transparent;
+
+  @include mixins.respond-below(md) {
+    padding: 28px 20px 18px;
+  }
+}
+
+.dismiss {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--hi-color-text-muted);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.12s ease, color 0.12s ease;
+
+  &:hover {
+    background: var(--mantine-color-gray-1);
+    color: var(--hi-text);
+  }
+}
+
+.dismissCongrats {
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+}
+
+.congratsHero {
+  text-align: center;
+  padding: 0 8px 28px;
+
+  @include mixins.respond-below(md) {
+    padding: 0 0 22px;
+  }
+}
+
+.congratsEmoji {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+
+  div {
+    margin-bottom: 0 !important;
+  }
+}
+
+.congratsEyebrow {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: var(--mantine-color-primary-7);
+  margin-bottom: 8px;
+}
+
+.congratsTitle {
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--hi-text);
+  margin: 0 0 8px 0;
+  line-height: 1.15;
+
+  @include mixins.respond-below(md) {
+    font-size: 1.375rem;
+  }
+}
+
+.congratsSubtitle {
+  font-size: 0.9375rem;
+  color: var(--hi-color-text-muted);
+  margin: 0 auto;
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding-right: 36px;
+}
+
+.headerCompact {
+  padding-top: 14px;
+  padding-right: 0;
+  border-top: 0.5px solid var(--hi-color-border);
+  margin-bottom: 0;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0 0 3px 0;
+  color: var(--hi-text);
+  line-height: 1.25;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.progressTrack {
+  width: 96px;
+  height: 5px;
+  background: var(--mantine-color-gray-1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--mantine-color-primary-5);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.body {
+  border-top: 0.5px solid var(--hi-color-border);
+}
+
+.cardCongrats .body {
+  border-top: none;
+  margin-top: 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--hi-color-border);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.cardCongrats .row {
+  padding: 14px 0;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.rowLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.cardCongrats .rowTitle {
+  font-size: 0.9375rem;
+}
+
+.rowTitleIncomplete {
+  color: var(--hi-text);
+  font-weight: 500;
+}
+
+.rowTitleComplete {
+  color: var(--hi-color-text-muted);
+  text-decoration: line-through;
+}
+
+.rowHelper {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.cardCongrats .rowHelper {
+  font-size: 0.8125rem;
+}
+
+.rowHelperIncomplete {
+  color: var(--hi-color-text-muted);
+}
+
+.rowHelperComplete {
+  color: var(--hi-color-text-muted);
+}
+
+.rowRight {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.iconIncomplete {
+  color: var(--hi-color-text-muted);
+  flex-shrink: 0;
+}
+
+.iconComplete {
+  color: var(--hi-color-success);
+  flex-shrink: 0;
+}
+
+.checkDone {
+  color: var(--hi-color-success);
+}
+
+.actionPrimary {
+  background-color: var(--mantine-color-primary-5) !important;
+  color: var(--hi-color-white) !important;
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.actionSecondary {
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  border: 0.5px solid var(--hi-color-border) !important;
+  background-color: var(--hi-color-white) !important;
+  color: var(--hi-text) !important;
+}
+
+.cardCongrats .actionPrimary,
+.cardCongrats .actionSecondary {
+  padding: 7px 14px !important;
+  font-size: 0.875rem !important;
+}

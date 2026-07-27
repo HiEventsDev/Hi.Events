@@ -15,8 +15,11 @@ use Tests\TestCase;
 class GetSitemapIndexHandlerTest extends TestCase
 {
     private EventRepositoryInterface $eventRepository;
+
     private OrganizerRepositoryInterface $organizerRepository;
+
     private SitemapGeneratorService $sitemapGenerator;
+
     private GetSitemapIndexHandler $handler;
 
     protected function setUp(): void
@@ -39,7 +42,7 @@ class GetSitemapIndexHandlerTest extends TestCase
         config(['app.frontend_url' => 'https://example.com']);
     }
 
-    public function testHandleReturnsCachedXml(): void
+    public function test_handle_returns_cached_xml(): void
     {
         $expectedXml = '<?xml version="1.0"?><sitemapindex></sitemapindex>';
 
@@ -53,7 +56,7 @@ class GetSitemapIndexHandlerTest extends TestCase
         $this->assertEquals($expectedXml, $result);
     }
 
-    public function testHandleGeneratesXmlWhenCacheMiss(): void
+    public function test_handle_generates_xml_when_cache_miss(): void
     {
         $expectedXml = '<?xml version="1.0"?><sitemapindex></sitemapindex>';
 
@@ -85,7 +88,7 @@ class GetSitemapIndexHandlerTest extends TestCase
         $this->assertEquals($expectedXml, $result);
     }
 
-    public function testHandleCalculatesCorrectPageCount(): void
+    public function test_handle_calculates_correct_page_count(): void
     {
         config(['sitemap.events_per_page' => 500]);
         config(['sitemap.organizers_per_page' => 500]);
@@ -108,14 +111,14 @@ class GetSitemapIndexHandlerTest extends TestCase
 
         Cache::shouldReceive('remember')
             ->once()
-            ->andReturnUsing(fn($key, $ttl, $callback) => $callback());
+            ->andReturnUsing(fn ($key, $ttl, $callback) => $callback());
 
         $result = $this->handler->handle();
 
         $this->assertEquals('xml', $result);
     }
 
-    public function testHandleReturnsAtLeastOnePage(): void
+    public function test_handle_returns_at_least_one_page(): void
     {
         $this->eventRepository
             ->shouldReceive('getSitemapEventCount')
@@ -135,14 +138,14 @@ class GetSitemapIndexHandlerTest extends TestCase
 
         Cache::shouldReceive('remember')
             ->once()
-            ->andReturnUsing(fn($key, $ttl, $callback) => $callback());
+            ->andReturnUsing(fn ($key, $ttl, $callback) => $callback());
 
         $result = $this->handler->handle();
 
         $this->assertEquals('xml', $result);
     }
 
-    public function testHandleTrimsTrailingSlashFromBaseUrl(): void
+    public function test_handle_trims_trailing_slash_from_base_url(): void
     {
         config(['app.frontend_url' => 'https://example.com/']);
 
@@ -164,7 +167,7 @@ class GetSitemapIndexHandlerTest extends TestCase
 
         Cache::shouldReceive('remember')
             ->once()
-            ->andReturnUsing(fn($key, $ttl, $callback) => $callback());
+            ->andReturnUsing(fn ($key, $ttl, $callback) => $callback());
 
         $result = $this->handler->handle();
 

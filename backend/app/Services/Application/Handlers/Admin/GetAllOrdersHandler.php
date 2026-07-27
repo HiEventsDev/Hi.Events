@@ -10,9 +10,7 @@ class GetAllOrdersHandler
 {
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetAllOrdersDTO $dto): LengthAwarePaginator
     {

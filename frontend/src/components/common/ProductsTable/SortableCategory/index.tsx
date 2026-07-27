@@ -10,6 +10,7 @@ import {t} from "@lingui/macro";
 import {useDeleteProductCategory} from "../../../../mutations/useDeleteProductCategory.ts";
 import {useParams} from "react-router";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
 
@@ -41,18 +42,21 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
             return;
         }
 
-        deleteMutation.mutate({productCategoryId: category.id, eventId: eventId}, {
-            onSuccess: () => {
-                editModal.close();
-            },
-            onError: (error) => {
-                if (error?.response?.status && error.response.status === 409 && error?.response?.data?.message) {
-                    showError(error?.response?.data.message);
-                    return;
-                } else {
-                    showError(t`We couldn't delete the category. Please try again.`);
+        confirmationDialog(t`Delete this category? Any products in it will also be deleted. This cannot be undone.`, () => {
+            deleteMutation.mutate({productCategoryId: category.id, eventId: eventId}, {
+                onSuccess: () => {
+                    showSuccess(t`Category deleted successfully`);
+                    editModal.close();
+                },
+                onError: (error: any) => {
+                    if (error?.response?.status && error.response.status === 409 && error?.response?.data?.message) {
+                        showError(error?.response?.data.message);
+                        return;
+                    } else {
+                        showError(t`We couldn't delete the category. Please try again.`);
+                    }
                 }
-            }
+            });
         });
     }
 

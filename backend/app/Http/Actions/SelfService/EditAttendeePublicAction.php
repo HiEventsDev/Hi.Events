@@ -14,8 +14,7 @@ class EditAttendeePublicAction extends BaseAction
 {
     public function __construct(
         private readonly EditAttendeePublicHandler $handler
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         EditAttendeePublicRequest $request,

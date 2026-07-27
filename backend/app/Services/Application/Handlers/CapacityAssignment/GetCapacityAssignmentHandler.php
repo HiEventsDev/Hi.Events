@@ -11,9 +11,7 @@ class GetCapacityAssignmentHandler
 {
     public function __construct(
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $capacityAssignmentId, int $eventId): CapacityAssignmentDomainObject
     {

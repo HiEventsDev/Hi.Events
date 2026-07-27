@@ -32,8 +32,8 @@ class OrderSummaryForOrganizer extends BaseMail
     {
         $subject = $this->order->getTotalGross() > 0
             ? __('New order for :amount for :event 🎉', [
-                    'amount' => Currency::format($this->order->getTotalGross(), $this->event->getCurrency()),
-                    'event' => Str::limit($this->event->getTitle(), 75)]
+                'amount' => Currency::format($this->order->getTotalGross(), $this->event->getCurrency()),
+                'event' => Str::limit($this->event->getTitle(), 75)]
             )
             : __('New order for :event 🎉', ['event' => Str::limit($this->event->getTitle(), 75)]);
 
@@ -53,7 +53,7 @@ class OrderSummaryForOrganizer extends BaseMail
                     Url::getFrontEndUrlFromConfig(Url::ORGANIZER_ORDER_SUMMARY),
                     $this->event->getId(),
                     $this->order->getId(),
-                )
+                ),
             ]
         );
     }

@@ -15,9 +15,7 @@ class PartialEditEventSettingsAction extends BaseAction
 {
     public function __construct(
         private readonly PartialUpdateEventSettingsHandler $partialUpdateEventSettingsHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

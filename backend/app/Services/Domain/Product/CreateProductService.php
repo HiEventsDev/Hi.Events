@@ -20,27 +20,24 @@ use Throwable;
 class CreateProductService
 {
     public function __construct(
-        private readonly ProductRepositoryInterface      $productRepository,
-        private readonly DatabaseManager                 $databaseManager,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
-        private readonly ProductPriceCreateService       $priceCreateService,
-        private readonly HtmlPurifierService             $purifier,
-        private readonly EventRepositoryInterface        $eventRepository,
-        private readonly ProductOrderingService          $productOrderingService,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly ProductPriceCreateService $priceCreateService,
+        private readonly HtmlPurifierService $purifier,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly ProductOrderingService $productOrderingService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function createProduct(
         ProductDomainObject $product,
-        int                 $accountId,
-        ?array              $taxAndFeeIds = null,
-    ): ProductDomainObject
-    {
+        int $accountId,
+        ?array $taxAndFeeIds = null,
+    ): ProductDomainObject {
         return $this->databaseManager->transaction(function () use ($accountId, $taxAndFeeIds, $product) {
             $persistedProduct = $this->persistProduct($product);
 
@@ -102,10 +99,9 @@ class CreateProductService
      */
     private function createProductTaxesAndFees(
         ProductDomainObject $product,
-        array               $taxAndFeeIds,
-        int                 $accountId,
-    ): Collection
-    {
+        array $taxAndFeeIds,
+        int $accountId,
+    ): Collection {
         return $this->taxAndProductAssociationService->addTaxesToProduct(
             new TaxAndProductAssociateParams(
                 productId: $product->getId(),

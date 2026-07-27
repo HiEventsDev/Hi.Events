@@ -20,7 +20,7 @@ class ProductCategoryResource extends JsonResource
             'is_hidden' => $this->getIsHidden(),
             'order' => $this->getOrder(),
             'no_products_message' => $this->getNoProductsMessage(),
-            $this->mergeWhen((bool)$this->getProducts(), fn() => [
+            $this->mergeWhen((bool) $this->getProducts(), fn () => [
                 'products' => ProductResource::collection($this->getProducts()),
             ]),
         ];

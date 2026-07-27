@@ -33,8 +33,11 @@ class CreateAttendeeAction extends BaseAction
 
         try {
             $attendee = $this->createAttendeeHandler->handle(CreateAttendeeDTO::fromArray(
-                array_merge($request->validationData(), [
+                array_merge($request->validated(), [
                     'event_id' => $eventId,
+                    'override_capacity' => (bool) $request->validated('override_capacity', false),
+                    'client_ip' => $this->getClientIp($request),
+                    'client_user_agent' => $request->userAgent(),
                 ])
             ));
         } catch (NoTicketsAvailableException $exception) {

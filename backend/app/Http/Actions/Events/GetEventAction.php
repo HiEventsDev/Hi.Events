@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Events;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
-use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -33,6 +36,14 @@ class GetEventAction extends BaseAction
         $event = $this->eventRepository
             ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
             ->loadRelation(new Relationship(ImageDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]),
+            ]))
             ->loadRelation(
                 new Relationship(ProductCategoryDomainObject::class, [
                     new Relationship(ProductDomainObject::class, [

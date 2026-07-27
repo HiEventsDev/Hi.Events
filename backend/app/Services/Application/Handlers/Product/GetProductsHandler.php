@@ -13,10 +13,8 @@ class GetProductsHandler
 {
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
-        private readonly ProductFilterService       $productFilterService,
-    )
-    {
-    }
+        private readonly ProductFilterService $productFilterService,
+    ) {}
 
     public function handle(int $eventId, QueryParamsDTO $queryParamsDTO): LengthAwarePaginator
     {
@@ -25,10 +23,9 @@ class GetProductsHandler
             ->loadRelation(TaxAndFeesDomainObject::class)
             ->findByEventId($eventId, $queryParamsDTO);
 
-        $filteredProducts = $this->productFilterService->filter(
-            productsCategories: $productPaginator->getCollection(),
+        $filteredProducts = $this->productFilterService->filterProducts(
+            products: $productPaginator->getCollection(),
             hideSoldOutProducts: false,
-            hideHiddenCategories: false,
         );
 
         $productPaginator->setCollection($filteredProducts);

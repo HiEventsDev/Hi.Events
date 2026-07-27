@@ -9,6 +9,8 @@ use HiEvents\DomainObjects\Generated\PromoCodeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -25,13 +27,21 @@ use Tests\TestCase;
 class EventStatisticsIncrementServiceTest extends TestCase
 {
     private EventStatisticsIncrementService $service;
+
     private MockInterface|PromoCodeRepositoryInterface $promoCodeRepository;
+
     private MockInterface|ProductRepositoryInterface $productRepository;
+
     private MockInterface|EventStatisticRepositoryInterface $eventStatisticsRepository;
+
     private MockInterface|EventDailyStatisticRepositoryInterface $eventDailyStatisticRepository;
+
     private MockInterface|DatabaseManager $databaseManager;
+
     private MockInterface|OrderRepositoryInterface $orderRepository;
+
     private MockInterface|LoggerInterface $logger;
+
     private MockInterface|Retrier $retrier;
 
     protected function setUp(): void
@@ -42,6 +52,8 @@ class EventStatisticsIncrementServiceTest extends TestCase
         $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
         $this->eventStatisticsRepository = Mockery::mock(EventStatisticRepositoryInterface::class);
         $this->eventDailyStatisticRepository = Mockery::mock(EventDailyStatisticRepositoryInterface::class);
+        $eventOccurrenceStatisticRepository = Mockery::mock(EventOccurrenceStatisticRepositoryInterface::class);
+        $eventOccurrenceDailyStatisticRepository = Mockery::mock(EventOccurrenceDailyStatisticRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
@@ -52,6 +64,8 @@ class EventStatisticsIncrementServiceTest extends TestCase
             $this->productRepository,
             $this->eventStatisticsRepository,
             $this->eventDailyStatisticRepository,
+            $eventOccurrenceStatisticRepository,
+            $eventOccurrenceDailyStatisticRepository,
             $this->databaseManager,
             $this->orderRepository,
             $this->logger,
@@ -59,7 +73,7 @@ class EventStatisticsIncrementServiceTest extends TestCase
         );
     }
 
-    public function testIncrementForOrderWithExistingStatistics(): void
+    public function test_increment_for_order_with_existing_statistics(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -71,11 +85,13 @@ class EventStatisticsIncrementServiceTest extends TestCase
         $ticketOrderItem1->shouldReceive('getQuantity')->andReturn(2);
         $ticketOrderItem1->shouldReceive('getProductId')->andReturn(1);
         $ticketOrderItem1->shouldReceive('getTotalBeforeAdditions')->andReturn(100.00);
+        $ticketOrderItem1->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $ticketOrderItem2 = Mockery::mock(OrderItemDomainObject::class);
         $ticketOrderItem2->shouldReceive('getQuantity')->andReturn(1);
         $ticketOrderItem2->shouldReceive('getProductId')->andReturn(2);
         $ticketOrderItem2->shouldReceive('getTotalBeforeAdditions')->andReturn(50.00);
+        $ticketOrderItem2->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $orderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
         $ticketOrderItems = new Collection([$ticketOrderItem1, $ticketOrderItem2]);
@@ -200,13 +216,15 @@ class EventStatisticsIncrementServiceTest extends TestCase
 
         // Expect incrementing promo code usage
         $this->promoCodeRepository
-            ->shouldReceive('increment')
-            ->with($promoCodeId, PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT)
-            ->once();
-
-        $this->promoCodeRepository
-            ->shouldReceive('increment')
-            ->with($promoCodeId, PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT, 3)
+            ->shouldReceive('incrementEach')
+            ->with(
+                [
+                    PromoCodeDomainObjectAbstract::ORDER_USAGE_COUNT => 1,
+                    PromoCodeDomainObjectAbstract::ATTENDEE_USAGE_COUNT => 3,
+                ],
+                [],
+                ['id' => $promoCodeId],
+            )
             ->once();
 
         // Expect incrementing product statistics
@@ -226,11 +244,10 @@ class EventStatisticsIncrementServiceTest extends TestCase
         // Execute
         $this->service->incrementForOrder($order);
 
-
         $this->assertTrue(true);
     }
 
-    public function testIncrementForOrderCreatesNewStatistics(): void
+    public function test_increment_for_order_creates_new_statistics(): void
     {
         $eventId = 1;
         $orderId = 123;
@@ -241,6 +258,7 @@ class EventStatisticsIncrementServiceTest extends TestCase
         $orderItem->shouldReceive('getQuantity')->andReturn(2);
         $orderItem->shouldReceive('getProductId')->andReturn(1);
         $orderItem->shouldReceive('getTotalBeforeAdditions')->andReturn(100.00);
+        $orderItem->shouldReceive('getEventOccurrenceId')->andReturnNull();
 
         $orderItems = new Collection([$orderItem]);
         $ticketOrderItems = new Collection([$orderItem]);
@@ -340,7 +358,6 @@ class EventStatisticsIncrementServiceTest extends TestCase
 
         // Execute
         $this->service->incrementForOrder($order);
-
 
         $this->assertTrue(true);
     }

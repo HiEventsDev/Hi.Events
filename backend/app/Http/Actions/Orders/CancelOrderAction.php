@@ -22,9 +22,7 @@ class CancelOrderAction extends BaseAction
 {
     public function __construct(
         private readonly CancelOrderHandler $cancelOrderHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -45,7 +43,7 @@ class CancelOrderAction extends BaseAction
         } catch (ApiErrorException|RefundNotPossibleException $exception) {
             throw ValidationException::withMessages([
                 'refund' => $exception instanceof ApiErrorException
-                    ? 'Stripe error: ' . $exception->getMessage()
+                    ? 'Stripe error: '.$exception->getMessage()
                     : $exception->getMessage(),
             ]);
         }

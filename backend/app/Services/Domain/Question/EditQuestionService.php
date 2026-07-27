@@ -14,20 +14,17 @@ class EditQuestionService
 {
     public function __construct(
         private readonly QuestionRepositoryInterface $questionRepository,
-        private readonly DatabaseManager             $databaseManager,
-        private readonly HtmlPurifierService         $purifier,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly HtmlPurifierService $purifier,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function editQuestion(
         QuestionDomainObject $question,
-        array                $productIds,
-    ): QuestionDomainObject
-    {
+        array $productIds,
+    ): QuestionDomainObject {
         return $this->databaseManager->transaction(function () use ($question, $productIds) {
             $this->questionRepository->updateQuestion(
                 questionId: $question->getId(),

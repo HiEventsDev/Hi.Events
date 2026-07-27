@@ -4,12 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         $table = Schema::hasTable('tickets') ? 'tickets' : 'products';
 
-        if (!Schema::hasColumn($table, 'start_collapsed')) {
+        if (! Schema::hasColumn($table, 'start_collapsed')) {
             Schema::table($table, static function (Blueprint $table) {
                 $table->boolean('start_collapsed')->default(false);
             });

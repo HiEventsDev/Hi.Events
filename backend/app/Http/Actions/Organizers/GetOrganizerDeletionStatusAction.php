@@ -13,9 +13,7 @@ class GetOrganizerDeletionStatusAction extends BaseAction
 {
     public function __construct(
         private readonly OrganizerDeletionService $organizerDeletionService,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId): JsonResponse
     {

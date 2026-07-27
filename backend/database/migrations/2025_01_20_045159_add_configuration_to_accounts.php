@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::table('accounts', static function (Blueprint $table) {
@@ -16,7 +17,7 @@ return new class extends Migration {
             'application_fee' => [
                 'percentage' => config('app.saas_stripe_application_fee_percent'),
                 'fixed' => config('app.saas_stripe_application_fee_fixed') ?? 0,
-            ]
+            ],
         ]]);
     }
 

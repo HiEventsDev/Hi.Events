@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Services\Domain\PromoCode;
 
+use Carbon\Carbon;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
-use Carbon\Carbon;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
@@ -16,16 +16,16 @@ class PromoCodeUsageValidationServiceTest extends TestCase
 
     private const PROMO_CODE_ID = 5;
 
-    public function testNullPromoCodeIsNotUsable(): void
+    public function test_null_promo_code_is_not_usable(): void
     {
         $service = new PromoCodeUsageValidationService(Mockery::mock(OrderRepositoryInterface::class));
 
         $this->assertFalse($service->isPromoCodeUsable(null));
     }
 
-    public function testExpiredPromoCodeIsNotUsable(): void
+    public function test_expired_promo_code_is_not_usable(): void
     {
-        $promoCode = (new PromoCodeDomainObject())
+        $promoCode = (new PromoCodeDomainObject)
             ->setId(self::PROMO_CODE_ID)
             ->setExpiryDate(Carbon::now()->subDay()->toDateTimeString());
 
@@ -37,9 +37,9 @@ class PromoCodeUsageValidationServiceTest extends TestCase
         $this->assertFalse($service->isPromoCodeUsable($promoCode));
     }
 
-    public function testPromoCodeWithNoUsageLimitIsUsable(): void
+    public function test_promo_code_with_no_usage_limit_is_usable(): void
     {
-        $promoCode = (new PromoCodeDomainObject())
+        $promoCode = (new PromoCodeDomainObject)
             ->setId(self::PROMO_CODE_ID)
             ->setMaxAllowedUsages(null);
 
@@ -51,9 +51,9 @@ class PromoCodeUsageValidationServiceTest extends TestCase
         $this->assertTrue($service->isPromoCodeUsable($promoCode));
     }
 
-    public function testPromoCodeIsUsableWhenLiveCountIsUnderLimit(): void
+    public function test_promo_code_is_usable_when_live_count_is_under_limit(): void
     {
-        $promoCode = (new PromoCodeDomainObject())
+        $promoCode = (new PromoCodeDomainObject)
             ->setId(self::PROMO_CODE_ID)
             ->setMaxAllowedUsages(2)
             ->setOrderUsageCount(0);
@@ -68,10 +68,10 @@ class PromoCodeUsageValidationServiceTest extends TestCase
         $this->assertTrue($service->isPromoCodeUsable($promoCode));
     }
 
-    public function testPromoCodeIsNotUsableWhenLiveCountReachesLimit(): void
+    public function test_promo_code_is_not_usable_when_live_count_reaches_limit(): void
     {
         // Stale order_usage_count is 0 (passes isValid), but the live count has reached the limit.
-        $promoCode = (new PromoCodeDomainObject())
+        $promoCode = (new PromoCodeDomainObject)
             ->setId(self::PROMO_CODE_ID)
             ->setMaxAllowedUsages(1)
             ->setOrderUsageCount(0);

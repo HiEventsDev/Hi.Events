@@ -5,6 +5,9 @@ namespace HiEvents\Http\Actions\Attendees;
 use HiEvents\DomainObjects\AttendeeCheckInDomainObject;
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
@@ -47,12 +50,21 @@ class GetAttendeeAction extends BaseAction
                 ],
                 name: 'check_ins'
             ))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ], name: 'event_location'),
+                ],
+                name: 'event_occurrence',
+            ))
             ->findFirstWhere([
                 'id' => $attendeeId,
                 'event_id' => $eventId,
             ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             return $this->notFoundResponse();
         }
 

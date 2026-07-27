@@ -15,8 +15,7 @@ class ResendOrderConfirmationPublicHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly SelfServiceResendEmailService $selfServiceResendEmailService,
-    ) {
-    }
+    ) {}
 
     public function handle(ResendEmailPublicDTO $dto): void
     {

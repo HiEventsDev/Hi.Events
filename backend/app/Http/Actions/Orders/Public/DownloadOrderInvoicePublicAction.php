@@ -10,9 +10,7 @@ class DownloadOrderInvoicePublicAction extends BaseAction
 {
     public function __construct(
         private readonly DownloadOrderInvoicePublicHandler $downloadOrderInvoicePublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $orderShortId): Response
     {

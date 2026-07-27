@@ -9,4 +9,5 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
  */
 interface OrderItemRepositoryInterface extends RepositoryInterface
 {
+    public function getReservedQuantityForOccurrence(int $occurrenceId): int;
 }

@@ -1,18 +1,16 @@
 import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
-import {IconAdjustmentsCog, IconCreditCard, IconReceiptTax, IconUsers} from "@tabler/icons-react";
+import {IconAdjustmentsCog, IconReceiptTax, IconUsers} from "@tabler/icons-react";
 import {Outlet, useLocation, useNavigate} from "react-router";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
-import { useGetAccount } from "../../../../queries/useGetAccount.ts";
 
 export const ManageAccount = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const tabValue = location.pathname.split('/').pop() || 'settings';
     const isUserAdmin = useIsCurrentUserAdmin();
-    const {data: account} = useGetAccount();
 
     return (
         <div className={classes.container}>
@@ -30,12 +28,6 @@ export const ManageAccount = () => {
                         {isUserAdmin && (
                             <Tabs.Tab value="users" leftSection={<IconUsers/>}>
                                 {t`Users`}
-                            </Tabs.Tab>
-                        )}
-
-                        {(isUserAdmin && account && account.is_saas_mode_enabled) && (
-                            <Tabs.Tab value="payment" leftSection={<IconCreditCard/>}>
-                                {t`Payment & Plan`}
                             </Tabs.Tab>
                         )}
                     </Tabs.List>

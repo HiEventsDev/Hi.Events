@@ -9,17 +9,19 @@ interface JoinWaitlistButtonProps {
     event: Event;
     productPriceId: IdParam;
     priceLabel?: string;
+    eventOccurrenceId?: IdParam;
 }
 
-export const JoinWaitlistButton = ({product, event, productPriceId, priceLabel}: JoinWaitlistButtonProps) => {
+export const JoinWaitlistButton = ({product, event, productPriceId, priceLabel, eventOccurrenceId}: JoinWaitlistButtonProps) => {
     const [modalOpen, {open: openModal, close: closeModal}] = useDisclosure(false);
-    const {joined: hasJoined, markJoined} = useWaitlistJoined(event.id, productPriceId);
+    const {joined: hasJoined, markJoined} = useWaitlistJoined(event.id, productPriceId, eventOccurrenceId);
 
     return (
         <>
             <button
                 type="button"
                 className="hi-waitlist-button"
+                data-testid="join-waitlist-button"
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -37,6 +39,7 @@ export const JoinWaitlistButton = ({product, event, productPriceId, priceLabel}:
                     event={event}
                     productPriceId={productPriceId}
                     priceLabel={priceLabel}
+                    eventOccurrenceId={eventOccurrenceId}
                     onSuccess={() => {
                         markJoined();
                         closeModal();

@@ -18,7 +18,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
         return [
             function ($validator) {
                 $pixels = $this->input('tracking_pixels', []);
-                if (!is_array($pixels)) {
+                if (! is_array($pixels)) {
                     return;
                 }
 
@@ -34,11 +34,12 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
                         );
+
                         continue;
                     }
 
                     if ($provider && $pixelId !== '') {
-                        if (!preg_match($provider->pixelIdPattern(), $pixelId)) {
+                        if (! preg_match($provider->pixelIdPattern(), $pixelId)) {
                             $validator->errors()->add(
                                 "tracking_pixels.{$index}.pixel_id",
                                 $provider->pixelIdFormatDescription()
@@ -47,8 +48,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                     }
                 }
 
-                $enabledPixels = collect($pixels)->filter(fn ($p) => !empty($p['enabled']));
-                if ($enabledPixels->isNotEmpty() && !$this->input('tracking_consent_acknowledged')) {
+                $enabledPixels = collect($pixels)->filter(fn ($p) => ! empty($p['enabled']));
+                if ($enabledPixels->isNotEmpty() && ! $this->input('tracking_consent_acknowledged')) {
                     $validator->errors()->add(
                         'tracking_consent_acknowledged',
                         __('You must acknowledge your data controller responsibilities before enabling tracking pixels.')
@@ -91,16 +92,6 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'github_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
 
             'website_url' => ['sometimes', 'nullable', 'url'],
-
-            // Location details
-            'location_details' => ['sometimes', 'array'],
-            'location_details.venue_name' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_1' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.address_line_2' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'location_details.city' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.state_or_region' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.zip_or_postal_code' => ['sometimes', 'nullable', 'string', 'max:85'],
-            'location_details.country' => ['sometimes', 'nullable', 'string', 'max:2'],
 
             // Homepage
             'homepage_visibility' => ['nullable', Rule::in(OrganizerHomepageVisibility::valuesArray())],

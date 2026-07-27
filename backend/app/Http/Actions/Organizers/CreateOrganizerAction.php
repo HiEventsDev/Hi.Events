@@ -12,9 +12,7 @@ use Illuminate\Http\JsonResponse;
 
 class CreateOrganizerAction extends BaseAction
 {
-    public function __construct(private readonly CreateOrganizerHandler $createOrganizerHandler)
-    {
-    }
+    public function __construct(private readonly CreateOrganizerHandler $createOrganizerHandler) {}
 
     public function __invoke(UpsertOrganizerRequest $request): JsonResponse
     {

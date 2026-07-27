@@ -17,13 +17,14 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
     const image = coverImage || logoImage;
     const url = organizerHomepageUrl(organizer);
 
-    const address = organizerSettings?.location_details ? {
+    const structuredAddress = organizer.location?.structured_address;
+    const address = structuredAddress ? {
         "@type": "http://schema.org/PostalAddress",
-        streetAddress: organizerSettings.location_details.address_line_1,
-        addressLocality: organizerSettings.location_details.city,
-        addressRegion: organizerSettings.location_details.state_or_region,
-        postalCode: organizerSettings.location_details.zip_or_postal_code,
-        addressCountry: organizerSettings.location_details.country
+        streetAddress: structuredAddress.address_line_1,
+        addressLocality: structuredAddress.city,
+        addressRegion: structuredAddress.state_or_region,
+        postalCode: structuredAddress.zip_or_postal_code,
+        addressCountry: structuredAddress.country
     } : undefined;
 
     // Filter out undefined address properties
@@ -39,7 +40,7 @@ export const OrganizerDocumentHead = ({organizer}: OrganizerDocumentHeadProps) =
 
     const location = address && Object.keys(address).length > 1 ? {
         "@type": "http://schema.org/Place",
-        name: organizerSettings?.location_details?.venue_name,
+        name: organizer.location?.name ?? structuredAddress?.venue_name,
         address
     } : undefined;
 

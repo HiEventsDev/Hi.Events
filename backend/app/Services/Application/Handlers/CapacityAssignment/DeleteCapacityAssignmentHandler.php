@@ -13,11 +13,9 @@ class DeleteCapacityAssignmentHandler
 {
     public function __construct(
         private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
-        private readonly ProductRepositoryInterface            $productRepository,
-        private readonly DatabaseManager                       $databaseManager,
-    )
-    {
-    }
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function handle(int $id, int $eventId): void
     {

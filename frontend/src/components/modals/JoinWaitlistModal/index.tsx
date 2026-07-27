@@ -1,5 +1,5 @@
 import {useMemo, useState} from "react";
-import {Event, GenericModalProps, IdParam, JoinWaitlistRequest, Product} from "../../../types.ts";
+import {Event, EventType, GenericModalProps, IdParam, JoinWaitlistRequest, Product} from "../../../types.ts";
 import {hasLength, isEmail, useForm} from "@mantine/form";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useJoinWaitlist} from "../../../mutations/useJoinWaitlist.ts";
@@ -9,6 +9,8 @@ import {InputGroup} from "../../common/InputGroup";
 import {CheckoutThemeProvider} from "../../layouts/Checkout/CheckoutThemeProvider.tsx";
 import {detectMode} from "../../../utilites/themeUtils.ts";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
+import {formatDateWithLocale, getSafeLocale} from "../../../utilites/dates.ts";
+import {getClientLocale} from "../../../locales.ts";
 
 const DEFAULT_ACCENT = '#8b5cf6';
 
@@ -16,17 +18,25 @@ interface JoinWaitlistModalProps extends GenericModalProps {
     product: Product;
     event: Event;
     productPriceId: IdParam;
+    eventOccurrenceId?: IdParam;
     priceLabel?: string;
     onSuccess: () => void;
 }
 
-export const JoinWaitlistModal = ({onClose, product, event, productPriceId, priceLabel, onSuccess}: JoinWaitlistModalProps) => {
+export const JoinWaitlistModal = ({onClose, product, event, productPriceId, eventOccurrenceId, priceLabel, onSuccess}: JoinWaitlistModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const mutation = useJoinWaitlist();
     const [status, setStatus] = useState<'form' | 'success' | 'error'>('form');
     const [errorMessage, setErrorMessage] = useState('');
 
     const productDisplayName = priceLabel ? `${product?.title} - ${priceLabel}` : product?.title;
+
+    const occurrence = (event?.type === EventType.RECURRING && eventOccurrenceId)
+        ? event?.occurrences?.find(o => Number(o.id) === Number(eventOccurrenceId))
+        : undefined;
+    const occurrenceDate = occurrence
+        ? formatDateWithLocale(occurrence.start_date, 'shortDateTime', event.timezone, getSafeLocale(getClientLocale()))
+        : null;
 
     const homepageSettings = event?.settings?.homepage_theme_settings;
     const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
@@ -56,6 +66,7 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
             data: {
                 ...values,
                 product_price_id: Number(productPriceId),
+                event_occurrence_id: eventOccurrenceId ? Number(eventOccurrenceId) : undefined,
             },
         }, {
             onSuccess: () => {
@@ -97,7 +108,9 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                             {t`You're on the waitlist!`}
                         </Text>
                         <Text size="sm" c="dimmed" mb="xl">
-                            {t`We'll notify you by email if a spot becomes available for ${productDisplayName}.`}
+                            {occurrenceDate
+                                ? t`We'll notify you by email if a spot becomes available for ${productDisplayName} on ${occurrenceDate}.`
+                                : t`We'll notify you by email if a spot becomes available for ${productDisplayName}.`}
                         </Text>
                         <Button fullWidth onClick={handleClose}>
                             {t`Close`}
@@ -155,6 +168,11 @@ export const JoinWaitlistModal = ({onClose, product, event, productPriceId, pric
                     }}
                     style={{padding: '0 15px 15px'}}
                 >
+                    {occurrenceDate && (
+                        <Text size="sm" c="dimmed" mb="md">
+                            {t`You're joining the waitlist for ${occurrenceDate}.`}
+                        </Text>
+                    )}
                     <InputGroup>
                         <TextInput
                             {...form.getInputProps('first_name')}

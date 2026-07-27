@@ -13,11 +13,9 @@ use Illuminate\Http\Request;
 class GetOrderActionPublic extends BaseAction
 {
     public function __construct(
-        private readonly GetOrderPublicHandler            $getOrderPublicHandler,
+        private readonly GetOrderPublicHandler $getOrderPublicHandler,
         private readonly CheckoutSessionManagementService $sessionService,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $orderShortId, Request $request): JsonResponse
     {

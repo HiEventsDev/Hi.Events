@@ -14,12 +14,10 @@ use Stripe\Charge;
 class ChargeSucceededHandler
 {
     public function __construct(
-        private readonly StripePaymentsRepository                  $stripePaymentsRepository,
+        private readonly StripePaymentsRepository $stripePaymentsRepository,
         private readonly StripePaymentPlatformFeeExtractionService $platformFeeExtractionService,
-        private readonly LoggerInterface                           $logger,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function handleEvent(Charge $charge): void
     {
@@ -34,31 +32,34 @@ class ChargeSucceededHandler
                 'charge_id' => $charge->id,
                 'status' => $charge->status,
             ]);
+
             return;
         }
 
-        /**@var StripePaymentDomainObject $stripePayment */
+        /** @var StripePaymentDomainObject $stripePayment */
         $stripePayment = $this->stripePaymentsRepository
             ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order'))
             ->findFirstWhere([
                 StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $charge->payment_intent,
             ]);
 
-        if (!$stripePayment) {
+        if (! $stripePayment) {
             $this->logger->warning(__('Stripe payment not found for charge'), [
                 'charge_id' => $charge->id,
                 'payment_intent_id' => $charge->payment_intent,
             ]);
+
             return;
         }
 
         $order = $stripePayment->getOrder();
-        if (!$order) {
+        if (! $order) {
             $this->logger->warning(__('Order not found for charge'), [
                 'charge_id' => $charge->id,
                 'payment_intent_id' => $charge->payment_intent,
                 'stripe_payment_id' => $stripePayment->getId(),
             ]);
+
             return;
         }
 

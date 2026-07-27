@@ -8,20 +8,19 @@ use InvalidArgumentException;
 class Relationship
 {
     public function __construct(
-        private readonly string  $domainObject,
+        private readonly string $domainObject,
         /**
          * @var Relationship[]|null
          */
-        private readonly ?array  $nested = [],
+        private readonly ?array $nested = [],
 
         private readonly ?string $name = null,
 
         /**
          * @var OrderAndDirection[]
          */
-        private readonly array   $orderAndDirections = [],
-    )
-    {
+        private readonly array $orderAndDirections = [],
+    ) {
         $this->validate();
     }
 
@@ -48,7 +47,7 @@ class Relationship
     public function buildLaravelEagerLoadArray(): array
     {
         $results = [
-            $this->getName() => $this->buildOrderAndDirectionEloquentCallback()
+            $this->getName() => $this->buildOrderAndDirectionEloquentCallback(),
         ];
 
         // If there are nested relationships, build them and merge into the results array
@@ -65,8 +64,8 @@ class Relationship
 
         if ($relationship->nested) {
             foreach ($relationship->nested as $nested) {
-                $nestedPrefix = $prefix === '' ? $relationship->getName() : $prefix . '.' . $relationship->getName();
-                $results[$nestedPrefix . '.' . $nested->getName()] = $nested->buildOrderAndDirectionEloquentCallback();
+                $nestedPrefix = $prefix === '' ? $relationship->getName() : $prefix.'.'.$relationship->getName();
+                $results[$nestedPrefix.'.'.$nested->getName()] = $nested->buildOrderAndDirectionEloquentCallback();
                 $results = array_merge($results, $this->buildNested($nested, $nestedPrefix));
             }
         }
@@ -89,7 +88,7 @@ class Relationship
 
     private function validate(): void
     {
-        if (!is_subclass_of($this->domainObject, DomainObjectInterface::class)) {
+        if (! is_subclass_of($this->domainObject, DomainObjectInterface::class)) {
             throw new InvalidArgumentException(
                 __('DomainObject must be a valid :interface.', [
                     'interface' => DomainObjectInterface::class,
@@ -98,7 +97,7 @@ class Relationship
         }
 
         foreach ($this->nested as $nested) {
-            if (!is_a($nested, __CLASS__)) {
+            if (! is_a($nested, __CLASS__)) {
                 throw new InvalidArgumentException(
                     __('Nested relationships must be an array of Relationship objects.'),
                 );
@@ -106,7 +105,7 @@ class Relationship
         }
 
         foreach ($this->orderAndDirections as $orderAndDirection) {
-            if (!is_a($orderAndDirection, OrderAndDirection::class)) {
+            if (! is_a($orderAndDirection, OrderAndDirection::class)) {
                 throw new InvalidArgumentException(
                     __('OrderAndDirections must be an array of OrderAndDirection objects.'),
                 );

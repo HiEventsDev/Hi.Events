@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class OrderAuditLogDomainObject extends Generated\OrderAuditLogDomainObjectAbstract
-{
-}
+class OrderAuditLogDomainObject extends Generated\OrderAuditLogDomainObjectAbstract {}

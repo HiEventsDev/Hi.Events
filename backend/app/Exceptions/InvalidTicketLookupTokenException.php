@@ -4,7 +4,4 @@ namespace HiEvents\Exceptions;
 
 use Exception;
 
-class InvalidTicketLookupTokenException extends Exception
-{
-
-}
+class InvalidTicketLookupTokenException extends Exception {}

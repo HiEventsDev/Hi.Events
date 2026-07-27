@@ -4,12 +4,10 @@ namespace Tests\Unit\Jobs\Message;
 
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
-use HiEvents\Jobs\Event\SendMessagesJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Services\Domain\Message\MessageDispatchService;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Bus;
 use Mockery as m;
 use RuntimeException;
 use Tests\TestCase;
@@ -17,6 +15,7 @@ use Tests\TestCase;
 class SendScheduledMessagesJobTest extends TestCase
 {
     private MessageRepositoryInterface $messageRepository;
+
     private MessageDispatchService $messageDispatchService;
 
     protected function setUp(): void
@@ -26,7 +25,7 @@ class SendScheduledMessagesJobTest extends TestCase
         $this->messageDispatchService = m::mock(MessageDispatchService::class);
     }
 
-    public function testPicksUpScheduledMessagesWithPastScheduledAt(): void
+    public function test_picks_up_scheduled_messages_with_past_scheduled_at(): void
     {
         $message = m::mock(MessageDomainObject::class);
 
@@ -43,11 +42,11 @@ class SendScheduledMessagesJobTest extends TestCase
             ->once()
             ->with($message);
 
-        $job = new SendScheduledMessagesJob();
+        $job = new SendScheduledMessagesJob;
         $job->handle($this->messageRepository, $this->messageDispatchService);
     }
 
-    public function testDoesNotPickUpFutureScheduledMessages(): void
+    public function test_does_not_pick_up_future_scheduled_messages(): void
     {
         $this->messageRepository->shouldReceive('findWhere')
             ->once()
@@ -55,11 +54,11 @@ class SendScheduledMessagesJobTest extends TestCase
 
         $this->messageDispatchService->shouldNotReceive('dispatchMessage');
 
-        $job = new SendScheduledMessagesJob();
+        $job = new SendScheduledMessagesJob;
         $job->handle($this->messageRepository, $this->messageDispatchService);
     }
 
-    public function testDoesNotPickUpCancelledMessages(): void
+    public function test_does_not_pick_up_cancelled_messages(): void
     {
         $this->messageRepository->shouldReceive('findWhere')
             ->once()
@@ -70,11 +69,11 @@ class SendScheduledMessagesJobTest extends TestCase
 
         $this->messageDispatchService->shouldNotReceive('dispatchMessage');
 
-        $job = new SendScheduledMessagesJob();
+        $job = new SendScheduledMessagesJob;
         $job->handle($this->messageRepository, $this->messageDispatchService);
     }
 
-    public function testContinuesProcessingWhenOneMessageFails(): void
+    public function test_continues_processing_when_one_message_fails(): void
     {
         $message1 = m::mock(MessageDomainObject::class);
         $message1->shouldReceive('getId')->andReturn(1);
@@ -94,7 +93,7 @@ class SendScheduledMessagesJobTest extends TestCase
             ->once()
             ->with($message2);
 
-        $job = new SendScheduledMessagesJob();
+        $job = new SendScheduledMessagesJob;
         $job->handle($this->messageRepository, $this->messageDispatchService);
     }
 }

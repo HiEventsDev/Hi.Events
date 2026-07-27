@@ -14,10 +14,12 @@ class LoginTest extends TestCase
     use RefreshDatabase;
 
     private const LOGIN_ROUTE = '/auth/login';
+
     private const LOGOUT_ROUTE = '/auth/logout';
+
     private const USERS_ME_ROUTE = '/users/me';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -28,7 +30,7 @@ class LoginTest extends TestCase
             'application_fees' => [
                 'percentage' => 1.5,
                 'fixed' => 0,
-            ]
+            ],
         ]);
     }
 
@@ -50,7 +52,7 @@ class LoginTest extends TestCase
             'token_type',
             'expires_in',
             'user',
-            'accounts'
+            'accounts',
         ]);
     }
 
@@ -69,7 +71,6 @@ class LoginTest extends TestCase
         $response->assertHeaderMissing('X-Auth-Token');
     }
 
-
     public function test_logout(): void
     {
         $password = fake()->password(16);
@@ -82,14 +83,14 @@ class LoginTest extends TestCase
         $response->assertCookie('token');
 
         $response2 = $this->postJson(self::LOGOUT_ROUTE, [], [
-            'Authorization' => 'Bearer ' . $response->headers->get('X-Auth-Token'),
+            'Authorization' => 'Bearer '.$response->headers->get('X-Auth-Token'),
         ]);
         $response2->assertStatus(200);
         $response2->assertCookieExpired('token');
 
         // try to use the expired token
         $response3 = $this->getJson(self::USERS_ME_ROUTE, [
-            'Authorization' => 'Bearer ' . $response->headers->get('X-Auth-Token'),
+            'Authorization' => 'Bearer '.$response->headers->get('X-Auth-Token'),
         ]);
         $response3->assertStatus(401);
     }
