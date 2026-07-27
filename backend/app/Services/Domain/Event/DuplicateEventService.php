@@ -218,15 +218,6 @@ class DuplicateEventService
         ]);
     }
 
-    /**
-     * The source's `excluded_dates` and `excluded_occurrences` both correspond
-     * to occurrences that were cancelled or deleted on the original event —
-     * those records aren't cloned (we only clone ACTIVE occurrences), so
-     * carrying their dates as exclusions on the duplicate would forever block
-     * those dates from regenerating with no record explaining why. Strip both
-     * on clone — additional_dates stay since they represent rule additions,
-     * not cancellations.
-     */
     private function stripStaleExclusions(?array $rule): ?array
     {
         if ($rule === null) {
@@ -400,17 +391,10 @@ class DuplicateEventService
         array $oldToNewOccurrenceMap = [],
     ): void {
         foreach ($event->getCheckInLists() as $checkInList) {
-            // CreateEventService already auto-created a system_default list on the
-            // new event — cloning the source's would produce two equivalent
-            // "covers every ticket" lists. Skip it.
             if ($checkInList->getIsSystemDefault()) {
                 continue;
             }
 
-            // Preserve occurrence scope: a list scoped to one source occurrence
-            // should map to the cloned occurrence on the duplicate. If the
-            // source occurrence was filtered out of the clone (cancelled or
-            // past), drop the scope rather than leaving it stale.
             $sourceOccurrenceId = $checkInList->getEventOccurrenceId();
             $newOccurrenceId = $sourceOccurrenceId !== null
                 ? ($oldToNewOccurrenceMap[$sourceOccurrenceId] ?? null)

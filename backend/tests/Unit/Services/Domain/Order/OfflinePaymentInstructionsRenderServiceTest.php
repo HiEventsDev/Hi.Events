@@ -62,8 +62,6 @@ class OfflinePaymentInstructionsRenderServiceTest extends TestCase
     public function test_render_failure_leaves_original_instructions(): void
     {
         $order = $this->makeOrder('<p>Use {{ order.number }}</p>');
-        // Force the context builder to throw while rendering (Carbon can't parse
-        // this created_at), which must leave the instructions untouched.
         $order->setCreatedAt('not-a-valid-date');
 
         $this->service()->renderForOrder($order);

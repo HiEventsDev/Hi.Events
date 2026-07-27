@@ -29,11 +29,6 @@ class GenerateOccurrencesRequest extends BaseRequest
                     return;
                 }
 
-                // For array entries we validate `time` here rather than via the
-                // sibling `*.time` rule because Laravel's `required_if:foo,value`
-                // compares foo to the literal string "value" and has no built-in
-                // way to express "required when the parent is an array" — the
-                // sibling rule never fires for these entries.
                 if (is_array($value)) {
                     if (! isset($value['time']) || ! is_string($value['time'])) {
                         $fail(__('Each time of day object must include a time field.'));

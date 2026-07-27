@@ -35,10 +35,6 @@ class EventStatisticsRefundService
         $this->updateAggregateStatisticsForRefund($order, $refundAmount);
         $this->updateDailyStatisticsForRefund($order, $refundAmount);
 
-        // Occurrence stats need order items eager-loaded; the aggregate / daily paths
-        // do not. Load + group once and pass the result down so the per-occurrence and
-        // per-occurrence-per-day updates do not each repeat the SELECT and the in-memory
-        // grouping. Skips the occurrence pass entirely for non-recurring orders.
         $orderWithItems = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->findById($order->getId());
@@ -176,11 +172,6 @@ class EventStatisticsRefundService
     }
 
     /**
-     * Atomically applies the refund delta to per-occurrence stats. Uses raw SQL increments
-     * (rather than read-modify-write) so concurrent refunds on the same occurrence cannot
-     * lose updates. Version is bumped so any concurrent reader using optimistic locking
-     * (e.g. EventStatisticsIncrementService) detects the change.
-     *
      * @param  array<int, OrderItemDomainObject[]>  $itemsByOccurrence
      */
     private function updateOccurrenceStatisticsForRefund(array $itemsByOccurrence, float $refundProportion): void
@@ -210,9 +201,6 @@ class EventStatisticsRefundService
     }
 
     /**
-     * Atomic per-occurrence-per-day refund stats update. See updateOccurrenceStatisticsForRefund
-     * for the rationale behind raw SQL increments.
-     *
      * @param  array<int, OrderItemDomainObject[]>  $itemsByOccurrence
      */
     private function updateOccurrenceDailyStatisticsForRefund(int $eventId, array $itemsByOccurrence, float $refundProportion, string $refundDate): void
@@ -268,9 +256,6 @@ class EventStatisticsRefundService
         }
     }
 
-    /**
-     * Locale-safe float-to-SQL formatter for inline numeric literals.
-     */
     private function formatDelta(float $value): string
     {
         return number_format($value, 4, '.', '');

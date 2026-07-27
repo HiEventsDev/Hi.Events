@@ -78,10 +78,6 @@ class ProcessWaitlistService
             }
 
             $offeredEntries = collect();
-            // Capacity is fetched once per (occurrence, price) and decremented
-            // in-flight as offers are issued, so the loop neither re-runs the
-            // multi-CTE availability query per entry nor over-offers when
-            // multiple waiting entries share an occurrence.
             $remainingByOccurrenceAndPrice = [];
 
             foreach ($entries as $entry) {
@@ -91,13 +87,6 @@ class ProcessWaitlistService
                     continue;
                 }
 
-                // Re-validate the occurrence + product visibility right before
-                // offering. The entry was validated when it was created, but
-                // the date can be cancelled, age past, or have its product
-                // visibility changed before this listener fires. Skip those
-                // entries silently — they should be cancelled out-of-band by
-                // the cancel/regen flows, but defending here means a stale
-                // entry never produces an offer email pointing at a dead date.
                 if (! $this->isOccurrenceStillEligibleForEntry($event, $occurrenceId, $entry)) {
                     continue;
                 }
@@ -200,12 +189,6 @@ class ProcessWaitlistService
         });
     }
 
-    /**
-     * Checks the occurrence is still cancellable / not past, and that the
-     * waitlisted product remains visible on it. Wraps the eligibility service
-     * with `overrideCapacity: true` because the caller has already done its
-     * own capacity arithmetic and we only want the lifecycle gates here.
-     */
     private function isOccurrenceStillEligibleForEntry(
         EventDomainObject $event,
         int $occurrenceId,
@@ -358,14 +341,6 @@ class ProcessWaitlistService
 
     private function hasCapacityForEntry(WaitlistEntryDomainObject $entry, EventDomainObject $event): bool
     {
-        // resolveEventOccurrenceId can throw two ways for an entry we cannot
-        // confidently route:
-        //   - ResourceConflictException: orphan entry on a recurring event
-        //     (FK cascaded null after delete)
-        //   - ResourceNotFoundException: single event has no occurrences at
-        //     all (degenerate state, but possible during creation flows)
-        // Either case → treat as "no capacity" so the offer batch skips it
-        // instead of crashing the entire waitlist run for that price.
         try {
             $eventOccurrenceId = $this->resolveEventOccurrenceId($event, $entry);
         } catch (ResourceConflictException|ResourceNotFoundException) {

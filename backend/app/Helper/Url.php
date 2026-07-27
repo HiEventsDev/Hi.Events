@@ -43,9 +43,6 @@ class Url
     }
 
     /**
-     * Generates a CDN URL for the given path if a CDN URL is configured.
-     * Falls back to generating a URL using the specified or default filesystem disk.
-     *
      * @param  string  $path  The relative path to the asset.
      * @return string The fully qualified URL to the asset, either via CDN or storage disk.
      */

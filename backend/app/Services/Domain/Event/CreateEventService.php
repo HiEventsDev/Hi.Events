@@ -78,10 +78,6 @@ class CreateEventService
         });
     }
 
-    /**
-     * Every event gets a default "covers every ticket" check-in list at creation
-     * time so staff can open check-in the moment tickets exist.
-     */
     private function createSystemDefaultCheckInList(EventDomainObject $event): void
     {
         $this->checkInListRepository->create([
@@ -256,9 +252,6 @@ class CreateEventService
             'organization_address' => null,
             'invoice_tax_details' => null,
 
-            // Recurring events default to per-order collection — each order typically
-            // covers multiple sessions, and collecting per-attendee details every time
-            // is high friction. Single events inherit the organizer-level default.
             'attendee_details_collection_method' => $event->getType() === EventType::RECURRING->name
                 ? AttendeeDetailsCollectionMethod::PER_ORDER->value
                 : $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),

@@ -7,11 +7,6 @@ import {formatDateWithLocale} from "../../../utilites/dates.ts";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-/**
- * Pure presentation + filtering helpers shared by occurrence pickers
- * (OccurrenceSelect, check-in filter pill). Keeps rendering in the consumer.
- */
-
 export const formatOccurrenceLabel = (occ: EventOccurrence, tz: string): string => {
     const date = formatDateWithLocale(occ.start_date, 'shortDate', tz);
     const time = formatDateWithLocale(occ.start_date, 'timeOnly', tz);
@@ -38,11 +33,8 @@ export interface OccurrenceGroup {
 
 export interface FilterAndGroupResult {
     grouped: OccurrenceGroup[];
-    /** Total occurrences after cancellation filter, before search/visibility cap. */
     totalAvailable: number;
-    /** Matching occurrences after the search filter is applied. */
     totalFiltered: number;
-    /** Whether the visible list was truncated by maxVisible. */
     truncated: boolean;
 }
 
@@ -54,10 +46,6 @@ interface FilterOptions {
     maxVisible?: number;
 }
 
-/**
- * Filter, group by month (in the event's tz), and cap the visible entries.
- * Consumers use the `truncated` flag to show a "type to search" hint.
- */
 export const filterAndGroupOccurrences = (
     occurrences: EventOccurrence[],
     {search, tz, filterCancelled = true, filterPast = false, maxVisible = 50}: FilterOptions,

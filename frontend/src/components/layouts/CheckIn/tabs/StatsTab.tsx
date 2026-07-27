@@ -9,11 +9,6 @@ import classes from "./StatsTab.module.scss";
 interface StatsTabProps {
     checkInListShortId: IdParam;
     enabled: boolean;
-    /**
-     * When the staff has narrowed an unscoped check-in list via the filter pill,
-     * pass the selected occurrence id so the stats endpoint returns counts for
-     * that session instead of the whole list.
-     */
     eventOccurrenceId?: number | null;
 }
 
@@ -39,7 +34,6 @@ export const StatsTab = ({checkInListShortId, enabled, eventOccurrenceId}: Stats
     const stats = statsQuery.data?.data;
     const [now, setNow] = useState(() => Date.now());
 
-    // Recompute throughput every 15s so the window stays accurate without a refetch.
     useEffect(() => {
         const id = setInterval(() => setNow(Date.now()), 15_000);
         return () => clearInterval(id);

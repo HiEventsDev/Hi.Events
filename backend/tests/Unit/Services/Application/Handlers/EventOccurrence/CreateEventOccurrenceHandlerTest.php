@@ -62,8 +62,6 @@ class CreateEventOccurrenceHandlerTest extends TestCase
 
     public function test_creates_occurrence_inheriting_event_location_when_no_event_location_payload(): void
     {
-        // No event_location override on the DTO — the occurrence should inherit
-        // by carrying a null event_location_id. The upserter must not be touched.
         $dto = new UpsertEventOccurrenceDTO(
             event_id: 1,
             start_date: '2026-06-01 10:00:00',
@@ -211,12 +209,6 @@ class CreateEventOccurrenceHandlerTest extends TestCase
 
     public function test_throws_when_event_not_found_for_override(): void
     {
-        // event_location is set but the event lookup throws — the upserter
-        // never runs and the occurrence never gets created. Note the handler
-        // also has an explicit `=== null` guard which is unreachable in
-        // production because `findById`'s contract is non-nullable
-        // (BaseRepository throws ModelNotFoundException), so the realistic
-        // failure surface is the bubble-up.
         $dto = new UpsertEventOccurrenceDTO(
             event_id: 999,
             start_date: '2026-06-01 10:00:00',

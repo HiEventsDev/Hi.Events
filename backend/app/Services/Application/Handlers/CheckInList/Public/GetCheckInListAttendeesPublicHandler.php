@@ -57,10 +57,6 @@ class GetCheckInListAttendeesPublicHandler
         return $attendees;
     }
 
-    /**
-     * Force the attendee query to the list's own occurrence when set; otherwise
-     * honour the client's filter (that's how the optional filter pill works).
-     */
     private function applyCheckInListOccurrenceScope(
         CheckInListDomainObject $checkInList,
         QueryParamsDTO $queryParams,

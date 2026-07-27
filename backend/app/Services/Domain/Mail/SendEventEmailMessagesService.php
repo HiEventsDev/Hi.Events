@@ -195,11 +195,6 @@ class SendEventEmailMessagesService
         $this->emailAttendees($attendees, $messageData, $event);
     }
 
-    /**
-     * Returns the `where` fragment scoping to the target occurrences.
-     * event_occurrence_ids wins over event_occurrence_id when both are set
-     * (the validator forbids that combo anyway).
-     */
     private function occurrenceWhere(SendMessageDTO $messageData): array
     {
         if (! empty($messageData->event_occurrence_ids)) {

@@ -11,10 +11,6 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin EventLocationDomainObject
- *
- * Public-surface projection of an EventLocation. Mirrors EventLocationResource
- * but embeds LocationPublicResource (no internal IDs / provider metadata)
- * and gates online_event_connection_details behind the post-checkout flag.
  */
 class EventLocationResourcePublic extends BaseResource
 {

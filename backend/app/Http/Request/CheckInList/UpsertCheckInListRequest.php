@@ -17,7 +17,6 @@ class UpsertCheckInListRequest extends BaseRequest
             'description' => ['nullable', 'string', 'max:2000'],
             'expires_at' => ['nullable', 'date'],
             'activates_at' => ['nullable', 'date'],
-            // Empty/absent = "covers every ticket on the event".
             'product_ids' => ['nullable', 'array'],
             'event_occurrence_id' => [
                 'nullable',

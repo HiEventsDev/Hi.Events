@@ -29,11 +29,6 @@ export const showError = (message: React.ReactNode, icon: ReactNode = <IconX/>) 
     })
 }
 
-/**
- * Success toast with an inline "Undo" action. Matches the same position and palette as
- * showSuccess so the two look at home next to each other. The undo handler runs only if
- * the user clicks before the toast auto-closes.
- */
 export const showSuccessWithUndo = (
     message: ReactNode,
     onUndo: () => void,

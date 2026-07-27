@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Hash;
 class UserFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -42,9 +40,6 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Set the user's password.
-     */
     public function password(string $password): static
     {
         return $this->state(fn (array $attributes) => [
@@ -52,9 +47,6 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -62,9 +54,6 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Saves an Account to the database and attaches it to the user.
-     */
     public function withAccount(): static
     {
         return $this->afterCreating(function (User $user): void {

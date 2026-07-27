@@ -24,11 +24,6 @@ use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * End-to-end canary for the event_location pivot. Exercises hydration,
- * occurrence inherit/override semantics, orphan cleanup, and the
- * pre/post-checkout gate on online_event_connection_details.
- */
 class EventLocationCanaryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -97,8 +92,6 @@ class EventLocationCanaryTest extends TestCase
 
     public function test_occurrence_inherits_event_location_when_null(): void
     {
-        // The inheritance walk lives in the email/service layer, so an
-        // occurrence with no override must not surface event_location here.
         $venueId = $this->createVenue('Event Venue');
         $eventId = $this->createEvent('Event with Inherited Occurrence');
         $eventLocationId = $this->createEventLocation($eventId, LocationType::IN_PERSON, $venueId);
@@ -114,7 +107,6 @@ class EventLocationCanaryTest extends TestCase
 
         $payload = (new EventOccurrenceResource($occurrence))->toArray(new Request);
 
-        // Absent values come back as Laravel's MissingValue, not as null.
         $this->assertTrue(
             ! array_key_exists('event_location', $payload)
                 || $payload['event_location'] instanceof MissingValue,
@@ -166,7 +158,6 @@ class EventLocationCanaryTest extends TestCase
         );
         $occurrenceId = $this->createOccurrence($eventId, eventLocationId: $occurrenceEventLocationId);
 
-        // Event-level
         $event = $this->eventRepo
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location'))
             ->findFirstWhere(['id' => $eventId]);
@@ -176,7 +167,6 @@ class EventLocationCanaryTest extends TestCase
         $this->assertSame(LocationType::ONLINE->name, $eventEmbed['type']);
         $this->assertSame('<p>Event default Zoom</p>', $eventEmbed['online_event_connection_details']);
 
-        // Occurrence-level
         $occurrence = $this->occurrenceRepo
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location'))
             ->findFirstWhere([EventOccurrenceDomainObjectAbstract::ID => $occurrenceId]);
@@ -189,14 +179,11 @@ class EventLocationCanaryTest extends TestCase
 
     public function test_clear_event_location_on_occurrence_orphans_cleaned_up(): void
     {
-        // clear_event_location must null the FK AND soft-delete the now-
-        // unreferenced row via EventLocationCleaner.
         $venueId = $this->createVenue('Override Venue');
         $eventId = $this->createEvent('Event with Cleanable Override');
         $occurrenceEventLocationId = $this->createEventLocation($eventId, LocationType::IN_PERSON, $venueId);
         $occurrenceId = $this->createOccurrence($eventId, eventLocationId: $occurrenceEventLocationId);
 
-        // Pre-condition: row exists and is not soft-deleted.
         $this->assertDatabaseHas('event_locations', [
             'id' => $occurrenceEventLocationId,
             'deleted_at' => null,
@@ -213,11 +200,9 @@ class EventLocationCanaryTest extends TestCase
             ),
         );
 
-        // Occurrence FK is now null.
         $occurrence = $this->occurrenceRepo->findFirstWhere([EventOccurrenceDomainObjectAbstract::ID => $occurrenceId]);
         $this->assertNull($occurrence->getEventLocationId());
 
-        // The orphaned row is soft-deleted.
         $stillAlive = DB::table('event_locations')
             ->where('id', $occurrenceEventLocationId)
             ->whereNull('deleted_at')
@@ -227,8 +212,6 @@ class EventLocationCanaryTest extends TestCase
 
     public function test_public_event_resource_hides_internal_location_fields(): void
     {
-        // Public surface must never leak internal IDs, organizer scoping,
-        // provider names, place IDs or timestamps from the venue row.
         $venueId = $this->createVenue('Public Venue', ['city' => 'Dublin']);
         DB::table('locations')->where('id', $venueId)->update([
             'provider' => 'google',
@@ -258,8 +241,6 @@ class EventLocationCanaryTest extends TestCase
 
     public function test_public_event_resource_hides_online_connection_details_pre_checkout(): void
     {
-        // online_event_connection_details is gated until the buyer completes
-        // their order — pre-checkout responses must omit it entirely.
         $eventId = $this->createEvent('Online Public Event');
         $eventLocationId = $this->createEventLocation(
             eventId: $eventId,
@@ -272,13 +253,11 @@ class EventLocationCanaryTest extends TestCase
             ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location'))
             ->findFirstWhere(['id' => $eventId]);
 
-        // Pre-checkout
         $prePayload = (new EventResourcePublic($event, false))->toArray(new Request);
         $preEmbed = $prePayload['event_location']->toArray(new Request);
         $preAssertable = $this->resolveWhen($preEmbed);
         $this->assertArrayNotHasKey('online_event_connection_details', $preAssertable);
 
-        // Post-checkout
         $postPayload = (new EventResourcePublic($event, true))->toArray(new Request);
         $postEmbed = $postPayload['event_location']->toArray(new Request);
         $postAssertable = $this->resolveWhen($postEmbed);
@@ -286,7 +265,6 @@ class EventLocationCanaryTest extends TestCase
         $this->assertSame('<p>Secret Zoom: https://zoom.example/secret</p>', $postAssertable['online_event_connection_details']);
     }
 
-    // Strips MissingValue instances so array_key_exists assertions work.
     private function resolveWhen(array $payload): array
     {
         return array_filter(

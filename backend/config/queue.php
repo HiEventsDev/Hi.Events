@@ -1,19 +1,8 @@
 <?php
 
 return [
-    /*
-     * The name of the queue that should be used to send webhooks.
-     *
-     * Falls back to the default queue connection if not set.
-     */
     'webhook_queue_name' => env('WEBHOOK_QUEUE_NAME', env('QUEUE_CONNECTION', 'sync')),
 
-    /*
-     * The name of the queue used for occurrence cancellation/refund jobs.
-     *
-     * When not set, these jobs ride the connection's default queue so any
-     * standard worker processes them without extra configuration.
-     */
     'occurrences_queue_name' => env('OCCURRENCES_QUEUE_NAME'),
 
     /*

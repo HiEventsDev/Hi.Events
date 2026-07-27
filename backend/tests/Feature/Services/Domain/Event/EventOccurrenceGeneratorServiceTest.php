@@ -12,11 +12,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Runs the generator through real repository hydration. Regression cover for
- * the start-date key mismatch (ISO-8601 hydrated dates vs `Y-m-d H:i:s`
- * candidate keys) that made every regeneration replace instead of match.
- */
 class EventOccurrenceGeneratorServiceTest extends TestCase
 {
     use DatabaseTransactions;

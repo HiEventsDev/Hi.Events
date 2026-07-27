@@ -66,8 +66,6 @@ class ProcessWaitlistOnCapacityAvailableListener implements ShouldQueue
             } catch (NoCapacityAvailableException) {
                 // Expected: no waiting entries or capacity consumed by pending offers
             } catch (Throwable $e) {
-                // Unexpected — surface it (otherwise the listener silently fails and
-                // waitlist entries stall). Re-throw so the queue retries the listener.
                 Log::error('ProcessWaitlistOnCapacityAvailableListener failed', [
                     'event_id' => $event->eventId,
                     'product_id' => $event->productId,

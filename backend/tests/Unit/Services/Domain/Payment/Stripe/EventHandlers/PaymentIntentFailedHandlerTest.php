@@ -20,10 +20,6 @@ use Mockery\MockInterface;
 use Stripe\PaymentIntent;
 use Tests\TestCase;
 
-/**
- * StripePaymentUpdateFromPaymentIntentService is a readonly class Mockery cannot
- * subclass, so a readonly test double records the calls instead.
- */
 final readonly class RecordingStripePaymentUpdateService extends StripePaymentUpdateFromPaymentIntentService
 {
     public function __construct(private StripePaymentUpdateCallLog $log) {}
@@ -116,7 +112,6 @@ class PaymentIntentFailedHandlerTest extends TestCase
         $this->stripePaymentsRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->stripePaymentsRepository->shouldReceive('findFirstWhere')->andReturn($stripePayment);
 
-        // The order was already paid, so the conditional downgrade matches zero rows.
         $this->orderRepository->shouldReceive('updateWhere')->once()->andReturn(0);
         $this->orderRepository->shouldNotReceive('findById');
 

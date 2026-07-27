@@ -155,9 +155,6 @@ class BulkUpdateOccurrencesHandler
         }
 
         if (! empty($deletableIds)) {
-            // FK is nullOnDelete; without this, WAITING/OFFERED entries scoped to
-            // the deleted occurrences become orphans and crash ProcessWaitlistService
-            // on the next CapacityChangedEvent.
             $this->waitlistEntryRepository->updateWhere(
                 attributes: [
                     'status' => WaitlistEntryStatus::CANCELLED->name,

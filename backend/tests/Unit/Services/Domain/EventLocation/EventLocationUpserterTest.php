@@ -54,9 +54,6 @@ class EventLocationUpserterTest extends TestCase
 
     public function test_create_for_event_in_person_validates_ownership_and_creates_row(): void
     {
-        // IN_PERSON with a location_id → ownership is validated against the
-        // owning event's organizer/account, then the row is persisted with a
-        // short_id minted via IdHelper.
         $data = new EventLocationData(
             type: LocationType::IN_PERSON,
             location_id: 42,
@@ -142,8 +139,6 @@ class EventLocationUpserterTest extends TestCase
 
     public function test_create_for_event_throws_when_event_missing(): void
     {
-        // Ownership validation needs the event to derive the organizer scope;
-        // if the event lookup misses, surface ResourceNotFoundException.
         $data = new EventLocationData(
             type: LocationType::IN_PERSON,
             location_id: 42,
@@ -165,8 +160,6 @@ class EventLocationUpserterTest extends TestCase
 
     public function test_create_for_event_throws_when_location_not_owned_by_organizer(): void
     {
-        // Ownership validator bubbles up ResourceNotFoundException for
-        // foreign-organizer or foreign-account locations.
         $data = new EventLocationData(
             type: LocationType::IN_PERSON,
             location_id: 999,

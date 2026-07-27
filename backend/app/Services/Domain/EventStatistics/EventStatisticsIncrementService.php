@@ -247,8 +247,6 @@ class EventStatisticsIncrementService
     }
 
     /**
-     * Increment occurrence statistics, grouped by occurrence_id from order items
-     *
      * @throws EventStatisticsVersionMismatchException
      */
     private function incrementOccurrenceStatistics(OrderDomainObject $order): void

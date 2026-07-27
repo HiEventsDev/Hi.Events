@@ -131,8 +131,6 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             };
         }
 
-        // "Empty attachments = all tickets": join the list via event_id and use
-        // EXISTS branches rather than an INNER JOIN on product_check_in_lists.
         $this->model = $this->model->select('attendees.*')
             ->join('orders', 'orders.id', '=', 'attendees.order_id')
             ->join('check_in_lists', function ($join) use ($shortId) {

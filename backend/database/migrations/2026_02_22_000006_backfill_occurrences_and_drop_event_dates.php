@@ -11,10 +11,6 @@ return new class extends Migration
     public function up(): void
     {
         DB::transaction(function () {
-            // Step 1: Create one occurrence per existing event (with short_id).
-            // start_date/end_date are read here and intentionally retained on the
-            // events table (never dropped). Skip individual events that already have
-            // an occurrence so a retry after partial completion succeeds.
             if (Schema::hasColumn('events', 'start_date')) {
                 DB::table('events')->select('id', 'start_date', 'end_date', 'created_at')->orderBy('id')->chunk(500, function ($events) {
                     $eventIds = $events->pluck('id')->all();
@@ -43,7 +39,6 @@ return new class extends Migration
                 });
             }
 
-            // Step 2: Backfill order_items.event_occurrence_id (idempotent — WHERE IS NULL)
             DB::statement('
                 UPDATE order_items oi
                 SET event_occurrence_id = (
@@ -55,7 +50,6 @@ return new class extends Migration
                 WHERE oi.event_occurrence_id IS NULL
             ');
 
-            // Step 3: Backfill attendees.event_occurrence_id (idempotent — WHERE IS NULL)
             DB::statement('
                 UPDATE attendees a
                 SET event_occurrence_id = (
@@ -66,8 +60,6 @@ return new class extends Migration
                 WHERE a.event_occurrence_id IS NULL
             ');
 
-            // Step 4: Make attendees NOT NULL (no-op if already NOT NULL).
-            // order_items stays nullable to support future series passes.
             Schema::table('attendees', function (Blueprint $table) {
                 $table->foreignId('event_occurrence_id')->nullable(false)->change();
             });

@@ -43,10 +43,6 @@ class AccountAttributionRepository extends BaseRepository implements AccountAttr
         $groupColumn = $groupByMap[$groupBy] ?? 'utm_source';
         $liveStatus = EventStatus::LIVE->name;
 
-        // Joining organizers + organizer_stripe_platforms here would multiply
-        // each event row by (organizers per account × stripe platforms per organizer),
-        // silently inflating SUM(sales_total_gross) and SUM(orders_created).
-        // Use EXISTS for the stripe_connected check instead.
         $query = DB::table('account_attributions as aa')
             ->select([
                 DB::raw("COALESCE(aa.{$groupColumn}, '(not set)') as attribution_value"),

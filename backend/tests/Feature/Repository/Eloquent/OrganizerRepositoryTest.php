@@ -12,11 +12,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Integration test for OrganizerRepository::getOrganizerStats() with a date range
- * and a per-day breakdown. Uses real DB inserts (no factories exist for organizers
- * / events / occurrences / daily statistics yet) and rolls back via DatabaseTransactions.
- */
 class OrganizerRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -107,8 +102,6 @@ class OrganizerRepositoryTest extends TestCase
 
     public function test_get_organizer_stats_returns_daily_breakdown_and_aggregates_across_date_window(): void
     {
-        // Seed 60 contiguous days of daily stats for both events. Per-event/day
-        // values are deterministic so we can verify aggregates exactly.
         $today = Carbon::now()->startOfDay();
         $rangeStart = (clone $today)->subDays(59);
 
@@ -139,7 +132,6 @@ class OrganizerRepositoryTest extends TestCase
         }
         DB::table('event_occurrence_daily_statistics')->insert($rows);
 
-        // Query the most recent 30 days.
         $endDate = (clone $today)->format('Y-m-d H:i:s');
         $startDate = (clone $today)->subDays(29)->format('Y-m-d H:i:s');
 
@@ -151,14 +143,11 @@ class OrganizerRepositoryTest extends TestCase
             endDate: $endDate,
         );
 
-        // Daily series spans the inclusive 30-day window.
         $this->assertCount(30, $stats->daily_stats);
         $stats->daily_stats->each(function ($row) {
             $this->assertInstanceOf(OrganizerDailyStatsResponseDTO::class, $row);
         });
 
-        // Each day across both events: products_sold=2+5=7, attendees=3+7=10,
-        // gross=10+25=35, orders=1+2=3, refunded=1.5+0.5=2.
         $firstDay = $stats->daily_stats->first();
         $this->assertSame(7, $firstDay->products_sold);
         $this->assertSame(10, $firstDay->attendees_registered);
@@ -166,7 +155,6 @@ class OrganizerRepositoryTest extends TestCase
         $this->assertSame(3, $firstDay->orders_created);
         $this->assertSame(2.0, $firstDay->total_refunded);
 
-        // Aggregates across the 30-day window equal the sum of the 30 daily rows.
         $this->assertSame(7 * 30, $stats->total_products_sold);
         $this->assertSame(10 * 30, $stats->total_attendees_registered);
         $this->assertSame(3 * 30, $stats->total_orders);
@@ -177,7 +165,6 @@ class OrganizerRepositoryTest extends TestCase
         $this->assertSame($startDate, $stats->start_date);
         $this->assertSame($endDate, $stats->end_date);
 
-        // all_organizers_currencies is preserved from the original behaviour.
         $this->assertContains('USD', $stats->all_organizers_currencies);
     }
 

@@ -21,8 +21,6 @@ class GetEventOccurrencesAction extends BaseAction
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        // include_stats=false skips the per-row statistics relation for selector
-        // use cases (occurrence dropdowns) where the stats payload is wasted.
         $includeStats = $request->boolean('include_stats', true);
 
         $occurrences = $this->handler->handle(

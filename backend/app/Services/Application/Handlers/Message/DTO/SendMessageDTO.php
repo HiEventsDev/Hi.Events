@@ -23,11 +23,6 @@ class SendMessageDTO extends BaseDTO
         public readonly ?array $product_ids = [],
         public readonly ?string $scheduled_at = null,
         public readonly ?int $event_occurrence_id = null,
-        /**
-         * When set, filters recipients to attendees/orders tied to any of these
-         * occurrences. Mutually exclusive with event_occurrence_id (handler
-         * prefers this when both are provided).
-         */
         public readonly ?array $event_occurrence_ids = null,
     ) {}
 }

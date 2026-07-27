@@ -15,9 +15,6 @@ return new class extends Migration
             $table->boolean('is_system_default')->default(false);
             $table->json('application_fees')->nullable();
             $table->boolean('bypass_application_fees')->default(false);
-            // Tracks the source row in the legacy account_configuration table so
-            // backfill + new-organizer assignment can match by id, not by name.
-            // Dropped in the follow-up that retires the legacy table.
             $table->unsignedBigInteger('legacy_account_configuration_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -25,8 +22,6 @@ return new class extends Migration
             $table->index('legacy_account_configuration_id');
         });
 
-        // Copy every non-deleted account_configuration row 1:1 into organizer_configurations,
-        // preserving the legacy id pointer so we can map organizers deterministically.
         DB::statement('
             INSERT INTO organizer_configurations
                 (name, is_system_default, application_fees, bypass_application_fees,
@@ -37,8 +32,6 @@ return new class extends Migration
             WHERE deleted_at IS NULL
         ');
 
-        // Ensure there's always a system default. If the legacy table didn't have one
-        // (fresh open-source install), seed from app config.
         $hasDefault = DB::table('organizer_configurations')->where('is_system_default', true)->exists();
         if (! $hasDefault) {
             DB::table('organizer_configurations')->insert([
@@ -66,8 +59,6 @@ return new class extends Migration
                 ->onDelete('set null');
         });
 
-        // Map each organizer to the new row that mirrors its parent account's plan.
-        // Falls back to the system default if the account had no plan assigned.
         DB::statement('
             UPDATE organizers o
             SET organizer_configuration_id = COALESCE((

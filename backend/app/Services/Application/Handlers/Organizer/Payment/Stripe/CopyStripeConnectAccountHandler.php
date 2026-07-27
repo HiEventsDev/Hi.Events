@@ -101,10 +101,6 @@ class CopyStripeConnectAccountHandler
             ]);
         }
 
-        // Mirror the connect/webhook flow: when an organizer first acquires a Stripe
-        // connection (even via copy), seed an empty VAT row if the country is EU.
-        // We read country from the cached account details since we don't fetch
-        // the live Stripe account here.
         $sourceDetails = $sourcePlatform->getStripeAccountDetails();
         if (is_string($sourceDetails)) {
             $sourceDetails = json_decode($sourceDetails, true) ?: [];

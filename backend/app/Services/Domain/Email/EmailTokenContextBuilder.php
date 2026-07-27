@@ -25,12 +25,6 @@ use Throwable;
 
 class EmailTokenContextBuilder
 {
-    /**
-     * Callers must hydrate `$event->event_location` (with nested `location`) and
-     * `$occurrence->event_location` before invoking these builders. Reads happen
-     * directly off the domain objects with no lazy-load fallback — invoking from
-     * a tight loop without preloads will N+1.
-     */
     public function __construct(
         private readonly LiquidTemplateRenderer $liquidTemplateRenderer,
         private readonly HtmlPurifierService $htmlPurifierService,

@@ -10,10 +10,6 @@ const ProductWidget = () => {
     const {eventId} = useParams();
     const location = useLocation();
 
-    // Forward `?occurrence_id=` from the embed URL so the public payload
-    // filters products by that occurrence and the storefront preselects it.
-    // Without this, embed share links to a specific date show ambiguous
-    // pickers and recurring products get the event-wide visibility set.
     const eventOccurrenceId = useMemo(() => {
         const raw = new URLSearchParams(location.search).get('occurrence_id');
         if (raw === null) return null;

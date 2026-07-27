@@ -187,8 +187,6 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  // Reserve space so the last row sits above the floating bottom nav; without this
-  // the list's scroll floor sits behind the pill and the final item is unreachable.
   padding-bottom: calc(110px + env(safe-area-inset-bottom));
   @include mixins.scrollbar();
 }

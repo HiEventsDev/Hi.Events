@@ -17,22 +17,12 @@ interface CheckInListRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    /**
-     * Counts attendees + check-ins for a check-in list. Auto-scopes to the
-     * list's own event_occurrence_id when set; callers can override via
-     * $eventOccurrenceIdOverride (e.g. when an "All occurrences" list is
-     * further narrowed by the client's filter pill).
-     */
     public function getCheckedInAttendeeCountById(
         int $checkInListId,
         ?int $eventOccurrenceIdOverride = null,
     ): CheckedInAttendeesCountDTO;
 
     /**
-     * Bulk counterpart used by the admin lists view. Auto-scopes each list
-     * to its own event_occurrence_id — no override because each row has
-     * independent scope.
-     *
      * @param  array<int>  $checkInListIds
      * @return Collection<CheckedInAttendeesCountDTO>
      */

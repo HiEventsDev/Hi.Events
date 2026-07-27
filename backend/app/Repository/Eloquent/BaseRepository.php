@@ -232,8 +232,6 @@ abstract class BaseRepository implements RepositoryInterface
     public function insert(array $inserts): bool
     {
         return $this->runQuery(function () use ($inserts) {
-            // When doing a bulk insert Eloquent doesn't autofill the updated/created dates,
-            // so we need to do it manually
             foreach ($inserts as $index => $insert) {
                 if (! isset($insert['created_at'], $insert['updated_at'])) {
                     $now = Carbon::now();
@@ -295,9 +293,6 @@ abstract class BaseRepository implements RepositoryInterface
                 $this->applyConditions($where);
             }
 
-            // Eloquent\Builder's __call swallows incrementEach's int return value
-            // and hands back the Builder, so we route through the underlying
-            // QueryBuilder to get the affected-row count.
             return $this->resolveBaseQuery()->incrementEach($columns, $additionalUpdates);
         });
     }
@@ -418,13 +413,6 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * Execute a query callback and guarantee per-call state is reset afterwards,
-     * even if the callback throws. This is the single point at which the in-flight
-     * builder ($this->model) and the eager-load list ($this->eagerLoads) are cleared.
-     *
-     * The callback runs BEFORE reset, so hydration helpers that read $this->eagerLoads
-     * (e.g. handleEagerLoads()) still see the correct state.
-     *
      * @template TReturn
      *
      * @param  Closure(): TReturn  $callback
@@ -446,12 +434,6 @@ abstract class BaseRepository implements RepositoryInterface
         $this->eagerLoads = [];
     }
 
-    /**
-     * Resolve $this->model (which may be a fresh Model or an Eloquent Builder
-     * after applyConditions()) to the underlying query builder. Required for
-     * methods Eloquent\Builder::__call swallows the return value of, e.g.
-     * incrementEach() / decrementEach().
-     */
     private function resolveBaseQuery(): QueryBuilder
     {
         return $this->model instanceof Builder

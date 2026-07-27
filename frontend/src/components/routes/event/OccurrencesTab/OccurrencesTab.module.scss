@@ -1,6 +1,5 @@
 @use "../../../../styles/mixins";
 
-// Unified toolbar
 .toolbar {
   display: flex;
   align-items: center;
@@ -24,7 +23,6 @@
   flex: 1;
 }
 
-// Selection group (inline in toolbar)
 .selectionGroup {
   display: flex;
   align-items: center;
@@ -65,7 +63,6 @@
   }
 }
 
-// Date & Time column
 .dateTimeLink {
   display: flex;
   flex-direction: column;
@@ -105,7 +102,6 @@
   white-space: nowrap;
 }
 
-// Status badge
 .statusBadge {
   display: inline-flex;
   align-items: center;
@@ -149,7 +145,6 @@
   flex-shrink: 0;
 }
 
-// Tickets sold column
 .ticketsSold {
   display: flex;
   flex-direction: column;
@@ -180,7 +175,6 @@
   color: var(--mantine-color-dimmed);
 }
 
-// Activity column
 .activity {
   display: flex;
   flex-direction: column;
@@ -198,26 +192,22 @@
   color: var(--mantine-color-red-6);
 }
 
-// Actions
 .action {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-// Empty state
 .emptyState {
   padding: 60px 24px;
   text-align: center;
   border-style: dashed;
 }
 
-// Content area - ensures consistent layout across loading/list/calendar views
 .contentArea {
   min-height: 720px;
 }
 
-// Count text
 .countText {
   font-size: 13px;
   color: var(--mantine-color-dimmed);

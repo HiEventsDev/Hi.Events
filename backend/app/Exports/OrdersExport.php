@@ -86,8 +86,6 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             );
         });
 
-        // Orders can span multiple occurrences (series passes). List every distinct
-        // occurrence date, not just the first, so the export doesn't silently lose data.
         $occurrenceDate = $order->getOrderItems()
             ?->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrence())
             ?->filter()

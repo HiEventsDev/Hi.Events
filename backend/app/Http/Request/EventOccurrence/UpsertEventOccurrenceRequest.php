@@ -8,11 +8,6 @@ use Illuminate\Validation\Rule;
 
 class UpsertEventOccurrenceRequest extends BaseRequest
 {
-    /**
-     * Status is intentionally absent — lifecycle transitions live in their
-     * own actions so the cancel/reactivate side effects (refund handling,
-     * recurrence exclusions, notifications) always fire.
-     */
     public function rules(): array
     {
         return [

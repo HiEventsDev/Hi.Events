@@ -10,12 +10,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-/**
- * Exercises the inline backfill on the link_events_and_occurrences_to_event_locations
- * migration. The legacy address columns are intentionally retained, so the
- * migration's backfill() method can be re-invoked against pretend
- * pre-migration data without rerunning the schema changes.
- */
 class LinkEventsToEventLocationsBackfillTest extends TestCase
 {
     use DatabaseTransactions;
@@ -165,8 +159,6 @@ class LinkEventsToEventLocationsBackfillTest extends TestCase
 
     private function migration(): Migration
     {
-        // The migration is an anonymous-class instance — `require` the file
-        // each time to get a fresh one and call backfill() directly.
         return require self::MIGRATION_PATH;
     }
 

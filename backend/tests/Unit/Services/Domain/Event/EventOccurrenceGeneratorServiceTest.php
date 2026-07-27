@@ -35,8 +35,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $this->ruleParser = Mockery::mock(RecurrenceRuleParserService::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
-        // Most tests don't exercise stale-deletion; default to a no-op so the
-        // few that do can override with explicit expectations.
         $this->waitlistEntryRepository->shouldReceive('updateWhere')->byDefault();
 
         $this->service = new EventOccurrenceGeneratorService(
@@ -52,11 +50,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * Mocks the two batch lookups the generator runs to decide which existing
-     * occurrences are "in use" and therefore protected from soft-deletion:
-     * occurrences pointed at by an active order_item OR an active attendee.
-     */
     private function mockDbBatchQuery(
         array $occurrenceIdsWithOrders = [],
         array $occurrenceIdsWithAttendees = [],
@@ -440,12 +433,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
     public function test_stale_occurrence_with_attendees_but_no_order_items_is_marked_overridden_and_not_deleted(): void
     {
-        // Regression: matches the single/bulk delete handlers, which both
-        // refuse to delete an occurrence that has any attendees pointing at
-        // it — even if no order_item row does. Regeneration was previously
-        // only checking order_items, so changing the recurrence rule could
-        // soft-delete an attendee-bearing occurrence in import / partial-
-        // restore scenarios where the two tables disagree.
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
 
@@ -474,8 +461,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             ->once()
             ->andReturn(collect([$staleWithAttendees]));
 
-        // No order_item rows pointing at occ 5, but the attendees query does
-        // return it — must still be protected.
         $this->mockDbBatchQuery(occurrenceIdsWithOrders: [], occurrenceIdsWithAttendees: [5]);
 
         $newOccurrence = $this->createOccurrenceDomainObject(
@@ -777,11 +762,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
     public function test_stale_occurrence_waitlist_entries_are_cancelled_before_deletion(): void
     {
-        // Regression for the regenerate-strands-waitlist bug: removeStaleOccurrences
-        // soft-deletes orphaned occurrences. The FK is nullOnDelete which only
-        // fires on hard deletes, so without explicit waitlist cleanup, WAITING/
-        // OFFERED entries are left pointing at soft-deleted rows and crash
-        // ProcessWaitlistService on the next CapacityChangedEvent.
         $event = $this->createMockEvent();
         $recurrenceRule = ['frequency' => 'daily'];
 
@@ -804,8 +784,6 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $this->mockDbBatchQuery([]);
 
-        // Override the default no-op mock with a strict expectation: the
-        // waitlist cancel must run with the right scope before the delete.
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
         $this->waitlistEntryRepository
             ->shouldReceive('updateWhere')

@@ -58,11 +58,6 @@ class StripeAccountSyncService
         }
     }
 
-    /**
-     * Insert the query param BEFORE the URL's fragment so the resulting URL is well-formed.
-     * Naive concatenation breaks when the configured return URL ends with #fragment
-     * (e.g. /manage/organizer/%d/settings#payouts) — the param lands inside the hash.
-     */
     private function appendQueryParam(string $url, string $param): string
     {
         $hashPosition = strpos($url, '#');
@@ -73,10 +68,6 @@ class StripeAccountSyncService
         return $base.$separator.$param.$fragment;
     }
 
-    /**
-     * Webhook entrypoint — updates every organizer row sharing this Stripe account
-     * and seeds account-level country/VAT state for every organizer that owns one.
-     */
     public function syncStripeAccountStatusByAccountId(Account $stripeAccount): void
     {
         $details = $this->buildAccountDetails($stripeAccount);
@@ -140,12 +131,6 @@ class StripeAccountSyncService
         );
     }
 
-    /**
-     * Seeds an empty organizer VAT setting row when an organizer first connects
-     * (or copies a connection) to a Stripe account in an EU country.
-     * Public so the copy/reuse flow can call it with a country code parsed
-     * from cached stripe_account_details rather than a live Stripe Account.
-     */
     public function seedVatSettingForOrganizerIfMissing(
         int $organizerId,
         ?string $countryCode,

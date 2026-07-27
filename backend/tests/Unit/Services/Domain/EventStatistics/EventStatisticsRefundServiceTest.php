@@ -54,9 +54,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
 
-        // Default: the order reload (eager-loading items for the occurrence path) returns
-        // an order with no occurrence items so the occurrence pass is skipped. Tests that
-        // exercise the occurrence path override this expectation.
         $this->stubOrderReload(totalGross: 0.0, items: []);
 
         $this->service = new EventStatisticsRefundService(
@@ -70,9 +67,6 @@ class EventStatisticsRefundServiceTest extends TestCase
     }
 
     /**
-     * Helper that stubs `orderRepository->loadRelation(...)->findById(...)` to return
-     * an OrderDomainObject pre-stocked with the given items + totalGross + createdAt.
-     *
      * @param  OrderItemDomainObject[]  $items
      */
     private function stubOrderReload(
@@ -163,9 +157,6 @@ class EventStatisticsRefundServiceTest extends TestCase
             )
             ->once();
 
-        // Default setUp stubs the order reload to return totalGross=0 with no items, so
-        // the occurrence pass must be skipped entirely. Assert that — nothing here exercises
-        // the new B4 / B5 code paths.
         $this->eventOccurrenceStatisticRepository->shouldNotReceive('updateWhere');
         $this->eventOccurrenceDailyStatisticRepository->shouldNotReceive('updateWhere');
 
@@ -349,13 +340,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * The order is loaded with order_items so the occurrence pass can run. Verify that:
-     *   1. The order reload happens exactly ONCE (perf fix — used to load twice).
-     *   2. updateWhere fires on both occurrence stats and occurrence daily stats.
-     *   3. The deltas are emitted as DB::raw atomic increments (not scalars).
-     *   4. The version column is bumped via raw SQL so optimistic readers see the change.
-     */
     public function test_update_for_refund_updates_occurrence_stats_for_order_with_items(): void
     {
         $eventId = 1;
@@ -366,7 +350,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $order = $this->makeBaseOrderMock($eventId, $orderId, $orderDate, totalGross: 100.00);
         $refundAmount = MoneyValue::fromFloat(100.00, $currency);
 
-        // Order reload returns one item on occurrence 50.
         $item = $this->makeOrderItemMock(
             occurrenceId: 50,
             totalGross: 100.00,
@@ -374,8 +357,6 @@ class EventStatisticsRefundServiceTest extends TestCase
             totalServiceFee: 2.00,
         );
 
-        // Override the default no-items reload — and assert it happens exactly once
-        // across the whole flow (regression guard for the perf duplication fix).
         $reloaded = Mockery::mock(OrderDomainObject::class);
         $reloaded->shouldReceive('getOrderItems')->andReturn(new Collection([$item]));
         $reloaded->shouldReceive('getTotalGross')->andReturn(100.00);
@@ -428,10 +409,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * An order with items split across two different occurrences must produce one
-     * updateWhere call per occurrence on each stats repository (4 calls total).
-     */
     public function test_update_for_refund_splits_refund_across_multiple_occurrences(): void
     {
         $eventId = 1;
@@ -442,7 +419,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $order = $this->makeBaseOrderMock($eventId, $orderId, $orderDate, totalGross: 200.00);
         $refundAmount = MoneyValue::fromFloat(200.00, $currency);
 
-        // 60% of the order belongs to occurrence 100, 40% to occurrence 200.
         $itemA = $this->makeOrderItemMock(occurrenceId: 100, totalGross: 120.00, totalTax: 10.00, totalServiceFee: 2.00);
         $itemB = $this->makeOrderItemMock(occurrenceId: 200, totalGross: 80.00, totalTax: 6.00, totalServiceFee: 2.00);
 
@@ -467,8 +443,6 @@ class EventStatisticsRefundServiceTest extends TestCase
 
         $this->stubAggregateAndDailyPaths($eventId);
 
-        // Expect one updateWhere per occurrence on each occurrence-stats repo. Order
-        // shouldn't matter (PHP foreach over the items map preserves insertion order).
         $this->eventOccurrenceStatisticRepository
             ->shouldReceive('updateWhere')
             ->once()
@@ -496,10 +470,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * Order items without an event_occurrence_id (legacy / non-recurring orders) must
-     * not trigger any occurrence-stats updates.
-     */
     public function test_update_for_refund_skips_occurrence_path_when_no_items_have_occurrence_id(): void
     {
         $eventId = 1;
@@ -547,10 +517,6 @@ class EventStatisticsRefundServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * Stubs the aggregate + daily stats lookups + updateWhere calls so the test can
-     * focus on the occurrence path. Returns nothing — sets up Mockery expectations.
-     */
     private function stubAggregateAndDailyPaths(int $eventId): void
     {
         $eventStatistics = Mockery::mock(EventStatisticDomainObject::class);

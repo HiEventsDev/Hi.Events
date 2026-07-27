@@ -26,9 +26,6 @@ class UpdateOrganizerConfigurationHandler
 
         $currentConfiguration = $organizer->getOrganizerConfiguration();
 
-        // Update in place only when the configuration is dedicated to this organizer.
-        // The system default and any backfilled/shared row may be referenced by sibling
-        // organizers, so mutating it would silently change their fees too.
         if ($currentConfiguration !== null
             && ! $currentConfiguration->getIsSystemDefault()
             && $this->isConfigurationDedicatedTo($currentConfiguration->getId(), $organizer->getId())
@@ -63,7 +60,6 @@ class UpdateOrganizerConfigurationHandler
             return false;
         }
 
-        // The single reference must be the organizer we're editing.
         $ownReference = $this->organizerRepository->countWhere([
             'organizer_configuration_id' => $configurationId,
             'id' => $organizerId,

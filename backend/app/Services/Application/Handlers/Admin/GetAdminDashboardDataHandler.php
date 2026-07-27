@@ -125,8 +125,6 @@ class GetAdminDashboardDataHandler
 
     private function getRecentAccounts(int $limit): array
     {
-        // stripe_connect_setup_complete is computed from organizer_stripe_platforms —
-        // any organizer in the account with completed setup counts as connected.
         $query = <<<'SQL'
             SELECT
                 a.id,

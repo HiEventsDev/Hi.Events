@@ -10,10 +10,6 @@ use Illuminate\Http\Request;
 
 /**
  * @mixin LocationDomainObject
- *
- * Public-surface projection of a Location: only the fields a buyer needs
- * to render a venue. Internal IDs, organizer scoping, provider names,
- * place IDs and timestamps are intentionally omitted.
  */
 class LocationPublicResource extends BaseResource
 {

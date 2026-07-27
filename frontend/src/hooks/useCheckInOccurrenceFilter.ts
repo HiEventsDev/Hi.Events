@@ -3,13 +3,6 @@ import {useSearchParams} from "react-router";
 import {EventOccurrence} from "../types.ts";
 import {isSsr} from "../utilites/helpers.ts";
 
-/**
- * Per-check-in-list occurrence filter. URL param (`?occurrence=NNN`) is the
- * source of truth so filtered views are shareable and survive back/forward;
- * localStorage seeds the URL on reload so mid-shift refreshes keep the filter.
- * Applied to attendee list/search — the scan tab intentionally ignores it.
- */
-
 const URL_PARAM = "occurrence";
 const STORAGE_KEY_PREFIX = "checkInOccurrenceFilter:";
 
@@ -34,18 +27,10 @@ const writePersisted = (key: string | null, id: number | null): void => {
 };
 
 export interface UseCheckInOccurrenceFilterResult {
-    /** Occurrence the staff is currently filtering to, or null for "All dates". */
     occurrenceId: number | null;
-    /** The matching occurrence object, or null. */
     activeOccurrence: EventOccurrence | null;
-    /** Set the filter. Pass null to clear. */
     setOccurrenceId: (id: number | null) => void;
-    /** Shortcut for clearing the filter. */
     clear: () => void;
-    /**
-     * True if a persisted or URL-supplied occurrence had to be dropped because
-     * it no longer exists (cancelled, removed). Consumers can show a toast.
-     */
     didClearStale: boolean;
 }
 
@@ -57,7 +42,6 @@ export const useCheckInOccurrenceFilter = (
     const [searchParams, setSearchParams] = useSearchParams();
     const [didClearStale, setDidClearStale] = useState(false);
 
-    // Hydrate from localStorage on mount when the URL has no param. One-shot.
     const [hasHydratedFromStorage, setHasHydratedFromStorage] = useState(false);
     useEffect(() => {
         if (hasHydratedFromStorage || !key || isSsr()) return;
@@ -79,8 +63,6 @@ export const useCheckInOccurrenceFilter = (
         return Number.isFinite(parsed) ? parsed : null;
     }, [rawParam]);
 
-    // Clear stale ids (cancelled/removed occurrences) and flip didClearStale
-    // so the consumer can toast it.
     useEffect(() => {
         if (occurrenceId === null) return;
         if (!occurrences || occurrences.length === 0) return;

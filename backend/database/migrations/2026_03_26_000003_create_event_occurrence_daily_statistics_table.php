@@ -42,7 +42,6 @@ return new class extends Migration
             $table->unique(['event_occurrence_id', 'date']);
         });
 
-        // Backfill for single-occurrence events (1:1 mapping from event_daily_statistics)
         DB::statement(<<<'SQL'
             INSERT INTO event_occurrence_daily_statistics (
                 event_id, event_occurrence_id, date,

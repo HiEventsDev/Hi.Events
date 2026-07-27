@@ -37,9 +37,6 @@ class CheckInListResourcePublic extends JsonResource
                 'is_expired' => $this->isExpired($this->getEvent()->getTimezone()),
                 'is_active' => $this->isActivated($this->getEvent()->getTimezone()),
                 'event' => EventResourcePublic::make($this->getEvent()),
-                // Unfiltered list (still excludes cancelled) so the staff filter
-                // pill can show past sessions for reconciliation. EventResourcePublic
-                // filters to future/active which is wrong for the check-in UI.
                 'event_occurrences' => $this->getEvent()->getEventOccurrences()
                     ? EventOccurrenceResourcePublic::collection(
                         $this->getEvent()->getEventOccurrences()

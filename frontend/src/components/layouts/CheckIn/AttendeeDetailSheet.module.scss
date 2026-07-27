@@ -3,8 +3,6 @@
 .drawer {
   border-radius: 20px 20px 0 0 !important;
   max-height: 90vh !important;
-  // Default transition lets the sheet snap back when a partial drag is released.
-  // During an active drag we zero this out via inline style for direct 1:1 tracking.
   transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
@@ -17,8 +15,6 @@
 }
 
 .handleHitArea {
-  // Fat target for the grab handle — the visible bar is thin but the draggable
-  // area needs to comfortably catch a thumb.
   padding: 10px 0 6px;
   display: flex;
   justify-content: center;

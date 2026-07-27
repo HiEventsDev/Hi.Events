@@ -119,9 +119,6 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
 
     public function test_scoped_list_ignores_client_occurrence_filter(): void
     {
-        // A check-in list scoped to occurrence 99 must always report its own scope,
-        // regardless of what the client passes. Passing null to the repository lets
-        // it auto-scope via cil.event_occurrence_id.
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(99);
@@ -144,7 +141,6 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
             ->once()->with(42, 20, null)
             ->andReturn(collect());
 
-        // Client tries to override with occurrence 77; handler should ignore it.
         $this->handler->handle('short-id', 77);
 
         $this->assertTrue(true);
@@ -152,8 +148,6 @@ class GetCheckInListStatsPublicHandlerTest extends TestCase
 
     public function test_unscoped_list_respects_client_occurrence_filter(): void
     {
-        // Unscoped list ("All occurrences") — the client's filter-pill selection
-        // propagates through to the repository so stats reflect the filtered view.
         $checkInList = m::mock(CheckInListDomainObject::class);
         $checkInList->shouldReceive('getId')->andReturn(42);
         $checkInList->shouldReceive('getEventOccurrenceId')->andReturn(null);

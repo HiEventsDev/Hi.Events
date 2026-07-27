@@ -74,7 +74,6 @@ export const OccurrenceFilterPill = ({
                 size="auto"
                 padding={0}
                 withCloseButton={false}
-                // Bump above BottomNav (z-index 40 inside a position:fixed root).
                 zIndex={400}
                 overlayProps={{backgroundOpacity: 0.45, blur: 2}}
                 classNames={{content: classes.sheetContent, body: classes.sheetBody}}

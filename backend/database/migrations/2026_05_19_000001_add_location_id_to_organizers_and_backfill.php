@@ -53,9 +53,6 @@ return new class extends Migration
                 }
             });
 
-        // Legacy organizer_settings.location_details is intentionally retained
-        // here. Dropping it is deferred to a follow-up migration once we've
-        // confirmed the new locations table is the only read path.
     }
 
     public function down(): void

@@ -42,7 +42,6 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
         $this->databaseManager = m::mock(DatabaseManager::class);
         $this->stripePaymentsRepository = m::mock(StripePaymentsRepositoryInterface::class);
 
-        // Default: reservations have no payment intent, so they are deleted as before.
         $this->stripePaymentsRepository->shouldReceive('countWhere')->andReturn(0)->byDefault();
 
         $this->databaseManager
@@ -142,7 +141,6 @@ class ProcessExpiredWaitlistOffersJobTest extends TestCase
         $this->repository->shouldReceive('findWhere')->once()->andReturn(new Collection([$entry]));
         $this->repository->shouldReceive('findByIdLocked')->once()->with(1)->andReturn($entry);
 
-        // A payment intent exists for this reservation.
         $this->stripePaymentsRepository
             ->shouldReceive('countWhere')
             ->with(['order_id' => 100])

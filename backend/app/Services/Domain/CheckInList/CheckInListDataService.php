@@ -29,9 +29,6 @@ class CheckInListDataService
     ): void {
         $allowedProductIds = $checkInList->getProducts()?->map(fn ($product) => $product->getId())->toArray() ?? [];
 
-        // A list with zero product attachments covers every ticket on the event;
-        // we only reject when it has specific product scope AND the attendee's
-        // product isn't in it.
         if (! empty($allowedProductIds) && ! in_array($attendee->getProductId(), $allowedProductIds, true)) {
             throw new CannotCheckInException(
                 __('Attendee :attendee_name is not allowed to check in using this check-in list', [
@@ -40,10 +37,6 @@ class CheckInListDataService
             );
         }
 
-        // Belt-and-braces when the list covers all tickets: the attendee's
-        // event must match the list's event. Normally the data model already
-        // guarantees this via the product FK, but for the empty-attachments
-        // case we have no product chain to rely on.
         if (empty($allowedProductIds) && $attendee->getEventId() !== $checkInList->getEventId()) {
             throw new CannotCheckInException(
                 __('Attendee :attendee_name does not belong to this event', [

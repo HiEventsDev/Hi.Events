@@ -72,12 +72,6 @@ class DeleteEventOccurrenceHandler
 
             $occurrenceStartDate = $occurrence->getStartDate();
 
-            // Cancel waitlist entries scoped to this occurrence BEFORE deleting
-            // it. The FK is `nullOnDelete`, so without this any WAITING/OFFERED
-            // entry would have its event_occurrence_id nulled — leaving an
-            // orphan that ProcessWaitlistService can't resolve, which throws
-            // ResourceConflictException and crashes the offer batch on the
-            // next CapacityChangedEvent.
             $this->waitlistEntryRepository->updateWhere(
                 attributes: [
                     'status' => WaitlistEntryStatus::CANCELLED->name,
@@ -96,11 +90,6 @@ class DeleteEventOccurrenceHandler
                 EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
             ]);
 
-            // For recurring events, the rule itself produces the candidate
-            // dates on the next regenerate. Without recording the deletion in
-            // excluded_occurrences, the regenerate parses the rule, sees the same
-            // candidate, and recreates the occurrence — silently undoing the
-            // delete. Mirror the cancel handler's behaviour here.
             $this->appendOccurrenceToRecurrenceExclusions($eventId, $occurrenceStartDate);
         });
     }

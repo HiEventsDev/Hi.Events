@@ -36,9 +36,6 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     ): CheckedInAttendeesCountDTO {
         $clause = $this->buildOccurrenceFilterClauses($eventOccurrenceIdOverride);
 
-        // "Empty attachments = all tickets": valid_attendees joins the list via
-        // event_id and uses EXISTS/NOT EXISTS to express "attached, or list has
-        // no attachments".
         $sql = <<<SQL
             WITH valid_check_ins AS (
                 SELECT attendee_id, check_in_list_id
@@ -102,14 +99,6 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
         );
     }
 
-    /**
-     * Build the WHERE fragments and bindings that restrict stats queries to a
-     * specific event occurrence.
-     *
-     * - Override set: count only attendees/check-ins with matching event_occurrence_id.
-     * - Override null: auto-scope to the check-in list's own event_occurrence_id if
-     *   set; otherwise count across all occurrences (unscoped "All occurrences" list).
-     */
     private function buildOccurrenceFilterClauses(?int $override): object
     {
         if ($override !== null) {
@@ -120,8 +109,6 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
             ];
         }
 
-        // Auto-scope to the list's own occurrence when set. A null on the list
-        // means "All occurrences" — no row-level filter.
         return (object) [
             'attendeeClause' => 'AND (cil.event_occurrence_id IS NULL OR a.event_occurrence_id = cil.event_occurrence_id)',
             'checkInClause' => 'AND (cil.event_occurrence_id IS NULL OR aci.event_occurrence_id = cil.event_occurrence_id)',
@@ -133,8 +120,6 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     {
         $placeholders = implode(',', array_fill(0, count($checkInListIds), '?'));
 
-        // Bulk version: auto-scopes each list via cil.event_occurrence_id (no
-        // single override). Same "empty attachments = all tickets" rule applies.
         $sql = <<<SQL
             WITH valid_check_ins AS (
                 SELECT aci.attendee_id, aci.check_in_list_id
@@ -203,8 +188,6 @@ class CheckInListRepository extends BaseRepository implements CheckInListReposit
     ): Collection {
         $clause = $this->buildOccurrenceFilterClauses($eventOccurrenceIdOverride);
 
-        // For the product breakdown, "empty attachments" returns a row for every
-        // product on the event.
         $sql = <<<SQL
             WITH valid_check_ins AS (
                 SELECT aci.attendee_id, aci.check_in_list_id

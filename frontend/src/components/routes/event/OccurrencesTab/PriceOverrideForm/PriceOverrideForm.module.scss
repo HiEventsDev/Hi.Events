@@ -37,10 +37,6 @@
   background: var(--mantine-color-gray-0);
   border-bottom: 1px solid var(--mantine-color-gray-2);
 
-  // Mantine's Switch ships with margin-bottom: 20px on its root for spacing
-  // when used inside form stacks. Inside a flex row with align-items: center,
-  // that margin is included in the centered box — so the visible track sits
-  // 10px above the optical center. Zero it out here.
   :global(.mantine-Switch-root) {
     margin: 0;
   }
@@ -49,17 +45,10 @@
 .productName {
   font-weight: 600;
   font-size: var(--mantine-font-size-sm);
-  // Explicit line-height so the text's optical center matches the Switch's
-  // track center — without this, inherited line-height (1.5+) makes the text
-  // sit slightly above the toggle even with align-items: center on the flex.
   line-height: 1;
   color: var(--mantine-color-text);
 }
 
-// Price tiers used to render as a <table>; vertical-align: middle on td uses
-// table baseline rules, which mis-aligned the NumberInput and ActionIcon
-// against the text spans next to them. Grid + align-items: center sidesteps
-// the issue entirely — every cell on a row sits on the same vertical axis.
 .priceTable {
   display: flex;
   flex-direction: column;
@@ -102,9 +91,6 @@
 
 .overrideInput {
   width: 100%;
-  // Same Mantine quirk as the Switch — InputWrapper has a 20px bottom margin
-  // by default, which would shift the input 10px above center inside the
-  // grid row.
   margin: 0;
 }
 

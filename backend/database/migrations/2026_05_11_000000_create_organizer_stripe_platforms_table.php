@@ -26,9 +26,6 @@ return new class extends Migration
             $table->index('stripe_connect_platform');
         });
 
-        // Preserve original created_at so getPrimaryStripePlatform()'s sortByDesc(created_at)
-        // is deterministic when an account had multiple platform rows (e.g. IE + US).
-        // Without this, every backfilled row shares NOW() and ties pick non-deterministically.
         DB::statement('
             INSERT INTO organizer_stripe_platforms (
                 organizer_id,

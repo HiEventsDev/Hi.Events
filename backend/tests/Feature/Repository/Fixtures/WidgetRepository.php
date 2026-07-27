@@ -7,11 +7,6 @@ namespace Tests\Feature\Repository\Fixtures;
 use HiEvents\Repository\Eloquent\BaseRepository;
 
 /**
- * Concrete BaseRepository subclass used by BaseRepositoryTest.
- *
- * Exists only in tests so we can exercise BaseRepository against an isolated
- * fixture table without coupling tests to any specific production entity.
- *
  * @extends BaseRepository<WidgetDomainObject>
  */
 class WidgetRepository extends BaseRepository
@@ -26,10 +21,6 @@ class WidgetRepository extends BaseRepository
         return WidgetDomainObject::class;
     }
 
-    /**
-     * Test hooks: expose protected state so we can assert reset behaviour
-     * without resorting to reflection.
-     */
     public function exposeEagerLoads(): array
     {
         return $this->eagerLoads;

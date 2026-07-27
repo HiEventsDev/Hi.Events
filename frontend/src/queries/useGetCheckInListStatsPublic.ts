@@ -10,7 +10,6 @@ export const useGetCheckInListStatsPublic = (
     eventOccurrenceId?: number | null,
 ) => {
     return useQuery({
-        // occurrence is part of the key so switching filters refetches cleanly.
         queryKey: [GET_CHECK_IN_LIST_STATS_PUBLIC_QUERY_KEY, checkInListShortId, eventOccurrenceId ?? null],
         queryFn: () => publicCheckInClient.getCheckInListStats(checkInListShortId, eventOccurrenceId),
         enabled,

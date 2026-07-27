@@ -19,11 +19,6 @@ interface SearchTabProps {
     isCheckInPending: boolean;
     isDeletePending: boolean;
     allowOrdersAwaitingOfflinePaymentToCheckIn: boolean;
-    /**
-     * Shown next to the product on each row when the event is recurring and
-     * the check-in list covers multiple occurrences. Suppressed on single
-     * events (the hidden implicit occurrence would just be noise).
-     */
     eventType?: EventType;
     timezone?: string;
     showRowOccurrences?: boolean;

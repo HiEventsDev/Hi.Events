@@ -34,9 +34,6 @@ const Checkout = () => {
     const {eventId, orderShortId} = useParams();
     const {data: order, isError: isOrderError} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
-    // Derive a single occurrence id from order items only when they all agree —
-    // a multi-occurrence order falls back to the event-wide view so the cache
-    // entry matches what would be loaded without occurrence scoping.
     const orderOccurrenceIds = Array.from(new Set(
         (order?.order_items ?? []).map(item => item.event_occurrence_id).filter((id): id is number => id != null)
     ));
@@ -281,10 +278,8 @@ const Checkout = () => {
         }
     }, [order?.status, order?.short_id, consentGranted]);
 
-    // Get accent color from event settings, derive mode from homepage background
     const homepageSettings = event?.settings?.homepage_theme_settings;
     const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
-    // Mode is derived from the homepage background color (light homepage = light checkout)
     const checkoutMode = homepageSettings?.mode || detectMode(homepageSettings?.background || '#ffffff');
 
     return (

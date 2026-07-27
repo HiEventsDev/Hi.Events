@@ -124,11 +124,6 @@ class SendOrderDetailsService
             ->send($mail);
     }
 
-    /**
-     * Single-occurrence orders return that occurrence so the email can show its
-     * date. Multi-occurrence series-pass orders return null (email falls back
-     * to the event-level range).
-     */
     private function resolvePrimaryOccurrence(OrderDomainObject $order): ?EventOccurrenceDomainObject
     {
         $items = $order->getOrderItems();

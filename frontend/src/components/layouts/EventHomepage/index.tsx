@@ -393,7 +393,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
                                         )}
 
-                                        {/* Mixed modes */}
                                         {mixedModesLabel && (
                                             <div className={classes.metaItem}>
                                                 <div className={classes.metaIconBox}>
@@ -405,7 +404,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
                                         )}
 
-                                        {/* Multiple locations */}
                                         {multipleLocationsLabel && (
                                             <div className={classes.metaItem}>
                                                 <div className={classes.metaIconBox}>
@@ -420,7 +418,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
                                         )}
 
-                                        {/* Location */}
                                         {hasLocation && (
                                             <div className={classes.metaItem}>
                                                 <div className={classes.metaIconBox}>

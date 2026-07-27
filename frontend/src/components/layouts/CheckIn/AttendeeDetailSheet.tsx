@@ -58,8 +58,6 @@ export const AttendeeDetailSheet = ({
     const meQuery = useGetMe();
     const isLoggedIn = !!meQuery.data?.id;
 
-    // Drag-to-dismiss: track a downward drag from the handle and close when the user
-    // passes the threshold. Smaller deltas snap back via the CSS transition.
     const dragStartRef = useRef<number | null>(null);
     const [dragOffset, setDragOffset] = useState(0);
     const [dragging, setDragging] = useState(false);
@@ -80,7 +78,6 @@ export const AttendeeDetailSheet = ({
 
     const onHandlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (dragStartRef.current === null) return;
-        // Downward drag only; upward drag is clamped to 0 so the sheet doesn't lift.
         const delta = Math.max(0, e.clientY - dragStartRef.current);
         setDragOffset(delta);
     }, []);
@@ -93,7 +90,7 @@ export const AttendeeDetailSheet = ({
         try {
             e.currentTarget.releasePointerCapture(e.pointerId);
         } catch {
-            // Capture may have already been released; ignore.
+            // ignore
         }
         if (delta > DRAG_DISMISS_THRESHOLD_PX) {
             onClose();
@@ -106,9 +103,6 @@ export const AttendeeDetailSheet = ({
     const currentCheckIn = detail?.check_ins?.[0];
     const isCheckedIn = !!currentCheckIn;
 
-    // The server already filters based on list visibility + staff account. When logged in,
-    // the frontend might be loaded before the stats/filter resolve - so we treat the logged-in
-    // flag as authoritative for showing sensitive fields.
     const visibility = detail?.visibility;
     const showNotes = isLoggedIn || !!visibility?.notes;
     const showQuestions = isLoggedIn || !!visibility?.question_answers;

@@ -28,11 +28,6 @@ const defaultIcon: Record<CalloutVariant, ReactNode> = {
     success: <IconCheck size={18} stroke={2.4}/>,
 };
 
-/**
- * Callout — a friendlier alternative to Mantine's Alert for contextual hints, onboarding
- * nudges, and helpful framing inside forms. Use it over Alert when the tone should feel
- * conversational rather than "system-generated".
- */
 export const Callout = ({
                             variant = "info",
                             title,

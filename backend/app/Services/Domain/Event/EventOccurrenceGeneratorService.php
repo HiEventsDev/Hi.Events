@@ -32,9 +32,6 @@ class EventOccurrenceGeneratorService
             EventOccurrenceDomainObjectAbstract::EVENT_ID => $event->getId(),
         ]);
 
-        // Hydrated domain objects serialize start_date in ISO-8601 while rule
-        // candidates use `Y-m-d H:i:s` — normalize both sides to UTC
-        // `Y-m-d H:i:s` or existing occurrences never match on regeneration.
         $existingByStartDate = collect($existingOccurrences)->keyBy(
             fn (EventOccurrenceDomainObject $occ) => Carbon::parse($occ->getStartDate())->utc()->toDateTimeString()
         );
@@ -42,12 +39,6 @@ class EventOccurrenceGeneratorService
         $existingIds = collect($existingOccurrences)
             ->map(fn (EventOccurrenceDomainObject $occ) => $occ->getId())
             ->all();
-        // Anything attendee-bearing is "in use" for regeneration purposes,
-        // mirroring the single/bulk delete handlers which both block on
-        // attendees OR order_items. Normal checkout creates the two together,
-        // but attendees-without-order-items can exist (manual creation flows,
-        // imports, partial restores) and we must not silently soft-delete
-        // their occurrences just because no order_item row points at them.
         $occurrenceIdsInUse = $this->getOccurrenceIdsInUse($existingIds);
 
         $result = collect();
@@ -141,11 +132,6 @@ class EventOccurrenceGeneratorService
             return;
         }
 
-        // Mirror the single/bulk delete handlers: cancel WAITING/OFFERED waitlist
-        // entries scoped to the soft-deleted occurrences first. The FK is
-        // nullOnDelete which only fires on hard deletes, so without this the
-        // entries are left pointing at soft-deleted rows and crash
-        // ProcessWaitlistService on the next CapacityChangedEvent.
         $this->waitlistEntryRepository->updateWhere(
             attributes: [
                 'status' => WaitlistEntryStatus::CANCELLED->name,
@@ -165,13 +151,6 @@ class EventOccurrenceGeneratorService
         ]);
     }
 
-    /**
-     * Returns the subset of given occurrence ids that have either an order_item
-     * or an attendee currently pointing at them. This is the "do not delete"
-     * set for regeneration. Mirrors the single/bulk delete handlers which both
-     * block on attendees OR order_items so the three paths agree on what
-     * counts as in-use.
-     */
     private function getOccurrenceIdsInUse(array $occurrenceIds): Collection
     {
         if (empty($occurrenceIds)) {

@@ -39,11 +39,6 @@ class GetCheckInListAttendeeDetailPublicAction extends BaseAction
         );
     }
 
-    /**
-     * The detail endpoint is public but should reveal all attendee fields to authenticated staff
-     * whose account matches the event's account. Returns null for anonymous / invalid tokens /
-     * any auth resolution failure — those callers get data filtered by the list's visibility flags.
-     */
     private function resolveStaffAccountId(): ?int
     {
         try {

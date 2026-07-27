@@ -32,18 +32,14 @@ class RefundOccurrenceOrdersJobTest extends TestCase
         $ordersBuilder = Mockery::mock('ordersBuilder');
         $batchBuilder = Mockery::mock('batchBuilder');
 
-        // First call: get order_ids for occurrence
-        // Third call: batch multi-occurrence check
         DB::shouldReceive('table')->with('order_items')->andReturn($orderItemsBuilder, $batchBuilder);
         DB::shouldReceive('table')->with('orders')->andReturn($ordersBuilder);
 
-        // First order_items query: get order IDs
         $orderItemsBuilder->shouldReceive('where')->with('event_occurrence_id', $occurrenceId)->andReturnSelf();
         $orderItemsBuilder->shouldReceive('whereNull')->with('deleted_at')->andReturnSelf();
         $orderItemsBuilder->shouldReceive('distinct')->andReturnSelf();
         $orderItemsBuilder->shouldReceive('pluck')->with('order_id')->andReturn(collect($orderIds));
 
-        // Orders query: already-refunded rows are filtered out with whereNull('refund_status')
         $ordersBuilder->shouldReceive('whereIn')->with('id', Mockery::any())->andReturnSelf();
         $ordersBuilder->shouldReceive('where')->with('status', 'COMPLETED')->andReturnSelf();
         $ordersBuilder->shouldReceive('where')->with('payment_status', 'PAYMENT_RECEIVED')->andReturnSelf();
@@ -52,7 +48,6 @@ class RefundOccurrenceOrdersJobTest extends TestCase
             collect(array_map(fn ($o) => (object) $o, $refundableOrders))
         );
 
-        // Batch multi-occurrence check
         $batchBuilder->shouldReceive('whereIn')->andReturnSelf();
         $batchBuilder->shouldReceive('whereNull')->andReturnSelf();
         $batchBuilder->shouldReceive('select')->andReturnSelf();
@@ -99,8 +94,6 @@ class RefundOccurrenceOrdersJobTest extends TestCase
 
         $this->refundHandler->shouldNotReceive('handle');
 
-        // Skipped orders must leave a trail on the order's audit log so the
-        // admin can see which orders need manual refunds.
         $this->auditLogRepository
             ->shouldReceive('create')
             ->once()
@@ -134,9 +127,6 @@ class RefundOccurrenceOrdersJobTest extends TestCase
 
     public function test_handle_skips_orders_already_refunded(): void
     {
-        // whereNull('refund_status') filters out orders that already entered a refund
-        // workflow. The mocked "refundableOrders" collection is empty because the
-        // filter excluded them — the handler must not be called.
         $this->mockDbChain(
             occurrenceId: 10,
             orderIds: [100, 101],
@@ -174,8 +164,6 @@ class RefundOccurrenceOrdersJobTest extends TestCase
             ->once()
             ->andThrow(new \RuntimeException('Stripe error'));
 
-        // Failed refunds must surface on the order's audit log so admins can see
-        // which orders need manual intervention.
         $this->auditLogRepository
             ->shouldReceive('create')
             ->once()

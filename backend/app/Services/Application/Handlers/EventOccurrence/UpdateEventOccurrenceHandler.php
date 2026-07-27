@@ -82,8 +82,6 @@ class UpdateEventOccurrenceHandler
             $originalStartDate = $occurrence->getStartDate();
             $startDateChanged = $this->datesDiffer($dto->start_date, $originalStartDate);
 
-            // `DateHelper::convertToUTC` normalizes to a different string than the
-            // DB-hydrated value, so string compare alone always reports a change.
             $isOverride = $occurrence->getIsOverridden()
                 || $startDateChanged
                 || $this->datesDiffer($dto->end_date, $occurrence->getEndDate())

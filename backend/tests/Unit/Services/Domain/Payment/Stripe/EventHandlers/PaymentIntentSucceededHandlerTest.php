@@ -30,10 +30,6 @@ use Psr\Log\LoggerInterface;
 use Stripe\PaymentIntent;
 use Tests\TestCase;
 
-/**
- * StripeRefundExpiredOrderService is a readonly class Mockery cannot subclass,
- * so a readonly test double records the refund call.
- */
 final readonly class RecordingRefundExpiredOrderService extends StripeRefundExpiredOrderService
 {
     public function __construct(private RefundCallLog $log) {}
@@ -126,7 +122,6 @@ class PaymentIntentSucceededHandlerTest extends TestCase
             $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']));
             $this->fail('Expected CannotAcceptPaymentException was not thrown');
         } catch (CannotAcceptPaymentException) {
-            // expected
         }
 
         $this->assertSame([], $this->refundLog->orderIds, 'An already-paid order must not be refunded on a duplicate webhook');
@@ -156,14 +151,12 @@ class PaymentIntentSucceededHandlerTest extends TestCase
             ->with('id', [5])
             ->andReturn(collect([$cancelledOccurrence]));
 
-        // The order must not be completed on the reject path.
         $this->orderRepository->shouldNotReceive('updateFromArray');
 
         try {
             $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']));
             $this->fail('Expected CannotAcceptPaymentException was not thrown');
         } catch (CannotAcceptPaymentException) {
-            // expected
         }
 
         $this->assertSame([1], $this->refundLog->orderIds, 'A late payment on a cancelled occurrence should be refunded exactly once');
@@ -191,7 +184,6 @@ class PaymentIntentSucceededHandlerTest extends TestCase
             $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']));
             $this->fail('Expected CannotAcceptPaymentException was not thrown');
         } catch (CannotAcceptPaymentException) {
-            // expected
         }
 
         $this->assertSame([1], $this->refundLog->orderIds, 'The late payment should have been refunded exactly once');

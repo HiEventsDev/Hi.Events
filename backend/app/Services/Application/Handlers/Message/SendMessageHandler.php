@@ -118,9 +118,6 @@ class SendMessageHandler
                 'account_id' => $messageData->account_id,
                 'attendee_ids' => $messageData->attendee_ids,
                 'product_ids' => $messageData->product_ids,
-                // event_occurrence_ids doesn't have a dedicated column — messages
-                // only have a single event_occurrence_id FK — so we persist the
-                // array here for audit + job replay.
                 'event_occurrence_ids' => $messageData->event_occurrence_ids,
             ],
         ]);
@@ -176,11 +173,6 @@ class SendMessageHandler
         };
     }
 
-    /**
-     * Build the `where` fragment that scopes a recipient query to the target
-     * occurrences. Prefers event_occurrence_ids (multi) over event_occurrence_id
-     * (single); returns an empty array when neither is set (= whole event).
-     */
     private function occurrenceWhere(SendMessageDTO $messageData): array
     {
         if (! empty($messageData->event_occurrence_ids)) {

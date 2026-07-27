@@ -275,7 +275,6 @@ export interface EventSettings {
     waitlist_auto_process?: boolean;
     waitlist_offer_timeout_minutes?: number | null;
 
-    // Occurrence display
     show_available_occurrence_capacity?: boolean;
     hide_sold_out_occurrences?: boolean;
 }
@@ -417,10 +416,6 @@ export interface RecurrenceRule {
     range: RecurrenceRuleRange;
     default_capacity?: number | null;
     excluded_dates?: string[];
-    // Written by the backend's RecurrenceRuleExclusionService whenever a
-    // generated date is cancelled — exposed here so the schedule modal can
-    // pass it through unchanged on save instead of dropping it and silently
-    // resurrecting cancelled dates on the next regenerate.
     excluded_occurrences?: string[];
     additional_dates?: RecurrenceRuleAdditionalDate[];
     monthly_pattern?: 'by_day_of_month' | 'by_day_of_week';
@@ -968,17 +963,7 @@ export interface CheckInList {
     event_occurrence_id?: number | null;
     event?: Event;
     event_occurrence?: EventOccurrence;
-    /**
-     * Marks the list auto-created with the event. Can't be deleted, gets a
-     * "Default" badge in the admin table, and is the stable check-in entry
-     * point for the event.
-     */
     is_system_default?: boolean;
-    /**
-     * Unfiltered occurrence list for the check-in tool's filter pill — includes
-     * past sessions so staff can reconcile after an event. Only present on the
-     * public check-in list response; admin endpoints use `event.occurrences`.
-     */
     event_occurrences?: EventOccurrence[];
     products: {
         id: number;

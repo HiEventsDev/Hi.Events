@@ -136,10 +136,6 @@ const parseLocalDate = (value: string): Date | null => {
 
 const computePreviewDates = (values: RecurrenceFormValues): Date[] => {
     const dates: Date[] = [];
-    // Anchor preview generation on the schedule start date (defaults to today,
-    // but organizers can shift it for events being scheduled in advance).
-    // Without this anchor the preview always starts from "today" even though
-    // the backend generates from values.range_start.
     const today = parseLocalDate(values.range_start) ?? new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -389,8 +385,6 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
     useEffect(() => {
         if (event?.recurrence_rule) {
             const rule = event.recurrence_rule;
-            // Prefer the rule's own start, then the earliest existing occurrence
-            // start (for events that already have generated dates), then today.
             const earliestOccurrence = event.occurrences?.length
                 ? event.occurrences
                     .map(o => o.start_date)
@@ -477,20 +471,10 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
             ? {type: 'until', until: values.range_until}
             : {type: 'count', count: values.range_count};
 
-        // Send range.start so the backend doesn't fall back to "now()" — for
-        // events scheduled in advance this is what anchors the generated dates
-        // to the organizer's intended start instead of the moment of submit.
         if (values.range_start) {
             range.start = values.range_start;
         }
 
-        // Hidden recurrence metadata — written by the backend whenever a
-        // generated date is cancelled (excluded_occurrences) or manually
-        // added (additional_dates), and never editable through this form.
-        // Carry them forward verbatim so a routine schedule edit doesn't
-        // silently resurrect cancelled dates or drop manually-added ones.
-        // Legacy excluded_dates is also preserved to keep older rules intact
-        // until the backend migrates them to excluded_occurrences.
         const existingRule = event?.recurrence_rule;
         const preservedMetadata: Partial<RecurrenceRule> = {};
         if (existingRule?.excluded_occurrences && existingRule.excluded_occurrences.length > 0) {
@@ -508,9 +492,6 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
             interval: values.interval,
             times_of_day: timesOfDay,
             range,
-            // `??` not `||` — `0` means "closed/no inventory" (legitimate for
-            // placeholder dates, comp-only sessions). Coercing 0 to null would
-            // silently flip a closed date to unlimited capacity.
             default_capacity: values.default_capacity ?? null,
             ...preservedMetadata,
         };

@@ -10,12 +10,6 @@ const patterns: Record<HapticPattern, number | number[]> = {
     error: [60, 60, 60],
 };
 
-/**
- * Vibration API wrapper with feature detection + user-preference gating via localStorage.
- * Call the returned `vibrate(pattern)` in response to a user gesture.
- *
- * Safari/iOS do not implement navigator.vibrate; the call is a no-op there rather than an error.
- */
 export const useHaptics = () => {
     return useCallback((pattern: HapticPattern) => {
         if (isSsr()) return;
@@ -28,7 +22,7 @@ export const useHaptics = () => {
         try {
             navigator.vibrate(patterns[pattern]);
         } catch {
-            // Vibration can throw on some browsers when called without a user gesture; ignore.
+            // ignore
         }
     }, []);
 };

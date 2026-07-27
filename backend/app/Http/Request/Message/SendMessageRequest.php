@@ -37,8 +37,6 @@ class SendMessageRequest extends FormRequest
                     ->where('event_id', $eventId)
                     ->whereNull('deleted_at'),
             ],
-            // Targets attendees across multiple occurrences (e.g. after a bulk
-            // reschedule). Mutually exclusive with event_occurrence_id.
             'event_occurrence_ids' => ['nullable', 'array', 'max:500'],
             'event_occurrence_ids.*' => [
                 'integer',

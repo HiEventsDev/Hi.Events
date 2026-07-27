@@ -21,14 +21,6 @@ use Tests\Feature\Repository\Fixtures\WidgetModel;
 use Tests\Feature\Repository\Fixtures\WidgetRepository;
 use Tests\TestCase;
 
-/**
- * Exercises HiEvents\Repository\Eloquent\BaseRepository against an isolated
- * fixture schema (br_test_widgets / br_test_widget_categories) so the test is
- * decoupled from production tables.
- *
- * Tables are created in setUp() and dropped in tearDown(). The DatabaseTransactions
- * trait wraps each test in a transaction, so any data inserted is rolled back too.
- */
 class BaseRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -72,10 +64,6 @@ class BaseRepositoryTest extends TestCase
         parent::tearDown();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Helpers
-    // ─────────────────────────────────────────────────────────────────────────
-
     private function makeCategory(string $name = 'Default'): WidgetCategoryModel
     {
         $category = new WidgetCategoryModel;
@@ -100,10 +88,6 @@ class BaseRepositoryTest extends TestCase
 
         return $widget;
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  create / insert
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function test_create_inserts_a_row_and_hydrates_a_domain_object(): void
     {
@@ -134,7 +118,6 @@ class BaseRepositoryTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertSame(2, WidgetModel::query()->count());
-        // both rows should have timestamps populated by the base repository
         $this->assertSame(0, WidgetModel::query()->whereNull('created_at')->count());
         $this->assertSame(0, WidgetModel::query()->whereNull('updated_at')->count());
     }
@@ -157,10 +140,6 @@ class BaseRepositoryTest extends TestCase
 
         $this->assertSame(1, WidgetModel::query()->where('created_at', $supplied)->count());
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  findById / findFirst / findFirstByField / findFirstWhere
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function test_find_by_id_returns_hydrated_domain_object(): void
     {
@@ -224,10 +203,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertNull($this->repository->findFirstWhere(['is_active' => false]));
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  findWhere / findWhereIn / all / countWhere
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_find_where_returns_collection_of_domain_objects(): void
     {
         $this->makeWidget(['name' => 'A', 'is_active' => true]);
@@ -290,10 +265,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertSame(2, $this->repository->countWhere(['is_active' => true]));
         $this->assertSame(3, $this->repository->countWhere([]));
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  applyConditions DSL
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function test_apply_conditions_supports_in_operator(): void
     {
@@ -374,16 +345,11 @@ class BaseRepositoryTest extends TestCase
 
         $results = $this->repository->findWhere([
             'name' => 'foo',
-            // closure-as-value path through applyConditions
             fn ($q) => $q->where('is_active', true),
         ]);
 
         $this->assertCount(1, $results);
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  update / delete
-    // ─────────────────────────────────────────────────────────────────────────
 
     public function test_update_from_array_persists_changes_and_returns_fresh_object(): void
     {
@@ -458,10 +424,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertSame(2, $deleted);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  increment / decrement
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_increment_bumps_an_integer_column(): void
     {
         $widget = $this->makeWidget(['quantity' => 10]);
@@ -530,10 +492,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertSame(9.00, (float) $fresh->price);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Pagination
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_paginate_returns_a_length_aware_paginator(): void
     {
         for ($i = 0; $i < 5; $i++) {
@@ -573,10 +531,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertCount(2, $page->items());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Eager loading
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_load_relation_hydrates_a_belongs_to_relation(): void
     {
         $category = $this->makeCategory('Tools');
@@ -605,10 +559,6 @@ class BaseRepositoryTest extends TestCase
         $this->assertCount(2, $found->getWidgets());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Soft deletes / includeDeleted
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_include_deleted_returns_soft_deleted_rows(): void
     {
         $widget = $this->makeWidget();
@@ -621,20 +571,14 @@ class BaseRepositoryTest extends TestCase
         $this->assertSame($widget->id, $found->getId());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  State reset (the actual point of the refactor)
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_consecutive_finds_do_not_leak_where_clauses(): void
     {
         $a = $this->makeWidget(['is_active' => true]);
         $b = $this->makeWidget(['is_active' => false]);
 
-        // First call applies a where(is_active, true)
         $first = $this->repository->findWhere(['is_active' => true]);
         $this->assertCount(1, $first);
 
-        // Second call must NOT inherit the previous where clause
         $second = $this->repository->findWhere([]);
         $this->assertCount(2, $second, 'Second findWhere([]) inherited state from the previous query');
     }
@@ -650,12 +594,8 @@ class BaseRepositoryTest extends TestCase
             ->findById($widgetA->id);
         $this->assertNotNull($first->getCategory());
 
-        // After the call, eagerLoads MUST be cleared. Previously this was a bug —
-        // resetModel() reset the builder but left $eagerLoads populated, so the
-        // array would grow unboundedly across calls on the same instance.
         $this->assertSame([], $this->repository->exposeEagerLoads());
 
-        // A subsequent call without loadRelation() must produce an unhydrated relation.
         $second = $this->repository->findById($widgetB->id);
         $this->assertNull($second->getCategory());
     }
@@ -665,18 +605,13 @@ class BaseRepositoryTest extends TestCase
         $this->makeWidget(['is_active' => true]);
 
         try {
-            // findById on a missing id throws ModelNotFoundException — but only
-            // AFTER the loadRelation call has registered an eager load and added
-            // a where clause.
             $this->repository
                 ->loadRelation(new Relationship(WidgetCategoryDomainObject::class, name: 'category'))
                 ->findById(999_999);
             $this->fail('Expected ModelNotFoundException');
         } catch (ModelNotFoundException) {
-            // expected
         }
 
-        // The next call on the same repository instance must start clean.
         $this->assertSame([], $this->repository->exposeEagerLoads());
         $this->assertFalse($this->repository->exposeBuilderHasWheres());
     }
@@ -692,13 +627,8 @@ class BaseRepositoryTest extends TestCase
         $this->assertCount(3, $page->items());
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Hydration edge cases
-    // ─────────────────────────────────────────────────────────────────────────
-
     public function test_hydration_calls_setters_via_studly_case(): void
     {
-        // category_id is a snake_case column → setCategoryId on the domain object
         $category = $this->makeCategory();
         $widget = $this->makeWidget(['category_id' => $category->id]);
 
@@ -709,8 +639,6 @@ class BaseRepositoryTest extends TestCase
 
     public function test_hydration_silently_skips_columns_with_no_setter(): void
     {
-        // No setter exists on WidgetDomainObject for an unknown column.
-        // Add a column on the fly via raw SQL so the model picks it up.
         Schema::table('br_test_widgets', function (Blueprint $table) {
             $table->string('mystery_field')->nullable();
         });
@@ -718,7 +646,6 @@ class BaseRepositoryTest extends TestCase
         $widget = $this->makeWidget();
         WidgetModel::query()->where('id', $widget->id)->update(['mystery_field' => 'something']);
 
-        // Should not throw — the silent-skip behaviour is documented.
         $found = $this->repository->findById($widget->id);
         $this->assertNotNull($found);
     }

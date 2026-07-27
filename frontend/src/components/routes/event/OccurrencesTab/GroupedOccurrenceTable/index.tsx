@@ -108,7 +108,7 @@ export const GroupedOccurrenceTable = ({
         onSelectionChange(next);
     }, [selectedIds, onSelectionChange]);
 
-    const totalColumns = columns.length + 1; // +1 for checkbox
+    const totalColumns = columns.length + 1;
 
     return (
         <div className={classes.tableWrapper}>

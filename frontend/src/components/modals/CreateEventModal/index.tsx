@@ -58,7 +58,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     const eventMutation = useCreateEvent();
     const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
 
-    // If organizerId is provided, set it and fetch the organizer data
     useEffect(() => {
         if (organizerId) {
             form.setFieldValue('organizer_id', String(organizerId));
@@ -272,7 +271,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         onChange={(value) => {
                                             form.setFieldValue('start_date', value);
 
-                                            // Auto-adjust end date if it's before new start date
                                             if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
                                                 form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
                                             }
@@ -294,7 +292,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                         onFocus={
                                             () => {
                                                 if (!form.values.end_date && form.values.start_date) {
-                                                    // Set default end date to 2 hours after start date
                                                     form.setFieldValue('end_date', dayjs(form.values.start_date).add(2, 'hours').toISOString());
                                                 }
                                             }

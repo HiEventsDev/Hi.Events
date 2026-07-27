@@ -6,19 +6,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-/**
- * Adds the event_location_id pivot to events and event_occurrences, then
- * backfills event_locations / locations rows from the legacy address
- * columns. Backfill logic is inlined so the migration has zero dependency
- * on application namespaces — it must keep working against fresh installs
- * and delayed deploys even after future domain-code refactors.
- *
- * Legacy columns (events.location_details, event_settings.{location_details,
- * online_event_connection_details, is_online_event}) are retained; a
- * follow-up migration drops them once read paths have moved over.
- *
- * Idempotent: events with event_location_id already set are skipped.
- */
 return new class extends Migration
 {
     private const TYPE_IN_PERSON = 'IN_PERSON';
@@ -63,10 +50,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Public so feature tests can invoke the backfill against pretend
-     * pre-migration data without rerunning the schema changes.
-     */
     public function backfill(): int
     {
         $backfilled = 0;
@@ -92,10 +75,6 @@ return new class extends Migration
             ->first();
 
         if ($this->isOnlineEvent($settings)) {
-            // Re-purify on the way through: the legacy column was sanitised
-            // when written, but online_event_connection_details is rendered
-            // post-checkout with dangerouslySetInnerHTML, so we don't want
-            // to trust historical data that may predate today's allowlist.
             $eventLocationId = $this->createOnlineEventLocation(
                 eventId: (int) $event->id,
                 onlineDetails: $this->purify($settings->online_event_connection_details ?? null),

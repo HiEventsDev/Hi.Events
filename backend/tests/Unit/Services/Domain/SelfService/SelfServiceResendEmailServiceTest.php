@@ -79,9 +79,6 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getOrganizer')->andReturn($organizer);
 
-        // Three eager-loads: order (with nested order items), event_occurrence,
-        // and product — so the attendee-ticket email can render the occurrence
-        // date, venue, and ticket type.
         $this->attendeeRepository
             ->shouldReceive('loadRelation')
             ->with(Mockery::type(Relationship::class))
@@ -175,9 +172,6 @@ class SelfServiceResendEmailServiceTest extends TestCase
             ])
             ->andReturn($order);
 
-        // organizer + event_settings + event_occurrences — the occurrence load is
-        // needed so OrderSummary can render the correct date for multi-occurrence
-        // orders where the primary-occurrence resolver returns null.
         $this->eventRepository
             ->shouldReceive('loadRelation')
             ->andReturnSelf();
@@ -237,8 +231,6 @@ class SelfServiceResendEmailServiceTest extends TestCase
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getOrganizer')->andReturn($organizer);
 
-        // Order + event_occurrence + product — three nested eager-loads so
-        // the resend email can show the occurrence date and the ticket type.
         $this->attendeeRepository
             ->shouldReceive('loadRelation')
             ->with(Mockery::type(Relationship::class))

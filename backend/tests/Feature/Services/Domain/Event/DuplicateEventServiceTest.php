@@ -58,7 +58,6 @@ class DuplicateEventServiceTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        // A past occurrence on the same UTC day as the duplication.
         $pastTodayStart = now()->utc()->startOfDay()->addSecond();
         $futureStart = now()->utc()->addDay();
 

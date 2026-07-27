@@ -50,16 +50,8 @@ interface EventMessageModalProps extends GenericModalProps {
     messageType: MessageType,
     attendeeId?: IdParam,
     eventOccurrenceId?: IdParam,
-    /**
-     * Multi-occurrence targeting (e.g. after a bulk reschedule). When set,
-     * the occurrence dropdown is hidden and the modal sends the array
-     * through to the backend for whereIn-style filtering. Mutually exclusive
-     * with eventOccurrenceId.
-     */
     eventOccurrenceIds?: IdParam[],
-    /** Pre-fill the subject field (organizer can still edit before sending). */
     initialSubject?: string,
-    /** Pre-fill the message body. */
     initialMessage?: string,
 }
 
@@ -147,9 +139,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
         eventOccurrenceId: rawEventOccurrenceId, eventOccurrenceIds,
         initialSubject, initialMessage,
     } = props;
-    // Normalize: a single-item array targets exactly one occurrence, so fall
-    // back to the scalar path (dropdown UI works as usual, backend uses the
-    // single FK column). Multi ≥ 2 keeps the array and the whereIn backend path.
     const isMultiOccurrence = !!eventOccurrenceIds && eventOccurrenceIds.length > 1;
     const eventOccurrenceId = rawEventOccurrenceId
         ?? (eventOccurrenceIds?.length === 1 ? eventOccurrenceIds[0] : undefined);
@@ -171,9 +160,6 @@ export const SendMessageModal = (props: EventMessageModalProps) => {
             }));
     }, [isRecurring, occurrencesData, event?.timezone]);
 
-    // Resolve the targeted occurrences for the multi-session case so we can
-    // render a verifiable list in the banner. Sorted chronologically — matches
-    // how they were selected and how attendees will see them on their tickets.
     const targetedOccurrences = useMemo(() => {
         if (!isMultiOccurrence || !occurrencesData?.data || !eventOccurrenceIds) return [];
         const ids = new Set(eventOccurrenceIds.map(id => Number(id)));

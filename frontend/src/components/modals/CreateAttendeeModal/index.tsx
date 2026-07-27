@@ -68,10 +68,6 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         },
     });
 
-    // Find the selected occurrence so we can show the override-capacity opt-in
-    // when the occurrence is at/over its limit. Without this control, the new
-    // backend eligibility check blocks manual attendee creation on full
-    // recurring sessions even though the override flag exists for that case.
     const selectedOccurrence = useMemo(() => {
         if (!isRecurring || !occurrencesData?.data || form.values.event_occurrence_id == null) return undefined;
         const targetId = Number(form.values.event_occurrence_id);
@@ -85,8 +81,6 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
         return (selectedOccurrence.used_capacity ?? 0) >= selectedOccurrence.capacity;
     }, [selectedOccurrence]);
 
-    // Reset the opt-in whenever the user switches occurrences so it never
-    // silently carries over from a previous full-occurrence selection.
     useEffect(() => {
         if (form.values.override_capacity && !occurrenceIsFull) {
             form.setFieldValue('override_capacity', false);

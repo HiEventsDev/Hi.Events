@@ -33,10 +33,6 @@ readonly class EventStatsFetchService
         $occurrenceId = $requestData->occurrence_id;
 
         if ($occurrenceId !== null) {
-            // event_id is bound here so an organiser with access to event A
-            // cannot pass an occurrence id belonging to event B and read its
-            // stats. Action-level authorization gates eventId; this keeps the
-            // query honest about that scope.
             $totalsQuery = <<<'SQL'
             SELECT
                 COALESCE(SUM(eods.products_sold), 0) AS total_products_sold,
@@ -117,8 +113,6 @@ readonly class EventStatsFetchService
         $endDate = $requestData->end_date;
 
         if ($occurrenceId !== null) {
-            // event_id is bound alongside occurrence_id so cross-event ids
-            // produce zero rows rather than another event's stats.
             $whereClause = 'eods.event_occurrence_id = :occurrenceId AND eods.event_id = :eventId';
             $bindings = ['startDate' => $startDate, 'endDate' => $endDate, 'occurrenceId' => $occurrenceId, 'eventId' => $eventId];
         } else {

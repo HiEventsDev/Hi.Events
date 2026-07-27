@@ -16,8 +16,6 @@ class GetAvailableTokensAction extends BaseAction
 
     public function __invoke(string $templateType): JsonResponse
     {
-        // no authorization needed
-
         $type = EmailTemplateType::tryFrom($templateType);
 
         if (! $type) {

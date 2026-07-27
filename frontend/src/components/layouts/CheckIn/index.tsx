@@ -103,8 +103,6 @@ const CheckIn = () => {
 
     const products = checkInList?.products;
 
-    // Prefer the list's unfiltered occurrences (includes past dates for
-    // reconciliation) over event.occurrences (future-only, customer-facing).
     const pillOccurrences = checkInList?.event_occurrences ?? event?.occurrences;
 
     const showOccurrenceFilter =
@@ -161,7 +159,6 @@ const CheckIn = () => {
         }
     }, [scanMode]);
 
-    // Show description on first open; dismissal persists per list short_id.
     useEffect(() => {
         if (isSsr()) return;
         if (!checkInListShortId) return;
@@ -416,8 +413,6 @@ const CheckIn = () => {
         };
     }, []);
 
-    // HID scanner listener — only active on Scan tab in USB mode. Ignores key
-    // events while focus is in an input so manual search still works.
     useEffect(() => {
         const usbListeningActive = activeTab === "scan" && scanMode === "usb";
         if (!usbListeningActive) {
@@ -497,8 +492,6 @@ const CheckIn = () => {
             />);
     }
 
-    // Scoped lists become unusable when their occurrence is cancelled — the
-    // occurrence no longer exists for attendees to be checked in against.
     if (checkInList?.event_occurrence?.status === EventOccurrenceStatus.CANCELLED) {
         return (
             <NoResultsSplash
@@ -545,8 +538,6 @@ const CheckIn = () => {
             />);
     }
 
-    // Filtered stats drive the progress chip when an occurrence is selected;
-    // otherwise the list's own totals (pre-computed server-side) are used.
     const filteredStats = progressStatsQuery.data?.data;
     const totalAttendees = filteredStats?.total_attendees ?? checkInList?.total_attendees ?? 0;
     const checkedInCount = filteredStats?.checked_in_attendees ?? checkInList?.checked_in_attendees ?? 0;
@@ -559,7 +550,6 @@ const CheckIn = () => {
                     <div className={classes.topTitle}>
                         <Truncate text={checkInList?.name ?? ""} length={26}/>
                     </div>
-                    {/* Subtitle for scoped lists so staff know which session they're on. */}
                     {checkInList?.event_occurrence && event?.timezone && (
                         <div className={classes.topScope}>
                             <IconCalendarEvent size={12}/>
@@ -598,7 +588,6 @@ const CheckIn = () => {
                 </div>
             </header>
 
-            {/* Persistent across tabs. Hidden for scoped lists (header shows it) and single events. */}
             {showOccurrenceFilter && event?.timezone && (
                 <div className={classes.occurrenceFilterBar}>
                     <OccurrenceFilterPill

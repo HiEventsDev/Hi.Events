@@ -48,8 +48,6 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
-        // Default: waitlist cleanup is a no-op (no entries). Tests that
-        // exercise the cleanup branch override this.
         $this->waitlistEntryRepository
             ->shouldReceive('updateWhere')
             ->byDefault()
@@ -104,7 +102,6 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
                 EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,
             ]);
 
-        // Non-recurring event: excluded_dates step is a no-op.
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getType')->andReturn(EventType::SINGLE->name);
         $this->eventRepository
@@ -118,9 +115,6 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
 
     public function test_delete_adds_date_to_recurrence_excluded_dates_for_recurring_event(): void
     {
-        // Without this, the next regenerate would parse the rule, see the same
-        // candidate date, and recreate the deleted occurrence — silently
-        // undoing the delete.
         $eventId = 1;
         $occurrenceId = 10;
 
@@ -179,7 +173,6 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
         ]);
 
         $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
-        // No event update — the date is already excluded.
         $this->eventRepository->shouldNotReceive('updateFromArray');
 
         $this->handler->handle($eventId, $occurrenceId);
@@ -244,10 +237,6 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
 
     public function test_delete_cancels_waiting_and_offered_waitlist_entries_for_occurrence(): void
     {
-        // The FK is nullOnDelete — without an explicit cancel here, WAITING
-        // entries pointing at this occurrence would be left as orphans (their
-        // event_occurrence_id nulled), which crashes ProcessWaitlistService
-        // on the next CapacityChangedEvent for recurring events.
         $eventId = 1;
         $occurrenceId = 10;
 

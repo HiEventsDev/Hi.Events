@@ -30,9 +30,6 @@ const stripHtml = (html: string): string => {
     return tmp.textContent || tmp.innerText || '';
 };
 
-// RFC 5545 §3.3.11 TEXT escaping. Backslash, semicolon and comma must be
-// escaped; CR/LF collapse to the literal "\n" sequence. Without this, a
-// crafted venue/title/description can inject extra calendar properties.
 const escapeICSText = (value: string): string => {
     return (value ?? '')
         .replace(/\\/g, '\\\\')
@@ -41,8 +38,6 @@ const escapeICSText = (value: string): string => {
         .replace(/\r\n|\r|\n/g, '\\n');
 };
 
-// RFC 5545 §3.1 content-line folding: lines longer than 75 octets must be
-// split with CRLF + a leading whitespace continuation.
 const foldICSLine = (line: string): string => {
     const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
     if (!encoder) {
@@ -60,13 +55,12 @@ const foldICSLine = (line: string): string => {
     let limit = 75;
     while (cursor < bytes.length) {
         let end = Math.min(cursor + limit, bytes.length);
-        // Avoid splitting in the middle of a UTF-8 sequence.
         while (end < bytes.length && (bytes[end] & 0xc0) === 0x80) {
             end--;
         }
         chunks.push(decoder.decode(bytes.subarray(cursor, end)));
         cursor = end;
-        limit = 74; // continuation lines begin with a space, so 1 byte less of content
+        limit = 74;
     }
     return chunks.join('\r\n ');
 };

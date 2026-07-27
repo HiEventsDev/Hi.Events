@@ -112,7 +112,6 @@ class CreateWaitlistEntryHandlerTest extends TestCase
             ->once()
             ->with(42, [30]);
 
-        // Regression: the DTO rebuild previously fataled via a non-existent fromArray().
         $this->createWaitlistEntryService
             ->shouldReceive('createEntry')
             ->once()

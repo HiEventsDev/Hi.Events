@@ -161,7 +161,6 @@ class SendMessageHandlerTest extends TestCase
         $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($account);
         $this->config->shouldReceive('get')->with('app.saas_mode_enabled')->andReturn(false);
 
-        // Mock eligibility checks to pass (return null = no violations)
         $this->eligibilityService->shouldReceive('checkTierLimits')->andReturn(null);
         $this->eligibilityService->shouldReceive('checkEligibility')->andReturn(null);
 
@@ -200,8 +199,6 @@ class SendMessageHandlerTest extends TestCase
 
     public function test_handle_estimates_recipients_for_multi_occurrence_targeting(): void
     {
-        // event_occurrence_ids (array) should produce an IN-style query against
-        // attendees, and the dispatched job DTO must carry the array forward.
         $dto = new SendMessageDTO(
             account_id: 1,
             event_id: 101,
@@ -228,8 +225,6 @@ class SendMessageHandlerTest extends TestCase
         $this->eligibilityService->shouldReceive('checkEligibility')->andReturn(null);
         $this->purifier->shouldReceive('purify')->andReturn('<p>Body</p>');
 
-        // Assert the estimate path uses whereIn against the array rather than
-        // an equality check on a single id.
         $this->attendeeRepository
             ->shouldReceive('countWhere')
             ->once()
@@ -239,7 +234,6 @@ class SendMessageHandlerTest extends TestCase
                 && $where[0][2] === [201, 202, 203]))
             ->andReturn(42);
 
-        // Stub the rest of the handler path.
         $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(collect());
         $this->productRepository->shouldReceive('findWhereIn')->andReturn(collect());
         $this->orderRepository->shouldReceive('findFirstWhere')->andReturn(null);
@@ -253,8 +247,6 @@ class SendMessageHandlerTest extends TestCase
             ->shouldReceive('create')
             ->once()
             ->with(m::on(function (array $attrs) {
-                // Array is not stored in the dedicated event_occurrence_id column —
-                // it's persisted in send_data for audit + job replay.
                 return $attrs['event_occurrence_id'] === null
                     && ($attrs['send_data']['event_occurrence_ids'] ?? null) === [201, 202, 203];
             }))

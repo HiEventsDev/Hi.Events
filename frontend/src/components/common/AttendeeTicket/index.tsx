@@ -30,9 +30,6 @@ export const AttendeeTicket = ({
                                    hideButtons = false,
                                    showPoweredBy = false,
                                }: AttendeeTicketProps) => {
-    // Prefer attendee.event_occurrence (hydrated by backend) over caller-supplied
-    // occurrence, so the ticket always shows the date the attendee is booked for
-    // rather than the event's aggregated range.
     const ticketOccurrence = attendee.event_occurrence ?? occurrence;
     const productPrice = getAttendeeProductPrice(attendee, product);
     const eventLocation = resolveEventLocation(event, ticketOccurrence);
@@ -59,7 +56,6 @@ export const AttendeeTicket = ({
     const isCancelled = attendee.status === 'CANCELLED';
     const isAwaitingPayment = attendee.status === 'AWAITING_PAYMENT';
 
-    // Generate a deterministic pattern based on attendee ID for consistency
     const generateQrPattern = () => {
         const seed = attendee.public_id || 'default';
         const pattern = [];

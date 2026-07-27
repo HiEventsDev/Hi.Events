@@ -87,8 +87,6 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
 
     public function test_overrides_client_supplied_occurrence_filter_for_scoped_list(): void
     {
-        // A misbehaving or stale client might try to pass a different occurrence id.
-        // For a scoped list we must ignore it and force the list's own occurrence.
         $this->expectCheckInListLoaded($this->buildCheckInList(occurrenceId: 42));
 
         $capturedParams = null;
@@ -115,14 +113,11 @@ class GetCheckInListAttendeesPublicHandlerTest extends TestCase
         $this->assertCount(1, $occurrenceFilters, 'client filter must be replaced, not appended');
         $this->assertSame('42', $occurrenceFilters->first()->value);
 
-        // Non-occurrence client filters are preserved.
         $this->assertCount(1, $filters->where('field', 'status'));
     }
 
     public function test_leaves_client_supplied_occurrence_filter_alone_when_list_is_not_scoped(): void
     {
-        // Unscoped ("All occurrences") list — respect the client's optional filter
-        // (this is how the filter pill in the check-in UI works).
         $this->expectCheckInListLoaded($this->buildCheckInList(occurrenceId: null));
 
         $capturedParams = null;

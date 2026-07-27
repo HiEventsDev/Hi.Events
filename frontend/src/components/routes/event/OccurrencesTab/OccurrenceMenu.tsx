@@ -65,8 +65,6 @@ const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions): Occ
     return items.filter(Boolean) as OccurrenceAction[];
 };
 
-// Vertical dropdown menu (used in table rows and calendar)
-
 interface OccurrenceMenuItemsProps {
     occurrence: EventOccurrence;
     actions: OccurrenceMenuActions;
@@ -110,8 +108,6 @@ export const OccurrenceMenuItems = ({occurrence, actions}: OccurrenceMenuItemsPr
         </>
     );
 };
-
-// Horizontal action bar (used in slideout / manage modal)
 
 interface OccurrenceActionBarProps {
     occurrence: EventOccurrence;
@@ -205,8 +201,6 @@ export const OccurrenceActionBar = ({occurrence, actions, hiddenKeys}: Occurrenc
         </div>
     );
 };
-
-// Shared utilities
 
 export const statusLabel = (status?: EventOccurrenceStatus) => {
     switch (status) {

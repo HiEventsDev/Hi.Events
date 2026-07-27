@@ -63,9 +63,6 @@ export const InlineCameraScanner = ({onAttendeeScanned}: Props) => {
             const cameras = await QrScanner.listCameras(true);
             setCameraList(cameras);
         });
-        // stopScanner reads qrScannerRef, which outlives the state captured at mount time.
-        // Don't gate on `permissionGranted` state — that was a closure bug that left the
-        // camera running after unmount.
         return () => {
             stopScanner();
         };

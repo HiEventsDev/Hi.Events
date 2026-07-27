@@ -68,10 +68,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * Convenience factory for the "existing occurrence" mock with the fields the
-     * override-detection logic reads.
-     */
     private function existingOccurrence(
         int $id = 10,
         string $startDate = '2026-06-01 10:00:00',
@@ -104,7 +100,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
         $dto = new UpsertEventOccurrenceDTO(
             event_id: $eventId,
-            start_date: '2026-06-02 10:00:00', // moved by a day
+            start_date: '2026-06-02 10:00:00',
             end_date: '2026-06-01 18:00:00',
             capacity: 100,
             label: 'Same label',
@@ -138,7 +134,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
         $dto = new UpsertEventOccurrenceDTO(
             event_id: $eventId,
             start_date: '2026-06-01 10:00:00',
-            end_date: '2026-06-01 20:00:00', // extended by 2 hours
+            end_date: '2026-06-01 20:00:00',
             capacity: 100,
             label: null,
         );
@@ -168,7 +164,7 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             event_id: $eventId,
             start_date: '2026-06-01 10:00:00',
             end_date: '2026-06-01 18:00:00',
-            capacity: 200, // changed from 100
+            capacity: 200,
             label: null,
         );
 
@@ -188,7 +184,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_does_not_flag_as_overridden_for_label_only_change(): void
     {
-        // A label-only edit shouldn't pin the occurrence against rule regenerates.
         $occurrenceId = 10;
         $eventId = 1;
 
@@ -218,9 +213,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_preserves_override_flag_when_already_overridden(): void
     {
-        // Once overridden, stays overridden regardless of which fields change now —
-        // we don't un-override just because the user happened to save with
-        // rule-aligned values.
         $occurrenceId = 10;
         $eventId = 1;
 
@@ -250,10 +242,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_does_not_flag_as_overridden_when_dates_are_same_instant_different_format(): void
     {
-        // DateHelper::convertToUTC (used by UpdateEventOccurrenceAction) returns
-        // "Mon Jun 15 2026 10:00:00 GMT+0000" style while DB-hydrated getStartDate()
-        // returns SQL format. Plain strict string equality would mark these as
-        // different even though they represent the same instant — regression test.
         $occurrenceId = 10;
         $eventId = 1;
 
@@ -398,9 +386,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_gains_override_calls_create_for_event(): void
     {
-        // Occurrence had no event_location override (event_location_id: null);
-        // DTO supplies new event_location → upserter creates a fresh row,
-        // FK gets set, and override flag is pinned.
         $occurrenceId = 10;
         $eventId = 1;
 
@@ -460,9 +445,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_edits_existing_override_calls_update_in_place(): void
     {
-        // Occurrence already has an event_location_id; DTO supplies a new
-        // event_location payload → upserter updates the existing row in place,
-        // FK stays the same.
         $occurrenceId = 10;
         $eventId = 1;
         $existingEventLocationId = 5;
@@ -514,8 +496,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
             ->once()
             ->with(
                 $occurrenceId,
-                // FK stays pinned to the existing row — updateInPlace mutates the
-                // row, doesn't create a new one.
                 Mockery::on(fn (array $attrs) => $attrs[EventOccurrenceDomainObjectAbstract::EVENT_LOCATION_ID] === $existingEventLocationId),
             )
             ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
@@ -526,9 +506,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_clear_event_location_clears_fk_and_cleans_up(): void
     {
-        // Occurrence has an override; DTO requests clear_event_location → FK
-        // gets nulled and the cleaner runs to soft-delete if the row is no
-        // longer referenced.
         $occurrenceId = 10;
         $eventId = 1;
         $existingEventLocationId = 5;
@@ -574,8 +551,6 @@ class UpdateEventOccurrenceHandlerTest extends TestCase
 
     public function test_clear_event_location_noop_when_no_existing_fk(): void
     {
-        // No existing override → clear_event_location is a no-op for both the
-        // upserter and the cleaner. Just a regular update.
         $occurrenceId = 10;
         $eventId = 1;
 

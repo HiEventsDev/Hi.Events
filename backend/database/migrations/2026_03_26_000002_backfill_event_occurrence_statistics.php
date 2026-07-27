@@ -57,6 +57,5 @@ return new class extends Migration
 
     public function down(): void
     {
-        // No rollback needed — the occurrence stats table can be truncated if needed
     }
 };

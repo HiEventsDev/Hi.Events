@@ -57,12 +57,6 @@ class CreateOrganizerHandler
             ->findById($organizer->getId());
     }
 
-    /**
-     * Prefer the parent account's plan via the legacy id pointer kept on
-     * organizer_configurations during the deprecation window — handles SaaS
-     * invite tokens that pre-assign a custom account_configuration. Falls back
-     * to the organizer-level system default.
-     */
     private function resolveConfigurationId(int $accountId): ?int
     {
         $account = $this->accountRepository->findFirst($accountId);

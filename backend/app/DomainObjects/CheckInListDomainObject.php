@@ -7,12 +7,6 @@ use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use Illuminate\Support\Collection;
 
-/**
- * A `null` event_occurrence_id means the list applies to every occurrence of the
- * event (the default for recurring events and the only meaningful value for
- * single-occurrence events). A non-null value scopes the list to that one
- * occurrence — only attendees on that occurrence can be checked in via the list.
- */
 class CheckInListDomainObject extends Generated\CheckInListDomainObjectAbstract implements IsSortable
 {
     private ?Collection $products = null;

@@ -104,9 +104,6 @@ const Settings = () => {
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const location = useLocation();
-    // Strip any query string that ended up inside the hash (e.g. Stripe return
-    // URLs append `?is_return=1` to /settings#payouts, which leaves the literal
-    // `payouts?is_return=1` as the hash fragment) before matching a section.
     const targetSectionId = useMemo(() => {
         const raw = location.hash?.replace(/^#/, '').split('?')[0] ?? '';
         return raw && SECTIONS.some(s => s.id === raw) ? raw : null;
@@ -117,10 +114,6 @@ const Settings = () => {
         if (!targetSectionId) return;
         setActiveSection(targetSectionId);
 
-        // Async data inside a section (e.g. the Stripe query in Payouts) keeps
-        // growing the card after the first paint, which moves the target down.
-        // 'smooth' here is unreliable because rapid re-calls cancel each other
-        // before any movement happens, so use instant jumps at increasing delays.
         const retryDelays = [0, 200, 600, 1200, 2000];
         const timers = retryDelays.map(delay => window.setTimeout(() => {
             document.getElementById(targetSectionId)?.scrollIntoView({ behavior: 'auto', block: 'start' });

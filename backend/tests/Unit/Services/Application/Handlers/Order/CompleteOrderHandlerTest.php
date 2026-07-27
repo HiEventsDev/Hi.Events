@@ -321,10 +321,6 @@ class CompleteOrderHandlerTest extends TestCase
 
     public function test_handle_throws_resource_conflict_exception_when_occurrence_has_ended(): void
     {
-        // Reservation could have been created before the occurrence ended
-        // (especially with long reservation windows). Re-checking on completion
-        // prevents a reserved order from aging into a valid purchase for a
-        // session that has since passed.
         $this->expectException(ResourceConflictException::class);
         $this->expectExceptionMessage('This event date has already ended');
 

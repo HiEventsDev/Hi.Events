@@ -132,12 +132,10 @@ class CreateEventServiceTest extends TestCase
                     $arg['sales_total_gross'] === 0;
             }));
 
-        // Every event now gets a system-default check-in list on creation.
         $this->checkInListRepository->shouldReceive('create')->once()
             ->with(Mockery::on(fn ($arg) => ($arg['is_system_default'] ?? false) === true
                 && ($arg['event_id'] ?? null) === $eventData->getId()));
 
-        // Mock event cover creation
         $this->config->shouldReceive('get')
             ->with('filesystems.public')
             ->andReturn('public');
@@ -204,7 +202,6 @@ class CreateEventServiceTest extends TestCase
         $this->eventStatisticsRepository->shouldReceive('create');
         $this->checkInListRepository->shouldReceive('create');
 
-        // Mock event cover creation
         $this->config->shouldReceive('get')
             ->with('filesystems.public')
             ->andReturn('public');
@@ -218,7 +215,7 @@ class CreateEventServiceTest extends TestCase
         $mockDisk = Mockery::mock();
         $mockDisk->shouldReceive('exists')
             ->with('event-covers/CONFERENCE.jpg')
-            ->andReturn(false); // No cover exists for this test
+            ->andReturn(false);
 
         $this->filesystemManager->shouldReceive('disk')
             ->with('public')
@@ -325,7 +322,6 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
 
-        // Mock that cover image exists
         $this->config->shouldReceive('get')
             ->with('filesystems.public')
             ->andReturn('public');
@@ -345,7 +341,6 @@ class CreateEventServiceTest extends TestCase
             ->with('public')
             ->andReturn($mockDisk);
 
-        // Verify image record is created with correct data
         $this->imageRepository->shouldReceive('create')
             ->once()
             ->with(Mockery::on(function ($arg) use ($eventData) {
@@ -359,7 +354,6 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventSettingsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) {
-                // When cover is created, background type should be MIRROR_COVER_IMAGE
                 return $arg['homepage_background_type'] === HomepageBackgroundType::MIRROR_COVER_IMAGE->name;
             }));
 
@@ -396,7 +390,6 @@ class CreateEventServiceTest extends TestCase
 
         $this->eventRepository->shouldReceive('create')->andReturn($eventData);
 
-        // Mock that cover image does not exist for MUSIC category
         $this->config->shouldReceive('get')
             ->with('filesystems.public')
             ->andReturn('public');
@@ -413,12 +406,10 @@ class CreateEventServiceTest extends TestCase
             ->with('public')
             ->andReturn($mockDisk);
 
-        // Image repository should NOT be called
         $this->imageRepository->shouldNotReceive('create');
 
         $this->eventSettingsRepository->shouldReceive('create')
             ->with(Mockery::on(function ($arg) {
-                // When no cover is created, background type should be COLOR
                 return $arg['homepage_background_type'] === HomepageBackgroundType::COLOR->name;
             }));
 
