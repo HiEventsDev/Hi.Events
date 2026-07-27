@@ -217,6 +217,12 @@ return new class extends Migration
 
     private function purifier(): HTMLPurifier
     {
-        return $this->purifier ??= new HTMLPurifier(HTMLPurifier_Config::createDefault());
+        if ($this->purifier === null) {
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('Cache.DefinitionImpl', null);
+            $this->purifier = new HTMLPurifier($config);
+        }
+
+        return $this->purifier;
     }
 };
