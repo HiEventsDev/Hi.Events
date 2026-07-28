@@ -33,12 +33,12 @@ export class AttendeePage {
     await this.page.getByRole('menuitem', { name: action }).click();
   }
 
-  viewTab(): Locator {
-    return this.page.getByRole('tab', { name: 'View' });
+  editButton(): Locator {
+    return this.page.getByTestId('attendee-edit-button');
   }
 
   async renameFirstName(firstName: string): Promise<void> {
-    await this.page.getByRole('tab', { name: 'Edit' }).click();
+    await this.editButton().click();
     await this.page.getByLabel(/^First name/).fill(firstName);
     await this.page.getByRole('button', { name: 'Save Changes' }).click();
   }

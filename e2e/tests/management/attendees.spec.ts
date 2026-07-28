@@ -33,7 +33,7 @@ test.describe('attendees', () => {
     await attendees.openRowAction(event.attendeeEmail, 'Manage attendee');
     await attendees.renameFirstName(newFirstName);
 
-    await expect(attendees.viewTab()).toHaveAttribute('aria-selected', 'true');
+    await expect(attendees.editButton()).toBeVisible();
     await attendees.closeDrawer();
     await expect(attendees.rowByText(newFirstName)).toBeVisible();
   });

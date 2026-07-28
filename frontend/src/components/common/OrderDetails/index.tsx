@@ -7,14 +7,12 @@ import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
-import React from "react";
 import {capitalize} from "../../../utilites/stringHelper.ts";
 
-export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
+export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
     order: Order,
     event: Event,
     cardVariant?: CardVariant,
-    style?: React.CSSProperties
 }) => {
     const occurrenceItems = order.order_items?.filter(item => item.event_occurrence) ?? [];
     const uniqueOccurrences = Array.from(
@@ -22,7 +20,7 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {
     );
 
     return (
-        <Card className={classes.orderDetails} variant={cardVariant} style={style}>
+        <Card className={classes.orderDetails} variant={cardVariant}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}

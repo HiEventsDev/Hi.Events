@@ -1,9 +1,8 @@
 import {t} from "@lingui/macro";
 import {Anchor, Button, Group, Menu, Popover, Text, Tooltip} from '@mantine/core';
-import {Event, IdParam, Invoice, MessageType, Order} from "../../../types.ts";
+import {Event, IdParam, Invoice, Order} from "../../../types.ts";
 import {
     IconAlertCircle,
-    IconBasketCog,
     IconCalendarEvent,
     IconCash,
     IconCheck,
@@ -15,37 +14,25 @@ import {
     IconFileInvoice,
     IconFileOff,
     IconHelp,
-    IconReceipt2,
-    IconReceiptDollar,
-    IconReceiptRefund,
-    IconRepeat,
     IconSend,
     IconTicket,
-    IconTrash,
     IconX
 } from "@tabler/icons-react";
 import {formatDateWithLocale, relativeDate} from "../../../utilites/dates.ts";
 import {ManageOrderModal} from "../../modals/ManageOrderModal";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useMemo, useState} from "react";
-import {CancelOrderModal} from "../../modals/CancelOrderModal";
-import {SendMessageModal} from "../../modals/SendMessageModal";
 import {NoResultsSplash} from "../NoResultsSplash";
-import {RefundOrderModal} from "../../modals/RefundOrderModal";
 import classes from "./OrdersTable.module.scss";
-import {useResendOrderConfirmation} from "../../../mutations/useResendOrderConfirmation.ts";
 import {formatNumber} from "../../../utilites/helpers.ts";
 import {useUrlHash} from "../../../hooks/useUrlHash.ts";
-import {useMarkOrderAsPaid} from "../../../mutations/useMarkOrderAsPaid.ts";
-import {orderClient} from "../../../api/order.client.ts";
-import {downloadBinary} from "../../../utilites/download.ts";
-import {withLoadingNotification} from "../../../utilites/withLoadingNotification.tsx";
-import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {useOrderActions} from "../../../hooks/useOrderActions.tsx";
+import {EntityActionMenuItems} from "../EntityActions";
+import {showSuccess} from "../../../utilites/notifications.tsx";
 import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
 import {formatCurrency} from "../../../utilites/currency.ts";
-import {eventCheckoutUrl} from "../../../utilites/urlHelper.ts";
 
 interface OrdersTableProps {
     event: Event,
@@ -55,14 +42,13 @@ interface OrdersTableProps {
 
 export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
     const [isViewModalOpen, viewModal] = useDisclosure(false);
-    const [isCancelModalOpen, cancelModal] = useDisclosure(false);
-    const [isMessageModalOpen, messageModal] = useDisclosure(false);
-    const [isRefundModalOpen, refundModal] = useDisclosure(false);
     const [orderId, setOrderId] = useState<IdParam>();
     const [emailPopoverId, setEmailPopoverId] = useState<IdParam | null>(null);
-    const resendConfirmationMutation = useResendOrderConfirmation();
-    const markAsPaidMutation = useMarkOrderAsPaid();
     const clipboard = useClipboard({timeout: 2000});
+    const {getOrderActions, orderActionModals, openMessageModal, downloadInvoice} = useOrderActions({
+        eventId: event.id,
+        onManage: (order: Order) => handleModalClick(order.id, viewModal),
+    });
 
     useUrlHash(/^#order-(\d+)$/, (matches => {
         const orderId = matches![1];
@@ -75,43 +61,6 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
         modal.open();
     }
 
-    const handleMarkAsPaid = (eventId: IdParam, orderId: IdParam) => {
-        markAsPaidMutation.mutate({eventId, orderId}, {
-            onSuccess: () => showSuccess(t`Order marked as paid`),
-            onError: () => showError(t`There was an error marking the order as paid`)
-        });
-    }
-
-    const handleResendConfirmation = (eventId: IdParam, orderId: IdParam) => {
-        resendConfirmationMutation.mutate({eventId, orderId}, {
-            onSuccess: () => showSuccess(t`Your message has been sent`),
-            onError: () => showError(t`There was an error sending your message`)
-        });
-    }
-
-    const handleInvoiceDownload = async (invoice: Invoice) => {
-        await withLoadingNotification(
-            async () => {
-                const blob = await orderClient.downloadInvoice(event.id, invoice.order_id);
-                downloadBinary(blob, invoice.invoice_number + '.pdf');
-            },
-            {
-                loading: {
-                    title: t`Downloading Invoice`,
-                    message: t`Please wait while we prepare your invoice...`
-                },
-                success: {
-                    title: t`Success`,
-                    message: t`Invoice downloaded successfully`
-                },
-                error: {
-                    title: t`Error`,
-                    message: t`Failed to download invoice. Please try again.`
-                }
-            }
-        );
-    };
-
     const handleCopyEmail = (email: string) => {
         clipboard.copy(email);
         showSuccess(t`Email address copied to clipboard`);
@@ -120,7 +69,7 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
 
     const handleMessageFromEmail = (order: Order) => {
         setEmailPopoverId(null);
-        handleModalClick(order.id, messageModal);
+        openMessageModal(order);
     };
 
     const formatTime = (dateString: string): string => {
@@ -133,11 +82,6 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
     };
 
     const ActionMenu = ({order}: { order: Order }) => {
-        const isRefundable = !order.is_free_order
-            && order.status !== 'AWAITING_OFFLINE_PAYMENT'
-            && order.payment_provider === 'STRIPE'
-            && order.refund_status !== 'REFUNDED';
-
         return (
             <Group wrap={'nowrap'} gap={0} justify={'flex-end'}>
                 <Menu shadow="md" width={200}>
@@ -150,52 +94,7 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                     </Menu.Target>
 
                     <Menu.Dropdown>
-                        <Menu.Label>{t`Manage`}</Menu.Label>
-                        <Menu.Item onClick={() => handleModalClick(order.id, viewModal)}
-                                   leftSection={<IconBasketCog size={14}/>}>{t`Manage order`}</Menu.Item>
-                        <Menu.Item onClick={() => handleModalClick(order.id, messageModal)}
-                                   leftSection={<IconSend size={14}/>}>{t`Message buyer`}</Menu.Item>
-                        <Menu.Item onClick={() => {
-                                       const url = eventCheckoutUrl(order.event_id, order.short_id, 'summary');
-                                       clipboard.copy(url);
-                                       showSuccess(t`Customer link copied to clipboard`);
-                                   }}
-                                   leftSection={<IconCopy size={14}/>}>{t`Copy customer link`}</Menu.Item>
-
-                        {order.latest_invoice && (
-                            <Menu.Item onClick={() => handleInvoiceDownload(order.latest_invoice as Invoice)}
-                                       leftSection={<IconReceipt2 size={14}/>}>{t`Download invoice`}</Menu.Item>
-                        )}
-
-                        {order.status === 'AWAITING_OFFLINE_PAYMENT' && (
-                            <Menu.Item onClick={() => handleMarkAsPaid(event.id, order.id)}
-                                       leftSection={<IconReceiptDollar size={14}/>}>{t`Mark as paid`}</Menu.Item>
-                        )}
-
-                        {isRefundable && (
-                            <Menu.Item onClick={() => handleModalClick(order.id, refundModal)}
-                                       leftSection={<IconReceiptRefund size={14}/>}>{t`Refund order`}</Menu.Item>
-                        )}
-
-                        {order.status === 'COMPLETED' && (
-                            <Menu.Item
-                                onClick={() => handleResendConfirmation(event.id, order.id)}
-                                leftSection={<IconRepeat size={14}/>}>
-                                {t`Resend order email`}
-                            </Menu.Item>
-                        )}
-
-                        {order.status !== 'CANCELLED' && (
-                            <>
-                                <Menu.Divider/>
-                                <Menu.Label>{t`Danger zone`}</Menu.Label>
-                                <Menu.Item color="red"
-                                           onClick={() => handleModalClick(order.id, cancelModal)}
-                                           leftSection={<IconTrash size={14}/>}>
-                                    {t`Cancel order`}
-                                </Menu.Item>
-                            </>
-                        )}
+                        <EntityActionMenuItems actions={getOrderActions(order)}/>
                     </Menu.Dropdown>
                 </Menu>
             </Group>
@@ -305,7 +204,7 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                                 </Text>
                                 {order.latest_invoice ? (
                                     <Anchor
-                                        onClick={() => handleInvoiceDownload(order.latest_invoice as Invoice)}
+                                        onClick={() => downloadInvoice(order.latest_invoice as Invoice)}
                                         className={classes.invoiceLink}
                                         style={{cursor: 'pointer'}}
                                     >
@@ -495,18 +394,8 @@ export const OrdersTable = ({orders, event, compact}: OrdersTableProps) => {
                 hideHeader={compact}
                 noCard={compact}
             />
-            {orderId && (
-                <>
-                    {isRefundModalOpen && <RefundOrderModal onClose={refundModal.close} orderId={orderId}/>}
-                    {isViewModalOpen && <ManageOrderModal onClose={viewModal.close} orderId={orderId}/>}
-                    {isCancelModalOpen && <CancelOrderModal onClose={cancelModal.close} orderId={orderId}/>}
-                    {isMessageModalOpen && <SendMessageModal
-                        onClose={messageModal.close}
-                        orderId={orderId}
-                        messageType={MessageType.OrderOwner}
-                    />}
-                </>
-            )}
+            {orderId && isViewModalOpen && <ManageOrderModal onClose={viewModal.close} orderId={orderId}/>}
+            {orderActionModals}
         </>
     )
 };

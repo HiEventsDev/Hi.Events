@@ -19,9 +19,9 @@ test.describe('orders management', () => {
     await orders.chooseRowAction(order.buyerEmail, 'Manage order');
 
     const drawer = orders.detailsDrawer();
-    await expect(drawer.getByText('Order Reference')).toBeVisible();
     await expect(drawer.getByText(`${order.buyerFirstName} ${order.buyerLastName}`).first()).toBeVisible();
-    await expect(drawer.getByText('Total order amount')).toBeVisible();
+    await expect(drawer.getByText('Items')).toBeVisible();
+    await expect(drawer.getByText('Order Summary')).toBeVisible();
     await expect(drawer.getByText('$0.00').first()).toBeVisible();
   });
 
