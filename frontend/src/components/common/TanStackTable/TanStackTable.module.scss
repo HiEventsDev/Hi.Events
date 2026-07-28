@@ -20,6 +20,10 @@
     background-color: #f2f0f5;
     color: var(--hi-secondary-text) !important;
     padding: 20px !important;
+
+    @include mixins.respond-below(sm) {
+      padding: 14px 12px !important;
+    }
   }
 }
 
@@ -46,6 +50,10 @@
     td {
       padding: 20px !important;
       white-space: nowrap;
+
+      @include mixins.respond-below(sm) {
+        padding: 14px 12px !important;
+      }
     }
   }
 
