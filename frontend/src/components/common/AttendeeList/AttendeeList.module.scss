@@ -1,35 +1,32 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
 .attendeeList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
 .attendee {
   display: flex;
   flex-direction: column;
-  padding: 0.875rem;
-  background: var(--mantine-color-gray-0);
-  border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-sm);
-  transition: all 0.2s ease;
+  padding: 10px 12px;
+  margin: 0 -12px;
+  border-radius: var(--mantine-radius-md);
+  transition: background-color 120ms ease;
 
   &:hover {
-    border-color: var(--mantine-color-gray-3);
-    transform: translateY(-1px);
+    background-color: var(--mantine-color-gray-0);
   }
 }
 
 .attendeeInfo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--mantine-spacing-sm);
   flex: 1;
+  min-width: 0;
 }
 
 .details {
@@ -38,52 +35,27 @@
 }
 
 .name {
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .product {
-  margin-top: 0.25rem;
-  color: var(--mantine-color-gray-6);
+  margin-top: 2px;
+  color: var(--mantine-color-dimmed);
 }
 
 .actionButton {
   margin-left: auto;
-
-  &:hover {
-    background-color: var(--mantine-color-blue-0);
-  }
 }
 
 .avatar {
-  background: var(--hi-color-gray);
+  background-color: var(--mantine-color-gray-1);
+  color: var(--mantine-color-dimmed);
   font-weight: 500;
 }
 
-/* Added styles for answers display */
 .answersContainer {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  padding-left: .4rem;
-  border-top: 1px solid var(--mantine-color-gray-2);
-}
-
-.questionAnswer {
-  margin-bottom: 0.75rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.questionTitle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
-  align-items: flex-start;
-}
-
-.answer {
-  color: var(--mantine-color-gray-7);
-  padding-left: 1.5rem;
-  font-size: var(--mantine-font-size-sm);
+  margin-top: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--mantine-color-gray-0);
 }

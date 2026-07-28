@@ -60,7 +60,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                         <div key={attendee.id} className={classes.attendee}>
                             <div className={classes.attendeeInfo}>
                                 <Avatar
-                                    size="md"
+                                    size={32}
                                     radius="xl"
                                     className={classes.avatar}
                                 >

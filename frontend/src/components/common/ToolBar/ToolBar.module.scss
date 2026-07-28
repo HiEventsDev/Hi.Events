@@ -19,6 +19,10 @@
   flex: 1;
   min-width: 0;
   margin-bottom: 0 !important;
+
+  @include mixins.respond-below(sm, true) {
+    flex-basis: 100%;
+  }
 }
 
 .actions {
@@ -27,6 +31,16 @@
   gap: 8px;
   flex-shrink: 0;
   margin-left: auto;
+
+  @include mixins.respond-below(sm, true) {
+    width: 100%;
+    margin-left: 0;
+
+    > * {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
 }
 
 .rowFilters {
@@ -42,6 +56,24 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+
+  @include mixins.respond-below(sm, true) {
+    width: 100%;
+
+    > * {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    :global(.mantine-Group-root) {
+      width: 100%;
+
+      > * {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+    }
+  }
 }
 
 .resultCount {

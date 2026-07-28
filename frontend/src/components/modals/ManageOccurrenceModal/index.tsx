@@ -95,7 +95,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
 
     if (!occurrence || !event) {
         return (
-            <SideDrawer opened={true} onClose={onClose} size="lg" padding="md">
+            <SideDrawer opened={true} onClose={onClose}>
                 <Stack p="md" gap="md">
                     <Skeleton height={24} width="70%"/>
                     <Skeleton height={14} width="40%"/>
@@ -127,7 +127,7 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
         : 0;
 
     return (
-        <SideDrawer opened={true} onClose={onClose} size="lg" padding="md">
+        <SideDrawer opened={true} onClose={onClose}>
             <Stack className={classes.container}>
                 <div className={classes.header}>
                     <div className={classes.occurrenceInfo}>
