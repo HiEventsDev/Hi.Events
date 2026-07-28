@@ -130,6 +130,7 @@
     display: flex;
     align-items: center;
     margin-left: auto;
+    flex-shrink: 0;
   }
 
   &.withShadow {
@@ -138,6 +139,7 @@
 
   .burger {
     --burger-color: var(--hi-color-white);
+    flex-shrink: 0;
     @include mixins.respond-above(md) {
       display: none;
     }
@@ -150,16 +152,18 @@
     display: flex;
     justify-content: center;
     padding-inline: 5px;
+    min-width: 0;
 
     a {
       display: flex;
+      min-width: 0;
     }
 
     img {
-      max-width: 120px;
+      max-width: min(120px, 100%);
 
       @include mixins.respond-below(sm) {
-        max-width: 100px;
+        max-width: min(100px, 100%);
       }
     }
 
