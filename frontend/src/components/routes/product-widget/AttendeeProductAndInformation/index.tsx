@@ -50,7 +50,6 @@ export const AttendeeProductAndInformation = () => {
                 attendee={attendee as Attendee}
                 product={attendee.product as Product}
                 event={event}
-                showPoweredBy
             />
 
             <OnlineEventDetails event={event} occurrence={attendee?.event_occurrence ?? null}/>
