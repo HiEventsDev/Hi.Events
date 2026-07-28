@@ -7,10 +7,7 @@
 <x-mail::message>
 # {{ __('You\'ve received a new order!') }} 🎉
 
-<br>
 {{ __('Congratulations! You\'ve received a new order for ') }} <b>{{ $event->getTitle() }}</b>! {{ __('Please find the details below.') }}
-<br>
-<br>
 
 @if($order->isOrderAwaitingOfflinePayment())
 <div style="border-radius: 4px; background-color: #f8d7da; color: #842029; margin-bottom: 1.5rem; padding: 1rem;">

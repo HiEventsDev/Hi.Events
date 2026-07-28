@@ -35,8 +35,7 @@
 
 <x-mail::message>
 # {{ __('You\'re going to') }} {{ $event->getTitle() }}! 🎉
-<br>
-<br>
+
 @if($order->isOrderAwaitingOfflinePayment())
 <div style="border-radius: 4px; background-color: #f8d7da; color: #842029; margin-bottom: 1.5rem; padding: 1rem;">
 <p>
