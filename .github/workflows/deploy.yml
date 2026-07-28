@@ -6,6 +6,7 @@ on:
       - main
       - develop
       - feature/vapor-env-updates
+      - feature/deploy-testing
   workflow_dispatch:
     inputs:
       environment:
@@ -21,6 +22,10 @@ on:
         required: false
         default: false
         type: boolean
+
+concurrency:
+  group: deploy-${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || (github.ref_name == 'main' && 'production' || 'staging') }}
+  cancel-in-progress: false
 
 jobs:
   backend:
@@ -176,7 +181,7 @@ jobs:
       - name: Poll Deployment Status
         if: env.TEST_MODE != 'true'
         run: |
-          MAX_RETRIES=60
+          MAX_RETRIES=90
           SLEEP_TIME=10
           COUNTER=0
 
@@ -185,17 +190,24 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
               -H "Content-Type: application/json")
 
-            STATUS=$(echo "$RESPONSE" | jq -r '.deployment.phase')
+            STATUS=$(echo "$RESPONSE" | jq -r '.deployment.phase // "UNKNOWN"')
 
             echo "🔄 Deployment Status: $STATUS"
 
-            if [ "$STATUS" == "ACTIVE" ]; then
-              echo "✅ Deployment completed successfully."
-              exit 0
-            elif [[ "$STATUS" == "FAILED" || "$STATUS" == "CANCELED" ]]; then
-              echo "❌ Deployment failed or was cancelled."
-              exit 1
-            fi
+            case "$STATUS" in
+              ACTIVE)
+                echo "✅ Deployment completed successfully."
+                exit 0
+                ;;
+              SUPERSEDED)
+                echo "⏭️ Superseded by a newer deployment, which is now responsible for this app."
+                exit 0
+                ;;
+              ERROR|CANCELED)
+                echo "❌ Deployment finished in state: $STATUS"
+                exit 1
+                ;;
+            esac
 
             COUNTER=$((COUNTER + 1))
             echo "⏳ Retrying in $SLEEP_TIME seconds... ($COUNTER/$MAX_RETRIES)"
