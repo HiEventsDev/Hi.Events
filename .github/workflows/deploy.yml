@@ -22,6 +22,11 @@ on:
         required: false
         default: false
         type: boolean
+      force_build:
+        description: 'Force a fresh DigitalOcean build (ignores the build cache)'
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: deploy-${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || (github.ref_name == 'main' && 'production' || 'staging') }}
@@ -140,11 +145,13 @@ jobs:
             echo "DO_APP_ID=${{ secrets.DIGITALOCEAN_STAGING_APP_ID }}" >> "$GITHUB_ENV"
             echo "TEST_MODE=false" >> "$GITHUB_ENV"
           fi
+          echo "FORCE_BUILD=${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force_build || 'false' }}" >> "$GITHUB_ENV"
 
       - name: Log Environment Settings
         run: |
           echo "🚀 Deploying frontend to DigitalOcean App: ${{ env.DO_APP_ID }}"
           echo "🧪 Test mode: ${{ env.TEST_MODE }}"
+          echo "🔨 Force build: ${{ env.FORCE_BUILD }}"
 
       - name: Validate Deployment Configuration (Test Mode)
         if: env.TEST_MODE == 'true'
@@ -159,7 +166,8 @@ jobs:
         run: |
           RESPONSE=$(curl -s -o response.json -w "%{http_code}" -X POST "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments" \
             -H "Authorization: Bearer ${{ secrets.DIGITALOCEAN_API_TOKEN }}" \
-            -H "Content-Type: application/json")
+            -H "Content-Type: application/json" \
+            -d "{\"force_build\": $FORCE_BUILD}")
 
           if [ "$RESPONSE" -ne 201 ] && [ "$RESPONSE" -ne 200 ]; then
             ERROR_MSG=$(jq -r '.message // "Unknown error occurred."' response.json)
@@ -193,6 +201,12 @@ jobs:
             STATUS=$(echo "$RESPONSE" | jq -r '.deployment.phase // "UNKNOWN"')
 
             echo "🔄 Deployment Status: $STATUS"
+
+            if [ -z "${DEPLOYMENT_LOGGED:-}" ] && [ "$STATUS" != "UNKNOWN" ]; then
+              echo "📦 $(echo "$RESPONSE" | jq -r '.deployment | "cause=\(.cause // "unknown") build_reused_from=\(.cloned_from // "none")"')"
+              echo "🔖 $(echo "$RESPONSE" | jq -r '[.deployment | ((.services//[]) + (.workers//[]) + (.jobs//[]) + (.static_sites//[])) | .[] | "\(.name)@\(.source_commit_hash[0:7] // "?")"] | join(" ") | if . == "" then "(no components reported)" else . end')"
+              DEPLOYMENT_LOGGED=1
+            fi
 
             case "$STATUS" in
               ACTIVE)
