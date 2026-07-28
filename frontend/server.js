@@ -1,7 +1,6 @@
 import express from "express";
 import {installGlobals} from "@remix-run/node";
 import process from "process";
-import {createServer as viteServer} from "vite";
 import compression from "compression";
 import fs from "node:fs/promises";
 import sirv from "sirv";
@@ -55,6 +54,8 @@ async function main() {
     let vite;
 
     if (!isProduction) {
+        const {createServer: viteServer} = await import("vite");
+
         vite = await viteServer({
             server: { middlewareMode: true },
             appType: "custom",
