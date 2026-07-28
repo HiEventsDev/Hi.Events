@@ -1,6 +1,6 @@
 import {ColumnDef, flexRender, getCoreRowModel, useReactTable, VisibilityState,} from '@tanstack/react-table';
 import {Table as MantineTable} from '@mantine/core';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Card} from '../Card';
 import classes from './TanStackTable.module.scss';
 
@@ -49,6 +49,34 @@ export function TanStackTable<TData>({
         return {};
     });
 
+    const viewportRef = useRef<HTMLDivElement>(null);
+    const [showStartShadow, setShowStartShadow] = useState(false);
+    const [showEndShadow, setShowEndShadow] = useState(false);
+
+    const updateStickyShadows = useCallback(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) {
+            return;
+        }
+        const {scrollLeft, clientWidth, scrollWidth} = viewport;
+        setShowStartShadow(scrollLeft > 1);
+        setShowEndShadow(scrollWidth - clientWidth - scrollLeft > 1);
+    }, []);
+
+    useEffect(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) {
+            return;
+        }
+        updateStickyShadows();
+        const resizeObserver = new ResizeObserver(updateStickyShadows);
+        resizeObserver.observe(viewport);
+        if (viewport.firstElementChild) {
+            resizeObserver.observe(viewport.firstElementChild);
+        }
+        return () => resizeObserver.disconnect();
+    }, [updateStickyShadows]);
+
     const table = useReactTable({
         data,
         columns,
@@ -69,8 +97,12 @@ export function TanStackTable<TData>({
     const tableContent = (
         <MantineTable.ScrollContainer minWidth={200} scrollAreaProps={{
             type: 'hover',
+            viewportRef: viewportRef,
+            onScrollPositionChange: updateStickyShadows,
         }}>
-            <MantineTable className={classes.table}>
+            <MantineTable
+                className={`${classes.table} ${showStartShadow ? classes.showStartShadow : ''} ${showEndShadow ? classes.showEndShadow : ''}`}
+            >
                 {!hideHeader && (
                     <MantineTable.Thead className={classes.tableHead}>
                         {table.getHeaderGroups().map((headerGroup) => (

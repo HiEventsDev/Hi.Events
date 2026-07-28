@@ -61,15 +61,18 @@
   &::after {
     content: '';
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -1px;
     bottom: 0;
-    width: 1px;
+    left: 100%;
+    width: 18px;
     background: linear-gradient(
                     to right,
-                    rgba(255, 255, 255, 0.1),
-                    rgba(255, 255, 255, 0)
+                    rgba(20, 10, 40, 0.11),
+                    rgba(20, 10, 40, 0.045) 45%,
+                    rgba(20, 10, 40, 0)
     );
+    opacity: 0;
+    transition: opacity 0.2s ease;
     pointer-events: none;
   }
 }
@@ -83,17 +86,25 @@
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
     bottom: 0;
-    width: 1px;
+    right: 100%;
+    width: 18px;
     background: linear-gradient(
                     to left,
-                    rgba(255, 255, 255, 0.1),
-                    rgba(255, 255, 255, 0)
+                    rgba(20, 10, 40, 0.11),
+                    rgba(20, 10, 40, 0.045) 45%,
+                    rgba(20, 10, 40, 0)
     );
+    opacity: 0;
+    transition: opacity 0.2s ease;
     pointer-events: none;
   }
+}
+
+.showStartShadow tbody .stickyLeft::after,
+.showEndShadow tbody .stickyRight::before {
+  opacity: 1;
 }
 
 .tableHead .stickyLeft,
