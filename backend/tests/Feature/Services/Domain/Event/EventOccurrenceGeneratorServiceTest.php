@@ -60,6 +60,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             'days_of_week' => ['monday'],
             'range' => ['type' => 'count', 'count' => $count, 'start' => '2030-06-03'],
             'times_of_day' => ['19:00'],
+            'duration_minutes' => 120,
         ];
     }
 
@@ -100,6 +101,42 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             DB::table('event_occurrences')->where('event_id', $this->eventId)->whereNotNull('deleted_at')->count(),
             'Re-running an identical rule must not soft-delete any occurrence'
         );
+    }
+
+    public function test_generated_occurrences_have_unique_short_ids_and_expected_columns(): void
+    {
+        $this->generator->generate($this->event(), $this->weeklyRule(count: 3));
+        $occurrences = $this->liveOccurrences();
+
+        $this->assertCount(3, $occurrences);
+
+        $shortIds = array_column($occurrences, 'short_id');
+        $this->assertCount(3, array_unique($shortIds));
+
+        foreach ($occurrences as $occurrence) {
+            $this->assertStringStartsWith('oc_', $occurrence->short_id);
+            $this->assertSame('ACTIVE', $occurrence->status);
+            $this->assertSame(0, $occurrence->used_capacity);
+            $this->assertFalse((bool) $occurrence->is_overridden);
+            $this->assertNotNull($occurrence->end_date);
+            $this->assertNotNull($occurrence->created_at);
+        }
+    }
+
+    public function test_regenerating_the_same_rule_issues_no_occurrence_updates(): void
+    {
+        $this->generator->generate($this->event(), $this->weeklyRule());
+
+        $occurrenceWrites = [];
+        DB::listen(function ($query) use (&$occurrenceWrites) {
+            if (preg_match('/^(update|insert into|delete from) "?event_occurrences"?/i', $query->sql)) {
+                $occurrenceWrites[] = $query->sql;
+            }
+        });
+
+        $this->generator->generate($this->event(), $this->weeklyRule());
+
+        $this->assertSame([], $occurrenceWrites, 'An identical rule must not write to event_occurrences');
     }
 
     public function test_extending_a_rule_keeps_matching_occurrences_and_appends_new_ones(): void

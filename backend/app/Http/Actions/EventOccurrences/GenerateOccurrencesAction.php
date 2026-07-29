@@ -6,16 +6,16 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\InvalidRecurrenceRuleException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\EventOccurrence\GenerateOccurrencesRequest;
-use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
+use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GenerateOccurrencesDTO;
-use HiEvents\Services\Application\Handlers\EventOccurrence\GenerateOccurrencesFromRuleHandler;
+use HiEvents\Services\Application\Handlers\EventOccurrence\StartOccurrenceGenerationHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class GenerateOccurrencesAction extends BaseAction
 {
     public function __construct(
-        private readonly GenerateOccurrencesFromRuleHandler $handler,
+        private readonly StartOccurrenceGenerationHandler $handler,
     ) {}
 
     public function __invoke(int $eventId, GenerateOccurrencesRequest $request): JsonResponse
@@ -23,7 +23,7 @@ class GenerateOccurrencesAction extends BaseAction
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         try {
-            $occurrences = $this->handler->handle(
+            $jobStatus = $this->handler->handle(
                 new GenerateOccurrencesDTO(
                     event_id: $eventId,
                     recurrence_rule: $request->validated('recurrence_rule'),
@@ -35,9 +35,10 @@ class GenerateOccurrencesAction extends BaseAction
             ]);
         }
 
-        return $this->resourceResponse(
-            resource: EventOccurrenceResource::class,
-            data: $occurrences,
-        );
+        return $this->jsonResponse([
+            'message' => $jobStatus->message,
+            'status' => $jobStatus->status->name,
+            'job_uuid' => $jobStatus->jobUuid,
+        ], ResponseCodes::HTTP_ACCEPTED);
     }
 }
