@@ -10,6 +10,8 @@ use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AffiliateRepository;
+use HiEvents\Repository\Eloquent\AnnouncementRepository;
+use HiEvents\Repository\Eloquent\AnnouncementUserRepository;
 use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
@@ -65,6 +67,8 @@ use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
+use HiEvents\Repository\Interfaces\AnnouncementRepositoryInterface;
+use HiEvents\Repository\Interfaces\AnnouncementUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
@@ -169,6 +173,8 @@ class RepositoryServiceProvider extends ServiceProvider
         OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
+        AnnouncementRepositoryInterface::class => AnnouncementRepository::class,
+        AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
         EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,
         EventOccurrenceStatisticRepositoryInterface::class => EventOccurrenceStatisticRepository::class,
