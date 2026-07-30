@@ -68,6 +68,7 @@ readonly class UpdateEventHandler
         $isCurrencyChanging = $eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency();
 
         if ($isCurrencyChanging) {
+            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$eventData->id]);
             $this->guardCurrencyChange($eventData);
         }
 

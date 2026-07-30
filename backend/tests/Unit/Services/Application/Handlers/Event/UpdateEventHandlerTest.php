@@ -32,6 +32,8 @@ class UpdateEventHandlerTest extends TestCase
 
     private Dispatcher|MockInterface $dispatcher;
 
+    private DatabaseManager|MockInterface $databaseManager;
+
     private UpdateEventHandler $handler;
 
     protected function setUp(): void
@@ -47,13 +49,13 @@ class UpdateEventHandlerTest extends TestCase
         $this->purifier = Mockery::mock(HtmlPurifierService::class);
         $this->dispatcher = Mockery::mock(Dispatcher::class);
 
-        $databaseManager = Mockery::mock(DatabaseManager::class);
-        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($cb) => $cb());
+        $this->databaseManager = Mockery::mock(DatabaseManager::class);
+        $this->databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($cb) => $cb());
 
         $this->handler = new UpdateEventHandler(
             $this->eventRepository,
             $this->dispatcher,
-            $databaseManager,
+            $this->databaseManager,
             $this->orderRepository,
             $this->purifier,
             $this->occurrenceRepository,
@@ -74,6 +76,11 @@ class UpdateEventHandlerTest extends TestCase
         $this->eventRepository
             ->shouldReceive('findFirstWhere')
             ->andReturn($existing);
+
+        $this->databaseManager
+            ->shouldReceive('statement')
+            ->once()
+            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
 
         $this->orderRepository
             ->shouldReceive('findFirstWhere')
@@ -107,6 +114,11 @@ class UpdateEventHandlerTest extends TestCase
         $this->eventRepository
             ->shouldReceive('findFirstWhere')
             ->andReturn($existing, $reloaded);
+
+        $this->databaseManager
+            ->shouldReceive('statement')
+            ->once()
+            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
 
         $this->orderRepository
             ->shouldReceive('findFirstWhere')
@@ -159,6 +171,7 @@ class UpdateEventHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn($existing, $reloaded);
 
+        $this->databaseManager->shouldNotReceive('statement');
         $this->orderRepository->shouldNotReceive('findFirstWhere');
         $this->orderRepository->shouldNotReceive('updateWhere');
         $this->purifier->shouldReceive('purify')->andReturn(null);
