@@ -27,6 +27,8 @@ export class OccurrencePage {
 
   async submitSchedule(): Promise<void> {
     await this.dialog().getByRole('button', { name: 'Create Schedule' }).click();
+    await this.dialog().waitFor({ state: 'hidden' });
+    await this.page.getByTestId('occurrence-generation-progress').waitFor({ state: 'detached', timeout: 60_000 });
   }
 
   occurrenceRows(): Locator {

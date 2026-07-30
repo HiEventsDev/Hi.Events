@@ -109,7 +109,7 @@ class BootstrapDevDataCommand extends Command
             type: EventType::RECURRING,
         ));
 
-        $occurrences = $generateOccurrencesHandler->handle(new GenerateOccurrencesDTO(
+        $generateOccurrencesHandler->handle(new GenerateOccurrencesDTO(
             event_id: $recurringEvent->getId(),
             recurrence_rule: [
                 'range' => ['type' => 'count', 'count' => 4, 'start' => now()->addDays(7)->toDateString()],
@@ -161,7 +161,7 @@ class BootstrapDevDataCommand extends Command
             ['free_product_id / price_id', $freeProduct['product_id'].' / '.$freeProduct['price_id']],
             ['paid_product_id / price_id (waitlist on)', $paidProduct['product_id'].' / '.$paidProduct['price_id']],
             ['recurring_event_id (LIVE)', $recurringEvent->getId()],
-            ['recurring_occurrence_ids', $occurrences->map(fn ($o) => $o->getId())->implode(', ')],
+            ['recurring_occurrence_ids', DB::table('event_occurrences')->where('event_id', $recurringEvent->getId())->pluck('id')->implode(', ')],
             ['recurring_product_id / price_id', $recurringProduct['product_id'].' / '.$recurringProduct['price_id']],
             ['promo_code', $promoCode->getCode()],
             ['affiliate_code', $affiliate->getCode()],

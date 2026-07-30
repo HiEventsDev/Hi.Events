@@ -9,6 +9,10 @@ use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
+use HiEvents\Http\Actions\Admin\Announcements\CreateAnnouncementAction;
+use HiEvents\Http\Actions\Admin\Announcements\DeleteAnnouncementAction;
+use HiEvents\Http\Actions\Admin\Announcements\GetAllAnnouncementsAction;
+use HiEvents\Http\Actions\Admin\Announcements\UpdateAnnouncementAction;
 use HiEvents\Http\Actions\Admin\Attribution\GetUtmAttributionStatsAction;
 use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
@@ -44,6 +48,8 @@ use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
 use HiEvents\Http\Actions\Affiliates\GetAffiliateAction;
 use HiEvents\Http\Actions\Affiliates\GetAffiliatesAction;
 use HiEvents\Http\Actions\Affiliates\UpdateAffiliateAction;
+use HiEvents\Http\Actions\Announcements\DismissAnnouncementAction;
+use HiEvents\Http\Actions\Announcements\GetActiveAnnouncementsAction;
 use HiEvents\Http\Actions\Attendees\CheckInAttendeeAction;
 use HiEvents\Http\Actions\Attendees\CreateAttendeeAction;
 use HiEvents\Http\Actions\Attendees\EditAttendeeAction;
@@ -98,6 +104,7 @@ use HiEvents\Http\Actions\EventOccurrences\CreateEventOccurrenceAction;
 use HiEvents\Http\Actions\EventOccurrences\DeleteEventOccurrenceAction;
 use HiEvents\Http\Actions\EventOccurrences\DeletePriceOverrideAction;
 use HiEvents\Http\Actions\EventOccurrences\GenerateOccurrencesAction;
+use HiEvents\Http\Actions\EventOccurrences\GetOccurrenceGenerationStatusAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrenceAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesPublicAction;
@@ -296,6 +303,10 @@ $router->middleware(['auth:api'])->group(
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
         $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
+
+        // Announcements
+        $router->get('/announcements/active', GetActiveAnnouncementsAction::class);
+        $router->post('/announcements/{announcement_id}/dismiss', DismissAnnouncementAction::class);
 
         // Accounts
         $router->post('/accounts/deletion-request', RequestAccountDeletionAction::class);
@@ -498,6 +509,7 @@ $router->middleware(['auth:api'])->group(
 
         // Event Occurrences
         $router->post('/events/{event_id}/occurrences/generate', GenerateOccurrencesAction::class);
+        $router->get('/events/{event_id}/occurrences/generate/status', GetOccurrenceGenerationStatusAction::class);
         $router->post('/events/{event_id}/occurrences/bulk-update', BulkUpdateOccurrencesAction::class);
         $router->post('/events/{event_id}/occurrences', CreateEventOccurrenceAction::class);
         $router->get('/events/{event_id}/occurrences', GetEventOccurrencesAction::class);
@@ -549,6 +561,12 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         // Messages
         $router->get('/messages', GetAllAdminMessagesAction::class);
         $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
+
+        // Announcements
+        $router->get('/announcements', GetAllAnnouncementsAction::class);
+        $router->post('/announcements', CreateAnnouncementAction::class);
+        $router->put('/announcements/{announcement_id}', UpdateAnnouncementAction::class);
+        $router->delete('/announcements/{announcement_id}', DeleteAnnouncementAction::class);
 
         // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);

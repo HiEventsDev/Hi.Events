@@ -505,6 +505,12 @@ export interface GenerateOccurrencesRequest {
     recurrence_rule: RecurrenceRule;
 }
 
+export interface OccurrenceGenerationStatus {
+    status: 'IN_PROGRESS' | 'FINISHED' | 'FAILED' | 'NOT_FOUND';
+    job_uuid?: string;
+    message?: string;
+}
+
 export interface BulkUpdateOccurrencesRequest {
     action: 'update' | 'cancel' | 'delete';
     start_time_shift?: number;

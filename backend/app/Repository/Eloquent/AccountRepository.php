@@ -53,10 +53,10 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('accounts.name', 'like', "{$search}%")
-                    ->orWhere('accounts.email', 'like', "{$search}%")
+                $q->where('accounts.name', 'ilike', "%{$search}%")
+                    ->orWhere('accounts.email', 'ilike', "%{$search}%")
                     ->orWhereHas('users', function ($userQuery) use ($search) {
-                        $userQuery->where('users.email', 'like', "{$search}%");
+                        $userQuery->where('users.email', 'ilike', "%{$search}%");
                     });
             });
         }

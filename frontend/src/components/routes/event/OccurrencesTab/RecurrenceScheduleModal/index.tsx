@@ -34,7 +34,9 @@ import {Callout} from "../../../../common/Callout";
 
 import {GenericModalProps, RecurrenceRule, RecurrenceTimeSlot} from "../../../../../types.ts";
 import {useGenerateOccurrences} from "../../../../../mutations/useGenerateOccurrences.ts";
-import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
+import {useGetEvent, GET_EVENT_QUERY_KEY} from "../../../../../queries/useGetEvent.ts";
+import {GET_EVENT_OCCURRENCES_QUERY_KEY} from "../../../../../queries/useGetEventOccurrences.ts";
+import {useQueryClient} from "@tanstack/react-query";
 import {showSuccess, showError} from "../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {useEffect, useMemo} from "react";
@@ -313,10 +315,15 @@ const formatLocalDate = (date: Date): string => {
 
 const todayLocalDate = (): string => formatLocalDate(new Date());
 
-export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
+interface RecurrenceScheduleModalProps extends GenericModalProps {
+    onGenerationStarted: (jobUuid: string, totalCount: number) => void;
+}
+
+export const RecurrenceScheduleModal = ({onClose, onGenerationStarted}: RecurrenceScheduleModalProps) => {
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const generateMutation = useGenerateOccurrences();
+    const queryClient = useQueryClient();
     const errorHandler = useFormErrorResponseHandler();
 
     const hasExistingRule = !!event?.recurrence_rule;
@@ -516,9 +523,18 @@ export const RecurrenceScheduleModal = ({onClose}: GenericModalProps) => {
         }
 
         generateMutation.mutate({eventId, data: {recurrence_rule: rule}}, {
-            onSuccess: () => {
-                showSuccess(t`Schedule created successfully`);
-                onClose();
+            onSuccess: (response) => {
+                if (response.status === 'IN_PROGRESS' && response.job_uuid) {
+                    onGenerationStarted(response.job_uuid, totalOccurrences);
+                    onClose();
+                } else if (response.status === 'FINISHED') {
+                    showSuccess(t`Schedule created successfully`);
+                    queryClient.invalidateQueries({queryKey: [GET_EVENT_OCCURRENCES_QUERY_KEY]});
+                    queryClient.invalidateQueries({queryKey: [GET_EVENT_QUERY_KEY, eventId]});
+                    onClose();
+                } else {
+                    showError(t`Failed to create schedule. Please try again.`);
+                }
             },
             onError: (error: any) => {
                 const errors = error?.response?.data?.errors;

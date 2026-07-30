@@ -253,13 +253,35 @@ export class ApiClient {
     return check(this.request.post(`events/${eventId}/orders/${orderId}/cancel`, { headers: jsonHeaders }));
   }
 
-  generateOccurrences(eventId: number, recurrenceRule: RecurrenceRule): Promise<Occurrence[]> {
-    return unwrap<Occurrence[]>(
-      this.request.post(`events/${eventId}/occurrences/generate`, {
-        headers: jsonHeaders,
-        data: { recurrence_rule: recurrenceRule },
-      }),
-    );
+  async generateOccurrences(eventId: number, recurrenceRule: RecurrenceRule): Promise<void> {
+    const response = await this.request.post(`events/${eventId}/occurrences/generate`, {
+      headers: jsonHeaders,
+      data: { recurrence_rule: recurrenceRule },
+    });
+    if (!response.ok()) {
+      throw new Error(`API ${response.url()} → ${response.status()}: ${await response.text()}`);
+    }
+    const { status, job_uuid: jobUuid } = (await response.json()) as { status: string; job_uuid: string };
+    let currentStatus = status;
+    const deadline = Date.now() + 60_000;
+    while (currentStatus === 'IN_PROGRESS') {
+      if (Date.now() > deadline) {
+        throw new Error(`Occurrence generation for event ${eventId} timed out`);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const pollResponse = await this.request.get(
+        `events/${eventId}/occurrences/generate/status?job_uuid=${jobUuid}`,
+        { headers: jsonHeaders },
+      );
+      if (!pollResponse.ok()) {
+        throw new Error(`API ${pollResponse.url()} → ${pollResponse.status()}: ${await pollResponse.text()}`);
+      }
+      const poll = (await pollResponse.json()) as { status: string };
+      currentStatus = poll.status;
+    }
+    if (currentStatus !== 'FINISHED') {
+      throw new Error(`Occurrence generation for event ${eventId} ended with status ${currentStatus}`);
+    }
   }
 
   listOccurrences(eventId: number): Promise<Occurrence[]> {
@@ -288,6 +310,19 @@ export class ApiClient {
   }
 }
 
+export interface UpsertAnnouncementPayload {
+  title: string;
+  content: string;
+  status: 'DRAFT' | 'PUBLISHED';
+  display_type: 'BANNER' | 'MODAL';
+  emoji?: string;
+  target_type: 'ALL' | 'ACCOUNTS' | 'USERS';
+  target_account_ids?: number[];
+  target_user_ids?: number[];
+  cta_label?: string;
+  cta_url?: string;
+}
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -298,5 +333,13 @@ export class AdminApiClient {
         data: { messaging_tier_id: messagingTierId },
       }),
     );
+  }
+
+  createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {
+    return unwrap(this.request.post('admin/announcements', { headers: jsonHeaders, data: payload }));
+  }
+
+  deleteAnnouncement(announcementId: number): Promise<void> {
+    return check(this.request.delete(`admin/announcements/${announcementId}`, { headers: jsonHeaders }));
   }
 }
