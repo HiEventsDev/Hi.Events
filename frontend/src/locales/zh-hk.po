@@ -427,6 +427,7 @@ msgstr "接受邀請"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
 msgid "Account"
@@ -440,9 +441,21 @@ msgstr ""
 msgid "Account · {0} · {1}"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:69
+msgid "Account deletion has been cancelled."
+msgstr "帳戶刪除已取消。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
+msgid "Account deletion is blocked"
+msgstr "帳戶刪除已被封鎖"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
 msgid "Account Information"
 msgstr "帳戶資訊"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
+msgid "Account name"
+msgstr "帳戶名稱"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -451,6 +464,10 @@ msgstr "賬户名稱"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Account not found"
 msgstr "找不到帳戶"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
+msgid "Account owner"
+msgstr "帳戶擁有者"
 
 #: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:17
@@ -722,6 +739,7 @@ msgstr "地址第 2 行"
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "管理員"
 
@@ -731,7 +749,7 @@ msgid "Admin Access Required"
 msgstr "需要管理員存取權限"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "管理儀表板"
@@ -796,9 +814,10 @@ msgid "all"
 msgstr ""
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:485
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Archived Events"
@@ -990,6 +1009,10 @@ msgstr "出現意外錯誤。請重試。"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:849
 msgid "and {0} more..."
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Anonymize"
+msgstr "匿名化"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
@@ -1596,6 +1619,10 @@ msgstr ""
 msgid "Basic Information"
 msgstr "基本資料"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:126
+msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
+msgstr "由於此帳戶有已完成的訂單，交易記錄（金額、日期及發票詳情）將以匿名形式保留，用於法律及稅務目的。所有個人資料將被永久刪除。"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:546
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:291
 msgid "Billing Address"
@@ -1734,6 +1761,7 @@ msgstr ""
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 #: src/components/modals/ManageOrderModal/index.tsx:209
 #: src/components/modals/PublishEventModal/index.tsx:208
+#: src/components/routes/admin/DeletionRequests/index.tsx:178
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
@@ -1767,6 +1795,16 @@ msgstr "取消所有產品並釋放回可用池"
 msgid "Cancel Date"
 msgstr ""
 
+#: src/components/common/PendingDeletionBanner/index.tsx:37
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Cancel deletion"
+msgstr "取消刪除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Cancel deletion request"
+msgstr "取消刪除請求"
+
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Cancel email change"
 msgstr "取消更改電子郵件"
@@ -1796,6 +1834,7 @@ msgstr "取消將取消與此訂單關聯的所有參與者，並將門票釋放
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:210
@@ -2332,6 +2371,7 @@ msgstr "完成您的個人資料以加入團隊。"
 #: src/components/common/OrdersTable/index.tsx:323
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:424
+#: src/components/routes/admin/DeletionRequests/index.tsx:86
 #: src/components/routes/event/orders.tsx:26
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
@@ -2384,7 +2424,7 @@ msgstr "配置名稱對最終用戶可見。固定費用將按當前匯率轉換
 msgid "Configuration updated successfully"
 msgstr "配置更新成功"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "配置"
@@ -3102,6 +3142,8 @@ msgstr "危險區"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:36
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:80
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/index.tsx:102
 #: src/components/routes/organizer/Settings/index.tsx:79
@@ -3266,6 +3308,11 @@ msgstr "刪除\"{0}\"？"
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
+msgid "Delete account"
+msgstr "刪除帳戶"
+
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "刪除推廣夥伴"
@@ -3347,6 +3394,27 @@ msgstr "刪除 Webhook"
 #: src/components/routes/event/OccurrencesTab/index.tsx:253
 msgid "Deleted {0} date(s)"
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:143
+msgid "Deleted account"
+msgstr "已刪除的帳戶"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:118
+msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
+msgstr "刪除帳戶會立即將其停用：所有已發佈的活動將被取消發佈，存取權限將被停用。30 天寬限期過後，刪除將成為永久性。在這 30 天內您可以隨時取消。"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:56
+msgid "Deletion queued for execution"
+msgstr "刪除已加入執行佇列"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:55
+msgid "Deletion request cancelled"
+msgstr "刪除請求已取消"
+
+#: src/components/layouts/Admin/index.tsx:20
+#: src/components/routes/admin/DeletionRequests/index.tsx:75
+msgid "Deletion Requests"
+msgstr "刪除請求"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:308
@@ -4313,6 +4381,18 @@ msgstr "例子：「T恤尺碼」、「餐飲偏好」、「職位」"
 msgid "Exception"
 msgstr "異常"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Execute deletion"
+msgstr "執行刪除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Execute deletion now"
+msgstr "立即執行刪除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:187
+msgid "Execute now"
+msgstr "立即執行"
+
 #: src/components/forms/CheckInListForm/index.tsx:160
 msgid "Expiration date"
 msgstr "過期日期"
@@ -4386,7 +4466,7 @@ msgstr "失敗"
 msgid "Failed At"
 msgstr "失敗時間"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "失敗任務"
@@ -5002,6 +5082,10 @@ msgstr "準備好您的活動"
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:224
+msgid "Go back"
+msgstr "返回"
+
 #: src/components/routes/event/OccurrenceDetail/index.tsx:72
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:221
@@ -5083,6 +5167,10 @@ msgstr "賓客"
 msgid "Happening now"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Hard delete"
+msgstr "徹底刪除"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:698
 msgid "Have a promo code?"
 msgstr "有促銷代碼嗎？"
@@ -5095,6 +5183,10 @@ msgstr "您好 {0}，從這裡管理您的平台。"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:172
+msgid "Help us improve by telling us why you're leaving"
+msgstr "告訴我們您離開的原因，幫助我們改進"
 
 #: src/components/routes/my-tickets/index.tsx:255
 msgid "Here are all the tickets associated with your email address."
@@ -6533,6 +6625,10 @@ msgstr "未安排日期"
 msgid "No dates scheduled yet"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:108
+msgid "No deletion requests found"
+msgstr "未找到刪除請求"
+
 #: src/components/forms/PromoCodeForm/index.tsx:94
 msgid "No Discount"
 msgstr "無折扣"
@@ -7022,6 +7118,10 @@ msgstr "僅發送給具有這些狀態的訂單"
 msgid "Only show start date and time"
 msgstr "僅顯示開始日期和時間"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:138
+msgid "Only the account owner can request account deletion."
+msgstr "只有帳戶擁有者才能請求刪除帳戶。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:513
 msgid "Only tickets count toward capacity"
 msgstr ""
@@ -7044,7 +7144,7 @@ msgstr "開啟簽到頁面"
 msgid "Open occurrence"
 msgstr ""
 
-#: src/components/layouts/AppLayout/index.tsx:29
+#: src/components/layouts/AppLayout/index.tsx:30
 msgid "Open sidebar"
 msgstr "打開側邊欄"
 
@@ -7384,6 +7484,10 @@ msgstr "其他"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "其他列表（不包含此票）"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:121
+msgid "Outcome"
+msgstr "結果"
+
 #: src/constants/eventCategories.ts:22
 msgid "Outdoors"
 msgstr ""
@@ -7622,10 +7726,11 @@ msgstr "付款不可用"
 msgid "Payouts"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:437
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
 msgid "Pending"
-msgstr ""
+msgstr "待處理"
 
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
@@ -7686,6 +7791,14 @@ msgstr "交易金額的百分比"
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
 msgstr "表現"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:184
+msgid "Permanently delete this account"
+msgstr "永久刪除此帳戶"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:81
+msgid "Permanently delete this account and its data."
+msgstr "永久刪除此帳戶及其資料。"
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
 msgid "Permanently delete this event and all its associated data."
@@ -8293,6 +8406,10 @@ msgstr "準備好發布了嗎？"
 msgid "Real-time analytics"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+msgid "Reason (optional)"
+msgstr "原因（可選）"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8516,6 +8633,14 @@ msgstr "報告"
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
 msgstr "請求新連結"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:119
+msgid "Requested"
+msgstr "請求時間"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:118
+msgid "Requested by"
+msgstr "請求人"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
 msgid "Require Billing Address"
@@ -8926,6 +9051,10 @@ msgstr ""
 msgid "Scheduled"
 msgstr "已排程"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:120
+msgid "Scheduled deletion"
+msgstr "計劃刪除時間"
+
 #: src/components/modals/SendMessageModal/index.tsx:502
 msgid "Scheduled time"
 msgstr "排程時間"
@@ -8943,6 +9072,7 @@ msgid "Search attendees"
 msgstr ""
 
 #: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/DeletionRequests/index.tsx:93
 msgid "Search by account name or email..."
 msgstr "按賬戶名稱或電子郵件搜尋..."
 
@@ -9714,6 +9844,8 @@ msgstr "出了點問題。請稍後再試。"
 
 #: src/components/layouts/Event/index.tsx:91
 #: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -9843,6 +9975,7 @@ msgstr ""
 #: src/components/modals/ManageOrderModal/index.tsx:121
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:161
 #: src/components/routes/admin/Dashboard/index.tsx:405
+#: src/components/routes/admin/DeletionRequests/index.tsx:122
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:294
@@ -10485,6 +10618,18 @@ msgstr "這些範本將僅覆蓋此活動的組織者預設設置。如果這裏
 msgid "Third"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:131
+msgid "This account has no completed orders, so all of its data will be permanently deleted."
+msgstr "此帳戶沒有已完成的訂單，因此其所有資料將被永久刪除。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:89
+msgid "This account is scheduled for deletion"
+msgstr "此帳戶已計劃刪除"
+
+#: src/components/common/PendingDeletionBanner/index.tsx:24
+msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
+msgstr "此帳戶已計劃於 <0>{scheduledDate}</0> 刪除"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:259
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr ""
@@ -10736,9 +10881,21 @@ msgstr ""
 msgid "This will be used for notifications and communication with your users."
 msgstr "這將用於通知和與使用者的溝通。"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:218
+msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
+msgstr "這將取消計劃的刪除並重新啟用帳戶。帳戶擁有者將收到電子郵件通知。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:158
+msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
+msgstr "這將立即停用您的帳戶，並在 30 天後永久刪除。請輸入您的帳戶名稱以確認：<0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "呢個唔會俾客戶睇到，但可以幫你識別推廣夥伴。"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:219
+msgid "This will permanently delete or anonymize the account immediately, without waiting for the scheduled date. This cannot be undone."
+msgstr "這將立即永久刪除或匿名化該帳戶，而不等待計劃日期。此操作無法復原。"
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:107
 msgid "Throughput"
@@ -12353,9 +12510,17 @@ msgstr "您已獲得一個名額！"
 msgid "You've changed the session time"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
+msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
+msgstr "您的帳戶已停用，將於 <0>{0}</0> 永久刪除。"
+
 #: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "您的帳戶有訊息限制。要提高您的限制，請聯繫我們"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:53
+msgid "Your account is now scheduled for deletion."
+msgstr "您的帳戶現已計劃刪除。"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."

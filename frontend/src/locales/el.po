@@ -427,6 +427,7 @@ msgstr "Αποδοχή Πρόσκλησης"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
 msgid "Account"
@@ -440,9 +441,21 @@ msgstr ""
 msgid "Account · {0} · {1}"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:69
+msgid "Account deletion has been cancelled."
+msgstr "Η διαγραφή του λογαριασμού ακυρώθηκε."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
+msgid "Account deletion is blocked"
+msgstr "Η διαγραφή λογαριασμού είναι αποκλεισμένη"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
 msgid "Account Information"
 msgstr "Πληροφορίες Λογαριασμού"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
+msgid "Account name"
+msgstr "Όνομα λογαριασμού"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -451,6 +464,10 @@ msgstr "Όνομα Λογαριασμού"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Account not found"
 msgstr "Ο λογαριασμός δεν βρέθηκε"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
+msgid "Account owner"
+msgstr "Κάτοχος λογαριασμού"
 
 #: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:17
@@ -722,6 +739,7 @@ msgstr "Διεύθυνση Γραμμή 2"
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "Διαχειριστής"
 
@@ -731,7 +749,7 @@ msgid "Admin Access Required"
 msgstr "Απαιτείται Πρόσβαση Διαχειριστή"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Πίνακας Διαχείρισης"
@@ -796,9 +814,10 @@ msgid "all"
 msgstr ""
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:485
 msgid "All"
-msgstr ""
+msgstr "Όλα"
 
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Archived Events"
@@ -990,6 +1009,10 @@ msgstr "Παρουσιάστηκε μη αναμενόμενο σφάλμα. Π�
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:849
 msgid "and {0} more..."
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Anonymize"
+msgstr "Ανωνυμοποίηση"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
@@ -1596,6 +1619,10 @@ msgstr ""
 msgid "Basic Information"
 msgstr "Βασικές Πληροφορίες"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:126
+msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
+msgstr "Επειδή αυτός ο λογαριασμός έχει ολοκληρωμένες παραγγελίες, τα αρχεία συναλλαγών (ποσά, ημερομηνίες και στοιχεία τιμολογίων) θα διατηρηθούν σε ανωνυμοποιημένη μορφή για νομικούς και φορολογικούς σκοπούς. Όλα τα προσωπικά δεδομένα θα διαγραφούν οριστικά."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:546
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:291
 msgid "Billing Address"
@@ -1734,6 +1761,7 @@ msgstr ""
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 #: src/components/modals/ManageOrderModal/index.tsx:209
 #: src/components/modals/PublishEventModal/index.tsx:208
+#: src/components/routes/admin/DeletionRequests/index.tsx:178
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:497
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
@@ -1767,6 +1795,16 @@ msgstr "Ακύρωση όλων των προϊόντων και επιστρο�
 msgid "Cancel Date"
 msgstr ""
 
+#: src/components/common/PendingDeletionBanner/index.tsx:37
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Cancel deletion"
+msgstr "Ακύρωση διαγραφής"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Cancel deletion request"
+msgstr "Ακύρωση αιτήματος διαγραφής"
+
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Cancel email change"
 msgstr "Ακύρωση αλλαγής email"
@@ -1796,6 +1834,7 @@ msgstr "Η ακύρωση θα ακυρώσει όλους τους συμμετ
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:210
@@ -2332,6 +2371,7 @@ msgstr "Ολοκληρώστε το προφίλ σας για να συμμετ
 #: src/components/common/OrdersTable/index.tsx:323
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:424
+#: src/components/routes/admin/DeletionRequests/index.tsx:86
 #: src/components/routes/event/orders.tsx:26
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
@@ -2384,7 +2424,7 @@ msgstr "Τα ονόματα ρυθμίσεων είναι ορατά στους 
 msgid "Configuration updated successfully"
 msgstr "Η ρύθμιση ενημερώθηκε επιτυχώς"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "Ρυθμίσεις"
@@ -3102,6 +3142,8 @@ msgstr "Επικίνδυνη ζώνη"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:36
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:80
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/index.tsx:102
 #: src/components/routes/organizer/Settings/index.tsx:79
@@ -3266,6 +3308,11 @@ msgstr "Διαγραφή \"{0}\";"
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
+msgid "Delete account"
+msgstr "Διαγραφή λογαριασμού"
+
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "Διαγραφή Συνεργάτη"
@@ -3347,6 +3394,27 @@ msgstr "Διαγραφή webhook"
 #: src/components/routes/event/OccurrencesTab/index.tsx:253
 msgid "Deleted {0} date(s)"
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:143
+msgid "Deleted account"
+msgstr "Διαγραμμένος λογαριασμός"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:118
+msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
+msgstr "Η διαγραφή του λογαριασμού σας τον απενεργοποιεί αμέσως: όλες οι δημοσιευμένες εκδηλώσεις αποσύρονται και η πρόσβαση απενεργοποιείται. Μετά από περίοδο χάριτος 30 ημερών, η διαγραφή γίνεται οριστική. Μπορείτε να ακυρώσετε οποιαδήποτε στιγμή εντός αυτών των 30 ημερών."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:56
+msgid "Deletion queued for execution"
+msgstr "Η διαγραφή τέθηκε σε ουρά για εκτέλεση"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:55
+msgid "Deletion request cancelled"
+msgstr "Το αίτημα διαγραφής ακυρώθηκε"
+
+#: src/components/layouts/Admin/index.tsx:20
+#: src/components/routes/admin/DeletionRequests/index.tsx:75
+msgid "Deletion Requests"
+msgstr "Αιτήματα διαγραφής"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:308
@@ -4313,6 +4381,18 @@ msgstr "Παραδείγματα: \"Μέγεθος μπλούζας\", \"Προ�
 msgid "Exception"
 msgstr "Εξαίρεση"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Execute deletion"
+msgstr "Εκτέλεση διαγραφής"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Execute deletion now"
+msgstr "Εκτέλεση διαγραφής τώρα"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:187
+msgid "Execute now"
+msgstr "Εκτέλεση τώρα"
+
 #: src/components/forms/CheckInListForm/index.tsx:160
 msgid "Expiration date"
 msgstr "Ημερομηνία λήξης"
@@ -4386,7 +4466,7 @@ msgstr "Απέτυχε"
 msgid "Failed At"
 msgstr "Απέτυχε στο"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Αποτυχημένες Εργασίες"
@@ -5002,6 +5082,10 @@ msgstr "Ετοιμάστε την εκδήλωσή σας"
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:224
+msgid "Go back"
+msgstr "Επιστροφή"
+
 #: src/components/routes/event/OccurrenceDetail/index.tsx:72
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:221
@@ -5083,6 +5167,10 @@ msgstr "Επισκέπτες"
 msgid "Happening now"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Hard delete"
+msgstr "Οριστική διαγραφή"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:698
 msgid "Have a promo code?"
 msgstr "Έχετε κωδικό προσφοράς;"
@@ -5095,6 +5183,10 @@ msgstr "Γεια σας {0}, διαχειριστείτε την πλατφόρ�
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "info@ekdiloseis.gr"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:172
+msgid "Help us improve by telling us why you're leaving"
+msgstr "Βοηθήστε μας να βελτιωθούμε λέγοντάς μας γιατί φεύγετε"
 
 #: src/components/routes/my-tickets/index.tsx:255
 msgid "Here are all the tickets associated with your email address."
@@ -6533,6 +6625,10 @@ msgstr "Δεν έχουν προγραμματιστεί ημερομηνίες"
 msgid "No dates scheduled yet"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:108
+msgid "No deletion requests found"
+msgstr "Δεν βρέθηκαν αιτήματα διαγραφής"
+
 #: src/components/forms/PromoCodeForm/index.tsx:94
 msgid "No Discount"
 msgstr "Χωρίς Έκπτωση"
@@ -7022,6 +7118,10 @@ msgstr "Αποστολή μόνο σε παραγγελίες με αυτές τ
 msgid "Only show start date and time"
 msgstr "Εμφάνιση μόνο ημερομηνίας και ώρας έναρξης"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:138
+msgid "Only the account owner can request account deletion."
+msgstr "Μόνο ο κάτοχος του λογαριασμού μπορεί να ζητήσει διαγραφή λογαριασμού."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:513
 msgid "Only tickets count toward capacity"
 msgstr ""
@@ -7044,7 +7144,7 @@ msgstr "Άνοιγμα Σελίδας Check-In"
 msgid "Open occurrence"
 msgstr ""
 
-#: src/components/layouts/AppLayout/index.tsx:29
+#: src/components/layouts/AppLayout/index.tsx:30
 msgid "Open sidebar"
 msgstr "Άνοιγμα πλαϊνής μπάρας"
 
@@ -7384,6 +7484,10 @@ msgstr "Άλλο"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Άλλες Λίστες (Εισιτήριο Μη Συμπεριλαμβανόμενο)"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:121
+msgid "Outcome"
+msgstr "Αποτέλεσμα"
+
 #: src/constants/eventCategories.ts:22
 msgid "Outdoors"
 msgstr ""
@@ -7622,10 +7726,11 @@ msgstr "Οι πληρωμές δεν είναι διαθέσιμες"
 msgid "Payouts"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:437
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
 msgid "Pending"
-msgstr ""
+msgstr "Σε εκκρεμότητα"
 
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
@@ -7686,6 +7791,14 @@ msgstr "Ποσοστό ποσού συναλλαγής"
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
 msgstr "Απόδοση"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:184
+msgid "Permanently delete this account"
+msgstr "Οριστική διαγραφή αυτού του λογαριασμού"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:81
+msgid "Permanently delete this account and its data."
+msgstr "Οριστική διαγραφή αυτού του λογαριασμού και των δεδομένων του."
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
 msgid "Permanently delete this event and all its associated data."
@@ -8293,6 +8406,10 @@ msgstr "Έτοιμοι να δημοσιεύσετε;"
 msgid "Real-time analytics"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+msgid "Reason (optional)"
+msgstr "Λόγος (προαιρετικό)"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8516,6 +8633,14 @@ msgstr "Αναφορές"
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
 msgstr "Αίτημα νέου συνδέσμου"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:119
+msgid "Requested"
+msgstr "Αιτήθηκε"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:118
+msgid "Requested by"
+msgstr "Αιτήθηκε από"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
 msgid "Require Billing Address"
@@ -8926,6 +9051,10 @@ msgstr ""
 msgid "Scheduled"
 msgstr "Προγραμματισμένο"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:120
+msgid "Scheduled deletion"
+msgstr "Προγραμματισμένη διαγραφή"
+
 #: src/components/modals/SendMessageModal/index.tsx:502
 msgid "Scheduled time"
 msgstr "Προγραμματισμένη ώρα"
@@ -8943,6 +9072,7 @@ msgid "Search attendees"
 msgstr ""
 
 #: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/DeletionRequests/index.tsx:93
 msgid "Search by account name or email..."
 msgstr "Αναζήτηση ανά όνομα λογαριασμού ή email..."
 
@@ -9714,6 +9844,8 @@ msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξα
 
 #: src/components/layouts/Event/index.tsx:91
 #: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -9843,6 +9975,7 @@ msgstr ""
 #: src/components/modals/ManageOrderModal/index.tsx:121
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:161
 #: src/components/routes/admin/Dashboard/index.tsx:405
+#: src/components/routes/admin/DeletionRequests/index.tsx:122
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:294
@@ -10485,6 +10618,18 @@ msgstr "Αυτά τα πρότυπα θα παρακάμψουν τις προε
 msgid "Third"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:131
+msgid "This account has no completed orders, so all of its data will be permanently deleted."
+msgstr "Αυτός ο λογαριασμός δεν έχει ολοκληρωμένες παραγγελίες, επομένως όλα τα δεδομένα του θα διαγραφούν οριστικά."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:89
+msgid "This account is scheduled for deletion"
+msgstr "Αυτός ο λογαριασμός έχει προγραμματιστεί για διαγραφή"
+
+#: src/components/common/PendingDeletionBanner/index.tsx:24
+msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
+msgstr "Αυτός ο λογαριασμός έχει προγραμματιστεί για διαγραφή στις <0>{scheduledDate}</0>"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:259
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr ""
@@ -10736,9 +10881,21 @@ msgstr ""
 msgid "This will be used for notifications and communication with your users."
 msgstr "Αυτό θα χρησιμοποιηθεί για ειδοποιήσεις και επικοινωνία με τους χρήστες σας."
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:218
+msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
+msgstr "Αυτό θα ακυρώσει την προγραμματισμένη διαγραφή και θα επανενεργοποιήσει τον λογαριασμό. Ο κάτοχος του λογαριασμού θα ειδοποιηθεί μέσω email."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:158
+msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
+msgstr "Αυτό θα απενεργοποιήσει τον λογαριασμό σας αμέσως και θα τον διαγράψει οριστικά μετά από 30 ημέρες. Για επιβεβαίωση, πληκτρολογήστε το όνομα του λογαριασμού σας: <0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Αυτό δεν θα είναι ορατό στους πελάτες, αλλά σας βοηθά να αναγνωρίσετε τον συνεργάτη."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:219
+msgid "This will permanently delete or anonymize the account immediately, without waiting for the scheduled date. This cannot be undone."
+msgstr "Αυτό θα διαγράψει ή θα ανωνυμοποιήσει οριστικά τον λογαριασμό αμέσως, χωρίς αναμονή για την προγραμματισμένη ημερομηνία. Δεν μπορεί να αναιρεθεί."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:107
 msgid "Throughput"
@@ -12353,9 +12510,17 @@ msgstr "Σας προσφέρθηκε μια θέση!"
 msgid "You've changed the session time"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
+msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
+msgstr "Ο λογαριασμός σας έχει απενεργοποιηθεί και θα διαγραφεί οριστικά στις <0>{0}</0>."
+
 #: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "Ο λογαριασμός σας έχει όρια μηνυμάτων. Για αύξηση ορίων, επικοινωνήστε μαζί μας στο"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:53
+msgid "Your account is now scheduled for deletion."
+msgstr "Ο λογαριασμός σας έχει πλέον προγραμματιστεί για διαγραφή."
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."

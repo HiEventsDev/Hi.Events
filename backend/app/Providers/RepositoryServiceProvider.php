@@ -6,6 +6,7 @@ namespace HiEvents\Providers;
 
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
+use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -61,6 +62,7 @@ use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -125,6 +127,7 @@ class RepositoryServiceProvider extends ServiceProvider
         UserRepositoryInterface::class => UserRepository::class,
         AccountRepositoryInterface::class => AccountRepository::class,
         AccountAttributionRepositoryInterface::class => AccountAttributionRepository::class,
+        AccountDeletionRequestRepositoryInterface::class => AccountDeletionRequestRepository::class,
         EventRepositoryInterface::class => EventRepository::class,
         ProductRepositoryInterface::class => ProductRepository::class,
         OrderRepositoryInterface::class => OrderRepository::class,

@@ -44,6 +44,13 @@ api.interceptors.response.use(
         const isManageEventPath = currentPath.startsWith('/manage/event/');
         const isAuthError = status === 401 || status === 403;
 
+        if (status === 403 && error.response.data?.error_code === 'ACCOUNT_PENDING_DELETION') {
+            if (!currentPath.startsWith('/account')) {
+                window?.location?.replace('/account/danger-zone');
+            }
+            return Promise.reject(error);
+        }
+
         if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
             // Store the current URL before redirecting to the login page
             window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
