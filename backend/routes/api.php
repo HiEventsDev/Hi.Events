@@ -1,6 +1,9 @@
 <?php
 
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
+use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
+use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
+use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
@@ -15,6 +18,10 @@ use HiEvents\Http\Actions\Admin\Configurations\CreateConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\DeleteConfigurationAction;
 use HiEvents\Http\Actions\Admin\Configurations\GetAllConfigurationsAction;
 use HiEvents\Http\Actions\Admin\Configurations\UpdateConfigurationAction;
+use HiEvents\Http\Actions\Admin\DeletionRequests\AdminCancelAccountDeletionAction;
+use HiEvents\Http\Actions\Admin\DeletionRequests\AdminExecuteAccountDeletionAction;
+use HiEvents\Http\Actions\Admin\DeletionRequests\AdminRequestAccountDeletionAction;
+use HiEvents\Http\Actions\Admin\DeletionRequests\GetAllAccountDeletionRequestsAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
@@ -302,6 +309,9 @@ $router->middleware(['auth:api'])->group(
         $router->post('/announcements/{announcement_id}/dismiss', DismissAnnouncementAction::class);
 
         // Accounts
+        $router->post('/accounts/deletion-request', RequestAccountDeletionAction::class);
+        $router->delete('/accounts/deletion-request', CancelAccountDeletionAction::class);
+        $router->get('/accounts/deletion-request', GetAccountDeletionStatusAction::class);
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
 
@@ -561,6 +571,12 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);
         $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
+
+        // Account Deletion Requests
+        $router->get('/deletion-requests', GetAllAccountDeletionRequestsAction::class);
+        $router->post('/accounts/{account_id}/deletion-request', AdminRequestAccountDeletionAction::class);
+        $router->delete('/deletion-requests/{deletion_request_id}', AdminCancelAccountDeletionAction::class);
+        $router->post('/deletion-requests/{deletion_request_id}/execute', AdminExecuteAccountDeletionAction::class);
 
         // System Info
         $router->get('/system-info', GetSystemInfoAction::class);

@@ -60,6 +60,7 @@ return [
         'order_details' => '/checkout/%d/%s/details',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
+        'account_danger_zone' => '/account/danger-zone',
     ],
 
     /**

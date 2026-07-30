@@ -119,6 +119,24 @@ export interface Account {
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
     requires_manual_verification?: boolean;
+    deletion_request?: AccountDeletionRequest | null;
+}
+
+export interface AccountDeletionRequest {
+    id: IdParam;
+    status: 'REQUESTED' | 'CANCELLED' | 'COMPLETED';
+    initiated_by: 'ACCOUNT_OWNER' | 'ADMIN';
+    expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
+    scheduled_deletion_at: string;
+    cancelled_at: string | null;
+    requested_at: string;
+}
+
+export interface AccountDeletionStatus {
+    deletion_request: AccountDeletionRequest | null;
+    can_request_deletion: boolean;
+    cannot_delete_reason: string | null;
+    expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
 }
 
 export interface AccountConfiguration {

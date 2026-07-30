@@ -12,12 +12,14 @@ use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventSettingDomainObjectAbstract;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Event;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -227,5 +229,30 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             ->where('event_settings.'.EventSettingDomainObjectAbstract::ALLOW_SEARCH_ENGINE_INDEXING, true)
             ->whereNull('events.'.EventDomainObjectAbstract::DELETED_AT)
             ->count();
+    }
+
+    public function getUpcomingEventsWithCompletedOrders(int $accountId): Collection
+    {
+        return $this->runQuery(function () use ($accountId) {
+            $events = $this->model
+                ->where('events.'.EventDomainObjectAbstract::ACCOUNT_ID, $accountId)
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('event_occurrences')
+                        ->whereColumn('event_occurrences.event_id', 'events.id')
+                        ->whereNull('event_occurrences.deleted_at')
+                        ->whereRaw('COALESCE(event_occurrences.end_date, event_occurrences.start_date) >= ?', [now()]);
+                })
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('orders')
+                        ->whereColumn('orders.event_id', 'events.id')
+                        ->whereNull('orders.deleted_at')
+                        ->where('orders.status', OrderStatus::COMPLETED->name);
+                })
+                ->get();
+
+            return $this->handleResults($events);
+        });
     }
 }

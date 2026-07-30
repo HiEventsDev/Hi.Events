@@ -214,6 +214,31 @@ export interface GetAllAccountsParams {
     search?: string;
 }
 
+export interface GetAllDeletionRequestsParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    status?: string;
+}
+
+export interface AdminDeletionRequest {
+    id: IdParam;
+    status: 'REQUESTED' | 'CANCELLED' | 'COMPLETED';
+    initiated_by: 'ACCOUNT_OWNER' | 'ADMIN';
+    reason: string | null;
+    expected_outcome: 'HARD_DELETE' | 'ANONYMIZE' | null;
+    outcome: 'HARD_DELETE' | 'ANONYMIZE' | null;
+    scheduled_deletion_at: string;
+    reminder_sent_at: string | null;
+    cancelled_at: string | null;
+    completed_at: string | null;
+    requested_at: string;
+    deletion_manifest: Record<string, unknown>[] | Record<string, number> | null;
+    account: { id: IdParam; name: string; email: string } | null;
+    requested_by_user: { id: IdParam; full_name: string; email: string } | null;
+    cancelled_by_user: { id: IdParam; full_name: string } | null;
+}
+
 export interface GetAllEventsParams {
     page?: number;
     per_page?: number;
@@ -584,6 +609,33 @@ export const adminClient = {
 
     getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {
         const response = await api.get<GenericDataResponse<AccountMessagingTier[]>>('admin/messaging-tiers');
+        return response.data;
+    },
+
+    getDeletionRequests: async (params: GetAllDeletionRequestsParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminDeletionRequest>>('admin/deletion-requests', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+                status: params.status || undefined,
+            }
+        });
+        return response.data;
+    },
+
+    requestAccountDeletion: async (accountId: IdParam, reason?: string) => {
+        const response = await api.post(`admin/accounts/${accountId}/deletion-request`, {reason});
+        return response.data;
+    },
+
+    cancelDeletionRequest: async (deletionRequestId: IdParam) => {
+        const response = await api.delete(`admin/deletion-requests/${deletionRequestId}`);
+        return response.data;
+    },
+
+    executeDeletionRequest: async (deletionRequestId: IdParam) => {
+        const response = await api.post(`admin/deletion-requests/${deletionRequestId}/execute`);
         return response.data;
     },
 };

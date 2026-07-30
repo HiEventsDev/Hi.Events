@@ -439,6 +439,7 @@ msgstr "接受邀请"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
 msgid "Account"
@@ -452,9 +453,21 @@ msgstr ""
 msgid "Account · {0} · {1}"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:69
+msgid "Account deletion has been cancelled."
+msgstr "账户删除已取消。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
+msgid "Account deletion is blocked"
+msgstr "账户删除已被阻止"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
 msgid "Account Information"
 msgstr "账户信息"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
+msgid "Account name"
+msgstr "账户名称"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -463,6 +476,10 @@ msgstr "账户名称"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Account not found"
 msgstr "账户未找到"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
+msgid "Account owner"
+msgstr "账户所有者"
 
 #: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:17
@@ -738,6 +755,7 @@ msgstr "地址第 2 行"
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "管理员"
 
@@ -747,7 +765,7 @@ msgid "Admin Access Required"
 msgstr "需要管理员访问权限"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "管理仪表板"
@@ -812,9 +830,10 @@ msgid "all"
 msgstr ""
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:487
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Archived Events"
@@ -1036,6 +1055,10 @@ msgstr "公告已更新"
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "公告"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Anonymize"
+msgstr "匿名化"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
@@ -1660,6 +1683,10 @@ msgstr ""
 msgid "Basic Information"
 msgstr "基本信息"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:126
+msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
+msgstr "由于此账户存在已完成的订单，交易记录（金额、日期和发票详情）将以匿名形式保留，用于法律和税务目的。所有个人信息将被永久删除。"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:546
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:291
 msgid "Billing Address"
@@ -1806,6 +1833,7 @@ msgstr ""
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 #: src/components/modals/ManageOrderModal/index.tsx:209
 #: src/components/modals/PublishEventModal/index.tsx:208
+#: src/components/routes/admin/DeletionRequests/index.tsx:178
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:499
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
@@ -1839,6 +1867,16 @@ msgstr "取消所有产品并释放回可用池"
 msgid "Cancel Date"
 msgstr ""
 
+#: src/components/common/PendingDeletionBanner/index.tsx:37
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Cancel deletion"
+msgstr "取消删除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Cancel deletion request"
+msgstr "取消删除请求"
+
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Cancel email change"
 msgstr "取消更改电子邮件"
@@ -1868,6 +1906,7 @@ msgstr "取消将取消与此订单关联的所有参与者，并将门票释放
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:210
@@ -2404,6 +2443,7 @@ msgstr "完成你的个人资料以加入团队。"
 #: src/components/common/OrdersTable/index.tsx:323
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:424
+#: src/components/routes/admin/DeletionRequests/index.tsx:86
 #: src/components/routes/event/orders.tsx:26
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
@@ -2456,7 +2496,7 @@ msgstr "配置名称对最终用户可见。固定费用将按当前汇率转换
 msgid "Configuration updated successfully"
 msgstr "配置更新成功"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "配置"
@@ -3197,6 +3237,8 @@ msgstr "危险区"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:36
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:80
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/index.tsx:102
 #: src/components/routes/organizer/Settings/index.tsx:79
@@ -3362,6 +3404,11 @@ msgstr "删除\"{0}\"？"
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
+msgid "Delete account"
+msgstr "删除账户"
+
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "删除推广员"
@@ -3443,6 +3490,27 @@ msgstr "删除 Webhook"
 #: src/components/routes/event/OccurrencesTab/index.tsx:255
 msgid "Deleted {0} date(s)"
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:143
+msgid "Deleted account"
+msgstr "已删除的账户"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:118
+msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
+msgstr "删除账户会立即将其停用：所有已发布的活动将被取消发布，访问权限将被禁用。30 天宽限期过后，删除将变为永久性。在这 30 天内您可以随时取消。"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:56
+msgid "Deletion queued for execution"
+msgstr "删除已加入执行队列"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:55
+msgid "Deletion request cancelled"
+msgstr "删除请求已取消"
+
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/DeletionRequests/index.tsx:75
+msgid "Deletion Requests"
+msgstr "删除请求"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:308
@@ -4445,6 +4513,18 @@ msgstr "示例：\"T恤尺码\"、\"餐饮偏好\"、\"职位\""
 msgid "Exception"
 msgstr "异常"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Execute deletion"
+msgstr "执行删除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Execute deletion now"
+msgstr "立即执行删除"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:187
+msgid "Execute now"
+msgstr "立即执行"
+
 #: src/components/forms/CheckInListForm/index.tsx:160
 msgid "Expiration date"
 msgstr "过期日期"
@@ -4518,7 +4598,7 @@ msgstr "失败"
 msgid "Failed At"
 msgstr "失败时间"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "失败任务"
@@ -5143,6 +5223,10 @@ msgstr "准备好您的活动"
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:224
+msgid "Go back"
+msgstr "返回"
+
 #: src/components/routes/event/OccurrenceDetail/index.tsx:72
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:223
@@ -5225,6 +5309,10 @@ msgstr "宾客"
 msgid "Happening now"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Hard delete"
+msgstr "彻底删除"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:698
 msgid "Have a promo code?"
 msgstr "有促销代码吗？"
@@ -5237,6 +5325,10 @@ msgstr "您好 {0}，从这里管理您的平台。"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:172
+msgid "Help us improve by telling us why you're leaving"
+msgstr "告诉我们您离开的原因，帮助我们改进"
 
 #: src/components/routes/my-tickets/index.tsx:255
 msgid "Here are all the tickets associated with your email address."
@@ -6692,6 +6784,10 @@ msgstr "未安排日期"
 msgid "No dates scheduled yet"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:108
+msgid "No deletion requests found"
+msgstr "未找到删除请求"
+
 #: src/components/forms/PromoCodeForm/index.tsx:94
 msgid "No Discount"
 msgstr "无折扣"
@@ -7189,6 +7285,10 @@ msgstr "仅发送给具有这些状态的订单"
 msgid "Only show start date and time"
 msgstr "仅显示开始日期和时间"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:138
+msgid "Only the account owner can request account deletion."
+msgstr "只有账户所有者才能请求删除账户。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:513
 msgid "Only tickets count toward capacity"
 msgstr ""
@@ -7211,7 +7311,7 @@ msgstr "打开签到页面"
 msgid "Open occurrence"
 msgstr ""
 
-#: src/components/layouts/AppLayout/index.tsx:30
+#: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
@@ -7555,6 +7655,10 @@ msgstr "其他"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "其他列表（不包含此票）"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:121
+msgid "Outcome"
+msgstr "结果"
+
 #: src/constants/eventCategories.ts:22
 msgid "Outdoors"
 msgstr ""
@@ -7793,10 +7897,11 @@ msgstr "付款不可用"
 msgid "Payouts"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:437
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
 msgid "Pending"
-msgstr ""
+msgstr "待处理"
 
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
@@ -7857,6 +7962,14 @@ msgstr "交易金额的百分比"
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
 msgstr "绩效"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:184
+msgid "Permanently delete this account"
+msgstr "永久删除此账户"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:81
+msgid "Permanently delete this account and its data."
+msgstr "永久删除此账户及其数据。"
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
 msgid "Permanently delete this event and all its associated data."
@@ -8470,6 +8583,10 @@ msgstr "准备好发布了吗？"
 msgid "Real-time analytics"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+msgid "Reason (optional)"
+msgstr "原因（可选）"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8693,6 +8810,14 @@ msgstr "报告"
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
 msgstr "请求新链接"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:119
+msgid "Requested"
+msgstr "请求时间"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:118
+msgid "Requested by"
+msgstr "请求人"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
 msgid "Require Billing Address"
@@ -9105,6 +9230,10 @@ msgstr ""
 msgid "Scheduled"
 msgstr "已安排"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:120
+msgid "Scheduled deletion"
+msgstr "计划删除时间"
+
 #: src/components/modals/SendMessageModal/index.tsx:502
 msgid "Scheduled time"
 msgstr "定时时间"
@@ -9122,6 +9251,7 @@ msgid "Search attendees"
 msgstr ""
 
 #: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/DeletionRequests/index.tsx:93
 msgid "Search by account name or email..."
 msgstr "按账户名称或电子邮件搜索..."
 
@@ -9921,6 +10051,8 @@ msgstr "出了点问题。请稍后再试。"
 
 #: src/components/layouts/Event/index.tsx:91
 #: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -10060,6 +10192,7 @@ msgstr ""
 #: src/components/routes/admin/Announcements/index.tsx:159
 #: src/components/routes/admin/Announcements/index.tsx:469
 #: src/components/routes/admin/Dashboard/index.tsx:405
+#: src/components/routes/admin/DeletionRequests/index.tsx:122
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:294
@@ -10710,6 +10843,18 @@ msgstr "这些模板将仅覆盖此活动的组织者默认设置。如果这里
 msgid "Third"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:131
+msgid "This account has no completed orders, so all of its data will be permanently deleted."
+msgstr "此账户没有已完成的订单，因此其所有数据将被永久删除。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:89
+msgid "This account is scheduled for deletion"
+msgstr "此账户已计划删除"
+
+#: src/components/common/PendingDeletionBanner/index.tsx:24
+msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
+msgstr "此账户已计划于 <0>{scheduledDate}</0> 删除"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:259
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr ""
@@ -10961,9 +11106,21 @@ msgstr ""
 msgid "This will be used for notifications and communication with your users."
 msgstr "这将用于通知和与用户沟通。"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:218
+msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
+msgstr "这将取消计划的删除并重新激活账户。账户所有者将收到电子邮件通知。"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:158
+msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
+msgstr "这将立即停用您的账户，并在 30 天后永久删除。请输入您的账户名称以确认：<0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "这对客户不可见，但有助于您识别推广员。"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:219
+msgid "This will permanently delete or anonymize the account immediately, without waiting for the scheduled date. This cannot be undone."
+msgstr "这将立即永久删除或匿名化该账户，而不等待计划日期。此操作无法撤消。"
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:107
 msgid "Throughput"
@@ -12608,9 +12765,17 @@ msgstr "您已获得一个名额！"
 msgid "You've changed the session time"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
+msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
+msgstr "您的账户已停用，将于 <0>{0}</0> 永久删除。"
+
 #: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "您的帐户有消息限制。要提高您的限制，请联系我们"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:53
+msgid "Your account is now scheduled for deletion."
+msgstr "您的账户现已计划删除。"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."

@@ -278,4 +278,13 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
         return $exists;
     }
+
+    public function accountHasCompletedOrders(int $accountId): bool
+    {
+        return $this->runQuery(fn () => $this->model
+            ->join('events', 'orders.event_id', '=', 'events.id')
+            ->where('events.account_id', $accountId)
+            ->where('orders.status', OrderStatus::COMPLETED->name)
+            ->exists());
+    }
 }

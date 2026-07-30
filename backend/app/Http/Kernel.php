@@ -4,6 +4,7 @@ namespace HiEvents\Http;
 
 use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
 use HiEvents\Http\Middleware\LogImpersonationMiddleware;
 use HiEvents\Http\Middleware\PreventRequestForgery;
@@ -71,6 +72,7 @@ class Kernel extends HttpKernel
             ThrottleRequests::class.':api',
             SubstituteBindings::class,
             SetAccountContext::class,
+            EnsureAccountIsNotPendingDeletion::class,
             SetUserLocaleMiddleware::class,
             LogImpersonationMiddleware::class,
         ],

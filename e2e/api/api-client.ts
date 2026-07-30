@@ -98,8 +98,14 @@ export async function confirmEmailWithCode(
 export class ApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
-  getAccount(): Promise<{ id: number }> {
-    return unwrap<{ id: number }>(this.request.get('accounts', { headers: jsonHeaders }));
+  getAccount(): Promise<{ id: number; name: string }> {
+    return unwrap<{ id: number; name: string }>(this.request.get('accounts', { headers: jsonHeaders }));
+  }
+
+  requestAccountDeletion(confirmation: string): Promise<{ id: number; status: string }> {
+    return unwrap<{ id: number; status: string }>(
+      this.request.post('accounts/deletion-request', { headers: jsonHeaders, data: { confirmation } }),
+    );
   }
 
   createOrganizer(name: string, opts: { email?: string; currency?: string; timezone?: string } = {}): Promise<Organizer> {

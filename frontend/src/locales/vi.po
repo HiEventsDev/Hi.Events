@@ -439,6 +439,7 @@ msgstr "Chấp nhận lời mời"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
 msgid "Account"
@@ -452,9 +453,21 @@ msgstr ""
 msgid "Account · {0} · {1}"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:69
+msgid "Account deletion has been cancelled."
+msgstr "Việc xóa tài khoản đã bị hủy."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
+msgid "Account deletion is blocked"
+msgstr "Việc xóa tài khoản đang bị chặn"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
 msgid "Account Information"
 msgstr "Thông tin tài khoản"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
+msgid "Account name"
+msgstr "Tên tài khoản"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -463,6 +476,10 @@ msgstr "Tên tài khoản"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Account not found"
 msgstr "Không tìm thấy tài khoản"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
+msgid "Account owner"
+msgstr "Chủ tài khoản"
 
 #: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:17
@@ -738,6 +755,7 @@ msgstr "Dòng địa chỉ 2"
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "Quản trị viên"
 
@@ -747,7 +765,7 @@ msgid "Admin Access Required"
 msgstr "Yêu cầu quyền truy cập quản trị viên"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Bảng Điều Khiển Quản Trị"
@@ -812,9 +830,10 @@ msgid "all"
 msgstr ""
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:487
 msgid "All"
-msgstr ""
+msgstr "Tất cả"
 
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Archived Events"
@@ -1036,6 +1055,10 @@ msgstr "Đã cập nhật thông báo"
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Thông báo"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Anonymize"
+msgstr "Ẩn danh hóa"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
@@ -1660,6 +1683,10 @@ msgstr ""
 msgid "Basic Information"
 msgstr "Thông tin cơ bản"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:126
+msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
+msgstr "Vì tài khoản này có các đơn hàng đã hoàn tất, hồ sơ giao dịch (số tiền, ngày tháng và chi tiết hóa đơn) sẽ được lưu giữ ở dạng ẩn danh cho các mục đích pháp lý và thuế. Tất cả thông tin cá nhân sẽ bị xóa vĩnh viễn."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:546
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:291
 msgid "Billing Address"
@@ -1806,6 +1833,7 @@ msgstr ""
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 #: src/components/modals/ManageOrderModal/index.tsx:209
 #: src/components/modals/PublishEventModal/index.tsx:208
+#: src/components/routes/admin/DeletionRequests/index.tsx:178
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:499
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
@@ -1839,6 +1867,16 @@ msgstr "Hủy tất cả sản phẩm và trả lại pool có sẵn"
 msgid "Cancel Date"
 msgstr ""
 
+#: src/components/common/PendingDeletionBanner/index.tsx:37
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Cancel deletion"
+msgstr "Hủy xóa"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Cancel deletion request"
+msgstr "Hủy yêu cầu xóa"
+
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Cancel email change"
 msgstr "Hủy thay đổi email"
@@ -1868,6 +1906,7 @@ msgstr "Hủy sẽ hủy tất cả người tham dự liên quan đến đơn h
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:210
@@ -2404,6 +2443,7 @@ msgstr "Hoàn thành hồ sơ của bạn để tham gia nhóm."
 #: src/components/common/OrdersTable/index.tsx:323
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:424
+#: src/components/routes/admin/DeletionRequests/index.tsx:86
 #: src/components/routes/event/orders.tsx:26
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
@@ -2456,7 +2496,7 @@ msgstr "Tên cấu hình hiển thị với người dùng cuối. Phí cố đ�
 msgid "Configuration updated successfully"
 msgstr "Cấu hình đã được cập nhật thành công"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "Cấu hình"
@@ -3197,6 +3237,8 @@ msgstr "Vùng nguy hiểm"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:36
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:80
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/index.tsx:102
 #: src/components/routes/organizer/Settings/index.tsx:79
@@ -3362,6 +3404,11 @@ msgstr "Xóa \"{0}\"?"
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
+msgid "Delete account"
+msgstr "Xóa tài khoản"
+
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "Xóa đối tác"
@@ -3443,6 +3490,27 @@ msgstr "Xóa webhook"
 #: src/components/routes/event/OccurrencesTab/index.tsx:255
 msgid "Deleted {0} date(s)"
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:143
+msgid "Deleted account"
+msgstr "Tài khoản đã xóa"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:118
+msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
+msgstr "Việc xóa tài khoản sẽ vô hiệu hóa nó ngay lập tức: tất cả các sự kiện đã xuất bản sẽ bị gỡ và quyền truy cập bị vô hiệu hóa. Sau thời gian ân hạn 30 ngày, việc xóa sẽ trở thành vĩnh viễn. Bạn có thể hủy bất cứ lúc nào trong 30 ngày đó."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:56
+msgid "Deletion queued for execution"
+msgstr "Việc xóa đã được đưa vào hàng đợi thực thi"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:55
+msgid "Deletion request cancelled"
+msgstr "Yêu cầu xóa đã bị hủy"
+
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/DeletionRequests/index.tsx:75
+msgid "Deletion Requests"
+msgstr "Yêu cầu xóa"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:308
@@ -4445,6 +4513,18 @@ msgstr "Ví dụ: \"Cỡ áo\", \"Sở thích ăn uống\", \"Chức danh\""
 msgid "Exception"
 msgstr "Ngoại lệ"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Execute deletion"
+msgstr "Thực hiện xóa"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Execute deletion now"
+msgstr "Thực hiện xóa ngay"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:187
+msgid "Execute now"
+msgstr "Thực hiện ngay"
+
 #: src/components/forms/CheckInListForm/index.tsx:160
 msgid "Expiration date"
 msgstr "Ngày hết hạn"
@@ -4518,7 +4598,7 @@ msgstr "Thất bại"
 msgid "Failed At"
 msgstr "Thất bại lúc"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Công việc thất bại"
@@ -5143,6 +5223,10 @@ msgstr "Chuẩn bị sự kiện của bạn"
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:224
+msgid "Go back"
+msgstr "Quay lại"
+
 #: src/components/routes/event/OccurrenceDetail/index.tsx:72
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:223
@@ -5225,6 +5309,10 @@ msgstr "Người được mời"
 msgid "Happening now"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Hard delete"
+msgstr "Xóa vĩnh viễn"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:698
 msgid "Have a promo code?"
 msgstr "Nhập mã khuyến mãi?"
@@ -5237,6 +5325,10 @@ msgstr "Xin chào {0}, quản lý nền tảng của bạn từ đây."
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:172
+msgid "Help us improve by telling us why you're leaving"
+msgstr "Hãy giúp chúng tôi cải thiện bằng cách cho biết lý do bạn rời đi"
 
 #: src/components/routes/my-tickets/index.tsx:255
 msgid "Here are all the tickets associated with your email address."
@@ -6692,6 +6784,10 @@ msgstr "Chưa có ngày nào được lên lịch"
 msgid "No dates scheduled yet"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:108
+msgid "No deletion requests found"
+msgstr "Không tìm thấy yêu cầu xóa nào"
+
 #: src/components/forms/PromoCodeForm/index.tsx:94
 msgid "No Discount"
 msgstr "Không giảm giá"
@@ -7189,6 +7285,10 @@ msgstr "Chỉ gửi đến các đơn hàng có trạng thái này"
 msgid "Only show start date and time"
 msgstr "Chỉ hiển thị ngày và giờ bắt đầu"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:138
+msgid "Only the account owner can request account deletion."
+msgstr "Chỉ chủ tài khoản mới có thể yêu cầu xóa tài khoản."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:513
 msgid "Only tickets count toward capacity"
 msgstr ""
@@ -7211,7 +7311,7 @@ msgstr "Mở Trang Check-In"
 msgid "Open occurrence"
 msgstr ""
 
-#: src/components/layouts/AppLayout/index.tsx:30
+#: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "Mở thanh bên"
 
@@ -7555,6 +7655,10 @@ msgstr "Khác"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Danh Sách Khác (Vé Không Bao Gồm)"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:121
+msgid "Outcome"
+msgstr "Kết quả"
+
 #: src/constants/eventCategories.ts:22
 msgid "Outdoors"
 msgstr ""
@@ -7793,10 +7897,11 @@ msgstr "Thanh toán không khả dụng"
 msgid "Payouts"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:437
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
 msgid "Pending"
-msgstr ""
+msgstr "Đang chờ"
 
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
@@ -7857,6 +7962,14 @@ msgstr "Phần trăm của số tiền giao dịch"
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
 msgstr "Hiệu suất"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:184
+msgid "Permanently delete this account"
+msgstr "Xóa vĩnh viễn tài khoản này"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:81
+msgid "Permanently delete this account and its data."
+msgstr "Xóa vĩnh viễn tài khoản này và dữ liệu của nó."
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
 msgid "Permanently delete this event and all its associated data."
@@ -8470,6 +8583,10 @@ msgstr "Sẵn sàng xuất bản?"
 msgid "Real-time analytics"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+msgid "Reason (optional)"
+msgstr "Lý do (không bắt buộc)"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8693,6 +8810,14 @@ msgstr "Báo cáo"
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
 msgstr "Yêu cầu liên kết mới"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:119
+msgid "Requested"
+msgstr "Đã yêu cầu"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:118
+msgid "Requested by"
+msgstr "Yêu cầu bởi"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
 msgid "Require Billing Address"
@@ -9105,6 +9230,10 @@ msgstr ""
 msgid "Scheduled"
 msgstr "Đã lên lịch"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:120
+msgid "Scheduled deletion"
+msgstr "Xóa theo lịch"
+
 #: src/components/modals/SendMessageModal/index.tsx:502
 msgid "Scheduled time"
 msgstr "Thời gian đã lên lịch"
@@ -9122,6 +9251,7 @@ msgid "Search attendees"
 msgstr ""
 
 #: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/DeletionRequests/index.tsx:93
 msgid "Search by account name or email..."
 msgstr "Tìm kiếm theo tên tài khoản hoặc email..."
 
@@ -9921,6 +10051,8 @@ msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 
 #: src/components/layouts/Event/index.tsx:91
 #: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -10060,6 +10192,7 @@ msgstr ""
 #: src/components/routes/admin/Announcements/index.tsx:159
 #: src/components/routes/admin/Announcements/index.tsx:469
 #: src/components/routes/admin/Dashboard/index.tsx:405
+#: src/components/routes/admin/DeletionRequests/index.tsx:122
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:294
@@ -10710,6 +10843,18 @@ msgstr "Các mẫu này sẽ ghi đè mặc định của tổ chức chỉ cho 
 msgid "Third"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:131
+msgid "This account has no completed orders, so all of its data will be permanently deleted."
+msgstr "Tài khoản này không có đơn hàng đã hoàn tất nào, vì vậy tất cả dữ liệu của nó sẽ bị xóa vĩnh viễn."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:89
+msgid "This account is scheduled for deletion"
+msgstr "Tài khoản này đã được lên lịch xóa"
+
+#: src/components/common/PendingDeletionBanner/index.tsx:24
+msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
+msgstr "Tài khoản này được lên lịch xóa vào <0>{scheduledDate}</0>"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:259
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr ""
@@ -10961,9 +11106,21 @@ msgstr ""
 msgid "This will be used for notifications and communication with your users."
 msgstr "Thông tin này sẽ được dùng để gửi thông báo và liên hệ với người dùng của bạn."
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:218
+msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
+msgstr "Thao tác này sẽ hủy việc xóa theo lịch và kích hoạt lại tài khoản. Chủ tài khoản sẽ được thông báo qua email."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:158
+msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
+msgstr "Thao tác này sẽ vô hiệu hóa tài khoản của bạn ngay lập tức và xóa vĩnh viễn sau 30 ngày. Để xác nhận, hãy nhập tên tài khoản của bạn: <0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Thông tin này sẽ không hiển thị với khách hàng, nhưng giúp bạn nhận diện đối tác."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:219
+msgid "This will permanently delete or anonymize the account immediately, without waiting for the scheduled date. This cannot be undone."
+msgstr "Thao tác này sẽ xóa vĩnh viễn hoặc ẩn danh hóa tài khoản ngay lập tức mà không cần chờ đến ngày đã lên lịch. Không thể hoàn tác."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:107
 msgid "Throughput"
@@ -12608,9 +12765,17 @@ msgstr "Bạn đã được mời một suất!"
 msgid "You've changed the session time"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
+msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
+msgstr "Tài khoản của bạn đã bị vô hiệu hóa và sẽ bị xóa vĩnh viễn vào <0>{0}</0>."
+
 #: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "Tài khoản của bạn có giới hạn nhắn tin. Để tăng giới hạn của bạn, hãy liên hệ với chúng tôi tại"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:53
+msgid "Your account is now scheduled for deletion."
+msgstr "Tài khoản của bạn hiện đã được lên lịch xóa."
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."

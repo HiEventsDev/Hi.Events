@@ -8,6 +8,7 @@ import {IconLayoutSidebar} from "@tabler/icons-react";
 import {UnstyledButton, VisuallyHidden} from "@mantine/core";
 import {t} from "@lingui/macro";
 import ImpersonationBanner from "../../common/ImpersonationBanner";
+import PendingDeletionBanner from "../../common/PendingDeletionBanner";
 import AnnouncementDisplay from "../../common/AnnouncementDisplay";
 
 interface AppLayoutProps {
@@ -82,6 +83,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     return (
         <>
             <ImpersonationBanner />
+            <PendingDeletionBanner />
             <AnnouncementDisplay />
             <div id={`${entityType}-manage-container`}
                  className={`${classes.container} ${sidebarOpen ? classes.open : classes.closed}`}>

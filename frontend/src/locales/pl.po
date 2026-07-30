@@ -439,6 +439,7 @@ msgstr "Akceptuj zaproszenie"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:53
 #: src/components/routes/admin/Dashboard/index.tsx:353
 #: src/components/routes/admin/Dashboard/index.tsx:400
+#: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
 msgid "Account"
@@ -452,9 +453,21 @@ msgstr ""
 msgid "Account · {0} · {1}"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:69
+msgid "Account deletion has been cancelled."
+msgstr "Usunięcie konta zostało anulowane."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
+msgid "Account deletion is blocked"
+msgstr "Usunięcie konta jest zablokowane"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
 msgid "Account Information"
 msgstr "Informacja o koncie"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
+msgid "Account name"
+msgstr "Nazwa konta"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:62
 msgid "Account Name"
@@ -463,6 +476,10 @@ msgstr "Nazwa konta"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Account not found"
 msgstr "Konto nie znalezione"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
+msgid "Account owner"
+msgstr "Właściciel konta"
 
 #: src/components/common/GlobalMenu/index.tsx:45
 #: src/components/routes/account/ManageAccount/index.tsx:17
@@ -738,6 +755,7 @@ msgstr "Linia adresu 2"
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "Administrator"
 
@@ -747,7 +765,7 @@ msgid "Admin Access Required"
 msgstr "Wymagany dostęp administratora"
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr "Panel administratora"
@@ -812,9 +830,10 @@ msgid "all"
 msgstr ""
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:487
 msgid "All"
-msgstr ""
+msgstr "Wszystkie"
 
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Archived Events"
@@ -1036,6 +1055,10 @@ msgstr "Ogłoszenie zaktualizowane"
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Ogłoszenia"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Anonymize"
+msgstr "Anonimizuj"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:97
 msgid "Answer updated successfully."
@@ -1660,6 +1683,10 @@ msgstr ""
 msgid "Basic Information"
 msgstr "Podstawowe informacje"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:126
+msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
+msgstr "Ponieważ to konto ma zrealizowane zamówienia, zapisy transakcji (kwoty, daty i szczegóły faktur) zostaną zachowane w formie zanonimizowanej do celów prawnych i podatkowych. Wszystkie dane osobowe zostaną trwale usunięte."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:546
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:291
 msgid "Billing Address"
@@ -1806,6 +1833,7 @@ msgstr ""
 #: src/components/modals/ManageAttendeeModal/index.tsx:184
 #: src/components/modals/ManageOrderModal/index.tsx:209
 #: src/components/modals/PublishEventModal/index.tsx:208
+#: src/components/routes/admin/DeletionRequests/index.tsx:178
 #: src/components/routes/event/messages.tsx:80
 #: src/components/routes/event/OccurrencesTab/index.tsx:499
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
@@ -1839,6 +1867,16 @@ msgstr "Anuluj wszystkie produkty i zwolnij je z powrotem do puli"
 msgid "Cancel Date"
 msgstr ""
 
+#: src/components/common/PendingDeletionBanner/index.tsx:37
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Cancel deletion"
+msgstr "Anuluj usunięcie"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Cancel deletion request"
+msgstr "Anuluj żądanie usunięcia"
+
 #: src/components/routes/profile/ManageProfile/index.tsx:137
 msgid "Cancel email change"
 msgstr "Anuluj zmianę e-maila"
@@ -1868,6 +1906,7 @@ msgstr "Anulowanie anuluje wszystkich uczestników związanych z tym zamówienie
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:210
@@ -2404,6 +2443,7 @@ msgstr "Uzupełnij swój profil, aby dołączyć do drużyny."
 #: src/components/common/OrdersTable/index.tsx:323
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:424
+#: src/components/routes/admin/DeletionRequests/index.tsx:86
 #: src/components/routes/event/orders.tsx:26
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
@@ -2456,7 +2496,7 @@ msgstr "Nazwy konfiguracji są widoczne dla użytkowników końcowych. Opłaty s
 msgid "Configuration updated successfully"
 msgstr "Konfiguracja zaktualizowana pomyślnie"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/Configurations/index.tsx:65
 msgid "Configurations"
 msgstr "Konfiguracje"
@@ -3197,6 +3237,8 @@ msgstr "Strefa zagrożenia"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:31
+#: src/components/routes/account/ManageAccount/index.tsx:36
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:80
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:555
 #: src/components/routes/event/Settings/index.tsx:102
 #: src/components/routes/organizer/Settings/index.tsx:79
@@ -3362,6 +3404,11 @@ msgstr "Usunąć \"{0}\"?"
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
+msgid "Delete account"
+msgstr "Usuń konto"
+
 #: src/components/common/AffiliateTable/index.tsx:198
 msgid "Delete Affiliate"
 msgstr "Usuń partnera"
@@ -3443,6 +3490,27 @@ msgstr "Usuń webhook"
 #: src/components/routes/event/OccurrencesTab/index.tsx:255
 msgid "Deleted {0} date(s)"
 msgstr ""
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:143
+msgid "Deleted account"
+msgstr "Usunięte konto"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:118
+msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
+msgstr "Usunięcie konta natychmiast je dezaktywuje: wszystkie opublikowane wydarzenia zostają wycofane, a dostęp zostaje wyłączony. Po 30-dniowym okresie karencji usunięcie staje się trwałe. Możesz anulować w dowolnym momencie w ciągu tych 30 dni."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:56
+msgid "Deletion queued for execution"
+msgstr "Usunięcie dodane do kolejki wykonania"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:55
+msgid "Deletion request cancelled"
+msgstr "Żądanie usunięcia anulowane"
+
+#: src/components/layouts/Admin/index.tsx:21
+#: src/components/routes/admin/DeletionRequests/index.tsx:75
+msgid "Deletion Requests"
+msgstr "Żądania usunięcia"
 
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:308
@@ -4445,6 +4513,18 @@ msgstr "Przykłady: \"Rozmiar koszulki\", \"Preferencje posiłków\", \"Stanowis
 msgid "Exception"
 msgstr "Wyjątek"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:232
+msgid "Execute deletion"
+msgstr "Wykonaj usunięcie"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:213
+msgid "Execute deletion now"
+msgstr "Wykonaj usunięcie teraz"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:187
+msgid "Execute now"
+msgstr "Wykonaj teraz"
+
 #: src/components/forms/CheckInListForm/index.tsx:160
 msgid "Expiration date"
 msgstr "Data wygaśnięcia"
@@ -4518,7 +4598,7 @@ msgstr "Nie powiodło się"
 msgid "Failed At"
 msgstr "Nie powiodło się o"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Nieudane zadania"
@@ -5143,6 +5223,10 @@ msgstr "Przygotuj swoje wydarzenie"
 msgid "GitHub"
 msgstr "GitHub"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:224
+msgid "Go back"
+msgstr "Wróć"
+
 #: src/components/routes/event/OccurrenceDetail/index.tsx:72
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:223
@@ -5225,6 +5309,10 @@ msgstr "Goście"
 msgid "Happening now"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:161
+msgid "Hard delete"
+msgstr "Trwałe usunięcie"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:698
 msgid "Have a promo code?"
 msgstr "Masz kod promocyjny?"
@@ -5237,6 +5325,10 @@ msgstr "Cześć {0}, zarządzaj swoją platformą stąd."
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:172
+msgid "Help us improve by telling us why you're leaving"
+msgstr "Pomóż nam się rozwijać, mówiąc nam, dlaczego odchodzisz"
 
 #: src/components/routes/my-tickets/index.tsx:255
 msgid "Here are all the tickets associated with your email address."
@@ -6692,6 +6784,10 @@ msgstr "Brak zaplanowanych terminów"
 msgid "No dates scheduled yet"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:108
+msgid "No deletion requests found"
+msgstr "Nie znaleziono żądań usunięcia"
+
 #: src/components/forms/PromoCodeForm/index.tsx:94
 msgid "No Discount"
 msgstr "Brak zniżki"
@@ -7189,6 +7285,10 @@ msgstr "Wysyłaj tylko do zamówień z tymi statusami"
 msgid "Only show start date and time"
 msgstr "Pokaż tylko datę i godzinę rozpoczęcia"
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:138
+msgid "Only the account owner can request account deletion."
+msgstr "Tylko właściciel konta może zażądać usunięcia konta."
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:513
 msgid "Only tickets count toward capacity"
 msgstr ""
@@ -7211,7 +7311,7 @@ msgstr "Otwórz stronę zameldowania"
 msgid "Open occurrence"
 msgstr ""
 
-#: src/components/layouts/AppLayout/index.tsx:30
+#: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "Otwórz pasek boczny"
 
@@ -7555,6 +7655,10 @@ msgstr "Inne"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Inne listy (bilet nie włączony)"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:121
+msgid "Outcome"
+msgstr "Wynik"
+
 #: src/constants/eventCategories.ts:22
 msgid "Outdoors"
 msgstr ""
@@ -7793,10 +7897,11 @@ msgstr "Płatności niedostępne"
 msgid "Payouts"
 msgstr ""
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:437
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
 msgid "Pending"
-msgstr ""
+msgstr "Oczekujące"
 
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
@@ -7857,6 +7962,14 @@ msgstr "Procent kwoty transakcji"
 #: src/components/common/AffiliateTable/index.tsx:84
 msgid "Performance"
 msgstr "Wydajność"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:184
+msgid "Permanently delete this account"
+msgstr "Trwale usuń to konto"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:81
+msgid "Permanently delete this account and its data."
+msgstr "Trwale usuń to konto i jego dane."
 
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
 msgid "Permanently delete this event and all its associated data."
@@ -8470,6 +8583,10 @@ msgstr "Gotowy do publikacji?"
 msgid "Real-time analytics"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+msgid "Reason (optional)"
+msgstr "Powód (opcjonalnie)"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8693,6 +8810,14 @@ msgstr "Raporty"
 #: src/components/routes/my-tickets/index.tsx:186
 msgid "Request a new link"
 msgstr "Poproś o nowy link"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:119
+msgid "Requested"
+msgstr "Zgłoszono"
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:118
+msgid "Requested by"
+msgstr "Zgłoszone przez"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
 msgid "Require Billing Address"
@@ -9105,6 +9230,10 @@ msgstr ""
 msgid "Scheduled"
 msgstr "Zaplanowane"
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:120
+msgid "Scheduled deletion"
+msgstr "Zaplanowane usunięcie"
+
 #: src/components/modals/SendMessageModal/index.tsx:502
 msgid "Scheduled time"
 msgstr "Zaplanowany czas"
@@ -9122,6 +9251,7 @@ msgid "Search attendees"
 msgstr ""
 
 #: src/components/routes/admin/Accounts/index.tsx:60
+#: src/components/routes/admin/DeletionRequests/index.tsx:93
 msgid "Search by account name or email..."
 msgstr "Szukaj po nazwie konta lub e-mailu..."
 
@@ -9921,6 +10051,8 @@ msgstr "Coś poszło nie tak. Spróbuj ponownie później."
 
 #: src/components/layouts/Event/index.tsx:91
 #: src/components/layouts/OrganizerLayout/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/auth/Login/index.tsx:72
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/profile/ManageProfile/index.tsx:91
@@ -10060,6 +10192,7 @@ msgstr ""
 #: src/components/routes/admin/Announcements/index.tsx:159
 #: src/components/routes/admin/Announcements/index.tsx:469
 #: src/components/routes/admin/Dashboard/index.tsx:405
+#: src/components/routes/admin/DeletionRequests/index.tsx:122
 #: src/components/routes/admin/Messages/index.tsx:120
 #: src/components/routes/admin/Messages/index.tsx:167
 #: src/components/routes/admin/Messages/index.tsx:294
@@ -10710,6 +10843,18 @@ msgstr "Te szablony będą zastępować domyślne ustawienia organizatora tylko 
 msgid "Third"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:131
+msgid "This account has no completed orders, so all of its data will be permanently deleted."
+msgstr "To konto nie ma zrealizowanych zamówień, więc wszystkie jego dane zostaną trwale usunięte."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:89
+msgid "This account is scheduled for deletion"
+msgstr "To konto jest zaplanowane do usunięcia"
+
+#: src/components/common/PendingDeletionBanner/index.tsx:24
+msgid "This account is scheduled for deletion on <0>{scheduledDate}</0>"
+msgstr "To konto zostanie usunięte dnia <0>{scheduledDate}</0>"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:259
 msgid "This applies to every matching date in the event, including dates not currently visible. Attendees registered on any of those dates will be reachable via the message composer once the update finishes."
 msgstr ""
@@ -10961,9 +11106,21 @@ msgstr ""
 msgid "This will be used for notifications and communication with your users."
 msgstr "Będzie to używane do powiadomień i komunikacji z użytkownikami."
 
+#: src/components/routes/admin/DeletionRequests/index.tsx:218
+msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
+msgstr "Spowoduje to anulowanie zaplanowanego usunięcia i ponowną aktywację konta. Właściciel konta zostanie powiadomiony e-mailem."
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:158
+msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
+msgstr "Spowoduje to natychmiastową dezaktywację konta i trwałe usunięcie go po 30 dniach. Aby potwierdzić, wpisz nazwę swojego konta: <0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "Nie będzie to widoczne dla klientów, ale pomaga Ci zidentyfikować partnera afiliacji."
+
+#: src/components/routes/admin/DeletionRequests/index.tsx:219
+msgid "This will permanently delete or anonymize the account immediately, without waiting for the scheduled date. This cannot be undone."
+msgstr "Spowoduje to natychmiastowe trwałe usunięcie lub anonimizację konta, bez czekania na zaplanowaną datę. Tego nie można cofnąć."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:107
 msgid "Throughput"
@@ -12608,9 +12765,17 @@ msgstr "Zaproponowano Ci miejsce!"
 msgid "You've changed the session time"
 msgstr ""
 
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
+msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
+msgstr "Twoje konto zostało dezaktywowane i zostanie trwale usunięte dnia <0>{0}</0>."
+
 #: src/components/modals/SendMessageModal/index.tsx:324
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "Twoje konto ma limity wiadomości. Aby zwiększyć swoje limity, skontaktuj się z nami pod adresem"
+
+#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:53
+msgid "Your account is now scheduled for deletion."
+msgstr "Twoje konto jest teraz zaplanowane do usunięcia."
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."

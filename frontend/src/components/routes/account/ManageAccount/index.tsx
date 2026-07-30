@@ -1,7 +1,7 @@
 import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
-import {IconAdjustmentsCog, IconReceiptTax, IconUsers} from "@tabler/icons-react";
+import {IconAdjustmentsCog, IconAlertTriangle, IconReceiptTax, IconUsers} from "@tabler/icons-react";
 import {Outlet, useLocation, useNavigate} from "react-router";
 import {t} from "@lingui/macro";
 import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
@@ -28,6 +28,12 @@ export const ManageAccount = () => {
                         {isUserAdmin && (
                             <Tabs.Tab value="users" leftSection={<IconUsers/>}>
                                 {t`Users`}
+                            </Tabs.Tab>
+                        )}
+
+                        {isUserAdmin && (
+                            <Tabs.Tab value="danger-zone" leftSection={<IconAlertTriangle/>} data-testid="danger-zone-tab">
+                                {t`Danger Zone`}
                             </Tabs.Tab>
                         )}
                     </Tabs.List>

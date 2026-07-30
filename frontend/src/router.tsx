@@ -166,6 +166,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "deletion-requests",
+                async lazy() {
+                    const DeletionRequests = await import("./components/routes/admin/DeletionRequests");
+                    return { Component: DeletionRequests.default };
+                }
+            },
+            {
                 path: "users",
                 async lazy() {
                     const Users = await import("./components/routes/admin/Users");
@@ -264,6 +271,13 @@ export const router: RouteObject[] = [
                         async lazy() {
                             const Users = await import("./components/routes/account/ManageAccount/sections/Users");
                             return { Component: Users.default };
+                        }
+                    },
+                    {
+                        path: "danger-zone",
+                        async lazy() {
+                            const DangerZone = await import("./components/routes/account/ManageAccount/sections/DangerZone");
+                            return { Component: DangerZone.default };
                         }
                     },
                 ]
