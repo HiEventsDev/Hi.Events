@@ -27,4 +27,7 @@ export const organizerStripeClient = {
         );
         return response.data;
     },
+    disconnectAccount: async (organizerId: IdParam, stripeAccountId: string) => {
+        await api.delete(`organizers/${organizerId}/stripe/connect_accounts/${stripeAccountId}`);
+    },
 };

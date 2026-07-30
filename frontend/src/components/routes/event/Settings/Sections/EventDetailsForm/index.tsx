@@ -135,7 +135,7 @@ export const EventDetailsForm = () => {
                             {...form.getInputProps('currency')}
                             label={t`Currency`}
                             placeholder={t`EUR`}
-                            disabled
+                            description={t`The currency used for this event's ticket prices.`}
                         />
 
                         <Select
@@ -144,6 +144,7 @@ export const EventDetailsForm = () => {
                             {...form.getInputProps('timezone')}
                             label={t`Timezone`}
                             placeholder={t`UTC`}
+                            description={t`The timezone used for this event's dates and times.`}
                         />
                     </InputGroup>
                     <Button loading={updateMutation.isPending} type={'submit'}>
