@@ -18,13 +18,15 @@ use Illuminate\Support\Facades\DB;
 
 class EventOccurrenceGeneratorService
 {
+    private const INSERT_CHUNK_SIZE = 500;
+
     public function __construct(
         private readonly RecurrenceRuleParserService $ruleParser,
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
     ) {}
 
-    public function generate(EventDomainObject $event, array $recurrenceRule): Collection
+    public function generate(EventDomainObject $event, array $recurrenceRule): void
     {
         $candidates = $this->ruleParser->parse($recurrenceRule, $event->getTimezone() ?? 'UTC');
 
@@ -41,8 +43,8 @@ class EventOccurrenceGeneratorService
             ->all();
         $occurrenceIdsInUse = $this->getOccurrenceIdsInUse($existingIds);
 
-        $result = collect();
         $matchedExistingIds = [];
+        $rowsToInsert = [];
 
         foreach ($candidates as $candidate) {
             $startDateKey = $candidate['start']->copy()->utc()->toDateTimeString();
@@ -53,25 +55,22 @@ class EventOccurrenceGeneratorService
                 $matchedExistingIds[] = $existing->getId();
 
                 if ($occurrenceIdsInUse->contains($existing->getId()) || $existing->getIsOverridden()) {
-                    $result->push($existing);
-
                     continue;
                 }
 
-                $this->occurrenceRepository->updateWhere(
-                    attributes: [
-                        EventOccurrenceDomainObjectAbstract::START_DATE => $candidate['start']->toDateTimeString(),
-                        EventOccurrenceDomainObjectAbstract::END_DATE => $candidate['end']?->toDateTimeString(),
-                        EventOccurrenceDomainObjectAbstract::CAPACITY => $candidate['capacity'],
-                        EventOccurrenceDomainObjectAbstract::LABEL => $candidate['label'] ?? null,
-                    ],
-                    where: [EventOccurrenceDomainObjectAbstract::ID => $existing->getId()]
-                );
-
-                $updated = $this->occurrenceRepository->findById($existing->getId());
-                $result->push($updated);
+                if (! $this->candidateMatchesExisting($candidate, $existing)) {
+                    $this->occurrenceRepository->updateWhere(
+                        attributes: [
+                            EventOccurrenceDomainObjectAbstract::START_DATE => $candidate['start']->toDateTimeString(),
+                            EventOccurrenceDomainObjectAbstract::END_DATE => $candidate['end']?->toDateTimeString(),
+                            EventOccurrenceDomainObjectAbstract::CAPACITY => $candidate['capacity'],
+                            EventOccurrenceDomainObjectAbstract::LABEL => $candidate['label'] ?? null,
+                        ],
+                        where: [EventOccurrenceDomainObjectAbstract::ID => $existing->getId()]
+                    );
+                }
             } else {
-                $newOccurrence = $this->occurrenceRepository->create([
+                $rowsToInsert[] = [
                     EventOccurrenceDomainObjectAbstract::EVENT_ID => $event->getId(),
                     EventOccurrenceDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
                     EventOccurrenceDomainObjectAbstract::START_DATE => $candidate['start']->toDateTimeString(),
@@ -81,15 +80,26 @@ class EventOccurrenceGeneratorService
                     EventOccurrenceDomainObjectAbstract::USED_CAPACITY => 0,
                     EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => false,
                     EventOccurrenceDomainObjectAbstract::LABEL => $candidate['label'] ?? null,
-                ]);
-
-                $result->push($newOccurrence);
+                ];
             }
         }
 
-        $this->removeStaleOccurrences($existingOccurrences, $matchedExistingIds, $occurrenceIdsInUse);
+        foreach (array_chunk($rowsToInsert, self::INSERT_CHUNK_SIZE) as $chunk) {
+            $this->occurrenceRepository->insert($chunk);
+        }
 
-        return $result;
+        $this->removeStaleOccurrences($existingOccurrences, $matchedExistingIds, $occurrenceIdsInUse);
+    }
+
+    private function candidateMatchesExisting(array $candidate, EventOccurrenceDomainObject $existing): bool
+    {
+        $existingEnd = $existing->getEndDate() !== null
+            ? Carbon::parse($existing->getEndDate())->utc()->toDateTimeString()
+            : null;
+
+        return $existingEnd === $candidate['end']?->copy()->utc()->toDateTimeString()
+            && $existing->getCapacity() === $candidate['capacity']
+            && $existing->getLabel() === ($candidate['label'] ?? null);
     }
 
     private function removeStaleOccurrences(
@@ -99,6 +109,7 @@ class EventOccurrenceGeneratorService
     ): void {
         $idsToDelete = [];
         $eventIdsToDelete = [];
+        $idsToMarkOverridden = [];
 
         foreach ($existingOccurrences as $existing) {
             if (in_array($existing->getId(), $matchedExistingIds, true)) {
@@ -110,12 +121,7 @@ class EventOccurrenceGeneratorService
             }
 
             if ($occurrenceIdsInUse->contains($existing->getId())) {
-                $this->occurrenceRepository->updateWhere(
-                    attributes: [
-                        EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true,
-                    ],
-                    where: [EventOccurrenceDomainObjectAbstract::ID => $existing->getId()]
-                );
+                $idsToMarkOverridden[] = $existing->getId();
 
                 continue;
             }
@@ -126,6 +132,15 @@ class EventOccurrenceGeneratorService
 
             $idsToDelete[] = $existing->getId();
             $eventIdsToDelete[$existing->getEventId()] = true;
+        }
+
+        if ($idsToMarkOverridden !== []) {
+            $this->occurrenceRepository->updateWhere(
+                attributes: [
+                    EventOccurrenceDomainObjectAbstract::IS_OVERRIDDEN => true,
+                ],
+                where: [[EventOccurrenceDomainObjectAbstract::ID, 'in', $idsToMarkOverridden]]
+            );
         }
 
         if ($idsToDelete === []) {

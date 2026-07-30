@@ -41,6 +41,7 @@ import {GroupedOccurrenceTable, GroupedTableColumn} from "./GroupedOccurrenceTab
 import {OccurrenceMenuItems, OccurrenceMenuActions, statusLabel, StatusIcon} from "./OccurrenceMenu";
 import {openCancelOccurrenceDialog} from "./cancelOccurrenceDialog";
 import {useOccurrenceCheckIn} from "../../../../hooks/useOccurrenceCheckIn.tsx";
+import {useOccurrenceGenerationPolling} from "../../../../hooks/useOccurrenceGenerationPolling.ts";
 import {ManageOccurrenceModal} from "../../../modals/ManageOccurrenceModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {ShareModal} from "../../../modals/ShareModal";
@@ -129,6 +130,7 @@ const OccurrencesTab = () => {
     const [shareOccurrence, setShareOccurrence] = useState<EventOccurrence | undefined>();
     const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
 
+    const generationPolling = useOccurrenceGenerationPolling(eventId);
     const cancelMutation = useCancelOccurrence();
     const deleteMutation = useDeleteEventOccurrence();
     const bulkUpdateMutation = useBulkUpdateOccurrences();
@@ -528,6 +530,7 @@ const OccurrencesTab = () => {
                         <Menu.Item
                             leftSection={<IconCalendarEvent size={16}/>}
                             onClick={openGenerate}
+                            disabled={generationPolling.isGenerating}
                         >
                             {t`Set Up Schedule`}
                         </Menu.Item>
@@ -540,6 +543,13 @@ const OccurrencesTab = () => {
                     </Menu.Dropdown>
                 </Menu>
             </div>
+
+            {generationPolling.isGenerating && (
+                <div className={classes.generationBanner} data-testid="occurrence-generation-progress">
+                    <Text size="sm">{t`Creating ${generationPolling.totalCount} dates. This may take a moment.`}</Text>
+                    <Progress size={4} value={100} animated color="blue"/>
+                </div>
+            )}
 
             {occurrences && occurrencesQuery.isFetching && !occurrencesQuery.isLoading && !occurrencesQuery.isPlaceholderData && (
                 <Progress size={2} value={100} animated color="blue" mb="xs"/>
@@ -653,7 +663,7 @@ const OccurrencesTab = () => {
             )}
 
             {generateOpen && (
-                <RecurrenceScheduleModal onClose={closeGenerate}/>
+                <RecurrenceScheduleModal onClose={closeGenerate} onGenerationStarted={generationPolling.start}/>
             )}
 
             {slideoutOccurrenceId && (

@@ -9,10 +9,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GenerateOccurrencesDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GenerateOccurrencesFromRuleHandler;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
-use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\ValidationException;
 use Mockery;
 use Tests\TestCase;
 
@@ -21,8 +18,6 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
     private EventOccurrenceGeneratorService|Mockery\MockInterface $generatorService;
 
     private EventRepositoryInterface|Mockery\MockInterface $eventRepository;
-
-    private RecurrenceRuleParserService|Mockery\MockInterface $ruleParserService;
 
     private DatabaseManager|Mockery\MockInterface $databaseManager;
 
@@ -34,16 +29,17 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
 
         $this->generatorService = Mockery::mock(EventOccurrenceGeneratorService::class);
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
-        $this->ruleParserService = Mockery::mock(RecurrenceRuleParserService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
             ->andReturnUsing(fn ($callback) => $callback());
+        $this->databaseManager->shouldReceive('statement')
+            ->with('SELECT pg_advisory_xact_lock(?)', [1])
+            ->byDefault();
 
         $this->handler = new GenerateOccurrencesFromRuleHandler(
             $this->generatorService,
             $this->eventRepository,
-            $this->ruleParserService,
             $this->databaseManager,
         );
     }
@@ -54,16 +50,11 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
         $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);
 
         $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getTimezone')->andReturn('America/New_York');
         $event->shouldReceive('getId')->andReturn(1);
+        $event->shouldReceive('getRecurrenceRule')->andReturn(null);
         $event->shouldReceive('setRecurrenceRule')->once()->with($rule);
 
-        $this->eventRepository->shouldReceive('findById')->with(1)->once()->andReturn($event);
-
-        $this->ruleParserService->shouldReceive('parse')
-            ->with($rule, 'America/New_York')
-            ->once()
-            ->andReturn(collect(range(1, 10)));
+        $this->eventRepository->shouldReceive('findByIdLocked')->with(1)->once()->andReturn($event);
 
         $this->eventRepository->shouldReceive('updateFromArray')
             ->once()
@@ -72,62 +63,118 @@ class GenerateOccurrencesFromRuleHandlerTest extends TestCase
                 EventDomainObjectAbstract::TYPE => EventType::RECURRING->name,
             ]);
 
-        $generatedOccurrences = collect(['occ1', 'occ2']);
         $this->generatorService->shouldReceive('generate')
             ->once()
-            ->with($event, $rule)
-            ->andReturn($generatedOccurrences);
-
-        $result = $this->handler->handle($dto);
-
-        $this->assertSame($generatedOccurrences, $result);
-    }
-
-    public function test_handle_throws_validation_exception_when_too_many_occurrences(): void
-    {
-        $rule = ['frequency' => 'daily', 'range' => ['type' => 'count', 'count' => 2000]];
-        $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);
-
-        $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getTimezone')->andReturn('UTC');
-
-        $this->eventRepository->shouldReceive('findById')->with(1)->once()->andReturn($event);
-
-        $this->ruleParserService->shouldReceive('parse')
-            ->with($rule, 'UTC')
-            ->once()
-            ->andReturn(collect(range(1, RecurrenceRuleParserService::MAX_OCCURRENCES + 1)));
-
-        $this->generatorService->shouldNotReceive('generate');
-
-        $this->expectException(ValidationException::class);
+            ->with($event, $rule);
 
         $this->handler->handle($dto);
     }
 
-    public function test_handle_uses_utc_when_event_has_no_timezone(): void
+    public function test_handle_takes_event_advisory_lock(): void
     {
         $rule = ['frequency' => 'weekly'];
         $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $rule);
 
         $event = Mockery::mock(EventDomainObject::class);
-        $event->shouldReceive('getTimezone')->andReturn(null);
         $event->shouldReceive('getId')->andReturn(1);
+        $event->shouldReceive('getRecurrenceRule')->andReturn(null);
         $event->shouldReceive('setRecurrenceRule')->once();
 
-        $this->eventRepository->shouldReceive('findById')->once()->andReturn($event);
-
-        $this->ruleParserService->shouldReceive('parse')
-            ->with($rule, 'UTC')
+        $this->databaseManager->shouldReceive('statement')
             ->once()
-            ->andReturn(collect(range(1, 5)));
+            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
 
+        $this->eventRepository->shouldReceive('findByIdLocked')->once()->andReturn($event);
         $this->eventRepository->shouldReceive('updateFromArray')->once();
-        $this->generatorService->shouldReceive('generate')->once()->andReturn(collect());
+        $this->generatorService->shouldReceive('generate')->once();
 
-        $result = $this->handler->handle($dto);
+        $this->handler->handle($dto);
+    }
 
-        $this->assertInstanceOf(Collection::class, $result);
+    public function test_handle_merges_live_exclusions_into_submitted_rule(): void
+    {
+        $submittedRule = [
+            'frequency' => 'weekly',
+            'excluded_occurrences' => ['2026-08-01 19:00'],
+        ];
+        $liveRule = [
+            'frequency' => 'weekly',
+            'excluded_occurrences' => ['2026-08-08 19:00'],
+            'excluded_dates' => ['2026-09-01'],
+        ];
+        $expectedRule = [
+            'frequency' => 'weekly',
+            'excluded_occurrences' => ['2026-08-08 19:00', '2026-08-01 19:00'],
+            'excluded_dates' => ['2026-09-01'],
+        ];
+        $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $submittedRule);
+
+        $event = Mockery::mock(EventDomainObject::class);
+        $event->shouldReceive('getId')->andReturn(1);
+        $event->shouldReceive('getRecurrenceRule')->andReturn($liveRule);
+        $event->shouldReceive('setRecurrenceRule')->once()->with($expectedRule);
+
+        $this->eventRepository->shouldReceive('findByIdLocked')->with(1)->once()->andReturn($event);
+
+        $this->eventRepository->shouldReceive('updateFromArray')
+            ->once()
+            ->with(1, [
+                EventDomainObjectAbstract::RECURRENCE_RULE => $expectedRule,
+                EventDomainObjectAbstract::TYPE => EventType::RECURRING->name,
+            ]);
+
+        $this->generatorService->shouldReceive('generate')
+            ->once()
+            ->with($event, $expectedRule);
+
+        $this->handler->handle($dto);
+    }
+
+    public function test_handle_merges_additional_dates_without_collapsing_them(): void
+    {
+        $submittedRule = [
+            'frequency' => 'weekly',
+            'additional_dates' => [
+                ['date' => '2026-08-01', 'time' => '10:00'],
+                ['date' => '2026-08-02', 'time' => '10:00'],
+            ],
+        ];
+        $liveRule = [
+            'frequency' => 'weekly',
+            'additional_dates' => [
+                ['date' => '2026-08-02', 'time' => '10:00'],
+                ['date' => '2026-08-03'],
+            ],
+        ];
+        $expectedRule = [
+            'frequency' => 'weekly',
+            'additional_dates' => [
+                ['date' => '2026-08-02', 'time' => '10:00'],
+                ['date' => '2026-08-03'],
+                ['date' => '2026-08-01', 'time' => '10:00'],
+            ],
+        ];
+        $dto = new GenerateOccurrencesDTO(event_id: 1, recurrence_rule: $submittedRule);
+
+        $event = Mockery::mock(EventDomainObject::class);
+        $event->shouldReceive('getId')->andReturn(1);
+        $event->shouldReceive('getRecurrenceRule')->andReturn($liveRule);
+        $event->shouldReceive('setRecurrenceRule')->once()->with($expectedRule);
+
+        $this->eventRepository->shouldReceive('findByIdLocked')->with(1)->once()->andReturn($event);
+
+        $this->eventRepository->shouldReceive('updateFromArray')
+            ->once()
+            ->with(1, [
+                EventDomainObjectAbstract::RECURRENCE_RULE => $expectedRule,
+                EventDomainObjectAbstract::TYPE => EventType::RECURRING->name,
+            ]);
+
+        $this->generatorService->shouldReceive('generate')
+            ->once()
+            ->with($event, $expectedRule);
+
+        $this->handler->handle($dto);
     }
 
     protected function tearDown(): void

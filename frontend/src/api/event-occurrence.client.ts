@@ -7,6 +7,7 @@ import {
     GenericDataResponse,
     GenericPaginatedResponse,
     IdParam,
+    OccurrenceGenerationStatus,
     ProductOccurrenceVisibility,
     ProductPriceOccurrenceOverride,
     QueryFilters,
@@ -72,9 +73,16 @@ export const eventOccurrenceClient = {
     },
 
     generate: async (eventId: IdParam, data: GenerateOccurrencesRequest) => {
-        const response = await api.post<GenericDataResponse<EventOccurrence[]>>(
+        const response = await api.post<OccurrenceGenerationStatus>(
             `events/${eventId}/occurrences/generate`,
             data
+        );
+        return response.data;
+    },
+
+    getGenerationStatus: async (eventId: IdParam, jobUuid: string) => {
+        const response = await api.get<OccurrenceGenerationStatus>(
+            `events/${eventId}/occurrences/generate/status?job_uuid=${jobUuid}`
         );
         return response.data;
     },

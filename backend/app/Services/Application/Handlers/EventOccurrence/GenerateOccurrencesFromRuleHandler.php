@@ -9,10 +9,7 @@ use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GenerateOccurrencesDTO;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
-use HiEvents\Services\Domain\Event\RecurrenceRuleParserService;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class GenerateOccurrencesFromRuleHandler
@@ -20,40 +17,48 @@ class GenerateOccurrencesFromRuleHandler
     public function __construct(
         private readonly EventOccurrenceGeneratorService $generatorService,
         private readonly EventRepositoryInterface $eventRepository,
-        private readonly RecurrenceRuleParserService $ruleParserService,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
     /**
      * @throws Throwable
      */
-    public function handle(GenerateOccurrencesDTO $dto): Collection
+    public function handle(GenerateOccurrencesDTO $dto): void
     {
-        $event = $this->eventRepository->findById($dto->event_id);
-        $timezone = $event->getTimezone() ?? 'UTC';
+        $this->databaseManager->transaction(function () use ($dto) {
+            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$dto->event_id]);
 
-        $previewCount = $this->ruleParserService->parse($dto->recurrence_rule, $timezone)->count();
+            $event = $this->eventRepository->findByIdLocked($dto->event_id);
 
-        if ($previewCount > RecurrenceRuleParserService::MAX_OCCURRENCES) {
-            throw ValidationException::withMessages([
-                'recurrence_rule' => [
-                    __('This rule would generate too many occurrences. Please reduce the date range or frequency, or contact support.'),
-                ],
-            ]);
-        }
+            $rule = $this->mergeLiveExclusions($dto->recurrence_rule, $event->getRecurrenceRule() ?? []);
 
-        return $this->databaseManager->transaction(function () use ($dto, $event) {
             $this->eventRepository->updateFromArray(
                 id: $event->getId(),
                 attributes: [
-                    EventDomainObjectAbstract::RECURRENCE_RULE => $dto->recurrence_rule,
+                    EventDomainObjectAbstract::RECURRENCE_RULE => $rule,
                     EventDomainObjectAbstract::TYPE => EventType::RECURRING->name,
                 ],
             );
 
-            $event->setRecurrenceRule($dto->recurrence_rule);
+            $event->setRecurrenceRule($rule);
 
-            return $this->generatorService->generate($event, $dto->recurrence_rule);
+            $this->generatorService->generate($event, $rule);
         });
+    }
+
+    private function mergeLiveExclusions(array $submittedRule, array $liveRule): array
+    {
+        foreach (['excluded_occurrences', 'excluded_dates', 'additional_dates'] as $key) {
+            $merged = array_values(array_unique(array_merge(
+                $liveRule[$key] ?? [],
+                $submittedRule[$key] ?? [],
+            ), SORT_REGULAR));
+
+            if ($merged !== []) {
+                $submittedRule[$key] = $merged;
+            }
+        }
+
+        return $submittedRule;
     }
 }

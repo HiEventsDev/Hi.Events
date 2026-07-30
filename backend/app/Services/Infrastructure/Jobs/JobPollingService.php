@@ -24,14 +24,26 @@ class JobPollingService
         );
     }
 
-    public function checkJobStatus(string $jobUuid, ?string $filePath = null): JobPollingResultDTO
+    public function checkJobStatus(string $jobUuid, ?string $filePath = null, ?string $expectedName = null): JobPollingResultDTO
     {
         $batch = Bus::findBatch($jobUuid);
+
+        if ($batch && $expectedName !== null && $batch->name !== $expectedName) {
+            $batch = null;
+        }
 
         if (! $batch) {
             return new JobPollingResultDTO(
                 status: JobStatusEnum::NOT_FOUND,
                 message: __('Job not found'),
+                jobUuid: $jobUuid,
+            );
+        }
+
+        if ($batch->cancelled() || $batch->failedJobs > 0) {
+            return new JobPollingResultDTO(
+                status: JobStatusEnum::FAILED,
+                message: __('Job failed'),
                 jobUuid: $jobUuid,
             );
         }
