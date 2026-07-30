@@ -29,6 +29,7 @@ import {
 } from "@tabler/icons-react";
 import {Callout} from "../../../../../common/Callout";
 import {t, Trans} from "@lingui/macro";
+import {modals} from "@mantine/modals";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import {Card} from "../../../../../common/Card";
@@ -36,6 +37,7 @@ import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {useGetOrganizerStripeConnect} from "../../../../../../queries/useGetOrganizerStripeConnect";
 import {useCreateOrGetOrganizerStripeConnect} from "../../../../../../queries/useCreateOrGetOrganizerStripeConnect";
 import {useCopyStripeConnectFromOrganizer} from "../../../../../../mutations/useCopyStripeConnectFromOrganizer";
+import {useDisconnectOrganizerStripeConnect} from "../../../../../../mutations/useDisconnectOrganizerStripeConnect";
 import {OrganizerStripeConnectAccount, ReusableStripeConnection} from "../../../../../../types";
 import {showError, showSuccess} from "../../../../../../utilites/notifications";
 import {CapabilityList} from "../../../Payments/CapabilityList";
@@ -58,6 +60,7 @@ export const PayoutsSettings = () => {
         pendingConnect && !!organizerId,
     );
     const copyMutation = useCopyStripeConnectFromOrganizer();
+    const disconnectMutation = useDisconnectOrganizerStripeConnect();
 
     const data = stripeQuery.data;
     const primaryAccount: OrganizerStripeConnectAccount | undefined =
@@ -98,6 +101,56 @@ export const PayoutsSettings = () => {
     const handleConnect = () => {
         setPendingConnect(true);
     };
+
+    const handleDisconnect = (account: OrganizerStripeConnectAccount) => {
+        if (!organizerId || !account.stripe_account_id) return;
+        const stripeAccountId = account.stripe_account_id;
+        modals.openConfirmModal({
+            title: t`Disconnect Stripe account`,
+            children: (
+                <Stack gap="xs">
+                    <Text size="sm">
+                        {t`This disconnects ${stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again.`}
+                    </Text>
+                    <Text size="sm" c="dimmed">
+                        {t`Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time.`}
+                    </Text>
+                </Stack>
+            ),
+            labels: {confirm: t`Disconnect`, cancel: t`Keep connection`},
+            confirmProps: {color: "red", "data-testid": "stripe-disconnect-confirm-button"},
+            onConfirm: () => {
+                disconnectMutation.mutate(
+                    {organizerId, stripeAccountId},
+                    {
+                        onSuccess: () => {
+                            showSuccess(t`Stripe account disconnected.`);
+                        },
+                        onError: () => {
+                            showError(t`We couldn't disconnect this Stripe account. Please try again.`);
+                        },
+                    },
+                );
+            },
+        });
+    };
+
+    const renderDisconnect = (account: OrganizerStripeConnectAccount, label: string) => (
+        <Box mt="md">
+            <Divider my="sm"/>
+            <Anchor
+                component="button"
+                type="button"
+                size="xs"
+                c="dimmed"
+                underline="hover"
+                onClick={() => handleDisconnect(account)}
+                data-testid="stripe-disconnect-button"
+            >
+                {label}
+            </Anchor>
+        </Box>
+    );
 
     const handleReuse = () => {
         if (!selectedReusable || !organizerId) return;
@@ -241,6 +294,8 @@ export const PayoutsSettings = () => {
                 </Button>
 
                 {renderInlineReuse()}
+
+                {renderDisconnect(account, t`Connected the wrong Stripe account? Disconnect and start over.`)}
 
                 {hasRequirements && (
                     <Box mt="md">
@@ -396,6 +451,8 @@ export const PayoutsSettings = () => {
                         <VatSettingsBody organizerId={organizerId} stripeCountry={account.country}/>
                     </Box>
                 )}
+
+                {renderDisconnect(account, t`Need to switch Stripe accounts? Disconnect this one.`)}
             </>
         );
     };

@@ -179,6 +179,7 @@ use HiEvents\Http\Actions\Organizers\Settings\PartialUpdateOrganizerSettingsActi
 use HiEvents\Http\Actions\Organizers\Stats\GetOrganizerStatsAction;
 use HiEvents\Http\Actions\Organizers\Stripe\CopyStripeConnectAccountAction;
 use HiEvents\Http\Actions\Organizers\Stripe\CreateStripeConnectAccountAction;
+use HiEvents\Http\Actions\Organizers\Stripe\DisconnectStripeConnectAccountAction;
 use HiEvents\Http\Actions\Organizers\Stripe\GetStripeConnectAccountsAction;
 use HiEvents\Http\Actions\Organizers\UpdateOrganizerLocationAction;
 use HiEvents\Http\Actions\Organizers\UpdateOrganizerStatusAction;
@@ -355,6 +356,8 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizerId}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
         $router->post('/organizers/{organizerId}/stripe/connect', CreateStripeConnectAccountAction::class);
         $router->post('/organizers/{organizerId}/stripe/copy_from/{sourceOrganizerId}', CopyStripeConnectAccountAction::class);
+        $router->delete('/organizers/{organizerId}/stripe/connect_accounts/{stripeAccountId}', DisconnectStripeConnectAccountAction::class)
+            ->where('stripeAccountId', '[A-Za-z0-9_]+');
 
         // VAT Settings - Organizer level
         $router->get('/organizers/{organizerId}/vat-settings', GetOrganizerVatSettingAction::class);

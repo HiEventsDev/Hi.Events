@@ -9,7 +9,6 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
-use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
@@ -66,8 +65,10 @@ readonly class UpdateEventHandler
             );
         }
 
-        if ($eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency()) {
-            $this->checkForCompletedOrders($eventData);
+        $isCurrencyChanging = $eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency();
+
+        if ($isCurrencyChanging) {
+            $this->guardCurrencyChange($eventData);
         }
 
         $attributes = [
@@ -85,6 +86,16 @@ readonly class UpdateEventHandler
                 'account_id' => $eventData->account_id,
             ],
         );
+
+        if ($isCurrencyChanging) {
+            $this->orderRepository->updateWhere(
+                attributes: ['currency' => $eventData->currency],
+                where: [
+                    'event_id' => $eventData->id,
+                    ['total_gross', '=', 0],
+                ],
+            );
+        }
 
         $this->updateSingleOccurrenceDates($eventData, $existingEvent);
     }
@@ -151,16 +162,16 @@ readonly class UpdateEventHandler
     /**
      * @throws CannotChangeCurrencyException
      */
-    private function checkForCompletedOrders(UpdateEventDTO $eventData): void
+    private function guardCurrencyChange(UpdateEventDTO $eventData): void
     {
-        $orders = $this->orderRepository->findWhere([
+        $paidOrder = $this->orderRepository->findFirstWhere([
             'event_id' => $eventData->id,
-            'status' => OrderStatus::COMPLETED->name,
+            ['total_gross', '>', 0],
         ]);
 
-        if ($orders->isNotEmpty()) {
+        if ($paidOrder !== null) {
             throw new CannotChangeCurrencyException(
-                __('You cannot change the currency of an event that has completed orders'),
+                __('You cannot change the currency of an event that has paid orders. To use a different currency, duplicate the event and change the currency on the new event.'),
             );
         }
     }

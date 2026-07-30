@@ -38,6 +38,9 @@ export const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (!error.response) {
+            return Promise.reject(error);
+        }
         const { status } = error.response;
         const currentPath = window?.location.pathname;
         const isAllowedUnauthenticatedPath = ALLOWED_UNAUTHENTICATED_PATHS.some(path => currentPath.includes(path));

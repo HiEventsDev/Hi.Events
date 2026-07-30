@@ -6,7 +6,6 @@ namespace Tests\Unit\Services\Application\Handlers\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
-use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\Dispatcher;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -16,7 +15,6 @@ use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
 use HiEvents\Services\Application\Handlers\Event\UpdateEventHandler;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Mockery;
 use Mockery\MockInterface;
@@ -68,7 +66,7 @@ class UpdateEventHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_throws_when_changing_currency_with_completed_orders(): void
+    public function test_throws_when_changing_currency_with_paid_orders(): void
     {
         $existing = Mockery::mock(EventDomainObject::class);
         $existing->shouldReceive('getCurrency')->andReturn('USD');
@@ -77,14 +75,12 @@ class UpdateEventHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn($existing);
 
-        $completedOrder = Mockery::mock(OrderDomainObject::class);
         $this->orderRepository
-            ->shouldReceive('findWhere')
-            ->with([
-                'event_id' => 1,
-                'status' => OrderStatus::COMPLETED->name,
-            ])
-            ->andReturn(new Collection([$completedOrder]));
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1, ['total_gross', '>', 0]])
+            ->andReturn(Mockery::mock(OrderDomainObject::class));
+
+        $this->orderRepository->shouldNotReceive('updateWhere');
 
         $this->expectException(CannotChangeCurrencyException::class);
 
@@ -97,7 +93,7 @@ class UpdateEventHandlerTest extends TestCase
         ));
     }
 
-    public function test_allows_currency_change_when_no_completed_orders(): void
+    public function test_allows_currency_change_and_updates_free_orders_when_no_paid_orders(): void
     {
         $existing = Mockery::mock(EventDomainObject::class);
         $existing->shouldReceive('getCurrency')->andReturn('USD');
@@ -113,12 +109,9 @@ class UpdateEventHandlerTest extends TestCase
             ->andReturn($existing, $reloaded);
 
         $this->orderRepository
-            ->shouldReceive('findWhere')
-            ->with([
-                'event_id' => 1,
-                'status' => OrderStatus::COMPLETED->name,
-            ])
-            ->andReturn(new Collection);
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1, ['total_gross', '>', 0]])
+            ->andReturnNull();
 
         $this->purifier->shouldReceive('purify')->andReturn(null);
 
@@ -128,6 +121,14 @@ class UpdateEventHandlerTest extends TestCase
             ->with(
                 Mockery::on(fn ($attrs) => ($attrs['currency'] ?? null) === 'EUR'),
                 ['id' => 1, 'account_id' => 5],
+            );
+
+        $this->orderRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->with(
+                ['currency' => 'EUR'],
+                ['event_id' => 1, ['total_gross', '=', 0]],
             );
 
         $this->dispatcher->shouldReceive('dispatchEvent')->once();
@@ -143,7 +144,7 @@ class UpdateEventHandlerTest extends TestCase
         $this->assertSame($reloaded, $result);
     }
 
-    public function test_skips_completed_orders_check_when_currency_unchanged(): void
+    public function test_skips_orders_check_when_currency_unchanged(): void
     {
         $existing = Mockery::mock(EventDomainObject::class);
         $existing->shouldReceive('getCurrency')->andReturn('USD');
@@ -158,7 +159,8 @@ class UpdateEventHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn($existing, $reloaded);
 
-        $this->orderRepository->shouldNotReceive('findWhere');
+        $this->orderRepository->shouldNotReceive('findFirstWhere');
+        $this->orderRepository->shouldNotReceive('updateWhere');
         $this->purifier->shouldReceive('purify')->andReturn(null);
         $this->eventRepository->shouldReceive('updateWhere')->once();
         $this->dispatcher->shouldReceive('dispatchEvent')->once();

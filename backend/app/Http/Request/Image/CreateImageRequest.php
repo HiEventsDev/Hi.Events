@@ -20,7 +20,7 @@ class CreateImageRequest extends FormRequest
             'image' => [
                 'required',
                 'image',
-                'max:8192', // 8mb
+                'max:5120', // 5mb
                 'dimensions:min_width='.$minWidth.',min_height='.$minHeight.',max_width=4000,max_height=4000',
                 'mimes:jpeg,png,jpg,webp',
             ],
