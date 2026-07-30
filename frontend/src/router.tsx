@@ -213,6 +213,13 @@ export const router: RouteObject[] = [
                     const Messages = await import("./components/routes/admin/Messages");
                     return { Component: Messages.default };
                 }
+            },
+            {
+                path: "announcements",
+                async lazy() {
+                    const Announcements = await import("./components/routes/admin/Announcements");
+                    return { Component: Announcements.default };
+                }
             }
         ]
     },

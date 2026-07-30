@@ -304,6 +304,19 @@ export class ApiClient {
   }
 }
 
+export interface UpsertAnnouncementPayload {
+  title: string;
+  content: string;
+  status: 'DRAFT' | 'PUBLISHED';
+  display_type: 'BANNER' | 'MODAL';
+  emoji?: string;
+  target_type: 'ALL' | 'ACCOUNTS' | 'USERS';
+  target_account_ids?: number[];
+  target_user_ids?: number[];
+  cta_label?: string;
+  cta_url?: string;
+}
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -314,5 +327,13 @@ export class AdminApiClient {
         data: { messaging_tier_id: messagingTierId },
       }),
     );
+  }
+
+  createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {
+    return unwrap(this.request.post('admin/announcements', { headers: jsonHeaders, data: payload }));
+  }
+
+  deleteAnnouncement(announcementId: number): Promise<void> {
+    return check(this.request.delete(`admin/announcements/${announcementId}`, { headers: jsonHeaders }));
   }
 }
