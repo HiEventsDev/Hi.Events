@@ -1,11 +1,11 @@
-import {Button} from "@mantine/core";
 import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
-import {Modal} from "../../common/Modal";
 import {ProductForm} from "../../forms/ProductForm";
+import {ProductDrawer} from "../../forms/ProductForm/ProductDrawer.tsx";
 import {useEffect} from "react";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
+import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {t} from "@lingui/macro";
 import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
 import {useGetProduct} from "../../../queries/useGetProduct.ts";
@@ -17,6 +17,7 @@ interface DuplicateProductModalProps extends GenericModalProps {
 
 export const DuplicateProductModal = ({onClose, originalProductId}: DuplicateProductModalProps) => {
     const {eventId} = useParams();
+    const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees, isFetched: taxesAndFeesLoaded} = useGetTaxesAndFees();
     const {data: originalProduct} = useGetProduct(eventId, originalProductId);
     const createProductMutation = useCreateProduct();
@@ -52,7 +53,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
     });
 
     useEffect(() => {
-        if (!originalProduct || !taxesAndFeesLoaded) {
+        if (!originalProduct) {
             return;
         }
 
@@ -76,6 +77,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             tax_and_fee_ids: originalProduct.taxes_and_fees?.map(t => String(t.id)) ?? [],
             product_type: originalProduct.product_type,
             product_category_id: originalProduct.product_category_id,
+            price: originalProduct.type === ProductPriceType.Free ? 0.00 : undefined,
             prices: originalProduct.prices?.map(price => ({
                 price: price.price,
                 label: price.label,
@@ -85,11 +87,13 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 is_hidden: price.is_hidden,
             })),
         });
+        form.resetDirty();
     }, [originalProduct]);
 
     useEffect(() => {
         if (taxesAndFeesLoaded) {
             form.setFieldValue("tax_and_fee_ids", taxesAndFees?.data?.filter(item => item.is_default).map((item: TaxAndFee) => String(item.id)) || []);
+            form.resetDirty();
         }
     }, [taxesAndFeesLoaded]);
 
@@ -110,13 +114,18 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
     };
 
     return (
-        <Modal onClose={onClose} heading={t`Duplicate Product`} opened size={"lg"} withCloseButton>
-            <form onSubmit={form.onSubmit(handleDuplicateProduct)}>
-                <ProductForm form={form}/>
-                <Button type="submit" fullWidth disabled={createProductMutation.isPending}>
-                    {createProductMutation.isPending ? t`Working...` : t`Duplicate Product`}
-                </Button>
-            </form>
-        </Modal>
+        <ProductDrawer
+            onClose={onClose}
+            title={t`Duplicate Product`}
+            event={event}
+            form={form}
+            loading={!originalProduct}
+            submitLabel={t`Duplicate Product`}
+            submitLoading={createProductMutation.isPending}
+            submitTestId="product-duplicate-submit-button"
+            onSubmit={handleDuplicateProduct}
+        >
+            <ProductForm form={form}/>
+        </ProductDrawer>
     );
 };

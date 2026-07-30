@@ -1,0 +1,83 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hi-spacing-md);
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--hi-color-gray-dark);
+}
+
+.widgetWrap {
+  pointer-events: none;
+  user-select: none;
+  border-radius: var(--hi-radius-lg);
+  overflow: hidden;
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &[data-hidden] {
+    opacity: 0.45;
+  }
+
+  :global(.hi-promo-code-row) {
+    display: none;
+  }
+
+  :global(.hi-donation-input-wrapper .mantine-TextInput-root) {
+    width: 110px !important;
+  }
+}
+
+.statusLine {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hi-spacing-md);
+  padding: var(--hi-spacing-md);
+  border-radius: var(--hi-radius-md);
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.4;
+}
+
+.statusDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+}
+
+.visible {
+  background-color: var(--hi-color-success-soft);
+  color: var(--hi-color-success);
+
+  .statusDot {
+    background-color: var(--hi-color-success);
+  }
+}
+
+.conditional {
+  background-color: color-mix(in srgb, var(--hi-color-warning) 12%, transparent);
+  color: var(--hi-color-warning);
+
+  .statusDot {
+    background-color: var(--hi-color-warning);
+  }
+}
+
+.hidden {
+  background-color: color-mix(in srgb, var(--hi-color-danger) 10%, transparent);
+  color: var(--hi-color-danger);
+
+  .statusDot {
+    background-color: var(--hi-color-danger);
+  }
+}
+
+.footnote {
+  font-size: 0.6875rem;
+  color: var(--hi-color-text-tertiary);
+}

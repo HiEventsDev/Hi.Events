@@ -1,5 +1,14 @@
 import type { Locator, Page } from '@playwright/test';
 
+export type ProductLedgerRow =
+  | 'description'
+  | 'sale-window'
+  | 'event-page'
+  | 'taxes'
+  | 'order-limits'
+  | 'highlight'
+  | 'access';
+
 export class ProductCreatePage {
   constructor(private readonly page: Page) {}
 
@@ -14,12 +23,11 @@ export class ProductCreatePage {
     await this.page.getByRole('heading', { name: 'Create Ticket or Product' }).waitFor();
   }
 
-  async selectPriceType(optionName: RegExp): Promise<void> {
+  async selectPriceType(segmentLabel: string): Promise<void> {
     await this.page
-      .getByLabel('Create Ticket or Product')
-      .getByText('Paid Product', { exact: true })
+      .getByTestId('product-price-type')
+      .getByText(segmentLabel, { exact: true })
       .click();
-    await this.page.getByRole('option', { name: optionName }).click();
   }
 
   async fillTier(index: number, price: string, label: string): Promise<void> {
@@ -31,8 +39,8 @@ export class ProductCreatePage {
     await this.page.getByTestId('product-add-tier-button').click();
   }
 
-  async openAdvancedOptions(): Promise<void> {
-    await this.page.getByRole('button', { name: /Taxes, Fees, Visibility/ }).click();
+  async openLedgerRow(row: ProductLedgerRow): Promise<void> {
+    await this.page.getByTestId(`product-ledger-${row}`).click();
   }
 
   hiddenSwitch(): Locator {
@@ -40,7 +48,7 @@ export class ProductCreatePage {
   }
 
   async submitCreate(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Create Product' }).click();
+    await this.page.getByTestId('product-create-submit-button').click();
   }
 
   async openEditModal(): Promise<void> {

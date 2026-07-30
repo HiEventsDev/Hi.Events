@@ -114,6 +114,11 @@ export const utcToTz = (date: undefined | string | Date, tz: string): string | u
     return dayjs.utc(date).tz(tz).format('YYYY-MM-DDTHH:mm');
 };
 
+export const nowInTimezone = (tz: string): string => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
+    return dayjs().tz(tz).format('YYYY-MM-DDTHH:mm');
+};
+
 export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: string): string => {
     const userTimezone = !isSsr()
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
