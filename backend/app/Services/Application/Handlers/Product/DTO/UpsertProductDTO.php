@@ -37,6 +37,8 @@ class UpsertProductDTO extends BaseDTO
         public readonly ?bool $show_quantity_remaining = false,
         public readonly ?bool $is_hidden_without_promo_code = false,
         public readonly ?array $tax_and_fee_ids = [],
+        public readonly ?array $addon_product_ids = [],
+        public readonly ?bool $is_addon_only = false,
         public readonly ?int $product_id = null,
         public readonly ?bool $is_highlighted = false,
         public readonly ?string $highlight_message = null,

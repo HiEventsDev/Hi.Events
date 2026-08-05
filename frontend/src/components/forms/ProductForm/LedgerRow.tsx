@@ -12,6 +12,7 @@ export type LedgerRowId =
     | 'waitlist'
     | 'taxes'
     | 'order-limits'
+    | 'addons'
     | 'highlight'
     | 'access';
 

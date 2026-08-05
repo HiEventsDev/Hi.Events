@@ -6,6 +6,7 @@ export type ProductLedgerRow =
   | 'event-page'
   | 'taxes'
   | 'order-limits'
+  | 'addons'
   | 'highlight'
   | 'access';
 
@@ -51,9 +52,19 @@ export class ProductCreatePage {
     await this.page.getByTestId('product-create-submit-button').click();
   }
 
-  async openEditModal(): Promise<void> {
-    await this.page.getByTestId('product-manage-button').click();
+  async openEditModal(index = 0): Promise<void> {
+    await this.page.getByTestId('product-manage-button').nth(index).click();
     await this.page.getByTestId('product-edit-menu-item').click();
     await this.page.getByRole('heading', { name: 'Edit Product' }).waitFor();
+  }
+
+  addonOnlySwitch(): Locator {
+    return this.page.getByLabel('Only available as an add-on');
+  }
+
+  async selectAddonProduct(productTitle: string): Promise<void> {
+    await this.page.getByRole('combobox', { name: 'Add-on products' }).click();
+    await this.page.getByRole('option', { name: productTitle }).click();
+    await this.page.keyboard.press('Escape');
   }
 }

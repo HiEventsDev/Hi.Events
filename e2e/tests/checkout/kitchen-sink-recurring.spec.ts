@@ -103,7 +103,7 @@ function buildCheckoutOptions(
     await expect(paneTime).toContainText(/7:00\s?PM/i);
     await expect(paneLocation).toHaveCount(0);
     await expect(selector.productsLoadingOverlay()).toHaveCount(0);
-    await expect(standardRow.getByText(BASE_STANDARD_INCLUSIVE)).toBeVisible();
+    await expect(standardRow.getByText(BASE_STANDARD_INCLUSIVE).first()).toBeVisible();
 
     const secondLabel = dayButtonLabel(second.start_date);
     await selector.navigateToMonthOf(second.start_date);
@@ -113,7 +113,7 @@ function buildCheckoutOptions(
     await expect(pane.getByText(OCCURRENCE_LABEL)).toBeVisible();
     await expect(paneLocation).toContainText('Warehouse 9, Brooklyn');
     await expect(selector.productsLoadingOverlay()).toHaveCount(0);
-    await expect(standardRow.getByText(TOTALS.standardInclusive)).toBeVisible();
+    await expect(standardRow.getByText(TOTALS.standardInclusive).first()).toBeVisible();
   };
 
   const expectSummaryDetails = async (page: Page) => {

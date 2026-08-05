@@ -34,6 +34,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
@@ -66,6 +67,7 @@ class DuplicateEventService
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
         private readonly ProductOccurrenceVisibilityRepositoryInterface $visibilityRepository,
         private readonly EventLocationRepositoryInterface $eventLocationRepository,
+        private readonly ProductRepositoryInterface $productRepository,
     ) {}
 
     /**
@@ -277,6 +279,8 @@ class DuplicateEventService
             }
         });
 
+        $this->cloneProductAddons($event, $oldProductToNewProductMap);
+
         if ($duplicateQuestions) {
             $this->clonePerProductQuestions($event, $newEventId, $oldProductToNewProductMap);
         }
@@ -294,6 +298,29 @@ class DuplicateEventService
         }
 
         return [$oldProductToNewProductMap, $oldPriceToNewPriceMap];
+    }
+
+    private function cloneProductAddons(EventDomainObject $event, array $oldProductToNewProductMap): void
+    {
+        $event->getProductCategories()?->each(function (ProductCategoryDomainObject $productCategory) use ($oldProductToNewProductMap) {
+            /** @var ProductDomainObject $product */
+            foreach ($productCategory->getProducts() as $product) {
+                $newProductId = $oldProductToNewProductMap[$product->getId()] ?? null;
+                if ($newProductId === null) {
+                    continue;
+                }
+
+                $newAddonIds = collect($product->getAddons() ?? [])
+                    ->map(fn (ProductDomainObject $addon) => $oldProductToNewProductMap[$addon->getId()] ?? null)
+                    ->filter()
+                    ->values()
+                    ->all();
+
+                if ($newAddonIds !== []) {
+                    $this->productRepository->syncAddons($newProductId, $newAddonIds);
+                }
+            }
+        });
     }
 
     /**
@@ -466,6 +493,7 @@ class DuplicateEventService
                     new Relationship(ProductDomainObject::class, [
                         new Relationship(ProductPriceDomainObject::class),
                         new Relationship(TaxAndFeesDomainObject::class),
+                        new Relationship(domainObject: ProductDomainObject::class, name: 'addons'),
                     ]),
                 ])
             )

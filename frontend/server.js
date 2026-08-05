@@ -51,6 +51,22 @@ async function main() {
         }
     });
 
+    const widgetTestPageEnabled = !isProduction || process.env.WIDGET_TEST_PAGE_ENABLED === 'true';
+
+    if (widgetTestPageEnabled) {
+        app.get('/widget-test', async (req, res) => {
+            try {
+                const widgetTestHtml = await fs.readFile(path.join(__dirname, './src/widget-test/index.html'), 'utf-8');
+                res.setHeader('Content-Type', 'text/html; charset=utf-8');
+                res.setHeader('Cache-Control', 'no-cache');
+                res.setHeader('X-Robots-Tag', 'noindex');
+                return res.status(200).send(widgetTestHtml);
+            } catch (error) {
+                return res.status(404).send('');
+            }
+        });
+    }
+
     let vite;
 
     if (!isProduction) {

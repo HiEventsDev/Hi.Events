@@ -111,6 +111,39 @@ class ProductFilterServiceTest extends TestCase
         $this->assertSame([$product], $result->first()->getProducts()->values()->all());
     }
 
+    public function test_filter_products_keeps_addon_only_products(): void
+    {
+        $addonOnly = $this->createFreeProduct(id: 1, priceId: 100)->setIsAddonOnly(true);
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+        ]);
+
+        $result = $this->service->filterProducts(
+            products: collect([$addonOnly]),
+            hideSoldOutProducts: false,
+        );
+
+        $this->assertSame([$addonOnly], $result->all());
+    }
+
+    public function test_filter_products_rejects_hidden_addon_only_products(): void
+    {
+        $hiddenAddon = $this->createFreeProduct(id: 1, priceId: 100)
+            ->setIsAddonOnly(true)
+            ->setIsHidden(true);
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$hiddenAddon]));
+
+        $this->assertTrue($result->isEmpty());
+    }
+
     private function createFreeProduct(int $id, int $priceId, int $productCategoryId = 5): ProductDomainObject
     {
         return (new ProductDomainObject)

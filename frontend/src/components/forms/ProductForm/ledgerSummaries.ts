@@ -121,6 +121,20 @@ export const orderLimitsSummary = (values: Product): RowSummary => {
     return {text: t`No limits`, emphasized: false};
 };
 
+export const addonsSummary = (values: Product): RowSummary => {
+    const count = values.addon_product_ids?.length || 0;
+    const parts = [
+        count === 1 ? t`1 add-on` : count > 1 ? t`${count} add-ons` : undefined,
+        values.is_addon_only ? t`Add-on only` : undefined,
+    ].filter(Boolean) as string[];
+
+    if (parts.length === 0) {
+        return {text: t`None`, emphasized: false};
+    }
+
+    return {text: parts.join(' · '), emphasized: true};
+};
+
 export const highlightSummary = (values: Product): RowSummary => {
     if (!values.is_highlighted) {
         return {text: t`Off`, emphasized: false};

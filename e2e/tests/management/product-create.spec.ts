@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { ProductCreatePage } from '../../pages/product-create.page';
-import { createDraftEvent } from '../../api/factory';
+import { createDraftEvent, createDraftEventWithTicket } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('product creation', () => {
@@ -51,6 +51,37 @@ test.describe('product creation', () => {
 
     await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
     await expect(authedPage.getByText('$10.00 – $20.00', { exact: true })).toBeVisible();
+  });
+
+  test('an organizer creates an add-on product and the settings persist', async ({ authedPage, api, account }) => {
+    const event = await createDraftEventWithTicket(api, account.organizerId, { productTitle: 'Main Ticket' });
+    const title = uniqueName('Parking Pass');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await authedPage.getByLabel(/^Price/).fill('10');
+    await products.openLedgerRow('addons');
+    await products.selectAddonProduct('Main Ticket');
+    await products.openLedgerRow('addons');
+    await expect(authedPage.getByText('1 add-on', { exact: true })).toBeVisible();
+
+    await products.openLedgerRow('addons');
+    await products.addonOnlySwitch().check();
+    await expect(authedPage.getByRole('combobox', { name: 'Add-on products' })).toHaveCount(0);
+    await products.openLedgerRow('addons');
+    await expect(authedPage.getByText('Add-on only', { exact: true })).toBeVisible();
+    await products.submitCreate();
+
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+    await expect(authedPage.getByText('Add-on only', { exact: true })).toBeVisible();
+
+    await products.openEditModal(1);
+    await expect(authedPage.getByLabel(/^Name/)).toHaveValue(title);
+    await products.openLedgerRow('addons');
+    await expect(products.addonOnlySwitch()).toBeChecked();
+    await expect(authedPage.getByRole('combobox', { name: 'Add-on products' })).toHaveCount(0);
   });
 
   test('ledger settings persist and are shown when reopening the edit modal', async ({ authedPage, api, account }) => {

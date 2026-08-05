@@ -19,6 +19,13 @@ export const computeVisibilityStatus = (values: Product, nowInEventTz: string): 
         };
     }
 
+    if (values.is_addon_only) {
+        return {
+            level: 'conditional',
+            message: t`Only shown as an add-on to the products it's attached to.`,
+        };
+    }
+
     if (values.is_hidden_without_promo_code) {
         return {
             level: 'conditional',

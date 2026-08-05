@@ -55,6 +55,7 @@ class OrderCreateRequestValidationService
         $this->validateTypes($data);
         $promoCode = $this->validatePromoCode($eventId, $data);
         $this->validateProductSelection($data);
+        $this->validateAddonProducts($data);
         $this->validateOccurrence($eventId, $data);
 
         $this->availableProductQuantities = $this->fetchAvailableProductQuantitiesService
@@ -259,6 +260,46 @@ class OrderCreateRequestValidationService
             throw ValidationException::withMessages([
                 'products' => __('You haven\'t selected any products'),
             ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateAddonProducts(array $data): void
+    {
+        $productLines = collect($data['products']);
+
+        $requestedQuantities = $productLines
+            ->groupBy(fn ($line) => (int) $line['product_id'])
+            ->map(fn ($lines) => $lines->sum(fn ($line) => collect($line['quantities'])->sum('quantity')));
+
+        $selectedProductIds = $requestedQuantities->filter(fn ($quantity) => $quantity > 0)->keys();
+
+        $selectedAddonOnlyProducts = $this->getProducts($data)
+            ->filter(fn (ProductDomainObject $product) => $product->getIsAddonOnly()
+                && $selectedProductIds->contains($product->getId()));
+
+        if ($selectedAddonOnlyProducts->isEmpty()) {
+            return;
+        }
+
+        $parentIdsByAddon = $this->productRepository->findParentProductIds(
+            $selectedAddonOnlyProducts->map(fn (ProductDomainObject $product) => $product->getId())->values()->all(),
+        );
+
+        foreach ($selectedAddonOnlyProducts as $addon) {
+            $hasSelectedParent = collect($parentIdsByAddon->get($addon->getId(), []))
+                ->contains(fn ($parentId) => $selectedProductIds->contains($parentId));
+
+            if (! $hasSelectedParent) {
+                $productIndex = $productLines->search(fn ($line) => (int) $line['product_id'] === $addon->getId());
+                throw ValidationException::withMessages([
+                    'products.'.(is_int($productIndex) ? $productIndex : 0) => __(':product is an add-on and can only be purchased with the product it belongs to', [
+                        'product' => $addon->getTitle(),
+                    ]),
+                ]);
+            }
         }
     }
 

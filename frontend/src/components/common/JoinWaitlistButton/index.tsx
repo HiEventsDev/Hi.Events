@@ -2,6 +2,7 @@ import {Event, IdParam, Product} from "../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {JoinWaitlistModal} from "../../modals/JoinWaitlistModal";
 import {t} from "@lingui/macro";
+import {IconCheck} from "@tabler/icons-react";
 import {useWaitlistJoined} from "../../../hooks/useWaitlistJoined.ts";
 
 interface JoinWaitlistButtonProps {
@@ -18,19 +19,25 @@ export const JoinWaitlistButton = ({product, event, productPriceId, priceLabel, 
 
     return (
         <>
-            <button
-                type="button"
-                className="hi-waitlist-button"
-                data-testid="join-waitlist-button"
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    openModal();
-                }}
-                disabled={hasJoined}
-            >
-                {hasJoined ? t`Joined` : t`Join Waitlist`}
-            </button>
+            {hasJoined ? (
+                <span className="hi-waitlist-joined" data-testid="join-waitlist-button">
+                    <IconCheck size={14} stroke={2.5}/>
+                    {t`On the waitlist`}
+                </span>
+            ) : (
+                <button
+                    type="button"
+                    className="hi-waitlist-button"
+                    data-testid="join-waitlist-button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openModal();
+                    }}
+                >
+                    {t`Join Waitlist`}
+                </button>
+            )}
             {modalOpen && (
                 <JoinWaitlistModal
                     onClose={closeModal}

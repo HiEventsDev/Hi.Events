@@ -83,11 +83,14 @@ export interface CreateProductPricePayload {
 
 export interface CreateProductPayload {
   title: string;
+  description?: string;
   product_type: ProductKind;
   type: ProductPriceType;
   product_category_id: number;
   prices: CreateProductPricePayload[];
   tax_and_fee_ids?: number[];
+  addon_product_ids?: number[];
+  is_addon_only?: boolean;
   max_per_order?: number;
   min_per_order?: number;
   is_hidden?: boolean;

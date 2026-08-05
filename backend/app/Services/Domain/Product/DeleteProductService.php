@@ -49,6 +49,8 @@ class DeleteProductService
                     ProductPriceDomainObjectAbstract::PRODUCT_ID => $productId,
                 ]
             );
+
+            $this->productRepository->detachAddonAssociations($productId);
         });
 
         $this->domainEventDispatcherService->dispatch(

@@ -25,6 +25,7 @@ import {
     IconEye,
     IconFlame,
     IconPlus,
+    IconPuzzle,
     IconReceipt,
     IconShirt,
     IconShoppingCart,
@@ -48,8 +49,10 @@ import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {CreateTaxOrFeeModal} from "../../modals/CreateTaxOrFeeModal";
 import {hasQuantityValue, ProductPriceTierForm, SeriesQuantityWarning} from "./ProductPriceTierForm.tsx";
 import {LedgerRow, LedgerRowId} from "./LedgerRow.tsx";
+import {ProductSelector} from "../../common/ProductSelector";
 import {
     accessSummary,
+    addonsSummary,
     descriptionSummary,
     eventPageSummary,
     highlightSummary,
@@ -72,6 +75,7 @@ const LEDGER_ROW_ORDER: LedgerRowId[] = [
     'waitlist',
     'taxes',
     'order-limits',
+    'addons',
     'highlight',
     'access',
 ];
@@ -83,6 +87,7 @@ const FIELD_TO_LEDGER_ROW: Array<[RegExp, LedgerRowId]> = [
     [/^waitlist_enabled$/, 'waitlist'],
     [/^tax_and_fee_ids/, 'taxes'],
     [/^(min_per_order|max_per_order)$/, 'order-limits'],
+    [/^(addon_product_ids|is_addon_only)$/, 'addons'],
     [/^(is_highlighted|highlight_message)$/, 'highlight'],
     [/^(is_hidden|is_hidden_without_promo_code)$/, 'access'],
 ];
@@ -520,6 +525,44 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         <NumberInput {...form.getInputProps('max_per_order')} label={t`Maximum Per Order`}
                                      placeholder="10"/>
                     </InputGroup>
+                </LedgerRow>
+
+                <LedgerRow
+                    id="addons"
+                    icon={<IconPuzzle size={16}/>}
+                    label={t`Add-ons`}
+                    summary={addonsSummary(form.values)}
+                    opened={openRows.has('addons')}
+                    onToggle={toggleRow}
+                >
+                    <Switch
+                        {...form.getInputProps('is_addon_only', {type: 'checkbox'})}
+                        onChange={(changeEvent) => {
+                            form.setFieldValue('is_addon_only', changeEvent.currentTarget.checked);
+                            if (changeEvent.currentTarget.checked) {
+                                form.setFieldValue('addon_product_ids', []);
+                            }
+                        }}
+                        label={t`Only available as an add-on`}
+                        description={t`This product won't appear on the event page on its own — buyers only see it as an add-on to the products it's attached to.`}
+                    />
+                    {!form.values.is_addon_only && (
+                        <div style={{marginTop: 15}}>
+                            <ProductSelector
+                                label={t`Add-on products`}
+                                placeholder={t`Select products...`}
+                                icon={<IconPuzzle size={16}/>}
+                                productCategories={event?.product_categories || []}
+                                form={form}
+                                productFieldName="addon_product_ids"
+                                excludedProductIds={product?.id ? [product.id] : []}
+                                noProductsMessage={t`Create more tickets or products to offer them as add-ons`}
+                            />
+                            <p className={classes.fieldHint}>
+                                {t`Buyers can add these to their order when they select this product at checkout.`}
+                            </p>
+                        </div>
+                    )}
                 </LedgerRow>
 
                 <LedgerRow

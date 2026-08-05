@@ -803,6 +803,9 @@ export interface Product {
     waitlist_enabled?: boolean | null;
     has_waiting_entries?: boolean;
     waitlist_entry_count?: number;
+    addon_product_ids?: IdParam[];
+    is_addon_only?: boolean;
+    addons?: Array<{ id: number; title: string }>;
 }
 
 export interface ProductCategory {

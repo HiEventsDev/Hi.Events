@@ -39,6 +39,8 @@ export const CreateProductModal = ({onClose, selectedCategoryId = undefined}: Cr
             type: ProductPriceType.Paid,
             product_type: ProductType.Ticket,
             tax_and_fee_ids: undefined,
+            addon_product_ids: [],
+            is_addon_only: false,
             product_category_id: selectedCategoryId ? String(selectedCategoryId) : undefined,
             prices: [{
                 price: 0,

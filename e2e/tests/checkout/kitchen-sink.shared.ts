@@ -1,5 +1,5 @@
-import { expect, type APIRequestContext, type Page } from '@playwright/test';
-import { CheckoutPage, type BuyerDetails } from '../../pages/checkout.page';
+import { expect, type APIRequestContext, type Frame, type Page } from '@playwright/test';
+import { CheckoutPage, setWidgetQuantity, type BuyerDetails, type CheckoutSurface } from '../../pages/checkout.page';
 import type { ApiClient } from '../../api/api-client';
 import type { Occurrence } from '../../api/types';
 import { createDraftEvent, OFFLINE_PAYMENT_INSTRUCTIONS } from '../../api/factory';
@@ -236,6 +236,10 @@ export interface KitchenSinkCheckoutOptions {
   paymentMode: 'offline' | 'stripe';
   attendeeCollection: 'PER_ATTENDEE' | 'PER_ORDER';
   totals: KitchenSinkTotals;
+  surfaces?: {
+    select: CheckoutSurface;
+    resolveCheckout: () => Promise<CheckoutSurface>;
+  };
   occurrence?: {
     select: (page: Page) => Promise<void>;
     expectSummaryDetails: (page: Page) => Promise<void>;
@@ -243,11 +247,11 @@ export interface KitchenSinkCheckoutOptions {
   emailBodyContains?: string[];
 }
 
-async function fillContactBlock(page: Page, index: number, details: BuyerDetails): Promise<void> {
-  await page.getByLabel(/^First Name/).nth(index).fill(details.firstName);
-  await page.getByLabel(/^Last Name/).nth(index).fill(details.lastName);
-  await page.getByLabel(/^Email Address/).nth(index).fill(details.email);
-  await page.getByLabel(/^Confirm Email Address/).nth(index).fill(details.email);
+async function fillContactBlock(root: CheckoutSurface, index: number, details: BuyerDetails): Promise<void> {
+  await root.getByLabel(/^First Name/).nth(index).fill(details.firstName);
+  await root.getByLabel(/^Last Name/).nth(index).fill(details.lastName);
+  await root.getByLabel(/^Email Address/).nth(index).fill(details.email);
+  await root.getByLabel(/^Confirm Email Address/).nth(index).fill(details.email);
 }
 
 export async function runKitchenSinkCheckout(
@@ -257,6 +261,9 @@ export async function runKitchenSinkCheckout(
   opts: KitchenSinkCheckoutOptions,
 ): Promise<void> {
   const { paymentMode, totals } = opts;
+  if (opts.surfaces && paymentMode === 'stripe') {
+    throw new Error('Stripe payment is not supported when running on embedded surfaces');
+  }
   const buyer: BuyerDetails = { firstName: 'Kitchen', lastName: 'Sink', email: uniqueEmail('kitchensink') };
   const guests: BuyerDetails[] = opts.attendeeCollection === 'PER_ATTENDEE'
     ? [
@@ -267,11 +274,69 @@ export async function runKitchenSinkCheckout(
       ]
     : [];
 
-  const checkout = new CheckoutPage(page);
-  const productRow = (title: string) => page.locator('.hi-product-row').filter({ hasText: title });
-  const summaryLineItem = (name: string) => page.getByTitle(name).locator('../..');
+  const selectRoot: CheckoutSurface = opts.surfaces?.select ?? page;
+  const selection = new CheckoutPage(page, selectRoot);
+  const productRow = (title: string) => selectRoot.locator('.hi-product-row').filter({ hasText: title });
+
+  if (!opts.surfaces) {
+    await selection.gotoPublicEvent(scenario.eventId, scenario.slug);
+  }
+  if (opts.occurrence) {
+    await opts.occurrence.select(page);
+  }
+
+  await expect(selectRoot.getByRole('heading', { name: scenario.gaCategoryName })).toBeVisible();
+  await expect(selectRoot.getByText(GA_DESCRIPTION)).toBeVisible();
+  await expect(selectRoot.getByRole('heading', { name: scenario.extrasCategoryName })).toBeVisible();
+  await expect(selectRoot.getByText(EXTRAS_DESCRIPTION)).toBeVisible();
+  await expect(selectRoot.getByRole('heading', { name: 'Tickets', exact: true })).toBeVisible();
+  await expect(selectRoot.getByText('There are no tickets available for this event')).toBeVisible();
+
+  await expect(productRow('Standard Ticket').getByText(totals.standardInclusive).first()).toBeVisible();
+  const seatedRow = productRow('Seated Ticket');
+  const balconyTier = seatedRow.locator('.hi-price-tier-row').filter({ hasText: 'Balcony' });
+  const frontRowTier = seatedRow.locator('.hi-price-tier-row').filter({ hasText: 'Front Row' });
+  await expect(balconyTier.getByText('$15.00')).toBeVisible();
+  await expect(frontRowTier.getByText('$40.00')).toBeVisible();
+  const donationRow = productRow('Supporter Donation');
+  await expect(donationRow.getByLabel(/^Amount/)).toBeVisible();
+  await expect(productRow('Event T-Shirt').getByText('$13.75').first()).toBeVisible();
+  await expect(selectRoot.getByText('Secret VIP')).toHaveCount(0);
+  await expect(selectRoot.getByText('Staff Comp')).toHaveCount(0);
+
+  await selection.applyPromoCode(scenario.promoCode);
+  const vipRow = productRow('Secret VIP');
+  await expect(vipRow.getByText('$40.00')).toBeVisible();
+  await expect(vipRow.getByText('$50.00')).toBeVisible();
+  await expect(productRow('Standard Ticket').getByText(totals.standardInclusive).first()).toBeVisible();
+  await expect(balconyTier.getByText('$15.00')).toBeVisible();
+  await expect(frontRowTier.getByText('$40.00')).toBeVisible();
+  await expect(productRow('Event T-Shirt').getByText('$13.75').first()).toBeVisible();
+  await expect(selectRoot.getByText('Staff Comp')).toHaveCount(0);
+
+  await selection.setQuantityForProduct('Standard Ticket', 1);
+  await setWidgetQuantity(frontRowTier, 1);
+  await donationRow.getByLabel(/^Amount/).fill('12.50');
+  await setWidgetQuantity(donationRow, 1);
+  await selection.setQuantityForProduct('Event T-Shirt', 1);
+  await selection.setQuantityForProduct('Secret VIP', 1);
+
+  await selectRoot.getByTestId('checkout-continue-button').click();
+  const checkoutRoot: CheckoutSurface = opts.surfaces ? await opts.surfaces.resolveCheckout() : page;
+  await checkoutRoot.waitForURL(/\/checkout\/\d+\/[^/]+\/details/);
+  const checkout = new CheckoutPage(page, checkoutRoot);
+
+  const summaryLineItem = (name: string) => checkoutRoot.getByTitle(name).locator('../..');
   const summaryRow = (label: string) =>
-    page.locator('[class*="totalsRow"]').filter({ has: page.getByText(label, { exact: true }) });
+    checkoutRoot.locator('[class*="totalsRow"]').filter({ has: checkoutRoot.getByText(label, { exact: true }) });
+  const reloadCheckout = async () => {
+    if (checkoutRoot === page) {
+      await page.reload();
+    } else {
+      await (checkoutRoot as Frame).goto(checkoutRoot.url());
+    }
+    await checkoutRoot.waitForLoadState('networkidle');
+  };
 
   const expectSummaryLineItems = async () => {
     await expect(summaryLineItem('Standard Ticket').getByText(totals.standardBase)).toBeVisible();
@@ -288,91 +353,49 @@ export async function runKitchenSinkCheckout(
     await expect(summaryRow('Total')).toContainText(totals.total);
   };
   const expectCompletedSummary = async () => {
-    await expect(page.getByText(`You're going to ${scenario.title}`)).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Additional Information' })).toBeVisible();
-    await expect(page.getByText(POST_CHECKOUT_MESSAGE)).toBeVisible();
+    await expect(checkoutRoot.getByText(`You're going to ${scenario.title}`)).toBeVisible();
+    await expect(checkoutRoot.getByRole('heading', { name: 'Additional Information' })).toBeVisible();
+    await expect(checkoutRoot.getByText(POST_CHECKOUT_MESSAGE)).toBeVisible();
   };
 
-  await checkout.gotoPublicEvent(scenario.eventId, scenario.slug);
-  if (opts.occurrence) {
-    await opts.occurrence.select(page);
-  }
-
-  await expect(page.getByRole('heading', { name: scenario.gaCategoryName })).toBeVisible();
-  await expect(page.getByText(GA_DESCRIPTION)).toBeVisible();
-  await expect(page.getByRole('heading', { name: scenario.extrasCategoryName })).toBeVisible();
-  await expect(page.getByText(EXTRAS_DESCRIPTION)).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Tickets', exact: true })).toBeVisible();
-  await expect(page.getByText('There are no tickets available for this event')).toBeVisible();
-
-  await expect(productRow('Standard Ticket').getByText(totals.standardInclusive)).toBeVisible();
-  const seatedRow = productRow('Seated Ticket');
-  const balconyTier = seatedRow.locator('.hi-price-tier-row').filter({ hasText: 'Balcony' });
-  const frontRowTier = seatedRow.locator('.hi-price-tier-row').filter({ hasText: 'Front Row' });
-  await expect(balconyTier.getByText('$15.00')).toBeVisible();
-  await expect(frontRowTier.getByText('$40.00')).toBeVisible();
-  const donationRow = productRow('Supporter Donation');
-  await expect(donationRow.getByLabel(/^Amount/)).toBeVisible();
-  await expect(productRow('Event T-Shirt').getByText('$13.75')).toBeVisible();
-  await expect(page.getByText('Secret VIP')).toHaveCount(0);
-  await expect(page.getByText('Staff Comp')).toHaveCount(0);
-
-  await checkout.applyPromoCode(scenario.promoCode);
-  const vipRow = productRow('Secret VIP');
-  await expect(vipRow.getByText('$40.00')).toBeVisible();
-  await expect(vipRow.getByText('$50.00')).toBeVisible();
-  await expect(productRow('Standard Ticket').getByText(totals.standardInclusive)).toBeVisible();
-  await expect(balconyTier.getByText('$15.00')).toBeVisible();
-  await expect(frontRowTier.getByText('$40.00')).toBeVisible();
-  await expect(productRow('Event T-Shirt').getByText('$13.75')).toBeVisible();
-  await expect(page.getByText('Staff Comp')).toHaveCount(0);
-
-  await checkout.setQuantityForProduct('Standard Ticket', 1);
-  await frontRowTier.locator('.hi-product-quantity-selector input').fill('1');
-  await donationRow.getByLabel(/^Amount/).fill('12.50');
-  await donationRow.locator('.hi-product-quantity-selector input').fill('1');
-  await checkout.setQuantityForProduct('Event T-Shirt', 1);
-  await checkout.setQuantityForProduct('Secret VIP', 1);
-  await checkout.continueToCheckout();
-
-  await expect(page.getByLabel(/^First Name/)).toHaveCount(1 + guests.length);
+  await expect(checkoutRoot.getByLabel(/^First Name/)).toHaveCount(1 + guests.length);
   const attendeeHeadingCount = opts.attendeeCollection === 'PER_ATTENDEE' ? 4 : 1;
-  await expect(page.getByRole('heading', { name: 'Attendee 1' })).toHaveCount(attendeeHeadingCount);
-  await expect(page.getByRole('heading', { name: 'Event T-Shirt' })).toHaveCount(0);
-  await expect(page.getByText(PRE_CHECKOUT_MESSAGE)).toBeVisible();
+  await expect(checkoutRoot.getByRole('heading', { name: 'Attendee 1' })).toHaveCount(attendeeHeadingCount);
+  await expect(checkoutRoot.getByRole('heading', { name: 'Event T-Shirt' })).toHaveCount(0);
+  await expect(checkoutRoot.getByText(PRE_CHECKOUT_MESSAGE)).toBeVisible();
 
-  await expect(page.getByLabel(/^How did you hear about us/)).toBeVisible();
-  await expect(page.getByLabel(/^Anything else we should know/)).toBeVisible();
-  await expect(page.getByRole('radio', { name: 'Medium' })).toHaveCount(1);
-  const standardSection = page.locator('[class*="ticketSection"]').filter({ hasText: 'Standard Ticket' });
+  await expect(checkoutRoot.getByLabel(/^How did you hear about us/)).toBeVisible();
+  await expect(checkoutRoot.getByLabel(/^Anything else we should know/)).toBeVisible();
+  await expect(checkoutRoot.getByRole('radio', { name: 'Medium' })).toHaveCount(1);
+  const standardSection = checkoutRoot.locator('[class*="ticketSection"]').filter({ hasText: 'Standard Ticket' });
   await expect(standardSection.getByRole('radio', { name: 'Medium' })).toBeVisible();
 
   await expectSummaryLineItems();
   await expectSummaryTotals();
-  await expect(page.getByText('-$10.00')).toBeVisible();
+  await expect(checkoutRoot.getByText('-$10.00')).toBeVisible();
 
   await checkout.fillOrderDetails(buyer);
   for (const [index, guest] of guests.entries()) {
-    await fillContactBlock(page, index + 1, guest);
+    await fillContactBlock(checkoutRoot, index + 1, guest);
   }
 
-  await page.getByRole('button', { name: 'Continue to Payment' }).click();
-  await expect(page.getByText('This field is required.')).toHaveCount(2);
+  await checkoutRoot.getByRole('button', { name: 'Continue to Payment' }).click();
+  await expect(checkoutRoot.getByText('This field is required.')).toHaveCount(2);
 
   await checkout.answerTextQuestion('How did you hear about us?', 'Kitchen sink e2e');
   await checkout.chooseRadioOption('Medium');
   await expectSummaryTotals();
   await checkout.continueToPayment();
 
-  await expect(page.getByRole('button', { name: 'Online' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Offline' })).toBeVisible();
-  await expect(page.getByRole('button', { name: `Pay ${totals.total}` })).toBeVisible();
+  await expect(checkoutRoot.getByRole('button', { name: 'Online' })).toBeVisible();
+  await expect(checkoutRoot.getByRole('button', { name: 'Offline' })).toBeVisible();
+  await expect(checkoutRoot.getByRole('button', { name: `Pay ${totals.total}` })).toBeVisible();
 
   if (paymentMode === 'offline') {
     await checkout.chooseOfflinePayment();
-    await expect(page.getByText('Your order is awaiting payment')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Payment Instructions' })).toBeVisible();
-    await expect(page.getByText(OFFLINE_PAYMENT_INSTRUCTIONS)).toBeVisible();
+    await expect(checkoutRoot.getByText('Your order is awaiting payment')).toBeVisible();
+    await expect(checkoutRoot.getByRole('heading', { name: 'Payment Instructions' })).toBeVisible();
+    await expect(checkoutRoot.getByText(OFFLINE_PAYMENT_INSTRUCTIONS)).toBeVisible();
   } else {
     await checkout.payWithStripeTestCard();
     const { orderShortId, sessionId } = parsePaymentReturnUrl(page.url());
@@ -382,20 +405,19 @@ export async function runKitchenSinkCheckout(
     await page.waitForLoadState('networkidle');
   }
 
-  await page.getByRole('button', { name: /Order Summary/ }).click();
+  await checkoutRoot.getByRole('button', { name: /Order Summary/ }).click();
   await expectSummaryLineItems();
   await expectSummaryTotals();
   for (const guest of guests) {
-    await expect(page.getByText(`${guest.firstName} ${guest.lastName}`)).toBeVisible();
+    await expect(checkoutRoot.getByText(`${guest.firstName} ${guest.lastName}`)).toBeVisible();
   }
 
   if (paymentMode === 'offline') {
-    await expect(page.getByRole('heading', { name: 'Additional Information' })).toHaveCount(0);
-    const orderShortId = page.url().match(/\/checkout\/\d+\/([^/?]+)\/summary/)![1];
+    await expect(checkoutRoot.getByRole('heading', { name: 'Additional Information' })).toHaveCount(0);
+    const orderShortId = checkoutRoot.url().match(/\/checkout\/\d+\/([^/?]+)\/summary/)![1];
     const orderId = await deps.api.findOrderIdByShortId(scenario.eventId, orderShortId);
     await deps.api.markOrderAsPaid(scenario.eventId, orderId);
-    await page.reload();
-    await page.waitForLoadState('networkidle');
+    await reloadCheckout();
   }
   await expectCompletedSummary();
   if (opts.occurrence) {

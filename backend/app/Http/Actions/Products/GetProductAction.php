@@ -6,8 +6,10 @@ namespace HiEvents\Http\Actions\Products;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Resources\Product\ProductResource;
@@ -30,6 +32,7 @@ class GetProductAction extends BaseAction
         $product = $this->productRepository
             ->loadRelation(TaxAndFeesDomainObject::class)
             ->loadRelation(ProductPriceDomainObject::class)
+            ->loadRelation(new Relationship(domainObject: ProductDomainObject::class, name: 'addons'))
             ->findFirstWhere([
                 ProductDomainObjectAbstract::EVENT_ID => $eventId,
                 ProductDomainObjectAbstract::ID => $productId,

@@ -37,6 +37,13 @@ class Product extends BaseModel
         return $this->belongsToMany(TaxAndFee::class, 'product_taxes_and_fees');
     }
 
+    public function addons(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_addons', 'product_id', 'addon_product_id')
+            ->withPivot('order')
+            ->orderByPivot('order');
+    }
+
     public function capacity_assignments(): BelongsToMany
     {
         return $this->belongsToMany(CapacityAssignment::class, 'product_capacity_assignments');

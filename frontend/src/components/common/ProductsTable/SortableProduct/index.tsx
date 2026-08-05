@@ -7,6 +7,7 @@ import {
     IconEyeOff,
     IconLock,
     IconPackage,
+    IconPuzzle,
     IconPencil,
     IconReceipt,
     IconSend,
@@ -46,6 +47,8 @@ interface SortableProductProps {
     category: ProductCategory;
     categories: ProductCategory[];
 }
+
+const addonBadgeLabel = (count: number): string => count === 1 ? t`1 add-on` : t`${count} add-ons`;
 
 export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
@@ -324,6 +327,36 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                                 <IconEyeOff size={12}/>}
                                         >
                                             {product.is_hidden_without_promo_code ? t`Promo Only` : t`Hidden`}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
+                                {product.is_addon_only && (
+                                    <Tooltip
+                                        label={t`Only shown as an add-on to the products it's attached to`}
+                                        withArrow
+                                    >
+                                        <Badge
+                                            variant="light"
+                                            color="teal"
+                                            size="sm"
+                                            leftSection={<IconPuzzle size={12}/>}
+                                        >
+                                            {t`Add-on only`}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
+                                {!!product.addons?.length && (
+                                    <Tooltip
+                                        label={product.addons.map(addon => addon.title).join(', ')}
+                                        withArrow
+                                    >
+                                        <Badge
+                                            variant="light"
+                                            color="grape"
+                                            size="sm"
+                                            leftSection={<IconPuzzle size={12}/>}
+                                        >
+                                            {addonBadgeLabel(product.addons.length)}
                                         </Badge>
                                     </Tooltip>
                                 )}

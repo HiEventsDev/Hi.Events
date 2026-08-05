@@ -12,9 +12,11 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\CannotChangeProductTypeException;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
+use HiEvents\Services\Domain\Product\ProductAddonAssociationService;
 use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
 use HiEvents\Services\Domain\Tax\DTO\TaxAndProductAssociateParams;
@@ -37,6 +39,7 @@ class EditProductHandler
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
         private readonly DatabaseManager $databaseManager,
         private readonly ProductPriceUpdateService $priceUpdateService,
+        private readonly ProductAddonAssociationService $productAddonAssociationService,
         private readonly HtmlPurifierService $purifier,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly GetProductCategoryService $getProductCategoryService,
@@ -60,6 +63,12 @@ class EditProductHandler
 
             $this->addTaxes($product, $productsData);
 
+            $this->productAddonAssociationService->associateAddons(
+                productId: $product->getId(),
+                eventId: $productsData->event_id,
+                addonProductIds: $productsData->is_addon_only ? [] : ($productsData->addon_product_ids ?? []),
+            );
+
             $this->priceUpdateService->updatePrices(
                 $product,
                 $productsData,
@@ -81,6 +90,7 @@ class EditProductHandler
 
             return $this->productRepository
                 ->loadRelation(ProductPriceDomainObject::class)
+                ->loadRelation(new Relationship(domainObject: ProductDomainObject::class, name: 'addons'))
                 ->findById($product->getId());
         });
     }
@@ -124,6 +134,7 @@ class EditProductHandler
                 'is_highlighted' => $productsData->is_highlighted ?? false,
                 'highlight_message' => $productsData->highlight_message,
                 'waitlist_enabled' => $productsData->waitlist_enabled,
+                'is_addon_only' => $productsData->is_addon_only ?? false,
             ],
             where: $where
         );
