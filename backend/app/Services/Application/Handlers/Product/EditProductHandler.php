@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Product;
 
 use Exception;
+use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
-use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Exceptions\CannotChangeProductTypeException;
 use HiEvents\Helper\DateHelper;
@@ -33,17 +33,15 @@ use Throwable;
 class EditProductHandler
 {
     public function __construct(
-        private readonly ProductRepositoryInterface      $productRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly TaxAndProductAssociationService $taxAndProductAssociationService,
-        private readonly DatabaseManager                 $databaseManager,
-        private readonly ProductPriceUpdateService       $priceUpdateService,
-        private readonly HtmlPurifierService             $purifier,
-        private readonly EventRepositoryInterface        $eventRepository,
-        private readonly GetProductCategoryService       $getProductCategoryService,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly ProductPriceUpdateService $priceUpdateService,
+        private readonly HtmlPurifierService $purifier,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly GetProductCategoryService $getProductCategoryService,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+    ) {}
 
     /**
      * @throws Throwable
@@ -156,16 +154,15 @@ class EditProductHandler
             ->findById($productId);
 
         return $product->getProductPrices()
-            ->mapWithKeys(fn(ProductPriceDomainObject $price) => [
+            ->mapWithKeys(fn (ProductPriceDomainObject $price) => [
                 $price->getId() => $price->getInitialQuantityAvailable(),
             ]);
     }
 
     private function dispatchCapacityChangedEventIfQuantityChanged(
         UpsertProductDTO $productsData,
-        Collection       $oldPriceQuantities,
-    ): void
-    {
+        Collection $oldPriceQuantities,
+    ): void {
         if ($productsData->prices === null) {
             return;
         }
@@ -180,11 +177,9 @@ class EditProductHandler
 
             $direction = match (true) {
                 ($newQuantity === null && $oldQuantity !== null),
-                ($newQuantity !== null && $oldQuantity !== null && $newQuantity > $oldQuantity)
-                    => CapacityChangeDirection::INCREASED,
+                ($newQuantity !== null && $oldQuantity !== null && $newQuantity > $oldQuantity) => CapacityChangeDirection::INCREASED,
                 ($newQuantity !== null && $oldQuantity === null),
-                ($newQuantity !== null && $oldQuantity !== null && $newQuantity < $oldQuantity)
-                    => CapacityChangeDirection::DECREASED,
+                ($newQuantity !== null && $oldQuantity !== null && $newQuantity < $oldQuantity) => CapacityChangeDirection::DECREASED,
                 default => null,
             };
 
@@ -204,6 +199,7 @@ class EditProductHandler
 
     /**
      * @throws CannotChangeProductTypeException
+     *
      * @todo - We should probably check reserved products here as well
      */
     private function validateChangeInProductType(UpsertProductDTO $productsData): void
@@ -213,7 +209,7 @@ class EditProductHandler
             ->findById($productsData->product_id);
 
         $quantitySold = $product->getProductPrices()
-            ->sum(fn(ProductPriceDomainObject $price) => $price->getQuantitySold());
+            ->sum(fn (ProductPriceDomainObject $price) => $price->getQuantitySold());
 
         if ($product->getType() !== $productsData->type->name && $quantitySold > 0) {
             throw new CannotChangeProductTypeException(

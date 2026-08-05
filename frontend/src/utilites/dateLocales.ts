@@ -1,10 +1,5 @@
-/**
- * Day.js locale configuration for internationalized date formatting
- */
-
 import { SupportedLocales } from '../locales.ts';
 
-// Import Day.js locales
 import 'dayjs/locale/en';
 import 'dayjs/locale/de';
 import 'dayjs/locale/fr';
@@ -22,14 +17,12 @@ import 'dayjs/locale/sk';
 import 'dayjs/locale/el';
 import 'dayjs/locale/cs';
 
-/**
- * Locale-specific date formats following cultural conventions
- */
 export const localeFormats: Record<SupportedLocales, {
     fullDateTime: string;
     shortDateTime: string;
     shortDate: string;
     chartDate: string;
+    dayMonthTime: string;
     monthShort: string;
     dayOfMonth: string;
     dayName: string;
@@ -42,6 +35,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'MMM D, YYYY h:mma',
         shortDate: 'MMM D, YYYY',
         chartDate: 'MMM D',
+        dayMonthTime: 'MMM D, h:mm A',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, MMMM D',
@@ -54,6 +48,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D. MMM YYYY HH:mm',
         shortDate: 'D. MMM YYYY',
         chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D. MMMM',
@@ -66,6 +61,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd D MMMM',
@@ -78,6 +74,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd D MMMM',
@@ -90,6 +87,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd D MMMM',
@@ -102,6 +100,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D [de] MMMM',
@@ -114,6 +113,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D [de] MMMM',
@@ -126,6 +126,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY年M月D日 HH:mm',
         shortDate: 'YYYY年M月D日',
         chartDate: 'M月D日',
+        dayMonthTime: 'M月D日 HH:mm',
         monthShort: 'M月',
         dayOfMonth: 'D日',
         dayName: 'M月D日 dddd',
@@ -138,6 +139,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D [de] MMM [de] YYYY HH:mm',
         shortDate: 'D [de] MMM [de] YYYY',
         chartDate: 'D [de] MMM',
+        dayMonthTime: 'D [de] MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D [de] MMMM',
@@ -150,6 +152,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: '[ngày] D [tháng] M [năm] YYYY HH:mm',
         shortDate: 'D [tháng] M, YYYY',
         chartDate: 'D [tháng] M',
+        dayMonthTime: 'D [tháng] M HH:mm',
         monthShort: '[Th]M',
         dayOfMonth: 'D',
         dayName: '[ngày] D [tháng] M',
@@ -162,6 +165,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY年M月D日 HH:mm',
         shortDate: 'YYYY年M月D日',
         chartDate: 'M月D日',
+        dayMonthTime: 'M月D日 HH:mm',
         monthShort: 'M月',
         dayOfMonth: 'D日',
         dayName: 'M月D日 dddd',
@@ -174,6 +178,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D MMMM',
@@ -186,6 +191,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'YYYY. MMM D. HH:mm',
         shortDate: 'YYYY. MMM D.',
         chartDate: 'MMM D.',
+        dayMonthTime: 'MMM D. HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D.',
         dayName: 'dddd, MMMM D.',
@@ -198,6 +204,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D MMMM',
@@ -210,6 +217,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd D MMMM',
@@ -222,6 +230,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D. MMM YYYY HH:mm',
         shortDate: 'D. MMM YYYY',
         chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D.',
         dayName: 'dddd D. MMMM',
@@ -234,6 +243,7 @@ export const localeFormats: Record<SupportedLocales, {
         shortDateTime: 'D MMM YYYY HH:mm',
         shortDate: 'D MMM YYYY',
         chartDate: 'D MMM',
+        dayMonthTime: 'D MMM HH:mm',
         monthShort: 'MMM',
         dayOfMonth: 'D',
         dayName: 'dddd, D MMMM',
@@ -254,4 +264,3 @@ export const localeFormats: Record<SupportedLocales, {
         dateTimePicker: 'D. MMM YYYY HH:mm'
     },
 };
-

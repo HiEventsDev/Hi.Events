@@ -166,6 +166,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "deletion-requests",
+                async lazy() {
+                    const DeletionRequests = await import("./components/routes/admin/DeletionRequests");
+                    return { Component: DeletionRequests.default };
+                }
+            },
+            {
                 path: "users",
                 async lazy() {
                     const Users = await import("./components/routes/admin/Users");
@@ -212,6 +219,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Messages = await import("./components/routes/admin/Messages");
                     return { Component: Messages.default };
+                }
+            },
+            {
+                path: "announcements",
+                async lazy() {
+                    const Announcements = await import("./components/routes/admin/Announcements");
+                    return { Component: Announcements.default };
                 }
             }
         ]
@@ -260,10 +274,10 @@ export const router: RouteObject[] = [
                         }
                     },
                     {
-                        path: "payment",
+                        path: "danger-zone",
                         async lazy() {
-                            const PaymentSettings = await import("./components/routes/account/ManageAccount/sections/PaymentSettings");
-                            return { Component: PaymentSettings.default };
+                            const DangerZone = await import("./components/routes/account/ManageAccount/sections/DangerZone");
+                            return { Component: DangerZone.default };
                         }
                     },
                 ]
@@ -314,6 +328,20 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "locations",
+                async lazy() {
+                    const Locations = await import("./components/routes/organizer/Locations");
+                    return { Component: Locations.default };
+                }
+            },
+            {
+                path: "payments",
+                async lazy() {
+                    const PaymentsRedirect = await import("./components/routes/organizer/Payments/Redirect");
+                    return { Component: PaymentsRedirect.default };
+                }
+            },
+            {
                 path: "reports",
                 async lazy() {
                     const OrganizerReports = await import("./components/routes/organizer/Reports");
@@ -350,6 +378,10 @@ export const router: RouteObject[] = [
                     const EventDashboard = await import("./components/routes/event/EventDashboard");
                     return { Component: EventDashboard.default };
                 }
+            },
+            {
+                path: "getting-started",
+                element: <Navigate to="../dashboard" replace={true} />
             },
             {
                 path: "reports",
@@ -450,17 +482,31 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "getting-started",
-                async lazy() {
-                    const GettingStarted = await import("./components/routes/event/GettingStarted");
-                    return { Component: GettingStarted.default };
-                }
-            },
-            {
                 path: "sold-out-waitlist",
                 async lazy() {
                     const SoldOutWaitlist = await import("./components/routes/event/SoldOutWaitlist");
                     return { Component: SoldOutWaitlist.default };
+                }
+            },
+            {
+                path: "occurrences",
+                async lazy() {
+                    const OccurrencesTab = await import("./components/routes/event/OccurrencesTab");
+                    return {Component: OccurrencesTab.default};
+                }
+            },
+            {
+                path: "occurrences/calendar",
+                async lazy() {
+                    const OccurrencesTab = await import("./components/routes/event/OccurrencesTab");
+                    return {Component: OccurrencesTab.default};
+                }
+            },
+            {
+                path: "occurrences/:occurrenceId",
+                async lazy() {
+                    const OccurrenceDetail = await import("./components/routes/event/OccurrenceDetail");
+                    return {Component: OccurrenceDetail.default};
                 }
             },
             {

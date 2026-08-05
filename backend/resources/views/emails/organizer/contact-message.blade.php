@@ -11,6 +11,8 @@
 
 {{ __('You have received a new message from') }} **{{ $senderName }}** ({{ $senderEmail }}).
 
+<b>{{ __('This message was submitted through your organizer contact form and may contain spam, suspicious links or malicious content. Please exercise caution when opening links, downloading attachments or replying.') }}</b>
+
 <div style="border-radius: 5px; background-color: #eeeeee; margin: 10px 0; padding: 20px;">
 
 {!! nl2br(e($messageContent)) !!}

@@ -9,11 +9,9 @@ use Spatie\LaravelData\Data;
 class CreateAttendeeCheckInPublicDTO extends Data
 {
     public function __construct(
-        public string     $checkInListUuid,
-        public string     $checkInUserIpAddress,
+        public string $checkInListUuid,
+        public string $checkInUserIpAddress,
         #[DataCollectionOf(AttendeeAndActionDTO::class)]
         public Collection $attendeesAndActions,
-    )
-    {
-    }
+    ) {}
 }

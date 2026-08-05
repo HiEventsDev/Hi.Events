@@ -1,37 +1,36 @@
-/* QuestionAndAnswerList.module.scss */
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--mantine-spacing-lg);
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--mantine-spacing-sm);
 }
 
 .sectionHeader {
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--mantine-spacing-xs);
   border-bottom: 1px solid var(--mantine-color-gray-2);
 }
 
 .questionsList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--mantine-spacing-md);
 }
 
 .questionCard {
-  padding: 0.75rem;
-  background: #ffffff;
+  padding: var(--mantine-spacing-md);
+  background-color: var(--mantine-color-body);
   border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--mantine-radius-md);
 }
 
 .questionCompact {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--mantine-color-gray-1);
+  padding: var(--mantine-spacing-xs) 0;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
 
   &:last-child {
     border-bottom: none;
@@ -39,97 +38,79 @@
 }
 
 .productTitle {
-  color: var(--mantine-color-gray-6);
-  margin-bottom: 0.5rem;
+  color: var(--mantine-color-dimmed);
+  margin-bottom: var(--mantine-spacing-xs);
   font-size: var(--mantine-font-size-xs);
 }
 
 .questionTitle {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.375rem;
+  gap: var(--mantine-spacing-xs);
+  margin-bottom: 4px;
   align-items: flex-start;
 }
 
 .answerContainer {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: var(--mantine-spacing-xs);
 }
 
 .answer {
   flex: 1;
-  color: var(--mantine-color-dark-6);
+  color: var(--mantine-color-text);
   word-break: break-word;
 }
 
 .editContainer {
-  padding: 0.5rem;
-  background: var(--mantine-color-gray-0);
+  padding: var(--mantine-spacing-sm);
+  background-color: var(--mantine-color-gray-0);
   border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--mantine-radius-md);
 }
 
 .editActions {
-  margin-top: 0.5rem;
+  margin-top: var(--mantine-spacing-xs);
 }
 
 .attendeeInfo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.625rem;
-  padding-top: 0.625rem;
-  border-top: 1px solid var(--mantine-color-gray-1);
-  color: var(--mantine-color-gray-6);
-}
-
-.emptyState {
-  padding: 1.5rem;
-  text-align: center;
+  gap: var(--mantine-spacing-xs);
+  margin-top: var(--mantine-spacing-sm);
+  padding-top: var(--mantine-spacing-sm);
+  border-top: 1px solid var(--mantine-color-gray-2);
+  color: var(--mantine-color-dimmed);
 }
 
 .questionText {
-  color: #333;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 4px;
+  color: var(--mantine-color-dimmed);
+  font-weight: 500;
 }
 
-/* New styles for attendee-focused layout */
 .attendeeQuestionsList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--mantine-spacing-sm);
 }
 
 .attendeeSection {
-  border: 1px solid var(--mantine-color-gray-3);
-  border-radius: var(--mantine-radius-sm);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-md);
   overflow: hidden;
-  background: var(--mantine-color-gray-0);
 }
 
 .attendeeHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  background-color: var(--mantine-color-gray-1);
-  border-bottom: 1px solid var(--mantine-color-gray-3);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  background-color: var(--mantine-color-gray-0);
+  border-bottom: 1px solid var(--mantine-color-gray-2);
 }
 
 .attendeeQuestions {
-  padding: 0.5rem;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-}
-
-/* In compact mode, adjust spacing in attendee sections */
-.questionCompact:first-child {
-  padding-top: 0.25rem;
-}
-
-.questionCompact:last-child {
-  padding-bottom: 0.25rem;
 }

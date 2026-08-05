@@ -9,6 +9,4 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 /**
  * @extends RepositoryInterface<ProductPriceDomainObject>
  */
-interface ProductPriceRepositoryInterface extends RepositoryInterface
-{
-}
+interface ProductPriceRepositoryInterface extends RepositoryInterface {}

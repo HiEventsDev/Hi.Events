@@ -26,6 +26,6 @@ class EmailHelper
             $local = preg_replace('/\+.*$/', '', $local);
         }
 
-        return $local . '@' . $domain;
+        return $local.'@'.$domain;
     }
 }

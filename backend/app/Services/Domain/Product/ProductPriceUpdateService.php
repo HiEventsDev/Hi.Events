@@ -18,9 +18,7 @@ class ProductPriceUpdateService
 {
     public function __construct(
         private readonly ProductPriceRepository $productPriceRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException
@@ -28,12 +26,11 @@ class ProductPriceUpdateService
      */
     public function updatePrices(
         ProductDomainObject $product,
-        UpsertProductDTO    $productsData,
+        UpsertProductDTO $productsData,
         /** @var Collection<ProductPriceDomainObject> $existingPrices */
-        Collection          $existingPrices,
-        EventDomainObject   $event,
-    ): void
-    {
+        Collection $existingPrices,
+        EventDomainObject $event,
+    ): void {
         $this->validateQuantityAvailable($productsData->prices, $existingPrices);
 
         if ($productsData->type !== ProductPriceType::TIERED) {
@@ -105,7 +102,7 @@ class ProductPriceUpdateService
             }
 
             /** @var ProductPriceDomainObject|null $existingPrice */
-            $existingPrice = $existingPrices->first(fn(ProductPriceDomainObject $p) => $p->getId() === $price->id);
+            $existingPrice = $existingPrices->first(fn (ProductPriceDomainObject $p) => $p->getId() === $price->id);
 
             if ($existingPrice === null) {
                 continue;
@@ -130,7 +127,7 @@ class ProductPriceUpdateService
      */
     private function deletePrices(?Collection $prices, Collection $existingPrices): void
     {
-        $pricesIds = $prices?->map(fn($price) => $price->id)->toArray();
+        $pricesIds = $prices?->map(fn ($price) => $price->id)->toArray();
 
         $existingPrices->each(function (ProductPriceDomainObject $price) use ($pricesIds) {
             if (in_array($price->getId(), $pricesIds, true)) {

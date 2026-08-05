@@ -15,11 +15,9 @@ class UpdateEventSettingsHandler
 {
     public function __construct(
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly HtmlPurifierService              $purifier,
-        private readonly DatabaseManager                  $databaseManager,
-    )
-    {
-    }
+        private readonly HtmlPurifierService $purifier,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -54,9 +52,6 @@ class UpdateEventSettingsHandler
                     'order_timeout_in_minutes' => $settings->order_timeout_in_minutes,
                     'website_url' => trim($settings->website_url),
                     'maps_url' => trim($settings->maps_url),
-                    'location_details' => $settings->location_details?->toArray(),
-                    'is_online_event' => $settings->is_online_event,
-                    'online_event_connection_details' => $this->purifier->purify($settings->online_event_connection_details),
 
                     'seo_title' => $settings->seo_title,
                     'seo_description' => $settings->seo_description,
@@ -64,7 +59,6 @@ class UpdateEventSettingsHandler
                     'allow_search_engine_indexing' => $settings->allow_search_engine_indexing,
                     'notify_organizer_of_new_orders' => $settings->notify_organizer_of_new_orders,
                     'price_display_mode' => $settings->price_display_mode->name,
-                    'hide_getting_started_page' => $settings->hide_getting_started_page,
 
                     // Payment settings
                     'payment_providers' => $settings->payment_providers,
@@ -101,6 +95,10 @@ class UpdateEventSettingsHandler
                     // Self-service settings
                     'allow_attendee_self_edit' => $settings->allow_attendee_self_edit,
 
+                    // Occurrence display
+                    'show_available_occurrence_capacity' => $settings->show_available_occurrence_capacity,
+                    'hide_sold_out_occurrences' => $settings->hide_sold_out_occurrences,
+
                     // Waitlist settings
                     'waitlist_auto_process' => $settings->waitlist_auto_process,
                     'waitlist_offer_timeout_minutes' => $settings->waitlist_offer_timeout_minutes,
@@ -116,7 +114,7 @@ class UpdateEventSettingsHandler
                 ]);
         });
 
-        if ($settings->waitlist_auto_process && !$wasAutoProcessEnabled) {
+        if ($settings->waitlist_auto_process && ! $wasAutoProcessEnabled) {
             event(new CapacityChangedEvent(
                 eventId: $settings->event_id,
                 direction: CapacityChangeDirection::INCREASED,

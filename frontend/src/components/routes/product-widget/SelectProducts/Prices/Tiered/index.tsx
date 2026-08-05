@@ -1,5 +1,5 @@
 import {Currency, ProductPriceDisplay} from "../../../../../common/Currency";
-import {Event, Product} from "../../../../../../types.ts";
+import {Event, IdParam, Product} from "../../../../../../types.ts";
 import {Group, TextInput} from "@mantine/core";
 import {NumberSelector} from "../../../../../common/NumberSelector";
 import {UseFormReturnType} from "@mantine/form";
@@ -12,9 +12,10 @@ interface TieredPricingProps {
     product: Product;
     form: UseFormReturnType<any>;
     productIndex: number;
+    eventOccurrenceId?: IdParam;
 }
 
-export const TieredPricing = ({product, event, form, productIndex}: TieredPricingProps) => {
+export const TieredPricing = ({product, event, form, productIndex, eventOccurrenceId}: TieredPricingProps) => {
     return (
         <>
             {product?.prices?.map((price, index) => {
@@ -74,7 +75,7 @@ export const TieredPricing = ({product, event, form, productIndex}: TieredPricin
                                     </>
                                 )}
                                 {(!product.is_available || !price.is_available) && (
-                                    <ProductPriceAvailability product={product} price={price} event={event}/>
+                                    <ProductPriceAvailability product={product} price={price} event={event} eventOccurrenceId={eventOccurrenceId}/>
                                 )}
                             </div>
                         </Group>

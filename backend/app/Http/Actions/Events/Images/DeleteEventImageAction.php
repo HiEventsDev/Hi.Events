@@ -10,9 +10,7 @@ use Illuminate\Http\Response;
 
 class DeleteEventImageAction extends BaseAction
 {
-    public function __construct(private readonly DeleteEventImageHandler $deleteEventImageHandler)
-    {
-    }
+    public function __construct(private readonly DeleteEventImageHandler $deleteEventImageHandler) {}
 
     public function __invoke(int $eventId, int $imageId): Response
     {

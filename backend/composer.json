@@ -4,9 +4,9 @@
     "description": "hi.events - Ticket selling and event management.",
     "keywords": ["ticketing", "events"],
     "license": "AGPL-3.0",
-    "version": "1.11.0-beta",
+    "version": "2.0.0-alpha.1",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "ext-intl": "*",
         "ext-xmlwriter": "*",
         "barryvdh/laravel-dompdf": "^3.0",
@@ -15,13 +15,13 @@
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.2",
         "lab404/laravel-impersonate": "^1.7",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.8",
+        "laravel/tinker": "^3.0",
         "laravel/vapor-core": "^2.37",
         "league/flysystem-aws-s3-v3": "^3.0",
         "liquid/liquid": "^1.4",
-        "maatwebsite/excel": "^3.1",
+        "maatwebsite/excel": "4.x-dev",
         "nette/php-generator": "^4.0",
         "php-open-source-saver/jwt-auth": "^2.1",
         "sentry/sentry-laravel": "^4.13",
@@ -36,14 +36,14 @@
         "ext-imagick": "Required for image dimension extraction and LQIP generation"
     },
     "require-dev": {
-        "druc/laravel-langscanner": "dev-l12-compatibility",
+        "druc/laravel-langscanner": "dev-l13-compatibility",
         "fakerphp/faker": "^1.9.1",
         "gettext/gettext": "^5.7",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.22",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^12.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -82,12 +82,15 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform": {
+            "php": "8.3.0"
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
         {

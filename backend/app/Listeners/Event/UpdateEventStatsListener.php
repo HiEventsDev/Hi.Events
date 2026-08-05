@@ -9,7 +9,7 @@ class UpdateEventStatsListener
 {
     public function handle(OrderStatusChangedEvent $changedEvent): void
     {
-        if (!$changedEvent->order->isOrderCompleted()) {
+        if (! $changedEvent->order->isOrderCompleted()) {
             return;
         }
 

@@ -3,22 +3,33 @@
 
     .separator {
       height: 1px;
-      margin: 7px 0;
+      margin: var(--mantine-spacing-xs) 0;
       width: 100%;
-      border-bottom: 1px solid #ddd;
+      background-color: var(--mantine-color-gray-2);
     }
 
     .itemRow {
       display: flex;
-      align-content: center;
+      align-items: baseline;
       justify-content: space-between;
-      padding: 10px 0;
+      gap: var(--mantine-spacing-md);
+      padding: 6px 0;
+      font-size: var(--mantine-font-size-sm);
 
       .itemName {
         text-align: left;
+        min-width: 0;
+        color: var(--mantine-color-text);
 
         .total {
-          font-size: 1.1em;
+          font-weight: 600;
+          color: var(--mantine-color-text);
+        }
+
+        .occurrenceMeta {
+          margin-top: 3px;
+          font-size: var(--mantine-font-size-xs);
+          color: var(--mantine-color-dimmed);
         }
       }
 
@@ -26,7 +37,23 @@
         text-align: right;
         font-weight: 500;
         white-space: nowrap;
+        color: var(--mantine-color-text);
       }
     }
+
+    .itemRow:last-child {
+      font-size: 0.9375rem;
+
+      .itemValue {
+        font-weight: 600;
+      }
+    }
+  }
+
+  .priceBeforeDiscount {
+    display: inline-block;
+    margin-right: 5px;
+    color: var(--mantine-color-dimmed);
+    font-weight: 400;
   }
 }

@@ -25,7 +25,7 @@ abstract class BaseAuthAction extends BaseAction
 
     protected function addTokenToResponse(JsonResponse|Response $response, ?string $token): JsonResponse
     {
-        if (!$token) {
+        if (! $token) {
             return $response;
         }
 

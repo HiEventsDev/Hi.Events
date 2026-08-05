@@ -9,9 +9,7 @@ class PromoCodeUsageValidationService
 {
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Usage is derived from a live count of orders currently holding the code
@@ -20,7 +18,7 @@ class PromoCodeUsageValidationService
      */
     public function isPromoCodeUsable(?PromoCodeDomainObject $promoCode): bool
     {
-        if (!$promoCode?->isValid()) {
+        if (! $promoCode?->isValid()) {
             return false;
         }
 

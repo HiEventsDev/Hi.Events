@@ -15,7 +15,7 @@ class LogoutAction
         $cookie = Cookie::forget('token');
 
         return (new Response([
-            'message' => __('Logout Successful')
+            'message' => __('Logout Successful'),
         ]))
             ->withCookie($cookie);
     }

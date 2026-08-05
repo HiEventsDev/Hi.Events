@@ -7,7 +7,4 @@ use HiEvents\DomainObjects\OrderPaymentPlatformFeeDomainObject;
 /**
  * @extends RepositoryInterface<OrderPaymentPlatformFeeDomainObject>
  */
-interface OrderPaymentPlatformFeeRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface OrderPaymentPlatformFeeRepositoryInterface extends RepositoryInterface {}

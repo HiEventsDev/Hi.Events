@@ -2,9 +2,12 @@
 
 namespace HiEvents\Services\Application\Handlers\Event;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\EventStatisticDomainObject;
 use HiEvents\DomainObjects\ImageDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -17,13 +20,19 @@ class GetEventsHandler
 {
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetEventsDTO $dto): LengthAwarePaginator
     {
         return $this->eventRepository
+            ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+            ]))
+            ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]),
+            ]))
             ->loadRelation(new Relationship(ImageDomainObject::class))
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(EventStatisticDomainObject::class))

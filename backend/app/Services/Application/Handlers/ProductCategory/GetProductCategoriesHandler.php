@@ -17,10 +17,8 @@ class GetProductCategoriesHandler
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
-        private readonly ProductFilterService               $productFilterService,
-    )
-    {
-    }
+        private readonly ProductFilterService $productFilterService,
+    ) {}
 
     public function handle(int $eventId): Collection
     {

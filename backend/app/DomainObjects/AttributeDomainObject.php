@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class AttributeDomainObject extends Generated\AttributeDomainObjectAbstract
-{
-}
+class AttributeDomainObject extends Generated\AttributeDomainObjectAbstract {}

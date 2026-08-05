@@ -18,11 +18,20 @@ class CheckInSummaryReport extends AbstractOrganizerReportService
                 FROM events
                 WHERE organizer_id = :organizer_id
                     AND deleted_at IS NULL
+            ),
+            event_dates AS (
+                SELECT
+                    eo.event_id,
+                    MIN(eo.start_date) AS start_date
+                FROM event_occurrences eo
+                WHERE eo.event_id IN (SELECT id FROM organizer_events)
+                    AND eo.deleted_at IS NULL
+                GROUP BY eo.event_id
             )
             SELECT
                 e.id AS event_id,
                 e.title AS event_name,
-                e.start_date,
+                ed.start_date,
                 COALESCE(attendee_counts.total_attendees, 0) AS total_attendees,
                 COALESCE(checkin_counts.total_checked_in, 0) AS total_checked_in,
                 CASE
@@ -31,6 +40,7 @@ class CheckInSummaryReport extends AbstractOrganizerReportService
                 END AS check_in_rate,
                 COALESCE(list_counts.check_in_lists_count, 0) AS check_in_lists_count
             FROM events e
+            LEFT JOIN event_dates ed ON e.id = ed.event_id
             LEFT JOIN (
                 SELECT
                     event_id,
@@ -61,7 +71,7 @@ class CheckInSummaryReport extends AbstractOrganizerReportService
             ) list_counts ON e.id = list_counts.event_id
             WHERE e.organizer_id = :organizer_id
                 AND e.deleted_at IS NULL
-            ORDER BY e.start_date DESC NULLS LAST
+            ORDER BY ed.start_date DESC NULLS LAST
 SQL;
     }
 }

@@ -10,7 +10,5 @@ class UpdateOrganizerStatusDTO extends BaseDTO
         public string $status,
         public int $organizerId,
         public int $accountId,
-    )
-    {
-    }
+    ) {}
 }

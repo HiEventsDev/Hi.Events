@@ -7,7 +7,4 @@ use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
 /**
  * @extends RepositoryInterface<QuestionAndAnswerViewDomainObject>
  */
-interface QuestionAndAnswerViewRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface QuestionAndAnswerViewRepositoryInterface extends RepositoryInterface {}

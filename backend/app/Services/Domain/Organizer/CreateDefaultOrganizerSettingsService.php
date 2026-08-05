@@ -11,9 +11,7 @@ class CreateDefaultOrganizerSettingsService
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository
-    )
-    {
-    }
+    ) {}
 
     public function createOrganizerSettings(OrganizerDomainObject $organizer): void
     {

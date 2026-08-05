@@ -11,12 +11,10 @@ use Throwable;
 readonly class DeleteQuestionHandler
 {
     public function __construct(
-        private QuestionRepositoryInterface       $questionRepository,
+        private QuestionRepositoryInterface $questionRepository,
         private QuestionAnswerRepositoryInterface $questionAnswersRepository,
-        private DatabaseManager                   $databaseManager,
-    )
-    {
-    }
+        private DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException

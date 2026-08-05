@@ -26,8 +26,8 @@ class GetUserAction extends BaseAction
 
         $user = $this->userRepository->findByIdAndAccountId($userId, $this->getAuthenticatedAccountId());
 
-        if (!$user) {
-            throw new ResourceNotFoundException();
+        if (! $user) {
+            throw new ResourceNotFoundException;
         }
 
         return $this->resourceResponse(

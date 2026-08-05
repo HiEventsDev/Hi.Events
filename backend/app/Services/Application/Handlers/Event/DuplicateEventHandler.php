@@ -11,9 +11,7 @@ class DuplicateEventHandler
 {
     public function __construct(
         private readonly DuplicateEventService $duplicateEventService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -35,6 +33,7 @@ class DuplicateEventHandler
             duplicateTicketLogo: $data->duplicateTicketLogo,
             duplicateWebhooks: $data->duplicateWebhooks,
             duplicateAffiliates: $data->duplicateAffiliates,
+            duplicateOccurrences: $data->duplicateOccurrences,
             description: $data->description,
             endDate: $data->endDate,
         );

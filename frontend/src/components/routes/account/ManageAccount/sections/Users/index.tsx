@@ -16,6 +16,7 @@ import {useResendUserInvitation} from "../../../../../../mutations/useResendUser
 import {showError, showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useDeleteUserInvitation} from "../../../../../../mutations/useDeleteUserInvitation.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
+import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
 
 const Users = () => {
     const usersQuery = useGetUsers();
@@ -46,16 +47,18 @@ const Users = () => {
     }
 
     const handleRevokeInvitation = (user: User) => {
-        revokeInvitationMutation.mutate({
-            userId: user.id,
-        }, {
-            onSuccess: () => {
-                showSuccess(t`Invitation revoked!`);
-            },
-            onError: (error) => {
-                console.error(error);
-                showError(t`Something went wrong! Please try again`);
-            }
+        confirmationDialog(t`Are you sure you want to revoke this invitation?`, () => {
+            revokeInvitationMutation.mutate({
+                userId: user.id,
+            }, {
+                onSuccess: () => {
+                    showSuccess(t`Invitation revoked!`);
+                },
+                onError: (error) => {
+                    console.error(error);
+                    showError(t`Something went wrong! Please try again`);
+                }
+            });
         });
     }
 
@@ -143,6 +146,7 @@ const Users = () => {
                 subHeading={t`Manage your users and their permissions`}
                 buttonText={t`Invite User`}
                 buttonAction={openCreateModal}
+                buttonDataTestId="team-invite-button"
             />
 
             <Card style={{padding: 0, position: 'relative'}}>

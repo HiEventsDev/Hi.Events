@@ -2,6 +2,8 @@
 
 namespace HiEvents\Services\Domain\Event;
 
+use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\ImageType;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
@@ -13,6 +15,8 @@ use HiEvents\Exceptions\OrganizerNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Helper\StringHelper;
+use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
@@ -27,34 +31,35 @@ use Throwable;
 class CreateEventService
 {
     public function __construct(
-        private readonly EventRepositoryInterface          $eventRepository,
-        private readonly EventSettingsRepositoryInterface  $eventSettingsRepository,
-        private readonly OrganizerRepositoryInterface      $organizerRepository,
-        private readonly DatabaseManager                   $databaseManager,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly EventStatisticRepositoryInterface $eventStatisticsRepository,
-        private readonly HtmlPurifierService               $purifier,
-        private readonly ImageRepositoryInterface          $imageRepository,
-        private readonly Repository                        $config,
-        private readonly FilesystemManager                 $filesystemManager,
-    )
-    {
-    }
+        private readonly HtmlPurifierService $purifier,
+        private readonly ImageRepositoryInterface $imageRepository,
+        private readonly Repository $config,
+        private readonly FilesystemManager $filesystemManager,
+        private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function createEvent(
-        EventDomainObject         $eventData,
-        ?EventSettingDomainObject $eventSettings = null
-    ): EventDomainObject
-    {
-        return $this->databaseManager->transaction(function () use ($eventData, $eventSettings) {
+        EventDomainObject $eventData,
+        ?string $startDate = null,
+        ?string $endDate = null,
+        ?EventSettingDomainObject $eventSettings = null,
+    ): EventDomainObject {
+        return $this->databaseManager->transaction(function () use ($eventData, $startDate, $endDate, $eventSettings) {
             $organizer = $this->getOrganizer(
                 organizerId: $eventData->getOrganizerId(),
                 accountId: $eventData->getAccountId()
             );
 
-            $event = $this->handleEventCreate($eventData);
+            $event = $this->handleEventCreate($eventData, $startDate, $endDate);
 
             $eventCoverCreated = $this->createEventCover($event);
 
@@ -67,8 +72,23 @@ class CreateEventService
 
             $this->createEventStatistics($event);
 
+            $this->createSystemDefaultCheckInList($event);
+
             return $event;
         });
+    }
+
+    private function createSystemDefaultCheckInList(EventDomainObject $event): void
+    {
+        $this->checkInListRepository->create([
+            'event_id' => $event->getId(),
+            'short_id' => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+            'name' => __('Default check-in'),
+            'is_system_default' => true,
+            'public_show_attendee_notes' => false,
+            'public_show_question_answers' => false,
+            'public_show_order_details' => false,
+        ]);
     }
 
     /**
@@ -92,26 +112,37 @@ class CreateEventService
         return $organizer;
     }
 
-    private function handleEventCreate(EventDomainObject $eventData): EventDomainObject
+    private function handleEventCreate(EventDomainObject $eventData, ?string $startDate = null, ?string $endDate = null): EventDomainObject
     {
-        return $this->eventRepository->create([
+        $event = $this->eventRepository->create([
             'title' => StringHelper::stripControlCharacters($eventData->getTitle()),
             'organizer_id' => $eventData->getOrganizerId(),
-            'start_date' => DateHelper::convertToUTC($eventData->getStartDate(), $eventData->getTimezone()),
-            'end_date' => $eventData->getEndDate()
-                ? DateHelper::convertToUTC($eventData->getEndDate(), $eventData->getTimezone())
-                : null,
             'description' => $this->purifier->purify($eventData->getDescription()),
             'timezone' => $eventData->getTimezone(),
             'currency' => $eventData->getCurrency(),
             'category' => $eventData->getCategory(),
-            'location_details' => $eventData->getLocationDetails(),
             'account_id' => $eventData->getAccountId(),
             'user_id' => $eventData->getUserId(),
             'status' => $eventData->getStatus(),
             'short_id' => IdHelper::shortId(IdHelper::EVENT_PREFIX),
             'attributes' => $eventData->getAttributes(),
+            'type' => $eventData->getType() ?? EventType::SINGLE->name,
+            'recurrence_rule' => $eventData->getRecurrenceRule(),
         ]);
+
+        if (($eventData->getType() ?? EventType::SINGLE->name) === EventType::SINGLE->name && $startDate !== null) {
+            $this->occurrenceRepository->create([
+                'event_id' => $event->getId(),
+                'short_id' => IdHelper::shortId(IdHelper::OCCURRENCE_PREFIX),
+                'start_date' => DateHelper::convertToUTC($startDate, $eventData->getTimezone()),
+                'end_date' => $endDate ? DateHelper::convertToUTC($endDate, $eventData->getTimezone()) : null,
+                'status' => 'ACTIVE',
+                'used_capacity' => 0,
+                'is_overridden' => false,
+            ]);
+        }
+
+        return $event;
     }
 
     private function createEventStatistics(EventDomainObject $event): void
@@ -129,19 +160,16 @@ class CreateEventService
 
     /**
      * If a default cover image exists for the event category, it will be created.
-     *
-     * @param EventDomainObject $event
-     * @return bool
      */
     private function createEventCover(EventDomainObject $event): bool
     {
         $disk = $this->config->get('filesystems.public');
         $defaultCoversPath = $this->config->get('app.event_categories_cover_images_path');
 
-        $imageFilename = $event->getCategory() . '.jpg';
-        $imagePath = $defaultCoversPath . '/' . $imageFilename;
+        $imageFilename = $event->getCategory().'.jpg';
+        $imagePath = $defaultCoversPath.'/'.$imageFilename;
 
-        if (!$this->filesystemManager->disk($disk)->exists($imagePath)) {
+        if (! $this->filesystemManager->disk($disk)->exists($imagePath)) {
             return false;
         }
 
@@ -162,11 +190,10 @@ class CreateEventService
 
     private function createEventSettings(
         ?EventSettingDomainObject $eventSettings,
-        EventDomainObject         $event,
-        OrganizerDomainObject     $organizer,
-        bool                      $eventCoverCreated = false
-    ): void
-    {
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
+        bool $eventCoverCreated = false
+    ): void {
         if ($eventSettings !== null) {
             $eventSettings->setEventId($event->getId());
             $eventSettingsArray = $eventSettings->toArray();
@@ -191,7 +218,7 @@ class CreateEventService
                 : ($organizerThemeSettings['background_type'] ?? HomepageBackgroundType::COLOR->name),
         ];
 
-        if (!empty($organizerThemeSettings['font_family'])) {
+        if (! empty($organizerThemeSettings['font_family'])) {
             $homepageThemeSettings['font_family'] = $organizerThemeSettings['font_family'];
         }
 
@@ -225,7 +252,9 @@ class CreateEventService
             'organization_address' => null,
             'invoice_tax_details' => null,
 
-            'attendee_details_collection_method' => $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
+            'attendee_details_collection_method' => $event->getType() === EventType::RECURRING->name
+                ? AttendeeDetailsCollectionMethod::PER_ORDER->value
+                : $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
             'allow_copy_details_to_all_attendees' => true,
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),

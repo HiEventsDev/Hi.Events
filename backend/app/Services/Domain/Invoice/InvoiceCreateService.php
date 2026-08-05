@@ -7,7 +7,6 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
-use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -15,15 +14,10 @@ use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 class InvoiceCreateService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface   $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
-    )
-    {
-    }
+    ) {}
 
-    /**
-     * @throws ResourceConflictException
-     */
     public function createInvoiceForOrder(int $orderId): InvoiceDomainObject
     {
         $existingInvoice = $this->invoiceRepository->findFirstWhere([
@@ -31,7 +25,7 @@ class InvoiceCreateService
         ]);
 
         if ($existingInvoice) {
-            throw new ResourceConflictException(__('Invoice already exists'));
+            return $existingInvoice;
         }
 
         $order = $this->orderRepository
@@ -50,14 +44,14 @@ class InvoiceCreateService
             'order_id' => $orderId,
             'account_id' => $event->getAccountId(),
             'invoice_number' => $this->getLatestInvoiceNumber($event->getId(), $eventSettings),
-            'items' => collect($order->getOrderItems())->map(fn(OrderItemDomainObject $item) => $item->toArray())->toArray(),
+            'items' => collect($order->getOrderItems())->map(fn (OrderItemDomainObject $item) => $item->toArray())->toArray(),
             'taxes_and_fees' => $order->getTaxesAndFeesRollup(),
             'issue_date' => now()->toDateString(),
             'status' => $order->isOrderCompleted() ? InvoiceStatus::PAID->name : InvoiceStatus::UNPAID->name,
             'total_amount' => $order->getTotalGross(),
             'due_date' => $eventSettings->getInvoicePaymentTermsDays() !== null
                 ? now()->addDays($eventSettings->getInvoicePaymentTermsDays())
-                : null
+                : null,
         ]);
     }
 
@@ -68,12 +62,12 @@ class InvoiceCreateService
         $startNumber = $eventSettings->getInvoiceStartNumber() ?? 1;
         $prefix = $eventSettings->getInvoicePrefix() ?? '';
 
-        if (!$latestInvoice) {
-            return $prefix . $startNumber;
+        if (! $latestInvoice) {
+            return $prefix.$startNumber;
         }
 
-        $nextInvoiceNumber = (int)preg_replace('/\D+/', '', $latestInvoice->getInvoiceNumber()) + 1;
+        $nextInvoiceNumber = (int) preg_replace('/\D+/', '', $latestInvoice->getInvoiceNumber()) + 1;
 
-        return $prefix . $nextInvoiceNumber;
+        return $prefix.$nextInvoiceNumber;
     }
 }

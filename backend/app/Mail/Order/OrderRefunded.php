@@ -17,13 +17,12 @@ use Illuminate\Mail\Mailables\Envelope;
 class OrderRefunded extends BaseMail
 {
     public function __construct(
-        private readonly OrderDomainObject        $order,
-        private readonly EventDomainObject        $event,
-        private readonly OrganizerDomainObject    $organizer,
+        private readonly OrderDomainObject $order,
+        private readonly EventDomainObject $event,
+        private readonly OrganizerDomainObject $organizer,
         private readonly EventSettingDomainObject $eventSettings,
-        private readonly MoneyValue               $refundAmount,
-    )
-    {
+        private readonly MoneyValue $refundAmount,
+    ) {
         parent::__construct();
     }
 

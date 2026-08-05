@@ -1,55 +1,90 @@
 @use "../../../styles/mixins";
 
-.card {
+.toolbar {
   container-type: inline-size;
   margin-bottom: 1rem;
+}
 
-  .wrapper {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    place-content: space-between;
+.rowPrimary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    @include mixins.respond-below(sm, true) {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-    }
+  @include mixins.respond-below(sm, true) {
+    flex-wrap: wrap;
+  }
+}
 
-    .searchBar {
-      margin-bottom: 0 !important;
-      width: 100%;
-      flex: 1;
-      min-width: 0; // Prevents flex item from overflowing
-    }
+.searchSlot {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0 !important;
 
-    .filterAndActions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      place-self: flex-end;
+  @include mixins.respond-below(sm, true) {
+    flex-basis: 100%;
+  }
+}
 
-      @include mixins.respond-below(sm, true) {
-        width: 100%;
-        justify-content: flex-end;
-      }
-    }
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
 
-    .filter {
-      display: flex;
-      align-items: center;
-    }
+  @include mixins.respond-below(sm, true) {
+    width: 100%;
+    margin-left: 0;
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      place-self: flex-end;
-      flex-wrap: wrap;
+    > * {
+      flex: 1 1 auto;
+      min-width: 0;
     }
   }
+}
 
-  button {
-    height: 42px !important;
+.rowFilters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  flex-wrap: wrap;
+}
+
+.filterSlot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @include mixins.respond-below(sm, true) {
+    width: 100%;
+
+    > * {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    :global(.mantine-Group-root) {
+      width: 100%;
+
+      > * {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+    }
+  }
+}
+
+.resultCount {
+  font-size: 12px;
+  color: var(--mantine-color-dimmed);
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+
+  @include mixins.respond-below(md) {
+    display: none;
   }
 }

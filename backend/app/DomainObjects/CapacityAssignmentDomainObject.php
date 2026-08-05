@@ -51,7 +51,7 @@ class CapacityAssignmentDomainObject extends Generated\CapacityAssignmentDomainO
 
     public function getPercentageUsed(): float
     {
-        if (!$this->getCapacity()) {
+        if (! $this->getCapacity()) {
             return 0;
         }
 

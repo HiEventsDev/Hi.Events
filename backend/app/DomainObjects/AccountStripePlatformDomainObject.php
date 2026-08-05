@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class AccountStripePlatformDomainObject extends Generated\AccountStripePlatformDomainObjectAbstract
-{
-}
+class AccountStripePlatformDomainObject extends Generated\AccountStripePlatformDomainObjectAbstract {}

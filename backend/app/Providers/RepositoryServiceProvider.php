@@ -6,23 +6,29 @@ namespace HiEvents\Providers;
 
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
+use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
-use HiEvents\Repository\Eloquent\AccountStripePlatformRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
-use HiEvents\Repository\Eloquent\AccountVatSettingRepository;
 use HiEvents\Repository\Eloquent\AffiliateRepository;
+use HiEvents\Repository\Eloquent\AnnouncementRepository;
+use HiEvents\Repository\Eloquent\AnnouncementUserRepository;
 use HiEvents\Repository\Eloquent\AttendeeCheckInRepository;
 use HiEvents\Repository\Eloquent\AttendeeRepository;
 use HiEvents\Repository\Eloquent\CapacityAssignmentRepository;
 use HiEvents\Repository\Eloquent\CheckInListRepository;
 use HiEvents\Repository\Eloquent\EmailTemplateRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
+use HiEvents\Repository\Eloquent\EventLocationRepository;
+use HiEvents\Repository\Eloquent\EventOccurrenceDailyStatisticRepository;
+use HiEvents\Repository\Eloquent\EventOccurrenceRepository;
+use HiEvents\Repository\Eloquent\EventOccurrenceStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
+use HiEvents\Repository\Eloquent\LocationRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
 use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
 use HiEvents\Repository\Eloquent\OrderAuditLogRepository;
@@ -30,12 +36,17 @@ use HiEvents\Repository\Eloquent\OrderItemRepository;
 use HiEvents\Repository\Eloquent\OrderPaymentPlatformFeeRepository;
 use HiEvents\Repository\Eloquent\OrderRefundRepository;
 use HiEvents\Repository\Eloquent\OrderRepository;
+use HiEvents\Repository\Eloquent\OrganizerConfigurationRepository;
 use HiEvents\Repository\Eloquent\OrganizerRepository;
 use HiEvents\Repository\Eloquent\OrganizerSettingsRepository;
+use HiEvents\Repository\Eloquent\OrganizerStripePlatformRepository;
+use HiEvents\Repository\Eloquent\OrganizerVatSettingRepository;
 use HiEvents\Repository\Eloquent\OutgoingMessageRepository;
 use HiEvents\Repository\Eloquent\PasswordResetRepository;
 use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
 use HiEvents\Repository\Eloquent\ProductCategoryRepository;
+use HiEvents\Repository\Eloquent\ProductOccurrenceVisibilityRepository;
+use HiEvents\Repository\Eloquent\ProductPriceOccurrenceOverrideRepository;
 use HiEvents\Repository\Eloquent\ProductPriceRepository;
 use HiEvents\Repository\Eloquent\ProductRepository;
 use HiEvents\Repository\Eloquent\PromoCodeRepository;
@@ -53,23 +64,29 @@ use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountStripePlatformRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
+use HiEvents\Repository\Interfaces\AnnouncementRepositoryInterface;
+use HiEvents\Repository\Interfaces\AnnouncementUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeCheckInRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
+use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
@@ -77,12 +94,17 @@ use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderPaymentPlatformFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -109,6 +131,7 @@ class RepositoryServiceProvider extends ServiceProvider
         UserRepositoryInterface::class => UserRepository::class,
         AccountRepositoryInterface::class => AccountRepository::class,
         AccountAttributionRepositoryInterface::class => AccountAttributionRepository::class,
+        AccountDeletionRequestRepositoryInterface::class => AccountDeletionRequestRepository::class,
         EventRepositoryInterface::class => EventRepository::class,
         ProductRepositoryInterface::class => ProductRepository::class,
         OrderRepositoryInterface::class => OrderRepository::class,
@@ -148,11 +171,21 @@ class RepositoryServiceProvider extends ServiceProvider
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
         EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
-        AccountStripePlatformRepositoryInterface::class => AccountStripePlatformRepository::class,
-        AccountVatSettingRepositoryInterface::class => AccountVatSettingRepository::class,
+        OrganizerStripePlatformRepositoryInterface::class => OrganizerStripePlatformRepository::class,
+        OrganizerVatSettingRepositoryInterface::class => OrganizerVatSettingRepository::class,
+        OrganizerConfigurationRepositoryInterface::class => OrganizerConfigurationRepository::class,
         TicketLookupTokenRepositoryInterface::class => TicketLookupTokenRepository::class,
         AccountMessagingTierRepositoryInterface::class => AccountMessagingTierRepository::class,
+        AnnouncementRepositoryInterface::class => AnnouncementRepository::class,
+        AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,
+        EventOccurrenceStatisticRepositoryInterface::class => EventOccurrenceStatisticRepository::class,
+        EventOccurrenceDailyStatisticRepositoryInterface::class => EventOccurrenceDailyStatisticRepository::class,
+        ProductOccurrenceVisibilityRepositoryInterface::class => ProductOccurrenceVisibilityRepository::class,
+        ProductPriceOccurrenceOverrideRepositoryInterface::class => ProductPriceOccurrenceOverrideRepository::class,
+        LocationRepositoryInterface::class => LocationRepository::class,
+        EventLocationRepositoryInterface::class => EventLocationRepository::class,
     ];
 
     public function register(): void

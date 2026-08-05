@@ -14,14 +14,17 @@ use HiEvents\Services\Domain\Organizer\OrganizerDeletionService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
 use Mockery as m;
-use Tests\TestCase;
 use Psr\Log\LoggerInterface;
+use Tests\TestCase;
 
 class DeleteOrganizerHandlerTest extends TestCase
 {
     private OrganizerRepositoryInterface $organizerRepository;
+
     private EventRepositoryInterface $eventRepository;
+
     private OrderRepositoryInterface $orderRepository;
+
     private DeleteOrganizerHandler $handler;
 
     protected function setUp(): void
@@ -37,7 +40,7 @@ class DeleteOrganizerHandlerTest extends TestCase
         $eventDatabaseManager = m::mock(DatabaseManager::class);
 
         $databaseManager->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $logger->shouldReceive('info')->byDefault();
         $eventLogger->shouldReceive('info')->byDefault();
@@ -60,7 +63,7 @@ class DeleteOrganizerHandlerTest extends TestCase
         $this->handler = new DeleteOrganizerHandler($organizerDeletionService);
     }
 
-    public function testDeleteOrganizerSuccessfully(): void
+    public function test_delete_organizer_successfully(): void
     {
         $this->organizerRepository->shouldReceive('countWhere')
             ->with(['account_id' => 10])
@@ -68,7 +71,7 @@ class DeleteOrganizerHandlerTest extends TestCase
 
         $this->eventRepository->shouldReceive('findWhere')
             ->with(['organizer_id' => 1])
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
         $this->organizerRepository->shouldReceive('deleteWhere')
             ->once()
@@ -82,7 +85,7 @@ class DeleteOrganizerHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testDeleteOrganizerFailsWithCompletedOrders(): void
+    public function test_delete_organizer_fails_with_completed_orders(): void
     {
         $event = m::mock(EventDomainObject::class);
         $event->shouldReceive('getId')->andReturn(100);
@@ -106,7 +109,7 @@ class DeleteOrganizerHandlerTest extends TestCase
         $this->handler->handle($dto);
     }
 
-    public function testDeleteLastOrganizerFails(): void
+    public function test_delete_last_organizer_fails(): void
     {
         $this->organizerRepository->shouldReceive('countWhere')
             ->with(['account_id' => 10])
@@ -114,7 +117,7 @@ class DeleteOrganizerHandlerTest extends TestCase
 
         $this->eventRepository->shouldReceive('findWhere')
             ->with(['organizer_id' => 1])
-            ->andReturn(new Collection());
+            ->andReturn(new Collection);
 
         $dto = new DeleteOrganizerDTO(organizerId: 1, accountId: 10);
 

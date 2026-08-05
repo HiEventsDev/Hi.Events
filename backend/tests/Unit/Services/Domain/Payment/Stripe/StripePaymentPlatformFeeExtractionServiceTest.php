@@ -12,14 +12,19 @@ use Illuminate\Support\Facades\Config;
 use Mockery as m;
 use Psr\Log\LoggerInterface;
 use Stripe\Charge;
+use Stripe\StripeClient;
 use Tests\TestCase;
 
 class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
 {
     private StripePaymentPlatformFeeExtractionService $service;
+
     private StripeClientFactory $stripeClientFactory;
+
     private OrderPaymentPlatformFeeService $orderPaymentPlatformFeeService;
+
     private OrderPaymentPlatformFeeRepositoryInterface $orderPaymentPlatformFeeRepository;
+
     private LoggerInterface $logger;
 
     protected function setUp(): void
@@ -39,7 +44,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         );
     }
 
-    public function testExtractAndStorePlatformFeeNoBalanceTransaction(): void
+    public function test_extract_and_store_platform_fee_no_balance_transaction(): void
     {
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -72,7 +77,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
             ])
             ->once();
 
-        $stripeClient = m::mock(\Stripe\StripeClient::class);
+        $stripeClient = m::mock(StripeClient::class);
         $chargesService = m::mock();
         $stripeClient->charges = $chargesService;
 
@@ -101,7 +106,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testExtractAndStorePlatformFeeWithConnectedAccount(): void
+    public function test_extract_and_store_platform_fee_with_connected_account(): void
     {
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -134,7 +139,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
             ])
             ->once();
 
-        $stripeClient = m::mock(\Stripe\StripeClient::class);
+        $stripeClient = m::mock(StripeClient::class);
         $chargesService = m::mock();
         $stripeClient->charges = $chargesService;
 
@@ -167,7 +172,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testExtractAndStorePlatformFeeHandlesException(): void
+    public function test_extract_and_store_platform_fee_handles_exception(): void
     {
         $order = m::mock(OrderDomainObject::class);
         $order->shouldReceive('getId')->andReturn(123);
@@ -215,7 +220,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $this->service->extractAndStorePlatformFee($order, $charge, $stripePayment);
     }
 
-    public function testExtractAndStorePlatformFeeWithVatAndExchangeRate(): void
+    public function test_extract_and_store_platform_fee_with_vat_and_exchange_rate(): void
     {
         Config::set('app.tax.eu_vat_handling_enabled', true);
 
@@ -228,20 +233,20 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $stripePayment->shouldReceive('getApplicationFeeVat')->andReturn(83);
         $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(0.20);
 
-        $balanceTransaction = (object)[
+        $balanceTransaction = (object) [
             'id' => 'txn_123',
             'fee' => 1000,
             'net' => 9000,
             'currency' => 'eur',
             'exchange_rate' => 1.17,
             'fee_details' => [
-                (object)[
+                (object) [
                     'type' => 'stripe_fee',
                     'amount' => 500,
                     'currency' => 'eur',
                     'description' => 'Stripe processing fee',
                 ],
-                (object)[
+                (object) [
                     'type' => 'application_fee',
                     'amount' => 500,
                     'currency' => 'eur',
@@ -250,7 +255,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
             ],
         ];
 
-        $paymentIntent = (object)[
+        $paymentIntent = (object) [
             'metadata' => [
                 'application_fee_gross_amount' => 5.00,
                 'application_fee_net_amount' => 4.17,
@@ -308,7 +313,7 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testExtractAndStorePlatformFeeWithVatDisabled(): void
+    public function test_extract_and_store_platform_fee_with_vat_disabled(): void
     {
         Config::set('app.tax.eu_vat_handling_enabled', false);
 
@@ -321,20 +326,20 @@ class StripePaymentPlatformFeeExtractionServiceTest extends TestCase
         $stripePayment->shouldReceive('getApplicationFeeVat')->never();
         $stripePayment->shouldReceive('getApplicationFeeVatRate')->andReturn(null);
 
-        $balanceTransaction = (object)[
+        $balanceTransaction = (object) [
             'id' => 'txn_123',
             'fee' => 1000,
             'net' => 9000,
             'currency' => 'eur',
             'exchange_rate' => null,
             'fee_details' => [
-                (object)[
+                (object) [
                     'type' => 'stripe_fee',
                     'amount' => 500,
                     'currency' => 'eur',
                     'description' => 'Stripe processing fee',
                 ],
-                (object)[
+                (object) [
                     'type' => 'application_fee',
                     'amount' => 500,
                     'currency' => 'eur',

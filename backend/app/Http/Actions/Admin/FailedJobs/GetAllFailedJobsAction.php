@@ -16,15 +16,14 @@ class GetAllFailedJobsAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllFailedJobsHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $jobs = $this->handler->handle(new GetAllFailedJobsDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
             queue: $request->query('queue'),
             sortBy: $request->query('sort_by', 'failed_at'),

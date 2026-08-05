@@ -9,7 +9,5 @@ class MarkOrderAsPaidDTO extends BaseDTO
     public function __construct(
         public readonly int $eventId,
         public readonly int $orderId,
-    )
-    {
-    }
+    ) {}
 }

@@ -16,9 +16,7 @@ class ConfirmEmailAddressAction extends BaseAction
 {
     public function __construct(
         private readonly ConfirmEmailAddressHandler $confirmEmailAddressHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws DecryptionFailedException|Throwable

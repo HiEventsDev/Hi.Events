@@ -9,24 +9,20 @@ use Throwable;
 class Retrier
 {
     /**
-     * @param callable(int $attempt):mixed $callableAction Receives 1-based attempt #
-     * @param int $maxAttempts
-     * @param int $baseDelayMs
-     * @param int $maxDelayMs
-     * @param null|callable(int $attempt, Throwable $e):void $onFailure Called before final throw
-     * @param class-string<Throwable>|array<class-string<Throwable>> $retryOn Exceptions to retry
-     * @return mixed
+     * @param  callable(int $attempt):mixed  $callableAction  Receives 1-based attempt #
+     * @param  null|callable(int $attempt, Throwable $e):void  $onFailure  Called before final throw
+     * @param  class-string<Throwable>|array<class-string<Throwable>>  $retryOn  Exceptions to retry
+     *
      * @throws Throwable
      */
     public function retry(
-        callable  $callableAction,
-        int       $maxAttempts = 3,
-        int       $baseDelayMs = 25,
-        int       $maxDelayMs = 250,
+        callable $callableAction,
+        int $maxAttempts = 3,
+        int $baseDelayMs = 25,
+        int $maxDelayMs = 250,
         ?callable $onFailure = null,
-        array     $retryOn = [Throwable::class],
-    ): mixed
-    {
+        array $retryOn = [Throwable::class],
+    ): mixed {
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
             try {
                 return $callableAction($attempt);
@@ -41,7 +37,7 @@ class Retrier
 
                 $isLast = ($attempt === $maxAttempts);
 
-                if (!$isRetryable || $isLast) {
+                if (! $isRetryable || $isLast) {
                     if ($onFailure !== null) {
                         $onFailure($attempt, $e);
                     }

@@ -10,18 +10,15 @@ use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 readonly class UpdateMeHandler
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
-        private Hasher                  $hasher,
-        private Mailer                  $mailer,
+        private Hasher $hasher,
+        private Mailer $mailer,
         private EncryptedPayloadService $encryptedPayloadService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws PasswordInvalidException
@@ -76,7 +73,7 @@ readonly class UpdateMeHandler
      */
     private function validateCurrentPassword(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): void
     {
-        if (!$this->hasher->check($updateUserData->current_password, $existingUser->getPassword())) {
+        if (! $this->hasher->check($updateUserData->current_password, $existingUser->getPassword())) {
             throw new PasswordInvalidException('Current password is invalid');
         }
     }
@@ -100,15 +97,11 @@ readonly class UpdateMeHandler
             ->to($existingUser->getEmail())
             ->locale($existingUser->getLocale())
             ->send(new ConfirmEmailChangeMail($existingUser, $this->encryptedPayloadService->encryptPayload([
-                    'id' => $existingUser->getId(),
-                ]))
+                'id' => $existingUser->getId(),
+            ]))
             );
     }
 
-    /**
-     * @param UpdateMeDTO $updateUserData
-     * @return bool
-     */
     private function isUpdatingDetails(UpdateMeDTO $updateUserData): bool
     {
         return $updateUserData->first_name !== null || $updateUserData->last_name !== null || $updateUserData->timezone !== null || $updateUserData->email !== null;

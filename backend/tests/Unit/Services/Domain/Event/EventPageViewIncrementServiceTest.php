@@ -7,8 +7,8 @@ use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Queue\QueueManager;
-use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
 class EventPageViewIncrementServiceTest extends TestCase
@@ -16,7 +16,9 @@ class EventPageViewIncrementServiceTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private CacheManager $cacheManager;
+
     private QueueManager $queueManager;
+
     private EventPageViewIncrementService $service;
 
     protected function setUp(): void
@@ -39,7 +41,7 @@ class EventPageViewIncrementServiceTest extends TestCase
         );
     }
 
-    public function testIncrementIgnoresRepeatedViewsFromSameIP(): void
+    public function test_increment_ignores_repeated_views_from_same_ip(): void
     {
         $eventId = 1;
         $userIp = '127.0.0.1';
@@ -52,7 +54,7 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->service->increment($eventId, $userIp);
     }
 
-    public function testIncrementUpdatesViewCount(): void
+    public function test_increment_updates_view_count(): void
     {
         $eventId = 1;
         $userIp = '127.0.0.2';
@@ -67,7 +69,7 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->service->increment($eventId, $userIp);
     }
 
-    public function testBatchUpdateDatabaseIsCalled(): void
+    public function test_batch_update_database_is_called(): void
     {
         $eventId = 1;
         $userIp = '127.0.0.3';
@@ -75,12 +77,12 @@ class EventPageViewIncrementServiceTest extends TestCase
         $this->cacheManager->shouldReceive('has')->once()->andReturn(false);
         $this->cacheManager->shouldReceive('put')->once();
         $this->cacheManager->shouldReceive('increment')->once()->andReturn(100);
-        $this->cacheManager->shouldReceive('decrement')->once()->with('event_views_' . $eventId, 100);
+        $this->cacheManager->shouldReceive('decrement')->once()->with('event_views_'.$eventId, 100);
 
         // The expectation has changed to checking if the job is pushed to the queue
         $this->queueManager->shouldReceive('push')
             ->once()
-            ->withArgs(fn($job) => $job instanceof UpdateEventPageViewsJob);
+            ->withArgs(fn ($job) => $job instanceof UpdateEventPageViewsJob);
 
         $this->service->increment($eventId, $userIp);
     }

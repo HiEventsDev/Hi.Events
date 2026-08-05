@@ -1,0 +1,100 @@
+@use "../../../styles/mixins.scss";
+
+.grid {
+  background-color: var(--hi-color-border);
+  border: 0.5px solid var(--hi-color-border);
+  border-radius: var(--hi-radius-card);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5px;
+
+  @include mixins.respond-below(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cell {
+  background-color: var(--hi-color-white);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hi-color-text-muted);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.middleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--hi-text);
+  line-height: 1.2;
+}
+
+.sparkline {
+  width: 56px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sparklineSpacer {
+  width: 56px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.delta {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.deltaUp {
+  color: var(--hi-color-success);
+}
+
+.deltaDown {
+  color: var(--hi-color-danger);
+}
+
+.deltaFlat {
+  color: var(--hi-color-text-muted);
+}
+
+.deltaNone {
+  color: var(--hi-color-text-muted);
+}
+
+.deltaPlaceholder {
+  display: block;
+  margin-top: 8px;
+  height: 15px;
+}
+
+.skeletonRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}

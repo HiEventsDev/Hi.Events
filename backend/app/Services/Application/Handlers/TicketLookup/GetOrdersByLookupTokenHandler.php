@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\TicketLookup;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -32,19 +33,19 @@ class GetOrdersByLookupTokenHandler
         private readonly TicketLookupTokenRepositoryInterface $ticketLookupTokenRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
-    ) {
-    }
+    ) {}
 
     /**
-     * @throws InvalidTicketLookupTokenException
      * @return Collection<OrderDomainObject>
+     *
+     * @throws InvalidTicketLookupTokenException
      */
     public function handle(GetOrdersByLookupTokenDTO $dto): Collection
     {
         $tokenRecord = $this->validateAndFetchToken($dto->token);
 
         return $this->getOrdersForEmail($tokenRecord->getEmail())
-            ->each(fn(OrderDomainObject $order) => $this->offlinePaymentInstructionsRenderService->renderForOrder($order));
+            ->each(fn (OrderDomainObject $order) => $this->offlinePaymentInstructionsRenderService->renderForOrder($order));
     }
 
     /**
@@ -54,7 +55,7 @@ class GetOrdersByLookupTokenHandler
     {
         $tokenRecord = $this->ticketLookupTokenRepository->findFirstWhere(['token' => $token]);
 
-        if (!$tokenRecord) {
+        if (! $tokenRecord) {
             throw new InvalidTicketLookupTokenException(__('Invalid or expired link. Please request a new one.'));
         }
 
@@ -84,10 +85,10 @@ class GetOrdersByLookupTokenHandler
                         nested: [
                             new Relationship(
                                 domainObject: ProductPriceDomainObject::class,
-                            )
+                            ),
                         ],
                         name: ProductDomainObjectAbstract::SINGULAR_NAME,
-                    )
+                    ),
                 ],
             ))
             ->loadRelation(new Relationship(
@@ -102,7 +103,10 @@ class GetOrdersByLookupTokenHandler
                     ),
                     new Relationship(
                         domainObject: ImageDomainObject::class,
-                    )
+                    ),
+                    new Relationship(
+                        domainObject: EventOccurrenceDomainObject::class,
+                    ),
                 ],
                 name: EventDomainObjectAbstract::SINGULAR_NAME
             ))

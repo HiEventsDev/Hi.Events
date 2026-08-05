@@ -15,9 +15,7 @@ class GetUtmAttributionStatsAction extends BaseAction
 {
     public function __construct(
         private readonly GetUtmAttributionStatsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {

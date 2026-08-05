@@ -16,16 +16,14 @@ class GetAllEventsAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllEventsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $events = $this->handler->handle(new GetAllEventsDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
             sortBy: $request->query('sort_by', 'start_date'),
             sortDirection: $request->query('sort_direction', 'desc'),

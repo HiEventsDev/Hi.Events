@@ -3,9 +3,9 @@ import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
-import {Alert, Button, Checkbox, LoadingOverlay} from "@mantine/core";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {Button, Checkbox, LoadingOverlay} from "@mantine/core";
 import classes from './CancelOrderModal.module.scss';
+import {Callout} from "../../common/Callout";
 import {OrderDetails} from "../../common/OrderDetails";
 import {AttendeeList} from "../../common/AttendeeList";
 import {t} from "@lingui/macro";
@@ -62,10 +62,9 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
 
             {products && <AttendeeList order={order} products={products}/>}
 
-            <Alert className={classes.alert} variant="light" color="blue" title={t`Please Note`}
-                   icon={<IconInfoCircle/>}>
+            <Callout variant="info" className={classes.alert} title={t`Please Note`}>
                 {t`Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool.`}
-            </Alert>
+            </Callout>
 
             {isRefundable && (
                 <Checkbox

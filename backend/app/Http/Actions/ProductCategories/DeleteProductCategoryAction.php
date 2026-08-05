@@ -14,9 +14,7 @@ class DeleteProductCategoryAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteProductCategoryHandler $deleteProductCategoryHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -25,8 +23,7 @@ class DeleteProductCategoryAction extends BaseAction
     public function __invoke(
         int $eventId,
         int $productCategoryId,
-    ): Response|JsonResponse
-    {
+    ): Response|JsonResponse {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         try {

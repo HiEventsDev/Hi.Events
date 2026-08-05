@@ -12,9 +12,7 @@ class GetWebhookAction extends BaseAction
 {
     public function __construct(
         private readonly GetWebhookHandler $getWebhookHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $webhookId): JsonResponse
     {

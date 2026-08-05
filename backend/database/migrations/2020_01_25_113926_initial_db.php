@@ -12,8 +12,8 @@ class InitialDb extends Migration
      */
     public function up()
     {
-        DB::unprepared(file_get_contents(__DIR__ . '/extensions.sql'));
-        DB::unprepared(file_get_contents(__DIR__ . '/schema.sql'));
+        DB::unprepared(file_get_contents(__DIR__.'/extensions.sql'));
+        DB::unprepared(file_get_contents(__DIR__.'/schema.sql'));
     }
 
     /**

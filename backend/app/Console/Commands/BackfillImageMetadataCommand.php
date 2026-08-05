@@ -22,26 +22,28 @@ class BackfillImageMetadataCommand extends Command
     protected $description = 'Backfill image metadata (dimensions, average colour, LQIP) for existing images';
 
     private const LQIP_MAX_DIMENSION = 16;
+
     private const LQIP_QUALITY = 60;
 
     public function __construct(
         private readonly FilesystemManager $filesystemManager,
-        private readonly LoggerInterface   $logger,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
 
     public function handle(): int
     {
-        if (!$this->isImagickAvailable()) {
+        if (! $this->isImagickAvailable()) {
             $this->error('Imagick extension is not available. Please install it first.');
+
             return self::FAILURE;
         }
 
         $this->info('Starting image metadata backfill...');
 
-        $limit = (int)$this->option('limit');
-        $batchSize = (int)$this->option('batch-size');
+        $limit = (int) $this->option('limit');
+        $batchSize = (int) $this->option('batch-size');
         $dryRun = $this->option('dry-run');
         $force = $this->option('force');
 
@@ -52,7 +54,7 @@ class BackfillImageMetadataCommand extends Command
         $query = Image::query()
             ->whereNull('deleted_at');
 
-        if (!$force) {
+        if (! $force) {
             $query->where(function ($q) {
                 $q->whereNull(ImageDomainObjectAbstract::WIDTH)
                     ->orWhereNull(ImageDomainObjectAbstract::HEIGHT)
@@ -65,6 +67,7 @@ class BackfillImageMetadataCommand extends Command
 
         if ($totalCount === 0) {
             $this->info('No images found that need metadata backfill.');
+
             return self::SUCCESS;
         }
 
@@ -139,21 +142,24 @@ class BackfillImageMetadataCommand extends Command
         $disk = $image->disk;
         $path = $image->path;
 
-        if (!$disk || !$path) {
+        if (! $disk || ! $path) {
             $this->logger->warning("Image #{$image->id} has no disk or path");
+
             return 'skipped';
         }
 
         $filesystem = $this->filesystemManager->disk($disk);
 
-        if (!$filesystem->exists($path)) {
+        if (! $filesystem->exists($path)) {
             $this->logger->warning("Image file not found for image #{$image->id}: {$path}");
+
             return 'skipped';
         }
 
         if ($dryRun) {
             $this->newLine();
             $this->line("Would process: Image #{$image->id}, Path: {$path}");
+
             return 'success';
         }
 
@@ -224,10 +230,10 @@ class BackfillImageMetadataCommand extends Command
 
         if ($width > $height) {
             $newWidth = self::LQIP_MAX_DIMENSION;
-            $newHeight = (int)round($height * (self::LQIP_MAX_DIMENSION / $width));
+            $newHeight = (int) round($height * (self::LQIP_MAX_DIMENSION / $width));
         } else {
             $newHeight = self::LQIP_MAX_DIMENSION;
-            $newWidth = (int)round($width * (self::LQIP_MAX_DIMENSION / $height));
+            $newWidth = (int) round($width * (self::LQIP_MAX_DIMENSION / $height));
         }
 
         $newWidth = max(1, $newWidth);
@@ -242,7 +248,7 @@ class BackfillImageMetadataCommand extends Command
         $clone->clear();
         $clone->destroy();
 
-        return 'data:image/webp;base64,' . base64_encode($blob);
+        return 'data:image/webp;base64,'.base64_encode($blob);
     }
 
     private function isImagickAvailable(): bool

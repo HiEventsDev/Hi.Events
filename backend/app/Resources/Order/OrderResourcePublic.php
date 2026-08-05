@@ -18,6 +18,8 @@ class OrderResourcePublic extends BaseResource
 {
     public function toArray(Request $request): array
     {
+        $includePostCheckoutData = $this->getStatus() === OrderStatus::COMPLETED->name;
+
         return [
             'short_id' => $this->getShortId(),
             'total_before_additions' => $this->getTotalBeforeAdditions(),
@@ -30,8 +32,8 @@ class OrderResourcePublic extends BaseResource
             'currency' => $this->getCurrency(),
             'reserved_until' => $this->getReservedUntil(),
             'is_expired' => $this->when(
-                !is_null($this->getReservedUntil()),
-                fn() => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
+                ! is_null($this->getReservedUntil()),
+                fn () => Carbon::createFromTimeString($this->getReservedUntil())->isPast(),
             ),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),
@@ -41,29 +43,33 @@ class OrderResourcePublic extends BaseResource
             'promo_code' => $this->getPromoCode(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event' => $this->when(
-                !is_null($this->getEvent()),
-                fn() => new EventResourcePublic(
+                ! is_null($this->getEvent()),
+                fn () => new EventResourcePublic(
                     resource: $this->getEvent(),
-                    includePostCheckoutData: $this->getStatus() === OrderStatus::COMPLETED->name,
+                    includePostCheckoutData: $includePostCheckoutData,
                 ),
             ),
             'latest_invoice' => $this->when(
-                !is_null($this->getLatestInvoice()),
-                fn() => (new InvoiceResourcePublic($this->getLatestInvoice()))->toArray($request),
+                ! is_null($this->getLatestInvoice()),
+                fn () => (new InvoiceResourcePublic($this->getLatestInvoice()))->toArray($request),
             ),
             'address' => $this->when(
-                !is_null($this->getAddress()),
-                fn() => $this->getAddress()
+                ! is_null($this->getAddress()),
+                fn () => $this->getAddress()
             ),
             'order_items' => $this->when(
-                !is_null($this->getOrderItems()),
-                fn() => OrderItemResourcePublic::collection($this->getOrderItems())
+                ! is_null($this->getOrderItems()),
+                fn () => $this->getOrderItems()->map(
+                    fn ($orderItem) => new OrderItemResourcePublic($orderItem, $includePostCheckoutData),
+                )
             ),
             'attendees' => $this->when(
-                !is_null($this->getAttendees()),
-                fn() => AttendeeResourcePublic::collection($this->getAttendees())
+                ! is_null($this->getAttendees()),
+                fn () => $this->getAttendees()->map(
+                    fn ($attendee) => new AttendeeResourcePublic($attendee, $includePostCheckoutData),
+                )
             ),
-            $this->mergeWhen($this->getSessionIdentifier() !== null, fn() => [
+            $this->mergeWhen($this->getSessionIdentifier() !== null, fn () => [
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
         ];

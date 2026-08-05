@@ -21,22 +21,18 @@ export const formatDate = (date: string, format: string, tz: string): string => 
     return dayjs.utc(date).tz(tz).format(format);
 };
 
-export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'chartDate' | 'monthShort' | 'dayOfMonth' | 'dayName' | 'timeOnly' | 'timezone';
+export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'chartDate' | 'dayMonthTime' | 'monthShort' | 'dayOfMonth' | 'dayName' | 'timeOnly' | 'timezone';
 
 /**
  * Safely get a supported locale, falling back to 'en' if not supported.
  */
-const getSafeLocale = (locale?: string): SupportedLocales => {
+export const getSafeLocale = (locale?: string): SupportedLocales => {
     if (locale && locale in localeFormats) {
         return locale as SupportedLocales;
     }
     return 'en';
 };
 
-/**
- * Format date with locale-specific formatting.
- * Uses locale() method on the dayjs instance to avoid global state mutation.
- */
 export const formatDateWithLocale = (
     date: string,
     formatType: DateFormatType,
@@ -50,10 +46,23 @@ export const formatDateWithLocale = (
     return dayjs.utc(date).tz(tz).locale(safeLocale).format(format);
 };
 
-/**
- * Format date with user's preferred locale (from user settings or browser).
- * Priority: user settings > browser locale > English fallback.
- */
+export const isSameDayInTimezone = (a: string, b: string, tz: string): boolean =>
+    dayjs.utc(a).tz(tz).isSame(dayjs.utc(b).tz(tz), 'day');
+
+export const formatOccurrenceEnd = (
+    endDate: string,
+    startDate: string,
+    tz: string,
+    locale?: SupportedLocales | string
+): string => {
+    return formatDateWithLocale(
+        endDate,
+        isSameDayInTimezone(startDate, endDate, tz) ? 'timeOnly' : 'dayMonthTime',
+        tz,
+        locale
+    );
+};
+
 export const formatDateForUser = (
     date: string,
     formatType: DateFormatType,
@@ -63,10 +72,6 @@ export const formatDateForUser = (
     return formatDateWithLocale(date, formatType, tz, userLocaleFromSettings);
 };
 
-/**
- * Format date in a short, readable format with optional timezone.
- * Uses locale-aware formatting.
- */
 export const prettyDate = (date: string, tz: string, showTimezoneOffset: boolean = false, locale?: string): string => {
     const formatted = formatDateWithLocale(date, 'shortDateTime', tz, locale);
 
@@ -97,6 +102,10 @@ export const getDateTimePickerFormat = (): string => {
     return localeFormats[safeLocale].dateTimePicker;
 };
 
+export const isValidDate = (date?: string | null): boolean => {
+    return !!date && dayjs(date).isValid();
+};
+
 export const utcToTz = (date: undefined | string | Date, tz: string): string | undefined => {
     if (!date) {
         return undefined;
@@ -105,10 +114,6 @@ export const utcToTz = (date: undefined | string | Date, tz: string): string | u
     return dayjs.utc(date).tz(tz).format('YYYY-MM-DDTHH:mm');
 };
 
-/**
- * Converts a datetime to the user's browser timezone with locale-aware formatting.
- * Falls back to provided timezone for SSR.
- */
 export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: string): string => {
     const userTimezone = !isSsr()
         ? Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -122,6 +127,10 @@ export const dateToBrowserTz = (date: string, fallbackTz: string, locale?: strin
 
 export const isDateInFuture = (date: string): boolean => {
     return dayjs.utc(date).diff(dayjs()) > 0;
+};
+
+export const utcDateToEpochMs = (date: string): number => {
+    return dayjs.utc(date).valueOf();
 };
 
 export const isDateInPast = (date: string): boolean => {

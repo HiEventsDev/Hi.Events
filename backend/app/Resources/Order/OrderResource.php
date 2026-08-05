@@ -44,20 +44,20 @@ class OrderResource extends BaseResource
             'promo_code' => $this->getPromoCode(),
             'event_id' => $this->getEventId(),
             'order_items' => $this->when(
-                !is_null($this->getOrderItems()),
-                fn() => OrderItemResource::collection($this->getOrderItems())
+                ! is_null($this->getOrderItems()),
+                fn () => OrderItemResource::collection($this->getOrderItems())
             ),
             'attendees' => $this->when(
-                !is_null($this->getAttendees()),
-                fn() => AttendeeResource::collection($this->getAttendees())
+                ! is_null($this->getAttendees()),
+                fn () => AttendeeResource::collection($this->getAttendees())
             ),
             'question_answers' => $this->when(
-                !is_null($this->getQuestionAndAnswerViews()),
-                fn() => QuestionAnswerViewResource::collection($this->getQuestionAndAnswerViews()),
+                ! is_null($this->getQuestionAndAnswerViews()),
+                fn () => QuestionAnswerViewResource::collection($this->getQuestionAndAnswerViews()),
             ),
             'latest_invoice' => $this->when(
-                !is_null($this->getLatestInvoice()),
-                fn() => (new InvoiceResource($this->getLatestInvoice()))->toArray($request),
+                ! is_null($this->getLatestInvoice()),
+                fn () => (new InvoiceResource($this->getLatestInvoice()))->toArray($request),
             ),
         ];
     }

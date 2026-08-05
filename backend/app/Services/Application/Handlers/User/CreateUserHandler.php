@@ -19,14 +19,12 @@ use Throwable;
 readonly class CreateUserHandler
 {
     public function __construct(
-        private UserRepositoryInterface       $userRepository,
-        private AccountRepositoryInterface    $accountRepository,
-        private SendUserInvitationService     $sendUserInvitationService,
+        private UserRepositoryInterface $userRepository,
+        private AccountRepositoryInterface $accountRepository,
+        private SendUserInvitationService $sendUserInvitationService,
         private AccountUserAssociationService $accountUserAssociationService,
-        private DatabaseManager               $databaseManager,
-    )
-    {
-    }
+        private DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -90,7 +88,7 @@ readonly class CreateUserHandler
             return null;
         }
 
-        if ($existingUser->accounts->some(fn($account) => $account->getId() === $userData->account_id)) {
+        if ($existingUser->accounts->some(fn ($account) => $account->getId() === $userData->account_id)) {
             throw new ResourceConflictException(
                 __('The email :email already exists on this account', [
                     'email' => $userData->email,

@@ -5,6 +5,7 @@ namespace HiEvents\Providers;
 use HiEvents\Listeners\Webhook\WebhookEventListener;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\CheckinEvent;
+use HiEvents\Services\Infrastructure\DomainEvents\Events\OccurrenceEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\ProductEvent;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -12,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
+    protected $listen = [
+    ];
+
     /**
      * Map of listeners to the events they should handle.
      *
@@ -23,6 +27,7 @@ class EventServiceProvider extends ServiceProvider
             OrderEvent::class,
             AttendeeEvent::class,
             CheckinEvent::class,
+            OccurrenceEvent::class,
         ],
     ];
 

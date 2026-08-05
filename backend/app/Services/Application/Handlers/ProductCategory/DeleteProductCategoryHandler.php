@@ -10,9 +10,7 @@ class DeleteProductCategoryHandler
 {
     public function __construct(
         private readonly DeleteProductCategoryService $deleteProductCategoryService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable

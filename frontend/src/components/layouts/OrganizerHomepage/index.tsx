@@ -199,16 +199,16 @@ export const OrganizerHomepage = ({
                                                 <div className={classes.nameSection}>
                                                     <h1>{organizer?.name}</h1>
                                                     <div className={classes.organizerMeta}>
-                                                        {getShortLocationDisplay(organizer?.settings?.location_details) && (
+                                                        {getShortLocationDisplay(organizer?.location?.structured_address) && (
                                                             <div className={classes.metaItem}>
                                                                 <IconMapPin size={15} className={classes.metaIcon}/>
                                                                 <a
-                                                                    href={getGoogleMapsUrl(organizer.settings!.location_details)}
+                                                                    href={getGoogleMapsUrl(organizer.location!.structured_address!)}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className={classes.mapLink}
                                                                 >
-                                                                    <span>{getShortLocationDisplay(organizer.settings!.location_details)}</span>
+                                                                    <span>{getShortLocationDisplay(organizer.location!.structured_address!)}</span>
                                                                     <IconExternalLink size={12}/>
                                                                 </a>
                                                             </div>

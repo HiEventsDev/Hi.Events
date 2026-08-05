@@ -13,10 +13,8 @@ readonly class TaxAndProductAssociationService
 {
     public function __construct(
         private TaxAndFeeRepositoryInterface $taxAndFeeRepository,
-        private ProductRepositoryInterface   $ticketRepository,
-    )
-    {
-    }
+        private ProductRepositoryInterface $ticketRepository,
+    ) {}
 
     /**
      * @throws Exception

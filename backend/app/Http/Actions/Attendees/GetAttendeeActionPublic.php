@@ -2,7 +2,10 @@
 
 namespace HiEvents\Http\Actions\Attendees;
 
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\Http\Actions\BaseAction;
@@ -34,11 +37,24 @@ class GetAttendeeActionPublic extends BaseAction
                         domainObject: ProductPriceDomainObject::class,
                     ),
                 ], name: 'product'))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: EventLocationDomainObject::class,
+                        nested: [
+                            new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                        ],
+                        name: 'event_location',
+                    ),
+                ],
+                name: 'event_occurrence',
+            ))
             ->findFirstWhere([
-                AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId
+                AttendeeDomainObjectAbstract::SHORT_ID => $attendeeShortId,
             ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             return $this->notFoundResponse();
         }
 

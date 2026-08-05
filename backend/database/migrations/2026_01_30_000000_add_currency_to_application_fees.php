@@ -12,7 +12,7 @@ return new class extends Migration
             ->get()
             ->each(function ($row) {
                 $fees = json_decode($row->application_fees, true);
-                if ($fees && !isset($fees['currency'])) {
+                if ($fees && ! isset($fees['currency'])) {
                     $fees['currency'] = 'USD';
                     DB::table('account_configuration')
                         ->where('id', $row->id)

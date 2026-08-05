@@ -116,14 +116,27 @@ export interface Account {
     timezone?: string;
     currency_code?: string;
     password?: string;
-    stripe_connect_setup_complete?: boolean;
-    stripe_account_id?: string;
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
-    configuration?: AccountConfiguration;
     requires_manual_verification?: boolean;
-    stripe_platform: string;
-    stripe_hi_events_primary_platform?: string;
+    deletion_request?: AccountDeletionRequest | null;
+}
+
+export interface AccountDeletionRequest {
+    id: IdParam;
+    status: 'REQUESTED' | 'CANCELLED' | 'COMPLETED';
+    initiated_by: 'ACCOUNT_OWNER' | 'ADMIN';
+    expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
+    scheduled_deletion_at: string;
+    cancelled_at: string | null;
+    requested_at: string;
+}
+
+export interface AccountDeletionStatus {
+    deletion_request: AccountDeletionRequest | null;
+    can_request_deletion: boolean;
+    cannot_delete_reason: string | null;
+    expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
 }
 
 export interface AccountConfiguration {
@@ -137,29 +150,50 @@ export interface AccountConfiguration {
     is_system_default: boolean;
 }
 
-export interface StripeConnectDetails {
-    account: Account;
+export interface OrganizerStripeConnectDetails {
+    organizer: Organizer;
     stripe_account_id: string;
     is_connect_setup_complete: boolean;
     connect_url: string | null;
 }
 
-export interface StripeConnectAccount {
+export interface OrganizerStripeConnectAccount {
     stripe_account_id: string;
     connect_url: string | null;
     is_setup_complete: boolean;
     platform: string | null;
     account_type: string | null;
     is_primary: boolean;
-    country?: string;
+    country?: string | null;
+    business_type?: string | null;
+    charges_enabled: boolean;
+    payouts_enabled: boolean;
+    capabilities: Record<string, string>;
+    requirements: {
+        currently_due: string[];
+        eventually_due: string[];
+        past_due: string[];
+        pending_verification: string[];
+    };
 }
 
-export interface StripeConnectAccountsResponse {
-    account: {
+export interface ReusableStripeConnection {
+    organizer_id: IdParam;
+    organizer_name: string;
+    stripe_account_id: string;
+    platform: string | null;
+    country?: string | null;
+    business_type?: string | null;
+}
+
+export interface OrganizerStripeConnectAccountsResponse {
+    organizer: {
         id: IdParam;
+        name: string;
         stripe_platform: string | null;
     };
-    stripe_connect_accounts: StripeConnectAccount[];
+    stripe_connect_accounts: OrganizerStripeConnectAccount[];
+    reusable_connections: ReusableStripeConnection[];
     primary_stripe_account_id: string | null;
     has_completed_setup: boolean;
 }
@@ -206,16 +240,12 @@ export interface EventSettings {
     homepage_secondary_text_color: string;
     homepage_body_background_color: string;
     homepage_background_type: 'COLOR' | 'MIRROR_COVER_IMAGE';
-    location_details?: VenueAddress;
-    is_online_event?: boolean;
-    online_event_connection_details?: string;
     maps_url?: string;
     seo_title?: string;
     seo_description?: string;
     seo_keywords?: string;
     allow_search_engine_indexing?: boolean;
     price_display_mode?: 'INCLUSIVE' | 'EXCLUSIVE';
-    hide_getting_started_page: boolean;
     attendee_details_collection_method?: AttendeeDetailsCollectionMethod;
 
     // Payment settings
@@ -262,6 +292,9 @@ export interface EventSettings {
     // Waitlist settings
     waitlist_auto_process?: boolean;
     waitlist_offer_timeout_minutes?: number | null;
+
+    show_available_occurrence_capacity?: boolean;
+    hide_sold_out_occurrences?: boolean;
 }
 
 export interface VenueAddress {
@@ -273,6 +306,49 @@ export interface VenueAddress {
     zip_or_postal_code?: string;
     country?: string;
 }
+
+export interface Location {
+    id?: IdParam;
+    short_id?: string;
+    organizer_id?: IdParam;
+    name?: string | null;
+    structured_address?: VenueAddress | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    provider?: string | null;
+    provider_place_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface GeoSuggestion {
+    provider_place_id: string;
+    primary_text: string;
+    secondary_text?: string | null;
+}
+
+export interface GeoPlace {
+    provider: string;
+    provider_place_id: string;
+    address: VenueAddress;
+    latitude?: number | null;
+    longitude?: number | null;
+    display_name?: string | null;
+}
+
+export interface EventLocation {
+    id: number;
+    type: LocationType;
+    location_id?: number | null;
+    location?: Location;
+    online_event_connection_details?: string | null;
+}
+
+export type UpsertEventLocationPayload = {
+    type: LocationType;
+    location_id?: number | null;
+    online_event_connection_details?: string | null;
+};
 
 export interface EventBase {
     title: string;
@@ -293,6 +369,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
     duplicate_affiliates: boolean;
+    duplicate_occurrences?: boolean;
 }
 
 export enum EventStatus {
@@ -314,10 +391,155 @@ export enum EventLifecycleStatus {
     ENDED = 'ENDED'
 }
 
+export enum EventType {
+    SINGLE = 'SINGLE',
+    RECURRING = 'RECURRING',
+}
+
+export enum LocationType {
+    InPerson = 'IN_PERSON',
+    Online = 'ONLINE',
+}
+
+export enum EventOccurrenceStatus {
+    ACTIVE = 'ACTIVE',
+    CANCELLED = 'CANCELLED',
+    SOLD_OUT = 'SOLD_OUT',
+}
+
+export interface RecurrenceRuleRange {
+    type: 'until' | 'count';
+    until?: string;
+    count?: number;
+    start?: string;
+}
+
+export interface RecurrenceRuleAdditionalDate {
+    date: string;
+    time: string;
+}
+
+export interface RecurrenceTimeSlot {
+    time: string;
+    label?: string;
+    duration_minutes?: number;
+}
+
+export interface RecurrenceRule {
+    frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+    interval: number;
+    days_of_week?: string[];
+    times_of_day?: (string | RecurrenceTimeSlot)[];
+    duration_minutes?: number;
+    range: RecurrenceRuleRange;
+    default_capacity?: number | null;
+    excluded_dates?: string[];
+    excluded_occurrences?: string[];
+    additional_dates?: RecurrenceRuleAdditionalDate[];
+    monthly_pattern?: 'by_day_of_month' | 'by_day_of_week';
+    days_of_month?: number[];
+    day_of_week?: string;
+    week_position?: number;
+    month?: number;
+}
+
+export interface EventOccurrenceStatistics {
+    total_gross_sales?: number;
+    total_tax?: number;
+    total_fee?: number;
+    orders_created?: number;
+    total_refunded?: number;
+    attendees_registered?: number;
+    products_sold?: number;
+}
+
+export interface EventOccurrence {
+    id?: IdParam;
+    event_id?: IdParam;
+    short_id?: string;
+    start_date: string;
+    end_date?: string;
+    status?: EventOccurrenceStatus;
+    capacity?: number | null;
+    used_capacity?: number;
+    available_capacity?: number | null;
+    label?: string;
+    show_available_capacity?: boolean | null;
+    is_overridden?: boolean;
+    is_past?: boolean;
+    is_future?: boolean;
+    is_active?: boolean;
+    event_location?: EventLocation;
+    statistics?: EventOccurrenceStatistics;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ProductPriceOccurrenceOverride {
+    id?: IdParam;
+    event_occurrence_id?: IdParam;
+    product_price_id?: IdParam;
+    price: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ProductOccurrenceVisibility {
+    id: IdParam;
+    event_occurrence_id: IdParam;
+    product_id: IdParam;
+}
+
+export interface UpsertEventOccurrenceRequest {
+    start_date: string;
+    end_date?: string;
+    capacity?: number | null;
+    label?: string;
+    status?: string;
+    show_available_capacity?: boolean | null;
+    event_location?: UpsertEventLocationPayload | null;
+    clear_event_location?: boolean;
+}
+
+export interface GenerateOccurrencesRequest {
+    recurrence_rule: RecurrenceRule;
+}
+
+export interface OccurrenceGenerationStatus {
+    status: 'IN_PROGRESS' | 'FINISHED' | 'FAILED' | 'NOT_FOUND';
+    job_uuid?: string;
+    message?: string;
+}
+
+export interface BulkUpdateOccurrencesRequest {
+    action: 'update' | 'cancel' | 'delete';
+    start_time_shift?: number;
+    end_time_shift?: number;
+    capacity?: number | null;
+    clear_capacity?: boolean;
+    future_only?: boolean;
+    skip_overridden?: boolean;
+    refund_orders?: boolean;
+    occurrence_ids?: number[];
+    apply_to_all?: boolean;
+    label?: string;
+    clear_label?: boolean;
+    duration_minutes?: number;
+    event_location?: UpsertEventLocationPayload | null;
+    clear_event_location?: boolean;
+}
+
+export interface UpsertPriceOverrideRequest {
+    product_price_id: IdParam;
+    price: number;
+}
+
 export interface Event extends EventBase {
     id?: IdParam;
     slug: string;
     status?: EventStatus;
+    type?: EventType;
+    recurrence_rule?: RecurrenceRule;
     description_preview?: string;
     lifecycle_status?: EventLifecycleStatus;
     settings?: EventSettings;
@@ -328,8 +550,13 @@ export interface Event extends EventBase {
     currency: string;
     timezone: string;
     organizer_id?: IdParam;
-    location_details?: VenueAddress;
+    event_location?: EventLocation;
     statistics?: EventStatistics;
+    occurrences?: EventOccurrence[];
+    next_occurrence_start_date?: string | null;
+    upcoming_occurrences_sold_out?: boolean;
+    last_occurrence_date?: string | null;
+    occurrences_month?: string | null;
 }
 
 export interface EventStatistics {
@@ -378,6 +605,15 @@ export interface EventStats {
     total_refunded: number;
 }
 
+export interface OrganizerDailyStats {
+    date: string;
+    attendees_registered: number;
+    products_sold: number;
+    total_sales_gross: number;
+    orders_created: number;
+    total_refunded: number;
+}
+
 export interface OrganizerStats {
     total_products_sold: number;
     total_attendees_registered: number;
@@ -387,6 +623,9 @@ export interface OrganizerStats {
     total_fees: number;
     total_views: number;
     total_refunded: number;
+    daily_stats: OrganizerDailyStats[];
+    start_date: string;
+    end_date: string;
     all_organizers_currencies: string[];
 }
 
@@ -403,8 +642,12 @@ export interface Organizer {
     images?: Image[];
     events?: Event[];
     settings?: OrganizerSettings;
-    location_details?: VenueAddress;
+    location_id?: IdParam | null;
+    location?: Location | null;
     status?: OrganizerStatus;
+    stripe_connect_setup_complete?: boolean;
+    stripe_account_id?: string | null;
+    configuration?: AccountConfiguration;
 }
 
 export interface OrganizerSettings {
@@ -417,7 +660,6 @@ export interface OrganizerSettings {
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
     website_url?: string;
-    location_details?: VenueAddress;
     social_media_handles?: {
         facebook?: string;
         instagram?: string;
@@ -592,11 +834,13 @@ export interface Attendee {
     checked_in_by?: number;
     question_answers?: QuestionAnswer[];
     locale?: SupportedLocales;
+    event_occurrence_id?: number;
+    event_occurrence?: EventOccurrence;
     check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
     check_ins?: AttendeeCheckIn[];
 }
 
-export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
+export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'short_id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;
 
 export interface AttendeeCheckIn {
     id: IdParam;
@@ -604,6 +848,7 @@ export interface AttendeeCheckIn {
     check_in_list_id: IdParam;
     product_id: IdParam;
     event_id: IdParam;
+    event_occurrence_id?: number;
     short_id: IdParam;
     order_id: IdParam;
     created_at: string;
@@ -686,6 +931,8 @@ export interface OrderItem {
     price_before_discount?: number;
     price: number;
     quantity: number;
+    event_occurrence_id?: number;
+    event_occurrence?: EventOccurrence;
 }
 
 export interface StripePaymentIntent {
@@ -730,25 +977,107 @@ export interface CheckInList {
     short_id: string;
     name: string;
     description?: string | null;
-    expires_at?: string;  // ISO 8601 string
-    activates_at?: string;  // ISO 8601 string
+    expires_at?: string;
+    activates_at?: string;
     total_attendees: number;
     checked_in_attendees: number;
     is_expired: boolean;
     is_active: boolean;
     event_id: number;
+    event_occurrence_id?: number | null;
     event?: Event;
+    event_occurrence?: EventOccurrence;
+    is_system_default?: boolean;
+    event_occurrences?: EventOccurrence[];
     products: {
         id: number;
         title: string;
     }[];
+    public_show_attendee_notes?: boolean;
+    public_show_question_answers?: boolean;
+    public_show_order_details?: boolean;
+}
+
+export interface AttendeeDetailPublicCheckIn {
+    id: number;
+    short_id: string;
+    check_in_list_id: number;
+    attendee_id: number;
+    checked_in_at: string;
+    order_id: number;
+}
+
+export interface AttendeeDetailPublicOrder {
+    id: number;
+    public_id: string;
+    short_id: string;
+    status: string;
+    total_gross: number;
+    currency: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    created_at: string;
+}
+
+export interface AttendeeDetailPublicQuestionAnswer {
+    question_id: number;
+    title: string;
+    answer: string | string[] | null;
+    belongs_to: string;
+}
+
+export interface AttendeeDetailPublic {
+    id: number;
+    public_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
+    product_id: number;
+    product_title: string | null;
+    event_occurrence: EventOccurrence | null;
+    check_ins: AttendeeDetailPublicCheckIn[];
+    visibility: {
+        notes: boolean;
+        question_answers: boolean;
+        order_details: boolean;
+    };
+    notes?: string | null;
+    question_answers?: AttendeeDetailPublicQuestionAnswer[];
+    order?: AttendeeDetailPublicOrder;
 }
 
 export type CheckInListRequest =
-    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active'>
+    Omit<CheckInList, 'event_id' | 'short_id' | 'id' | 'products' | 'total_attendees' | 'checked_in_attendees' | 'is_expired' | 'is_active' | 'event_occurrence' | 'public_show_attendee_notes' | 'public_show_question_answers' | 'public_show_order_details'>
     & {
     product_ids: IdParam[];
+    public_show_attendee_notes?: boolean;
+    public_show_question_answers?: boolean;
+    public_show_order_details?: boolean;
 };
+
+export interface CheckInListProductStat {
+    product_id: number;
+    product_title: string;
+    total_attendees: number;
+    checked_in_attendees: number;
+}
+
+export interface CheckInListRecentCheckIn {
+    attendee_public_id: string;
+    first_name: string;
+    last_name: string;
+    product_title: string | null;
+    checked_in_at: string;
+}
+
+export interface CheckInListStats {
+    total_attendees: number;
+    checked_in_attendees: number;
+    per_product: CheckInListProductStat[];
+    recent_check_ins: CheckInListRecentCheckIn[];
+}
 
 export interface QuestionRequestData {
     title: string;
@@ -863,6 +1192,7 @@ export interface PromoCode {
     expiry_date?: string;
     event_id?: number;
     discount_type?: PromoCodeDiscountType | null;
+    discount_applies_to?: PromoCodeDiscountAppliesTo;
     attendee_usage_count?: number;
     order_usage_count?: number;
     max_allowed_usages?: number | undefined;
@@ -872,6 +1202,19 @@ export enum PromoCodeDiscountType {
     Percentage = 'PERCENTAGE',
     Fixed = 'FIXED',
     None = 'NONE',
+}
+
+export enum PromoCodeDiscountAppliesTo {
+    Order = 'ORDER',
+    EachProduct = 'EACH_PRODUCT',
+}
+
+export interface PromoCodeValidationResponse {
+    valid: boolean;
+    discount?: number;
+    discount_type?: PromoCodeDiscountType;
+    discount_applies_to?: PromoCodeDiscountAppliesTo;
+    applies_to_all_products?: boolean;
 }
 
 export enum TaxAndFeeType {
@@ -932,6 +1275,7 @@ export enum ReportTypes {
     ProductSales = 'product_sales',
     DailySales = 'daily_sales_report',
     PromoCodes = 'promo_codes_report',
+    OccurrenceSummary = 'occurrence_summary',
 }
 
 export enum OrganizerReportTypes {
@@ -967,7 +1311,7 @@ export interface WebhookLog {
 }
 
 // Email Template Types
-export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket';
+export type EmailTemplateType = 'order_confirmation' | 'attendee_ticket' | 'occurrence_cancellation';
 export type EmailTemplateEngine = 'liquid' | 'blade';
 
 export interface EmailTemplate {
@@ -1051,6 +1395,8 @@ export interface WaitlistEntry {
     id?: number;
     event_id?: number;
     product_price_id?: number;
+    event_occurrence_id?: number | null;
+    event_occurrence?: EventOccurrence | null;
     product?: Product;
     product_price?: ProductPrice;
     email?: string;
@@ -1072,6 +1418,7 @@ export interface WaitlistEntry {
 
 export interface JoinWaitlistRequest {
     product_price_id: number;
+    event_occurrence_id?: number;
     email: string;
     first_name: string;
     last_name?: string;

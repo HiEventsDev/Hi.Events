@@ -4,7 +4,4 @@ namespace HiEvents\Exceptions;
 
 use Exception;
 
-class ResourceNameAlreadyExistsException extends Exception
-{
-
-}
+class ResourceNameAlreadyExistsException extends Exception {}

@@ -19,13 +19,11 @@ class UpdateOrganizerStatusHandler
 {
     public function __construct(
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly AccountRepositoryInterface   $accountRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
-        private readonly LoggerInterface              $logger,
-        private readonly DatabaseManager              $databaseManager,
-    )
-    {
-    }
+        private readonly AccountRepositoryInterface $accountRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws AccountNotVerifiedException|CannotDeleteEntityException|Throwable
@@ -88,7 +86,7 @@ class UpdateOrganizerStatusHandler
 
         $this->logger->info('Organizer status updated', [
             'organizerId' => $updateOrganizerStatusDTO->organizerId,
-            'status' => $updateOrganizerStatusDTO->status
+            'status' => $updateOrganizerStatusDTO->status,
         ]);
 
         return $this->organizerRepository->findFirstWhere([

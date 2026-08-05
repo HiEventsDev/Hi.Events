@@ -13,22 +13,19 @@ use Illuminate\Database\DatabaseManager;
 class UpdateCapacityAssignmentService
 {
     public function __construct(
-        private readonly DatabaseManager                            $databaseManager,
-        private readonly CapacityAssignmentRepositoryInterface      $capacityAssignmentRepository,
-        private readonly EventProductValidationService              $eventProductValidationService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly CapacityAssignmentRepositoryInterface $capacityAssignmentRepository,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CapacityAssignmentProductAssociationService $capacityAssignmentProductAssociationService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
      */
     public function updateCapacityAssignment(
         CapacityAssignmentDomainObject $capacityAssignment,
-        ?array                         $productIds = null,
-    ): CapacityAssignmentDomainObject
-    {
+        ?array $productIds = null,
+    ): CapacityAssignmentDomainObject {
         if ($productIds !== null) {
             $this->eventProductValidationService->validateProductIds($productIds, $capacityAssignment->getEventId());
         }
@@ -38,9 +35,8 @@ class UpdateCapacityAssignmentService
 
     private function updateAssignmentAndAssociateProducts(
         CapacityAssignmentDomainObject $capacityAssignment,
-        ?array                         $productIds
-    ): CapacityAssignmentDomainObject
-    {
+        ?array $productIds
+    ): CapacityAssignmentDomainObject {
         return $this->databaseManager->transaction(function () use ($capacityAssignment, $productIds) {
             /** @var CapacityAssignmentDomainObject $capacityAssignment */
             $this->capacityAssignmentRepository->updateWhere(

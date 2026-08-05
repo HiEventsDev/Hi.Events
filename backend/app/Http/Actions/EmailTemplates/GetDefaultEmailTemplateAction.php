@@ -12,9 +12,7 @@ class GetDefaultEmailTemplateAction extends BaseAction
 {
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {

@@ -18,9 +18,7 @@ class DeleteEventAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteEventHandler $deleteEventHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId): Response|JsonResponse
     {

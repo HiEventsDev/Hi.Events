@@ -34,10 +34,6 @@ class EventSettingsResource extends JsonResource
             'website_url' => $this->getWebsiteUrl(),
             'maps_url' => $this->getMapsUrl(),
 
-            'location_details' => $this->getLocationDetails(),
-            'is_online_event' => $this->getIsOnlineEvent(),
-            'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
-
             'seo_title' => $this->getSeoTitle(),
             'seo_description' => $this->getSeoDescription(),
             'seo_keywords' => $this->getSeoKeywords(),
@@ -46,7 +42,6 @@ class EventSettingsResource extends JsonResource
             'notify_organizer_of_new_orders' => $this->getNotifyOrganizerOfNewOrders(),
 
             'price_display_mode' => $this->getPriceDisplayMode(),
-            'hide_getting_started_page' => $this->getHideGettingStartedPage(),
 
             // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),
@@ -82,6 +77,10 @@ class EventSettingsResource extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+
+            // Occurrence display
+            'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),
+            'hide_sold_out_occurrences' => $this->getHideSoldOutOccurrences(),
 
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),

@@ -9,16 +9,12 @@ use Illuminate\Support\Collection;
 class CompleteOrderDTO extends BaseDTO
 {
     /**
-     * @param CompleteOrderOrderDTO $order
-     * @param Collection<CompleteOrderProductDataDTO> $products
-     * @param int $event_id
+     * @param  Collection<CompleteOrderProductDataDTO>  $products
      */
     public function __construct(
         public CompleteOrderOrderDTO $order,
         #[CollectionOf(CompleteOrderProductDataDTO::class)]
-        public Collection            $products,
-        public int                   $event_id,
-    )
-    {
-    }
+        public Collection $products,
+        public int $event_id,
+    ) {}
 }

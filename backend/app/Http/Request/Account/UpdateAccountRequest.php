@@ -9,7 +9,7 @@ class UpdateAccountRequest extends FormRequest
 {
     public function rules(): array
     {
-        $currencies = include __DIR__ . '/../../../../data/currencies.php';
+        $currencies = include __DIR__.'/../../../../data/currencies.php';
 
         return [
             'name' => 'required|string',

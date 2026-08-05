@@ -15,6 +15,7 @@ use Tests\TestCase;
 class OrderAuditLogServiceTest extends TestCase
 {
     private OrderAuditLogService $service;
+
     private MockInterface|OrderAuditLogRepositoryInterface $orderAuditLogRepository;
 
     protected function setUp(): void
@@ -28,7 +29,7 @@ class OrderAuditLogServiceTest extends TestCase
         );
     }
 
-    public function testLogAttendeeUpdateCreatesAuditLogEntry(): void
+    public function test_log_attendee_update_creates_audit_log_entry(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getEventId')->andReturn(1);
@@ -53,7 +54,7 @@ class OrderAuditLogServiceTest extends TestCase
         $this->orderAuditLogRepository
             ->shouldReceive('create')
             ->once()
-            ->withArgs(function ($data) use ($attendee, $oldValues, $newValues, $ipAddress, $userAgent) {
+            ->withArgs(function ($data) use ($oldValues, $newValues, $ipAddress, $userAgent) {
                 return $data['event_id'] === 1
                     && $data['order_id'] === 123
                     && $data['attendee_id'] === 456
@@ -77,7 +78,7 @@ class OrderAuditLogServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testLogOrderUpdateCreatesAuditLogEntry(): void
+    public function test_log_order_update_creates_audit_log_entry(): void
     {
         $order = Mockery::mock(OrderDomainObject::class);
         $order->shouldReceive('getEventId')->andReturn(1);
@@ -101,7 +102,7 @@ class OrderAuditLogServiceTest extends TestCase
         $this->orderAuditLogRepository
             ->shouldReceive('create')
             ->once()
-            ->withArgs(function ($data) use ($order, $oldValues, $newValues, $ipAddress, $userAgent) {
+            ->withArgs(function ($data) use ($oldValues, $newValues, $ipAddress, $userAgent) {
                 return $data['event_id'] === 1
                     && $data['order_id'] === 123
                     && $data['attendee_id'] === null
@@ -125,7 +126,7 @@ class OrderAuditLogServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testLogEmailResentForAttendee(): void
+    public function test_log_email_resent_for_attendee(): void
     {
         $action = OrderAuditAction::ATTENDEE_EMAIL_RESENT->value;
         $eventId = 1;
@@ -164,7 +165,7 @@ class OrderAuditLogServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testLogEmailResentForOrder(): void
+    public function test_log_email_resent_for_order(): void
     {
         $action = OrderAuditAction::ORDER_EMAIL_RESENT->value;
         $eventId = 1;

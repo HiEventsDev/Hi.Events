@@ -17,12 +17,10 @@ use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 readonly class UpdatePromoCodeHandler
 {
     public function __construct(
-        private PromoCodeRepositoryInterface  $promoCodeRepository,
+        private PromoCodeRepositoryInterface $promoCodeRepository,
         private EventProductValidationService $eventProductValidationService,
-        private EventRepositoryInterface      $eventRepository,
-    )
-    {
-    }
+        private EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -62,8 +60,10 @@ readonly class UpdatePromoCodeHandler
             PromoCodeDomainObjectAbstract::CODE => $promoCodeDTO->code,
             PromoCodeDomainObjectAbstract::DISCOUNT => $promoCodeDTO->discount_type === PromoCodeDiscountTypeEnum::NONE
                 ? 0.00
-                : (float)$promoCodeDTO->discount,
+                : (float) $promoCodeDTO->discount,
             PromoCodeDomainObjectAbstract::DISCOUNT_TYPE => $promoCodeDTO->discount_type?->name,
+            PromoCodeDomainObjectAbstract::DISCOUNT_APPLIES_TO => $promoCodeDTO->discount_applies_to?->name
+                ?? $promoCode->getDiscountAppliesTo(),
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCodeDTO->expiry_date
                 ? DateHelper::convertToUTC($promoCodeDTO->expiry_date, $event->getTimezone())
                 : null,

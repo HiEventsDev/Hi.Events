@@ -11,17 +11,17 @@ use Psr\Log\LoggerInterface;
 class WebhookResponseHandlerService
 {
     public function __construct(
-        private readonly WebhookRepositoryInterface    $webhookRepository,
-        private readonly LoggerInterface               $logger,
+        private readonly WebhookRepositoryInterface $webhookRepository,
+        private readonly LoggerInterface $logger,
         private readonly WebhookLogRepositoryInterface $webhookLogRepository,
-        private readonly DatabaseManager               $databaseManager,
+        private readonly DatabaseManager $databaseManager,
     ) {}
 
     public function handleResponse(
-        int       $eventId,
-        int       $webhookId,
-        string    $eventType,
-        array     $payload,
+        int $eventId,
+        int $webhookId,
+        string $eventType,
+        array $payload,
         ?Response $response
     ): void {
         $this->databaseManager->transaction(function () use ($payload, $eventType, $eventId, $webhookId, $response) {
@@ -29,8 +29,9 @@ class WebhookResponseHandlerService
                 'id' => $webhookId,
             ]);
 
-            if (!$webhook) {
+            if (! $webhook) {
                 $this->logger->error("Webhook not found for ID: $webhookId and event ID: $eventId");
+
                 return;
             }
 

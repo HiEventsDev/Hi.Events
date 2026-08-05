@@ -17,8 +17,11 @@ use PHPUnit\Framework\TestCase;
 class ImageUploadServiceTest extends TestCase
 {
     private ImageStorageService $imageStorageService;
+
     private ImageRepositoryInterface $imageRepository;
+
     private ImageMetadataService $imageMetadataService;
+
     private ImageUploadService $service;
 
     protected function setUp(): void
@@ -36,7 +39,7 @@ class ImageUploadServiceTest extends TestCase
         );
     }
 
-    public function testUploadSuccessfullyCreatesImageRecordWithMetadata(): void
+    public function test_upload_successfully_creates_image_record_with_metadata(): void
     {
         $uploadedFile = m::mock(UploadedFile::class);
         $storedImage = new ImageStorageResponseDTO(
@@ -92,7 +95,7 @@ class ImageUploadServiceTest extends TestCase
         $this->assertSame($imageDomainObject, $result);
     }
 
-    public function testUploadSuccessfullyCreatesImageRecordWithoutMetadata(): void
+    public function test_upload_successfully_creates_image_record_without_metadata(): void
     {
         $uploadedFile = m::mock(UploadedFile::class);
         $storedImage = new ImageStorageResponseDTO(
@@ -138,7 +141,7 @@ class ImageUploadServiceTest extends TestCase
         $this->assertSame($imageDomainObject, $result);
     }
 
-    public function testUploadThrowsExceptionIfStorageFails(): void
+    public function test_upload_throws_exception_if_storage_fails(): void
     {
         $this->expectException(CouldNotUploadImageException::class);
 

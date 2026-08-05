@@ -3,7 +3,9 @@ import {IdParam} from "../types.ts";
 
 const STORAGE_KEY_PREFIX = 'waitlist_joined_';
 
-const getKey = (eventId: IdParam, productPriceId: IdParam) => `${STORAGE_KEY_PREFIX}${eventId}_${productPriceId}`;
+const getKey = (eventId: IdParam, productPriceId: IdParam, eventOccurrenceId?: IdParam) => {
+    return `${STORAGE_KEY_PREFIX}${eventId}_${productPriceId}_${eventOccurrenceId ?? 'single'}`;
+};
 
 export const clearWaitlistJoinedForEvent = (eventId: IdParam) => {
     if (typeof window === 'undefined') return;
@@ -20,27 +22,27 @@ export const clearWaitlistJoinedForEvent = (eventId: IdParam) => {
     }
 };
 
-export const useWaitlistJoined = (eventId?: IdParam, productPriceId?: IdParam) => {
+export const useWaitlistJoined = (eventId?: IdParam, productPriceId?: IdParam, eventOccurrenceId?: IdParam) => {
     const [joined, setJoined] = useState(false);
 
     useEffect(() => {
         if (!eventId || !productPriceId) return;
         try {
-            setJoined(localStorage.getItem(getKey(eventId, productPriceId)) === '1');
+            setJoined(localStorage.getItem(getKey(eventId, productPriceId, eventOccurrenceId)) === '1');
         } catch {
             // localStorage unavailable
         }
-    }, [eventId, productPriceId]);
+    }, [eventId, productPriceId, eventOccurrenceId]);
 
     const markJoined = useCallback(() => {
         if (!eventId || !productPriceId) return;
         setJoined(true);
         try {
-            localStorage.setItem(getKey(eventId, productPriceId), '1');
+            localStorage.setItem(getKey(eventId, productPriceId, eventOccurrenceId), '1');
         } catch {
             // localStorage unavailable
         }
-    }, [eventId, productPriceId]);
+    }, [eventId, productPriceId, eventOccurrenceId]);
 
     return {joined, markJoined};
 };

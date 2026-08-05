@@ -12,6 +12,5 @@ class GetAllFailedJobsDTO extends BaseDataObject
         public readonly ?string $queue = null,
         public readonly ?string $sortBy = 'failed_at',
         public readonly ?string $sortDirection = 'desc',
-    ) {
-    }
+    ) {}
 }

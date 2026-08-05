@@ -14,9 +14,7 @@ class SortQuestionsAction extends BaseAction
 {
     public function __construct(
         private readonly SortQuestionsHandler $sortQuestionsHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(SortQuestionsRequest $request, int $eventId): Response|JsonResponse
     {
