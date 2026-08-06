@@ -1,8 +1,10 @@
+@use "../../../styles/mixins";
+
 .priceTierCard {
   position: relative;
   padding: var(--hi-spacing-md) var(--hi-spacing-lg);
   margin-bottom: var(--hi-spacing-md);
-  border-left: 3px solid var(--mantine-color-blue-5);
+  border-left: 3px solid var(--mantine-color-primary-5);
 
   h3 {
     margin: 0 0 var(--hi-spacing-sm) 0;
@@ -21,7 +23,7 @@
 
   &.disabled {
     svg {
-      color: #b4b4b4;
+      color: var(--hi-color-text-tertiary);
     }
   }
 }
@@ -32,110 +34,182 @@
   }
 }
 
-.visibilityOptions {
+.typeCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--hi-spacing-md);
+  margin-bottom: var(--hi-spacing-lg);
+}
+
+.typeCard {
+  display: flex;
+  align-items: center;
+  gap: var(--hi-spacing-md);
+  padding: var(--hi-spacing-md) var(--hi-spacing-lg);
+  border: 1.5px solid var(--hi-color-gray-2);
+  border-radius: var(--hi-radius-lg);
+  background-color: var(--mantine-color-body);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-4);
+    outline-offset: 2px;
+  }
+
+  &.selected {
+    border-color: var(--hi-primary);
+    background-color: var(--hi-accent-brand-soft);
+
+    .typeCardIcon {
+      color: var(--hi-primary);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.typeCardIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--hi-color-gray-dark);
+}
+
+.typeCardText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.typeCardLabel {
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.typeCardDescription {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
+}
+
+.priceBlock {
+  margin-bottom: var(--hi-spacing-sm);
+}
+
+.priceBlockHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hi-spacing-md);
+  margin-bottom: var(--hi-spacing-md);
+  flex-wrap: wrap;
+}
+
+.priceBlockLabel {
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.ledger {
+  margin-bottom: var(--hi-spacing-lg);
+}
+
+.ledgerHeading {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--hi-color-gray-dark);
+  padding-bottom: var(--hi-spacing-md);
+}
+
+.ledgerRow {
+  border-top: 1px solid var(--hi-color-border);
+
+  &:last-child {
+    border-bottom: 1px solid var(--hi-color-border);
+  }
+}
+
+.ledgerRowButton {
+  display: flex;
+  align-items: center;
+  gap: var(--hi-spacing-md);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--hi-spacing-md) var(--hi-spacing-sm);
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--hi-radius-sm);
+
+  &:hover {
+    background-color: var(--hi-color-gray);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-4);
+    outline-offset: -2px;
+  }
+}
+
+.ledgerRowIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--hi-primary);
+}
+
+.ledgerRowLabel {
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+  flex-shrink: 0;
+}
+
+.ledgerRowSummary {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
+  @include mixins.ellipsis();
+
+  &.emphasized {
+    color: var(--hi-primary);
+    font-weight: 600;
+  }
+}
+
+.ledgerRowChevron {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  color: var(--hi-color-text-tertiary);
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.ledgerRowContent {
+  padding: var(--hi-spacing-md) var(--hi-spacing-sm) var(--hi-spacing-lg);
+}
+
+.switchStack {
   display: flex;
   flex-direction: column;
   gap: var(--hi-spacing-sm);
 }
 
-.additionalToggle {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: var(--hi-spacing-sm) var(--hi-spacing-md);
-  margin-top: var(--hi-spacing-sm);
-  margin-bottom: var(--hi-spacing-xl);
-  cursor: pointer;
-  background: var(--mantine-color-gray-0);
-  border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-md);
-  transition: all 0.15s ease;
-
-  &:hover {
-    background: var(--mantine-color-gray-1);
-    border-color: var(--mantine-color-gray-3);
-
-    .toggleLabel {
-      color: var(--mantine-color-gray-8);
-    }
-
-    svg {
-      color: var(--mantine-color-gray-6);
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--mantine-color-violet-4);
-    outline-offset: 2px;
-  }
-
-  &.hasReminder {
-    border-color: var(--mantine-color-orange-3);
-    background: var(--mantine-color-orange-0);
-
-    &:hover {
-      background: var(--mantine-color-orange-1);
-      border-color: var(--mantine-color-orange-4);
-    }
-  }
-
-  .toggleMain {
-    display: flex;
-    align-items: center;
-    gap: var(--hi-spacing-xs);
-
-    svg {
-      flex-shrink: 0;
-      color: var(--mantine-color-gray-5);
-      transition: color 0.15s ease;
-    }
-  }
-
-  .toggleLabel {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--mantine-color-gray-7);
-    transition: color 0.15s ease;
-  }
-
-  .toggleMeta {
-    margin-left: calc(16px + var(--hi-spacing-xs));
-  }
-
-  .toggleDescription {
-    font-size: 0.8rem;
-    color: var(--mantine-color-gray-5);
-  }
-
-  .taxReminder {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--mantine-color-orange-7);
-
-    svg {
-      color: var(--mantine-color-orange-5);
-    }
-  }
-}
-
-.additionalOptionsContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--hi-spacing-lg);
-  margin-bottom: var(--hi-spacing-xl);
-}
-
-.fieldsetLegend {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--hi-spacing-xs);
-
-  svg {
-    flex-shrink: 0;
-  }
+.fieldHint {
+  margin: var(--hi-spacing-xs) 0 0;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
 }
 
 .addTaxFeeButton {

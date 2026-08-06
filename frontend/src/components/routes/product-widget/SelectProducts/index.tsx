@@ -20,7 +20,7 @@ import {
     ProductPriceQuantityFormValue
 } from "../../../../api/order.client.ts";
 import {useForm} from "@mantine/form";
-import {range, useInputState, useResizeObserver} from "@mantine/hooks";
+import {useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {
@@ -48,9 +48,10 @@ import {
     PromoCodeValidationResponse
 } from "../../../../types.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
+import {getDisplayPrice} from "../../../common/Currency";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
-import {IconChevronRight, IconX} from "@tabler/icons-react"
+import {IconCheck, IconChevronDown, IconX} from "@tabler/icons-react"
 import {getSessionIdentifier} from "../../../../utilites/sessionIdentifier.ts";
 import {setCheckoutSessionIdentifier} from "../../../../utilites/checkoutSession.ts";
 import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../../utilites/iframeResize.ts";
@@ -116,6 +117,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
     const [resizeRef, resizeObserverRect] = useResizeObserver();
     const [collapsedProducts, setCollapsedProducts] = useState<{ [key: number]: boolean }>({});
+    const [expandedDetails, setExpandedDetails] = useState<{ [key: number]: boolean }>({});
     const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
     const [appliedPromoDetails, setAppliedPromoDetails] = useState<{
         code: string;
@@ -380,7 +382,73 @@ const SelectProducts = (props: SelectProductsProps) => {
     const productCategories = event?.product_categories || [];
     const productAreAvailable = productCategories && productCategories.some(category => !!category?.products?.length);
     const products: Product[] = productCategories.reduce((acc: Product[], category) => acc.concat(category.products ?? []), []);
+    const topLevelProducts = products.filter(product => !product.is_addon_only);
     const waitlistAvailable = products.some(product => product.waitlist_enabled);
+
+    const productsById = useMemo(
+        () => new Map(products.map(product => [Number(product.id), product])),
+        [productCategories],
+    );
+
+    const getProductFormIndex = (productId: number): number =>
+        form.values.products?.findIndex(product => product.product_id === productId) ?? -1;
+
+    const getProductQuantity = (productId: number): number => form.values.products
+        ?.find(product => product.product_id === productId)
+        ?.quantities?.reduce((acc, {quantity}) => acc + Number(quantity), 0) || 0;
+
+    const getResolvableAddonIds = (product: Product): number[] =>
+        (product.addon_product_ids || [])
+            .map(Number)
+            .filter(addonId => addonId !== Number(product.id) && productsById.has(addonId));
+
+    const renderProductDetails = (productId: number, description: string, className: string) => {
+        const isExpanded = expandedDetails[productId] ?? false;
+
+        return (
+            <div className={className}>
+                <button type={'button'}
+                        className={classNames('hi-details-toggle', isExpanded && 'open')}
+                        aria-expanded={isExpanded}
+                        onClick={() => setExpandedDetails(prev => ({...prev, [productId]: !isExpanded}))}>
+                    {t`Details`}
+                    <IconChevronDown size={14} stroke={2} className={isExpanded ? 'open' : ''}/>
+                </button>
+                <Collapse expanded={isExpanded} transitionDuration={250}>
+                    <div className={'hi-product-description'}
+                         dangerouslySetInnerHTML={{__html: description}}/>
+                </Collapse>
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        const formProducts = form.values.products;
+        if (!formProducts) {
+            return;
+        }
+
+        products
+            .filter(product => product.is_addon_only)
+            .forEach(addon => {
+                const addonId = Number(addon.id);
+                const formIndex = formProducts.findIndex(formProduct => formProduct.product_id === addonId);
+                if (formIndex === -1 || getProductQuantity(addonId) === 0) {
+                    return;
+                }
+
+                const hasSelectedParent = topLevelProducts.some(parent =>
+                    getProductQuantity(Number(parent.id)) > 0
+                    && getResolvableAddonIds(parent).includes(addonId));
+
+                if (!hasSelectedParent) {
+                    form.setFieldValue(
+                        `products.${formIndex}.quantities`,
+                        formProducts[formIndex].quantities.map(quantity => ({...quantity, quantity: 0})),
+                    );
+                }
+            });
+    }, [form.values.products]);
 
     const selectedProductQuantitySum = useMemo(() => {
         let total = 0;
@@ -522,7 +590,7 @@ const SelectProducts = (props: SelectProductsProps) => {
         || !productAreAvailable
         || selectedProductQuantitySum === 0
         || props.widgetMode === 'preview'
-        || products?.every(product => product.is_sold_out)
+        || topLevelProducts.every(product => product.is_sold_out)
         || (needsOccurrenceSelection && !occurrenceSelected);
 
     const unavailableMessage = (() => {
@@ -540,12 +608,16 @@ const SelectProducts = (props: SelectProductsProps) => {
         return null;
     })();
 
-    let productIndex = 0;
-
     const productFormSection = (
         <>
             <div className={'hi-product-category-rows'}>
                 {productCategories && productCategories.map((category) => {
+                    const visibleProducts = (category.products || []).filter(product => !product.is_addon_only);
+
+                    if ((category.products?.length ?? 0) > 0 && visibleProducts.length === 0) {
+                        return null;
+                    }
+
                     return (
                         <div className={'hi-product-category-row'} key={category.id}>
                             <h2 className={'hi-product-category-title'} style={category.description ? {
@@ -569,11 +641,10 @@ const SelectProducts = (props: SelectProductsProps) => {
                                     </div>
                                 )}
 
-                                {(category.products) && category.products.map((product) => {
-                                    const currentProductIndex = productIndex;
-                                    const quantityRange = range(product.min_per_order || 1, product.max_per_order || 25)
-                                        .map((n) => n.toString());
-                                    quantityRange.unshift("0");
+                                {visibleProducts.map((product) => {
+                                    const currentProductIndex = getProductFormIndex(Number(product.id));
+                                    const parentQuantity = getProductQuantity(Number(product.id));
+                                    const addonIds = getResolvableAddonIds(product);
 
                                     const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
                                     const toggleCollapse = () => {
@@ -583,16 +654,41 @@ const SelectProducts = (props: SelectProductsProps) => {
                                         }));
                                     };
 
+                                    const isSimpleProduct = product.type !== 'TIERED'
+                                        && product.type !== 'DONATION'
+                                        && (product.prices?.length ?? 0) === 1;
+
+                                    const availabilityState = product.is_sold_out
+                                        ? 'sold-out'
+                                        : product.is_before_sale_start_date
+                                            ? 'upcoming'
+                                            : product.is_after_sale_end_date
+                                                ? 'ended'
+                                                : undefined;
+
+                                    const collapsedFromPrice = (() => {
+                                        if (!isProductCollapsed || product.type !== 'TIERED') {
+                                            return null;
+                                        }
+                                        const availablePrices = (product.prices || []).filter(price => price.is_available);
+                                        if (availablePrices.length === 0) {
+                                            return null;
+                                        }
+                                        return Math.min(...availablePrices.map(price =>
+                                            getDisplayPrice(price, event?.settings?.price_display_mode)));
+                                    })();
+
                                     return (
-                                        <div key={product.id} className={`hi-product-row ${product.is_highlighted ? 'hi-product-highlighted' : ''}`}>
+                                        <div key={product.id}
+                                             className={`hi-product-row ${product.is_highlighted ? 'hi-product-highlighted' : ''}`}
+                                             data-availability={availabilityState}>
                                             {product.is_highlighted && product.highlight_message && (
                                                 <div className={'hi-product-highlight-message'}>
                                                     {product.highlight_message}
                                                 </div>
                                             )}
                                             <div className={'hi-title-row'}>
-                                                <UnstyledButton variant={'transparent'}
-                                                                className={'hi-product-title'}
+                                                <UnstyledButton className={'hi-product-title'}
                                                                 onClick={toggleCollapse}
                                                 >
                                                     <h3>
@@ -602,42 +698,69 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         {(product.is_available && !!product.quantity_available && !(isRecurring && product.product_type === ProductType.Ticket)) && (
                                                             <>
                                                                 {product.quantity_available === Constants.INFINITE_TICKETS && (
-                                                                    <Trans>
-                                                                        Unlimited available
-                                                                    </Trans>
+                                                                    <span className={'hi-quantity-remaining-note'}>
+                                                                        <Trans>
+                                                                            Unlimited available
+                                                                        </Trans>
+                                                                    </span>
                                                                 )}
                                                                 {product.quantity_available !== Constants.INFINITE_TICKETS && (
-                                                                    <Trans>
-                                                                        {product.quantity_available} available
-                                                                    </Trans>
+                                                                    <span className={'hi-scarcity-pill'}>
+                                                                        <Trans>
+                                                                            {product.quantity_available} available
+                                                                        </Trans>
+                                                                    </span>
                                                                 )}
                                                             </>
                                                         )}
 
                                                         {(!product.is_available && product.type === 'TIERED') && (
-                                                            <ProductAvailabilityMessage product={product}
-                                                                                        event={event}
-                                                                                        eventOccurrenceId={selectedOccurrenceId}/>
+                                                            <span className={'hi-product-availability'}
+                                                                  data-reason={availabilityState}>
+                                                                <ProductAvailabilityMessage product={product}
+                                                                                            event={event}
+                                                                                            eventOccurrenceId={selectedOccurrenceId}/>
+                                                            </span>
                                                         )}
 
                                                         <span className={`hi-product-collapse-arrow`}>
-                                                        <IconChevronRight
+                                                        <IconChevronDown
                                                             className={isProductCollapsed ? "" : "open"}/>
                                                         </span>
                                                     </div>
                                                 </UnstyledButton>
                                             </div>
-                                            <Collapse transitionDuration={100} expanded={!isProductCollapsed}
-                                                      className={'hi-product-content'} hidden={isProductCollapsed}>
-                                                <div className={'hi-price-tiers-rows'}>
+                                            {isSimpleProduct && (
+                                                <div className={'hi-product-header-body'}>
                                                     <TieredPricing
-                                                        productIndex={productIndex++}
+                                                        productIndex={currentProductIndex}
                                                         event={event}
                                                         product={product}
                                                         form={form}
                                                         eventOccurrenceId={selectedOccurrenceId}
+                                                        displayMode={'header'}
+                                                        showStepper={!isProductCollapsed}
                                                     />
                                                 </div>
+                                            )}
+                                            {collapsedFromPrice !== null && (
+                                                <div className={'hi-price-from-summary'}>
+                                                    {t`From ${formatCurrency(collapsedFromPrice, event?.currency)}`}
+                                                </div>
+                                            )}
+                                            <Collapse transitionDuration={100} expanded={!isProductCollapsed}
+                                                      className={'hi-product-content'} hidden={isProductCollapsed}>
+                                                {!isSimpleProduct && (
+                                                    <div className={'hi-price-tiers-rows'}>
+                                                        <TieredPricing
+                                                            productIndex={currentProductIndex}
+                                                            event={event}
+                                                            product={product}
+                                                            form={form}
+                                                            eventOccurrenceId={selectedOccurrenceId}
+                                                        />
+                                                    </div>
+                                                )}
 
                                                 {product.max_per_order && form.values.products && isObjectEmpty(form.errors) && (form.values.products[currentProductIndex]?.quantities.reduce((acc, {quantity}) => acc + Number(quantity), 0) > product.max_per_order) && (
                                                     <div className={'hi-product-quantity-error'}>
@@ -653,15 +776,61 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                     </div>
                                                 )}
 
-                                                {product.description && (
-                                                    <div
-                                                        className={'hi-product-description-row'}>
-                                                        <Spoiler maxHeight={87} showLabel={t`Show more`}
-                                                                 hideLabel={t`Hide`}>
-                                                            <div dangerouslySetInnerHTML={{
-                                                                __html: product.description
-                                                            }}/>
-                                                        </Spoiler>
+                                                {product.description && renderProductDetails(
+                                                    Number(product.id),
+                                                    product.description,
+                                                    'hi-product-description-row',
+                                                )}
+
+                                                {addonIds.length > 0 && (
+                                                    <div className={'hi-product-addons'}
+                                                         data-inactive={parentQuantity === 0 || undefined}>
+                                                        <div className={'hi-product-addons-heading'}>
+                                                            <Trans>Add-ons</Trans>
+                                                            {parentQuantity === 0 && (
+                                                                <span className={'hi-product-addons-note'}>
+                                                                    <Trans>Add {product.title} first</Trans>
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {addonIds.map((addonId) => {
+                                                            const addon = productsById.get(addonId);
+                                                            if (!addon) {
+                                                                return null;
+                                                            }
+                                                            const addonFormIndex = getProductFormIndex(addonId);
+
+                                                            return (
+                                                                <div key={addonId}
+                                                                     className={classNames('hi-product-addon', addon.is_highlighted && 'hi-product-addon-highlighted')}>
+                                                                    <div className={'hi-product-addon-title'}>
+                                                                        {addon.title}
+                                                                        {addon.is_highlighted && addon.highlight_message && (
+                                                                            <span className={'hi-product-addon-highlight-message'}>
+                                                                                {addon.highlight_message}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    <TieredPricing
+                                                                        productIndex={addonFormIndex}
+                                                                        event={event}
+                                                                        product={addon}
+                                                                        form={form}
+                                                                        eventOccurrenceId={selectedOccurrenceId}
+                                                                    />
+                                                                    {form.errors[`products.${addonFormIndex}`] && (
+                                                                        <div className={'hi-product-quantity-error'}>
+                                                                            {form.errors[`products.${addonFormIndex}`]}
+                                                                        </div>
+                                                                    )}
+                                                                    {addon.description && renderProductDetails(
+                                                                        addonId,
+                                                                        addon.description,
+                                                                        'hi-product-addon-description',
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 )}
                                             </Collapse>
@@ -700,6 +869,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
             {form.values.promo_code && (
                 <div className={'hi-promo-code-applied'}>
+                    <IconCheck size={16} stroke={2.5} className={'hi-promo-code-applied-check'}/>
                     <span>
                         <b>{form.values.promo_code}</b>{' '}
                         {(appliedPromoDetails?.response.discount_type === PromoCodeDiscountType.Fixed
@@ -725,7 +895,7 @@ const SelectProducts = (props: SelectProductsProps) => {
             )}
 
             {(showPromoCodeInput && !form.values.promo_code) && (
-                <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'20px'}>
+                <Group className={'hi-promo-code-input-wrapper'} wrap={'nowrap'} gap={'10px'}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/*@ts-ignore*/}
                     <TextInput autoFocus classNames={{input: 'hi-promo-code-input'}} onKeyDown={(event) => {
@@ -738,7 +908,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             className={'hi-apply-promo-code-button'} variant={'outline'}
                             data-testid="promo-code-apply-button"
                             onClick={handleApplyPromoCode}>
-                        {t`Apply Promo Code`}
+                        {t`Apply`}
                     </Button>
                     <ActionIcon
                         type="button"

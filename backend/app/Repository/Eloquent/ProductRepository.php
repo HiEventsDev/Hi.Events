@@ -140,6 +140,38 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         Product::findOrFail($productId)?->tax_and_fees()->sync($taxIds);
     }
 
+    public function syncAddons(int $productId, array $addonProductIds): void
+    {
+        $syncData = [];
+        foreach (array_values($addonProductIds) as $position => $addonProductId) {
+            $syncData[$addonProductId] = ['order' => $position];
+        }
+
+        Product::findOrFail($productId)->addons()->sync($syncData);
+    }
+
+    public function detachAddonAssociations(int $productId): void
+    {
+        $this->runQuery(
+            fn () => $this->db->table('product_addons')
+                ->where('product_id', $productId)
+                ->orWhere('addon_product_id', $productId)
+                ->delete()
+        );
+    }
+
+    public function findParentProductIds(array $addonProductIds): Collection
+    {
+        return $this->runQuery(
+            fn () => collect(
+                $this->db->table('product_addons')
+                    ->whereIn('addon_product_id', $addonProductIds)
+                    ->get(['product_id', 'addon_product_id'])
+            )->groupBy('addon_product_id')
+                ->map(fn ($rows) => $rows->pluck('product_id')->all())
+        );
+    }
+
     public function addCapacityAssignmentToProducts(int $capacityAssignmentId, array $productIds): void
     {
         $productIds = array_unique($productIds);

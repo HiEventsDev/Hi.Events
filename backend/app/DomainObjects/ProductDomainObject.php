@@ -16,6 +16,8 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     private ?Collection $prices = null;
 
+    private ?Collection $addons = null;
+
     private ?string $offSaleReason = null;
 
     private ?int $quantityAvailable = null;
@@ -77,6 +79,23 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
     public function getFees(): ?Collection
     {
         return $this->getTaxAndFees()?->filter(fn (TaxAndFeesDomainObject $taxAndFee) => $taxAndFee->isFee());
+    }
+
+    public function setAddons(Collection $addons): ProductDomainObject
+    {
+        $this->addons = $addons;
+
+        return $this;
+    }
+
+    public function getAddons(): ?Collection
+    {
+        return $this->addons;
+    }
+
+    public function getAddonProductIds(): ?array
+    {
+        return $this->addons?->map(fn (ProductDomainObject $addon) => $addon->getId())->all();
     }
 
     public function isSoldOut(): bool

@@ -26,6 +26,15 @@ interface ProductRepositoryInterface extends RepositoryInterface
 
     public function addTaxesAndFeesToProduct(int $productId, array $taxIds): void;
 
+    public function syncAddons(int $productId, array $addonProductIds): void;
+
+    public function detachAddonAssociations(int $productId): void;
+
+    /**
+     * @return Collection<int, array<int>> map of addon_product_id => parent product ids
+     */
+    public function findParentProductIds(array $addonProductIds): Collection;
+
     public function addCapacityAssignmentToProducts(int $capacityAssignmentId, array $productIds): void;
 
     public function addCheckInListToProducts(int $checkInListId, array $productIds): void;

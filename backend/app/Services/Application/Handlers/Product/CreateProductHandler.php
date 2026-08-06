@@ -60,12 +60,14 @@ class CreateProductHandler
                 ->setIsHighlighted($productsData->is_highlighted ?? false)
                 ->setHighlightMessage($productsData->highlight_message)
                 ->setWaitlistEnabled($productsData->waitlist_enabled)
+                ->setIsAddonOnly($productsData->is_addon_only ?? false)
                 ->setProductPrices($productPrices)
                 ->setEventId($productsData->event_id)
                 ->setProductType($productsData->product_type->name)
                 ->setProductCategoryId($category->getId()),
             accountId: $productsData->account_id,
             taxAndFeeIds: $productsData->tax_and_fee_ids,
+            addonProductIds: $productsData->is_addon_only ? [] : $productsData->addon_product_ids,
         );
     }
 }

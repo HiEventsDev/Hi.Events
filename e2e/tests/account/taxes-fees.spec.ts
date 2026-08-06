@@ -117,7 +117,7 @@ test.describe('taxes and fees', () => {
     await products.openCreateModal();
     await page.getByLabel(/^Name/).fill(title);
     await page.getByLabel(/^Price/).fill('30');
-    await products.openAdvancedOptions();
+    await products.openLedgerRow('taxes');
 
     await page.getByRole('combobox', { name: 'Taxes and Fees' }).click();
     await page.getByRole('option', { name: new RegExp(`^${taxName}`) }).click();
@@ -127,7 +127,7 @@ test.describe('taxes and fees', () => {
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
 
     await products.openEditModal();
-    await products.openAdvancedOptions();
+    await products.openLedgerRow('taxes');
     await expect(page.getByRole('dialog').getByText(new RegExp(`^${taxName}`))).toBeVisible();
   });
 });

@@ -28,6 +28,7 @@ class GetProductCategoriesHandler
                 nested: [
                     new Relationship(ProductPriceDomainObject::class),
                     new Relationship(TaxAndFeesDomainObject::class),
+                    new Relationship(domainObject: ProductDomainObject::class, name: 'addons'),
                 ],
                 orderAndDirections: [
                     new OrderAndDirection(

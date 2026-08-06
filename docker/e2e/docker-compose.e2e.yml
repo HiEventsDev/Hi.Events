@@ -35,6 +35,7 @@ services:
             dockerfile: Dockerfile.ssr
         environment:
             NODE_ENV: production
+            WIDGET_TEST_PAGE_ENABLED: 'true'
             VITE_API_URL_CLIENT: 'http://localhost:8123/api'
             VITE_API_URL_SERVER: 'http://backend:8080'
             VITE_FRONTEND_URL: 'http://localhost:8123'

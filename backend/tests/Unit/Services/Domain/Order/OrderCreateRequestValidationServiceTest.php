@@ -749,11 +749,106 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_rejects_addon_only_product_without_parent_in_order(): void
+    {
+        $this->setupEventLookup(1);
+
+        $addon = $this->createFullProductMock(productId: 10, priceId: 100, isAddonOnly: true, productType: 'GENERAL');
+
+        $this->productRepository
+            ->shouldReceive('findWhereIn')
+            ->andReturn(collect([$addon]));
+
+        $this->productRepository
+            ->shouldReceive('findParentProductIds')
+            ->with([10])
+            ->andReturn(collect([10 => [99]]));
+
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('add-on');
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+    }
+
+    public function test_allows_addon_only_product_with_parent_in_order(): void
+    {
+        $occurrence = $this->createOccurrence();
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailabilityFor([[9, 90], [10, 100]]);
+
+        $parent = $this->createFullProductMock(productId: 9, priceId: 90);
+        $addon = $this->createFullProductMock(productId: 10, priceId: 100, isAddonOnly: true, productType: 'GENERAL');
+
+        $this->productRepository
+            ->shouldReceive('findWhereIn')
+            ->andReturn(collect([$parent, $addon]));
+
+        $this->productRepository
+            ->shouldReceive('findParentProductIds')
+            ->with([10])
+            ->andReturn(collect([10 => [9]]));
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 9,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 90, 'quantity' => 1]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 2]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
+    public function test_ignores_addon_only_product_with_zero_quantity(): void
+    {
+        $occurrence = $this->createOccurrence();
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailabilityFor([[9, 90], [10, 100]]);
+
+        $parent = $this->createFullProductMock(productId: 9, priceId: 90);
+        $addon = $this->createFullProductMock(productId: 10, priceId: 100, isAddonOnly: true, productType: 'GENERAL');
+
+        $this->productRepository
+            ->shouldReceive('findWhereIn')
+            ->andReturn(collect([$parent, $addon]));
+
+        $this->productRepository->shouldNotReceive('findParentProductIds');
+
+        $data = [
+            'products' => [
+                [
+                    'product_id' => 9,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 90, 'quantity' => 1]],
+                ],
+                [
+                    'product_id' => 10,
+                    'event_occurrence_id' => 10,
+                    'quantities' => [['price_id' => 100, 'quantity' => 0]],
+                ],
+            ],
+        ];
+
+        $this->service->validateRequestData(1, $data);
+        $this->assertTrue(true);
+    }
+
     private function createTicketProductStub(int $id): ProductDomainObject|MockInterface
     {
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn($id);
         $product->shouldReceive('getProductType')->andReturn('TICKET');
+        $product->shouldReceive('getIsAddonOnly')->andReturn(false);
 
         return $product;
     }
@@ -838,6 +933,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('getProductType')->andReturn($productType);
         $product->shouldReceive('getIsHidden')->andReturn(false);
         $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
+        $product->shouldReceive('getIsAddonOnly')->andReturn(false);
 
         $this->productRepository
             ->shouldReceive('loadRelation')->andReturnSelf();
@@ -845,6 +941,56 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->productRepository
             ->shouldReceive('findWhereIn')
             ->andReturn(collect([$product]));
+    }
+
+    private function createFullProductMock(
+        int $productId,
+        int $priceId,
+        bool $isAddonOnly = false,
+        string $productType = 'TICKET',
+    ): ProductDomainObject|MockInterface {
+        $price = Mockery::mock(ProductPriceDomainObject::class);
+        $price->shouldReceive('getId')->andReturn($priceId);
+        $price->shouldReceive('getIsHidden')->andReturn(false);
+        $price->shouldReceive('getLabel')->andReturn(null);
+
+        $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('getId')->andReturn($productId);
+        $product->shouldReceive('getEventId')->andReturn(1);
+        $product->shouldReceive('getTitle')->andReturn('Product '.$productId);
+        $product->shouldReceive('getMaxPerOrder')->andReturn(10);
+        $product->shouldReceive('getMinPerOrder')->andReturn(1);
+        $product->shouldReceive('getType')->andReturn('PAID');
+        $product->shouldReceive('isSoldOut')->andReturn(false);
+        $product->shouldReceive('getProductPrices')->andReturn(collect([$price]));
+        $product->shouldReceive('getProductType')->andReturn($productType);
+        $product->shouldReceive('getIsHidden')->andReturn(false);
+        $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
+        $product->shouldReceive('getIsAddonOnly')->andReturn($isAddonOnly);
+
+        return $product;
+    }
+
+    private function setupAvailabilityFor(array $productPricePairs): void
+    {
+        $this->availabilityService
+            ->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect($productPricePairs)->map(
+                    fn (array $pair) => AvailableProductQuantitiesDTO::fromArray([
+                        'product_id' => $pair[0],
+                        'price_id' => $pair[1],
+                        'product_title' => 'Product '.$pair[0],
+                        'product_type' => 'TICKET',
+                        'price_label' => null,
+                        'quantity_available' => 100,
+                        'quantity_reserved' => 0,
+                        'initial_quantity_available' => 100,
+                        'capacities' => new Collection,
+                    ])
+                ),
+                capacities: collect(),
+            ));
     }
 
     private function createRequestData(int $occurrenceId, int $productId = 10, int $priceId = 100, int $quantity = 1, ?float $price = null): array

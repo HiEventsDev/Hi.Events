@@ -40,7 +40,7 @@ class GetProductsHandlerTest extends TestCase
         $paginator = new LengthAwarePaginator(collect([$product]), 1, 25);
         $queryParams = new QueryParamsDTO;
 
-        $this->productRepository->shouldReceive('loadRelation')->twice()->andReturnSelf();
+        $this->productRepository->shouldReceive('loadRelation')->times(3)->andReturnSelf();
         $this->productRepository->shouldReceive('findByEventId')
             ->once()
             ->with(10, $queryParams)
