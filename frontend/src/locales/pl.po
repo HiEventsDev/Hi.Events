@@ -196,14 +196,6 @@ msgstr ""
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} typów biletów"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:570
-msgid "{totalOccurrences} dates"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:563
-msgid "{totalOccurrences} sessions across {0} dates ({1, plural, one {# session} other {# sessions}} per day)"
-msgstr ""
-
 #: src/components/common/Currency/index.tsx:59
 msgid "+ {formattedAmount} fees"
 msgstr "+ {formattedAmount} opłaty"
@@ -219,6 +211,10 @@ msgstr "+ {formattedAmount} podatek"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:98
 msgid "+1 234 567 890"
 msgstr "+1 234 567 890"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1019
+msgid "+1 day"
+msgstr "+1 dzień"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:410
 msgid "+Tax/Fees"
@@ -423,6 +419,10 @@ msgstr "Standardowy podatek, jak VAT lub GST"
 msgid "A URL is required when a button label is set"
 msgstr "Adres URL jest wymagany, gdy ustawiono etykietę przycisku"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:921
+msgid "A weekday pattern"
+msgstr "Wzorzec dnia tygodnia"
+
 #: src/components/common/OrdersTable/index.tsx:347
 msgid "Abandoned"
 msgstr "Porzucony"
@@ -611,7 +611,7 @@ msgstr "Dodaj opis dla tej listy odpraw"
 msgid "Add a Single Date"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:755
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:992
 msgid "Add another time"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr "Dodaj wszelkie notatki o zamówieniu. Nie będą widoczne dla klienta."
 msgid "Add any notes about the order..."
 msgstr "Dodaj wszelkie notatki o zamówieniu..."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:382
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:533
 msgid "Add at least one time"
 msgstr ""
 
@@ -682,7 +682,7 @@ msgstr "Dodaj instrukcje dla płatności offline (np. szczegóły przelewu banko
 msgid "Add Location"
 msgstr "Dodaj lokalizację"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:759
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1047
 msgid "Add multiple times if you run several sessions per day."
 msgstr ""
 
@@ -1091,9 +1091,9 @@ msgstr "Wystąpił nieoczekiwany błąd."
 msgid "An unexpected error occurred. Please try again."
 msgstr "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:865
-msgid "and {0} more..."
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:782
+msgid "and"
+msgstr "i"
 
 #: src/components/routes/admin/Announcements/index.tsx:354
 msgid "Announcement content"
@@ -1136,7 +1136,7 @@ msgstr ""
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:580
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1148
 msgid "Any dates you've manually customized will be kept."
 msgstr ""
 
@@ -1201,7 +1201,7 @@ msgstr ""
 msgid "Approve Message"
 msgstr "Zatwierdź wiadomość"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:76
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:68
 msgid "April"
 msgstr ""
 
@@ -1585,7 +1585,7 @@ msgstr "Wartość atrybucji"
 msgid "Audience"
 msgstr "Odbiorcy"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:80
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:72
 msgid "August"
 msgstr ""
 
@@ -1842,14 +1842,6 @@ msgstr "Dodając piksele śledzące, potwierdzasz, że Ty i ta platforma jesteś
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "Kontynuując, zgadzasz się na <0>{0} Warunki korzystania z usługi</0>"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:644
-msgid "By day of month"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:645
-msgid "By day of week"
-msgstr ""
-
 #: src/components/routes/auth/Register/index.tsx:141
 msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Rejestrując się, zgadzasz się na nasze <0>Warunki korzystania z usługi</0> i <1>Politykę prywatności</1>."
@@ -1909,6 +1901,7 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1155
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:83
@@ -2000,7 +1993,7 @@ msgstr "Nie można usunąć domyślnej konfiguracji systemu"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:503
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:827
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1104
 msgid "Capacity"
 msgstr "Pojemność"
 
@@ -2382,6 +2375,7 @@ msgstr "zamknij"
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:163
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:872
 #: src/components/routes/product-widget/SelectProducts/index.tsx:918
 msgid "Close"
 msgstr "Zamknij"
@@ -2939,10 +2933,6 @@ msgstr "Utwórz szablon {0}"
 msgid "Create a custom widget to sell tickets on your site."
 msgstr "Utwórz niestandardowy widget do sprzedaży biletów na swojej stronie."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:801
-msgid "Create a fixed number"
-msgstr ""
-
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr ""
@@ -3089,9 +3079,9 @@ msgstr "Utwórz kod promocyjny"
 msgid "Create Question"
 msgstr "Utwórz pytanie"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:880
-msgid "Create Schedule"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1163
+msgid "Create schedule"
+msgstr "Utwórz harmonogram"
 
 #: src/components/forms/ProductForm/index.tsx:501
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:53
@@ -3280,7 +3270,7 @@ msgstr "Dostosuj swoją stronę wydarzenia"
 msgid "Customize your organizer page appearance"
 msgstr "Dostosuj wygląd strony organizatora"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:58
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:50
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Daily"
 msgstr ""
@@ -3392,6 +3382,11 @@ msgstr ""
 msgid "Date updated successfully"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:808
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1093
+msgid "dates"
+msgstr "terminów"
+
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:105
 msgid "Dates are managed per occurrence"
 msgstr ""
@@ -3400,15 +3395,15 @@ msgstr ""
 msgid "Dates with sessions"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:95
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:87
 msgid "day"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:675
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:973
 msgid "Day"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:692
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:937
 msgid "Day of Month"
 msgstr ""
 
@@ -3416,25 +3411,25 @@ msgstr ""
 msgid "Day one capacity"
 msgstr "Pojemność pierwszego dnia"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:103
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:95
 msgid "days"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:651
-msgid "Days of Month"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:920
+msgid "Days of the month"
+msgstr "Dni miesiąca"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:621
-msgid "Days of Week"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:84
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:76
 msgid "December"
 msgstr ""
 
 #: src/components/common/CookieConsentBanner/index.tsx:62
 msgid "Decline"
 msgstr "Odrzuć"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:322
+msgid "Decrease"
+msgstr "Zmniejsz"
 
 #: src/components/common/NumberSelector/index.tsx:109
 msgid "Decrease quantity"
@@ -3450,7 +3445,7 @@ msgstr "Domyślny"
 msgid "Default attendee information collection"
 msgstr "Domyślne zbieranie informacji o uczestniku"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:831
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1106
 msgid "Default capacity per date"
 msgstr ""
 
@@ -3652,10 +3647,12 @@ msgid "Disabling this capacity will track sales but not stop them when the limit
 msgstr "Wyłączenie tej pojemności będzie śledzić sprzedaż, ale nie zatrzyma jej po osiągnięciu limitu"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:731
 msgid "Discard"
 msgstr ""
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:54
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:725
 msgid "Discard changes?"
 msgstr ""
 
@@ -3846,7 +3843,6 @@ msgstr "np. Dowiedz się więcej"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:452
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:450
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:730
 msgid "e.g. Morning Session"
 msgstr ""
 
@@ -3996,6 +3992,10 @@ msgstr "Edytuj kod promocyjny"
 #: src/components/modals/EditQuestionModal/index.tsx:101
 msgid "Edit Question"
 msgstr "Edytuj pytanie"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:866
+msgid "Edit schedule"
+msgstr "Edytuj harmonogram"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 msgid "Edit user"
@@ -4215,10 +4215,6 @@ msgstr "Włącz listę oczekujących"
 msgid "Enabled"
 msgstr "Włączony"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:720
-msgid "End"
-msgstr ""
-
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
@@ -4236,9 +4232,9 @@ msgstr "Data i czas zakończenia (opcjonalne)"
 msgid "End date must be after start date"
 msgstr "Data zakończenia musi być po dacie rozpoczęcia"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:787
-msgid "End on a date"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1011
+msgid "End time"
+msgstr "Godzina zakończenia"
 
 #: src/components/routes/welcome/index.tsx:445
 msgid "End time (optional)"
@@ -4391,6 +4387,7 @@ msgid "Error loading logs"
 msgstr "Błąd ładowania logów"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:98
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:870
 msgid "Esc to close"
 msgstr ""
 
@@ -4576,9 +4573,17 @@ msgstr "Wydajność wydarzeń"
 msgid "Events Starting in Next 24 Hours"
 msgstr "Wydarzenia rozpoczynające się w ciągu następnych 24 godzin"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:895
+msgid "Every"
+msgstr "Co"
+
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:37
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Every {0}"
+msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
+msgid "Every {0} {cadenceUnit}"
 msgstr ""
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
@@ -4601,6 +4606,10 @@ msgstr ""
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Every {0} years"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:747
+msgid "Every {cadenceUnit}"
+msgstr "Co {cadenceUnit}"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:23
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
@@ -4751,11 +4760,11 @@ msgstr "Nie udało się utworzyć partnera"
 msgid "Failed to create configuration"
 msgstr "Nie udało się utworzyć konfiguracji"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:546
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:712
 msgid "Failed to create schedule"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:536
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:702
 #: src/hooks/useOccurrenceGenerationPolling.ts:42
 msgid "Failed to create schedule. Please try again."
 msgstr "Nie udało się utworzyć harmonogramu. Spróbuj ponownie."
@@ -5004,7 +5013,7 @@ msgstr ""
 msgid "Fast payouts to your bank"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:74
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:66
 msgid "February"
 msgstr ""
 
@@ -5099,7 +5108,7 @@ msgstr ""
 msgid "Finish setup"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:65
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:57
 msgid "First"
 msgstr ""
 
@@ -5208,11 +5217,19 @@ msgstr "Jedzenie i napoje"
 msgid "Footer Text"
 msgstr "Tekst stopki"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1085
+msgid "for"
+msgstr "przez"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1060
+msgid "For a number of dates"
+msgstr "Przez określoną liczbę terminów"
+
 #: src/components/routes/auth/Login/index.tsx:100
 msgid "Forgot password?"
 msgstr "Zapomniałeś hasła?"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:68
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:60
 msgid "Fourth"
 msgstr ""
 
@@ -5234,17 +5251,18 @@ msgstr "Darmowy"
 msgid "French"
 msgstr "Francuski"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:602
-msgid "Frequency"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:52
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:44
 msgid "Fri"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:44
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Friday"
-msgstr ""
+msgstr "Piątek"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1066
+msgid "From"
+msgstr "Od"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:748
 msgid "From {0}"
@@ -5253,6 +5271,14 @@ msgstr "Od {0}"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:46
 msgid "From {start}"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:789
+msgid "from {start} until {end}"
+msgstr "od {start} do {end}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:793
+msgid "from {start}, for {count} dates"
+msgstr "od {start}, przez {count} terminów"
 
 #: src/components/layouts/AuthLayout/index.tsx:26
 msgid "Full data ownership"
@@ -5628,10 +5654,6 @@ msgstr "Jak stosowany jest rabat?"
 msgid "How long a customer has to complete their purchase after receiving an offer. Leave empty for no timeout."
 msgstr "Jak długo klient ma na sfinalizowanie zakupu po otrzymaniu oferty. Pozostaw puste, aby nie było limitu czasu."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:766
-msgid "How long does the schedule run?"
-msgstr ""
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "Ile minut klient ma na ukończenie zamówienia. Zalecamy co najmniej 15 minut"
@@ -5639,10 +5661,6 @@ msgstr "Ile minut klient ma na ukończenie zamówienia. Zalecamy co najmniej 15 
 #: src/components/forms/PromoCodeForm/index.tsx:173
 msgid "How many times can this code be used?"
 msgstr "Ile razy można użyć tego kodu?"
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:597
-msgid "How often?"
-msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:449
 msgid "How VAT is applied to the platform fees we charge you."
@@ -5824,6 +5842,10 @@ msgstr "Zawiera {0} produktów"
 msgid "Includes 1 product"
 msgstr "Zawiera 1 produkt"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:331
+msgid "Increase"
+msgstr "Zwiększ"
+
 #: src/components/common/NumberSelector/index.tsx:136
 msgid "Increase quantity"
 msgstr "Zwiększ ilość"
@@ -5963,7 +5985,7 @@ msgstr "przedmiot(y)"
 msgid "Items"
 msgstr "Przedmioty"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:73
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:65
 msgid "January"
 msgstr ""
 
@@ -6013,11 +6035,11 @@ msgstr "Dołącz do listy oczekujących na {productDisplayName}"
 msgid "Joined"
 msgstr "Dołączono"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:79
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:71
 msgid "July"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:78
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:70
 msgid "June"
 msgstr ""
 
@@ -6038,6 +6060,7 @@ msgid "Keep connection"
 msgstr "Zachowaj połączenie"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:731
 msgid "Keep editing"
 msgstr ""
 
@@ -6055,10 +6078,14 @@ msgstr ""
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:63
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:449
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:727
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1023
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
 msgid "Label"
 msgstr "Etykieta"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1026
+msgid "Label — e.g. Morning session"
+msgstr "Etykieta — np. Sesja poranna"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:301
 msgid "label updates"
@@ -6070,7 +6097,7 @@ msgstr ""
 msgid "Language"
 msgstr "Język"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:69
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:61
 msgid "Last"
 msgstr ""
 
@@ -6174,12 +6201,15 @@ msgstr ""
 msgid "Latest check-ins"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1098
+msgid "Leave “from” as today to start right away."
+msgstr "Pozostaw „Od” jako dziś, aby zacząć od razu."
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:201
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Pozostaw puste, aby użyć domyślnego słowa \"Faktura\""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:507
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:832
 msgid "Leave empty for unlimited"
 msgstr ""
 
@@ -6463,7 +6493,7 @@ msgstr "Dodaj uczestnika ręcznie"
 msgid "Manually Add Attendee"
 msgstr "Dodaj uczestnika ręcznie"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:75
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:67
 msgid "March"
 msgstr ""
 
@@ -6491,7 +6521,7 @@ msgstr "Maksymalnie {cap} na zamówienie"
 msgid "Maximum Per Order"
 msgstr "Maksimum na zamówienie"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:77
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:69
 msgid "May"
 msgstr ""
 
@@ -6616,13 +6646,14 @@ msgstr "Okno modalne"
 msgid "Mode"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:48
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:40
 msgid "Mon"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:40
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Monday"
-msgstr ""
+msgstr "Poniedziałek"
 
 #: src/components/routes/admin/Dashboard/index.tsx:163
 msgid "Monetary values are approximate totals across all currencies"
@@ -6632,24 +6663,20 @@ msgstr "Wartości pieniężne są przybliżonymi sumami we wszystkich walutach"
 msgid "Monitor and manage failed background jobs"
 msgstr "Monitoruj i zarządzaj nieudanymi zadaniami w tle"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:97
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:89
 msgid "month"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:687
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:931
 msgid "Month"
 msgstr "Miesiąc"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:52
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:41
 msgid "Monthly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:640
-msgid "Monthly Pattern"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:105
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:97
 msgid "months"
 msgstr ""
 
@@ -6789,6 +6816,10 @@ msgstr "Nowe rejestracje"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:53
 msgid "New time:"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:429
+msgid "Next month"
+msgstr "Następny miesiąc"
 
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:162
 msgid "Next occurrence"
@@ -7244,11 +7275,11 @@ msgstr ""
 msgid "Notify organizer of new orders"
 msgstr "Powiadom organizatora o nowych zamówieniach"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:83
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:75
 msgid "November"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:816
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1087
 msgid "Number of dates to create"
 msgstr ""
 
@@ -7295,13 +7326,17 @@ msgstr ""
 msgid "Occurrences can be configured after creation"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:82
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:74
 msgid "October"
 msgstr ""
 
 #: src/components/common/OrganizerReportTable/index.tsx:356
 msgid "of"
 msgstr "z"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:978
+msgid "of every month"
+msgstr "każdego miesiąca"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:77
 #: src/components/forms/ProductForm/ledgerSummaries.ts:140
@@ -7369,9 +7404,24 @@ msgstr "Informacje o płatnościach offline"
 msgid "Offline Payments Settings"
 msgstr "Ustawienia płatności offline"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:904
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:914
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:929
+msgid "on"
+msgstr "w"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 msgid "On"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:760
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:768
+msgid "on {dayList}"
+msgstr "w {dayList}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:777
+msgid "on {month} {day}"
+msgstr "{day} {month}"
 
 #: src/components/common/EventCard/index.tsx:93
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:101
@@ -7382,6 +7432,10 @@ msgstr "W sprzedaży"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:107
 msgid "On sale {0}"
 msgstr "W sprzedaży {0}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:772
+msgid "on the {position} {day}"
+msgstr "w {position} {day}"
 
 #: src/components/forms/ProductForm/index.tsx:442
 msgid "On the event page"
@@ -8194,17 +8248,21 @@ msgstr "Informacje osobiste"
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:379
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:530
 msgid "Pick an end date"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:387
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:538
 msgid "Pick at least one day of the month"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:376
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:527
 msgid "Pick at least one day of the week"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:841
+msgid "Pick days to see your dates."
+msgstr "Wybierz dni, aby zobaczyć terminy."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:82
 msgid "Pinterest"
@@ -8252,7 +8310,7 @@ msgstr "Przychody platformy"
 msgid "Please add at least one option"
 msgstr "Dodaj co najmniej jedną opcję"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:543
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:709
 #: src/hooks/useFormErrorResponseHandler.tsx:18
 msgid "Please check the provided information is correct"
 msgstr "Sprawdź, czy podane informacje są poprawne"
@@ -8382,7 +8440,7 @@ msgstr "Popularne wydarzenia (ostatnie 14 dni)"
 msgid "Portuguese"
 msgstr "Portugalski"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:670
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:967
 msgid "Position"
 msgstr ""
 
@@ -8416,6 +8474,10 @@ msgstr "Podgląd formularza płatności"
 #: src/components/layouts/Event/index.tsx:280
 msgid "Preview Event page"
 msgstr "Podgląd strony wydarzenia"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:420
+msgid "Previous month"
+msgstr "Poprzedni miesiąc"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
@@ -9000,6 +9062,10 @@ msgstr ""
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "Całkowicie usuwa wyprzedane daty i godziny ze strony wydarzenia. Gdy wyłączone, pozostają widoczne i są oznaczone jako wyprzedane."
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1031
+msgid "Remove time"
+msgstr "Usuń godzinę"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:60
 msgid "Reopen for new sales"
 msgstr ""
@@ -9008,9 +9074,9 @@ msgstr ""
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:607
-msgid "Repeat every"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:885
+msgid "Repeats"
+msgstr "Powtarzanie"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -9217,9 +9283,9 @@ msgstr "Cofnij ofertę"
 msgid "Role"
 msgstr "Rola"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:788
-msgid "Run until a specific date"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1053
+msgid "Runs"
+msgstr "Czas trwania"
 
 #: src/components/forms/ProductForm/index.tsx:429
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:85
@@ -9299,13 +9365,14 @@ msgstr "Przykładowa cena biletu"
 msgid "Sample Venue"
 msgstr "Przykładowa Sala"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:53
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:45
 msgid "Sat"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:45
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Saturday"
-msgstr ""
+msgstr "Sobota"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
@@ -9350,9 +9417,9 @@ msgstr ""
 msgid "Save Organizer"
 msgstr "Zapisz organizatora"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:880
-msgid "Save Schedule"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1163
+msgid "Save schedule"
+msgstr "Zapisz harmonogram"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:90
 msgid "Save Settings"
@@ -9414,12 +9481,12 @@ msgstr ""
 msgid "Schedule added"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:531
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:697
 #: src/hooks/useOccurrenceGenerationPolling.ts:36
 msgid "Schedule created successfully"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:809
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1078
 msgid "Schedule ends on"
 msgstr ""
 
@@ -9431,7 +9498,11 @@ msgstr "Zaplanuj na później"
 msgid "Schedule Message"
 msgstr "Zaplanuj wiadomość"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:771
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1131
+msgid "Schedule preview"
+msgstr "Podgląd harmonogramu"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1069
 msgid "Schedule starts on"
 msgstr ""
 
@@ -9571,7 +9642,7 @@ msgstr "Wyszukiwanie..."
 msgid "Seasonal"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:66
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:58
 msgid "Second"
 msgstr ""
 
@@ -9893,7 +9964,7 @@ msgstr "Ustawienia SEO"
 msgid "SEO Title"
 msgstr "Tytuł SEO"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:81
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:73
 msgid "September"
 msgstr ""
 
@@ -9905,6 +9976,10 @@ msgstr "Opłata za usługę"
 msgid "Session cancelled"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:807
+msgid "sessions · {dateCount} dates × {timesPerDay} times"
+msgstr "sesji · {dateCount} terminów × {timesPerDay} godzin"
+
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:43
 msgid "Set default platform fee settings for new events created under this organizer."
 msgstr "Ustaw domyślne ustawienia opłat platformy dla nowych wydarzeń utworzonych pod tym organizatorem."
@@ -9915,10 +9990,6 @@ msgstr "Ustaw domyślne ustawienia dla nowych wydarzeń utworzonych pod tym orga
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Set how long each date lasts"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:800
-msgid "Set number of dates"
 msgstr ""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
@@ -9968,12 +10039,9 @@ msgid "Set up your organization"
 msgstr "Ustaw swoją organizację"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:103
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:866
 msgid "Set up your schedule"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:585
-msgid "Set Up Your Schedule"
-msgstr ""
+msgstr "Skonfiguruj harmonogram"
 
 #: src/components/routes/welcome/index.tsx:415
 msgid "Set up your schedule in the next steps"
@@ -10310,10 +10378,6 @@ msgstr "Sport"
 msgid "Staff instructions"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:712
-msgid "Start"
-msgstr ""
-
 #: src/components/modals/SelectCheckInListModal/index.tsx:48
 msgid "Start check-in"
 msgstr ""
@@ -10337,6 +10401,10 @@ msgstr "Data i czas rozpoczęcia"
 #: src/components/routes/welcome/index.tsx:247
 msgid "Start date is required"
 msgstr "Data rozpoczęcia jest wymagana"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1000
+msgid "Start time"
+msgstr "Godzina rozpoczęcia"
 
 #: src/components/common/AddressAutocomplete/index.tsx:87
 msgid "Start typing a venue or address..."
@@ -10672,13 +10740,14 @@ msgstr "Letni Festiwal Muzyki {0}"
 msgid "Summer Music Festival 2025"
 msgstr "Letni Festiwal Muzyki 2025"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:54
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:46
 msgid "Sun"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:46
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Sunday"
-msgstr ""
+msgstr "Niedziela"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
@@ -10704,6 +10773,10 @@ msgstr "Koszulka"
 #: src/components/forms/ProductForm/index.tsx:214
 msgid "T-shirts, mugs and more"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:960
+msgid "Tap dates like a calendar."
+msgstr "Wybieraj daty jak w kalendarzu."
 
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
@@ -10807,7 +10880,7 @@ msgstr "Powiedz nam o Twojej imprezie"
 msgid "Tell us about your organization. This information will be displayed on your event pages."
 msgstr "Powiedz nam o Twojej organizacji. Informacja ta będzie wyświetlana na stronach Twoich imprez."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:589
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1151
 msgid "Tell us how often your event repeats and we'll create all the dates for you."
 msgstr ""
 
@@ -10853,6 +10926,10 @@ msgstr ""
 #: src/components/routes/product-widget/SelectProducts/index.tsx:505
 msgid "That promo code is invalid"
 msgstr "Ten kod promocyjny jest nieprawidłowy"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:818
+msgid "That's {totalOccurrences} sessions — the maximum is {max}. Shorten the range or frequency."
+msgstr "To {totalOccurrences} sesji — maksimum to {max}. Skróć zakres lub częstotliwość."
 
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:54
 msgid "That's a wrap"
@@ -10905,10 +10982,6 @@ msgstr "Adres e-mail został zmieniony. Uczestnik otrzyma nowy bilet na zaktuali
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "Impreza, którą szukasz, nie jest dostępna w chwili obecnej. Mogła zostać usunięta, wygaśnięta lub adres URL może być nieprawidłowy."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:772
-msgid "The first date this schedule will generate from."
-msgstr ""
-
 #: src/components/modals/CancelOrderModal/index.tsx:76
 msgid "The full order amount will be refunded to the customer's original payment method."
 msgstr "Pełna kwota zamówienia zostanie zwrócona do oryginalnej metody płatności klienta."
@@ -10924,10 +10997,6 @@ msgstr "Link, który próbujesz otworzyć, wygasł lub nie jest już ważny. Spr
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:22
 msgid "The link you clicked is invalid."
 msgstr "Kliknięty link jest nieprawidłowy."
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:856
-msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
-msgstr ""
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:767
 msgid "The maximum number of products for {0}is {1}"
@@ -11069,7 +11138,7 @@ msgstr "Te szablony będą używane jako domyślne dla wszystkich wydarzeń w Tw
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "Te szablony będą zastępować domyślne ustawienia organizatora tylko dla tego wydarzenia. Jeśli tutaj nie jest ustawiony żaden niestandardowy szablon, zostanie użyty szablon organizatora."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:67
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:59
 msgid "Third"
 msgstr ""
 
@@ -11356,13 +11425,14 @@ msgstr "Spowoduje to natychmiastowe trwałe usunięcie lub anonimizację konta, 
 msgid "Throughput"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:51
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:43
 msgid "Thu"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:43
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Thursday"
-msgstr ""
+msgstr "Czwartek"
 
 #: src/components/routes/my-tickets/index.tsx:102
 #: src/hooks/useAttendeeActions.tsx:104
@@ -11503,6 +11573,10 @@ msgstr ""
 msgid "Time left:"
 msgstr "Pozostały czas:"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:985
+msgid "Times"
+msgstr "Godziny"
+
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:725
 msgid "Times shown in {timezoneAbbr}"
 msgstr ""
@@ -11535,7 +11609,7 @@ msgstr "Tytuł"
 msgid "Title is required"
 msgstr "Tytuł jest wymagany"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:718
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1008
 msgid "to"
 msgstr ""
 
@@ -11693,13 +11767,14 @@ msgstr "Spróbuj innego e-maila"
 msgid "Try Hi.Events Free"
 msgstr "Spróbuj Hi.Events za darmo"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:49
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:41
 msgid "Tue"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:41
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Tuesday"
-msgstr ""
+msgstr "Wtorek"
 
 #: src/components/common/LanguageSwitcher/index.tsx:38
 msgid "Turkish"
@@ -11825,6 +11900,7 @@ msgstr "Nieznany uczestnik"
 #: src/components/forms/PromoCodeForm/index.tsx:171
 #: src/components/modals/OfferWaitlistModal/index.tsx:195
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:172
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1107
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
 msgid "Unlimited"
@@ -11854,9 +11930,17 @@ msgstr "Nieopłacony"
 msgid "Unpaid Order"
 msgstr "Nieopłacone zamówienie"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1075
+msgid "until"
+msgstr "do"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:49
 msgid "Until {end}"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1059
+msgid "Until a date"
+msgstr "Do daty"
 
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:101
 msgid "Untitled product"
@@ -11949,6 +12033,10 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:215
 msgid "Updated location for {count} date(s)"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1138
+msgid "Updates as you build the rule. Flip through months to sanity-check dates."
+msgstr "Aktualizuje się podczas tworzenia reguły. Przeglądaj miesiące, aby sprawdzić terminy."
 
 #: src/components/forms/ProductForm/ProductPreview.tsx:93
 msgid "Updates as you type."
@@ -12469,6 +12557,10 @@ msgstr "Nie mogliśmy potwierdzić Twojej płatności. Proszę spróbować ponow
 msgid "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
 msgstr "Nie mogliśmy zweryfikować numeru VAT po wielu próbach. Będziemy kontynuować próby w tle. Proszę sprawdzić później."
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1150
+msgid "We'll create all {totalOccurrences} sessions — you can edit or remove any date afterwards"
+msgstr "Utworzymy wszystkie {totalOccurrences} sesji — potem możesz edytować lub usunąć dowolny termin"
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:112
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
 msgstr "Powiadomimy Cię e-mailem, jeśli miejsce stanie się dostępne dla {productDisplayName} w dniu {occurrenceDate}."
@@ -12550,24 +12642,25 @@ msgstr "Webhooki"
 msgid "Website"
 msgstr "Strona internetowa"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:50
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:42
 msgid "Wed"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:42
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Wednesday"
-msgstr ""
+msgstr "Środa"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:96
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:88
 msgid "week"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:59
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:51
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Weekly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:104
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:96
 msgid "weeks"
 msgstr ""
 
@@ -12622,10 +12715,6 @@ msgstr "Do jakich produktów powinna dotyczyć ta pojemność?"
 #: src/components/forms/QuestionForm/index.tsx:179
 msgid "What time will you be arriving?"
 msgstr "O której godzinie przyjedziesz?"
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:704
-msgid "What time?"
-msgstr ""
 
 #: src/components/routes/welcome/index.tsx:334
 msgid "What type of event?"
@@ -12812,7 +12901,7 @@ msgstr "Napisz swoją wiadomość tutaj..."
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:98
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:90
 msgid "year"
 msgstr ""
 
@@ -12822,12 +12911,12 @@ msgstr ""
 msgid "Year to date"
 msgstr "Od początku roku"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:61
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:53
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Yearly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:106
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:98
 msgid "years"
 msgstr ""
 
@@ -12872,7 +12961,7 @@ msgstr "Możesz skonfigurować dodatkowe opłaty za usługi i podatki w ustawien
 msgid "You can create a promo code which targets this product on the"
 msgstr "Możesz utworzyć kod promocyjny, który jest ukierunkowany na ten produkt w"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:839
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1115
 msgid "You can override this for individual dates later."
 msgstr ""
 
@@ -12938,6 +13027,7 @@ msgid "You have taxes and fees added to a Free Product. Would you like to remove
 msgstr "Masz podatki i opłaty dodane do darmowego produktu. Czy chcesz je usunąć?"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:57
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:728
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr ""
 

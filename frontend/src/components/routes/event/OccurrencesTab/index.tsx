@@ -29,7 +29,7 @@ import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal} from "./OccurrenceEditModal";
 import {OccurrenceBulkEditModal} from "./OccurrenceBulkEditModal";
-import {RecurrenceScheduleModal} from "./RecurrenceScheduleModal";
+import {RecurrenceScheduleDrawer} from "./RecurrenceScheduleDrawer";
 import {CalendarView} from "./CalendarView";
 import {useCancelOccurrence} from "../../../../mutations/useCancelOccurrence.ts";
 import {useDeleteEventOccurrence} from "../../../../mutations/useDeleteEventOccurrence.ts";
@@ -663,7 +663,7 @@ const OccurrencesTab = () => {
             )}
 
             {generateOpen && (
-                <RecurrenceScheduleModal onClose={closeGenerate} onGenerationStarted={generationPolling.start}/>
+                <RecurrenceScheduleDrawer onClose={closeGenerate} onGenerationStarted={generationPolling.start}/>
             )}
 
             {slideoutOccurrenceId && (

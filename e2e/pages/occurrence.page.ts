@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class OccurrencePage {
   constructor(private readonly page: Page) {}
@@ -17,11 +17,13 @@ export class OccurrencePage {
   }
 
   async pickWeekday(label: string): Promise<void> {
-    await this.dialog().getByRole('checkbox', { name: label, exact: true }).check({ force: true });
+    const dot = this.dialog().getByRole('checkbox', { name: new RegExp(`^${label}`) });
+    await dot.click();
+    await expect(dot).toBeChecked();
   }
 
   async chooseFixedNumberOfDates(count: number): Promise<void> {
-    await this.dialog().getByText('Set number of dates').click();
+    await this.dialog().getByText('For a number of dates').click();
     await this.dialog().getByLabel(/^Number of dates to create/).fill(String(count));
   }
 
