@@ -40,6 +40,9 @@ class UpdateEventSettingsHandler
                     'require_attendee_details' => $settings->require_attendee_details,
                     'attendee_details_collection_method' => $settings->attendee_details_collection_method->name,
                     'continue_button_text' => trim($settings->continue_button_text),
+                    'get_tickets_button_text' => $settings->get_tickets_button_text === null
+                        ? null
+                        : trim($settings->get_tickets_button_text),
 
                     'homepage_background_color' => $settings->homepage_background_color,
                     'homepage_primary_color' => $settings->homepage_primary_color,

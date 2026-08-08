@@ -23,6 +23,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'email_footer_message' => ['string', 'nullable'],
 
             'continue_button_text' => ['string', 'nullable', 'max:100'],
+            'get_tickets_button_text' => ['string', 'nullable', 'max:100'],
             'support_email' => ['email', 'nullable'],
             'require_attendee_details' => ['boolean'],
             'attendee_details_collection_method' => [Rule::in(AttendeeDetailsCollectionMethod::valuesArray())],

@@ -46,6 +46,9 @@ class PartialUpdateEventSettingsHandler
                 'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['continue_button_text']
                     : $existingSettings->getContinueButtonText(),
+                'get_tickets_button_text' => array_key_exists('get_tickets_button_text', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['get_tickets_button_text']
+                    : $existingSettings->getGetTicketsButtonText(),
 
                 'homepage_background_color' => $eventSettingsDTO->settings['homepage_background_color'] ?? $existingSettings->getHomepageBackgroundColor(),
                 'homepage_primary_color' => $eventSettingsDTO->settings['homepage_primary_color'] ?? $existingSettings->getHomepagePrimaryColor(),

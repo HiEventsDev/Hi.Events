@@ -69,6 +69,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const ALLOW_COPY_DETAILS_TO_ALL_ATTENDEES = 'allow_copy_details_to_all_attendees';
     final public const SHOW_AVAILABLE_OCCURRENCE_CAPACITY = 'show_available_occurrence_capacity';
     final public const HIDE_SOLD_OUT_OCCURRENCES = 'hide_sold_out_occurrences';
+    final public const GET_TICKETS_BUTTON_TEXT = 'get_tickets_button_text';
 
     protected int $id;
     protected int $event_id;
@@ -129,6 +130,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $allow_copy_details_to_all_attendees = true;
     protected bool $show_available_occurrence_capacity = false;
     protected bool $hide_sold_out_occurrences = false;
+    protected ?string $get_tickets_button_text = null;
 
     public function toArray(): array
     {
@@ -192,6 +194,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'allow_copy_details_to_all_attendees' => $this->allow_copy_details_to_all_attendees ?? null,
                     'show_available_occurrence_capacity' => $this->show_available_occurrence_capacity ?? null,
                     'hide_sold_out_occurrences' => $this->hide_sold_out_occurrences ?? null,
+                    'get_tickets_button_text' => $this->get_tickets_button_text ?? null,
                 ];
     }
 
@@ -843,5 +846,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getHideSoldOutOccurrences(): bool
     {
         return $this->hide_sold_out_occurrences;
+    }
+
+    public function setGetTicketsButtonText(?string $get_tickets_button_text): self
+    {
+        $this->get_tickets_button_text = $get_tickets_button_text;
+        return $this;
+    }
+
+    public function getGetTicketsButtonText(): ?string
+    {
+        return $this->get_tickets_button_text;
     }
 }
