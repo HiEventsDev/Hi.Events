@@ -6,6 +6,7 @@ use HiEvents\Providers\AuthServiceProvider;
 use HiEvents\Providers\EventServiceProvider;
 use HiEvents\Providers\RepositoryServiceProvider;
 use HiEvents\Providers\RouteServiceProvider;
+use HiEvents\Providers\ScrambleServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -240,6 +241,7 @@ return [
         EventServiceProvider::class,
         RouteServiceProvider::class,
         RepositoryServiceProvider::class,
+        ScrambleServiceProvider::class,
 
     ])->toArray(),
 
