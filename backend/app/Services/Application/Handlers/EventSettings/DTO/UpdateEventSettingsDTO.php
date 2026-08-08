@@ -88,6 +88,8 @@ class UpdateEventSettingsDTO extends BaseDTO
         // Waitlist settings
         public readonly ?bool $waitlist_auto_process = null,
         public readonly ?int $waitlist_offer_timeout_minutes = null,
+
+        public readonly ?string $get_tickets_button_text = null,
     ) {}
 
     public static function createWithDefaults(

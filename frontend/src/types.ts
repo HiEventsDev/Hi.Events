@@ -226,6 +226,7 @@ export interface EventSettings {
     event_id?: IdParam;
     id?: IdParam;
     continue_button_text: string;
+    get_tickets_button_text?: string;
     email_footer_message: string;
     pre_checkout_message: string;
     product_page_message: string;
