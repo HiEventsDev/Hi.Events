@@ -1,7 +1,7 @@
 import classes from "./EventHomepage.module.scss";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
 import "../../../styles/widget/default.scss";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {Event, EventOccurrence, EventType, OrganizerStatus} from "../../../types.ts";
@@ -39,6 +39,7 @@ import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
 import {isDateInPast} from "../../../utilites/dates.ts";
+import {formatCurrency} from "../../../utilites/currency.ts";
 
 interface EventHomepageProps {
     event?: Event;
@@ -52,7 +53,30 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
+    const [selectedCart, setSelectedCart] = useState({quantity: 0, total: 0});
+    const [continueButtonNode, setContinueButtonNode] = useState<HTMLButtonElement | null>(null);
+    const [continueButtonInView, setContinueButtonInView] = useState(false);
     const ticketsSectionRef = useRef<HTMLDivElement>(null);
+
+    const handleCartChange = useCallback(
+        (cart: {quantity: number; total: number}) => setSelectedCart(cart),
+        [],
+    );
+
+    useEffect(() => {
+        if (!continueButtonNode) {
+            setContinueButtonInView(false);
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setContinueButtonInView(entry.isIntersecting),
+            {threshold: 0.5},
+        );
+        observer.observe(continueButtonNode);
+
+        return () => observer.disconnect();
+    }, [continueButtonNode]);
 
     const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
         event?.organizer?.settings?.tracking_pixels
@@ -167,25 +191,17 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const getStatusBadge = () => {
         const products = event.products || event.product_categories?.flatMap(c => c.products || []) || [];
 
-        if (products.length === 0) {
-            return null;
+        if (products.length > 0 && products.every(p => p.is_sold_out)) {
+            return {text: t`Sold Out`};
         }
 
-        const availableProducts = products.filter(p => p.is_available && !p.is_sold_out);
-        const allSoldOut = products.every(p => p.is_sold_out);
-
-        if (allSoldOut) {
-            return {text: t`Sold Out`, variant: 'danger'};
-        }
-
-        if (availableProducts.length === 0) {
-            return null;
-        }
-
-        return {text: t`Tickets Available`, variant: 'success'};
+        return null;
     };
 
     const statusBadge = getStatusBadge();
+    const getTicketsButtonText = event.settings?.get_tickets_button_text || t`Get Tickets`;
+    const continueButtonText = event.settings?.continue_button_text || t`Continue`;
+    const showFloatingCheckoutButton = selectedCart.quantity > 0 && !!continueButtonNode && !continueButtonInView;
 
     return (
         <>
@@ -561,6 +577,8 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     showPoweredBy={false}
                                     initialOccurrenceId={initialOccurrenceId}
                                     onSelectedOccurrenceChange={setSelectedOccurrence}
+                                    onCartChange={handleCartChange}
+                                    continueButtonRef={setContinueButtonNode}
                                 />
                             </div>
 
@@ -685,14 +703,24 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         </div>
                     </div>
 
-                    {/* Floating Scroll Button */}
-                    {showScrollButton && (
+                    {showFloatingCheckoutButton && (
+                        <button
+                            className={classes.scrollToTicketsButton}
+                            onClick={() => continueButtonNode?.click()}
+                        >
+                            <IconTicket size={18}/>
+                            {selectedCart.total > 0
+                                ? `${continueButtonText} (${formatCurrency(selectedCart.total, event.currency)})`
+                                : continueButtonText}
+                        </button>
+                    )}
+                    {!showFloatingCheckoutButton && showScrollButton && (
                         <button
                             className={classes.scrollToTicketsButton}
                             onClick={scrollToTickets}
                         >
                             <IconTicket size={18}/>
-                            {t`Get Tickets`}
+                            {getTicketsButtonText}
                         </button>
                     )}
 

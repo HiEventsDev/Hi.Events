@@ -104,6 +104,8 @@ interface SelectProductsProps {
     showPoweredBy?: boolean;
     initialOccurrenceId?: number | null;
     onSelectedOccurrenceChange?: (occurrence?: EventOccurrence) => void;
+    onCartChange?: (cart: {quantity: number; total: number}) => void;
+    continueButtonRef?: React.Ref<HTMLButtonElement>;
 }
 
 const SelectProducts = (props: SelectProductsProps) => {
@@ -460,6 +462,37 @@ const SelectProducts = (props: SelectProductsProps) => {
 
         return total;
     }, [form.values.products]);
+
+    const selectedProductsTotal = useMemo(() => {
+        let total = 0;
+        form.values.products?.forEach(({product_id, quantities}) => {
+            const product = productsById.get(product_id);
+            if (!product) {
+                return;
+            }
+            quantities?.forEach(({quantity, price_id, price}) => {
+                const selectedQuantity = Number(quantity);
+                if (!selectedQuantity) {
+                    return;
+                }
+                if (product.type === 'DONATION') {
+                    total += selectedQuantity * Number(price || 0);
+                    return;
+                }
+                const productPrice = product.prices?.find(p => Number(p.id) === price_id);
+                if (productPrice) {
+                    total += selectedQuantity * getDisplayPrice(productPrice, event?.settings?.price_display_mode);
+                }
+            });
+        });
+
+        return total;
+    }, [form.values.products, productsById, event?.settings?.price_display_mode]);
+
+    const {onCartChange} = props;
+    useEffect(() => {
+        onCartChange?.({quantity: selectedProductQuantitySum, total: selectedProductsTotal});
+    }, [selectedProductQuantitySum, selectedProductsTotal, onCartChange]);
 
     useEffect(() => {
         if (form.values.promo_code) {
@@ -850,6 +883,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                     }} className={'hi-product-page-message'}/>
                 )}
                 <Button disabled={isButtonDisabled} fullWidth className={'hi-continue-button'}
+                        ref={props.continueButtonRef}
                         type={"submit"}
                         data-testid="checkout-continue-button"
                         loading={productMutation.isPending}>
