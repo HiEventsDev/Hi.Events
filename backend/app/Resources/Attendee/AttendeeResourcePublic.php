@@ -27,6 +27,7 @@ class AttendeeResourcePublic extends JsonResource
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
+            /** @var 'ACTIVE'|'AWAITING_PAYMENT'|'CANCELLED' */
             'status' => $this->getStatus(),
             'first_name' => $this->getFirstName(),
             'last_name' => $this->getLastName(),

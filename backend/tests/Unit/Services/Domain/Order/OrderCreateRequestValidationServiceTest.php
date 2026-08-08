@@ -220,6 +220,21 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertSame(10, $normalized['products'][0]['event_occurrence_id']);
     }
 
+    public function test_requires_occurrence_id_for_recurring_event_checkout(): void
+    {
+        $this->setupEventLookup(1, isRecurring: true);
+
+        $data = $this->createRequestData(10);
+        unset($data['products'][0]['event_occurrence_id']);
+
+        try {
+            $this->service->validateRequestData(1, $data);
+            $this->fail('Expected ValidationException for missing event_occurrence_id');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('products.0.event_occurrence_id', $exception->errors());
+        }
+    }
+
     public function test_accepts_occurrence_with_unlimited_capacity(): void
     {
         $occurrence = $this->createOccurrence(

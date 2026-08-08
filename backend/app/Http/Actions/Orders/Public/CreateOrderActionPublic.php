@@ -28,6 +28,12 @@ class CreateOrderActionPublic extends BaseAction
     ) {}
 
     /**
+     * Create Order
+     *
+     * `products.*.event_occurrence_id` is required for recurring events; for single-occurrence
+     * events it is inferred when omitted. Product availability, capacity, and pricing are
+     * validated against the event's live configuration.
+     *
      * @throws Throwable
      */
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse

@@ -196,14 +196,6 @@ msgstr ""
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} 个票种"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:570
-msgid "{totalOccurrences} dates"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:563
-msgid "{totalOccurrences} sessions across {0} dates ({1, plural, one {# session} other {# sessions}} per day)"
-msgstr ""
-
 #: src/components/common/Currency/index.tsx:59
 msgid "+ {formattedAmount} fees"
 msgstr "+ {formattedAmount} 费用"
@@ -219,6 +211,10 @@ msgstr "+ {formattedAmount} 税费"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:98
 msgid "+1 234 567 890"
 msgstr "+1 234 567 890"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1019
+msgid "+1 day"
+msgstr "+1 天"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:410
 msgid "+Tax/Fees"
@@ -423,6 +419,10 @@ msgstr "标准税，如增值税或消费税"
 msgid "A URL is required when a button label is set"
 msgstr "设置按钮文字后必须填写链接"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:921
+msgid "A weekday pattern"
+msgstr "按星期模式"
+
 #: src/components/common/OrdersTable/index.tsx:347
 msgid "Abandoned"
 msgstr "已放弃"
@@ -611,7 +611,7 @@ msgstr "为此签到列表添加描述"
 msgid "Add a Single Date"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:755
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:992
 msgid "Add another time"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr "添加关于订单的备注。这些信息不会对客户可见。"
 msgid "Add any notes about the order..."
 msgstr "添加关于订单的备注..."
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:382
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:533
 msgid "Add at least one time"
 msgstr ""
 
@@ -682,7 +682,7 @@ msgstr "添加线下支付的说明（例如，银行转账详情、支票寄送
 msgid "Add Location"
 msgstr "添加地点"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:759
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1047
 msgid "Add multiple times if you run several sessions per day."
 msgstr ""
 
@@ -1091,9 +1091,9 @@ msgstr "出现意外错误。"
 msgid "An unexpected error occurred. Please try again."
 msgstr "出现意外错误。请重试。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:865
-msgid "and {0} more..."
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:782
+msgid "and"
+msgstr "和"
 
 #: src/components/routes/admin/Announcements/index.tsx:354
 msgid "Announcement content"
@@ -1136,7 +1136,7 @@ msgstr ""
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:580
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1148
 msgid "Any dates you've manually customized will be kept."
 msgstr ""
 
@@ -1201,7 +1201,7 @@ msgstr ""
 msgid "Approve Message"
 msgstr "批准消息"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:76
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:68
 msgid "April"
 msgstr ""
 
@@ -1585,7 +1585,7 @@ msgstr "归因值"
 msgid "Audience"
 msgstr "受众"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:80
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:72
 msgid "August"
 msgstr ""
 
@@ -1842,14 +1842,6 @@ msgstr "通过添加跟踪像素，您确认您和本平台是所收集数据的
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "继续操作即表示您同意<0>{0}服务条款</0>"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:644
-msgid "By day of month"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:645
-msgid "By day of week"
-msgstr ""
-
 #: src/components/routes/auth/Register/index.tsx:141
 msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "注册即表示您同意我们的<0>服务条款</0>和<1>隐私政策</1>。"
@@ -1909,6 +1901,7 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1155
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:83
@@ -2000,7 +1993,7 @@ msgstr "无法删除系统默认配置"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:42
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:503
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:827
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1104
 msgid "Capacity"
 msgstr "容量"
 
@@ -2382,6 +2375,7 @@ msgstr "关闭"
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:163
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:872
 #: src/components/routes/product-widget/SelectProducts/index.tsx:918
 msgid "Close"
 msgstr "关闭"
@@ -2939,10 +2933,6 @@ msgstr "创建{0}模板"
 msgid "Create a custom widget to sell tickets on your site."
 msgstr "创建自定义小部件以在您的网站上销售门票。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:801
-msgid "Create a fixed number"
-msgstr ""
-
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr ""
@@ -3089,9 +3079,9 @@ msgstr "创建促销代码"
 msgid "Create Question"
 msgstr "创建问题"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:880
-msgid "Create Schedule"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1163
+msgid "Create schedule"
+msgstr "创建日程"
 
 #: src/components/forms/ProductForm/index.tsx:501
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:53
@@ -3280,7 +3270,7 @@ msgstr "定制您的活动页面"
 msgid "Customize your organizer page appearance"
 msgstr "自定义主办方页面外观"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:58
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:50
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
 msgid "Daily"
 msgstr ""
@@ -3392,6 +3382,11 @@ msgstr ""
 msgid "Date updated successfully"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:808
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1093
+msgid "dates"
+msgstr "个日期"
+
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:105
 msgid "Dates are managed per occurrence"
 msgstr ""
@@ -3400,15 +3395,15 @@ msgstr ""
 msgid "Dates with sessions"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:95
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:87
 msgid "day"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:675
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:973
 msgid "Day"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:692
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:937
 msgid "Day of Month"
 msgstr ""
 
@@ -3416,25 +3411,25 @@ msgstr ""
 msgid "Day one capacity"
 msgstr "第一天容量"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:103
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:95
 msgid "days"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:651
-msgid "Days of Month"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:920
+msgid "Days of the month"
+msgstr "每月日期"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:621
-msgid "Days of Week"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:84
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:76
 msgid "December"
 msgstr ""
 
 #: src/components/common/CookieConsentBanner/index.tsx:62
 msgid "Decline"
 msgstr "拒绝"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:322
+msgid "Decrease"
+msgstr "减少"
 
 #: src/components/common/NumberSelector/index.tsx:109
 msgid "Decrease quantity"
@@ -3450,7 +3445,7 @@ msgstr "默认"
 msgid "Default attendee information collection"
 msgstr "默认参与者信息收集"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:831
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1106
 msgid "Default capacity per date"
 msgstr ""
 
@@ -3652,10 +3647,12 @@ msgid "Disabling this capacity will track sales but not stop them when the limit
 msgstr "禁用此容量将跟踪销售情况，但不会在达到限制时停止销售"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:731
 msgid "Discard"
 msgstr ""
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:54
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:725
 msgid "Discard changes?"
 msgstr ""
 
@@ -3846,7 +3843,6 @@ msgstr "例如：了解更多"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:452
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:450
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:730
 msgid "e.g. Morning Session"
 msgstr ""
 
@@ -3996,6 +3992,10 @@ msgstr "编辑促销代码"
 #: src/components/modals/EditQuestionModal/index.tsx:101
 msgid "Edit Question"
 msgstr "编辑问题"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:866
+msgid "Edit schedule"
+msgstr "编辑日程"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 msgid "Edit user"
@@ -4215,10 +4215,6 @@ msgstr "启用候补名单"
 msgid "Enabled"
 msgstr "已启用"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:720
-msgid "End"
-msgstr ""
-
 #: src/components/common/AdminEventsTable/index.tsx:107
 #: src/components/modals/DuplicateEventModal/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
@@ -4236,9 +4232,9 @@ msgstr "结束日期和时间（可选）"
 msgid "End date must be after start date"
 msgstr "结束日期必须在开始日期之后"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:787
-msgid "End on a date"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1011
+msgid "End time"
+msgstr "结束时间"
 
 #: src/components/routes/welcome/index.tsx:445
 msgid "End time (optional)"
@@ -4391,6 +4387,7 @@ msgid "Error loading logs"
 msgstr "加载日志时出错"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:98
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:870
 msgid "Esc to close"
 msgstr ""
 
@@ -4576,9 +4573,17 @@ msgstr "活动表现"
 msgid "Events Starting in Next 24 Hours"
 msgstr "未来24小时内开始的活动"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:895
+msgid "Every"
+msgstr "每"
+
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:37
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:38
 msgid "Every {0}"
+msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
+msgid "Every {0} {cadenceUnit}"
 msgstr ""
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:32
@@ -4601,6 +4606,10 @@ msgstr ""
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Every {0} years"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:747
+msgid "Every {cadenceUnit}"
+msgstr "每{cadenceUnit}"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:23
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
@@ -4751,11 +4760,11 @@ msgstr "创建推广员失败"
 msgid "Failed to create configuration"
 msgstr "配置创建失败"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:546
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:712
 msgid "Failed to create schedule"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:536
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:702
 #: src/hooks/useOccurrenceGenerationPolling.ts:42
 msgid "Failed to create schedule. Please try again."
 msgstr "创建日程失败。请重试。"
@@ -5004,7 +5013,7 @@ msgstr ""
 msgid "Fast payouts to your bank"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:74
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:66
 msgid "February"
 msgstr ""
 
@@ -5099,7 +5108,7 @@ msgstr ""
 msgid "Finish setup"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:65
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:57
 msgid "First"
 msgstr ""
 
@@ -5208,11 +5217,19 @@ msgstr "美食美酒"
 msgid "Footer Text"
 msgstr "页脚文字"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1085
+msgid "for"
+msgstr "共"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1060
+msgid "For a number of dates"
+msgstr "按日期数量"
+
 #: src/components/routes/auth/Login/index.tsx:100
 msgid "Forgot password?"
 msgstr "忘记密码？"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:68
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:60
 msgid "Fourth"
 msgstr ""
 
@@ -5234,17 +5251,18 @@ msgstr "免费"
 msgid "French"
 msgstr "法语"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:602
-msgid "Frequency"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:52
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:44
 msgid "Fri"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:44
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Friday"
-msgstr ""
+msgstr "星期五"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1066
+msgid "From"
+msgstr "从"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:748
 msgid "From {0}"
@@ -5253,6 +5271,14 @@ msgstr "{0} 起"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:46
 msgid "From {start}"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:789
+msgid "from {start} until {end}"
+msgstr "从{start}至{end}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:793
+msgid "from {start}, for {count} dates"
+msgstr "从{start}起，共{count}个日期"
 
 #: src/components/layouts/AuthLayout/index.tsx:26
 msgid "Full data ownership"
@@ -5628,10 +5654,6 @@ msgstr "折扣如何应用？"
 msgid "How long a customer has to complete their purchase after receiving an offer. Leave empty for no timeout."
 msgstr "客户收到报价后完成购买的时限。留空表示无时间限制。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:766
-msgid "How long does the schedule run?"
-msgstr ""
-
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:122
 msgid "How many minutes the customer has to complete their order. We recommend at least 15 minutes"
 msgstr "客户有多少分钟来完成订单。我们建议至少 15 分钟"
@@ -5639,10 +5661,6 @@ msgstr "客户有多少分钟来完成订单。我们建议至少 15 分钟"
 #: src/components/forms/PromoCodeForm/index.tsx:173
 msgid "How many times can this code be used?"
 msgstr "这个代码可以使用多少次？"
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:597
-msgid "How often?"
-msgstr ""
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:449
 msgid "How VAT is applied to the platform fees we charge you."
@@ -5824,6 +5842,10 @@ msgstr "包括{0}个产品"
 msgid "Includes 1 product"
 msgstr "包括1个产品"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:331
+msgid "Increase"
+msgstr "增加"
+
 #: src/components/common/NumberSelector/index.tsx:136
 msgid "Increase quantity"
 msgstr "增加数量"
@@ -5963,7 +5985,7 @@ msgstr "项"
 msgid "Items"
 msgstr "项目"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:73
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:65
 msgid "January"
 msgstr ""
 
@@ -6013,11 +6035,11 @@ msgstr "加入{productDisplayName}的等候名单"
 msgid "Joined"
 msgstr "已加入"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:79
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:71
 msgid "July"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:78
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:70
 msgid "June"
 msgstr ""
 
@@ -6038,6 +6060,7 @@ msgid "Keep connection"
 msgstr "保留连接"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:731
 msgid "Keep editing"
 msgstr ""
 
@@ -6055,10 +6078,14 @@ msgstr ""
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:63
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:449
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:727
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1023
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:45
 msgid "Label"
 msgstr "标签"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1026
+msgid "Label — e.g. Morning session"
+msgstr "标签 — 例如：上午场"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:301
 msgid "label updates"
@@ -6070,7 +6097,7 @@ msgstr ""
 msgid "Language"
 msgstr "语言"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:69
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:61
 msgid "Last"
 msgstr ""
 
@@ -6174,12 +6201,15 @@ msgstr ""
 msgid "Latest check-ins"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1098
+msgid "Leave “from” as today to start right away."
+msgstr "将“从”保留为今天即可立即开始。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:201
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "留空以使用默认词“发票”"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:507
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:832
 msgid "Leave empty for unlimited"
 msgstr ""
 
@@ -6463,7 +6493,7 @@ msgstr "手动添加与会者"
 msgid "Manually Add Attendee"
 msgstr "手动添加与会者"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:75
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:67
 msgid "March"
 msgstr ""
 
@@ -6491,7 +6521,7 @@ msgstr "每笔订单最多 {cap} 件"
 msgid "Maximum Per Order"
 msgstr "每份订单的最高限额"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:77
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:69
 msgid "May"
 msgstr ""
 
@@ -6616,13 +6646,14 @@ msgstr "弹窗"
 msgid "Mode"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:48
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:40
 msgid "Mon"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:40
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Monday"
-msgstr ""
+msgstr "星期一"
 
 #: src/components/routes/admin/Dashboard/index.tsx:163
 msgid "Monetary values are approximate totals across all currencies"
@@ -6632,24 +6663,20 @@ msgstr "货币金额是所有货币的大致总和"
 msgid "Monitor and manage failed background jobs"
 msgstr "监控和管理失败的后台任务"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:97
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:89
 msgid "month"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:687
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:931
 msgid "Month"
 msgstr "月"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:60
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:52
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:41
 msgid "Monthly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:640
-msgid "Monthly Pattern"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:105
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:97
 msgid "months"
 msgstr ""
 
@@ -6789,6 +6816,10 @@ msgstr "新注册"
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:53
 msgid "New time:"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:429
+msgid "Next month"
+msgstr "下个月"
 
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:162
 msgid "Next occurrence"
@@ -7244,11 +7275,11 @@ msgstr ""
 msgid "Notify organizer of new orders"
 msgstr "将新订单通知组织者"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:83
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:75
 msgid "November"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:816
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1087
 msgid "Number of dates to create"
 msgstr ""
 
@@ -7295,13 +7326,17 @@ msgstr ""
 msgid "Occurrences can be configured after creation"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:82
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:74
 msgid "October"
 msgstr ""
 
 #: src/components/common/OrganizerReportTable/index.tsx:356
 msgid "of"
 msgstr "共"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:978
+msgid "of every month"
+msgstr "每月"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:77
 #: src/components/forms/ProductForm/ledgerSummaries.ts:140
@@ -7369,9 +7404,24 @@ msgstr "线下支付信息"
 msgid "Offline Payments Settings"
 msgstr "线下支付设置"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:904
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:914
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:929
+msgid "on"
+msgstr "于"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 msgid "On"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:760
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:768
+msgid "on {dayList}"
+msgstr "于{dayList}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:777
+msgid "on {month} {day}"
+msgstr "于{month}{day}日"
 
 #: src/components/common/EventCard/index.tsx:93
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:101
@@ -7382,6 +7432,10 @@ msgstr "销售中"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:107
 msgid "On sale {0}"
 msgstr "销售于{0}"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:772
+msgid "on the {position} {day}"
+msgstr "于{position}{day}"
 
 #: src/components/forms/ProductForm/index.tsx:442
 msgid "On the event page"
@@ -8194,17 +8248,21 @@ msgstr "个人信息"
 msgid "Phone"
 msgstr "电话"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:379
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:530
 msgid "Pick an end date"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:387
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:538
 msgid "Pick at least one day of the month"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:376
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:527
 msgid "Pick at least one day of the week"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:841
+msgid "Pick days to see your dates."
+msgstr "选择日期后即可在此查看。"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:82
 msgid "Pinterest"
@@ -8252,7 +8310,7 @@ msgstr "平台收入"
 msgid "Please add at least one option"
 msgstr "请至少添加一个选项"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:543
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:709
 #: src/hooks/useFormErrorResponseHandler.tsx:18
 msgid "Please check the provided information is correct"
 msgstr "请检查所提供的信息是否正确"
@@ -8382,7 +8440,7 @@ msgstr "热门活动（过去14天）"
 msgid "Portuguese"
 msgstr "葡萄牙语"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:670
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:967
 msgid "Position"
 msgstr ""
 
@@ -8416,6 +8474,10 @@ msgstr "预览结账表单"
 #: src/components/layouts/Event/index.tsx:280
 msgid "Preview Event page"
 msgstr "预览活动页面"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:420
+msgid "Previous month"
+msgstr "上个月"
 
 #: src/components/common/AttendeeTicket/index.tsx:133
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:398
@@ -9000,6 +9062,10 @@ msgstr ""
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "从活动页面完全移除已售罄的日期和时间。禁用时，它们仍然可见并标记为已售罄。"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1031
+msgid "Remove time"
+msgstr "移除时间"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:60
 msgid "Reopen for new sales"
 msgstr ""
@@ -9008,9 +9074,9 @@ msgstr ""
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:607
-msgid "Repeat every"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:885
+msgid "Repeats"
+msgstr "重复"
 
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:26
 msgid "Report not found"
@@ -9217,9 +9283,9 @@ msgstr "撤销报价"
 msgid "Role"
 msgstr "角色"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:788
-msgid "Run until a specific date"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1053
+msgid "Runs"
+msgstr "持续时间"
 
 #: src/components/forms/ProductForm/index.tsx:429
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:85
@@ -9299,13 +9365,14 @@ msgstr "示例票价"
 msgid "Sample Venue"
 msgstr "示例场地"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:53
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:45
 msgid "Sat"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:45
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Saturday"
-msgstr ""
+msgstr "星期六"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:142
@@ -9350,9 +9417,9 @@ msgstr ""
 msgid "Save Organizer"
 msgstr "保存组织器"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:880
-msgid "Save Schedule"
-msgstr ""
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1163
+msgid "Save schedule"
+msgstr "保存日程"
 
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:90
 msgid "Save Settings"
@@ -9414,12 +9481,12 @@ msgstr ""
 msgid "Schedule added"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:531
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:697
 #: src/hooks/useOccurrenceGenerationPolling.ts:36
 msgid "Schedule created successfully"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:809
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1078
 msgid "Schedule ends on"
 msgstr ""
 
@@ -9431,7 +9498,11 @@ msgstr "稍后发送"
 msgid "Schedule Message"
 msgstr "定时发送消息"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:771
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1131
+msgid "Schedule preview"
+msgstr "日程预览"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1069
 msgid "Schedule starts on"
 msgstr ""
 
@@ -9571,7 +9642,7 @@ msgstr "搜索中..."
 msgid "Seasonal"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:66
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:58
 msgid "Second"
 msgstr ""
 
@@ -9893,7 +9964,7 @@ msgstr "搜索引擎优化设置"
 msgid "SEO Title"
 msgstr "搜索引擎优化标题"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:81
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:73
 msgid "September"
 msgstr ""
 
@@ -9905,6 +9976,10 @@ msgstr "服务费"
 msgid "Session cancelled"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:807
+msgid "sessions · {dateCount} dates × {timesPerDay} times"
+msgstr "场 · {dateCount} 个日期 × {timesPerDay} 个时间"
+
 #: src/components/routes/organizer/Settings/Sections/PlatformFeesSettings/index.tsx:43
 msgid "Set default platform fee settings for new events created under this organizer."
 msgstr "为此组织者创建的新活动设置默认平台费用设置。"
@@ -9915,10 +9990,6 @@ msgstr "为此组织者创建的新活动设置默认设置。"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:34
 msgid "Set how long each date lasts"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:800
-msgid "Set number of dates"
 msgstr ""
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
@@ -9968,12 +10039,9 @@ msgid "Set up your organization"
 msgstr "设置您的组织"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:103
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:866
 msgid "Set up your schedule"
-msgstr ""
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:585
-msgid "Set Up Your Schedule"
-msgstr ""
+msgstr "设置您的日程"
 
 #: src/components/routes/welcome/index.tsx:415
 msgid "Set up your schedule in the next steps"
@@ -10310,10 +10378,6 @@ msgstr "体育"
 msgid "Staff instructions"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:712
-msgid "Start"
-msgstr ""
-
 #: src/components/modals/SelectCheckInListModal/index.tsx:48
 msgid "Start check-in"
 msgstr ""
@@ -10337,6 +10401,10 @@ msgstr "开始日期和时间"
 #: src/components/routes/welcome/index.tsx:247
 msgid "Start date is required"
 msgstr "开始日期为必填项"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1000
+msgid "Start time"
+msgstr "开始时间"
 
 #: src/components/common/AddressAutocomplete/index.tsx:87
 msgid "Start typing a venue or address..."
@@ -10672,13 +10740,14 @@ msgstr "夏季音乐节 {0}"
 msgid "Summer Music Festival 2025"
 msgstr "2025夏季音乐节"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:54
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:46
 msgid "Sun"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:46
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Sunday"
-msgstr ""
+msgstr "星期日"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
@@ -10704,6 +10773,10 @@ msgstr "T恤衫"
 #: src/components/forms/ProductForm/index.tsx:214
 msgid "T-shirts, mugs and more"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:960
+msgid "Tap dates like a calendar."
+msgstr "像日历一样点选日期。"
 
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:59
 msgid "Tap this screen to resume scanning"
@@ -10807,7 +10880,7 @@ msgstr "介绍一下您的活动"
 msgid "Tell us about your organization. This information will be displayed on your event pages."
 msgstr "请告诉我们您的组织信息。这些信息将显示在您的活动页面上。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:589
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1151
 msgid "Tell us how often your event repeats and we'll create all the dates for you."
 msgstr ""
 
@@ -10853,6 +10926,10 @@ msgstr ""
 #: src/components/routes/product-widget/SelectProducts/index.tsx:505
 msgid "That promo code is invalid"
 msgstr "促销代码无效"
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:818
+msgid "That's {totalOccurrences} sessions — the maximum is {max}. Shorten the range or frequency."
+msgstr "共 {totalOccurrences} 场 — 上限为 {max}。请缩短日期范围或降低频率。"
 
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:54
 msgid "That's a wrap"
@@ -10905,10 +10982,6 @@ msgstr "电子邮件地址已更改。参与者将在更新后的电子邮件地
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "您查找的活动目前不可用。它可能已被删除、过期或 URL 不正确。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:772
-msgid "The first date this schedule will generate from."
-msgstr ""
-
 #: src/components/modals/CancelOrderModal/index.tsx:76
 msgid "The full order amount will be refunded to the customer's original payment method."
 msgstr "订单全额将退款至客户的原始付款方式。"
@@ -10924,10 +10997,6 @@ msgstr "您尝试访问的链接已过期或不再有效。请检查您的电子
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:22
 msgid "The link you clicked is invalid."
 msgstr "您点击的链接无效。"
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:856
-msgid "The maximum is {MAX_PREVIEW} sessions. Please reduce the date range, frequency, or number of sessions per day."
-msgstr ""
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:767
 msgid "The maximum number of products for {0}is {1}"
@@ -11069,7 +11138,7 @@ msgstr "这些模板将用作您组织中所有活动的默认模板。单个活
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "这些模板将仅覆盖此活动的组织者默认设置。如果这里没有设置自定义模板，将使用组织者模板。"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:67
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:59
 msgid "Third"
 msgstr ""
 
@@ -11356,13 +11425,14 @@ msgstr "这将立即永久删除或匿名化该账户，而不等待计划日期
 msgid "Throughput"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:51
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:43
 msgid "Thu"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:43
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:27
 msgid "Thursday"
-msgstr ""
+msgstr "星期四"
 
 #: src/components/routes/my-tickets/index.tsx:102
 #: src/hooks/useAttendeeActions.tsx:104
@@ -11503,6 +11573,10 @@ msgstr ""
 msgid "Time left:"
 msgstr "剩余时间："
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:985
+msgid "Times"
+msgstr "时间"
+
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:725
 msgid "Times shown in {timezoneAbbr}"
 msgstr ""
@@ -11535,7 +11609,7 @@ msgstr "标题"
 msgid "Title is required"
 msgstr "标题为必填项"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:718
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1008
 msgid "to"
 msgstr ""
 
@@ -11693,13 +11767,14 @@ msgstr "尝试其他邮箱"
 msgid "Try Hi.Events Free"
 msgstr "免费试用Hi.Events"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:49
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:41
 msgid "Tue"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:41
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Tuesday"
-msgstr ""
+msgstr "星期二"
 
 #: src/components/common/LanguageSwitcher/index.tsx:38
 msgid "Turkish"
@@ -11825,6 +11900,7 @@ msgstr "未知参会者"
 #: src/components/forms/PromoCodeForm/index.tsx:171
 #: src/components/modals/OfferWaitlistModal/index.tsx:195
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:172
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1107
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:78
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:84
 msgid "Unlimited"
@@ -11854,9 +11930,17 @@ msgstr "未支付"
 msgid "Unpaid Order"
 msgstr "未付款订单"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1075
+msgid "until"
+msgstr "至"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:49
 msgid "Until {end}"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1059
+msgid "Until a date"
+msgstr "直到某个日期"
 
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:101
 msgid "Untitled product"
@@ -11949,6 +12033,10 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:215
 msgid "Updated location for {count} date(s)"
 msgstr ""
+
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1138
+msgid "Updates as you build the rule. Flip through months to sanity-check dates."
+msgstr "随规则创建实时更新。翻阅月份以核对日期。"
 
 #: src/components/forms/ProductForm/ProductPreview.tsx:93
 msgid "Updates as you type."
@@ -12469,6 +12557,10 @@ msgstr "我们无法确认您的付款。请重试或联系技术支持。"
 msgid "We were unable to validate your VAT number after multiple attempts. We'll continue trying in the background. Please check back later."
 msgstr "我们在多次尝试后无法验证您的增值税号。我们将在后台继续尝试。请稍后检查。"
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1150
+msgid "We'll create all {totalOccurrences} sessions — you can edit or remove any date afterwards"
+msgstr "我们将创建全部 {totalOccurrences} 场 — 之后您可以编辑或删除任意日期"
+
 #: src/components/modals/JoinWaitlistModal/index.tsx:112
 msgid "We'll notify you by email if a spot becomes available for {productDisplayName} on {occurrenceDate}."
 msgstr "如果{productDisplayName}在{occurrenceDate}有空位，我们将通过电子邮件通知您。"
@@ -12550,24 +12642,25 @@ msgstr "Webhooks"
 msgid "Website"
 msgstr "网站"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:50
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:42
 msgid "Wed"
 msgstr ""
 
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:42
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:26
 msgid "Wednesday"
-msgstr ""
+msgstr "星期三"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:96
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:88
 msgid "week"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:59
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:51
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:35
 msgid "Weekly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:104
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:96
 msgid "weeks"
 msgstr ""
 
@@ -12622,10 +12715,6 @@ msgstr "此容量应适用于哪些产品？"
 #: src/components/forms/QuestionForm/index.tsx:179
 msgid "What time will you be arriving?"
 msgstr "您什么时候抵达？"
-
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:704
-msgid "What time?"
-msgstr ""
 
 #: src/components/routes/welcome/index.tsx:334
 msgid "What type of event?"
@@ -12812,7 +12901,7 @@ msgstr "请在此输入您的消息..."
 msgid "X (Twitter)"
 msgstr "X（推特）"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:98
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:90
 msgid "year"
 msgstr ""
 
@@ -12822,12 +12911,12 @@ msgstr ""
 msgid "Year to date"
 msgstr "年度至今"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:61
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:53
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:43
 msgid "Yearly"
 msgstr ""
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:106
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:98
 msgid "years"
 msgstr ""
 
@@ -12872,7 +12961,7 @@ msgstr "您可以在账户设置中配置额外的服务费和税费。"
 msgid "You can create a promo code which targets this product on the"
 msgstr "您可以创建一个促销代码，针对该产品"
 
-#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleModal/index.tsx:839
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1115
 msgid "You can override this for individual dates later."
 msgstr ""
 
@@ -12938,6 +13027,7 @@ msgid "You have taxes and fees added to a Free Product. Would you like to remove
 msgstr "您已向免费产品添加了税费。您想要删除它们吗？"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:57
+#: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:728
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr ""
 

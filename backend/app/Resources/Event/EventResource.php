@@ -27,9 +27,12 @@ class EventResource extends BaseResource
             'start_date' => $this->getStartDate(),
             'end_date' => $this->getEndDate(),
             'next_occurrence_start_date' => $this->getNextOccurrenceStartDate(),
+            /** @var 'DRAFT'|'LIVE'|'ARCHIVED'|null */
             'status' => $this->getStatus(),
+            /** @var 'SINGLE'|'RECURRING' */
             'type' => $this->getType(),
             'recurrence_rule' => $this->getRecurrenceRule(),
+            /** @var 'UPCOMING'|'ONGOING'|'ENDED' */
             'lifecycle_status' => $this->getLifeCycleStatus(),
             'currency' => $this->getCurrency(),
             'timezone' => $this->getTimezone(),
