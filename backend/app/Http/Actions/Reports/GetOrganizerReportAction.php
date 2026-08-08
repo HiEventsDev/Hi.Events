@@ -19,6 +19,11 @@ class GetOrganizerReportAction extends BaseAction
     public function __construct(private readonly GetOrganizerReportHandler $reportHandler) {}
 
     /**
+     * Get Organizer Report
+     *
+     * The response rows depend on the requested `reportType`. Paginated report types return
+     * `{data, meta, links}`; non-paginated report types return `{data}`.
+     *
      * @throws ValidationException
      */
     public function __invoke(GetOrganizerReportRequest $request, int $organizerId, string $reportType): JsonResponse

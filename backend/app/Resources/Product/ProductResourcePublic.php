@@ -17,7 +17,9 @@ class ProductResourcePublic extends JsonResource
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
+            /** @var 'PAID'|'FREE'|'DONATION'|'TIERED'|'REGISTRATION' */
             'type' => $this->getType(),
+            /** @var 'TICKET'|'GENERAL' */
             'product_type' => $this->getProductType(),
             'description' => $this->getDescription(),
             'max_per_order' => $this->getMaxPerOrder(),

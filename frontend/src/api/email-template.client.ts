@@ -37,7 +37,7 @@ export const emailTemplateClient = {
     },
 
     deleteForOrganizer: async (organizerId: IdParam, templateId: IdParam) => {
-        const response = await api.delete<{ message: string }>(`organizers/${organizerId}/email-templates/${templateId}`);
+        const response = await api.delete<void>(`organizers/${organizerId}/email-templates/${templateId}`);
         return response.data;
     },
 
@@ -70,7 +70,7 @@ export const emailTemplateClient = {
     },
 
     deleteForEvent: async (eventId: IdParam, templateId: IdParam) => {
-        const response = await api.delete<{ message: string }>(`events/${eventId}/email-templates/${templateId}`);
+        const response = await api.delete<void>(`events/${eventId}/email-templates/${templateId}`);
         return response.data;
     },
 

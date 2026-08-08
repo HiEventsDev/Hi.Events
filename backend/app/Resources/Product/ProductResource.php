@@ -22,7 +22,9 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
+            /** @var 'PAID'|'FREE'|'DONATION'|'TIERED'|'REGISTRATION' */
             'type' => $this->getType(),
+            /** @var 'TICKET'|'GENERAL' */
             'product_type' => $this->getProductType(),
             'order' => $this->getOrder(),
             'description' => $this->getDescription(),

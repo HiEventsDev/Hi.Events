@@ -442,7 +442,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/questions/{question_id}', GetQuestionAction::class);
         $router->delete('/events/{event_id}/questions/{question_id}', DeleteQuestionAction::class);
         $router->get('/events/{event_id}/questions', GetQuestionsAction::class);
-        $router->post('/events/{event_id}/questions/export', ExportOrdersAction::class);
         $router->post('/events/{event_id}/questions/sort', SortQuestionsAction::class);
         $router->put('/events/{event_id}/questions/{question_id}/answers/{answer_id}', EditQuestionAnswerAction::class);
         $router->match(['get', 'post'], '/events/{event_id}/questions/answers/export', ExportQuestionAnswersAction::class);
@@ -668,4 +667,6 @@ $router->prefix('/public')->group(
     }
 );
 
-include_once __DIR__.'/mail.php';
+if (app()->environment('local', 'development')) {
+    include_once __DIR__.'/mail.php';
+}
