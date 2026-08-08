@@ -400,7 +400,15 @@ const SelectProducts = (props: SelectProductsProps) => {
     const getResolvableAddonIds = (product: Product): number[] =>
         (product.addon_product_ids || [])
             .map(Number)
-            .filter(addonId => addonId !== Number(product.id) && productsById.has(addonId));
+            .filter(addonId => addonId !== Number(product.id) && productsById.get(addonId)?.is_addon_only);
+
+    const addonSectionEntries = products
+        .filter(product => product.is_addon_only)
+        .map(addon => ({
+            addon,
+            parents: topLevelProducts.filter(parent => getResolvableAddonIds(parent).includes(Number(addon.id))),
+        }))
+        .filter(({parents}) => parents.length > 0);
 
     const renderProductDetails = (productId: number, description: string, className: string) => {
         const isExpanded = expandedDetails[productId] ?? false;
@@ -643,8 +651,6 @@ const SelectProducts = (props: SelectProductsProps) => {
 
                                 {visibleProducts.map((product) => {
                                     const currentProductIndex = getProductFormIndex(Number(product.id));
-                                    const parentQuantity = getProductQuantity(Number(product.id));
-                                    const addonIds = getResolvableAddonIds(product);
 
                                     const isProductCollapsed = collapsedProducts[Number(product.id)] ?? product.start_collapsed;
                                     const toggleCollapse = () => {
@@ -782,57 +788,6 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                     'hi-product-description-row',
                                                 )}
 
-                                                {addonIds.length > 0 && (
-                                                    <div className={'hi-product-addons'}
-                                                         data-inactive={parentQuantity === 0 || undefined}>
-                                                        <div className={'hi-product-addons-heading'}>
-                                                            <Trans>Add-ons</Trans>
-                                                            {parentQuantity === 0 && (
-                                                                <span className={'hi-product-addons-note'}>
-                                                                    <Trans>Add {product.title} first</Trans>
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        {addonIds.map((addonId) => {
-                                                            const addon = productsById.get(addonId);
-                                                            if (!addon) {
-                                                                return null;
-                                                            }
-                                                            const addonFormIndex = getProductFormIndex(addonId);
-
-                                                            return (
-                                                                <div key={addonId}
-                                                                     className={classNames('hi-product-addon', addon.is_highlighted && 'hi-product-addon-highlighted')}>
-                                                                    <div className={'hi-product-addon-title'}>
-                                                                        {addon.title}
-                                                                        {addon.is_highlighted && addon.highlight_message && (
-                                                                            <span className={'hi-product-addon-highlight-message'}>
-                                                                                {addon.highlight_message}
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                    <TieredPricing
-                                                                        productIndex={addonFormIndex}
-                                                                        event={event}
-                                                                        product={addon}
-                                                                        form={form}
-                                                                        eventOccurrenceId={selectedOccurrenceId}
-                                                                    />
-                                                                    {form.errors[`products.${addonFormIndex}`] && (
-                                                                        <div className={'hi-product-quantity-error'}>
-                                                                            {form.errors[`products.${addonFormIndex}`]}
-                                                                        </div>
-                                                                    )}
-                                                                    {addon.description && renderProductDetails(
-                                                                        addonId,
-                                                                        addon.description,
-                                                                        'hi-product-addon-description',
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                )}
                                             </Collapse>
                                         </div>
                                     )
@@ -841,6 +796,65 @@ const SelectProducts = (props: SelectProductsProps) => {
                         </div>
                     )
                 })}
+
+                {addonSectionEntries.length > 0 && (
+                    <div className={'hi-addons-section'}>
+                        <h2 className={'hi-product-category-title'}>
+                            <Trans>Add-ons</Trans>
+                        </h2>
+                        <div className={'hi-addons-panel'}>
+                            {addonSectionEntries.map(({addon, parents}) => {
+                                const addonId = Number(addon.id);
+                                const addonFormIndex = getProductFormIndex(addonId);
+                                const isUnlocked = parents.some(parent => getProductQuantity(Number(parent.id)) > 0);
+                                const parentTitles = parents.map(parent => parent.title);
+                                const noteParts = [
+                                    parentTitles.slice(0, -1).join(', '),
+                                    parentTitles[parentTitles.length - 1],
+                                ];
+
+                                return (
+                                    <div key={addonId}
+                                         className={classNames('hi-product-addon', addon.is_highlighted && 'hi-product-addon-highlighted')}
+                                         data-inactive={!isUnlocked || undefined}>
+                                        <div className={'hi-product-addon-title'}>
+                                            {addon.title}
+                                            {addon.is_highlighted && addon.highlight_message && (
+                                                <span className={'hi-product-addon-highlight-message'}>
+                                                    {addon.highlight_message}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {!isUnlocked && (
+                                            <div className={'hi-product-addon-lock-note'}>
+                                                {parents.length === 1
+                                                    ? t`Add ${noteParts[1]} first`
+                                                    : t`Add ${noteParts[0]} or ${noteParts[1]} first`}
+                                            </div>
+                                        )}
+                                        <TieredPricing
+                                            productIndex={addonFormIndex}
+                                            event={event}
+                                            product={addon}
+                                            form={form}
+                                            eventOccurrenceId={selectedOccurrenceId}
+                                        />
+                                        {form.errors[`products.${addonFormIndex}`] && (
+                                            <div className={'hi-product-quantity-error'}>
+                                                {form.errors[`products.${addonFormIndex}`]}
+                                            </div>
+                                        )}
+                                        {addon.description && renderProductDetails(
+                                            addonId,
+                                            addon.description,
+                                            'hi-product-addon-description',
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className={'hi-footer-row'}>

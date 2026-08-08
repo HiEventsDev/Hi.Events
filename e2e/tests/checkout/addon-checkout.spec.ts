@@ -4,7 +4,7 @@ import { createDraftEvent, enableOfflinePayments } from '../../api/factory';
 import { uniqueEmail } from '../../utils/unique';
 
 test.describe('add-on checkout', () => {
-  test('a buyer sees add-ons under the parent ticket and orders both', async ({ page, api, account }) => {
+  test('a buyer unlocks add-ons by adding a qualifying ticket and orders both', async ({ page, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const categories = await api.listProductCategories(event.eventId);
     const categoryId = categories[0].id;
@@ -34,7 +34,7 @@ test.describe('add-on checkout', () => {
 
     await expect(page.locator('.hi-product-row h3').filter({ hasText: 'Festival Ticket' })).toBeVisible();
     await expect(page.locator('.hi-product-row h3').filter({ hasText: 'Parking Pass' })).toHaveCount(0);
-    await expect(page.locator('.hi-product-addon').filter({ hasText: 'Parking Pass' })).toBeVisible();
+    await expect(page.locator('.hi-addons-panel .hi-product-addon').filter({ hasText: 'Parking Pass' })).toHaveCount(1);
     await expect(page.getByText('Add Festival Ticket first')).toBeVisible();
 
     await checkout.setQuantityForProduct('Festival Ticket', 1);
@@ -101,7 +101,7 @@ test.describe('add-on checkout', () => {
     await expect(page.getByText('$20.00').first()).toBeVisible();
   });
 
-  test('a product sold on its own can also be an add-on, with both steppers kept in sync', async ({ page, api, account }) => {
+  test('a product sold on its own is not repeated as an add-on row', async ({ page, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const categories = await api.listProductCategories(event.eventId);
     const categoryId = categories[0].id;
@@ -129,22 +129,76 @@ test.describe('add-on checkout', () => {
     await checkout.gotoPublicEvent(event.eventId, event.slug);
 
     const shirtRow = page.locator('.hi-product-row').filter({ has: page.locator('h3', { hasText: 'Tour Shirt' }) });
-    const shirtAddon = page.locator('.hi-product-addon').filter({ hasText: 'Tour Shirt' });
     await expect(shirtRow).toBeVisible();
-    await expect(shirtAddon).toBeVisible();
+    await expect(page.locator('.hi-product-addon')).toHaveCount(0);
+    await expect(page.locator('.hi-addons-panel')).toHaveCount(0);
 
     await checkout.setQuantityForProduct('Gig Ticket', 1);
-    await checkout.setAddonQuantity('Tour Shirt', 2);
-    await expect(shirtRow.locator('.hi-product-quantity-selector input').first()).toHaveValue('2');
-
     await setWidgetQuantity(shirtRow, 1);
-    await expect(shirtAddon.locator('input')).toHaveValue('1');
 
     await checkout.continueToCheckout();
 
     await expect(page.getByText('Gig Ticket').first()).toBeVisible();
     await expect(page.getByText('Tour Shirt').first()).toBeVisible();
     await expect(page.getByText('× 1', { exact: true })).toHaveCount(2);
+  });
+
+  test('a shared add-on appears once and unlocks with any qualifying ticket', async ({ page, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    const categories = await api.listProductCategories(event.eventId);
+    const categoryId = categories[0].id;
+
+    const parking = await api.createProduct(event.eventId, {
+      title: 'Parking Pass',
+      product_type: 'GENERAL',
+      type: 'FREE',
+      product_category_id: categoryId,
+      is_addon_only: true,
+      prices: [{ price: 0 }],
+    });
+
+    await api.createProduct(event.eventId, {
+      title: 'General Admission',
+      product_type: 'TICKET',
+      type: 'FREE',
+      product_category_id: categoryId,
+      addon_product_ids: [parking.id],
+      prices: [{ price: 0 }],
+    });
+
+    await api.createProduct(event.eventId, {
+      title: 'VIP Ticket',
+      product_type: 'TICKET',
+      type: 'FREE',
+      product_category_id: categoryId,
+      addon_product_ids: [parking.id],
+      prices: [{ price: 0 }],
+    });
+
+    await api.publishEvent(event.eventId);
+
+    const checkout = new CheckoutPage(page);
+    await checkout.gotoPublicEvent(event.eventId, event.slug);
+
+    const parkingAddon = page.locator('.hi-product-addon').filter({ hasText: 'Parking Pass' });
+    await expect(parkingAddon).toHaveCount(1);
+    await expect(page.getByText('Add General Admission or VIP Ticket first')).toBeVisible();
+
+    await checkout.setQuantityForProduct('VIP Ticket', 1);
+    await expect(page.getByText('Add General Admission or VIP Ticket first')).toHaveCount(0);
+
+    await checkout.setAddonQuantity('Parking Pass', 2);
+
+    await checkout.setQuantityForProduct('VIP Ticket', 0);
+    await expect(page.getByText('Add General Admission or VIP Ticket first')).toBeVisible();
+    await expect(parkingAddon.locator('input')).toBeHidden();
+
+    await checkout.setQuantityForProduct('General Admission', 1);
+    await checkout.setAddonQuantity('Parking Pass', 2);
+    await checkout.continueToCheckout();
+
+    await expect(page.getByText('Parking Pass')).toHaveCount(1);
+    await expect(page.getByText('× 2', { exact: true })).toBeVisible();
   });
 
   test('a buyer completes an order that includes an add-on', async ({ page, api, account, mailpit }) => {
