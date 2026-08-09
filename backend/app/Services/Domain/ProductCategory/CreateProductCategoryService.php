@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Domain\ProductCategory;
 
+use HiEvents\DomainObjects\Enums\ProductTerminology;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
@@ -19,11 +20,13 @@ class CreateProductCategoryService
 
     public function createDefaultProductCategory(EventDomainObject $event): void
     {
+        $terminology = ProductTerminology::forCategory($event->getCategory());
+
         $this->createCategory((new ProductCategoryDomainObject)
             ->setEventId($event->getId())
-            ->setName(__('Tickets'))
+            ->setName($terminology->defaultProductCategoryName())
             ->setIsHidden(false)
-            ->setNoProductsMessage(__('There are no tickets available for this event'))
+            ->setNoProductsMessage($terminology->defaultNoProductsMessage())
         );
     }
 }
