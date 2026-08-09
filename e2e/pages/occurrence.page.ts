@@ -1,5 +1,12 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
+export type BulkAction =
+  | 'shift-times'
+  | 'change-duration'
+  | 'update-capacity'
+  | 'update-label'
+  | 'update-location';
+
 export class OccurrencePage {
   constructor(private readonly page: Page) {}
 
@@ -10,6 +17,10 @@ export class OccurrencePage {
 
   dialog(): Locator {
     return this.page.getByRole('dialog');
+  }
+
+  async selectTimePeriod(period: 'Upcoming' | 'Past' | 'All'): Promise<void> {
+    await this.page.locator('[class*="toolbar"] label').filter({ hasText: new RegExp(`^${period}$`) }).click();
   }
 
   async openScheduleSetup(): Promise<void> {
@@ -39,6 +50,22 @@ export class OccurrencePage {
 
   statusBadges(status: 'ACTIVE' | 'CANCELLED'): Locator {
     return this.page.locator(`[class*="statusBadge"][data-status="${status}"]`);
+  }
+
+  timeCells(): Locator {
+    return this.page.locator('[class*="dateTimePrimary"]');
+  }
+
+  labelCells(): Locator {
+    return this.page.locator('[class*="dateTimeMeta"]');
+  }
+
+  locationCells(): Locator {
+    return this.page.locator('[class*="dateTimeLocation"]');
+  }
+
+  capacityCells(): Locator {
+    return this.page.locator('[class*="ticketsSoldNumbers"]');
   }
 
   rowWithStatus(status: 'ACTIVE' | 'CANCELLED'): Locator {
@@ -72,6 +99,55 @@ export class OccurrencePage {
 
   async saveProductSettings(): Promise<void> {
     await this.page.locator('[class*="saveButton"]').click();
+  }
+
+  selectAllCheckbox(): Locator {
+    return this.page.getByRole('checkbox', { name: 'Select all', exact: true });
+  }
+
+  selectionSummary(): Locator {
+    return this.page.locator('[class*="selectionCount"]');
+  }
+
+  async clearSelection(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-clear-selection-button').click();
+  }
+
+  async cancelSelected(): Promise<void> {
+    const count = parseInt(await this.selectionSummary().innerText(), 10);
+    await this.page.getByTestId('occurrence-bulk-cancel-button').click();
+    const confirm = this.dialog().filter({ hasText: `Cancel ${count} date(s)` });
+    await confirm.getByRole('button', { name: `Cancel ${count} date(s)` }).click();
+  }
+
+  async deleteSelected(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-delete-button').click();
+    await this.dialog().getByRole('button', { name: 'Confirm' }).click();
+  }
+
+  bulkEditModal(): Locator {
+    return this.dialog().filter({ hasText: 'Bulk Edit Dates' });
+  }
+
+  async openBulkEdit(action: BulkAction): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-edit-button').click();
+    await this.page.getByTestId(`occurrence-bulk-action-${action}`).click();
+  }
+
+  async setBulkScope(scope: 'Loaded dates' | 'All matching dates'): Promise<void> {
+    await this.bulkEditModal().getByText(scope, { exact: true }).click();
+  }
+
+  bulkOption(label: string): Locator {
+    return this.bulkEditModal().getByRole('checkbox', { name: label });
+  }
+
+  affectedCount(): Locator {
+    return this.bulkEditModal().getByText(/This will affect \d+ date\(s\)\./);
+  }
+
+  async applyBulkEdit(): Promise<void> {
+    await this.page.getByTestId('occurrence-bulk-edit-submit-button').click();
   }
 
   async closeModal(): Promise<void> {

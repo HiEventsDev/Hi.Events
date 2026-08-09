@@ -294,6 +294,12 @@ export class ApiClient {
     );
   }
 
+  createOccurrence(eventId: number, payload: UpdateOccurrencePayload): Promise<Occurrence> {
+    return unwrap<Occurrence>(
+      this.request.post(`events/${eventId}/occurrences`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
   updateOccurrence(eventId: number, occurrenceId: number, payload: UpdateOccurrencePayload): Promise<void> {
     return check(
       this.request.put(`events/${eventId}/occurrences/${occurrenceId}`, { headers: jsonHeaders, data: payload }),

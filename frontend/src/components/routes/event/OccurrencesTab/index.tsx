@@ -495,13 +495,27 @@ const OccurrencesTab = () => {
                 {selectedIds.size > 0 && (
                     <div className={classes.selectionGroup}>
                         <span className={classes.selectionCount}>{selectedIds.size} {t`selected`}</span>
-                        <button className={classes.selectionAction} data-danger onClick={handleBulkCancel}>
+                        <button
+                            className={classes.selectionAction}
+                            data-danger
+                            data-testid="occurrence-bulk-cancel-button"
+                            onClick={handleBulkCancel}
+                        >
                             {t`Cancel`}
                         </button>
-                        <button className={classes.selectionAction} data-danger onClick={handleBulkDelete}>
+                        <button
+                            className={classes.selectionAction}
+                            data-danger
+                            data-testid="occurrence-bulk-delete-button"
+                            onClick={handleBulkDelete}
+                        >
                             {t`Delete`}
                         </button>
-                        <button className={classes.selectionAction} onClick={() => setSelectedIds(new Set())}>
+                        <button
+                            className={classes.selectionAction}
+                            data-testid="occurrence-bulk-clear-selection-button"
+                            onClick={() => setSelectedIds(new Set())}
+                        >
                             {t`Clear`}
                         </button>
                         <div className={classes.toolbarDivider}/>
@@ -513,6 +527,7 @@ const OccurrencesTab = () => {
                     variant="light"
                     leftSection={<IconPencil size={14}/>}
                     onClick={openBulkEdit}
+                    data-testid="occurrence-bulk-edit-button"
                 >
                     {t`Bulk Edit`}
                 </Button>

@@ -1,6 +1,14 @@
 import type { APIRequestContext } from '@playwright/test';
 import type { ApiClient } from './api-client';
-import type { EventType, Occurrence, Organizer, ProductPriceType, PublicOrder, QuestionRecord } from './types';
+import type {
+  AttendeeDetailsCollection,
+  EventType,
+  Occurrence,
+  Organizer,
+  ProductPriceType,
+  PublicOrder,
+  QuestionRecord,
+} from './types';
 import {
   awaitOfflinePayment,
   completePublicOrder,
@@ -31,7 +39,14 @@ interface SeedOptions {
   waitlistEnabled?: boolean;
   taxIds?: number[];
   prices?: { price: number; label?: string }[];
+  attendeeDetails?: AttendeeDetailsCollection;
 }
+
+export const setAttendeeDetailsCollection = (
+  api: ApiClient,
+  eventId: number,
+  method: AttendeeDetailsCollection,
+): Promise<void> => api.updateEventSettings(eventId, { attendee_details_collection_method: method });
 
 const futureStartDate = (): string => {
   const date = new Date();
@@ -60,6 +75,10 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     currency: 'USD',
     timezone: 'UTC',
   });
+
+  if (eventType === 'SINGLE') {
+    await setAttendeeDetailsCollection(api, event.id, opts.attendeeDetails ?? 'PER_TICKET');
+  }
 
   const categories = await api.listProductCategories(event.id);
   const categoryId = categories[0].id;
@@ -97,7 +116,7 @@ export interface SeededDraftEvent {
 export async function createDraftEvent(
   api: ApiClient,
   organizerId: number,
-  opts: { title?: string } = {},
+  opts: { title?: string; attendeeDetails?: AttendeeDetailsCollection } = {},
 ): Promise<SeededDraftEvent> {
   const title = opts.title ?? uniqueName('E2E Event');
   const event = await api.createEvent({
@@ -109,6 +128,7 @@ export async function createDraftEvent(
     currency: 'USD',
     timezone: 'UTC',
   });
+  await setAttendeeDetailsCollection(api, event.id, opts.attendeeDetails ?? 'PER_TICKET');
   return { eventId: event.id, slug: event.slug, title };
 }
 
