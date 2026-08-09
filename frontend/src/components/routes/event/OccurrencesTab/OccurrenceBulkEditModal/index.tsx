@@ -29,12 +29,12 @@ interface OccurrenceBulkEditModalProps extends GenericModalProps {
 }
 
 export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEditModalProps) => {
-    const ACTIONS: { value: BulkAction; label: string; icon: typeof IconClock; description: string }[] = [
-        {value: 'shift_times', label: t`Shift times`, icon: IconClock, description: t`Move all dates earlier or later`},
-        {value: 'change_duration', label: t`Change duration`, icon: IconRuler, description: t`Set how long each date lasts`},
-        {value: 'update_capacity', label: t`Update capacity`, icon: IconUsers, description: t`Change the attendee limit`},
-        {value: 'update_label', label: t`Update label`, icon: IconTag, description: t`Set or clear the date label`},
-        {value: 'update_location', label: t`Update location`, icon: IconMapPin, description: t`Set, change, or remove the date's location or online details`},
+    const ACTIONS: { value: BulkAction; label: string; icon: typeof IconClock; description: string; testId: string }[] = [
+        {value: 'shift_times', label: t`Shift times`, icon: IconClock, description: t`Move all dates earlier or later`, testId: 'occurrence-bulk-action-shift-times'},
+        {value: 'change_duration', label: t`Change duration`, icon: IconRuler, description: t`Set how long each date lasts`, testId: 'occurrence-bulk-action-change-duration'},
+        {value: 'update_capacity', label: t`Update capacity`, icon: IconUsers, description: t`Change the attendee limit`, testId: 'occurrence-bulk-action-update-capacity'},
+        {value: 'update_label', label: t`Update label`, icon: IconTag, description: t`Set or clear the date label`, testId: 'occurrence-bulk-action-update-label'},
+        {value: 'update_location', label: t`Update location`, icon: IconMapPin, description: t`Set, change, or remove the date's location or online details`, testId: 'occurrence-bulk-action-update-location'},
     ];
     const {eventId} = useParams();
     const bulkUpdateMutation = useBulkUpdateOccurrences();
@@ -308,11 +308,12 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
         <Modal opened={!pendingNotification} onClose={onClose} heading={t`Bulk Edit Dates`}>
             {!selectedAction ? (
                 <div className={classes.actionPicker}>
-                    {ACTIONS.map(({value, label, icon: Icon, description}) => (
+                    {ACTIONS.map(({value, label, icon: Icon, description, testId}) => (
                         <button
                             key={value}
                             type="button"
                             className={classes.actionOption}
+                            data-testid={testId}
                             onClick={() => form.setFieldValue('bulk_action', value)}
                         >
                             <div className={classes.actionOptionIcon}>
@@ -504,6 +505,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                         type="submit"
                         fullWidth
                         mt="lg"
+                        data-testid="occurrence-bulk-edit-submit-button"
                         loading={bulkUpdateMutation.isPending || createLocationMutation.isPending}
                     >
                         {t`Apply Changes`}

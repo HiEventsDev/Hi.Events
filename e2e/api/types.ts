@@ -175,6 +175,7 @@ export interface UpdateOccurrencePayload {
   start_date: string;
   end_date?: string | null;
   label?: string;
+  capacity?: number | null;
   event_location?:
     | { type: 'IN_PERSON'; location_id: number }
     | { type: 'ONLINE'; online_event_connection_details: string };
@@ -215,10 +216,13 @@ export interface EmailTemplate {
   subject: string;
 }
 
+export type AttendeeDetailsCollection = 'PER_TICKET' | 'PER_ORDER';
+
 export interface EventSettings {
   payment_providers?: string[];
   offline_payment_instructions?: string | null;
   waitlist_enabled?: boolean;
+  attendee_details_collection_method?: AttendeeDetailsCollection;
   [key: string]: unknown;
 }
 
