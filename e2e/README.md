@@ -223,6 +223,10 @@ Known gap: SaaS-mode Stripe checkout requires a connected Stripe account
 (`organizer_stripe_platforms`), which cannot be onboarded headlessly. The Stripe spec
 targets non-SaaS platform-account charges until a seeded-connected-account helper exists.
 
+Known gap: in SaaS mode the message composer hides its form behind "Connect Stripe to
+enable messaging" until the account is manually verified, so composer-driven specs only
+run on a non-SaaS stack.
+
 ## CI
 
 `.github/workflows/e2e.yml` builds the backend and frontend images (GHA layer cache),
