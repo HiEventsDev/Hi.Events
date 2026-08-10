@@ -116,4 +116,32 @@ test.describe('product creation', () => {
     await products.openLedgerRow('access');
     await expect(products.hiddenSwitch()).toBeChecked();
   });
+
+  test('the live preview renders the ticket in the event page theme', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    await api.updateEventSettings(event.eventId, {
+      homepage_theme_settings: {
+        mode: 'light',
+        accent: '#FF2D95',
+        background: '#FFFFFF',
+        background_type: 'COLOR',
+      },
+    });
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await authedPage.getByLabel(/^Name/).fill(uniqueName('Themed'));
+
+    const previewCta = authedPage.getByRole('dialog').locator('.hi-continue-button');
+    await expect(previewCta).toBeVisible();
+    await expect
+      .poll(() =>
+        previewCta.evaluate((el) => {
+          const style = getComputedStyle(el);
+          return `${style.backgroundColor} @ ${style.opacity}`;
+        }),
+      )
+      .toBe('rgb(255, 45, 149) @ 1');
+  });
 });
