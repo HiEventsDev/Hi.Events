@@ -261,4 +261,6 @@ return [
     ])->toArray(),
 
     'is_hi_events' => env('APP_IS_HI_EVENTS', false),
+
+    'api_docs_enabled' => (bool) env('API_DOCS_ENABLED', false),
 ];

@@ -9,7 +9,9 @@ use Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\RouteInfo;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -27,6 +29,11 @@ class ScrambleServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::define(
+            'viewApiDocs',
+            static fn (?Authenticatable $user): bool => (bool) config('app.api_docs_enabled'),
+        );
+
         Scramble::configure()
             ->routes(static function (Route $route): bool {
                 if (Str::is(['mail-test', '*sitemap*', 'admin', 'admin/*'], $route->uri())) {
