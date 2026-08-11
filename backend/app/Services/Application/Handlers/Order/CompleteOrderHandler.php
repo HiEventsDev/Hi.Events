@@ -79,6 +79,8 @@ class CompleteOrderHandler
         $updatedOrder = DB::transaction(function () use ($orderData, $orderShortId, $eventSettings) {
             $orderDTO = $orderData->order;
 
+            DB::statement('SELECT pg_advisory_xact_lock(hashtext(?))', [$orderShortId]);
+
             $order = $this->getOrder($orderShortId);
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);

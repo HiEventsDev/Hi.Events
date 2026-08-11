@@ -389,6 +389,11 @@ class OrderCreateRequestValidationService
             promoCode: $promoCode
         );
 
+        $this->validateProductSaleWindow(
+            productIndex: $productIndex,
+            product: $product
+        );
+
         $this->validateProductQuantity(
             productIndex: $productIndex,
             productAndQuantities: $productAndQuantities,
@@ -468,7 +473,7 @@ class OrderCreateRequestValidationService
             throw ValidationException::withMessages([
                 "products.$productIndex" => __('The maximum number of products available for :products is :max', [
                     'max' => $maxPerOrder,
-                    'product' => $product->getTitle(),
+                    'products' => $product->getTitle(),
                 ]),
             ]);
         }
@@ -487,6 +492,28 @@ class OrderCreateRequestValidationService
     {
         if ($product->getEventId() !== $event->getId()) {
             throw new NotFoundHttpException(sprintf('Product ID %d not found for event ID %d', $productId, $event->getId()));
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateProductSaleWindow(int $productIndex, ProductDomainObject $product): void
+    {
+        if ($product->isBeforeSaleStartDate()) {
+            throw ValidationException::withMessages([
+                "products.$productIndex" => __(':product is not yet on sale', [
+                    'product' => $product->getTitle(),
+                ]),
+            ]);
+        }
+
+        if ($product->isAfterSaleEndDate()) {
+            throw ValidationException::withMessages([
+                "products.$productIndex" => __('Sales for :product have ended', [
+                    'product' => $product->getTitle(),
+                ]),
+            ]);
         }
     }
 
@@ -558,7 +585,7 @@ class OrderCreateRequestValidationService
             }
 
             $selectedPrice = $productPrices?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $priceId);
-            if ((int) $quantity > 0 && $selectedPrice?->getIsHidden()) {
+            if ((int) $quantity > 0 && $this->isPriceUnavailable($selectedPrice)) {
                 $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
             }
         }
@@ -566,6 +593,17 @@ class OrderCreateRequestValidationService
         if (! empty($errors)) {
             throw ValidationException::withMessages($errors);
         }
+    }
+
+    private function isPriceUnavailable(?ProductPriceDomainObject $price): bool
+    {
+        if ($price === null) {
+            return true;
+        }
+
+        return $price->getIsHidden()
+            || $price->isBeforeSaleStartDate()
+            || $price->isAfterSaleEndDate();
     }
 
     /**
