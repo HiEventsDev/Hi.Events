@@ -5,6 +5,7 @@ namespace HiEvents\Services\Domain\CapacityAssignment;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\DomainObjects\Generated\CapacityAssignmentDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Services\Domain\Product\EventProductValidationService;
 use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
@@ -23,12 +24,22 @@ class UpdateCapacityAssignmentService
 
     /**
      * @throws UnrecognizedProductIdException
+     * @throws ResourceNotFoundException
      */
     public function updateCapacityAssignment(
         CapacityAssignmentDomainObject $capacityAssignment,
         ?array                         $productIds = null,
     ): CapacityAssignmentDomainObject
     {
+        $existingAssignment = $this->capacityAssignmentRepository->findFirstWhere([
+            CapacityAssignmentDomainObjectAbstract::ID => $capacityAssignment->getId(),
+            CapacityAssignmentDomainObjectAbstract::EVENT_ID => $capacityAssignment->getEventId(),
+        ]);
+
+        if ($existingAssignment === null) {
+            throw new ResourceNotFoundException(__('Capacity assignment not found'));
+        }
+
         if ($productIds !== null) {
             $this->eventProductValidationService->validateProductIds($productIds, $capacityAssignment->getEventId());
         }

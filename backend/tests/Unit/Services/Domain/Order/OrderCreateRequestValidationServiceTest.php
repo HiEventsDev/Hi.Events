@@ -411,6 +411,242 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->service->validateRequestData($eventId, $data);
     }
 
+    public function testProductBeforeSaleStartDateIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Early Access'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isBeforeSaleStartDate: true,
+        );
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $this->singleProductPayload($productId, $priceId, 1));
+    }
+
+    public function testProductAfterSaleEndDateIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Closed'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            isAfterSaleEndDate: true,
+        );
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $this->singleProductPayload($productId, $priceId, 1));
+    }
+
+    public function testProductInsideSaleWindowIsAccepted(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['On Sale'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+        );
+
+        $this->service->validateRequestData($eventId, $this->singleProductPayload($productId, $priceId, 1));
+
+        $this->assertTrue(true);
+    }
+
+    public function testExpiredPriceTierIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $currentPriceId = 101;
+        $expiredPriceId = 102;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$currentPriceId, $expiredPriceId],
+            priceLabels: ['Regular', 'Early Bird'],
+            availabilities: [
+                ['price_id' => $currentPriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+                ['price_id' => $expiredPriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            expiredPriceIds: [$expiredPriceId],
+        );
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $this->singleProductPayload($productId, $expiredPriceId, 1));
+    }
+
+    public function testNotYetOnSalePriceTierIsRejected(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $currentPriceId = 101;
+        $futurePriceId = 102;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$currentPriceId, $futurePriceId],
+            priceLabels: ['Regular', 'Late Release'],
+            availabilities: [
+                ['price_id' => $currentPriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+                ['price_id' => $futurePriceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            notYetOnSalePriceIds: [$futurePriceId],
+        );
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $this->singleProductPayload($productId, $futurePriceId, 1));
+    }
+
+    public function testMaxPerOrderIsEnforcedAcrossRepeatedProductEntries(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Limited'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            maxPerOrder: 2,
+        );
+
+        $data = [
+            'products' => [
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
+    public function testMaxPerOrderStillAllowsTheLimitAcrossRepeatedEntries(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Limited'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 50, 'quantity_reserved' => 0],
+            ],
+            maxPerOrder: 4,
+        );
+
+        $data = [
+            'products' => [
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+            ],
+        ];
+
+        $this->service->validateRequestData($eventId, $data);
+
+        $this->assertTrue(true);
+    }
+
+    public function testAvailableStockIsEnforcedAcrossRepeatedProductEntries(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Scarce'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 3, 'quantity_reserved' => 0],
+            ],
+        );
+
+        $data = [
+            'products' => [
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+            ],
+        ];
+
+        $this->expectException(ValidationException::class);
+        $this->service->validateRequestData($eventId, $data);
+    }
+
+    public function testAvailableStockAllowsExactlyTheRemainingQuantityAcrossEntries(): void
+    {
+        $eventId = 1;
+        $productId = 10;
+        $priceId = 101;
+
+        $this->setupMocks(
+            eventId: $eventId,
+            productId: $productId,
+            priceIds: [$priceId],
+            priceLabels: ['Scarce'],
+            availabilities: [
+                ['price_id' => $priceId, 'quantity_available' => 3, 'quantity_reserved' => 0],
+            ],
+        );
+
+        $data = [
+            'products' => [
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 2]]],
+                ['product_id' => $productId, 'quantities' => [['price_id' => $priceId, 'quantity' => 1]]],
+            ],
+        ];
+
+        $this->service->validateRequestData($eventId, $data);
+
+        $this->assertTrue(true);
+    }
+
+    private function singleProductPayload(int $productId, int $priceId, int $quantity): array
+    {
+        return [
+            'products' => [
+                [
+                    'product_id' => $productId,
+                    'quantities' => [
+                        ['price_id' => $priceId, 'quantity' => $quantity],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     private function setupMocks(
         int   $eventId,
         int   $productId,
@@ -422,6 +658,11 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         bool $isHidden = false,
         bool $isHiddenWithoutPromoCode = false,
         array $hiddenPriceIds = [],
+        bool $isBeforeSaleStartDate = false,
+        bool $isAfterSaleEndDate = false,
+        array $expiredPriceIds = [],
+        array $notYetOnSalePriceIds = [],
+        ?int $maxPerOrder = null,
     ): void
     {
         $event = Mockery::mock(EventDomainObject::class);
@@ -437,6 +678,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             $price->shouldReceive('getId')->andReturn($priceId);
             $price->shouldReceive('getLabel')->andReturn($priceLabels[$i] ?? null);
             $price->shouldReceive('getIsHidden')->andReturn(in_array($priceId, $hiddenPriceIds, true));
+            $price->shouldReceive('isBeforeSaleStartDate')->andReturn(in_array($priceId, $notYetOnSalePriceIds, true));
+            $price->shouldReceive('isAfterSaleEndDate')->andReturn(in_array($priceId, $expiredPriceIds, true));
             $productPrices->push($price);
         }
 
@@ -444,13 +687,15 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('getId')->andReturn($productId);
         $product->shouldReceive('getEventId')->andReturn($eventId);
         $product->shouldReceive('getTitle')->andReturn('Test Product');
-        $product->shouldReceive('getMaxPerOrder')->andReturn(100);
+        $product->shouldReceive('getMaxPerOrder')->andReturn($maxPerOrder ?? 100);
         $product->shouldReceive('getMinPerOrder')->andReturn(1);
         $product->shouldReceive('isSoldOut')->andReturn(false);
         $product->shouldReceive('getType')->andReturn(ProductPriceType::TIERED->name);
         $product->shouldReceive('getProductPrices')->andReturn($productPrices);
         $product->shouldReceive('getIsHidden')->andReturn($isHidden);
         $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn($isHiddenWithoutPromoCode);
+        $product->shouldReceive('isBeforeSaleStartDate')->andReturn($isBeforeSaleStartDate);
+        $product->shouldReceive('isAfterSaleEndDate')->andReturn($isAfterSaleEndDate);
 
         $this->productRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->productRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$product]));

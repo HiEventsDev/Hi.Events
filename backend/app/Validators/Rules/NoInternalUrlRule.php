@@ -3,29 +3,17 @@
 namespace HiEvents\Validators\Rules;
 
 use Closure;
+use HiEvents\Exceptions\UnsafeWebhookUrlException;
+use HiEvents\Services\Infrastructure\Webhook\WebhookUrlValidator;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Facades\Config;
 
 class NoInternalUrlRule implements ValidationRule
 {
-    private const ALLOWED_SCHEMES = ['http', 'https'];
-
-    private const BLOCKED_HOSTS = [
-        'localhost',
-        '127.0.0.1',
-        '::1',
-        '0.0.0.0',
-    ];
-
-    private const BLOCKED_TLDS = [
-        '.localhost',
-    ];
-
-    private const CLOUD_METADATA_HOSTS = [
-        '169.254.169.254',
-        'metadata.google.internal',
-        'metadata.goog',
-    ];
+    public function __construct(
+        private readonly ?WebhookUrlValidator $validator = null,
+    )
+    {
+    }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -34,133 +22,10 @@ class NoInternalUrlRule implements ValidationRule
             return;
         }
 
-        $parsedUrl = parse_url($value);
-        if ($parsedUrl === false || !isset($parsedUrl['host'])) {
-            $fail(__('The :attribute must be a valid URL.'));
-            return;
+        try {
+            ($this->validator ?? app(WebhookUrlValidator::class))->validate($value);
+        } catch (UnsafeWebhookUrlException $exception) {
+            $fail($exception->getMessage());
         }
-
-        $scheme = strtolower($parsedUrl['scheme'] ?? '');
-        if (!in_array($scheme, self::ALLOWED_SCHEMES, true)) {
-            $fail(__('The :attribute must use http or https protocol.'));
-            return;
-        }
-
-        $host = strtolower($parsedUrl['host']);
-
-        // Handle IPv6 addresses wrapped in brackets
-        if (str_starts_with($host, '[') && str_ends_with($host, ']')) {
-            $host = substr($host, 1, -1);
-        }
-
-        // Handle NoInternalIP/Host Exceptions
-        if ($this->isWhitelistedHost($host)) {
-            return;
-        }
-
-        if ($this->isBlockedHost($host)) {
-            $fail(__('The :attribute cannot point to localhost or internal addresses.'));
-            return;
-        }
-
-        if ($this->isBlockedTld($host)) {
-            $fail(__('The :attribute cannot use reserved domain names.'));
-            return;
-        }
-
-        if ($this->isCloudMetadataHost($host)) {
-            $fail(__('The :attribute cannot point to cloud metadata endpoints.'));
-            return;
-        }
-
-        if ($this->isPrivateIpAddress($host)) {
-            $fail(__('The :attribute cannot point to private or internal IP addresses.'));
-            return;
-        }
-    }
-
-    private function isBlockedHost(string $host): bool
-    {
-        return in_array($host, self::BLOCKED_HOSTS, true);
-    }
-
-    private function isBlockedTld(string $host): bool
-    {
-        foreach (self::BLOCKED_TLDS as $tld) {
-            if (str_ends_with($host, $tld)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function isCloudMetadataHost(string $host): bool
-    {
-        foreach (self::CLOUD_METADATA_HOSTS as $metadataHost) {
-            if ($host === $metadataHost || str_ends_with($host, '.' . $metadataHost)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function isPrivateIpAddress(string $host): bool
-    {
-        $ip = $this->resolveAndNormalize($host);
-
-        if ($ip === false) {
-            return true;
-        }
-
-        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-            return true;
-        }
-
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-            return true;
-        }
-
-        if (str_starts_with($ip, '169.254.')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function resolveAndNormalize(string $host): string|false
-    {
-        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            $binary = inet_pton($host);
-            if ($binary !== false && strlen($binary) === 16) {
-                $prefix = substr($binary, 0, 12);
-                if ($prefix === "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff") {
-                    return inet_ntop(substr($binary, 12));
-                }
-            }
-            return $host;
-        }
-
-        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            return $host;
-        }
-
-        $ip = gethostbyname($host);
-        if ($ip === $host) {
-            return false;
-        }
-
-        return $ip;
-    }
-
-    private function isWhitelistedHost(string $host): bool
-    {
-        $whitelistedHosts = Config::string('app.allowed_internal_webhook_hosts');
-        if (!empty($whitelistedHosts)) {
-            $allowedList = array_filter(array_map('trim', explode(',', $whitelistedHosts)));
-            if (in_array($host, $allowedList) || in_array(gethostbyname($host), $allowedList)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\CapacityAssignment;
 
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\Events\CapacityChangedEvent;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Models\CapacityAssignment;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -19,9 +20,19 @@ class DeleteCapacityAssignmentHandler
     {
     }
 
+    /**
+     * @throws ResourceNotFoundException
+     */
     public function handle(int $id, int $eventId): void
     {
-        $capacityAssignment = $this->capacityAssignmentRepository->findById($id);
+        $capacityAssignment = $this->capacityAssignmentRepository->findFirstWhere([
+            'id' => $id,
+            'event_id' => $eventId,
+        ]);
+
+        if ($capacityAssignment === null) {
+            throw new ResourceNotFoundException(__('Capacity assignment not found'));
+        }
 
         $productIds = CapacityAssignment::find($id)?->products()->pluck('products.id')->toArray() ?? [];
 
