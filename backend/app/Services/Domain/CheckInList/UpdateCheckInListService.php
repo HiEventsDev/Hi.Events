@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -23,10 +24,20 @@ class UpdateCheckInListService
 
     /**
      * @throws UnrecognizedProductIdException
+     * @throws ResourceNotFoundException
      */
     public function updateCheckInList(CheckInListDomainObject $checkInList, array $productIds): CheckInListDomainObject
     {
         return $this->databaseManager->transaction(function () use ($checkInList, $productIds) {
+            $existingCheckInList = $this->checkInListRepository->findFirstWhere([
+                CheckInListDomainObjectAbstract::ID => $checkInList->getId(),
+                CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+            ]);
+
+            if ($existingCheckInList === null) {
+                throw new ResourceNotFoundException(__('Check-in list not found'));
+            }
+
             $this->eventProductValidationService->validateProductIds($productIds, $checkInList->getEventId());
             $event = $this->eventRepository->findById($checkInList->getEventId());
 
