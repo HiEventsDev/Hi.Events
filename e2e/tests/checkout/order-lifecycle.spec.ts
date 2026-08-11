@@ -10,9 +10,10 @@ test.describe('order lifecycle', () => {
     await page.goto(`/checkout/${event.eventId}/${orderShortId}/details?session_identifier=${sessionId}`);
     await page.waitForLoadState('networkidle');
 
-    const timerLabel = page.getByText('Time left:');
-    await expect(timerLabel).toBeVisible();
-    await expect(timerLabel.locator('..')).toContainText(/\d+:\d{2}/);
+    const timer = page.getByTestId('checkout-timer');
+    await expect(timer).toBeVisible();
+    await expect(timer).toContainText(/\d+:\d{2}/);
+    await expect(page.locator('header').getByText(event.title, { exact: true })).toBeVisible();
   });
 
   test('abandoning a checkout returns to the event page and cancels the order', async ({ page, api, account }) => {
@@ -24,7 +25,7 @@ test.describe('order lifecycle', () => {
     await checkout.continueToCheckout();
     const detailsUrl = page.url();
 
-    await page.getByRole('button', { name: 'Event Homepage' }).click();
+    await page.getByRole('button', { name: 'Back to event page' }).click();
     await expect(page.getByRole('heading', { name: 'Are you sure you want to leave?' })).toBeVisible();
     await page.getByRole('button', { name: 'Yes, cancel my order' }).click();
 
