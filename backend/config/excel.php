@@ -208,7 +208,7 @@ return [
     |
     */
     'value_binder' => [
-        'default' => Maatwebsite\Excel\DefaultValueBinder::class,
+        'default' => HiEvents\Exports\ValueBinders\FormulaSafeValueBinder::class,
     ],
 
     'cache' => [
