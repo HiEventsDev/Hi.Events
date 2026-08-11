@@ -1,0 +1,29 @@
+@use "../../../../styles/mixins";
+
+$font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+.stepTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: $font-display;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--checkout-text-primary);
+  margin: 0;
+
+  @include mixins.respond-below(md) {
+    font-size: 17px;
+  }
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--checkout-text-secondary);
+  margin: 0;
+}
