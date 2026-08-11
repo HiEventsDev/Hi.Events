@@ -10,7 +10,9 @@ use HiEvents\Http\Request\Questions\UpsertQuestionRequest;
 use HiEvents\Resources\Question\QuestionResource;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Application\Handlers\Question\EditQuestionHandler;
+use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class EditQuestionAction extends BaseAction
@@ -29,19 +31,26 @@ class EditQuestionAction extends BaseAction
     {
         $this->isActionAuthorized($eventId, EventDomainObject::class);
 
-        $question = $this->editQuestionHandler->handle(
-            questionId: $questionId,
-            createQuestionDTO: UpsertQuestionDTO::fromArray([
-                'title' => $request->input('title'),
-                'type' => QuestionTypeEnum::fromName($request->input('type')),
-                'required' => $request->boolean('required'),
-                'options' => $request->input('options'),
-                'event_id' => $eventId,
-                'product_ids' => $request->input('product_ids'),
-                'is_hidden' => $request->boolean('is_hidden'),
-                'belongs_to' => QuestionBelongsTo::fromName($request->input('belongs_to')),
-                'description' => $request->input('description'),
-            ]));
+        try {
+            $question = $this->editQuestionHandler->handle(
+                questionId: $questionId,
+                createQuestionDTO: UpsertQuestionDTO::fromArray([
+                    'title' => $request->input('title'),
+                    'type' => QuestionTypeEnum::fromName($request->input('type')),
+                    'required' => $request->boolean('required'),
+                    'options' => $request->input('options'),
+                    'event_id' => $eventId,
+                    'product_ids' => $request->input('product_ids'),
+                    'is_hidden' => $request->boolean('is_hidden'),
+                    'belongs_to' => QuestionBelongsTo::fromName($request->input('belongs_to')),
+                    'description' => $request->input('description'),
+                ]));
+        } catch (UnrecognizedProductIdException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
 
         return $this->resourceResponse(QuestionResource::class, $question);
     }
