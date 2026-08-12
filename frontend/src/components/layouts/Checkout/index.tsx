@@ -4,12 +4,11 @@ import {useGetOrderPublic} from "../../../queries/useGetOrderPublic.ts";
 import {t} from "@lingui/macro";
 import {Countdown} from "../../common/Countdown";
 import {ActionIcon, Button, Group, Modal, Tooltip} from "@mantine/core";
-import {IconArrowLeft, IconPrinter, IconReceipt} from "@tabler/icons-react";
+import {IconArrowLeft, IconClock, IconPrinter, IconReceipt} from "@tabler/icons-react";
 import {eventHomepagePath, eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {AddToEventCalendarButton} from "../../common/AddEventToCalendarButton";
-import {ProgressStepper} from "../../common/ProgressStepper";
-import {useMediaQuery} from "@mantine/hooks";
+import classNames from "classnames";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {getEmbedMode, getParentOrigin} from "../../../utilites/iframeResize.ts";
 import {Invoice} from "../../../types.ts";
@@ -50,7 +49,6 @@ const Checkout = () => {
     const orderIsCompleted = order?.status === 'COMPLETED';
     const orderIsReserved = order?.status === 'RESERVED';
     const orderIsAwaitingOfflinePayment = order?.status === 'AWAITING_OFFLINE_PAYMENT';
-    const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpired, setIsExpired] = useState(false);
     const orderHasAttendees = order?.attendees && order.attendees.length > 0;
     const [showAbandonDialog, setShowAbandonDialog] = useState(false);
@@ -77,6 +75,15 @@ const Checkout = () => {
         return 'details';
     };
     const currentStep = getCurrentStep();
+
+    const progressPercent = order?.is_payment_required
+        ? {details: 33, payment: 66, summary: 100}[currentStep]
+        : {details: 50, payment: 100, summary: 100}[currentStep];
+
+    const stepCount = order?.is_payment_required ? 3 : 2;
+    const stepNumber = order?.is_payment_required
+        ? {details: 1, payment: 2, summary: 3}[currentStep]
+        : {details: 1, payment: 2, summary: 2}[currentStep];
 
     const isOrderReservedAndNotExpired = orderIsReserved && order?.reserved_until
         && isDateInFuture(order.reserved_until);
@@ -288,56 +295,67 @@ const Checkout = () => {
                 <div className={classes.mainContent}>
                     <header className={classes.header}>
                         {(event) && (
-                            <div className={classes.actionBar} style={isModal ? {paddingRight: '44px'} : undefined}>
-                                <Group justify="space-between" wrap="nowrap">
-                                    {isModal ? (
-                                        <span/>
-                                    ) : (
-                                        <Button
-                                            title={t`Back to event page`}
-                                            variant="subtle"
-                                            leftSection={<IconArrowLeft size={20}/>}
-                                            onClick={handleEventHomepageClick}
-                                        >
-                                            {!isMobile && t`Event Homepage`}
-                                        </Button>
+                            <>
+                                <div
+                                    className={classNames(classes.headerRow, (orderIsCompleted || orderIsAwaitingOfflinePayment) && classes.headerRowComplete)}
+                                    style={isModal ? {paddingRight: '44px'} : undefined}
+                                >
+                                    {!isModal && (
+                                        <>
+                                            <ActionIcon
+                                                className={classes.backButton}
+                                                variant="subtle"
+                                                title={t`Back to event page`}
+                                                aria-label={t`Back to event page`}
+                                                onClick={handleEventHomepageClick}
+                                            >
+                                                <IconArrowLeft size={19}/>
+                                            </ActionIcon>
+                                            <span className={classes.headerDivider}/>
+                                        </>
                                     )}
 
-                                    {orderIsReserved && (
-                                        <ProgressStepper
-                                            isPaymentRequired={!!order.is_payment_required}
-                                            currentStep={currentStep}
-                                        />
-                                    )}
-
-                                    {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
-                                        <span className={classes.title}>
-                                            {t`Your Order`}
-                                        </span>
-                                    )}
-
-                                    {orderIsReserved && (
-                                        <Group gap="5px" className={classes.timerGroup}>
-                                            <span className={classes.timerLabel}>
-                                                {t`Time left:`}
+                                    <div className={classes.titleBlock}>
+                                        {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
+                                            <span
+                                                className={classNames(classes.eyebrow, orderIsAwaitingOfflinePayment ? classes.eyebrowAwaiting : classes.eyebrowComplete)}>
+                                                {orderIsAwaitingOfflinePayment ? t`Awaiting payment` : t`Order complete`}
                                             </span>
-                                            <Countdown
-                                                displayType={'short'}
-                                                className={classes.countdown}
-                                                closeToExpiryClassName={classes.countdownCloseToExpiry}
-                                                targetDate={order.reserved_until}
-                                                onExpiry={handleExpiry}
-                                            />
-                                        </Group>
+                                        )}
+
+                                        {orderIsReserved && (
+                                            <span className={classes.eyebrow}>
+                                                {t`Checkout · step ${stepNumber} of ${stepCount}`}
+                                            </span>
+                                        )}
+                                        <span className={classes.eventName}>{event.title}</span>
+                                    </div>
+
+                                    <div className={classes.headerSpacer}/>
+
+                                    {orderIsReserved && (
+                                        <>
+                                            <span className={classes.timerCaption}>{t`Time left`}</span>
+                                            <div className={classes.timerChip} data-testid="checkout-timer">
+                                                <IconClock size={14}/>
+                                                <Countdown
+                                                    displayType={'short'}
+                                                    className={classes.countdown}
+                                                    closeToExpiryClassName={classes.countdownCloseToExpiry}
+                                                    targetDate={order.reserved_until}
+                                                    onExpiry={handleExpiry}
+                                                />
+                                            </div>
+                                        </>
                                     )}
 
                                     {(orderIsCompleted || orderIsAwaitingOfflinePayment) && (
-                                        <Group gap="2px">
+                                        <div className={classes.headerActions}>
                                             <ShareComponent
                                                 title={event.title}
                                                 text={t`Check out this event!`}
                                                 url={eventHomepageUrl(event)}
-                                                hideShareButtonText={isMobile}
+                                                hideShareButtonText
                                             />
 
                                             <AddToEventCalendarButton event={event} occurrence={order?.order_items?.[0]?.event_occurrence}/>
@@ -365,10 +383,16 @@ const Checkout = () => {
                                                     </ActionIcon>
                                                 </Tooltip>
                                             )}
-                                        </Group>
+                                        </div>
                                     )}
-                                </Group>
-                            </div>
+                                </div>
+
+                                {orderIsReserved && (
+                                    <div className={classes.progressTrack}>
+                                        <div className={classes.progressFill} style={{width: `${progressPercent}%`}}/>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </header>
                     <Outlet/>

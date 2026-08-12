@@ -628,7 +628,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         ];
 
         $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('maximum number of products available for Test Products is 10');
+        $this->expectExceptionMessage('maximum number of products available for Test Product is 10');
 
         $this->service->validateRequestData(1, $data);
     }
@@ -858,6 +858,81 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_rejects_product_before_its_sale_start_date(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('is not yet on sale');
+
+        $this->setupSaleWindowScenario(productBeforeSaleStart: true);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+    }
+
+    public function test_rejects_product_after_its_sale_end_date(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Sales for');
+
+        $this->setupSaleWindowScenario(productAfterSaleEnd: true);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+    }
+
+    public function test_rejects_price_tier_after_its_sale_end_date(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Invalid price ID');
+
+        $this->setupSaleWindowScenario(priceAfterSaleEnd: true);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+    }
+
+    public function test_rejects_price_tier_before_its_sale_start_date(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Invalid price ID');
+
+        $this->setupSaleWindowScenario(priceBeforeSaleStart: true);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+    }
+
+    public function test_accepts_product_inside_its_sale_window(): void
+    {
+        $this->setupSaleWindowScenario();
+
+        $this->service->validateRequestData(1, $this->createRequestData(10));
+
+        $this->assertTrue(true);
+    }
+
+    private function setupSaleWindowScenario(
+        bool $productBeforeSaleStart = false,
+        bool $productAfterSaleEnd = false,
+        bool $priceBeforeSaleStart = false,
+        bool $priceAfterSaleEnd = false,
+    ): void {
+        $occurrence = $this->createOccurrence(
+            status: EventOccurrenceStatus::ACTIVE->name,
+            capacity: 100,
+            usedCapacity: 0,
+        );
+
+        $this->setupOccurrenceLookup(1, 10, $occurrence);
+        $this->setupEventLookup(1);
+        $this->setupAvailability(1);
+        $this->setupProducts(
+            1,
+            10,
+            100,
+            productBeforeSaleStart: $productBeforeSaleStart,
+            productAfterSaleEnd: $productAfterSaleEnd,
+            priceBeforeSaleStart: $priceBeforeSaleStart,
+            priceAfterSaleEnd: $priceAfterSaleEnd,
+        );
+    }
+
     private function createTicketProductStub(int $id): ProductDomainObject|MockInterface
     {
         $product = Mockery::mock(ProductDomainObject::class);
@@ -928,12 +1003,25 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ));
     }
 
-    private function setupProducts(int $eventId, int $productId, int $priceId, string $productType = 'TICKET', string $type = 'PAID', int $maxPerOrder = 10, int $minPerOrder = 1): void
-    {
+    private function setupProducts(
+        int $eventId,
+        int $productId,
+        int $priceId,
+        string $productType = 'TICKET',
+        string $type = 'PAID',
+        int $maxPerOrder = 10,
+        int $minPerOrder = 1,
+        bool $productBeforeSaleStart = false,
+        bool $productAfterSaleEnd = false,
+        bool $priceBeforeSaleStart = false,
+        bool $priceAfterSaleEnd = false,
+    ): void {
         $price = Mockery::mock(ProductPriceDomainObject::class);
         $price->shouldReceive('getId')->andReturn($priceId);
         $price->shouldReceive('getIsHidden')->andReturn(false);
         $price->shouldReceive('getLabel')->andReturn(null);
+        $price->shouldReceive('isBeforeSaleStartDate')->andReturn($priceBeforeSaleStart);
+        $price->shouldReceive('isAfterSaleEndDate')->andReturn($priceAfterSaleEnd);
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn($productId);
@@ -948,6 +1036,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('getProductType')->andReturn($productType);
         $product->shouldReceive('getIsHidden')->andReturn(false);
         $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
+        $product->shouldReceive('isBeforeSaleStartDate')->andReturn($productBeforeSaleStart);
+        $product->shouldReceive('isAfterSaleEndDate')->andReturn($productAfterSaleEnd);
         $product->shouldReceive('getIsAddonOnly')->andReturn(false);
 
         $this->productRepository
@@ -968,6 +1058,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('getId')->andReturn($priceId);
         $price->shouldReceive('getIsHidden')->andReturn(false);
         $price->shouldReceive('getLabel')->andReturn(null);
+        $price->shouldReceive('isBeforeSaleStartDate')->andReturn(false);
+        $price->shouldReceive('isAfterSaleEndDate')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getId')->andReturn($productId);
@@ -981,6 +1073,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $product->shouldReceive('getProductType')->andReturn($productType);
         $product->shouldReceive('getIsHidden')->andReturn(false);
         $product->shouldReceive('getIsHiddenWithoutPromoCode')->andReturn(false);
+        $product->shouldReceive('isBeforeSaleStartDate')->andReturn(false);
+        $product->shouldReceive('isAfterSaleEndDate')->andReturn(false);
         $product->shouldReceive('getIsAddonOnly')->andReturn($isAddonOnly);
 
         return $product;

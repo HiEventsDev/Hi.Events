@@ -44,6 +44,8 @@ use Tests\TestCase;
 
 class CompleteOrderHandlerTest extends TestCase
 {
+    private array $executedStatements = [];
+
     private OrderRepositoryInterface|MockInterface $orderRepository;
 
     private AttendeeRepositoryInterface|MockInterface $attendeeRepository;
@@ -73,6 +75,12 @@ class CompleteOrderHandlerTest extends TestCase
         Mail::fake();
         Bus::fake();
         DB::shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback(Mockery::mock(Connection::class)));
+        $this->executedStatements = [];
+        DB::shouldReceive('statement')->andReturnUsing(function (string $sql, array $bindings = []) {
+            $this->executedStatements[] = [$sql, $bindings];
+
+            return true;
+        });
 
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
@@ -138,6 +146,34 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertTrue(true);
+    }
+
+    public function test_handle_takes_an_advisory_lock_keyed_on_the_order_before_reading_it(): void
+    {
+        $orderShortId = 'ABC123';
+        $orderData = $this->createMockCompleteOrderDTO();
+        $order = $this->createMockOrder();
+        $updatedOrder = $this->createMockOrder();
+
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($updatedOrder);
+
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
+
+        $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
+
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+
+        $this->assertSame(
+            [['SELECT pg_advisory_xact_lock(hashtext(?))', [$orderShortId]]],
+            $this->executedStatements,
+        );
     }
 
     public function test_handle_throws_resource_not_found_exception_when_order_not_found(): void

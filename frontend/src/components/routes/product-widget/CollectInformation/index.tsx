@@ -24,6 +24,7 @@ import {useEffect, useState} from "react";
 import {InputGroup} from "../../../common/InputGroup";
 import {Card} from "../../../common/Card";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {getConfig} from "../../../../utilites/config.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
@@ -429,6 +430,13 @@ export const CollectInformation = () => {
         <form onSubmit={form.onSubmit(handleSubmit)}>
 
             <CheckoutContent>
+                <CheckoutStepTitle
+                    title={t`Details`}
+                    subtitle={order?.is_payment_required
+                        ? t`Next: payment`
+                        : t`Next: review your order`}
+                />
+
                 {isFromWaitlist && (
                     <div className={classes.waitlistBanner}>
                         <div className={classes.waitlistBannerIcon}>
