@@ -3,6 +3,7 @@ import { SupportedLocales } from '../locales.ts';
 import 'dayjs/locale/en';
 import 'dayjs/locale/de';
 import 'dayjs/locale/fr';
+import 'dayjs/locale/fi';
 import 'dayjs/locale/it';
 import 'dayjs/locale/nl';
 import 'dayjs/locale/pt';
@@ -54,6 +55,19 @@ export const localeFormats: Record<SupportedLocales, {
         timeOnly: 'HH:mm',
         timezone: 'z',
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
+    },
+    'fi': {
+        fullDateTime: 'ddd D. MMM YYYY HH.mm',
+        shortDateTime: 'D. MMM YYYY HH.mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH.mm',
+        monthShort: 'MMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
+        timeOnly: 'HH.mm',
+        timezone: 'z',
+        dateTimePicker: 'D. MMM YYYY [klo] HH.mm'
     },
     'fr': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
