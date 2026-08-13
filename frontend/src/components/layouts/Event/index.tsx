@@ -28,7 +28,7 @@ import {
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings";
-import {useGetEventStats} from "../../../queries/useGetEventStats";
+import {useGetEventCounts} from "../../../queries/useGetEventCounts";
 import {useGeoStatus} from "../../../queries/useGeoStatus.ts";
 import Truncate from "../../common/Truncate";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
@@ -66,7 +66,7 @@ const EventLayout = () => {
 
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const {isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
-    const {data: eventStats} = useGetEventStats(eventId);
+    const {data: eventCounts} = useGetEventCounts(eventId);
     const {data: me} = useGetMe();
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
@@ -122,13 +122,13 @@ const EventLayout = () => {
         // 3. Ticketing & Sales
         {label: t`Ticketing & Sales`},
         {link: 'products', label: t`Tickets & Products`, icon: IconTicket},
-        {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventStats?.total_orders},
+        {link: 'orders', label: t`Orders`, icon: IconReceipt, badge: eventCounts?.total_orders},
         {link: 'promo-codes', label: t`Promo Codes`, icon: IconDiscount2},
         {link: 'affiliates', label: t`Affiliates`, icon: IconTrendingUp},
 
         // 4. GUESTS
         {label: t`Guest Management`},
-        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventStats?.total_attendees_registered},
+        {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventCounts?.total_attendees_registered},
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},

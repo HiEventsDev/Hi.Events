@@ -22,8 +22,12 @@ export class CheckInListPage {
   }
 
   async openRowAction(name: string, action: string): Promise<void> {
-    await this.row(name).getByRole('button').click();
+    await this.row(name).getByTestId('check-in-list-actions-menu').click();
     await this.page.getByRole('menuitem', { name: action }).click();
+  }
+
+  openCheckInButton(name: string): Locator {
+    return this.row(name).getByTestId('check-in-list-open-button');
   }
 
   editNameInput(): Locator {

@@ -341,6 +341,28 @@ export class AdminApiClient {
     );
   }
 
+  setAccountVerification(accountId: number, isManuallyVerified: boolean): Promise<void> {
+    return check(
+      this.request.put(`admin/accounts/${accountId}/verification`, {
+        headers: jsonHeaders,
+        data: { is_manually_verified: isManuallyVerified },
+      }),
+    );
+  }
+
+  async findAccountIdByEmail(email: string): Promise<number> {
+    const accounts = await unwrap<{ id: number; email: string }[]>(
+      this.request.get('admin/accounts', { headers: jsonHeaders, params: { search: email } }),
+    );
+
+    const match = accounts.find((account) => account.email === email);
+    if (!match) {
+      throw new Error(`No admin account found for ${email}`);
+    }
+
+    return match.id;
+  }
+
   createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {
     return unwrap(this.request.post('admin/announcements', { headers: jsonHeaders, data: payload }));
   }

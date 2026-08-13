@@ -282,11 +282,11 @@ export async function createCompletedPaidOrder(
   publicApi: APIRequestContext,
   event: Pick<SeededEvent, 'eventId' | 'productId' | 'priceId'>,
   opts: OrderSeedOptions = {},
-): Promise<SeededOrder & { orderId: number }> {
+): Promise<SeededOrder & { orderId: number; totalGross: number }> {
   const seeded = await createAwaitingOfflineOrder(api, publicApi, event, opts);
   await api.markOrderAsPaid(event.eventId, seeded.orderId);
   const completed = await getPublicOrder(publicApi, event.eventId, seeded.orderShortId, seeded.sessionId);
-  return { ...seeded, attendees: mapAttendees(completed) };
+  return { ...seeded, attendees: mapAttendees(completed), totalGross: completed.total_gross };
 }
 
 export async function createSoldOutEvent(

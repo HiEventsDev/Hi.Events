@@ -4,6 +4,7 @@ import {GET_ATTENDEES_QUERY_KEY} from "../queries/useGetAttendees.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {IdParam} from "../types.ts";
 import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
+import {GET_EVENT_COUNTS_QUERY_KEY} from "../queries/useGetEventCounts.ts";
 
 export const useCreateAttendee = () => {
     const queryClient = useQueryClient();
@@ -16,7 +17,8 @@ export const useCreateAttendee = () => {
 
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: [GET_EVENT_ORDERS_QUERY_KEY]});
-             queryClient.invalidateQueries({queryKey: [GET_ATTENDEES_QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey: [GET_ATTENDEES_QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_COUNTS_QUERY_KEY]});
         }
     });
 }

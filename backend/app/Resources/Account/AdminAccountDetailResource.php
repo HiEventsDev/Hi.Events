@@ -21,6 +21,7 @@ class AdminAccountDetailResource extends BaseResource
             'email' => $this->resource->email,
             'timezone' => $this->resource->timezone,
             'currency_code' => $this->resource->currency_code,
+            'is_manually_verified' => (bool) $this->resource->is_manually_verified,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'events_count' => $this->resource->events_count ?? 0,

@@ -3,7 +3,7 @@ import { AdminApiClient, ApiClient, login } from '../api/api-client';
 import { MailpitClient } from '../utils/mailpit';
 import { bootstrapAccount, type AccountContext, type AccountIdentity } from './account.fixture';
 import { buildStorageState, openAuthedPage } from './auth.fixture';
-import { API_BASE_URL, BASE_URL, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD } from '../utils/env';
+import { API_BASE_URL, BASE_URL, IS_SAAS_MODE, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD } from '../utils/env';
 import { uniqueName } from '../utils/unique';
 
 export interface FreshAccount extends AccountIdentity {
@@ -15,6 +15,38 @@ export interface FreshAccount extends AccountIdentity {
 interface SuperAdminAuth {
   token: string;
 }
+
+const TRUSTED_MESSAGING_TIER_ID = 2;
+
+/**
+ * In SaaS mode a new account cannot message attendees or manage email templates until it is
+ * verified, and its messages are held for review on the default tier. Grant both so specs
+ * exercise the feature rather than the gate.
+ *
+ * A missing superadmin is tolerated (local stacks without `dev:bootstrap`); a failing admin
+ * call is not, so a broken grant surfaces here rather than as a confusing gate assertion.
+ */
+const grantMessagingPrivileges = async (
+  playwright: { request: APIRequest },
+  anon: APIRequestContext,
+  account: { id: number },
+): Promise<void> => {
+  let token: string;
+  try {
+    ({ token } = await login(anon, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD));
+  } catch {
+    return;
+  }
+
+  const adminContext = await newApiContext(playwright, { Authorization: `Bearer ${token}` });
+  try {
+    const adminApi = new AdminApiClient(adminContext);
+    await adminApi.setAccountVerification(account.id, true);
+    await adminApi.setMessagingTier(account.id, TRUSTED_MESSAGING_TIER_ID);
+  } finally {
+    await adminContext.dispose();
+  }
+};
 
 interface WorkerFixtures {
   /** A registered, verified account with an organizer and an authorized API client. Shared per worker. */
@@ -60,6 +92,10 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
       const authed = await newApiContext(playwright, { Authorization: `Bearer ${identity.token}` });
       const api = new ApiClient(authed);
       const organizer = await api.createOrganizer(uniqueName('E2E Org'));
+
+      if (IS_SAAS_MODE) {
+        await grantMessagingPrivileges(playwright, anon, await api.getAccount());
+      }
 
       await use({ ...identity, organizerId: organizer.id, api });
 

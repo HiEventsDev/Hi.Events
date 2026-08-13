@@ -221,7 +221,7 @@ msgid "+Tax/Fees"
 msgstr "+税费"
 
 #: src/components/common/CheckInListList/index.tsx:49
-#: src/components/common/CheckInListTable/index.tsx:271
+#: src/components/common/CheckInListTable/index.tsx:284
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
 msgstr "<0>签到列表帮助您按日期、区域或票务类型管理活动入场。您可以将票务链接到特定列表，如VIP区域或第1天通行证，并与工作人员共享安全的签到链接。无需账户。签到适用于移动设备、桌面或平板电脑，使用设备相机或HID USB扫描仪。                                </0>"
 
@@ -495,9 +495,13 @@ msgstr "账户删除已取消。"
 msgid "Account deletion is blocked"
 msgstr "账户删除已被阻止"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:102
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:115
 msgid "Account Information"
 msgstr "账户信息"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:47
+msgid "Account marked as verified"
+msgstr "账户已标记为已验证"
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:165
 msgid "Account name"
@@ -507,7 +511,7 @@ msgstr "账户名称"
 msgid "Account Name"
 msgstr "账户名称"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:84
 msgid "Account not found"
 msgstr "账户未找到"
 
@@ -523,6 +527,10 @@ msgstr "账户设置"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:42
 msgid "Account updated successfully"
 msgstr "账户更新成功"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:48
+msgid "Account verification revoked"
+msgstr "已撤销账户验证"
 
 #: src/components/common/AdminUsersTable/index.tsx:127
 #: src/components/layouts/Admin/index.tsx:14
@@ -562,7 +570,7 @@ msgstr "激活日期"
 #: src/components/common/AttendeeStatusBadge/index.tsx:27
 #: src/components/common/AttendeeTable/index.tsx:260
 #: src/components/common/CheckInListList/index.tsx:114
-#: src/components/common/CheckInListTable/index.tsx:167
+#: src/components/common/CheckInListTable/index.tsx:168
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:279
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
@@ -925,7 +933,7 @@ msgstr "所有货币"
 msgid "All dates"
 msgstr "全部日期"
 
-#: src/components/common/CheckInListTable/index.tsx:106
+#: src/components/common/CheckInListTable/index.tsx:107
 #: src/components/routes/event/attendees.tsx:235
 #: src/components/routes/event/orders.tsx:182
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:104
@@ -1395,7 +1403,7 @@ msgid "Are you sure you would like to delete this Capacity Assignment?"
 msgstr "您确定要删除此容量分配吗？"
 
 #: src/components/common/CheckInListList/index.tsx:181
-#: src/components/common/CheckInListTable/index.tsx:228
+#: src/components/common/CheckInListTable/index.tsx:230
 msgid "Are you sure you would like to delete this Check-In List?"
 msgstr "您确定要删除此签到列表吗？"
 
@@ -1431,7 +1439,7 @@ msgstr "分配其他方案"
 msgid "Assign plan"
 msgstr "分配方案"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:165
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Assigned Tier"
 msgstr "分配的级别"
 
@@ -1675,7 +1683,7 @@ msgstr "精彩活动有限公司"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:93
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:106
 msgid "Back to Accounts"
 msgstr "返回账户"
 
@@ -2158,7 +2166,7 @@ msgstr "已撤销 {0} 的签到"
 msgid "Check-in history"
 msgstr "签到记录"
 
-#: src/components/common/CheckInListTable/index.tsx:59
+#: src/components/common/CheckInListTable/index.tsx:60
 msgid "Check-In List"
 msgstr "签到名单"
 
@@ -2167,7 +2175,7 @@ msgid "Check-In List Created"
 msgstr "签到列表已创建！"
 
 #: src/components/common/CheckInListList/index.tsx:33
-#: src/components/common/CheckInListTable/index.tsx:46
+#: src/components/common/CheckInListTable/index.tsx:47
 msgid "Check-In List deleted successfully"
 msgstr "签到列表删除成功"
 
@@ -2225,11 +2233,11 @@ msgid "Check-in Summary"
 msgstr "签到摘要"
 
 #: src/components/common/CheckInListList/index.tsx:160
-#: src/components/common/CheckInListTable/index.tsx:204
+#: src/components/common/CheckInListTable/index.tsx:205
 msgid "Check-In URL copied to clipboard"
 msgstr "签到链接已复制到剪贴板"
 
-#: src/components/common/CheckInListTable/index.tsx:129
+#: src/components/common/CheckInListTable/index.tsx:130
 #: src/components/modals/ManageAttendeeModal/index.tsx:160
 msgid "Check-Ins"
 msgstr "签到"
@@ -2818,7 +2826,7 @@ msgid "Copy Affiliate Link"
 msgstr "复制推广链接"
 
 #: src/components/common/CheckInListList/index.tsx:154
-#: src/components/common/CheckInListTable/index.tsx:198
+#: src/components/common/CheckInListTable/index.tsx:199
 msgid "Copy Check-In URL"
 msgstr "复制签到链接"
 
@@ -2919,7 +2927,7 @@ msgstr "封面图片将显示在活动页面顶部"
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "封面图像将显示在您的组织者页面顶部"
 
-#: src/components/common/CheckInListTable/index.tsx:82
+#: src/components/common/CheckInListTable/index.tsx:83
 msgid "Covers every ticket"
 msgstr "覆盖所有门票"
 
@@ -3015,7 +3023,7 @@ msgid "Create Category"
 msgstr "创建类别"
 
 #: src/components/common/CheckInListList/index.tsx:59
-#: src/components/common/CheckInListTable/index.tsx:280
+#: src/components/common/CheckInListTable/index.tsx:293
 #: src/components/modals/CreateCheckInListModal/index.tsx:112
 #: src/components/routes/event/CheckInLists/index.tsx:67
 msgid "Create Check-In List"
@@ -3128,7 +3136,7 @@ msgid "Create your own event"
 msgstr "创建您自己的活动"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:124
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -3161,7 +3169,7 @@ msgstr "CTA标签是必需的"
 #: src/components/common/OrganizerReportTable/index.tsx:306
 #: src/components/forms/OrganizerForm/index.tsx:50
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:128
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:141
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
@@ -3304,7 +3312,7 @@ msgstr "舞蹈"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:153
 #: src/components/common/CheckInListList/index.tsx:174
-#: src/components/common/CheckInListTable/index.tsx:221
+#: src/components/common/CheckInListTable/index.tsx:223
 #: src/components/common/EntityActions/index.tsx:57
 #: src/components/common/LocationsTable/index.tsx:68
 #: src/components/common/OrganizerWebhookTable/index.tsx:116
@@ -3337,7 +3345,7 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: src/components/common/AdminOrdersTable/index.tsx:94
-#: src/components/common/CheckInListTable/index.tsx:97
+#: src/components/common/CheckInListTable/index.tsx:98
 #: src/components/common/OrderDetails/index.tsx:42
 #: src/components/common/WaitlistTable/index.tsx:184
 #: src/components/forms/QuestionForm/index.tsx:136
@@ -3446,7 +3454,7 @@ msgstr "减少"
 msgid "Decrease quantity"
 msgstr "减少数量"
 
-#: src/components/common/CheckInListTable/index.tsx:77
+#: src/components/common/CheckInListTable/index.tsx:78
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:113
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:221
 msgid "Default"
@@ -3520,7 +3528,7 @@ msgid "Delete category"
 msgstr "删除类别"
 
 #: src/components/common/CheckInListList/index.tsx:177
-#: src/components/common/CheckInListTable/index.tsx:224
+#: src/components/common/CheckInListTable/index.tsx:226
 msgid "Delete Check-In List"
 msgstr "删除签到列表"
 
@@ -3951,7 +3959,7 @@ msgid "Edit category"
 msgstr "编辑类别"
 
 #: src/components/common/CheckInListList/index.tsx:146
-#: src/components/common/CheckInListTable/index.tsx:190
+#: src/components/common/CheckInListTable/index.tsx:191
 #: src/components/modals/EditCheckInListModal/index.tsx:77
 #: src/components/modals/EditCheckInListModal/index.tsx:107
 msgid "Edit Check-In List"
@@ -4066,7 +4074,7 @@ msgstr "符合条件的签到列表"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:152
 #: src/components/modals/ManageOrderModal/index.tsx:136
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:107
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:120
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:65
@@ -4564,7 +4572,7 @@ msgstr "活动已更新"
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/layouts/Admin/index.tsx:16
 #: src/components/layouts/OrganizerLayout/index.tsx:105
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:138
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
 #: src/components/routes/admin/Attribution/index.tsx:133
 #: src/components/routes/admin/Dashboard/index.tsx:403
 #: src/components/routes/admin/Events/index.tsx:77
@@ -4965,6 +4973,10 @@ msgstr "无法开始模拟。请重试。"
 msgid "Failed to stop impersonation. Please try again."
 msgstr "无法停止模拟。请重试。"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+msgid "Failed to update account verification"
+msgstr "更新账户验证失败"
+
 #: src/components/modals/EditAffiliateModal/index.tsx:70
 msgid "Failed to update affiliate"
 msgstr "更新推广员失败"
@@ -4985,7 +4997,7 @@ msgstr "配置更新失败"
 msgid "Failed to update event status"
 msgstr "更新活动状态失败"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:37
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:39
 msgid "Failed to update messaging tier"
 msgstr "更新消息级别失败"
 
@@ -5811,7 +5823,7 @@ msgstr "进行中"
 
 #: src/components/common/AffiliateTable/index.tsx:131
 #: src/components/common/CheckInListList/index.tsx:114
-#: src/components/common/CheckInListTable/index.tsx:172
+#: src/components/common/CheckInListTable/index.tsx:173
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:279
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
@@ -5846,12 +5858,12 @@ msgid "Include tax and fees in the price"
 msgstr "价格中包含税费"
 
 #: src/components/common/CheckInListList/index.tsx:101
-#: src/components/common/CheckInListTable/index.tsx:85
+#: src/components/common/CheckInListTable/index.tsx:86
 msgid "Includes {0} products"
 msgstr "包括{0}个产品"
 
 #: src/components/common/CheckInListList/index.tsx:102
-#: src/components/common/CheckInListTable/index.tsx:84
+#: src/components/common/CheckInListTable/index.tsx:85
 msgid "Includes 1 product"
 msgstr "包括1个产品"
 
@@ -6258,7 +6270,7 @@ msgstr "链接已过期或无效"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:189
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:222
 msgid "Links Allowed"
 msgstr "允许链接"
 
@@ -6415,14 +6427,14 @@ msgstr "将此问题作为必答题"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:140
 #: src/components/common/CheckInListList/index.tsx:143
-#: src/components/common/CheckInListTable/index.tsx:217
+#: src/components/common/CheckInListTable/index.tsx:219
 #: src/components/common/EntityActions/index.tsx:43
 #: src/components/common/LocationsTable/index.tsx:57
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:500
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:240
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:81
 msgid "Manage"
 msgstr "管理"
@@ -6506,6 +6518,10 @@ msgstr "手动添加与会者"
 msgid "Manually Add Attendee"
 msgstr "手动添加与会者"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:176
+msgid "Manually verified"
+msgstr "手动验证"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:67
 msgid "March"
 msgstr "3 月"
@@ -6518,11 +6534,11 @@ msgstr "标记为已支付"
 msgid "Mark as validated (admin override)"
 msgstr "标记为已核验（管理员特批）"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:210
 msgid "Max Messages / 24h"
 msgstr "最大消息数 / 24小时"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:183
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:216
 msgid "Max Recipients / Message"
 msgstr "最大收件人数 / 消息"
 
@@ -6613,11 +6629,11 @@ msgid "Messages"
 msgstr "信息"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:156
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:189
 msgid "Messaging Tier"
 msgstr "消息级别"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:36
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:38
 msgid "Messaging tier updated successfully"
 msgstr "消息级别更新成功"
 
@@ -6855,7 +6871,7 @@ msgstr "下一步：核对订单"
 msgid "Nightlife"
 msgstr "夜生活"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:191
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:224
 msgid "No"
 msgstr "否"
 
@@ -6930,7 +6946,7 @@ msgid "No change"
 msgstr "无变化"
 
 #: src/components/common/CheckInListList/index.tsx:44
-#: src/components/common/CheckInListTable/index.tsx:266
+#: src/components/common/CheckInListTable/index.tsx:279
 msgid "No Check-In Lists"
 msgstr "没有签到列表"
 
@@ -7583,8 +7599,12 @@ msgstr "仅使用促销代码可见"
 msgid "Open check-in"
 msgstr "打开签到"
 
+#: src/components/common/CheckInListTable/index.tsx:253
+msgid "Open Check-In"
+msgstr "打开签到"
+
 #: src/components/common/CheckInListList/index.tsx:165
-#: src/components/common/CheckInListTable/index.tsx:209
+#: src/components/common/CheckInListTable/index.tsx:210
 #: src/components/modals/CheckInListSuccessModal/index.tsx:56
 msgid "Open Check-In Page"
 msgstr "打开签到页面"
@@ -7916,7 +7936,7 @@ msgstr "组织者状态已更新"
 msgid "Organizer/default template will be used"
 msgstr "将使用组织者/默认模板"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:202
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:235
 msgid "Organizers"
 msgstr "主办方"
 
@@ -9715,7 +9735,7 @@ msgstr "先选择日期，即可查看可选时间"
 msgid "Select a message to view its contents"
 msgstr "选择一条消息查看其内容"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
 msgid "Select a tier"
 msgstr "选择级别"
 
@@ -9822,7 +9842,7 @@ msgstr "选择开始时间"
 msgid "Select status"
 msgstr "选择状态"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:166
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:199
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "为此帐户选择消息级别。这控制消息限制和链接权限。"
 
@@ -10481,7 +10501,7 @@ msgstr "统计"
 #: src/components/common/AdminOrdersTable/index.tsx:85
 #: src/components/common/AffiliateTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:251
-#: src/components/common/CheckInListTable/index.tsx:157
+#: src/components/common/CheckInListTable/index.tsx:158
 #: src/components/common/OrderDetails/index.tsx:71
 #: src/components/common/OrdersTable/index.tsx:314
 #: src/components/common/OrganizerWebhookTable/index.tsx:238
@@ -11611,7 +11631,7 @@ msgstr "使用次数"
 
 #: src/components/forms/OrganizerForm/index.tsx:59
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:119
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:132
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -11974,6 +11994,10 @@ msgstr "未命名门票"
 msgid "Untrusted"
 msgstr "不受信任"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
+msgid "Unverified"
+msgstr "未验证"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:118
 msgid "Up to {max} per order"
 msgstr "每单最多 {max} 件"
@@ -12165,8 +12189,8 @@ msgstr "用户管理"
 #: src/components/common/AdminAccountsTable/index.tsx:109
 #: src/components/layouts/Admin/index.tsx:15
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:145
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:158
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:286
 #: src/components/routes/admin/Dashboard/index.tsx:404
 #: src/components/routes/admin/Users/index.tsx:57
 msgid "Users"
@@ -12275,11 +12299,11 @@ msgstr "平台费用的增值税处理:欧盟增值税注册企业可以使用�
 msgid "VAT validation service temporarily unavailable"
 msgstr "增值税验证服务暂时不可用"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:225
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:258
 msgid "VAT: {0}"
 msgstr "增值税：{0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:263
 msgid "VAT: not registered"
 msgstr "增值税：未登记"
 
@@ -12287,6 +12311,10 @@ msgstr "增值税：未登记"
 #: src/components/modals/LocationEditModal/index.tsx:140
 msgid "Venue Name"
 msgstr "地点名称"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:169
+msgid "Verification"
+msgstr "验证"
 
 #: src/components/routes/welcome/index.tsx:161
 msgid "Verification code"
@@ -12296,10 +12324,15 @@ msgstr "验证码"
 msgid "Verification email sent. Check your inbox."
 msgstr "验证邮件已发送，请查收收件箱。"
 
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:171
 #: src/components/routes/admin/Attribution/index.tsx:136
 #: src/components/routes/admin/Dashboard/index.tsx:421
 msgid "Verified"
 msgstr "已验证"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:177
+msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
+msgstr "已验证的账户可以向参与者发送消息并管理电子邮件模板。连接 Stripe 会自动验证账户。"
 
 #: src/components/routes/welcome/index.tsx:189
 msgid "Verify Email"
@@ -12940,7 +12973,7 @@ msgstr "每年"
 msgid "years"
 msgstr "年"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:191
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:224
 msgid "Yes"
 msgstr "是"
 

@@ -39,7 +39,7 @@ export const Orders: React.FC = () => {
     const isRecurring = event?.type === EventType.RECURRING;
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const ordersQuery = useGetEventOrders(eventId, searchParams as QueryFilters);
-    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
+    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
     const orders = ordersQuery?.data?.data;
     const pagination = ordersQuery?.data?.meta;
     const [downloadPending, setDownloadPending] = useState(false);
