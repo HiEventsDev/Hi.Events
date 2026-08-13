@@ -3,6 +3,7 @@ import { test, expect } from '../../fixtures';
 import { OrderPage } from '../../pages/order.page';
 import { createCompletedOrder, createLiveEventWithFreeTicket } from '../../api/factory';
 import { uniqueEmail, uniqueName } from '../../utils/unique';
+import { saasOnly } from '../../utils/mode';
 
 const CONFIRMATION_SUBJECT = 'Your Order is Confirmed';
 
@@ -59,6 +60,25 @@ test.describe('orders management', () => {
 
     const message = await mailpit.waitForMessage(order.buyerEmail, { subjectContains: subject });
     expect(message.Subject).toContain(subject);
+  });
+
+  test.describe('messaging the buyer from an unverified account', () => {
+    saasOnly();
+
+    test('an unverified organizer is prompted to connect Stripe instead of the message form', async ({ freshAccount, publicApi }) => {
+      const event = await createLiveEventWithFreeTicket(freshAccount.api, freshAccount.organizerId);
+      const order = await createCompletedOrder(publicApi, event, { buyerEmail: uniqueEmail() });
+
+      const page = await freshAccount.newAuthedPage();
+      const orders = new OrderPage(page);
+      await orders.goto(event.eventId);
+
+      await orders.chooseRowAction(order.buyerEmail, 'Message buyer');
+
+      await expect(page.getByRole('heading', { name: 'Send a message' })).toBeVisible();
+      await expect(page.getByText('Connect Stripe to enable messaging')).toBeVisible();
+      await expect(page.getByLabel(/^Subject/)).toHaveCount(0);
+    });
   });
 
   test('an organizer cancels an order', async ({ authedPage, api, account, publicApi, mailpit }) => {

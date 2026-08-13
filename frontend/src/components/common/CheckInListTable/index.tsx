@@ -4,15 +4,15 @@ import {
     IconCalendarEvent,
     IconCheck,
     IconCopy,
-    IconExternalLink,
     IconPencil,
     IconPlus,
+    IconQrcode,
     IconTrash,
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
 import {useMemo, useState} from "react";
-import {useDisclosure} from "@mantine/hooks";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {useParams} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import {NoResultsSplash} from "../NoResultsSplash";
@@ -39,6 +39,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
     const deleteMutation = useDeleteCheckInList();
     const {eventId} = useParams();
     const isRecurring = event?.type === EventType.RECURRING;
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const handleDeleteCheckInList = (checkInListId: IdParam, eventId: IdParam) => {
         deleteMutation.mutate({checkInListId, eventId}, {
@@ -207,10 +208,11 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             },
                             {
                                 label: t`Open Check-In Page`,
-                                icon: <IconExternalLink size={14}/>,
+                                icon: <IconQrcode size={14}/>,
                                 onClick: () => {
                                     window.open(`/check-in/${list.short_id}`, '_blank');
-                                }
+                                },
+                                visible: isMobile,
                             },
                         ];
                         const groups: {label: string; items: any[]}[] = [
@@ -239,8 +241,19 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             });
                         }
                         return (
-                            <div className={classes.actionsMenu}>
-                                <ActionMenu itemsGroups={groups}/>
+                            <div className={classes.rowActions}>
+                                {!isMobile && (
+                                    <Button
+                                        size="xs"
+                                        variant="light"
+                                        leftSection={<IconQrcode size={14}/>}
+                                        onClick={() => window.open(`/check-in/${list.short_id}`, '_blank')}
+                                        data-testid="check-in-list-open-button"
+                                    >
+                                        {t`Open Check-In`}
+                                    </Button>
+                                )}
+                                <ActionMenu itemsGroups={groups} dataTestId="check-in-list-actions-menu"/>
                             </div>
                         );
                     },
@@ -257,7 +270,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                 return true;
             });
         },
-        [eventId, isRecurring, event?.timezone]
+        [eventId, isRecurring, event?.timezone, isMobile]
     );
 
     if (checkInLists.length === 0) {

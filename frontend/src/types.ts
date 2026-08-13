@@ -588,6 +588,11 @@ export interface CheckInStats {
     total_attendees: number;
 }
 
+export interface EventCounts {
+    total_orders: number;
+    total_attendees_registered: number;
+}
+
 export interface EventStats {
     daily_stats: EventDailyStats[];
     start_date: string;

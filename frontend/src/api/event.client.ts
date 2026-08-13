@@ -3,6 +3,7 @@ import {
     CheckInStats,
     Event,
     EventDuplicatePayload,
+    EventCounts,
     EventStats,
     GenericDataResponse,
     GenericPaginatedResponse,
@@ -49,6 +50,11 @@ export const eventsClient = {
         if (options.endDate) params.set('end_date', options.endDate);
         const qs = params.toString();
         const response = await api.get<GenericDataResponse<EventStats>>(`events/${eventId}/stats${qs ? '?' + qs : ''}`);
+        return response.data;
+    },
+
+    getEventCounts: async (eventId: IdParam) => {
+        const response = await api.get<GenericDataResponse<EventCounts>>('events/' + eventId + '/counts');
         return response.data;
     },
 

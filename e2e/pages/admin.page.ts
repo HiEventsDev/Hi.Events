@@ -24,4 +24,14 @@ export class AdminPage {
   async search(term: string): Promise<void> {
     await this.page.getByPlaceholder(/^Search by/).fill(term);
   }
+
+  async gotoAccount(accountId: number): Promise<void> {
+    await this.page.goto(`/admin/accounts/${accountId}`);
+    await this.page.waitForLoadState('networkidle');
+    await this.page.getByText('Account Information').waitFor();
+  }
+
+  verificationSwitch(): Locator {
+    return this.page.getByTestId('account-verification-switch');
+  }
 }

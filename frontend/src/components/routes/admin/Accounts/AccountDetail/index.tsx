@@ -1,10 +1,11 @@
-import {Container, Title, Stack, Card, Text, Group, Button, Badge, Skeleton, Select} from "@mantine/core";
+import {Container, Title, Stack, Card, Text, Group, Button, Badge, Skeleton, Select, Switch} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useParams, useNavigate} from "react-router";
 import {useState} from "react";
 import {useGetAdminAccount} from "../../../../../queries/useGetAdminAccount";
 import {useGetMessagingTiers} from "../../../../../queries/useGetMessagingTiers";
 import {useUpdateAccountMessagingTier} from "../../../../../mutations/useUpdateAccountMessagingTier";
+import {useUpdateAccountVerification} from "../../../../../mutations/useUpdateAccountVerification";
 import {IconArrowLeft, IconCalendar, IconWorld, IconBuildingBank, IconUsers} from "@tabler/icons-react";
 import {showSuccess, showError} from "../../../../../utilites/notifications";
 import {AdminOrganizerSummary} from "../../../../../api/admin.client";
@@ -17,6 +18,7 @@ const AccountDetail = () => {
     const {data: accountData, isLoading} = useGetAdminAccount(accountId);
     const {data: messagingTiersData} = useGetMessagingTiers();
     const updateTierMutation = useUpdateAccountMessagingTier(accountId!);
+    const updateVerificationMutation = useUpdateAccountVerification(accountId!);
     const [managedOrganizer, setManagedOrganizer] = useState<AdminOrganizerSummary | null>(null);
 
     const account = accountData?.data;
@@ -35,6 +37,17 @@ const AccountDetail = () => {
         updateTierMutation.mutate(parseInt(value, 10), {
             onSuccess: () => showSuccess(t`Messaging tier updated successfully`),
             onError: () => showError(t`Failed to update messaging tier`),
+        });
+    };
+
+    const handleVerificationChange = (isVerified: boolean) => {
+        updateVerificationMutation.mutate(isVerified, {
+            onSuccess: () => showSuccess(
+                isVerified
+                    ? t`Account marked as verified`
+                    : t`Account verification revoked`
+            ),
+            onError: () => showError(t`Failed to update account verification`),
         });
     };
 
@@ -147,6 +160,26 @@ const AccountDetail = () => {
                                     </Stack>
                                 </div>
                             </div>
+                        </Stack>
+                    </Card>
+
+                    <Card className={classes.accountCard}>
+                        <Stack gap="md">
+                            <Group justify="space-between">
+                                <Text size="lg" fw={600}>{t`Verification`}</Text>
+                                <Badge color={account.is_manually_verified ? 'green' : 'orange'}>
+                                    {account.is_manually_verified ? t`Verified` : t`Unverified`}
+                                </Badge>
+                            </Group>
+
+                            <Switch
+                                label={t`Manually verified`}
+                                description={t`Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically.`}
+                                checked={account.is_manually_verified}
+                                onChange={(event) => handleVerificationChange(event.currentTarget.checked)}
+                                disabled={updateVerificationMutation.isPending}
+                                data-testid="account-verification-switch"
+                            />
                         </Stack>
                     </Card>
 

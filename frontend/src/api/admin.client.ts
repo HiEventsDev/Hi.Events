@@ -98,6 +98,7 @@ export interface AdminOrganizerSummary {
 export interface AdminAccountDetail extends AdminAccount {
     messaging_tier?: AccountMessagingTier;
     organizers: AdminOrganizerSummary[];
+    is_manually_verified: boolean;
 }
 
 export interface UpdateAdminOrganizerVatSettingData {
@@ -603,6 +604,13 @@ export const adminClient = {
     updateAccountMessagingTier: async (accountId: IdParam, tierId: number) => {
         const response = await api.put(`admin/accounts/${accountId}/messaging-tier`, {
             messaging_tier_id: tierId
+        });
+        return response.data;
+    },
+
+    updateAccountVerification: async (accountId: IdParam, isManuallyVerified: boolean) => {
+        const response = await api.put(`admin/accounts/${accountId}/verification`, {
+            is_manually_verified: isManuallyVerified
         });
         return response.data;
     },

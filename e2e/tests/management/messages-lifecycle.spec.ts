@@ -4,6 +4,7 @@ import { createEventWithAttendee } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('message lifecycle', () => {
+
   test('a message to all attendees is delivered to the attendee inbox', { tag: '@smoke' }, async ({ authedPage, api, account, mailpit }) => {
     const event = await createEventWithAttendee(api, account.organizerId);
     const subject = uniqueName('Doors open early');

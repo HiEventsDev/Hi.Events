@@ -3,6 +3,7 @@ import {IdParam} from "../types.ts";
 import {orderClient} from "../api/order.client.ts";
 import {GET_ORDER_QUERY_KEY} from "../queries/useGetOrder.ts";
 import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
+import {GET_EVENT_COUNTS_QUERY_KEY} from "../queries/useGetEventCounts.ts";
 
 export const useCancelOrder = () => {
     const queryClient = useQueryClient();
@@ -21,6 +22,7 @@ export const useCancelOrder = () => {
             queryClient.invalidateQueries({
                 queryKey: [GET_EVENT_ORDERS_QUERY_KEY, variables.eventId]
             });
+            queryClient.invalidateQueries({queryKey: [GET_EVENT_COUNTS_QUERY_KEY]});
         }
     });
 }

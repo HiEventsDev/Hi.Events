@@ -4,6 +4,7 @@ import { createDraftEvent, createFreshOrganizer } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('email templates', () => {
+
   test('an organizer creates an event-level order confirmation template', async ({ authedPage, api, account }) => {
     const event = await createDraftEvent(api, account.organizerId);
     const subject = uniqueName('Event Subject');

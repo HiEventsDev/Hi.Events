@@ -41,7 +41,7 @@ const Attendees = () => {
     const [downloadPending, setDownloadPending] = useState(false);
     const {data: event} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
-    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
+    const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
 
     const occurrences = occurrencesData?.data || [];
     const occurrenceFilter = searchParams.filterFields?.event_occurrence_id;
