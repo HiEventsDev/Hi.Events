@@ -15,14 +15,14 @@ COPY ./VERSION /app/VERSION
 RUN yarn install --network-timeout 600000 --frozen-lockfile && yarn build
 
 # Use stable multi-arch serversideup/php image
-FROM serversideup/php:8.3-fpm-alpine
+FROM serversideup/php:8.5-fpm-alpine
 
 ENV PHP_OPCACHE_ENABLE=1
 
 # Switch to root for installing extensions and packages
 USER root
 
-RUN install-php-extensions intl
+RUN install-php-extensions intl gd
 
 RUN apk add --no-cache nodejs yarn nginx supervisor dos2unix
 

@@ -36,7 +36,7 @@ class QuestionAnswerViewResource extends JsonResource
 
             $this->mergeWhen(
                 $this->getAttendeeId() !== null,
-                fn() => [
+                fn () => [
                     'attendee_id' => $this->getAttendeeId(),
                     'first_name' => $this->getFirstName(),
                     'last_name' => $this->getLastName(),

@@ -1,14 +1,14 @@
 import {GenericModalProps, ProductCategory} from "../../../types.ts";
 import {Modal} from "../../common/Modal";
 import {t} from "@lingui/macro";
-import {Alert, Button} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useCreateProductCategory} from "../../../mutations/useCreateProductCategory.ts";
 import {ProductCategoryForm} from "../../forms/ProductCategoryForm";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
 
 export const CreateProductCategoryModal = ({onClose}: GenericModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
@@ -48,13 +48,9 @@ export const CreateProductCategoryModal = ({onClose}: GenericModalProps) => {
             withCloseButton
         >
             <form onSubmit={form.onSubmit((values) => handleCreate(values))}>
-                <Alert
-                    icon={<IconInfoCircle/>}
-                    title={t`What is a Category?`}
-                    mb={20}
-                >
+                <Callout variant="info" title={t`What is a Category?`}>
                     {t`Categories allow you to group products together. For example, you might have a category for "Tickets" and another for "Merchandise".`}
-                </Alert>
+                </Callout>
                 <ProductCategoryForm form={form}/>
                 <Button type="submit" fullWidth disabled={mutation.isPending}>
                     {mutation.isPending ? t`Working...` : t`Create Category`}

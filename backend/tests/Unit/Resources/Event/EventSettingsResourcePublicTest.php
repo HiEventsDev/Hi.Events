@@ -11,7 +11,7 @@ class EventSettingsResourcePublicTest extends TestCase
 {
     public function test_public_resource_exposes_allow_copy_details_when_enabled(): void
     {
-        $settings = (new EventSettingDomainObject())
+        $settings = (new EventSettingDomainObject)
             ->setAllowCopyDetailsToAllAttendees(true);
 
         $resource = (new EventSettingsResourcePublic($settings))->toArray(Request::create('/'));
@@ -24,7 +24,7 @@ class EventSettingsResourcePublicTest extends TestCase
 
     public function test_public_resource_exposes_allow_copy_details_when_disabled(): void
     {
-        $settings = (new EventSettingDomainObject())
+        $settings = (new EventSettingDomainObject)
             ->setAllowCopyDetailsToAllAttendees(false);
 
         $resource = (new EventSettingsResourcePublic($settings))->toArray(Request::create('/'));

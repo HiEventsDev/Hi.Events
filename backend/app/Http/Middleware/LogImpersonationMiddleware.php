@@ -12,10 +12,8 @@ class LogImpersonationMiddleware
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly AuthManager     $authManager,
-    )
-    {
-    }
+        private readonly AuthManager $authManager,
+    ) {}
 
     public function handle(Request $request, Closure $next)
     {
@@ -23,7 +21,7 @@ class LogImpersonationMiddleware
 
         $isImpersonating = false;
         try {
-            $isImpersonating = (bool)$this->authManager->payload()->get('is_impersonating', false);
+            $isImpersonating = (bool) $this->authManager->payload()->get('is_impersonating', false);
         } catch (Exception) {
             // Not authenticated or no JWT token
         }
@@ -32,7 +30,7 @@ class LogImpersonationMiddleware
             && $isImpersonating
             && in_array($request->method(), $mutateMethods, true)
         ) {
-            $this->logger->info('Impersonation action by user ID ' . $this->authManager->payload()->get('impersonator_id'), [
+            $this->logger->info('Impersonation action by user ID '.$this->authManager->payload()->get('impersonator_id'), [
                 'impersonator_id' => $this->authManager->payload()->get('impersonator_id'),
                 'impersonated_user_id' => $this->authManager->user()->id,
                 'account_id' => $this->authManager->payload()->get('account_id'),

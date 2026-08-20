@@ -10,9 +10,7 @@ readonly class StripePaymentUpdateFromPaymentIntentService
 {
     public function __construct(
         private StripePaymentsRepository $stripePaymentsRepository,
-    )
-    {
-    }
+    ) {}
 
     public function updateStripePaymentInfo(PaymentIntent $paymentIntent, StripePaymentDomainObjectAbstract $stripePayment): void
     {

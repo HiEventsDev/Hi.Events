@@ -20,8 +20,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private EventSettingsRepositoryInterface $eventSettingsRepository;
+
     private HtmlPurifierService $purifier;
+
     private DatabaseManager $databaseManager;
+
     private UpdateEventSettingsHandler $handler;
 
     protected function setUp(): void
@@ -32,11 +35,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
         $this->purifier = Mockery::mock(HtmlPurifierService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
-        $this->purifier->shouldReceive('purify')->andReturnUsing(fn($v) => $v);
+        $this->purifier->shouldReceive('purify')->andReturnUsing(fn ($v) => $v);
 
         $this->databaseManager
             ->shouldReceive('transaction')
-            ->andReturnUsing(fn($callback) => $callback());
+            ->andReturnUsing(fn ($callback) => $callback());
 
         $this->handler = new UpdateEventSettingsHandler(
             eventSettingsRepository: $this->eventSettingsRepository,
@@ -45,11 +48,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
         );
     }
 
-    public function testDispatchesCapacityEventWhenAutoProcessToggledOn(): void
+    public function test_dispatches_capacity_event_when_auto_process_toggled_on(): void
     {
         Event::fake();
 
-        $existingSettings = new EventSettingDomainObject();
+        $existingSettings = new EventSettingDomainObject;
         $existingSettings->setWaitlistAutoProcess(false);
 
         $this->eventSettingsRepository
@@ -72,11 +75,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
         });
     }
 
-    public function testDoesNotDispatchEventWhenAutoProcessAlreadyEnabled(): void
+    public function test_does_not_dispatch_event_when_auto_process_already_enabled(): void
     {
         Event::fake();
 
-        $existingSettings = new EventSettingDomainObject();
+        $existingSettings = new EventSettingDomainObject;
         $existingSettings->setWaitlistAutoProcess(true);
 
         $this->eventSettingsRepository
@@ -95,11 +98,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testDoesNotDispatchEventWhenAutoProcessDisabled(): void
+    public function test_does_not_dispatch_event_when_auto_process_disabled(): void
     {
         Event::fake();
 
-        $existingSettings = new EventSettingDomainObject();
+        $existingSettings = new EventSettingDomainObject;
         $existingSettings->setWaitlistAutoProcess(true);
 
         $this->eventSettingsRepository
@@ -118,11 +121,11 @@ class UpdateEventSettingsHandlerTest extends TestCase
         Event::assertNotDispatched(CapacityChangedEvent::class);
     }
 
-    public function testPersistsAllowCopyDetailsToAllAttendees(): void
+    public function test_persists_allow_copy_details_to_all_attendees(): void
     {
         Event::fake();
 
-        $existingSettings = new EventSettingDomainObject();
+        $existingSettings = new EventSettingDomainObject;
 
         $this->eventSettingsRepository
             ->shouldReceive('findFirstWhere')
@@ -140,6 +143,7 @@ class UpdateEventSettingsHandlerTest extends TestCase
                         $captured = $arg['allow_copy_details_to_all_attendees'];
                     }
                 }
+
                 return 1;
             });
 
@@ -151,11 +155,73 @@ class UpdateEventSettingsHandlerTest extends TestCase
         );
     }
 
+    public function test_persists_trimmed_get_tickets_button_text(): void
+    {
+        Event::fake();
+
+        $existingSettings = new EventSettingDomainObject;
+
+        $this->eventSettingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1])
+            ->twice()
+            ->andReturn($existingSettings);
+
+        $captured = ['missing'];
+        $this->eventSettingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturnUsing(function (...$args) use (&$captured) {
+                foreach ($args as $arg) {
+                    if (is_array($arg) && array_key_exists('get_tickets_button_text', $arg)) {
+                        $captured = [$arg['get_tickets_button_text']];
+                    }
+                }
+
+                return 1;
+            });
+
+        $this->handler->handle($this->createDTO(get_tickets_button_text: '  Grab a spot  '));
+
+        $this->assertSame(['Grab a spot'], $captured);
+    }
+
+    public function test_persists_null_get_tickets_button_text(): void
+    {
+        Event::fake();
+
+        $existingSettings = new EventSettingDomainObject;
+
+        $this->eventSettingsRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1])
+            ->twice()
+            ->andReturn($existingSettings);
+
+        $captured = ['missing'];
+        $this->eventSettingsRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturnUsing(function (...$args) use (&$captured) {
+                foreach ($args as $arg) {
+                    if (is_array($arg) && array_key_exists('get_tickets_button_text', $arg)) {
+                        $captured = [$arg['get_tickets_button_text']];
+                    }
+                }
+
+                return 1;
+            });
+
+        $this->handler->handle($this->createDTO());
+
+        $this->assertSame([null], $captured);
+    }
+
     private function createDTO(
         ?bool $waitlist_auto_process = null,
-        bool  $allow_copy_details_to_all_attendees = true,
-    ): UpdateEventSettingsDTO
-    {
+        bool $allow_copy_details_to_all_attendees = true,
+        ?string $get_tickets_button_text = null,
+    ): UpdateEventSettingsDTO {
         return UpdateEventSettingsDTO::fromArray([
             'account_id' => 1,
             'event_id' => 1,
@@ -163,6 +229,7 @@ class UpdateEventSettingsHandlerTest extends TestCase
             'pre_checkout_message' => null,
             'email_footer_message' => null,
             'continue_button_text' => 'Continue',
+            'get_tickets_button_text' => $get_tickets_button_text,
             'support_email' => 'test@test.com',
             'homepage_background_color' => '#ffffff',
             'homepage_primary_color' => '#000000',

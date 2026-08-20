@@ -9,6 +9,7 @@ import EventHomepage from "../EventHomepage";
 interface PreviewSettings {
     homepage_theme_settings?: Partial<HomepageThemeSettings>;
     continue_button_text?: string;
+    get_tickets_button_text?: string;
 }
 
 const EventHomepagePreview = () => {
@@ -45,6 +46,7 @@ const EventHomepagePreview = () => {
                 ...event.settings,
                 homepage_theme_settings: previewSettings.homepage_theme_settings as HomepageThemeSettings || event.settings.homepage_theme_settings,
                 continue_button_text: previewSettings.continue_button_text ?? event.settings.continue_button_text,
+                get_tickets_button_text: previewSettings.get_tickets_button_text ?? event.settings.get_tickets_button_text,
             }
         };
     }

@@ -9,7 +9,7 @@ class SendOrderDetailsEmailListener
 {
     public function handle(OrderStatusChangedEvent $changedEvent): void
     {
-        if (!$changedEvent->sendEmails) {
+        if (! $changedEvent->sendEmails) {
             return;
         }
 

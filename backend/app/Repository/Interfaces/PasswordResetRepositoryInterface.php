@@ -7,7 +7,4 @@ use HiEvents\DomainObjects\PasswordResetDomainObject;
 /**
  * @extends RepositoryInterface<PasswordResetDomainObject>
  */
-interface PasswordResetRepositoryInterface extends RepositoryInterface
-{
-
-}
+interface PasswordResetRepositoryInterface extends RepositoryInterface {}

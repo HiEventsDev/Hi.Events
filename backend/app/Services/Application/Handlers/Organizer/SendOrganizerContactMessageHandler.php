@@ -13,12 +13,10 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class SendOrganizerContactMessageHandler
 {
     public function __construct(
-        private readonly Mailer                       $mailer,
+        private readonly Mailer $mailer,
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly HtmlPurifierService          $purifier,
-    )
-    {
-    }
+        private readonly HtmlPurifierService $purifier,
+    ) {}
 
     public function handle(SendOrganizerContactMessageDTO $dto): void
     {

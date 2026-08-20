@@ -9,6 +9,7 @@ use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetOrganizerReportDTO;
 use HiEvents\Services\Application\Handlers\Reports\GetOrganizerReportHandler;
 use HiEvents\Services\Domain\Report\DTO\PaginatedReportDTO;
+use HiEvents\Services\Infrastructure\Export\SpreadsheetFormulaEscaper;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -18,9 +19,10 @@ class ExportOrganizerReportAction extends BaseAction
 {
     private const MAX_EXPORT_ROWS = 15000;
 
-    public function __construct(private readonly GetOrganizerReportHandler $reportHandler)
-    {
-    }
+    public function __construct(
+        private readonly GetOrganizerReportHandler $reportHandler,
+        private readonly SpreadsheetFormulaEscaper $formulaEscaper,
+    ) {}
 
     /**
      * @throws ValidationException
@@ -31,7 +33,7 @@ class ExportOrganizerReportAction extends BaseAction
 
         $this->validateDateRange($request);
 
-        if (!in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
+        if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
         }
 
@@ -52,7 +54,7 @@ class ExportOrganizerReportAction extends BaseAction
             ? $reportData->data
             : $reportData;
 
-        $filename = $reportType . '_' . date('Y-m-d_H-i-s') . '.csv';
+        $filename = $reportType.'_'.date('Y-m-d_H-i-s').'.csv';
 
         return new StreamedResponse(function () use ($data, $reportType) {
             $handle = fopen('php://output', 'w');
@@ -62,7 +64,7 @@ class ExportOrganizerReportAction extends BaseAction
 
             foreach ($data as $row) {
                 $csvRow = $this->formatRowForReportType($row, $reportType);
-                fputcsv($handle, $csvRow);
+                fputcsv($handle, $this->formulaEscaper->escapeRow($csvRow));
             }
 
             fclose($handle);
@@ -148,7 +150,7 @@ class ExportOrganizerReportAction extends BaseAction
                 $row->order_reference ?? '',
                 $row->amount_paid ?? 0,
                 $row->fee_amount ?? 0,
-                $row->vat_rate !== null ? ($row->vat_rate * 100) . '%' : '',
+                $row->vat_rate !== null ? ($row->vat_rate * 100).'%' : '',
                 $row->vat_amount ?? 0,
                 $row->total_fee ?? 0,
                 $row->currency ?? '',
@@ -186,7 +188,7 @@ class ExportOrganizerReportAction extends BaseAction
                 $row->event_name ?? '',
                 $row->event_currency ?? '',
                 $row->tax_name ?? '',
-                $row->tax_rate ? ($row->tax_rate * 100) . '%' : '',
+                $row->tax_rate ? ($row->tax_rate * 100).'%' : '',
                 $row->total_collected ?? 0,
                 $row->order_count ?? 0,
             ],
@@ -211,7 +213,7 @@ class ExportOrganizerReportAction extends BaseAction
         $startDate = $request->validated('start_date');
         $endDate = $request->validated('end_date');
 
-        if (!$startDate || !$endDate) {
+        if (! $startDate || ! $endDate) {
             return;
         }
 

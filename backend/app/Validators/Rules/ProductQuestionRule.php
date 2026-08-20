@@ -22,26 +22,33 @@ class ProductQuestionRule extends BaseQuestionRule
 
         $this->skipBasicAttendeeValidation = $attendeeDetailsCollectionMethod === AttendeeDetailsCollectionMethod::PER_ORDER->name;
     }
+
     /**
      * @throws ValidationException
      */
     protected function validateRequiredQuestionArePresent(Collection $orderProducts): void
     {
         foreach ($orderProducts as $productData) {
-            $productId = $this->getProductIdFromProductPriceId($productData['product_price_id']);
+            if (! isset($productData['product_price_id']) || ! is_numeric($productData['product_price_id'])) {
+                throw ValidationException::withMessages([
+                    __('This product is outdated. Please reload the page.'),
+                ]);
+            }
+
+            $productId = $this->getProductIdFromProductPriceId((int) $productData['product_price_id']);
             $questions = $productData['questions'] ?? [];
 
             $requiredQuestionIds = $this->questions
                 ->filter(function (QuestionDomainObject $question) use ($productId) {
                     return $question->getRequired()
-                        && !$question->getIsHidden()
-                        && $question->getProducts()?->map(fn($product) => $product->getId())->contains($productId);
+                        && ! $question->getIsHidden()
+                        && $question->getProducts()?->map(fn ($product) => $product->getId())->contains($productId);
                 })
-                ->map(fn(QuestionDomainObject $question) => $question->getId());
+                ->map(fn (QuestionDomainObject $question) => $question->getId());
 
             if (array_diff($requiredQuestionIds->toArray(), collect($questions)->pluck('question_id')->toArray())) {
                 throw ValidationException::withMessages([
-                    __('Required questions have not been answered. You may need to reload the page.')
+                    __('Required questions have not been answered. You may need to reload the page.'),
                 ]);
             }
         }
@@ -52,14 +59,21 @@ class ProductQuestionRule extends BaseQuestionRule
         $validationMessages = [];
 
         foreach ($products as $productIndex => $productRequestData) {
-            $productDomainObject = $this->getProductDomainObject($productRequestData['product_id']);
+            if (! isset($productRequestData['product_id']) || ! is_numeric($productRequestData['product_id'])) {
+                throw ValidationException::withMessages([
+                    __('This product is outdated. Please reload the page.'),
+                ]);
+            }
 
-            if (!$productDomainObject) {
-                $validationMessages['products.' . $productIndex][] = __('This product is outdated. Please reload the page.');
+            $productDomainObject = $this->getProductDomainObject((int) $productRequestData['product_id']);
+
+            if (! $productDomainObject) {
+                $validationMessages['products.'.$productIndex][] = __('This product is outdated. Please reload the page.');
+
                 continue;
             }
 
-            if ($productDomainObject->getProductType() === ProductType::TICKET->name && !$this->skipBasicAttendeeValidation) {
+            if ($productDomainObject->getProductType() === ProductType::TICKET->name && ! $this->skipBasicAttendeeValidation) {
                 $validationMessages = [
                     ...$validationMessages,
                     ...$this->validateBasicTicketFields($productRequestData, $productIndex),
@@ -69,16 +83,17 @@ class ProductQuestionRule extends BaseQuestionRule
             $questions = $productRequestData['questions'] ?? [];
             foreach ($questions as $questionIndex => $question) {
                 $questionDomainObject = $this->getQuestionDomainObject($question['question_id'] ?? null);
-                $key = 'products.' . $productIndex . '.questions.' . $questionIndex . '.response';
+                $key = 'products.'.$productIndex.'.questions.'.$questionIndex.'.response';
                 $response = empty($question['response']) ? null : $question['response'];
                 $answer = $response['answer'] ?? $response;
 
-                if (!$questionDomainObject) {
-                    $validationMessages[$key . '.answer'][] = __('This question is outdated. Please reload the page.');
+                if (! $questionDomainObject) {
+                    $validationMessages[$key.'.answer'][] = __('This question is outdated. Please reload the page.');
+
                     continue;
                 }
 
-                if (is_null($response) && !$questionDomainObject->getRequired()) {
+                if (is_null($response) && ! $questionDomainObject->getRequired()) {
                     continue;
                 }
 
@@ -86,8 +101,8 @@ class ProductQuestionRule extends BaseQuestionRule
                     $validationMessages = $this->validateRequiredFields($questionDomainObject, $response, $key, $validationMessages);
                 }
 
-                if (!$questionDomainObject->isAnswerValid($answer)) {
-                    $validationMessages[$key . '.answer'][] = __('Please select an option');
+                if (! $questionDomainObject->isAnswerValid($answer)) {
+                    $validationMessages[$key.'.answer'][] = __('Please select an option');
                 }
 
                 $validationMessages = $this->validateResponseLength($questionDomainObject, $response, $key, $validationMessages);

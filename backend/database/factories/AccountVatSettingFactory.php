@@ -9,7 +9,7 @@ use HiEvents\Models\AccountVatSetting;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\HiEvents\Models\AccountVatSetting>
+ * @extends Factory<AccountVatSetting>
  */
 class AccountVatSettingFactory extends Factory
 {
@@ -32,9 +32,9 @@ class AccountVatSettingFactory extends Factory
     public function registered(): self
     {
         $countryCode = fake()->randomElement(['IE', 'DE', 'FR', 'ES', 'NL', 'IT']);
-        $vatNumber = $countryCode . fake()->numerify('########');
+        $vatNumber = $countryCode.fake()->numerify('########');
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'vat_registered' => true,
             'vat_number' => $vatNumber,
             'vat_country_code' => $countryCode,
@@ -44,9 +44,9 @@ class AccountVatSettingFactory extends Factory
     public function validated(): self
     {
         $countryCode = fake()->randomElement(['IE', 'DE', 'FR', 'ES', 'NL', 'IT']);
-        $vatNumber = $countryCode . fake()->numerify('########');
+        $vatNumber = $countryCode.fake()->numerify('########');
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'vat_registered' => true,
             'vat_number' => $vatNumber,
             'vat_validated' => true,
@@ -59,7 +59,7 @@ class AccountVatSettingFactory extends Factory
 
     public function notRegistered(): self
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'vat_registered' => false,
             'vat_number' => null,
             'vat_validated' => false,

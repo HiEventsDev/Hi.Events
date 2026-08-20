@@ -10,7 +10,5 @@ class DeletePromoCodeDTO extends BaseDTO
         public int $promo_code_id,
         public int $event_id,
         public int $user_id,
-    )
-    {
-    }
+    ) {}
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     private const TIER_UNTRUSTED = 1;
+
     private const TIER_PREMIUM = 3;
 
     public function up(): void
@@ -19,7 +20,7 @@ return new class extends Migration
                 ->nullOnDelete();
         });
 
-        if (!config('app.is_hi_events')) {
+        if (! config('app.is_hi_events')) {
             // Self-hosted: set all accounts to Premium tier
             DB::table('accounts')
                 ->whereNull('account_messaging_tier_id')

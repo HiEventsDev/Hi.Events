@@ -17,13 +17,11 @@ use Throwable;
 class CancelOrderHandler
 {
     public function __construct(
-        private readonly OrderCancelService       $orderCancelService,
+        private readonly OrderCancelService $orderCancelService,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly DatabaseManager          $databaseManager,
-        private readonly RefundOrderHandler       $refundOrderHandler,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly RefundOrderHandler $refundOrderHandler,
+    ) {}
 
     /**
      * @throws Throwable
@@ -38,7 +36,7 @@ class CancelOrderHandler
                     OrderDomainObjectAbstract::ID => $cancelOrderDTO->orderId,
                 ]);
 
-            if (!$order) {
+            if (! $order) {
                 throw new ResourceNotFoundException(__('Order not found'));
             }
 

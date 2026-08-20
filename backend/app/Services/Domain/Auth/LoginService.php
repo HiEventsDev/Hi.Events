@@ -18,12 +18,10 @@ use Psr\Log\LoggerInterface;
 readonly class LoginService
 {
     public function __construct(
-        private JWTAuth                        $jwtAuth,
-        private LoggerInterface                $logger,
+        private JWTAuth $jwtAuth,
+        private LoggerInterface $logger,
         private AccountUserRepositoryInterface $accountUserRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws UnauthorizedException
@@ -36,7 +34,7 @@ readonly class LoginService
             'password' => $password,
         ]);
 
-        if (!$token) {
+        if (! $token) {
             throw new UnauthorizedException(__('Username or Password are incorrect'));
         }
 
@@ -49,7 +47,7 @@ readonly class LoginService
                 'user_id' => $user->getId(),
             ]);
 
-        $accounts = $userAccounts->map(fn($accountUser) => $accountUser->getAccount());
+        $accounts = $userAccounts->map(fn ($accountUser) => $accountUser->getAccount());
 
         $accountId = $this->getAccountId($accounts, $requestedAccountId);
 
@@ -80,7 +78,7 @@ readonly class LoginService
         }
 
         if ($requestedAccountId) {
-            $verifiedAccount = $accounts->firstWhere(fn(AccountDomainObject $account) => $account->getId() === $requestedAccountId);
+            $verifiedAccount = $accounts->firstWhere(fn (AccountDomainObject $account) => $account->getId() === $requestedAccountId);
 
             if ($verifiedAccount === null) {
                 throw new UnauthorizedException(__('Account not found'));
@@ -94,12 +92,11 @@ readonly class LoginService
 
     private function getToken(
         Collection $accounts,
-        string     $email,
-        string     $password,
-        ?int       $requestedAccountId,
-        ?Role      $userRole,
-    ): ?string
-    {
+        string $email,
+        string $password,
+        ?int $requestedAccountId,
+        ?Role $userRole,
+    ): ?string {
         $accountId = $this->getAccountId($accounts, $requestedAccountId);
 
         // if there's no account, we can't generate a token. The user will be prompted to select an account
@@ -118,7 +115,7 @@ readonly class LoginService
             'password' => $password,
         ]);
 
-        if (!$token) {
+        if (! $token) {
             throw new UnauthorizedException(__('Username or Password are incorrect'));
         }
 
@@ -129,7 +126,7 @@ readonly class LoginService
     {
         /** @var AccountUserDomainObject $currentAccount */
         $currentAccount = $userAccounts
-            ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
+            ->first(fn (AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
 
         if ($currentAccount->getStatus() !== UserStatus::ACTIVE->name) {
             $this->logger->info(__('Attempt to log in to a non-active account'), $currentAccount->toArray());
@@ -146,7 +143,7 @@ readonly class LoginService
 
         /** @var AccountUserDomainObject $currentAccount */
         $currentAccount = $userAccounts
-            ->first(fn(AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
+            ->first(fn (AccountUserDomainObject $userAccount) => $userAccount->getAccountId() === $accountId);
 
         return Role::from($currentAccount?->getRole());
     }

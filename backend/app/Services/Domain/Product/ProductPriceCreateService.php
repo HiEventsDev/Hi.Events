@@ -12,17 +12,14 @@ class ProductPriceCreateService
 {
     public function __construct(
         private readonly ProductPriceRepository $productPriceRepository,
-    )
-    {
-    }
+    ) {}
 
     public function createPrices(
-        int               $productId,
-        Collection        $prices,
+        int $productId,
+        Collection $prices,
         EventDomainObject $event,
-    ): Collection
-    {
-        return (new Collection($prices->map(fn(ProductPriceDomainObject $price, int $index) => $this->productPriceRepository->create([
+    ): Collection {
+        return new Collection($prices->map(fn (ProductPriceDomainObject $price, int $index) => $this->productPriceRepository->create([
             'product_id' => $productId,
             'price' => $price->getPrice(),
             'label' => $price->getLabel(),
@@ -35,6 +32,6 @@ class ProductPriceCreateService
             'initial_quantity_available' => $price->getInitialQuantityAvailable(),
             'is_hidden' => $price->getIsHidden(),
             'order' => $index + 1,
-        ]))));
+        ])));
     }
 }

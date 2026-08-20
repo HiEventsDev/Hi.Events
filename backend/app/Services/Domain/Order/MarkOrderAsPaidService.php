@@ -3,16 +3,18 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Brick\Math\Exception\MathException;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
-use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLocationDomainObject;
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\InvoiceDomainObject;
+use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
@@ -37,19 +39,18 @@ use Throwable;
 class MarkOrderAsPaidService
 {
     public function __construct(
-        private readonly OrderRepositoryInterface              $orderRepository,
-        private readonly DatabaseManager                       $databaseManager,
-        private readonly AffiliateRepositoryInterface          $affiliateRepository,
-        private readonly InvoiceRepositoryInterface            $invoiceRepository,
-        private readonly AttendeeRepositoryInterface           $attendeeRepository,
-        private readonly DomainEventDispatcherService          $domainEventDispatcherService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly InvoiceRepositoryInterface $invoiceRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
-        private readonly EventRepositoryInterface              $eventRepository,
-        private readonly OrderApplicationFeeService            $orderApplicationFeeService,
-        private readonly SendOrderDetailsService               $sendOrderDetailsService,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly OrderApplicationFeeService $orderApplicationFeeService,
+        private readonly SendOrderDetailsService $sendOrderDetailsService,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
+    ) {}
 
     /**
      * @throws ResourceConflictException|Throwable
@@ -57,8 +58,7 @@ class MarkOrderAsPaidService
     public function markOrderAsPaid(
         int $orderId,
         int $eventId,
-    ): OrderDomainObject
-    {
+    ): OrderDomainObject {
         return $this->databaseManager->transaction(function () use ($orderId, $eventId) {
             /** @var OrderDomainObject $order */
             $order = $this->orderRepository
@@ -73,18 +73,41 @@ class MarkOrderAsPaidService
             $event = $this->eventRepository
                 ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
                 ->loadRelation(new Relationship(EventSettingDomainObject::class))
+                ->loadRelation(new Relationship(domainObject: EventOccurrenceDomainObject::class, nested: [
+                    new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                        new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                    ]),
+                ]))
+                ->loadRelation(new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                ]))
                 ->findById($order->getEventId());
 
             if ($order->getStatus() !== OrderStatus::AWAITING_OFFLINE_PAYMENT->name) {
                 throw new ResourceConflictException(__('Order is not awaiting offline payment'));
             }
 
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
+
             $this->updateOrderStatus($orderId);
 
             $this->updateOrderInvoice($orderId);
 
             $updatedOrder = $this->orderRepository
-                ->loadRelation(OrderItemDomainObject::class)
+                ->loadRelation(new Relationship(
+                    domainObject: OrderItemDomainObject::class,
+                    nested: [
+                        new Relationship(
+                            domainObject: EventOccurrenceDomainObject::class,
+                            nested: [
+                                new Relationship(domainObject: EventLocationDomainObject::class, name: 'event_location', nested: [
+                                    new Relationship(domainObject: LocationDomainObject::class, name: 'location'),
+                                ]),
+                            ],
+                            name: 'event_occurrence',
+                        ),
+                    ],
+                ))
                 ->findById($orderId);
 
             // Update affiliate sales if this order has an affiliate
@@ -163,24 +186,26 @@ class MarkOrderAsPaidService
         /** @var EventDomainObject $event */
         $event = $this->eventRepository
             ->loadRelation(new Relationship(
-                domainObject: AccountDomainObject::class,
+                domainObject: OrganizerDomainObject::class,
                 nested: [
                     new Relationship(
-                        domainObject: AccountConfigurationDomainObject::class,
-                        name: 'configuration',
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'organizer_configuration',
                     ),
                 ],
-                name: 'account'
+                name: 'organizer'
             ))
             ->findById($updatedOrder->getEventId());
 
-        /** @var AccountConfigurationDomainObject $config */
-        $config = $event->getAccount()->getConfiguration();
+        $config = $event->getOrganizer()?->getOrganizerConfiguration();
+        if (! $config) {
+            return;
+        }
 
         $this->orderApplicationFeeService->createOrderApplicationFee(
             orderId: $updatedOrder->getId(),
             applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                accountConfiguration: $config,
+                configuration: $config,
                 order: $updatedOrder,
             )?->netApplicationFee?->toMinorUnit() ?? 0,
             orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,

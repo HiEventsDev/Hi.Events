@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\CheckInList;
 
 use HiEvents\DomainObjects\CheckInListDomainObject;
 use HiEvents\DomainObjects\Generated\CheckInListDomainObjectAbstract;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -14,21 +15,29 @@ use Illuminate\Database\DatabaseManager;
 class UpdateCheckInListService
 {
     public function __construct(
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
-        private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventRepositoryInterface            $eventRepository,
-    )
-    {
-    }
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
+     * @throws ResourceNotFoundException
      */
     public function updateCheckInList(CheckInListDomainObject $checkInList, array $productIds): CheckInListDomainObject
     {
         return $this->databaseManager->transaction(function () use ($checkInList, $productIds) {
+            $existingCheckInList = $this->checkInListRepository->findFirstWhere([
+                CheckInListDomainObjectAbstract::ID => $checkInList->getId(),
+                CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+            ]);
+
+            if ($existingCheckInList === null) {
+                throw new ResourceNotFoundException(__('Check-in list not found'));
+            }
+
             $this->eventProductValidationService->validateProductIds($productIds, $checkInList->getEventId());
             $event = $this->eventRepository->findById($checkInList->getEventId());
 
@@ -37,12 +46,16 @@ class UpdateCheckInListService
                     CheckInListDomainObjectAbstract::NAME => $checkInList->getName(),
                     CheckInListDomainObjectAbstract::DESCRIPTION => $checkInList->getDescription(),
                     CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                    CheckInListDomainObjectAbstract::EVENT_OCCURRENCE_ID => $checkInList->getEventOccurrenceId(),
                     CheckInListDomainObjectAbstract::EXPIRES_AT => $checkInList->getExpiresAt()
                         ? DateHelper::convertToUTC($checkInList->getExpiresAt(), $event->getTimezone())
                         : null,
                     CheckInListDomainObjectAbstract::ACTIVATES_AT => $checkInList->getActivatesAt()
                         ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                         : null,
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
                 ],
                 where: [
                     CheckInListDomainObjectAbstract::ID => $checkInList->getId(),

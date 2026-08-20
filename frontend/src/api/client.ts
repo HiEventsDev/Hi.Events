@@ -38,11 +38,21 @@ export const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (!error.response) {
+            return Promise.reject(error);
+        }
         const { status } = error.response;
         const currentPath = window?.location.pathname;
         const isAllowedUnauthenticatedPath = ALLOWED_UNAUTHENTICATED_PATHS.some(path => currentPath.includes(path));
         const isManageEventPath = currentPath.startsWith('/manage/event/');
         const isAuthError = status === 401 || status === 403;
+
+        if (status === 403 && error.response.data?.error_code === 'ACCOUNT_PENDING_DELETION') {
+            if (!currentPath.startsWith('/account')) {
+                window?.location?.replace('/account/danger-zone');
+            }
+            return Promise.reject(error);
+        }
 
         if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
             // Store the current URL before redirecting to the login page

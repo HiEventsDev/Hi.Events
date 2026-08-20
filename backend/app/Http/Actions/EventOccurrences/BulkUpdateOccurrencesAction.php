@@ -1,0 +1,71 @@
+<?php
+
+namespace HiEvents\Http\Actions\EventOccurrences;
+
+use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Exceptions\InvalidOccurrenceDatesException;
+use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\EventOccurrence\BulkUpdateOccurrencesRequest;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Application\Handlers\EventOccurrence\BulkUpdateOccurrencesHandler;
+use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\BulkUpdateOccurrencesDTO;
+use HiEvents\Services\Domain\EventLocation\EventLocationData;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+
+class BulkUpdateOccurrencesAction extends BaseAction
+{
+    public function __construct(
+        private readonly BulkUpdateOccurrencesHandler $handler,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
+
+    public function __invoke(int $eventId, BulkUpdateOccurrencesRequest $request): JsonResponse
+    {
+        $this->isActionAuthorized($eventId, EventDomainObject::class);
+
+        $event = $this->eventRepository->findById($eventId);
+
+        $eventLocationPayload = $request->validated('event_location');
+
+        try {
+            $result = $this->handler->handle(
+                new BulkUpdateOccurrencesDTO(
+                    event_id: $eventId,
+                    action: BulkOccurrenceAction::from($request->validated('action')),
+                    timezone: $event->getTimezone(),
+                    start_time_shift: $request->validated('start_time_shift') !== null
+                        ? (int) $request->validated('start_time_shift')
+                        : null,
+                    end_time_shift: $request->validated('end_time_shift') !== null
+                        ? (int) $request->validated('end_time_shift')
+                        : null,
+                    capacity: $request->validated('capacity') !== null ? (int) $request->validated('capacity') : null,
+                    clear_capacity: (bool) $request->validated('clear_capacity', false),
+                    future_only: (bool) $request->validated('future_only', true),
+                    skip_overridden: (bool) $request->validated('skip_overridden', true),
+                    refund_orders: (bool) $request->validated('refund_orders', false),
+                    occurrence_ids: $request->validated('occurrence_ids'),
+                    apply_to_all: (bool) $request->validated('apply_to_all', false),
+                    label: $request->validated('label'),
+                    clear_label: (bool) $request->validated('clear_label', false),
+                    duration_minutes: $request->validated('duration_minutes') !== null
+                        ? (int) $request->validated('duration_minutes')
+                        : null,
+                    event_location: $eventLocationPayload !== null ? EventLocationData::fromArray($eventLocationPayload) : null,
+                    clear_event_location: (bool) $request->validated('clear_event_location', false),
+                )
+            );
+        } catch (InvalidOccurrenceDatesException $e) {
+            throw ValidationException::withMessages([
+                'start_time_shift' => [$e->getMessage()],
+            ]);
+        }
+
+        return $this->jsonResponse([
+            'updated_count' => $result->updated_count,
+            'updated_ids' => $result->updated_ids,
+        ]);
+    }
+}

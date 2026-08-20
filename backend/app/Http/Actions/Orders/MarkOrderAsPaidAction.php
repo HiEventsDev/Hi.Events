@@ -15,9 +15,7 @@ class MarkOrderAsPaidAction extends BaseAction
 {
     public function __construct(
         private readonly MarkOrderAsPaidHandler $markOrderAsPaidHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, int $orderId): JsonResponse|Response
     {

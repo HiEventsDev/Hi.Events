@@ -1,6 +1,12 @@
 <?php
 
 use HiEvents\DomainObjects\Enums\ColorTheme;
+use HiEvents\Providers\AppServiceProvider;
+use HiEvents\Providers\AuthServiceProvider;
+use HiEvents\Providers\EventServiceProvider;
+use HiEvents\Providers\RepositoryServiceProvider;
+use HiEvents\Providers\RouteServiceProvider;
+use HiEvents\Providers\ScrambleServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +22,7 @@ return [
     'saas_mode_enabled' => env('APP_SAAS_MODE_ENABLED', false),
     'saas_stripe_application_fee_percent' => env('APP_SAAS_STRIPE_APPLICATION_FEE_PERCENT', 1.5),
     'saas_stripe_application_fee_fixed' => env('APP_SAAS_STRIPE_APPLICATION_FEE_FIXED', 0),
-    'saas_default_pass_platform_fee_to_buyer' => env('APP_SAAS_DEFAULT_PASS_PLATFORM_FEE_TO_BUYER', false),
+    'saas_default_pass_platform_fee_to_buyer' => env('APP_SAAS_DEFAULT_PASS_PLATFORM_FEE_TO_BUYER', true),
     'disable_registration' => env('APP_DISABLE_REGISTRATION', false),
     'api_rate_limit_per_minute' => env('APP_API_RATE_LIMIT_PER_MINUTE', 180),
     'stripe_connect_account_type' => env('APP_STRIPE_CONNECT_ACCOUNT_TYPE', 'express'),
@@ -47,14 +53,15 @@ return [
         'reset_password' => '/auth/reset-password/%s',
         'confirm_email_change' => '/manage/profile/confirm-email-change/%s',
         'accept_invitation' => '/auth/accept-invitation/%s',
-        'stripe_connect_return_url' => '/account/payment',
-        'stripe_connect_refresh_url' => '/account/payment',
+        'stripe_connect_return_url' => '/manage/organizer/%d/settings#payouts',
+        'stripe_connect_refresh_url' => '/manage/organizer/%d/settings#payouts',
         'event_homepage' => '/event/%d/%s',
         'attendee_product' => '/product/%d/%s',
         'order_summary' => '/checkout/%d/%s/summary',
         'order_details' => '/checkout/%d/%s/details',
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
+        'account_danger_zone' => '/account/danger-zone',
     ],
 
     /**
@@ -107,7 +114,7 @@ return [
     |
     */
 
-    'debug' => (bool)env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -228,12 +235,13 @@ return [
         /*
          * Application Service Providers...
          */
-        \HiEvents\Providers\AppServiceProvider::class,
-        \HiEvents\Providers\AuthServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        \HiEvents\Providers\EventServiceProvider::class,
-        \HiEvents\Providers\RouteServiceProvider::class,
-        \HiEvents\Providers\RepositoryServiceProvider::class
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        RepositoryServiceProvider::class,
+        ScrambleServiceProvider::class,
 
     ])->toArray(),
 
@@ -252,6 +260,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
-
     'is_hi_events' => env('APP_IS_HI_EVENTS', false),
+
+    'api_docs_enabled' => (bool) env('API_DOCS_ENABLED', false),
 ];

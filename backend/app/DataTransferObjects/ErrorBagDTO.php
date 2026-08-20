@@ -9,9 +9,7 @@ class ErrorBagDTO extends BaseDTO
          * @var array<string, string>
          */
         public array $errors = [],
-    )
-    {
-    }
+    ) {}
 
     public function addError(string $key, string $message): void
     {

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Repository\Eloquent;
 
+use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
@@ -18,6 +19,7 @@ use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Waitlist\DTO\WaitlistStatsDTO;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRepositoryInterface
@@ -32,17 +34,17 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         return WaitlistEntryDomainObject::class;
     }
 
-    public function getStatsByEventId(int $eventId): WaitlistStatsDTO
+    public function getStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): WaitlistStatsDTO
     {
-        $stats = DB::table('waitlist_entries')
-            ->selectRaw("
+        $query = DB::table('waitlist_entries')
+            ->selectRaw('
                 COUNT(*) as total,
                 SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as waiting,
                 SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as offered,
                 SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as purchased,
                 SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as cancelled,
                 SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as expired
-            ", [
+            ', [
                 WaitlistEntryStatus::WAITING->name,
                 WaitlistEntryStatus::OFFERED->name,
                 WaitlistEntryStatus::PURCHASED->name,
@@ -50,8 +52,11 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
                 WaitlistEntryStatus::OFFER_EXPIRED->name,
             ])
             ->where('event_id', $eventId)
-            ->whereNull('deleted_at')
-            ->first();
+            ->whereNull('deleted_at');
+
+        $this->applyOccurrenceScope($query, $eventOccurrenceId);
+
+        $stats = $query->first();
 
         return new WaitlistStatsDTO(
             total: (int) ($stats->total ?? 0),
@@ -63,9 +68,9 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         );
     }
 
-    public function getProductStatsByEventId(int $eventId): \Illuminate\Support\Collection
+    public function getProductStatsByEventId(int $eventId, ?int $eventOccurrenceId = null): Collection
     {
-        return DB::table('waitlist_entries')
+        $query = DB::table('waitlist_entries')
             ->join('product_prices', 'waitlist_entries.product_price_id', '=', 'product_prices.id')
             ->join('products', 'product_prices.product_id', '=', 'products.id')
             ->selectRaw("
@@ -85,41 +90,56 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
             ->whereNull('waitlist_entries.deleted_at')
             ->whereNull('product_prices.deleted_at')
             ->whereNull('products.deleted_at')
-            ->groupBy('waitlist_entries.product_price_id', 'products.title', 'product_prices.label')
-            ->get();
+            ->groupBy('waitlist_entries.product_price_id', 'products.title', 'product_prices.label');
+
+        $this->applyOccurrenceScope($query, $eventOccurrenceId);
+
+        return $query->get();
     }
 
-    public function getMaxPosition(int $productPriceId): int
+    public function getMaxPosition(int $productPriceId, ?int $eventOccurrenceId = null): int
     {
-        return (int) DB::table('waitlist_entries')
+        $query = DB::table('waitlist_entries')
             ->where('product_price_id', $productPriceId)
-            ->whereNull('deleted_at')
-            ->max('position') ?? 0;
+            ->whereNull('deleted_at');
+
+        $this->applyOccurrenceScope($query, $eventOccurrenceId);
+
+        return (int) $query->max('position') ?? 0;
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, WaitlistEntryDomainObject>
+     * @return Collection<int, WaitlistEntryDomainObject>
      */
-    public function getNextWaitingEntries(int $productPriceId, int $limit): \Illuminate\Support\Collection
+    public function getNextWaitingEntries(int $productPriceId, ?int $limit = null, ?int $eventOccurrenceId = null): Collection
     {
-        $models = WaitlistEntry::query()
+        $query = WaitlistEntry::query()
             ->where('product_price_id', $productPriceId)
             ->where('status', WaitlistEntryStatus::WAITING->name)
             ->orderBy('position')
-            ->limit($limit)
-            ->get();
+            ->orderBy('created_at')
+            ->orderBy('id');
+
+        $this->applyOccurrenceScope($query, $eventOccurrenceId);
+
+        if ($limit !== null) {
+            $query->limit($limit);
+        }
+
+        $models = $query->get();
 
         return $this->handleResults($models);
     }
 
-    public function lockForProductPrice(int $productPriceId): void
+    public function lockForProductPrice(int $productPriceId, ?int $eventOccurrenceId = null): void
     {
-        DB::table('waitlist_entries')
+        $query = DB::table('waitlist_entries')
             ->where('product_price_id', $productPriceId)
-            ->whereIn('status', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name])
-            ->lockForUpdate()
-            ->select('id')
-            ->get();
+            ->whereIn('status', [WaitlistEntryStatus::WAITING->name, WaitlistEntryStatus::OFFERED->name]);
+
+        $this->applyOccurrenceScope($query, $eventOccurrenceId);
+
+        $query->lockForUpdate()->select('id')->get();
     }
 
     public function findByIdLocked(int $id): ?WaitlistEntryDomainObject
@@ -145,13 +165,13 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         if ($params->query) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder
-                    ->where(WaitlistEntryDomainObjectAbstract::FIRST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere(WaitlistEntryDomainObjectAbstract::LAST_NAME, 'ilike', '%' . $params->query . '%')
-                    ->orWhere(WaitlistEntryDomainObjectAbstract::EMAIL, 'ilike', '%' . $params->query . '%');
+                    ->where(WaitlistEntryDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(WaitlistEntryDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(WaitlistEntryDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
             };
         }
 
-        if (!empty($params->filter_fields)) {
+        if (! empty($params->filter_fields)) {
             $this->applyFilterFields($params, WaitlistEntryDomainObject::getAllowedFilterFields());
         }
 
@@ -161,9 +181,9 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
         );
 
         return $this->loadRelation(new Relationship(
-                domainObject: OrderDomainObject::class,
-                name: OrderDomainObjectAbstract::SINGULAR_NAME,
-            ))
+            domainObject: OrderDomainObject::class,
+            name: OrderDomainObjectAbstract::SINGULAR_NAME,
+        ))
             ->loadRelation(new Relationship(
                 domainObject: ProductPriceDomainObject::class,
                 nested: [
@@ -174,10 +194,23 @@ class WaitlistEntryRepository extends BaseRepository implements WaitlistEntryRep
                 ],
                 name: ProductPriceDomainObjectAbstract::SINGULAR_NAME
             ))
+            ->loadRelation(new Relationship(
+                domainObject: EventOccurrenceDomainObject::class,
+                name: 'event_occurrence',
+            ))
             ->paginateWhere(
                 where: $where,
                 limit: $params->per_page,
                 page: $params->page,
             );
+    }
+
+    private function applyOccurrenceScope($query, ?int $eventOccurrenceId): void
+    {
+        if ($eventOccurrenceId === null) {
+            return;
+        }
+
+        $query->where('event_occurrence_id', $eventOccurrenceId);
     }
 }

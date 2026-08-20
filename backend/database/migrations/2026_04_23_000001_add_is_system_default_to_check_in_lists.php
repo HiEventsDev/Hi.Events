@@ -1,0 +1,63 @@
+<?php
+
+use HiEvents\Helper\IdHelper;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('check_in_lists', function (Blueprint $table) {
+            $table->boolean('is_system_default')->default(false);
+        });
+
+        DB::statement('
+            CREATE UNIQUE INDEX check_in_lists_one_default_per_event
+            ON check_in_lists (event_id)
+            WHERE is_system_default = true AND deleted_at IS NULL
+        ');
+
+        DB::table('events')
+            ->select('id')
+            ->whereNull('deleted_at')
+            ->orderBy('id')
+            ->chunk(500, function ($events) {
+                foreach ($events as $event) {
+                    $alreadyHasDefault = DB::table('check_in_lists')
+                        ->where('event_id', $event->id)
+                        ->where('is_system_default', true)
+                        ->whereNull('deleted_at')
+                        ->exists();
+
+                    if ($alreadyHasDefault) {
+                        continue;
+                    }
+
+                    DB::table('check_in_lists')->insert([
+                        'event_id' => $event->id,
+                        'short_id' => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+                        'name' => 'Default check-in',
+                        'description' => null,
+                        'is_system_default' => true,
+                        'public_show_attendee_notes' => false,
+                        'public_show_question_answers' => false,
+                        'public_show_order_details' => false,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            });
+    }
+
+    public function down(): void
+    {
+        DB::statement('DROP INDEX IF EXISTS check_in_lists_one_default_per_event');
+
+        Schema::table('check_in_lists', function (Blueprint $table) {
+            $table->dropColumn('is_system_default');
+        });
+    }
+};

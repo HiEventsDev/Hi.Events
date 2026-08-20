@@ -17,13 +17,11 @@ use Throwable;
 class UpdateUserHandler
 {
     public function __construct(
-        private readonly UserRepositoryInterface        $userRepository,
-        private readonly LoggerInterface                $logger,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly LoggerInterface $logger,
         private readonly AccountUserRepositoryInterface $accountUserRepository,
-        private readonly DatabaseManager                $databaseManager,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws CannotUpdateResourceException|Throwable

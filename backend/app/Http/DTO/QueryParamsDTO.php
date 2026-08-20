@@ -8,18 +8,16 @@ use Illuminate\Support\Collection;
 class QueryParamsDTO extends BaseDTO
 {
     public function __construct(
-        public readonly ?int        $page = 1,
-        public readonly ?int        $per_page = 25,
-        public readonly ?string     $sort_by = null,
-        public readonly ?string     $sort_direction = null,
-        public readonly ?string     $query = null,
+        public readonly ?int $page = 1,
+        public readonly ?int $per_page = 25,
+        public readonly ?string $sort_by = null,
+        public readonly ?string $sort_direction = null,
+        public readonly ?string $query = null,
         /** @var Collection<FilterFieldDTO> */
         public readonly ?Collection $filter_fields = null,
-        public readonly ?array      $includes = null,
+        public readonly ?array $includes = null,
         public readonly ?Collection $query_params = null,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -35,8 +33,8 @@ class QueryParamsDTO extends BaseDTO
         }
 
         return new self(
-            page: isset($data['page']) ? (int)$data['page'] : 1,
-            per_page: isset($data['per_page']) ? (int)$data['per_page'] : 25,
+            page: isset($data['page']) ? (int) $data['page'] : 1,
+            per_page: isset($data['per_page']) ? (int) $data['per_page'] : 25,
             sort_by: $data['sort_by'] ?? null,
             sort_direction: $data['sort_direction'] ?? null,
             query: $data['query'] ?? null,

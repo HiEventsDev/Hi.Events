@@ -12,6 +12,7 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const PLURAL_NAME = 'check_in_lists';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const SHORT_ID = 'short_id';
     final public const NAME = 'name';
     final public const DESCRIPTION = 'description';
@@ -20,9 +21,14 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const DELETED_AT = 'deleted_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const PUBLIC_SHOW_ATTENDEE_NOTES = 'public_show_attendee_notes';
+    final public const PUBLIC_SHOW_QUESTION_ANSWERS = 'public_show_question_answers';
+    final public const PUBLIC_SHOW_ORDER_DETAILS = 'public_show_order_details';
+    final public const IS_SYSTEM_DEFAULT = 'is_system_default';
 
     protected int $id;
     protected int $event_id;
+    protected ?int $event_occurrence_id = null;
     protected string $short_id;
     protected string $name;
     protected ?string $description = null;
@@ -31,12 +37,17 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected ?string $deleted_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected bool $public_show_attendee_notes = false;
+    protected bool $public_show_question_answers = false;
+    protected bool $public_show_order_details = false;
+    protected bool $is_system_default = false;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'name' => $this->name ?? null,
                     'description' => $this->description ?? null,
@@ -45,6 +56,10 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'deleted_at' => $this->deleted_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'public_show_attendee_notes' => $this->public_show_attendee_notes ?? null,
+                    'public_show_question_answers' => $this->public_show_question_answers ?? null,
+                    'public_show_order_details' => $this->public_show_order_details ?? null,
+                    'is_system_default' => $this->is_system_default ?? null,
                 ];
     }
 
@@ -68,6 +83,17 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): ?int
+    {
+        return $this->event_occurrence_id;
     }
 
     public function setShortId(string $short_id): self
@@ -156,5 +182,49 @@ abstract class CheckInListDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setPublicShowAttendeeNotes(bool $public_show_attendee_notes): self
+    {
+        $this->public_show_attendee_notes = $public_show_attendee_notes;
+        return $this;
+    }
+
+    public function getPublicShowAttendeeNotes(): bool
+    {
+        return $this->public_show_attendee_notes;
+    }
+
+    public function setPublicShowQuestionAnswers(bool $public_show_question_answers): self
+    {
+        $this->public_show_question_answers = $public_show_question_answers;
+        return $this;
+    }
+
+    public function getPublicShowQuestionAnswers(): bool
+    {
+        return $this->public_show_question_answers;
+    }
+
+    public function setPublicShowOrderDetails(bool $public_show_order_details): self
+    {
+        $this->public_show_order_details = $public_show_order_details;
+        return $this;
+    }
+
+    public function getPublicShowOrderDetails(): bool
+    {
+        return $this->public_show_order_details;
+    }
+
+    public function setIsSystemDefault(bool $is_system_default): self
+    {
+        $this->is_system_default = $is_system_default;
+        return $this;
+    }
+
+    public function getIsSystemDefault(): bool
+    {
+        return $this->is_system_default;
     }
 }

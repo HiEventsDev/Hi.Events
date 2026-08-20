@@ -16,4 +16,6 @@ interface AffiliateRepositoryInterface extends RepositoryInterface
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
     public function incrementSales(int $affiliateId, float $amount): void;
+
+    public function decrementSales(int $affiliateId, float $amount): void;
 }

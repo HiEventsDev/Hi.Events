@@ -3,9 +3,16 @@
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
+@php /** @var \HiEvents\DomainObjects\EventOccurrenceDomainObject|null $occurrence */ @endphp
 @php /** @var string $orderUrl */ @endphp
 
 @php /** @see \HiEvents\Mail\Order\OrderSummary */ @endphp
+
+@php
+    $displayStart = $occurrence?->getStartDate() ?? $event->getStartDate();
+    $displayDate = (new Carbon(DateHelper::convertFromUTC($displayStart, $event->getTimezone())))->format('F j, Y');
+    $displayTime = (new Carbon(DateHelper::convertFromUTC($displayStart, $event->getTimezone())))->format('g:i A');
+@endphp
 
 <x-mail::message>
 # {{ __('Your Order is Confirmed! ') }} 🎉
@@ -13,7 +20,7 @@
 @if($order->isOrderAwaitingOfflinePayment() === false)
 
 <p>
-{{ __('Congratulations! Your order for :eventTitle on :eventDate at :eventTime was successful. Please find your order details below.', ['eventTitle' => $event->getTitle(), 'eventDate' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y'), 'eventTime' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A')]) }}
+{{ __('Congratulations! Your order for :eventTitle on :eventDate at :eventTime was successful. Please find your order details below.', ['eventTitle' => $event->getTitle(), 'eventDate' => $displayDate, 'eventTime' => $displayTime]) }}
 </p>
 
 @else
@@ -34,24 +41,28 @@
 
 <p>
 
-# {{ __('Event Details') }}
+## {{ __('Event Details') }}
 **{{ __('Event Name:') }}** {{ $event->getTitle() }}
     <br>
-**{{ __('Date & Time:') }}** {{ __(':date at :time', ['date' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('F j, Y'), 'time' => (new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())))->format('g:i A')]) }}
+**{{ __('Date & Time:') }}** {{ __(':date at :time', ['date' => $displayDate, 'time' => $displayTime]) }}
+@if($occurrence?->getLabel())
+    <br>
+**{{ __('Session:') }}** {{ $occurrence->getLabel() }}
+@endif
 
 </p>
 
 @if($eventSettings->getPostCheckoutMessage() && $order->isOrderCompleted())
 <p>
 
-# {{ __('Additional Information') }}
+## {{ __('Additional Information') }}
 
 {!! $eventSettings->getPostCheckoutMessage() !!}
 
 </p>
 @endif
 
-# {{ __('Order Summary') }}
+## {{ __('Order Summary') }}
 - **{{ __('Order Number:') }}** {{ $order->getPublicId() }}
 - **{{ __('Total Amount:') }}** {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
 

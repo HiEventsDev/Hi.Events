@@ -14,16 +14,14 @@ class StopImpersonationAction extends BaseAuthAction
 {
     public function __construct(
         private readonly StopImpersonationHandler $handler,
-        private readonly AuthManager              $authManager,
-    )
-    {
-    }
+        private readonly AuthManager $authManager,
+    ) {}
 
     public function __invoke(): JsonResponse
     {
         $isImpersonating = $this->authManager->payload()->get('is_impersonating');
 
-        if (!$isImpersonating) {
+        if (! $isImpersonating) {
             return $this->errorResponse(__('Not currently impersonating'));
         }
 
@@ -36,7 +34,7 @@ class StopImpersonationAction extends BaseAuthAction
         $response = $this->jsonResponse([
             'message' => __('Impersonation ended'),
             'redirect_url' => '/admin/users',
-            'token' => $token
+            'token' => $token,
         ]);
 
         return $this->addTokenToResponse($response, $token);

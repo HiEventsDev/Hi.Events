@@ -11,10 +11,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class EventSettingsResourcePublic extends JsonResource
 {
     public function __construct(
-        mixed                 $resource,
+        mixed $resource,
         private readonly bool $includePostCheckoutData = false,
-    )
-    {
+    ) {
         parent::__construct($resource);
     }
 
@@ -28,11 +27,11 @@ class EventSettingsResourcePublic extends JsonResource
             // i.e. order->event->event_settings and not event->event_settings
             $this->mergeWhen($this->includePostCheckoutData, [
                 'post_checkout_message' => $this->getPostCheckoutMessage(),
-                'online_event_connection_details' => $this->getOnlineEventConnectionDetails(),
             ]),
 
             'product_page_message' => $this->getProductPageMessage(),
             'continue_button_text' => $this->getContinueButtonText(),
+            'get_tickets_button_text' => $this->getGetTicketsButtonText(),
             'required_attendee_details' => $this->getRequireAttendeeDetails(),
             'attendee_details_collection_method' => $this->getAttendeeDetailsCollectionMethod(),
             'email_footer_message' => $this->getEmailFooterMessage(),
@@ -50,9 +49,6 @@ class EventSettingsResourcePublic extends JsonResource
 
             'website_url' => $this->getWebsiteUrl(),
             'maps_url' => $this->getMapsUrl(),
-
-            'location_details' => $this->getLocationDetails(),
-            'is_online_event' => $this->getIsOnlineEvent(),
 
             // Ticket design settings
             'ticket_design_settings' => $this->getTicketDesignSettings(),
@@ -88,6 +84,10 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),
+
+            // Occurrence display
+            'show_available_occurrence_capacity' => $this->getShowAvailableOccurrenceCapacity(),
+            'hide_sold_out_occurrences' => $this->getHideSoldOutOccurrences(),
 
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),

@@ -13,8 +13,8 @@ class UpdateEventRequest extends BaseRequest
 
     public function rules(): array
     {
-        $rules =  $this->eventRules();
-        unset($rules['organizer_id']);
+        $rules = $this->eventRules();
+        unset($rules['organizer_id'], $rules['event_location'], $rules['event_location.type'], $rules['event_location.location_id'], $rules['event_location.online_event_connection_details']);
 
         return $rules;
     }

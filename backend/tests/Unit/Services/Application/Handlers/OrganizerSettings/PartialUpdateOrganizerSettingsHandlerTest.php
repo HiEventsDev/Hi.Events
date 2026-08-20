@@ -17,7 +17,9 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private OrganizerSettingsRepositoryInterface $settingsRepository;
+
     private OrganizerRepositoryInterface $organizerRepository;
+
     private PartialUpdateOrganizerSettingsHandler $handler;
 
     protected function setUp(): void
@@ -33,12 +35,12 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
         );
     }
 
-    public function testTrackingPixelsArePersisted(): void
+    public function test_tracking_pixels_are_persisted(): void
     {
-        $organizer = new OrganizerDomainObject();
+        $organizer = new OrganizerDomainObject;
         $organizer->setId(1);
 
-        $existingSettings = new OrganizerSettingDomainObject();
+        $existingSettings = new OrganizerSettingDomainObject;
         $existingSettings->setId(10);
         $existingSettings->setOrganizerId(1);
 
@@ -70,7 +72,7 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
                 Mockery::any()
             );
 
-        $updatedSettings = new OrganizerSettingDomainObject();
+        $updatedSettings = new OrganizerSettingDomainObject;
         $updatedSettings->setId(10);
 
         $this->settingsRepository
@@ -91,16 +93,16 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
         $this->assertInstanceOf(OrganizerSettingDomainObject::class, $result);
     }
 
-    public function testTrackingPixelsDefaultToExistingWhenNotProvided(): void
+    public function test_tracking_pixels_default_to_existing_when_not_provided(): void
     {
-        $organizer = new OrganizerDomainObject();
+        $organizer = new OrganizerDomainObject;
         $organizer->setId(1);
 
         $existingPixels = [
             ['provider' => 'facebook_pixel', 'pixel_id' => '9999999', 'enabled' => true],
         ];
 
-        $existingSettings = new OrganizerSettingDomainObject();
+        $existingSettings = new OrganizerSettingDomainObject;
         $existingSettings->setId(10);
         $existingSettings->setOrganizerId(1);
         $existingSettings->setTrackingPixels($existingPixels);

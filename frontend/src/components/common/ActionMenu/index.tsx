@@ -8,6 +8,7 @@ export interface MenuItem {
     onClick: () => void;
     color?: string;
     visible?: boolean;
+    dataTestId?: string;
 }
 
 export interface ActionMenuItemsGroup {
@@ -19,6 +20,7 @@ export interface ActionMenuItemsGroup {
 interface ActionMenuProps {
     itemsGroups: ActionMenuItemsGroup[];
     target?: React.ReactNode;
+    dataTestId?: string;
 }
 
 const DefaultTarget = () => (
@@ -29,13 +31,14 @@ const DefaultTarget = () => (
 
 export const ActionMenu: React.FC<ActionMenuProps> = ({
                                                           itemsGroups,
-                                                          target = <DefaultTarget/>
+                                                          target = <DefaultTarget/>,
+                                                          dataTestId
                                                       }) => {
     return (
         <>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <div style={{cursor: 'pointer'}}>
+                    <div style={{cursor: 'pointer'}} data-testid={dataTestId}>
                         {target}
                     </div>
                 </Menu.Target>
@@ -51,6 +54,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                                     color={item.color}
                                     leftSection={item.icon}
                                     onClick={item.onClick}
+                                    data-testid={item.dataTestId}
                                 >
                                     {item.label}
                                 </Menu.Item>

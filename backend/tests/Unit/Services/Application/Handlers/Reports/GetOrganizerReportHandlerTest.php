@@ -13,6 +13,7 @@ use Tests\TestCase;
 class GetOrganizerReportHandlerTest extends TestCase
 {
     private OrganizerReportServiceFactory $reportServiceFactory;
+
     private GetOrganizerReportHandler $handler;
 
     protected function setUp(): void
@@ -23,7 +24,7 @@ class GetOrganizerReportHandlerTest extends TestCase
         $this->handler = new GetOrganizerReportHandler($this->reportServiceFactory);
     }
 
-    public function testHandleReturnsReportData(): void
+    public function test_handle_returns_report_data(): void
     {
         $organizerId = 1;
         $reportType = OrganizerReportTypes::REVENUE_SUMMARY;
@@ -67,7 +68,7 @@ class GetOrganizerReportHandlerTest extends TestCase
         $this->assertEquals($expectedCollection, $result);
     }
 
-    public function testHandleWorksWithNullDates(): void
+    public function test_handle_works_with_null_dates(): void
     {
         $organizerId = 1;
         $reportType = OrganizerReportTypes::EVENTS_PERFORMANCE;
@@ -105,7 +106,7 @@ class GetOrganizerReportHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testHandleCorrectlyRoutesToTaxSummaryReport(): void
+    public function test_handle_correctly_routes_to_tax_summary_report(): void
     {
         $organizerId = 2;
         $reportType = OrganizerReportTypes::TAX_SUMMARY;

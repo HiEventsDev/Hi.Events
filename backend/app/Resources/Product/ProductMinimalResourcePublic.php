@@ -19,8 +19,8 @@ class ProductMinimalResourcePublic extends JsonResource
             'type' => $this->getType(),
             'event_id' => $this->getEventId(),
             'prices' => $this->when(
-                (bool)$this->getProductPrices(),
-                fn() => ProductPriceResourcePublic::collection($this->getProductPrices()),
+                (bool) $this->getProductPrices(),
+                fn () => ProductPriceResourcePublic::collection($this->getProductPrices()),
             ),
             'product_category_id' => $this->getProductCategoryId(),
         ];

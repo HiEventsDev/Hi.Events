@@ -29,28 +29,27 @@ class MailBuilderServiceTest extends TestCase
             app(OfflinePaymentInstructionsRenderService::class),
         );
 
-        $organizer = (new OrganizerDomainObject())
+        $organizer = (new OrganizerDomainObject)
             ->setId(1)
             ->setName('Example Organizer')
             ->setEmail('organizer@example.com');
 
-        $settings = (new EventSettingDomainObject())
+        $settings = (new EventSettingDomainObject)
             ->setId(20)
             ->setEventId(10)
             ->setSupportEmail('support@example.com')
             ->setOfflinePaymentInstructions('<p>Use {{ order.number }} as your reference</p>');
 
-        $event = (new EventDomainObject())
+        $event = (new EventDomainObject)
             ->setId(10)
             ->setAccountId(1)
             ->setTitle('Summer Session')
-            ->setStartDate('2026-08-15 18:00:00')
             ->setCurrency('GBP')
             ->setTimezone('UTC')
             ->setOrganizer($organizer)
             ->setEventSettings($settings);
 
-        $order = (new OrderDomainObject())
+        $order = (new OrderDomainObject)
             ->setId(30)
             ->setEventId(10)
             ->setShortId('order-short-id')

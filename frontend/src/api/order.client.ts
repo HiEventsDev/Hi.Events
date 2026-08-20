@@ -41,6 +41,7 @@ export interface ProductPriceQuantityFormValue {
 export interface ProductFormValue {
     product_id: number,
     quantities: ProductPriceQuantityFormValue[],
+    event_occurrence_id?: number,
 }
 
 export interface ProductFormPayload {
@@ -86,8 +87,9 @@ export const orderClient = {
         return response.data;
     },
 
-    exportOrders: async (eventId: IdParam): Promise<Blob> => {
-        const response = await api.post(`events/${eventId}/orders/export`, {}, {
+    exportOrders: async (eventId: IdParam, eventOccurrenceId?: number | null): Promise<Blob> => {
+        const body = eventOccurrenceId ? {event_occurrence_id: eventOccurrenceId} : {};
+        const response = await api.post(`events/${eventId}/orders/export`, body, {
             responseType: 'blob',
         });
 
@@ -122,15 +124,11 @@ export const orderClientPublic = {
     findByShortId: async (
         eventId: number,
         orderShortId: string,
-        includes: string[] = [],
-        sessionIdentifier?: string
+        includes: string[] = []
     ) => {
         const query = new URLSearchParams();
         if (includes.length > 0) {
             query.append("include", includes.join(","));
-        }
-        if (sessionIdentifier) {
-            query.append("session_identifier", sessionIdentifier);
         }
 
         const response = await publicApi.get<GenericDataResponse<Order>>(

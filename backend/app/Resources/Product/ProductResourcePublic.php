@@ -17,7 +17,9 @@ class ProductResourcePublic extends JsonResource
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
+            /** @var 'PAID'|'FREE'|'DONATION'|'TIERED'|'REGISTRATION' */
             'type' => $this->getType(),
+            /** @var 'TICKET'|'GENERAL' */
             'product_type' => $this->getProductType(),
             'description' => $this->getDescription(),
             'max_per_order' => $this->getMaxPerOrder(),
@@ -28,25 +30,25 @@ class ProductResourcePublic extends JsonResource
             'is_before_sale_start_date' => $this->isBeforeSaleStartDate(),
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'start_collapsed' => $this->getStartCollapsed(),
-            $this->mergeWhen($this->getShowQuantityRemaining(), fn() => [
+            $this->mergeWhen($this->getShowQuantityRemaining(), fn () => [
                 'quantity_available' => $this->getQuantityAvailable(),
             ]),
             'price' => $this->when(
-                $this->getProductPrices() && !$this->isTieredType(),
-                fn() => $this->getPrice(),
+                $this->getProductPrices() && ! $this->isTieredType(),
+                fn () => $this->getPrice(),
             ),
             'prices' => $this->when(
-                (bool)$this->getProductPrices(),
-                fn() => ProductPriceResourcePublic::collectionWithAdditionalData($this->getProductPrices(), [
+                (bool) $this->getProductPrices(),
+                fn () => ProductPriceResourcePublic::collectionWithAdditionalData($this->getProductPrices(), [
                     ProductPriceResourcePublic::SHOW_QUANTITY_AVAILABLE => $this->getShowQuantityRemaining(),
                 ]),
             ),
             // todo: this should be taxes_and_fees
             'taxes' => $this->when(
-                (bool)$this->getTaxAndFees(),
-                fn() => TaxAndFeeResource::collection($this->getTaxAndFees())
+                (bool) $this->getTaxAndFees(),
+                fn () => TaxAndFeeResource::collection($this->getTaxAndFees())
             ),
-            $this->mergeWhen((bool)$this->getProductPrices(), fn() => [
+            $this->mergeWhen((bool) $this->getProductPrices(), fn () => [
                 'is_available' => $this->isAvailable(),
                 'is_sold_out' => $this->isSoldOut(),
             ]),
@@ -54,6 +56,11 @@ class ProductResourcePublic extends JsonResource
             'is_highlighted' => $this->getIsHighlighted(),
             'highlight_message' => $this->getHighlightMessage(),
             'waitlist_enabled' => $this->getWaitlistEnabled(),
+            'is_addon_only' => $this->getIsAddonOnly(),
+            'addon_product_ids' => $this->when(
+                $this->getAddons() !== null,
+                fn () => $this->getAddonProductIds(),
+            ),
         ];
     }
 }

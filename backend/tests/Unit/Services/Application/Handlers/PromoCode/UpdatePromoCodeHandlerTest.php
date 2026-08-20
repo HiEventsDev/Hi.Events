@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Application\Handlers\PromoCode;
 
+use HiEvents\DomainObjects\Enums\PromoCodeDiscountAppliesToEnum;
 use HiEvents\DomainObjects\Enums\PromoCodeDiscountTypeEnum;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
@@ -17,8 +18,11 @@ use Tests\TestCase;
 class UpdatePromoCodeHandlerTest extends TestCase
 {
     private PromoCodeRepositoryInterface $promoCodeRepository;
+
     private EventProductValidationService $eventProductValidationService;
+
     private EventRepositoryInterface $eventRepository;
+
     private UpdatePromoCodeHandler $handler;
 
     protected function setUp(): void
@@ -36,7 +40,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         );
     }
 
-    public function testHandleThrowsExceptionWhenPromoCodeNotFoundForEvent(): void
+    public function test_handle_throws_exception_when_promo_code_not_found_for_event(): void
     {
         $promoCodeId = 1;
         $eventId = 2;
@@ -47,7 +51,8 @@ class UpdatePromoCodeHandlerTest extends TestCase
             discount_type: PromoCodeDiscountTypeEnum::PERCENTAGE,
             discount: 10.0,
             expiry_date: null,
-            max_allowed_usages: null
+            max_allowed_usages: null,
+            discount_applies_to: PromoCodeDiscountAppliesToEnum::EACH_PRODUCT
         );
 
         $this->promoCodeRepository
@@ -65,7 +70,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         $this->handler->handle($promoCodeId, $dto);
     }
 
-    public function testHandleVerifiesPromoCodeBelongsToEvent(): void
+    public function test_handle_verifies_promo_code_belongs_to_event(): void
     {
         $promoCodeId = 1;
         $eventIdFromRequest = 2;
@@ -78,7 +83,8 @@ class UpdatePromoCodeHandlerTest extends TestCase
             discount_type: PromoCodeDiscountTypeEnum::PERCENTAGE,
             discount: 10.0,
             expiry_date: null,
-            max_allowed_usages: null
+            max_allowed_usages: null,
+            discount_applies_to: PromoCodeDiscountAppliesToEnum::EACH_PRODUCT
         );
 
         $this->promoCodeRepository
@@ -98,7 +104,7 @@ class UpdatePromoCodeHandlerTest extends TestCase
         $this->handler->handle($promoCodeId, $dto);
     }
 
-    public function testHandleSuccessfullyUpdatesPromoCodeWhenOwnershipVerified(): void
+    public function test_handle_successfully_updates_promo_code_when_ownership_verified(): void
     {
         $promoCodeId = 1;
         $eventId = 2;
@@ -109,7 +115,8 @@ class UpdatePromoCodeHandlerTest extends TestCase
             discount_type: PromoCodeDiscountTypeEnum::PERCENTAGE,
             discount: 10.0,
             expiry_date: null,
-            max_allowed_usages: null
+            max_allowed_usages: null,
+            discount_applies_to: PromoCodeDiscountAppliesToEnum::EACH_PRODUCT
         );
 
         $existingPromoCode = m::mock(PromoCodeDomainObject::class);
@@ -156,6 +163,53 @@ class UpdatePromoCodeHandlerTest extends TestCase
         $result = $this->handler->handle($promoCodeId, $dto);
 
         $this->assertSame($updatedPromoCode, $result);
+    }
+
+    public function test_handle_preserves_stored_discount_applies_to_when_omitted(): void
+    {
+        $promoCodeId = 1;
+        $eventId = 2;
+        $dto = new UpsertPromoCodeDTO(
+            code: 'testcode',
+            event_id: $eventId,
+            applicable_product_ids: [],
+            discount_type: PromoCodeDiscountTypeEnum::FIXED,
+            discount: 10.0,
+            expiry_date: null,
+            max_allowed_usages: null,
+            discount_applies_to: null
+        );
+
+        $existingPromoCode = m::mock(PromoCodeDomainObject::class);
+        $existingPromoCode->shouldReceive('getId')->andReturn($promoCodeId);
+        $existingPromoCode->shouldReceive('getDiscountAppliesTo')->andReturn(PromoCodeDiscountAppliesToEnum::ORDER->name);
+
+        $event = m::mock(EventDomainObject::class);
+        $event->shouldReceive('getTimezone')->andReturn('UTC');
+
+        $this->promoCodeRepository
+            ->shouldReceive('findFirstWhere')
+            ->twice()
+            ->andReturn($existingPromoCode);
+
+        $this->eventProductValidationService
+            ->shouldReceive('validateProductIds')
+            ->once();
+
+        $this->eventRepository
+            ->shouldReceive('findById')
+            ->once()
+            ->andReturn($event);
+
+        $this->promoCodeRepository
+            ->shouldReceive('updateFromArray')
+            ->once()
+            ->with($promoCodeId, m::on(
+                static fn (array $attributes) => $attributes['discount_applies_to'] === PromoCodeDiscountAppliesToEnum::ORDER->name
+            ))
+            ->andReturn($existingPromoCode);
+
+        $this->assertSame($existingPromoCode, $this->handler->handle($promoCodeId, $dto));
     }
 
     protected function tearDown(): void

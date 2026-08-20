@@ -2,9 +2,9 @@
 
 namespace HiEvents\Repository\Eloquent;
 
-use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
-use HiEvents\Models\StripePayout;
 use HiEvents\DomainObjects\StripePayoutDomainObject;
+use HiEvents\Models\StripePayout;
+use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 
 /**
  * @extends BaseRepository<StripePayoutDomainObject>

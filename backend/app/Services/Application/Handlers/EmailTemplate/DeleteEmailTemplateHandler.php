@@ -10,9 +10,7 @@ class DeleteEmailTemplateHandler
 {
     public function __construct(
         private readonly EmailTemplateRepositoryInterface $emailTemplateRepository
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws EmailTemplateNotFoundException
@@ -24,7 +22,7 @@ class DeleteEmailTemplateHandler
             'account_id' => $dto->account_id,
         ]);
 
-        if (!$template) {
+        if (! $template) {
             throw new EmailTemplateNotFoundException(__('Email template not found'));
         }
 

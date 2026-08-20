@@ -20,21 +20,25 @@ use Throwable;
 class CreateOrderActionPublic extends BaseAction
 {
     public function __construct(
-        private readonly CreateOrderHandler                  $orderHandler,
+        private readonly CreateOrderHandler $orderHandler,
         private readonly OrderCreateRequestValidationService $orderCreateRequestValidationService,
-        private readonly CheckoutSessionManagementService    $sessionIdentifierService,
-        private readonly LocaleService                        $localeService,
+        private readonly CheckoutSessionManagementService $sessionIdentifierService,
+        private readonly LocaleService $localeService,
 
-    )
-    {
-    }
+    ) {}
 
     /**
+     * Create Order
+     *
+     * `products.*.event_occurrence_id` is required for recurring events; for single-occurrence
+     * events it is inferred when omitted. Product availability, capacity, and pricing are
+     * validated against the event's live configuration.
+     *
      * @throws Throwable
      */
     public function __invoke(CreateOrderRequest $request, int $eventId): JsonResponse
     {
-        $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
+        $validatedData = $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
         $sessionId = $this->sessionIdentifierService->getSessionId();
 
         $order = $this->orderHandler->handle(
@@ -43,7 +47,7 @@ class CreateOrderActionPublic extends BaseAction
                 'is_user_authenticated' => $this->isUserAuthenticated(),
                 'promo_code' => $request->input('promo_code'),
                 'affiliate_code' => $request->input('affiliate_code'),
-                'products' => ProductOrderDetailsDTO::collectionFromArray($request->input('products')),
+                'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
                 'session_identifier' => $sessionId,
                 'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
             ])
@@ -51,7 +55,7 @@ class CreateOrderActionPublic extends BaseAction
 
         $order->setSessionIdentifier($sessionId);
 
-        $response =  $this->resourceResponse(
+        $response = $this->resourceResponse(
             resource: OrderResourcePublic::class,
             data: $order,
             statusCode: ResponseCodes::HTTP_CREATED,

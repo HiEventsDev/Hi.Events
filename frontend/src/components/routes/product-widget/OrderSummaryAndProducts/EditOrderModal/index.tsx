@@ -1,10 +1,10 @@
 import {t} from "@lingui/macro";
-import {Alert, Button, Group, Modal, Text, TextInput} from "@mantine/core";
+import {Button, Group, Modal, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {IconInfoCircle} from "@tabler/icons-react";
 import {Order} from "../../../../../types";
 import classes from "./EditOrderModal.module.scss";
 import {InputGroup} from "../../../../common/InputGroup";
+import {Callout} from "../../../../common/Callout";
 
 interface EditOrderModalProps {
     opened: boolean;
@@ -73,11 +73,9 @@ export const EditOrderModal = ({
                     />
 
                     {emailChanged && (
-                        <Alert mb={20} icon={<IconInfoCircle size={16}/>} color="orange">
-                            <Text size="sm" fw={500}>
-                                {t`Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving.`}
-                            </Text>
-                        </Alert>
+                        <Callout variant="tip">
+                            {t`Important: Changing your email address will update the link to access this order. You will be redirected to the new order link after saving.`}
+                        </Callout>
                     )}
 
                     <Group justify="flex-end" gap="sm" mt="md">

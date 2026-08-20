@@ -63,16 +63,14 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     public function isBeforeSaleStartDate(): bool
     {
-        return (!is_null($this->getSaleStartDate())
-            && (new Carbon($this->getSaleStartDate()))->isFuture()
-        );
+        return ! is_null($this->getSaleStartDate())
+            && (new Carbon($this->getSaleStartDate()))->isFuture();
     }
 
     public function isAfterSaleEndDate(): bool
     {
-        return (!is_null($this->getSaleEndDate())
-            && (new Carbon($this->getSaleEndDate()))->isPast()
-        );
+        return ! is_null($this->getSaleEndDate())
+            && (new Carbon($this->getSaleEndDate()))->isPast();
     }
 
     public function isSoldOut(): bool
@@ -86,7 +84,7 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
             return true;
         }
 
-       if ($this->getInitialQuantityAvailable() === null) {
+        if ($this->getInitialQuantityAvailable() === null) {
             return false;
         }
 
@@ -101,6 +99,7 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function setIsAvailable(?bool $isAvailable): ProductPriceDomainObject
     {
         $this->isAvailable = $isAvailable;
+
         return $this;
     }
 
@@ -124,6 +123,7 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function setProduct(?ProductDomainObject $product): self
     {
         $this->product = $product;
+
         return $this;
     }
 

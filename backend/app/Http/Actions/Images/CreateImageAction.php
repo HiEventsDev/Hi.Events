@@ -15,9 +15,7 @@ class CreateImageAction extends BaseAction
 {
     public function __construct(
         public readonly CreateImageHandler $createImageHandler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws CouldNotUploadImageException

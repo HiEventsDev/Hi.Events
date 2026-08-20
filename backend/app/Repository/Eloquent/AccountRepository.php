@@ -26,16 +26,16 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
 
     public function findByEventId(int $eventId): AccountDomainObject
     {
-        $account = $this
-            ->model
-            ->select('accounts.*')
-            ->join('events', 'accounts.id', '=', 'events.account_id')
-            ->where('events.id', $eventId)
-            ->first();
+        return $this->runQuery(function () use ($eventId) {
+            $account = $this
+                ->model
+                ->select('accounts.*')
+                ->join('events', 'accounts.id', '=', 'events.account_id')
+                ->where('events.id', $eventId)
+                ->first();
 
-        $this->resetModel();
-
-        return $this->handleSingleResult($account, AccountDomainObject::class);
+            return $this->handleSingleResult($account, AccountDomainObject::class);
+        });
     }
 
     public function getAllAccountsWithCounts(?string $search, int $perPage): LengthAwarePaginator
@@ -53,10 +53,10 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('accounts.name', 'like', "{$search}%")
-                    ->orWhere('accounts.email', 'like', "{$search}%")
+                $q->where('accounts.name', 'ilike', "%{$search}%")
+                    ->orWhere('accounts.email', 'ilike', "%{$search}%")
                     ->orWhereHas('users', function ($userQuery) use ($search) {
-                        $userQuery->where('users.email', 'like', "{$search}%");
+                        $userQuery->where('users.email', 'ilike', "%{$search}%");
                     });
             });
         }
@@ -69,13 +69,13 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
         return $this->model
             ->withCount(['events', 'users'])
             ->with([
-                'configuration',
-                'account_vat_setting',
                 'messagingTier',
+                'organizers.organizer_configuration',
+                'organizers.organizer_vat_setting',
                 'users' => function ($query) {
                     $query->select('users.id', 'users.first_name', 'users.last_name', 'users.email')
                         ->withPivot('role');
-                }
+                },
             ])
             ->findOrFail($accountId);
     }

@@ -22,8 +22,7 @@ class UserInvited extends BaseMail
         UserDomainObject $invitedUser,
         string $appName,
         string $inviteLink
-    )
-    {
+    ) {
         parent::__construct();
 
         $this->invitedUser = $invitedUser;
@@ -45,7 +44,7 @@ class UserInvited extends BaseMail
             with: [
                 'invitedUser' => $this->invitedUser,
                 'appName' => $this->appName,
-                'inviteLink' => $this->inviteLink
+                'inviteLink' => $this->inviteLink,
             ]
         );
     }

@@ -10,7 +10,5 @@ class CheckedInAttendeesCountDTO extends BaseDTO
         public int $checkInListId,
         public int $checkedInCount,
         public int $totalAttendeesCount,
-    )
-    {
-    }
+    ) {}
 }

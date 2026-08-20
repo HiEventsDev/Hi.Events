@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\EventSettings;
 
-use HiEvents\DataTransferObjects\AddressDTO;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -13,11 +12,9 @@ use Throwable;
 class PartialUpdateEventSettingsHandler
 {
     public function __construct(
-        private readonly UpdateEventSettingsHandler       $eventSettingsHandler,
+        private readonly UpdateEventSettingsHandler $eventSettingsHandler,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -28,15 +25,8 @@ class PartialUpdateEventSettingsHandler
             'event_id' => $eventSettingsDTO->event_id,
         ]);
 
-        if (!$existingSettings) {
+        if (! $existingSettings) {
             throw new RefundNotPossibleException('Event settings not found');
-        }
-
-        $locationDetails = AddressDTO::from($eventSettingsDTO->settings['location_details'] ?? $existingSettings->getLocationDetails());
-        $isOnlineEvent = $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent();
-
-        if ($isOnlineEvent) {
-            $locationDetails = null;
         }
 
         return $this->eventSettingsHandler->handle(
@@ -56,6 +46,9 @@ class PartialUpdateEventSettingsHandler
                 'continue_button_text' => array_key_exists('continue_button_text', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['continue_button_text']
                     : $existingSettings->getContinueButtonText(),
+                'get_tickets_button_text' => array_key_exists('get_tickets_button_text', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['get_tickets_button_text']
+                    : $existingSettings->getGetTicketsButtonText(),
 
                 'homepage_background_color' => $eventSettingsDTO->settings['homepage_background_color'] ?? $existingSettings->getHomepageBackgroundColor(),
                 'homepage_primary_color' => $eventSettingsDTO->settings['homepage_primary_color'] ?? $existingSettings->getHomepagePrimaryColor(),
@@ -70,11 +63,6 @@ class PartialUpdateEventSettingsHandler
                 'maps_url' => array_key_exists('maps_url', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['maps_url']
                     : $existingSettings->getMapsUrl(),
-                'location_details' => $locationDetails,
-                'is_online_event' => $eventSettingsDTO->settings['is_online_event'] ?? $existingSettings->getIsOnlineEvent(),
-                'online_event_connection_details' => array_key_exists('online_event_connection_details', $eventSettingsDTO->settings)
-                    ? $eventSettingsDTO->settings['online_event_connection_details']
-                    : $existingSettings->getOnlineEventConnectionDetails(),
 
                 'seo_title' => $eventSettingsDTO->settings['seo_title'] ?? $existingSettings->getSeoTitle(),
                 'seo_description' => $eventSettingsDTO->settings['seo_description'] ?? $existingSettings->getSeoDescription(),
@@ -83,7 +71,6 @@ class PartialUpdateEventSettingsHandler
 
                 'notify_organizer_of_new_orders' => $eventSettingsDTO->settings['notify_organizer_of_new_orders'] ?? $existingSettings->getNotifyOrganizerOfNewOrders(),
                 'price_display_mode' => $eventSettingsDTO->settings['price_display_mode'] ?? $existingSettings->getPriceDisplayMode(),
-                'hide_getting_started_page' => $eventSettingsDTO->settings['hide_getting_started_page'] ?? $existingSettings->getHideGettingStartedPage(),
 
                 // Payment settings
                 'payment_providers' => $eventSettingsDTO->settings['payment_providers'] ?? $existingSettings->getPaymentProviders(),
@@ -140,6 +127,10 @@ class PartialUpdateEventSettingsHandler
 
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),
+
+                // Occurrence display
+                'show_available_occurrence_capacity' => $eventSettingsDTO->settings['show_available_occurrence_capacity'] ?? $existingSettings->getShowAvailableOccurrenceCapacity(),
+                'hide_sold_out_occurrences' => $eventSettingsDTO->settings['hide_sold_out_occurrences'] ?? $existingSettings->getHideSoldOutOccurrences(),
 
                 // Waitlist settings
                 'waitlist_auto_process' => $eventSettingsDTO->settings['waitlist_auto_process'] ?? $existingSettings->getWaitlistAutoProcess(),

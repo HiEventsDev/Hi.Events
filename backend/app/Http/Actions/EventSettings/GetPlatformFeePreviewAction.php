@@ -14,9 +14,7 @@ class GetPlatformFeePreviewAction extends BaseAction
 {
     public function __construct(
         private readonly GetPlatformFeePreviewHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {
@@ -28,7 +26,7 @@ class GetPlatformFeePreviewAction extends BaseAction
 
         $dto = new GetPlatformFeePreviewDTO(
             eventId: $eventId,
-            price: (float)$request->input('price'),
+            price: (float) $request->input('price'),
         );
 
         $result = $this->handler->handle($dto);

@@ -14,6 +14,8 @@ interface OfferWaitlistModalProps extends GenericModalProps {
     eventId: IdParam;
     eventSettings?: EventSettings;
     stats?: WaitlistStats;
+    eventOccurrenceId?: IdParam | null;
+    isRecurring?: boolean;
 }
 
 const getDefaultQuantity = (product: WaitlistProductStats): number => {
@@ -27,12 +29,13 @@ const getMaxQuantity = (product: WaitlistProductStats): number => {
     return Math.min(product.waiting, product.available);
 };
 
-export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: OfferWaitlistModalProps) => {
+export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats, eventOccurrenceId, isRecurring}: OfferWaitlistModalProps) => {
     const mutation = useOfferWaitlistEntry();
     const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
 
     const productsWithWaiting = stats?.products?.filter(p => p.waiting > 0) ?? [];
     const isAutoProcess = !!eventSettings?.waitlist_auto_process;
+    const showAllDatesNote = !!isRecurring && !eventOccurrenceId;
 
     const [quantities, setQuantities] = useState<Record<number, number>>(() => {
         const initial: Record<number, number> = {};
@@ -54,6 +57,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
             eventId,
             productPriceId: product.product_price_id,
             quantity: qty,
+            eventOccurrenceId,
         }, {
             onSuccess: (response) => {
                 const count = response?.data?.length ?? qty;
@@ -104,6 +108,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
                         <Text size="sm" fw={500} mb="xs">{t`Manual offer`}</Text>
                         <Text size="xs" c="dimmed" mb="sm">
                             {t`You can still manually offer tickets if needed.`}
+                            {showAllDatesNote && ' ' + t`Counts include all upcoming dates. Each person is offered a spot for the date they joined for.`}
                         </Text>
                         <ProductOfferTable
                             products={productsWithWaiting}
@@ -128,6 +133,7 @@ export const OfferWaitlistModal = ({onClose, eventId, eventSettings, stats}: Off
             <Text size="sm" c="dimmed" mb="xs">
                 {t`Each person will receive an email with a reserved spot to complete their purchase.`}
                 {!!timeoutHours && ' ' + t`Offers expire after ${timeoutHours} hours.`}
+                {showAllDatesNote && ' ' + t`Counts include all upcoming dates. Each person is offered a spot for the date they joined for.`}
             </Text>
 
             {productsWithWaiting.length === 0 ? (

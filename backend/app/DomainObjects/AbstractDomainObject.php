@@ -29,7 +29,7 @@ abstract class AbstractDomainObject implements DomainObjectInterface, Arrayable
 
     public static function hydrateFromArray(array $array): DomainObjectInterface
     {
-        $domainObject = new static();
+        $domainObject = new static;
         foreach ($array as $key => $value) {
             $domainObject->{$key} = $value;
         }

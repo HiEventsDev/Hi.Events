@@ -20,13 +20,13 @@ class CreateImageRequest extends FormRequest
             'image' => [
                 'required',
                 'image',
-                'max:8192', //8mb
-                'dimensions:min_width=' . $minWidth . ',min_height=' . $minHeight . ',max_width=4000,max_height=4000',
+                'max:5120', // 5mb
+                'dimensions:min_width='.$minWidth.',min_height='.$minHeight.',max_width=4000,max_height=4000',
                 'mimes:jpeg,png,jpg,webp',
             ],
             'image_type' => [
                 Rule::in(ImageType::valuesArray()),
-                'required_with:entity_id'
+                'required_with:entity_id',
             ],
             'entity_id' => ['integer', 'required_with:image_type'],
         ];

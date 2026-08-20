@@ -1,6 +1,6 @@
 import {api} from "./client";
 import {
-    GenericDataResponse, GenericPaginatedResponse, IdParam, PromoCode, QueryFilters,
+    GenericDataResponse, GenericPaginatedResponse, IdParam, PromoCode, PromoCodeValidationResponse, QueryFilters,
 } from "../types";
 import {publicApi} from "./public-client.ts";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
@@ -36,7 +36,7 @@ export const promoCodeClient = {
 
 export const promoCodeClientPublic = {
     validateCode: async (eventId: IdParam, promoCode: string | null) => {
-        const response = await publicApi.get<{ valid: boolean }>(
+        const response = await publicApi.get<PromoCodeValidationResponse>(
             `events/${eventId}/promo-codes/${promoCode}`
         );
         return response.data;

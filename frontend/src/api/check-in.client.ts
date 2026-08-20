@@ -1,7 +1,9 @@
 import {publicApi} from "./public-client";
 import {
     Attendee,
+    AttendeeDetailPublic,
     CheckInList,
+    CheckInListStats,
     GenericDataResponse,
     GenericPaginatedResponse,
     IdParam, PublicCheckIn,
@@ -14,12 +16,21 @@ export const publicCheckInClient = {
         const response = await publicApi.get<GenericDataResponse<CheckInList>>(`/check-in-lists/${checkInListShortId}`);
         return response.data;
     },
+    getCheckInListStats: async (checkInListShortId: IdParam, eventOccurrenceId?: number | null) => {
+        const qs = eventOccurrenceId ? `?event_occurrence_id=${eventOccurrenceId}` : '';
+        const response = await publicApi.get<GenericDataResponse<CheckInListStats>>(`/check-in-lists/${checkInListShortId}/stats${qs}`);
+        return response.data;
+    },
     getCheckInListAttendees: async (checkInListShortId: IdParam, pagination: QueryFilters) => {
         const response = await publicApi.get<GenericPaginatedResponse<Attendee>>(`/check-in-lists/${checkInListShortId}/attendees` + queryParamsHelper.buildQueryString(pagination));
         return response.data;
     },
     getCheckInListAttendee: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
         const response = await publicApi.get<GenericDataResponse<Attendee>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}`);
+        return response.data;
+    },
+    getCheckInListAttendeeDetail: async (checkInListShortId: IdParam, attendeePublicId: IdParam) => {
+        const response = await publicApi.get<GenericDataResponse<AttendeeDetailPublic>>(`/check-in-lists/${checkInListShortId}/attendees/${attendeePublicId}/detail`);
         return response.data;
     },
     createCheckIn: async (checkInListShortId: IdParam, attendeePublicId: IdParam, action: 'check-in' | 'check-in-and-mark-order-as-paid') => {

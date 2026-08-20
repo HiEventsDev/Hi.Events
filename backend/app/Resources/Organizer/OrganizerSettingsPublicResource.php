@@ -19,10 +19,10 @@ class OrganizerSettingsPublicResource extends OrganizerSettingsResource
             $data['homepage_password'],
         );
 
-        if (config('app.saas_mode_enabled') && !empty($data['tracking_pixels'])) {
+        if (config('app.saas_mode_enabled') && ! empty($data['tracking_pixels'])) {
             $data['tracking_pixels'] = array_values(array_filter(
                 $data['tracking_pixels'],
-                fn($pixel) => ($pixel['provider'] ?? null) !== TrackingPixelProvider::GOOGLE_TAG_MANAGER->value,
+                fn ($pixel) => ($pixel['provider'] ?? null) !== TrackingPixelProvider::GOOGLE_TAG_MANAGER->value,
             ));
         }
 

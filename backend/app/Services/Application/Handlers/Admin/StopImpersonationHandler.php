@@ -10,9 +10,7 @@ class StopImpersonationHandler
 {
     public function __construct(
         private readonly AuthManager $authManager,
-    )
-    {
-    }
+    ) {}
 
     public function handle(StopImpersonationDTO $dto): string
     {

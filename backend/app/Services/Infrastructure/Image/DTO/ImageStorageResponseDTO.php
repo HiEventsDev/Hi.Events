@@ -8,9 +8,7 @@ readonly class ImageStorageResponseDTO
         public string $filename,
         public string $disk,
         public string $path,
-        public int    $size,
+        public int $size,
         public string $mime_type,
-    )
-    {
-    }
+    ) {}
 }

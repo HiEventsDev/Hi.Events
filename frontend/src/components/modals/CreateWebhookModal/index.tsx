@@ -4,14 +4,14 @@ import {Modal} from "../../common/Modal";
 import {t, Trans} from "@lingui/macro";
 import {WebhookForm} from "../../forms/WebhookForm";
 import {useForm} from "@mantine/form";
-import {Alert, Button, Group, TextInput} from "@mantine/core";
+import {Button, TextInput} from "@mantine/core";
 import {useCreateWebhook} from "../../../mutations/useCreateWebhook";
 import {showSuccess} from "../../../utilites/notifications";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler";
 import {WebhookRequest} from "../../../api/webhook.client.ts";
 import {CopyButton} from "../../common/CopyButton";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {Callout} from "../../common/Callout";
 
 export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
     const {eventId} = useParams();
@@ -60,9 +60,9 @@ export const CreateWebhookModal = ({onClose}: GenericModalProps) => {
                 onClose={onClose}
                 heading={t`Webhook Signing Secret`}
             >
-                <Alert icon={<IconInfoCircle/>} color="yellow" mb="md">
+                <Callout variant="tip">
                     <Trans>This is the only time the signing secret will be shown. Please copy it now and store it securely.</Trans>
-                </Alert>
+                </Callout>
                 <TextInput
                     value={secret}
                     readOnly

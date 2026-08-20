@@ -22,9 +22,13 @@ use Tests\TestCase;
 class SelfServiceEditAttendeeServiceTest extends TestCase
 {
     private SelfServiceEditAttendeeService $service;
+
     private MockInterface|AttendeeRepositoryInterface $attendeeRepository;
+
     private MockInterface|EventRepositoryInterface $eventRepository;
+
     private MockInterface|OrderAuditLogService $orderAuditLogService;
+
     private MockInterface|SendAttendeeTicketService $sendAttendeeTicketService;
 
     protected function setUp(): void
@@ -46,7 +50,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         );
     }
 
-    public function testSuccessfulEditUpdatesAttendeeFields(): void
+    public function test_successful_edit_updates_attendee_fields(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(456);
@@ -128,7 +132,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         });
     }
 
-    public function testEmailChangeTriggersShortIdRotation(): void
+    public function test_email_change_triggers_short_id_rotation(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(456);
@@ -220,7 +224,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         });
     }
 
-    public function testNoUpdateWhenNoFieldsChange(): void
+    public function test_no_update_when_no_fields_change(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(456);
@@ -248,7 +252,7 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         Mail::assertNothingSent();
     }
 
-    public function testMultipleFieldsUpdateTogether(): void
+    public function test_multiple_fields_update_together(): void
     {
         $attendee = Mockery::mock(AttendeeDomainObject::class);
         $attendee->shouldReceive('getId')->andReturn(456);

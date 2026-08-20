@@ -17,8 +17,7 @@ class UpdateAccountMessagingTierAction extends BaseAction
     public function __construct(
         private readonly UpdateAccountMessagingTierHandler $handler,
         private readonly GetAccountHandler $getAccountHandler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $accountId): JsonResponse
     {

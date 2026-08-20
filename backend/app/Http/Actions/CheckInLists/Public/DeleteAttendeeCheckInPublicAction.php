@@ -14,16 +14,13 @@ class DeleteAttendeeCheckInPublicAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteAttendeeCheckInPublicHandler $deleteAttendeeCheckInPublicHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(
-        string  $checkInListShortId,
-        string  $checkInShortId,
+        string $checkInListShortId,
+        string $checkInShortId,
         Request $request
-    ): Response|JsonResponse
-    {
+    ): Response|JsonResponse {
         try {
             $this->deleteAttendeeCheckInPublicHandler->handle(new DeleteAttendeeCheckInPublicDTO(
                 checkInListShortId: $checkInListShortId,

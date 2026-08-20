@@ -19,9 +19,7 @@ class OfferWaitlistEntryAction extends BaseAction
 {
     public function __construct(
         private readonly OfferWaitlistEntryHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(OfferWaitlistEntryRequest $request, int $eventId): JsonResponse
     {
@@ -33,6 +31,7 @@ class OfferWaitlistEntryAction extends BaseAction
                 product_price_id: $request->validated('product_price_id'),
                 entry_id: $request->validated('entry_id'),
                 quantity: $request->validated('quantity') ?? 1,
+                event_occurrence_id: $request->validated('event_occurrence_id'),
             ));
         } catch (NoCapacityAvailableException $exception) {
             throw ValidationException::withMessages([

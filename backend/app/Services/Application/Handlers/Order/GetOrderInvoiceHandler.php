@@ -10,9 +10,7 @@ class GetOrderInvoiceHandler
 {
     public function __construct(
         private readonly GenerateOrderInvoicePDFService $generateOrderInvoicePDFService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetOrderInvoiceDTO $command): InvoicePdfResponseDTO
     {

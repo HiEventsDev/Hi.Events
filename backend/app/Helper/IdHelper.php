@@ -7,12 +7,22 @@ use Illuminate\Support\Str;
 class IdHelper
 {
     public const ATTENDEE_PREFIX = 'a';
+
     public const ORDER_PREFIX = 'o';
+
     public const EVENT_PREFIX = 'e';
+
     public const ACCOUNT_PREFIX = 'acc';
 
     public const CHECK_IN_LIST_PREFIX = 'cil';
+
     public const CHECK_IN_PREFIX = 'ci';
+
+    public const OCCURRENCE_PREFIX = 'oc';
+
+    public const LOCATION_PREFIX = 'loc';
+
+    public const EVENT_LOCATION_PREFIX = 'el';
 
     public static function shortId(string $prefix, int $length = 13): string
     {
@@ -21,6 +31,6 @@ class IdHelper
 
     public static function publicId(string $prefix = '', string $suffix = '', int $length = 7): string
     {
-        return Str::upper($prefix . '-' . Str::random($length) . $suffix);
+        return Str::upper($prefix.'-'.Str::random($length).$suffix);
     }
 }

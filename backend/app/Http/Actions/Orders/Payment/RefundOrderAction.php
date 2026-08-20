@@ -16,9 +16,7 @@ use Throwable;
 
 class RefundOrderAction extends BaseAction
 {
-    public function __construct(private readonly RefundOrderHandler     $refundOrderHandler)
-    {
-    }
+    public function __construct(private readonly RefundOrderHandler $refundOrderHandler) {}
 
     /**
      * @throws Throwable
@@ -38,7 +36,7 @@ class RefundOrderAction extends BaseAction
         } catch (ApiErrorException|RefundNotPossibleException $exception) {
             throw ValidationException::withMessages([
                 'amount' => $exception instanceof ApiErrorException
-                    ? 'Stripe error: ' . $exception->getMessage()
+                    ? 'Stripe error: '.$exception->getMessage()
                     : $exception->getMessage(),
             ]);
         }

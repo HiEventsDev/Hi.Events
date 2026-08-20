@@ -4,14 +4,15 @@ namespace HiEvents\Services\Domain\Message;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AccountMessagingTierDomainObject;
-use HiEvents\DomainObjects\AccountStripePlatformDomainObject;
 use HiEvents\DomainObjects\Enums\MessagingEligibilityFailureEnum;
 use HiEvents\DomainObjects\Enums\MessagingTierViolationEnum;
+use HiEvents\DomainObjects\OrganizerStripePlatformDomainObject;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Domain\Message\DTO\MessagingEligibilityFailureDTO;
 use HiEvents\Services\Domain\Message\DTO\MessagingTierViolationDTO;
 
@@ -25,14 +26,12 @@ class MessagingEligibilityService
         private readonly MessageRepositoryInterface $messageRepository,
         private readonly AccountMessagingTierRepositoryInterface $accountMessagingTierRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-    ) {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+    ) {}
 
     public function checkEligibility(int $accountId, int $eventId): ?MessagingEligibilityFailureDTO
     {
-        $account = $this->accountRepository
-            ->loadRelation(AccountStripePlatformDomainObject::class)
-            ->findById($accountId);
+        $account = $this->accountRepository->findById($accountId);
 
         $tier = $this->getAccountMessagingTier($account->getAccountMessagingTierId());
 
@@ -41,17 +40,22 @@ class MessagingEligibilityService
             return null;
         }
 
+        $event = $this->eventRepository->findById($eventId);
+
+        $organizer = $this->organizerRepository
+            ->loadRelation(OrganizerStripePlatformDomainObject::class)
+            ->findById($event->getOrganizerId());
+
         $failures = [];
 
-        if (!$account->isStripeSetupComplete()) {
+        if (! $organizer || ! $organizer->isStripeSetupComplete()) {
             $failures[] = MessagingEligibilityFailureEnum::STRIPE_NOT_CONNECTED;
         }
 
-        if (!$this->hasPaidOrder($accountId)) {
+        if (! $this->hasPaidOrder($accountId)) {
             $failures[] = MessagingEligibilityFailureEnum::NO_PAID_ORDERS;
         }
 
-        $event = $this->eventRepository->findById($eventId);
         if ($this->isEventTooNew($event->getCreatedAt())) {
             $failures[] = MessagingEligibilityFailureEnum::EVENT_TOO_NEW;
         }
@@ -83,7 +87,7 @@ class MessagingEligibilityService
             $violations[] = MessagingTierViolationEnum::RECIPIENT_LIMIT_EXCEEDED;
         }
 
-        if (!$tier->getLinksAllowed() && $this->containsLinks($messageContent)) {
+        if (! $tier->getLinksAllowed() && $this->containsLinks($messageContent)) {
             $violations[] = MessagingTierViolationEnum::LINKS_NOT_ALLOWED;
         }
 

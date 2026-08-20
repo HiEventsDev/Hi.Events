@@ -12,16 +12,13 @@ class GetAvailableTokensAction extends BaseAction
 {
     public function __construct(
         private readonly GetAvailableTokensHandler $handler
-    ) {
-    }
+    ) {}
 
     public function __invoke(string $templateType): JsonResponse
     {
-        //no authorization needed
-
         $type = EmailTemplateType::tryFrom($templateType);
 
-        if (!$type) {
+        if (! $type) {
             return $this->jsonResponse(['error' => __('Invalid template type')], ResponseCodes::HTTP_BAD_REQUEST);
         }
 

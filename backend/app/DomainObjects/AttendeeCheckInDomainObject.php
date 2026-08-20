@@ -16,12 +16,14 @@ class AttendeeCheckInDomainObject extends Generated\AttendeeCheckInDomainObjectA
     public function setAttendee(AttendeeDomainObject $attendee): self
     {
         $this->attendee = $attendee;
+
         return $this;
     }
 
     public function setCheckInList(?CheckInListDomainObject $checkInList): AttendeeCheckInDomainObject
     {
         $this->checkInList = $checkInList;
+
         return $this;
     }
 

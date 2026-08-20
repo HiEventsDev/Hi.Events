@@ -14,9 +14,7 @@ class DeleteAffiliateAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteAffiliateHandler $deleteAffiliateHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId, int $affiliateId): Response
     {

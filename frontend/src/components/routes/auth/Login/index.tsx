@@ -91,23 +91,23 @@ const Login = () => {
                 <form onSubmit={form.onSubmit((values) => loginUser(values))}>
                     <TextInput {...form.getInputProps('email')}
                                label={t`Email`}
-                               placeholder="hello@example.com"
+                               placeholder="you@example.com"
                                required
                     />
+                    <div className={classes.passwordLabelRow}>
+                        <label htmlFor="login-password">{t`Password`}</label>
+                        <NavLink to={`/auth/forgot-password`} tabIndex={-1}>
+                            {t`Forgot password?`}
+                        </NavLink>
+                    </div>
                     <PasswordInput {...form.getInputProps('password')}
-                                   label={t`Password`}
+                                   id="login-password"
                                    placeholder={t`Your password`}
                                    required
-                                   mt="md"
                     />
                     <Button color="secondary.5" type="submit" fullWidth loading={isPending} disabled={isPending} mt="lg">
                         {isPending ? t`Logging in` : t`Log in`}
                     </Button>
-                    <p>
-                        <NavLink to={`/auth/forgot-password`}>
-                            {t`Forgot password?`}
-                        </NavLink>
-                    </p>
                 </form>
             </div>
 
@@ -126,7 +126,7 @@ const Login = () => {
                     />
                 </UnstyledButton>
 
-                <Collapse in={ticketLookupOpen}>
+                <Collapse expanded={ticketLookupOpen}>
                     <div className={classes.ticketLookupContent}>
                         {ticketLookupSuccess ? (
                             <div className={classes.successMessage}>
