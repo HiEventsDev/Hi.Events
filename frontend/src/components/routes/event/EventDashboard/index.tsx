@@ -5,11 +5,9 @@ import {PageBody} from "../../../common/PageBody";
 import {StatBoxes} from "../../../common/StatBoxes";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {t, Trans} from "@lingui/macro";
-import {AreaChart} from "@mantine/charts";
-import {Card} from "../../../common/Card";
+import {ProductSalesChartCard, RevenueChartCard} from "../../../common/StatsCharts";
 import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
-import {formatCurrency} from "../../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
@@ -278,76 +276,20 @@ export const EventDashboard = () => {
                     <UpcomingOccurrences eventId={eventId} event={event}/>
                 )}
 
-                <Card className={classes.chartCard}>
-                    <div className={classes.chartCardTitle}>
-                        <h2>{t`Product Sales`}</h2>
-                        <div className={classes.dateRange}>
-                        <span>
-                            {dateRangeLabel}
-                        </span>
-                        </div>
-                    </div>
-                    <AreaChart
-                        h={300}
-                        data={eventStats?.daily_stats.map(stat => ({
-                            date: formatDateWithLocale(stat.date, 'chartDate', event.timezone),
-                            orders_created: stat.orders_created,
-                            products_sold: stat.products_sold,
-                            attendees_registered: stat.attendees_registered,
-                        })) || []}
-                        dataKey="date"
-                        withLegend
-                        legendProps={{verticalAlign: 'bottom', height: 50}}
+                <ProductSalesChartCard
+                    dailyStats={eventStats?.daily_stats}
+                    timezone={event.timezone}
+                    dateRangeLabel={dateRangeLabel}
+                    syncId="events"
+                />
 
-                        series={[
-                            {name: 'orders_created', color: 'blue.6', label: t`Completed Orders`},
-                            {name: 'products_sold', color: 'blue.2', label: t`Products Sold`},
-                            {name: 'attendees_registered', color: 'blue.4', label: t`Attendees Registered`},
-                        ]}
-                        curveType="bump"
-                        tickLine="none"
-                        areaChartProps={{syncId: 'events'}}
-                    />
-                </Card>
-
-                <Card className={classes.chartCard}>
-                    <div className={classes.chartCardTitle}>
-                        <h2>{t`Revenue`}</h2>
-                        <div className={classes.dateRange}>
-                        <span>
-                            {dateRangeLabel}
-                        </span>
-                        </div>
-                    </div>
-
-                    <AreaChart
-                        h={300}
-                        pl={40}
-                        pr={40}
-                        data={eventStats?.daily_stats.map(stat => {
-                            return ({
-                                date: formatDateWithLocale(stat.date, 'chartDate', event.timezone),
-                                total_fees: stat.total_fees,
-                                total_sales_gross: stat.total_sales_gross,
-                                total_tax: stat.total_tax,
-                                total_refunded: stat.total_refunded,
-                            });
-                        }) || []}
-                        dataKey="date"
-                        valueFormatter={(value) => formatCurrency(value, event.currency)}
-                        withLegend
-                        legendProps={{verticalAlign: 'bottom', height: 50}}
-                        series={[
-                            {name: 'total_fees', label: t`Total Fees`, color: 'primary.3'},
-                            {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
-                            {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
-                            {name: 'total_refunded', label: t`Total Refunded`, color: 'red.6'},
-                        ]}
-                        curveType="natural"
-                        tickLine="none"
-                        areaChartProps={{syncId: 'events'}}
-                    />
-                </Card>
+                <RevenueChartCard
+                    dailyStats={eventStats?.daily_stats}
+                    timezone={event.timezone}
+                    currency={event.currency}
+                    dateRangeLabel={dateRangeLabel}
+                    syncId="events"
+                />
             </>)}
         </PageBody>
     )
