@@ -1132,7 +1132,7 @@ msgstr "公告"
 msgid "Anonymize"
 msgstr "匿名化"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:97
+#: src/components/common/QuestionAndAnswerList/index.tsx:76
 msgid "Answer updated successfully."
 msgstr "答案更新成功。"
 
@@ -1273,7 +1273,7 @@ msgstr "确定要取消 {count} 个日期吗？受影响的参与者会收到邮
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "您确定要取消该与会者吗？这将使其门票作废"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:59
+#: src/components/routes/event/OccurrenceDetail/index.tsx:57
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:36
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:326
 msgid "Are you sure you want to cancel this date? Affected attendees will be notified by email."
@@ -1300,7 +1300,7 @@ msgid "Are you sure you want to delete this configuration? This may affect accou
 msgstr "确定要删除此配置吗？这可能会影响使用它的账户。"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:58
-#: src/components/routes/event/OccurrenceDetail/index.tsx:84
+#: src/components/routes/event/OccurrenceDetail/index.tsx:82
 #: src/components/routes/event/OccurrencesTab/index.tsx:184
 msgid "Are you sure you want to delete this date? This action cannot be undone."
 msgstr "确定要删除这个日期吗？此操作无法撤销。"
@@ -1471,6 +1471,10 @@ msgstr "位参与者"
 msgid "Attendee"
 msgstr "参与者"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:261
+msgid "Attendee answers"
+msgstr "参与者答案"
+
 #: src/components/forms/WebhookForm/index.tsx:115
 msgid "Attendee Cancelled"
 msgstr "与会者已取消"
@@ -1535,6 +1539,7 @@ msgstr "位参与者"
 
 #: src/components/common/EventCard/index.tsx:251
 #: src/components/common/EventCard/index.tsx:366
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:420
 #: src/components/common/StatBoxes/index.tsx:73
 #: src/components/layouts/Event/index.tsx:131
@@ -1563,8 +1568,7 @@ msgstr "与会者已导出"
 msgid "Attendees registered"
 msgstr "已注册参会者"
 
-#: src/components/routes/event/EventDashboard/index.tsx:305
-#: src/components/routes/event/OccurrenceDetail/index.tsx:183
+#: src/components/common/StatsCharts/index.tsx:55
 msgid "Attendees Registered"
 msgstr "注册的参会者"
 
@@ -1898,7 +1902,7 @@ msgstr "无法签到"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:131
 #: src/components/common/LocationPicker/index.tsx:352
 #: src/components/common/PromoCodeTable/index.tsx:40
-#: src/components/common/QuestionAndAnswerList/index.tsx:149
+#: src/components/common/QuestionAndAnswerList/index.tsx:125
 #: src/components/common/WaitlistTable/index.tsx:114
 #: src/components/common/WaitlistTable/index.tsx:135
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
@@ -1930,8 +1934,8 @@ msgstr "取消 {count} 个日期"
 msgid "Cancel all products and release them back to the pool"
 msgstr "取消所有产品并释放回可用池"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:55
-#: src/components/routes/event/OccurrenceDetail/index.tsx:72
+#: src/components/routes/event/OccurrenceDetail/index.tsx:53
+#: src/components/routes/event/OccurrenceDetail/index.tsx:70
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:32
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:322
@@ -2532,8 +2536,7 @@ msgstr "已完成"
 msgid "Completed orders"
 msgstr "已完成订单"
 
-#: src/components/routes/event/EventDashboard/index.tsx:303
-#: src/components/routes/event/OccurrenceDetail/index.tsx:181
+#: src/components/common/StatsCharts/index.tsx:53
 msgid "Completed Orders"
 msgstr "已完成订单"
 
@@ -3365,7 +3368,7 @@ msgstr "日期和时间"
 msgid "Date Cancellation"
 msgstr "日期取消"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:76
+#: src/components/routes/event/OccurrenceDetail/index.tsx:74
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:54
 msgid "Date cancelled"
 msgstr "日期已取消"
@@ -3379,7 +3382,7 @@ msgid "Date created successfully"
 msgstr "日期已成功创建"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:61
-#: src/components/routes/event/OccurrenceDetail/index.tsx:87
+#: src/components/routes/event/OccurrenceDetail/index.tsx:85
 #: src/components/routes/event/OccurrencesTab/index.tsx:186
 msgid "Date deleted"
 msgstr "日期已删除"
@@ -3389,7 +3392,7 @@ msgid "Date deleted successfully"
 msgstr "日期已成功删除"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:75
-#: src/components/routes/event/OccurrenceDetail/index.tsx:101
+#: src/components/routes/event/OccurrenceDetail/index.tsx:99
 msgid "Date reactivated"
 msgstr "日期已重新启用"
 
@@ -3932,7 +3935,7 @@ msgstr "编辑推广员"
 msgid "Edit Announcement"
 msgstr "编辑公告"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:159
+#: src/components/common/QuestionAndAnswerList/index.tsx:135
 msgid "Edit Answer"
 msgstr "编辑答案"
 
@@ -4555,7 +4558,7 @@ msgstr "活动标题"
 msgid "Event Too New"
 msgstr "活动太新"
 
-#: src/components/routes/event/EventDashboard/index.tsx:264
+#: src/components/routes/event/EventDashboard/index.tsx:262
 msgid "Event totals"
 msgstr "活动总计"
 
@@ -4750,7 +4753,7 @@ msgstr "配置分配失败"
 msgid "Failed to cancel attendee"
 msgstr "取消与会者失败"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:77
+#: src/components/routes/event/OccurrenceDetail/index.tsx:75
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:57
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:348
 msgid "Failed to cancel date"
@@ -4799,7 +4802,7 @@ msgid "Failed to delete configuration"
 msgstr "配置删除失败"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:64
-#: src/components/routes/event/OccurrenceDetail/index.tsx:90
+#: src/components/routes/event/OccurrenceDetail/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:187
 msgid "Failed to delete date"
 msgstr "删除日期失败"
@@ -4884,7 +4887,7 @@ msgid "Failed to offer tickets"
 msgstr "提供票券失败"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:76
-#: src/components/routes/event/OccurrenceDetail/index.tsx:102
+#: src/components/routes/event/OccurrenceDetail/index.tsx:100
 msgid "Failed to reactivate date"
 msgstr "重新启用日期失败"
 
@@ -4981,7 +4984,7 @@ msgstr "更新账户验证失败"
 msgid "Failed to update affiliate"
 msgstr "更新推广员失败"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:102
+#: src/components/common/QuestionAndAnswerList/index.tsx:81
 msgid "Failed to update answer."
 msgstr "更新答案失败。"
 
@@ -5386,7 +5389,7 @@ msgstr "GitHub"
 msgid "Go back"
 msgstr "返回"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:72
+#: src/components/routes/event/OccurrenceDetail/index.tsx:70
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:223
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:339
@@ -5442,10 +5445,9 @@ msgstr "总收入"
 msgid "Gross sales"
 msgstr "销售总额"
 
+#: src/components/common/StatsCharts/index.tsx:79
 #: src/components/modals/ManageOccurrenceModal/index.tsx:182
 #: src/components/routes/admin/Dashboard/index.tsx:259
-#: src/components/routes/event/EventDashboard/index.tsx:342
-#: src/components/routes/event/OccurrenceDetail/index.tsx:213
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:83
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
 msgid "Gross Sales"
@@ -5505,7 +5507,7 @@ msgstr "这是您可以用来在应用程序中嵌入小部件的 React 组件�
 msgid "Here is your affiliate link"
 msgstr "这是您的推广链接"
 
-#: src/components/routes/event/EventDashboard/index.tsx:206
+#: src/components/routes/event/EventDashboard/index.tsx:204
 msgid "Hi {0} 👋"
 msgstr "你好 {0} 👋"
 
@@ -6762,10 +6764,6 @@ msgstr "我的简介"
 msgid "My Tickets"
 msgstr "我的票"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:178
-msgid "N/A"
-msgstr "不适用"
-
 #: src/components/common/WidgetEditor/index.tsx:364
 msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
@@ -6798,8 +6796,7 @@ msgstr "姓名为必填项"
 msgid "Name must be less than 255 characters"
 msgstr "名称长度必须少于255个字符"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:181
-#: src/components/common/QuestionAndAnswerList/index.tsx:289
+#: src/components/common/QuestionAndAnswerList/index.tsx:202
 msgid "Navigate to Attendee"
 msgstr "导航至与会者"
 
@@ -6920,7 +6917,7 @@ msgstr "没有可显示的参与者"
 msgid "No Attendees to show"
 msgstr "无与会者"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:79
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:81
 msgid "No attendees yet for this date."
 msgstr "该日期还没有参与者。"
 
@@ -7097,7 +7094,7 @@ msgstr "无订单显示"
 msgid "No orders yet"
 msgstr "尚无订单"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:90
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:92
 msgid "No orders yet for this date."
 msgstr "该日期还没有订单。"
 
@@ -7681,6 +7678,10 @@ msgstr "订单和门票"
 msgid "Order #"
 msgstr "订单号"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:258
+msgid "Order answers"
+msgstr "订单答案"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:387
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:376
 msgid "Order cancelled"
@@ -7825,6 +7826,7 @@ msgstr "订单已被取消"
 msgid "orders"
 msgstr "个订单"
 
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
 #: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:125
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
@@ -8601,6 +8603,10 @@ msgstr "处理订单中"
 msgid "Product"
 msgstr "产品"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:264
+msgid "Product answers"
+msgstr "产品答案"
+
 #: src/components/forms/ProductForm/index.tsx:252
 msgid "Product Category"
 msgstr "产品类别"
@@ -8625,8 +8631,7 @@ msgstr "产品删除成功"
 msgid "Product Price Type"
 msgstr "产品价格类型"
 
-#: src/components/routes/event/EventDashboard/index.tsx:283
-#: src/components/routes/event/OccurrenceDetail/index.tsx:166
+#: src/components/common/StatsCharts/index.tsx:43
 #: src/components/routes/event/Reports/index.tsx:19
 msgid "Product Sales"
 msgstr "产品销售"
@@ -8671,10 +8676,9 @@ msgstr "产品"
 msgid "Products sold"
 msgstr "已售产品"
 
+#: src/components/common/StatsCharts/index.tsx:54
 #: src/components/routes/admin/Dashboard/index.tsx:258
 #: src/components/routes/admin/Dashboard/index.tsx:355
-#: src/components/routes/event/EventDashboard/index.tsx:304
-#: src/components/routes/event/OccurrenceDetail/index.tsx:182
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:73
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
 msgid "Products Sold"
@@ -8892,7 +8896,7 @@ msgid "Re-offer Spot"
 msgstr "重新提供名额"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:70
-#: src/components/routes/event/OccurrenceDetail/index.tsx:96
+#: src/components/routes/event/OccurrenceDetail/index.tsx:94
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "重新启用该日期？它将重新开放售票。"
 
@@ -8934,7 +8938,7 @@ msgstr "最近签到"
 msgid "Recent orders"
 msgstr "最近订单"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:63
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:64
 msgid "Recent Orders"
 msgstr "最近订单"
 
@@ -9004,7 +9008,7 @@ msgstr "刷新预览"
 msgid "Refund all orders for these dates"
 msgstr "为这些日期的所有订单退款"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:67
+#: src/components/routes/event/OccurrenceDetail/index.tsx:65
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:44
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:334
 msgid "Refund all orders for this date"
@@ -9301,9 +9305,8 @@ msgstr "复用本账户中其他主办方的 Stripe 连接。"
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:255
 #: src/components/common/EventCard/index.tsx:374
+#: src/components/common/StatsCharts/index.tsx:66
 #: src/components/routes/admin/Attribution/index.tsx:137
-#: src/components/routes/event/EventDashboard/index.tsx:315
-#: src/components/routes/event/OccurrenceDetail/index.tsx:193
 msgid "Revenue"
 msgstr "收入"
 
@@ -9418,7 +9421,7 @@ msgid "Saturday"
 msgstr "星期六"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
-#: src/components/common/QuestionAndAnswerList/index.tsx:142
+#: src/components/common/QuestionAndAnswerList/index.tsx:118
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -11246,7 +11249,7 @@ msgstr "此代码将用于跟踪销售。只允许字母、数字、连字符和
 msgid "This color combination may be hard to read for some users"
 msgstr "此颜色组合对某些用户来说可能难以阅读"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:63
+#: src/components/routes/event/OccurrenceDetail/index.tsx:61
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:40
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:330
 msgid "This date has {orderCount} order(s) that will be affected."
@@ -11726,8 +11729,7 @@ msgstr "总费用"
 msgid "Total fees"
 msgstr "费用合计"
 
-#: src/components/routes/event/EventDashboard/index.tsx:341
-#: src/components/routes/event/OccurrenceDetail/index.tsx:212
+#: src/components/common/StatsCharts/index.tsx:78
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:97
 msgid "Total Fees"
 msgstr "总费用"
@@ -11754,8 +11756,7 @@ msgstr "所有场次的总数量"
 msgid "Total refunded"
 msgstr "退款总额"
 
-#: src/components/routes/event/EventDashboard/index.tsx:344
-#: src/components/routes/event/OccurrenceDetail/index.tsx:215
+#: src/components/common/StatsCharts/index.tsx:81
 msgid "Total Refunded"
 msgstr "退款总额"
 
@@ -11763,8 +11764,7 @@ msgstr "退款总额"
 msgid "Total tax"
 msgstr "税费合计"
 
-#: src/components/routes/event/EventDashboard/index.tsx:343
-#: src/components/routes/event/OccurrenceDetail/index.tsx:214
+#: src/components/common/StatsCharts/index.tsx:80
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:91
 msgid "Total Tax"
 msgstr "总税额"
@@ -11929,7 +11929,7 @@ msgstr "美国"
 msgid "Unknown"
 msgstr "未知"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:284
+#: src/components/common/QuestionAndAnswerList/index.tsx:191
 msgid "Unknown Attendee"
 msgstr "未知参会者"
 
@@ -12355,7 +12355,7 @@ msgstr "正在验证..."
 msgid "Vietnamese"
 msgstr "越南语"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:68
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "查看全部"
 
@@ -12729,7 +12729,7 @@ msgstr "欢迎加入！请登录以继续。"
 msgid "Welcome back"
 msgstr "欢迎回来"
 
-#: src/components/routes/event/EventDashboard/index.tsx:200
+#: src/components/routes/event/EventDashboard/index.tsx:198
 msgid "Welcome back{0} 👋"
 msgstr "欢迎回来{0} 👋"
 

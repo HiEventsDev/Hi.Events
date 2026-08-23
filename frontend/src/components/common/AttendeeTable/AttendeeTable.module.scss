@@ -12,6 +12,24 @@
   gap: 8px;
 }
 
+@media (max-width: 768px) {
+  .attendeeDetails {
+    max-width: 130px;
+  }
+
+  .nameRow {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+
+  .attendeeName {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .attendeeName {
   font-size: 15px;
   font-weight: 600;

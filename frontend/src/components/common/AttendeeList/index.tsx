@@ -122,7 +122,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                             <Collapse expanded={isExpanded(attendee.id)}>
                                 <div className={classes.answersContainer}>
                                     <QuestionList
-                                        compact
+                                        hideProductTitle
                                         questions={getAttendeeQuestions(attendee.id)}
                                         onEditAnswer={refetchOrder}
                                     />

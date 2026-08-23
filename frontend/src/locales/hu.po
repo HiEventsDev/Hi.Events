@@ -1132,7 +1132,7 @@ msgstr "Közlemények"
 msgid "Anonymize"
 msgstr "Anonimizálás"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:97
+#: src/components/common/QuestionAndAnswerList/index.tsx:76
 msgid "Answer updated successfully."
 msgstr "Válasz sikeresen frissítve."
 
@@ -1273,7 +1273,7 @@ msgstr "Biztosan lemond {count} időpontot? Az érintett résztvevők e-mailben 
 msgid "Are you sure you want to cancel this attendee? This will void their ticket"
 msgstr "Biztosan törölni szeretné ezt a résztvevőt? Ez érvényteleníti a jegyét."
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:59
+#: src/components/routes/event/OccurrenceDetail/index.tsx:57
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:36
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:326
 msgid "Are you sure you want to cancel this date? Affected attendees will be notified by email."
@@ -1300,7 +1300,7 @@ msgid "Are you sure you want to delete this configuration? This may affect accou
 msgstr "Biztosan törölni szeretné ezt a konfigurációt? Ez hatással lehet az azt használó fiókokra."
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:58
-#: src/components/routes/event/OccurrenceDetail/index.tsx:84
+#: src/components/routes/event/OccurrenceDetail/index.tsx:82
 #: src/components/routes/event/OccurrencesTab/index.tsx:184
 msgid "Are you sure you want to delete this date? This action cannot be undone."
 msgstr "Biztosan törli ezt az időpontot? A művelet nem vonható vissza."
@@ -1471,6 +1471,10 @@ msgstr "résztvevő"
 msgid "Attendee"
 msgstr "Résztvevő"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:261
+msgid "Attendee answers"
+msgstr "Résztvevői válaszok"
+
 #: src/components/forms/WebhookForm/index.tsx:115
 msgid "Attendee Cancelled"
 msgstr "Résztvevő törölve"
@@ -1535,6 +1539,7 @@ msgstr "résztvevő"
 
 #: src/components/common/EventCard/index.tsx:251
 #: src/components/common/EventCard/index.tsx:366
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:420
 #: src/components/common/StatBoxes/index.tsx:73
 #: src/components/layouts/Event/index.tsx:131
@@ -1563,8 +1568,7 @@ msgstr "Résztvevők exportálva"
 msgid "Attendees registered"
 msgstr "Regisztrált résztvevők"
 
-#: src/components/routes/event/EventDashboard/index.tsx:305
-#: src/components/routes/event/OccurrenceDetail/index.tsx:183
+#: src/components/common/StatsCharts/index.tsx:55
 msgid "Attendees Registered"
 msgstr "Regisztrált résztvevők"
 
@@ -1898,7 +1902,7 @@ msgstr "A beléptetés nem lehetséges"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:131
 #: src/components/common/LocationPicker/index.tsx:352
 #: src/components/common/PromoCodeTable/index.tsx:40
-#: src/components/common/QuestionAndAnswerList/index.tsx:149
+#: src/components/common/QuestionAndAnswerList/index.tsx:125
 #: src/components/common/WaitlistTable/index.tsx:114
 #: src/components/common/WaitlistTable/index.tsx:135
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
@@ -1930,8 +1934,8 @@ msgstr "{count} időpont lemondása"
 msgid "Cancel all products and release them back to the pool"
 msgstr "Minden termék törlése és visszahelyezése a készletbe"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:55
-#: src/components/routes/event/OccurrenceDetail/index.tsx:72
+#: src/components/routes/event/OccurrenceDetail/index.tsx:53
+#: src/components/routes/event/OccurrenceDetail/index.tsx:70
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:32
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:322
@@ -2532,8 +2536,7 @@ msgstr "Befejezett"
 msgid "Completed orders"
 msgstr "Befejezett megrendelések"
 
-#: src/components/routes/event/EventDashboard/index.tsx:303
-#: src/components/routes/event/OccurrenceDetail/index.tsx:181
+#: src/components/common/StatsCharts/index.tsx:53
 msgid "Completed Orders"
 msgstr "Befejezett megrendelések"
 
@@ -3365,7 +3368,7 @@ msgstr "Dátum és idő"
 msgid "Date Cancellation"
 msgstr "Időpont lemondása"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:76
+#: src/components/routes/event/OccurrenceDetail/index.tsx:74
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:54
 msgid "Date cancelled"
 msgstr "Időpont lemondva"
@@ -3379,7 +3382,7 @@ msgid "Date created successfully"
 msgstr "Az időpont létrehozva"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:61
-#: src/components/routes/event/OccurrenceDetail/index.tsx:87
+#: src/components/routes/event/OccurrenceDetail/index.tsx:85
 #: src/components/routes/event/OccurrencesTab/index.tsx:186
 msgid "Date deleted"
 msgstr "Időpont törölve"
@@ -3389,7 +3392,7 @@ msgid "Date deleted successfully"
 msgstr "Az időpont törölve"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:75
-#: src/components/routes/event/OccurrenceDetail/index.tsx:101
+#: src/components/routes/event/OccurrenceDetail/index.tsx:99
 msgid "Date reactivated"
 msgstr "Az időpont újraaktiválva"
 
@@ -3932,7 +3935,7 @@ msgstr "Partner szerkesztése"
 msgid "Edit Announcement"
 msgstr "Közlemény szerkesztése"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:159
+#: src/components/common/QuestionAndAnswerList/index.tsx:135
 msgid "Edit Answer"
 msgstr "Válasz szerkesztése"
 
@@ -4555,7 +4558,7 @@ msgstr "Esemény címe"
 msgid "Event Too New"
 msgstr "Az esemény túl új"
 
-#: src/components/routes/event/EventDashboard/index.tsx:264
+#: src/components/routes/event/EventDashboard/index.tsx:262
 msgid "Event totals"
 msgstr "Esemény összesítése"
 
@@ -4750,7 +4753,7 @@ msgstr "A konfiguráció hozzárendelése sikertelen"
 msgid "Failed to cancel attendee"
 msgstr "Nem sikerült törölni a résztvevőt."
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:77
+#: src/components/routes/event/OccurrenceDetail/index.tsx:75
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:57
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:348
 msgid "Failed to cancel date"
@@ -4799,7 +4802,7 @@ msgid "Failed to delete configuration"
 msgstr "A konfiguráció törlése sikertelen"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:64
-#: src/components/routes/event/OccurrenceDetail/index.tsx:90
+#: src/components/routes/event/OccurrenceDetail/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:187
 msgid "Failed to delete date"
 msgstr "Az időpontot nem sikerült törölni"
@@ -4884,7 +4887,7 @@ msgid "Failed to offer tickets"
 msgstr "Nem sikerült jegyeket felajánlani"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:76
-#: src/components/routes/event/OccurrenceDetail/index.tsx:102
+#: src/components/routes/event/OccurrenceDetail/index.tsx:100
 msgid "Failed to reactivate date"
 msgstr "Az időpontot nem sikerült újraaktiválni"
 
@@ -4981,7 +4984,7 @@ msgstr "A fiók ellenőrzésének frissítése sikertelen"
 msgid "Failed to update affiliate"
 msgstr "Partner frissítése sikertelen"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:102
+#: src/components/common/QuestionAndAnswerList/index.tsx:81
 msgid "Failed to update answer."
 msgstr "Válasz frissítése sikertelen."
 
@@ -5386,7 +5389,7 @@ msgstr "GitHub"
 msgid "Go back"
 msgstr "Vissza"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:72
+#: src/components/routes/event/OccurrenceDetail/index.tsx:70
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:49
 #: src/components/routes/event/OccurrencesTab/index.tsx:223
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:339
@@ -5442,10 +5445,9 @@ msgstr "Bruttó bevétel"
 msgid "Gross sales"
 msgstr "Bruttó értékesítés"
 
+#: src/components/common/StatsCharts/index.tsx:79
 #: src/components/modals/ManageOccurrenceModal/index.tsx:182
 #: src/components/routes/admin/Dashboard/index.tsx:259
-#: src/components/routes/event/EventDashboard/index.tsx:342
-#: src/components/routes/event/OccurrenceDetail/index.tsx:213
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:83
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:30
 msgid "Gross Sales"
@@ -5505,7 +5507,7 @@ msgstr "Íme a React komponens, amelyet a widget beágyazásához használhatja 
 msgid "Here is your affiliate link"
 msgstr "Íme az affiliate linkje"
 
-#: src/components/routes/event/EventDashboard/index.tsx:206
+#: src/components/routes/event/EventDashboard/index.tsx:204
 msgid "Hi {0} 👋"
 msgstr "Szia {0} 👋"
 
@@ -6762,10 +6764,6 @@ msgstr "Profilom"
 msgid "My Tickets"
 msgstr "Jegyeim"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:178
-msgid "N/A"
-msgstr "N/A"
-
 #: src/components/common/WidgetEditor/index.tsx:364
 msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
@@ -6798,8 +6796,7 @@ msgstr "Név kötelező"
 msgid "Name must be less than 255 characters"
 msgstr "A névnek rövidebbnek kell lennie 255 karakternél"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:181
-#: src/components/common/QuestionAndAnswerList/index.tsx:289
+#: src/components/common/QuestionAndAnswerList/index.tsx:202
 msgid "Navigate to Attendee"
 msgstr "Navigálás a résztvevőhöz"
 
@@ -6920,7 +6917,7 @@ msgstr "Nincs megjeleníthető résztvevő"
 msgid "No Attendees to show"
 msgstr "Nincs megjeleníthető résztvevő"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:79
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:81
 msgid "No attendees yet for this date."
 msgstr "Ehhez az időponthoz még nincs résztvevő."
 
@@ -7097,7 +7094,7 @@ msgstr "Nincs megjeleníthető megrendelés"
 msgid "No orders yet"
 msgstr "Még nincsenek megrendelések"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:90
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:92
 msgid "No orders yet for this date."
 msgstr "Ehhez az időponthoz még nincs megrendelés."
 
@@ -7681,6 +7678,10 @@ msgstr "Rendelés és jegy"
 msgid "Order #"
 msgstr "Rendelésszám"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:258
+msgid "Order answers"
+msgstr "Rendelési válaszok"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:387
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:376
 msgid "Order cancelled"
@@ -7825,6 +7826,7 @@ msgstr "Rendelés törölve lett"
 msgid "orders"
 msgstr "megrendelés"
 
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
 #: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:125
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
@@ -8601,6 +8603,10 @@ msgstr "Rendelés feldolgozása"
 msgid "Product"
 msgstr "Termék"
 
+#: src/components/common/QuestionAndAnswerList/index.tsx:264
+msgid "Product answers"
+msgstr "Termékválaszok"
+
 #: src/components/forms/ProductForm/index.tsx:252
 msgid "Product Category"
 msgstr "Termékkategória"
@@ -8625,8 +8631,7 @@ msgstr "Termék sikeresen törölve"
 msgid "Product Price Type"
 msgstr "Termék ár típusa"
 
-#: src/components/routes/event/EventDashboard/index.tsx:283
-#: src/components/routes/event/OccurrenceDetail/index.tsx:166
+#: src/components/common/StatsCharts/index.tsx:43
 #: src/components/routes/event/Reports/index.tsx:19
 msgid "Product Sales"
 msgstr "Termék értékesítés"
@@ -8671,10 +8676,9 @@ msgstr "Termékek"
 msgid "Products sold"
 msgstr "Eladott termékek"
 
+#: src/components/common/StatsCharts/index.tsx:54
 #: src/components/routes/admin/Dashboard/index.tsx:258
 #: src/components/routes/admin/Dashboard/index.tsx:355
-#: src/components/routes/event/EventDashboard/index.tsx:304
-#: src/components/routes/event/OccurrenceDetail/index.tsx:182
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:73
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:68
 msgid "Products Sold"
@@ -8892,7 +8896,7 @@ msgid "Re-offer Spot"
 msgstr "Hely újbóli felajánlása"
 
 #: src/components/modals/ManageOccurrenceModal/index.tsx:70
-#: src/components/routes/event/OccurrenceDetail/index.tsx:96
+#: src/components/routes/event/OccurrenceDetail/index.tsx:94
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Újraaktiválja ezt az időpontot? Újra megnyílik a jövőbeli értékesítés előtt."
 
@@ -8934,7 +8938,7 @@ msgstr "Legutóbbi beléptetések"
 msgid "Recent orders"
 msgstr "Legutóbbi megrendelések"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:63
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:64
 msgid "Recent Orders"
 msgstr "Legutóbbi megrendelések"
 
@@ -9004,7 +9008,7 @@ msgstr "Előnézet frissítése"
 msgid "Refund all orders for these dates"
 msgstr "Az ezekhez az időpontokhoz tartozó összes megrendelés visszatérítése"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:67
+#: src/components/routes/event/OccurrenceDetail/index.tsx:65
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:44
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:334
 msgid "Refund all orders for this date"
@@ -9301,9 +9305,8 @@ msgstr "Használjon újra egy Stripe-kapcsolatot a fiók egy másik szervezőjé
 #: src/components/common/AffiliateTable/index.tsx:157
 #: src/components/common/EventCard/index.tsx:255
 #: src/components/common/EventCard/index.tsx:374
+#: src/components/common/StatsCharts/index.tsx:66
 #: src/components/routes/admin/Attribution/index.tsx:137
-#: src/components/routes/event/EventDashboard/index.tsx:315
-#: src/components/routes/event/OccurrenceDetail/index.tsx:193
 msgid "Revenue"
 msgstr "Bevétel"
 
@@ -9418,7 +9421,7 @@ msgid "Saturday"
 msgstr "Szombat"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
-#: src/components/common/QuestionAndAnswerList/index.tsx:142
+#: src/components/common/QuestionAndAnswerList/index.tsx:118
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:272
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -11246,7 +11249,7 @@ msgstr "Ezt a kódot az értékesítések nyomon követésére használjuk. Csak
 msgid "This color combination may be hard to read for some users"
 msgstr "Ez a színkombináció nehezen olvasható lehet egyes felhasználók számára"
 
-#: src/components/routes/event/OccurrenceDetail/index.tsx:63
+#: src/components/routes/event/OccurrenceDetail/index.tsx:61
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:40
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:330
 msgid "This date has {orderCount} order(s) that will be affected."
@@ -11726,8 +11729,7 @@ msgstr "Összesített díj"
 msgid "Total fees"
 msgstr "Díjak összesen"
 
-#: src/components/routes/event/EventDashboard/index.tsx:341
-#: src/components/routes/event/OccurrenceDetail/index.tsx:212
+#: src/components/common/StatsCharts/index.tsx:78
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:97
 msgid "Total Fees"
 msgstr "Összes díj"
@@ -11754,8 +11756,7 @@ msgstr "Teljes mennyiség az összes időpontra"
 msgid "Total refunded"
 msgstr "Összes visszatérített"
 
-#: src/components/routes/event/EventDashboard/index.tsx:344
-#: src/components/routes/event/OccurrenceDetail/index.tsx:215
+#: src/components/common/StatsCharts/index.tsx:81
 msgid "Total Refunded"
 msgstr "Összes visszatérített"
 
@@ -11763,8 +11764,7 @@ msgstr "Összes visszatérített"
 msgid "Total tax"
 msgstr "Adó összesen"
 
-#: src/components/routes/event/EventDashboard/index.tsx:343
-#: src/components/routes/event/OccurrenceDetail/index.tsx:214
+#: src/components/common/StatsCharts/index.tsx:80
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:91
 msgid "Total Tax"
 msgstr "Összes adó"
@@ -11929,7 +11929,7 @@ msgstr "Egyesült Államok"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: src/components/common/QuestionAndAnswerList/index.tsx:284
+#: src/components/common/QuestionAndAnswerList/index.tsx:191
 msgid "Unknown Attendee"
 msgstr "Ismeretlen résztvevő"
 
@@ -12355,7 +12355,7 @@ msgstr "Ellenőrzés..."
 msgid "Vietnamese"
 msgstr "Vietnámi"
 
-#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:68
+#: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
 msgstr "Összes megtekintése"
 
@@ -12729,7 +12729,7 @@ msgstr "Üdv a fedélzeten! Kérjük, jelentkezzen be a folytatáshoz."
 msgid "Welcome back"
 msgstr "Üdvözöljük újra"
 
-#: src/components/routes/event/EventDashboard/index.tsx:200
+#: src/components/routes/event/EventDashboard/index.tsx:198
 msgid "Welcome back{0} 👋"
 msgstr "Üdv újra, {0} 👋"
 

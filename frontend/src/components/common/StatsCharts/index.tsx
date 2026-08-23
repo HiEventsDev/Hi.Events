@@ -19,9 +19,9 @@ const responsiveChartProps = {
     dataKey: "date",
     withLegend: true,
     legendProps: {verticalAlign: 'bottom' as const},
-    styles: {legend: {justifyContent: 'center', rowGap: 4}},
+    styles: {legend: {justifyContent: 'center', rowGap: 4, paddingTop: 24}},
     xAxisProps: {minTickGap: 24},
-    yAxisProps: {width: 'auto' as const},
+    yAxisProps: {width: 'auto' as const, tickMargin: 10, tick: {fontSize: 12, fill: 'currentColor'}},
     tickLine: "none" as const,
 };
 
