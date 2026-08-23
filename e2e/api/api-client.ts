@@ -253,6 +253,25 @@ export class ApiClient {
     return check(this.request.post(`events/${eventId}/orders/${orderId}/cancel`, { headers: jsonHeaders }));
   }
 
+  listAttendees(eventId: number): Promise<AttendeeRecord[]> {
+    return unwrap<AttendeeRecord[]>(this.request.get(`events/${eventId}/attendees`, { headers: jsonHeaders }));
+  }
+
+  async findAttendeeIdByPublicId(eventId: number, publicId: string): Promise<number> {
+    const attendees = await this.listAttendees(eventId);
+    const attendee = attendees.find((candidate) => candidate.public_id === publicId);
+    if (!attendee) {
+      throw new Error(`Attendee ${publicId} not found among ${attendees.length} attendees for event ${eventId}`);
+    }
+    return attendee.id;
+  }
+
+  updateAttendeeStatus(eventId: number, attendeeId: number, status: 'ACTIVE' | 'CANCELLED'): Promise<void> {
+    return check(
+      this.request.patch(`events/${eventId}/attendees/${attendeeId}`, { headers: jsonHeaders, data: { status } }),
+    );
+  }
+
   async generateOccurrences(eventId: number, recurrenceRule: RecurrenceRule): Promise<void> {
     const response = await this.request.post(`events/${eventId}/occurrences/generate`, {
       headers: jsonHeaders,

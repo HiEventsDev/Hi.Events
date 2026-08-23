@@ -53,6 +53,7 @@ export interface ProductPrice {
   id: number;
   price: number;
   label?: string | null;
+  quantity_sold?: number;
 }
 
 export interface ProductRecord {
