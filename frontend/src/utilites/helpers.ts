@@ -93,6 +93,12 @@ export const formatNumber = (number: number) => {
 
 export const isSsr = () => import.meta.env.SSR;
 
+export const prefetchOnIdle = (load: () => Promise<unknown>) => {
+    if (isSsr()) return;
+    const whenIdle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 1));
+    whenIdle(() => load().catch(() => undefined));
+};
+
 export const safeSessionStorageGet = (key: string): string | null => {
     if (isSsr()) return null;
     try {

@@ -5,7 +5,6 @@ import {IconMinus, IconPlus} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classes from './NumberSelector.module.scss';
 import classNames from "classnames";
-import _ from "lodash";
 
 interface NumberSelectorProps extends TextInputProps {
     formInstance: UseFormReturnType<any>;
@@ -17,16 +16,19 @@ interface NumberSelectorProps extends TextInputProps {
     onLimitReached?: () => void;
 }
 
+const getFormValue = (values: Record<string, any>, fieldName: string) =>
+    Number(fieldName.split('.').reduce<any>((acc, key) => acc?.[key], values) ?? 0);
+
 export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues, selectorSize = 'default', onLimitReached}: NumberSelectorProps) => {
     const handlers = useRef<NumberInputHandlers>(null);
-    const [value, setValue] = useState<number>(() => Number(_.get(formInstance.values, fieldName) ?? 0));
+    const [value, setValue] = useState<number>(() => getFormValue(formInstance.values, fieldName));
 
     const minValue = min || 0;
     const maxValue = max || 100;
 
     const [sharedVals] = useState<SharedValues>(() => {
         const shared = sharedValues ?? new SharedValues(maxValue);
-        shared.changeValue(Number(_.get(formInstance.values, fieldName) ?? 0));
+        shared.changeValue(getFormValue(formInstance.values, fieldName));
         return shared;
     });
 
@@ -35,7 +37,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues,
     }, [value]);
 
     useEffect(() => {
-        const formValue = Number(_.get(formInstance.values, fieldName) ?? 0);
+        const formValue = getFormValue(formInstance.values, fieldName);
         if (formValue !== value) {
             const adjustedDifference = sharedVals.changeValue(formValue - value);
             setValue(value + adjustedDifference);
