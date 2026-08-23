@@ -126,11 +126,12 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
             }
 
-            const { appHtml, dehydratedState, helmetContext } = await render(
+            const { appHtml, dehydratedState, helmetContext, themeColors } = await render(
                 { req, res },
                 ssrManifest
             );
             const stringifiedState = htmlSafeJsonStringify(dehydratedState);
+            const stringifiedThemeColors = htmlSafeJsonStringify(themeColors);
 
             const helmetHtml = Object.values(helmetContext.helmet || {})
                 .map((value) => value.toString() || "")
@@ -148,7 +149,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
             const html = template
                 .replace("<!--head-snippets-->", () => headSnippets.join("\n"))
                 .replace("<!--app-html-->", () => appHtml)
-                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState}</script>`)
+                .replace("<!--dehydrated-state-->", () => `<script>window.__REHYDRATED_STATE__ = ${stringifiedState};window.__THEME_COLORS__ = ${stringifiedThemeColors}</script>`)
                 .replace("<!--environment-variables-->", () => envVariablesHtml)
                 .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
 

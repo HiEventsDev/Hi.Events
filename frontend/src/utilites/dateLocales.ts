@@ -1,21 +1,5 @@
 import { SupportedLocales } from '../locales.ts';
 
-import 'dayjs/locale/en';
-import 'dayjs/locale/de';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/it';
-import 'dayjs/locale/nl';
-import 'dayjs/locale/pt';
-import 'dayjs/locale/es';
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/pt-br';
-import 'dayjs/locale/vi';
-import 'dayjs/locale/zh-hk';
-import 'dayjs/locale/tr';
-import 'dayjs/locale/hu';
-import 'dayjs/locale/sk';
-import 'dayjs/locale/el';
-
 export const localeFormats: Record<SupportedLocales, {
     fullDateTime: string;
     shortDateTime: string;
