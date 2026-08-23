@@ -15,6 +15,7 @@ import 'dayjs/locale/tr';
 import 'dayjs/locale/hu';
 import 'dayjs/locale/sk';
 import 'dayjs/locale/el';
+import 'dayjs/locale/ko';
 
 export const localeFormats: Record<SupportedLocales, {
     fullDateTime: string;
@@ -249,5 +250,17 @@ export const localeFormats: Record<SupportedLocales, {
         timeOnly: 'HH:mm',
         timezone: 'z',
         dateTimePicker: 'D MMM YYYY HH:mm'
+    },
+    'ko': {
+        fullDateTime: 'YYYY년 M월 D일 (ddd) A h:mm',
+        shortDateTime: 'YYYY년 M월 D일 A h:mm',
+        shortDate: 'YYYY년 M월 D일',
+        chartDate: 'M월 D일',
+        monthShort: 'M월',
+        dayOfMonth: 'D일',
+        dayName: 'M월 D일 dddd',
+        timeOnly: 'A h:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY년 M월 D일 A h:mm'
     },
 };
