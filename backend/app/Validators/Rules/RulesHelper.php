@@ -6,6 +6,8 @@ class RulesHelper
 {
     public const MONEY = ['gte:0', 'numeric', 'decimal:0,2', 'max:999999999999'];
 
+    public const INTEGER = ['integer', 'max:2147483647'];
+
     public const REQUIRED_STRING = ['string', 'required', 'max:100', 'min:1'];
 
     public const REQUIRED_NUMERIC = ['numeric', 'required'];
