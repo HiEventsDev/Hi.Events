@@ -36,6 +36,12 @@ class ValidateVatNumberJob implements ShouldQueue
         OrganizerVatSettingRepositoryInterface $repository,
         LoggerInterface $logger,
     ): void {
+        if (! isset($this->vatSettingId, $this->vatNumber)) {
+            $logger->warning('Skipping VAT validation job with a payload from a previous release');
+
+            return;
+        }
+
         $logger->info('VAT validation job started', [
             'organizer_vat_setting_id' => $this->vatSettingId,
             'vat_number' => $this->maskVatNumber($this->vatNumber),

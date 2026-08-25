@@ -143,6 +143,66 @@ class PartialEditAttendeeHandlerTest extends TestCase
         );
     }
 
+    public function test_cancelling_with_a_lowercase_status_releases_capacity_and_decrements_statistics(): void
+    {
+        $this->givenAttendee(AttendeeStatus::ACTIVE);
+        $this->givenOrderExists();
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::CANCELLED);
+
+        $this->productQuantityService->shouldReceive('decreaseQuantitySold')
+            ->once()
+            ->with(self::PRODUCT_PRICE_ID, 1, self::OCCURRENCE_ID);
+
+        $this->cancellationService->shouldReceive('decrementForCancelledAttendee')
+            ->once()
+            ->with(self::EVENT_ID, self::ORDER_CREATED_AT, 1, self::OCCURRENCE_ID);
+
+        $this->domainEventDispatcherService->shouldReceive('dispatch')
+            ->once()
+            ->with(Mockery::on(
+                fn (AttendeeEvent $event) => $event->type === DomainEventType::ATTENDEE_CANCELLED
+                    && $event->attendeeId === self::ATTENDEE_ID
+            ));
+
+        $this->handler->handle(new PartialEditAttendeeDTO(
+            attendee_id: self::ATTENDEE_ID,
+            event_id: self::EVENT_ID,
+            first_name: null,
+            last_name: null,
+            email: null,
+            status: 'cancelled',
+        ));
+
+        Event::assertDispatched(
+            CapacityChangedEvent::class,
+            fn (CapacityChangedEvent $event) => $event->direction === CapacityChangeDirection::INCREASED
+        );
+    }
+
+    public function test_setting_the_same_status_in_lowercase_does_not_touch_capacity_or_statistics(): void
+    {
+        $this->givenAttendee(AttendeeStatus::ACTIVE);
+        $this->expectAttendeeUpdatedWithStatus(AttendeeStatus::ACTIVE);
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->productQuantityService->shouldNotReceive('decreaseQuantitySold');
+        $this->cancellationService->shouldNotReceive('decrementForCancelledAttendee');
+        $this->reactivationService->shouldNotReceive('incrementForReactivatedAttendee');
+        $this->domainEventDispatcherService->shouldNotReceive('dispatch');
+        $this->orderRepository->shouldNotReceive('findFirstWhere');
+
+        $this->handler->handle(new PartialEditAttendeeDTO(
+            attendee_id: self::ATTENDEE_ID,
+            event_id: self::EVENT_ID,
+            first_name: null,
+            last_name: null,
+            email: null,
+            status: 'active',
+        ));
+
+        Event::assertNotDispatched(CapacityChangedEvent::class);
+    }
+
     public function test_setting_the_same_status_does_not_touch_capacity_or_statistics(): void
     {
         $this->givenAttendee(AttendeeStatus::ACTIVE);

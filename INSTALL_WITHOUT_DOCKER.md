@@ -7,7 +7,7 @@ setup steps, and configuration details.
 
 ## Prerequisites
 
-1. [Install PHP 8.2 or higher](https://www.php.net/downloads.php)
+1. [Install PHP 8.3 or higher](https://www.php.net/downloads.php)
 2. [Install Composer](https://getcomposer.org/download/)
 3. [Install PostgreSQL](https://www.postgresql.org/download/)
 4. [Install Node.js](https://nodejs.org/en)

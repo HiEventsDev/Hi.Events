@@ -200,7 +200,7 @@ class SendEventEmailMessagesService
         if (! empty($messageData->event_occurrence_ids)) {
             return [['event_occurrence_id', 'in', $messageData->event_occurrence_ids]];
         }
-        if ($messageData->event_occurrence_id) {
+        if ($messageData->event_occurrence_id ?? null) {
             return ['event_occurrence_id' => $messageData->event_occurrence_id];
         }
 
@@ -229,8 +229,8 @@ class SendEventEmailMessagesService
             eventId: $messageData->event_id,
             productIds: $messageData->product_ids,
             orderStatuses: $messageData->order_statuses,
-            eventOccurrenceId: $messageData->event_occurrence_id,
-            eventOccurrenceIds: $messageData->event_occurrence_ids,
+            eventOccurrenceId: $messageData->event_occurrence_id ?? null,
+            eventOccurrenceIds: $messageData->event_occurrence_ids ?? null,
         );
 
         if ($orders->isEmpty()) {

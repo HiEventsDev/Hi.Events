@@ -68,7 +68,7 @@ class OrderSummary extends BaseMail
                 'event' => $this->event,
                 'order' => $this->order,
                 'organizer' => $this->organizer,
-                'occurrence' => $this->occurrence,
+                'occurrence' => $this->occurrence ?? null,
                 'orderUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
                     $this->event->getId(),

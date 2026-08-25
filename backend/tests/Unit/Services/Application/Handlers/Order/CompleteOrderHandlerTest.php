@@ -386,6 +386,61 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }
 
+    public function test_exception_is_thrown_when_attendee_counts_match_in_total_but_not_per_price(): void
+    {
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('The number of attendees does not match the number of tickets in the order');
+
+        $orderShortId = 'ABC123';
+
+        $secondOrderItem = (new OrderItemDomainObject)
+            ->setId(2)
+            ->setProductId(2)
+            ->setQuantity(1)
+            ->setPrice(10)
+            ->setTotalGross(10)
+            ->setProductPriceId(2)
+            ->setEventOccurrenceId(1);
+
+        $order = $this->createMockOrder();
+        $order->getOrderItems()->first()->setQuantity(2);
+        $order->getOrderItems()->push($secondOrderItem);
+
+        $secondProductPrice = Mockery::mock(ProductPriceDomainObject::class);
+        $secondProductPrice->shouldReceive('getId')->andReturn(2);
+        $secondProductPrice->shouldReceive('getProductId')->andReturn(2);
+
+        $attendeeForFirstPrice = fn () => new CompleteOrderProductDataDTO(
+            product_price_id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john@example.com'
+        );
+
+        $orderData = new CompleteOrderDTO(
+            order: new CompleteOrderOrderDTO(
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'john@example.com',
+                questions: null,
+            ),
+            products: new Collection([$attendeeForFirstPrice(), $attendeeForFirstPrice(), $attendeeForFirstPrice()]),
+            event_id: 1,
+        );
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([
+            $this->createMockProductPrice(),
+            $secondProductPrice,
+        ]));
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
     public function test_handle_throws_resource_conflict_exception_when_occurrence_is_cancelled(): void
     {
         $this->expectException(ResourceConflictException::class);
