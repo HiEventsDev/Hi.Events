@@ -8,6 +8,7 @@ import {Event, Product} from "../../../types.ts";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
 import {nowInTimezone} from "../../../utilites/dates.ts";
+import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
 import {buildPreviewEvent} from "./buildPreviewEvent.ts";
 import {computeVisibilityStatus} from "./visibilityStatus.ts";
 import SelectProducts from "../../routes/product-widget/SelectProducts";
@@ -61,6 +62,12 @@ export const ProductPreview = ({form, event}: ProductPreviewProps) => {
         );
     }, [event, debouncedValues, taxesAndFees, eventSettings]);
 
+    const themeSettings = useMemo(
+        () => validateThemeSettings((eventSettings ?? event?.settings)?.homepage_theme_settings),
+        [eventSettings, event],
+    );
+    const themeVariables = useMemo(() => computeThemeVariables(themeSettings), [themeSettings]);
+
     if (!event || !previewEvent) {
         return null;
     }
@@ -82,7 +89,10 @@ export const ProductPreview = ({form, event}: ProductPreviewProps) => {
                     showPoweredBy={false}
                     colors={{
                         background: '#ffffff',
+                        primary: themeSettings.accent,
                         primaryText: '#1a1a1a',
+                        secondary: themeSettings.accent,
+                        secondaryText: themeVariables['--theme-accent-contrast'],
                     }}
                 />
             </div>
