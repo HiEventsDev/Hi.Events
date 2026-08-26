@@ -27,6 +27,7 @@ use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Order\OrderApplicationFeeService;
 use HiEvents\Services\Domain\Payment\Stripe\StripeRefundExpiredOrderService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
@@ -43,21 +44,20 @@ use Throwable;
 class PaymentIntentSucceededHandler
 {
     public function __construct(
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly StripePaymentsRepository         $stripePaymentsRepository,
-        private readonly AffiliateRepositoryInterface     $affiliateRepository,
-        private readonly ProductQuantityUpdateService     $quantityUpdateService,
-        private readonly StripeRefundExpiredOrderService  $refundExpiredOrderService,
-        private readonly AttendeeRepositoryInterface      $attendeeRepository,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly LoggerInterface                  $logger,
-        private readonly Repository                       $cache,
-        private readonly DomainEventDispatcherService     $domainEventDispatcherService,
-        private readonly OrderApplicationFeeService       $orderApplicationFeeService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly StripePaymentsRepository $stripePaymentsRepository,
+        private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly ProductQuantityUpdateService $quantityUpdateService,
+        private readonly StripeRefundExpiredOrderService $refundExpiredOrderService,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly LoggerInterface $logger,
+        private readonly Repository $cache,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly OrderApplicationFeeService $orderApplicationFeeService,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-    )
-    {
-    }
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
+    ) {}
 
     /**
      * @throws Throwable
@@ -72,20 +72,22 @@ class PaymentIntentSucceededHandler
             return;
         }
 
-        $this->databaseManager->transaction(function () use ($paymentIntent) {
+        $result = $this->databaseManager->transaction(function () use ($paymentIntent) {
             /** @var StripePaymentDomainObjectAbstract $stripePayment */
             $stripePayment = $this->stripePaymentsRepository
-                ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order'))
+                ->loadRelation(new Relationship(OrderDomainObject::class, name: 'order', nested: [
+                    new Relationship(OrderItemDomainObject::class),
+                ]))
                 ->findFirstWhere([
                     StripePaymentDomainObjectAbstract::PAYMENT_INTENT_ID => $paymentIntent->id,
                 ]);
 
-            if (!$stripePayment) {
+            if (! $stripePayment) {
                 $this->logger->error('Payment intent not found when handling payment intent succeeded event', [
                     'paymentIntent' => $paymentIntent->toArray(),
                 ]);
 
-                return;
+                return null;
             }
 
             $this->validatePaymentAndOrderStatus($stripePayment, $paymentIntent);
@@ -103,19 +105,25 @@ class PaymentIntentSucceededHandler
                 EventSettingDomainObjectAbstract::EVENT_ID => $updatedOrder->getEventId(),
             ]);
 
-            event(new OrderStatusChangedEvent($updatedOrder, createInvoice: $eventSettings->getEnableInvoicing()));
-
-            $this->domainEventDispatcherService->dispatch(
-                new OrderEvent(
-                    type: DomainEventType::ORDER_CREATED,
-                    orderId: $updatedOrder->getId()
-                ),
-            );
-
             $this->markPaymentIntentAsHandled($paymentIntent, $updatedOrder);
 
             $this->storeApplicationFeePayment($updatedOrder, $paymentIntent);
+
+            return ['order' => $updatedOrder, 'eventSettings' => $eventSettings];
         });
+
+        if ($result === null) {
+            return;
+        }
+
+        event(new OrderStatusChangedEvent($result['order'], createInvoice: $result['eventSettings']->getEnableInvoicing()));
+
+        $this->domainEventDispatcherService->dispatch(
+            new OrderEvent(
+                type: DomainEventType::ORDER_CREATED,
+                orderId: $result['order']->getId()
+            ),
+        );
     }
 
     private function updateOrderStatuses(StripePaymentDomainObjectAbstract $stripePayment): OrderDomainObject
@@ -170,28 +178,42 @@ class PaymentIntentSucceededHandler
      * @throws UnknownCurrencyException
      * @throws NumberFormatException
      * @throws StripeClientConfigurationException
+     *
      * @todo We could check to see if there are products available, and if so, complete the order.
      *       This would be a better user experience.
-     *
      */
     private function handleExpiredOrder(
         StripePaymentDomainObjectAbstract $stripePayment,
-        PaymentIntent                     $paymentIntent,
-    ): void
-    {
+        PaymentIntent $paymentIntent,
+    ): void {
         if ((new Carbon($stripePayment->getOrder()?->getReservedUntil()))->isPast()) {
-            $this->refundExpiredOrderService->refundExpiredOrder(
-                paymentIntent: $paymentIntent,
-                stripePayment: $stripePayment,
-                order: $stripePayment->getOrder(),
-            );
-
-            throw new CannotAcceptPaymentException(
+            $this->rejectAndRefund(
+                $stripePayment,
+                $paymentIntent,
                 __('Payment was successful, but order has expired. Order: :id', [
-                    'id' => $stripePayment->getOrderId()
+                    'id' => $stripePayment->getOrderId(),
                 ])
             );
         }
+    }
+
+    /**
+     * @throws CannotAcceptPaymentException
+     */
+    private function rejectAndRefund(
+        StripePaymentDomainObjectAbstract $stripePayment,
+        PaymentIntent $paymentIntent,
+        string $message,
+    ): void {
+        $this->refundExpiredOrderService->refundExpiredOrder(
+            paymentIntent: $paymentIntent,
+            stripePayment: $stripePayment,
+            order: $stripePayment->getOrder(),
+        );
+
+        $this->cache->put('payment_intent_handled_'.$paymentIntent->id, true, 3600);
+
+        throw new CannotAcceptPaymentException($message);
     }
 
     /**
@@ -204,10 +226,9 @@ class PaymentIntentSucceededHandler
      */
     private function validatePaymentAndOrderStatus(
         StripePaymentDomainObjectAbstract $stripePayment,
-        PaymentIntent                     $paymentIntent
-    ): void
-    {
-        if (!in_array($stripePayment->getOrder()?->getPaymentStatus(), [
+        PaymentIntent $paymentIntent
+    ): void {
+        if (! in_array($stripePayment->getOrder()?->getPaymentStatus(), [
             OrderPaymentStatus::AWAITING_PAYMENT->name,
             OrderPaymentStatus::PAYMENT_FAILED->name,
         ], true)) {
@@ -215,6 +236,31 @@ class PaymentIntentSucceededHandler
                 __('Order is not awaiting payment. Order: :id',
                     ['id' => $stripePayment->getOrderId()]
                 )
+            );
+        }
+
+        if (in_array($stripePayment->getOrder()?->getStatus(), [
+            OrderStatus::CANCELLED->name,
+            OrderStatus::ABANDONED->name,
+        ], true)) {
+            $this->rejectAndRefund(
+                $stripePayment,
+                $paymentIntent,
+                __('Payment was successful, but the order is no longer valid. Order: :id', [
+                    'id' => $stripePayment->getOrderId(),
+                ])
+            );
+        }
+
+        $order = $stripePayment->getOrder();
+
+        if ($order !== null && $this->occurrenceStatusValidator->findBlockingOccurrence($order) !== null) {
+            $this->rejectAndRefund(
+                $stripePayment,
+                $paymentIntent,
+                __('Payment was successful, but the event date is no longer available. Order: :id', [
+                    'id' => $stripePayment->getOrderId(),
+                ])
             );
         }
 
@@ -243,12 +289,12 @@ class PaymentIntentSucceededHandler
             'currency' => $paymentIntent->currency,
         ]);
 
-        $this->cache->put('payment_intent_handled_' . $paymentIntent->id, true, 3600);
+        $this->cache->put('payment_intent_handled_'.$paymentIntent->id, true, 3600);
     }
 
     private function isPaymentIntentAlreadyHandled(PaymentIntent $paymentIntent): bool
     {
-        return $this->cache->has('payment_intent_handled_' . $paymentIntent->id);
+        return $this->cache->has('payment_intent_handled_'.$paymentIntent->id);
     }
 
     private function storeApplicationFeePayment(OrderDomainObject $updatedOrder, PaymentIntent $paymentIntent): void

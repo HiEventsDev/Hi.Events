@@ -15,11 +15,9 @@ class DispatchOrderWebhookJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        public int             $orderId,
+        public int $orderId,
         public DomainEventType $eventType,
-    )
-    {
-    }
+    ) {}
 
     public function handle(WebhookDispatchService $webhookDispatchService): void
     {

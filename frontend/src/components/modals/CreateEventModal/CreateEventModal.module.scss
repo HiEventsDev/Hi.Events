@@ -234,7 +234,6 @@
     padding-bottom: 2rem;
   }
 
-  // Ensure consistent spacing between form elements
   form > * + * {
     margin-top: 1.5rem;
 
@@ -255,7 +254,6 @@
 
 // Editor field
 .editorField {
-  // Spacing handled by parent form
 }
 
 // Date time section
@@ -270,6 +268,36 @@
   }
 }
 
+
+.recurringNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--mantine-color-blue-0);
+  border: 1px solid var(--mantine-color-blue-2);
+  border-radius: 12px;
+}
+
+.recurringNoticeIcon {
+  color: var(--mantine-color-blue-5);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.recurringNoticeTitle {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--mantine-color-dark-7);
+}
+
+.recurringNoticeText {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--mantine-color-gray-7);
+  line-height: 1.45;
+}
 
 // Create button
 .createButton {

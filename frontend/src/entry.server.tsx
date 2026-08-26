@@ -8,6 +8,9 @@ import {setAuthToken} from "./utilites/apiClient.ts";
 import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "react-router";
 import {dynamicActivateLocale} from "./locales.ts";
 import {setSsrQueryClient} from "./utilites/ssrQueryClient.ts";
+import {generateThemeColors} from "./utilites/themeColors.ts";
+
+const themeColors = generateThemeColors();
 
 const getLocale = (req: express.Request): string => {
     if (req.cookies.locale) {
@@ -59,6 +62,7 @@ export async function render(params: {
             queryClient={queryClient}
             helmetContext={helmetContext}
             locale={getLocale(params.req)}
+            themeColors={themeColors}
         >
             <StaticRouterProvider
                 router={routerWithContext}
@@ -76,6 +80,7 @@ export async function render(params: {
         appHtml: appHtml,
         dehydratedState,
         helmetContext,
+        themeColors,
     };
 }
 

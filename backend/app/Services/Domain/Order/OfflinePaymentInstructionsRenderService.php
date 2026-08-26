@@ -15,9 +15,7 @@ class OfflinePaymentInstructionsRenderService
 {
     public function __construct(
         private readonly EmailTokenContextBuilder $tokenContextBuilder,
-    )
-    {
-    }
+    ) {}
 
     public function renderForOrder(OrderDomainObject $order): void
     {
@@ -25,7 +23,7 @@ class OfflinePaymentInstructionsRenderService
         $eventSettings = $event?->getEventSettings();
         $organizer = $event?->getOrganizer();
 
-        if (!$event || !$eventSettings || !$organizer) {
+        if (! $event || ! $eventSettings || ! $organizer) {
             return;
         }
 
@@ -33,13 +31,12 @@ class OfflinePaymentInstructionsRenderService
     }
 
     public function render(
-        OrderDomainObject        $order,
-        EventDomainObject        $event,
-        OrganizerDomainObject    $organizer,
+        OrderDomainObject $order,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
         EventSettingDomainObject $eventSettings,
-    ): void
-    {
-        if (!$eventSettings->getOfflinePaymentInstructions()) {
+    ): void {
+        if (! $eventSettings->getOfflinePaymentInstructions()) {
             return;
         }
 

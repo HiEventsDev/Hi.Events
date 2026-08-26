@@ -27,7 +27,7 @@ class GetAllMessagesForAdminHandler
             ->whereNull('messages.deleted_at');
 
         if ($dto->search) {
-            $searchTerm = '%' . $dto->search . '%';
+            $searchTerm = '%'.$dto->search.'%';
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('messages.subject', 'ilike', $searchTerm)
                     ->orWhere('events.title', 'ilike', $searchTerm)
@@ -46,7 +46,7 @@ class GetAllMessagesForAdminHandler
         $sortColumn = in_array($dto->sortBy, self::ALLOWED_SORT_COLUMNS, true) ? $dto->sortBy : 'created_at';
         $sortDirection = in_array(strtolower($dto->sortDirection ?? 'desc'), ['asc', 'desc']) ? $dto->sortDirection : 'desc';
 
-        $query->orderBy('messages.' . $sortColumn, $sortDirection);
+        $query->orderBy('messages.'.$sortColumn, $sortDirection);
 
         return $query->paginate($dto->perPage);
     }

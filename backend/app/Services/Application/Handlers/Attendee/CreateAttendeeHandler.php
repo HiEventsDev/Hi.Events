@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
@@ -21,39 +22,43 @@ use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
+use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
-use RuntimeException;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class CreateAttendeeHandler
 {
     public function __construct(
-        private readonly AttendeeRepositoryInterface  $attendeeRepository,
-        private readonly OrderRepositoryInterface     $orderRepository,
-        private readonly ProductRepositoryInterface   $productRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
+        private readonly AttendeeRepositoryInterface $attendeeRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
         private readonly ProductQuantityUpdateService $productQuantityAdjustmentService,
-        private readonly DatabaseManager              $databaseManager,
+        private readonly DatabaseManager $databaseManager,
         private readonly TaxAndFeeRepositoryInterface $taxAndFeeRepository,
-        private readonly TaxAndFeeRollupService       $taxAndFeeRollupService,
-        private readonly OrderManagementService       $orderManagementService,
+        private readonly TaxAndFeeRollupService $taxAndFeeRollupService,
+        private readonly OrderManagementService $orderManagementService,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
+        private readonly OrderAuditLogService $orderAuditLogService,
+    ) {}
 
     /**
      * @throws NoTicketsAvailableException
@@ -61,6 +66,19 @@ class CreateAttendeeHandler
      */
     public function handle(CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
     {
+        $attendeeDTO = $this->resolveOccurrenceId($attendeeDTO);
+
+        $this->occurrenceEligibilityService->assertOccurrencePurchasable(
+            eventId: $attendeeDTO->event_id,
+            occurrenceId: $attendeeDTO->event_occurrence_id,
+            additionalQuantity: 1,
+            overrideCapacity: $attendeeDTO->override_capacity,
+        );
+        $this->occurrenceEligibilityService->assertProductsVisibleOnOccurrence(
+            $attendeeDTO->event_occurrence_id,
+            [$attendeeDTO->product_id],
+        );
+
         return $this->databaseManager->transaction(function () use ($attendeeDTO) {
             $this->calculateTaxesAndFees($attendeeDTO);
 
@@ -75,7 +93,7 @@ class CreateAttendeeHandler
                     ProductDomainObjectAbstract::PRODUCT_TYPE => ProductType::TICKET->name,
                 ]);
 
-            if (!$product) {
+            if (! $product) {
                 throw new NoTicketsAvailableException(__('This ticket is invalid'));
             }
 
@@ -87,24 +105,33 @@ class CreateAttendeeHandler
             );
 
             if ($availableQuantity <= 0) {
-                throw new NoTicketsAvailableException(__('There are no tickets available. ' .
-                    'If you would like to assign a product to this attendee,' .
+                throw new NoTicketsAvailableException(__('There are no tickets available. '.
+                    'If you would like to assign a product to this attendee,'.
                     ' please adjust the product\'s available quantity.'));
             }
-
-            $productPriceId = $this->getProductPriceId($attendeeDTO, $product);
 
             $this->processTaxesAndFees($attendeeDTO);
 
             $orderItem = $this->createOrderItem($attendeeDTO, $order, $product, $productPriceId);
 
-            $attendee = $this->createAttendee($order, $attendeeDTO);
+            $attendee = $this->createAttendee($order, $attendeeDTO, $productPriceId);
 
             $this->orderManagementService->updateOrderTotals($order, collect([$orderItem]));
 
-            $this->fireEventsAndUpdateQuantities($attendeeDTO, $order);
+            $this->fireEventsAndUpdateQuantities($attendeeDTO, $order, $productPriceId);
 
             $this->queueWebhooks($order);
+
+            if ($attendeeDTO->override_capacity) {
+                $this->orderAuditLogService->logManualAttendeeCapacityOverride(
+                    eventId: $attendeeDTO->event_id,
+                    orderId: $order->getId(),
+                    attendeeId: $attendee->getId(),
+                    occurrenceId: $attendeeDTO->event_occurrence_id,
+                    ipAddress: $attendeeDTO->client_ip ?? '',
+                    userAgent: $attendeeDTO->client_user_agent,
+                );
+            }
 
             return $attendee;
         });
@@ -140,12 +167,13 @@ class CreateAttendeeHandler
      */
     private function getProductPriceId(CreateAttendeeDTO $attendeeDTO, ProductDomainObject $product): int
     {
-        $priceIds = $product->getProductPrices()->map(fn(ProductPriceDomainObject $productPrice) => $productPrice->getId());
+        $priceIds = $product->getProductPrices()->map(fn (ProductPriceDomainObject $productPrice) => $productPrice->getId());
 
         if ($attendeeDTO->product_price_id) {
-            if (!$priceIds->contains($attendeeDTO->product_price_id)) {
+            if (! $priceIds->contains($attendeeDTO->product_price_id)) {
                 throw new InvalidProductPriceId(__('The product price ID is invalid.'));
             }
+
             return $attendeeDTO->product_price_id;
         }
 
@@ -161,7 +189,7 @@ class CreateAttendeeHandler
 
     private function calculateTaxesAndFees(CreateAttendeeDTO $attendeeDTO): ?Collection
     {
-        if (!$attendeeDTO->taxes_and_fees) {
+        if (! $attendeeDTO->taxes_and_fees) {
             return null;
         }
 
@@ -169,16 +197,18 @@ class CreateAttendeeHandler
             'id',
             $attendeeDTO
                 ->taxes_and_fees
-                ->map(fn(CreateAttendeeTaxAndFeeDTO $taxAndFee) => $taxAndFee->tax_or_fee_id)
+                ->map(fn (CreateAttendeeTaxAndFeeDTO $taxAndFee) => $taxAndFee->tax_or_fee_id)
                 ->toArray()
         );
 
         $validatedTaxesAndFees = collect();
         $attendeeDTO->taxes_and_fees->each(function (CreateAttendeeTaxAndFeeDTO $taxAndFee) use ($validatedTaxesAndFees, $taxesAndFees) {
-            $taxOrFee = $taxesAndFees->first(fn($taxOrFee) => $taxOrFee->getId() === $taxAndFee->tax_or_fee_id);
+            $taxOrFee = $taxesAndFees->first(fn ($taxOrFee) => $taxOrFee->getId() === $taxAndFee->tax_or_fee_id);
 
-            if (!$taxOrFee) {
-                throw new RuntimeException('Tax or fee not found.');
+            if (! $taxOrFee) {
+                throw ValidationException::withMessages([
+                    'taxes_and_fees' => __('One or more selected taxes or fees could not be found.'),
+                ]);
             }
 
             $validatedTaxesAndFees->push($taxOrFee);
@@ -190,12 +220,12 @@ class CreateAttendeeHandler
     private function processTaxesAndFees(CreateAttendeeDTO $attendeeDTO): void
     {
         $this->calculateTaxesAndFees($attendeeDTO)
-            ?->each(fn($taxOrFee) => $this->taxAndFeeRollupService
+            ?->each(fn ($taxOrFee) => $this->taxAndFeeRollupService
                 ->addToRollUp(
                     $taxOrFee,
                     $attendeeDTO
                         ->taxes_and_fees
-                        ->first(fn($taxOrFeeDTO) => $taxOrFeeDTO->tax_or_fee_id === $taxOrFee->getId())
+                        ->first(fn ($taxOrFeeDTO) => $taxOrFeeDTO->tax_or_fee_id === $taxOrFee->getId())
                         ->amount)
             );
     }
@@ -214,17 +244,19 @@ class CreateAttendeeHandler
                 OrderItemDomainObjectAbstract::ORDER_ID => $order->getId(),
                 OrderItemDomainObjectAbstract::ITEM_NAME => $product->getTitle(),
                 OrderItemDomainObjectAbstract::PRODUCT_PRICE_ID => $productPriceId,
+                OrderItemDomainObjectAbstract::PRODUCT_TYPE => $product->getProductType(),
                 OrderItemDomainObjectAbstract::TAXES_AND_FEES_ROLLUP => $this->taxAndFeeRollupService->getRollUp(),
+                OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             ]
         );
     }
 
-    private function createAttendee(OrderDomainObject $order, CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
+    private function createAttendee(OrderDomainObject $order, CreateAttendeeDTO $attendeeDTO, int $productPriceId): AttendeeDomainObject
     {
         return $this->attendeeRepository->create([
             AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
             AttendeeDomainObjectAbstract::PRODUCT_ID => $attendeeDTO->product_id,
-            AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $attendeeDTO->product_price_id,
+            AttendeeDomainObjectAbstract::PRODUCT_PRICE_ID => $productPriceId,
             AttendeeDomainObjectAbstract::STATUS => AttendeeStatus::ACTIVE->name,
             AttendeeDomainObjectAbstract::EMAIL => $attendeeDTO->email,
             AttendeeDomainObjectAbstract::FIRST_NAME => $attendeeDTO->first_name,
@@ -232,14 +264,16 @@ class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::ORDER_ID => $order->getId(),
             AttendeeDomainObjectAbstract::PUBLIC_ID => IdHelper::publicId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
+            AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
         ]);
     }
 
-    private function fireEventsAndUpdateQuantities(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order): void
+    private function fireEventsAndUpdateQuantities(CreateAttendeeDTO $attendeeDTO, OrderDomainObject $order, int $productPriceId): void
     {
         $this->productQuantityAdjustmentService->increaseQuantitySold(
-            priceId: $attendeeDTO->product_price_id,
+            priceId: $productPriceId,
+            eventOccurrenceId: $attendeeDTO->event_occurrence_id,
         );
 
         event(new OrderStatusChangedEvent(
@@ -253,5 +287,35 @@ class CreateAttendeeHandler
         $this->domainEventDispatcherService->dispatch(
             new OrderEvent(DomainEventType::ORDER_CREATED, $order->getId())
         );
+    }
+
+    private function resolveOccurrenceId(CreateAttendeeDTO $attendeeDTO): CreateAttendeeDTO
+    {
+        if ($attendeeDTO->event_occurrence_id !== null) {
+            return $attendeeDTO;
+        }
+
+        $event = $this->eventRepository->findById($attendeeDTO->event_id);
+
+        if ($event->getType() !== EventType::SINGLE->name) {
+            throw ValidationException::withMessages([
+                'event_occurrence_id' => __('An occurrence must be selected for recurring events.'),
+            ]);
+        }
+
+        $occurrence = $this->eventOccurrenceRepository->findFirstWhere([
+            'event_id' => $attendeeDTO->event_id,
+        ]);
+
+        if (! $occurrence) {
+            throw ValidationException::withMessages([
+                'event_occurrence_id' => __('No occurrence found for this event.'),
+            ]);
+        }
+
+        return CreateAttendeeDTO::fromArray(array_merge(
+            $attendeeDTO->toArray(),
+            ['event_occurrence_id' => $occurrence->getId()]
+        ));
     }
 }

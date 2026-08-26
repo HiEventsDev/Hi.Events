@@ -16,13 +16,11 @@ use Throwable;
 class EditQuestionService
 {
     public function __construct(
-        private readonly QuestionRepositoryInterface   $questionRepository,
-        private readonly DatabaseManager               $databaseManager,
-        private readonly HtmlPurifierService           $purifier,
+        private readonly QuestionRepositoryInterface $questionRepository,
+        private readonly DatabaseManager $databaseManager,
+        private readonly HtmlPurifierService $purifier,
         private readonly EventProductValidationService $eventProductValidationService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
@@ -31,9 +29,8 @@ class EditQuestionService
      */
     public function editQuestion(
         QuestionDomainObject $question,
-        array                $productIds,
-    ): QuestionDomainObject
-    {
+        array $productIds,
+    ): QuestionDomainObject {
         $existingQuestion = $this->questionRepository->findFirstWhere([
             QuestionDomainObjectAbstract::ID => $question->getId(),
             QuestionDomainObjectAbstract::EVENT_ID => $question->getEventId(),

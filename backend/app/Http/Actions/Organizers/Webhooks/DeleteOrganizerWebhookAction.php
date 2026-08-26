@@ -11,9 +11,7 @@ class DeleteOrganizerWebhookAction extends BaseAction
 {
     public function __construct(
         private readonly DeleteWebhookHandler $deleteWebhookHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId, int $webhookId): Response
     {

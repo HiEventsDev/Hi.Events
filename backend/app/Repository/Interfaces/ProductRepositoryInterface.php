@@ -14,78 +14,35 @@ use Illuminate\Support\Collection;
  */
 interface ProductRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param int $eventId
-     * @param QueryParamsDTO $params
-     * @return LengthAwarePaginator
-     */
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    /**
-     * @param int $productId
-     * @param int $productPriceId
-     * @return int
-     */
     public function getQuantityRemainingForProductPrice(int $productId, int $productPriceId): int;
 
-    /**
-     * @param int $productId
-     * @return Collection
-     */
     public function getTaxesByProductId(int $productId): Collection;
 
-    /**
-     * @param int $taxId
-     * @return Collection
-     */
     public function getProductsByTaxId(int $taxId): Collection;
 
-    /**
-     * @param int $productId
-     * @return Collection
-     */
     public function getCapacityAssignmentsByProductId(int $productId): Collection;
 
-    /**
-     * @param int $productId
-     * @param array $taxIds
-     * @return void
-     */
     public function addTaxesAndFeesToProduct(int $productId, array $taxIds): void;
 
+    public function syncAddons(int $productId, array $addonProductIds): void;
+
+    public function detachAddonAssociations(int $productId): void;
+
     /**
-     * @param array $productIds
-     * @param int $capacityAssignmentId
-     * @return void
+     * @return Collection<int, array<int>> map of addon_product_id => parent product ids
      */
+    public function findParentProductIds(array $addonProductIds): Collection;
+
     public function addCapacityAssignmentToProducts(int $capacityAssignmentId, array $productIds): void;
 
-    /**
-     * @param int $checkInListId
-     * @param array $productIds
-     * @return void
-     */
     public function addCheckInListToProducts(int $checkInListId, array $productIds): void;
 
-    /**
-     * @param int $checkInListId
-     * @return void
-     */
     public function removeCheckInListFromProducts(int $checkInListId): void;
 
-    /**
-     * @param int $capacityAssignmentId
-     * @return void
-     */
     public function removeCapacityAssignmentFromProducts(int $capacityAssignmentId): void;
 
-
-    /**
-     * @param int $eventId
-     * @param array $productUpdates
-     * @param array $categoryUpdates
-     * @return void
-     */
     public function bulkUpdateProductsAndCategories(int $eventId, array $productUpdates, array $categoryUpdates): void;
 
     public function hasAssociatedOrders(int $productId): bool;

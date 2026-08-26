@@ -1,135 +1,143 @@
-/* QuestionAndAnswerList.module.scss */
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--mantine-spacing-lg);
 }
 
-.section {
+.group {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 4px;
 }
 
-.sectionHeader {
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--mantine-color-gray-2);
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.groupTitle {
+  color: var(--mantine-color-dimmed);
+}
+
+.groupCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--mantine-radius-xl);
+  background-color: var(--mantine-color-gray-1);
+  color: var(--mantine-color-dimmed);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .questionsList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
-.questionCard {
-  padding: 0.75rem;
-  background: #ffffff;
-  border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-sm);
-}
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
 
-.questionCompact {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--mantine-color-gray-1);
-
-  &:last-child {
-    border-bottom: none;
+  & + & {
+    border-top: 1px solid var(--mantine-color-gray-2);
   }
 }
 
-.productTitle {
-  color: var(--mantine-color-gray-6);
-  margin-bottom: 0.5rem;
-  font-size: var(--mantine-font-size-xs);
+.questionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-sm);
+  min-width: 0;
 }
 
-.questionTitle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.375rem;
-  align-items: flex-start;
+.questionText {
+  color: var(--mantine-color-dimmed);
+  font-weight: 500;
+  min-width: 0;
+}
+
+.productTitle {
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .answerContainer {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: var(--mantine-spacing-xs);
 }
 
 .answer {
   flex: 1;
-  color: var(--mantine-color-dark-6);
+  min-width: 0;
+  color: var(--mantine-color-text);
   word-break: break-word;
+  white-space: pre-line;
+}
+
+.emptyAnswer {
+  flex: 1;
+  color: var(--mantine-color-dimmed);
+}
+
+.editButton {
+  flex-shrink: 0;
+  margin-top: -2px;
 }
 
 .editContainer {
-  padding: 0.5rem;
-  background: var(--mantine-color-gray-0);
+  margin-top: 4px;
+  padding: var(--mantine-spacing-sm);
+  background-color: var(--mantine-color-gray-0);
   border: 1px solid var(--mantine-color-gray-2);
-  border-radius: var(--mantine-radius-sm);
+  border-radius: var(--mantine-radius-md);
 }
 
 .editActions {
-  margin-top: 0.5rem;
+  margin-top: var(--mantine-spacing-xs);
 }
 
-.attendeeInfo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.625rem;
-  padding-top: 0.625rem;
-  border-top: 1px solid var(--mantine-color-gray-1);
-  color: var(--mantine-color-gray-6);
-}
-
-.emptyState {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.questionText {
-  color: #333;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 4px;
-}
-
-/* New styles for attendee-focused layout */
-.attendeeQuestionsList {
+.attendeeGroups {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--mantine-spacing-md);
 }
 
-.attendeeSection {
-  border: 1px solid var(--mantine-color-gray-3);
-  border-radius: var(--mantine-radius-sm);
-  overflow: hidden;
-  background: var(--mantine-color-gray-0);
+.attendeeGroup {
+  display: flex;
+  flex-direction: column;
 }
 
 .attendeeHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  background-color: var(--mantine-color-gray-1);
+  gap: 6px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--mantine-color-gray-3);
 }
 
-.attendeeQuestions {
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.attendeeIcon {
+  color: var(--mantine-color-dimmed);
+  flex-shrink: 0;
 }
 
-/* In compact mode, adjust spacing in attendee sections */
-.questionCompact:first-child {
-  padding-top: 0.25rem;
+.attendeeName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.questionCompact:last-child {
-  padding-bottom: 0.25rem;
+.attendeeHeader .productTitle {
+  margin-left: auto;
 }

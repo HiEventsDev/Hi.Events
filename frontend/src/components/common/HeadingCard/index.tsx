@@ -9,9 +9,10 @@ interface HeadingCardProps {
     subHeading: string;
     buttonAction?: () => void;
     buttonText?: string;
+    buttonDataTestId?: string;
 }
 
-export const HeadingCard = ({className = '', subHeading, heading, buttonAction, buttonText}: HeadingCardProps) => {
+export const HeadingCard = ({className = '', subHeading, heading, buttonAction, buttonText, buttonDataTestId}: HeadingCardProps) => {
     return (
         <Card className={`${className} ${classes.card}`}>
             <div>
@@ -24,7 +25,7 @@ export const HeadingCard = ({className = '', subHeading, heading, buttonAction, 
             </div>
             {buttonAction && (
                 <div className={classes.button}>
-                    <Button size={'xs'} onClick={buttonAction} variant={'light'}>{buttonText || t`Add New`}</Button>
+                    <Button size={'xs'} onClick={buttonAction} variant={'light'} data-testid={buttonDataTestId}>{buttonText || t`Add New`}</Button>
                 </div>
             )}
         </Card>

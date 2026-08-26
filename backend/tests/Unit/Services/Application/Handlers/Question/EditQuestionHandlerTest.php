@@ -17,12 +17,12 @@ class EditQuestionHandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testDescriptionIsPurifiedOnEdit(): void
+    public function test_description_is_purified_on_edit(): void
     {
         $editQuestionService = Mockery::mock(EditQuestionService::class);
         $purifier = Mockery::mock(HtmlPurifierService::class);
 
-        $purifier->shouldReceive('purify')->andReturnUsing(fn($v) => is_string($v) ? 'PURIFIED:' . $v : $v);
+        $purifier->shouldReceive('purify')->andReturnUsing(fn ($v) => is_string($v) ? 'PURIFIED:'.$v : $v);
 
         $capturedQuestion = null;
         $editQuestionService
@@ -30,6 +30,7 @@ class EditQuestionHandlerTest extends TestCase
             ->once()
             ->andReturnUsing(function ($question) use (&$capturedQuestion) {
                 $capturedQuestion = $question;
+
                 return $question;
             });
 

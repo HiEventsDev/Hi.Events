@@ -16,11 +16,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class GetOrganizerReportAction extends BaseAction
 {
-    public function __construct(private readonly GetOrganizerReportHandler $reportHandler)
-    {
-    }
+    public function __construct(private readonly GetOrganizerReportHandler $reportHandler) {}
 
     /**
+     * Get Organizer Report
+     *
+     * The response rows depend on the requested `reportType`. Paginated report types return
+     * `{data, meta, links}`; non-paginated report types return `{data}`.
+     *
      * @throws ValidationException
      */
     public function __invoke(GetOrganizerReportRequest $request, int $organizerId, string $reportType): JsonResponse
@@ -29,7 +32,7 @@ class GetOrganizerReportAction extends BaseAction
 
         $this->validateDateRange($request);
 
-        if (!in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
+        if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
         }
 
@@ -66,7 +69,7 @@ class GetOrganizerReportAction extends BaseAction
         $startDate = $request->validated('start_date');
         $endDate = $request->validated('end_date');
 
-        if (!$startDate || !$endDate) {
+        if (! $startDate || ! $endDate) {
             return;
         }
 

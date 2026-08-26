@@ -1,6 +1,7 @@
 @php /** @var \HiEvents\DomainObjects\WaitlistEntryDomainObject $entry */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventDomainObject $event */ @endphp
 @php /** @var ?string $productName */ @endphp
+@php /** @var ?string $occurrenceDateFormatted */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var string $eventUrl */ @endphp
@@ -12,7 +13,11 @@
 
 {{ __('Hello') }},
 
-@if($productName)
+@if($occurrenceDateFormatted && $productName)
+{{ __('Unfortunately, your waitlist offer for **:product** on **:date** for the event **:event** has expired.', ['product' => $productName, 'date' => $occurrenceDateFormatted, 'event' => $event->getTitle()]) }}
+@elseif($occurrenceDateFormatted)
+{{ __('Unfortunately, your waitlist offer on **:date** for the event **:event** has expired.', ['date' => $occurrenceDateFormatted, 'event' => $event->getTitle()]) }}
+@elseif($productName)
 {{ __('Unfortunately, your waitlist offer for **:product** for the event **:event** has expired.', ['product' => $productName, 'event' => $event->getTitle()]) }}
 @else
 {{ __('Unfortunately, your waitlist offer for the event **:event** has expired.', ['event' => $event->getTitle()]) }}

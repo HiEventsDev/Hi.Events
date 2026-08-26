@@ -14,9 +14,7 @@ class CancelMessageHandler
 {
     public function __construct(
         private readonly MessageRepositoryInterface $messageRepository,
-    )
-    {
-    }
+    ) {}
 
     public function handle(int $messageId, int $eventId): MessageDomainObject
     {

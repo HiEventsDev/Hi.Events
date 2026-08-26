@@ -10,7 +10,5 @@ class DeleteAttendeeCheckInPublicDTO extends BaseDTO
         public string $checkInListShortId,
         public string $checkInShortId,
         public string $checkInUserIpAddress,
-    )
-    {
-    }
+    ) {}
 }

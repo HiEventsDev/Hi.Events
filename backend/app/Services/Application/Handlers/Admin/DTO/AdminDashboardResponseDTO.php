@@ -15,6 +15,5 @@ class AdminDashboardResponseDTO extends BaseDataObject
         public readonly int $recent_orders_count,
         public readonly float $recent_orders_total,
         public readonly int $recent_signups_count,
-    ) {
-    }
+    ) {}
 }

@@ -18,8 +18,7 @@ class EventMessage extends BaseMail
         private readonly EventDomainObject $event,
         private readonly EventSettingDomainObject $eventSettings,
         private readonly SendMessageDTO $messageData
-    )
-    {
+    ) {
         parent::__construct();
     }
 

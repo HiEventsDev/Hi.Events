@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Switch} from "@mantine/core";
+import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -21,7 +21,6 @@ export const MiscSettings = () => {
     const form = useForm({
         initialValues: {
             price_display_mode: 'EXCLUSIVE',
-            hide_getting_started_page: false,
             allow_attendee_self_edit: false,
         }
     });
@@ -31,7 +30,6 @@ export const MiscSettings = () => {
         if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data) {
             form.setValues({
                 price_display_mode: eventSettingsQuery.data.price_display_mode,
-                hide_getting_started_page: eventSettingsQuery.data.hide_getting_started_page,
                 allow_attendee_self_edit: eventSettingsQuery.data.allow_attendee_self_edit ?? false,
             });
         }
@@ -86,12 +84,6 @@ export const MiscSettings = () => {
                             {form.errors['price_display_mode']}
                         </div>
                     )}
-
-                    <Switch
-                        {...form.getInputProps('hide_getting_started_page', {type: 'checkbox'})}
-                        label={t`Hide getting started page`}
-                        description={t`Hide the getting started page from the sidebar`}
-                    />
 
                     <SelfServiceSettings
                         value={form.values.allow_attendee_self_edit}

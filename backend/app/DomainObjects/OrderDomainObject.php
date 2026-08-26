@@ -92,13 +92,13 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function getFullName(): string
     {
-        return $this->getFirstName() . ' ' . $this->getLastName();
+        return $this->getFirstName().' '.$this->getLastName();
     }
 
     public function getProductOrderItems(): Collection
     {
         if ($this->getOrderItems() === null) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
@@ -109,7 +109,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getTicketOrderItems(): Collection
     {
         if ($this->getOrderItems() === null) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->getOrderItems()->filter(static function (OrderItemDomainObject $orderItem) {
@@ -120,6 +120,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setOrderItems(?Collection $orderItems): OrderDomainObject
     {
         $this->orderItems = $orderItems;
+
         return $this;
     }
 
@@ -134,6 +135,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setAttendees(?Collection $attendees): OrderDomainObject
     {
         $this->attendees = $attendees;
+
         return $this;
     }
 
@@ -144,7 +146,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isPaymentRequired(): bool
     {
-        return (int)ceil($this->getTotalGross()) > 0;
+        return (int) ceil($this->getTotalGross()) > 0;
     }
 
     public function isOrderAwaitingOfflinePayment(): bool
@@ -180,6 +182,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setStripePayment(?StripePaymentDomainObject $stripePayment): OrderDomainObject
     {
         $this->stripePayment = $stripePayment;
+
         return $this;
     }
 
@@ -190,7 +193,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isFullyRefunded(): bool
     {
-        return !$this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
+        return ! $this->isFreeOrder() && ($this->getTotalRefunded() >= $this->getTotalGross());
     }
 
     public function getHumanReadableStatus(): string
@@ -215,7 +218,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function getLatestInvoice(): ?InvoiceDomainObject
     {
-        return $this->getInvoices()?->sortByDesc(fn(InvoiceDomainObject $invoice) => $invoice->getId())->first();
+        return $this->getInvoices()?->sortByDesc(fn (InvoiceDomainObject $invoice) => $invoice->getId())->first();
     }
 
     public function getStripePayment(): ?StripePaymentDomainObject
@@ -231,6 +234,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setQuestionAndAnswerViews(?Collection $questionAndAnswerViews): OrderDomainObject
     {
         $this->questionAndAnswerViews = $questionAndAnswerViews;
+
         return $this;
     }
 
@@ -240,7 +244,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             throw new RuntimeException('Cannot calculate total quantity, order items are null');
         }
 
-        return $this->getOrderItems()->sum(fn(OrderItemDomainObject $item) => $item->getQuantity());
+        return $this->getOrderItems()->sum(fn (OrderItemDomainObject $item) => $item->getQuantity());
     }
 
     public function getQuestionAndAnswerViews(): ?Collection
@@ -251,6 +255,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setEvent(?EventDomainObject $event): OrderDomainObject
     {
         $this->event = $event;
+
         return $this;
     }
 
@@ -262,6 +267,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setInvoices(?Collection $invoices): OrderDomainObject
     {
         $this->invoices = $invoices;
+
         return $this;
     }
 
@@ -273,6 +279,7 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function setSessionIdentifier(?string $sessionIdentifier): OrderDomainObject
     {
         $this->sessionIdentifier = $sessionIdentifier;
+
         return $this;
     }
 
@@ -283,9 +290,9 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public function isRefundable(): bool
     {
-        return !$this->isFreeOrder()
+        return ! $this->isFreeOrder()
             && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
-            && $this->getPaymentProvider() === PaymentProviders::STRIPE->name
+            && in_array($this->getPaymentProvider(), [PaymentProviders::STRIPE->name, PaymentProviders::OFFLINE->name], true)
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
     }
 

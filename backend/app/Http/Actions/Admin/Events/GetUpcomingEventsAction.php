@@ -16,16 +16,14 @@ class GetUpcomingEventsAction extends BaseAction
 {
     public function __construct(
         private readonly GetUpcomingEventsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $events = $this->handler->handle(new GetUpcomingEventsDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
         ));
 
         return $this->resourceResponse(

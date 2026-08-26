@@ -2,7 +2,4 @@
 
 namespace HiEvents\Exceptions;
 
-class CannotAcceptPaymentException extends BaseException
-{
-
-}
+class CannotAcceptPaymentException extends BaseException {}

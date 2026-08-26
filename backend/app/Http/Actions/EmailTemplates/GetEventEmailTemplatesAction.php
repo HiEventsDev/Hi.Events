@@ -16,9 +16,7 @@ class GetEventEmailTemplatesAction extends BaseAction
 {
     public function __construct(
         private readonly GetEmailTemplatesHandler $handler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request, int $eventId): JsonResponse
     {

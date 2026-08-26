@@ -33,15 +33,13 @@ class RefundOrderHandler
 {
     public function __construct(
         private readonly StripePaymentIntentRefundService $refundService,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly EventRepositoryInterface         $eventRepository,
-        private readonly Mailer                           $mailer,
-        private readonly OrderCancelService               $orderCancelService,
-        private readonly DatabaseManager                  $databaseManager,
-        private readonly StripeClientFactory              $stripeClientFactory,
-    )
-    {
-    }
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly Mailer $mailer,
+        private readonly OrderCancelService $orderCancelService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly StripeClientFactory $stripeClientFactory,
+    ) {}
 
     /**
      * @throws RefundNotPossibleException
@@ -50,7 +48,7 @@ class RefundOrderHandler
      */
     public function handle(RefundOrderDTO $refundOrderDTO): OrderDomainObject
     {
-        return $this->databaseManager->transaction(fn() => $this->refundOrder($refundOrderDTO));
+        return $this->databaseManager->transaction(fn () => $this->refundOrder($refundOrderDTO));
     }
 
     private function fetchOrder(int $eventId, int $orderId): OrderDomainObject
@@ -59,7 +57,7 @@ class RefundOrderHandler
             ->loadRelation(new Relationship(StripePaymentDomainObject::class, name: 'stripe_payment'))
             ->findFirstWhere(['event_id' => $eventId, 'id' => $orderId]);
 
-        if (!$order) {
+        if (! $order) {
             throw new ResourceNotFoundException(__('Order :id not found for event :eventId', [
                 'id' => $orderId,
                 'eventId' => $eventId,
@@ -74,7 +72,7 @@ class RefundOrderHandler
      */
     private function validateRefundability(OrderDomainObject $order): void
     {
-        if (!$order->getStripePayment()) {
+        if (! $order->getStripePayment()) {
             throw new RefundNotPossibleException(__('There is no Stripe data associated with this order.'));
         }
 

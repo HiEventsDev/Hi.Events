@@ -3,15 +3,16 @@ import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
 import {Modal} from "../../common/Modal";
-import {Alert, Button, Checkbox, LoadingOverlay} from "@mantine/core";
-import {IconInfoCircle} from "@tabler/icons-react";
+import {Button, Checkbox, LoadingOverlay} from "@mantine/core";
 import classes from './CancelOrderModal.module.scss';
+import {Callout} from "../../common/Callout";
 import {OrderDetails} from "../../common/OrderDetails";
 import {AttendeeList} from "../../common/AttendeeList";
 import {t} from "@lingui/macro";
 import {useCancelOrder} from "../../../mutations/useCancelOrder.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {useState} from "react";
+import {isOfflineOrder, isOrderRefundable} from "../../../utilites/orderHelper.ts";
 
 interface RefundOrderModalProps extends GenericModalProps {
     orderId: IdParam,
@@ -24,10 +25,7 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const cancelOrderMutation = useCancelOrder();
     const [shouldRefund, setShouldRefund] = useState(true);
 
-    const isRefundable = order && !order.is_free_order
-        && order.status !== 'AWAITING_OFFLINE_PAYMENT'
-        && order.payment_provider === 'STRIPE'
-        && order.refund_status !== 'REFUNDED';
+    const isRefundable = order && isOrderRefundable(order);
 
     const handleCancelOrder = () => {
         cancelOrderMutation.mutate({
@@ -62,10 +60,9 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
 
             {products && <AttendeeList order={order} products={products}/>}
 
-            <Alert className={classes.alert} variant="light" color="blue" title={t`Please Note`}
-                   icon={<IconInfoCircle/>}>
+            <Callout variant="info" className={classes.alert} title={t`Please Note`}>
                 {t`Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool.`}
-            </Alert>
+            </Callout>
 
             {isRefundable && (
                 <Checkbox
@@ -74,7 +71,9 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                     checked={shouldRefund}
                     onChange={(event) => setShouldRefund(event.currentTarget.checked)}
                     label={t`Also refund this order`}
-                    description={t`The full order amount will be refunded to the customer's original payment method.`}
+                    description={isOfflineOrder(order)
+                        ? t`The order will be marked as refunded. You will need to return the payment to the customer yourself.`
+                        : t`The full order amount will be refunded to the customer's original payment method.`}
                 />
             )}
 

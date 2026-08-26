@@ -6,6 +6,7 @@ import ProductSalesReport from "../ProductSalesReport";
 import {ReportTypes} from "../../../../../types.ts";
 import {DailySalesReport} from "../DailySalesReport";
 import PromoCodesReport from "../PromoCodesReport";
+import OccurrenceSummaryReport from "../OccurrenceSummaryReport";
 
 const renderReport = (reportType: string) => {
     switch (reportType) {
@@ -15,6 +16,8 @@ const renderReport = (reportType: string) => {
             return <DailySalesReport/>;
         case ReportTypes.PromoCodes:
             return <PromoCodesReport/>;
+        case ReportTypes.OccurrenceSummary:
+            return <OccurrenceSummaryReport/>;
         default:
             return <div>Report not found</div>;
     }

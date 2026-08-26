@@ -8,7 +8,5 @@ class TaxAndProductAssociateParams
         public readonly int $productId,
         public readonly int $accountId,
         public readonly array $taxAndFeeIds,
-    )
-    {
-    }
+    ) {}
 }

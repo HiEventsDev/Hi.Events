@@ -14,6 +14,7 @@ abstract class WaitlistEntryDomainObjectAbstract extends \HiEvents\DomainObjects
     final public const EVENT_ID = 'event_id';
     final public const PRODUCT_PRICE_ID = 'product_price_id';
     final public const ORDER_ID = 'order_id';
+    final public const EVENT_OCCURRENCE_ID = 'event_occurrence_id';
     final public const EMAIL = 'email';
     final public const FIRST_NAME = 'first_name';
     final public const LAST_NAME = 'last_name';
@@ -34,6 +35,7 @@ abstract class WaitlistEntryDomainObjectAbstract extends \HiEvents\DomainObjects
     protected int $event_id;
     protected int $product_price_id;
     protected ?int $order_id = null;
+    protected ?int $event_occurrence_id = null;
     protected string $email;
     protected string $first_name;
     protected ?string $last_name = null;
@@ -57,6 +59,7 @@ abstract class WaitlistEntryDomainObjectAbstract extends \HiEvents\DomainObjects
                     'event_id' => $this->event_id ?? null,
                     'product_price_id' => $this->product_price_id ?? null,
                     'order_id' => $this->order_id ?? null,
+                    'event_occurrence_id' => $this->event_occurrence_id ?? null,
                     'email' => $this->email ?? null,
                     'first_name' => $this->first_name ?? null,
                     'last_name' => $this->last_name ?? null,
@@ -117,6 +120,17 @@ abstract class WaitlistEntryDomainObjectAbstract extends \HiEvents\DomainObjects
     public function getOrderId(): ?int
     {
         return $this->order_id;
+    }
+
+    public function setEventOccurrenceId(?int $event_occurrence_id): self
+    {
+        $this->event_occurrence_id = $event_occurrence_id;
+        return $this;
+    }
+
+    public function getEventOccurrenceId(): ?int
+    {
+        return $this->event_occurrence_id;
     }
 
     public function setEmail(string $email): self

@@ -19,16 +19,14 @@ use Throwable;
 class ResetPasswordHandler
 {
     public function __construct(
-        private readonly UserRepositoryInterface               $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
         private readonly PasswordResetTokenRepositoryInterface $passwordResetTokenRepository,
-        private readonly Mailer                                $mailer,
-        private readonly HashManager                           $hashManager,
-        private readonly DatabaseManager                       $databaseManager,
-        private readonly LoggerInterface                       $logger,
-        private readonly ResetPasswordTokenValidateService     $passwordTokenValidateService,
-    )
-    {
-    }
+        private readonly Mailer $mailer,
+        private readonly HashManager $hashManager,
+        private readonly DatabaseManager $databaseManager,
+        private readonly LoggerInterface $logger,
+        private readonly ResetPasswordTokenValidateService $passwordTokenValidateService,
+    ) {}
 
     /**
      * @throws Throwable
@@ -58,7 +56,7 @@ class ResetPasswordHandler
     private function validateUser(string $email): UserDomainObject
     {
         $user = $this->userRepository->findFirstWhere(['email' => $email]);
-        if (!$user) {
+        if (! $user) {
             throw new ResourceNotFoundException(__('User not found'));
         }
 
@@ -69,10 +67,10 @@ class ResetPasswordHandler
     {
         $this->userRepository->updateWhere(
             attributes: [
-                'password' => $this->hashManager->make($newPassword)
+                'password' => $this->hashManager->make($newPassword),
             ],
             where: [
-                'id' => $userId
+                'id' => $userId,
             ],
         );
     }
@@ -85,9 +83,9 @@ class ResetPasswordHandler
     private function logResetPasswordSuccess(UserDomainObject $user): void
     {
         $this->logger->info('Password reset successfully', [
-                'user_id' => $user->getId(),
-                'email' => $user->getEmail()
-            ]
+            'user_id' => $user->getId(),
+            'email' => $user->getEmail(),
+        ]
         );
     }
 
@@ -96,6 +94,6 @@ class ResetPasswordHandler
         $this->mailer
             ->to($user->getEmail())
             ->locale($user->getLocale())
-            ->send(new ResetPasswordSuccess());
+            ->send(new ResetPasswordSuccess);
     }
 }

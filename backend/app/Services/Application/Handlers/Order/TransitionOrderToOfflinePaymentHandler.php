@@ -15,6 +15,7 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
+use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -25,15 +26,14 @@ use Illuminate\Database\DatabaseManager;
 class TransitionOrderToOfflinePaymentHandler
 {
     public function __construct(
-        private readonly ProductQuantityUpdateService     $productQuantityUpdateService,
-        private readonly OrderRepositoryInterface         $orderRepository,
-        private readonly DatabaseManager                  $databaseManager,
+        private readonly ProductQuantityUpdateService $productQuantityUpdateService,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly DatabaseManager $databaseManager,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
-        private readonly DomainEventDispatcherService     $domainEventDispatcherService,
+        private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
-    )
-    {
-    }
+    ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
     {
@@ -48,7 +48,7 @@ class TransitionOrderToOfflinePaymentHandler
             }
 
             if ($order->getSessionId() === null
-                || !$this->sessionManagementService->verifySession($order->getSessionId())) {
+                || ! $this->sessionManagementService->verifySession($order->getSessionId())) {
                 throw new UnauthorizedException(
                     __('Sorry, we could not verify your session. Please restart your order.')
                 );
@@ -60,6 +60,8 @@ class TransitionOrderToOfflinePaymentHandler
             ]);
 
             $this->validateOfflinePayment($order, $eventSettings);
+
+            $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
 
             $this->updateOrderStatuses($order->getId());
 
@@ -100,11 +102,10 @@ class TransitionOrderToOfflinePaymentHandler
      * @throws ResourceConflictException
      */
     public function validateOfflinePayment(
-        OrderDomainObject        $order,
+        OrderDomainObject $order,
         EventSettingDomainObject $settings,
-    ): void
-    {
-        if (!$order->isOrderReserved()) {
+    ): void {
+        if (! $order->isOrderReserved()) {
             throw new ResourceConflictException(__('Order is not in the correct status to transition to offline payment'));
         }
 

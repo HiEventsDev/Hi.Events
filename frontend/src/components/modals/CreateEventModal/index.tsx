@@ -1,20 +1,21 @@
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useNavigate} from "react-router";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {Event, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
+import {Event, EventType, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
 import React, {useEffect, useState} from "react";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Select, TextInput} from "@mantine/core";
+import {Anchor, Button, SegmentedControl, Select, TextInput} from "@mantine/core";
 import {hasLength, useForm} from "@mantine/form";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
 import {Editor} from "../../common/Editor";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
-import {IconCalendarEvent, IconSparkles, IconUsers, IconX} from "@tabler/icons-react";
+import {IconCalendarEvent, IconCalendarRepeat, IconSparkles, IconUsers, IconX} from "@tabler/icons-react";
 import classes from "./CreateEventModal.module.scss";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import dayjs from "dayjs";
 import {DateTimePicker} from "@mantine/dates";
-import {EventCategories} from "../../../constants/eventCategories.ts";
+import {getEventCategories} from "../../../constants/eventCategories.ts";
+import {Callout} from "../../common/Callout";
 import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
 
 interface CreateEventModalProps extends GenericModalProps {
@@ -31,6 +32,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
         initialValues: {
             title: '',
             status: undefined,
+            type: EventType.SINGLE,
             start_date: dayjs().add(1, 'day').hour(21).minute(0).second(0).toISOString(),
             end_date: undefined,
             description: undefined,
@@ -40,6 +42,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
         validate: {
             title: hasLength({max: 150}, t`Event name should be less than 150 characters`),
             end_date: (value, values) => {
+                if (values.type === EventType.RECURRING) return;
                 if (value && values.start_date && dayjs(value).isBefore(dayjs(values.start_date))) {
                     return t`End date must be after start date`;
                 }
@@ -55,7 +58,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     const eventMutation = useCreateEvent();
     const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
 
-    // If organizerId is provided, set it and fetch the organizer data
     useEffect(() => {
         if (organizerId) {
             form.setFieldValue('organizer_id', String(organizerId));
@@ -88,7 +90,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
         eventMutation.mutateAsync({
             eventData: values,
         }).then((data) => {
-            navigate(`/manage/event/${data.data.id}/getting-started?new_event=true`)
+            navigate(`/manage/event/${data.data.id}/dashboard?new_event=true`)
         }).catch((error) => {
             errorHandler(form, error);
         });
@@ -185,7 +187,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 {...form.getInputProps('category')}
                                 label={t`Event Category`}
                                 placeholder={t`Select a category`}
-                                data={EventCategories.map((category) => ({
+                                data={getEventCategories().map((category) => ({
                                     value: category.id,
                                     label: `${category.emoji} ${category.name}`,
                                 }))}
@@ -206,53 +208,98 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                 />
                             </div>
 
-                            <div className={classes.dateTimeGrid}>
-                                <DateTimePicker
-                                    label={t`Start Date & Time`}
-                                    {...form.getInputProps('start_date')}
-                                    required
+                            <div>
+                                <SegmentedControl
+                                    fullWidth
                                     size="md"
-                                    placeholder={t`Select start date and time`}
-                                    valueFormat={getDateTimePickerFormat()}
-                                    clearable
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
+                                    value={form.values.type || EventType.SINGLE}
                                     onChange={(value) => {
-                                        form.setFieldValue('start_date', value);
-
-                                        // Auto-adjust end date if it's before new start date
-                                        if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                            form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
+                                        form.setFieldValue('type', value as EventType);
+                                        if (value === EventType.RECURRING) {
+                                            form.setFieldValue('start_date', undefined);
+                                            form.setFieldValue('end_date', undefined);
+                                        } else {
+                                            form.setFieldValue('start_date', dayjs().add(1, 'day').hour(21).minute(0).second(0).toISOString());
                                         }
                                     }}
-                                />
-                                <DateTimePicker
-                                    label={t`End Date & Time (optional)`}
-                                    {...form.getInputProps('end_date')}
-                                    size="md"
-                                    placeholder={t`Select end date and time`}
-                                    valueFormat={getDateTimePickerFormat()}
-                                    clearable
-                                    dropdownType="modal"
-                                    timePickerProps={{
-                                        format: '12h',
-                                        withDropdown: true,
-                                    }}
-                                    minDate={form.values.start_date ?? undefined}
-                                    onFocus={
-                                        () => {
-                                            if (!form.values.end_date && form.values.start_date) {
-                                                // Set default end date to 2 hours after start date
-                                                form.setFieldValue('end_date', dayjs(form.values.start_date).add(2, 'hours').toISOString());
-                                            }
-                                        }
-                                    }
-
+                                    data={[
+                                        {
+                                            value: EventType.SINGLE,
+                                            label: (
+                                                <span style={{display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center'}}>
+                                                    <IconCalendarEvent size={16}/>
+                                                    {t`Single Event`}
+                                                </span>
+                                            ),
+                                        },
+                                        {
+                                            value: EventType.RECURRING,
+                                            label: (
+                                                <span style={{display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center'}}>
+                                                    <IconCalendarRepeat size={16}/>
+                                                    {t`Recurring Event`}
+                                                </span>
+                                            ),
+                                        },
+                                    ]}
+                                    mb="md"
                                 />
                             </div>
+
+                            {form.values.type === EventType.RECURRING ? (
+                                <Callout
+                                    icon={<IconCalendarRepeat size={22} className={classes.recurringNoticeIcon}/>}
+                                    title={t`Occurrences can be configured after creation`}
+                                    children={t`You'll be able to set up dates, schedules, and recurrence rules in the next step.`}
+                                    className={classes.recurringNotice}
+                                />
+                            ) : (
+                                <div className={classes.dateTimeGrid}>
+                                    <DateTimePicker
+                                        label={t`Start Date & Time`}
+                                        {...form.getInputProps('start_date')}
+                                        required
+                                        size="md"
+                                        placeholder={t`Select start date and time`}
+                                        valueFormat={getDateTimePickerFormat()}
+                                        clearable
+                                        dropdownType="modal"
+                                        timePickerProps={{
+                                            format: '12h',
+                                            withDropdown: true,
+                                        }}
+                                        onChange={(value) => {
+                                            form.setFieldValue('start_date', value);
+
+                                            if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
+                                                form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
+                                            }
+                                        }}
+                                    />
+                                    <DateTimePicker
+                                        label={t`End Date & Time (optional)`}
+                                        {...form.getInputProps('end_date')}
+                                        size="md"
+                                        placeholder={t`Select end date and time`}
+                                        valueFormat={getDateTimePickerFormat()}
+                                        clearable
+                                        dropdownType="modal"
+                                        timePickerProps={{
+                                            format: '12h',
+                                            withDropdown: true,
+                                        }}
+                                        minDate={form.values.start_date ?? undefined}
+                                        onFocus={
+                                            () => {
+                                                if (!form.values.end_date && form.values.start_date) {
+                                                    form.setFieldValue('end_date', dayjs(form.values.start_date).add(2, 'hours').toISOString());
+                                                }
+                                            }
+                                        }
+
+                                    />
+                                </div>
+                            )}
 
                             <Button
                                 loading={eventMutation.isPending}

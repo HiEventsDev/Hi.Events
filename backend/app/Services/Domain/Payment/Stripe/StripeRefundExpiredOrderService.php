@@ -25,14 +25,12 @@ readonly class StripeRefundExpiredOrderService
 {
     public function __construct(
         private StripePaymentIntentRefundService $refundService,
-        private Mailer                           $mailer,
-        private LoggerInterface                  $logger,
-        private EventRepositoryInterface         $eventRepository,
-        private StripeClientFactory              $stripeClientFactory,
+        private Mailer $mailer,
+        private LoggerInterface $logger,
+        private EventRepositoryInterface $eventRepository,
+        private StripeClientFactory $stripeClientFactory,
 
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ApiErrorException
@@ -43,11 +41,10 @@ readonly class StripeRefundExpiredOrderService
      * @throws StripeClientConfigurationException
      */
     public function refundExpiredOrder(
-        PaymentIntent             $paymentIntent,
+        PaymentIntent $paymentIntent,
         StripePaymentDomainObject $stripePayment,
-        OrderDomainObject         $order,
-    ): void
-    {
+        OrderDomainObject $order,
+    ): void {
         $event = $this->eventRepository
             ->loadRelation(new Relationship(EventSettingDomainObject::class))
             ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
@@ -69,12 +66,12 @@ readonly class StripeRefundExpiredOrderService
         $this->mailer
             ->to($order->getEmail())
             ->locale($order->getLocale())
-            ->send(new PaymentSuccessButOrderExpiredMail(
+            ->send((new PaymentSuccessButOrderExpiredMail(
                 order: $order,
                 event: $event,
                 eventSettings: $event->getEventSettings(),
                 organizer: $event->getOrganizer(),
-            ));
+            ))->beforeCommit());
 
         $this->logger->info('Refunded expired order', [
             'order_id' => $order->getId(),

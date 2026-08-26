@@ -16,16 +16,14 @@ class GetAllAccountsAction extends BaseAction
 {
     public function __construct(
         private readonly GetAllAccountsHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
         $accounts = $this->handler->handle(new GetAllAccountsDTO(
-            perPage: min((int)$request->query('per_page', 20), 100),
+            perPage: min((int) $request->query('per_page', 20), 100),
             search: $request->query('search'),
         ));
 

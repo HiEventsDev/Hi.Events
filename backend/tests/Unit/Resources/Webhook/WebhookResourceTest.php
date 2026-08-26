@@ -12,7 +12,7 @@ class WebhookResourceTest extends TestCase
 {
     private function createWebhookDomainObject(): WebhookDomainObject
     {
-        return (new WebhookDomainObject())
+        return (new WebhookDomainObject)
             ->setId(1)
             ->setUrl('https://example.com/webhook')
             ->setEventTypes(['order.created', 'attendee.created'])

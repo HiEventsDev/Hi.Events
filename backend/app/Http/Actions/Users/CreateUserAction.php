@@ -20,9 +20,7 @@ class CreateUserAction extends BaseAction
 {
     public function __construct(
         private readonly CreateUserHandler $createUserHandler
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException|Throwable

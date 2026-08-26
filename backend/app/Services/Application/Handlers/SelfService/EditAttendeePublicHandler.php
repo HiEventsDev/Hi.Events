@@ -21,8 +21,7 @@ class EditAttendeePublicHandler
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly SelfServiceEditAttendeeService $selfServiceEditAttendeeService,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws SelfServiceDisabledException
@@ -38,7 +37,7 @@ class EditAttendeePublicHandler
             AttendeeDomainObjectAbstract::EVENT_ID => $dto->eventId,
         ]);
 
-        if (!$attendee) {
+        if (! $attendee) {
             throw new ResourceNotFoundException(__('Attendee not found'));
         }
 

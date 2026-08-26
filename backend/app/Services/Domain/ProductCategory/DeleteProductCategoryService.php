@@ -17,13 +17,11 @@ class DeleteProductCategoryService
 {
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
-        private readonly ProductRepositoryInterface         $productRepository,
-        private readonly DeleteProductService               $deleteProductService,
-        private readonly LoggerInterface                    $logger,
-        private readonly DatabaseManager                    $databaseManager,
-    )
-    {
-    }
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly DeleteProductService $deleteProductService,
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     /**
      * @throws Throwable
@@ -62,7 +60,7 @@ class DeleteProductCategoryService
             ]
         );
 
-        $productsWhichCanNotBeDeleted = new Collection();
+        $productsWhichCanNotBeDeleted = new Collection;
 
         foreach ($productsToDelete as $product) {
             try {
@@ -75,7 +73,7 @@ class DeleteProductCategoryService
         if ($productsWhichCanNotBeDeleted->isNotEmpty()) {
             throw new CannotDeleteEntityException(
                 __('You cannot delete this product category because it contains the following products: :products. These products are linked to existing orders. Please move the :product_name to another category before attempting to delete this one.', [
-                    'products' => $productsWhichCanNotBeDeleted->map(fn($product) => $product->getTitle())->implode(', '),
+                    'products' => $productsWhichCanNotBeDeleted->map(fn ($product) => $product->getTitle())->implode(', '),
                     'product_name' => $productsWhichCanNotBeDeleted->count() > 1 ? __('products') : __('product'),
                 ])
             );

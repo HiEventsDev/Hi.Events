@@ -20,7 +20,7 @@ export const EventDefaults = () => {
 
     const form = useForm({
         initialValues: {
-            default_attendee_details_collection_method: 'PER_TICKET' as 'PER_TICKET' | 'PER_ORDER',
+            default_attendee_details_collection_method: 'PER_ORDER' as 'PER_TICKET' | 'PER_ORDER',
             default_show_marketing_opt_in: true,
             default_allow_attendee_self_edit: false,
         }
@@ -46,7 +46,7 @@ export const EventDefaults = () => {
     useEffect(() => {
         if (organizerSettingsQuery?.isFetched && organizerSettingsQuery?.data) {
             form.setValues({
-                default_attendee_details_collection_method: organizerSettingsQuery.data.default_attendee_details_collection_method || 'PER_TICKET',
+                default_attendee_details_collection_method: organizerSettingsQuery.data.default_attendee_details_collection_method || 'PER_ORDER',
                 default_show_marketing_opt_in: organizerSettingsQuery.data.default_show_marketing_opt_in ?? true,
                 default_allow_attendee_self_edit: organizerSettingsQuery.data.default_allow_attendee_self_edit ?? false,
             });

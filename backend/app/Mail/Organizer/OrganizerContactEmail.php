@@ -12,11 +12,10 @@ class OrganizerContactEmail extends BaseMail
 {
     public function __construct(
         private readonly OrganizerDomainObject $organizer,
-        private readonly string                $senderName,
-        private readonly string                $senderEmail,
-        private readonly string                $messageContent,
-    )
-    {
+        private readonly string $senderName,
+        private readonly string $senderEmail,
+        private readonly string $messageContent,
+    ) {
         parent::__construct();
     }
 

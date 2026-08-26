@@ -22,9 +22,7 @@ class ExportOrganizerReportAction extends BaseAction
     public function __construct(
         private readonly GetOrganizerReportHandler $reportHandler,
         private readonly SpreadsheetFormulaEscaper $formulaEscaper,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException
@@ -35,7 +33,7 @@ class ExportOrganizerReportAction extends BaseAction
 
         $this->validateDateRange($request);
 
-        if (!in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
+        if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
         }
 
@@ -56,7 +54,7 @@ class ExportOrganizerReportAction extends BaseAction
             ? $reportData->data
             : $reportData;
 
-        $filename = $reportType . '_' . date('Y-m-d_H-i-s') . '.csv';
+        $filename = $reportType.'_'.date('Y-m-d_H-i-s').'.csv';
 
         return new StreamedResponse(function () use ($data, $reportType) {
             $handle = fopen('php://output', 'w');
@@ -152,7 +150,7 @@ class ExportOrganizerReportAction extends BaseAction
                 $row->order_reference ?? '',
                 $row->amount_paid ?? 0,
                 $row->fee_amount ?? 0,
-                $row->vat_rate !== null ? ($row->vat_rate * 100) . '%' : '',
+                $row->vat_rate !== null ? ($row->vat_rate * 100).'%' : '',
                 $row->vat_amount ?? 0,
                 $row->total_fee ?? 0,
                 $row->currency ?? '',
@@ -190,7 +188,7 @@ class ExportOrganizerReportAction extends BaseAction
                 $row->event_name ?? '',
                 $row->event_currency ?? '',
                 $row->tax_name ?? '',
-                $row->tax_rate ? ($row->tax_rate * 100) . '%' : '',
+                $row->tax_rate ? ($row->tax_rate * 100).'%' : '',
                 $row->total_collected ?? 0,
                 $row->order_count ?? 0,
             ],
@@ -215,7 +213,7 @@ class ExportOrganizerReportAction extends BaseAction
         $startDate = $request->validated('start_date');
         $endDate = $request->validated('end_date');
 
-        if (!$startDate || !$endDate) {
+        if (! $startDate || ! $endDate) {
             return;
         }
 

@@ -1,5 +1,5 @@
 import {Anchor, Tooltip} from "@mantine/core";
-import {prettyDate, relativeDate} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {OrderStatusBadge} from "../OrderStatusBadge";
 import {Currency} from "../Currency";
 import {Card, CardVariant} from "../Card";
@@ -7,17 +7,20 @@ import {Event, Order} from "../../../types.ts";
 import classes from "./OrderDetails.module.scss";
 import {t} from "@lingui/macro";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
-import React from "react";
 import {capitalize} from "../../../utilites/stringHelper.ts";
 
-export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {}}: {
+export const OrderDetails = ({order, event, cardVariant = 'lightGray'}: {
     order: Order,
     event: Event,
     cardVariant?: CardVariant,
-    style?: React.CSSProperties
 }) => {
+    const occurrenceItems = order.order_items?.filter(item => item.event_occurrence) ?? [];
+    const uniqueOccurrences = Array.from(
+        new Map(occurrenceItems.map(item => [item.event_occurrence!.id, item.event_occurrence!])).values()
+    );
+
     return (
-        <Card className={classes.orderDetails} variant={cardVariant} style={style}>
+        <Card className={classes.orderDetails} variant={cardVariant}>
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Name`}
@@ -46,6 +49,23 @@ export const OrderDetails = ({order, event, cardVariant = 'lightGray', style = {
                     </Tooltip>
                 </div>
             </div>
+            {uniqueOccurrences.length > 0 && (
+                <div className={classes.block}>
+                    <div className={classes.title}>
+                        {uniqueOccurrences.length === 1 ? t`Occurrence` : t`Occurrences`}
+                    </div>
+                    <div className={classes.amount}>
+                        {uniqueOccurrences.map(occurrence => (
+                            <div key={occurrence.id}>
+                                {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                {' '}
+                                {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                {occurrence.label && ` · ${occurrence.label}`}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
             <div className={classes.block}>
                 <div className={classes.title}>
                     {t`Status`}

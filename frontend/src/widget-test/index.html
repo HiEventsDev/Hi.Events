@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Hi.Events Widget Playground</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background: #f4f4f5;
+            color: #18181b;
+        }
+        aside {
+            width: 320px;
+            flex-shrink: 0;
+            background: #ffffff;
+            border-right: 1px solid #e4e4e7;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        aside h1 { font-size: 16px; margin: 0 0 4px; }
+        aside .subtitle { font-size: 12px; color: #71717a; margin: 0 0 16px; }
+        fieldset {
+            border: 1px solid #e4e4e7;
+            border-radius: 8px;
+            padding: 10px 12px 12px;
+            margin: 0 0 14px;
+        }
+        legend { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; padding: 0 4px; }
+        label { display: block; font-size: 12px; font-weight: 600; margin: 8px 0 3px; }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 6px 8px;
+            font-size: 13px;
+            border: 1px solid #d4d4d8;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+        .checkbox-row { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+        .checkbox-row label { margin: 0; }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            background: #7b5db8;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover { filter: brightness(1.08); }
+        main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        #host-area { flex: 1; padding: 40px 24px; transition: background-color 0.2s; }
+        #host-area p { max-width: 640px; margin: 0 auto 16px; line-height: 1.6; opacity: 0.75; }
+        #widget-container { margin: 24px auto; }
+        #widget-hint {
+            max-width: 640px;
+            margin: 24px auto;
+            padding: 24px;
+            border: 2px dashed #d4d4d8;
+            border-radius: 12px;
+            text-align: center;
+            color: #71717a;
+        }
+        #tools {
+            background: #ffffff;
+            border-top: 1px solid #e4e4e7;
+            padding: 14px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-height: 250px;
+        }
+        #tools h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; margin: 0 0 8px; }
+        #embed-code, #message-log {
+            background: #18181b;
+            color: #e4e4e7;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 11.5px;
+            line-height: 1.5;
+            border-radius: 8px;
+            padding: 12px;
+            overflow: auto;
+            max-height: 170px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+        #copy-embed {
+            margin-top: 8px;
+            padding: 5px 12px;
+            font-size: 12px;
+            border: 1px solid #d4d4d8;
+            border-radius: 6px;
+            background: #ffffff;
+            cursor: pointer;
+        }
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            aside { width: 100%; height: auto; position: static; }
+            #tools { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<aside>
+    <h1>Widget Playground</h1>
+    <p class="subtitle">Test the embeddable widget with different settings. Not available in production.</p>
+    <form id="settings-form">
+        <fieldset>
+            <legend>Event</legend>
+            <label for="field-id">Event ID</label>
+            <input type="number" id="field-id" name="id" min="1" required>
+            <label for="field-continueButtonText">Continue button text</label>
+            <input type="text" id="field-continueButtonText" name="continueButtonText" placeholder="Continue">
+            <label for="field-locale">Locale</label>
+            <select id="field-locale" name="locale">
+                <option value="">Default (en)</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <legend>Colors &amp; layout</legend>
+            <label for="field-primaryColor">Primary color</label>
+            <input type="text" id="field-primaryColor" name="primaryColor" placeholder="#7b5db8">
+            <label for="field-primaryTextColor">Primary text color</label>
+            <input type="text" id="field-primaryTextColor" name="primaryTextColor" placeholder="#000000">
+            <label for="field-secondaryColor">Secondary color</label>
+            <input type="text" id="field-secondaryColor" name="secondaryColor" placeholder="#7b5eb9">
+            <label for="field-secondaryTextColor">Secondary text color</label>
+            <input type="text" id="field-secondaryTextColor" name="secondaryTextColor" placeholder="#ffffff">
+            <label for="field-backgroundColor">Widget background</label>
+            <input type="text" id="field-backgroundColor" name="backgroundColor" placeholder="#ffffff">
+            <label for="field-padding">Padding</label>
+            <input type="text" id="field-padding" name="padding" placeholder="10px">
+        </fieldset>
+        <fieldset>
+            <legend>Behaviour</legend>
+            <label for="field-checkout">Checkout mode</label>
+            <select id="field-checkout" name="checkout">
+                <option value="">Modal (default)</option>
+                <option value="new-tab">New tab</option>
+            </select>
+            <div class="checkbox-row">
+                <input type="checkbox" id="field-autoresize" name="autoresize" checked>
+                <label for="field-autoresize">Auto-resize iframe</label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Host page</legend>
+            <label for="field-hostBg">Host background</label>
+            <select id="field-hostBg" name="hostBg">
+                <option value="#f4f4f5">Light</option>
+                <option value="#18181b">Dark</option>
+                <option value="#fdf6e3">Warm</option>
+            </select>
+            <label for="field-width">Widget container width</label>
+            <input type="text" id="field-width" name="width" placeholder="600px">
+        </fieldset>
+        <button type="submit">Apply settings</button>
+    </form>
+</aside>
+<main>
+    <div id="host-area">
+        <p>This page simulates a third-party website embedding the Hi.Events widget. The paragraphs around the widget
+            demonstrate how it sits inside surrounding content and how auto-resizing pushes the page around.</p>
+        <div id="widget-container"></div>
+        <p>Content below the widget. If auto-resize is on, this paragraph moves as the widget grows and shrinks —
+            for example when expanding a product's details or applying a promo code.</p>
+    </div>
+    <div id="tools">
+        <div>
+            <h2>Embed code</h2>
+            <pre id="embed-code"></pre>
+            <button type="button" id="copy-embed">Copy</button>
+        </div>
+        <div>
+            <h2>Widget messages</h2>
+            <pre id="message-log">Waiting for messages from the widget…</pre>
+        </div>
+    </div>
+</main>
+<script>
+    const LOCALES = ['de', 'el', 'en', 'es', 'fr', 'hu', 'it', 'nl', 'pl', 'pt', 'pt-br', 'ru', 'se', 'sk', 'tr', 'vi', 'zh-cn', 'zh-hk'];
+    const ATTRIBUTE_FIELDS = {
+        continueButtonText: 'continue-button-text',
+        locale: 'locale',
+        primaryColor: 'primary-color',
+        primaryTextColor: 'primary-text-color',
+        secondaryColor: 'secondary-color',
+        secondaryTextColor: 'secondary-text-color',
+        backgroundColor: 'background-color',
+        padding: 'padding',
+        checkout: 'checkout',
+    };
+
+    const form = document.getElementById('settings-form');
+    const params = new URLSearchParams(location.search);
+
+    const localeSelect = document.getElementById('field-locale');
+    LOCALES.forEach((locale) => {
+        const option = document.createElement('option');
+        option.value = locale;
+        option.textContent = locale;
+        localeSelect.appendChild(option);
+    });
+
+    for (const [name, value] of params) {
+        const field = form.elements.namedItem(name);
+        if (!field) continue;
+        if (field.type === 'checkbox') {
+            field.checked = value !== 'false';
+        } else {
+            field.value = value;
+        }
+    }
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const next = new URLSearchParams();
+        for (const field of form.elements) {
+            if (!field.name) continue;
+            if (field.type === 'checkbox') {
+                if (!field.checked) next.set(field.name, 'false');
+            } else if (field.value.trim() !== '') {
+                next.set(field.name, field.value.trim());
+            }
+        }
+        location.search = next.toString();
+    });
+
+    const buildAttributes = () => {
+        const attributes = { 'data-hievents-id': params.get('id') };
+        for (const [fieldName, attributeSuffix] of Object.entries(ATTRIBUTE_FIELDS)) {
+            const value = params.get(fieldName);
+            if (value) attributes[`data-hievents-${attributeSuffix}`] = value;
+        }
+        if (params.get('autoresize') === 'false') attributes['data-hievents-autoresize'] = 'false';
+        return attributes;
+    };
+
+    const renderWidget = () => {
+        const container = document.getElementById('widget-container');
+        container.style.maxWidth = params.get('width') || '600px';
+
+        const widget = document.createElement('div');
+        widget.className = 'hievents-widget';
+        for (const [name, value] of Object.entries(buildAttributes())) {
+            widget.setAttribute(name, value);
+        }
+        container.appendChild(widget);
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `${location.origin}/widget.js`;
+        document.head.appendChild(script);
+    };
+
+    const renderEmbedCode = () => {
+        const attributeLines = Object.entries(buildAttributes())
+            .map(([name, value]) => `     ${name}="${value.replace(/"/g, '&quot;')}"`)
+            .join('\n');
+        document.getElementById('embed-code').textContent =
+            `<script async src="${location.origin}/widget.js"><\/script>\n<div class="hievents-widget"\n${attributeLines}></div>`;
+    };
+
+    const hostBg = params.get('hostBg') || '#f4f4f5';
+    const hostArea = document.getElementById('host-area');
+    hostArea.style.backgroundColor = hostBg;
+    hostArea.style.color = hostBg === '#18181b' ? '#e4e4e7' : '#18181b';
+
+    if (params.get('id')) {
+        renderWidget();
+        renderEmbedCode();
+    } else {
+        const hint = document.createElement('div');
+        hint.id = 'widget-hint';
+        hint.textContent = 'Enter an event ID and apply settings to render the widget here.';
+        document.getElementById('widget-container').appendChild(hint);
+        document.getElementById('embed-code').textContent = 'Enter an event ID to generate the embed code.';
+    }
+
+    document.getElementById('copy-embed').addEventListener('click', async () => {
+        await navigator.clipboard.writeText(document.getElementById('embed-code').textContent);
+    });
+
+    const logElement = document.getElementById('message-log');
+    let logStarted = false;
+    window.addEventListener('message', (event) => {
+        if (!event.data || typeof event.data.type !== 'string') return;
+        if (!logStarted) {
+            logStarted = true;
+            logElement.textContent = '';
+        }
+        const detail = Object.entries(event.data)
+            .filter(([key]) => key !== 'type')
+            .map(([key, value]) => `${key}=${value}`)
+            .join(' ');
+        logElement.textContent += `${new Date().toLocaleTimeString()}  ${event.data.type}  ${detail}\n`;
+        logElement.scrollTop = logElement.scrollHeight;
+    });
+</script>
+</body>
+</html>

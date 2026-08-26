@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Infrastructure\Export;
 
 use HiEvents\Services\Infrastructure\Export\SpreadsheetFormulaEscaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class SpreadsheetFormulaEscaperTest extends TestCase
@@ -16,9 +17,7 @@ class SpreadsheetFormulaEscaperTest extends TestCase
         $this->escaper = new SpreadsheetFormulaEscaper;
     }
 
-    /**
-     * @dataProvider formulaProvider
-     */
+    #[DataProvider('formulaProvider')]
     public function test_it_neutralises_formula_triggers(string $value): void
     {
         $this->assertTrue($this->escaper->isFormulaTrigger($value));
@@ -39,9 +38,7 @@ class SpreadsheetFormulaEscaperTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider safeValueProvider
-     */
+    #[DataProvider('safeValueProvider')]
     public function test_it_leaves_safe_values_untouched(mixed $value): void
     {
         $this->assertFalse($this->escaper->isFormulaTrigger($value));

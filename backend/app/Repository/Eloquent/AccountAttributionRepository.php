@@ -49,16 +49,12 @@ class AccountAttributionRepository extends BaseRepository implements AccountAttr
                 DB::raw('COUNT(DISTINCT aa.account_id) as total_accounts'),
                 DB::raw('COUNT(DISTINCT e.id) as total_events'),
                 DB::raw("COUNT(DISTINCT CASE WHEN e.status = '{$liveStatus}' THEN e.id END) as live_events"),
-                DB::raw('COUNT(DISTINCT CASE WHEN asp.stripe_setup_completed_at IS NOT NULL THEN aa.account_id END) as stripe_connected'),
+                DB::raw('COUNT(DISTINCT CASE WHEN EXISTS (SELECT 1 FROM organizers o2 JOIN organizer_stripe_platforms osp2 ON osp2.organizer_id = o2.id WHERE o2.account_id = aa.account_id AND o2.deleted_at IS NULL AND osp2.deleted_at IS NULL AND osp2.stripe_setup_completed_at IS NOT NULL) THEN aa.account_id END) as stripe_connected'),
                 DB::raw('COUNT(DISTINCT CASE WHEN a.is_manually_verified = true THEN aa.account_id END) as verified_accounts'),
                 DB::raw('COALESCE(SUM(es.sales_total_gross), 0) as total_revenue'),
                 DB::raw('COALESCE(SUM(es.orders_created), 0) as total_orders'),
             ])
             ->join('accounts as a', 'aa.account_id', '=', 'a.id')
-            ->leftJoin('account_stripe_platforms as asp', function ($join) {
-                $join->on('a.id', '=', 'asp.account_id')
-                    ->whereNull('asp.deleted_at');
-            })
             ->leftJoin('events as e', function ($join) {
                 $join->on('a.id', '=', 'e.account_id')
                     ->whereNull('e.deleted_at');

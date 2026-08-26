@@ -8,7 +8,6 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\CancelOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
-use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
 use HiEvents\Services\Domain\Order\OrderCancelService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -17,13 +16,11 @@ use Throwable;
 class CancelOrderHandler
 {
     public function __construct(
-        private readonly OrderCancelService       $orderCancelService,
+        private readonly OrderCancelService $orderCancelService,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly DatabaseManager          $databaseManager,
-        private readonly RefundOrderHandler       $refundOrderHandler,
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly RefundOrderHandler $refundOrderHandler,
+    ) {}
 
     /**
      * @throws Throwable
@@ -38,7 +35,7 @@ class CancelOrderHandler
                     OrderDomainObjectAbstract::ID => $cancelOrderDTO->orderId,
                 ]);
 
-            if (!$order) {
+            if (! $order) {
                 throw new ResourceNotFoundException(__('Order not found'));
             }
 

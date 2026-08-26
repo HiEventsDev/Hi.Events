@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class ProductsCheckInListDomainObject extends Generated\ProductCheckInListDomainObjectAbstract
-{
-}
+class ProductsCheckInListDomainObject extends Generated\ProductCheckInListDomainObjectAbstract {}

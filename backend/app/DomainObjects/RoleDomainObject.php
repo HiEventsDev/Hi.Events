@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class RoleDomainObject extends Generated\RoleDomainObjectAbstract
-{
-}
+class RoleDomainObject extends Generated\RoleDomainObjectAbstract {}

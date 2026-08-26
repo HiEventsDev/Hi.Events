@@ -15,14 +15,12 @@ use Illuminate\Database\DatabaseManager;
 class UpdateCheckInListService
 {
     public function __construct(
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
-        private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventRepositoryInterface            $eventRepository,
-    )
-    {
-    }
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
@@ -48,12 +46,16 @@ class UpdateCheckInListService
                     CheckInListDomainObjectAbstract::NAME => $checkInList->getName(),
                     CheckInListDomainObjectAbstract::DESCRIPTION => $checkInList->getDescription(),
                     CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                    CheckInListDomainObjectAbstract::EVENT_OCCURRENCE_ID => $checkInList->getEventOccurrenceId(),
                     CheckInListDomainObjectAbstract::EXPIRES_AT => $checkInList->getExpiresAt()
                         ? DateHelper::convertToUTC($checkInList->getExpiresAt(), $event->getTimezone())
                         : null,
                     CheckInListDomainObjectAbstract::ACTIVATES_AT => $checkInList->getActivatesAt()
                         ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                         : null,
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
+                    CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
                 ],
                 where: [
                     CheckInListDomainObjectAbstract::ID => $checkInList->getId(),

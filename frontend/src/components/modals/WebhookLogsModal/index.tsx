@@ -104,7 +104,7 @@ const LogEntry = ({log}: { log: WebhookLog }) => {
                 )}
             </Group>
 
-            <Collapse in={detailsOpen} transitionDuration={300}>
+            <Collapse expanded={detailsOpen} transitionDuration={300}>
                 <Stack mt="lg" gap="md">
                     {log.payload && (
                         <div>

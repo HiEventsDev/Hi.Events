@@ -3,9 +3,10 @@
 namespace HiEvents\Services\Application\Handlers\EventSettings;
 
 use Brick\Money\Currency;
-use HiEvents\DomainObjects\AccountConfigurationDomainObject;
+use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
-use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\GetPlatformFeePreviewDTO;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\PlatformFeePreviewResponseDTO;
@@ -14,26 +15,28 @@ use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClient
 class GetPlatformFeePreviewHandler
 {
     public function __construct(
-        private readonly AccountRepositoryInterface        $accountRepository,
-        private readonly EventRepositoryInterface          $eventRepository,
+        private readonly EventRepositoryInterface $eventRepository,
         private readonly CurrencyConversionClientInterface $currencyConversionClient,
-    )
-    {
-    }
+    ) {}
 
     public function handle(GetPlatformFeePreviewDTO $dto): PlatformFeePreviewResponseDTO
     {
-        $event = $this->eventRepository->findById($dto->eventId);
-        $eventCurrency = $event->getCurrency();
-
-        $account = $this->accountRepository
+        /** @var EventDomainObject $event */
+        $event = $this->eventRepository
             ->loadRelation(new Relationship(
-                domainObject: AccountConfigurationDomainObject::class,
-                name: 'configuration',
+                domainObject: OrganizerDomainObject::class,
+                nested: [
+                    new Relationship(
+                        domainObject: OrganizerConfigurationDomainObject::class,
+                        name: 'organizer_configuration',
+                    ),
+                ],
+                name: 'organizer',
             ))
-            ->findByEventId($dto->eventId);
+            ->findById($dto->eventId);
 
-        $configuration = $account->getConfiguration();
+        $eventCurrency = $event->getCurrency();
+        $configuration = $event->getOrganizer()?->getOrganizerConfiguration();
 
         if ($configuration === null) {
             return new PlatformFeePreviewResponseDTO(

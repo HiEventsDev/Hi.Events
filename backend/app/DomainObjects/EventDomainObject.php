@@ -2,17 +2,18 @@
 
 namespace HiEvents\DomainObjects;
 
-use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
 use HiEvents\DomainObjects\SortingAndFiltering\AllowedSorts;
 use HiEvents\DomainObjects\Status\EventLifecycleStatus;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsSortable, IsFilterable
+class EventDomainObject extends Generated\EventDomainObjectAbstract implements IsFilterable, IsSortable
 {
     private ?Collection $products = null;
 
@@ -32,6 +33,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $affiliates = null;
 
+    private ?Collection $eventOccurrences = null;
+
     private ?EventSettingDomainObject $settings = null;
 
     private ?OrganizerDomainObject $organizer = null;
@@ -40,12 +43,20 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?AccountDomainObject $account = null;
 
+    private ?EventLocationDomainObject $eventLocation = null;
+
+    private bool $upcomingOccurrencesSoldOut = false;
+
+    private ?string $nextOccurrenceStartDate = null;
+
+    private ?string $lastOccurrenceStartDate = null;
+
+    private ?string $occurrencesMonth = null;
+
     public static function getAllowedFilterFields(): array
     {
         return [
             self::TITLE,
-            self::START_DATE,
-            self::END_DATE,
             self::CREATED_AT,
             self::UPDATED_AT,
             self::STATUS,
@@ -57,14 +68,6 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         return new AllowedSorts(
             [
-                self::START_DATE => [
-                    'asc' => __('Closest start date'),
-                    'desc' => __('Furthest start date'),
-                ],
-                self::END_DATE => [
-                    'asc' => __('Closest end date'),
-                    'desc' => __('Furthest end date'),
-                ],
                 self::CREATED_AT => [
                     'desc' => __('Newest first'),
                     'asc' => __('Oldest first'),
@@ -79,12 +82,12 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     public static function getDefaultSort(): string
     {
-        return self::START_DATE;
+        return self::CREATED_AT;
     }
 
     public static function getDefaultSortDirection(): string
     {
-        return 'asc';
+        return 'desc';
     }
 
     public function setProducts(Collection $products): self
@@ -102,6 +105,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setQuestions(?Collection $questions): EventDomainObject
     {
         $this->questions = $questions;
+
         return $this;
     }
 
@@ -118,6 +122,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setImages(?Collection $images): EventDomainObject
     {
         $this->images = $images;
+
         return $this;
     }
 
@@ -134,6 +139,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventSettings(?EventSettingDomainObject $settings): EventDomainObject
     {
         $this->settings = $settings;
+
         return $this;
     }
 
@@ -157,6 +163,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setAccount(?AccountDomainObject $account): self
     {
         $this->account = $account;
+
         return $this;
     }
 
@@ -178,58 +185,147 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return StringHelper::previewFromHtml($this->getDescription());
     }
 
-    public function isEventInPast(): bool
+    public function setEventOccurrences(?Collection $eventOccurrences): self
     {
-        if ($this->getEndDate() === null) {
-            return false;
-        }
-        $endDate = Carbon::parse($this->getEndDate());
-        $endDate->setTimezone($this->getTimezone());
+        $this->eventOccurrences = $eventOccurrences;
 
-        return $endDate->isPast();
+        return $this;
     }
 
-    public function isEventInFuture(): bool
+    public function getEventOccurrences(): ?Collection
     {
-        if ($this->getStartDate() === null) {
-            return false;
-        }
-        $startDate = Carbon::parse($this->getStartDate());
-        $startDate->setTimezone($this->getTimezone());
+        return $this->eventOccurrences;
+    }
 
-        return $startDate->isFuture();
+    public function setUpcomingOccurrencesSoldOut(bool $upcomingOccurrencesSoldOut): self
+    {
+        $this->upcomingOccurrencesSoldOut = $upcomingOccurrencesSoldOut;
+
+        return $this;
+    }
+
+    public function getUpcomingOccurrencesSoldOut(): bool
+    {
+        return $this->upcomingOccurrencesSoldOut;
+    }
+
+    public function getStartDate(): ?string
+    {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        return $this->eventOccurrences->min(
+            fn (EventOccurrenceDomainObject $o) => $o->getStartDate()
+        );
+    }
+
+    public function getEndDate(): ?string
+    {
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        $withEndDates = $this->eventOccurrences->filter(
+            fn (EventOccurrenceDomainObject $o) => $o->getEndDate() !== null
+        );
+
+        if ($withEndDates->isEmpty()) {
+            return $this->eventOccurrences->max(
+                fn (EventOccurrenceDomainObject $o) => $o->getStartDate()
+            );
+        }
+
+        return $withEndDates->max(
+            fn (EventOccurrenceDomainObject $o) => $o->getEndDate()
+        );
+    }
+
+    public function setNextOccurrenceStartDate(?string $nextOccurrenceStartDate): self
+    {
+        $this->nextOccurrenceStartDate = $nextOccurrenceStartDate;
+
+        return $this;
+    }
+
+    public function setLastOccurrenceStartDate(?string $lastOccurrenceStartDate): self
+    {
+        $this->lastOccurrenceStartDate = $lastOccurrenceStartDate;
+
+        return $this;
+    }
+
+    public function getLastOccurrenceStartDate(): ?string
+    {
+        return $this->lastOccurrenceStartDate;
+    }
+
+    public function setOccurrencesMonth(?string $occurrencesMonth): self
+    {
+        $this->occurrencesMonth = $occurrencesMonth;
+
+        return $this;
+    }
+
+    public function getOccurrencesMonth(): ?string
+    {
+        return $this->occurrencesMonth;
+    }
+
+    public function getNextOccurrenceStartDate(): ?string
+    {
+        if ($this->nextOccurrenceStartDate !== null) {
+            return $this->nextOccurrenceStartDate;
+        }
+
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return null;
+        }
+
+        $nextOccurrence = $this->eventOccurrences
+            ->filter(fn (EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name)
+            ->filter(fn (EventOccurrenceDomainObject $o) => ! $o->isPast())
+            ->sortBy(fn (EventOccurrenceDomainObject $o) => $o->getStartDate())
+            ->first();
+
+        return $nextOccurrence?->getStartDate();
     }
 
     public function isEventOngoing(): bool
     {
-        $startDate = Carbon::parse($this->getStartDate());
-        $startDate->setTimezone($this->getTimezone());
-
-        if ($this->getEndDate() === null) {
-            return $startDate->isPast();
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return false;
         }
 
-        $endDate = Carbon::parse($this->getEndDate());
-        $endDate->setTimezone($this->getTimezone());
-
-        return $startDate->isPast() && $endDate->isFuture();
+        return $this->eventOccurrences->contains(
+            fn (EventOccurrenceDomainObject $o) => $o->getStatus() === EventOccurrenceStatus::ACTIVE->name
+                && ! $o->isFuture()
+                && ! $o->isPast()
+        );
     }
 
     public function getLifecycleStatus(): string
     {
-        if ($this->isEventInPast()) {
-            return EventLifecycleStatus::ENDED->name;
-        }
-
-        if ($this->isEventInFuture()) {
-            return EventLifecycleStatus::UPCOMING->name;
-        }
-
         if ($this->isEventOngoing()) {
             return EventLifecycleStatus::ONGOING->name;
         }
 
-        return EventLifecycleStatus::ENDED->name;
+        if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
+            return EventLifecycleStatus::UPCOMING->name;
+        }
+
+        $hasOccurrenceStillToCome = $this->eventOccurrences->contains(
+            fn (EventOccurrenceDomainObject $o) => ! $o->isPast()
+        );
+
+        return $hasOccurrenceStillToCome
+            ? EventLifecycleStatus::UPCOMING->name
+            : EventLifecycleStatus::ENDED->name;
+    }
+
+    public function isRecurring(): bool
+    {
+        return $this->getType() === EventType::RECURRING->name;
     }
 
     public function getPromoCodes(): ?Collection
@@ -276,12 +372,14 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventStatistics(?EventStatisticDomainObject $eventStatistics): self
     {
         $this->eventStatistics = $eventStatistics;
+
         return $this;
     }
 
     public function setProductCategories(?Collection $productCategories): EventDomainObject
     {
         $this->productCategories = $productCategories;
+
         return $this;
     }
 
@@ -298,6 +396,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setWebhooks(?Collection $webhooks): EventDomainObject
     {
         $this->webhooks = $webhooks;
+
         return $this;
     }
 
@@ -309,6 +408,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setAffiliates(?Collection $affiliates): EventDomainObject
     {
         $this->affiliates = $affiliates;
+
+        return $this;
+    }
+
+    public function getEventLocation(): ?EventLocationDomainObject
+    {
+        return $this->eventLocation;
+    }
+
+    public function setEventLocation(?EventLocationDomainObject $eventLocation): self
+    {
+        $this->eventLocation = $eventLocation;
+
         return $this;
     }
 }

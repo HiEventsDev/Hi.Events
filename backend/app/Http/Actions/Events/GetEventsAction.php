@@ -17,9 +17,7 @@ class GetEventsAction extends BaseAction
 {
     public function __construct(
         private readonly GetEventsHandler $getEventsHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {

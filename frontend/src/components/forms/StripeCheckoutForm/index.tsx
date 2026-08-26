@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {PaymentElement, useElements, useStripe} from "@stripe/react-stripe-js";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import * as stripeJs from "@stripe/stripe-js";
 import {Alert, Skeleton} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -11,6 +11,32 @@ import {CheckoutContent} from "../../layouts/Checkout/CheckoutContent";
 import {HomepageInfoMessage} from "../../common/HomepageInfoMessage";
 import {eventCheckoutPath, eventHomepagePath} from "../../../utilites/urlHelper.ts";
 import {Event} from "../../../types.ts";
+import {getEmbedParentUrl} from "../../../utilites/iframeResize.ts";
+import {getCheckoutSessionIdentifier} from "../../../utilites/checkoutSession.ts";
+
+const buildReturnUrl = (eventId: string, orderShortId: string, sessionId: string | null): string => {
+    const parentUrl = getEmbedParentUrl();
+
+    if (parentUrl) {
+        try {
+            const url = new URL(parentUrl);
+            if (url.protocol === 'https:' || url.protocol === 'http:') {
+                url.searchParams.set('hievents_event', eventId);
+                url.searchParams.set('hievents_order', orderShortId);
+                if (sessionId) {
+                    url.searchParams.set('hievents_session', sessionId);
+                }
+                return url.toString();
+            }
+        } catch (e) {
+            return window.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
+                + (sessionId ? `?session_identifier=${sessionId}` : '');
+        }
+    }
+
+    const fallback = window.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`;
+    return sessionId ? `${fallback}?session_identifier=${sessionId}` : fallback;
+};
 
 export default function StripeCheckoutForm({setSubmitHandler}: {
     setSubmitHandler: (submitHandler: () => () => Promise<void>) => void
@@ -18,6 +44,7 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     const {eventId, orderShortId} = useParams();
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
     const [message, setMessage] = useState<string | undefined>('');
     const {data: order, isFetched: isOrderFetched} = useGetOrderPublic(eventId, orderShortId, ['event']);
     const event = order?.event;
@@ -27,18 +54,27 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
             return;
         }
 
+        const sessionId = getCheckoutSessionIdentifier(String(orderShortId));
+
         const {error} = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: window?.location.origin + `/checkout/${eventId}/${orderShortId}/payment_return`
+                return_url: buildReturnUrl(String(eventId), String(orderShortId), sessionId)
             },
+            redirect: 'if_required',
         });
 
-        if (error?.type === "card_error" || error?.type === "validation_error") {
-            setMessage(error.message);
-        } else {
-            setMessage(t`An unexpected error occurred.`);
+        if (error) {
+            if (error.type === "card_error" || error.type === "validation_error") {
+                setMessage(error.message);
+            } else {
+                setMessage(t`An unexpected error occurred.`);
+            }
+            return;
         }
+
+        navigate(eventCheckoutPath(eventId, orderShortId, 'payment_return')
+            + (sessionId ? `?session_identifier=${sessionId}` : ''));
     };
 
     useEffect(() => {
@@ -123,9 +159,6 @@ export default function StripeCheckoutForm({setSubmitHandler}: {
     return (
         <form id="payment-form">
             <>
-                <h2>
-                    {t`Payment`}
-                </h2>
                 {(order?.payment_status === 'PAYMENT_FAILED' || window?.location.search.includes('payment_failed')) && (
                     <Alert mb={20} color={'red'}>{t`Your payment was unsuccessful. Please try again.`}</Alert>
                 )}

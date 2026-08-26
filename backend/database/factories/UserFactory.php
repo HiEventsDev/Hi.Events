@@ -13,13 +13,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\HiEvents\Core\Models\User>
+ * @extends Factory<\HiEvents\Core\Models\User>
  */
 class UserFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -37,40 +35,31 @@ class UserFactory extends Factory
 
     public function pendingEmail(?string $email = null): self
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'pending_email' => $email ?? fake()->unique()->safeEmail(),
         ]);
     }
 
-    /**
-     * Set the user's password.
-     */
     public function password(string $password): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'password' => Hash::make($password),
         ]);
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
 
-    /**
-     * Saves an Account to the database and attaches it to the user.
-     */
     public function withAccount(): static
     {
         return $this->afterCreating(function (User $user): void {
             $account = Account::factory()->verified()->create();
             $account->timezone = $user->timezone;
-            $account->name = $user->first_name . ($user->last_name ? ' ' . $user->last_name : '');
+            $account->name = $user->first_name.($user->last_name ? ' '.$user->last_name : '');
             $account->email = strtolower($user->email);
 
             $user->accounts()->attach($account, [

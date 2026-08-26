@@ -2,6 +2,7 @@ import {Event, Order} from "../../../types.ts";
 import classes from "./OrderSummary.module.scss";
 import {Currency} from "../Currency";
 import {t} from "@lingui/macro";
+import {formatDateWithLocale} from "../../../utilites/dates.ts";
 
 interface OrderSummaryProps {
     event: Event,
@@ -14,13 +15,24 @@ export const OrderSummary = ({event, order, showFreeWhenZeroTotal = true}: Order
         <div className={classes.summary}>
             <div className={classes.items}>
                 {order?.order_items?.map(item => {
+                    const occurrence = item.event_occurrence;
                     return (
                         <div key={item.id} className={classes.itemRow}>
-                            {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
-                            <div className={classes.itemName}>{item.quantity} x {item.item_name}</div>
+                            <div className={classes.itemName}>
+                                {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
+                                <div>{item.quantity} x {item.item_name}</div>
+                                {occurrence && (
+                                    <div className={classes.occurrenceMeta}>
+                                        {formatDateWithLocale(occurrence.start_date, 'shortDate', event.timezone)}
+                                        {' '}
+                                        {formatDateWithLocale(occurrence.start_date, 'timeOnly', event.timezone)}
+                                        {occurrence.label && ` · ${occurrence.label}`}
+                                    </div>
+                                )}
+                            </div>
                             <div className={classes.itemValue}>
                                 {!!item.price_before_discount && (
-                                    <div style={{color: '#888', marginRight: '5px', display: 'inline-block'}}>
+                                    <div className={classes.priceBeforeDiscount}>
                                         <Currency
                                             currency={event.currency}
                                             price={item.price_before_discount * item.quantity}

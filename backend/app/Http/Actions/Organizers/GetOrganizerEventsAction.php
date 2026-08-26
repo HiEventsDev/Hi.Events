@@ -16,9 +16,7 @@ class GetOrganizerEventsAction extends BaseAction
 {
     public function __construct(
         private readonly GetOrganizerEventsHandler $getOrganizerEventsHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId, Request $request): JsonResponse
     {

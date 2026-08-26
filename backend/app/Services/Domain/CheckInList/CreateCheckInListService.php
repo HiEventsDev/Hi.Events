@@ -15,15 +15,12 @@ use Illuminate\Database\DatabaseManager;
 class CreateCheckInListService
 {
     public function __construct(
-        private readonly CheckInListRepositoryInterface      $checkInListRepository,
-        private readonly EventProductValidationService       $eventProductValidationService,
+        private readonly CheckInListRepositoryInterface $checkInListRepository,
+        private readonly EventProductValidationService $eventProductValidationService,
         private readonly CheckInListProductAssociationService $checkInListProductAssociationService,
-        private readonly DatabaseManager                     $databaseManager,
-        private readonly EventRepositoryInterface            $eventRepository,
-
-    )
-    {
-    }
+        private readonly DatabaseManager $databaseManager,
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws UnrecognizedProductIdException
@@ -38,6 +35,7 @@ class CreateCheckInListService
                 CheckInListDomainObjectAbstract::NAME => $checkInList->getName(),
                 CheckInListDomainObjectAbstract::DESCRIPTION => $checkInList->getDescription(),
                 CheckInListDomainObjectAbstract::EVENT_ID => $checkInList->getEventId(),
+                CheckInListDomainObjectAbstract::EVENT_OCCURRENCE_ID => $checkInList->getEventOccurrenceId(),
                 CheckInListDomainObjectAbstract::EXPIRES_AT => $checkInList->getExpiresAt()
                     ? DateHelper::convertToUTC($checkInList->getExpiresAt(), $event->getTimezone())
                     : null,
@@ -45,6 +43,9 @@ class CreateCheckInListService
                     ? DateHelper::convertToUTC($checkInList->getActivatesAt(), $event->getTimezone())
                     : null,
                 CheckInListDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::CHECK_IN_LIST_PREFIX),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_ATTENDEE_NOTES => $checkInList->getPublicShowAttendeeNotes(),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_QUESTION_ANSWERS => $checkInList->getPublicShowQuestionAnswers(),
+                CheckInListDomainObjectAbstract::PUBLIC_SHOW_ORDER_DETAILS => $checkInList->getPublicShowOrderDetails(),
             ]);
 
             $this->checkInListProductAssociationService->addCheckInListToProducts(

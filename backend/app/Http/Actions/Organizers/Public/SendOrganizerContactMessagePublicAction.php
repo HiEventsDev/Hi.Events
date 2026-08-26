@@ -13,9 +13,7 @@ class SendOrganizerContactMessagePublicAction extends BaseAction
 {
     public function __construct(
         private readonly SendOrganizerContactMessageHandler $handler,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ValidationException

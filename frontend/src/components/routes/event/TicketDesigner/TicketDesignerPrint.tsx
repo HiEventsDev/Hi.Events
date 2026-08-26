@@ -7,6 +7,8 @@ import {AttendeeTicket} from '../../../common/AttendeeTicket';
 import {PoweredByFooter} from '../../../common/PoweredByFooter';
 import {t} from '@lingui/macro';
 import {useEffect} from "react";
+import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
+import {LocationType} from "../../../../types.ts";
 import classes from '../../../routes/product-widget/PrintOrder/PrintOrder.module.scss';
 
 const TicketDesignerPrint = () => {
@@ -70,16 +72,24 @@ const TicketDesignerPrint = () => {
         }
     };
 
-    // Merge the ticket design settings and images into the event
+    const fallbackLocationDetails = {
+        venue_name: t`Sample Venue`,
+        address_line_1: t`123 Sample Street`,
+    };
+    const resolved = resolveEventLocation(event, null);
+    const resolvedEventLocation = resolved?.type === LocationType.InPerson && resolved.location
+        ? resolved
+        : {
+            id: 0,
+            type: LocationType.InPerson,
+            location: {name: fallbackLocationDetails.venue_name, structured_address: fallbackLocationDetails},
+        };
     const eventWithDesignSettings = {
         ...event,
+        event_location: resolvedEventLocation,
         settings: {
             ...event.settings,
             ticket_design_settings: settings.ticket_design_settings,
-            location_details: event.settings?.location_details || {
-                venue_name: t`Sample Venue`,
-                address_line_1: t`123 Sample Street`,
-            }
         },
         images: images || []
     };

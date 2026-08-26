@@ -1,25 +1,92 @@
 .wrapper {
-  display: flex;
+  box-sizing: border-box;
+  min-height: 41px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100px;
+  justify-content: center;
+  gap: 2px;
+  border: 1.5px solid var(--hi-border, rgba(0, 0, 0, 0.14));
+  border-radius: 999px;
+  padding: 3px;
+  background: var(--hi-card-bg, transparent);
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &[data-empty] {
+    border-color: transparent;
+    background: transparent;
+    padding: 0;
+  }
 }
 
-
 .control {
-  background-color:#6319ff;
-  color: #fff;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+  }
 
   &:disabled {
-    border-color: #ddd;
-    background-color: transparent;
+    border: none;
+    opacity: 0.5;
+    background: transparent;
+  }
+}
+
+.decrement {
+  background: transparent;
+  color: var(--hi-text, inherit);
+
+  &:hover {
+    background: var(--hi-inset-bg, rgba(0, 0, 0, 0.05));
+  }
+}
+
+.increment {
+  background: var(--hi-soft-accent, rgba(0, 0, 0, 0.06));
+  color: var(--hi-accent, inherit);
+
+  &:hover {
+    background: var(--hi-soft-accent-strong, var(--hi-soft-accent, rgba(0, 0, 0, 0.1)));
+  }
+
+  &[data-limit] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
 .input {
-  padding-right: 10px !important;
-  padding-left: 10px !important;
-  height: 20px !important;
-  flex: 1 !important;
+  padding: 0 4px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  line-height: 1.4 !important;
+  min-width: 34px;
+  width: 34px;
+  flex: 0 0 auto !important;
   text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  font-variant-numeric: tabular-nums;
+  color: var(--hi-text, inherit) !important;
+}
+
+.compact {
+  min-height: 33px;
+  padding: 2px;
+
+  &[data-empty] {
+    padding: 0;
+  }
+
+  .input {
+    min-width: 28px;
+    width: 28px;
+    font-size: 13px !important;
+  }
 }

@@ -15,11 +15,9 @@ readonly class DeleteTaxHandler
 {
     public function __construct(
         private TaxAndFeeRepositoryInterface $taxRepository,
-        private LoggerInterface              $logger,
-        private DatabaseManager              $databaseManager
-    )
-    {
-    }
+        private LoggerInterface $logger,
+        private DatabaseManager $databaseManager
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -33,8 +31,8 @@ readonly class DeleteTaxHandler
                 TaxAndFeesDomainObjectAbstract::ACCOUNT_ID => $taxData->accountId,
             ]);
 
-            if (!$tax) {
-                throw new ResourceNotFoundException();
+            if (! $tax) {
+                throw new ResourceNotFoundException;
             }
 
             $this->taxRepository->deleteWhere([

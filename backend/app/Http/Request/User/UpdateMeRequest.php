@@ -19,7 +19,7 @@ class UpdateMeRequest extends BaseRequest
             'last_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
             'email' => 'required_without_all:current_password,password,password_confirmation|email',
             'timezone' => 'required_without_all:current_password,password,password_confirmation|timezone',
-            'locale' => 'required_without_all:current_password,password,password_confirmation|in:' . implode(',', Locale::getSupportedLocales()),
+            'locale' => 'required_without_all:current_password,password,password_confirmation|in:'.implode(',', Locale::getSupportedLocales()),
 
             'current_password' => [
                 'required_with:password,password_confirmation',
@@ -28,7 +28,7 @@ class UpdateMeRequest extends BaseRequest
             'password' => [
                 'required_with:current_password',
                 'confirmed',
-                Password::min(8)
+                Password::min(8),
             ],
             'marketing_opt_in' => 'boolean|nullable',
         ];

@@ -26,6 +26,7 @@ import {useGetOrderPublic, GET_ORDER_PUBLIC_QUERY_KEY} from "../../../../queries
 import {eventCheckoutPath} from "../../../../utilites/urlHelper.ts";
 import {dateToBrowserTz} from "../../../../utilites/dates.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
+import {getEventLocationDisplay, resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import {getAttendeeProductTitle} from "../../../../utilites/products.ts";
 import {showSuccess, showError} from "../../../../utilites/notifications.tsx";
 
@@ -38,6 +39,7 @@ import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 import {AddToCalendarCTA} from "../../../common/AddToCalendarCTA";
 import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {EditAttendeeModal} from "./EditAttendeeModal";
 import {EditOrderModal} from "./EditOrderModal";
 
@@ -46,7 +48,7 @@ import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
-import {Attendee, Event, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, LocationType, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 // Purchase tracking is handled by the parent Checkout layout
@@ -124,6 +126,7 @@ const GuestListItem = ({
                         <Tooltip label={t`Edit Attendee`}>
                             <ActionIcon
                                 variant="subtle"
+                                data-testid="attendee-edit-button"
                                 onClick={onEditClick}
                             >
                                 <IconEdit size={18}/>
@@ -132,6 +135,7 @@ const GuestListItem = ({
                         <Tooltip label={t`Resend Ticket`}>
                             <ActionIcon
                                 variant="subtle"
+                                data-testid="resend-ticket-button"
                                 onClick={onResendClick}
                             >
                                 <IconSend size={18}/>
@@ -234,7 +238,7 @@ const OrderDetails = ({
                         <span>{order.first_name} {order.last_name}</span>
                         {allowSelfEdit && order.status !== 'CANCELLED' && (
                             <Tooltip label={t`Edit`}>
-                                <ActionIcon size="xs" variant="subtle" onClick={onEditClick}>
+                                <ActionIcon size="xs" variant="subtle" data-testid="order-edit-button" onClick={onEditClick}>
                                     <IconEdit size={14}/>
                                 </ActionIcon>
                             </Tooltip>
@@ -255,7 +259,7 @@ const OrderDetails = ({
                         <span style={{wordBreak: 'break-all'}}>{order.email}</span>
                         {allowSelfEdit && order.status !== 'CANCELLED' && (
                             <Tooltip label={t`Resend Confirmation`}>
-                                <ActionIcon size="xs" variant="subtle" onClick={onResendClick}>
+                                <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
                                     <IconSend size={14}/>
                                 </ActionIcon>
                             </Tooltip>
@@ -293,11 +297,22 @@ const OrderDetails = ({
     </Card>
 );
 
-const EventDetails = ({event}: { event: Event }) => {
-    const location = event.settings?.location_details ? formatAddress(event.settings.location_details) : null;
-    const venueDetails = event.settings?.location_details?.venue_name
-        ? `${event.settings.location_details.venue_name}${location ? `, ${location}` : ''}`
-        : location;
+const EventDetails = ({event, order}: { event: Event; order: Order }) => {
+    const orderOccurrence = order.order_items?.[0]?.event_occurrence;
+    const effective = resolveEventLocation(event, orderOccurrence);
+    const isInPerson = effective?.type === LocationType.InPerson;
+    const venueName = isInPerson
+        ? (effective.location?.name || effective.location?.structured_address?.venue_name || null)
+        : null;
+    const formattedAddress = isInPerson && effective.location?.structured_address
+        ? formatAddress(effective.location.structured_address)
+        : '';
+    const venueDetails = isInPerson
+        ? (venueName
+            ? `${venueName}${formattedAddress ? `, ${formattedAddress}` : ''}`
+            : formattedAddress || null)
+        : null;
+    const mapsUrl = getEventLocationDisplay(event, orderOccurrence)?.mapsUrl ?? '';
 
     return (
         <Card>
@@ -305,7 +320,14 @@ const EventDetails = ({event}: { event: Event }) => {
                 <DetailItem
                     icon={IconCalendarEvent}
                     label={t`Event Date`}
-                    value={<EventDateRange event={event}/>}
+                    value={
+                        <>
+                            <EventDateRange event={event} occurrence={orderOccurrence}/>
+                            {orderOccurrence?.label && (
+                                <Text size="xs" c="dimmed" mt={2}>{orderOccurrence.label}</Text>
+                            )}
+                        </>
+                    }
                 />
                 {venueDetails && (
                     <DetailItem
@@ -313,7 +335,7 @@ const EventDetails = ({event}: { event: Event }) => {
                         label={t`Location`}
                         value={(
                             <NavLink
-                                to={event.settings?.maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event?.settings?.location_details ? formatAddress(event.settings.location_details) : '')}`}
+                                to={mapsUrl}
                                 target="_blank"
                             >
                                 {venueDetails}
@@ -549,7 +571,7 @@ export const OrderSummaryAndProducts = () => {
         return <LoadingMask/>;
     }
 
-    if (window?.location.search.includes('failed') || order?.payment_status === 'PAYMENT_FAILED') {
+    if ((typeof window !== 'undefined' && window.location.search.includes('failed')) || order?.payment_status === 'PAYMENT_FAILED') {
         navigate(eventCheckoutPath(eventId, orderShortId, 'payment') + '?payment_failed=true');
         return;
     }
@@ -561,6 +583,8 @@ export const OrderSummaryAndProducts = () => {
     return (
         <>
             <CheckoutContent>
+                <CheckoutStepTitle title={t`Summary`}/>
+
                 <WelcomeHeader order={order} event={event} allowSelfEdit={allowSelfEdit}/>
 
                 {emailUpdated && (
@@ -599,14 +623,14 @@ export const OrderSummaryAndProducts = () => {
                     onResendClick={handleResendOrderConfirmation}
                 />
 
-                {event?.settings?.is_online_event && <OnlineEventDetails eventSettings={event.settings}/>}
+                <OnlineEventDetails event={event} occurrence={order.order_items?.[0]?.event_occurrence ?? null}/>
 
                 {!!event?.settings?.post_checkout_message && <PostCheckoutMessage message={event.settings.post_checkout_message}/>}
 
                 <h1 className={classes.heading}>{t`Event Details`}</h1>
-                <EventDetails event={event}/>
+                <EventDetails event={event} order={order}/>
 
-                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event}/>}
+                {order.status === 'COMPLETED' && <AddToCalendarCTA event={event} occurrence={order.order_items?.[0]?.event_occurrence}/>}
 
                 {(order?.attendees && order.attendees.length > 0) && (
                     <>

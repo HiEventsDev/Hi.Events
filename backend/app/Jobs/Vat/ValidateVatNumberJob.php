@@ -6,7 +6,7 @@ namespace HiEvents\Jobs\Vat;
 
 use DateTimeInterface;
 use HiEvents\DomainObjects\Status\VatValidationStatus;
-use HiEvents\Repository\Interfaces\AccountVatSettingRepositoryInterface;
+use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use HiEvents\Services\Infrastructure\Vat\ViesValidationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,37 +27,51 @@ class ValidateVatNumberJob implements ShouldQueue
     public int $timeout = 15;
 
     public function __construct(
-        private readonly int $accountVatSettingId,
+        private readonly int $vatSettingId,
         private readonly string $vatNumber,
     ) {}
 
     public function handle(
         ViesValidationService $viesService,
-        AccountVatSettingRepositoryInterface $repository,
+        OrganizerVatSettingRepositoryInterface $repository,
         LoggerInterface $logger,
     ): void {
+        if (! isset($this->vatSettingId, $this->vatNumber)) {
+            $logger->warning('Skipping VAT validation job with a payload from a previous release');
+
+            return;
+        }
+
         $logger->info('VAT validation job started', [
-            'account_vat_setting_id' => $this->accountVatSettingId,
+            'organizer_vat_setting_id' => $this->vatSettingId,
             'vat_number' => $this->maskVatNumber($this->vatNumber),
             'attempt' => $this->attempts(),
         ]);
 
-        $repository->updateFromArray($this->accountVatSettingId, [
+        if (! $this->vatNumberIsCurrent($repository, $logger)) {
+            return;
+        }
+
+        $repository->updateFromArray($this->vatSettingId, [
             'vat_validation_status' => VatValidationStatus::VALIDATING->value,
             'vat_validation_attempts' => $this->attempts(),
         ]);
 
         $result = $viesService->validateVatNumber($this->vatNumber);
 
+        if (! $this->vatNumberIsCurrent($repository, $logger)) {
+            return;
+        }
+
         if ($result->valid) {
             $logger->info('VAT validation successful', [
-                'account_vat_setting_id' => $this->accountVatSettingId,
+                'organizer_vat_setting_id' => $this->vatSettingId,
                 'vat_number' => $this->maskVatNumber($this->vatNumber),
                 'business_name' => $result->businessName,
                 'attempt' => $this->attempts(),
             ]);
 
-            $repository->updateFromArray($this->accountVatSettingId, [
+            $repository->updateFromArray($this->vatSettingId, [
                 'vat_validated' => true,
                 'vat_validation_status' => VatValidationStatus::VALID->value,
                 'vat_validation_date' => now(),
@@ -73,13 +87,13 @@ class ValidateVatNumberJob implements ShouldQueue
 
         if ($result->isTransientError) {
             $logger->warning('VAT validation transient error - will retry', [
-                'account_vat_setting_id' => $this->accountVatSettingId,
+                'organizer_vat_setting_id' => $this->vatSettingId,
                 'vat_number' => $this->maskVatNumber($this->vatNumber),
                 'error' => $result->errorMessage,
                 'attempt' => $this->attempts(),
             ]);
 
-            $repository->updateFromArray($this->accountVatSettingId, [
+            $repository->updateFromArray($this->vatSettingId, [
                 'vat_validation_status' => VatValidationStatus::PENDING->value,
                 'vat_validation_error' => $result->errorMessage,
                 'vat_validation_attempts' => $this->attempts(),
@@ -91,13 +105,13 @@ class ValidateVatNumberJob implements ShouldQueue
         }
 
         $logger->info('VAT validation failed - invalid VAT number', [
-            'account_vat_setting_id' => $this->accountVatSettingId,
+            'organizer_vat_setting_id' => $this->vatSettingId,
             'vat_number' => $this->maskVatNumber($this->vatNumber),
             'error' => $result->errorMessage,
             'attempt' => $this->attempts(),
         ]);
 
-        $repository->updateFromArray($this->accountVatSettingId, [
+        $repository->updateFromArray($this->vatSettingId, [
             'vat_validated' => false,
             'vat_validation_status' => VatValidationStatus::INVALID->value,
             'vat_validation_error' => $result->errorMessage,
@@ -108,17 +122,21 @@ class ValidateVatNumberJob implements ShouldQueue
     public function failed(Throwable $exception): void
     {
         $logger = app(LoggerInterface::class);
-        $repository = app(AccountVatSettingRepositoryInterface::class);
+        $repository = app(OrganizerVatSettingRepositoryInterface::class);
 
         $logger->error('VAT validation job failed permanently', [
-            'account_vat_setting_id' => $this->accountVatSettingId,
+            'organizer_vat_setting_id' => $this->vatSettingId,
             'vat_number' => $this->maskVatNumber($this->vatNumber),
             'error' => $exception->getMessage(),
             'attempt' => $this->attempts(),
         ]);
 
         try {
-            $repository->updateFromArray($this->accountVatSettingId, [
+            if (! $this->vatNumberIsCurrent($repository, $logger)) {
+                return;
+            }
+
+            $repository->updateFromArray($this->vatSettingId, [
                 'vat_validated' => false,
                 'vat_validation_status' => VatValidationStatus::FAILED->value,
                 'vat_validation_error' => __('Validation failed after multiple attempts: :error', [
@@ -128,7 +146,7 @@ class ValidateVatNumberJob implements ShouldQueue
             ]);
         } catch (Throwable $e) {
             $logger->error('Failed to update VAT setting after job failure', [
-                'account_vat_setting_id' => $this->accountVatSettingId,
+                'organizer_vat_setting_id' => $this->vatSettingId,
                 'error' => $e->getMessage(),
             ]);
         }
@@ -137,21 +155,7 @@ class ValidateVatNumberJob implements ShouldQueue
     public function backoff(): array
     {
         return [
-            10,      // 10s
-            10,      // 10s
-            10,      // 10s
-            10,      // 10s
-            20,      // 20s
-            30,      // 30s
-            60,      // 1m
-            120,     // 2m
-            180,     // 3m
-            300,     // 5m
-            420,     // 7m
-            600,     // 10m
-            900,     // 15m
-            1200,    // 20m
-            1800,    // 30m
+            10, 10, 10, 10, 20, 30, 60, 120, 180, 300, 420, 600, 900, 1200, 1800,
         ];
     }
 
@@ -168,6 +172,25 @@ class ValidateVatNumberJob implements ShouldQueue
         return $backoffs[$attempt] ?? end($backoffs);
     }
 
+    private function vatNumberIsCurrent(
+        OrganizerVatSettingRepositoryInterface $repository,
+        LoggerInterface $logger,
+    ): bool {
+        $current = $repository->findFirstWhere(['id' => $this->vatSettingId]);
+
+        if ($current !== null && $current->getVatNumber() === $this->vatNumber) {
+            return true;
+        }
+
+        $logger->info('VAT validation result discarded - VAT number changed since validation started', [
+            'organizer_vat_setting_id' => $this->vatSettingId,
+            'vat_number' => $this->maskVatNumber($this->vatNumber),
+            'attempt' => $this->attempts(),
+        ]);
+
+        return false;
+    }
+
     private function maskVatNumber(string $vatNumber): string
     {
         $length = strlen($vatNumber);
@@ -175,6 +198,6 @@ class ValidateVatNumberJob implements ShouldQueue
             return $vatNumber;
         }
 
-        return substr($vatNumber, 0, 2) . str_repeat('*', $length - 4) . substr($vatNumber, -2);
+        return substr($vatNumber, 0, 2).str_repeat('*', $length - 4).substr($vatNumber, -2);
     }
 }

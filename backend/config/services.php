@@ -52,4 +52,10 @@ return [
     'open_exchange_rates' => [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
     ],
+    'geo' => [
+        'provider' => env('GEO_PROVIDER', 'google'),
+        'google' => [
+            'api_key' => env('GOOGLE_MAPS_API_KEY'),
+        ],
+    ],
 ];

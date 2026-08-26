@@ -71,6 +71,6 @@ enum ImageType
             return UserDomainObject::class;
         }
 
-        throw new InvalidArgumentException('Invalid image type: ' . $this->name);
+        throw new InvalidArgumentException('Invalid image type: '.$this->name);
     }
 }

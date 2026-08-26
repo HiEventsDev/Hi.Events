@@ -14,13 +14,11 @@ class OrganizerDeletionService
 {
     public function __construct(
         private readonly OrganizerRepositoryInterface $organizerRepository,
-        private readonly EventRepositoryInterface     $eventRepository,
-        private readonly EventDeletionService         $eventDeletionService,
-        private readonly LoggerInterface              $logger,
-        private readonly DatabaseManager              $databaseManager,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventDeletionService $eventDeletionService,
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+    ) {}
 
     public function canDeleteOrganizer(int $organizerId, int $accountId): bool
     {
@@ -37,7 +35,7 @@ class OrganizerDeletionService
         ]);
 
         foreach ($events as $event) {
-            if (!$this->eventDeletionService->canDeleteEvent($event->getId())) {
+            if (! $this->eventDeletionService->canDeleteEvent($event->getId())) {
                 return false;
             }
         }
@@ -60,7 +58,7 @@ class OrganizerDeletionService
         ]);
 
         foreach ($events as $event) {
-            if (!$this->eventDeletionService->canDeleteEvent($event->getId())) {
+            if (! $this->eventDeletionService->canDeleteEvent($event->getId())) {
                 return __('This organizer has events with completed orders. Please cancel or refund all orders first.');
             }
         }

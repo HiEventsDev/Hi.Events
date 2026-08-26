@@ -31,7 +31,7 @@ class GetAdminDashboardDataHandler
 
     private function getPopularEvents(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 e.id,
                 e.title,
@@ -66,7 +66,7 @@ class GetAdminDashboardDataHandler
 
     private function getMostViewedEvents(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 e.id,
                 e.title,
@@ -99,7 +99,7 @@ class GetAdminDashboardDataHandler
 
     private function getTopOrganizers(Carbon $since, int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 o.id,
                 o.name,
@@ -125,13 +125,21 @@ class GetAdminDashboardDataHandler
 
     private function getRecentAccounts(int $limit): array
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT
                 a.id,
                 a.name,
                 a.email,
                 a.created_at,
-                a.stripe_connect_setup_complete,
+                EXISTS (
+                    SELECT 1
+                    FROM organizer_stripe_platforms osp
+                    JOIN organizers o ON o.id = osp.organizer_id
+                    WHERE o.account_id = a.id
+                      AND osp.stripe_setup_completed_at IS NOT NULL
+                      AND osp.deleted_at IS NULL
+                      AND o.deleted_at IS NULL
+                ) AS stripe_connect_setup_complete,
                 a.account_verified_at,
                 COUNT(DISTINCT e.id) as events_count,
                 COUNT(DISTINCT au.user_id) as users_count
@@ -139,7 +147,7 @@ class GetAdminDashboardDataHandler
             LEFT JOIN events e ON e.account_id = a.id AND e.deleted_at IS NULL
             LEFT JOIN account_users au ON au.account_id = a.id AND au.deleted_at IS NULL
             WHERE a.deleted_at IS NULL
-            GROUP BY a.id, a.name, a.email, a.created_at, a.stripe_connect_setup_complete, a.account_verified_at
+            GROUP BY a.id, a.name, a.email, a.created_at, a.account_verified_at
             ORDER BY a.created_at DESC
             LIMIT :limit
         SQL;
@@ -151,7 +159,7 @@ class GetAdminDashboardDataHandler
 
     private function getRecentRevenue(Carbon $since): float
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COALESCE(SUM(es.sales_total_gross), 0) as total_revenue
             FROM event_statistics es
             WHERE es.updated_at >= :since
@@ -160,12 +168,12 @@ class GetAdminDashboardDataHandler
 
         $result = DB::selectOne($query, ['since' => $since]);
 
-        return (float)($result->total_revenue ?? 0);
+        return (float) ($result->total_revenue ?? 0);
     }
 
     private function getRecentOrdersCount(Carbon $since): int
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COUNT(*) as count
             FROM orders o
             WHERE o.created_at >= :since
@@ -180,12 +188,12 @@ class GetAdminDashboardDataHandler
             'paymentStatusPaid' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
         ]);
 
-        return (int)($result->count ?? 0);
+        return (int) ($result->count ?? 0);
     }
 
     private function getRecentOrdersTotal(Carbon $since): float
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COALESCE(SUM(o.total_gross), 0) as total
             FROM orders o
             WHERE o.created_at >= :since
@@ -200,12 +208,12 @@ class GetAdminDashboardDataHandler
             'paymentStatusPaid' => OrderPaymentStatus::PAYMENT_RECEIVED->name,
         ]);
 
-        return (float)($result->total ?? 0);
+        return (float) ($result->total ?? 0);
     }
 
     private function getRecentSignupsCount(Carbon $since): int
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
             SELECT COUNT(*) as count
             FROM accounts a
             WHERE a.created_at >= :since
@@ -214,6 +222,6 @@ class GetAdminDashboardDataHandler
 
         $result = DB::selectOne($query, ['since' => $since]);
 
-        return (int)($result->count ?? 0);
+        return (int) ($result->count ?? 0);
     }
 }

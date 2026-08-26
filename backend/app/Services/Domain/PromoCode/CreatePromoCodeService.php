@@ -15,12 +15,10 @@ use HiEvents\Services\Domain\Product\Exception\UnrecognizedProductIdException;
 class CreatePromoCodeService
 {
     public function __construct(
-        private readonly PromoCodeRepositoryInterface  $promoCodeRepository,
+        private readonly PromoCodeRepositoryInterface $promoCodeRepository,
         private readonly EventProductValidationService $eventProductValidationService,
-        private readonly EventRepositoryInterface      $eventRepository,
-    )
-    {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+    ) {}
 
     /**
      * @throws ResourceConflictException
@@ -30,7 +28,7 @@ class CreatePromoCodeService
     {
         $this->checkForDuplicateCode($promoCode);
 
-        if (!empty($promoCode->getApplicableProductIds())) {
+        if (! empty($promoCode->getApplicableProductIds())) {
             $this->eventProductValidationService->validateProductIds(
                 productIds: $promoCode->getApplicableProductIds(),
                 eventId: $promoCode->getEventId()
@@ -46,6 +44,7 @@ class CreatePromoCodeService
                 ? 0.00
                 : $promoCode->getDiscount(),
             PromoCodeDomainObjectAbstract::DISCOUNT_TYPE => $promoCode->getDiscountType(),
+            PromoCodeDomainObjectAbstract::DISCOUNT_APPLIES_TO => $promoCode->getDiscountAppliesTo(),
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => $promoCode->getExpiryDate()
                 ? DateHelper::convertToUTC($promoCode->getExpiryDate(), $event->getTimezone())
                 : null,

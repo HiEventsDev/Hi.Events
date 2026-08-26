@@ -9,6 +9,5 @@ class GetAdminDashboardDataDTO extends BaseDataObject
     public function __construct(
         public readonly int $days = 14,
         public readonly int $limit = 10,
-    ) {
-    }
+    ) {}
 }

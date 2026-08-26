@@ -15,17 +15,15 @@ class GetPublicOrganizerAction extends BaseAction
 {
     public function __construct(
         private readonly GetPublicOrganizerHandler $handler,
-        private readonly LoggerInterface           $logger,
+        private readonly LoggerInterface $logger,
 
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $organizerId): Response|JsonResponse
     {
         $organizer = $this->handler->handle($organizerId);
 
-        if (!$this->canUserViewOrganizer($organizer)) {
+        if (! $this->canUserViewOrganizer($organizer)) {
             $this->logger->debug(__('Organizer with ID :organizerId is not live and user is not authenticated', [
                 'organizerId' => $organizer->getId(),
             ]));

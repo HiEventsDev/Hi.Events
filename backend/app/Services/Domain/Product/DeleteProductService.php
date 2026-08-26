@@ -17,14 +17,12 @@ use Throwable;
 class DeleteProductService
 {
     public function __construct(
-        private readonly ProductRepositoryInterface      $productRepository,
+        private readonly ProductRepositoryInterface $productRepository,
         private readonly ProductPriceRepositoryInterface $productPriceRepository,
-        private readonly LoggerInterface                 $logger,
-        private readonly DatabaseManager                 $databaseManager,
-        private readonly DomainEventDispatcherService    $domainEventDispatcherService,
-    )
-    {
-    }
+        private readonly LoggerInterface $logger,
+        private readonly DatabaseManager $databaseManager,
+        private readonly DomainEventDispatcherService $domainEventDispatcherService,
+    ) {}
 
     /**
      * @throws CannotDeleteEntityException
@@ -35,7 +33,7 @@ class DeleteProductService
         $this->databaseManager->transaction(function () use ($productId, $eventId) {
             if ($this->productRepository->hasAssociatedOrders($productId)) {
                 throw new CannotDeleteEntityException(
-                    __('You cannot delete this product because it has orders associated with it. You can hide it instead.')
+                    __('You cannot delete this product because it has orders associated with it or is reserved by a checkout in progress. You can hide it instead.')
                 );
             }
 
@@ -51,6 +49,8 @@ class DeleteProductService
                     ProductPriceDomainObjectAbstract::PRODUCT_ID => $productId,
                 ]
             );
+
+            $this->productRepository->detachAddonAssociations($productId);
         });
 
         $this->domainEventDispatcherService->dispatch(

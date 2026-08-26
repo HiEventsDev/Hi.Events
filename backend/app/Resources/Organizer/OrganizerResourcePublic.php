@@ -5,6 +5,7 @@ namespace HiEvents\Resources\Organizer;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\Image\ImageResource;
+use HiEvents\Resources\Location\LocationPublicResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -21,17 +22,21 @@ class OrganizerResourcePublic extends JsonResource
             'description' => $this->getDescription(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),
+            'location' => $this->when(
+                condition: $this->getLocationRecord() !== null,
+                value: fn () => new LocationPublicResource($this->getLocationRecord()),
+            ),
             'images' => $this->when(
-                (bool)$this->getImages(),
-                fn() => ImageResource::collection($this->getImages())
+                (bool) $this->getImages(),
+                fn () => ImageResource::collection($this->getImages())
             ),
             'events' => $this->when(
-                condition: !is_null($this->getEvents()),
-                value: fn() => EventResourcePublic::collection($this->getEvents())
+                condition: ! is_null($this->getEvents()),
+                value: fn () => EventResourcePublic::collection($this->getEvents())
             ),
             'settings' => $this->when(
-                condition: !is_null($this->getOrganizerSettings()),
-                value: fn() => new OrganizerSettingsPublicResource($this->getOrganizerSettings())
+                condition: ! is_null($this->getOrganizerSettings()),
+                value: fn () => new OrganizerSettingsPublicResource($this->getOrganizerSettings())
             ),
         ];
     }

@@ -19,26 +19,24 @@ class TaxAndFeeCalculationService
     }
 
     public function calculateTaxAndFeesForProductPrice(
-        ProductDomainObject      $product,
+        ProductDomainObject $product,
         ProductPriceDomainObject $price,
-    ): TaxCalculationResponse
-    {
+    ): TaxCalculationResponse {
         return $this->calculateTaxAndFeesForProduct($product, $price->getPrice());
     }
 
     public function calculateTaxAndFeesForProduct(
         ProductDomainObject $product,
-        float               $price,
-        int                 $quantity = 1
-    ): TaxCalculationResponse
-    {
+        float $price,
+        int $quantity = 1
+    ): TaxCalculationResponse {
         $this->taxRollupService->resetRollUp();
 
         $fees = $product->getFees()
-            ?->sum(fn($taxOrFee) => $this->calculateFee($taxOrFee, $price, $quantity)) ?: 0.00;
+            ?->sum(fn ($taxOrFee) => $this->calculateFee($taxOrFee, $price, $quantity)) ?: 0.00;
 
         $taxFees = $product->getTaxRates()
-            ?->sum(fn($taxOrFee) => $this->calculateFee($taxOrFee, $price + $fees, $quantity));
+            ?->sum(fn ($taxOrFee) => $this->calculateFee($taxOrFee, $price + $fees, $quantity));
 
         return new TaxCalculationResponse(
             feeTotal: $fees ? ($fees * $quantity) : 0.00,

@@ -13,16 +13,14 @@ class EditQuestionHandler
     public function __construct(
         private readonly EditQuestionService $editQuestionService,
         private readonly HtmlPurifierService $purifier,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function handle(int $questionId, UpsertQuestionDTO $createQuestionDTO): QuestionDomainObject
     {
-        $question = (new QuestionDomainObject())
+        $question = (new QuestionDomainObject)
             ->setId($questionId)
             ->setTitle($createQuestionDTO->title)
             ->setEventId($createQuestionDTO->event_id)

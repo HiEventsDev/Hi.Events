@@ -7,6 +7,7 @@ import {
     IconEyeOff,
     IconLock,
     IconPackage,
+    IconPuzzle,
     IconPencil,
     IconReceipt,
     IconSend,
@@ -33,6 +34,7 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import {useDeleteProduct} from "../../../../mutations/useDeleteProduct.ts";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
 import {SortArrows} from "../../SortArrows";
@@ -45,6 +47,8 @@ interface SortableProductProps {
     category: ProductCategory;
     categories: ProductCategory[];
 }
+
+const addonBadgeLabel = (count: number): string => count === 1 ? t`1 add-on` : t`${count} add-ons`;
 
 export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
@@ -64,15 +68,19 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
     }
 
     const handleDeleteProduct = (productId: IdParam, eventId: IdParam) => {
-        deleteMutation.mutate({productId, eventId}, {
-            onSuccess: () => {
-                showSuccess(t`Product deleted successfully`);
-            },
-            onError: (error: any) => {
-                if (error.response?.status === 409) {
-                    showError(error.response.data.message || t`This product cannot be deleted because it is associated with an order. You can hide it instead.`);
+        confirmationDialog(t`Delete this product? This cannot be undone.`, () => {
+            deleteMutation.mutate({productId, eventId}, {
+                onSuccess: () => {
+                    showSuccess(t`Product deleted successfully`);
+                },
+                onError: (error: any) => {
+                    if (error.response?.status === 409) {
+                        showError(error.response.data.message || t`This product cannot be deleted because it is associated with an order. You can hide it instead.`);
+                    } else {
+                        showError(error.response?.data?.message || t`Failed to delete product. Please try again.`);
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -322,6 +330,36 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                         </Badge>
                                     </Tooltip>
                                 )}
+                                {product.is_addon_only && (
+                                    <Tooltip
+                                        label={t`Only shown as an add-on to the products it's attached to`}
+                                        withArrow
+                                    >
+                                        <Badge
+                                            variant="light"
+                                            color="teal"
+                                            size="sm"
+                                            leftSection={<IconPuzzle size={12}/>}
+                                        >
+                                            {t`Add-on only`}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
+                                {!!product.addons?.length && (
+                                    <Tooltip
+                                        label={product.addons.map(addon => addon.title).join(', ')}
+                                        withArrow
+                                    >
+                                        <Badge
+                                            variant="light"
+                                            color="grape"
+                                            size="sm"
+                                            leftSection={<IconPuzzle size={12}/>}
+                                        >
+                                            {addonBadgeLabel(product.addons.length)}
+                                        </Badge>
+                                    </Tooltip>
+                                )}
                                 {product.is_highlighted && (
                                     <Tooltip
                                         label={product.highlight_message || t`This product is highlighted on the event page`}
@@ -457,6 +495,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                         size="xs"
                                         variant="subtle"
                                         className={classes.actionButton}
+                                        data-testid="product-manage-button"
                                     >
                                         <span className={classes.actionButtonText}>{t`Manage`}</span>
                                         <IconDotsVertical size={16} className={classes.actionButtonIcon}/>
@@ -478,6 +517,7 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                 <Menu.Item
                                     onClick={() => handleModalClick(product.id, editModal)}
                                     leftSection={<IconPencil size={14}/>}
+                                    data-testid="product-edit-menu-item"
                                 >
                                     <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
                                 </Menu.Item>

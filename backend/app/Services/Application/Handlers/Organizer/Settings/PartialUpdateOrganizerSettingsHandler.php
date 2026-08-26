@@ -7,16 +7,13 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
-use Spatie\LaravelData\Data;
 
 class PartialUpdateOrganizerSettingsHandler
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
-        private readonly OrganizerRepositoryInterface         $organizerRepository,
-    )
-    {
-    }
+        private readonly OrganizerRepositoryInterface $organizerRepository,
+    ) {}
 
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
     {
@@ -30,16 +27,6 @@ class PartialUpdateOrganizerSettingsHandler
         $organizerSettings = $this->organizerSettingsRepository->findFirstWhere([
             'organizer_id' => $organizer->getId(),
         ]);
-
-        $locationDetails = $dto->getProvided('locationDetails', $organizerSettings->getLocationDetails());
-
-        if ($locationDetails instanceof Data) {
-            $locationDetails = $locationDetails->toArray();
-        } elseif (is_array($locationDetails)) {
-            $locationDetails = array_filter($locationDetails);
-        } else {
-            $locationDetails = [];
-        }
 
         $this->organizerSettingsRepository->updateWhere([
             'default_attendee_details_collection_method' => $dto->getProvided(
@@ -82,8 +69,6 @@ class PartialUpdateOrganizerSettingsHandler
             ]),
 
             'website_url' => $dto->getProvided('websiteUrl', $organizerSettings->getWebsiteUrl()),
-
-            'location_details' => $locationDetails,
 
             'homepage_visibility' => $dto->getProvided('homepageVisibility', $organizerSettings->getHomepageVisibility()),
 

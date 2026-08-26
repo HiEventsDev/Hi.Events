@@ -14,9 +14,7 @@ class EditEventSettingsAction extends BaseAction
 {
     public function __construct(
         private readonly UpdateEventSettingsHandler $updateEventSettingsHandler
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(UpdateEventSettingsRequest $request, int $eventId): JsonResponse
     {

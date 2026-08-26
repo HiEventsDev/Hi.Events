@@ -37,6 +37,28 @@ export const Currency: React.FC<CurrencyProps> = ({
     );
 };
 
+export const getDisplayPrice = (price: ProductPrice, taxAndServiceFeeDisplayType?: string): number => {
+    const totalTaxAndFees = (price.tax_total || 0) + (price.fee_total || 0);
+
+    return taxAndServiceFeeDisplayType === 'INCLUSIVE'
+        ? Number(price.price) + totalTaxAndFees
+        : Number(price.price);
+};
+
+export const getInclusiveFeeNote = (hasFees: boolean, hasTax: boolean): string => {
+    if (hasFees && hasTax) {
+        return t`incl. fees & tax`;
+    }
+    return hasFees ? t`incl. fees` : t`incl. tax`;
+};
+
+export const getExclusiveFeeNote = (formattedAmount: string, hasFees: boolean, hasTax: boolean): string => {
+    if (hasFees && hasTax) {
+        return t`+ ${formattedAmount} fees & tax`;
+    }
+    return hasFees ? t`+ ${formattedAmount} fees` : t`+ ${formattedAmount} tax`;
+};
+
 interface ProductPriceProps {
     product: Product;
     price: ProductPrice;
@@ -44,6 +66,7 @@ interface ProductPriceProps {
     className?: string;
     freeLabel?: string | null;
     taxAndServiceFeeDisplayType?: 'INCLUSIVE' | 'EXCLUSIVE';
+    feeDisplay?: 'popover' | 'none';
 }
 
 export const ProductPriceDisplay: React.FC<ProductPriceProps> = ({
@@ -53,9 +76,24 @@ export const ProductPriceDisplay: React.FC<ProductPriceProps> = ({
                                                                    className,
                                                                    freeLabel,
                                                                    taxAndServiceFeeDisplayType = 'exclusive',
+                                                                   feeDisplay = 'popover',
                                                                }) => {
     let displayPrice = price.price;
     const totalTaxAndFees = (price.tax_total || 0) + (price.fee_total || 0);
+
+    if (feeDisplay === 'none') {
+        const inclusiveAwarePrice = getDisplayPrice(price, taxAndServiceFeeDisplayType);
+
+        if (inclusiveAwarePrice === 0 && totalTaxAndFees === 0) {
+            return <span className={className}>{freeLabel || t`Free`}</span>;
+        }
+
+        return (
+            <span className={className}>
+                <span className={'hi-price-amount'}>{formatCurrency(inclusiveAwarePrice, currency)}</span>
+            </span>
+        );
+    }
 
     // Order taxes and service fees for display
     const orderedFees = [...(product.taxes || [])].sort((a, b) => a.type.localeCompare(b.type));

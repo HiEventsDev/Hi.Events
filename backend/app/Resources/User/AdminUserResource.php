@@ -24,7 +24,7 @@ class AdminUserResource extends BaseResource
             'id' => $this->resource->id,
             'first_name' => $this->resource->first_name,
             'last_name' => $this->resource->last_name,
-            'full_name' => $this->resource->first_name . ' ' . $this->resource->last_name,
+            'full_name' => $this->resource->first_name.' '.$this->resource->last_name,
             'email' => $this->resource->email,
             'timezone' => $this->resource->timezone,
             'locale' => $this->resource->locale,

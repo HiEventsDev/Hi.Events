@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class RequiredIf implements ValidationRule
 {
-
     public bool $implicit = true;
 
     private Request $request;

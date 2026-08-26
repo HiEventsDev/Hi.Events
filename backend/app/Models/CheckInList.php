@@ -22,4 +22,9 @@ class CheckInList extends BaseModel
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function event_occurrence(): BelongsTo
+    {
+        return $this->belongsTo(EventOccurrence::class, 'event_occurrence_id');
+    }
 }

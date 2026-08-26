@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Infrastructure\Webhook;
 use HiEvents\Exceptions\UnsafeWebhookUrlException;
 use HiEvents\Services\Infrastructure\Webhook\DTO\WebhookTargetDTO;
 use HiEvents\Services\Infrastructure\Webhook\WebhookUrlValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class WebhookUrlValidatorTest extends TestCase
@@ -20,9 +21,7 @@ class WebhookUrlValidatorTest extends TestCase
         $this->validator = new WebhookUrlValidator;
     }
 
-    /**
-     * @dataProvider blockedUrlProvider
-     */
+    #[DataProvider('blockedUrlProvider')]
     public function test_it_rejects_urls_resolving_to_internal_addresses(string $url): void
     {
         $this->expectException(UnsafeWebhookUrlException::class);
@@ -60,9 +59,7 @@ class WebhookUrlValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider allowedUrlProvider
-     */
+    #[DataProvider('allowedUrlProvider')]
     public function test_it_allows_public_addresses(string $url, string $expectedHost): void
     {
         $target = $this->validator->validate($url);

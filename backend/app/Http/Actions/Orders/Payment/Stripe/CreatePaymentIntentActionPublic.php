@@ -12,9 +12,7 @@ class CreatePaymentIntentActionPublic extends BaseAction
 {
     public function __construct(
         private readonly CreatePaymentIntentHandler $createPaymentIntentHandler,
-    )
-    {
-    }
+    ) {}
 
     public function __invoke(int $eventId, string $orderShortId): JsonResponse
     {

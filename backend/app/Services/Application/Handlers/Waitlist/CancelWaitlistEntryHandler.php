@@ -11,9 +11,7 @@ class CancelWaitlistEntryHandler
 {
     public function __construct(
         private readonly CancelWaitlistEntryService $cancelWaitlistEntryService,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws ResourceConflictException

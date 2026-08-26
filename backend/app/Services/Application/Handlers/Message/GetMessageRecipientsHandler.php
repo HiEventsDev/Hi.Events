@@ -12,10 +12,8 @@ class GetMessageRecipientsHandler
 {
     public function __construct(
         private readonly OutgoingMessageRepositoryInterface $outgoingMessageRepository,
-        private readonly MessageRepositoryInterface         $messageRepository,
-    )
-    {
-    }
+        private readonly MessageRepositoryInterface $messageRepository,
+    ) {}
 
     public function handle(int $eventId, int $messageId, QueryParamsDTO $params): LengthAwarePaginator
     {
