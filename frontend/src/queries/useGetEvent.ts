@@ -13,5 +13,7 @@ export const useGetEvent = (eventId: IdParam) => {
             const {data} = await eventsClient.findByID(eventId);
             return data;
         },
+
+        enabled: !!eventId,
     });
 };
