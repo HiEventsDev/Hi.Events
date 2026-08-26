@@ -209,7 +209,7 @@ test.describe('occurrence bulk edit', () => {
     });
     await api.generateOccurrences(event.id, {
       frequency: 'daily',
-      range: { type: 'count', count: 55 },
+      range: { type: 'count', count: 55, start: daysFromNow(1, 0) },
       times_of_day: ['19:00'],
       duration_minutes: 120,
     });
