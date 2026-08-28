@@ -48,6 +48,7 @@ export interface AccountConfiguration {
     id: number;
     name: string;
     is_system_default: boolean;
+    default_for_currency: string | null;
     application_fees: {
         fixed: number;
         percentage: number;
@@ -55,6 +56,9 @@ export interface AccountConfiguration {
     };
     bypass_application_fees: boolean;
 }
+
+export const isDefaultConfiguration = (config: AccountConfiguration): boolean =>
+    config.is_system_default || Boolean(config.default_for_currency);
 
 export interface CreateConfigurationData {
     name: string;

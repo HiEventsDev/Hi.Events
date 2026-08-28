@@ -16,6 +16,7 @@ class OrganizerConfigurationResource extends JsonResource
             'id' => $this->getId(),
             'name' => $this->getName(),
             'is_system_default' => $this->getIsSystemDefault(),
+            'default_for_currency' => $this->getDefaultForCurrency(),
             'application_fees' => [
                 'percentage' => $this->getPercentageApplicationFee(),
                 'fixed' => $this->getFixedApplicationFee(),

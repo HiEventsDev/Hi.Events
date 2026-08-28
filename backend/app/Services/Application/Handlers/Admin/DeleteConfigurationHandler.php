@@ -22,9 +22,9 @@ class DeleteConfigurationHandler
     {
         $configuration = $this->repository->findById($configurationId);
 
-        if ($configuration->getIsSystemDefault()) {
+        if ($configuration->isDefault()) {
             throw new CannotDeleteEntityException(
-                __('The system default configuration cannot be deleted.')
+                __('Default configurations cannot be deleted.')
             );
         }
 
