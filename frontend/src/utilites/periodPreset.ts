@@ -67,6 +67,9 @@ export const periodPresetToDateRange = (preset: PeriodPreset, event?: Event): Da
                 const floorStart = new Date(end);
                 floorStart.setDate(floorStart.getDate() - 369);
                 start = desiredStart.getTime() > floorStart.getTime() ? desiredStart : floorStart;
+                if (start.getTime() > end.getTime()) {
+                    start = floorStart;
+                }
                 break;
             }
         }
