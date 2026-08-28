@@ -148,6 +148,7 @@ export interface AccountConfiguration {
         currency: string;
     },
     is_system_default: boolean;
+    default_for_currency: string | null;
 }
 
 export interface OrganizerStripeConnectDetails {

@@ -56,6 +56,8 @@ class BootstrapDevDataCommand extends Command
             return self::FAILURE;
         }
 
+        $this->seedCurrencyDefaultConfigurations();
+
         $email = $this->option('email') ?: 'agent+'.now()->format('YmdHis').'@dev.test';
         $password = $this->option('password');
 
@@ -207,5 +209,39 @@ class BootstrapDevDataCommand extends Command
             'product_id' => $product->getId(),
             'price_id' => DB::table('product_prices')->where('product_id', $product->getId())->value('id'),
         ];
+    }
+
+    private function seedCurrencyDefaultConfigurations(): void
+    {
+        $fees = [
+            'USD' => 0.60,
+            'EUR' => 0.50,
+            'GBP' => 0.45,
+            'AUD' => 0.85,
+        ];
+
+        foreach ($fees as $currency => $fixedFee) {
+            $exists = DB::table('organizer_configurations')
+                ->where('default_for_currency', $currency)
+                ->whereNull('deleted_at')
+                ->exists();
+
+            if ($exists) {
+                continue;
+            }
+
+            DB::table('organizer_configurations')->insert([
+                'name' => "Standard ($currency)",
+                'is_system_default' => false,
+                'application_fees' => json_encode([
+                    'percentage' => 1.25,
+                    'fixed' => $fixedFee,
+                    'currency' => $currency,
+                ], JSON_THROW_ON_ERROR),
+                'default_for_currency' => $currency,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

@@ -382,6 +382,10 @@ export class AdminApiClient {
     return match.id;
   }
 
+  listConfigurations(): Promise<{ id: number; name: string; is_system_default: boolean; default_for_currency: string | null }[]> {
+    return unwrap(this.request.get('admin/configurations', { headers: jsonHeaders }));
+  }
+
   createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {
     return unwrap(this.request.post('admin/announcements', { headers: jsonHeaders, data: payload }));
   }
