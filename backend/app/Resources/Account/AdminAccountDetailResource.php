@@ -38,6 +38,7 @@ class AdminAccountDetailResource extends BaseResource
                             'id' => $configuration->id,
                             'name' => $configuration->name,
                             'is_system_default' => $configuration->is_system_default,
+                            'default_for_currency' => $configuration->default_for_currency,
                             'application_fees' => $configuration->application_fees ?? [
                                 'percentage' => 0,
                                 'fixed' => 0,
