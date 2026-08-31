@@ -68,6 +68,10 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     {
         return new AllowedSorts(
             [
+                self::START_DATE => [
+                    'asc' => __('Closest start date'),
+                    'desc' => __('Furthest start date'),
+                ],
                 self::CREATED_AT => [
                     'desc' => __('Newest first'),
                     'asc' => __('Oldest first'),
