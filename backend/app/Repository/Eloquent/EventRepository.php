@@ -111,16 +111,39 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             };
         }
 
-        $this->model = $this->model->orderBy(
-            $this->validateSortColumn($params->sort_by, EventDomainObject::class),
-            $this->validateSortDirection($params->sort_direction, EventDomainObject::class),
-        );
+        $sortColumn = $this->validateSortColumn($params->sort_by, EventDomainObject::class);
+        $sortDirection = $this->validateSortDirection($params->sort_direction, EventDomainObject::class);
+
+        if ($sortColumn === EventDomainObjectAbstract::START_DATE) {
+            $this->applyOccurrenceStartDateSort($sortDirection, $upcomingEventsFilter, $endedEventsFilter);
+        } else {
+            $this->model = $this->model->orderBy($sortColumn, $sortDirection);
+        }
 
         return $this->paginateWhere(
             where: $where,
             limit: $params->per_page,
             page: $params->page,
         );
+    }
+
+    private function applyOccurrenceStartDateSort(string $direction, bool $upcomingOnly, bool $endedOnly): void
+    {
+        $liveOccurrences = 'FROM event_occurrences eo WHERE eo.event_id = events.id AND eo.deleted_at IS NULL';
+        $bindings = [];
+
+        if ($upcomingOnly) {
+            $sortDateSql = "SELECT MIN(eo.start_date) {$liveOccurrences} AND COALESCE(eo.end_date, eo.start_date) >= ?";
+            $bindings[] = now();
+        } elseif ($endedOnly) {
+            $sortDateSql = "SELECT MAX(eo.start_date) {$liveOccurrences}";
+        } else {
+            $sortDateSql = "SELECT MIN(eo.start_date) {$liveOccurrences}";
+        }
+
+        $this->model = $this->model
+            ->orderByRaw("({$sortDateSql}) {$direction} NULLS LAST", $bindings)
+            ->orderBy(EventDomainObjectAbstract::ID);
     }
 
     public function getUpcomingEventsForAdmin(int $perPage): LengthAwarePaginator
