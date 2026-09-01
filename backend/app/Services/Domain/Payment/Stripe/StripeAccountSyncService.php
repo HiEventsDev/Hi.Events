@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerStripePlatformRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
+use HiEvents\Services\Domain\Organizer\AssignCurrencyDefaultOrganizerConfigurationService;
 use Illuminate\Config\Repository;
 use Psr\Log\LoggerInterface;
 use Stripe\Account;
@@ -26,6 +27,7 @@ class StripeAccountSyncService
         private readonly OrganizerStripePlatformRepositoryInterface $organizerStripePlatformRepository,
         private readonly OrganizerVatSettingRepositoryInterface $vatSettingRepository,
         private readonly Repository $config,
+        private readonly AssignCurrencyDefaultOrganizerConfigurationService $assignCurrencyDefaultOrganizerConfigurationService,
     ) {}
 
     public function isStripeAccountComplete(Account $stripeAccount): bool
@@ -99,6 +101,10 @@ class StripeAccountSyncService
                 stripeAccountId: $stripeAccount->id,
                 organizerStripePlatformId: $organizerRow->getId(),
             );
+            $this->assignCurrencyDefaultOrganizerConfigurationService->assignForCountry(
+                organizerId: $organizerRow->getOrganizerId(),
+                countryCode: $stripeAccount->country,
+            );
         }
     }
 
@@ -128,6 +134,10 @@ class StripeAccountSyncService
             countryCode: $stripeAccount->country,
             stripeAccountId: $stripeAccount->id,
             organizerStripePlatformId: $organizerStripePlatform->getId(),
+        );
+        $this->assignCurrencyDefaultOrganizerConfigurationService->assignForCountry(
+            organizerId: $organizerStripePlatform->getOrganizerId(),
+            countryCode: $stripeAccount->country,
         );
     }
 

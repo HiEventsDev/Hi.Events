@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\QuestionAnswerDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -24,6 +25,7 @@ use HiEvents\Services\Application\Handlers\Order\CompleteOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderOrderDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\CompleteOrderProductDataDTO;
+use HiEvents\Services\Application\Handlers\Order\DTO\OrderQuestionsDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -146,6 +148,55 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertTrue(true);
+    }
+
+    public function test_handle_stores_unwrapped_order_answers_and_skips_blank_ones(): void
+    {
+        $orderShortId = 'ABC123';
+        $orderData = new CompleteOrderDTO(
+            order: new CompleteOrderOrderDTO(
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'john@example.com',
+                questions: new Collection([
+                    new OrderQuestionsDTO(question_id: 10, response: ['answer' => null]),
+                    new OrderQuestionsDTO(question_id: 11, response: ['answer' => '']),
+                    new OrderQuestionsDTO(question_id: 12, response: ['answer' => 'Band 5']),
+                ]),
+            ),
+            products: new Collection([
+                new CompleteOrderProductDataDTO(
+                    product_price_id: 1,
+                    first_name: 'John',
+                    last_name: 'Doe',
+                    email: 'john@example.com'
+                ),
+            ]),
+            event_id: 1,
+        );
+        $order = $this->createMockOrder();
+
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
+        $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+
+        $createdAnswers = [];
+        $this->questionAnswersRepository->shouldReceive('create')->andReturnUsing(function (array $data) use (&$createdAnswers) {
+            $createdAnswers[] = $data;
+
+            return new QuestionAnswerDomainObject;
+        });
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+
+        $this->assertSame([
+            ['question_id' => 12, 'answer' => 'Band 5', 'order_id' => 1],
+        ], $createdAnswers);
     }
 
     public function test_handle_takes_an_advisory_lock_keyed_on_the_order_before_reading_it(): void
@@ -331,6 +382,61 @@ class CompleteOrderHandlerTest extends TestCase
 
         $this->attendeeRepository->shouldReceive('insert')->andReturn(true);
         $this->attendeeRepository->shouldReceive('findWhere')->andReturn(new Collection);
+
+        $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
+    public function test_exception_is_thrown_when_attendee_counts_match_in_total_but_not_per_price(): void
+    {
+        $this->expectException(ResourceConflictException::class);
+        $this->expectExceptionMessage('The number of attendees does not match the number of tickets in the order');
+
+        $orderShortId = 'ABC123';
+
+        $secondOrderItem = (new OrderItemDomainObject)
+            ->setId(2)
+            ->setProductId(2)
+            ->setQuantity(1)
+            ->setPrice(10)
+            ->setTotalGross(10)
+            ->setProductPriceId(2)
+            ->setEventOccurrenceId(1);
+
+        $order = $this->createMockOrder();
+        $order->getOrderItems()->first()->setQuantity(2);
+        $order->getOrderItems()->push($secondOrderItem);
+
+        $secondProductPrice = Mockery::mock(ProductPriceDomainObject::class);
+        $secondProductPrice->shouldReceive('getId')->andReturn(2);
+        $secondProductPrice->shouldReceive('getProductId')->andReturn(2);
+
+        $attendeeForFirstPrice = fn () => new CompleteOrderProductDataDTO(
+            product_price_id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john@example.com'
+        );
+
+        $orderData = new CompleteOrderDTO(
+            order: new CompleteOrderOrderDTO(
+                first_name: 'John',
+                last_name: 'Doe',
+                email: 'john@example.com',
+                questions: null,
+            ),
+            products: new Collection([$attendeeForFirstPrice(), $attendeeForFirstPrice(), $attendeeForFirstPrice()]),
+            event_id: 1,
+        );
+
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
+        $this->orderRepository->shouldReceive('findByShortId')->with($orderShortId)->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([
+            $this->createMockProductPrice(),
+            $secondProductPrice,
+        ]));
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
     }

@@ -119,6 +119,7 @@ export const StatBoxes = ({occurrenceId, dateRange, event}: StatBoxesProps = {})
             {visibleCells.map((cell) => (
                 <KpiCell
                     key={cell.key}
+                    testId={`event-stat-${cell.key}`}
                     label={cell.label}
                     value={cell.value}
                     sparkline={cell.sparkline}

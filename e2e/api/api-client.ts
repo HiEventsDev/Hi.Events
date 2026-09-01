@@ -253,6 +253,25 @@ export class ApiClient {
     return check(this.request.post(`events/${eventId}/orders/${orderId}/cancel`, { headers: jsonHeaders }));
   }
 
+  listAttendees(eventId: number): Promise<AttendeeRecord[]> {
+    return unwrap<AttendeeRecord[]>(this.request.get(`events/${eventId}/attendees`, { headers: jsonHeaders }));
+  }
+
+  async findAttendeeIdByPublicId(eventId: number, publicId: string): Promise<number> {
+    const attendees = await this.listAttendees(eventId);
+    const attendee = attendees.find((candidate) => candidate.public_id === publicId);
+    if (!attendee) {
+      throw new Error(`Attendee ${publicId} not found among ${attendees.length} attendees for event ${eventId}`);
+    }
+    return attendee.id;
+  }
+
+  updateAttendeeStatus(eventId: number, attendeeId: number, status: 'ACTIVE' | 'CANCELLED'): Promise<void> {
+    return check(
+      this.request.patch(`events/${eventId}/attendees/${attendeeId}`, { headers: jsonHeaders, data: { status } }),
+    );
+  }
+
   async generateOccurrences(eventId: number, recurrenceRule: RecurrenceRule): Promise<void> {
     const response = await this.request.post(`events/${eventId}/occurrences/generate`, {
       headers: jsonHeaders,
@@ -339,6 +358,32 @@ export class AdminApiClient {
         data: { messaging_tier_id: messagingTierId },
       }),
     );
+  }
+
+  setAccountVerification(accountId: number, isManuallyVerified: boolean): Promise<void> {
+    return check(
+      this.request.put(`admin/accounts/${accountId}/verification`, {
+        headers: jsonHeaders,
+        data: { is_manually_verified: isManuallyVerified },
+      }),
+    );
+  }
+
+  async findAccountIdByEmail(email: string): Promise<number> {
+    const accounts = await unwrap<{ id: number; email: string }[]>(
+      this.request.get('admin/accounts', { headers: jsonHeaders, params: { search: email } }),
+    );
+
+    const match = accounts.find((account) => account.email === email);
+    if (!match) {
+      throw new Error(`No admin account found for ${email}`);
+    }
+
+    return match.id;
+  }
+
+  listConfigurations(): Promise<{ id: number; name: string; is_system_default: boolean; default_for_currency: string | null }[]> {
+    return unwrap(this.request.get('admin/configurations', { headers: jsonHeaders }));
   }
 
   createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {

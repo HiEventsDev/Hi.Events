@@ -214,12 +214,13 @@ class CompleteOrderHandler
     private function createOrderQuestions(Collection $questions, OrderDomainObject $order): void
     {
         $questions->each(function (OrderQuestionsDTO $orderQuestionsDTO) use ($order) {
-            if (empty($orderQuestionsDTO->response)) {
+            $answer = $this->extractAnswer($orderQuestionsDTO->response);
+            if ($answer === null) {
                 return;
             }
             $this->questionAnswersRepository->create([
                 'question_id' => $orderQuestionsDTO->question_id,
-                'answer' => $orderQuestionsDTO->response['answer'] ?? $orderQuestionsDTO->response,
+                'answer' => $answer,
                 'order_id' => $order->getId(),
             ]);
         });
@@ -258,19 +259,31 @@ class CompleteOrderHandler
             );
 
             foreach ($productRequestData->questions as $question) {
-                if (empty($question->response)) {
+                $answer = $this->extractAnswer($question->response);
+                if ($answer === null) {
                     continue;
                 }
 
                 $this->questionAnswersRepository->create([
                     'question_id' => $question->question_id,
-                    'answer' => $question->response['answer'] ?? $question->response,
+                    'answer' => $answer,
                     'order_id' => $order->getId(),
                     'product_id' => $productId,
                     'attendee_id' => $insertedAttendee?->getId(),
                 ]);
             }
         }
+    }
+
+    private function extractAnswer(array $response): mixed
+    {
+        $answer = array_key_exists('answer', $response) ? $response['answer'] : $response;
+
+        if ($answer === null || $answer === '' || $answer === []) {
+            return null;
+        }
+
+        return $answer;
     }
 
     /**
@@ -376,22 +389,27 @@ class CompleteOrderHandler
      */
     private function validateTicketProductsCount(OrderDomainObject $order, Collection $attendees): void
     {
-        $orderAttendeeCount = $order->getOrderItems()
-            ?->filter(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductType() === ProductType::TICKET->name)
-            ?->sum(fn (OrderItemDomainObject $orderItem) => $orderItem->getQuantity());
+        $orderItems = $order->getOrderItems() ?? collect();
 
-        $ticketAttendeeCount = $attendees
+        $orderTicketCountsByPriceId = $orderItems
+            ->filter(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductType() === ProductType::TICKET->name)
+            ->groupBy(fn (OrderItemDomainObject $orderItem) => $orderItem->getProductPriceId())
+            ->map(fn (Collection $items) => $items->sum(fn (OrderItemDomainObject $item) => $item->getQuantity()));
+
+        $attendeeTicketCountsByPriceId = $attendees
             ->filter(
                 fn (CompleteOrderProductDataDTO $attendee) => $this->getProductTypeFromPriceId(
                     $attendee->product_price_id,
-                    $order->getOrderItems()
+                    $orderItems
                 ) === ProductType::TICKET->name)
-            ->count();
+            ->countBy(fn (CompleteOrderProductDataDTO $attendee) => $attendee->product_price_id);
 
-        if ($orderAttendeeCount !== $ticketAttendeeCount) {
-            throw new ResourceConflictException(
-                __('The number of attendees does not match the number of tickets in the order')
-            );
+        foreach ($orderTicketCountsByPriceId as $priceId => $expectedCount) {
+            if (($attendeeTicketCountsByPriceId[$priceId] ?? 0) !== $expectedCount) {
+                throw new ResourceConflictException(
+                    __('The number of attendees does not match the number of tickets in the order')
+                );
+            }
         }
     }
 

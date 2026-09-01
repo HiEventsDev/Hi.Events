@@ -42,7 +42,7 @@ return new class extends Migration
                 vat_validation_error, vat_validation_attempts, vat_validation_date,
                 business_name, business_address, vat_country_code, created_at, updated_at
             )
-            SELECT
+            SELECT DISTINCT ON (o.id)
                 o.id,
                 avs.vat_registered,
                 avs.vat_number,
@@ -60,6 +60,7 @@ return new class extends Migration
             JOIN account_vat_settings avs ON avs.account_id = o.account_id
             WHERE avs.deleted_at IS NULL
               AND o.deleted_at IS NULL
+            ORDER BY o.id, avs.id
         ');
     }
 

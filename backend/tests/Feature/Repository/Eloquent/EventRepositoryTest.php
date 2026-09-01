@@ -152,12 +152,70 @@ class EventRepositoryTest extends TestCase
         $this->assertLessThan(array_search($this->eventWithoutOccurrencesId, $ids, true), array_search($lateId, $ids, true));
     }
 
-    private function findEventIds(string $eventsStatus): array
+    public function test_start_date_sort_orders_events_chronologically_not_by_creation_order(): void
+    {
+        $earlierStartId = $this->createEvent('Chrono earlier '.uniqid(), createdAt: now()->subDays(2));
+        $laterStartId = $this->createEvent('Chrono later '.uniqid(), createdAt: now()->subDay());
+        $this->createOccurrence($earlierStartId, now()->addDays(5), now()->addDays(5)->addHours(2));
+        $this->createOccurrence($laterStartId, now()->addDays(10), now()->addDays(10)->addHours(2));
+
+        $ids = $this->findEventIds('upcoming', sortBy: 'start_date', sortDirection: 'asc');
+
+        $this->assertLessThan(array_search($laterStartId, $ids, true), array_search($earlierStartId, $ids, true));
+    }
+
+    public function test_upcoming_start_date_sort_uses_next_upcoming_occurrence(): void
+    {
+        $partiallyElapsedId = $this->createEvent('Partially elapsed '.uniqid());
+        $singleUpcomingId = $this->createEvent('Single upcoming '.uniqid());
+        $this->createOccurrence($partiallyElapsedId, now()->subDays(30), now()->subDays(30)->addHours(2));
+        $this->createOccurrence($partiallyElapsedId, now()->addDays(10), now()->addDays(10)->addHours(2));
+        $this->createOccurrence($singleUpcomingId, now()->addDays(5), now()->addDays(5)->addHours(2));
+
+        $ids = $this->findEventIds('upcoming', sortBy: 'start_date', sortDirection: 'asc');
+
+        $this->assertLessThan(array_search($partiallyElapsedId, $ids, true), array_search($singleUpcomingId, $ids, true));
+    }
+
+    public function test_upcoming_start_date_sort_puts_events_without_occurrences_last(): void
+    {
+        $withOccurrenceId = $this->createEvent('Has occurrence '.uniqid());
+        $this->createOccurrence($withOccurrenceId, now()->addDays(60), now()->addDays(60)->addHours(2));
+
+        $ids = $this->findEventIds('upcoming', sortBy: 'start_date', sortDirection: 'asc');
+
+        $this->assertLessThan(array_search($this->eventWithoutOccurrencesId, $ids, true), array_search($withOccurrenceId, $ids, true));
+    }
+
+    public function test_ended_start_date_sort_desc_puts_most_recent_past_event_first(): void
+    {
+        $olderPastId = $this->createEvent('Older past '.uniqid(), createdAt: now()->subDay());
+        $recentPastId = $this->createEvent('Recent past '.uniqid(), createdAt: now()->subDays(2));
+        $this->createOccurrence($olderPastId, now()->subDays(20), now()->subDays(20)->addHours(2));
+        $this->createOccurrence($recentPastId, now()->subDays(40), now()->subDays(40)->addHours(2));
+        $this->createOccurrence($recentPastId, now()->subDays(5), now()->subDays(5)->addHours(2));
+
+        $ids = $this->findEventIds('ended', sortBy: 'start_date', sortDirection: 'desc');
+
+        $this->assertLessThan(array_search($olderPastId, $ids, true), array_search($recentPastId, $ids, true));
+    }
+
+    public function test_unknown_sort_column_falls_back_to_created_at_desc(): void
+    {
+        $olderId = $this->createEvent('Fallback older '.uniqid(), createdAt: now()->subDays(3));
+        $newerId = $this->createEvent('Fallback newer '.uniqid(), createdAt: now()->subDay());
+
+        $ids = $this->findEventIds('upcoming', sortBy: 'not_a_column', sortDirection: 'desc');
+
+        $this->assertLessThan(array_search($olderId, $ids, true), array_search($newerId, $ids, true));
+    }
+
+    private function findEventIds(string $eventsStatus, string $sortBy = 'created_at', string $sortDirection = 'desc'): array
     {
         $params = QueryParamsDTO::fromArray([
             'eventsStatus' => $eventsStatus,
-            'sort_by' => 'created_at',
-            'sort_direction' => 'desc',
+            'sort_by' => $sortBy,
+            'sort_direction' => $sortDirection,
             'per_page' => 100,
         ]);
 
@@ -174,9 +232,9 @@ class EventRepositoryTest extends TestCase
             ->all();
     }
 
-    private function createEvent(string $title, string $status = 'DRAFT'): int
+    private function createEvent(string $title, string $status = 'DRAFT', $createdAt = null): int
     {
-        $now = now()->toDateTimeString();
+        $createdAt = ($createdAt ?? now())->toDateTimeString();
 
         return DB::table('events')->insertGetId([
             'title' => $title,
@@ -187,8 +245,8 @@ class EventRepositoryTest extends TestCase
             'currency' => 'USD',
             'timezone' => 'UTC',
             'short_id' => 'evt_'.uniqid(),
-            'created_at' => $now,
-            'updated_at' => $now,
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ]);
     }
 

@@ -9,7 +9,7 @@ use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Repository\Interfaces\OrderAuditLogRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
-use HiEvents\Services\Application\Handlers\Order\Payment\Stripe\RefundOrderHandler;
+use HiEvents\Services\Application\Handlers\Order\RefundOrderHandler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;

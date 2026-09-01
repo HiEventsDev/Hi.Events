@@ -69,9 +69,9 @@ const ReportTable = <T extends Record<string, any>>({
                                                         showCustomDatePicker = false,
                                                         event
                                                     }: ReportProps<T>) => {
-    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-        dayjs(defaultStartDate).tz(event.timezone).toDate(),
-        dayjs(defaultEndDate).tz(event.timezone).toDate()
+    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(() => [
+        dayjs(defaultStartDate).tz(event.timezone).startOf('day').toDate(),
+        dayjs(defaultEndDate).tz(event.timezone).endOf('day').toDate()
     ]);
     const [selectedPeriod, setSelectedPeriod] = useState('90d');
     const [showDatePickerInput, setShowDatePickerInput] = useState(showCustomDatePicker);
@@ -84,7 +84,7 @@ const ReportTable = <T extends Record<string, any>>({
     const occurrencesQuery = useGetEventOccurrences(
         eventId,
         {pageNumber: 1, perPage: 500},
-        true,
+        isRecurring && showOccurrenceFilter,
         {includeStats: false},
     );
     const occurrences = occurrencesQuery?.data?.data || [];

@@ -10,6 +10,10 @@
   }
 }
 
+.tabLabelShort {
+  display: none;
+}
+
 .tabCount {
   display: inline-flex;
   align-items: center;
@@ -33,6 +37,32 @@
 }
 
 @media (max-width: 768px) {
+  .tabsCard {
+    :global(.mantine-Tabs-list) {
+      flex-wrap: nowrap;
+    }
+
+    :global(.mantine-Tabs-tab) {
+      flex: 1 1 0;
+      justify-content: center;
+      min-width: 0;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    :global(.mantine-Tabs-tab:last-of-type) {
+      border-top-right-radius: var(--hi-radius-lg);
+    }
+  }
+
+  .tabLabelFull {
+    display: none;
+  }
+
+  .tabLabelShort {
+    display: inline;
+  }
+
   .viewAllLink {
     display: none;
   }

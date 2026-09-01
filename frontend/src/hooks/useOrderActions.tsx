@@ -24,6 +24,7 @@ import {downloadBinary} from "../utilites/download.ts";
 import {withLoadingNotification} from "../utilites/withLoadingNotification.tsx";
 import {showError, showSuccess} from "../utilites/notifications.tsx";
 import {eventCheckoutUrl} from "../utilites/urlHelper.ts";
+import {isOrderRefundable} from "../utilites/orderHelper.ts";
 
 interface UseOrderActionsOptions {
     eventId: IdParam;
@@ -88,10 +89,7 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
     };
 
     const getOrderActions = (order: Order): EntityAction[] => {
-        const isRefundable = !order.is_free_order
-            && order.status !== 'AWAITING_OFFLINE_PAYMENT'
-            && order.payment_provider === 'STRIPE'
-            && order.refund_status !== 'REFUNDED';
+        const isRefundable = isOrderRefundable(order);
 
         const actions: (EntityAction | false)[] = [
             !!onManage && {

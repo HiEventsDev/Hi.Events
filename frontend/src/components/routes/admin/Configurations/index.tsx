@@ -10,7 +10,7 @@ import {useState} from "react";
 import {Modal} from "../../../common/Modal";
 import {useForm} from "@mantine/form";
 import {showSuccess, showError} from "../../../../utilites/notifications";
-import {AccountConfiguration} from "../../../../api/admin.client";
+import {AccountConfiguration, isDefaultConfiguration} from "../../../../api/admin.client";
 import {currenciesMap} from "../../../../../data/currencies";
 import {getCurrencySymbol} from "../../../../utilites/currency";
 import classes from "./Configurations.module.scss";
@@ -32,11 +32,6 @@ const Configurations = () => {
     const configurations = configurationsData?.data || [];
 
     const handleDelete = (config: AccountConfiguration) => {
-        if (config.is_system_default) {
-            showError(t`Cannot delete the system default configuration`);
-            return;
-        }
-
         if (window.confirm(t`Are you sure you want to delete this configuration? This may affect accounts using it.`)) {
             deleteMutation.mutate(config.id, {
                 onSuccess: () => showSuccess(t`Configuration deleted successfully`),
@@ -85,6 +80,9 @@ const Configurations = () => {
                                             {config.is_system_default && (
                                                 <Badge color="blue" size="sm">{t`System Default`}</Badge>
                                             )}
+                                            {config.default_for_currency && (
+                                                <Badge color="teal" size="sm">{t`${config.default_for_currency} Default`}</Badge>
+                                            )}
                                             {config.bypass_application_fees && (
                                                 <Badge color="orange" size="sm">{t`Fees Bypassed`}</Badge>
                                             )}
@@ -114,7 +112,7 @@ const Configurations = () => {
                                             variant="light"
                                             color="red"
                                             onClick={() => handleDelete(config)}
-                                            disabled={config.is_system_default}
+                                            disabled={isDefaultConfiguration(config)}
                                         >
                                             <IconTrash size={16} />
                                         </ActionIcon>
@@ -211,6 +209,12 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
             {isEditing && configuration?.is_system_default && (
                 <Callout variant="tip">
                     {t`Warning: This is the system default configuration. Changes will affect all accounts that don't have a specific configuration assigned.`}
+                </Callout>
+            )}
+
+            {isEditing && configuration && !configuration.is_system_default && configuration.default_for_currency && (
+                <Callout variant="tip">
+                    {t`Warning: This is the ${configuration.default_for_currency} default configuration. Changes will affect every organizer automatically assigned this pricing.`}
                 </Callout>
             )}
 

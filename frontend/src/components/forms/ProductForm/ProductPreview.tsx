@@ -79,7 +79,6 @@ export const ProductPreview = ({form, event}: ProductPreviewProps) => {
             <div className={classes.eyebrow}>{t`Live preview`}</div>
             <div
                 className={classes.widgetWrap}
-                style={{backgroundColor: themeSettings.background}}
                 data-hidden={isHiddenFromEveryone || undefined}
                 aria-hidden
             >
@@ -89,9 +88,9 @@ export const ProductPreview = ({form, event}: ProductPreviewProps) => {
                     widgetMode="preview"
                     showPoweredBy={false}
                     colors={{
-                        background: 'transparent',
+                        background: '#ffffff',
                         primary: themeSettings.accent,
-                        primaryText: themeVariables['--theme-text-primary'],
+                        primaryText: '#1a1a1a',
                         secondary: themeSettings.accent,
                         secondaryText: themeVariables['--theme-accent-contrast'],
                     }}

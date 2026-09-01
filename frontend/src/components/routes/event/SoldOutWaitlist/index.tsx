@@ -37,7 +37,7 @@ export const SoldOutWaitlist = () => {
     const {data: occurrencesData} = useGetEventOccurrences(
         eventId,
         {pageNumber: 1, perPage: 1200} as QueryFilters,
-        true,
+        isRecurring,
         {includeStats: false},
     );
     const occurrences = occurrencesData?.data || [];

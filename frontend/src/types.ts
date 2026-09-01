@@ -148,6 +148,7 @@ export interface AccountConfiguration {
         currency: string;
     },
     is_system_default: boolean;
+    default_for_currency: string | null;
 }
 
 export interface OrganizerStripeConnectDetails {
@@ -586,6 +587,11 @@ export interface EventDailyStats {
 export interface CheckInStats {
     total_checked_in_attendees: number;
     total_attendees: number;
+}
+
+export interface EventCounts {
+    total_orders: number;
+    total_attendees_registered: number;
 }
 
 export interface EventStats {
