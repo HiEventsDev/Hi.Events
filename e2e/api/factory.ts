@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import type { APIRequestContext } from '@playwright/test';
 import type { ApiClient } from './api-client';
 import type {
@@ -29,6 +31,7 @@ export interface SeededEvent {
 
 interface SeedOptions {
   organizerId: number;
+  startDate?: string;
   price?: number;
   productType?: ProductPriceType;
   eventType?: EventType;
@@ -55,6 +58,19 @@ const futureStartDate = (): string => {
   return date.toISOString();
 };
 
+const pastStartDate = (): string => {
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  date.setHours(21, 0, 0, 0);
+  return date.toISOString();
+};
+
+const coverImage = (): { name: string; mimeType: string; buffer: Buffer } => ({
+  name: 'event-cover.png',
+  mimeType: 'image/png',
+  buffer: readFileSync(fileURLToPath(new URL('../fixtures/assets/event-cover.png', import.meta.url))),
+});
+
 export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptions): Promise<SeededEvent> {
   const {
     organizerId,
@@ -70,7 +86,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     title,
     type: eventType,
     organizer_id: organizerId,
-    start_date: futureStartDate(),
+    start_date: opts.startDate ?? futureStartDate(),
     category,
     currency: 'USD',
     timezone: 'UTC',
@@ -304,6 +320,27 @@ export async function createSoldOutEvent(
   });
   const consumedOrder = await createCompletedOrder(publicApi, event);
   return { ...event, consumedOrder };
+}
+
+export async function createPastEventWithCoverImage(
+  api: ApiClient,
+  organizerId: number,
+  opts: { title?: string; eventType?: EventType } = {},
+): Promise<SeededEvent> {
+  const event = await createLiveEventWithProduct(api, {
+    organizerId,
+    startDate: pastStartDate(),
+    title: opts.title,
+    eventType: opts.eventType,
+  });
+
+  if (opts.eventType === 'RECURRING') {
+    await api.createOccurrence(event.eventId, { start_date: pastStartDate() });
+  }
+
+  await api.uploadEventImage(event.eventId, coverImage());
+
+  return event;
 }
 
 export async function createRecurringLiveEvent(
