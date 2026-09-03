@@ -44,6 +44,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                 ->whereIn(EventDomainObjectAbstract::STATUS, [
                     EventStatus::LIVE->name,
                     EventStatus::DRAFT->name,
+                    EventStatus::PENDING_MANUAL_REVIEW->name,
                 ])
                 ->where(EventDomainObjectAbstract::ORGANIZER_ID, $organizerId)
                 ->where(EventDomainObjectAbstract::ACCOUNT_ID, $accountId);

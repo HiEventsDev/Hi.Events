@@ -368,6 +368,30 @@ export interface AdminMessage {
     eligibility_failures?: string[];
 }
 
+export interface SpamCheckVerdict {
+    confidence: number;
+    reasons: string[];
+}
+
+export interface AdminSpamEvent {
+    id: IdParam;
+    event_id: IdParam;
+    event_title: string;
+    event_description: string;
+    organizer_name: string | null;
+    account_name: string | null;
+    account_email: string | null;
+    account_id: IdParam;
+    verdict: SpamCheckVerdict;
+    checked_at: string;
+}
+
+export interface GetAllAdminSpamEventsParams {
+    page?: number;
+    per_page?: number;
+    search?: string;
+}
+
 export interface GetAllAdminMessagesParams {
     page?: number;
     per_page?: number;
@@ -602,6 +626,27 @@ export const adminClient = {
 
     approveMessage: async (messageId: IdParam) => {
         const response = await api.post(`admin/messages/${messageId}/approve`);
+        return response.data;
+    },
+
+    getAllAdminSpamEvents: async (params: GetAllAdminSpamEventsParams = {}) => {
+        const response = await api.get<GenericPaginatedResponse<AdminSpamEvent>>('admin/spam-events', {
+            params: {
+                page: params.page || 1,
+                per_page: params.per_page || 20,
+                search: params.search || undefined,
+            }
+        });
+        return response.data;
+    },
+
+    approveSpamEvent: async (eventId: IdParam) => {
+        const response = await api.post(`admin/spam-events/${eventId}/approve`);
+        return response.data;
+    },
+
+    confirmSpamEvent: async (eventId: IdParam) => {
+        const response = await api.post(`admin/spam-events/${eventId}/confirm-spam`);
         return response.data;
     },
 

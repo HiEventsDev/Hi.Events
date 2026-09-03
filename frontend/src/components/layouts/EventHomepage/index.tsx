@@ -209,7 +209,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                 <StatusToggle
                     entityType="event"
                     entityId={event.id}
-                    currentStatus={event.status as 'DRAFT' | 'LIVE'}
+                    currentStatus={event.status as 'DRAFT' | 'LIVE' | 'PENDING_MANUAL_REVIEW'}
                     entityName={event.title}
                     onSuccess={() =>
                         setTimeout(() => {

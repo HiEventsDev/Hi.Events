@@ -162,7 +162,7 @@ export const EventDashboard = () => {
 
     const isSaasMode = !!account?.is_saas_mode_enabled;
     const allChecklistComplete = !!event
-        && event.status === 'LIVE'
+        && (event.status === 'LIVE' || event.status === 'PENDING_MANUAL_REVIEW')
         && (!isSaasMode || isStripeConnected)
         && productCount > 0
         && hasEventDetails(event)

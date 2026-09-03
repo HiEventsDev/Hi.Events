@@ -13,12 +13,12 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/layouts/Event/index.tsx:217
+#: src/components/layouts/Event/index.tsx:224
 #: src/components/layouts/OrganizerLayout/index.tsx:218
 msgid "- Click to Publish"
 msgstr "- Нажмите, чтобы опубликовать"
 
-#: src/components/layouts/Event/index.tsx:219
+#: src/components/layouts/Event/index.tsx:226
 #: src/components/layouts/OrganizerLayout/index.tsx:220
 msgid "- Click to Unpublish"
 msgstr "- Нажмите, чтобы снять с публикации"
@@ -113,7 +113,7 @@ msgstr ""
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:133
+#: src/components/common/EventCard/index.tsx:141
 msgid "{availableCount} of {totalCount} available"
 msgstr ""
 
@@ -196,7 +196,7 @@ msgstr ""
 msgid "{slotCount} times available"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:129
+#: src/components/common/EventCard/index.tsx:137
 msgid "{totalCount} ticket types"
 msgstr ""
 
@@ -300,7 +300,7 @@ msgstr "За 1 час до мероприятия"
 msgid "1 ticket"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:129
+#: src/components/common/EventCard/index.tsx:137
 msgid "1 ticket type"
 msgstr ""
 
@@ -480,6 +480,8 @@ msgstr ""
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
 #: src/components/routes/admin/Messages/index.tsx:164
 #: src/components/routes/admin/Messages/index.tsx:282
+#: src/components/routes/admin/SpamEvents/index.tsx:130
+#: src/components/routes/admin/SpamEvents/index.tsx:249
 msgid "Account"
 msgstr ""
 
@@ -551,7 +553,7 @@ msgstr ""
 msgid "Action Required: VAT Information Needed"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:112
+#: src/components/common/AdminEventsTable/index.tsx:114
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/EntityActions/index.tsx:28
 #: src/components/common/OrdersTable/index.tsx:356
@@ -827,13 +829,13 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:72
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:73
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:78
 msgid "Admin Access Required"
 msgstr ""
 
 #: src/components/common/GlobalMenu/index.tsx:61
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Dashboard/index.tsx:70
 msgid "Admin Dashboard"
 msgstr ""
@@ -1127,7 +1129,7 @@ msgstr ""
 msgid "Announcement updated"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr ""
@@ -1209,6 +1211,10 @@ msgstr ""
 msgid "Apply to all tickets"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:177
+msgid "Approve - Not Spam"
+msgstr "Одобрить - Не спам"
+
 #: src/components/routes/admin/Messages/index.tsx:232
 msgid "Approve Message"
 msgstr ""
@@ -1217,17 +1223,17 @@ msgstr ""
 msgid "April"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 msgid "Archive"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/components/common/EventCard/index.tsx:165
 msgid "Archive event"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:125
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:139
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:126
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:143
 msgid "Archive Event"
 msgstr ""
 
@@ -1236,7 +1242,7 @@ msgstr ""
 msgid "Archive Organizer"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:129
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:132
 msgid "Archive this event to hide it from the public. You can restore it later."
 msgstr ""
 
@@ -1244,7 +1250,7 @@ msgstr ""
 msgid "Archive this organizer. This will also archive all events belonging to this organizer."
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:82
+#: src/components/common/EventCard/index.tsx:87
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:32
 msgid "Archived"
 msgstr ""
@@ -1253,15 +1259,19 @@ msgstr ""
 msgid "Archived Organizers"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:61
+msgid "Are you sure this event is not spam? It will be published immediately."
+msgstr "Вы уверены, что это событие не спам? Оно будет опубликовано немедленно."
+
 #: src/hooks/useAttendeeActions.tsx:43
 msgid "Are you sure you want to activate this attendee?"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:62
+#: src/components/common/EventCard/index.tsx:67
 msgid "Are you sure you want to archive this event?"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:49
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:50
 msgid "Are you sure you want to archive this event? It will no longer be visible to the public."
 msgstr ""
 
@@ -1286,6 +1296,10 @@ msgstr ""
 #: src/components/routes/event/messages.tsx:33
 msgid "Are you sure you want to cancel this scheduled message?"
 msgstr "Вы уверены, что хотите отменить это запланированное сообщение?"
+
+#: src/components/routes/admin/SpamEvents/index.tsx:75
+msgid "Are you sure you want to confirm this event as spam? It will remain unpublished."
+msgstr "Вы уверены, что хотите подтвердить это событие как спам? Оно останется неопубликованным."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:85
 msgid "Are you sure you want to delete all failed jobs?"
@@ -1338,7 +1352,7 @@ msgstr ""
 msgid "Are you sure you want to leave?"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:183
+#: src/components/layouts/Event/index.tsx:188
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr ""
 
@@ -1358,11 +1372,11 @@ msgstr ""
 msgid "Are you sure you want to permanently delete this date? This cannot be undone."
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:38
+#: src/components/common/StatusToggle/index.tsx:37
 msgid "Are you sure you want to publish this event? Once published, it will be visible to the public."
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:39
+#: src/components/common/StatusToggle/index.tsx:38
 msgid "Are you sure you want to publish this organizer profile? Once published, it will be visible to the public."
 msgstr ""
 
@@ -1378,11 +1392,11 @@ msgstr ""
 msgid "Are you sure you want to resend the ticket to {0}?"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:48
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:49
 msgid "Are you sure you want to restore this event?"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:63
+#: src/components/common/EventCard/index.tsx:68
 msgid "Are you sure you want to restore this event? It will be restored as a draft event."
 msgstr ""
 
@@ -1394,11 +1408,11 @@ msgstr ""
 msgid "Are you sure you want to revoke this invitation?"
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:41
+#: src/components/common/StatusToggle/index.tsx:40
 msgid "Are you sure you want to unpublish this event? It will no longer be visible to the public."
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:42
+#: src/components/common/StatusToggle/index.tsx:41
 msgid "Are you sure you want to unpublish this organizer profile? It will no longer be visible to the public."
 msgstr ""
 
@@ -1541,8 +1555,8 @@ msgstr ""
 msgid "attendees"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:251
-#: src/components/common/EventCard/index.tsx:366
+#: src/components/common/EventCard/index.tsx:259
+#: src/components/common/EventCard/index.tsx:374
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:420
 #: src/components/common/StatBoxes/index.tsx:73
@@ -1568,7 +1582,7 @@ msgstr ""
 msgid "Attendees Exported"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:363
+#: src/components/common/EventCard/index.tsx:371
 msgid "Attendees registered"
 msgstr ""
 
@@ -1580,7 +1594,7 @@ msgstr ""
 msgid "Attendees with a specific ticket"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:138
+#: src/components/common/AdminEventsTable/index.tsx:140
 msgid "Attendees:"
 msgstr ""
 
@@ -1920,7 +1934,7 @@ msgstr ""
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:306
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:61
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1155
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:83
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:83
@@ -2254,6 +2268,10 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:132
+msgid "Checked"
+msgstr "Проверено"
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:120
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:111
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:151
@@ -2554,6 +2572,11 @@ msgstr ""
 msgid "Conference Center"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:131
+#: src/components/routes/admin/SpamEvents/index.tsx:257
+msgid "Confidence"
+msgstr "Уверенность"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:104
 msgid "Configuration"
 msgstr ""
@@ -2578,7 +2601,7 @@ msgstr ""
 msgid "Configuration updated successfully"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr ""
@@ -2638,7 +2661,11 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:294
+#: src/components/routes/admin/SpamEvents/index.tsx:189
+msgid "Confirm Spam"
+msgstr "Подтвердить спам"
+
+#: src/components/layouts/Event/index.tsx:301
 msgid "Confirm your email to access all features."
 msgstr ""
 
@@ -3487,7 +3514,7 @@ msgstr ""
 msgid "Defaults"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:29
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:30
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:31
 msgid "delete"
 msgstr ""
@@ -3548,8 +3575,8 @@ msgstr ""
 msgid "Delete Date"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:84
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:119
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:85
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:120
 msgid "Delete Event"
 msgstr ""
 
@@ -3615,7 +3642,7 @@ msgstr ""
 msgid "Deletion request cancelled"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr ""
@@ -3625,6 +3652,7 @@ msgstr ""
 #: src/components/forms/ProductForm/index.tsx:403
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
 #: src/components/modals/DuplicateEventModal/index.tsx:118
+#: src/components/routes/admin/SpamEvents/index.tsx:235
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:98
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:86
 msgid "Description"
@@ -3800,8 +3828,8 @@ msgstr ""
 msgid "Downloading Invoice"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:88
-#: src/components/layouts/Event/index.tsx:216
+#: src/components/common/EventCard/index.tsx:96
+#: src/components/layouts/Event/index.tsx:223
 #: src/components/layouts/OrganizerLayout/index.tsx:217
 #: src/components/routes/admin/Announcements/index.tsx:183
 #: src/components/routes/admin/Announcements/index.tsx:472
@@ -3832,7 +3860,7 @@ msgstr ""
 msgid "Duplicate Date"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:151
+#: src/components/common/EventCard/index.tsx:159
 msgid "Duplicate event"
 msgstr ""
 
@@ -4240,7 +4268,7 @@ msgstr "Включить список ожидания"
 msgid "Enabled"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:107
+#: src/components/common/AdminEventsTable/index.tsx:109
 #: src/components/modals/DuplicateEventModal/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:445
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
@@ -4265,7 +4293,7 @@ msgstr "Время окончания"
 msgid "End time (optional)"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:85
+#: src/components/common/EventCard/index.tsx:90
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:26
 #: src/components/common/EventStatusBadge/index.tsx:14
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:95
@@ -4427,6 +4455,8 @@ msgstr ""
 #: src/components/routes/admin/Dashboard/index.tsx:305
 #: src/components/routes/admin/Messages/index.tsx:163
 #: src/components/routes/admin/Messages/index.tsx:278
+#: src/components/routes/admin/SpamEvents/index.tsx:128
+#: src/components/routes/admin/SpamEvents/index.tsx:230
 #: src/components/routes/events/Dashboard/index.tsx:184
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:19
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:41
@@ -4435,17 +4465,25 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:65
+msgid "Event approved and published"
+msgstr "Событие одобрено и опубликовано"
+
 #: src/components/forms/WebhookForm/index.tsx:55
 msgid "Event Archived"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:56
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:57
 msgid "Event archived successfully"
 msgstr ""
 
 #: src/components/modals/CreateEventModal/index.tsx:188
 msgid "Event Category"
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:79
+msgid "Event confirmed as spam"
+msgstr "Событие подтверждено как спам"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:55
 msgid "Event Cover Image"
@@ -4479,7 +4517,7 @@ msgstr ""
 msgid "Event Defaults"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:36
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:37
 msgid "Event deleted successfully"
 msgstr ""
 
@@ -4526,11 +4564,11 @@ msgstr ""
 msgid "Event Not Available"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:283
+#: src/components/layouts/Event/index.tsx:290
 msgid "Event Page"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:56
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:57
 msgid "Event restored successfully"
 msgstr ""
 
@@ -4539,20 +4577,20 @@ msgstr ""
 msgid "Event Settings"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:74
-#: src/components/common/StatusToggle/index.tsx:63
-#: src/components/layouts/Event/index.tsx:194
+#: src/components/common/EventCard/index.tsx:79
+#: src/components/common/StatusToggle/index.tsx:62
+#: src/components/layouts/Event/index.tsx:199
 #: src/components/modals/PublishEventModal/index.tsx:125
 msgid "Event status update failed. Please try again later"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:71
-#: src/components/common/StatusToggle/index.tsx:55
-#: src/components/layouts/Event/index.tsx:191
+#: src/components/common/EventCard/index.tsx:76
+#: src/components/common/StatusToggle/index.tsx:54
+#: src/components/layouts/Event/index.tsx:196
 msgid "Event status updated"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:84
+#: src/components/common/AdminEventsTable/index.tsx:86
 msgid "Event Title"
 msgstr ""
 
@@ -4738,7 +4776,7 @@ msgstr ""
 msgid "Failed At"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr ""
@@ -4746,6 +4784,10 @@ msgstr ""
 #: src/components/layouts/Checkout/index.tsx:209
 msgid "Failed to abandon order. Please try again."
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:68
+msgid "Failed to approve event"
+msgstr "Не удалось одобрить событие"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:53
 msgid "Failed to assign configuration"
@@ -4772,6 +4814,10 @@ msgstr ""
 #: src/components/modals/CancelOrderModal/index.tsx:44
 msgid "Failed to cancel order"
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:82
+msgid "Failed to confirm event as spam"
+msgstr "Не удалось подтвердить событие как спам"
 
 #: src/components/modals/CreateAffiliateModal/index.tsx:62
 msgid "Failed to create affiliate"
@@ -4817,7 +4863,7 @@ msgstr ""
 msgid "Failed to delete dates"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:40
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:41
 msgid "Failed to delete event"
 msgstr ""
 
@@ -4998,7 +5044,7 @@ msgstr "Не удалось обновить участника"
 msgid "Failed to update configuration"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:59
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:60
 msgid "Failed to update event status"
 msgstr ""
 
@@ -5222,6 +5268,15 @@ msgstr ""
 msgid "Fixed fee must be 0 or greater"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:224
+msgid "Flagged Event Details"
+msgstr "Сведения о помеченном событии"
+
+#: src/components/layouts/Admin/index.tsx:19
+#: src/components/routes/admin/SpamEvents/index.tsx:101
+msgid "Flagged Events"
+msgstr "Помеченные события"
+
 #: src/components/layouts/CheckIn/tabs/InlineCameraScanner.tsx:140
 msgid "Flash off"
 msgstr ""
@@ -5433,7 +5488,7 @@ msgstr ""
 msgid "Greek"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:369
+#: src/components/common/EventCard/index.tsx:377
 msgid "Gross revenue"
 msgstr ""
 
@@ -5782,7 +5837,7 @@ msgstr ""
 msgid "Impersonate"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:166
+#: src/components/common/AdminEventsTable/index.tsx:168
 msgid "Impersonate User"
 msgstr ""
 
@@ -6282,8 +6337,8 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:91
-#: src/components/layouts/Event/index.tsx:218
+#: src/components/common/EventCard/index.tsx:99
+#: src/components/layouts/Event/index.tsx:225
 #: src/components/layouts/OrganizerLayout/index.tsx:219
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
 msgid "Live"
@@ -6326,7 +6381,7 @@ msgstr ""
 
 #: src/components/common/OrganizerReportTable/index.tsx:265
 #: src/components/common/ReportTable/index.tsx:225
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:88
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:89
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:94
 msgid "Loading..."
 msgstr ""
@@ -6455,7 +6510,7 @@ msgstr ""
 msgid "Manage dates and times for your recurring event"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:146
+#: src/components/common/EventCard/index.tsx:154
 msgid "Manage event"
 msgstr ""
 
@@ -6734,7 +6789,7 @@ msgstr ""
 msgid "Multi line text box"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:100
+#: src/components/common/EventCard/index.tsx:108
 #: src/components/layouts/EventHomepage/index.tsx:180
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:47
 msgid "Multiple locations"
@@ -6977,8 +7032,8 @@ msgstr ""
 msgid "No data to show. Please select a date range"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:221
-#: src/components/common/EventCard/index.tsx:318
+#: src/components/common/EventCard/index.tsx:229
+#: src/components/common/EventCard/index.tsx:326
 msgid "No date added"
 msgstr ""
 
@@ -7046,6 +7101,10 @@ msgstr ""
 #: src/components/common/FilterModal/index.tsx:261
 msgid "No filters available"
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:120
+msgid "No flagged events awaiting review"
+msgstr "Нет помеченных событий, ожидающих проверки"
 
 #: src/components/common/OrdersTable/index.tsx:217
 msgid "No invoice"
@@ -7460,7 +7519,7 @@ msgstr "по {dayList}"
 msgid "on {month} {day}"
 msgstr "{day} {month}"
 
-#: src/components/common/EventCard/index.tsx:93
+#: src/components/common/EventCard/index.tsx:101
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:101
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
 msgid "On Sale"
@@ -7495,7 +7554,7 @@ msgstr ""
 msgid "Ongoing"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:103
+#: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:50
 #: src/components/routes/event/OccurrencesTab/index.tsx:318
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:473
@@ -7511,7 +7570,7 @@ msgstr ""
 msgid "Online — provide connection details"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:100
+#: src/components/common/EventCard/index.tsx:108
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:47
 msgid "Online & in-person"
 msgstr ""
@@ -7546,7 +7605,7 @@ msgstr "Осталось всего {capacity}"
 msgid "Only a name is required — everything else has sensible defaults"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:74
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:75
 msgid "Only account administrators can delete or archive events. Contact your account admin for assistance."
 msgstr ""
 
@@ -7857,7 +7916,7 @@ msgstr ""
 msgid "Orders Total"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:142
+#: src/components/common/AdminEventsTable/index.tsx:144
 msgid "Orders:"
 msgstr ""
 
@@ -7878,7 +7937,7 @@ msgstr ""
 msgid "Organization Name"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:87
+#: src/components/common/AdminEventsTable/index.tsx:89
 #: src/components/layouts/EventHomepage/index.tsx:589
 #: src/components/modals/EditUserModal/index.tsx:56
 #: src/components/modals/InviteUserModal/index.tsx:47
@@ -7886,6 +7945,8 @@ msgstr ""
 #: src/components/routes/admin/Dashboard/index.tsx:257
 #: src/components/routes/admin/Dashboard/index.tsx:306
 #: src/components/routes/admin/Dashboard/index.tsx:352
+#: src/components/routes/admin/SpamEvents/index.tsx:129
+#: src/components/routes/admin/SpamEvents/index.tsx:245
 #: src/components/routes/events/Dashboard/index.tsx:194
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:354
 msgid "Organizer"
@@ -7926,12 +7987,12 @@ msgstr ""
 msgid "Organizer Settings"
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:64
+#: src/components/common/StatusToggle/index.tsx:63
 #: src/components/layouts/OrganizerLayout/index.tsx:162
 msgid "Organizer status update failed. Please try again later"
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:56
+#: src/components/common/StatusToggle/index.tsx:55
 #: src/components/layouts/OrganizerLayout/index.tsx:159
 msgid "Organizer status updated"
 msgstr ""
@@ -8207,9 +8268,19 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
+#: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
+msgid "Pending review"
+msgstr "Ожидает проверки"
+
+#: src/components/common/EventCard/index.tsx:93
+#: src/components/layouts/Event/index.tsx:221
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
 msgstr ""
+
+#: src/components/common/EventStatusBadge/index.tsx:31
+msgid "PENDING REVIEW"
+msgstr "ОЖИДАЕТ ПРОВЕРКИ"
 
 #: src/components/common/QuestionsTable/index.tsx:316
 msgid "Per Attendee"
@@ -8275,7 +8346,7 @@ msgstr ""
 msgid "Permanently delete this account and its data."
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:87
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:88
 msgid "Permanently delete this event and all its associated data."
 msgstr ""
 
@@ -8517,8 +8588,8 @@ msgstr ""
 msgid "Preview checkout form"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:276
-#: src/components/layouts/Event/index.tsx:280
+#: src/components/layouts/Event/index.tsx:283
+#: src/components/layouts/Event/index.tsx:287
 msgid "Preview Event page"
 msgstr ""
 
@@ -8776,7 +8847,7 @@ msgstr ""
 msgid "Public"
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:97
+#: src/components/common/StatusToggle/index.tsx:107
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:117
 msgid "Publish"
 msgstr ""
@@ -8912,6 +8983,10 @@ msgstr ""
 msgid "Reason (optional)"
 msgstr ""
 
+#: src/components/routes/admin/SpamEvents/index.tsx:264
+msgid "Reasons"
+msgstr "Причины"
+
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:133
 #: src/components/routes/profile/ManageProfile/index.tsx:210
@@ -8973,8 +9048,8 @@ msgstr ""
 msgid "Record Refund"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:209
-#: src/components/common/EventCard/index.tsx:322
+#: src/components/common/EventCard/index.tsx:217
+#: src/components/common/EventCard/index.tsx:330
 msgid "Recurring"
 msgstr ""
 
@@ -9176,7 +9251,7 @@ msgstr "Отправить подтверждение повторно"
 msgid "Resend Confirmation Email"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:296
+#: src/components/layouts/Event/index.tsx:303
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr ""
@@ -9242,17 +9317,17 @@ msgstr ""
 msgid "Response Details"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:63
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 msgid "Restore"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:157
+#: src/components/common/EventCard/index.tsx:165
 msgid "Restore event"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:125
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:139
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:126
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:143
 msgid "Restore Event"
 msgstr ""
 
@@ -9261,7 +9336,7 @@ msgstr ""
 msgid "Restore Organizer"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:128
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:131
 msgid "Restore this event to make it visible again."
 msgstr ""
 
@@ -9311,8 +9386,8 @@ msgid "Reuse a Stripe connection from another organizer in this account."
 msgstr ""
 
 #: src/components/common/AffiliateTable/index.tsx:157
-#: src/components/common/EventCard/index.tsx:255
-#: src/components/common/EventCard/index.tsx:374
+#: src/components/common/EventCard/index.tsx:263
+#: src/components/common/EventCard/index.tsx:382
 #: src/components/common/StatsCharts/index.tsx:66
 #: src/components/routes/admin/Attribution/index.tsx:137
 msgid "Revenue"
@@ -9322,6 +9397,10 @@ msgstr ""
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:67
 msgid "Revenue Summary"
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:102
+msgid "Review events flagged as potential spam by the automated check"
+msgstr "Проверьте события, помеченные автоматической проверкой как возможный спам"
 
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:133
 msgid "Revoke invitation"
@@ -9402,7 +9481,7 @@ msgstr ""
 msgid "Sales, orders, and performance metrics for all events"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:134
+#: src/components/common/AdminEventsTable/index.tsx:136
 msgid "Sales:"
 msgstr ""
 
@@ -9603,6 +9682,10 @@ msgstr ""
 #: src/components/routes/admin/Events/index.tsx:80
 msgid "Search by event title or organizer..."
 msgstr ""
+
+#: src/components/routes/admin/SpamEvents/index.tsx:106
+msgid "Search by event, organizer, or account email..."
+msgstr "Поиск по событию, организатору или email аккаунта..."
 
 #: src/components/routes/admin/FailedJobs/index.tsx:142
 msgid "Search by job name or exception..."
@@ -10137,8 +10220,8 @@ msgstr ""
 msgid "Share Affiliate Link"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:234
-#: src/components/layouts/Event/index.tsx:240
+#: src/components/layouts/Event/index.tsx:241
+#: src/components/layouts/Event/index.tsx:247
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:102
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:131
 msgid "Share Event"
@@ -10326,7 +10409,7 @@ msgstr ""
 msgid "sold out"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:125
+#: src/components/common/EventCard/index.tsx:133
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:52
@@ -10436,7 +10519,7 @@ msgstr ""
 msgid "Start check-in"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:96
+#: src/components/common/AdminEventsTable/index.tsx:98
 #: src/components/modals/DuplicateEventModal/index.tsx:128
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:439
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:122
@@ -10496,7 +10579,7 @@ msgstr ""
 msgid "State or Region"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:110
+#: src/components/common/AdminEventsTable/index.tsx:112
 msgid "Statistics"
 msgstr ""
 
@@ -10508,7 +10591,7 @@ msgstr ""
 msgid "Stats"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:111
+#: src/components/common/AdminEventsTable/index.tsx:113
 #: src/components/common/AdminOrdersTable/index.tsx:85
 #: src/components/common/AffiliateTable/index.tsx:83
 #: src/components/common/AttendeeTable/index.tsx:251
@@ -11303,9 +11386,25 @@ msgstr "У этого мероприятия ещё нет билетов или
 msgid "This event is not available"
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:82
+#: src/components/common/StatusToggle/index.tsx:92
 msgid "This event is not published yet"
 msgstr ""
+
+#: src/components/layouts/Event/index.tsx:179
+msgid "This event is pending manual review and cannot be published until the review is complete."
+msgstr "Это событие ожидает ручной проверки и не может быть опубликовано до её завершения."
+
+#: src/components/common/StatusToggle/index.tsx:84
+msgid "This event is pending manual review and is not visible to the public"
+msgstr "Это событие ожидает ручной проверки и не видно публике"
+
+#: src/components/common/EventCard/index.tsx:62
+msgid "This event is pending manual review and its status cannot be changed until the review is complete."
+msgstr "Это событие ожидает ручной проверки, и его статус нельзя изменить до завершения проверки."
+
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:129
+msgid "This event is pending manual review. Its status cannot be changed until the review is complete."
+msgstr "Это событие ожидает ручной проверки. Его статус нельзя изменить до завершения проверки."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:635
 msgid "This event is sold out"
@@ -11408,7 +11507,7 @@ msgstr ""
 msgid "This order was paid offline. Refunding it will only update your reporting — you will need to return the payment to the customer yourself."
 msgstr ""
 
-#: src/components/common/StatusToggle/index.tsx:83
+#: src/components/common/StatusToggle/index.tsx:93
 msgid "This organizer profile is not published yet"
 msgstr ""
 
@@ -11857,7 +11956,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:100
+#: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:101
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:106
 msgid "Type \"delete\" to confirm"
 msgstr ""
@@ -12227,7 +12326,7 @@ msgstr ""
 msgid "UTC"
 msgstr ""
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:21
 msgid "UTM Analytics"
 msgstr ""
 
@@ -12354,7 +12453,7 @@ msgstr ""
 msgid "Verify Email"
 msgstr ""
 
-#: src/components/layouts/Event/index.tsx:293
+#: src/components/layouts/Event/index.tsx:300
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr ""
@@ -12405,6 +12504,7 @@ msgstr ""
 
 #: src/components/common/AdminAccountsTable/index.tsx:73
 #: src/components/routes/admin/FailedJobs/index.tsx:190
+#: src/components/routes/admin/SpamEvents/index.tsx:167
 msgid "View Details"
 msgstr ""
 
@@ -12412,14 +12512,14 @@ msgstr ""
 msgid "View details for {0} {1}"
 msgstr ""
 
-#: src/components/common/AdminEventsTable/index.tsx:157
+#: src/components/common/AdminEventsTable/index.tsx:159
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:72
 #: src/components/routes/admin/Dashboard/index.tsx:478
 msgid "View Event"
 msgstr ""
 
-#: src/components/common/EventCard/index.tsx:141
+#: src/components/common/EventCard/index.tsx:149
 msgid "View event page"
 msgstr ""
 
