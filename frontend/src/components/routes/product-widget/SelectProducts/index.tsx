@@ -836,13 +836,13 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             return (
                                                                 <div key={addonId}
                                                                      className={classNames('hi-product-addon', addon.is_highlighted && 'hi-product-addon-highlighted')}>
+                                                                    {addon.is_highlighted && addon.highlight_message && (
+                                                                        <div className={'hi-product-addon-highlight-message'}>
+                                                                            {addon.highlight_message}
+                                                                        </div>
+                                                                    )}
                                                                     <div className={'hi-product-addon-title'}>
                                                                         {addon.title}
-                                                                        {addon.is_highlighted && addon.highlight_message && (
-                                                                            <span className={'hi-product-addon-highlight-message'}>
-                                                                                {addon.highlight_message}
-                                                                            </span>
-                                                                        )}
                                                                     </div>
                                                                     <TieredPricing
                                                                         productIndex={addonFormIndex}

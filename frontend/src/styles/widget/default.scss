@@ -503,25 +503,10 @@
       }
 
       .hi-product-addon-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
         font-weight: 600;
         font-size: 13.5px;
         margin-bottom: 2px;
         overflow-wrap: anywhere;
-      }
-
-      .hi-product-addon-highlight-message {
-        background: var(--hi-accent);
-        color: var(--hi-accent-contrast);
-        font-size: 10px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 2px 8px;
-        border-radius: 999px;
-        white-space: nowrap;
       }
 
       &.hi-product-addon-highlighted {
@@ -529,7 +514,23 @@
         margin-right: -10px;
         padding: 8px 10px;
         border-radius: 10px;
+        border: 1px solid color-mix(in srgb, var(--hi-accent) 35%, transparent);
         background-color: var(--hi-soft-accent);
+        overflow: hidden;
+      }
+
+      .hi-product-addon-highlight-message {
+        background: var(--hi-accent);
+        color: var(--hi-accent-contrast);
+        font-size: 10.5px;
+        font-weight: 700;
+        line-height: 1.4;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: center;
+        overflow-wrap: anywhere;
+        padding: 4px 10px;
+        margin: -8px -10px 8px;
       }
 
       .hi-product-addon-description {
