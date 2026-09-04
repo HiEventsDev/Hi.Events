@@ -18,9 +18,11 @@ import type {
   CreateTaxOrFeePayload,
   CreateWebhookPayload,
   EmailTemplate,
+  EventImageType,
   EventRecord,
   EventSettings,
   EventStatus,
+  ImageRecord,
   InviteUserPayload,
   Me,
   Occurrence,
@@ -128,6 +130,14 @@ export class ApiClient {
 
   createEvent(payload: CreateEventPayload): Promise<EventRecord> {
     return unwrap<EventRecord>(this.request.post('events', { headers: jsonHeaders, data: payload }));
+  }
+
+  uploadEventImage(
+    eventId: number,
+    image: { name: string; mimeType: string; buffer: Buffer },
+    type: EventImageType = 'EVENT_COVER',
+  ): Promise<ImageRecord> {
+    return unwrap<ImageRecord>(this.request.post(`events/${eventId}/images`, { multipart: { image, type } }));
   }
 
   listProductCategories(eventId: number): Promise<ProductCategory[]> {

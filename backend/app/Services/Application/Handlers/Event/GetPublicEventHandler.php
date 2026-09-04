@@ -17,6 +17,7 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\Status\EventLifecycleStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
@@ -122,8 +123,13 @@ class GetPublicEventHandler
             : [...$occurrenceWhere, PublicOccurrenceVisibilityService::hasRemainingCapacity()];
 
         $nextBookable = $this->findEdgeOccurrence($nextBookableWhere, 'asc');
+        $lastUpcoming = $this->findEdgeOccurrence($occurrenceWhere, 'desc');
         $event->setNextOccurrenceStartDate($nextBookable?->getStartDate());
-        $event->setLastOccurrenceStartDate($this->findEdgeOccurrence($occurrenceWhere, 'desc')?->getStartDate());
+        $event->setLastOccurrenceStartDate($lastUpcoming?->getStartDate());
+
+        if ($lastUpcoming === null) {
+            $this->setLifecycleStatusForEndedEvent($event, $eventId);
+        }
 
         $anchorOccurrence = $verifiedOccurrence ?? $nextBookable;
         if ($anchorOccurrence === null && ! $hideSoldOutOccurrences) {
@@ -161,6 +167,18 @@ class GetPublicEventHandler
                     },
                 ]) !== null
             );
+        }
+    }
+
+    private function setLifecycleStatusForEndedEvent(EventDomainObject $event, int $eventId): void
+    {
+        $latestOccurrence = $this->findEdgeOccurrence([
+            EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId,
+            [EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name],
+        ], 'desc');
+
+        if ($latestOccurrence?->isPast()) {
+            $event->setLifecycleStatus(EventLifecycleStatus::ENDED->name);
         }
     }
 
