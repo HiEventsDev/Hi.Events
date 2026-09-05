@@ -10,7 +10,7 @@ import {getClientLocale} from "../../../../locales.ts";
 import {useEffect} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
-import {captureUtmData, getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
+import {getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -57,8 +57,6 @@ export const Register = () => {
     }
 
     useEffect(() => {
-        captureUtmData();
-
         const searchParams = new URLSearchParams(location.search);
         const token = searchParams.get('invite_token');
 
