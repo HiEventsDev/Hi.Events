@@ -44,6 +44,14 @@ export interface EventRecord {
   status: EventStatus;
 }
 
+export type EventImageType = 'EVENT_COVER' | 'TICKET_LOGO';
+
+export interface ImageRecord {
+  id: number;
+  url: string;
+  type: EventImageType;
+}
+
 export interface ProductCategory {
   id: number;
   name: string;

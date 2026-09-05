@@ -4,7 +4,7 @@ import "../../../styles/widget/default.scss";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {EventDocumentHead} from "../../common/EventDocumentHead";
 import {eventCoverImage, eventHomepageUrl, imageUrl, organizerHomepageUrl} from "../../../utilites/urlHelper.ts";
-import {Event, EventOccurrence, EventType, OrganizerStatus} from "../../../types.ts";
+import {Event, EventLifecycleStatus, EventOccurrence, EventType, OrganizerStatus} from "../../../types.ts";
 import {EventNotAvailable} from "./EventNotAvailable";
 import {
     IconArrowUpRight,
@@ -188,7 +188,13 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
             config: socialMediaConfig[platform as keyof typeof socialMediaConfig]
         })) : [];
 
+    const eventHasEnded = event.lifecycle_status === EventLifecycleStatus.ENDED;
+
     const getStatusBadge = () => {
+        if (eventHasEnded) {
+            return {text: t`Sales ended`};
+        }
+
         const products = event.products || event.product_categories?.flatMap(c => c.products || []) || [];
 
         if (products.length > 0 && products.every(p => p.is_sold_out)) {
@@ -714,7 +720,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                 : continueButtonText}
                         </button>
                     )}
-                    {!showFloatingCheckoutButton && showScrollButton && (
+                    {!showFloatingCheckoutButton && showScrollButton && !eventHasEnded && (
                         <button
                             className={classes.scrollToTicketsButton}
                             onClick={scrollToTickets}

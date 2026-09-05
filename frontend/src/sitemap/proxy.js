@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as Sentry from '@sentry/node';
 
 const getBackendUrl = () => {
     const backendUrl = process.env.VITE_API_URL_SERVER;
@@ -26,6 +27,10 @@ const fetchSitemap = async (path, res, errorContext) => {
             res.status(404).send('Sitemap not found');
             return;
         }
+        Sentry.captureException(error, {
+            tags: { source: 'sitemap-proxy' },
+            extra: { errorContext, path },
+        });
         console.error(`Error fetching ${errorContext}:`, error);
         res.status(500).send('Internal server error');
     }
