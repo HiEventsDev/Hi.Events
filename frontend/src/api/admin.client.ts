@@ -311,7 +311,7 @@ export interface UtmAttributionStats {
     live_events: number;
     stripe_connected: number;
     verified_accounts: number;
-    total_revenue: number;
+    revenue_by_currency: Record<string, number>;
     total_orders: number;
 }
 
@@ -324,8 +324,10 @@ export interface UtmAttributionSummary {
     total_accounts: number;
 }
 
+export type AttributionGroupBy = 'source' | 'medium' | 'campaign' | 'content' | 'term' | 'cta' | 'source_type';
+
 export interface GetUtmAttributionStatsParams {
-    group_by?: 'source' | 'campaign' | 'medium' | 'source_type';
+    group_by?: AttributionGroupBy;
     date_from?: string;
     date_to?: string;
     page?: number;
