@@ -4,10 +4,11 @@ import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {PoweredByFooter} from "../../common/PoweredByFooter";
 import {LanguageSwitcher} from "../../common/LanguageSwitcher";
-import {useCallback, useRef} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import {getConfig} from "../../../utilites/config.ts";
 import {isHiEvents} from "../../../utilites/helpers.ts";
 import {showInfo} from "../../../utilites/notifications.tsx";
+import {captureUtmData} from "../../../utilites/utm.ts";
 
 const tickerFeatures = [
     t`Recurring events`,
@@ -126,6 +127,10 @@ const AuthLayout = () => {
     const me = useGetMe();
     const clickCountRef = useRef(0);
     const clickTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+    useEffect(() => {
+        captureUtmData();
+    }, []);
 
     const handleLogoClick = useCallback(() => {
         clickCountRef.current += 1;
