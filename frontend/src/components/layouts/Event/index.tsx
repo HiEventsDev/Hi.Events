@@ -175,6 +175,11 @@ const EventLayout = () => {
     ];
 
     const handleStatusToggle = () => {
+        if (event?.status === 'PENDING_MANUAL_REVIEW') {
+            showError(t`This event is pending manual review and cannot be published until the review is complete.`);
+            return;
+        }
+
         if (event?.status !== 'LIVE') {
             openPublishModal();
             return;
@@ -209,14 +214,16 @@ const EventLayout = () => {
                             onClick={handleStatusToggle}
                             data-testid="event-status-toggle"
                             size="sm"
-                            leftSection={event?.status === 'DRAFT' ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                            leftSection={(event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
                             rightSection={<IconChevronRight size={14}/>}
                         >
-                            {event?.status === 'DRAFT'
-                                ? <span>{t`Draft`} <span
-                                    className={classes.statusAction}>{t`- Click to Publish`}</span></span>
-                                : <span>{t`Live`} <span
-                                    className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
+                            {event?.status === 'PENDING_MANUAL_REVIEW'
+                                ? <span>{t`Pending Review`}</span>
+                                : event?.status === 'DRAFT'
+                                    ? <span>{t`Draft`} <span
+                                        className={classes.statusAction}>{t`- Click to Publish`}</span></span>
+                                    : <span>{t`Live`} <span
+                                        className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
                             }
                         </TopBarButton>
                     )}

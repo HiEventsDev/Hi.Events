@@ -52,7 +52,7 @@ class EventResourcePublic extends BaseResource
             'type' => $this->getType(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
-            /** @var 'DRAFT'|'LIVE'|'ARCHIVED'|null */
+            /** @var 'DRAFT'|'LIVE'|'ARCHIVED'|'PENDING_MANUAL_REVIEW'|null */
             'status' => $this->getStatus(),
             /** @var 'UPCOMING'|'ONGOING'|'ENDED' */
             'lifecycle_status' => $this->getLifecycleStatus(),

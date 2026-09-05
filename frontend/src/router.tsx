@@ -222,6 +222,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "spam-events",
+                async lazy() {
+                    const SpamEvents = await import("./components/routes/admin/SpamEvents");
+                    return { Component: SpamEvents.default };
+                }
+            },
+            {
                 path: "announcements",
                 async lazy() {
                     const Announcements = await import("./components/routes/admin/Announcements");

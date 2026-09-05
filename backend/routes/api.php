@@ -38,6 +38,9 @@ use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
 use HiEvents\Http\Actions\Admin\Organizers\AssignOrganizerConfigurationAction;
 use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
 use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
+use HiEvents\Http\Actions\Admin\SpamEvents\ApproveSpamEventAction;
+use HiEvents\Http\Actions\Admin\SpamEvents\ConfirmSpamEventAction;
+use HiEvents\Http\Actions\Admin\SpamEvents\GetAllSpamEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
@@ -566,6 +569,11 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         // Messages
         $router->get('/messages', GetAllAdminMessagesAction::class);
         $router->post('/messages/{message_id}/approve', ApproveMessageAction::class);
+
+        // Spam Events
+        $router->get('/spam-events', GetAllSpamEventsAction::class);
+        $router->post('/spam-events/{event_id}/approve', ApproveSpamEventAction::class);
+        $router->post('/spam-events/{event_id}/confirm-spam', ConfirmSpamEventAction::class);
 
         // Announcements
         $router->get('/announcements', GetAllAnnouncementsAction::class);

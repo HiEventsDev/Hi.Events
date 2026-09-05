@@ -10,6 +10,7 @@ import {fileURLToPath} from "node:url";
 import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
 import "dotenv/config";
+import * as Sentry from "@sentry/node";
 import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
 import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
 
@@ -110,6 +111,16 @@ Sitemap: ${frontendUrl}/sitemap.xml
     app.get('/sitemap-events-:page.xml', sitemapEventsHandler);
     app.get('/sitemap-organizers-:page.xml', sitemapOrganizersHandler);
 
+    const nonRenderablePathPattern = /(^|\/)\.[^/]|\.(php|asp|aspx|jsp|cgi|sql|bak|old|zip|tar|gz|rar|7z|env|ini|yml|yaml|conf|log|sh|exe|dll)$/i;
+
+    app.use("*", async (req, res, next) => {
+        if (nonRenderablePathPattern.test(req.originalUrl.split("?")[0])) {
+            return res.status(404).type("text/plain").send("Not Found");
+        }
+
+        return next();
+    });
+
     app.use("*", async (req, res) => {
         const url = req.originalUrl.replace(base, "");
 
@@ -126,10 +137,19 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 render = (await dynamicImport(path.join(__dirname, "./dist/server/entry.server.js"))).render;
             }
 
-            const { appHtml, dehydratedState, helmetContext, themeColors } = await render(
+            const { appHtml, dehydratedState, helmetContext, themeColors, statusCode, renderErrors } = await render(
                 { req, res },
                 ssrManifest
             );
+
+            if (statusCode >= 500) {
+                renderErrors.forEach((renderError) => {
+                    Sentry.captureException(renderError, {
+                        tags: { source: "ssr-loader" },
+                        extra: { url: req.originalUrl },
+                    });
+                });
+            }
             const stringifiedState = htmlSafeJsonStringify(dehydratedState);
             const stringifiedThemeColors = htmlSafeJsonStringify(themeColors);
 
@@ -154,7 +174,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 .replace(/<!--render-helmet-->.*?<!--\/render-helmet-->/s, () => helmetHtml);
 
             res.setHeader("Content-Type", "text/html");
-            return res.status(200).end(html);
+            return res.status(statusCode || 200).end(html);
         } catch (error) {
             if (error instanceof Response) {
                 if (error.status >= 300 && error.status < 400) {
@@ -164,9 +184,25 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 }
             }
 
+            Sentry.captureException(error, {
+                tags: { source: "ssr-render" },
+                extra: { url: req.originalUrl },
+            });
             console.error(error);
             res.status(500).send("Internal Server Error");
         }
+    });
+
+    Sentry.setupExpressErrorHandler(app);
+
+    app.use((error, req, res, _next) => {
+        console.error(error);
+
+        if (res.headersSent) {
+            return res.end();
+        }
+
+        return res.status(500).type("text/plain").send("Internal Server Error");
     });
 
     app.listen(port, () => {

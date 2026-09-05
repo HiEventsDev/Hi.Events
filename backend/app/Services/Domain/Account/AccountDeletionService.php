@@ -117,7 +117,10 @@ class AccountDeletionService
                 attributes: [EventDomainObjectAbstract::STATUS => EventStatus::DRAFT->name],
                 where: [
                     EventDomainObjectAbstract::ACCOUNT_ID => $accountId,
-                    EventDomainObjectAbstract::STATUS => EventStatus::LIVE->name,
+                    [EventDomainObjectAbstract::STATUS, 'in', [
+                        EventStatus::LIVE->name,
+                        EventStatus::PENDING_MANUAL_REVIEW->name,
+                    ]],
                 ],
             );
 

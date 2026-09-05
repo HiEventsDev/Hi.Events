@@ -378,7 +378,8 @@ export enum EventStatus {
     DRAFT = 'DRAFT',
     LIVE = 'LIVE',
     PAUSED = 'PAUSED',
-    ARCHIVED = 'ARCHIVED'
+    ARCHIVED = 'ARCHIVED',
+    PENDING_MANUAL_REVIEW = 'PENDING_MANUAL_REVIEW'
 }
 
 export enum OrganizerStatus {

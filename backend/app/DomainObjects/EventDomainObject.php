@@ -53,6 +53,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?string $occurrencesMonth = null;
 
+    private ?string $lifecycleStatus = null;
+
     public static function getAllowedFilterFields(): array
     {
         return [
@@ -308,8 +310,19 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         );
     }
 
+    public function setLifecycleStatus(string $lifecycleStatus): self
+    {
+        $this->lifecycleStatus = $lifecycleStatus;
+
+        return $this;
+    }
+
     public function getLifecycleStatus(): string
     {
+        if ($this->lifecycleStatus !== null) {
+            return $this->lifecycleStatus;
+        }
+
         if ($this->isEventOngoing()) {
             return EventLifecycleStatus::ONGOING->name;
         }

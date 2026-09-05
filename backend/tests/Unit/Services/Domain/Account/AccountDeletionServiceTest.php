@@ -143,7 +143,7 @@ class AccountDeletionServiceTest extends TestCase
             ->once()
             ->with(
                 ['status' => EventStatus::DRAFT->name],
-                ['account_id' => 1, 'status' => EventStatus::LIVE->name],
+                ['account_id' => 1, ['status', 'in', [EventStatus::LIVE->name, EventStatus::PENDING_MANUAL_REVIEW->name]]],
             )
             ->andReturn(1);
 
