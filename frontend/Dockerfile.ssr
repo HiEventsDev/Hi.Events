@@ -38,7 +38,7 @@ WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-COPY package.json yarn.lock server.js ./
+COPY package.json yarn.lock server.js instrument.mjs ./
 COPY src ./src
 COPY public ./public
 

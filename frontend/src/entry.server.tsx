@@ -27,7 +27,6 @@ export async function render(params: {
 }) {
     setAuthToken(params.req.cookies.token);
 
-    // Create a fresh query client for each request
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
@@ -73,7 +72,6 @@ export async function render(params: {
 
     const dehydratedState = dehydrate(queryClient);
 
-    // Clean up the SSR query client
     setSsrQueryClient(null);
 
     return {
@@ -81,6 +79,8 @@ export async function render(params: {
         dehydratedState,
         helmetContext,
         themeColors,
+        statusCode: context.statusCode,
+        renderErrors: Object.values(context.errors ?? {}),
     };
 }
 

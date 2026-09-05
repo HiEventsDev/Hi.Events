@@ -116,6 +116,7 @@ jobs:
         run: vapor deploy ${{ env.VAPOR_ENV }}
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
 
   frontend:
     name: Deploy Frontend
