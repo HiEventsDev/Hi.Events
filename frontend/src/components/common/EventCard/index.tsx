@@ -58,6 +58,11 @@ export function EventCard({event, compact = false}: EventCardProps) {
     }
 
     const handleStatusToggle = () => {
+        if (event?.status === 'PENDING_MANUAL_REVIEW') {
+            showError(t`This event is pending manual review and its status cannot be changed until the review is complete.`);
+            return;
+        }
+
         const message = event?.status !== 'ARCHIVED'
             ? t`Are you sure you want to archive this event?`
             : t`Are you sure you want to restore this event? It will be restored as a draft event.`;
@@ -83,6 +88,9 @@ export function EventCard({event, compact = false}: EventCardProps) {
         }
         if (event.lifecycle_status === 'ENDED') {
             return {label: t`Ended`, status: 'ended', tone: 'muted'};
+        }
+        if (event.status === 'PENDING_MANUAL_REVIEW') {
+            return {label: t`Pending Review`, status: 'draft', tone: 'warning'};
         }
         if (event.status === 'DRAFT') {
             return {label: t`Draft`, status: 'draft', tone: 'warning'};
