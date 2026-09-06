@@ -41,6 +41,7 @@ services:
             VITE_FRONTEND_URL: 'http://localhost:8123'
             VITE_STRIPE_PUBLISHABLE_KEY: '${STRIPE_PUBLIC_KEY:-}'
             VITE_APP_NAME: 'Hi.Events'
+            VITE_COOKIE_CONSENT_ENABLED: 'true'
         depends_on:
             backend:
                 condition: service_healthy
