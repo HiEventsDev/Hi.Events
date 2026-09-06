@@ -32,7 +32,7 @@ import {getConfig} from "../../../utilites/config.ts";
 import {computeThemeVariables, validateThemeSettings} from "../../../utilites/themeUtils.ts";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
 import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
-import {CookieConsentBanner} from "../../common/CookieConsentBanner";
+import {CookieSettingsLink} from "../../common/CookieSettingsLink";
 import {removeTransparency} from "../../../utilites/colorHelper.ts";
 import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 import {ShareComponent} from "../../common/ShareIcon";
@@ -78,19 +78,19 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
         return () => observer.disconnect();
     }, [continueButtonNode]);
 
-    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
+    const {pixelsReady} = useOrganizerTrackingPixels(
         event?.organizer?.settings?.tracking_pixels
     );
 
     useEffect(() => {
-        if (event && consentGranted && hasActivePixels()) {
+        if (event && pixelsReady && hasActivePixels()) {
             trackPixelEvent({
                 eventName: 'ViewContent',
                 contentName: event.title,
                 contentId: event.id,
             });
         }
-    }, [event?.id, consentGranted]);
+    }, [event?.id, pixelsReady]);
 
     useEffect(() => {
         let showTimer: NodeJS.Timeout;
@@ -706,6 +706,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                 </Anchor>
                             </div>
                             <PoweredByFooter className={classes.poweredByFooter}/>
+                            <CookieSettingsLink/>
                         </div>
                     </div>
 
@@ -737,9 +738,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         organizer={organizer}
                     />
                 </div>
-                {consentPending && (
-                    <CookieConsentBanner onConsent={onConsent}/>
-                )}
             </main>
         </>
     );

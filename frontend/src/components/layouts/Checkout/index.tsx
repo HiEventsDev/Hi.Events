@@ -24,7 +24,7 @@ import {detectMode} from "../../../utilites/themeUtils.ts";
 import {CheckoutThemeProvider} from "./CheckoutThemeProvider.tsx";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
 import {trackPixelEvent, hasActivePixels} from "../../../utilites/trackingPixels";
-import {CookieConsentBanner} from "../../common/CookieConsentBanner";
+import {CookieSettingsLink} from "../../common/CookieSettingsLink";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 
 const DEFAULT_ACCENT = '#8b5cf6';
@@ -250,22 +250,22 @@ const Checkout = () => {
         }
     }, [blocker.state]);
 
-    const {consentPending, consentGranted, onConsent} = useOrganizerTrackingPixels(
+    const {pixelsReady} = useOrganizerTrackingPixels(
         publicEvent?.organizer?.settings?.tracking_pixels
     );
 
     useEffect(() => {
-        if (event && orderIsReserved && consentGranted && hasActivePixels()) {
+        if (event && orderIsReserved && pixelsReady && hasActivePixels()) {
             trackPixelEvent({
                 eventName: 'InitiateCheckout',
                 contentName: event.title,
                 contentId: event.id,
             });
         }
-    }, [event?.id, orderIsReserved, consentGranted]);
+    }, [event?.id, orderIsReserved, pixelsReady]);
 
     useEffect(() => {
-        if (!event || !order || !consentGranted || !hasActivePixels()) return;
+        if (!event || !order || !pixelsReady || !hasActivePixels()) return;
         if (!orderIsCompleted && !orderIsAwaitingOfflinePayment) return;
 
         const key = `purchase_tracked_${order.short_id}`;
@@ -283,7 +283,7 @@ const Checkout = () => {
         if (typeof sessionStorage !== 'undefined') {
             sessionStorage.setItem(key, '1');
         }
-    }, [order?.status, order?.short_id, consentGranted]);
+    }, [order?.status, order?.short_id, pixelsReady]);
 
     const homepageSettings = event?.settings?.homepage_theme_settings;
     const accentColor = homepageSettings?.accent || DEFAULT_ACCENT;
@@ -397,7 +397,10 @@ const Checkout = () => {
                     </header>
                     <Outlet/>
                     {isModal && currentStep !== 'summary' && (
-                        <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                        <>
+                            <PoweredByFooter style={{marginTop: '12px', paddingBottom: '16px'}}/>
+                            <CookieSettingsLink/>
+                        </>
                     )}
                 </div>
             </div>
@@ -458,9 +461,6 @@ const Checkout = () => {
                     </Group>
                 </div>
             </Modal>
-            {consentPending && (
-                <CookieConsentBanner onConsent={onConsent}/>
-            )}
         </CheckoutThemeProvider>
     );
 }

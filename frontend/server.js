@@ -85,6 +85,16 @@ async function main() {
         app.use(base, sirv(path.join(__dirname, "./dist/client"), { extensions: [] }));
     }
 
+    const googleConsentDefaults = (consentCookie) => {
+        const consent = new URLSearchParams(typeof consentCookie === 'string' ? consentCookie : '');
+        if (!consent.has('analytics') && !consent.has('advertising')) {
+            return "ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500";
+        }
+        const advertising = consent.get('advertising') === '1' ? 'granted' : 'denied';
+        const analytics = consent.get('analytics') === '1' ? 'granted' : 'denied';
+        return `ad_storage:'${advertising}',ad_user_data:'${advertising}',ad_personalization:'${advertising}',analytics_storage:'${analytics}'`;
+    };
+
     const getViteEnvironmentVariables = () => {
         const envVars = {};
         for (const key in process.env) {
@@ -160,9 +170,19 @@ Sitemap: ${frontendUrl}/sitemap.xml
             const envVariablesHtml = `<script>window.hievents = ${getViteEnvironmentVariables()};</script>`;
 
             const headSnippets = [];
+            if (process.env.VITE_COOKIE_CONSENT_ENABLED === 'true') {
+                headSnippets.push(`<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{${googleConsentDefaults(req.cookies?.hi_cookie_consent)}});</script>`);
+            }
+            if (process.env.VITE_GOOGLE_ADS_CONVERSION_ID) {
+                const conversionId = encodeURIComponent(process.env.VITE_GOOGLE_ADS_CONVERSION_ID);
+                headSnippets.push(`
+                <script async src="https://www.googletagmanager.com/gtag/js?id=${conversionId}"></script>
+                <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${conversionId}');</script>
+            `);
+            }
             if (process.env.VITE_FATHOM_SITE_ID) {
                 headSnippets.push(`
-                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${process.env.VITE_FATHOM_SITE_ID}" defer></script>
+                <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${encodeURIComponent(process.env.VITE_FATHOM_SITE_ID)}" defer></script>
             `);
             }
 
