@@ -1,9 +1,12 @@
+import {getConfig} from './config.ts';
+
 declare global {
     interface Window {
         fathom?: {
             trackEvent: (eventName: string, options?: { _value?: number }) => void;
             trackPageview: () => void;
         };
+        gtag?: (...args: unknown[]) => void;
     }
 }
 
@@ -24,20 +27,41 @@ export const AnalyticsEvents = {
 
 export type AnalyticsEventName = typeof AnalyticsEvents[keyof typeof AnalyticsEvents];
 
+function getGoogleAdsConversionLabels(): Record<string, string> {
+    const raw = getConfig('VITE_GOOGLE_ADS_CONVERSION_LABELS');
+    if (!raw) {
+        return {};
+    }
+
+    return raw.split(',').reduce<Record<string, string>>((labels, pair) => {
+        const [eventName, label] = pair.split(':').map((part) => part.trim());
+        if (eventName && label) {
+            labels[eventName] = label;
+        }
+        return labels;
+    }, {});
+}
+
+function trackGoogleAdsConversion(eventName: string): void {
+    const conversionId = getConfig('VITE_GOOGLE_ADS_CONVERSION_ID');
+    const label = getGoogleAdsConversionLabels()[eventName];
+
+    if (!conversionId || !label || !window.gtag) {
+        return;
+    }
+
+    window.gtag('event', 'conversion', {send_to: `${conversionId}/${label}`});
+}
+
 export function trackEvent(eventName: AnalyticsEventName | string, options?: TrackEventOptions): void {
     if (typeof window === 'undefined') {
         return;
     }
-    // Fathom Analytics
+
     if (window.fathom?.trackEvent) {
         const fathomOptions = options?.value ? { _value: options.value } : undefined;
         window.fathom.trackEvent(eventName, fathomOptions);
     }
 
-    // Future: Google Analytics 4
-    // if (window.gtag) {
-    //     window.gtag('event', eventName, {
-    //         value: options?.value ? options.value / 100 : undefined,
-    //     });
-    // }
+    trackGoogleAdsConversion(eventName);
 }

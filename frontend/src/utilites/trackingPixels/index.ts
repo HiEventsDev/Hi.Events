@@ -3,12 +3,20 @@ import {googleAnalytics4Plugin} from './plugins/googleAnalytics4';
 import {googleTagManagerPlugin} from './plugins/googleTagManager';
 import {tiktokPixelPlugin} from './plugins/tiktokPixel';
 import {TrackingPixelPlugin, TrackingPixelConfig, PageViewData, TrackingEventData} from './types';
+import {ConsentCategory} from '../cookieConsent';
 
 const pluginRegistry: Record<string, TrackingPixelPlugin> = {
     facebook_pixel: facebookPixelPlugin,
     google_analytics_4: googleAnalytics4Plugin,
     google_tag_manager: googleTagManagerPlugin,
     tiktok_pixel: tiktokPixelPlugin,
+};
+
+export const pixelConsentCategory: Record<string, ConsentCategory> = {
+    facebook_pixel: 'advertising',
+    google_analytics_4: 'analytics',
+    google_tag_manager: 'advertising',
+    tiktok_pixel: 'advertising',
 };
 
 let activePlugins: TrackingPixelPlugin[] = [];

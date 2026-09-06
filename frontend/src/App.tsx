@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useCallback, useEffect} from "react";
+import React, {FC, PropsWithChildren, useEffect} from "react";
 import {MantineProvider, v8CssVariablesResolver} from "@mantine/core";
 import {Notifications} from "@mantine/notifications";
 import {i18n} from "@lingui/core";
@@ -22,7 +22,7 @@ import {StartupChecks} from "./StartupChecks.tsx";
 import {ThirdPartyScripts} from "./components/common/ThirdPartyScripts";
 import {getConfig} from "./utilites/config.ts";
 import {CookieConsentBanner} from "./components/common/CookieConsentBanner";
-import {isConsentPending, setConsentState, updateGoogleConsentMode} from "./utilites/trackingPixels/consent";
+import {isConsentBannerEnabled} from "./utilites/cookieConsent";
 
 declare global {
     interface Window {
@@ -40,15 +40,6 @@ export const App: FC<
     }>
 > = (props) => {
     const [isLoadedOnBrowser, setIsLoadedOnBrowser] = React.useState(false);
-    const showGlobalConsentBanner = getConfig('VITE_COOKIE_CONSENT_ENABLED') === 'true'
-        && !isSsr() && isConsentPending();
-
-    const handleGlobalConsent = useCallback((granted: boolean) => {
-        setConsentState(granted ? 'granted' : 'denied');
-        updateGoogleConsentMode(granted);
-        window.dispatchEvent(new CustomEvent('hi_consent_change', {detail: {granted}}));
-    }, []);
-
     useEffect(() => {
         setIsLoadedOnBrowser(!isSsr());
     }, []);
@@ -100,9 +91,7 @@ export const App: FC<
                                     {props.children}
                                 </ModalsProvider>
                                 <Notifications pauseResetOnHover="notification"/>
-                                {showGlobalConsentBanner && (
-                                    <CookieConsentBanner onConsent={handleGlobalConsent}/>
-                                )}
+                                {isConsentBannerEnabled() && <CookieConsentBanner/>}
                             </HydrationBoundary>
                         </QueryClientProvider>
                         </DatesProvider>
