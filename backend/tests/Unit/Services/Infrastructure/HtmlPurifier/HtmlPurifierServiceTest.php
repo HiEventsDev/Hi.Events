@@ -148,8 +148,22 @@ class HtmlPurifierServiceTest extends TestCase
             'javascript scheme is stripped' => ['<a href="javascript:alert(1)">x</a>', '<a>x</a>'],
             'data uri is stripped' => ['<img src="data:text/html;base64,PHNjcmlwdD4=" alt="x">', ''],
             'event handler is stripped' => ['<img src="x" onerror="alert(1)" alt="x">', '<img src="x" alt="x" />'],
-            'encoded braces in text are literal' => ['<p>%7B%7Bfoo%7D%7D</p>', '<p>%7B%7Bfoo%7D%7D</p>'],
         ];
+    }
+
+    public function test_percent_encoded_braces_typed_by_hand_also_decode(): void
+    {
+        $this->assertSame('<p>{{foo}}</p>', $this->service->purify('<p>%7B%7Bfoo%7D%7D</p>'));
+    }
+
+    public function test_decoding_can_only_emit_characters_that_are_inert_in_markup(): void
+    {
+        $purified = (string) $this->service->purify(
+            '<a href="https://example.com/?a=%7B%7B%22onerror%3D%3Cscript%3E%7D%7D">x</a>'
+        );
+
+        $this->assertStringNotContainsString('<script', $purified);
+        $this->assertStringNotContainsString('onerror=', $purified);
     }
 
     public function test_null_is_preserved(): void

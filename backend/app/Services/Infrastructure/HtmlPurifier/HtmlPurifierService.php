@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\File;
 
 class HtmlPurifierService
 {
-    private const URI_DEFINITION_ID = 'hievents.uri';
+    private const ENCODED_LIQUID_TOKEN = '/%7B%7B((?:%20|%7C|[A-Za-z0-9_.\-])*)%7D%7D/i';
 
-    private const URI_DEFINITION_REV = 1;
+    private const DECODABLE = [
+        '%20' => ' ',
+        '%7C' => '|',
+        '%7c' => '|',
+    ];
 
     private HTMLPurifier_Config $config;
 
@@ -24,10 +28,6 @@ class HtmlPurifierService
         $this->config->set('Cache.SerializerPath', $cachePath);
         $this->config->set('HTML.Nofollow', true);
         $this->config->set('HTML.TargetBlank', true);
-        $this->config->set('URI.DefinitionID', self::URI_DEFINITION_ID);
-        $this->config->set('URI.DefinitionRev', self::URI_DEFINITION_REV);
-
-        $this->config->maybeGetRawURIDefinition()?->addFilter(new LiquidTokenUriFilter, $this->config);
     }
 
     public function purify(?string $html): ?string
@@ -36,6 +36,10 @@ class HtmlPurifierService
             return null;
         }
 
-        return $this->htmlPurifier->purify($html, $this->config);
+        return preg_replace_callback(
+            self::ENCODED_LIQUID_TOKEN,
+            static fn (array $matches): string => '{{'.strtr($matches[1], self::DECODABLE).'}}',
+            $this->htmlPurifier->purify($html, $this->config),
+        );
     }
 }
