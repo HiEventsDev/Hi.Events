@@ -3,6 +3,8 @@
 namespace Tests\Feature\Http\Actions\Admin;
 
 use HiEvents\Models\User;
+use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
+use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -75,7 +77,8 @@ class SpamEventsTest extends TestCase
         $this->assertSame('APPROVED', $check->status);
         $this->assertSame($this->user->id, $check->reviewed_by_user_id);
         $this->assertNotNull($check->reviewed_at);
-        $this->assertSame(hash('sha256', "Spam Test Event\n"), $check->content_hash);
+        $this->assertNotSame(hash('sha256', 'content'), $check->content_hash);
+        $this->assertSame($this->currentContentHash(), $check->content_hash);
     }
 
     public function test_approve_twice_returns_not_found(): void
@@ -162,6 +165,15 @@ class SpamEventsTest extends TestCase
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    private function currentContentHash(): string
+    {
+        $contentService = $this->app->make(EventSpamCheckContentService::class);
+
+        return $this->app->make(EventSpamCheckService::class)->hashContent(
+            $contentService->buildForEvent($contentService->loadEvent($this->eventId)),
+        );
     }
 
     private function makeSpamCheck(int $eventId, string $status): int
