@@ -50,7 +50,7 @@ class CreateEmailTemplateHandler
             'event_id' => $dto->event_id,
             'template_type' => $dto->template_type->value,
             'subject' => $dto->subject,
-            'body' => $this->purifier->purify($dto->body),
+            'body' => $this->purifier->purifyPreservingLiquid($dto->body),
             'cta' => $dto->cta,
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,
