@@ -36,6 +36,7 @@ import classes from "./CollectInformation.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../../utilites/analytics.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {useCheckoutPrefill, CheckoutPrefill} from "../../../../hooks/useCheckoutPrefill.ts";
+import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 
 const LoadingSkeleton = () =>
     (
@@ -742,7 +743,7 @@ export const CollectInformation = () => {
 
                 {!!event?.settings?.pre_checkout_message && (
                     <Card>
-                        <div dangerouslySetInnerHTML={{__html: event?.settings?.pre_checkout_message}}/>
+                        <UserGeneratedContent html={event?.settings?.pre_checkout_message}/>
                     </Card>
                 )}
 
