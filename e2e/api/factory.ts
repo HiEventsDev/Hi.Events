@@ -38,6 +38,7 @@ interface SeedOptions {
   category?: string;
   title?: string;
   productTitle?: string;
+  productDescription?: string;
   quantityAvailable?: number;
   waitlistEnabled?: boolean;
   taxIds?: number[];
@@ -101,6 +102,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
 
   const created = await api.createProduct(event.id, {
     title: productTitle,
+    ...(opts.productDescription !== undefined ? { description: opts.productDescription } : {}),
     product_type: 'TICKET',
     type: productType,
     product_category_id: categoryId,

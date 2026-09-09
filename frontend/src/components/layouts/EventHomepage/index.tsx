@@ -40,6 +40,7 @@ import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
 import {isDateInPast} from "../../../utilites/dates.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
+import {UserGeneratedContent} from "../../common/UserGeneratedContent";
 
 interface EventHomepageProps {
     event?: Event;
@@ -480,9 +481,9 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     <div className={classes.sectionHeader}>
                                         <h2 className={classes.sectionTitle}>{t`About`}</h2>
                                     </div>
-                                    <div
+                                    <UserGeneratedContent
                                         className={classes.description}
-                                        dangerouslySetInnerHTML={{__html: event.description}}
+                                        html={event.description}
                                     />
                                 </div>
                             )}
@@ -630,9 +631,9 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             </div>
 
                                             {organizer.description && (
-                                                <div
+                                                <UserGeneratedContent
                                                     className={classes.organizerBio}
-                                                    dangerouslySetInnerHTML={{__html: organizer.description}}
+                                                    html={organizer.description}
                                                 />
                                             )}
 

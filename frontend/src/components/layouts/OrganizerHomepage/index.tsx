@@ -20,6 +20,7 @@ import {computeThemeVariables, validateThemeSettings} from "../../../utilites/th
 import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
 import {CookieSettingsLink} from "../../common/CookieSettingsLink";
+import {UserGeneratedContent} from "../../common/UserGeneratedContent";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -262,9 +263,9 @@ export const OrganizerHomepage = ({
                                         </div>
                                     </div>
                                     {organizer?.description && (
-                                        <div
+                                        <UserGeneratedContent
                                             className={classes.description}
-                                            dangerouslySetInnerHTML={{__html: organizer.description}}
+                                            html={organizer.description}
                                         />
                                     )}
                                 </div>
