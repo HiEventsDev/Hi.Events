@@ -16,7 +16,9 @@ use HiEvents\Mail\Event\EventPendingManualReviewMail;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
+use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckResultDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
@@ -37,6 +39,8 @@ class EventSpamCheckJobTest extends TestCase
 
     private EventSpamCheckService|MockInterface $eventSpamCheckService;
 
+    private EventSpamCheckContentService|MockInterface $eventSpamCheckContentService;
+
     private Mailer|MockInterface $mailer;
 
     private DatabaseManager|MockInterface $databaseManager;
@@ -50,6 +54,10 @@ class EventSpamCheckJobTest extends TestCase
         $this->eventSpamCheckRepository = Mockery::mock(EventSpamCheckRepositoryInterface::class);
         $this->accountRepository = Mockery::mock(AccountRepositoryInterface::class);
         $this->eventSpamCheckService = Mockery::mock(EventSpamCheckService::class);
+        $this->eventSpamCheckContentService = Mockery::mock(EventSpamCheckContentService::class);
+        $this->eventSpamCheckContentService->shouldReceive('buildForEvent')->andReturn(
+            new EventSpamCheckContentDTO(title: 'Event Title', description: 'Event description'),
+        );
         $this->mailer = Mockery::mock(Mailer::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
         $this->databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($cb) => $cb());
@@ -76,7 +84,7 @@ class EventSpamCheckJobTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturnNull();
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturnNull();
         $this->eventSpamCheckService->shouldNotReceive('checkContent');
 
         $this->runJob();
@@ -87,23 +95,9 @@ class EventSpamCheckJobTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturn(
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturn(
             $this->makeEvent(EventStatus::DRAFT->name),
         );
-        $this->eventSpamCheckService->shouldNotReceive('checkContent');
-
-        $this->runJob();
-    }
-
-    public function test_skips_when_content_changed_since_dispatch(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturn(
-            $this->makeEvent(EventStatus::LIVE->name),
-        );
-        $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn('different-hash');
         $this->eventSpamCheckService->shouldNotReceive('checkContent');
 
         $this->runJob();
@@ -114,7 +108,7 @@ class EventSpamCheckJobTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturn(
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturn(
             $this->makeEvent(EventStatus::LIVE->name),
         );
         $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn(self::CONTENT_HASH);
@@ -214,7 +208,7 @@ class EventSpamCheckJobTest extends TestCase
     private function arrangeCheckableEvent(?string $supportEmail = 'support@example.com'): void
     {
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturn(
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturn(
             $this->makeEvent(EventStatus::LIVE->name),
         );
         $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn(self::CONTENT_HASH);
@@ -226,13 +220,14 @@ class EventSpamCheckJobTest extends TestCase
 
     private function runJob(): void
     {
-        $job = new EventSpamCheckJob(1, self::CONTENT_HASH);
+        $job = new EventSpamCheckJob(1);
 
         $job->handle(
             $this->eventRepository,
             $this->eventSpamCheckRepository,
             $this->accountRepository,
             $this->eventSpamCheckService,
+            $this->eventSpamCheckContentService,
             $this->mailer,
             new Repository(['app' => ['platform_support_email' => $this->supportEmail]]),
             $this->databaseManager,

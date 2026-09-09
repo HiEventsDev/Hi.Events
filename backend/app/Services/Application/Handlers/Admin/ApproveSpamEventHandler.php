@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
+use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
@@ -20,6 +21,7 @@ class ApproveSpamEventHandler
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventSpamCheckRepositoryInterface $eventSpamCheckRepository,
         private readonly EventSpamCheckService $eventSpamCheckService,
+        private readonly EventSpamCheckContentService $eventSpamCheckContentService,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -47,7 +49,7 @@ class ApproveSpamEventHandler
             throw new ResourceNotFoundException(__('No flagged spam check found for this event'));
         }
 
-        $event = $this->eventRepository->findFirstWhere(['id' => $eventId]);
+        $event = $this->eventSpamCheckContentService->loadEvent($eventId);
 
         $updated = $this->eventRepository->updateWhere(
             attributes: ['status' => EventStatus::LIVE->name],
@@ -66,7 +68,9 @@ class ApproveSpamEventHandler
         $this->eventSpamCheckRepository->updateWhere(
             attributes: [
                 'status' => EventSpamCheckStatus::APPROVED->name,
-                'content_hash' => $this->eventSpamCheckService->hashContent($event->getTitle(), $event->getDescription()),
+                'content_hash' => $this->eventSpamCheckService->hashContent(
+                    $this->eventSpamCheckContentService->buildForEvent($event),
+                ),
                 'reviewed_by_user_id' => $reviewedByUserId,
                 'reviewed_at' => now(),
             ],

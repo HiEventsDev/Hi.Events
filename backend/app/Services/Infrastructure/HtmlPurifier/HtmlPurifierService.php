@@ -18,6 +18,8 @@ class HtmlPurifierService
         File::ensureDirectoryExists($cachePath, 0755);
 
         $this->config->set('Cache.SerializerPath', $cachePath);
+        $this->config->set('HTML.Nofollow', true);
+        $this->config->set('HTML.TargetBlank', true);
     }
 
     public function purify(?string $html): ?string

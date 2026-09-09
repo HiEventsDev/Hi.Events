@@ -13,6 +13,7 @@ use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
 use HiEvents\Services\Application\Handlers\Event\UpdateEventStatusHandler;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
@@ -50,7 +51,7 @@ class UpdateEventStatusHandlerTest extends TestCase
             $this->accountRepository,
             new NullLogger,
             $databaseManager,
-            $this->eventSpamCheckService,
+            new EventSpamCheckDispatchService($this->eventSpamCheckService),
         );
 
         $this->accountRepository
@@ -82,7 +83,6 @@ class UpdateEventStatusHandlerTest extends TestCase
         $this->arrangeStatusUpdate(currentStatus: EventStatus::DRAFT->name);
 
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn('hash');
 
         $this->handler->handle($this->makeDTO(EventStatus::LIVE->name));
 
