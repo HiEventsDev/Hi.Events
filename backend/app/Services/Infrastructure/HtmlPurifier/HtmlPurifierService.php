@@ -5,10 +5,13 @@ namespace HiEvents\Services\Infrastructure\HtmlPurifier;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class HtmlPurifierService
 {
+    private const URI_DEFINITION_ID = 'hievents.uri';
+
+    private const URI_DEFINITION_REV = 1;
+
     private HTMLPurifier_Config $config;
 
     public function __construct(private readonly HTMLPurifier $htmlPurifier)
@@ -21,6 +24,10 @@ class HtmlPurifierService
         $this->config->set('Cache.SerializerPath', $cachePath);
         $this->config->set('HTML.Nofollow', true);
         $this->config->set('HTML.TargetBlank', true);
+        $this->config->set('URI.DefinitionID', self::URI_DEFINITION_ID);
+        $this->config->set('URI.DefinitionRev', self::URI_DEFINITION_REV);
+
+        $this->config->maybeGetRawURIDefinition()?->addFilter(new LiquidTokenUriFilter, $this->config);
     }
 
     public function purify(?string $html): ?string
@@ -30,33 +37,5 @@ class HtmlPurifierService
         }
 
         return $this->htmlPurifier->purify($html, $this->config);
-    }
-
-    public function purifyPreservingLiquid(?string $html): ?string
-    {
-        if ($html === null) {
-            return null;
-        }
-
-        $prefix = 'LQ'.Str::lower(Str::random(12));
-        $tokens = [];
-        $protected = preg_replace_callback(
-            '/\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\}/',
-            static function (array $matches) use (&$tokens, $prefix): string {
-                $placeholder = $prefix.count($tokens).'X';
-                $tokens[$placeholder] = $matches[0];
-
-                return $placeholder;
-            },
-            $html,
-        );
-
-        if ($protected === null) {
-            return $this->purify($html);
-        }
-
-        $purified = $this->htmlPurifier->purify($protected, $this->config);
-
-        return strtr($purified, $tokens);
     }
 }

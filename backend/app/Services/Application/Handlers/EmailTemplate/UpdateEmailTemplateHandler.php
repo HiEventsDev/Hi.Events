@@ -48,7 +48,7 @@ class UpdateEmailTemplateHandler
 
         return $this->emailTemplateRepository->updateFromArray($template->getId(), [
             'subject' => $dto->subject,
-            'body' => $this->purifier->purifyPreservingLiquid($dto->body),
+            'body' => $this->purifier->purify($dto->body),
             'cta' => $dto->cta,
             'engine' => $dto->engine->value,
             'is_active' => $dto->is_active,
