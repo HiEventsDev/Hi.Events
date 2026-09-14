@@ -68,6 +68,53 @@ export class OccurrencePage {
     return this.page.locator('[class*="ticketsSoldNumbers"]');
   }
 
+  bookedCell(row: Locator): Locator {
+    return row.locator('[class*="ticketsSoldNumbers"]');
+  }
+
+  bookingSummary(): Locator {
+    return this.dialog().locator('[data-testid="occurrence-booking-summary"]:visible');
+  }
+
+  async openBookingDetails(): Promise<void> {
+    await this.dialog().locator('[data-testid="occurrence-booking-details-button"]:visible').click();
+    await this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible').waitFor();
+  }
+
+  async closeBookingDetails(): Promise<void> {
+    await this.dialog().locator('[data-testid="occurrence-booking-details-button"]:visible').click();
+    await this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible').waitFor({ state: 'hidden' });
+  }
+
+  async openCapacityHelp(): Promise<void> {
+    await this.dialog().locator('[data-testid="capacity-help-link"]:visible').click();
+    await this.page.getByRole('heading', { name: 'How capacity works' }).waitFor();
+  }
+
+  capacityHelpScenarios(): Locator {
+    return this.page.getByTestId('capacity-help-scenario');
+  }
+
+  breakdown(): Locator {
+    return this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible');
+  }
+
+  breakdownRow(row: 'capacity' | 'allocation' | 'sellable' | 'booked'): Locator {
+    return this.breakdown().getByTestId(`occurrence-booking-row-${row}`).locator('span').last();
+  }
+
+  breakdownTiers(): Locator {
+    return this.breakdown().getByTestId('occurrence-booking-row-tier');
+  }
+
+  breakdownLimitedBy(): Locator {
+    return this.breakdown().getByTestId('occurrence-booking-limited-by');
+  }
+
+  priceAvailability(): Locator {
+    return this.page.getByTestId('occurrence-price-availability');
+  }
+
   rowWithStatus(status: 'ACTIVE' | 'CANCELLED'): Locator {
     return this.occurrenceRows().filter({ has: this.statusBadges(status) });
   }
@@ -79,6 +126,11 @@ export class OccurrencePage {
 
   async confirmModalAction(buttonName: string): Promise<void> {
     await this.dialog().getByRole('button', { name: buttonName }).click();
+  }
+
+  async addSingleDate(): Promise<void> {
+    await this.page.getByRole('button', { name: 'Add Dates' }).click();
+    await this.page.getByTestId('occurrence-add-single-date-menu-item').click();
   }
 
   async openProductsTab(): Promise<void> {
@@ -95,6 +147,10 @@ export class OccurrencePage {
 
   overrideInput(): Locator {
     return this.page.locator('[class*="overrideInput"] input');
+  }
+
+  quantityOverrideInput(): Locator {
+    return this.page.getByTestId('occurrence-override-quantity-input');
   }
 
   async saveProductSettings(): Promise<void> {
@@ -154,6 +210,13 @@ export class OccurrencePage {
     await this.page.keyboard.press('Escape');
   }
 }
+
+export const occurrenceDayLabel = (isoDate: string): RegExp => {
+  const date = new Date(isoDate);
+  const weekday = date.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  return new RegExp(`^${weekday}, ${month} ${date.getUTCDate()},`);
+};
 
 export class PublicOccurrenceSelector {
   constructor(private readonly page: Page) {}

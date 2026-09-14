@@ -88,6 +88,7 @@ export interface CreateProductPricePayload {
   price: number;
   label?: string;
   initial_quantity_available?: number;
+  quantity_applies_to?: 'OCCURRENCE' | 'EVENT';
 }
 
 export interface CreateProductPayload {
@@ -104,6 +105,8 @@ export interface CreateProductPayload {
   min_per_order?: number;
   is_hidden?: boolean;
   is_hidden_without_promo_code?: boolean;
+  show_quantity_remaining?: boolean;
+  waitlist_enabled?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
 }
@@ -192,7 +195,8 @@ export interface UpdateOccurrencePayload {
 
 export interface OccurrencePriceOverridePayload {
   product_price_id: number;
-  price: number;
+  price?: number | null;
+  quantity_available?: number | null;
 }
 
 export interface QuestionRecord {

@@ -112,6 +112,6 @@ class ProductPriceService
             'product_price_id' => $priceId,
         ]);
 
-        return $override === null ? null : (float) $override->getPrice();
+        return $override?->getPrice();
     }
 }

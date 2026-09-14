@@ -16,13 +16,15 @@ abstract class ProductPriceOccurrenceOverrideDomainObjectAbstract extends \HiEve
     final public const PRICE = 'price';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const QUANTITY_AVAILABLE = 'quantity_available';
 
     protected int $id;
     protected int $event_occurrence_id;
     protected int $product_price_id;
-    protected float $price;
+    protected ?float $price = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected ?int $quantity_available = null;
 
     public function toArray(): array
     {
@@ -33,6 +35,7 @@ abstract class ProductPriceOccurrenceOverrideDomainObjectAbstract extends \HiEve
                     'price' => $this->price ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'quantity_available' => $this->quantity_available ?? null,
                 ];
     }
 
@@ -69,13 +72,13 @@ abstract class ProductPriceOccurrenceOverrideDomainObjectAbstract extends \HiEve
         return $this->product_price_id;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(?float $price): self
     {
         $this->price = $price;
         return $this;
     }
 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -100,5 +103,16 @@ abstract class ProductPriceOccurrenceOverrideDomainObjectAbstract extends \HiEve
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setQuantityAvailable(?int $quantity_available): self
+    {
+        $this->quantity_available = $quantity_available;
+        return $this;
+    }
+
+    public function getQuantityAvailable(): ?int
+    {
+        return $this->quantity_available;
     }
 }

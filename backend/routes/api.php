@@ -112,6 +112,7 @@ use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrenceAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesAction;
 use HiEvents\Http\Actions\EventOccurrences\GetEventOccurrencesPublicAction;
 use HiEvents\Http\Actions\EventOccurrences\GetOccurrenceGenerationStatusAction;
+use HiEvents\Http\Actions\EventOccurrences\GetOccurrenceProductAvailabilityAction;
 use HiEvents\Http\Actions\EventOccurrences\GetPriceOverridesAction;
 use HiEvents\Http\Actions\EventOccurrences\GetProductVisibilityAction;
 use HiEvents\Http\Actions\EventOccurrences\ReactivateOccurrenceAction;
@@ -530,6 +531,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/occurrences/{occurrence_id}/price-overrides', GetPriceOverridesAction::class);
         $router->delete('/events/{event_id}/occurrences/{occurrence_id}/price-overrides/{override_id}', DeletePriceOverrideAction::class);
         $router->get('/events/{event_id}/occurrences/{occurrence_id}/product-visibility', GetProductVisibilityAction::class);
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/product-availability', GetOccurrenceProductAvailabilityAction::class);
         $router->put('/events/{event_id}/occurrences/{occurrence_id}/product-visibility', UpdateProductVisibilityAction::class);
 
         // Images

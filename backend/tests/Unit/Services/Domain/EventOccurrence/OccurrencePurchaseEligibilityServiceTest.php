@@ -6,9 +6,9 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductOccurrenceVisibilityDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
-use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
+use HiEvents\Services\Domain\Product\SoldAndReservedQuantitiesService;
 use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\MockInterface;
@@ -18,7 +18,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
-    private OrderItemRepositoryInterface|MockInterface $orderItemRepository;
+    private SoldAndReservedQuantitiesService|MockInterface $soldAndReservedQuantities;
 
     private ProductOccurrenceVisibilityRepositoryInterface|MockInterface $visibilityRepository;
 
@@ -29,11 +29,11 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
         parent::setUp();
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
-        $this->orderItemRepository = Mockery::mock(OrderItemRepositoryInterface::class);
+        $this->soldAndReservedQuantities = Mockery::mock(SoldAndReservedQuantitiesService::class);
         $this->visibilityRepository = Mockery::mock(ProductOccurrenceVisibilityRepositoryInterface::class);
 
-        $this->orderItemRepository
-            ->shouldReceive('getReservedQuantityForOccurrence')
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getReservedTicketsForOccurrence')
             ->byDefault()
             ->andReturn(0);
 
@@ -44,7 +44,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
 
         $this->service = new OccurrencePurchaseEligibilityService(
             $this->occurrenceRepository,
-            $this->orderItemRepository,
+            $this->soldAndReservedQuantities,
             $this->visibilityRepository,
         );
     }
@@ -127,8 +127,8 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
-        $this->orderItemRepository
-            ->shouldReceive('getReservedQuantityForOccurrence')
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getReservedTicketsForOccurrence')
             ->with(10)
             ->andReturn(3);
 
@@ -142,7 +142,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
             eventId: 1,
@@ -157,7 +157,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 10);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
             eventId: 1,
@@ -196,7 +196,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
         $this->occurrenceRepository->shouldNotReceive('findFirstWhere');
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
             eventId: 1,
@@ -213,7 +213,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 4);
         $this->occurrenceRepository->shouldNotReceive('findFirstWhere');
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('capacity');
@@ -275,7 +275,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
     {
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 10, usedCapacity: 10);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
             eventId: 1,
@@ -292,7 +292,7 @@ class OccurrencePurchaseEligibilityServiceTest extends TestCase
         $occurrence = $this->occurrence(EventOccurrenceStatus::ACTIVE->name, capacity: 1, usedCapacity: 5);
         $this->occurrenceRepository->shouldReceive('findFirstWhere')->andReturn($occurrence);
 
-        $this->orderItemRepository->shouldNotReceive('getReservedQuantityForOccurrence');
+        $this->soldAndReservedQuantities->shouldNotReceive('getReservedTicketsForOccurrence');
 
         $result = $this->service->assertOccurrencePurchasable(
             eventId: 1,

@@ -30,6 +30,8 @@ class ProductPriceResourcePublic extends BaseResource
             'is_after_sale_end_date' => $this->isAfterSaleEndDate(),
             'is_available' => $this->isAvailable(),
             'is_sold_out' => $this->isSoldOut(),
+            /** @var 'OCCURRENCE'|'EVENT' */
+            'quantity_applies_to' => $this->getQuantityAppliesTo(),
             $this->mergeWhen($this->getAdditionalDataByKey(self::SHOW_QUANTITY_AVAILABLE), fn () => [
                 'quantity_remaining' => $this->getQuantityAvailable(),
             ]),

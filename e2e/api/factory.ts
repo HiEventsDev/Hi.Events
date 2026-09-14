@@ -40,6 +40,7 @@ interface SeedOptions {
   productTitle?: string;
   quantityAvailable?: number;
   waitlistEnabled?: boolean;
+  showQuantityRemaining?: boolean;
   taxIds?: number[];
   prices?: { price: number; label?: string }[];
   attendeeDetails?: AttendeeDetailsCollection;
@@ -109,6 +110,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
       ...priceEntry,
     })),
     ...(opts.waitlistEnabled !== undefined ? { waitlist_enabled: opts.waitlistEnabled } : {}),
+    ...(opts.showQuantityRemaining !== undefined ? { show_quantity_remaining: opts.showQuantityRemaining } : {}),
     ...(opts.taxIds ? { tax_and_fee_ids: opts.taxIds } : {}),
   });
 
@@ -346,7 +348,15 @@ export async function createPastEventWithCoverImage(
 export async function createRecurringLiveEvent(
   api: ApiClient,
   organizerId: number,
-  opts: { count?: number; price?: number; title?: string } = {},
+  opts: {
+    count?: number;
+    price?: number;
+    title?: string;
+    quantityAvailable?: number;
+    quantityAppliesTo?: 'OCCURRENCE' | 'EVENT';
+    waitlistEnabled?: boolean;
+    showQuantityRemaining?: boolean;
+  } = {},
 ): Promise<SeededEvent & { occurrences: Occurrence[] }> {
   const count = opts.count ?? 3;
   const price = opts.price ?? 0;
@@ -377,7 +387,13 @@ export async function createRecurringLiveEvent(
     product_type: 'TICKET',
     type: price > 0 ? 'PAID' : 'FREE',
     product_category_id: categories[0].id,
-    prices: [{ price }],
+    prices: [{
+      price,
+      ...(opts.quantityAvailable !== undefined ? { initial_quantity_available: opts.quantityAvailable } : {}),
+      ...(opts.quantityAppliesTo ? { quantity_applies_to: opts.quantityAppliesTo } : {}),
+    }],
+    ...(opts.waitlistEnabled !== undefined ? { waitlist_enabled: opts.waitlistEnabled } : {}),
+    ...(opts.showQuantityRemaining !== undefined ? { show_quantity_remaining: opts.showQuantityRemaining } : {}),
   });
   const product = await api.getProduct(event.id, created.id);
   const priceId = product.prices?.[0]?.id;

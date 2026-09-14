@@ -3,6 +3,7 @@
 namespace HiEvents\DomainObjects;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\Helper\Currency;
 use LogicException;
 
@@ -75,20 +76,24 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     public function isSoldOut(): bool
     {
-        // todo this is temporary to see why/when this happens
         if ($this->getQuantityAvailable() < 0) {
             throw new LogicException('Quantity available cannot be less than 0');
         }
 
-        if ($this->getQuantityAvailable() !== null && $this->getQuantityAvailable() <= 0) {
-            return true;
+        if ($this->getQuantityAvailable() !== null) {
+            return $this->getQuantityAvailable() <= 0;
         }
 
-        if ($this->getInitialQuantityAvailable() === null) {
+        if ($this->getInitialQuantityAvailable() === null || $this->isQuantityPerOccurrence()) {
             return false;
         }
 
         return $this->getQuantitySold() >= $this->getInitialQuantityAvailable();
+    }
+
+    public function isQuantityPerOccurrence(): bool
+    {
+        return $this->getQuantityAppliesTo() === ProductQuantityAppliesTo::OCCURRENCE->name;
     }
 
     public function isAvailable(): ?bool

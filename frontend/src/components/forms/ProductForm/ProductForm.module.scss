@@ -100,6 +100,41 @@
   margin-bottom: var(--hi-spacing-sm);
 }
 
+.quantityScope {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: calc(100% - 8px);
+  padding: 0 var(--hi-spacing-xs);
+  border-radius: var(--mantine-radius-sm);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  color: var(--hi-color-gray-dark);
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--hi-color-gray-light);
+    color: var(--hi-color-text);
+  }
+}
+
+.quantityScopeOption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.quantityScopeOptionLabel {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+
+.quantityScopeOptionDescription {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
+}
+
 .priceBlockHeader {
   display: flex;
   align-items: center;
