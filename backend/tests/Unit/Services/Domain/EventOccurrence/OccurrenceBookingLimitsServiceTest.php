@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\EventOccurrence\OccurrenceBookingLimitsService;
@@ -35,7 +36,15 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
 
     private function limitsFor(EventOccurrenceDomainObject $occurrence, $products)
     {
-        $this->productRepository->shouldReceive('findWhere')->once()->andReturn($products);
+        $this->productRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->with(
+                ['event_id' => 1],
+                ['*'],
+                Mockery::on(fn (array $orders) => array_map(fn (OrderAndDirection $o) => $o->getOrder(), $orders) === ['order', 'id']),
+            )
+            ->andReturn($products);
         $this->service->attachTo(collect([$occurrence]), 1);
 
         return $occurrence->getBookingLimits();
@@ -136,6 +145,21 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
         $this->assertNull($limits->capacity);
     }
 
+    public function test_tiers_are_listed_in_their_configured_order(): void
+    {
+        $this->overrideRepository->shouldReceive('findWhereIn')->once()->andReturn(collect());
+        $products = collect([
+            $this->product('Theatre', ProductType::TICKET, [
+                [12, 'Circle', 50, ProductQuantityAppliesTo::OCCURRENCE, 2],
+                [11, 'Stalls', 100, ProductQuantityAppliesTo::OCCURRENCE, 1],
+            ]),
+        ]);
+
+        $limits = $this->limitsFor($this->occurrence(1, capacity: null), $products);
+
+        $this->assertSame(['Stalls', 'Circle'], array_map(fn ($allocation) => $allocation->price_label, $limits->allocations));
+    }
+
     private function occurrence(int $id, ?int $capacity): EventOccurrenceDomainObject
     {
         return (new EventOccurrenceDomainObject)->setId($id)->setCapacity($capacity);
@@ -150,6 +174,7 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
                 ->setId($p[0])
                 ->setLabel($p[1])
                 ->setInitialQuantityAvailable($p[2])
-                ->setQuantityAppliesTo($p[3]->name), $prices)));
+                ->setQuantityAppliesTo($p[3]->name)
+                ->setOrder($p[4] ?? 1), $prices)));
     }
 }

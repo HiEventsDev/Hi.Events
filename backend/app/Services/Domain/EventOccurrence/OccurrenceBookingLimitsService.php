@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceBookingLimitsDTO;
@@ -32,7 +33,13 @@ class OccurrenceBookingLimitsService
 
         $products = $this->productRepository
             ->loadRelation(ProductPriceDomainObject::class)
-            ->findWhere([ProductDomainObjectAbstract::EVENT_ID => $eventId]);
+            ->findWhere(
+                where: [ProductDomainObjectAbstract::EVENT_ID => $eventId],
+                orderAndDirections: [
+                    new OrderAndDirection(ProductDomainObjectAbstract::ORDER),
+                    new OrderAndDirection(ProductDomainObjectAbstract::ID),
+                ],
+            );
 
         $limits = $this->forOccurrences($occurrences, $products);
 
@@ -86,8 +93,11 @@ class OccurrenceBookingLimitsService
                 continue;
             }
 
+            $prices = ($product->getProductPrices() ?? collect())
+                ->sortBy(fn (ProductPriceDomainObject $price) => $price->getOrder());
+
             /** @var ProductPriceDomainObject $price */
-            foreach ($product->getProductPrices() ?? [] as $price) {
+            foreach ($prices as $price) {
                 $quantity = $this->allocationForDate($price, $overridesByPrice->get($price->getId()));
 
                 if ($quantity === null) {
