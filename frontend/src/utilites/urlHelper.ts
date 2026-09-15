@@ -49,6 +49,9 @@ export const imageUrl = (imageType: ImageType, images?: Image[], fallbackUrl?: s
     return fallbackUrl || getConfig('VITE_DEFAULT_IMAGE_URL');
 }
 
+export const attendeeWalletPassUrl = (eventId: IdParam, attendeeShortId: string, provider: 'apple' | 'google') =>
+    `${getConfig('VITE_API_URL_CLIENT')}/public/events/${eventId}/attendees/${attendeeShortId}/wallet/${provider}`;
+
 export const organizerPreviewPath = (organizerId: IdParam) => {
     return `/organizer/${organizerId}/preview`;
 }

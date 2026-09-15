@@ -852,6 +852,10 @@ export interface Attendee {
     event_occurrence?: EventOccurrence;
     check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
     check_ins?: AttendeeCheckIn[];
+    wallet_passes?: {
+        apple: boolean;
+        google: boolean;
+    };
 }
 
 export type PublicCheckIn = Pick<AttendeeCheckIn, 'id' | 'short_id' | 'order_id' | 'attendee_id' | 'check_in_list_id' | 'product_id' | 'event_id'>;

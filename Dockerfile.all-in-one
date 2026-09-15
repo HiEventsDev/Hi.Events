@@ -22,7 +22,7 @@ ENV PHP_OPCACHE_ENABLE=1
 # Switch to root for installing extensions and packages
 USER root
 
-RUN install-php-extensions intl gd
+RUN install-php-extensions intl gd zip
 
 RUN apk add --no-cache nodejs yarn nginx supervisor dos2unix
 
