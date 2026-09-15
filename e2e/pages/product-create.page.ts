@@ -40,12 +40,34 @@ export class ProductCreatePage {
     await this.page.getByTestId('product-add-tier-button').click();
   }
 
+  async dragTierAbove(fromIndex: number, toIndex: number): Promise<void> {
+    const source = await this.page.getByTestId(`product-tier-${fromIndex}-drag-handle`).boundingBox();
+    const target = await this.page.getByTestId(`product-tier-${toIndex}-drag-handle`).boundingBox();
+    if (!source || !target) {
+      throw new Error('Tier drag handles are not visible');
+    }
+
+    const startX = source.x + source.width / 2;
+    const startY = source.y + source.height / 2;
+    const endY = target.y - 10;
+
+    await this.page.mouse.move(startX, startY);
+    await this.page.mouse.down();
+    await this.page.mouse.move(startX, startY - 5, { steps: 3 });
+    await this.page.mouse.move(startX, endY, { steps: 12 });
+    await this.page.mouse.up();
+  }
+
   async openLedgerRow(row: ProductLedgerRow): Promise<void> {
     await this.page.getByTestId(`product-ledger-${row}`).click();
   }
 
   hiddenSwitch(): Locator {
     return this.page.getByLabel('Hide this product from customers');
+  }
+
+  sequentialReleaseSwitch(): Locator {
+    return this.page.getByLabel('Release tiers in order');
   }
 
   async submitCreate(): Promise<void> {

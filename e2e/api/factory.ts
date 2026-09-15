@@ -42,7 +42,8 @@ interface SeedOptions {
   quantityAvailable?: number;
   waitlistEnabled?: boolean;
   taxIds?: number[];
-  prices?: { price: number; label?: string }[];
+  prices?: { price: number; label?: string; initial_quantity_available?: number }[];
+  sequentialTierRelease?: boolean;
   attendeeDetails?: AttendeeDetailsCollection;
 }
 
@@ -111,6 +112,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
       ...priceEntry,
     })),
     ...(opts.waitlistEnabled !== undefined ? { waitlist_enabled: opts.waitlistEnabled } : {}),
+    ...(opts.sequentialTierRelease !== undefined ? { sequential_tier_release: opts.sequentialTierRelease } : {}),
     ...(opts.taxIds ? { tax_and_fee_ids: opts.taxIds } : {}),
   });
 

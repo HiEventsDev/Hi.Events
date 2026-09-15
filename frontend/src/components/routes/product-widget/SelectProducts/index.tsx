@@ -748,7 +748,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </>
                                                         )}
 
-                                                        {(!product.is_available && product.type === 'TIERED') && (
+                                                        {(!product.is_available && product.type === 'TIERED' && isProductCollapsed) && (
                                                             <span className={'hi-product-availability'}
                                                                   data-reason={availabilityState}>
                                                                 <ProductAvailabilityMessage product={product}

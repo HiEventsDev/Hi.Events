@@ -106,6 +106,7 @@ export interface CreateProductPayload {
   is_hidden_without_promo_code?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
+  sequential_tier_release?: boolean;
 }
 
 export interface CreateProductCategoryPayload {

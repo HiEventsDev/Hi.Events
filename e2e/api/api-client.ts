@@ -162,6 +162,10 @@ export class ApiClient {
     );
   }
 
+  listProducts(eventId: number): Promise<ProductRecord[]> {
+    return unwrap<ProductRecord[]>(this.request.get(`events/${eventId}/products`, { headers: jsonHeaders }));
+  }
+
   setEventStatus(eventId: number, status: EventStatus): Promise<void> {
     return check(this.request.put(`events/${eventId}/status`, { headers: jsonHeaders, data: { status } }));
   }

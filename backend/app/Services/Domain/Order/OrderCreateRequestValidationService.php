@@ -378,6 +378,8 @@ class OrderCreateRequestValidationService
             throw new NotFoundHttpException(sprintf('Product ID %d not found', $productId));
         }
 
+        $this->hydrateReservedQuantitiesAndMarkLockedTiers($product);
+
         $this->validateProductEvent(
             event: $event,
             productId: $productId,
@@ -419,6 +421,19 @@ class OrderCreateRequestValidationService
             productAndQuantities: $productAndQuantities,
             product: $product
         );
+    }
+
+    private function hydrateReservedQuantitiesAndMarkLockedTiers(ProductDomainObject $product): void
+    {
+        $reservedByPriceId = $this->availableProductQuantities
+            ->productQuantities
+            ->keyBy('price_id');
+
+        $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($reservedByPriceId) {
+            $price->setQuantityReserved($reservedByPriceId->get($price->getId())?->quantity_reserved ?? 0);
+        });
+
+        $product->markLockedTiers();
     }
 
     /**
@@ -585,6 +600,12 @@ class OrderCreateRequestValidationService
             }
 
             $selectedPrice = $productPrices?->first(fn (ProductPriceDomainObject $price) => $price->getId() === $priceId);
+            if ((int) $quantity > 0 && $selectedPrice?->isLockedBehindEarlierTier()) {
+                $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('This price is not on sale yet');
+
+                continue;
+            }
+
             if ((int) $quantity > 0 && $this->isPriceUnavailable($selectedPrice)) {
                 $errors["products.$productIndex.quantities.$quantityIndex.price_id"] = __('Invalid price ID');
             }

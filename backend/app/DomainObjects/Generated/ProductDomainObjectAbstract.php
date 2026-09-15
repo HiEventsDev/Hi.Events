@@ -38,6 +38,7 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     final public const HIGHLIGHT_MESSAGE = 'highlight_message';
     final public const WAITLIST_ENABLED = 'waitlist_enabled';
     final public const IS_ADDON_ONLY = 'is_addon_only';
+    final public const SEQUENTIAL_TIER_RELEASE = 'sequential_tier_release';
 
     protected int $id;
     protected int $event_id;
@@ -67,6 +68,7 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     protected ?string $highlight_message = null;
     protected ?bool $waitlist_enabled = null;
     protected bool $is_addon_only = false;
+    protected bool $sequential_tier_release = false;
 
     public function toArray(): array
     {
@@ -99,6 +101,7 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
                     'highlight_message' => $this->highlight_message ?? null,
                     'waitlist_enabled' => $this->waitlist_enabled ?? null,
                     'is_addon_only' => $this->is_addon_only ?? null,
+                    'sequential_tier_release' => $this->sequential_tier_release ?? null,
                 ];
     }
 
@@ -408,5 +411,16 @@ abstract class ProductDomainObjectAbstract extends \HiEvents\DomainObjects\Abstr
     public function getIsAddonOnly(): bool
     {
         return $this->is_addon_only;
+    }
+
+    public function setSequentialTierRelease(bool $sequential_tier_release): self
+    {
+        $this->sequential_tier_release = $sequential_tier_release;
+        return $this;
+    }
+
+    public function getSequentialTierRelease(): bool
+    {
+        return $this->sequential_tier_release;
     }
 }

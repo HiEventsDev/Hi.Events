@@ -764,6 +764,7 @@ export interface ProductPrice {
     is_before_sale_start_date?: boolean;
     is_after_sale_end_date?: boolean;
     is_sold_out?: boolean;
+    is_locked_behind_earlier_tier?: boolean;
     initial_quantity_available?: number;
     quantity_sold?: number;
     is_hidden?: boolean;
@@ -792,6 +793,7 @@ export interface Product {
     hide_before_sale_start_date?: boolean;
     hide_after_sale_end_date?: boolean;
     hide_when_sold_out?: boolean;
+    sequential_tier_release?: boolean;
     start_collapsed?: boolean;
     show_quantity_remaining?: boolean;
     quantity_available?: number;
