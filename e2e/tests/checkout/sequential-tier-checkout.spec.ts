@@ -8,7 +8,7 @@ test.describe('sequential tier release', () => {
       organizerId: account.organizerId,
       productType: 'TIERED',
       productTitle: 'Sequential Ticket',
-      sequentialTierRelease: true,
+      sequentialTierReleaseEnabled: true,
       prices: [
         { price: 0, label: 'Early bird', initial_quantity_available: 1 },
         { price: 0, label: 'General', initial_quantity_available: 1 },

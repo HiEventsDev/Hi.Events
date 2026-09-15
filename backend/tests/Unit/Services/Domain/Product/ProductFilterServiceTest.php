@@ -192,7 +192,7 @@ class ProductFilterServiceTest extends TestCase
             ->setEventId(self::EVENT_ID)
             ->setProductCategoryId(5)
             ->setType(ProductPriceType::TIERED->name)
-            ->setSequentialTierRelease(true)
+            ->setSequentialTierReleaseEnabled(true)
             ->setProductPrices(collect([
                 (new ProductPriceDomainObject)->setId(100)->setOrder(1)->setPrice(0.00)->setInitialQuantityAvailable(10)->setQuantitySold(0),
                 (new ProductPriceDomainObject)->setId(101)->setOrder(2)->setPrice(0.00)->setInitialQuantityAvailable(50)->setQuantitySold(0),

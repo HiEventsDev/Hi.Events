@@ -15,7 +15,7 @@ class UpsertProductRequestTest extends TestCase
     public function test_sequential_release_requires_quantity_on_all_but_last_tier(): void
     {
         $validator = $this->validate([
-            'sequential_tier_release' => true,
+            'sequential_tier_release_enabled' => true,
             'prices' => [
                 ['price' => 10, 'label' => 'Early bird', 'initial_quantity_available' => null],
                 ['price' => 20, 'label' => 'Regular', 'initial_quantity_available' => 50],
@@ -32,7 +32,7 @@ class UpsertProductRequestTest extends TestCase
     public function test_sequential_release_passes_when_all_but_last_tier_have_quantity(): void
     {
         $validator = $this->validate([
-            'sequential_tier_release' => true,
+            'sequential_tier_release_enabled' => true,
             'prices' => [
                 ['price' => 10, 'label' => 'Early bird', 'initial_quantity_available' => 25],
                 ['price' => 20, 'label' => 'Regular'],
@@ -45,7 +45,7 @@ class UpsertProductRequestTest extends TestCase
     public function test_quantity_rule_is_ignored_when_sequential_release_is_off(): void
     {
         $validator = $this->validate([
-            'sequential_tier_release' => false,
+            'sequential_tier_release_enabled' => false,
             'prices' => [
                 ['price' => 10, 'label' => 'Early bird'],
                 ['price' => 20, 'label' => 'Regular'],
@@ -59,7 +59,7 @@ class UpsertProductRequestTest extends TestCase
     {
         $validator = $this->validate([
             'type' => ProductPriceType::PAID->name,
-            'sequential_tier_release' => true,
+            'sequential_tier_release_enabled' => true,
             'prices' => [
                 ['price' => 10],
             ],

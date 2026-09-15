@@ -952,7 +952,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->setTitle('Ticket')
             ->setType(ProductPriceType::TIERED->name)
             ->setProductType(ProductType::TICKET->name)
-            ->setSequentialTierRelease(true)
+            ->setSequentialTierReleaseEnabled(true)
             ->setMaxPerOrder(10)
             ->setMinPerOrder(1)
             ->setProductPrices(collect([

@@ -109,7 +109,7 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
 
     public function markLockedTiers(): void
     {
-        if (! $this->isTieredType() || ! $this->getSequentialTierRelease() || ! $this->getProductPrices()) {
+        if (! $this->isTieredType() || ! $this->getSequentialTierReleaseEnabled() || ! $this->getProductPrices()) {
             return;
         }
 

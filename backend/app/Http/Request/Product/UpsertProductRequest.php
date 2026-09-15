@@ -35,7 +35,7 @@ class UpsertProductRequest extends BaseRequest
             'hide_before_sale_start_date' => 'boolean',
             'hide_after_sale_end_date' => 'boolean',
             'hide_when_sold_out' => 'boolean',
-            'sequential_tier_release' => 'boolean',
+            'sequential_tier_release_enabled' => 'boolean',
             'start_collapsed' => 'boolean',
             'show_quantity_remaining' => 'boolean',
             'is_hidden_without_promo_code' => 'boolean',
@@ -55,7 +55,7 @@ class UpsertProductRequest extends BaseRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            if (! $this->boolean('sequential_tier_release') || $this->input('type') !== ProductPriceType::TIERED->name) {
+            if (! $this->boolean('sequential_tier_release_enabled') || $this->input('type') !== ProductPriceType::TIERED->name) {
                 return;
             }
 

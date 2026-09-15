@@ -141,7 +141,7 @@ class ProductDomainObjectTest extends TestCase
         return (new ProductDomainObject)
             ->setId(1)
             ->setType(ProductPriceType::TIERED->name)
-            ->setSequentialTierRelease($sequential)
+            ->setSequentialTierReleaseEnabled($sequential)
             ->setProductPrices(collect($prices));
     }
 

@@ -54,7 +54,7 @@ const buildPreviewPrices = (
         return (visibleTiers.length > 0 ? visibleTiers : tiers).map((tier, index) => {
             const isBeforeSaleStart = !!tier.sale_start_date && String(tier.sale_start_date) > nowInEventTz;
             const isAfterSaleEnd = !!tier.sale_end_date && String(tier.sale_end_date) < nowInEventTz;
-            const isLocked = !!values.sequential_tier_release && earlierTierOpen;
+            const isLocked = !!values.sequential_tier_release_enabled && earlierTierOpen;
 
             if (!isAfterSaleEnd) {
                 earlierTierOpen = true;
