@@ -383,6 +383,13 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                     {t`Add tier`}
                                 </Button>
                             </div>
+                            <Switch
+                                mt={15}
+                                {...form.getInputProps('sequential_tier_release_enabled', {type: 'checkbox'})}
+                                label={t`Release tiers in order`}
+                                description={t`Each tier goes on sale only after the tiers above it sell out or end. Every tier except the last needs a quantity.`}
+                                data-testid="product-sequential-tier-release-switch"
+                            />
                         </Fieldset>
                     </>
                 )}

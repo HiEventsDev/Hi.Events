@@ -5,6 +5,7 @@ import {t} from "@lingui/macro";
 import {useNavigate} from "react-router";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
 import {Event, EventType, Product, ProductPriceType} from "../../../types.ts";
+import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {useGetEventSettings} from "../../../queries/useGetEventSettings.ts";
 import {useGetOrganizer} from "../../../queries/useGetOrganizer.ts";
 import {useGetEventProductCategories} from "../../../queries/useGetProductCategories.ts";
@@ -48,6 +49,7 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
     const organizerId = event.organizer_id ?? event.organizer?.id;
     const isRecurring = event.type === EventType.RECURRING;
 
+    const {data: account, isFetched: isAccountFetched} = useGetAccount();
     const {data: eventSettings, isFetched: isSettingsFetched} = useGetEventSettings(eventId);
     const {data: organizer, isFetched: isOrganizerFetched} = useGetOrganizer(organizerId);
     const {data: productCategories, isFetched: isProductsFetched} = useGetEventProductCategories(eventId);
@@ -58,18 +60,20 @@ export const PublishEventModal = ({opened, onClose, event, onSuccess}: PublishEv
     const products = productCategories?.data?.flatMap((category) => category.products ?? []) ?? [];
     const hasProducts = products.length > 0;
     const hasPaidProducts = products.some(productRequiresPayment);
+    const isSaasMode = !!account?.is_saas_mode_enabled;
     const isStripeEnabled = !!eventSettings?.payment_providers?.includes('STRIPE');
     const isStripeConnected = !!organizer?.stripe_connect_setup_complete;
     const hasOccurrences = (occurrencesQuery.data?.data?.length ?? 0) > 0;
 
-    const checksLoaded = isSettingsFetched
+    const checksLoaded = isAccountFetched
+        && isSettingsFetched
         && isOrganizerFetched
         && isProductsFetched
         && (!isRecurring || occurrencesQuery.isFetched);
 
     const checks: PublishCheck[] = [];
 
-    if (hasPaidProducts && isStripeEnabled && !isStripeConnected) {
+    if (isSaasMode && hasPaidProducts && isStripeEnabled && !isStripeConnected) {
         checks.push({
             key: 'stripe',
             blocking: true,

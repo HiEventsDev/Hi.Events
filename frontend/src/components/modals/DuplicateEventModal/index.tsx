@@ -76,12 +76,10 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
 
     useEffect(() => {
         if (eventQuery?.data) {
-            form.setValues({
-                title: eventQuery.data.title,
-                description: eventQuery.data.description,
-                start_date: utcToTz(eventQuery.data.start_date, eventQuery.data.timezone),
-                end_date: utcToTz(eventQuery.data.end_date, eventQuery.data.timezone),
-            });
+            form.setFieldValue('title', eventQuery.data.title);
+            form.setFieldValue('description', eventQuery.data.description);
+            form.setFieldValue('start_date', utcToTz(eventQuery.data.start_date, eventQuery.data.timezone));
+            form.setFieldValue('end_date', utcToTz(eventQuery.data.end_date, eventQuery.data.timezone));
         }
     }, [eventQuery.isFetched]);
 

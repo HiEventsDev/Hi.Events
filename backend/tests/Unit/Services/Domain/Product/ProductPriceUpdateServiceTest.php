@@ -104,6 +104,34 @@ class ProductPriceUpdateServiceTest extends TestCase
         }
     }
 
+    public function test_rewrites_order_to_match_submitted_tier_sequence(): void
+    {
+        $existingPrices = new Collection([
+            $this->createExistingPrice(id: 1, quantitySold: 0, label: 'Tier 1'),
+            $this->createExistingPrice(id: 2, quantitySold: 0, label: 'Tier 2'),
+        ]);
+        [$product, $event] = $this->createProductAndEvent($existingPrices);
+
+        $orders = [];
+        $this->productPriceRepository
+            ->shouldReceive('updateWhere')
+            ->twice()
+            ->andReturnUsing(function (array $attributes, array $where) use (&$orders) {
+                $orders[$where['id']] = $attributes['order'];
+
+                return 1;
+            });
+
+        $productsData = $this->createUpsertDTO(ProductPriceType::TIERED, [
+            new ProductPriceDTO(price: 20.00, label: 'Tier 2', id: 2),
+            new ProductPriceDTO(price: 10.00, label: 'Tier 1', id: 1),
+        ]);
+
+        $this->service->updatePrices($product, $productsData, $existingPrices, $event);
+
+        $this->assertSame([2 => 1, 1 => 2], $orders);
+    }
+
     private function createExistingPrice(int $id, int $quantitySold, string $label): MockInterface
     {
         $price = Mockery::mock(ProductPriceDomainObject::class);
