@@ -4,10 +4,10 @@ import {formatCurrency} from "../../../utilites/currency.ts";
 import {t} from "@lingui/macro";
 import {prettyDate} from "../../../utilites/dates.ts";
 import QRCode from "react-qr-code";
-import {IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
+import {IconBrandApple, IconBrandGoogle, IconCopy, IconPrinter, IconLock, IconX} from "@tabler/icons-react";
 import {Attendee, Event, EventOccurrence, LocationType, Product} from "../../../types.ts";
 import classes from './AttendeeTicket.module.scss';
-import {imageUrl} from "../../../utilites/urlHelper.ts";
+import {attendeeWalletPassUrl, imageUrl} from "../../../utilites/urlHelper.ts";
 import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {PoweredByFooter} from "../PoweredByFooter";
@@ -168,6 +168,30 @@ export const AttendeeTicket = ({
 
             {!hideButtons && (
                 <div className={classes.actions}>
+                    {attendee.wallet_passes?.apple && !isVoid && (
+                        <Button
+                            component="a"
+                            href={attendeeWalletPassUrl(event.id, attendee.short_id, 'apple')}
+                            variant="default"
+                            size="sm"
+                            leftSection={<IconBrandApple size={16}/>}
+                        >
+                            {t`Add to Apple Wallet`}
+                        </Button>
+                    )}
+
+                    {attendee.wallet_passes?.google && !isVoid && (
+                        <Button
+                            component="a"
+                            href={attendeeWalletPassUrl(event.id, attendee.short_id, 'google')}
+                            variant="default"
+                            size="sm"
+                            leftSection={<IconBrandGoogle size={16}/>}
+                        >
+                            {t`Add to Google Wallet`}
+                        </Button>
+                    )}
+
                     <Button
                         variant="default"
                         size="sm"

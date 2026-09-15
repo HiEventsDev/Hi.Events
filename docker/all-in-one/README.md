@@ -63,6 +63,29 @@ docker compose up -d
 
 Visit [http://localhost:8123/auth/register](http://localhost:8123/auth/register) to create an account.
 
+## Ticket wallet passes
+
+Wallet buttons appear on active attendee tickets when the corresponding provider is configured. Credential files are passed as base64 so they work with Docker Compose secrets and environment variables without multiline parsing issues.
+
+For Apple Wallet, create a Pass Type ID and certificate in the Apple Developer portal, export the certificate as a password-protected `.p12`, and download Apple's WWDR G4 intermediate certificate. Add these values to `.env`:
+
+```dotenv
+APPLE_WALLET_PASS_TYPE_IDENTIFIER=pass.com.example.tickets
+APPLE_WALLET_TEAM_IDENTIFIER=ABCDE12345
+APPLE_WALLET_CERTIFICATE_BASE64=<base64 contents of certificate.p12>
+APPLE_WALLET_CERTIFICATE_PASSWORD=<p12 export password>
+APPLE_WALLET_WWDR_CERTIFICATE_BASE64=<base64 contents of AppleWWDRCAG4.pem>
+```
+
+For Google Wallet, enable the Google Wallet API, create an issuer account, and grant the service account Developer access in the Google Pay & Wallet Console. Add these values to `.env`:
+
+```dotenv
+GOOGLE_WALLET_ISSUER_ID=3388000000012345678
+GOOGLE_WALLET_SERVICE_ACCOUNT_BASE64=<base64 contents of service-account.json>
+```
+
+On Linux, encode a file with `base64 -w 0 filename`. On macOS, use `base64 -i filename`.
+
 ---
 
 **Production Note:**  

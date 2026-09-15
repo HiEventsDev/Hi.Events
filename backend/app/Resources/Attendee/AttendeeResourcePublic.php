@@ -45,6 +45,13 @@ class AttendeeResourcePublic extends JsonResource
                 ),
             ),
             'locale' => $this->getLocale(),
+            'wallet_passes' => [
+                'apple' => collect(config('services.wallet_passes.apple'))
+                    ->except('certificate_password')
+                    ->every(fn ($value) => filled($value)),
+                'google' => collect(config('services.wallet_passes.google'))
+                    ->every(fn ($value) => filled($value)),
+            ],
         ];
     }
 }

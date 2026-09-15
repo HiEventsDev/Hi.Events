@@ -58,4 +58,17 @@ return [
             'api_key' => env('GOOGLE_MAPS_API_KEY'),
         ],
     ],
+    'wallet_passes' => [
+        'apple' => [
+            'pass_type_identifier' => env('APPLE_WALLET_PASS_TYPE_IDENTIFIER'),
+            'team_identifier' => env('APPLE_WALLET_TEAM_IDENTIFIER'),
+            'certificate' => env('APPLE_WALLET_CERTIFICATE_BASE64'),
+            'certificate_password' => env('APPLE_WALLET_CERTIFICATE_PASSWORD'),
+            'wwdr_certificate' => env('APPLE_WALLET_WWDR_CERTIFICATE_BASE64'),
+        ],
+        'google' => [
+            'issuer_id' => env('GOOGLE_WALLET_ISSUER_ID'),
+            'service_account' => env('GOOGLE_WALLET_SERVICE_ACCOUNT_BASE64'),
+        ],
+    ],
 ];
