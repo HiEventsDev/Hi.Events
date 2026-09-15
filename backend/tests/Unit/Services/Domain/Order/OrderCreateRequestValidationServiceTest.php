@@ -3,6 +3,8 @@
 namespace Tests\Unit\Services\Domain\Order;
 
 use Carbon\Carbon;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -907,6 +909,77 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_rejects_tier_locked_behind_an_earlier_tier_with_stock(): void
+    {
+        $this->setupSequentialTierScenario(tierOneReserved: 0);
+
+        try {
+            $this->service->validateRequestData(1, $this->createRequestData(10, priceId: 101));
+            $this->fail('Expected ValidationException was not thrown');
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('products.0.quantities.0.price_id', $e->errors());
+            $this->assertSame('This price is not on sale yet', $e->errors()['products.0.quantities.0.price_id'][0]);
+        }
+    }
+
+    public function test_accepts_next_tier_once_earlier_tier_is_fully_reserved(): void
+    {
+        $this->setupSequentialTierScenario(tierOneReserved: 10);
+
+        $this->service->validateRequestData(1, $this->createRequestData(10, priceId: 101));
+
+        $this->assertTrue(true);
+    }
+
+    private function setupSequentialTierScenario(int $tierOneReserved): void
+    {
+        $this->setupOccurrenceLookup(1, 10, $this->createOccurrence(capacity: 100));
+        $this->setupEventLookup(1);
+
+        $this->availabilityService
+            ->shouldReceive('getAvailableProductQuantities')
+            ->andReturn(new AvailableProductQuantitiesResponseDTO(
+                productQuantities: collect([
+                    $this->createQuantityDto(priceId: 100, available: 10 - $tierOneReserved, reserved: $tierOneReserved),
+                    $this->createQuantityDto(priceId: 101, available: 100, reserved: 0),
+                ]),
+                capacities: collect(),
+            ));
+
+        $product = (new ProductDomainObject)
+            ->setId(10)
+            ->setEventId(1)
+            ->setTitle('Ticket')
+            ->setType(ProductPriceType::TIERED->name)
+            ->setProductType(ProductType::TICKET->name)
+            ->setSequentialTierReleaseEnabled(true)
+            ->setMaxPerOrder(10)
+            ->setMinPerOrder(1)
+            ->setProductPrices(collect([
+                (new ProductPriceDomainObject)->setId(100)->setOrder(1)->setPrice(10.00)->setInitialQuantityAvailable(10)->setQuantitySold(0),
+                (new ProductPriceDomainObject)->setId(101)->setOrder(2)->setPrice(20.00)->setInitialQuantityAvailable(100)->setQuantitySold(0),
+            ]));
+
+        $this->productRepository
+            ->shouldReceive('findWhereIn')
+            ->andReturn(collect([$product]));
+    }
+
+    private function createQuantityDto(int $priceId, int $available, int $reserved): AvailableProductQuantitiesDTO
+    {
+        return AvailableProductQuantitiesDTO::fromArray([
+            'product_id' => 10,
+            'price_id' => $priceId,
+            'product_title' => 'Ticket',
+            'product_type' => 'TICKET',
+            'price_label' => null,
+            'quantity_available' => $available,
+            'quantity_reserved' => $reserved,
+            'initial_quantity_available' => 100,
+            'capacities' => new Collection,
+        ]);
+    }
+
     private function setupSaleWindowScenario(
         bool $productBeforeSaleStart = false,
         bool $productAfterSaleEnd = false,
@@ -1022,8 +1095,12 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('getLabel')->andReturn(null);
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn($priceBeforeSaleStart);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn($priceAfterSaleEnd);
+        $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
+        $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('markLockedTiers');
         $product->shouldReceive('getId')->andReturn($productId);
         $product->shouldReceive('getEventId')->andReturn($eventId);
         $product->shouldReceive('getTitle')->andReturn('Test Product');
@@ -1060,8 +1137,12 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('getLabel')->andReturn(null);
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn(false);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn(false);
+        $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
+        $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('markLockedTiers');
         $product->shouldReceive('getId')->andReturn($productId);
         $product->shouldReceive('getEventId')->andReturn(1);
         $product->shouldReceive('getTitle')->andReturn('Product '.$productId);

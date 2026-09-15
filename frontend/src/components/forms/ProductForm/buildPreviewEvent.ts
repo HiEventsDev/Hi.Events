@@ -49,15 +49,23 @@ const buildPreviewPrices = (
         const tiers = values.prices || [];
         const visibleTiers = tiers.filter((tier) => !tier.is_hidden);
 
+        let earlierTierOpen = false;
+
         return (visibleTiers.length > 0 ? visibleTiers : tiers).map((tier, index) => {
             const isBeforeSaleStart = !!tier.sale_start_date && String(tier.sale_start_date) > nowInEventTz;
             const isAfterSaleEnd = !!tier.sale_end_date && String(tier.sale_end_date) < nowInEventTz;
+            const isLocked = !!values.sequential_tier_release_enabled && earlierTierOpen;
+
+            if (!isAfterSaleEnd) {
+                earlierTierOpen = true;
+            }
 
             return buildPreviewPrice(index + 1, Number(tier.price || 0), selectedTaxesAndFees, {
                 label: tier.label || t`Tier ${index + 1}`,
-                is_available: !isBeforeSaleStart && !isAfterSaleEnd,
+                is_available: !isBeforeSaleStart && !isAfterSaleEnd && !isLocked,
                 is_before_sale_start_date: isBeforeSaleStart,
                 is_after_sale_end_date: isAfterSaleEnd,
+                is_locked_behind_earlier_tier: isLocked,
             });
         });
     }

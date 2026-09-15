@@ -27,6 +27,7 @@ class ProductPriceResource extends BaseResource
             /** @var 'OCCURRENCE'|'EVENT' */
             'quantity_applies_to' => $this->getQuantityAppliesTo(),
             'is_sold_out' => $this->isSoldOut(),
+            'is_locked_behind_earlier_tier' => $this->isLockedBehindEarlierTier(),
             'is_hidden' => $this->getIsHidden(),
             'off_sale_reason' => $this->getOffSaleReason(),
             'price_including_taxes_and_fees' => $this->getPriceIncludingTaxAndServiceFee(),

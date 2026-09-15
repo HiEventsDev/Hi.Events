@@ -38,11 +38,13 @@ interface SeedOptions {
   category?: string;
   title?: string;
   productTitle?: string;
+  productDescription?: string;
   quantityAvailable?: number;
   waitlistEnabled?: boolean;
   showQuantityRemaining?: boolean;
   taxIds?: number[];
-  prices?: { price: number; label?: string }[];
+  prices?: { price: number; label?: string; initial_quantity_available?: number }[];
+  sequentialTierReleaseEnabled?: boolean;
   attendeeDetails?: AttendeeDetailsCollection;
 }
 
@@ -102,6 +104,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
 
   const created = await api.createProduct(event.id, {
     title: productTitle,
+    ...(opts.productDescription !== undefined ? { description: opts.productDescription } : {}),
     product_type: 'TICKET',
     type: productType,
     product_category_id: categoryId,
@@ -111,6 +114,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     })),
     ...(opts.waitlistEnabled !== undefined ? { waitlist_enabled: opts.waitlistEnabled } : {}),
     ...(opts.showQuantityRemaining !== undefined ? { show_quantity_remaining: opts.showQuantityRemaining } : {}),
+    ...(opts.sequentialTierReleaseEnabled !== undefined ? { sequential_tier_release_enabled: opts.sequentialTierReleaseEnabled } : {}),
     ...(opts.taxIds ? { tax_and_fee_ids: opts.taxIds } : {}),
   });
 

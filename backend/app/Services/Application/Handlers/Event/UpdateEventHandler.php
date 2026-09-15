@@ -15,14 +15,13 @@ use HiEvents\Events\EventUpdateEvent;
 use HiEvents\Exceptions\CannotChangeCurrencyException;
 use HiEvents\Helper\DateHelper;
 use HiEvents\Helper\StringHelper;
-use HiEvents\Jobs\Event\EventSpamCheckJob;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
-use HiEvents\Services\Domain\Event\EventSpamCheckService;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
@@ -38,7 +37,7 @@ readonly class UpdateEventHandler
         private OrderRepositoryInterface $orderRepository,
         private HtmlPurifierService $purifier,
         private EventOccurrenceRepositoryInterface $occurrenceRepository,
-        private EventSpamCheckService $eventSpamCheckService,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -118,14 +117,11 @@ readonly class UpdateEventHandler
         $contentChanged = $attributes['title'] !== $existingEvent->getTitle()
             || $attributes['description'] !== $existingEvent->getDescription();
 
-        if (! $contentChanged || ! $this->eventSpamCheckService->isEnabled()) {
+        if (! $contentChanged) {
             return;
         }
 
-        EventSpamCheckJob::dispatch(
-            $existingEvent->getId(),
-            $this->eventSpamCheckService->hashContent($attributes['title'], $attributes['description']),
-        )->afterCommit();
+        $this->eventSpamCheckDispatchService->dispatchForEvent($existingEvent->getId());
     }
 
     private function updateSingleOccurrenceDates(UpdateEventDTO $eventData, EventDomainObject $existingEvent): void

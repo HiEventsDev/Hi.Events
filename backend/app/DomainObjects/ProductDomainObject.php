@@ -107,9 +107,34 @@ class ProductDomainObject extends Generated\ProductDomainObjectAbstract implemen
         return $this->getProductPrices()->every(fn (ProductPriceDomainObject $price) => $price->isSoldOut());
     }
 
+    public function markLockedTiers(): void
+    {
+        if (! $this->isTieredType() || ! $this->getSequentialTierReleaseEnabled() || ! $this->getProductPrices()) {
+            return;
+        }
+
+        $earlierTierOpen = false;
+
+        $this->getProductPrices()
+            ->sortBy(fn (ProductPriceDomainObject $price) => $price->getOrder())
+            ->each(function (ProductPriceDomainObject $price) use (&$earlierTierOpen) {
+                if ($price->getIsHidden()) {
+                    return;
+                }
+
+                $price->setIsLockedBehindEarlierTier($earlierTierOpen);
+
+                if (! $price->isExhausted()) {
+                    $earlierTierOpen = true;
+                }
+            });
+    }
+
     public function getQuantityAvailable(): int
     {
-        $availableCount = $this->getProductPrices()->sum(fn (ProductPriceDomainObject $price) => $price->getQuantityAvailable());
+        $availableCount = $this->getProductPrices()
+            ->reject(fn (ProductPriceDomainObject $price) => $price->isLockedBehindEarlierTier())
+            ->sum(fn (ProductPriceDomainObject $price) => $price->getQuantityAvailable());
 
         if ($this->quantityAvailable !== null) {
             return min($availableCount, $this->quantityAvailable);

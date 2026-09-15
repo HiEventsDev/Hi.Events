@@ -21,6 +21,10 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     private ?string $offSaleReason = null;
 
+    private int $quantityReserved = 0;
+
+    private bool $isLockedBehindEarlierTier = false;
+
     public function getPriceBeforeDiscount(): ?float
     {
         return $this->priceBeforeDiscount;
@@ -94,6 +98,39 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function isQuantityPerOccurrence(): bool
     {
         return $this->getQuantityAppliesTo() === ProductQuantityAppliesTo::OCCURRENCE->name;
+    }
+
+    public function isExhausted(): bool
+    {
+        if ($this->isAfterSaleEndDate()) {
+            return true;
+        }
+
+        if ($this->isQuantityPerOccurrence()) {
+            return $this->getQuantityAvailable() !== null && $this->getQuantityAvailable() <= 0;
+        }
+
+        return $this->getInitialQuantityAvailable() !== null
+            && $this->getQuantitySold() + $this->quantityReserved >= $this->getInitialQuantityAvailable();
+    }
+
+    public function setQuantityReserved(int $quantityReserved): self
+    {
+        $this->quantityReserved = $quantityReserved;
+
+        return $this;
+    }
+
+    public function isLockedBehindEarlierTier(): bool
+    {
+        return $this->isLockedBehindEarlierTier;
+    }
+
+    public function setIsLockedBehindEarlierTier(bool $isLocked): self
+    {
+        $this->isLockedBehindEarlierTier = $isLocked;
+
+        return $this;
     }
 
     public function isAvailable(): ?bool

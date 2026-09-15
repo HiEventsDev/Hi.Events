@@ -14,6 +14,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
 use HiEvents\Services\Application\Handlers\Event\UpdateEventHandler;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
@@ -65,7 +66,7 @@ class UpdateEventHandlerTest extends TestCase
             $this->orderRepository,
             $this->purifier,
             $this->occurrenceRepository,
-            $this->eventSpamCheckService,
+            new EventSpamCheckDispatchService($this->eventSpamCheckService),
         );
     }
 
@@ -203,10 +204,6 @@ class UpdateEventHandlerTest extends TestCase
         $existing = $this->liveEvent(title: 'Old Title', description: 'Old description');
 
         $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
-        $this->eventSpamCheckService
-            ->shouldReceive('hashContent')
-            ->with('New Title', null)
-            ->andReturn('new-hash');
 
         $this->handleContentUpdate($existing, title: 'New Title');
 
@@ -216,8 +213,6 @@ class UpdateEventHandlerTest extends TestCase
     public function test_does_not_dispatch_spam_check_when_content_unchanged(): void
     {
         $existing = $this->liveEvent(title: 'Event', description: 'Same description');
-
-        $this->eventSpamCheckService->shouldNotReceive('hashContent');
 
         $this->handleContentUpdate($existing, title: 'Event', description: 'Same description');
 

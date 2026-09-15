@@ -32,6 +32,7 @@ class ProductPriceResourcePublic extends BaseResource
             'is_sold_out' => $this->isSoldOut(),
             /** @var 'OCCURRENCE'|'EVENT' */
             'quantity_applies_to' => $this->getQuantityAppliesTo(),
+            'is_locked_behind_earlier_tier' => $this->isLockedBehindEarlierTier(),
             $this->mergeWhen($this->getAdditionalDataByKey(self::SHOW_QUANTITY_AVAILABLE), fn () => [
                 'quantity_remaining' => $this->getQuantityAvailable(),
             ]),

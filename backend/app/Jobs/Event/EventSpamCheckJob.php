@@ -2,21 +2,20 @@
 
 namespace HiEvents\Jobs\Event;
 
-use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\EventSpamCheckStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Mail\Admin\EventFlaggedAsSpamMail;
 use HiEvents\Mail\Event\EventPendingManualReviewMail;
-use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckResultDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,7 +24,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class EventSpamCheckJob implements ShouldQueue
+class EventSpamCheckJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,10 +32,16 @@ class EventSpamCheckJob implements ShouldQueue
 
     public array $backoff = [30, 120, 300];
 
+    public int $uniqueFor = 600;
+
     public function __construct(
         private readonly int $eventId,
-        private readonly string $contentHash,
     ) {}
+
+    public function uniqueId(): string
+    {
+        return (string) $this->eventId;
+    }
 
     /**
      * @throws Throwable
@@ -46,6 +51,7 @@ class EventSpamCheckJob implements ShouldQueue
         EventSpamCheckRepositoryInterface $eventSpamCheckRepository,
         AccountRepositoryInterface $accountRepository,
         EventSpamCheckService $eventSpamCheckService,
+        EventSpamCheckContentService $eventSpamCheckContentService,
         Mailer $mailer,
         Repository $config,
         DatabaseManager $databaseManager,
@@ -54,22 +60,18 @@ class EventSpamCheckJob implements ShouldQueue
             return;
         }
 
-        /** @var EventDomainObject|null $event */
-        $event = $eventRepository
-            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
-            ->findFirstWhere(['id' => $this->eventId]);
+        $event = $eventSpamCheckContentService->loadEvent($this->eventId);
 
         if ($event === null || $event->getStatus() !== EventStatus::LIVE->name) {
             return;
         }
 
-        if ($eventSpamCheckService->hashContent($event->getTitle(), $event->getDescription()) !== $this->contentHash) {
-            return;
-        }
+        $content = $eventSpamCheckContentService->buildForEvent($event);
+        $contentHash = $eventSpamCheckService->hashContent($content);
 
         $existingCheck = $eventSpamCheckRepository->findFirstWhere([
             'event_id' => $this->eventId,
-            'content_hash' => $this->contentHash,
+            'content_hash' => $contentHash,
         ]);
 
         $vettedStatuses = [EventSpamCheckStatus::CLEAN->name, EventSpamCheckStatus::APPROVED->name];
@@ -78,10 +80,10 @@ class EventSpamCheckJob implements ShouldQueue
             return;
         }
 
-        $result = $eventSpamCheckService->checkContent($event->getTitle(), $event->getDescription());
+        $result = $eventSpamCheckService->checkContent($content);
 
         if (! $result->isSpam) {
-            $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::CLEAN);
+            $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::CLEAN, $contentHash);
 
             return;
         }
@@ -94,6 +96,7 @@ class EventSpamCheckJob implements ShouldQueue
             $config,
             $event,
             $result,
+            $contentHash,
         ) {
             $updated = $eventRepository->updateWhere(
                 attributes: ['status' => EventStatus::PENDING_MANUAL_REVIEW->name],
@@ -107,7 +110,7 @@ class EventSpamCheckJob implements ShouldQueue
                 return;
             }
 
-            $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::FLAGGED);
+            $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::FLAGGED, $contentHash);
 
             $organizerEmail = $event->getOrganizer()?->getEmail();
 
@@ -139,12 +142,13 @@ class EventSpamCheckJob implements ShouldQueue
         EventSpamCheckRepositoryInterface $eventSpamCheckRepository,
         EventSpamCheckResultDTO $result,
         EventSpamCheckStatus $status,
+        string $contentHash,
     ): void {
         $eventSpamCheckRepository->create([
             'event_id' => $this->eventId,
             'status' => $status->name,
             'verdict' => $result->toVerdictArray(),
-            'content_hash' => $this->contentHash,
+            'content_hash' => $contentHash,
             'checked_at' => now(),
         ]);
     }

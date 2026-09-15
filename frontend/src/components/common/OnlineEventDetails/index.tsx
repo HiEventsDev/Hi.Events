@@ -2,6 +2,7 @@ import {t} from "@lingui/macro";
 import {Card} from "../Card";
 import {Event, EventOccurrence, LocationType} from "../../../types.ts";
 import {resolveEventLocation} from "../../../utilites/effectiveLocation.ts";
+import {UserGeneratedContent} from "../UserGeneratedContent";
 
 interface OnlineEventDetailsProps {
     event?: Event | null;
@@ -21,7 +22,7 @@ export const OnlineEventDetails = (props: OnlineEventDetailsProps) => {
         <div style={{marginTop: "40px", marginBottom: "40px"}}>
             <h2>{t`Online Event Details`}</h2>
             <Card>
-                <div dangerouslySetInnerHTML={{__html: details as string}}/>
+                <UserGeneratedContent html={details as string}/>
             </Card>
         </div>
     );

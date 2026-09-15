@@ -109,6 +109,7 @@ export interface CreateProductPayload {
   waitlist_enabled?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
+  sequential_tier_release_enabled?: boolean;
 }
 
 export interface CreateProductCategoryPayload {

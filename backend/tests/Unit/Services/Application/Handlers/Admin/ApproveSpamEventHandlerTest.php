@@ -12,6 +12,8 @@ use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Admin\ApproveSpamEventHandler;
+use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
@@ -27,6 +29,8 @@ class ApproveSpamEventHandlerTest extends TestCase
 
     private EventSpamCheckService|MockInterface $eventSpamCheckService;
 
+    private EventSpamCheckContentService|MockInterface $eventSpamCheckContentService;
+
     private ApproveSpamEventHandler $handler;
 
     protected function setUp(): void
@@ -36,6 +40,10 @@ class ApproveSpamEventHandlerTest extends TestCase
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $this->eventSpamCheckRepository = Mockery::mock(EventSpamCheckRepositoryInterface::class);
         $this->eventSpamCheckService = Mockery::mock(EventSpamCheckService::class);
+        $this->eventSpamCheckContentService = Mockery::mock(EventSpamCheckContentService::class);
+        $this->eventSpamCheckContentService->shouldReceive('buildForEvent')->andReturn(
+            new EventSpamCheckContentDTO(title: 'T', description: 'D'),
+        );
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($cb) => $cb());
@@ -44,6 +52,7 @@ class ApproveSpamEventHandlerTest extends TestCase
             $this->eventRepository,
             $this->eventSpamCheckRepository,
             $this->eventSpamCheckService,
+            $this->eventSpamCheckContentService,
             $databaseManager,
         );
     }
@@ -63,14 +72,13 @@ class ApproveSpamEventHandlerTest extends TestCase
             ->with(['event_id' => 1, 'status' => EventSpamCheckStatus::FLAGGED->name])
             ->andReturn(new EventSpamCheckDomainObject);
 
-        $this->eventRepository
-            ->shouldReceive('findFirstWhere')
-            ->with(['id' => 1])
+        $this->eventSpamCheckContentService
+            ->shouldReceive('loadEvent')
+            ->with(1)
             ->andReturn((new EventDomainObject)->setTitle('Title')->setDescription('Description'));
 
         $this->eventSpamCheckService
             ->shouldReceive('hashContent')
-            ->with('Title', 'Description')
             ->andReturn('current-hash');
 
         $this->eventRepository
@@ -114,7 +122,7 @@ class ApproveSpamEventHandlerTest extends TestCase
             ->shouldReceive('findFirstWhere')
             ->andReturn(new EventSpamCheckDomainObject);
 
-        $this->eventRepository->shouldReceive('findFirstWhere')->andReturn(new EventDomainObject);
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturn(new EventDomainObject);
         $this->eventRepository->shouldReceive('updateWhere')->andReturn(0);
         $this->eventSpamCheckRepository->shouldNotReceive('updateWhere');
 

@@ -10,13 +10,12 @@ use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\EventPendingReviewException;
 use HiEvents\Exceptions\ResourceNotFoundException;
-use HiEvents\Jobs\Event\EventSpamCheckJob;
 use HiEvents\Jobs\Event\Webhook\DispatchEventWebhookJob;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventStatusDTO;
-use HiEvents\Services\Domain\Event\EventSpamCheckService;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
@@ -29,7 +28,7 @@ readonly class UpdateEventStatusHandler
         private AccountRepositoryInterface $accountRepository,
         private LoggerInterface $logger,
         private DatabaseManager $databaseManager,
-        private EventSpamCheckService $eventSpamCheckService,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -112,11 +111,8 @@ readonly class UpdateEventStatusHandler
         $isBecomingLive = $updateEventStatusDTO->status === EventStatus::LIVE->name
             && $previousStatus !== EventStatus::LIVE->name;
 
-        if ($isBecomingLive && $this->eventSpamCheckService->isEnabled()) {
-            EventSpamCheckJob::dispatch(
-                $event->getId(),
-                $this->eventSpamCheckService->hashContent($event->getTitle(), $event->getDescription()),
-            )->afterCommit();
+        if ($isBecomingLive) {
+            $this->eventSpamCheckDispatchService->dispatchForEvent($event->getId());
         }
 
         return $event;
