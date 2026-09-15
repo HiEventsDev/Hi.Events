@@ -1,4 +1,5 @@
-import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType, ProductQuantityAppliesTo,
+    ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {ProductForm} from "../../forms/ProductForm";
@@ -51,6 +52,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 sale_end_date: undefined,
                 sale_start_date: undefined,
                 initial_quantity_available: undefined,
+                quantity_applies_to: ProductQuantityAppliesTo.Occurrence,
             }],
         },
     });
@@ -90,6 +92,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 sale_start_date: price.sale_start_date,
                 sale_end_date: price.sale_end_date,
                 initial_quantity_available: price.initial_quantity_available,
+                quantity_applies_to: price.quantity_applies_to,
                 is_hidden: price.is_hidden,
             })),
         });

@@ -89,6 +89,7 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                                 currencyCode={event.currency}
                                                 categories={categories}
                                                 category={category}
+                                                isRecurringEvent={event.type === 'RECURRING'}
                                             />
                                         ))}
                                     </div>

@@ -10,12 +10,14 @@ use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
+use HiEvents\Services\Domain\EventOccurrence\OccurrenceBookingLimitsService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetEventOccurrencesHandler
 {
     public function __construct(
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
+        private readonly OccurrenceBookingLimitsService $bookingLimitsService,
     ) {}
 
     public function handle(int $eventId, QueryParamsDTO $queryParams, bool $includeStats = true): LengthAwarePaginator
@@ -29,6 +31,10 @@ class GetEventOccurrencesHandler
             $repository = $repository->loadRelation(EventOccurrenceStatisticDomainObject::class);
         }
 
-        return $repository->findByEventId($eventId, $queryParams);
+        $occurrences = $repository->findByEventId($eventId, $queryParams);
+
+        $this->bookingLimitsService->attachTo($occurrences->getCollection(), $eventId);
+
+        return $occurrences;
     }
 }

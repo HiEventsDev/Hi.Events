@@ -34,8 +34,8 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
-use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\CreateWebhookService;
@@ -605,6 +605,7 @@ class DuplicateEventService
                 'event_occurrence_id' => $oldToNewOccurrenceMap[$override->getEventOccurrenceId()],
                 'product_price_id' => $newPriceId,
                 'price' => $override->getPrice(),
+                'quantity_available' => $override->getQuantityAvailable(),
             ];
         }
         if ($priceOverrideInserts !== []) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Services\Application\Handlers\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -32,6 +33,7 @@ class CreateProductHandler
             ProductPriceDomainObjectAbstract::SALE_START_DATE => $price->sale_start_date,
             ProductPriceDomainObjectAbstract::SALE_END_DATE => $price->sale_end_date,
             ProductPriceDomainObjectAbstract::INITIAL_QUANTITY_AVAILABLE => $price->initial_quantity_available,
+            ProductPriceDomainObjectAbstract::QUANTITY_APPLIES_TO => ($price->quantity_applies_to ?? ProductQuantityAppliesTo::defaultFor($productsData->product_type))->name,
             ProductPriceDomainObjectAbstract::IS_HIDDEN => $price->is_hidden,
         ]));
 

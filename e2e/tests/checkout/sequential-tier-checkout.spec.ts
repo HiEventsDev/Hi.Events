@@ -31,14 +31,14 @@ test.describe('sequential tier release', () => {
     await expect(generalRow.getByText('Not yet on sale')).toBeVisible();
 
     await createCompletedOrder(publicApi, event);
-    await page.reload();
+    await checkout.gotoPublicEventAfterAvailabilityCacheExpires(event.eventId, event.slug);
 
     await expect(earlyBirdRow.getByText('Sold out')).toBeVisible();
     await expect(generalRow).not.toHaveAttribute('data-unavailable');
     await expect(generalRow.getByRole('button', { name: 'Increase quantity' })).toBeVisible();
 
     await createCompletedOrder(publicApi, { ...event, priceId: generalPriceId });
-    await page.reload();
+    await checkout.gotoPublicEventAfterAvailabilityCacheExpires(event.eventId, event.slug);
 
     await expect(productRow.locator('.hi-product-availability:visible')).toHaveCount(2);
     await productRow.locator('.hi-product-title').click();

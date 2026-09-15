@@ -3,6 +3,7 @@
 namespace HiEvents\Services\Domain\Order;
 
 use Exception;
+use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Enums\ProductType;
@@ -425,12 +426,20 @@ class OrderCreateRequestValidationService
 
     private function hydrateReservedQuantitiesAndMarkLockedTiers(ProductDomainObject $product): void
     {
-        $reservedByPriceId = $this->availableProductQuantities
+        $quantitiesByPriceId = $this->availableProductQuantities
             ->productQuantities
             ->keyBy('price_id');
 
-        $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($reservedByPriceId) {
-            $price->setQuantityReserved($reservedByPriceId->get($price->getId())?->quantity_reserved ?? 0);
+        $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($quantitiesByPriceId) {
+            /** @var AvailableProductQuantitiesDTO|null $quantities */
+            $quantities = $quantitiesByPriceId->get($price->getId());
+            $price->setQuantityReserved($quantities?->quantity_reserved ?? 0);
+
+            if ($quantities !== null && $price->isQuantityPerOccurrence()) {
+                $price->setQuantityAvailable(
+                    $quantities->quantity_available === Constants::INFINITE ? null : $quantities->quantity_available
+                );
+            }
         });
 
         $product->markLockedTiers();

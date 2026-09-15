@@ -171,4 +171,45 @@ class AttendeeRepository extends BaseRepository implements AttendeeRepositoryInt
             limit: min($params->per_page, 250),
         );
     }
+
+    public function getSoldQuantitiesByPriceForOccurrence(int $occurrenceId): array
+    {
+        return $this->runQuery(fn () => $this->soldAttendeesQuery()
+            ->where('attendees.event_occurrence_id', $occurrenceId)
+            ->groupBy('attendees.product_price_id')
+            ->selectRaw('attendees.product_price_id, COUNT(*) AS quantity')
+            ->pluck('quantity', 'product_price_id')
+            ->map(fn ($quantity) => (int) $quantity)
+            ->all());
+    }
+
+    public function getMaxSoldPerOccurrenceByPrice(array $productPriceIds): array
+    {
+        return $this->runQuery(fn () => $this->soldAttendeesQuery()
+            ->whereIn('attendees.product_price_id', $productPriceIds)
+            ->whereNotNull('attendees.event_occurrence_id')
+            ->groupBy('attendees.product_price_id', 'attendees.event_occurrence_id')
+            ->selectRaw('attendees.product_price_id, COUNT(*) AS quantity')
+            ->get()
+            ->groupBy('product_price_id')
+            ->map(fn ($rows) => (int) $rows->max('quantity'))
+            ->all());
+    }
+
+    private function soldAttendeesQuery(): Builder
+    {
+        return Attendee::query()
+            ->join('orders', 'orders.id', '=', 'attendees.order_id')
+            ->whereNull('attendees.deleted_at')
+            ->whereNull('orders.deleted_at')
+            ->where(function (Builder $query) {
+                $query
+                    ->where('attendees.status', AttendeeStatus::ACTIVE->name)
+                    ->orWhere(function (Builder $query) {
+                        $query
+                            ->where('attendees.status', AttendeeStatus::AWAITING_PAYMENT->name)
+                            ->where('orders.status', OrderStatus::AWAITING_OFFLINE_PAYMENT->name);
+                    });
+            });
+    }
 }

@@ -84,6 +84,7 @@ export const EditProductModal = ({onClose, productId}: GenericModalProps & { pro
                 sale_start_date: utcToTz(p.sale_start_date, event.timezone),
                 sale_end_date: utcToTz(p.sale_end_date, event.timezone),
                 initial_quantity_available: p.initial_quantity_available ?? undefined,
+                quantity_applies_to: p.quantity_applies_to,
                 id: p.id,
                 is_hidden: p.is_hidden,
             })) ?? [],

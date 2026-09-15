@@ -13,7 +13,6 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Repository\Interfaces\OrderItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -23,6 +22,7 @@ use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\ProductPriceService;
+use HiEvents\Services\Domain\Product\SoldAndReservedQuantitiesService;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -43,7 +43,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
     private ProductOccurrenceVisibilityRepositoryInterface|MockInterface $visibilityRepository;
 
-    private OrderItemRepositoryInterface|MockInterface $orderItemRepository;
+    private SoldAndReservedQuantitiesService|MockInterface $soldAndReservedQuantities;
 
     private ProductPriceService|MockInterface $productPriceService;
 
@@ -59,7 +59,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $this->availabilityService = Mockery::mock(AvailableProductQuantitiesFetchService::class);
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->visibilityRepository = Mockery::mock(ProductOccurrenceVisibilityRepositoryInterface::class);
-        $this->orderItemRepository = Mockery::mock(OrderItemRepositoryInterface::class);
+        $this->soldAndReservedQuantities = Mockery::mock(SoldAndReservedQuantitiesService::class);
         $this->productPriceService = Mockery::mock(ProductPriceService::class);
 
         $this->visibilityRepository
@@ -67,8 +67,8 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             ->byDefault()
             ->andReturn(collect());
 
-        $this->orderItemRepository
-            ->shouldReceive('getReservedQuantityForOccurrence')
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getReservedTicketsForOccurrence')
             ->byDefault()
             ->andReturn(0);
 
@@ -95,7 +95,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
 
         $eligibilityService = new OccurrencePurchaseEligibilityService(
             $this->occurrenceRepository,
-            $this->orderItemRepository,
+            $this->soldAndReservedQuantities,
             $this->visibilityRepository,
         );
 
@@ -1096,6 +1096,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn($priceBeforeSaleStart);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn($priceAfterSaleEnd);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);
@@ -1137,6 +1138,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
         $price->shouldReceive('isBeforeSaleStartDate')->andReturn(false);
         $price->shouldReceive('isAfterSaleEndDate')->andReturn(false);
         $price->shouldReceive('setQuantityReserved')->andReturnSelf();
+        $price->shouldReceive('isQuantityPerOccurrence')->andReturn(false);
         $price->shouldReceive('isLockedBehindEarlierTier')->andReturn(false);
 
         $product = Mockery::mock(ProductDomainObject::class);

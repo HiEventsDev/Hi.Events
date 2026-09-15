@@ -1,16 +1,15 @@
 import {t, Trans} from "@lingui/macro";
 import {UseFormReturnType} from "@mantine/form";
-import {Event, EventType, Product, ProductPrice} from "../../../types.ts";
-import {ActionIcon, NumberInput, Switch, TextInput} from "@mantine/core";
-import {IconGripVertical, IconTrash, IconTrashOff} from "@tabler/icons-react";
-import {Callout} from "../../common/Callout";
-import {NavLink} from "react-router";
+import {Event, EventType, Product, ProductPrice, ProductQuantityAppliesTo, ProductType} from "../../../types.ts";
+import {ActionIcon, Menu, NumberInput, Switch, TextInput, UnstyledButton} from "@mantine/core";
+import {IconCheck, IconChevronDown, IconGripVertical, IconTrash, IconTrashOff} from "@tabler/icons-react";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {Card} from "../../common/Card";
 import classes from './ProductForm.module.scss';
 import {InputGroup} from "../../common/InputGroup";
 import {showError} from "../../../utilites/notifications.tsx";
 import classNames from "classnames";
+import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {closestCenter, DndContext, DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
@@ -22,18 +21,90 @@ interface ProductPriceTierFormProps {
     event?: Event,
 }
 
-export const hasQuantityValue = (value: unknown): boolean =>
-    value !== undefined && value !== null && value !== '';
+export const defaultQuantityAppliesTo = (productType?: ProductType): ProductQuantityAppliesTo =>
+    productType === ProductType.General ? ProductQuantityAppliesTo.Event : ProductQuantityAppliesTo.Occurrence;
 
-export const SeriesQuantityWarning = ({eventId}: { eventId?: string | number }) => (
-    <Callout variant="warning" style={{marginBottom: 20}}>
-        <Trans>
-            This limits total sales across every date in your schedule combined — it is not a
-            per-date limit. To limit attendance for each date, set a capacity on the <NavLink
-            to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.
-        </Trans>
-    </Callout>
-);
+interface QuantityFieldProps {
+    form: UseFormReturnType<Product>;
+    index: number;
+    isRecurring: boolean;
+    testId?: string;
+}
+
+export const QuantityField = ({form, index, isRecurring, testId}: QuantityFieldProps) => {
+    const appliesTo = form.values.prices?.[index]?.quantity_applies_to
+        ?? defaultQuantityAppliesTo(form.values.product_type);
+    const perDate = isRecurring && appliesTo === ProductQuantityAppliesTo.Occurrence;
+
+    const helpText = (() => {
+        if (!isRecurring) {
+            return (
+                <Trans>
+                    <p>The number of products available for this product</p>
+                    <p>
+                        This value can be overridden if there are <a target={'__blank'}
+                                                                     href={'capacity-assignments'}>Capacity
+                        Limits</a> associated with this product.
+                    </p>
+                </Trans>
+            );
+        }
+        return perDate
+            ? t`Applies to each date in your schedule. Dates with a capacity are also limited by it. You can override it for a single date on the Occurrence Schedule page.`
+            : t`One pool shared by every date.`;
+    })();
+
+    const scopeOptions = [
+        {
+            value: ProductQuantityAppliesTo.Occurrence,
+            label: t`Per date`,
+            description: t`Applies to each date in your schedule`,
+        },
+        {
+            value: ProductQuantityAppliesTo.Event,
+            label: t`All dates`,
+            description: t`One pool shared by every date.`,
+        },
+    ];
+
+    const scopeMenu = isRecurring ? (
+        <Menu position="bottom-end" width={260} shadow="md">
+            <Menu.Target>
+                <UnstyledButton className={classes.quantityScope} data-testid={testId}>
+                    {perDate ? t`per date` : t`all dates`}
+                    <IconChevronDown size={12}/>
+                </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+                {scopeOptions.map((option) => (
+                    <Menu.Item
+                        key={option.value}
+                        data-testid={`${testId}-option-${option.value}`}
+                        rightSection={appliesTo === option.value ? <IconCheck size={14}/> : undefined}
+                        onClick={() => form.setFieldValue(`prices.${index}.quantity_applies_to`, option.value)}
+                    >
+                        <div className={classes.quantityScopeOption}>
+                            <span className={classes.quantityScopeOptionLabel}>{option.label}</span>
+                            <span className={classes.quantityScopeOptionDescription}>{option.description}</span>
+                        </div>
+                    </Menu.Item>
+                ))}
+            </Menu.Dropdown>
+        </Menu>
+    ) : undefined;
+
+    return (
+        <NumberInput
+            min={0}
+            placeholder={t`Unlimited`}
+            {...form.getInputProps(`prices.${index}.initial_quantity_available`)}
+            label={<InputLabelWithHelp label={t`Quantity Available`} helpText={helpText}/>}
+            rightSection={scopeMenu}
+            rightSectionWidth={isRecurring ? 96 : undefined}
+            rightSectionPointerEvents="all"
+        />
+    );
+};
 
 const SortableTierCard = ({index, sortable, children}: { index: number; sortable: boolean; children: ReactNode }) => {
     const {attributes, listeners, setNodeRef, transform, transition, isDragging} = useSortable({
@@ -57,7 +128,7 @@ const SortableTierCard = ({index, sortable, children}: { index: number; sortable
 };
 
 export const ProductPriceTierForm = ({form, product, event}: ProductPriceTierFormProps) => {
-    const isRecurringTicket = event?.type === EventType.RECURRING && form.values.product_type === 'TICKET';
+    const isRecurring = event?.type === EventType.RECURRING;
     const prices: ProductPrice[] = form.values.prices ?? [];
     const sortable = prices.length > 1;
     const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
@@ -102,14 +173,12 @@ export const ProductPriceTierForm = ({form, product, event}: ProductPriceTierFor
                                     required
                                 />
                             </InputGroup>
-                            <NumberInput
-                                placeholder={t`Unlimited`}
-                                {...form.getInputProps(`prices.${index}.initial_quantity_available`)}
-                                label={isRecurringTicket ? t`Total Quantity Across All Dates` : t`Quantity Available`}
+                            <QuantityField
+                                form={form}
+                                index={index}
+                                isRecurring={isRecurring}
+                                testId={`product-tier-${index}-quantity-applies-to`}
                             />
-                            {!product && isRecurringTicket && hasQuantityValue(price.initial_quantity_available) && (
-                                <SeriesQuantityWarning eventId={event?.id}/>
-                            )}
                             <InputGroup>
                                 <TextInput
                                     type={'datetime-local'}

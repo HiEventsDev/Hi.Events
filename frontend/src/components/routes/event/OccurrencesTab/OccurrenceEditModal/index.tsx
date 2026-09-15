@@ -43,15 +43,20 @@ import {showSuccess, showError} from "../../../../../utilites/notifications.tsx"
 import {isEmptyHtml} from "../../../../../utilites/helpers.ts";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {OccurrenceProductSettings} from "../PriceOverrideForm";
+import {BookingSummary} from "../BookingSummary";
+import {CapacityHelpLink} from "../../../../common/CapacityHelp";
 import {SendMessageModal} from "../../../../modals/SendMessageModal";
 import {MessageType} from "../../../../../types.ts";
 import {buildSingleRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceEditModal.module.scss';
 
+export type OccurrenceEditTab = 'details' | 'products';
+
 interface OccurrenceEditModalProps extends GenericModalProps {
     occurrenceId?: IdParam;
     duplicateFrom?: EventOccurrence;
     defaultDate?: string;
+    initialTab?: OccurrenceEditTab;
 }
 
 type CapacityVisibility = 'inherit' | 'show' | 'hide';
@@ -62,7 +67,7 @@ const capacityVisibilityToForm = (value?: boolean | null): CapacityVisibility =>
 const capacityVisibilityToPayload = (value: CapacityVisibility): boolean | null =>
     value === 'show' ? true : value === 'hide' ? false : null;
 
-export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defaultDate}: OccurrenceEditModalProps) => {
+export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defaultDate, initialTab = 'details'}: OccurrenceEditModalProps) => {
     const {eventId} = useParams();
     const isEditing = !!occurrenceId;
     const errorHandler = useFormErrorResponseHandler();
@@ -401,7 +406,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
             heading={isEditing ? t`Edit Date` : duplicateFrom ? t`Duplicate Date` : t`Add Date`}
             size="lg"
         >
-            <Tabs defaultValue="details">
+            <Tabs defaultValue={initialTab}>
                 <Tabs.List>
                     <Tabs.Tab value="details" leftSection={<IconEdit size={14}/>}>
                         {t`Details`}
@@ -501,6 +506,7 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                 <div className={classes.sectionHeader}>
                                     <div className={classes.sectionIcon}><IconUsers size={16}/></div>
                                     <span className={classes.sectionTitle}>{t`Capacity`}</span>
+                                    <span className={classes.sectionAction}><CapacityHelpLink/></span>
                                 </div>
                                 <NumberInput
                                     {...form.getInputProps('capacity')}
@@ -508,6 +514,17 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     min={0}
                                     allowNegative={false}
                                 />
+                                {isEditing && occurrence?.booking_limits && (
+                                    <div className={classes.capacityStats}>
+                                        <BookingSummary
+                                            capacity={form.values.capacity === null || form.values.capacity === undefined || (form.values.capacity as unknown) === ''
+                                                ? null
+                                                : Number(form.values.capacity)}
+                                            booked={occurrence.used_capacity ?? 0}
+                                            allocations={occurrence.booking_limits.allocations}
+                                        />
+                                    </div>
+                                )}
                                 <Callout
                                     variant="info"
                                     title={t`Only tickets count toward capacity`}

@@ -23,6 +23,6 @@ class ProductCategory extends BaseModel
 
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class)->orderBy('order');
     }
 }

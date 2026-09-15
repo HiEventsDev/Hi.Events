@@ -20,6 +20,7 @@ import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResp
 import {SendMessageModal} from "../../../../modals/SendMessageModal";
 import {buildBulkRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceBulkEditModal.module.scss';
+import {CapacityHelpLink} from "../../../../common/CapacityHelp";
 
 type BulkAction = 'shift_times' | 'change_duration' | 'update_capacity' | 'update_label' | 'update_location';
 type BulkLocationMode = 'in_person' | 'online' | 'clear';
@@ -441,6 +442,7 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                                 label={t`Set to unlimited (remove limit)`}
                                 {...form.getInputProps('clear_capacity', {type: 'checkbox'})}
                             />
+                            <div className={classes.helpRow}><CapacityHelpLink/></div>
                         </>
                     )}
 

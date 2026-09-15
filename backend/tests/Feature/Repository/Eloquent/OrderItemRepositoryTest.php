@@ -105,7 +105,7 @@ class OrderItemRepositoryTest extends TestCase
 
     public function test_returns_zero_when_no_reservations(): void
     {
-        $this->assertSame(0, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(0, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_sums_active_reservations_for_occurrence(): void
@@ -121,7 +121,7 @@ class OrderItemRepositoryTest extends TestCase
             occurrenceQuantities: [$this->occurrenceId => 2],
         );
 
-        $this->assertSame(5, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(5, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_ignores_expired_reservations(): void
@@ -137,7 +137,7 @@ class OrderItemRepositoryTest extends TestCase
             occurrenceQuantities: [$this->occurrenceId => 4],
         );
 
-        $this->assertSame(4, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(4, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_ignores_non_reserved_orders(): void
@@ -158,7 +158,7 @@ class OrderItemRepositoryTest extends TestCase
             occurrenceQuantities: [$this->occurrenceId => 1],
         );
 
-        $this->assertSame(1, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(1, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_ignores_soft_deleted_orders(): void
@@ -175,7 +175,7 @@ class OrderItemRepositoryTest extends TestCase
             occurrenceQuantities: [$this->occurrenceId => 2],
         );
 
-        $this->assertSame(2, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(2, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_scopes_by_occurrence_id(): void
@@ -189,8 +189,8 @@ class OrderItemRepositoryTest extends TestCase
             ],
         );
 
-        $this->assertSame(3, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
-        $this->assertSame(7, $this->repository->getReservedQuantityForOccurrence($this->otherOccurrenceId));
+        $this->assertSame(3, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(7, $this->repository->getReservedTicketQuantityForOccurrence($this->otherOccurrenceId));
     }
 
     public function test_ignores_general_product_order_items(): void
@@ -207,7 +207,7 @@ class OrderItemRepositoryTest extends TestCase
             occurrenceQuantities: [$this->occurrenceId => 2],
         );
 
-        $this->assertSame(2, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(2, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
     }
 
     public function test_ignores_soft_deleted_order_items(): void
@@ -244,7 +244,56 @@ class OrderItemRepositoryTest extends TestCase
             'deleted_at' => now(),
         ]);
 
-        $this->assertSame(4, $this->repository->getReservedQuantityForOccurrence($this->occurrenceId));
+        $this->assertSame(4, $this->repository->getReservedTicketQuantityForOccurrence($this->occurrenceId));
+    }
+
+    public function test_reserved_quantities_by_price_include_general_products(): void
+    {
+        $otherPriceId = DB::table('product_prices')->insertGetId([
+            'product_id' => $this->productId,
+            'price' => 10.00,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->occurrenceId => 3]);
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->occurrenceId => 2], productType: ProductType::GENERAL->name, productPriceId: $otherPriceId);
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->subMinute(), [$this->occurrenceId => 9]);
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->otherOccurrenceId => 4]);
+
+        $this->assertSame(
+            [$this->productPriceId => 3, $otherPriceId => 2],
+            $this->repository->getReservedQuantitiesByPrice($this->eventId, $this->occurrenceId),
+        );
+    }
+
+    public function test_reserved_quantities_by_price_for_the_whole_event_span_occurrences_and_skip_deleted_items(): void
+    {
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->occurrenceId => 3, $this->otherOccurrenceId => 4]);
+        $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->subMinute(), [$this->occurrenceId => 9]);
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->occurrenceId => 5]);
+        $deletedItemsOrder = $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->occurrenceId => 6]);
+        DB::table('order_items')->where('order_id', $deletedItemsOrder)->update(['deleted_at' => now()]);
+
+        $this->assertSame([$this->productPriceId => 7], $this->repository->getReservedQuantitiesByPrice($this->eventId));
+    }
+
+    public function test_sold_general_quantities_by_price_count_completed_and_offline_pending_orders(): void
+    {
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->occurrenceId => 2], productType: ProductType::GENERAL->name);
+        $this->insertOrderWithItems(OrderStatus::AWAITING_OFFLINE_PAYMENT->name, now(), [$this->occurrenceId => 1], productType: ProductType::GENERAL->name);
+        $this->insertOrderWithItems(OrderStatus::CANCELLED->name, now(), [$this->occurrenceId => 5], productType: ProductType::GENERAL->name);
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->occurrenceId => 7]);
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->otherOccurrenceId => 4], productType: ProductType::GENERAL->name);
+
+        $this->assertSame([$this->productPriceId => 3], $this->repository->getSoldQuantitiesByPriceForOccurrence($this->occurrenceId));
+    }
+
+    public function test_max_sold_general_quantity_on_a_single_occurrence(): void
+    {
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->occurrenceId => 2, $this->otherOccurrenceId => 5], productType: ProductType::GENERAL->name);
+        $this->insertOrderWithItems(OrderStatus::COMPLETED->name, now(), [$this->occurrenceId => 1], productType: ProductType::GENERAL->name);
+
+        $this->assertSame([$this->productPriceId => 5], $this->repository->getMaxSoldPerOccurrenceByPrice([$this->productPriceId]));
     }
 
     /**
@@ -256,6 +305,7 @@ class OrderItemRepositoryTest extends TestCase
         array $occurrenceQuantities,
         ?\DateTimeInterface $deletedAt = null,
         string $productType = ProductType::TICKET->name,
+        ?int $productPriceId = null,
     ): int {
         $orderId = DB::table('orders')->insertGetId([
             'short_id' => 'ord_'.uniqid(),
@@ -273,7 +323,7 @@ class OrderItemRepositoryTest extends TestCase
             DB::table('order_items')->insert([
                 'order_id' => $orderId,
                 'product_id' => $this->productId,
-                'product_price_id' => $this->productPriceId,
+                'product_price_id' => $productPriceId ?? $this->productPriceId,
                 'product_type' => $productType,
                 'event_occurrence_id' => $occurrenceId,
                 'quantity' => $quantity,

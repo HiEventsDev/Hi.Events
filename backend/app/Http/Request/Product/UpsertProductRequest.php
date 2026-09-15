@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Http\Request\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\Rules\RulesHelper;
@@ -29,6 +30,7 @@ class UpsertProductRequest extends BaseRequest
             'prices.*.sale_end_date' => 'date|nullable|after:prices.*.sale_start_date',
             'prices.*.initial_quantity_available' => [...RulesHelper::INTEGER, 'nullable', 'min:0'],
             'prices.*.is_hidden' => ['boolean'],
+            'prices.*.quantity_applies_to' => ['nullable', Rule::in(ProductQuantityAppliesTo::valuesArray())],
             'description' => 'string|nullable',
             'min_per_order' => [...RulesHelper::INTEGER, 'nullable'],
             'is_hidden' => 'boolean',

@@ -24,6 +24,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const IS_HIDDEN = 'is_hidden';
     final public const ORDER = 'order';
     final public const QUANTITY_AVAILABLE = 'quantity_available';
+    final public const QUANTITY_APPLIES_TO = 'quantity_applies_to';
 
     protected int $id;
     protected int $product_id;
@@ -39,6 +40,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected ?bool $is_hidden = false;
     protected int $order = 1;
     protected ?int $quantity_available = null;
+    protected string $quantity_applies_to = 'OCCURRENCE';
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'is_hidden' => $this->is_hidden ?? null,
                     'order' => $this->order ?? null,
                     'quantity_available' => $this->quantity_available ?? null,
+                    'quantity_applies_to' => $this->quantity_applies_to ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class ProductPriceDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getQuantityAvailable(): ?int
     {
         return $this->quantity_available;
+    }
+
+    public function setQuantityAppliesTo(string $quantity_applies_to): self
+    {
+        $this->quantity_applies_to = $quantity_applies_to;
+        return $this;
+    }
+
+    public function getQuantityAppliesTo(): string
+    {
+        return $this->quantity_applies_to;
     }
 }

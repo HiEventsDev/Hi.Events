@@ -66,12 +66,23 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
         $attendeesBuilder->shouldReceive('distinct')->andReturnSelf();
         $attendeesBuilder->shouldReceive('pluck')->andReturn(collect($occurrenceIdsWithAttendees));
 
+        $emptyBuilder = Mockery::mock(Builder::class);
+        $emptyBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $emptyBuilder->shouldReceive('distinct')->andReturnSelf();
+        $emptyBuilder->shouldReceive('pluck')->andReturn(collect());
+
         DB::shouldReceive('table')
             ->with('order_items')
             ->andReturn($orderItemsBuilder);
         DB::shouldReceive('table')
             ->with('attendees')
             ->andReturn($attendeesBuilder);
+        DB::shouldReceive('table')
+            ->with('product_price_occurrence_overrides')
+            ->andReturn($emptyBuilder);
+        DB::shouldReceive('table')
+            ->with('product_occurrence_visibility')
+            ->andReturn($emptyBuilder);
     }
 
     public function test_new_occurrences_are_bulk_inserted_when_none_exist(): void

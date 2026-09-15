@@ -33,6 +33,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import classes from './RecurrenceScheduleDrawer.module.scss';
+import {CapacityHelpLink} from "../../../../common/CapacityHelp";
 
 const MAX_PREVIEW = 1200;
 
@@ -1112,7 +1113,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                 />
                             </div>
                             <p className={classes.fieldHint}>
-                                {t`You can override this for individual dates later.`}
+                                {t`You can override this for individual dates later.`} <CapacityHelpLink/>
                             </p>
                         </div>
                     </form>

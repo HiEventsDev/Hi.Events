@@ -17,4 +17,11 @@ class AvailableProductQuantitiesResponseDTO extends BaseDTO
         public ?EventOccurrenceDomainObject $occurrence = null,
         public ?int $occurrenceReservedQuantity = null,
     ) {}
+
+    public function getAvailableQuantityForPrice(int $productPriceId): int
+    {
+        return $this->productQuantities
+            ->first(fn (AvailableProductQuantitiesDTO $dto) => $dto->price_id === $productPriceId)
+            ?->quantity_available ?? 0;
+    }
 }

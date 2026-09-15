@@ -4,6 +4,7 @@ namespace Tests\Unit\DomainObjects;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use Tests\TestCase;
@@ -64,6 +65,34 @@ class ProductDomainObjectTest extends TestCase
     {
         $product = $this->createTieredProduct(sequential: true, prices: [
             $this->createPrice(id: 1, order: 1, initialQuantity: 10, sold: 7)->setQuantityReserved(3),
+            $this->createPrice(id: 2, order: 2, initialQuantity: 10, sold: 0),
+        ]);
+
+        $product->markLockedTiers();
+
+        $this->assertSame([false, false], $this->lockedFlags($product));
+    }
+
+    public function test_per_date_tier_is_exhausted_from_resolved_availability_not_event_wide_sales(): void
+    {
+        $product = $this->createTieredProduct(sequential: true, prices: [
+            $this->createPrice(id: 1, order: 1, initialQuantity: 10, sold: 40)
+                ->setQuantityAppliesTo(ProductQuantityAppliesTo::OCCURRENCE->name)
+                ->setQuantityAvailable(4),
+            $this->createPrice(id: 2, order: 2, initialQuantity: 10, sold: 0),
+        ]);
+
+        $product->markLockedTiers();
+
+        $this->assertSame([false, true], $this->lockedFlags($product));
+    }
+
+    public function test_per_date_tier_with_no_availability_on_this_date_unlocks_next_tier(): void
+    {
+        $product = $this->createTieredProduct(sequential: true, prices: [
+            $this->createPrice(id: 1, order: 1, initialQuantity: 10, sold: 2)
+                ->setQuantityAppliesTo(ProductQuantityAppliesTo::OCCURRENCE->name)
+                ->setQuantityAvailable(0),
             $this->createPrice(id: 2, order: 2, initialQuantity: 10, sold: 0),
         ]);
 
@@ -152,6 +181,7 @@ class ProductDomainObjectTest extends TestCase
             ->setOrder($order)
             ->setPrice(10.00)
             ->setInitialQuantityAvailable($initialQuantity)
+            ->setQuantityAppliesTo(ProductQuantityAppliesTo::EVENT->name)
             ->setQuantitySold($sold);
     }
 

@@ -16,8 +16,6 @@ interface ProductRepositoryInterface extends RepositoryInterface
 {
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator;
 
-    public function getQuantityRemainingForProductPrice(int $productId, int $productPriceId): int;
-
     public function getTaxesByProductId(int $productId): Collection;
 
     public function getProductsByTaxId(int $taxId): Collection;

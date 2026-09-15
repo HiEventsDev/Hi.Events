@@ -29,6 +29,7 @@ import {
     ProductCategory,
     ProductPrice,
     ProductPriceType,
+    ProductQuantityAppliesTo,
     ProductType
 } from "../../../../types.ts";
 import {useDisclosure} from "@mantine/hooks";
@@ -46,11 +47,12 @@ interface SortableProductProps {
     currencyCode: string;
     category: ProductCategory;
     categories: ProductCategory[];
+    isRecurringEvent?: boolean;
 }
 
 const addonBadgeLabel = (count: number): string => count === 1 ? t`1 add-on` : t`${count} add-ons`;
 
-export const SortableProduct = ({product, currencyCode, category, categories}: SortableProductProps) => {
+export const SortableProduct = ({product, currencyCode, category, categories, isRecurringEvent}: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
@@ -152,6 +154,35 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
         }
         return product.taxes_and_fees.map(tf => tf.name).join(', ');
     }
+
+    const quantityScope = (): 'per-date' | 'total' | 'mixed' | null => {
+        const prices = product.prices ?? [];
+        if (!isRecurringEvent || prices.length === 0) {
+            return null;
+        }
+        if (prices.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Occurrence)) {
+            return 'per-date';
+        }
+        if (prices.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Event)) {
+            return 'total';
+        }
+        return 'mixed';
+    };
+
+    const quantityScopeLabel = (): string | null => {
+        switch (quantityScope()) {
+            case 'per-date':
+                return t`per date`;
+            case 'total':
+                return t`total`;
+            case 'mixed':
+                return t`mixed`;
+            default:
+                return null;
+        }
+    };
+
+    const perDateAllocation = product.initial_quantity_available;
 
     const getSalesProgress = () => {
         const sold = Number(product.quantity_sold) || 0;
@@ -420,11 +451,19 @@ export const SortableProduct = ({product, currencyCode, category, categories}: S
                                 {isTicket ? t`Attendees` : t`Sold`}
                             </span>
                             <div className={classes.salesValue}>
-                                {salesProgress ? (
+                                {quantityScope() === 'per-date' && perDateAllocation ? (
+                                    <span className={classes.salesCount}>
+                                        {Number(product.quantity_sold)}
+                                        <span className={classes.salesTotal}> · {t`up to ${perDateAllocation} per date`}</span>
+                                    </span>
+                                ) : salesProgress ? (
                                     <div className={classes.salesWithProgress}>
                                         <span className={classes.salesCount}>
                                             {salesProgress.sold}
                                             <span className={classes.salesTotal}>/ {salesProgress.total}</span>
+                                            {quantityScopeLabel() && (
+                                                <span className={classes.salesTotal}> {quantityScopeLabel()}</span>
+                                            )}
                                         </span>
                                         <Progress
                                             value={salesProgress.percentage}
