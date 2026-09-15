@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\File;
 
 class HtmlPurifierService
 {
+    private const ENCODED_LIQUID_TOKEN = '/%7B%7B((?:%20|%7C|[A-Za-z0-9_.\-])*)%7D%7D/i';
+
+    private const DECODABLE = [
+        '%20' => ' ',
+        '%7C' => '|',
+        '%7c' => '|',
+    ];
+
     private HTMLPurifier_Config $config;
 
     public function __construct(private readonly HTMLPurifier $htmlPurifier)
@@ -28,6 +36,10 @@ class HtmlPurifierService
             return null;
         }
 
-        return $this->htmlPurifier->purify($html, $this->config);
+        return preg_replace_callback(
+            self::ENCODED_LIQUID_TOKEN,
+            static fn (array $matches): string => '{{'.strtr($matches[1], self::DECODABLE).'}}',
+            $this->htmlPurifier->purify($html, $this->config),
+        );
     }
 }
