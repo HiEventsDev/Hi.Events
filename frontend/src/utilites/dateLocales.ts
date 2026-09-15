@@ -39,6 +39,19 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
+    'fi': {
+        fullDateTime: 'ddd D. MMM YYYY HH.mm',
+        shortDateTime: 'D. MMM YYYY HH.mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH.mm',
+        monthShort: 'MMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
+        timeOnly: 'HH.mm',
+        timezone: 'z',
+        dateTimePicker: 'D. MMM YYYY [klo] HH.mm'
+    },
     'fr': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
         shortDateTime: 'D MMM YYYY HH:mm',

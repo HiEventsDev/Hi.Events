@@ -16,6 +16,8 @@ export const LanguageSwitcher = () => {
                 return t`German`;
             case "en":
                 return t`English`;
+            case "fi":
+                return t`Finnish`;
             case "es":
                 return t`Spanish`;
             case "fr":
