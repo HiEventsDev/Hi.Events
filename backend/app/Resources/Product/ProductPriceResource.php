@@ -25,6 +25,7 @@ class ProductPriceResource extends BaseResource
             'initial_quantity_available' => $this->getInitialQuantityAvailable(),
             'quantity_sold' => $this->getQuantitySold(),
             'is_sold_out' => $this->isSoldOut(),
+            'is_locked_behind_earlier_tier' => $this->isLockedBehindEarlierTier(),
             'is_hidden' => $this->getIsHidden(),
             'off_sale_reason' => $this->getOffSaleReason(),
             'price_including_taxes_and_fees' => $this->getPriceIncludingTaxAndServiceFee(),

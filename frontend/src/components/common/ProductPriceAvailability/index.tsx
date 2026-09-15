@@ -35,6 +35,14 @@ const ProductPriceSaleDateMessage = ({price, event, product, eventOccurrenceId}:
         );
     }
 
+    if (product.is_sold_out || product.is_after_sale_end_date || product.is_before_sale_start_date) {
+        return <ProductAvailabilityMessage product={product} event={event} eventOccurrenceId={eventOccurrenceId}/>;
+    }
+
+    if (price.is_locked_behind_earlier_tier) {
+        return t`Not yet on sale`;
+    }
+
     return t`Not available`;
 }
 

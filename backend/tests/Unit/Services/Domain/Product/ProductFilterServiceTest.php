@@ -144,6 +144,61 @@ class ProductFilterServiceTest extends TestCase
         $this->assertTrue($result->isEmpty());
     }
 
+    public function test_sequential_release_locks_later_tiers_but_keeps_them_visible(): void
+    {
+        $product = $this->createSequentialTieredProduct();
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 5),
+            $this->createQuantityDto(productId: 1, priceId: 101, quantityAvailable: 50),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$product]));
+
+        $prices = $result->first()->getProductPrices()->values();
+        $this->assertCount(2, $prices);
+        $this->assertTrue($prices[0]->isAvailable());
+        $this->assertFalse($prices[0]->isLockedBehindEarlierTier());
+        $this->assertFalse($prices[1]->isAvailable());
+        $this->assertTrue($prices[1]->isLockedBehindEarlierTier());
+        $this->assertSame('Price is locked until earlier tiers sell out', $prices[1]->getOffSaleReason());
+        $this->assertSame(5, $result->first()->getQuantityAvailable());
+    }
+
+    public function test_sequential_release_unlocks_next_tier_when_earlier_tier_is_fully_reserved(): void
+    {
+        $product = $this->createSequentialTieredProduct();
+
+        $this->expectAccountConfigurationLoad();
+        $this->expectQuantities([
+            $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 0, quantityReserved: 10),
+            $this->createQuantityDto(productId: 1, priceId: 101, quantityAvailable: 50),
+        ]);
+
+        $result = $this->service->filterProducts(collect([$product]));
+
+        $prices = $result->first()->getProductPrices()->values();
+        $this->assertFalse($prices[0]->isAvailable());
+        $this->assertTrue($prices[0]->isSoldOut());
+        $this->assertTrue($prices[1]->isAvailable());
+        $this->assertFalse($prices[1]->isLockedBehindEarlierTier());
+    }
+
+    private function createSequentialTieredProduct(): ProductDomainObject
+    {
+        return (new ProductDomainObject)
+            ->setId(1)
+            ->setEventId(self::EVENT_ID)
+            ->setProductCategoryId(5)
+            ->setType(ProductPriceType::TIERED->name)
+            ->setSequentialTierReleaseEnabled(true)
+            ->setProductPrices(collect([
+                (new ProductPriceDomainObject)->setId(100)->setOrder(1)->setPrice(0.00)->setInitialQuantityAvailable(10)->setQuantitySold(0),
+                (new ProductPriceDomainObject)->setId(101)->setOrder(2)->setPrice(0.00)->setInitialQuantityAvailable(50)->setQuantitySold(0),
+            ]));
+    }
+
     private function createFreeProduct(int $id, int $priceId, int $productCategoryId = 5): ProductDomainObject
     {
         return (new ProductDomainObject)
@@ -158,7 +213,7 @@ class ProductFilterServiceTest extends TestCase
             ]));
     }
 
-    private function createQuantityDto(int $productId, int $priceId, int $quantityAvailable): AvailableProductQuantitiesDTO
+    private function createQuantityDto(int $productId, int $priceId, int $quantityAvailable, int $quantityReserved = 0): AvailableProductQuantitiesDTO
     {
         return new AvailableProductQuantitiesDTO(
             product_id: $productId,
@@ -166,7 +221,7 @@ class ProductFilterServiceTest extends TestCase
             product_title: 'Ticket',
             price_label: null,
             quantity_available: $quantityAvailable,
-            quantity_reserved: 0,
+            quantity_reserved: $quantityReserved,
             initial_quantity_available: null,
             product_type: 'TICKET',
         );

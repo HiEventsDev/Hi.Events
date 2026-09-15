@@ -6,6 +6,7 @@ namespace HiEvents\Services\Application\Handlers\Product;
 
 use Exception;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -127,6 +128,7 @@ class EditProductHandler
                 'hide_before_sale_start_date' => $productsData->hide_before_sale_start_date,
                 'hide_after_sale_end_date' => $productsData->hide_after_sale_end_date,
                 'hide_when_sold_out' => $productsData->hide_when_sold_out,
+                'sequential_tier_release_enabled' => $productsData->type === ProductPriceType::TIERED && $productsData->sequential_tier_release_enabled,
                 'show_quantity_remaining' => $productsData->show_quantity_remaining,
                 'is_hidden_without_promo_code' => $productsData->is_hidden_without_promo_code,
                 'product_type' => $productsData->product_type->name,

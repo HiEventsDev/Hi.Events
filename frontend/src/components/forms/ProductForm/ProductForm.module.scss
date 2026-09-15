@@ -14,6 +14,32 @@
   }
 }
 
+.priceTierCard.dragging {
+  opacity: 0.85;
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.tierDragHandle {
+  position: absolute;
+  top: 0;
+  right: 44px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  cursor: grab;
+  color: var(--mantine-color-gray-5);
+  touch-action: none;
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
 .removeTier {
   position: absolute;
   top: 0;
