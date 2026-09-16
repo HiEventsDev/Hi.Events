@@ -44,6 +44,11 @@ export class CheckoutPage {
     await this.page.waitForLoadState('networkidle');
   }
 
+  async gotoPublicEventAfterAvailabilityCacheExpires(eventId: number, slug: string): Promise<void> {
+    await this.page.waitForTimeout(2500);
+    await this.gotoPublicEvent(eventId, slug);
+  }
+
   async setFirstProductQuantity(quantity: number): Promise<void> {
     await setWidgetQuantity(this.surface, quantity);
   }

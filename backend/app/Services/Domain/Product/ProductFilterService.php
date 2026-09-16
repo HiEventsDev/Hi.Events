@@ -176,12 +176,16 @@ class ProductFilterService
             });
         }
 
-        $product->getProductPrices()?->map(function (ProductPriceDomainObject $price) use ($productQuantities) {
-            $availableQuantity = $productQuantities->where('price_id', $price->getId())->first()?->quantity_available;
+        $quantitiesByPriceId = $productQuantities->keyBy('price_id');
+
+        $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($quantitiesByPriceId) {
+            $priceQuantities = $quantitiesByPriceId->get($price->getId());
+            $availableQuantity = $priceQuantities?->quantity_available;
             $availableQuantity = $availableQuantity === Constants::INFINITE ? null : $availableQuantity;
             $price->setQuantityAvailable(
                 max($availableQuantity, 0)
             );
+            $price->setQuantityReserved($priceQuantities?->quantity_reserved ?? 0);
         });
 
         $productQuantities->each(function (AvailableProductQuantitiesDTO $quantity) use ($product) {
@@ -321,11 +325,17 @@ class ProductFilterService
             $hidden = true;
         }
 
+        if ($price->isLockedBehindEarlierTier() && $price->getOffSaleReason() === null) {
+            $price->setOffSaleReason(__('Price is locked until earlier tiers sell out'));
+        }
+
         return $hidden && $hideSoldOutProducts;
     }
 
     private function processProductPrices(ProductDomainObject $product, bool $hideSoldOutProducts = true): void
     {
+        $product->markLockedTiers();
+
         $product->setProductPrices(
             $product->getProductPrices()
                 ?->each(fn (ProductPriceDomainObject $price) => $this->processProductPrice($product, $price))
@@ -356,7 +366,8 @@ class ProductFilterService
             return ! $price->isSoldOut()
                 && ! $price->isBeforeSaleStartDate()
                 && ! $price->isAfterSaleEndDate()
-                && ! $price->getIsHidden();
+                && ! $price->getIsHidden()
+                && ! $price->isLockedBehindEarlierTier();
         }
 
         return ! $product->isSoldOut()

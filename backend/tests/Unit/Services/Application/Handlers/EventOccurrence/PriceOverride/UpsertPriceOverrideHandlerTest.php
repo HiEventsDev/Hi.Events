@@ -2,11 +2,14 @@
 
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence\PriceOverride;
 
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\ProductPriceOccurrenceOverrideDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Exceptions\InvalidOccurrenceQuantityOverrideException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
@@ -14,6 +17,7 @@ use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\PriceOverride\DTO\UpsertPriceOverrideDTO;
 use HiEvents\Services\Application\Handlers\EventOccurrence\PriceOverride\UpsertPriceOverrideHandler;
+use HiEvents\Services\Domain\Product\SoldAndReservedQuantitiesService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\MockInterface;
@@ -29,6 +33,8 @@ class UpsertPriceOverrideHandlerTest extends TestCase
 
     private ProductRepositoryInterface|MockInterface $productRepository;
 
+    private SoldAndReservedQuantitiesService|MockInterface $soldAndReservedQuantities;
+
     private DatabaseManager|MockInterface $databaseManager;
 
     private UpsertPriceOverrideHandler $handler;
@@ -41,6 +47,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
         $this->productPriceRepository = Mockery::mock(ProductPriceRepositoryInterface::class);
         $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
+        $this->soldAndReservedQuantities = Mockery::mock(SoldAndReservedQuantitiesService::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
 
         $this->databaseManager->shouldReceive('transaction')
@@ -51,25 +58,32 @@ class UpsertPriceOverrideHandlerTest extends TestCase
             $this->occurrenceRepository,
             $this->productPriceRepository,
             $this->productRepository,
+            $this->soldAndReservedQuantities,
             $this->databaseManager,
         );
     }
 
-    private function mockOwnershipChecks(): void
-    {
+    private function mockOwnershipChecks(
+        string $quantityAppliesTo = ProductQuantityAppliesTo::OCCURRENCE->name,
+        string $productType = ProductType::TICKET->name,
+    ): void {
         $this->occurrenceRepository
             ->shouldReceive('findFirstWhere')
             ->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
 
         $priceMock = Mockery::mock(ProductPriceDomainObject::class);
         $priceMock->shouldReceive('getProductId')->andReturn(5);
+        $priceMock->shouldReceive('getQuantityAppliesTo')->andReturn($quantityAppliesTo);
+        $priceMock->shouldReceive('getLabel')->andReturn('Early Bird');
         $this->productPriceRepository
             ->shouldReceive('findFirst')
             ->andReturn($priceMock);
 
+        $productMock = Mockery::mock(ProductDomainObject::class);
+        $productMock->shouldReceive('getProductType')->andReturn($productType);
         $this->productRepository
             ->shouldReceive('findFirstWhere')
-            ->andReturn(Mockery::mock(ProductDomainObject::class));
+            ->andReturn($productMock);
     }
 
     public function test_handle_creates_new_override_when_none_exists(): void
@@ -101,6 +115,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
                 ProductPriceOccurrenceOverrideDomainObjectAbstract::EVENT_OCCURRENCE_ID => 10,
                 ProductPriceOccurrenceOverrideDomainObjectAbstract::PRODUCT_PRICE_ID => 20,
                 ProductPriceOccurrenceOverrideDomainObjectAbstract::PRICE => 99.99,
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::QUANTITY_AVAILABLE => null,
             ])
             ->andReturn($expectedOverride);
 
@@ -142,6 +157,7 @@ class UpsertPriceOverrideHandlerTest extends TestCase
             ->once()
             ->with(5, [
                 ProductPriceOccurrenceOverrideDomainObjectAbstract::PRICE => 149.99,
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::QUANTITY_AVAILABLE => null,
             ])
             ->andReturn($updatedOverride);
 
@@ -324,6 +340,116 @@ class UpsertPriceOverrideHandlerTest extends TestCase
         );
 
         $this->handler->handle($dto);
+    }
+
+    public function test_it_stores_a_quantity_override_for_a_per_date_tier(): void
+    {
+        $this->mockOwnershipChecks();
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getSoldByPriceForOccurrence')
+            ->once()
+            ->with(10, ProductType::TICKET)
+            ->andReturn([20 => 3]);
+
+        $expectedOverride = Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class);
+
+        $this->overrideRepository->shouldReceive('findFirstWhere')->once()->andReturn(null);
+        $this->overrideRepository
+            ->shouldReceive('create')
+            ->once()
+            ->with([
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::EVENT_OCCURRENCE_ID => 10,
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::PRODUCT_PRICE_ID => 20,
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::PRICE => null,
+                ProductPriceOccurrenceOverrideDomainObjectAbstract::QUANTITY_AVAILABLE => 5,
+            ])
+            ->andReturn($expectedOverride);
+
+        $result = $this->handler->handle(new UpsertPriceOverrideDTO(
+            event_id: 1,
+            event_occurrence_id: 10,
+            product_price_id: 20,
+            quantity_available: 5,
+        ));
+
+        $this->assertSame($expectedOverride, $result);
+    }
+
+    public function test_it_counts_general_product_sales_from_order_items(): void
+    {
+        $this->mockOwnershipChecks(productType: ProductType::GENERAL->name);
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getSoldByPriceForOccurrence')
+            ->once()
+            ->with(10, ProductType::GENERAL)
+            ->andReturn([20 => 2]);
+
+        $this->overrideRepository->shouldReceive('findFirstWhere')->once()->andReturn(null);
+        $this->overrideRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn(Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class));
+
+        $this->handler->handle(new UpsertPriceOverrideDTO(
+            event_id: 1,
+            event_occurrence_id: 10,
+            product_price_id: 20,
+            quantity_available: 2,
+        ));
+    }
+
+    public function test_it_rejects_a_quantity_override_for_an_event_wide_tier(): void
+    {
+        $this->mockOwnershipChecks(quantityAppliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->overrideRepository->shouldNotReceive('create');
+
+        $this->expectException(InvalidOccurrenceQuantityOverrideException::class);
+
+        $this->handler->handle(new UpsertPriceOverrideDTO(
+            event_id: 1,
+            event_occurrence_id: 10,
+            product_price_id: 20,
+            quantity_available: 5,
+        ));
+    }
+
+    public function test_it_rejects_a_quantity_below_the_sold_count_for_that_date(): void
+    {
+        $this->mockOwnershipChecks();
+        $this->soldAndReservedQuantities
+            ->shouldReceive('getSoldByPriceForOccurrence')
+            ->once()
+            ->andReturn([20 => 4]);
+        $this->overrideRepository->shouldNotReceive('create');
+
+        $this->expectException(InvalidOccurrenceQuantityOverrideException::class);
+        $this->expectExceptionMessageMatches('/Early Bird.*\(4\)/');
+
+        $this->handler->handle(new UpsertPriceOverrideDTO(
+            event_id: 1,
+            event_occurrence_id: 10,
+            product_price_id: 20,
+            quantity_available: 3,
+        ));
+    }
+
+    public function test_a_price_only_override_skips_the_quantity_guard(): void
+    {
+        $this->mockOwnershipChecks(quantityAppliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->soldAndReservedQuantities->shouldNotReceive('getSoldByPriceForOccurrence');
+
+        $this->overrideRepository->shouldReceive('findFirstWhere')->once()->andReturn(null);
+        $this->overrideRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn(Mockery::mock(ProductPriceOccurrenceOverrideDomainObject::class));
+
+        $this->handler->handle(new UpsertPriceOverrideDTO(
+            event_id: 1,
+            event_occurrence_id: 10,
+            product_price_id: 20,
+            price: 12.50,
+        ));
     }
 
     protected function tearDown(): void

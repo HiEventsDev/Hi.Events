@@ -12,6 +12,14 @@
   }
 }
 
+.priceMeta {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 400;
+  color: var(--mantine-color-dimmed);
+}
+
 .productCard {
   border: 1px solid var(--mantine-color-gray-2);
   border-radius: var(--mantine-radius-md);
@@ -57,7 +65,7 @@
 .priceHeaderRow,
 .priceRow {
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(0, 130px) 32px;
+  grid-template-columns: 1fr 1fr minmax(0, 130px) minmax(0, 110px) 32px;
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
@@ -89,7 +97,8 @@
   color: var(--mantine-color-dimmed);
 }
 
-.overrideInput {
+.overrideInput,
+.quantityInput {
   width: 100%;
   margin: 0;
 }

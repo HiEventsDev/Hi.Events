@@ -10,6 +10,7 @@ class UpsertPriceOverrideDTO extends BaseDataObject
         public readonly int $event_id,
         public readonly int $event_occurrence_id,
         public readonly int $product_price_id,
-        public readonly float $price,
+        public readonly ?float $price = null,
+        public readonly ?int $quantity_available = null,
     ) {}
 }

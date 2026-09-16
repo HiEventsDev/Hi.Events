@@ -42,6 +42,7 @@ import {
     EventOccurrenceStatus,
     EventType,
     Product,
+    ProductQuantityAppliesTo,
     ProductType,
     PromoCodeDiscountAppliesTo,
     PromoCodeDiscountType,
@@ -204,6 +205,9 @@ const SelectProducts = (props: SelectProductsProps) => {
     });
 
     const isRecurring = event?.type === EventType.RECURRING;
+    const hasPerDateQuantities = (product: Product): boolean =>
+        (product.prices?.length ?? 0) > 0
+        && product.prices!.every(price => price.quantity_applies_to === ProductQuantityAppliesTo.Occurrence);
     const activeOccurrences = useMemo(() => {
         return (event?.occurrences || []).filter(
             occ => (occ.status === EventOccurrenceStatus.ACTIVE || occ.status === EventOccurrenceStatus.SOLD_OUT) && !occ.is_past
@@ -729,7 +733,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                         {product.title}
                                                     </h3>
                                                     <div className={'hi-product-title-metadata'}>
-                                                        {(product.is_available && !!product.quantity_available && !(isRecurring && product.product_type === ProductType.Ticket)) && (
+                                                        {(product.is_available && !!product.quantity_available && (!isRecurring || product.product_type !== ProductType.Ticket || hasPerDateQuantities(product))) && (
                                                             <>
                                                                 {product.quantity_available === Constants.INFINITE_TICKETS && (
                                                                     <span className={'hi-quantity-remaining-note'}>
@@ -748,7 +752,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                                                             </>
                                                         )}
 
-                                                        {(!product.is_available && product.type === 'TIERED') && (
+                                                        {(!product.is_available && product.type === 'TIERED' && isProductCollapsed) && (
                                                             <span className={'hi-product-availability'}
                                                                   data-reason={availabilityState}>
                                                                 <ProductAvailabilityMessage product={product}

@@ -1,6 +1,6 @@
 import {useLocation, useNavigate, useParams} from "react-router";
 import {t} from "@lingui/macro";
-import {Anchor, Button, Checkbox, Group, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
+import {Anchor, Button, Checkbox, Group, HoverCard, Menu, Paper, Progress, SegmentedControl, Skeleton, Stack, Text, Tooltip} from "@mantine/core";
 import {
     IconCalendar,
     IconCalendarEvent,
@@ -27,7 +27,7 @@ import {useGetEvent} from "../../../../queries/useGetEvent.ts";
 import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../utilites/dates.ts";
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
-import {OccurrenceEditModal} from "./OccurrenceEditModal";
+import {OccurrenceEditModal, OccurrenceEditTab} from "./OccurrenceEditModal";
 import {OccurrenceBulkEditModal} from "./OccurrenceBulkEditModal";
 import {RecurrenceScheduleDrawer} from "./RecurrenceScheduleDrawer";
 import {CalendarView} from "./CalendarView";
@@ -39,6 +39,8 @@ import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {GroupedOccurrenceTable, GroupedTableColumn} from "./GroupedOccurrenceTable";
 import {OccurrenceMenuItems, OccurrenceMenuActions, statusLabel, StatusIcon} from "./OccurrenceMenu";
+import {bookedLimit} from "./bookingLimits.ts";
+import {BookingBreakdown} from "./BookingSummary";
 import {openCancelOccurrenceDialog} from "./cancelOccurrenceDialog";
 import {useOccurrenceCheckIn} from "../../../../hooks/useOccurrenceCheckIn.tsx";
 import {useOccurrenceGenerationPolling} from "../../../../hooks/useOccurrenceGenerationPolling.ts";
@@ -126,6 +128,7 @@ const OccurrencesTab = () => {
     const [slideoutOccurrenceId, setSlideoutOccurrenceId] = useState<number | undefined>();
     const [duplicateFrom, setDuplicateFrom] = useState<EventOccurrence | undefined>();
     const [defaultDate, setDefaultDate] = useState<string | undefined>();
+    const [editInitialTab, setEditInitialTab] = useState<OccurrenceEditTab>('details');
     const [messageOccurrenceId, setMessageOccurrenceId] = useState<number | undefined>();
     const [shareOccurrence, setShareOccurrence] = useState<EventOccurrence | undefined>();
     const {launchCheckIn, checkInModals} = useOccurrenceCheckIn(eventId);
@@ -140,6 +143,14 @@ const OccurrencesTab = () => {
     const handleEditClick = (occurrenceId: number) => {
         setSelectedOccurrenceId(occurrenceId);
         setDuplicateFrom(undefined);
+        setEditInitialTab('details');
+        openEditModal();
+    };
+
+    const handleProductsClick = (occurrenceId: number) => {
+        setSelectedOccurrenceId(occurrenceId);
+        setDuplicateFrom(undefined);
+        setEditInitialTab('products');
         openEditModal();
     };
 
@@ -154,6 +165,7 @@ const OccurrencesTab = () => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(undefined);
         setDefaultDate(undefined);
+        setEditInitialTab('details');
         openEditModal();
     };
 
@@ -161,12 +173,14 @@ const OccurrencesTab = () => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(undefined);
         setDefaultDate(date);
+        setEditInitialTab('details');
         openEditModal();
     };
 
     const handleDuplicate = (occ: EventOccurrence) => {
         setSelectedOccurrenceId(undefined);
         setDuplicateFrom(occ);
+        setEditInitialTab('details');
         openEditModal();
     };
 
@@ -275,6 +289,7 @@ const OccurrencesTab = () => {
     const menuActions: OccurrenceMenuActions = {
         eventId: eventId!,
         onEdit: handleEditClick,
+        onProducts: handleProductsClick,
         onCancel: handleCancel,
         onDelete: handleDelete,
         onNavigate: navigate,
@@ -368,20 +383,33 @@ const OccurrencesTab = () => {
             },
             {
                 id: 'ticketsSold',
-                header: t`Sold`,
+                header: t`Booked`,
                 render: (occ: EventOccurrence) => {
                     const used = occ.used_capacity ?? 0;
-                    const total = occ.capacity;
+                    const total = bookedLimit(occ);
                     const pct = total ? Math.min(100, Math.round((used / total) * 100)) : 0;
+                    const limits = occ.booking_limits;
+                    const numbers = (
+                        <div className={classes.ticketsSoldNumbers}>
+                            <span className={classes.ticketsSoldCount}>{used}</span>
+                            {total != null && (
+                                <span className={classes.ticketsSoldTotal}> / {total}</span>
+                            )}
+                        </div>
+                    );
 
                     return (
                         <div className={classes.ticketsSold}>
-                            <div className={classes.ticketsSoldNumbers}>
-                                <span className={classes.ticketsSoldCount}>{used}</span>
-                                {total != null && (
-                                    <span className={classes.ticketsSoldTotal}> / {total}</span>
-                                )}
-                            </div>
+                            {limits && (limits.capacity !== null || limits.allocations.length > 0) ? (
+                                <HoverCard position="bottom-start" width={320} shadow="md" withArrow openDelay={150}>
+                                    <HoverCard.Target>
+                                        {numbers}
+                                    </HoverCard.Target>
+                                    <HoverCard.Dropdown p={0}>
+                                        <BookingBreakdown capacity={limits.capacity} booked={used} allocations={limits.allocations}/>
+                                    </HoverCard.Dropdown>
+                                </HoverCard>
+                            ) : numbers}
                             {total != null && (
                                 <Progress
                                     value={pct}
@@ -547,11 +575,12 @@ const OccurrencesTab = () => {
                             onClick={openGenerate}
                             disabled={generationPolling.isGenerating}
                         >
-                            {t`Set Up Schedule`}
+                            {event?.recurrence_rule ? t`Edit Schedule` : t`Set Up Schedule`}
                         </Menu.Item>
                         <Menu.Item
                             leftSection={<IconCalendarPlus size={16}/>}
                             onClick={handleCreateClick}
+                            data-testid="occurrence-add-single-date-menu-item"
                         >
                             {t`Add a Single Date`}
                         </Menu.Item>
@@ -670,6 +699,7 @@ const OccurrencesTab = () => {
                     occurrenceId={selectedOccurrenceId}
                     duplicateFrom={duplicateFrom}
                     defaultDate={defaultDate}
+                    initialTab={editInitialTab}
                 />
             )}
 

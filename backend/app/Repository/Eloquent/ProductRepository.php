@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Repository\Eloquent;
 
 use Exception;
-use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
@@ -20,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -51,45 +49,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             limit: $params->per_page,
             page: $params->page,
         );
-    }
-
-    public function getQuantityRemainingForProductPrice(int $productId, int $productPriceId): int
-    {
-        $query = <<<'SQL'
-        SELECT
-            COALESCE(product_prices.initial_quantity_available, 0) - (
-                product_prices.quantity_sold + COALESCE((
-                    SELECT sum(order_items.quantity)
-                    FROM orders
-                    INNER JOIN order_items ON orders.id = order_items.order_id
-                    WHERE order_items.product_price_id = :productPriceId
-                    AND orders.status in ('RESERVED')
-                    AND current_timestamp < orders.reserved_until
-                    AND orders.deleted_at IS NULL
-                    AND order_items.deleted_at IS NULL
-                ), 0)
-            ) AS quantity_remaining,
-            product_prices.initial_quantity_available IS NULL AS unlimited_products_available
-        FROM product_prices
-        WHERE product_prices.id = :productPriceId
-        AND product_prices.product_id = :productId
-        AND product_prices.deleted_at IS NULL
-    SQL;
-
-        $result = $this->db->selectOne($query, [
-            'productPriceId' => $productPriceId,
-            'productId' => $productId,
-        ]);
-
-        if ($result === null) {
-            throw new RuntimeException('Product price not found');
-        }
-
-        if ($result->unlimited_products_available) {
-            return Constants::INFINITE;
-        }
-
-        return (int) $result->quantity_remaining;
     }
 
     public function getTaxesByProductId(int $productId): Collection

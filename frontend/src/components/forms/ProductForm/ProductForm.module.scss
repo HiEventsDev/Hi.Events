@@ -14,6 +14,32 @@
   }
 }
 
+.priceTierCard.dragging {
+  opacity: 0.85;
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.tierDragHandle {
+  position: absolute;
+  top: 0;
+  right: 44px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  cursor: grab;
+  color: var(--mantine-color-gray-5);
+  touch-action: none;
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
 .removeTier {
   position: absolute;
   top: 0;
@@ -98,6 +124,41 @@
 
 .priceBlock {
   margin-bottom: var(--hi-spacing-sm);
+}
+
+.quantityScope {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: calc(100% - 8px);
+  padding: 0 var(--hi-spacing-xs);
+  border-radius: var(--mantine-radius-sm);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  color: var(--hi-color-gray-dark);
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--hi-color-gray-light);
+    color: var(--hi-color-text);
+  }
+}
+
+.quantityScopeOption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.quantityScopeOptionLabel {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+
+.quantityScopeOptionDescription {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--hi-color-gray-dark);
 }
 
 .priceBlockHeader {

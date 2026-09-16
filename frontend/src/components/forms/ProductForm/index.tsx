@@ -36,7 +36,7 @@ import {
 import {Callout} from "../../common/Callout";
 import {useDisclosure} from "@mantine/hooks";
 import {NavLink, useParams} from "react-router";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
@@ -47,7 +47,7 @@ import {InputGroup} from "../../common/InputGroup";
 import classNames from "classnames";
 import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {CreateTaxOrFeeModal} from "../../modals/CreateTaxOrFeeModal";
-import {hasQuantityValue, ProductPriceTierForm, SeriesQuantityWarning} from "./ProductPriceTierForm.tsx";
+import {defaultQuantityAppliesTo, ProductPriceTierForm, QuantityField} from "./ProductPriceTierForm.tsx";
 import {LedgerRow, LedgerRowId} from "./LedgerRow.tsx";
 import {ProductSelector} from "../../common/ProductSelector";
 import {
@@ -101,8 +101,8 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees} = useGetTaxesAndFees();
     const isRecurring = event?.type === EventType.RECURRING;
-    const isRecurringTicket = isRecurring && form.values.product_type === 'TICKET';
     const typeLocked = Number(product?.quantity_sold) > 0;
+    const previousProductType = useRef(form.values.product_type);
 
     const handleTaxOrFeeCreated = (taxOrFee: TaxAndFee) => {
         const currentIds = form.values.tax_and_fee_ids || [];
@@ -123,6 +123,20 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
             form.setFieldValue('price', 0.00);
         }
     }, [form.values.type, form.values.price]);
+
+    useEffect(() => {
+        const previous = previousProductType.current;
+        const next = form.values.product_type;
+        previousProductType.current = next;
+        if (previous === next || !form.isDirty('product_type')) {
+            return;
+        }
+        form.values.prices?.forEach((price, index) => {
+            if ((price.quantity_applies_to ?? defaultQuantityAppliesTo(previous)) === defaultQuantityAppliesTo(previous)) {
+                form.setFieldValue(`prices.${index}.quantity_applies_to`, defaultQuantityAppliesTo(next));
+            }
+        });
+    }, [form.values.product_type]);
 
     useEffect(() => {
         if (event?.product_categories && event.product_categories.length === 1) {
@@ -308,39 +322,13 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                              )}
                                          />}
                                          placeholder="19.99"/>
-                            <NumberInput min={0}
-                                         placeholder={t`Unlimited`}
-                                         {...form.getInputProps('prices.0.initial_quantity_available')}
-                                         label={<InputLabelWithHelp
-                                             label={isRecurringTicket ? t`Total Quantity Across All Dates` : t`Quantity Available`}
-                                             helpText={isRecurringTicket ? (
-                                                 <Trans>
-                                                     <p>
-                                                         This is the total quantity available across every date in your
-                                                         schedule combined — not a per-date limit. To limit attendance for
-                                                         each date, set a capacity on the <NavLink
-                                                         to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
-                                                         page</NavLink>.
-                                                     </p>
-                                                 </Trans>
-                                             ) : (
-                                                 <Trans>
-                                                     <p>
-                                                         The number of products available for this product
-                                                     </p>
-                                                     <p>
-                                                         This value can be overridden if there are <a target={'__blank'}
-                                                                                                      href={'capacity-assignments'}>Capacity
-                                                         Limits</a> associated with this product.
-                                                     </p>
-                                                 </Trans>
-                                             )}
-                                         />}
+                            <QuantityField
+                                form={form}
+                                index={0}
+                                isRecurring={isRecurring}
+                                testId="product-quantity-applies-to"
                             />
                         </InputGroup>
-                        {!product && isRecurringTicket && hasQuantityValue(form.values.prices?.[0]?.initial_quantity_available) && (
-                            <SeriesQuantityWarning eventId={eventId}/>
-                        )}
                     </>
                 )}
 
@@ -356,9 +344,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         <Fieldset legend={t`Price Tiers`} mt={20} mb={20}>
                             {isRecurring && (
                                 <Callout variant="info" style={{marginBottom: 10}}>
-                                    <Trans>These prices apply across all dates in your schedule, and tier quantities limit
-                                        total sales across all dates combined. Sale dates on tiers apply globally. You can
-                                        override prices for individual dates on the <NavLink
+                                    <Trans>These prices apply across all dates in your schedule, and each tier's quantity
+                                        can be per date or a total across all dates. Sale dates on tiers apply globally.
+                                        You can override prices and per-date quantities for individual dates on the <NavLink
                                             to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule
                                             page</NavLink>.</Trans>
                                 </Callout>
@@ -376,13 +364,21 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                             price: 0,
                                             label: undefined,
                                             sale_end_date: undefined,
-                                            sale_start_date: undefined
+                                            sale_start_date: undefined,
+                                            quantity_applies_to: defaultQuantityAppliesTo(form.values.product_type),
                                         })
                                     }
                                 >
                                     {t`Add tier`}
                                 </Button>
                             </div>
+                            <Switch
+                                mt={15}
+                                {...form.getInputProps('sequential_tier_release_enabled', {type: 'checkbox'})}
+                                label={t`Release tiers in order`}
+                                description={t`Each tier goes on sale only after the tiers above it sell out or end. Every tier except the last needs a quantity.`}
+                                data-testid="product-sequential-tier-release-switch"
+                            />
                         </Fieldset>
                     </>
                 )}
@@ -417,8 +413,8 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                 >
                     {isRecurring && (
                         <Callout variant="info" style={{marginBottom: 10}}>
-                            <Trans>Sale period dates apply across all dates in your schedule. To control pricing and
-                                availability for individual dates, use the overrides on the <NavLink
+                            <Trans>Sale period dates apply across all dates in your schedule. To adjust prices,
+                                per-date quantities or availability for individual dates, use the overrides on the <NavLink
                                     to={`/manage/event/${eventId}/occurrences`}>Occurrence Schedule page</NavLink>.</Trans>
                         </Callout>
                     )}

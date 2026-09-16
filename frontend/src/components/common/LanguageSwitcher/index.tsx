@@ -16,6 +16,8 @@ export const LanguageSwitcher = () => {
                 return t`German`;
             case "en":
                 return t`English`;
+            case "fi":
+                return t`Finnish`;
             case "es":
                 return t`Spanish`;
             case "fr":
@@ -44,6 +46,8 @@ export const LanguageSwitcher = () => {
                 return t`Slovak`;
             case "el":
                 return t`Greek`;
+            case "ko":
+                return t`Korean`;
             default:
                 // Defensive fallback: if a new locale is added to SupportedLocales
                 // but not handled here, return the locale code itself rather than

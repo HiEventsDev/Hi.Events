@@ -7,12 +7,15 @@ use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\GetEventOccurrenceHandler;
+use HiEvents\Services\Domain\EventOccurrence\OccurrenceBookingLimitsService;
 use Mockery;
 use Tests\TestCase;
 
 class GetEventOccurrenceHandlerTest extends TestCase
 {
     private EventOccurrenceRepositoryInterface|Mockery\MockInterface $occurrenceRepository;
+
+    private OccurrenceBookingLimitsService|Mockery\MockInterface $bookingLimitsService;
 
     private GetEventOccurrenceHandler $handler;
 
@@ -21,7 +24,9 @@ class GetEventOccurrenceHandlerTest extends TestCase
         parent::setUp();
 
         $this->occurrenceRepository = Mockery::mock(EventOccurrenceRepositoryInterface::class);
-        $this->handler = new GetEventOccurrenceHandler($this->occurrenceRepository);
+        $this->bookingLimitsService = Mockery::mock(OccurrenceBookingLimitsService::class);
+        $this->bookingLimitsService->shouldReceive('attachTo')->byDefault();
+        $this->handler = new GetEventOccurrenceHandler($this->occurrenceRepository, $this->bookingLimitsService);
     }
 
     public function test_handle_returns_occurrence_with_stats(): void

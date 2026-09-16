@@ -31,6 +31,7 @@ use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeDTO;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\CreateAttendeeTaxAndFeeDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
+use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Domain\SelfService\OrderAuditLogService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeRollupService;
@@ -58,6 +59,7 @@ class CreateAttendeeHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
         private readonly OrderAuditLogService $orderAuditLogService,
+        private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
     ) {}
 
     /**
@@ -99,10 +101,14 @@ class CreateAttendeeHandler
 
             $productPriceId = $this->getProductPriceId($attendeeDTO, $product);
 
-            $availableQuantity = $this->productRepository->getQuantityRemainingForProductPrice(
-                $attendeeDTO->product_id,
-                $productPriceId,
-            );
+            $availableQuantity = $this->availableProductQuantitiesFetchService
+                ->getAvailableProductQuantities(
+                    $attendeeDTO->event_id,
+                    ignoreCache: true,
+                    eventOccurrenceId: $attendeeDTO->event_occurrence_id,
+                    applyOccurrenceLimits: false,
+                )
+                ->getAvailableQuantityForPrice($productPriceId);
 
             if ($availableQuantity <= 0) {
                 throw new NoTicketsAvailableException(__('There are no tickets available. '.

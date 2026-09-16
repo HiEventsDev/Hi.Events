@@ -477,15 +477,39 @@ export interface EventOccurrence {
     is_active?: boolean;
     event_location?: EventLocation;
     statistics?: EventOccurrenceStatistics;
+    booking_limits?: OccurrenceBookingLimits;
     created_at?: string;
     updated_at?: string;
+}
+
+export interface OccurrenceTierAllocation {
+    product_price_id: IdParam;
+    product_title: string;
+    price_label: string | null;
+    quantity: number | null;
+    applies_to: ProductQuantityAppliesTo;
+}
+
+export interface OccurrenceBookingLimits {
+    capacity: number | null;
+    allocation_total: number | null;
+    sellable: number | null;
+    allocations: OccurrenceTierAllocation[];
+}
+
+export interface OccurrenceProductAvailability {
+    product_id: IdParam;
+    product_price_id: IdParam;
+    quantity_sold: number;
+    quantity_available: number | null;
 }
 
 export interface ProductPriceOccurrenceOverride {
     id?: IdParam;
     event_occurrence_id?: IdParam;
     product_price_id?: IdParam;
-    price: number;
+    price: number | null;
+    quantity_available?: number | null;
     created_at?: string;
     updated_at?: string;
 }
@@ -537,7 +561,8 @@ export interface BulkUpdateOccurrencesRequest {
 
 export interface UpsertPriceOverrideRequest {
     product_price_id: IdParam;
-    price: number;
+    price?: number | null;
+    quantity_available?: number | null;
 }
 
 export interface Event extends EventBase {
@@ -744,6 +769,11 @@ export enum ProductType {
     General = 'GENERAL',
 }
 
+export enum ProductQuantityAppliesTo {
+    Occurrence = 'OCCURRENCE',
+    Event = 'EVENT',
+}
+
 export enum ProductStatus {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE',
@@ -764,8 +794,10 @@ export interface ProductPrice {
     is_before_sale_start_date?: boolean;
     is_after_sale_end_date?: boolean;
     is_sold_out?: boolean;
+    is_locked_behind_earlier_tier?: boolean;
     initial_quantity_available?: number;
     quantity_sold?: number;
+    quantity_applies_to?: ProductQuantityAppliesTo;
     is_hidden?: boolean;
     quantity_remaining?: number;
 }
@@ -792,6 +824,7 @@ export interface Product {
     hide_before_sale_start_date?: boolean;
     hide_after_sale_end_date?: boolean;
     hide_when_sold_out?: boolean;
+    sequential_tier_release_enabled?: boolean;
     start_collapsed?: boolean;
     show_quantity_remaining?: boolean;
     quantity_available?: number;

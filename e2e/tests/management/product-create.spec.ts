@@ -53,6 +53,55 @@ test.describe('product creation', () => {
     await expect(authedPage.getByText('$10.00 – $20.00', { exact: true })).toBeVisible();
   });
 
+  test('sequential tier release requires quantities and persists on the product', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    const title = uniqueName('Sequential Tiers');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await products.selectPriceType('Tiers');
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await products.fillTier(0, '10', 'Early Bird');
+    await products.addTier();
+    await products.fillTier(1, '20', 'Standard');
+    await products.sequentialReleaseSwitch().check();
+    await products.submitCreate();
+
+    await expect(authedPage.getByText('Every tier except the last needs a quantity when tiers are released in order.')).toBeVisible();
+
+    await authedPage.getByLabel('Quantity Available').nth(0).fill('25');
+    await products.submitCreate();
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+
+    await products.openEditModal();
+    await expect(products.sequentialReleaseSwitch()).toBeChecked();
+  });
+
+  test('an organizer drags a tier above another and the saved order follows', async ({ authedPage, api, account }) => {
+    const event = await createDraftEvent(api, account.organizerId);
+    const title = uniqueName('Reordered Tiers');
+
+    const products = new ProductCreatePage(authedPage);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await products.selectPriceType('Tiers');
+    await authedPage.getByLabel(/^Name/).fill(title);
+    await products.fillTier(0, '10', 'Early Bird');
+    await products.addTier();
+    await products.fillTier(1, '20', 'Standard');
+    await products.dragTierAbove(1, 0);
+
+    await expect(authedPage.getByLabel(/^Label/).nth(0)).toHaveValue('Standard');
+    await expect(authedPage.getByLabel(/^Label/).nth(1)).toHaveValue('Early Bird');
+
+    await products.submitCreate();
+    await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();
+
+    const saved = (await api.listProducts(event.eventId)).find((product) => product.title === title);
+    expect(saved?.prices?.map((price) => price.label)).toEqual(['Standard', 'Early Bird']);
+  });
+
   test('an organizer creates an add-on product and the settings persist', async ({ authedPage, api, account }) => {
     const event = await createDraftEventWithTicket(api, account.organizerId, { productTitle: 'Main Ticket' });
     const title = uniqueName('Parking Pass');

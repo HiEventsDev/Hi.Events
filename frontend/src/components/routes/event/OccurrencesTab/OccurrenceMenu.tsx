@@ -13,6 +13,7 @@ import {
     IconReceipt,
     IconSend,
     IconShare,
+    IconTicket,
     IconTrash,
     IconUsers,
     IconX,
@@ -22,6 +23,7 @@ import {EventOccurrence, EventOccurrenceStatus, IdParam} from "../../../../types
 export interface OccurrenceMenuActions {
     eventId: IdParam;
     onEdit: (occurrenceId: number) => void;
+    onProducts?: (occurrenceId: number) => void;
     onCancel: (occurrenceId: number) => void;
     onDelete: (occurrenceId: number) => void;
     onNavigate: (path: string) => void;
@@ -50,6 +52,7 @@ const buildActions = (occ: EventOccurrence, actions: OccurrenceMenuActions): Occ
 
     const items: (OccurrenceAction | false)[] = [
         {key: 'edit', icon: <IconPencil size={14}/>, label: t`Edit`, onClick: () => actions.onEdit(id), group: 'primary'},
+        !!actions.onProducts && !isCancelled && {key: 'products', icon: <IconTicket size={14}/>, label: t`Products`, onClick: () => actions.onProducts!(id), group: 'primary'},
         !!actions.onDuplicate && {key: 'duplicate', icon: <IconCopy size={14}/>, label: t`Duplicate`, onClick: () => actions.onDuplicate!(occ), group: 'secondary'},
         {key: 'dashboard', icon: <IconChartBar size={14}/>, label: t`Dashboard`, onClick: () => actions.onNavigate(`/manage/event/${actions.eventId}/occurrences/${occ.id}`), group: 'primary'},
         {key: 'attendees', icon: <IconUsers size={14}/>, label: t`Attendees`, onClick: () => actions.onNavigate(`/manage/event/${actions.eventId}/attendees?filterFields[event_occurrence_id][eq]=${occ.id}`), group: 'secondary'},

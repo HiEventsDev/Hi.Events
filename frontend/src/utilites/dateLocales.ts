@@ -39,6 +39,19 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
+    'fi': {
+        fullDateTime: 'ddd D. MMM YYYY HH.mm',
+        shortDateTime: 'D. MMM YYYY HH.mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH.mm',
+        monthShort: 'MMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
+        timeOnly: 'HH.mm',
+        timezone: 'z',
+        dateTimePicker: 'D. MMM YYYY [klo] HH.mm'
+    },
     'fr': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
         shortDateTime: 'D MMM YYYY HH:mm',
@@ -183,17 +196,17 @@ export const localeFormats: Record<SupportedLocales, {
         dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
     },
     'pl': {
-        fullDateTime: 'ddd, D MMM YYYY HH:mm',
-        shortDateTime: 'D MMM YYYY HH:mm',
-        shortDate: 'D MMM YYYY',
-        chartDate: 'D MMM',
-        dayMonthTime: 'D MMM HH:mm',
+        fullDateTime: 'ddd D. MMM YYYY HH:mm',
+        shortDateTime: 'D. MMM YYYY HH:mm',
+        shortDate: 'D. MMM YYYY',
+        chartDate: 'D. MMM',
+        dayMonthTime: 'D. MMM HH:mm',
         monthShort: 'MMM',
-        dayOfMonth: 'D',
-        dayName: 'dddd, D MMMM',
+        dayOfMonth: 'D.',
+        dayName: 'dddd D. MMMM',
         timeOnly: 'HH:mm',
         timezone: 'z',
-        dateTimePicker: 'MMM DD, YYYY [at] h:mm A'
+        dateTimePicker: 'D. MMM YYYY HH:mm'
     },
     'se': {
         fullDateTime: 'ddd D MMM YYYY HH:mm',
@@ -233,5 +246,18 @@ export const localeFormats: Record<SupportedLocales, {
         timeOnly: 'HH:mm',
         timezone: 'z',
         dateTimePicker: 'D MMM YYYY HH:mm'
+    },
+    'ko': {
+        fullDateTime: 'YYYY년 M월 D일 (ddd) A h:mm',
+        shortDateTime: 'YYYY년 M월 D일 A h:mm',
+        shortDate: 'YYYY년 M월 D일',
+        chartDate: 'M월 D일',
+        dayMonthTime: 'M월 D일 A h:mm',
+        monthShort: 'M월',
+        dayOfMonth: 'D일',
+        dayName: 'M월 D일 dddd',
+        timeOnly: 'A h:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY년 M월 D일 A h:mm'
     },
 };

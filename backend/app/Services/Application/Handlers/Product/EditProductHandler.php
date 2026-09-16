@@ -6,6 +6,8 @@ namespace HiEvents\Services\Application\Handlers\Product;
 
 use Exception;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\Enums\ProductPriceType;
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -127,6 +129,7 @@ class EditProductHandler
                 'hide_before_sale_start_date' => $productsData->hide_before_sale_start_date,
                 'hide_after_sale_end_date' => $productsData->hide_after_sale_end_date,
                 'hide_when_sold_out' => $productsData->hide_when_sold_out,
+                'sequential_tier_release_enabled' => $productsData->type === ProductPriceType::TIERED && $productsData->sequential_tier_release_enabled,
                 'show_quantity_remaining' => $productsData->show_quantity_remaining,
                 'is_hidden_without_promo_code' => $productsData->is_hidden_without_promo_code,
                 'product_type' => $productsData->product_type->name,
@@ -166,7 +169,10 @@ class EditProductHandler
 
         return $product->getProductPrices()
             ->mapWithKeys(fn (ProductPriceDomainObject $price) => [
-                $price->getId() => $price->getInitialQuantityAvailable(),
+                $price->getId() => [
+                    'quantity' => $price->getInitialQuantityAvailable(),
+                    'applies_to' => $price->getQuantityAppliesTo(),
+                ],
             ]);
     }
 
@@ -183,14 +189,20 @@ class EditProductHandler
                 continue;
             }
 
-            $oldQuantity = $oldPriceQuantities->get($price->id);
+            $old = $oldPriceQuantities->get($price->id);
+            $oldQuantity = $old['quantity'] ?? null;
             $newQuantity = $price->initial_quantity_available;
+            $scopeChanged = $price->quantity_applies_to !== null
+                && $old !== null
+                && $price->quantity_applies_to->name !== $old['applies_to'];
 
             $direction = match (true) {
                 ($newQuantity === null && $oldQuantity !== null),
-                ($newQuantity !== null && $oldQuantity !== null && $newQuantity > $oldQuantity) => CapacityChangeDirection::INCREASED,
+                ($newQuantity !== null && $oldQuantity !== null && $newQuantity > $oldQuantity),
+                ($scopeChanged && $price->quantity_applies_to === ProductQuantityAppliesTo::OCCURRENCE) => CapacityChangeDirection::INCREASED,
                 ($newQuantity !== null && $oldQuantity === null),
-                ($newQuantity !== null && $oldQuantity !== null && $newQuantity < $oldQuantity) => CapacityChangeDirection::DECREASED,
+                ($newQuantity !== null && $oldQuantity !== null && $newQuantity < $oldQuantity),
+                $scopeChanged => CapacityChangeDirection::DECREASED,
                 default => null,
             };
 

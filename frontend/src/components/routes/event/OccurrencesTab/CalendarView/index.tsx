@@ -15,6 +15,7 @@ import {EventOccurrence} from "../../../../../types.ts";
 import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../../utilites/dates.ts";
 import {OccurrenceMenuItems, OccurrenceMenuActions} from "../OccurrenceMenu";
 import classes from "./CalendarView.module.scss";
+import {bookedLimit} from "../bookingLimits.ts";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -167,8 +168,8 @@ export const CalendarView = ({
                                                 <span className={classes.popoverLabel}>{occ.label}</span>
                                             )}
                                             <span className={classes.popoverCapacity}>
-                                                {occ.capacity != null ? (
-                                                    <>{occ.used_capacity ?? 0} / {occ.capacity}</>
+                                                {bookedLimit(occ) != null ? (
+                                                    <>{occ.used_capacity ?? 0} / {bookedLimit(occ)}</>
                                                 ) : t`Unlimited`}
                                             </span>
                                         </div>
@@ -248,8 +249,9 @@ export const CalendarView = ({
                                     {dayOccs.length > 0 && (
                                         <div className={classes.dayDots}>
                                             {dayOccs.slice(0, MAX_DOTS).map(occ => {
-                                                const fillPct = occ.capacity
-                                                    ? Math.min(100, Math.round(((occ.used_capacity ?? 0) / occ.capacity) * 100))
+                                                const limit = bookedLimit(occ);
+                                                const fillPct = limit
+                                                    ? Math.min(100, Math.round(((occ.used_capacity ?? 0) / limit) * 100))
                                                     : 0;
                                                 return (
                                                     <div

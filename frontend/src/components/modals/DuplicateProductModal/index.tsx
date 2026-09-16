@@ -1,4 +1,5 @@
-import {GenericModalProps, IdParam, Product, ProductPriceType, ProductType, TaxAndFee} from "../../../types.ts";
+import {GenericModalProps, IdParam, Product, ProductPriceType, ProductQuantityAppliesTo,
+    ProductType, TaxAndFee} from "../../../types.ts";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {ProductForm} from "../../forms/ProductForm";
@@ -35,6 +36,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             hide_after_sale_end_date: false,
             show_quantity_remaining: false,
             hide_when_sold_out: false,
+            sequential_tier_release_enabled: false,
             is_hidden_without_promo_code: false,
             is_highlighted: false,
             highlight_message: undefined,
@@ -50,6 +52,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 sale_end_date: undefined,
                 sale_start_date: undefined,
                 initial_quantity_available: undefined,
+                quantity_applies_to: ProductQuantityAppliesTo.Occurrence,
             }],
         },
     });
@@ -71,6 +74,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             hide_after_sale_end_date: originalProduct.hide_after_sale_end_date,
             show_quantity_remaining: originalProduct.show_quantity_remaining,
             hide_when_sold_out: originalProduct.hide_when_sold_out,
+            sequential_tier_release_enabled: originalProduct.sequential_tier_release_enabled,
             is_hidden_without_promo_code: originalProduct.is_hidden_without_promo_code,
             is_hidden: originalProduct.is_hidden,
             is_highlighted: originalProduct.is_highlighted,
@@ -88,6 +92,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
                 sale_start_date: price.sale_start_date,
                 sale_end_date: price.sale_end_date,
                 initial_quantity_available: price.initial_quantity_available,
+                quantity_applies_to: price.quantity_applies_to,
                 is_hidden: price.is_hidden,
             })),
         });

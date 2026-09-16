@@ -34,8 +34,8 @@ use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
-use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\CapacityAssignment\CreateCapacityAssignmentService;
 use HiEvents\Services\Domain\CheckInList\CreateCheckInListService;
 use HiEvents\Services\Domain\CreateWebhookService;
@@ -127,13 +127,16 @@ class DuplicateEventService
                     event: $event,
                     newEventId: $newEvent->getId(),
                     duplicateQuestions: $duplicateQuestions,
-                    duplicatePromoCodes: $duplicatePromoCodes,
                     duplicateCapacityAssignments: $duplicateCapacityAssignments,
                     duplicateCheckInLists: $duplicateCheckInLists,
                     oldToNewOccurrenceMap: $oldToNewOccurrenceMap,
                 );
             } else {
                 $this->createProductCategoryService->createDefaultProductCategory($newEvent);
+            }
+
+            if ($duplicatePromoCodes) {
+                $this->clonePromoCodes($event, $newEvent->getId(), $oldProductToNewProductMap);
             }
 
             if ($duplicateOccurrences && $duplicateProducts && ! empty($oldToNewOccurrenceMap)) {
@@ -240,7 +243,6 @@ class DuplicateEventService
         EventDomainObject $event,
         int $newEventId,
         bool $duplicateQuestions,
-        bool $duplicatePromoCodes,
         bool $duplicateCapacityAssignments,
         bool $duplicateCheckInLists,
         array $oldToNewOccurrenceMap = [],
@@ -283,10 +285,6 @@ class DuplicateEventService
 
         if ($duplicateQuestions) {
             $this->clonePerProductQuestions($event, $newEventId, $oldProductToNewProductMap);
-        }
-
-        if ($duplicatePromoCodes) {
-            $this->clonePromoCodes($event, $newEventId, $oldProductToNewProductMap);
         }
 
         if ($duplicateCapacityAssignments) {
@@ -377,14 +375,19 @@ class DuplicateEventService
     private function clonePromoCodes(EventDomainObject $event, int $newEventId, array $oldProductToNewProductMap): void
     {
         foreach ($event->getPromoCodes() as $promoCode) {
+            $mappedProductIds = array_values(array_filter(
+                array_map(
+                    static fn ($productId) => $oldProductToNewProductMap[$productId] ?? null,
+                    $promoCode->getApplicableProductIds() ?? [],
+                ),
+                static fn ($productId) => $productId !== null,
+            ));
+
             $this->createPromoCodeService->createPromoCode(
                 (new PromoCodeDomainObject)
                     ->setCode($promoCode->getCode())
                     ->setEventId($newEventId)
-                    ->setApplicableProductIds(array_map(
-                        static fn ($productId) => $oldProductToNewProductMap[$productId],
-                        $promoCode->getApplicableProductIds() ?? [],
-                    ))
+                    ->setApplicableProductIds($mappedProductIds)
                     ->setDiscountType($promoCode->getDiscountType())
                     ->setDiscount($promoCode->getDiscount())
                     ->setExpiryDate($promoCode->getExpiryDate())
@@ -602,6 +605,7 @@ class DuplicateEventService
                 'event_occurrence_id' => $oldToNewOccurrenceMap[$override->getEventOccurrenceId()],
                 'product_price_id' => $newPriceId,
                 'price' => $override->getPrice(),
+                'quantity_available' => $override->getQuantityAvailable(),
             ];
         }
         if ($priceOverrideInserts !== []) {
