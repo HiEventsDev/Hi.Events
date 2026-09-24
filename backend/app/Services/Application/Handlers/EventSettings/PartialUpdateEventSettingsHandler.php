@@ -79,6 +79,8 @@ class PartialUpdateEventSettingsHandler
                     : $existingSettings->getOfflinePaymentInstructions(),
                 'allow_orders_awaiting_offline_payment_to_check_in' => $eventSettingsDTO->settings['allow_orders_awaiting_offline_payment_to_check_in']
                     ?? $existingSettings->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+                'offline_payment_availability' => $eventSettingsDTO->settings['offline_payment_availability']
+                    ?? $existingSettings->getOfflinePaymentAvailability(),
 
                 // Invoice settings
                 'enable_invoicing' => $eventSettingsDTO->settings['enable_invoicing'] ?? $existingSettings->getEnableInvoicing(),

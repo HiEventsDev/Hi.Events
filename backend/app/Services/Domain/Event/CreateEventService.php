@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\ImageType;
+use HiEvents\DomainObjects\Enums\OfflinePaymentAvailability;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\ProductTerminology;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -245,6 +246,7 @@ class CreateEventService
 
             'payment_providers' => [PaymentProviders::STRIPE->value],
             'offline_payment_instructions' => null,
+            'offline_payment_availability' => OfflinePaymentAvailability::EVERYONE->name,
 
             'enable_invoicing' => false,
             'invoice_label' => __('Invoice'),

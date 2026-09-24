@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Card as MantineCard, Checkbox, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
+import {Button, Card as MantineCard, Checkbox, NumberInput, Paper, Radio, Stack, Switch, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -25,6 +25,7 @@ export const PaymentAndInvoicingSettings = () => {
             payment_providers: [] as PaymentProvider[],
             offline_payment_instructions: "",
             allow_orders_awaiting_offline_payment_to_check_in: false,
+            offline_payment_availability: "EVERYONE" as 'EVERYONE' | 'PROMO_CODE_ONLY',
             enable_invoicing: false,
             invoice_label: "",
             invoice_prefix: "",
@@ -52,6 +53,7 @@ export const PaymentAndInvoicingSettings = () => {
                 payment_providers: eventSettingsQuery.data.payment_providers || [],
                 offline_payment_instructions: eventSettingsQuery.data.offline_payment_instructions || "",
                 allow_orders_awaiting_offline_payment_to_check_in: eventSettingsQuery.data.allow_orders_awaiting_offline_payment_to_check_in || false,
+                offline_payment_availability: eventSettingsQuery.data.offline_payment_availability || "EVERYONE",
                 enable_invoicing: eventSettingsQuery.data.enable_invoicing || false,
                 invoice_label: eventSettingsQuery.data.invoice_label || "",
                 invoice_prefix: eventSettingsQuery.data.invoice_prefix || "",
@@ -163,7 +165,23 @@ export const PaymentAndInvoicingSettings = () => {
                                             />
                                         }
                                     />
+                                    <Radio.Group
+                                        label={t`Who can use Offline Payment?`}
+                                        description={t`Choose whether Offline Payment is available to everyone, or only customers with an authorised promo code.`}
+                                        mt="md"
+                                        value={form.values.offline_payment_availability}
+                                        onChange={(value) => form.setFieldValue('offline_payment_availability', value as 'EVERYONE' | 'PROMO_CODE_ONLY')}
+                                    >
+                                        <Stack gap="xs" mt="xs">
+                                            <Radio value="EVERYONE" label={t`Everyone`}/>
+                                            <Radio
+                                                value="PROMO_CODE_ONLY"
+                                                label={t`Only customers using an authorised promo code`}
+                                            />
+                                        </Stack>
+                                    </Radio.Group>
                                     <Switch
+                                        mt="md"
                                         label={t`Allow attendees associated with unpaid orders to check in`}
                                         description={t`If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in.`}
                                         checked={form.values.allow_orders_awaiting_offline_payment_to_check_in}

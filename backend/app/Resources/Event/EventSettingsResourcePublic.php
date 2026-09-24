@@ -65,6 +65,7 @@ class EventSettingsResourcePublic extends JsonResource
             'payment_providers' => $this->getPaymentProviders(),
             'offline_payment_instructions' => $this->getOfflinePaymentInstructions(),
             'allow_orders_awaiting_offline_payment_to_check_in' => $this->getAllowOrdersAwaitingOfflinePaymentToCheckIn(),
+            'offline_payment_availability' => $this->getOfflinePaymentAvailability(),
 
             // Invoice settings
             'require_billing_address' => $this->getRequireBillingAddress(),

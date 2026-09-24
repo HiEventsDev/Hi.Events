@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\EventSettings\DTO;
 use HiEvents\DataTransferObjects\BaseDTO;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
+use HiEvents\DomainObjects\Enums\OfflinePaymentAvailability;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
@@ -50,6 +51,7 @@ class UpdateEventSettingsDTO extends BaseDTO
         public readonly array $payment_providers = [],
         public readonly ?string $offline_payment_instructions = null,
         public readonly bool $allow_orders_awaiting_offline_payment_to_check_in = false,
+        public readonly string $offline_payment_availability = 'EVERYONE',
 
         // Invoice settings
         public readonly bool $enable_invoicing = false,
@@ -127,6 +129,7 @@ class UpdateEventSettingsDTO extends BaseDTO
             // Payment defaults
             payment_providers: [PaymentProviders::STRIPE->value],
             offline_payment_instructions: null,
+            offline_payment_availability: OfflinePaymentAvailability::EVERYONE->name,
 
             // Invoice defaults
             enable_invoicing: false,

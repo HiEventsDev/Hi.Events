@@ -34,6 +34,7 @@ class CreateUpdatePromoCodeRequest extends BaseRequest
                 'sometimes',
                 Rule::in(PromoCodeDiscountAppliesToEnum::valuesArray()),
             ],
+            'allows_offline_payment' => ['sometimes', 'boolean'],
         ];
     }
 }

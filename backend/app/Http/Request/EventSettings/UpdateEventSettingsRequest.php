@@ -5,6 +5,7 @@ namespace HiEvents\Http\Request\EventSettings;
 use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
+use HiEvents\DomainObjects\Enums\OfflinePaymentAvailability;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Enums\PriceDisplayMode;
 use HiEvents\DomainObjects\Enums\TicketDateDisplayMode;
@@ -54,6 +55,7 @@ class UpdateEventSettingsRequest extends BaseRequest
             'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
             'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn () => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
             'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
+            'offline_payment_availability' => ['sometimes', 'string', Rule::in(OfflinePaymentAvailability::valuesArray())],
 
             // Invoice settings
             'enable_invoicing' => ['boolean'],

@@ -44,6 +44,7 @@ class UpdatePromoCodeAction extends BaseAction
                 discount_applies_to: $request->has('discount_applies_to')
                     ? PromoCodeDiscountAppliesToEnum::fromName($request->input('discount_applies_to'))
                     : null,
+                allows_offline_payment: $request->boolean('allows_offline_payment'),
             ));
         } catch (ResourceConflictException $e) {
             throw ValidationException::withMessages([

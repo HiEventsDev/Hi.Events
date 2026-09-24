@@ -34,7 +34,8 @@ const Payment = () => {
     const transitionOrderToOfflinePaymentMutation = useTransitionOrderToOfflinePaymentPublic();
 
     const isStripeEnabled = event?.settings?.payment_providers?.includes('STRIPE');
-    const isOfflineEnabled = event?.settings?.payment_providers?.includes('OFFLINE');
+    const isOfflineEnabledForEvent = event?.settings?.payment_providers?.includes('OFFLINE');
+    const isOfflineEnabled = Boolean(isOfflineEnabledForEvent && order?.offline_payment_available);
 
     React.useEffect(() => {
         // Automatically set the first available payment method

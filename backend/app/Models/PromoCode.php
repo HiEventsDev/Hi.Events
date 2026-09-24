@@ -15,6 +15,7 @@ class PromoCode extends BaseModel
             PromoCodeDomainObjectAbstract::DISCOUNT => 'float',
             PromoCodeDomainObjectAbstract::EXPIRY_DATE => 'datetime',
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => 'array',
+            PromoCodeDomainObjectAbstract::ALLOWS_OFFLINE_PAYMENT => 'boolean',
         ];
     }
 
@@ -29,6 +30,7 @@ class PromoCode extends BaseModel
             PromoCodeDomainObjectAbstract::EXPIRY_DATE,
             PromoCodeDomainObjectAbstract::EVENT_ID,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES,
+            PromoCodeDomainObjectAbstract::ALLOWS_OFFLINE_PAYMENT,
         ];
     }
 }

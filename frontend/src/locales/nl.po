@@ -415,9 +415,9 @@ msgstr "Er is een nieuwe verificatiecode naar je e-mail verzonden"
 msgid "A percentage of the product price. E.g., 3.5% of the product price"
 msgstr "Een percentage van de productprijs. Bijvoorbeeld 3,5% van de productprijs"
 
-#: src/components/forms/PromoCodeForm/index.tsx:147
-msgid "A promo code with no discount can be used to reveal hidden products."
-msgstr "Een promotiecode zonder korting kan worden gebruikt om verborgen producten te onthullen."
+#: src/components/forms/PromoCodeForm/index.tsx:148
+msgid "A promo code with no discount can be used to reveal hidden products or unlock Offline Payment."
+msgstr "Een promotiecode zonder korting kan worden gebruikt om verborgen producten te tonen of offline betaling te ontgrendelen."
 
 #: src/components/forms/QuestionForm/index.tsx:120
 msgid "A Radio option has multiple options but only one can be selected."
@@ -485,11 +485,11 @@ msgstr "Accentkleur"
 msgid "Accept all"
 msgstr "Alles accepteren"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:94
 msgid "Accept bank transfers, checks, or other offline payment methods"
 msgstr "Accepteer bankoverschrijvingen, cheques of andere offline betalingsmethoden"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:87
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:89
 msgid "Accept credit card payments with Stripe"
 msgstr "Accepteer creditcardbetalingen met Stripe"
 
@@ -718,7 +718,7 @@ msgstr "Details toevoegen"
 msgid "Add event details"
 msgstr "Evenementdetails toevoegen"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:156
 msgid "Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)"
 msgstr "Instructies voor offline betalingen toevoegen (bijv. details voor bankoverschrijving, waar cheques naartoe moeten, betalingstermijnen)"
 
@@ -1042,7 +1042,7 @@ msgstr "Alle aankomende evenementen"
 msgid "All users"
 msgstr "Alle gebruikers"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:167
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:185
 msgid "Allow attendees associated with unpaid orders to check in"
 msgstr "Deelnemers met onbetaalde bestellingen toestaan om in te checken"
 
@@ -1061,6 +1061,10 @@ msgstr "Klanten toestaan zich aan te melden voor een wachtlijst wanneer dit prod
 #: src/components/forms/ProductForm/index.tsx:463
 msgid "Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date."
 msgstr "Klanten toestaan zich aan te melden voor een wachtlijst wanneer dit product is uitverkocht. Klanten melden zich aan voor de wachtlijst voor een specifieke datum."
+
+#: src/components/forms/PromoCodeForm/index.tsx:154
+msgid "Allow offline payment"
+msgstr "Offline betaling toestaan"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:82
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:82
@@ -1860,7 +1864,7 @@ msgstr "Omdat dit account voltooide bestellingen heeft, worden transactiegegeven
 msgid "Billing Address"
 msgstr "Factuuradres"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:177
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:195
 msgid "Billing Settings"
 msgstr "Factureringsinstellingen"
 
@@ -1950,7 +1954,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "Door trackingpixels toe te voegen, erkent u dat u en dit platform gezamenlijke verwerkingsverantwoordelijken zijn van de verzamelde gegevens. U bent verantwoordelijk voor het waarborgen van een rechtmatige grondslag voor deze verwerking onder toepasselijke privacywetgeving (AVG, CCPA, enz.)."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:762
-#: src/components/routes/product-widget/Payment/index.tsx:157
+#: src/components/routes/product-widget/Payment/index.tsx:158
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "Door verder te gaan, gaat u akkoord met de <0>{0} Servicevoorwaarden</0>"
 
@@ -2437,6 +2441,10 @@ msgstr "Kies hoe de evenementdatum op het ticket wordt weergegeven"
 msgid "Choose the default setting for new events. This can be overridden for individual events."
 msgstr "Kies de standaardinstelling voor nieuwe evenementen. Dit kan per evenement worden overschreven."
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:170
+msgid "Choose whether Offline Payment is available to everyone, or only customers with an authorised promo code."
+msgstr "Kies of offline betaling beschikbaar is voor iedereen, of alleen voor klanten met een geautoriseerde promotiecode."
+
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:51
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Kies wie de platformkosten betaalt. Dit heeft geen invloed op extra kosten die u in uw accountinstellingen hebt geconfigureerd."
@@ -2521,7 +2529,7 @@ msgstr "Zijbalk sluiten"
 #: src/components/common/PromoCodeTable/index.tsx:69
 #: src/components/forms/AffiliateForm/index.tsx:38
 #: src/components/forms/AffiliateForm/index.tsx:72
-#: src/components/forms/PromoCodeForm/index.tsx:63
+#: src/components/forms/PromoCodeForm/index.tsx:64
 msgid "Code"
 msgstr "Code"
 
@@ -2537,8 +2545,8 @@ msgstr "Code is verplicht"
 msgid "Code must be at least 3 characters"
 msgstr "Code moet minimaal 3 tekens bevatten"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:27
-#: src/components/modals/EditPromoCodeModal/index.tsx:38
+#: src/components/modals/CreatePromoCodeModal/index.tsx:28
+#: src/components/modals/EditPromoCodeModal/index.tsx:39
 msgid "Code must be between 3 and 50 characters long"
 msgstr "De code moet tussen 3 en 50 tekens lang zijn"
 
@@ -2614,7 +2622,7 @@ msgid "Complete Order"
 msgstr "Volledige bestelling"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:371
-#: src/components/routes/product-widget/Payment/index.tsx:153
+#: src/components/routes/product-widget/Payment/index.tsx:154
 msgid "Complete Payment"
 msgstr "Volledige betaling"
 
@@ -3213,8 +3221,8 @@ msgstr "Organisator maken"
 msgid "Create Product"
 msgstr "Product maken"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:52
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:53
+#: src/components/modals/CreatePromoCodeModal/index.tsx:58
 msgid "Create Promo Code"
 msgstr "Promocode maken"
 
@@ -3369,6 +3377,10 @@ msgstr "Klant ontvangt een e-mail ter bevestiging van de terugbetaling"
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
 msgid "Customers"
 msgstr "Klanten"
+
+#: src/components/forms/PromoCodeForm/index.tsx:155
+msgid "Customers using this promo code can select Offline Payment when it is enabled for the event."
+msgstr "Klanten die deze promotiecode gebruiken, kunnen offline betaling selecteren wanneer die voor het evenement is ingeschakeld."
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:150
 msgid "Customize page"
@@ -3828,15 +3840,15 @@ msgstr "Discord"
 msgid "Discount"
 msgstr "Korting"
 
-#: src/components/forms/PromoCodeForm/index.tsx:110
+#: src/components/forms/PromoCodeForm/index.tsx:111
 msgid "Discount %"
 msgstr "Korting %"
 
-#: src/components/forms/PromoCodeForm/index.tsx:110
+#: src/components/forms/PromoCodeForm/index.tsx:111
 msgid "Discount in {0}"
 msgstr "Korting in {0}"
 
-#: src/components/forms/PromoCodeForm/index.tsx:90
+#: src/components/forms/PromoCodeForm/index.tsx:91
 msgid "Discount Type"
 msgstr "Korting Type"
 
@@ -3872,7 +3884,7 @@ msgstr "Toont hoeveel plekken er per datum over zijn in de ticketwidget. Je kunt
 msgid "Display name"
 msgstr "Weergavenaam"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:200
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:218
 msgid "Document Label"
 msgstr "Documentlabel"
 
@@ -4030,7 +4042,7 @@ msgstr "bijv. Standaard, Premium, Enterprise"
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Elke persoon ontvangt een e-mail met een gereserveerde plek om de aankoop te voltooien."
 
-#: src/components/forms/PromoCodeForm/index.tsx:133
+#: src/components/forms/PromoCodeForm/index.tsx:134
 msgid "Each product"
 msgstr "Elk product"
 
@@ -4148,8 +4160,8 @@ msgstr "Bewerk product"
 msgid "Edit Product Category"
 msgstr "Bewerk productcategorie"
 
-#: src/components/modals/EditPromoCodeModal/index.tsx:80
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
+#: src/components/modals/EditPromoCodeModal/index.tsx:82
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
 msgid "Edit Promo Code"
 msgstr "Kortingscode bewerken"
 
@@ -4362,7 +4374,7 @@ msgstr "Zelfbediening voor deelnemers inschakelen"
 msgid "Enable attendee self-service by default"
 msgstr "Zelfbediening voor deelnemers standaard inschakelen"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:209
 msgid "Enable Invoicing"
 msgstr "Facturering inschakelen"
 
@@ -4524,7 +4536,7 @@ msgstr "Voer je naam in"
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Voer uw BTW-nummer in inclusief de landcode, zonder spaties (bijv. NL123456789B01, DE123456789)"
 
-#: src/components/forms/PromoCodeForm/index.tsx:129
+#: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
 msgstr "Volledige bestelling"
 
@@ -4795,6 +4807,10 @@ msgstr "Elke {cadenceUnit}"
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
 msgstr "Elke e-mailsjabloon moet een call-to-action knop bevatten die linkt naar de juiste pagina"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:176
+msgid "Everyone"
+msgstr "Iedereen"
+
 #: src/components/forms/ProductForm/index.tsx:388
 msgid "Everything else — tap to edit"
 msgstr "Al het overige — tik om te bewerken"
@@ -4837,7 +4853,7 @@ msgstr "Verlopen"
 msgid "Expires"
 msgstr "Verloopt op"
 
-#: src/components/forms/PromoCodeForm/index.tsx:168
+#: src/components/forms/PromoCodeForm/index.tsx:176
 msgid "Expiry Date"
 msgstr "Vervaldatum"
 
@@ -5324,7 +5340,7 @@ msgstr "Eerste 90 dagen"
 msgid "First attendee"
 msgstr "Eerste deelnemer"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:216
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:234
 msgid "First Invoice Number"
 msgstr "Eerste factuurnummer"
 
@@ -5372,7 +5388,7 @@ msgstr "Los de problemen op om te publiceren"
 msgid "Fixed"
 msgstr "Vast"
 
-#: src/components/forms/PromoCodeForm/index.tsx:102
+#: src/components/forms/PromoCodeForm/index.tsx:103
 msgid "Fixed amount"
 msgstr "Vast bedrag"
 
@@ -5523,14 +5539,14 @@ msgid "General information about your organizer"
 msgstr "Algemene informatie over je organisator"
 
 #: src/components/forms/AffiliateForm/index.tsx:57
-#: src/components/forms/PromoCodeForm/index.tsx:77
+#: src/components/forms/PromoCodeForm/index.tsx:78
 msgid "Generate"
 msgstr "Genereer"
 
 #: src/components/forms/AffiliateForm/index.tsx:53
 #: src/components/forms/AffiliateForm/index.tsx:60
-#: src/components/forms/PromoCodeForm/index.tsx:73
-#: src/components/forms/PromoCodeForm/index.tsx:80
+#: src/components/forms/PromoCodeForm/index.tsx:74
+#: src/components/forms/PromoCodeForm/index.tsx:81
 msgid "Generate code"
 msgstr "Genereer code"
 
@@ -5872,7 +5888,7 @@ msgstr "Uren"
 msgid "How capacity works"
 msgstr "Hoe capaciteit werkt"
 
-#: src/components/forms/PromoCodeForm/index.tsx:116
+#: src/components/forms/PromoCodeForm/index.tsx:117
 msgid "How is the discount applied?"
 msgstr "Hoe wordt de korting toegepast?"
 
@@ -5888,7 +5904,7 @@ msgstr "Hoeveel minuten de klant heeft om zijn bestelling af te ronden. We raden
 msgid "How many of each ticket you sell on a date. Next to the quantity, choose \"per date\" to allocate it to every date, or \"all dates\" to share one pool across the whole run."
 msgstr "Hoeveel je van elk ticket op een datum verkoopt. Kies naast het aantal 'per datum' om het aan elke datum toe te wijzen, of 'alle datums' om één voorraad over de hele reeks te delen."
 
-#: src/components/forms/PromoCodeForm/index.tsx:173
+#: src/components/forms/PromoCodeForm/index.tsx:181
 msgid "How many times can this code be used?"
 msgstr "Hoe vaak kan deze code worden gebruikt?"
 
@@ -5944,7 +5960,7 @@ msgstr "Indien leeg, wordt het adres gebruikt om een Google Maps-link te generer
 msgid "If checked, this category will be hidden from the public."
 msgstr "Indien aangevinkt, wordt deze categorie verborgen voor het publiek."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:168
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:186
 msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
 msgstr "Als dit is ingeschakeld, kunnen incheckmedewerkers aanwezigen markeren als ingecheckt of de bestelling als betaald markeren en de aanwezigen inchecken. Als deze optie is uitgeschakeld, kunnen bezoekers van onbetaalde bestellingen niet worden ingecheckt."
 
@@ -6178,15 +6194,15 @@ msgstr "Factuur"
 msgid "Invoice downloaded successfully"
 msgstr "Factuur succesvol gedownload"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:262
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:280
 msgid "Invoice Notes"
 msgstr "Factuurnotities"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:207
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:225
 msgid "Invoice Numbering"
 msgstr "Factuurnummering"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:187
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:205
 msgid "Invoice Settings"
 msgstr "Factuur Instellingen"
 
@@ -6443,7 +6459,7 @@ msgstr "Nieuwste check-ins"
 msgid "Leave “from” as today to start right away."
 msgstr "Laat “Van” op vandaag staan om direct te beginnen."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:201
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:219
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Laat leeg om het standaardwoord te gebruiken"
 
@@ -6634,7 +6650,7 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat el
 msgid "Main Office"
 msgstr "Hoofdkantoor"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:180
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:198
 msgid "Make billing address mandatory during checkout"
 msgstr "Maak factuuradres verplicht tijdens het afrekenen"
 
@@ -6684,7 +6700,7 @@ msgstr "Beheren in Stripe"
 msgid "Manage order"
 msgstr "Bestelling beheren"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:100
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:102
 msgid "Manage payment and invoicing settings for this event."
 msgstr "Beheer de betalings- en factureringsinstellingen voor dit evenement."
 
@@ -7087,7 +7103,7 @@ msgid "Next: payment"
 msgstr "Volgende: betaling"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:438
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/Payment/index.tsx:99
 msgid "Next: review your order"
 msgstr "Volgende: bestelling controleren"
 
@@ -7236,7 +7252,7 @@ msgstr "Nog geen datums ingepland"
 msgid "No deletion requests found"
 msgstr "Geen verwijderingsverzoeken gevonden"
 
-#: src/components/forms/PromoCodeForm/index.tsx:94
+#: src/components/forms/PromoCodeForm/index.tsx:95
 msgid "No Discount"
 msgstr "Geen Korting"
 
@@ -7349,7 +7365,7 @@ msgstr "Geen betaalde bestellingen"
 msgid "No past events"
 msgstr "Geen afgelopen evenementen"
 
-#: src/components/routes/product-widget/Payment/index.tsx:89
+#: src/components/routes/product-widget/Payment/index.tsx:90
 msgid "No payment methods are currently available. Please contact the event organizer for assistance."
 msgstr "Er zijn momenteel geen betalingsmethoden beschikbaar. Neem contact op met de organisator van het evenement voor hulp."
 
@@ -7557,11 +7573,11 @@ msgstr "November"
 msgid "Number of dates to create"
 msgstr "Aantal aan te maken datums"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:227
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:245
 msgid "Number of days allowed for payment (leave blank to omit payment terms from invoices)"
 msgstr "Aantal dagen toegestaan voor betaling (leeg laten om betalingstermijnen weg te laten van facturen)"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:209
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:227
 msgid "Number Prefix"
 msgstr "Nummer Voorvoegsel"
 
@@ -7650,31 +7666,31 @@ msgstr "Aanbiedingen verlopen na {timeoutHours} uur."
 #: src/components/common/OrdersTable/index.tsx:300
 #: src/components/layouts/CheckIn/index.tsx:573
 #: src/components/layouts/CheckIn/index.tsx:575
-#: src/components/routes/product-widget/Payment/index.tsx:135
+#: src/components/routes/product-widget/Payment/index.tsx:136
 msgid "Offline"
 msgstr "Offline"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:146
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:148
 msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
 msgstr "Offline bestellingen worden niet weergegeven in evenementstatistieken totdat de bestelling als betaald is gemarkeerd."
 
-#: src/components/routes/product-widget/Payment/index.tsx:79
+#: src/components/routes/product-widget/Payment/index.tsx:80
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "Offline betaling mislukt. Probeer het opnieuw of neem contact op met de organisator van het evenement."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
 msgid "Offline Payment Instructions"
 msgstr "Offline Betalingsinstructies"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:91
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:93
 msgid "Offline Payments"
 msgstr "Offline betalingen"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:140
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:142
 msgid "Offline Payments Information"
 msgstr "Informatie over offline betalingen"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:135
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:137
 msgid "Offline Payments Settings"
 msgstr "Instellingen voor offline betalingen"
 
@@ -7753,7 +7769,7 @@ msgstr "Doorlopend"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:122
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:248
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:346
-#: src/components/routes/product-widget/Payment/index.tsx:127
+#: src/components/routes/product-widget/Payment/index.tsx:128
 msgid "Online"
 msgstr "Online"
 
@@ -7807,6 +7823,10 @@ msgstr "Alleen accountbeheerders kunnen organisatoren verwijderen of archiveren.
 #: src/components/forms/ProductForm/index.tsx:542
 msgid "Only available as an add-on"
 msgstr "Alleen beschikbaar als add-on"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
+msgid "Only customers using an authorised promo code"
+msgstr "Alleen klanten met een geautoriseerde promotiecode"
 
 #: src/components/routes/admin/Announcements/index.tsx:470
 msgid "Only published announcements are shown to users"
@@ -7878,7 +7898,7 @@ msgstr "Zijbalk openen"
 msgid "Option {i}"
 msgstr "Optie {i}"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:263
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:281
 msgid "Optional additional information to appear on all invoices (e.g., payment terms, late payment fees, return policy)"
 msgstr "Optionele aanvullende informatie die op alle facturen moet worden vermeld (bijv. betalingsvoorwaarden, kosten voor te late betaling, retourbeleid)"
 
@@ -7890,7 +7910,7 @@ msgstr "Optionele call-to-action"
 msgid "Optional nickname shown in pickers, e.g. \"HQ Conference Room\""
 msgstr "Optionele bijnaam die in keuzelijsten wordt getoond, bijv. \"HQ-vergaderruimte\""
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:210
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:228
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "Optioneel voorvoegsel voor factuurnummers (bijv. INV-)"
 
@@ -8123,16 +8143,16 @@ msgstr "Bestellingen:"
 msgid "Organic Accounts"
 msgstr "Organische accounts"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:245
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:263
 msgid "Organization Address"
 msgstr "Adres organisatie"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:236
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
 msgid "Organization Details"
 msgstr "Organisatie details"
 
 #: src/components/forms/OrganizerForm/index.tsx:28
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:238
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:256
 msgid "Organization Name"
 msgstr "Naam organisatie"
 
@@ -8364,7 +8384,7 @@ msgstr "patrick@acme.com"
 msgid "Paused"
 msgstr "Gepauzeerd"
 
-#: src/components/routes/product-widget/Payment/index.tsx:151
+#: src/components/routes/product-widget/Payment/index.tsx:152
 msgid "Pay"
 msgstr "Betalen"
 
@@ -8379,7 +8399,7 @@ msgstr "Payload"
 
 #: src/components/common/OrdersTable/index.tsx:286
 #: src/components/common/ProgressStepper/index.tsx:19
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/Payment/index.tsx:99
 msgid "Payment"
 msgstr "Betaling"
 
@@ -8387,7 +8407,7 @@ msgstr "Betaling"
 msgid "Payment & Invoicing"
 msgstr "Betaling & facturering"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:99
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:101
 msgid "Payment & Invoicing Settings"
 msgstr "Instellingen voor betaling en facturering"
 
@@ -8395,7 +8415,7 @@ msgstr "Instellingen voor betaling en facturering"
 msgid "Payment Date"
 msgstr "Betaaldatum"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:226
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:244
 msgid "Payment Due Period"
 msgstr "Betalingstermijn"
 
@@ -8409,11 +8429,11 @@ msgstr "Betaling mislukt"
 msgid "Payment Instructions"
 msgstr "Betalingsinstructies"
 
-#: src/components/routes/product-widget/Payment/index.tsx:118
+#: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Payment method"
 msgstr "Betaalmethode"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:106
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:108
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
@@ -8439,7 +8459,7 @@ msgstr "Betalingsstatus"
 msgid "Payment succeeded!"
 msgstr "Betaling gelukt!"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:224
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:242
 msgid "Payment Terms"
 msgstr "Betalingsvoorwaarden"
 
@@ -8508,7 +8528,7 @@ msgstr "per product"
 msgid "Per ticket"
 msgstr "Per ticket"
 
-#: src/components/forms/PromoCodeForm/index.tsx:98
+#: src/components/forms/PromoCodeForm/index.tsx:99
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
 msgid "Percentage"
 msgstr "Percentage"
@@ -9153,7 +9173,7 @@ msgstr "Vragen herschikt"
 msgid "Queue"
 msgstr "Wachtrij"
 
-#: src/components/forms/PromoCodeForm/index.tsx:145
+#: src/components/forms/PromoCodeForm/index.tsx:146
 msgid "Quick Tip"
 msgstr "Snelle tip"
 
@@ -9453,7 +9473,7 @@ msgstr "Aangevraagd"
 msgid "Requested by"
 msgstr "Aangevraagd door"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:197
 msgid "Require Billing Address"
 msgstr "Factuuradres vereisen"
 
@@ -9739,7 +9759,7 @@ msgstr "Zaterdag"
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:193
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:275
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:293
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:72
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:80
@@ -10146,7 +10166,7 @@ msgid "Select Product Tier"
 msgstr "Selecteer productcategorie"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/forms/PromoCodeForm/index.tsx:158
+#: src/components/forms/PromoCodeForm/index.tsx:166
 #: src/components/modals/SendMessageModal/index.tsx:414
 msgid "Select products"
 msgstr "Selecteer producten"
@@ -10388,7 +10408,7 @@ msgstr "Het datumlabel instellen of verwijderen"
 msgid "Set the end time of each date to be this long after its start time."
 msgstr "Stel de eindtijd van elke datum zo lang na de starttijd in."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:217
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:235
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
 msgstr "Stel het startnummer voor factuurnummering in. Dit kan niet worden gewijzigd als de facturen eenmaal zijn gegenereerd."
 
@@ -10894,7 +10914,7 @@ msgstr "Stop Imiteren"
 
 #: src/components/common/OrdersTable/index.tsx:295
 #: src/components/routes/admin/Dashboard/index.tsx:424
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:86
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:88
 msgid "Stripe"
 msgstr "Stripe"
 
@@ -10993,7 +11013,7 @@ msgstr "Succesvol aangemaakte deelnemer"
 msgid "Successfully Created Product"
 msgstr "Succesvol gecreëerd product"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:40
+#: src/components/modals/CreatePromoCodeModal/index.tsx:41
 msgid "Successfully Created Promo Code"
 msgstr "Succesvol aangemaakte promotiecode"
 
@@ -11075,7 +11095,7 @@ msgstr "Bestelling succesvol bijgewerkt"
 msgid "Successfully Updated Organizer"
 msgstr "Organisator succesvol bijgewerkt"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:75
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:77
 msgid "Successfully Updated Payment & Invoicing Settings"
 msgstr "Instellingen voor betalen en factureren succesvol bijgewerkt"
 
@@ -11091,7 +11111,7 @@ msgstr "Platformkosteninstellingen succesvol bijgewerkt"
 msgid "Successfully updated product"
 msgstr "Product succesvol bijgewerkt"
 
-#: src/components/modals/EditPromoCodeModal/index.tsx:52
+#: src/components/modals/EditPromoCodeModal/index.tsx:53
 msgid "Successfully Updated Promo Code"
 msgstr "Succesvol bijgewerkte promotiecode"
 
@@ -11218,11 +11238,11 @@ msgstr "Belastingen en heffingen"
 msgid "Tax collected grouped by tax type and event"
 msgstr "Geïnde belasting gegroepeerd op belastingtype en evenement"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:253
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:271
 msgid "Tax Details"
 msgstr "Belastingdetails"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:272
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "Belastinginformatie die onderaan alle facturen moet staan (bijv. btw-nummer, belastingregistratie)"
 
@@ -11370,11 +11390,11 @@ msgstr "De standaardvaluta voor je evenementen."
 msgid "The default timezone for your events."
 msgstr "De standaard tijdzone voor je evenementen."
 
-#: src/components/forms/PromoCodeForm/index.tsx:119
+#: src/components/forms/PromoCodeForm/index.tsx:120
 msgid "The discount is deducted from every eligible product. E.g., {currencySymbol}10 off × 3 tickets = {currencySymbol}30 off."
 msgstr "De korting wordt afgetrokken van elk in aanmerking komend product. Bijv. {currencySymbol}10 korting × 3 tickets = {currencySymbol}30 korting."
 
-#: src/components/forms/PromoCodeForm/index.tsx:118
+#: src/components/forms/PromoCodeForm/index.tsx:119
 msgid "The discount is deducted once from the order total."
 msgstr "De korting wordt eenmalig afgetrokken van het ordertotaal."
 
@@ -11693,7 +11713,7 @@ msgstr "Dit evenement is uitverkocht"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "De datums en tijden van dit evenement worden in de datumplanning ingesteld."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:153
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:155
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Deze informatie wordt weergegeven op de betaalpagina, de pagina met het overzicht van de bestelling en de e-mail ter bevestiging van de bestelling."
 
@@ -12344,7 +12364,7 @@ msgstr "Onbekende deelnemer"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:483
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:99
-#: src/components/forms/PromoCodeForm/index.tsx:171
+#: src/components/forms/PromoCodeForm/index.tsx:179
 #: src/components/modals/OfferWaitlistModal/index.tsx:195
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:30
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:38
@@ -13182,7 +13202,7 @@ msgstr "Wat is een categorie?"
 msgid "What products does this code apply to?"
 msgstr "Op welke producten is deze code van toepassing?"
 
-#: src/components/forms/PromoCodeForm/index.tsx:157
+#: src/components/forms/PromoCodeForm/index.tsx:165
 msgid "What products does this code apply to? (Applies to all by default)"
 msgstr "Op welke producten is deze code van toepassing? (Geldt standaard voor alle)"
 
@@ -13302,7 +13322,7 @@ msgstr "Wanneer klanten tickets kopen, verschijnen hun bestellingen hier."
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr "Indien ingeschakeld, kunnen kopers hun naam en e-mailadres in één keer naar alle deelnemers kopiëren. Schakel dit uit om de optie \"Alle deelnemers\" te verwijderen; kopers kunnen hun gegevens nog steeds naar de eerste deelnemer kopiëren, de rest moet afzonderlijk worden ingevoerd."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:192
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:210
 msgid "When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page."
 msgstr "Als deze optie is ingeschakeld, worden facturen gegenereerd voor ticketbestellingen. Facturen worden samen met de e-mail ter bevestiging van de bestelling verzonden. Bezoekers kunnen hun facturen ook downloaden van de bestelbevestigingspagina."
 
@@ -13318,7 +13338,7 @@ msgstr "Indien ingeschakeld, tonen nieuwe evenementen een marketing opt-in selec
 msgid "When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported."
 msgstr "Indien ingeschakeld, worden er geen applicatiekosten in rekening gebracht bij Stripe Connect-transacties. Gebruik dit voor landen waar applicatiekosten niet worden ondersteund."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:142
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "Als offline betalingen zijn ingeschakeld, kunnen gebruikers hun bestellingen afronden en hun tickets ontvangen. Hun tickets zullen duidelijk aangeven dat de bestelling niet betaald is en de check-in tool zal het check-in personeel informeren als een bestelling betaald moet worden."
 
@@ -13329,6 +13349,10 @@ msgstr "Waar de knop naartoe linkt"
 #: src/components/forms/CheckInListForm/index.tsx:119
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Welke tickets moeten aan deze inchecklijst worden gekoppeld?"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:169
+msgid "Who can use Offline Payment?"
+msgstr "Wie kan offline betaling gebruiken?"
 
 #: src/components/modals/CreateEventModal/index.tsx:156
 msgid "Who is organizing this event?"
@@ -13356,11 +13380,11 @@ msgstr "Werken"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:142
 #: src/components/modals/CreateProductCategoryModal/index.tsx:56
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:58
 #: src/components/modals/CreateQuestionModal/index.tsx:75
 #: src/components/modals/DuplicateEventModal/index.tsx:181
 #: src/components/modals/EditProductCategoryModal/index.tsx:70
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:101
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:135
@@ -13561,7 +13585,7 @@ msgstr "U moet het e-mailadres van uw account verifiëren voordat u berichten ku
 msgid "You receive"
 msgstr "U ontvangt"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:146
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Je moet een bestelling handmatig als betaald markeren. Dit kun je doen op de pagina Bestelling beheren."
 

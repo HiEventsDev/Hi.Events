@@ -5,10 +5,12 @@ namespace HiEvents\Resources\Order;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
 use HiEvents\Resources\Order\Invoice\InvoiceResourcePublic;
+use HiEvents\Services\Domain\Payment\OfflinePaymentEligibilityService;
 use Illuminate\Http\Request;
 
 /**
@@ -44,6 +46,7 @@ class OrderResourcePublic extends BaseResource
             'public_id' => $this->getPublicId(),
             'is_payment_required' => $this->isPaymentRequired(),
             'promo_code' => $this->getPromoCode(),
+            'offline_payment_available' => $this->resolveOfflinePaymentAvailable(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'event' => $this->when(
                 ! is_null($this->getEvent()),
@@ -76,5 +79,19 @@ class OrderResourcePublic extends BaseResource
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
         ];
+    }
+
+    private function resolveOfflinePaymentAvailable(): bool
+    {
+        $eventSettings = $this->getEvent()?->getEventSettings()
+            ?? app(EventSettingsRepositoryInterface::class)->findFirstWhere([
+                'event_id' => $this->getEventId(),
+            ]);
+
+        if ($eventSettings === null) {
+            return false;
+        }
+
+        return app(OfflinePaymentEligibilityService::class)->isEligible($this->resource, $eventSettings);
     }
 }

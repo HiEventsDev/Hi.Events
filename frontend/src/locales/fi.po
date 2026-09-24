@@ -414,9 +414,9 @@ msgstr "Uusi vahvistuskoodi on lähetetty sähköpostiisi"
 msgid "A percentage of the product price. E.g., 3.5% of the product price"
 msgstr "Prosenttiosuus tuotteen hinnasta. Esim. 3,5 % tuotteen hinnasta"
 
-#: src/components/forms/PromoCodeForm/index.tsx:147
-msgid "A promo code with no discount can be used to reveal hidden products."
-msgstr "Kampanjakoodia ilman alennusta voidaan käyttää piilotettujen tuotteiden paljastamiseen."
+#: src/components/forms/PromoCodeForm/index.tsx:148
+msgid "A promo code with no discount can be used to reveal hidden products or unlock Offline Payment."
+msgstr "Alennuksetonta tarjouskoodia voidaan käyttää piilotettujen tuotteiden näyttämiseen tai offline-maksun avaamiseen."
 
 #: src/components/forms/QuestionForm/index.tsx:120
 msgid "A Radio option has multiple options but only one can be selected."
@@ -484,11 +484,11 @@ msgstr "Korostusväri"
 msgid "Accept all"
 msgstr "Hyväksy kaikki"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:92
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:94
 msgid "Accept bank transfers, checks, or other offline payment methods"
 msgstr "Hyväksy pankkisiirrot, shekit tai muut offline-maksutavat"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:87
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:89
 msgid "Accept credit card payments with Stripe"
 msgstr "Hyväksy luottokorttimaksut Stripellä"
 
@@ -717,7 +717,7 @@ msgstr "Lisää tiedot"
 msgid "Add event details"
 msgstr "Lisää tapahtuman tiedot"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:156
 msgid "Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)"
 msgstr "Lisää ohjeet offline-maksuille (esim. pankkisiirtotiedot, shekin lähetysosoite, eräpäivät)"
 
@@ -1041,7 +1041,7 @@ msgstr "Kaikki tulevat tapahtumat"
 msgid "All users"
 msgstr "Kaikki käyttäjät"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:167
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:185
 msgid "Allow attendees associated with unpaid orders to check in"
 msgstr "Salli maksamattomiin tilauksiin liittyvien osallistujien kirjautua sisään"
 
@@ -1060,6 +1060,10 @@ msgstr "Salli asiakkaiden liittyä jonotuslistalle, kun tämä tuote on loppuunm
 #: src/components/forms/ProductForm/index.tsx:463
 msgid "Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date."
 msgstr "Salli asiakkaiden liittyä jonotuslistalle, kun tämä tuote on loppuunmyyty. Asiakkaat liittyvät jonotuslistalle tietylle päivämäärälle."
+
+#: src/components/forms/PromoCodeForm/index.tsx:154
+msgid "Allow offline payment"
+msgstr "Salli offline-maksu"
 
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:82
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:82
@@ -1859,7 +1863,7 @@ msgstr "Koska tällä tilillä on valmiita tilauksia, tapahtumatiedot (summat, p
 msgid "Billing Address"
 msgstr "Laskutusosoite"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:177
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:195
 msgid "Billing Settings"
 msgstr "Laskutusasetukset"
 
@@ -1949,7 +1953,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "Lisäämällä seurantapikseleitä vahvistat, että sinä ja tämä alusta olette yhteisiä kerättyjen tietojen rekisterinpitäjiä. Olet vastuussa siitä, että sinulla on laillinen käsittelyperuste sovellettavien tietosuojalakien (GDPR, CCPA jne.) mukaisesti."
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:762
-#: src/components/routes/product-widget/Payment/index.tsx:157
+#: src/components/routes/product-widget/Payment/index.tsx:158
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
 msgstr "Jatkamalla hyväksyt <0>{0}:n käyttöehdot</0>"
 
@@ -2436,6 +2440,10 @@ msgstr "Valitse, miten tapahtuman päivämäärä näytetään lipussa"
 msgid "Choose the default setting for new events. This can be overridden for individual events."
 msgstr "Valitse oletusasetukset uusille tapahtumille. Tätä voidaan ohittaa yksittäisille tapahtumille."
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:170
+msgid "Choose whether Offline Payment is available to everyone, or only customers with an authorised promo code."
+msgstr "Valitse, onko offline-maksu kaikkien käytettävissä vai vain valtuutetun tarjouskoodin omaaville asiakkaille."
+
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:51
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Valitse, kuka maksaa palvelumaksun. Tämä ei vaikuta tileilläsi määriteltyihin lisämaksuihin."
@@ -2520,7 +2528,7 @@ msgstr "Sulje sivupalkki"
 #: src/components/common/PromoCodeTable/index.tsx:69
 #: src/components/forms/AffiliateForm/index.tsx:38
 #: src/components/forms/AffiliateForm/index.tsx:72
-#: src/components/forms/PromoCodeForm/index.tsx:63
+#: src/components/forms/PromoCodeForm/index.tsx:64
 msgid "Code"
 msgstr "Koodi"
 
@@ -2536,8 +2544,8 @@ msgstr "Koodi on pakollinen"
 msgid "Code must be at least 3 characters"
 msgstr "Koodin on oltava vähintään 3 merkkiä pitkä"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:27
-#: src/components/modals/EditPromoCodeModal/index.tsx:38
+#: src/components/modals/CreatePromoCodeModal/index.tsx:28
+#: src/components/modals/EditPromoCodeModal/index.tsx:39
 msgid "Code must be between 3 and 50 characters long"
 msgstr "Koodin on oltava 3–50 merkkiä pitkä"
 
@@ -2613,7 +2621,7 @@ msgid "Complete Order"
 msgstr "Viimeistele tilaus"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:371
-#: src/components/routes/product-widget/Payment/index.tsx:153
+#: src/components/routes/product-widget/Payment/index.tsx:154
 msgid "Complete Payment"
 msgstr "Suorita maksu"
 
@@ -3212,8 +3220,8 @@ msgstr "Luo järjestäjä"
 msgid "Create Product"
 msgstr "Luo tuote"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:52
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:53
+#: src/components/modals/CreatePromoCodeModal/index.tsx:58
 msgid "Create Promo Code"
 msgstr "Luo kampanjakoodi"
 
@@ -3368,6 +3376,10 @@ msgstr "Asiakas saa sähköpostin, joka vahvistaa hyvityksen"
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
 msgid "Customers"
 msgstr "Asiakkaat"
+
+#: src/components/forms/PromoCodeForm/index.tsx:155
+msgid "Customers using this promo code can select Offline Payment when it is enabled for the event."
+msgstr "Tätä tarjouskoodia käyttävät asiakkaat voivat valita offline-maksun, kun se on käytössä tapahtumassa."
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:150
 msgid "Customize page"
@@ -3827,15 +3839,15 @@ msgstr "Discord"
 msgid "Discount"
 msgstr "Alennus"
 
-#: src/components/forms/PromoCodeForm/index.tsx:110
+#: src/components/forms/PromoCodeForm/index.tsx:111
 msgid "Discount %"
 msgstr "Alennus %"
 
-#: src/components/forms/PromoCodeForm/index.tsx:110
+#: src/components/forms/PromoCodeForm/index.tsx:111
 msgid "Discount in {0}"
 msgstr "Alennus kohteessa {0}"
 
-#: src/components/forms/PromoCodeForm/index.tsx:90
+#: src/components/forms/PromoCodeForm/index.tsx:91
 msgid "Discount Type"
 msgstr "Alennustyyppi"
 
@@ -3871,7 +3883,7 @@ msgstr "Näytä, kuinka monta paikkaa on jäljellä kussakin päivässä lippuwi
 msgid "Display name"
 msgstr "Näyttönimi"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:200
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:218
 msgid "Document Label"
 msgstr "Asiakirjan huomautus"
 
@@ -4029,7 +4041,7 @@ msgstr "esim. Perus, Premium, Enterprise"
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Jokainen henkilö saa sähköpostin, jossa on varattu paikka ostoksen viimeistelyä varten."
 
-#: src/components/forms/PromoCodeForm/index.tsx:133
+#: src/components/forms/PromoCodeForm/index.tsx:134
 msgid "Each product"
 msgstr "Jokainen tuote"
 
@@ -4147,8 +4159,8 @@ msgstr "Muokkaa tuotetta"
 msgid "Edit Product Category"
 msgstr "Muokkaa tuoteryhmää"
 
-#: src/components/modals/EditPromoCodeModal/index.tsx:80
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
+#: src/components/modals/EditPromoCodeModal/index.tsx:82
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
 msgid "Edit Promo Code"
 msgstr "Muokkaa kampanjakoodia"
 
@@ -4361,7 +4373,7 @@ msgstr "Ota osallistujien itsepalvelu käyttöön"
 msgid "Enable attendee self-service by default"
 msgstr "Ota osallistujien itsepalvelu oletuksena käyttöön"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:191
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:209
 msgid "Enable Invoicing"
 msgstr "Ota laskutus käyttöön"
 
@@ -4523,7 +4535,7 @@ msgstr "Anna nimesi"
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Anna ALV-numero kansainvälisellä maatunnuksella ilman välilyöntejä (esim. IE1234567A, DE123456789)"
 
-#: src/components/forms/PromoCodeForm/index.tsx:129
+#: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
 msgstr "Koko tilaus"
 
@@ -4794,6 +4806,10 @@ msgstr "Joka {cadenceUnit}"
 msgid "Every email template must include a call-to-action button that links to the appropriate page"
 msgstr "Jokaisessa sähköpostipohjassa täytyy olla toimintakehotuspainike, joka linkittää oikealle sivulle"
 
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:176
+msgid "Everyone"
+msgstr "Kaikki"
+
 #: src/components/forms/ProductForm/index.tsx:388
 msgid "Everything else — tap to edit"
 msgstr "Muut asetukset — napauta muokataksesi"
@@ -4836,7 +4852,7 @@ msgstr "Vanhentunut"
 msgid "Expires"
 msgstr "Vanhenee"
 
-#: src/components/forms/PromoCodeForm/index.tsx:168
+#: src/components/forms/PromoCodeForm/index.tsx:176
 msgid "Expiry Date"
 msgstr "Vanhentumispäivä"
 
@@ -5323,7 +5339,7 @@ msgstr "Ensimmäiset 90 päivää"
 msgid "First attendee"
 msgstr "Ensimmäinen osallistuja"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:216
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:234
 msgid "First Invoice Number"
 msgstr "Ensimmäinen laskun numero"
 
@@ -5371,7 +5387,7 @@ msgstr "Korjaa ongelmat julkaisua varten"
 msgid "Fixed"
 msgstr "Kiinteä"
 
-#: src/components/forms/PromoCodeForm/index.tsx:102
+#: src/components/forms/PromoCodeForm/index.tsx:103
 msgid "Fixed amount"
 msgstr "Kiinteä summa"
 
@@ -5522,14 +5538,14 @@ msgid "General information about your organizer"
 msgstr "Yleistietoja järjestäjästäsi"
 
 #: src/components/forms/AffiliateForm/index.tsx:57
-#: src/components/forms/PromoCodeForm/index.tsx:77
+#: src/components/forms/PromoCodeForm/index.tsx:78
 msgid "Generate"
 msgstr "Luo"
 
 #: src/components/forms/AffiliateForm/index.tsx:53
 #: src/components/forms/AffiliateForm/index.tsx:60
-#: src/components/forms/PromoCodeForm/index.tsx:73
-#: src/components/forms/PromoCodeForm/index.tsx:80
+#: src/components/forms/PromoCodeForm/index.tsx:74
+#: src/components/forms/PromoCodeForm/index.tsx:81
 msgid "Generate code"
 msgstr "Luo koodi"
 
@@ -5871,7 +5887,7 @@ msgstr "Tunnit"
 msgid "How capacity works"
 msgstr "Näin kapasiteetti toimii"
 
-#: src/components/forms/PromoCodeForm/index.tsx:116
+#: src/components/forms/PromoCodeForm/index.tsx:117
 msgid "How is the discount applied?"
 msgstr "Miten alennus sovelletaan?"
 
@@ -5887,7 +5903,7 @@ msgstr "Kuinka monta minuuttia asiakkaalla on aikaa viimeistellä tilaus. Suosit
 msgid "How many of each ticket you sell on a date. Next to the quantity, choose \"per date\" to allocate it to every date, or \"all dates\" to share one pool across the whole run."
 msgstr "Kuinka monta kutakin lippua myyt yhtenä päivämääränä. Valitse määrän vierestä \"per päivämäärä\", jolloin määrä koskee jokaista päivämäärää, tai \"kaikki päivämäärät\", jolloin yksi yhteinen kiintiö jaetaan koko sarjan kesken."
 
-#: src/components/forms/PromoCodeForm/index.tsx:173
+#: src/components/forms/PromoCodeForm/index.tsx:181
 msgid "How many times can this code be used?"
 msgstr "Kuinka monta kertaa tätä koodia voi käyttää?"
 
@@ -5943,7 +5959,7 @@ msgstr "Jos kenttä jätetään tyhjäksi, osoite käytetään Google Maps -link
 msgid "If checked, this category will be hidden from the public."
 msgstr "Jos valittuna, tämä kategoria piilotetaan julkiselta yleisöltä."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:168
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:186
 msgid "If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in."
 msgstr "Jos ominaisuus on käytössä, sisäänkirjaushenkilöstö voi merkitä osallistujat sisäänkirjatuiksi tai merkitä tilauksen maksetuksi ja kirjata osallistujat sisään. Jos ominaisuus on pois päältä, maksamattomien tilausten osallistujia ei voi kirjata sisään."
 
@@ -6177,15 +6193,15 @@ msgstr "Lasku"
 msgid "Invoice downloaded successfully"
 msgstr "Lasku ladattu onnistuneesti"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:262
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:280
 msgid "Invoice Notes"
 msgstr "Laskun muistiinpanot"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:207
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:225
 msgid "Invoice Numbering"
 msgstr "Laskun numerointi"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:187
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:205
 msgid "Invoice Settings"
 msgstr "Laskuasetukset"
 
@@ -6442,7 +6458,7 @@ msgstr "Viimeisimmät sisäänkirjautumiset"
 msgid "Leave “from” as today to start right away."
 msgstr "Jätä “from” tänään aloittaaksesi välittömästi."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:201
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:219
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Jätä tyhjäksi käyttääksesi oletussanaa \"Invoice\""
 
@@ -6633,7 +6649,7 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat el
 msgid "Main Office"
 msgstr "Pääkonttori"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:180
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:198
 msgid "Make billing address mandatory during checkout"
 msgstr "Tee laskutusosoitteesta pakollinen kassalla"
 
@@ -6683,7 +6699,7 @@ msgstr "Hallinnoi Stripella"
 msgid "Manage order"
 msgstr "Hallinnoi tilausta"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:100
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:102
 msgid "Manage payment and invoicing settings for this event."
 msgstr "Hallinnoi tämän tapahtuman maksamis- ja laskutusasetuksia."
 
@@ -7086,7 +7102,7 @@ msgid "Next: payment"
 msgstr "Seuraavaksi: maksu"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:438
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/Payment/index.tsx:99
 msgid "Next: review your order"
 msgstr "Seuraavaksi: tarkastele tilaustasi"
 
@@ -7235,7 +7251,7 @@ msgstr "Päiviä ei ole vielä ajastettu"
 msgid "No deletion requests found"
 msgstr "Poistopyyntöjä ei löytynyt"
 
-#: src/components/forms/PromoCodeForm/index.tsx:94
+#: src/components/forms/PromoCodeForm/index.tsx:95
 msgid "No Discount"
 msgstr "Ei alennusta"
 
@@ -7348,7 +7364,7 @@ msgstr "Ei maksettuja tilauksia"
 msgid "No past events"
 msgstr "Ei menneitä tapahtumia"
 
-#: src/components/routes/product-widget/Payment/index.tsx:89
+#: src/components/routes/product-widget/Payment/index.tsx:90
 msgid "No payment methods are currently available. Please contact the event organizer for assistance."
 msgstr "Maksutapoja ei ole tällä hetkellä saatavilla. Ota yhteyttä tapahtuman järjestäjään saadaksesi apua."
 
@@ -7556,11 +7572,11 @@ msgstr "marraskuu"
 msgid "Number of dates to create"
 msgstr "Luotavien päivämäärien määrä"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:227
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:245
 msgid "Number of days allowed for payment (leave blank to omit payment terms from invoices)"
 msgstr "Sallittujen maksupäivien määrä (jätä tyhjäksi poistaaksesi maksuehdot laskuilta)"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:209
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:227
 msgid "Number Prefix"
 msgstr "Numeroesivalinta"
 
@@ -7649,31 +7665,31 @@ msgstr "Tarjoukset vanhenevat {timeoutHours} tunnin kuluttua."
 #: src/components/common/OrdersTable/index.tsx:300
 #: src/components/layouts/CheckIn/index.tsx:573
 #: src/components/layouts/CheckIn/index.tsx:575
-#: src/components/routes/product-widget/Payment/index.tsx:135
+#: src/components/routes/product-widget/Payment/index.tsx:136
 msgid "Offline"
 msgstr "Offline"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:146
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:148
 msgid "Offline orders are not reflected in event statistics until the order is marked as paid."
 msgstr "Offline-tilaukset eivät näy tapahtuman tilastoissa ennen kuin tilaus merkitään maksetuksi."
 
-#: src/components/routes/product-widget/Payment/index.tsx:79
+#: src/components/routes/product-widget/Payment/index.tsx:80
 msgid "Offline payment failed. Please try again or contact the event organizer."
 msgstr "Offline-maksu epäonnistui. Yritä uudelleen tai ota yhteyttä tapahtuman järjestäjään."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:152
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:154
 msgid "Offline Payment Instructions"
 msgstr "Offline-maksuohjeet"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:91
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:93
 msgid "Offline Payments"
 msgstr "Offline-maksut"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:140
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:142
 msgid "Offline Payments Information"
 msgstr "Offline-maksujen tiedot"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:135
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:137
 msgid "Offline Payments Settings"
 msgstr "Offline-maksuasetukset"
 
@@ -7752,7 +7768,7 @@ msgstr "Käynnissä"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:122
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:248
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:346
-#: src/components/routes/product-widget/Payment/index.tsx:127
+#: src/components/routes/product-widget/Payment/index.tsx:128
 msgid "Online"
 msgstr "Verkossa"
 
@@ -7806,6 +7822,10 @@ msgstr "Vain tilin ylläpitäjät voivat poistaa tai arkistoida järjestäjiä. 
 #: src/components/forms/ProductForm/index.tsx:542
 msgid "Only available as an add-on"
 msgstr "Saatavilla vain lisäosana"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
+msgid "Only customers using an authorised promo code"
+msgstr "Vain valtuutettua tarjouskoodia käyttävät asiakkaat"
 
 #: src/components/routes/admin/Announcements/index.tsx:470
 msgid "Only published announcements are shown to users"
@@ -7877,7 +7897,7 @@ msgstr "Avaa sivupalkki"
 msgid "Option {i}"
 msgstr "Vaihtoehto {i}"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:263
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:281
 msgid "Optional additional information to appear on all invoices (e.g., payment terms, late payment fees, return policy)"
 msgstr "Valinnainen lisätieto, joka näkyy kaikissa laskuissa (esim. maksuehdot, myöhästymismaksut, palautusehdot)"
 
@@ -7889,7 +7909,7 @@ msgstr "Valinnainen toimintakehotus"
 msgid "Optional nickname shown in pickers, e.g. \"HQ Conference Room\""
 msgstr "Valinnainen lempinimi, joka näytetään valitsimissa, esim. \"HQ Conference Room\""
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:210
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:228
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "Valinnainen esitäyte laskunumeroille (esim. INV-)"
 
@@ -8122,16 +8142,16 @@ msgstr "Tilaukset:"
 msgid "Organic Accounts"
 msgstr "Orgaaniset tilit"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:245
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:263
 msgid "Organization Address"
 msgstr "Organisaation osoite"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:236
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
 msgid "Organization Details"
 msgstr "Organisaation tiedot"
 
 #: src/components/forms/OrganizerForm/index.tsx:28
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:238
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:256
 msgid "Organization Name"
 msgstr "Organisaation nimi"
 
@@ -8363,7 +8383,7 @@ msgstr "patrick@acme.com"
 msgid "Paused"
 msgstr "Tauolla"
 
-#: src/components/routes/product-widget/Payment/index.tsx:151
+#: src/components/routes/product-widget/Payment/index.tsx:152
 msgid "Pay"
 msgstr "Maksa"
 
@@ -8378,7 +8398,7 @@ msgstr "Payload"
 
 #: src/components/common/OrdersTable/index.tsx:286
 #: src/components/common/ProgressStepper/index.tsx:19
-#: src/components/routes/product-widget/Payment/index.tsx:98
+#: src/components/routes/product-widget/Payment/index.tsx:99
 msgid "Payment"
 msgstr "Maksu"
 
@@ -8386,7 +8406,7 @@ msgstr "Maksu"
 msgid "Payment & Invoicing"
 msgstr "Maksut ja laskutus"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:99
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:101
 msgid "Payment & Invoicing Settings"
 msgstr "Maksu- ja laskutusasetukset"
 
@@ -8394,7 +8414,7 @@ msgstr "Maksu- ja laskutusasetukset"
 msgid "Payment Date"
 msgstr "Maksupäivä"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:226
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:244
 msgid "Payment Due Period"
 msgstr "Maksuaika"
 
@@ -8408,11 +8428,11 @@ msgstr "Maksu epäonnistui"
 msgid "Payment Instructions"
 msgstr "Maksuohjeet"
 
-#: src/components/routes/product-widget/Payment/index.tsx:118
+#: src/components/routes/product-widget/Payment/index.tsx:119
 msgid "Payment method"
 msgstr "Maksutapa"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:106
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:108
 msgid "Payment Methods"
 msgstr "Maksutavat"
 
@@ -8438,7 +8458,7 @@ msgstr "Maksun tila"
 msgid "Payment succeeded!"
 msgstr "Maksu onnistui!"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:224
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:242
 msgid "Payment Terms"
 msgstr "Maksuehdot"
 
@@ -8507,7 +8527,7 @@ msgstr "tuotetta kohden"
 msgid "Per ticket"
 msgstr "lippua kohden"
 
-#: src/components/forms/PromoCodeForm/index.tsx:98
+#: src/components/forms/PromoCodeForm/index.tsx:99
 #: src/components/forms/TaxAndFeeForm/index.tsx:27
 msgid "Percentage"
 msgstr "Prosentti"
@@ -9152,7 +9172,7 @@ msgstr "Kysymykset järjestetty uudelleen"
 msgid "Queue"
 msgstr "Jono"
 
-#: src/components/forms/PromoCodeForm/index.tsx:145
+#: src/components/forms/PromoCodeForm/index.tsx:146
 msgid "Quick Tip"
 msgstr "Pikavinkki"
 
@@ -9452,7 +9472,7 @@ msgstr "Pyydetty"
 msgid "Requested by"
 msgstr "Pyydetty käyttäjän toimesta"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:179
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:197
 msgid "Require Billing Address"
 msgstr "Vaadi laskutusosoite"
 
@@ -9738,7 +9758,7 @@ msgstr "Lauantai"
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:141
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:193
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:94
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:275
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:293
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:72
 #: src/components/routes/event/Settings/Sections/SeoSettings/index.tsx:85
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:80
@@ -10145,7 +10165,7 @@ msgid "Select Product Tier"
 msgstr "Valitse tuotteen taso"
 
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:49
-#: src/components/forms/PromoCodeForm/index.tsx:158
+#: src/components/forms/PromoCodeForm/index.tsx:166
 #: src/components/modals/SendMessageModal/index.tsx:414
 msgid "Select products"
 msgstr "Valitse tuotteet"
@@ -10387,7 +10407,7 @@ msgstr "Aseta tai poista päivämäärän nimike"
 msgid "Set the end time of each date to be this long after its start time."
 msgstr "Aseta kunkin päivämäärän lopetusaika alkuaikaan nähden näin pitkän ajan jälkeen."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:217
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:235
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
 msgstr "Aseta laskujen numeroinnin lähtönumero. Tätä ei voi muuttaa sen jälkeen, kun laskuja on luotu."
 
@@ -10893,7 +10913,7 @@ msgstr "Lopeta käyttäjänä toimiminen"
 
 #: src/components/common/OrdersTable/index.tsx:295
 #: src/components/routes/admin/Dashboard/index.tsx:424
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:86
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:88
 msgid "Stripe"
 msgstr "Stripe"
 
@@ -10992,7 +11012,7 @@ msgstr "Osallistuja luotu onnistuneesti"
 msgid "Successfully Created Product"
 msgstr "Tuote luotu onnistuneesti"
 
-#: src/components/modals/CreatePromoCodeModal/index.tsx:40
+#: src/components/modals/CreatePromoCodeModal/index.tsx:41
 msgid "Successfully Created Promo Code"
 msgstr "Kampanjakoodi luotu onnistuneesti"
 
@@ -11074,7 +11094,7 @@ msgstr "Tilaus päivitetty onnistuneesti"
 msgid "Successfully Updated Organizer"
 msgstr "Järjestäjä päivitetty onnistuneesti"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:75
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:77
 msgid "Successfully Updated Payment & Invoicing Settings"
 msgstr "Maksu- ja laskutusasetukset päivitetty onnistuneesti"
 
@@ -11090,7 +11110,7 @@ msgstr "Palvelumaksuasetukset päivitetty onnistuneesti"
 msgid "Successfully updated product"
 msgstr "Tuote päivitetty onnistuneesti"
 
-#: src/components/modals/EditPromoCodeModal/index.tsx:52
+#: src/components/modals/EditPromoCodeModal/index.tsx:53
 msgid "Successfully Updated Promo Code"
 msgstr "Kampanjakoodi päivitetty onnistuneesti"
 
@@ -11217,11 +11237,11 @@ msgstr "Verot ja maksut"
 msgid "Tax collected grouped by tax type and event"
 msgstr "Kerätyt verot ryhmitelty verotyypin ja tapahtuman mukaan"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:253
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:271
 msgid "Tax Details"
 msgstr "Verotiedot"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:254
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:272
 msgid "Tax information to appear at the bottom of all invoices (e.g., VAT number, tax registration)"
 msgstr "Verotiedot, jotka näkyvät kaikissa laskuissa alareunassa (esim. ALV-numero, verorekisteröinti)"
 
@@ -11369,11 +11389,11 @@ msgstr "Tapahtumiesi oletusvaluutta."
 msgid "The default timezone for your events."
 msgstr "Tapahtumiesi oletusaikavyöhyke."
 
-#: src/components/forms/PromoCodeForm/index.tsx:119
+#: src/components/forms/PromoCodeForm/index.tsx:120
 msgid "The discount is deducted from every eligible product. E.g., {currencySymbol}10 off × 3 tickets = {currencySymbol}30 off."
 msgstr "Alennus vähennetään jokaisesta oikeutetuista tuotteesta. Esim. {currencySymbol}10 alennus × 3 lippua = {currencySymbol}30 alennus."
 
-#: src/components/forms/PromoCodeForm/index.tsx:118
+#: src/components/forms/PromoCodeForm/index.tsx:119
 msgid "The discount is deducted once from the order total."
 msgstr "Alennus vähennetään kerran tilauksen kokonaissummasta."
 
@@ -11692,7 +11712,7 @@ msgstr "Tämä tapahtuma on loppuunmyyty"
 msgid "This event's dates and times are set on the occurrence schedule."
 msgstr "Tapahtuman päivämäärät ja kellonajat määritetään tapahtumakertojen aikataulussa."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:153
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:155
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Nämä tiedot näytetään maksusivulla, tilauksen yhteenvetosivulla ja tilausvahvistussähköpostissa."
 
@@ -12343,7 +12363,7 @@ msgstr "Tuntematon osallistuja"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:483
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:99
-#: src/components/forms/PromoCodeForm/index.tsx:171
+#: src/components/forms/PromoCodeForm/index.tsx:179
 #: src/components/modals/OfferWaitlistModal/index.tsx:195
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:30
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:38
@@ -13181,7 +13201,7 @@ msgstr "Mikä on kategoria?"
 msgid "What products does this code apply to?"
 msgstr "Mitä tuotteita tämä koodi koskee?"
 
-#: src/components/forms/PromoCodeForm/index.tsx:157
+#: src/components/forms/PromoCodeForm/index.tsx:165
 msgid "What products does this code apply to? (Applies to all by default)"
 msgstr "Mitä tuotteita tämä koodi koskee? (Oletusarvoisesti koskee kaikkia tuotteita)"
 
@@ -13301,7 +13321,7 @@ msgstr "Kun asiakkaat ostavat lippuja, heidän tilauksensa näkyvät täällä."
 msgid "When enabled, buyers can copy their own name and email onto all attendees at once. Turn this off to remove the \"All attendees\" option; buyers can still copy to the first attendee, and the rest must be entered individually."
 msgstr "Kun tämä on käytössä, ostajat voivat kopioida oman nimensä ja sähköpostiosoitteensa kaikille osallistujille kerralla. Poista tämä käytöstä poistaaksesi \"Kaikki osallistujat\"-vaihtoehdon. Ostajat voivat edelleen kopioida tietonsa ensimmäiselle osallistujalle, mutta muiden tiedot on syötettävä erikseen."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:192
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:210
 msgid "When enabled, invoices will be generated for ticket orders. Invoices will sent along with the order confirmation email. Attendees can also download their invoices from the order confirmation page."
 msgstr "Kun tämä on käytössä, lipputilauksista luodaan laskut. Laskut lähetetään tilausvahvistussähköpostin mukana. Osallistujat voivat myös ladata laskunsa tilausvahvistussivulta."
 
@@ -13317,7 +13337,7 @@ msgstr "Kun tämä on käytössä, uusissa tapahtumissa näytetään kassalla ma
 msgid "When enabled, no application fees will be charged on Stripe Connect transactions. Use this for countries where application fees are not supported."
 msgstr "Kun tämä on käytössä, Stripe Connect -tapahtumista ei veloiteta sovellusmaksuja. Käytä tätä maissa, joissa sovellusmaksuja ei tueta."
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:142
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
 msgid "When offline payments are enabled, users will be able to complete their orders and receive their tickets. Their tickets will clearly indicate the order is not paid, and the check-in tool will notify the check-in staff if an order requires payment."
 msgstr "Kun offline-maksut ovat käytössä, käyttäjät voivat viimeistellä tilauksensa ja vastaanottaa lippunsa. Lipuissa ilmoitetaan selvästi, että tilausta ei ole maksettu, ja sisäänkirjautumistyökalu ilmoittaa henkilökunnalle, jos tilaus edellyttää maksua."
 
@@ -13328,6 +13348,10 @@ msgstr "Mihin painike johtaa"
 #: src/components/forms/CheckInListForm/index.tsx:119
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mitkä liput yhdistetään tähän sisäänkirjautumislistaan?"
+
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:169
+msgid "Who can use Offline Payment?"
+msgstr "Kuka voi käyttää offline-maksua?"
 
 #: src/components/modals/CreateEventModal/index.tsx:156
 msgid "Who is organizing this event?"
@@ -13355,11 +13379,11 @@ msgstr "Käsitellään"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:142
 #: src/components/modals/CreateProductCategoryModal/index.tsx:56
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:58
 #: src/components/modals/CreateQuestionModal/index.tsx:75
 #: src/components/modals/DuplicateEventModal/index.tsx:181
 #: src/components/modals/EditProductCategoryModal/index.tsx:70
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:101
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:135
@@ -13560,7 +13584,7 @@ msgstr "Sinun on vahvistettava tilisi sähköpostiosoite ennen kuin voit lähett
 msgid "You receive"
 msgstr "Saat"
 
-#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
+#: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:146
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Sinun on merkittävä tilaus maksetuksi manuaalisesti. Voit tehdä tämän tilauksen hallintasivulla."
 

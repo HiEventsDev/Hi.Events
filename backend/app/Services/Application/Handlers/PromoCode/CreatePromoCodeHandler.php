@@ -31,6 +31,7 @@ readonly class CreatePromoCodeHandler
                 ->setMaxAllowedUsages($promoCodeDTO->max_allowed_usages)
                 ->setApplicableProductIds($promoCodeDTO->applicable_product_ids)
                 ->setDiscountAppliesTo(($promoCodeDTO->discount_applies_to ?? PromoCodeDiscountAppliesToEnum::EACH_PRODUCT)->name)
+                ->setAllowsOfflinePayment($promoCodeDTO->allows_offline_payment)
         );
     }
 }

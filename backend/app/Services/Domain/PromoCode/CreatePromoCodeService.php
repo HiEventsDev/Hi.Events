@@ -50,6 +50,7 @@ class CreatePromoCodeService
                 : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCode->getMaxAllowedUsages(),
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCode->getApplicableProductIds(),
+            PromoCodeDomainObjectAbstract::ALLOWS_OFFLINE_PAYMENT => $promoCode->getAllowsOfflinePayment(),
         ]);
     }
 

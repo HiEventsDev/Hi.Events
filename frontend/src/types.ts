@@ -257,6 +257,7 @@ export interface EventSettings {
     offline_payment_instructions: string;
     payment_providers: PaymentProvider[];
     allow_orders_awaiting_offline_payment_to_check_in: boolean;
+    offline_payment_availability?: 'EVERYONE' | 'PROMO_CODE_ONLY';
 
     // Invoice settings
     enable_invoicing: boolean;
@@ -953,6 +954,7 @@ export interface Order {
     is_free_order: boolean;
     promo_code?: string;
     promo_code_id?: number;
+    offline_payment_available?: boolean;
     taxes_and_fees_rollup?: TaxesAndFeesRollup;
     question_answers?: QuestionAnswer[];
     event?: Event;
@@ -1243,6 +1245,7 @@ export interface PromoCode {
     attendee_usage_count?: number;
     order_usage_count?: number;
     max_allowed_usages?: number | undefined;
+    allows_offline_payment?: boolean;
 }
 
 export enum PromoCodeDiscountType {

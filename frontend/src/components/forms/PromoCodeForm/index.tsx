@@ -1,5 +1,5 @@
 import {UseFormReturnType} from "@mantine/form";
-import {Button, Input, NumberInput, SegmentedControl, Select, TextInput} from "@mantine/core";
+import {Button, Input, NumberInput, SegmentedControl, Select, Switch, TextInput} from "@mantine/core";
 import {IconBulb, IconPercentage, IconRefresh, IconTicket} from "@tabler/icons-react";
 import {PromoCode, PromoCodeDiscountAppliesTo, PromoCodeDiscountType} from "../../../types.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
@@ -23,6 +23,7 @@ const hasAdvancedValuesSet = (form: UseFormReturnType<PromoCode>): boolean => {
         (form.values.applicable_product_ids?.length ?? 0) > 0
         || form.values.expiry_date
         || form.values.max_allowed_usages
+        || form.values.allows_offline_payment
     );
 };
 
@@ -36,7 +37,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
         if (hasAdvancedValuesSet(form)) {
             setShowAdvanced(true);
         }
-    }, [form.values.applicable_product_ids, form.values.expiry_date, form.values.max_allowed_usages]);
+    }, [form.values.applicable_product_ids, form.values.expiry_date, form.values.max_allowed_usages, form.values.allows_offline_payment]);
 
     const currencySymbol = getCurrencySymbol(event?.currency as string);
 
@@ -144,9 +145,16 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     variant="info"
                     title={t`Quick Tip`}
                 >
-                    {t`A promo code with no discount can be used to reveal hidden products.`}
+                    {t`A promo code with no discount can be used to reveal hidden products or unlock Offline Payment.`}
                 </Callout>
             )}
+
+            <Switch
+                mt="md"
+                label={t`Allow offline payment`}
+                description={t`Customers using this promo code can select Offline Payment when it is enabled for the event.`}
+                {...form.getInputProps('allows_offline_payment', {type: 'checkbox'})}
+            />
 
             <AdvancedOptions
                 opened={showAdvanced}

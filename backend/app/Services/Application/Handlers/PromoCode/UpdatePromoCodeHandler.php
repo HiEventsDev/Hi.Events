@@ -69,6 +69,7 @@ readonly class UpdatePromoCodeHandler
                 : null,
             PromoCodeDomainObjectAbstract::MAX_ALLOWED_USAGES => $promoCodeDTO->max_allowed_usages,
             PromoCodeDomainObjectAbstract::APPLICABLE_PRODUCT_IDS => $promoCodeDTO->applicable_product_ids,
+            PromoCodeDomainObjectAbstract::ALLOWS_OFFLINE_PAYMENT => $promoCodeDTO->allows_offline_payment,
         ]);
     }
 }

@@ -26,6 +26,7 @@ class PromoCodeResource extends JsonResource
             'attendee_usage_count' => $this->getAttendeeUsageCount(),
             'order_usage_count' => $this->getOrderUsageCount(),
             'max_allowed_usages' => $this->getMaxAllowedUsages(),
+            'allows_offline_payment' => $this->getAllowsOfflinePayment(),
         ];
     }
 }

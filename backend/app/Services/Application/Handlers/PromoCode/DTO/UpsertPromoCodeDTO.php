@@ -16,5 +16,6 @@ class UpsertPromoCodeDTO
         public readonly ?string $expiry_date,
         public readonly ?int $max_allowed_usages,
         public readonly ?PromoCodeDiscountAppliesToEnum $discount_applies_to,
+        public readonly bool $allows_offline_payment = false,
     ) {}
 }

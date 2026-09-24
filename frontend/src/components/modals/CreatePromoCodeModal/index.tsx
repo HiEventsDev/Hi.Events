@@ -22,6 +22,7 @@ export const CreatePromoCodeModal = ({onClose}: GenericModalProps) => {
             discount_type: PromoCodeDiscountType.None,
             discount_applies_to: PromoCodeDiscountAppliesTo.Order,
             max_allowed_usages: undefined,
+            allows_offline_payment: false,
         },
         validate: {
             code: hasLength({min: 3, max: 50}, t`Code must be between 3 and 50 characters long`),

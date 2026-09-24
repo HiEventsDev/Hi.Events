@@ -33,6 +33,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
             expiry_date: undefined,
             discount_type: undefined,
             max_allowed_usages: undefined,
+            allows_offline_payment: false,
         },
         validate: {
             code: hasLength({min: 3, max: 50}, t`Code must be between 3 and 50 characters long`),
@@ -70,6 +71,7 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
             discount_type: promoCode.discount_type,
             discount_applies_to: promoCode.discount_applies_to ?? PromoCodeDiscountAppliesTo.EachProduct,
             max_allowed_usages: promoCode.max_allowed_usages || undefined,
+            allows_offline_payment: promoCode.allows_offline_payment ?? false,
         });
     }, [promoCode, event]);
 

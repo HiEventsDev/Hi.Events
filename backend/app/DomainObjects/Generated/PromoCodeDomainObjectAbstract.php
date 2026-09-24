@@ -24,6 +24,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const UPDATED_AT = 'updated_at';
     final public const DELETED_AT = 'deleted_at';
     final public const DISCOUNT_APPLIES_TO = 'discount_applies_to';
+    final public const ALLOWS_OFFLINE_PAYMENT = 'allows_offline_payment';
 
     protected int $id;
     protected int $event_id;
@@ -39,6 +40,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected ?string $updated_at = null;
     protected ?string $deleted_at = null;
     protected string $discount_applies_to = 'EACH_PRODUCT';
+    protected bool $allows_offline_payment = false;
 
     public function toArray(): array
     {
@@ -57,6 +59,7 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'updated_at' => $this->updated_at ?? null,
                     'deleted_at' => $this->deleted_at ?? null,
                     'discount_applies_to' => $this->discount_applies_to ?? null,
+                    'allows_offline_payment' => $this->allows_offline_payment ?? null,
                 ];
     }
 
@@ -212,5 +215,16 @@ abstract class PromoCodeDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getDiscountAppliesTo(): string
     {
         return $this->discount_applies_to;
+    }
+
+    public function setAllowsOfflinePayment(bool $allows_offline_payment): self
+    {
+        $this->allows_offline_payment = $allows_offline_payment;
+        return $this;
+    }
+
+    public function getAllowsOfflinePayment(): bool
+    {
+        return $this->allows_offline_payment;
     }
 }

@@ -16,6 +16,7 @@ use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\TransitionOrderToOfflinePaymentPublicDTO;
 use HiEvents\Services\Domain\Order\OccurrenceStatusValidator;
+use HiEvents\Services\Domain\Payment\OfflinePaymentEligibilityService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -33,6 +34,7 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
+        private readonly OfflinePaymentEligibilityService $offlinePaymentEligibilityService,
     ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
@@ -100,6 +102,7 @@ class TransitionOrderToOfflinePaymentHandler
 
     /**
      * @throws ResourceConflictException
+     * @throws UnauthorizedException
      */
     public function validateOfflinePayment(
         OrderDomainObject $order,
@@ -113,8 +116,12 @@ class TransitionOrderToOfflinePaymentHandler
             throw new ResourceConflictException(__('Order reservation has expired'));
         }
 
-        if (collect($settings->getPaymentProviders())->contains(PaymentProviders::OFFLINE->value) === false) {
-            throw new UnauthorizedException(__('Offline payments are not enabled for this event'));
+        if (! $this->offlinePaymentEligibilityService->isEligible($order, $settings)) {
+            if (collect($settings->getPaymentProviders())->contains(PaymentProviders::OFFLINE->value) === false) {
+                throw new UnauthorizedException(__('Offline payments are not enabled for this event'));
+            }
+
+            throw new UnauthorizedException(__('Offline payment is not available for this order'));
         }
     }
 }
