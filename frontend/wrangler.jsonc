@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hievents-frontend",
+  "main": "dist/worker/worker.js",
+  "compatibility_date": "2026-07-27",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_compat_populate_process_env"
+  ],
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    // Worker must run first so SSR fills index.html instead of serving the raw shell.
+    "run_worker_first": true
+  },
+  "vars": {
+    "VITE_APP_NAME": "Hi.Events"
+  }
+}
