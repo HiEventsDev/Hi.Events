@@ -10,4 +10,5 @@ enum ReportTypes: string
     case DAILY_SALES_REPORT = 'daily_sales_report';
     case PROMO_CODES_REPORT = 'promo_codes_report';
     case OCCURRENCE_SUMMARY = 'occurrence_summary';
+    case CASHLESS_SALES = 'cashless_sales';
 }

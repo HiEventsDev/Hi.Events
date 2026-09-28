@@ -12,6 +12,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const PLURAL_NAME = 'event_settings';
     final public const ID = 'id';
     final public const EVENT_ID = 'event_id';
+    final public const CASHLESS_TOPUP_PRODUCT_ID = 'cashless_topup_product_id';
     final public const PRE_CHECKOUT_MESSAGE = 'pre_checkout_message';
     final public const POST_CHECKOUT_MESSAGE = 'post_checkout_message';
     final public const PRODUCT_PAGE_MESSAGE = 'product_page_message';
@@ -70,9 +71,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const SHOW_AVAILABLE_OCCURRENCE_CAPACITY = 'show_available_occurrence_capacity';
     final public const HIDE_SOLD_OUT_OCCURRENCES = 'hide_sold_out_occurrences';
     final public const GET_TICKETS_BUTTON_TEXT = 'get_tickets_button_text';
+    final public const CASHLESS_ENABLED = 'cashless_enabled';
+    final public const CASHLESS_MIN_TOPUP_AMOUNT = 'cashless_min_topup_amount';
+    final public const CASHLESS_ALLOW_REMAINING_BALANCE_REFUND = 'cashless_allow_remaining_balance_refund';
+    final public const CASHLESS_REFUND_DEADLINE_AT = 'cashless_refund_deadline_at';
+    final public const CASHLESS_ONLINE_TOPUP_ENABLED = 'cashless_online_topup_enabled';
+    final public const CASHLESS_CLOSED_AT = 'cashless_closed_at';
 
     protected int $id;
     protected int $event_id;
+    protected ?int $cashless_topup_product_id = null;
     protected ?string $pre_checkout_message = null;
     protected ?string $post_checkout_message = null;
     protected ?string $product_page_message = null;
@@ -131,12 +139,19 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $show_available_occurrence_capacity = false;
     protected bool $hide_sold_out_occurrences = false;
     protected ?string $get_tickets_button_text = null;
+    protected bool $cashless_enabled = false;
+    protected float $cashless_min_topup_amount = 5.0;
+    protected bool $cashless_allow_remaining_balance_refund = false;
+    protected ?string $cashless_refund_deadline_at = null;
+    protected bool $cashless_online_topup_enabled = true;
+    protected ?string $cashless_closed_at = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
                     'event_id' => $this->event_id ?? null,
+                    'cashless_topup_product_id' => $this->cashless_topup_product_id ?? null,
                     'pre_checkout_message' => $this->pre_checkout_message ?? null,
                     'post_checkout_message' => $this->post_checkout_message ?? null,
                     'product_page_message' => $this->product_page_message ?? null,
@@ -195,6 +210,12 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'show_available_occurrence_capacity' => $this->show_available_occurrence_capacity ?? null,
                     'hide_sold_out_occurrences' => $this->hide_sold_out_occurrences ?? null,
                     'get_tickets_button_text' => $this->get_tickets_button_text ?? null,
+                    'cashless_enabled' => $this->cashless_enabled ?? null,
+                    'cashless_min_topup_amount' => $this->cashless_min_topup_amount ?? null,
+                    'cashless_allow_remaining_balance_refund' => $this->cashless_allow_remaining_balance_refund ?? null,
+                    'cashless_refund_deadline_at' => $this->cashless_refund_deadline_at ?? null,
+                    'cashless_online_topup_enabled' => $this->cashless_online_topup_enabled ?? null,
+                    'cashless_closed_at' => $this->cashless_closed_at ?? null,
                 ];
     }
 
@@ -218,6 +239,17 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    public function setCashlessTopupProductId(?int $cashless_topup_product_id): self
+    {
+        $this->cashless_topup_product_id = $cashless_topup_product_id;
+        return $this;
+    }
+
+    public function getCashlessTopupProductId(): ?int
+    {
+        return $this->cashless_topup_product_id;
     }
 
     public function setPreCheckoutMessage(?string $pre_checkout_message): self
@@ -857,5 +889,71 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getGetTicketsButtonText(): ?string
     {
         return $this->get_tickets_button_text;
+    }
+
+    public function setCashlessEnabled(bool $cashless_enabled): self
+    {
+        $this->cashless_enabled = $cashless_enabled;
+        return $this;
+    }
+
+    public function getCashlessEnabled(): bool
+    {
+        return $this->cashless_enabled;
+    }
+
+    public function setCashlessMinTopupAmount(float $cashless_min_topup_amount): self
+    {
+        $this->cashless_min_topup_amount = $cashless_min_topup_amount;
+        return $this;
+    }
+
+    public function getCashlessMinTopupAmount(): float
+    {
+        return $this->cashless_min_topup_amount;
+    }
+
+    public function setCashlessAllowRemainingBalanceRefund(bool $cashless_allow_remaining_balance_refund): self
+    {
+        $this->cashless_allow_remaining_balance_refund = $cashless_allow_remaining_balance_refund;
+        return $this;
+    }
+
+    public function getCashlessAllowRemainingBalanceRefund(): bool
+    {
+        return $this->cashless_allow_remaining_balance_refund;
+    }
+
+    public function setCashlessRefundDeadlineAt(?string $cashless_refund_deadline_at): self
+    {
+        $this->cashless_refund_deadline_at = $cashless_refund_deadline_at;
+        return $this;
+    }
+
+    public function getCashlessRefundDeadlineAt(): ?string
+    {
+        return $this->cashless_refund_deadline_at;
+    }
+
+    public function setCashlessOnlineTopupEnabled(bool $cashless_online_topup_enabled): self
+    {
+        $this->cashless_online_topup_enabled = $cashless_online_topup_enabled;
+        return $this;
+    }
+
+    public function getCashlessOnlineTopupEnabled(): bool
+    {
+        return $this->cashless_online_topup_enabled;
+    }
+
+    public function setCashlessClosedAt(?string $cashless_closed_at): self
+    {
+        $this->cashless_closed_at = $cashless_closed_at;
+        return $this;
+    }
+
+    public function getCashlessClosedAt(): ?string
+    {
+        return $this->cashless_closed_at;
     }
 }

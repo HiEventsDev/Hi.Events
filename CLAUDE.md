@@ -122,6 +122,21 @@ Gotchas:
 #### Database & Migrations
 - **DO** use auto-incrementing integer IDs (`$table->id()`), not UUIDs
 - Use anonymous class syntax for migrations
+- Postgres returns `decimal` columns as strings. Domain objects type them as `float`, so every new decimal column needs a `'column' => 'float'` entry in the Eloquent model's `getCastMap()` or hydration throws a `TypeError`
+
+#### Cashless
+- A top-up is a **normal order** containing a hidden system product flagged `products.is_cashless_topup`, provisioned by `CashlessTopupProductProvisionService`. Its fees are the account's native taxes & fees, attached to that product from the cashless settings screen. Cash top-ups at a sales point never touch the product, so they never pay the fee
+- A sales point purchase is also a **normal order** (`CashlessPosOrderService`), created `COMPLETED` with `payment_provider = CASHLESS`. That is what makes it count in orders, product statistics, stock and reports. Reversing the purchase cancels the order through `OrderCancelService`. `CASHLESS` is not a checkout payment method: `UpdateEventSettingsRequest` deliberately only accepts Stripe and offline
+- Top-up orders are **excluded from every sales statistic** (`EventStatisticsIncrementService`, `RefundService`, `CancellationService` all return early via `CashlessTopupOrderChecker`) and from the product-sales, events-performance and tax-summary reports: the money is only revenue once it is spent at a sales point, so counting both would double the gross. Refunding a remaining balance therefore never touches sales figures either
+- Every balance mutation goes through `CashlessWalletService::record()` / `reverse()`, which take a row lock on the wallet. Never write `cashless_wallets.balance` directly — the ledger must always re-sum to the stored balance
+- `cashless_transactions` is append-only. A mistake is corrected with a `REVERSAL` row, never by editing or deleting
+- Crediting a top-up runs in `CreditCashlessWalletJob`, dispatched from `OrderStatusChangedEvent`. Keeping it queued is what stops the Unit suite from hitting the DB. A `PENDING` `cashless_topups` row against a `COMPLETED` order means the job never ran — that is the reconciliation signal
+- Sales point writes are idempotent on `client_reference_id`, unique per sales point. Any new till operation must send one
+- The till never computes a total itself: it asks `CashlessQuoteService` (`/quote`) so the amount shown to staff, and the amount to key into a card terminal, always match what the order will charge
+- Visitors reach their balance without logging in: the event homepage links to `/cashless/:eventId` (type or scan the ticket ID), which redirects to `/cashless/:eventId/:ticketReference`. `CashlessWalletResolveService::resolveByTicketReference` accepts both `A-…` public ids and `a_…` short ids; the public wallet response only exposes the surname initial, and both public endpoints are throttled because the public id is the only secret
+- The top-up confirmation email is the editable `EmailTemplateType::CASHLESS_TOPUP` template (Liquid, event/organizer level like order confirmation), built through `MailBuilderService::buildCashlessTopupConfirmationMail`. It is edited from the cashless settings page (`TemplateSettings` restricted with `types={['cashless_topup']}`); the event email screen omits it, only the organizer defaults screen lists it too. The blade view is only the fallback when no template exists — never send `CashlessTopupConfirmationMail` directly, and add tokens in `LiquidTemplateRenderer` and `EmailTokenContextBuilder` together
+- The closure lives in the cashless settings page inside the shared `DangerZone`/`DangerZoneSection` (like organizer and event settings), not on the overview. Admin drill-downs link to the transactions list through `cashlessTransactionsPath()` using the `filterFields[cashless_wallet_id|cashless_sales_point_id][eq]` query params; the list also filters on `type` (`in`) and searches attendees through `query`
+- Closing cashless (`CashlessClosureService`, one transaction) writes a `CLOSURE` ledger row per wallet with a balance, locks every wallet as `CLOSED`, sets `event_settings.cashless_closed_at`, and adds the total to `sales_total_gross` / `sales_total_before_additions` through `EventStatisticsCashlessClosureService` — atomic `incrementEach` that also bumps `version`, touching neither `orders_created` nor `products_sold` since no order exists. It is refused while balance refunds are still open, and it cannot be undone (closures are not reversible). Wallets first created after the closure are born `CLOSED`. Order-derived reports (product sales, events performance) do not include it: only the event statistics do
 
 #### Enums
 - Status enums go in `backend/app/DomainObjects/Status/`
@@ -167,6 +182,9 @@ Gotchas:
 - Add a `data-testid` to interactive elements the E2E suite needs to drive — primarily **buttons** (open-modal triggers, submit/save), **menu items**, and **custom widgets with no accessible label** (e.g. `CustomSelect`, which takes a `dataTestId` prop that lands on its target and options). This is not required for every element: text inputs with a unique `<label>` are found by role/label instead, so don't add IDs there.
 - Convention: kebab-case `<feature>-<element>`, e.g. `promo-code-create-button`, `webhook-submit-button`, `product-edit-menu-item`. For `CustomSelect`, options are auto-derived as `<dataTestId>-option-<value>`.
 - Only add IDs for elements a test actually interacts with; don't blanket-annotate new UI.
+
+#### Public (unauthenticated) pages
+- `frontend/src/api/client.ts` holds `ALLOWED_UNAUTHENTICATED_PATHS`. A new public route must be listed there, otherwise the 401 from `/users/me` redirects anonymous visitors to the login page
 
 #### Error Handling
 - **DON'T** use `showNotification` from `@mantine/notifications`

@@ -15,6 +15,7 @@ import {
     IconMapPin,
     IconMenuOrder,
     IconPrinter,
+    IconWallet,
     IconSend,
     IconTicket,
     IconUser
@@ -122,6 +123,17 @@ const GuestListItem = ({
                         <IconPrinter size={18}/>
                     </ActionIcon>
                 </Tooltip>
+                {event.settings?.cashless_enabled && !isCancelled && (
+                    <Tooltip label={t`Cashless balance`}>
+                        <ActionIcon
+                            variant="subtle"
+                            onClick={() => window?.open(`/cashless/${event.id}/${attendee.short_id}`, '_blank')}
+                            data-testid="attendee-cashless-button"
+                        >
+                            <IconWallet size={18}/>
+                        </ActionIcon>
+                    </Tooltip>
+                )}
                 {allowSelfEdit && !isCancelled && (
                     <>
                         <Tooltip label={t`Edit Attendee`}>

@@ -89,6 +89,13 @@ class AttendeeTicketMail extends BaseMail
                     $this->event->getId(),
                     $this->attendee->getShortId(),
                 ),
+                'cashlessWalletUrl' => $this->eventSettings->getCashlessEnabled()
+                    ? sprintf(
+                        Url::getFrontEndUrlFromConfig(Url::CASHLESS_WALLET),
+                        $this->event->getId(),
+                        $this->attendee->getShortId(),
+                    )
+                    : null,
             ]
         );
     }

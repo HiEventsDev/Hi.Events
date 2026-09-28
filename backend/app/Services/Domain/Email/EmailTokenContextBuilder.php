@@ -215,6 +215,68 @@ class EmailTokenContextBuilder
         ];
     }
 
+    public function buildCashlessTopupContext(
+        AttendeeDomainObject $attendee,
+        EventDomainObject $event,
+        OrganizerDomainObject $organizer,
+        EventSettingDomainObject $eventSettings,
+        string $toppedUpAmount,
+        string $newBalance,
+        string $walletUrl,
+    ): array {
+        $eventStartDate = $event->getStartDate() ? new Carbon(DateHelper::convertFromUTC($event->getStartDate(), $event->getTimezone())) : null;
+        $eventEndDate = $event->getEndDate() ? new Carbon(DateHelper::convertFromUTC($event->getEndDate(), $event->getTimezone())) : null;
+
+        $eventLocation = $event->getEventLocation();
+        $structuredAddress = $this->extractStructuredAddress($eventLocation);
+
+        return [
+            'event' => [
+                'title' => $event->getTitle(),
+                'date' => $eventStartDate?->format('F j, Y') ?? '',
+                'time' => $eventStartDate?->format('g:i A') ?? '',
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'full_address' => $structuredAddress ? AddressHelper::formatAddress($structuredAddress) : '',
+                'location_details' => $structuredAddress,
+                'description' => $event->getDescription() ?? '',
+                'timezone' => $event->getTimezone(),
+            ],
+
+            'event_location' => $this->buildLocationContext($eventLocation, $structuredAddress),
+
+            'occurrence' => [
+                'start_date' => $eventStartDate?->format('F j, Y') ?? '',
+                'start_time' => $eventStartDate?->format('g:i A') ?? '',
+                'end_date' => $eventEndDate?->format('F j, Y') ?? '',
+                'end_time' => $eventEndDate?->format('g:i A') ?? '',
+                'label' => '',
+            ],
+
+            'organizer' => [
+                'name' => $organizer->getName() ?? '',
+                'email' => $organizer->getEmail() ?? '',
+            ],
+
+            'settings' => [
+                'support_email' => $eventSettings->getSupportEmail() ?? $organizer->getEmail() ?? '',
+                'offline_payment_instructions' => '',
+                'post_checkout_message' => $eventSettings->getPostCheckoutMessage() ?? '',
+            ],
+
+            'attendee' => [
+                'name' => trim($attendee->getFirstName().' '.$attendee->getLastName()),
+                'email' => $attendee->getEmail() ?? '',
+            ],
+
+            'cashless' => [
+                'topped_up_amount' => $toppedUpAmount,
+                'new_balance' => $newBalance,
+                'url' => $walletUrl,
+            ],
+        ];
+    }
+
     public function buildPreviewContext(string $templateType): array
     {
         $baseContext = [
@@ -290,6 +352,18 @@ class EmailTokenContextBuilder
                 'name' => 'VIP Pass',
                 'price' => '$75.00',
                 'url' => 'https://example.com/ticket/XYZ789',
+            ];
+        }
+
+        if ($templateType === 'cashless_topup') {
+            $baseContext['attendee'] = [
+                'name' => 'John Smith',
+                'email' => 'john@example.com',
+            ];
+            $baseContext['cashless'] = [
+                'topped_up_amount' => '$20.00',
+                'new_balance' => '$35.00',
+                'url' => 'https://example.com/cashless/123/A-ABC1234',
             ];
         }
 

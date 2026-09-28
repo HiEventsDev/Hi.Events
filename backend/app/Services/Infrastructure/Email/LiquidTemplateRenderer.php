@@ -255,10 +255,39 @@ class LiquidTemplateRenderer
             ],
         ];
 
+        $cashlessTokens = [
+            [
+                'token' => '{{ attendee.name }}',
+                'description' => __('The attendee\'s full name'),
+                'example' => 'John Smith',
+            ],
+            [
+                'token' => '{{ attendee.email }}',
+                'description' => __('The attendee\'s email'),
+                'example' => 'john@example.com',
+            ],
+            [
+                'token' => '{{ cashless.topped_up_amount }}',
+                'description' => __('The amount that was just added to the balance'),
+                'example' => '$20.00',
+            ],
+            [
+                'token' => '{{ cashless.new_balance }}',
+                'description' => __('The balance available after this top-up'),
+                'example' => '$35.00',
+            ],
+            [
+                'token' => '{{ cashless.url }}',
+                'description' => __('Link to view the cashless balance'),
+                'example' => 'https://example.com/cashless/123/A-ABC1234',
+            ],
+        ];
+
         return match ($type) {
             EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens),
             EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens),
             EmailTemplateType::OCCURRENCE_CANCELLATION => array_merge($commonTokens, $cancellationTokens),
+            EmailTemplateType::CASHLESS_TOPUP => array_merge($commonTokens, $cashlessTokens),
         };
     }
 }

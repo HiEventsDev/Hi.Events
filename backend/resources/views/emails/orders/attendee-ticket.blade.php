@@ -6,6 +6,7 @@
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventOccurrenceDomainObject|null $occurrence */ @endphp
 @php /** @var string $ticketUrl */ @endphp
+@php /** @var ?string $cashlessWalletUrl */ @endphp
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
 @php
@@ -67,6 +68,14 @@
 <x-mail::button :url="$ticketUrl">
 {{ __('View Ticket') }}
 </x-mail::button>
+
+@if($cashlessWalletUrl)
+{{ __('Pay cashless at the event: top up the balance attached to this ticket and pay with its QR code.') }}
+
+<x-mail::button :url="$cashlessWalletUrl">
+{{ __('Top up my balance') }}
+</x-mail::button>
+@endif
 
 {{ __('If you have any questions or need assistance, please reply to this email or contact the event organizer') }}
 {{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.

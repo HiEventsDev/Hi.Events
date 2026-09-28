@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 import {AreaChart} from "@mantine/charts";
 import {t} from "@lingui/macro";
 import {Card} from "../Card";
-import {EventDailyStats} from "../../../types.ts";
+import {CashlessDailyStats, EventDailyStats} from "../../../types.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import classes from "./StatsCharts.module.scss";
@@ -79,6 +79,34 @@ export const RevenueChartCard = ({dailyStats, timezone, dateRangeLabel, syncId, 
                 {name: 'total_sales_gross', label: t`Gross Sales`, color: 'grape.5'},
                 {name: 'total_tax', label: t`Total Tax`, color: 'grape.7'},
                 {name: 'total_refunded', label: t`Total Refunded`, color: 'red.6'},
+            ]}
+            curveType="natural"
+            areaChartProps={{syncId}}
+        />
+    </ChartCard>
+);
+
+export const CashlessRevenueChartCard = ({dailyStats, timezone, dateRangeLabel, syncId, currency}: {
+    dailyStats: CashlessDailyStats[] | undefined;
+    timezone: string;
+    dateRangeLabel: string;
+    syncId: string;
+    currency: string;
+}) => (
+    <ChartCard title={t`Cashless Revenue`} dateRangeLabel={dateRangeLabel}>
+        <AreaChart
+            {...responsiveChartProps}
+            data={dailyStats?.map(stat => ({
+                date: formatDateWithLocale(stat.date, 'chartDate', timezone),
+                topped_up: stat.topped_up,
+                spent: stat.spent,
+                refunded: stat.refunded,
+            })) || []}
+            valueFormatter={(value) => formatCurrency(value, currency)}
+            series={[
+                {name: 'topped_up', label: t`Topped up`, color: 'teal.6'},
+                {name: 'spent', label: t`Spent at sales points`, color: 'grape.5'},
+                {name: 'refunded', label: t`Refunded`, color: 'red.6'},
             ]}
             curveType="natural"
             areaChartProps={{syncId}}

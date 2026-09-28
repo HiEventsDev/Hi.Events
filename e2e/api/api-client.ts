@@ -37,6 +37,9 @@ import type {
   RegisterPayload,
   TaxOrFee,
   UpdateOccurrencePayload,
+  CashlessSalesPoint,
+  CashlessSettings,
+  CreateCashlessSalesPointPayload,
   Webhook,
 } from './types';
 
@@ -180,6 +183,38 @@ export class ApiClient {
 
   updateEventSettings(eventId: number, settings: Partial<EventSettings>): Promise<void> {
     return check(this.request.patch(`events/${eventId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
+  updateCashlessSettings(
+    eventId: number,
+    payload: {
+      cashless_enabled: boolean;
+      cashless_min_topup_amount: number;
+      cashless_allow_remaining_balance_refund: boolean;
+      cashless_refund_deadline_at?: string | null;
+      cashless_online_topup_enabled?: boolean;
+      cashless_topup_tax_and_fee_ids?: number[];
+    },
+  ): Promise<CashlessSettings> {
+    return unwrap<CashlessSettings>(
+      this.request.put(`events/${eventId}/cashless/settings`, {
+        headers: jsonHeaders,
+        data: {
+          cashless_online_topup_enabled: true,
+          cashless_topup_tax_and_fee_ids: [],
+          ...payload,
+        },
+      }),
+    );
+  }
+
+  createCashlessSalesPoint(eventId: number, payload: CreateCashlessSalesPointPayload): Promise<CashlessSalesPoint> {
+    return unwrap<CashlessSalesPoint>(
+      this.request.post(`events/${eventId}/cashless/sales-points`, {
+        headers: jsonHeaders,
+        data: { allow_staff_topups: true, ...payload },
+      }),
+    );
   }
 
   createPromoCode(eventId: number, payload: CreatePromoCodePayload): Promise<PromoCode> {

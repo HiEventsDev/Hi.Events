@@ -86,6 +86,12 @@ class EventSettingsResource extends JsonResource
             // Waitlist settings
             'waitlist_auto_process' => $this->getWaitlistAutoProcess(),
             'waitlist_offer_timeout_minutes' => $this->getWaitlistOfferTimeoutMinutes(),
+
+            // Cashless settings
+            'cashless_enabled' => $this->getCashlessEnabled(),
+            'cashless_min_topup_amount' => $this->getCashlessMinTopupAmount(),
+            'cashless_allow_remaining_balance_refund' => $this->getCashlessAllowRemainingBalanceRefund(),
+            'cashless_refund_deadline_at' => $this->getCashlessRefundDeadlineAt(),
         ];
     }
 }

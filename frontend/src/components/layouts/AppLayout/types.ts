@@ -7,6 +7,7 @@ export interface NavItem {
     icon?: Icon;
     comingSoon?: boolean;
     isActive?: (isActive: boolean) => boolean;
+    matchExactly?: boolean;
     badge?: string | number | null | undefined;
     badgeColor?: string;
     onClick?: () => void;

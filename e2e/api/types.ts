@@ -313,7 +313,7 @@ export interface CreateWebhookPayload {
 }
 
 export interface CreateEmailTemplatePayload {
-  template_type: 'order_confirmation' | 'attendee_ticket' | 'occurrence_cancellation';
+  template_type: 'order_confirmation' | 'attendee_ticket' | 'occurrence_cancellation' | 'cashless_topup';
   subject: string;
   body: string;
   ctaLabel: string;
@@ -335,4 +335,32 @@ export interface RecurrenceRule {
   times_of_day?: (string | { time: string; label?: string; duration_minutes?: number })[];
   duration_minutes?: number;
   default_capacity?: number;
+}
+
+export interface CashlessSettings {
+  event_id: number;
+  cashless_enabled: boolean;
+  cashless_topup_product_id: number | null;
+  cashless_closed_at: string | null;
+  cashless_min_topup_amount: number;
+  cashless_allow_remaining_balance_refund: boolean;
+  cashless_refund_deadline_at: string | null;
+  cashless_online_topup_enabled: boolean;
+  cashless_topup_tax_and_fee_ids: number[];
+}
+
+export interface CreateCashlessSalesPointPayload {
+  name: string;
+  product_ids: number[];
+  allow_staff_topups?: boolean;
+  access_pin?: string | null;
+  description?: string | null;
+}
+
+export interface CashlessSalesPoint {
+  id: number;
+  short_id: string;
+  name: string;
+  has_access_pin: boolean;
+  allow_staff_topups: boolean;
 }

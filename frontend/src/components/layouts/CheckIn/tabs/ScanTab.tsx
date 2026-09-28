@@ -1,11 +1,10 @@
 import {t, Trans} from "@lingui/macro";
-import {IconCamera, IconCheck, IconScan, IconVolume, IconVolumeOff, IconX} from "@tabler/icons-react";
-import {ActionIcon} from "@mantine/core";
-import {InlineCameraScanner} from "./InlineCameraScanner.tsx";
+import {IconCheck, IconX} from "@tabler/icons-react";
+import {TicketScanZone, ScanMode} from "../../../common/TicketScanZone";
 import classes from "./ScanTab.module.scss";
 import {RecentScan} from "../types.ts";
 
-export type ScanMode = "usb" | "camera";
+export type {ScanMode};
 
 interface ScanTabProps {
     mode: ScanMode;
@@ -42,65 +41,18 @@ export const ScanTab = ({
                         }: ScanTabProps) => {
     return (
         <div className={classes.wrap}>
-            <div className={classes.scanArea}>
-                {mode === "camera" ? (
-                    <InlineCameraScanner onAttendeeScanned={onAttendeeScanned}/>
-                ) : (
-                    <div className={classes.usbPane}>
-                        <div className={classes.usbStatusRow}>
-                            <span className={`${classes.statusDot} ${hidPageHasFocus ? classes.dotActive : classes.dotPaused}`}/>
-                            <span className={classes.statusText}>
-                                {hidPageHasFocus ? t`USB scanner listening` : t`USB scanner paused`}
-                            </span>
-                        </div>
-                        <div className={classes.usbInstruction}>
-                            {hidPageHasFocus
-                                ? t`Scan a ticket to check in an attendee`
-                                : t`Tap this screen to resume scanning`}
-                        </div>
-                        <div className={classes.buffer}>
-                            {hidBuffer
-                                ? <span className={classes.bufferText}>{hidBuffer}</span>
-                                : <span className={classes.bufferPlaceholder}>{t`Waiting for scan…`}</span>}
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div className={classes.toolbar}>
-                <div className={classes.modeToggle} role="tablist" aria-label={t`Scanner mode`}>
-                    <button
-                        type="button"
-                        role="tab"
-                        aria-selected={mode === "usb"}
-                        className={`${classes.modeBtn} ${mode === "usb" ? classes.modeActive : ""}`}
-                        onClick={() => onModeChange("usb")}
-                    >
-                        <IconScan size={16}/>
-                        <span>{t`USB`}</span>
-                    </button>
-                    <button
-                        type="button"
-                        role="tab"
-                        aria-selected={mode === "camera"}
-                        className={`${classes.modeBtn} ${mode === "camera" ? classes.modeActive : ""}`}
-                        onClick={() => onModeChange("camera")}
-                    >
-                        <IconCamera size={16}/>
-                        <span>{t`Camera`}</span>
-                    </button>
-                </div>
-                <ActionIcon
-                    aria-label={isSoundOn ? t`Turn sound off` : t`Turn sound on`}
-                    variant="default"
-                    size="lg"
-                    radius="xl"
-                    onClick={onSoundToggle}
-                    className={classes.soundBtn}
-                >
-                    {isSoundOn ? <IconVolume size={18}/> : <IconVolumeOff size={18}/>}
-                </ActionIcon>
-            </div>
+            <TicketScanZone
+                mode={mode}
+                onModeChange={onModeChange}
+                hidPageHasFocus={hidPageHasFocus}
+                hidBuffer={hidBuffer}
+                isSoundOn={isSoundOn}
+                onSoundToggle={onSoundToggle}
+                onCodeScanned={onAttendeeScanned}
+                listeningLabel={t`Scan a ticket to check in an attendee`}
+                pausedLabel={t`Tap this screen to resume scanning`}
+                withSideGutter
+            />
 
             <div className={classes.recentSection}>
                 <div className={classes.sectionHeader}>{t`Recent check-ins`}</div>

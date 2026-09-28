@@ -51,7 +51,7 @@ class UpdateEventSettingsRequest extends BaseRequest
 
             // Payment settings
             'payment_providers' => ['array'],
-            'payment_providers.*' => ['string', Rule::in(PaymentProviders::valuesArray())],
+            'payment_providers.*' => ['string', Rule::in([PaymentProviders::STRIPE->value, PaymentProviders::OFFLINE->value])],
             'offline_payment_instructions' => ['string', 'nullable', Rule::requiredIf(fn () => in_array(PaymentProviders::OFFLINE->name, $this->input('payment_providers', []), true))],
             'allow_orders_awaiting_offline_payment_to_check_in' => ['boolean'],
 

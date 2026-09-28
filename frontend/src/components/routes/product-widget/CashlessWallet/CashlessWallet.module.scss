@@ -1,0 +1,132 @@
+.container {
+  max-width: 560px;
+  padding-bottom: 2rem;
+}
+
+.title {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.subtitle {
+  margin-top: .25rem;
+  text-align: center;
+  color: var(--mantine-color-dimmed);
+}
+
+.balanceCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  padding: 2rem 1rem;
+  margin-top: 1rem;
+  border-radius: var(--mantine-radius-lg);
+  background: var(--mantine-color-default-hover);
+}
+
+.balanceLabel {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--mantine-color-dimmed);
+}
+
+.balance {
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.ticketId {
+  margin-top: .5rem;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: .8rem;
+  color: var(--mantine-color-dimmed);
+}
+
+.explainer {
+  margin: 1rem 0;
+  text-align: center;
+  color: var(--mantine-color-dimmed);
+}
+
+.topupCard,
+.historyCard {
+  padding: 1.25rem;
+  margin-top: 1rem;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-lg);
+}
+
+.sectionTitle {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.suggestion {
+  padding: .6rem .25rem;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-md);
+}
+
+.suggestionActive {
+  border-color: var(--mantine-primary-color-filled);
+  background: var(--mantine-primary-color-light);
+}
+
+.history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.historyLabel {
+  display: block;
+}
+
+.historyMeta {
+  display: block;
+  font-size: .8rem;
+  color: var(--mantine-color-dimmed);
+}
+
+.amountIn {
+  font-weight: 600;
+  color: var(--mantine-color-green-7);
+}
+
+.amountOut {
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .suggestions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

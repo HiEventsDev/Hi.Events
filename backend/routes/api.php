@@ -76,6 +76,35 @@ use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\GetCapacityAssignmentsAction;
 use HiEvents\Http\Actions\CapacityAssignments\UpdateCapacityAssignmentAction;
+use HiEvents\Http\Actions\Cashless\CloseCashlessAction;
+use HiEvents\Http\Actions\Cashless\GetCashlessSettingsAction;
+use HiEvents\Http\Actions\Cashless\GetCashlessStatsAction;
+use HiEvents\Http\Actions\Cashless\GetCashlessSummaryAction;
+use HiEvents\Http\Actions\Cashless\Public\CreateCashlessPurchasePublicAction;
+use HiEvents\Http\Actions\Cashless\Public\CreateCashlessSalesPointSessionAction;
+use HiEvents\Http\Actions\Cashless\Public\CreateCashlessTopupPublicAction;
+use HiEvents\Http\Actions\Cashless\Public\CreateStaffTopupPublicAction;
+use HiEvents\Http\Actions\Cashless\Public\GetCashlessQuotePublicAction;
+use HiEvents\Http\Actions\Cashless\Public\GetCashlessSalesPointPublicAction;
+use HiEvents\Http\Actions\Cashless\Public\GetCashlessSalesPointTransactionsPublicAction;
+use HiEvents\Http\Actions\Cashless\Public\GetCashlessWalletForSalesPointAction;
+use HiEvents\Http\Actions\Cashless\Public\GetCashlessWalletPublicAction;
+use HiEvents\Http\Actions\Cashless\Public\ReverseCashlessTransactionPublicAction;
+use HiEvents\Http\Actions\Cashless\SalesPoint\CreateCashlessSalesPointAction;
+use HiEvents\Http\Actions\Cashless\SalesPoint\DeleteCashlessSalesPointAction;
+use HiEvents\Http\Actions\Cashless\SalesPoint\GetCashlessSalesPointAction;
+use HiEvents\Http\Actions\Cashless\SalesPoint\GetCashlessSalesPointsAction;
+use HiEvents\Http\Actions\Cashless\SalesPoint\UpdateCashlessSalesPointAction;
+use HiEvents\Http\Actions\Cashless\UpdateCashlessSettingsAction;
+use HiEvents\Http\Actions\Cashless\Wallet\CreateOrganizerTopupAction;
+use HiEvents\Http\Actions\Cashless\Wallet\ExportCashlessTransactionsAction;
+use HiEvents\Http\Actions\Cashless\Wallet\GetCashlessTransactionsAction;
+use HiEvents\Http\Actions\Cashless\Wallet\GetCashlessWalletAction;
+use HiEvents\Http\Actions\Cashless\Wallet\GetCashlessWalletsAction;
+use HiEvents\Http\Actions\Cashless\Wallet\LookupCashlessWalletAction;
+use HiEvents\Http\Actions\Cashless\Wallet\RefundCashlessWalletAction;
+use HiEvents\Http\Actions\Cashless\Wallet\ReverseCashlessTransactionAction;
+use HiEvents\Http\Actions\Cashless\Wallet\UpdateCashlessWalletStatusAction;
 use HiEvents\Http\Actions\CheckInLists\CreateCheckInListAction;
 use HiEvents\Http\Actions\CheckInLists\DeleteCheckInListAction;
 use HiEvents\Http\Actions\CheckInLists\GetCheckInListAction;
@@ -499,6 +528,27 @@ $router->middleware(['auth:api'])->group(
         $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
         $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
 
+        // Cashless
+        $router->get('/events/{event_id}/cashless/settings', GetCashlessSettingsAction::class);
+        $router->get('/events/{event_id}/cashless/stats', GetCashlessStatsAction::class);
+        $router->get('/events/{event_id}/cashless/summary', GetCashlessSummaryAction::class);
+        $router->post('/events/{event_id}/cashless/close', CloseCashlessAction::class);
+        $router->put('/events/{event_id}/cashless/settings', UpdateCashlessSettingsAction::class);
+        $router->post('/events/{event_id}/cashless/sales-points', CreateCashlessSalesPointAction::class);
+        $router->get('/events/{event_id}/cashless/sales-points', GetCashlessSalesPointsAction::class);
+        $router->get('/events/{event_id}/cashless/sales-points/{sales_point_id}', GetCashlessSalesPointAction::class);
+        $router->put('/events/{event_id}/cashless/sales-points/{sales_point_id}', UpdateCashlessSalesPointAction::class);
+        $router->delete('/events/{event_id}/cashless/sales-points/{sales_point_id}', DeleteCashlessSalesPointAction::class);
+        $router->get('/events/{event_id}/cashless/wallets', GetCashlessWalletsAction::class);
+        $router->post('/events/{event_id}/cashless/wallets/lookup', LookupCashlessWalletAction::class);
+        $router->get('/events/{event_id}/cashless/wallets/{wallet_id}', GetCashlessWalletAction::class);
+        $router->post('/events/{event_id}/cashless/wallets/{wallet_id}/topups', CreateOrganizerTopupAction::class);
+        $router->patch('/events/{event_id}/cashless/wallets/{wallet_id}/status', UpdateCashlessWalletStatusAction::class);
+        $router->post('/events/{event_id}/cashless/wallets/{wallet_id}/refund', RefundCashlessWalletAction::class);
+        $router->get('/events/{event_id}/cashless/transactions', GetCashlessTransactionsAction::class);
+        $router->post('/events/{event_id}/cashless/transactions/export', ExportCashlessTransactionsAction::class);
+        $router->post('/events/{event_id}/cashless/transactions/{transaction_id}/reverse', ReverseCashlessTransactionAction::class);
+
         // Webhooks
         $router->post('/events/{event_id}/webhooks', CreateWebhookAction::class);
         $router->get('/events/{event_id}/webhooks', GetWebhooksAction::class);
@@ -659,6 +709,24 @@ $router->prefix('/public')->group(
         $router->get('/check-in-lists/{check_in_list_short_id}/attendees/{attendee_public_id}/detail', GetCheckInListAttendeeDetailPublicAction::class);
         $router->post('/check-in-lists/{check_in_list_short_id}/check-ins', CreateAttendeeCheckInPublicAction::class);
         $router->delete('/check-in-lists/{check_in_list_short_id}/check-ins/{check_in_short_id}', DeleteAttendeeCheckInPublicAction::class);
+
+        // Cashless
+        $router->get('/events/{event_id}/cashless/{ticket_reference}', GetCashlessWalletPublicAction::class)
+            ->middleware('throttle:30,1');
+        $router->post('/events/{event_id}/cashless/{ticket_reference}/topup', CreateCashlessTopupPublicAction::class)
+            ->middleware('throttle:20,1');
+
+        // Cashless sales points
+        $router->post('/cashless/sales-points/{sales_point_short_id}/session', CreateCashlessSalesPointSessionAction::class)
+            ->middleware('throttle:10,1');
+        $router->get('/cashless/sales-points/{sales_point_short_id}', GetCashlessSalesPointPublicAction::class);
+        $router->get('/cashless/sales-points/{sales_point_short_id}/wallets/{attendee_public_id}', GetCashlessWalletForSalesPointAction::class)
+            ->middleware('throttle:300,1');
+        $router->get('/cashless/sales-points/{sales_point_short_id}/transactions', GetCashlessSalesPointTransactionsPublicAction::class);
+        $router->post('/cashless/sales-points/{sales_point_short_id}/quote', GetCashlessQuotePublicAction::class);
+        $router->post('/cashless/sales-points/{sales_point_short_id}/purchases', CreateCashlessPurchasePublicAction::class);
+        $router->post('/cashless/sales-points/{sales_point_short_id}/topups', CreateStaffTopupPublicAction::class);
+        $router->post('/cashless/sales-points/{sales_point_short_id}/transactions/{transaction_short_id}/reverse', ReverseCashlessTransactionPublicAction::class);
 
         // Color themes
         $router->get('/color-themes', GetColorThemesAction::class);

@@ -14,6 +14,7 @@ class EventSetting extends BaseModel
             'payment_providers' => 'array',
             'ticket_design_settings' => 'array',
             'homepage_theme_settings' => 'array',
+            'cashless_min_topup_amount' => 'float',
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Report\Factory;
 
 use HiEvents\DomainObjects\Enums\ReportTypes;
 use HiEvents\Services\Domain\Report\AbstractReportService;
+use HiEvents\Services\Domain\Report\Reports\CashlessSalesReport;
 use HiEvents\Services\Domain\Report\Reports\DailySalesReport;
 use HiEvents\Services\Domain\Report\Reports\OccurrenceSummaryReport;
 use HiEvents\Services\Domain\Report\Reports\ProductSalesReport;
@@ -19,6 +20,7 @@ class ReportServiceFactory
             ReportTypes::DAILY_SALES_REPORT => App::make(DailySalesReport::class),
             ReportTypes::PROMO_CODES_REPORT => App::make(PromoCodesReport::class),
             ReportTypes::OCCURRENCE_SUMMARY => App::make(OccurrenceSummaryReport::class),
+            ReportTypes::CASHLESS_SALES => App::make(CashlessSalesReport::class),
         };
     }
 }

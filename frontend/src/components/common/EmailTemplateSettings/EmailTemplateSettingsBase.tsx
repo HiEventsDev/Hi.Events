@@ -57,6 +57,7 @@ interface EmailTemplateSettingsBaseProps {
     onDeleteSuccess?: () => void;
     onError?: (error: any, message: string) => void;
     eventType?: EventType;
+    types?: EmailTemplateType[];
 }
 
 export const EmailTemplateSettingsBase = ({
@@ -73,7 +74,8 @@ export const EmailTemplateSettingsBase = ({
     onSaveSuccess,
     onDeleteSuccess,
     onError,
-    eventType
+    eventType,
+    types
 }: EmailTemplateSettingsBaseProps) => {
     const [editorOpened, {open: openEditor, close: closeEditor}] = useDisclosure(false);
     const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
@@ -88,9 +90,13 @@ export const EmailTemplateSettingsBase = ({
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification;
 
-    const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
-    const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');
-    const occurrenceCancellationTemplate = templates.find(t => t.template_type === 'occurrence_cancellation');
+    const isOrganizer = contextType === 'organizer';
+    const visibleTypes: EmailTemplateType[] = types ?? [
+        'order_confirmation',
+        'attendee_ticket',
+        ...(isOrganizer || eventType === EventType.RECURRING ? ['occurrence_cancellation' as const] : []),
+        ...(isOrganizer ? ['cashless_topup' as const] : []),
+    ];
 
     const handleCreateTemplate = (type: EmailTemplateType) => {
         setEditingTemplate(null);
@@ -210,12 +216,14 @@ export const EmailTemplateSettingsBase = ({
         'order_confirmation': t`Order Confirmation`,
         'attendee_ticket': t`Attendee Ticket`,
         'occurrence_cancellation': t`Date Cancellation`,
+        'cashless_topup': t`Cashless Top-up`,
     };
 
     const templateDescriptions: Record<EmailTemplateType, string> = {
         'order_confirmation': t`Sent to customers when they place an order`,
         'attendee_ticket': t`Sent to each attendee with their ticket details`,
         'occurrence_cancellation': t`Sent to attendees when a scheduled date is cancelled`,
+        'cashless_topup': t`Sent to attendees when their cashless balance is topped up online`,
     };
 
     const getTemplateStatusBadge = (template?: EmailTemplate) => {
@@ -382,28 +390,15 @@ export const EmailTemplateSettingsBase = ({
                 <LoadingOverlay visible={isLoading}/>
 
                 <Stack gap="md">
-                    <TemplateCard
-                        type="order_confirmation"
-                        template={orderConfirmationTemplate}
-                        label={templateTypeLabels.order_confirmation}
-                        description={templateDescriptions.order_confirmation}
-                    />
-
-                    <TemplateCard
-                        type="attendee_ticket"
-                        template={attendeeTicketTemplate}
-                        label={templateTypeLabels.attendee_ticket}
-                        description={templateDescriptions.attendee_ticket}
-                    />
-
-                    {(contextType === 'organizer' || eventType === EventType.RECURRING) && (
+                    {visibleTypes.map((type) => (
                         <TemplateCard
-                            type="occurrence_cancellation"
-                            template={occurrenceCancellationTemplate}
-                            label={templateTypeLabels.occurrence_cancellation}
-                            description={templateDescriptions.occurrence_cancellation}
+                            key={type}
+                            type={type}
+                            template={templates.find(template => template.template_type === type)}
+                            label={templateTypeLabels[type]}
+                            description={templateDescriptions[type]}
                         />
-                    )}
+                    ))}
                 </Stack>
             </div>
 

@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterf
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Cashless\CashlessTopupOrderChecker;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Support\Facades\DB;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,7 @@ class EventStatisticsRefundService
         private readonly EventOccurrenceDailyStatisticRepositoryInterface $eventOccurrenceDailyStatisticRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly LoggerInterface $logger,
+        private readonly CashlessTopupOrderChecker $topupOrderChecker,
     ) {}
 
     /**
@@ -32,6 +34,10 @@ class EventStatisticsRefundService
      */
     public function updateForRefund(OrderDomainObject $order, MoneyValue $refundAmount): void
     {
+        if ($this->topupOrderChecker->isTopupOrder($order->getId())) {
+            return;
+        }
+
         $this->updateAggregateStatisticsForRefund($order, $refundAmount);
         $this->updateDailyStatisticsForRefund($order, $refundAmount);
 

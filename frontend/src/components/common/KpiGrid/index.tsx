@@ -8,11 +8,12 @@ import classes from "./KpiGrid.module.scss";
 interface KpiGridProps {
     children: ReactNode;
     className?: string;
+    columns?: 3 | 4;
 }
 
-export const KpiGrid = ({children, className = ''}: KpiGridProps) => {
+export const KpiGrid = ({children, className = '', columns = 3}: KpiGridProps) => {
     return (
-        <div className={`${classes.grid} ${className}`}>
+        <div className={`${classes.grid} ${columns === 4 ? classes.fourColumns : ''} ${className}`}>
             {children}
         </div>
     );

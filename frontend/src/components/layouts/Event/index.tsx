@@ -1,6 +1,7 @@
 import {
     IconArrowLeft,
     IconCalendarRepeat,
+    IconChartBar,
     IconChartPie,
     IconChevronRight,
     IconDashboard,
@@ -24,6 +25,9 @@ import {
     IconUsersGroup,
     IconWebhook,
     IconListCheck,
+    IconCoin,
+    IconBuildingStore,
+    IconArrowsExchange,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {useGetEvent} from "../../../queries/useGetEvent";
@@ -139,7 +143,15 @@ const EventLayout = () => {
             showWhen: () => event?.type !== EventType.RECURRING,
         },
 
-        // 5. INTEGRATIONS
+        // 5. CASHLESS
+        {label: t`Cashless`},
+        {link: 'cashless/overview', label: t`Overview`, icon: IconChartBar},
+        {link: 'cashless', label: t`Balances`, icon: IconCoin, matchExactly: true},
+        {link: 'cashless/sales-points', label: t`Sales Points`, icon: IconBuildingStore},
+        {link: 'cashless/transactions', label: t`Transactions`, icon: IconArrowsExchange},
+        {link: 'cashless/settings', label: t`Cashless Settings`, icon: IconSettings},
+
+        // 6. INTEGRATIONS
         {label: t`Integrations`},
         {link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode},
         {link: 'webhooks', label: t`Webhooks`, icon: IconWebhook},

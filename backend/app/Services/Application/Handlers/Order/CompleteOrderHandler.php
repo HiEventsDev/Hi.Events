@@ -291,7 +291,7 @@ class CompleteOrderHandler
      */
     private function validateOrder(OrderDomainObject $order): void
     {
-        if ($order->getEmail() !== null) {
+        if ($order->getPaymentStatus() !== null) {
             throw new ResourceConflictException(__('This order has already been processed'));
         }
 

@@ -18,6 +18,7 @@ import {
     IconMaximize,
     IconShare,
     IconTicket,
+    IconWallet,
     IconWorld
 } from "@tabler/icons-react";
 import {Anchor} from "@mantine/core";
@@ -588,6 +589,25 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     continueButtonRef={setContinueButtonNode}
                                 />
                             </div>
+
+                            {event.settings?.cashless_enabled && event.settings?.cashless_online_topup_enabled && (
+                                <div className={classes.section} id="cashless">
+                                    <div className={classes.sectionHeader}>
+                                        <h2 className={classes.sectionTitle}>{t`Cashless`}</h2>
+                                    </div>
+                                    <p className={classes.description}>
+                                        {t`Already have a ticket? Top up the balance attached to it and pay at the event with its QR code.`}
+                                    </p>
+                                    <a
+                                        href={`/cashless/${event.id}`}
+                                        className={classes.cashlessLink}
+                                        data-testid="event-cashless-topup-link"
+                                    >
+                                        <IconWallet size={18}/>
+                                        {t`Top up my balance`}
+                                    </a>
+                                </div>
+                            )}
 
                             {/* Organizer Section */}
                             {organizer && organizer.status === OrganizerStatus.LIVE && (

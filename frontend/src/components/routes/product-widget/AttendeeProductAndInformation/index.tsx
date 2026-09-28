@@ -3,8 +3,10 @@ import {useParams} from "react-router";
 import {useGetAttendeePublic} from "../../../../queries/useGetAttendeePublic.ts";
 import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {Attendee, Product} from "../../../../types.ts";
-import {Container} from "@mantine/core";
+import {Button, Container} from "@mantine/core";
 import {t} from "@lingui/macro";
+import {IconWallet} from "@tabler/icons-react";
+import {NavLink} from "react-router";
 import {PoweredByFooter} from "../../../common/PoweredByFooter";
 import {OnlineEventDetails} from "../../../common/OnlineEventDetails";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
@@ -51,6 +53,20 @@ export const AttendeeProductAndInformation = () => {
                 product={attendee.product as Product}
                 event={event}
             />
+
+            {event.settings?.cashless_enabled && (
+                <Button
+                    component={NavLink}
+                    to={`/cashless/${eventId}/${attendeeShortId}`}
+                    fullWidth
+                    size="md"
+                    mt="md"
+                    leftSection={<IconWallet size={18}/>}
+                    data-testid="cashless-wallet-link"
+                >
+                    {t`Cashless balance`}
+                </Button>
+            )}
 
             <OnlineEventDetails event={event} occurrence={attendee?.event_occurrence ?? null}/>
 

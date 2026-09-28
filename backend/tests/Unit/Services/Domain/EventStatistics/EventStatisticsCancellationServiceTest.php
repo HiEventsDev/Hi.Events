@@ -17,6 +17,7 @@ use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Services\Domain\Cashless\CashlessTopupOrderChecker;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
 use Illuminate\Database\DatabaseManager;
@@ -82,6 +83,7 @@ class EventStatisticsCancellationServiceTest extends TestCase
             $this->promoCodeRepository,
             $this->productRepository,
             $this->affiliateRepository,
+            Mockery::mock(CashlessTopupOrderChecker::class, ['isTopupOrder' => false]),
         );
     }
 

@@ -33,6 +33,7 @@ class TaxSummaryReport extends AbstractOrganizerReportService
                     AND o.status = '$completedStatus'
                     AND o.deleted_at IS NULL
                     AND e.deleted_at IS NULL
+                    AND NOT EXISTS (SELECT 1 FROM cashless_topups ct WHERE ct.order_id = o.id)
                     $currencyFilter
                     AND DATE(o.created_at) BETWEEN '$startDateStr' AND '$endDateStr'
             )

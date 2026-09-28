@@ -1,0 +1,36 @@
+.section {
+  margin-top: 1.25rem;
+}
+
+.sectionTitle {
+  margin: 0 0 .75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tables {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.numeric {
+  text-align: right;
+}
+
+.row {
+  margin-bottom: 1.25rem;
+}
+
+.rowLabel {
+  margin-bottom: .4rem;
+  font-size: .6875rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--hi-color-text-muted);
+}

@@ -8,9 +8,10 @@ import classes from "./InlineCameraScanner.module.scss";
 
 interface Props {
     onAttendeeScanned: (attendeePublicId: string) => void;
+    clearHandledCodesToken?: string | number;
 }
 
-export const InlineCameraScanner = ({onAttendeeScanned}: Props) => {
+export const InlineCameraScanner = ({onAttendeeScanned, clearHandledCodesToken}: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const qrScannerRef = useRef<QrScanner | null>(null);
     const [permissionDenied, setPermissionDenied] = useState(false);
@@ -26,6 +27,12 @@ export const InlineCameraScanner = ({onAttendeeScanned}: Props) => {
     useEffect(() => {
         latestProcessedRef.current = processed;
     }, [processed]);
+
+    useEffect(() => {
+        if (clearHandledCodesToken === undefined) return;
+        setProcessed([]);
+        setCurrentId(null);
+    }, [clearHandledCodesToken]);
 
     const startScanner = async () => {
         try {

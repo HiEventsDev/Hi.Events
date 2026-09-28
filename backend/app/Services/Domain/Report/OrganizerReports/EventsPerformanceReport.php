@@ -43,6 +43,7 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                 WHERE o.event_id IN (SELECT id FROM organizer_events)
                     AND o.status = '$completedStatus'
                     AND o.deleted_at IS NULL
+                    AND NOT EXISTS (SELECT 1 FROM cashless_topups ct WHERE ct.order_id = o.id)
                     $orderCurrencyFilter
                 GROUP BY o.event_id
             ),
@@ -56,6 +57,7 @@ class EventsPerformanceReport extends AbstractOrganizerReportService
                     AND o.status = '$completedStatus'
                     AND o.deleted_at IS NULL
                     AND oi.deleted_at IS NULL
+                    AND NOT EXISTS (SELECT 1 FROM cashless_topups ct WHERE ct.order_id = o.id)
                     $orderCurrencyFilter
                 GROUP BY o.event_id
             )

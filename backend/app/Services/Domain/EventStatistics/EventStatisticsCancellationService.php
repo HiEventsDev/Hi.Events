@@ -20,6 +20,7 @@ use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Services\Domain\Cashless\CashlessTopupOrderChecker;
 use HiEvents\Services\Infrastructure\Utlitiy\Retry\Retrier;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Carbon;
@@ -42,6 +43,7 @@ class EventStatisticsCancellationService
         private readonly PromoCodeRepositoryInterface $promoCodeRepository,
         private readonly ProductRepositoryInterface $productRepository,
         private readonly AffiliateRepositoryInterface $affiliateRepository,
+        private readonly CashlessTopupOrderChecker $topupOrderChecker,
     ) {}
 
     /**
@@ -50,6 +52,10 @@ class EventStatisticsCancellationService
      */
     public function decrementForCancelledOrder(OrderDomainObject $order): void
     {
+        if ($this->topupOrderChecker->isTopupOrder($order->getId())) {
+            return;
+        }
+
         $order = $this->orderRepository
             ->loadRelation(OrderItemDomainObject::class)
             ->findById($order->getId());

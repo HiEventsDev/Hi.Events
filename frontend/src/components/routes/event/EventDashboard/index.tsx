@@ -5,9 +5,10 @@ import {PageBody} from "../../../common/PageBody";
 import {StatBoxes} from "../../../common/StatBoxes";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {t, Trans} from "@lingui/macro";
-import {ProductSalesChartCard, RevenueChartCard} from "../../../common/StatsCharts";
+import {CashlessRevenueChartCard, ProductSalesChartCard, RevenueChartCard} from "../../../common/StatsCharts";
 import classes from "./EventDashboard.module.scss";
 import {useGetEventStats} from "../../../../queries/useGetEventStats.ts";
+import {useGetCashlessStats} from "../../../../queries/useGetCashlessStats.ts";
 import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {Skeleton} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
@@ -65,6 +66,11 @@ export const EventDashboard = () => {
         enabled: !!event && !!defaultDateRangeRef.current,
     });
     const {data: eventStats} = eventStatsQuery;
+    const {data: cashlessStats} = useGetCashlessStats(
+        event?.settings?.cashless_enabled ? eventId : undefined,
+        startDate,
+        endDate,
+    );
     const isMobile = useMediaQuery('(max-width: 768px)');
     const {data: account, isFetched: accountIsFetched} = useGetAccount();
     const [publishModalOpened, {open: openPublishModal, close: closePublishModal}] = useDisclosure(false);
@@ -290,6 +296,16 @@ export const EventDashboard = () => {
                     dateRangeLabel={dateRangeLabel}
                     syncId="events"
                 />
+
+                {event.settings?.cashless_enabled && (
+                    <CashlessRevenueChartCard
+                        dailyStats={cashlessStats}
+                        timezone={event.timezone}
+                        currency={event.currency}
+                        dateRangeLabel={dateRangeLabel}
+                        syncId="events"
+                    />
+                )}
             </>)}
         </PageBody>
     )

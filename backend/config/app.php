@@ -64,6 +64,7 @@ return [
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
         'account_danger_zone' => '/account/danger-zone',
+        'cashless_wallet' => '/cashless/%d/%s',
     ],
 
     /**

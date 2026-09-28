@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { EmailTemplatePage } from '../../pages/email-template.page';
-import { createDraftEvent, createFreshOrganizer } from '../../api/factory';
+import { createDraftEvent, createFreshOrganizer, createLiveEventWithFreeTicket } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 test.describe('email templates', () => {
@@ -21,6 +21,32 @@ test.describe('email templates', () => {
     const card = templates.templateCard('Order Confirmation');
     await expect(card.getByText(subject)).toBeVisible();
     await expect(card.getByText('Active', { exact: true })).toBeVisible();
+  });
+
+  test('the cashless top-up template lives in the cashless settings, not the event email templates', async ({ authedPage, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    await api.updateCashlessSettings(event.eventId, {
+      cashless_enabled: true,
+      cashless_min_topup_amount: 5,
+      cashless_allow_remaining_balance_refund: true,
+    });
+    const templates = new EmailTemplatePage(authedPage);
+
+    await templates.gotoEventTemplates(event.eventId);
+    await expect(templates.templateCard('Order Confirmation')).toBeVisible();
+    await expect(templates.templateCard('Cashless Top-up')).toHaveCount(0);
+
+    const subject = uniqueName('Cashless Subject');
+    await authedPage.goto(`/manage/event/${event.eventId}/cashless/settings`);
+    await authedPage.waitForLoadState('networkidle');
+    await expect(templates.templateCard('Order Confirmation')).toHaveCount(0);
+
+    await templates.openCreateEditor('Cashless Top-up');
+    await expect(templates.subjectInput()).toHaveValue(/cashless balance/);
+    await templates.fillEditor(subject, uniqueName('Cashless body copy'));
+    await templates.saveTemplate();
+
+    await expect(templates.templateCard('Cashless Top-up').getByText(subject)).toBeVisible();
   });
 
   test('the template preview renders the saved subject and body', async ({ authedPage, api, account }) => {

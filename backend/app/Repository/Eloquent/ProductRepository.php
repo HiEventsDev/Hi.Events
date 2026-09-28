@@ -30,6 +30,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $where = [
             [ProductDomainObjectAbstract::EVENT_ID, '=', $eventId],
+            [ProductDomainObjectAbstract::IS_CASHLESS_TOPUP, '=', false],
         ];
 
         if (! empty($params->query)) {

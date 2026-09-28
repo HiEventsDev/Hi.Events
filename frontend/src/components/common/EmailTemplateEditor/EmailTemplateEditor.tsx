@@ -35,6 +35,13 @@ export const EmailTemplateEditor = ({
                                     }: EmailTemplateEditorProps) => {
     const [activeTab, setActiveTab] = useState<string>('editor');
 
+    const defaultCtaLabels: Record<EmailTemplateType, string> = {
+        'order_confirmation': t`View Order`,
+        'attendee_ticket': t`View Ticket`,
+        'occurrence_cancellation': t`View Event`,
+        'cashless_topup': t`View my balance`,
+    };
+
     const form = useForm({
         initialValues: {
             subject: template?.subject || defaultTemplate?.subject || '',
@@ -54,10 +61,7 @@ export const EmailTemplateEditor = ({
         if (!template && defaultTemplate && defaultTemplate.subject && defaultTemplate.body) {
             form.setFieldValue('subject', defaultTemplate.subject);
             form.setFieldValue('body', defaultTemplate.body);
-            const defaultCtaLabel = templateType === 'order_confirmation' ? t`View Order`
-                : templateType === 'occurrence_cancellation' ? t`View Event`
-                : t`View Ticket`;
-            form.setFieldValue('ctaLabel', defaultCtaLabel);
+            form.setFieldValue('ctaLabel', defaultCtaLabels[templateType]);
             form.setFieldValue('isActive', true);
         }
     }, [defaultTemplate, template]);
@@ -69,7 +73,7 @@ export const EmailTemplateEditor = ({
                 subject: form.values.subject,
                 body: form.values.body,
                 template_type: templateType,
-                ctaLabel: form.values.ctaLabel || (templateType === 'order_confirmation' ? t`View Order` : templateType === 'occurrence_cancellation' ? t`View Event` : t`View Ticket`),
+                ctaLabel: form.values.ctaLabel || defaultCtaLabels[templateType],
             });
         }
     };
@@ -97,6 +101,7 @@ export const EmailTemplateEditor = ({
         'order_confirmation': t`Order Confirmation`,
         'attendee_ticket': t`Attendee Ticket`,
         'occurrence_cancellation': t`Date Cancellation`,
+        'cashless_topup': t`Cashless Top-up`,
     };
 
     return (

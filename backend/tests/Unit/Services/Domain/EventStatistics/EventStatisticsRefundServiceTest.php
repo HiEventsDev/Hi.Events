@@ -12,6 +12,7 @@ use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterf
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
+use HiEvents\Services\Domain\Cashless\CashlessTopupOrderChecker;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
 use HiEvents\Values\MoneyValue;
 use Illuminate\Database\Query\Expression;
@@ -62,7 +63,8 @@ class EventStatisticsRefundServiceTest extends TestCase
             $this->eventOccurrenceStatisticRepository,
             $this->eventOccurrenceDailyStatisticRepository,
             $this->orderRepository,
-            $this->logger
+            $this->logger,
+            Mockery::mock(CashlessTopupOrderChecker::class, ['isTopupOrder' => false]),
         );
     }
 
@@ -373,7 +375,8 @@ class EventStatisticsRefundServiceTest extends TestCase
             $this->eventOccurrenceStatisticRepository,
             $this->eventOccurrenceDailyStatisticRepository,
             $this->orderRepository,
-            $this->logger
+            $this->logger,
+            Mockery::mock(CashlessTopupOrderChecker::class, ['isTopupOrder' => false]),
         );
 
         $this->stubAggregateAndDailyPaths($eventId);
@@ -438,7 +441,8 @@ class EventStatisticsRefundServiceTest extends TestCase
             $this->eventOccurrenceStatisticRepository,
             $this->eventOccurrenceDailyStatisticRepository,
             $this->orderRepository,
-            $this->logger
+            $this->logger,
+            Mockery::mock(CashlessTopupOrderChecker::class, ['isTopupOrder' => false]),
         );
 
         $this->stubAggregateAndDailyPaths($eventId);
@@ -502,7 +506,8 @@ class EventStatisticsRefundServiceTest extends TestCase
             $this->eventOccurrenceStatisticRepository,
             $this->eventOccurrenceDailyStatisticRepository,
             $this->orderRepository,
-            $this->logger
+            $this->logger,
+            Mockery::mock(CashlessTopupOrderChecker::class, ['isTopupOrder' => false]),
         );
 
         $this->stubAggregateAndDailyPaths($eventId);

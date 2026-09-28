@@ -8,6 +8,8 @@ class IdHelper
 {
     public const ATTENDEE_PREFIX = 'a';
 
+    public const ATTENDEE_PREFIX_PUBLIC = 'A-';
+
     public const ORDER_PREFIX = 'o';
 
     public const EVENT_PREFIX = 'e';
@@ -23,6 +25,10 @@ class IdHelper
     public const LOCATION_PREFIX = 'loc';
 
     public const EVENT_LOCATION_PREFIX = 'el';
+
+    public const CASHLESS_SALES_POINT_PREFIX = 'csp';
+
+    public const CASHLESS_TRANSACTION_PREFIX = 'ctx';
 
     public static function shortId(string $prefix, int $length = 13): string
     {

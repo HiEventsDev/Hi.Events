@@ -45,6 +45,7 @@ class ProductSalesReport extends AbstractReportService
         LEFT JOIN filtered_orders fo ON fo.product_id = p.id
         WHERE p.event_id = :event_id
             AND p.deleted_at IS NULL
+            AND p.is_cashless_topup = false
         GROUP BY p.id, p.title, p.type
         ORDER BY p."order"
 SQL;

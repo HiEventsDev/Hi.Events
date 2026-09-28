@@ -4,6 +4,8 @@ namespace HiEvents\Services\Domain\Email;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\CashlessTransactionDomainObject;
+use HiEvents\DomainObjects\CashlessWalletDomainObject;
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
@@ -11,8 +13,11 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Helper\Currency;
 use HiEvents\Helper\DateHelper;
+use HiEvents\Helper\Url;
 use HiEvents\Mail\Attendee\AttendeeTicketMail;
+use HiEvents\Mail\Cashless\CashlessTopupConfirmationMail;
 use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
@@ -198,6 +203,75 @@ class MailBuilderService
             $organizer,
             $eventSettings,
             $refundOrders,
+        );
+
+        return $this->emailTemplateService->renderTemplate($template, $context);
+    }
+
+    public function buildCashlessTopupConfirmationMail(
+        CashlessWalletDomainObject $wallet,
+        CashlessTransactionDomainObject $transaction,
+        AttendeeDomainObject $attendee,
+        EventDomainObject $event,
+        EventSettingDomainObject $eventSettings,
+        OrganizerDomainObject $organizer,
+    ): CashlessTopupConfirmationMail {
+        $toppedUpAmount = Currency::format(abs($transaction->getAmount()), $wallet->getCurrency());
+        $newBalance = Currency::format($transaction->getBalanceAfter(), $wallet->getCurrency());
+        $walletUrl = sprintf(
+            Url::getFrontEndUrlFromConfig(Url::CASHLESS_WALLET),
+            $event->getId(),
+            $attendee->getShortId(),
+        );
+
+        return new CashlessTopupConfirmationMail(
+            attendee: $attendee,
+            event: $event,
+            eventSettings: $eventSettings,
+            organizer: $organizer,
+            toppedUpAmount: $toppedUpAmount,
+            newBalance: $newBalance,
+            walletUrl: $walletUrl,
+            renderedTemplate: $this->renderCashlessTopupTemplate(
+                $attendee,
+                $event,
+                $eventSettings,
+                $organizer,
+                $toppedUpAmount,
+                $newBalance,
+                $walletUrl,
+            ),
+        );
+    }
+
+    private function renderCashlessTopupTemplate(
+        AttendeeDomainObject $attendee,
+        EventDomainObject $event,
+        EventSettingDomainObject $eventSettings,
+        OrganizerDomainObject $organizer,
+        string $toppedUpAmount,
+        string $newBalance,
+        string $walletUrl,
+    ): ?RenderedEmailTemplateDTO {
+        $template = $this->emailTemplateService->getTemplateByType(
+            type: EmailTemplateType::CASHLESS_TOPUP,
+            accountId: $event->getAccountId(),
+            eventId: $event->getId(),
+            organizerId: $organizer->getId()
+        );
+
+        if (! $template) {
+            return null;
+        }
+
+        $context = $this->tokenContextBuilder->buildCashlessTopupContext(
+            $attendee,
+            $event,
+            $organizer,
+            $eventSettings,
+            $toppedUpAmount,
+            $newBalance,
+            $walletUrl,
         );
 
         return $this->emailTemplateService->renderTemplate($template, $context);

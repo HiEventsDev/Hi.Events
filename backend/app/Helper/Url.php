@@ -30,6 +30,8 @@ class Url
 
     public const ACCOUNT_DANGER_ZONE = 'app.frontend_urls.account_danger_zone';
 
+    public const CASHLESS_WALLET = 'app.frontend_urls.cashless_wallet';
+
     public static function getFrontEndUrlFromConfig(string $key, array $queryParams = []): string
     {
         $url = config('app.frontend_url').config($key);

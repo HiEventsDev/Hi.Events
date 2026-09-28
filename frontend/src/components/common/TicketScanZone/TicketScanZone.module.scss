@@ -1,0 +1,151 @@
+.scanArea {
+  margin-top: 14px;
+  flex: 0 0 auto;
+  height: min(46vh, 380px);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #1a1625;
+  border: 1px solid var(--hi-color-gray-2);
+  position: relative;
+}
+
+.scanAreaGutter {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.usbPane {
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 14px;
+}
+
+.usbStatusRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--hi-color-gray);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dotActive {
+  background: var(--hi-color-money-green);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--hi-color-money-green) 25%, transparent);
+}
+
+.dotPaused {
+  background: #f59f00;
+}
+
+.statusText {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hi-text);
+  letter-spacing: 0.02em;
+}
+
+.usbInstruction {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hi-text);
+  text-align: center;
+  letter-spacing: -0.01em;
+  max-width: 340px;
+}
+
+.buffer {
+  margin-top: 4px;
+  min-width: 240px;
+  max-width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--hi-color-gray);
+  border: 1px dashed var(--hi-color-gray-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--hi-text);
+  text-align: center;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bufferText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.bufferPlaceholder {
+  color: var(--hi-color-gray-dark);
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  font-style: italic;
+}
+
+.toolbar {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbarGutter {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.modeToggle {
+  display: flex;
+  background: #fff;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: 999px;
+  padding: 3px;
+  flex: 0 0 auto;
+}
+
+.modeBtn {
+  border: none;
+  background: transparent;
+  color: var(--hi-color-gray-dark);
+  padding: 7px 14px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, transform 120ms ease;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.modeActive {
+  background: var(--hi-primary);
+  color: #fff;
+}
+
+.soundBtn {
+  margin-left: auto;
+}

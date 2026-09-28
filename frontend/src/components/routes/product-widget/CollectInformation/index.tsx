@@ -214,6 +214,22 @@ export const CollectInformation = () => {
 
     // Reset copy option if order details become incomplete
     useEffect(() => {
+        if (!order?.email || form.values.order.email) {
+            return;
+        }
+
+        form.setValues({
+            order: {
+                ...form.values.order,
+                first_name: order.first_name ?? '',
+                last_name: order.last_name ?? '',
+                email: order.email,
+                email_confirmation: order.email,
+            },
+        });
+    }, [order?.email]);
+
+    useEffect(() => {
         if (copyOption !== 'none' && !areOrderDetailsComplete()) {
             setCopyOption('none');
             copyDetailsToAttendees('none');

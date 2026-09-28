@@ -103,6 +103,37 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertEquals('Great Organizer', $context['organizer']['name']);
     }
 
+    public function test_builds_cashless_topup_context(): void
+    {
+        $context = $this->contextBuilder->buildCashlessTopupContext(
+            $this->createMockAttendee(),
+            $this->createMockEvent(),
+            $this->createMockOrganizer(),
+            $this->createMockEventSettings(),
+            '$20.00',
+            '$35.00',
+            'https://example.com/cashless/1/a_abc',
+        );
+
+        $this->assertSame('$20.00', $context['cashless']['topped_up_amount']);
+        $this->assertSame('$35.00', $context['cashless']['new_balance']);
+        $this->assertSame('https://example.com/cashless/1/a_abc', $context['cashless']['url']);
+        $this->assertArrayHasKey('name', $context['attendee']);
+        $this->assertArrayHasKey('title', $context['event']);
+        $this->assertArrayHasKey('name', $context['organizer']);
+        $this->assertArrayHasKey('support_email', $context['settings']);
+    }
+
+    public function test_cashless_preview_context_exposes_the_cashless_tokens(): void
+    {
+        $context = $this->contextBuilder->buildPreviewContext('cashless_topup');
+
+        $this->assertArrayHasKey('topped_up_amount', $context['cashless']);
+        $this->assertArrayHasKey('new_balance', $context['cashless']);
+        $this->assertArrayHasKey('url', $context['cashless']);
+        $this->assertArrayHasKey('name', $context['attendee']);
+    }
+
     public function test_whitelists_only_allowed_tokens_for_order_confirmation(): void
     {
         $order = $this->createMockOrder();

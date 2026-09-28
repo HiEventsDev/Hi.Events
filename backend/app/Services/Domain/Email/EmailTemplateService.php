@@ -144,6 +144,10 @@ class EmailTemplateService
                 'label' => __('View Event'),
                 'url_token' => 'event.url',
             ],
+            EmailTemplateType::CASHLESS_TOPUP->value => [
+                'label' => __('View my balance'),
+                'url_token' => 'cashless.url',
+            ],
         ];
     }
 
@@ -202,6 +206,25 @@ If you have any questions about your order, please respond to this email or cont
 {% endif %}
 
 Best regards,<br>
+{{ organizer.name }}
+LIQUID
+            ],
+            EmailTemplateType::CASHLESS_TOPUP->value => [
+                'subject' => '💳 Your cashless balance for {{ event.title }}',
+                'body' => <<<'LIQUID'
+<strong>Your cashless balance is topped up</strong><br>
+
+Hello {{ attendee.name }},<br>
+
+We have added <strong>{{ cashless.topped_up_amount }}</strong> to the cashless balance attached to your ticket for <strong>{{ event.title }}</strong>.<br>
+
+<strong>New balance:</strong> {{ cashless.new_balance }}<br>
+
+Show the QR code on your ticket at any bar or stand to pay — no cash needed.<br>
+
+If you have any questions or need assistance, please reply to this email or contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
+
+Thank you,<br>
 {{ organizer.name }}
 LIQUID
             ],

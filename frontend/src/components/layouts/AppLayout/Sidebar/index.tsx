@@ -47,6 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
                 <NavLink
                     to={item.comingSoon ? '#' : (item.link ?? '#')}
+                    end={item.matchExactly}
                     key={item.label}
                     onClick={() => {
                         if (isMobile) {

@@ -11,6 +11,7 @@ import {ActionIcon} from "@mantine/core";
 import {IconCalendarEvent, IconInfoCircle, IconWifiOff} from "@tabler/icons-react";
 import {formatDateWithLocale} from "../../../utilites/dates.ts";
 import {useHaptics} from "../../../hooks/useHaptics.ts";
+import {useUsbBarcodeScanner} from "../../../hooks/useUsbBarcodeScanner.ts";
 import {useGetCheckInListAttendees} from "../../../queries/useGetCheckInListAttendeesPublic.ts";
 import {useGetCheckInListStatsPublic} from "../../../queries/useGetCheckInListStatsPublic.ts";
 import {useCreateCheckInPublic} from "../../../mutations/useCreateCheckInPublic.ts";
@@ -76,10 +77,7 @@ const CheckIn = () => {
     const [recentScans, setRecentScans] = useState<RecentScan[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchQueryDebounced] = useDebouncedValue(searchQuery, 200);
-    const [currentBarcode, setCurrentBarcode] = useState("");
-    const [pageHasFocus, setPageHasFocus] = useState(true);
 
-    const barcodeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isProcessingRef = useRef(false);
     const processedBarcodesRef = useRef<Set<string>>(new Set());
     const lastScanTimeRef = useRef<number>(0);
@@ -400,65 +398,10 @@ const CheckIn = () => {
         }
     }, [handleQrCheckIn]);
 
-    useEffect(() => {
-        const handleFocus = () => setPageHasFocus(true);
-        const handleBlur = () => setPageHasFocus(false);
-
-        window.addEventListener("focus", handleFocus);
-        window.addEventListener("blur", handleBlur);
-
-        return () => {
-            window.removeEventListener("focus", handleFocus);
-            window.removeEventListener("blur", handleBlur);
-        };
-    }, []);
-
-    useEffect(() => {
-        const usbListeningActive = activeTab === "scan" && scanMode === "usb";
-        if (!usbListeningActive) {
-            setCurrentBarcode("");
-            return;
-        }
-
-        const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return;
-            }
-
-            if (e.key === "Enter") {
-                if (currentBarcode.length > 0) {
-                    processBarcode(currentBarcode);
-                    setCurrentBarcode("");
-                }
-            } else if (e.key.length === 1) {
-                setCurrentBarcode(prev => {
-                    const newBarcode = prev + e.key;
-
-                    if (barcodeTimeoutRef.current) {
-                        clearTimeout(barcodeTimeoutRef.current);
-                    }
-
-                    barcodeTimeoutRef.current = setTimeout(() => {
-                        if (newBarcode.startsWith("A-") && newBarcode.length > 3) {
-                            processBarcode(newBarcode);
-                        }
-                        setCurrentBarcode("");
-                    }, 100);
-
-                    return newBarcode;
-                });
-            }
-        };
-
-        window.addEventListener("keypress", handleKeyPress);
-
-        return () => {
-            window.removeEventListener("keypress", handleKeyPress);
-            if (barcodeTimeoutRef.current) {
-                clearTimeout(barcodeTimeoutRef.current);
-            }
-        };
-    }, [activeTab, scanMode, currentBarcode, processBarcode]);
+    const {hidBuffer: currentBarcode, pageHasFocus} = useUsbBarcodeScanner(
+        activeTab === "scan" && scanMode === "usb",
+        processBarcode,
+    );
 
     if (CheckInListQuery.error && (CheckInListQuery.error as any).response?.status === 404) {
         return (
