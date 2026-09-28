@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Group, Pill, SegmentedControl, Select} from "@mantine/core";
+import {Button, Group, Pill} from "@mantine/core";
 import {IconDownload} from "@tabler/icons-react";
 import {useState} from "react";
 import {useParams} from "react-router";
@@ -8,48 +8,34 @@ import {PageTitle} from "../../../../common/PageTitle";
 import {ToolBar} from "../../../../common/ToolBar";
 import {SearchBarWrapper} from "../../../../common/SearchBar";
 import {SortSelector} from "../../../../common/SortSelector";
+import {FilterModal, FilterOption} from "../../../../common/FilterModal";
 import {TableSkeleton} from "../../../../common/TableSkeleton";
 import {Pagination} from "../../../../common/Pagination";
-import {CashlessTransactionTable} from "../../../../common/CashlessTransactionTable";
+import {CashlessTransactionTable, typeLabel} from "../../../../common/CashlessTransactionTable";
 import {useFilterQueryParamSync} from "../../../../../hooks/useFilterQueryParamSync.ts";
 import {useGetCashlessTransactions} from "../../../../../queries/useGetCashlessTransactions.ts";
-import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {useGetCashlessSalesPoints} from "../../../../../queries/useGetCashlessSalesPoints.ts";
 import {useGetCashlessWallet} from "../../../../../queries/useGetCashlessWallet.ts";
+import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {cashlessClient} from "../../../../../api/cashless.client.ts";
 import {downloadBinary} from "../../../../../utilites/download.ts";
 import {withLoadingNotification} from "../../../../../utilites/withLoadingNotification.tsx";
-import {IdParam, QueryFilterOperator, QueryFilters} from "../../../../../types.ts";
+import {CashlessTransactionType, IdParam, QueryFilterOperator, QueryFilters} from "../../../../../types.ts";
 
-const KIND_FILTERS: Record<string, string[]> = {
-    all: [],
-    topups: ['TOPUP_ONLINE', 'TOPUP_STAFF'],
-    purchases: ['PURCHASE'],
-    reversals: ['REVERSAL'],
-    refunds: ['REFUND_REMAINING'],
-    closure: ['CLOSURE'],
-};
+const TRANSACTION_TYPES: CashlessTransactionType[] = [
+    'TOPUP_ONLINE',
+    'TOPUP_STAFF',
+    'PURCHASE',
+    'REVERSAL',
+    'REFUND_REMAINING',
+    'CLOSURE',
+];
 
-const singleFilterValue = (condition: unknown): string | null => {
-    if (!condition || Array.isArray(condition)) {
-        return null;
-    }
-
-    return String((condition as { value: string | string[] }).value);
-};
-
-const activeKind = (condition: unknown): string => {
-    const raw = (condition as { value?: string | string[] } | undefined)?.value;
-
-    if (!raw) {
-        return 'all';
-    }
-
-    const values = Array.isArray(raw) ? raw : [raw];
-
-    return Object.entries(KIND_FILTERS).find(
-        ([, kinds]) => kinds.length === values.length && kinds.every((kind) => values.includes(kind)),
-    )?.[0] ?? 'all';
+const getFilterValue = (field: any): any[] => {
+    if (!field) return [];
+    if (Array.isArray(field)) return field;
+    if (Array.isArray(field.value)) return field.value;
+    return field.value ? [field.value] : [];
 };
 
 const CashlessTransactions = () => {
@@ -57,35 +43,68 @@ const CashlessTransactions = () => {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const {data: event} = useGetEvent(eventId);
     const {data: transactionsData} = useGetCashlessTransactions(eventId, searchParams as QueryFilters);
-    const [downloadPending, setDownloadPending] = useState(false);
     const {data: salesPointsData} = useGetCashlessSalesPoints(eventId, {pageNumber: 1, perPage: 100} as QueryFilters);
+    const [downloadPending, setDownloadPending] = useState(false);
 
-    const walletId = singleFilterValue(searchParams.filterFields?.cashless_wallet_id);
-    const salesPointId = singleFilterValue(searchParams.filterFields?.cashless_sales_point_id);
-    const {data: filteredWallet} = useGetCashlessWallet(eventId, walletId ?? undefined);
+    const transactions = transactionsData?.data;
+    const pagination = transactionsData?.meta;
 
-    const applyFilters = (changes: Record<string, { operator: QueryFilterOperator; value: string | string[] } | null>) => {
-        const filterFields: Record<string, unknown> = {...(searchParams.filterFields || {})};
+    const walletId = getFilterValue(searchParams.filterFields?.cashless_wallet_id)[0];
+    const {data: filteredWallet} = useGetCashlessWallet(eventId, walletId);
 
-        Object.entries(changes).forEach(([field, condition]) => {
-            if (condition) {
-                filterFields[field] = condition;
-            } else {
-                delete filterFields[field];
-            }
-        });
+    const filterOptions: FilterOption[] = [
+        {
+            field: 'type',
+            label: t`Type`,
+            type: 'multi-select',
+            options: TRANSACTION_TYPES.map((type) => ({value: type, label: typeLabel(type)})),
+        },
+        {
+            field: 'cashless_sales_point_id',
+            label: t`Sales point`,
+            type: 'multi-select',
+            options: salesPointsData?.data?.map((salesPoint) => ({
+                value: String(salesPoint.id),
+                label: salesPoint.name,
+            })) ?? [],
+        },
+    ];
+
+    const currentFilters = {
+        type: getFilterValue(searchParams.filterFields?.type),
+        cashless_sales_point_id: getFilterValue(searchParams.filterFields?.cashless_sales_point_id),
+    };
+
+    const walletFilter = () => walletId
+        ? {cashless_wallet_id: {operator: QueryFilterOperator.Equals, value: walletId}}
+        : {};
+
+    const handleFilterChange = (values: Record<string, any>) => {
+        const filterFields: any = {...walletFilter()};
+
+        if (values.type?.length > 0) {
+            filterFields.type = {operator: QueryFilterOperator.In, value: values.type};
+        }
+        if (values.cashless_sales_point_id?.length > 0) {
+            filterFields.cashless_sales_point_id = {
+                operator: QueryFilterOperator.In,
+                value: values.cashless_sales_point_id,
+            };
+        }
 
         setSearchParams({...searchParams, filterFields, pageNumber: 1} as QueryFilters, true);
     };
 
-    const handleKindChange = (kind: string) => {
-        const kinds = KIND_FILTERS[kind];
-
-        applyFilters({type: kinds.length > 0 ? {operator: QueryFilterOperator.In, value: kinds} : null});
+    const handleResetFilters = () => {
+        setSearchParams({...searchParams, filterFields: walletFilter(), pageNumber: 1} as QueryFilters, true);
     };
 
-    const transactions = transactionsData?.data;
-    const pagination = transactionsData?.meta;
+    const handleWalletRemoved = () => {
+        const filterFields: any = {...(searchParams.filterFields || {})};
+        delete filterFields.cashless_wallet_id;
+
+        setSearchParams({...searchParams, filterFields, pageNumber: 1} as QueryFilters, true);
+    };
 
     const handleExport = async (eventId: IdParam) => {
         await withLoadingNotification(async () => {
@@ -128,34 +147,6 @@ const CashlessTransactions = () => {
                 )}
                 filterComponent={(
                     <Group gap="sm" wrap="wrap">
-                        <SegmentedControl
-                            size="xs"
-                            value={activeKind(searchParams.filterFields?.type)}
-                            onChange={handleKindChange}
-                            data={[
-                                {value: 'all', label: t`All`},
-                                {value: 'topups', label: t`Top-ups`},
-                                {value: 'purchases', label: t`Purchases`},
-                                {value: 'reversals', label: t`Reversals`},
-                                {value: 'refunds', label: t`Refunds`},
-                                {value: 'closure', label: t`Closure`},
-                            ]}
-                            data-testid="cashless-transactions-kind-filter"
-                        />
-                        <Select
-                            size="sm"
-                            clearable
-                            placeholder={t`All sales points`}
-                            value={salesPointId}
-                            onChange={(value) => applyFilters({
-                                cashless_sales_point_id: value ? {operator: QueryFilterOperator.Equals, value} : null,
-                            })}
-                            data={salesPointsData?.data?.map((salesPoint) => ({
-                                value: String(salesPoint.id),
-                                label: salesPoint.name,
-                            })) ?? []}
-                            data-testid="cashless-transactions-sales-point-filter"
-                        />
                         {pagination?.allowed_sorts && (
                             <SortSelector
                                 selected={searchParams.sortBy && searchParams.sortDirection
@@ -165,10 +156,17 @@ const CashlessTransactions = () => {
                                 onSortSelect={(key, sortDirection) => setSearchParams({sortBy: key, sortDirection})}
                             />
                         )}
+                        <FilterModal
+                            filters={filterOptions}
+                            activeFilters={currentFilters}
+                            onChange={handleFilterChange}
+                            onReset={handleResetFilters}
+                            title={t`Filter Transactions`}
+                        />
                         {walletId && (
                             <Pill
                                 withRemoveButton
-                                onRemove={() => applyFilters({cashless_wallet_id: null})}
+                                onRemove={handleWalletRemoved}
                                 data-testid="cashless-transactions-wallet-pill"
                             >
                                 {filteredWallet

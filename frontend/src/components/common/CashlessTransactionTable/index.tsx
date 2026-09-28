@@ -28,7 +28,7 @@ const typeColour: Record<CashlessTransactionType, string> = {
     CLOSURE: 'gray',
 };
 
-const typeLabel = (type: CashlessTransactionType): string => ({
+export const typeLabel = (type: CashlessTransactionType): string => ({
     TOPUP_ONLINE: t`Online top-up`,
     TOPUP_STAFF: t`Staff top-up`,
     PURCHASE: t`Purchase`,

@@ -121,7 +121,7 @@ export class CashlessSettingsPage {
   }
 
   dangerZone(): Locator {
-    return this.page.getByText('Danger Zone');
+    return this.page.getByRole('heading', { name: 'Danger Zone' });
   }
 
   async openCloseModal(): Promise<void> {
@@ -146,8 +146,19 @@ export class CashlessTransactionsPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  async filterByKind(label: string): Promise<void> {
-    await this.page.getByTestId('cashless-transactions-kind-filter').getByText(label, { exact: true }).click();
+  async filterBy(field: 'Type' | 'Sales point', optionLabel: string): Promise<void> {
+    await this.page.getByRole('button', { name: /^Filters/ }).click();
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByPlaceholder(`Select ${field.toLowerCase()}`).click();
+    await this.page.getByRole('option', { name: optionLabel, exact: true }).click();
+    await dialog.getByRole('heading').click();
+    await dialog.getByRole('button', { name: 'Apply' }).click();
+    await dialog.waitFor({ state: 'hidden' });
+  }
+
+  async resetFilters(): Promise<void> {
+    await this.page.getByRole('button', { name: /^Filters/ }).click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Reset' }).click();
   }
 
   async search(query: string): Promise<void> {

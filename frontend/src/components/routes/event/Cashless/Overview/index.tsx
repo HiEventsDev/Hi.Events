@@ -97,7 +97,7 @@ const CashlessOverview = () => {
             </div>
 
             <div className={classes.row}>
-                <div className={classes.rowLabel}>{t`Left over`}</div>
+                <div className={classes.rowLabel}>{t`Other statistics`}</div>
                 <KpiGrid columns={4}>
                     <KpiCell
                         label={t`Left in balances`}

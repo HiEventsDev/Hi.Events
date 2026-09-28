@@ -332,13 +332,15 @@ test.describe('cashless', () => {
     await expect(transactions.row(attendee.publicId)).toBeVisible();
 
     await transactions.goto(event.eventId);
-    await transactions.filterByKind('Purchases');
+    await transactions.filterBy('Type', 'Purchase');
     await expect(authedPage.getByText('No cashless activity yet')).toBeVisible();
-    await transactions.filterByKind('Top-ups');
+    await transactions.resetFilters();
+    await expect(transactions.row(attendee.publicId)).toBeVisible();
+    await transactions.filterBy('Type', 'Staff top-up');
     await expect(transactions.row(attendee.publicId)).toBeVisible();
 
-    await transactions.filterByKind('All');
-    await expect(authedPage.getByRole('radio', { name: 'All' })).toBeChecked();
+    await transactions.resetFilters();
+    await expect(authedPage.getByRole('button', { name: 'Filters', exact: true })).toBeVisible();
     await transactions.search('nobody-with-that-name');
     await expect(authedPage.getByText('No search results.')).toBeVisible();
     await transactions.search(attendee.publicId);
@@ -349,6 +351,8 @@ test.describe('cashless', () => {
     await salesPoints.row(salesPointName).getByRole('button').click();
     await authedPage.getByTestId('cashless-sales-point-transactions-menu-item').click();
     await expect(authedPage).toHaveURL(/cashless\/transactions\?.*cashless_sales_point_id/);
-    await expect(authedPage.getByTestId('cashless-transactions-sales-point-filter')).toHaveValue(salesPointName);
+    await expect(authedPage.getByRole('button', { name: 'Filters (1)' })).toBeVisible();
+    await authedPage.getByRole('button', { name: 'Filters (1)' }).click();
+    await expect(authedPage.getByRole('dialog').getByText(salesPointName)).toBeVisible();
   });
 });
