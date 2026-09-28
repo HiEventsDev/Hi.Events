@@ -110,6 +110,19 @@ export class CashlessOverviewPage {
   kpiValue(name: 'outstanding' | 'topped-up' | 'spent' | 'refunded' | 'closed' | 'purchases'): Locator {
     return this.page.getByTestId(`cashless-overview-${name}-value`);
   }
+}
+
+export class CashlessSettingsPage {
+  constructor(private readonly page: Page) {}
+
+  async goto(eventId: number): Promise<void> {
+    await this.page.goto(`/manage/event/${eventId}/cashless/settings`);
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  dangerZone(): Locator {
+    return this.page.getByText('Danger Zone');
+  }
 
   async openCloseModal(): Promise<void> {
     await this.page.getByTestId('cashless-close-button').click();
@@ -122,5 +135,26 @@ export class CashlessOverviewPage {
   async confirmAndClose(): Promise<void> {
     await this.page.getByTestId('cashless-close-confirm-checkbox').check();
     await this.closeSubmitButton().click();
+  }
+}
+
+export class CashlessTransactionsPage {
+  constructor(private readonly page: Page) {}
+
+  async goto(eventId: number): Promise<void> {
+    await this.page.goto(`/manage/event/${eventId}/cashless/transactions`);
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async filterByKind(label: string): Promise<void> {
+    await this.page.getByTestId('cashless-transactions-kind-filter').getByText(label, { exact: true }).click();
+  }
+
+  async search(query: string): Promise<void> {
+    await this.page.getByPlaceholder(/Search by name/).fill(query);
+  }
+
+  row(text: string): Locator {
+    return this.page.getByRole('row').filter({ hasText: text });
   }
 }

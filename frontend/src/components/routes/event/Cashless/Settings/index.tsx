@@ -1,11 +1,17 @@
 import {t} from "@lingui/macro";
-import {Button, ComboboxItem, MultiSelect, NumberInput, Switch, TextInput} from "@mantine/core";
+import {Badge, Button, ComboboxItem, MultiSelect, NumberInput, Switch, TextInput} from "@mantine/core";
+import {IconLock, IconLockCheck} from "@tabler/icons-react";
+import {useDisclosure} from "@mantine/hooks";
 import {useForm} from "@mantine/form";
 import {useEffect} from "react";
 import {useParams} from "react-router";
 import {PageBody} from "../../../../common/PageBody";
 import {PageTitle} from "../../../../common/PageTitle";
 import {Card} from "../../../../common/Card";
+import {DangerZone, DangerZoneSection} from "../../../../common/DangerZone";
+import {CashlessCloseModal} from "../../../../modals/CashlessCloseModal";
+import {useGetCashlessSummary} from "../../../../../queries/useGetCashlessSummary.ts";
+import {prettyDate} from "../../../../../utilites/dates.ts";
 import {useGetCashlessSettings} from "../../../../../queries/useGetCashlessSettings.ts";
 import {useUpdateCashlessSettings} from "../../../../../mutations/useUpdateCashlessSettings.ts";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
@@ -29,6 +35,8 @@ const CashlessSettings = () => {
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const {data: settings} = useGetCashlessSettings(eventId);
+    const {data: summary} = useGetCashlessSummary(eventId);
+    const [closeModalOpen, {open: openCloseModal, close: closeCloseModal}] = useDisclosure(false);
     const updateMutation = useUpdateCashlessSettings();
     const errorHandler = useFormErrorResponseHandler();
     const {data: taxesAndFees} = useGetTaxesAndFees();
@@ -161,6 +169,42 @@ const CashlessSettings = () => {
                     </Button>
                 </form>
             </Card>
+
+            {settings && (settings.cashless_enabled || settings.cashless_closed_at) && (
+                <DangerZone>
+                    <DangerZoneSection
+                        title={t`Close cashless`}
+                        description={settings.cashless_closed_at && event
+                            ? t`Cashless was closed on ${prettyDate(settings.cashless_closed_at, event.timezone)}. Every remaining balance was moved into your sales.`
+                            : t`Once the event is over, close cashless to move the money left in balances into your total sales. Every balance is locked and this cannot be undone.`}
+                        action={settings.cashless_closed_at ? (
+                            <Badge variant="light" color="gray" leftSection={<IconLockCheck size={14}/>}>
+                                {t`Closed`}
+                            </Badge>
+                        ) : (
+                            <Button
+                                color="red"
+                                variant="outline"
+                                leftSection={<IconLock size={16}/>}
+                                disabled={!summary}
+                                onClick={openCloseModal}
+                                data-testid="cashless-close-button"
+                            >
+                                {t`Close cashless`}
+                            </Button>
+                        )}
+                    />
+                </DangerZone>
+            )}
+
+            {closeModalOpen && settings && summary && (
+                <CashlessCloseModal
+                    settings={settings}
+                    summary={summary}
+                    currency={event?.currency ?? 'USD'}
+                    onClose={closeCloseModal}
+                />
+            )}
         </PageBody>
     );
 };

@@ -1,7 +1,6 @@
 import {t} from "@lingui/macro";
-import {Alert, Button, Table, Text} from "@mantine/core";
-import {IconLock, IconLockCheck} from "@tabler/icons-react";
-import {useDisclosure} from "@mantine/hooks";
+import {Alert, Table, Text} from "@mantine/core";
+import {IconLockCheck} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
 import {useParams} from "react-router";
 import {PageBody} from "../../../../common/PageBody";
@@ -10,7 +9,6 @@ import {Card} from "../../../../common/Card";
 import {KpiCell, KpiGrid} from "../../../../common/KpiGrid";
 import {PeriodPreset, PeriodSelector} from "../../../../common/PeriodSelector";
 import {CashlessRevenueChartCard} from "../../../../common/StatsCharts";
-import {CashlessCloseModal} from "../../../../modals/CashlessCloseModal";
 import {CashlessDisabledNotice} from "../CashlessDisabledNotice";
 import {useGetEvent} from "../../../../../queries/useGetEvent.ts";
 import {useGetCashlessSettings} from "../../../../../queries/useGetCashlessSettings.ts";
@@ -27,7 +25,6 @@ const CashlessOverview = () => {
     const {data: event} = useGetEvent(eventId);
     const {data: settings} = useGetCashlessSettings(eventId);
     const {data: summary, isLoading} = useGetCashlessSummary(eventId);
-    const [closeModalOpen, {open: openCloseModal, close: closeCloseModal}] = useDisclosure(false);
     const [dateRange, setDateRange] = useState<PeriodPreset>('event_full');
 
     const {startDate, endDate} = useMemo(() => periodPresetToDateRange(dateRange, event), [dateRange, event]);
@@ -54,59 +51,79 @@ const CashlessOverview = () => {
                 </Alert>
             )}
 
-            <KpiGrid>
-                <KpiCell
-                    label={t`Left in balances`}
-                    value={money(summary?.outstanding_balance)}
-                    isLoading={isLoading}
-                    testId="cashless-overview-outstanding"
-                />
-                <KpiCell
-                    label={t`Topped up`}
-                    value={money((summary?.topped_up_online ?? 0) + (summary?.topped_up_staff ?? 0))}
-                    isLoading={isLoading}
-                    testId="cashless-overview-topped-up"
-                />
-                <KpiCell
-                    label={t`Spent at sales points`}
-                    value={money(summary?.spent)}
-                    isLoading={isLoading}
-                    testId="cashless-overview-spent"
-                />
-                <KpiCell
-                    label={t`Refunded`}
-                    value={money(summary?.refunded)}
-                    isLoading={isLoading}
-                    testId="cashless-overview-refunded"
-                />
-                <KpiCell
-                    label={t`Moved to sales on closing`}
-                    value={money(summary?.closed)}
-                    isLoading={isLoading}
-                    testId="cashless-overview-closed"
-                />
-                <KpiCell
-                    label={t`Purchases`}
-                    value={formatNumber(summary?.purchases_count ?? 0)}
-                    isLoading={isLoading}
-                    testId="cashless-overview-purchases"
-                />
-                <KpiCell
-                    label={t`Online top-ups`}
-                    value={money(summary?.topped_up_online)}
-                    isLoading={isLoading}
-                />
-                <KpiCell
-                    label={t`Top-ups at the event`}
-                    value={money(summary?.topped_up_staff)}
-                    isLoading={isLoading}
-                />
-                <KpiCell
-                    label={t`Balances holding money`}
-                    value={`${formatNumber(summary?.wallets_with_balance ?? 0)} / ${formatNumber(summary?.wallets_total ?? 0)}`}
-                    isLoading={isLoading}
-                />
-            </KpiGrid>
+            <div className={classes.row}>
+                <div className={classes.rowLabel}>{t`Top-ups`}</div>
+                <KpiGrid>
+                    <KpiCell
+                        label={t`Topped up`}
+                        value={money((summary?.topped_up_online ?? 0) + (summary?.topped_up_staff ?? 0))}
+                        isLoading={isLoading}
+                        testId="cashless-overview-topped-up"
+                    />
+                    <KpiCell
+                        label={t`Online top-ups`}
+                        value={money(summary?.topped_up_online)}
+                        isLoading={isLoading}
+                    />
+                    <KpiCell
+                        label={t`Top-ups at the event`}
+                        value={money(summary?.topped_up_staff)}
+                        isLoading={isLoading}
+                    />
+                </KpiGrid>
+            </div>
+
+            <div className={classes.row}>
+                <div className={classes.rowLabel}>{t`Spending`}</div>
+                <KpiGrid>
+                    <KpiCell
+                        label={t`Spent at sales points`}
+                        value={money(summary?.spent)}
+                        isLoading={isLoading}
+                        testId="cashless-overview-spent"
+                    />
+                    <KpiCell
+                        label={t`Purchases`}
+                        value={formatNumber(summary?.purchases_count ?? 0)}
+                        isLoading={isLoading}
+                        testId="cashless-overview-purchases"
+                    />
+                    <KpiCell
+                        label={t`Average purchase`}
+                        value={money(summary && summary.purchases_count > 0 ? summary.spent / summary.purchases_count : 0)}
+                        isLoading={isLoading}
+                    />
+                </KpiGrid>
+            </div>
+
+            <div className={classes.row}>
+                <div className={classes.rowLabel}>{t`Left over`}</div>
+                <KpiGrid columns={4}>
+                    <KpiCell
+                        label={t`Left in balances`}
+                        value={money(summary?.outstanding_balance)}
+                        isLoading={isLoading}
+                        testId="cashless-overview-outstanding"
+                    />
+                    <KpiCell
+                        label={t`Balances holding money`}
+                        value={`${formatNumber(summary?.wallets_with_balance ?? 0)} / ${formatNumber(summary?.wallets_total ?? 0)}`}
+                        isLoading={isLoading}
+                    />
+                    <KpiCell
+                        label={t`Refunded`}
+                        value={money(summary?.refunded)}
+                        isLoading={isLoading}
+                        testId="cashless-overview-refunded"
+                    />
+                    <KpiCell
+                        label={t`Moved to sales on closing`}
+                        value={money(summary?.closed)}
+                        isLoading={isLoading}
+                        testId="cashless-overview-closed"
+                    />
+                </KpiGrid>
+            </div>
 
             <div className={classes.section}>
                 <PeriodSelector
@@ -182,39 +199,6 @@ const CashlessOverview = () => {
                     )}
                 </Card>
             </div>
-
-            {settings?.cashless_enabled && !isClosed && summary && (
-                <div className={classes.section}>
-                    <Card>
-                        <div className={classes.closure}>
-                            <div className={classes.closureText}>
-                                <h3 className={classes.sectionTitle}>{t`Close cashless`}</h3>
-                                <Text size="sm" c="dimmed">
-                                    {t`Once the event is over, close cashless to move the money left in balances into your total sales. Every balance is locked and this cannot be undone.`}
-                                </Text>
-                            </div>
-                            <Button
-                                color="red"
-                                variant="light"
-                                leftSection={<IconLock size={16}/>}
-                                onClick={openCloseModal}
-                                data-testid="cashless-close-button"
-                            >
-                                {t`Close cashless`}
-                            </Button>
-                        </div>
-                    </Card>
-                </div>
-            )}
-
-            {closeModalOpen && settings && summary && (
-                <CashlessCloseModal
-                    settings={settings}
-                    summary={summary}
-                    currency={currency}
-                    onClose={closeCloseModal}
-                />
-            )}
         </PageBody>
     );
 };

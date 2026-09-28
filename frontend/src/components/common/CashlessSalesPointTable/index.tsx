@@ -1,9 +1,9 @@
 import {t} from "@lingui/macro";
 import {Badge, Button, Table as MantineTable, Text} from "@mantine/core";
-import {IconCopy, IconPencil, IconPlus, IconQrcode, IconTrash} from "@tabler/icons-react";
+import {IconArrowsExchange, IconCopy, IconPencil, IconPlus, IconQrcode, IconTrash} from "@tabler/icons-react";
 import {useClipboard, useDisclosure} from "@mantine/hooks";
 import {useState} from "react";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {CashlessSalesPoint, IdParam} from "../../../types.ts";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {Table, TableHead} from "../Table";
@@ -14,6 +14,7 @@ import {useDeleteCashlessSalesPoint} from "../../../mutations/useDeleteCashlessS
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {formatCurrency} from "../../../utilites/currency.ts";
+import {cashlessTransactionsPath} from "../../../utilites/cashlessLinks.ts";
 import classes from "./CashlessSalesPointTable.module.scss";
 
 interface CashlessSalesPointTableProps {
@@ -27,6 +28,7 @@ const salesPointUrl = (shortId: string) =>
 
 export const CashlessSalesPointTable = ({salesPoints, currency, openCreateModal}: CashlessSalesPointTableProps) => {
     const {eventId} = useParams();
+    const navigate = useNavigate();
     const copy = useClipboard();
     const [selectedSalesPoint, setSelectedSalesPoint] = useState<CashlessSalesPoint>();
     const [editOpen, {open: openEdit, close: closeEdit}] = useDisclosure(false);
@@ -113,6 +115,12 @@ export const CashlessSalesPointTable = ({salesPoints, currency, openCreateModal}
                                     itemsGroups={[{
                                         label: t`Manage`,
                                         items: [
+                                            {
+                                                label: t`View transactions`,
+                                                icon: <IconArrowsExchange size={14}/>,
+                                                onClick: () => navigate(cashlessTransactionsPath(eventId, {salesPointId: salesPoint.id})),
+                                                dataTestId: 'cashless-sales-point-transactions-menu-item',
+                                            },
                                             {
                                                 label: t`Share with staff`,
                                                 icon: <IconQrcode size={14}/>,

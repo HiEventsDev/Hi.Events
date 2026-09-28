@@ -1,14 +1,15 @@
 import {t} from "@lingui/macro";
 import {Badge, Table as MantineTable, Text} from "@mantine/core";
-import {IconCoin, IconLock, IconLockOpen, IconReceiptRefund} from "@tabler/icons-react";
+import {IconArrowsExchange, IconCoin, IconLock, IconLockOpen, IconReceiptRefund} from "@tabler/icons-react";
 import {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {CashlessWallet} from "../../../types.ts";
 import {NoResultsSplash} from "../NoResultsSplash";
 import {Table, TableHead} from "../Table";
 import {ActionMenu} from "../ActionMenu";
 import {formatCurrency} from "../../../utilites/currency.ts";
+import {cashlessTransactionsPath} from "../../../utilites/cashlessLinks.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateCashlessWalletStatus} from "../../../mutations/useUpdateCashlessWalletStatus.ts";
@@ -28,6 +29,7 @@ const statusColour: Record<CashlessWallet['status'], string> = {
 
 export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
     const {eventId} = useParams();
+    const navigate = useNavigate();
     const [selectedWallet, setSelectedWallet] = useState<CashlessWallet>();
     const [topupOpen, {open: openTopup, close: closeTopup}] = useDisclosure(false);
     const [refundOpen, {open: openRefund, close: closeRefund}] = useDisclosure(false);
@@ -96,13 +98,20 @@ export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
                                 </Badge>
                             </MantineTable.Td>
                             <MantineTable.Td>
-                                {wallet.status !== 'CLOSED' && <ActionMenu
+                                <ActionMenu
                                     itemsGroups={[{
                                         label: t`Manage`,
                                         items: [
                                             {
+                                                label: t`View transactions`,
+                                                icon: <IconArrowsExchange size={14}/>,
+                                                onClick: () => navigate(cashlessTransactionsPath(eventId, {walletId: wallet.id})),
+                                                dataTestId: 'cashless-wallet-transactions-menu-item',
+                                            },
+                                            {
                                                 label: t`Top up`,
                                                 icon: <IconCoin size={14}/>,
+                                                visible: wallet.status !== 'CLOSED',
                                                 onClick: () => {
                                                     setSelectedWallet(wallet);
                                                     openTopup();
@@ -112,6 +121,7 @@ export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
                                             {
                                                 label: t`Refund balance`,
                                                 icon: <IconReceiptRefund size={14}/>,
+                                                visible: wallet.status !== 'CLOSED',
                                                 onClick: () => {
                                                     setSelectedWallet(wallet);
                                                     openRefund();
@@ -122,11 +132,12 @@ export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
                                                 label: wallet.status === 'FROZEN' ? t`Unfreeze` : t`Freeze`,
                                                 icon: wallet.status === 'FROZEN' ? <IconLockOpen size={14}/> :
                                                     <IconLock size={14}/>,
+                                                visible: wallet.status !== 'CLOSED',
                                                 onClick: () => handleStatusToggle(wallet),
                                             },
                                         ],
                                     }]}
-                                />}
+                                />
                             </MantineTable.Td>
                         </MantineTable.Tr>
                     ))}

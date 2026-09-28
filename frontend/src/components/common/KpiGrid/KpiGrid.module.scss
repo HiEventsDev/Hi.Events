@@ -6,8 +6,24 @@
   border-radius: var(--hi-radius-card);
   overflow: hidden;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+
+  @media (min-resolution: 2dppx) {
+    gap: 0.5px;
+  }
+
+  @include mixins.respond-below(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.respond-below(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fourColumns {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   @include mixins.respond-below(lg) {
     grid-template-columns: repeat(2, 1fr);

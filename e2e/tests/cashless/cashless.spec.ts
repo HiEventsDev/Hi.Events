@@ -1,6 +1,8 @@
 import { test, expect } from '../../fixtures';
 import {
   CashlessOverviewPage,
+  CashlessSettingsPage,
+  CashlessTransactionsPage,
   CashlessPosPage,
   CashlessTopupEntryPage,
   CashlessSalesPointPage,
@@ -249,10 +251,13 @@ test.describe('cashless', () => {
     await expect(overview.kpiValue('topped-up')).toHaveText('$30.00');
     await expect(overview.kpiValue('spent')).toHaveText('$0.00');
 
-    await overview.openCloseModal();
+    const settings = new CashlessSettingsPage(authedPage);
+    await settings.goto(event.eventId);
+    await expect(settings.dangerZone()).toBeVisible();
+    await settings.openCloseModal();
     await expect(authedPage.getByTestId('cashless-close-refund-warning')).toBeVisible();
     await authedPage.getByTestId('cashless-close-confirm-checkbox').check();
-    await expect(overview.closeSubmitButton()).toBeDisabled();
+    await expect(settings.closeSubmitButton()).toBeDisabled();
     await authedPage.keyboard.press('Escape');
 
     await api.updateCashlessSettings(event.eventId, {
@@ -262,14 +267,16 @@ test.describe('cashless', () => {
     });
     await authedPage.reload();
 
-    await overview.openCloseModal();
+    await settings.openCloseModal();
     await expect(authedPage.getByTestId('cashless-close-amount')).toHaveText('$30.00');
-    await overview.confirmAndClose();
+    await settings.confirmAndClose();
 
+    await expect(authedPage.getByTestId('cashless-close-button')).toHaveCount(0);
+
+    await overview.goto(event.eventId);
     await expect(authedPage.getByTestId('cashless-closed-notice')).toBeVisible();
     await expect(overview.kpiValue('outstanding')).toHaveText('$0.00');
     await expect(overview.kpiValue('closed')).toHaveText('$30.00');
-    await expect(authedPage.getByTestId('cashless-close-button')).toHaveCount(0);
 
     await wallets.goto(event.eventId);
     await expect(wallets.row(attendee.publicId)).toContainText('CLOSED');
@@ -284,15 +291,64 @@ test.describe('cashless', () => {
       cashless_min_topup_amount: 5,
       cashless_allow_remaining_balance_refund: false,
     });
-    const overview = new CashlessOverviewPage(authedPage);
-    await overview.goto(event.eventId);
-    await overview.openCloseModal();
-    await overview.confirmAndClose();
-    await expect(authedPage.getByTestId('cashless-closed-notice')).toBeVisible();
+    const settings = new CashlessSettingsPage(authedPage);
+    await settings.goto(event.eventId);
+    await settings.openCloseModal();
+    await settings.confirmAndClose();
+    await expect(authedPage.getByTestId('cashless-close-button')).toHaveCount(0);
 
     const wallet = new CashlessWalletPublicPage(page);
     await wallet.goto(event.eventId, attendee.publicId);
     await expect(page.getByText('Cashless is closed for this event')).toBeVisible();
     await expect(page.getByTestId('cashless-topup-button')).toHaveCount(0);
+  });
+
+  test('an organizer jumps from a balance or a sales point to its transactions and filters them', async ({
+    authedPage,
+    api,
+    account,
+    publicApi,
+  }) => {
+    const { event, order, drinkId } = await seedCashlessEvent(api, publicApi, account.organizerId);
+    const attendee = order.attendees[0];
+    const salesPointName = uniqueName('Bar');
+    await api.createCashlessSalesPoint(event.eventId, {
+      name: salesPointName,
+      product_ids: [drinkId],
+      access_pin: SALES_POINT_PIN,
+    });
+
+    const wallets = new CashlessWalletsPage(authedPage);
+    await wallets.goto(event.eventId);
+    await wallets.topUpByTicketId(attendee.publicId, 30);
+    await expect(authedPage.getByText('Balance topped up')).toBeVisible();
+
+    await wallets.row(attendee.publicId).getByRole('button').click();
+    await authedPage.getByTestId('cashless-wallet-transactions-menu-item').click();
+
+    const transactions = new CashlessTransactionsPage(authedPage);
+    await expect(authedPage).toHaveURL(/cashless\/transactions\?.*cashless_wallet_id/);
+    await expect(authedPage.getByTestId('cashless-transactions-wallet-pill')).toBeVisible();
+    await expect(transactions.row(attendee.publicId)).toBeVisible();
+
+    await transactions.goto(event.eventId);
+    await transactions.filterByKind('Purchases');
+    await expect(authedPage.getByText('No cashless activity yet')).toBeVisible();
+    await transactions.filterByKind('Top-ups');
+    await expect(transactions.row(attendee.publicId)).toBeVisible();
+
+    await transactions.filterByKind('All');
+    await expect(authedPage.getByRole('radio', { name: 'All' })).toBeChecked();
+    await transactions.search('nobody-with-that-name');
+    await expect(authedPage.getByText('No search results.')).toBeVisible();
+    await transactions.search(attendee.publicId);
+    await expect(transactions.row(attendee.publicId)).toBeVisible();
+
+    const salesPoints = new CashlessSalesPointPage(authedPage);
+    await salesPoints.goto(event.eventId);
+    await salesPoints.row(salesPointName).getByRole('button').click();
+    await authedPage.getByTestId('cashless-sales-point-transactions-menu-item').click();
+    await expect(authedPage).toHaveURL(/cashless\/transactions\?.*cashless_sales_point_id/);
+    await expect(authedPage.getByTestId('cashless-transactions-sales-point-filter')).toHaveValue(salesPointName);
   });
 });

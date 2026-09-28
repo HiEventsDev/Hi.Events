@@ -6,10 +6,12 @@ namespace HiEvents\Repository\Eloquent;
 
 use HiEvents\DomainObjects\CashlessTransactionDomainObject;
 use HiEvents\DomainObjects\Enums\CashlessTransactionType;
+use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CashlessTransactionDomainObjectAbstract;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\CashlessTransaction;
 use HiEvents\Repository\Interfaces\CashlessTransactionRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -34,9 +36,22 @@ class CashlessTransactionRepository extends BaseRepository implements CashlessTr
             [CashlessTransactionDomainObjectAbstract::EVENT_ID, '=', $eventId],
         ];
 
+        if (! empty($params->query)) {
+            $where[] = static function (Builder $builder) use ($params) {
+                $builder->whereHas('wallet.attendee', static function (Builder $attendeeBuilder) use ($params) {
+                    $attendeeBuilder
+                        ->where(AttendeeDomainObjectAbstract::FIRST_NAME, 'ilike', '%'.$params->query.'%')
+                        ->orWhere(AttendeeDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                        ->orWhere(AttendeeDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%')
+                        ->orWhere(AttendeeDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%');
+                });
+            };
+        }
+
         $this->applyFilterFields($params, [
             CashlessTransactionDomainObjectAbstract::TYPE,
             CashlessTransactionDomainObjectAbstract::CASHLESS_SALES_POINT_ID,
+            CashlessTransactionDomainObjectAbstract::CASHLESS_WALLET_ID,
         ]);
 
         $this->model = $this->model->orderBy(
