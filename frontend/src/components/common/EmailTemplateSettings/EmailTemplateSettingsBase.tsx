@@ -57,7 +57,7 @@ interface EmailTemplateSettingsBaseProps {
     onDeleteSuccess?: () => void;
     onError?: (error: any, message: string) => void;
     eventType?: EventType;
-    isCashlessEnabled?: boolean;
+    types?: EmailTemplateType[];
 }
 
 export const EmailTemplateSettingsBase = ({
@@ -75,7 +75,7 @@ export const EmailTemplateSettingsBase = ({
     onDeleteSuccess,
     onError,
     eventType,
-    isCashlessEnabled
+    types
 }: EmailTemplateSettingsBaseProps) => {
     const [editorOpened, {open: openEditor, close: closeEditor}] = useDisclosure(false);
     const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
@@ -90,10 +90,13 @@ export const EmailTemplateSettingsBase = ({
     const accountRequiresManualVerification = isAccountFetched && account?.requires_manual_verification;
     const isModifyDisabled = !isAccountVerified || accountRequiresManualVerification;
 
-    const orderConfirmationTemplate = templates.find(t => t.template_type === 'order_confirmation');
-    const attendeeTicketTemplate = templates.find(t => t.template_type === 'attendee_ticket');
-    const occurrenceCancellationTemplate = templates.find(t => t.template_type === 'occurrence_cancellation');
-    const cashlessTopupTemplate = templates.find(t => t.template_type === 'cashless_topup');
+    const isOrganizer = contextType === 'organizer';
+    const visibleTypes: EmailTemplateType[] = types ?? [
+        'order_confirmation',
+        'attendee_ticket',
+        ...(isOrganizer || eventType === EventType.RECURRING ? ['occurrence_cancellation' as const] : []),
+        ...(isOrganizer ? ['cashless_topup' as const] : []),
+    ];
 
     const handleCreateTemplate = (type: EmailTemplateType) => {
         setEditingTemplate(null);
@@ -387,37 +390,15 @@ export const EmailTemplateSettingsBase = ({
                 <LoadingOverlay visible={isLoading}/>
 
                 <Stack gap="md">
-                    <TemplateCard
-                        type="order_confirmation"
-                        template={orderConfirmationTemplate}
-                        label={templateTypeLabels.order_confirmation}
-                        description={templateDescriptions.order_confirmation}
-                    />
-
-                    <TemplateCard
-                        type="attendee_ticket"
-                        template={attendeeTicketTemplate}
-                        label={templateTypeLabels.attendee_ticket}
-                        description={templateDescriptions.attendee_ticket}
-                    />
-
-                    {(contextType === 'organizer' || eventType === EventType.RECURRING) && (
+                    {visibleTypes.map((type) => (
                         <TemplateCard
-                            type="occurrence_cancellation"
-                            template={occurrenceCancellationTemplate}
-                            label={templateTypeLabels.occurrence_cancellation}
-                            description={templateDescriptions.occurrence_cancellation}
+                            key={type}
+                            type={type}
+                            template={templates.find(template => template.template_type === type)}
+                            label={templateTypeLabels[type]}
+                            description={templateDescriptions[type]}
                         />
-                    )}
-
-                    {(contextType === 'organizer' || isCashlessEnabled) && (
-                        <TemplateCard
-                            type="cashless_topup"
-                            template={cashlessTopupTemplate}
-                            label={templateTypeLabels.cashless_topup}
-                            description={templateDescriptions.cashless_topup}
-                        />
-                    )}
+                    ))}
                 </Stack>
             </div>
 

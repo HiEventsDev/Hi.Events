@@ -23,21 +23,24 @@ test.describe('email templates', () => {
     await expect(card.getByText('Active', { exact: true })).toBeVisible();
   });
 
-  test('the cashless top-up template only appears once cashless is enabled and can be customised', async ({ authedPage, api, account }) => {
+  test('the cashless top-up template lives in the cashless settings, not the event email templates', async ({ authedPage, api, account }) => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
-    const templates = new EmailTemplatePage(authedPage);
-
-    await templates.gotoEventTemplates(event.eventId);
-    await expect(templates.templateCard('Cashless Top-up')).toHaveCount(0);
-
     await api.updateCashlessSettings(event.eventId, {
       cashless_enabled: true,
       cashless_min_topup_amount: 5,
       cashless_allow_remaining_balance_refund: true,
     });
-    const subject = uniqueName('Cashless Subject');
+    const templates = new EmailTemplatePage(authedPage);
 
-    await authedPage.reload();
+    await templates.gotoEventTemplates(event.eventId);
+    await expect(templates.templateCard('Order Confirmation')).toBeVisible();
+    await expect(templates.templateCard('Cashless Top-up')).toHaveCount(0);
+
+    const subject = uniqueName('Cashless Subject');
+    await authedPage.goto(`/manage/event/${event.eventId}/cashless/settings`);
+    await authedPage.waitForLoadState('networkidle');
+    await expect(templates.templateCard('Order Confirmation')).toHaveCount(0);
+
     await templates.openCreateEditor('Cashless Top-up');
     await expect(templates.subjectInput()).toHaveValue(/cashless balance/);
     await templates.fillEditor(subject, uniqueName('Cashless body copy'));

@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class CashlessSalesPointProductDomainObject extends Generated\CashlessSalesPointProductDomainObjectAbstract
-{
-}
+class CashlessSalesPointProductDomainObject extends Generated\CashlessSalesPointProductDomainObjectAbstract {}

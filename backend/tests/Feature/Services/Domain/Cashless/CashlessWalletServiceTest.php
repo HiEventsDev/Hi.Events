@@ -158,12 +158,15 @@ class CashlessWalletServiceTest extends TestCase
     {
         $this->topUp(10.00);
 
+        $refused = false;
+
         try {
             $this->purchase(10.01);
-            $this->fail('Expected the debit to be refused');
         } catch (InsufficientCashlessBalanceException) {
-            // expected
+            $refused = true;
         }
+
+        $this->assertTrue($refused);
 
         $this->assertSame(10.0, (float) DB::table('cashless_wallets')->find($this->walletId)->balance);
         $this->assertSame(1, DB::table('cashless_transactions')->where('cashless_wallet_id', $this->walletId)->count());

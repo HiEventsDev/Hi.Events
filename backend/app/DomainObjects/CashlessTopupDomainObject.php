@@ -2,6 +2,4 @@
 
 namespace HiEvents\DomainObjects;
 
-class CashlessTopupDomainObject extends Generated\CashlessTopupDomainObjectAbstract
-{
-}
+class CashlessTopupDomainObject extends Generated\CashlessTopupDomainObjectAbstract {}

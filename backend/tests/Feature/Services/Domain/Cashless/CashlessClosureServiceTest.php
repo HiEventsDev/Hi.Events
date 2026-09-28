@@ -194,12 +194,15 @@ class CashlessClosureServiceTest extends TestCase
             'cashless_refund_deadline_at' => now()->addDay(),
         ]);
 
+        $refused = false;
+
         try {
             $this->closureService->close($this->eventId, $this->userId);
-            $this->fail('Expected the closure to be refused');
         } catch (CashlessClosureNotAllowedException) {
-            // expected
+            $refused = true;
         }
+
+        $this->assertTrue($refused);
 
         $this->assertSame(10.0, (float) DB::table('cashless_wallets')->find($walletId)->balance);
         $this->assertNull(DB::table('event_settings')->where('event_id', $this->eventId)->value('cashless_closed_at'));

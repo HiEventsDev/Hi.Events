@@ -20,6 +20,7 @@ import {
     IconCoin,
     IconLock,
     IconLockCheck,
+    IconMail,
     IconReceiptRefund,
 } from "@tabler/icons-react";
 import {useEffect, useMemo, useState} from "react";
@@ -30,6 +31,7 @@ import {Card} from "../../../../common/Card";
 import {HeadingWithDescription} from "../../../../common/Card/CardHeading";
 import {DangerZone, DangerZoneSection} from "../../../../common/DangerZone";
 import {CashlessCloseModal} from "../../../../modals/CashlessCloseModal";
+import {TemplateSettings} from "../../Settings/Sections/EmailSettings/TemplateSettings.tsx";
 import {useGetCashlessSettings} from "../../../../../queries/useGetCashlessSettings.ts";
 import {useGetCashlessSummary} from "../../../../../queries/useGetCashlessSummary.ts";
 import {useUpdateCashlessSettings} from "../../../../../mutations/useUpdateCashlessSettings.ts";
@@ -117,6 +119,7 @@ const CashlessSettings = () => {
         {id: 'cashless-general', label: t`General`, icon: IconAdjustments},
         {id: 'cashless-topups', label: t`Top-ups`, icon: IconCoin},
         {id: 'cashless-refunds', label: t`Refunds`, icon: IconReceiptRefund},
+        {id: 'cashless-email', label: t`Email Templates`, icon: IconMail},
         ...(showDangerZone
             ? [{id: 'cashless-danger-zone', label: t`Danger Zone`, icon: IconAlertTriangle, color: 'red'}]
             : []),
@@ -251,6 +254,10 @@ const CashlessSettings = () => {
                     </Card>
                 </div>
             </form>
+
+            <div id="cashless-email" style={{scrollMarginTop: '20px'}}>
+                <TemplateSettings types={['cashless_topup']}/>
+            </div>
 
             {showDangerZone && settings && (
                 <div id="cashless-danger-zone" style={{scrollMarginTop: '20px'}}>
