@@ -138,13 +138,15 @@ const CashlessSettings = () => {
     };
 
     const saveButton = (testId: string) => (
-        <Button
-            type="submit"
-            loading={updateMutation.isPending}
-            data-testid={testId}
-        >
-            {t`Save`}
-        </Button>
+        <div>
+            <Button
+                type="submit"
+                loading={updateMutation.isPending}
+                data-testid={testId}
+            >
+                {t`Save`}
+            </Button>
+        </div>
     );
 
     const sideMenu = (
