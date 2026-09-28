@@ -14,6 +14,7 @@ class CashlessSettingsDTO extends BaseDataObject
         public bool $cashless_allow_remaining_balance_refund,
         public ?string $cashless_refund_deadline_at,
         public bool $cashless_online_topup_enabled,
+        public ?string $cashless_closed_at,
         /** @var array<int> */
         public array $cashless_topup_tax_and_fee_ids,
     ) {}

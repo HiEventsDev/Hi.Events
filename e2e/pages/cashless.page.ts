@@ -98,3 +98,29 @@ export class CashlessTopupEntryPage {
     await this.page.getByTestId('cashless-entry-continue-button').click();
   }
 }
+
+export class CashlessOverviewPage {
+  constructor(private readonly page: Page) {}
+
+  async goto(eventId: number): Promise<void> {
+    await this.page.goto(`/manage/event/${eventId}/cashless/overview`);
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  kpiValue(name: 'outstanding' | 'topped-up' | 'spent' | 'refunded' | 'closed' | 'purchases'): Locator {
+    return this.page.getByTestId(`cashless-overview-${name}-value`);
+  }
+
+  async openCloseModal(): Promise<void> {
+    await this.page.getByTestId('cashless-close-button').click();
+  }
+
+  closeSubmitButton(): Locator {
+    return this.page.getByTestId('cashless-close-submit-button');
+  }
+
+  async confirmAndClose(): Promise<void> {
+    await this.page.getByTestId('cashless-close-confirm-checkbox').check();
+    await this.closeSubmitButton().click();
+  }
+}

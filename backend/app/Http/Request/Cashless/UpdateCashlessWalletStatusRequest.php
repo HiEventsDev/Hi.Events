@@ -13,7 +13,7 @@ class UpdateCashlessWalletStatusRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::in(CashlessWalletStatus::valuesArray())],
+            'status' => ['required', Rule::in([CashlessWalletStatus::ACTIVE->value, CashlessWalletStatus::FROZEN->value])],
         ];
     }
 }

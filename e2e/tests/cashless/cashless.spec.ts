@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures';
 import {
+  CashlessOverviewPage,
   CashlessPosPage,
   CashlessTopupEntryPage,
   CashlessSalesPointPage,
@@ -226,5 +227,72 @@ test.describe('cashless', () => {
 
     await expect(page).toHaveURL(/\/(payment|summary)$/);
     await expect(page.getByText(/already been processed/i)).toHaveCount(0);
+  });
+
+  test('the overview totals the balances and closing moves what is left into sales', async ({
+    authedPage,
+    api,
+    account,
+    publicApi,
+  }) => {
+    const { event, order } = await seedCashlessEvent(api, publicApi, account.organizerId);
+    const attendee = order.attendees[0];
+
+    const wallets = new CashlessWalletsPage(authedPage);
+    await wallets.goto(event.eventId);
+    await wallets.topUpByTicketId(attendee.publicId, 30);
+    await expect(authedPage.getByText('Balance topped up')).toBeVisible();
+
+    const overview = new CashlessOverviewPage(authedPage);
+    await overview.goto(event.eventId);
+    await expect(overview.kpiValue('outstanding')).toHaveText('$30.00');
+    await expect(overview.kpiValue('topped-up')).toHaveText('$30.00');
+    await expect(overview.kpiValue('spent')).toHaveText('$0.00');
+
+    await overview.openCloseModal();
+    await expect(authedPage.getByTestId('cashless-close-refund-warning')).toBeVisible();
+    await authedPage.getByTestId('cashless-close-confirm-checkbox').check();
+    await expect(overview.closeSubmitButton()).toBeDisabled();
+    await authedPage.keyboard.press('Escape');
+
+    await api.updateCashlessSettings(event.eventId, {
+      cashless_enabled: true,
+      cashless_min_topup_amount: 5,
+      cashless_allow_remaining_balance_refund: false,
+    });
+    await authedPage.reload();
+
+    await overview.openCloseModal();
+    await expect(authedPage.getByTestId('cashless-close-amount')).toHaveText('$30.00');
+    await overview.confirmAndClose();
+
+    await expect(authedPage.getByTestId('cashless-closed-notice')).toBeVisible();
+    await expect(overview.kpiValue('outstanding')).toHaveText('$0.00');
+    await expect(overview.kpiValue('closed')).toHaveText('$30.00');
+    await expect(authedPage.getByTestId('cashless-close-button')).toHaveCount(0);
+
+    await wallets.goto(event.eventId);
+    await expect(wallets.row(attendee.publicId)).toContainText('CLOSED');
+  });
+
+  test('a closed balance can no longer be topped up online', async ({ page, authedPage, api, account, publicApi }) => {
+    const { event, order } = await seedCashlessEvent(api, publicApi, account.organizerId);
+    const attendee = order.attendees[0];
+
+    await api.updateCashlessSettings(event.eventId, {
+      cashless_enabled: true,
+      cashless_min_topup_amount: 5,
+      cashless_allow_remaining_balance_refund: false,
+    });
+    const overview = new CashlessOverviewPage(authedPage);
+    await overview.goto(event.eventId);
+    await overview.openCloseModal();
+    await overview.confirmAndClose();
+    await expect(authedPage.getByTestId('cashless-closed-notice')).toBeVisible();
+
+    const wallet = new CashlessWalletPublicPage(page);
+    await wallet.goto(event.eventId, attendee.publicId);
+    await expect(page.getByText('Cashless is closed for this event')).toBeVisible();
+    await expect(page.getByTestId('cashless-topup-button')).toHaveCount(0);
   });
 });

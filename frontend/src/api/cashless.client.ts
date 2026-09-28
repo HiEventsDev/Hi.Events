@@ -1,9 +1,11 @@
 import {api} from "./client";
 import {
+    CashlessClosureResult,
     CashlessDailyStats,
     CashlessRefundResult,
     CashlessSalesPoint,
     CashlessSettings,
+    CashlessSummary,
     CashlessTransaction,
     CashlessWallet,
     CashlessWalletStatus,
@@ -21,8 +23,18 @@ export const cashlessClient = {
         const response = await api.get<GenericDataResponse<CashlessSettings>>(`events/${eventId}/cashless/settings`);
         return response.data;
     },
-    updateSettings: async (eventId: IdParam, settings: Omit<CashlessSettings, 'event_id' | 'cashless_topup_product_id'>) => {
+    updateSettings: async (eventId: IdParam, settings: Omit<CashlessSettings, 'event_id' | 'cashless_topup_product_id' | 'cashless_closed_at'>) => {
         const response = await api.put<GenericDataResponse<CashlessSettings>>(`events/${eventId}/cashless/settings`, settings);
+        return response.data;
+    },
+
+    getSummary: async (eventId: IdParam) => {
+        const response = await api.get<GenericDataResponse<CashlessSummary>>(`events/${eventId}/cashless/summary`);
+        return response.data;
+    },
+
+    closeCashless: async (eventId: IdParam) => {
+        const response = await api.post<GenericDataResponse<CashlessClosureResult>>(`events/${eventId}/cashless/close`);
         return response.data;
     },
 

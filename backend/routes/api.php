@@ -92,7 +92,9 @@ use HiEvents\Http\Actions\Cashless\SalesPoint\GetCashlessSalesPointsAction;
 use HiEvents\Http\Actions\Cashless\SalesPoint\UpdateCashlessSalesPointAction;
 use HiEvents\Http\Actions\Cashless\Public\GetCashlessWalletPublicAction;
 use HiEvents\Http\Actions\Cashless\GetCashlessSettingsAction;
+use HiEvents\Http\Actions\Cashless\CloseCashlessAction;
 use HiEvents\Http\Actions\Cashless\GetCashlessStatsAction;
+use HiEvents\Http\Actions\Cashless\GetCashlessSummaryAction;
 use HiEvents\Http\Actions\Cashless\UpdateCashlessSettingsAction;
 use HiEvents\Http\Actions\Cashless\Wallet\CreateOrganizerTopupAction;
 use HiEvents\Http\Actions\Cashless\Wallet\ExportCashlessTransactionsAction;
@@ -530,6 +532,8 @@ $router->middleware(['auth:api'])->group(
         // Cashless
         $router->get('/events/{event_id}/cashless/settings', GetCashlessSettingsAction::class);
         $router->get('/events/{event_id}/cashless/stats', GetCashlessStatsAction::class);
+        $router->get('/events/{event_id}/cashless/summary', GetCashlessSummaryAction::class);
+        $router->post('/events/{event_id}/cashless/close', CloseCashlessAction::class);
         $router->put('/events/{event_id}/cashless/settings', UpdateCashlessSettingsAction::class);
         $router->post('/events/{event_id}/cashless/sales-points', CreateCashlessSalesPointAction::class);
         $router->get('/events/{event_id}/cashless/sales-points', GetCashlessSalesPointsAction::class);

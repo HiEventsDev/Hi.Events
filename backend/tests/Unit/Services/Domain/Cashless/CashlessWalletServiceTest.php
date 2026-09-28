@@ -36,6 +36,8 @@ class CashlessWalletServiceTest extends TestCase
 
     private array $capturedWalletUpdate = [];
 
+    private array $walletUpdates = [];
+
     private array $capturedTransaction = [];
 
     protected function setUp(): void
@@ -207,6 +209,65 @@ class CashlessWalletServiceTest extends TestCase
         $this->service->reverse($reversal, reversedByUserId: 3);
     }
 
+    public function test_closing_a_wallet_writes_a_closure_for_the_whole_balance_and_closes_it(): void
+    {
+        $this->givenWallet(balance: 12.50, toppedUp: 30.00, spent: 17.50);
+        $this->expectTransactionCreated();
+
+        $transaction = $this->service->close(walletId: 1, closedByUserId: 9);
+
+        $this->assertNotNull($transaction);
+        $this->assertSame(CashlessTransactionType::CLOSURE->value, $this->capturedTransaction[CashlessTransactionDomainObjectAbstract::TYPE]);
+        $this->assertSame(-12.50, $this->capturedTransaction[CashlessTransactionDomainObjectAbstract::AMOUNT]);
+        $this->assertSame(0.0, $this->capturedTransaction[CashlessTransactionDomainObjectAbstract::BALANCE_AFTER]);
+        $this->assertSame(9, $this->capturedTransaction[CashlessTransactionDomainObjectAbstract::CREATED_BY_USER_ID]);
+        $this->assertSame(CashlessWalletStatus::CLOSED->value, $this->capturedWalletUpdate[CashlessWalletDomainObjectAbstract::STATUS]);
+    }
+
+    public function test_closing_leaves_the_topped_up_spent_and_refunded_totals_alone(): void
+    {
+        $this->givenWallet(balance: 12.50, toppedUp: 30.00, spent: 17.50, refunded: 0.0);
+        $this->expectTransactionCreated();
+        $this->service->close(walletId: 1, closedByUserId: null);
+
+        $writeUpdate = $this->walletUpdates[0];
+        $this->assertSame(30.00, $writeUpdate[CashlessWalletDomainObjectAbstract::TOTAL_TOPPED_UP]);
+        $this->assertSame(17.50, $writeUpdate[CashlessWalletDomainObjectAbstract::TOTAL_SPENT]);
+        $this->assertSame(0.0, $writeUpdate[CashlessWalletDomainObjectAbstract::TOTAL_REFUNDED]);
+    }
+
+    public function test_closing_an_empty_wallet_writes_no_transaction(): void
+    {
+        $this->givenWallet(balance: 0.00);
+        $this->transactionRepository->shouldNotReceive('create');
+
+        $transaction = $this->service->close(walletId: 1, closedByUserId: null);
+
+        $this->assertNull($transaction);
+        $this->assertSame(CashlessWalletStatus::CLOSED->value, $this->capturedWalletUpdate[CashlessWalletDomainObjectAbstract::STATUS]);
+    }
+
+    public function test_a_frozen_wallet_can_still_be_closed(): void
+    {
+        $this->givenWallet(balance: 8.00, status: CashlessWalletStatus::FROZEN);
+        $this->expectTransactionCreated();
+
+        $this->assertNotNull($this->service->close(walletId: 1, closedByUserId: null));
+    }
+
+    public function test_a_closure_cannot_be_reversed(): void
+    {
+        $closure = (new CashlessTransactionDomainObject)
+            ->setId(90)
+            ->setCashlessWalletId(1)
+            ->setType(CashlessTransactionType::CLOSURE->value)
+            ->setAmount(-12.50);
+
+        $this->expectException(CashlessTransactionNotReversibleException::class);
+
+        $this->service->reverse($closure, reversedByUserId: 3);
+    }
+
     private function purchaseTransaction(): CashlessTransactionDomainObject
     {
         return (new CashlessTransactionDomainObject)
@@ -241,6 +302,7 @@ class CashlessWalletServiceTest extends TestCase
             ->shouldReceive('updateFromArray')
             ->andReturnUsing(function (int $id, array $attributes) use ($wallet) {
                 $this->capturedWalletUpdate = $attributes;
+                $this->walletUpdates[] = $attributes;
 
                 return $wallet;
             });

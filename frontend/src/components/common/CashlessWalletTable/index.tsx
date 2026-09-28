@@ -96,7 +96,7 @@ export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
                                 </Badge>
                             </MantineTable.Td>
                             <MantineTable.Td>
-                                <ActionMenu
+                                {wallet.status !== 'CLOSED' && <ActionMenu
                                     itemsGroups={[{
                                         label: t`Manage`,
                                         items: [
@@ -126,7 +126,7 @@ export const CashlessWalletTable = ({wallets}: CashlessWalletTableProps) => {
                                             },
                                         ],
                                     }]}
-                                />
+                                />}
                             </MantineTable.Td>
                         </MantineTable.Tr>
                     ))}

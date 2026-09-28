@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\Enums\CashlessTransactionType;
 use HiEvents\DomainObjects\Generated\CashlessTransactionDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CashlessTransactionItemDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CashlessWalletDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\CashlessWalletStatus;
 use HiEvents\Exceptions\CashlessTransactionNotReversibleException;
 use HiEvents\Exceptions\CashlessWalletUnavailableException;
 use HiEvents\Exceptions\InsufficientCashlessBalanceException;
@@ -79,6 +80,12 @@ class CashlessWalletService
             );
         }
 
+        if ($transaction->isClosure()) {
+            throw new CashlessTransactionNotReversibleException(
+                __('A cashless closure cannot be reversed.')
+            );
+        }
+
         $existingReversal = $this->transactionRepository->findFirstWhere([
             CashlessTransactionDomainObjectAbstract::REVERSES_TRANSACTION_ID => $transaction->getId(),
         ]);
@@ -111,6 +118,40 @@ class CashlessWalletService
                 reversesTransactionId: $transaction->getId(),
                 items: null,
             );
+        });
+    }
+
+    /**
+     * @throws CashlessWalletUnavailableException
+     * @throws Throwable
+     */
+    public function close(int $walletId, ?int $closedByUserId): ?CashlessTransactionDomainObject
+    {
+        return $this->databaseManager->transaction(function () use ($walletId, $closedByUserId) {
+            $wallet = $this->lockWallet($walletId, requireActive: false);
+
+            $transaction = $wallet->getBalance() > 0
+                ? $this->write(
+                    wallet: $wallet,
+                    type: CashlessTransactionType::CLOSURE,
+                    signedAmount: -$wallet->getBalance(),
+                    totalsDelta: $this->totalsDelta(CashlessTransactionType::CLOSURE, $wallet->getBalance()),
+                    orderId: null,
+                    salesPointId: null,
+                    createdByUserId: $closedByUserId,
+                    staffPaymentMethod: null,
+                    clientReferenceId: null,
+                    notes: null,
+                    reversesTransactionId: null,
+                    items: null,
+                )
+                : null;
+
+            $this->walletRepository->updateFromArray($wallet->getId(), [
+                CashlessWalletDomainObjectAbstract::STATUS => CashlessWalletStatus::CLOSED->value,
+            ]);
+
+            return $transaction;
         });
     }
 
@@ -228,7 +269,8 @@ class CashlessWalletService
             CashlessTransactionType::TOPUP_STAFF => ['topped_up' => $magnitude, 'spent' => 0.0, 'refunded' => 0.0],
             CashlessTransactionType::PURCHASE => ['topped_up' => 0.0, 'spent' => $magnitude, 'refunded' => 0.0],
             CashlessTransactionType::REFUND_REMAINING => ['topped_up' => 0.0, 'spent' => 0.0, 'refunded' => $magnitude],
-            CashlessTransactionType::REVERSAL => ['topped_up' => 0.0, 'spent' => 0.0, 'refunded' => 0.0],
+            CashlessTransactionType::REVERSAL,
+            CashlessTransactionType::CLOSURE => ['topped_up' => 0.0, 'spent' => 0.0, 'refunded' => 0.0],
         };
     }
 

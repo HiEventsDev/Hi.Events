@@ -68,6 +68,12 @@ class CreateCashlessTopupHandler
             ticketReference: $topupData->ticket_reference,
         );
 
+        if (! $wallet->isActive()) {
+            throw new CashlessWalletUnavailableException(
+                __('This cashless wallet is not active.')
+            );
+        }
+
         $topupProduct = $this->getTopupProduct($settings);
         $occurrenceId = $this->occurrenceResolver->resolveForSale($topupData->event_id);
 

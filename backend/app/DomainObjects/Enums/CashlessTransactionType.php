@@ -13,6 +13,7 @@ enum CashlessTransactionType: string
     case PURCHASE = 'PURCHASE';
     case REVERSAL = 'REVERSAL';
     case REFUND_REMAINING = 'REFUND_REMAINING';
+    case CLOSURE = 'CLOSURE';
 
     public function isCredit(): bool
     {
@@ -27,6 +28,7 @@ enum CashlessTransactionType: string
             self::PURCHASE->value => __('Purchase'),
             self::REVERSAL->value => __('Reversal'),
             self::REFUND_REMAINING->value => __('Balance refund'),
+            self::CLOSURE->value => __('Balance closure'),
         };
     }
 }

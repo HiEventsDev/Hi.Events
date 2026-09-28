@@ -454,6 +454,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "cashless/overview",
+                async lazy() {
+                    const CashlessOverview = await import("./components/routes/event/Cashless/Overview");
+                    return { Component: CashlessOverview.default };
+                }
+            },
+            {
                 path: "cashless",
                 async lazy() {
                     const CashlessWallets = await import("./components/routes/event/Cashless/Wallets");

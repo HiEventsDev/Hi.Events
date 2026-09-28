@@ -4,7 +4,7 @@ import {CashlessSettings, IdParam} from "../types.ts";
 import {GET_CASHLESS_SETTINGS_QUERY_KEY} from "../queries/useGetCashlessSettings.ts";
 import {GET_EVENT_SETTINGS_QUERY_KEY} from "../queries/useGetEventSettings.ts";
 
-type SettingsPayload = Omit<CashlessSettings, 'event_id' | 'cashless_topup_product_id'>;
+type SettingsPayload = Omit<CashlessSettings, 'event_id' | 'cashless_topup_product_id' | 'cashless_closed_at'>;
 
 export const useUpdateCashlessSettings = () => {
     const queryClient = useQueryClient();

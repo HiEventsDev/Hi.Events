@@ -341,6 +341,7 @@ export interface CashlessSettings {
   event_id: number;
   cashless_enabled: boolean;
   cashless_topup_product_id: number | null;
+  cashless_closed_at: string | null;
   cashless_min_topup_amount: number;
   cashless_allow_remaining_balance_refund: boolean;
   cashless_refund_deadline_at: string | null;

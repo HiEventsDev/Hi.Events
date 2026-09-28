@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\CashlessWalletDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\DomainObjects\Status\CashlessWalletStatus;
 use HiEvents\Exceptions\CashlessWalletUnavailableException;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -22,6 +23,7 @@ class CashlessWalletResolveService
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly CashlessWalletRepositoryInterface $walletRepository,
         private readonly EventRepositoryInterface $eventRepository,
+        private readonly CashlessSettingsService $settingsService,
     ) {}
 
     /**
@@ -88,6 +90,9 @@ class CashlessWalletResolveService
             CashlessWalletDomainObjectAbstract::EVENT_ID => $attendee->getEventId(),
             CashlessWalletDomainObjectAbstract::ATTENDEE_ID => $attendee->getId(),
             CashlessWalletDomainObjectAbstract::CURRENCY => $event->getCurrency(),
+            CashlessWalletDomainObjectAbstract::STATUS => $this->settingsService->getSettings($attendee->getEventId())->getCashlessClosedAt() === null
+                ? CashlessWalletStatus::ACTIVE->value
+                : CashlessWalletStatus::CLOSED->value,
         ])->setAttendee($attendee);
     }
 }

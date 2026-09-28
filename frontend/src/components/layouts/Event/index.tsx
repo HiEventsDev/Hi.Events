@@ -1,6 +1,7 @@
 import {
     IconArrowLeft,
     IconCalendarRepeat,
+    IconChartBar,
     IconChartPie,
     IconChevronRight,
     IconDashboard,
@@ -144,6 +145,7 @@ const EventLayout = () => {
 
         // 5. CASHLESS
         {label: t`Cashless`},
+        {link: 'cashless/overview', label: t`Overview`, icon: IconChartBar},
         {link: 'cashless', label: t`Balances`, icon: IconCoin, matchExactly: true},
         {link: 'cashless/sales-points', label: t`Sales Points`, icon: IconBuildingStore},
         {link: 'cashless/transactions', label: t`Transactions`, icon: IconArrowsExchange},

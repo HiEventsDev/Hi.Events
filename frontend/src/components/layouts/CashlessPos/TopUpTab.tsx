@@ -100,6 +100,12 @@ export const TopUpTab = ({
                         <span className={classes.customerName}>{wallet.attendee_name}</span>
                         <span className={classes.customerTicket}>{wallet.attendee_public_id}</span>
                         <span className={classes.customerBalance}>{formatCurrency(wallet.balance, currency)}</span>
+                        {wallet.status === 'FROZEN' && (
+                            <span className={classes.customerWarning}>{t`This balance is frozen`}</span>
+                        )}
+                        {wallet.status === 'CLOSED' && (
+                            <span className={classes.customerWarning}>{t`This balance is closed`}</span>
+                        )}
                         <Button variant="subtle" size="compact-sm" onClick={onClear}>
                             {t`Serve someone else`}
                         </Button>
@@ -147,7 +153,7 @@ export const TopUpTab = ({
                         mt="md"
                         fullWidth
                         loading={isSubmitting}
-                        disabled={Number(amount) <= 0}
+                        disabled={Number(amount) <= 0 || wallet.status !== 'ACTIVE'}
                         onClick={() => onTopUp(Number(amount), paymentMethod)}
                         data-testid="cashless-pos-topup-submit-button"
                     >

@@ -82,4 +82,9 @@ class CashlessTransactionDomainObject extends Generated\CashlessTransactionDomai
     {
         return $this->getType() === CashlessTransactionType::REVERSAL->value;
     }
+
+    public function isClosure(): bool
+    {
+        return $this->getType() === CashlessTransactionType::CLOSURE->value;
+    }
 }

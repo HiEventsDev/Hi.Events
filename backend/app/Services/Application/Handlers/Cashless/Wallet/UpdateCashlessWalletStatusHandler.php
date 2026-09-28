@@ -7,6 +7,7 @@ namespace HiEvents\Services\Application\Handlers\Cashless\Wallet;
 use HiEvents\DomainObjects\CashlessWalletDomainObject;
 use HiEvents\DomainObjects\Generated\CashlessWalletDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\CashlessWalletStatus;
+use HiEvents\Exceptions\CashlessWalletUnavailableException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\CashlessWalletRepositoryInterface;
 
@@ -19,10 +20,17 @@ class UpdateCashlessWalletStatusHandler
 
     /**
      * @throws ResourceNotFoundException
+     * @throws CashlessWalletUnavailableException
      */
     public function handle(int $eventId, int $walletId, CashlessWalletStatus $status): CashlessWalletDomainObject
     {
-        $this->getCashlessWalletHandler->handle($eventId, $walletId);
+        $wallet = $this->getCashlessWalletHandler->handle($eventId, $walletId);
+
+        if ($wallet->getStatus() === CashlessWalletStatus::CLOSED->value) {
+            throw new CashlessWalletUnavailableException(
+                __('A closed cashless wallet cannot be changed.')
+            );
+        }
 
         $this->walletRepository->updateWhere(
             attributes: [CashlessWalletDomainObjectAbstract::STATUS => $status->value],

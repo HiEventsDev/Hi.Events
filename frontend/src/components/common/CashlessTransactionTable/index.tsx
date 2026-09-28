@@ -25,6 +25,7 @@ const typeColour: Record<CashlessTransactionType, string> = {
     PURCHASE: 'blue',
     REVERSAL: 'orange',
     REFUND_REMAINING: 'grape',
+    CLOSURE: 'gray',
 };
 
 const typeLabel = (type: CashlessTransactionType): string => ({
@@ -33,6 +34,7 @@ const typeLabel = (type: CashlessTransactionType): string => ({
     PURCHASE: t`Purchase`,
     REVERSAL: t`Reversal`,
     REFUND_REMAINING: t`Balance refund`,
+    CLOSURE: t`Balance closure`,
 }[type]);
 
 export const CashlessTransactionTable = ({transactions, currency, timezone}: CashlessTransactionTableProps) => {
@@ -119,7 +121,7 @@ export const CashlessTransactionTable = ({transactions, currency, timezone}: Cas
                                             label: t`Reverse`,
                                             icon: <IconArrowBackUp size={14}/>,
                                             color: 'red',
-                                            visible: transaction.type !== 'REVERSAL' && !!transaction.id,
+                                            visible: transaction.type !== 'REVERSAL' && transaction.type !== 'CLOSURE' && !!transaction.id,
                                             onClick: () => handleReverse(transaction.id!),
                                             dataTestId: 'cashless-transaction-reverse-menu-item',
                                         },

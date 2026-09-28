@@ -49,6 +49,8 @@ const CashlessWallet = () => {
         );
     }
 
+    const isClosed = wallet.status === 'CLOSED';
+
     const handleTopup = () => {
         if (Number(amount) < minimumAmount) {
             showError(t`The minimum top-up is ${formatCurrency(minimumAmount, wallet.currency)}`);
@@ -74,6 +76,9 @@ const CashlessWallet = () => {
                 {wallet.status === 'FROZEN' && (
                     <Badge color="orange" variant="light" mt="sm">{t`Frozen`}</Badge>
                 )}
+                {wallet.status === 'CLOSED' && (
+                    <Badge color="gray" variant="light" mt="sm">{t`Closed`}</Badge>
+                )}
                 <span className={classes.ticketId}>{wallet.attendee_public_id}</span>
             </div>
 
@@ -84,14 +89,21 @@ const CashlessWallet = () => {
                 </Trans>
             </p>
 
-            {!onlineTopupEnabled && (
+            {isClosed && (
+                <div className={classes.topupCard}>
+                    <h3 className={classes.sectionTitle}>{t`Cashless is closed`}</h3>
+                    <p>{t`Cashless is closed for this event, so this balance can no longer be used or topped up.`}</p>
+                </div>
+            )}
+
+            {!isClosed && !onlineTopupEnabled && (
                 <div className={classes.topupCard}>
                     <h3 className={classes.sectionTitle}>{t`Add funds`}</h3>
                     <p>{t`Top-ups are taken at the event. Show your ticket QR code at any top-up point.`}</p>
                 </div>
             )}
 
-            {onlineTopupEnabled && (
+            {!isClosed && onlineTopupEnabled && (
             <div className={classes.topupCard}>
                 <h3 className={classes.sectionTitle}>{t`Add funds`}</h3>
 

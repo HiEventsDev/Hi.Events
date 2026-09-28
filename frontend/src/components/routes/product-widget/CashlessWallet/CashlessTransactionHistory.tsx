@@ -19,6 +19,7 @@ const describe = (transaction: CashlessTransaction): string => {
         PURCHASE: t`Purchase`,
         REVERSAL: t`Cancelled`,
         REFUND_REMAINING: t`Balance refunded`,
+        CLOSURE: t`Balance closed`,
     } as Record<CashlessTransactionType, string>)[transaction.type];
 };
 

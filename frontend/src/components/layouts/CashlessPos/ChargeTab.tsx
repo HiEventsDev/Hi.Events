@@ -115,8 +115,11 @@ export const ChargeTab = ({
                         <span className={classes.customerBalance}>
                             {formatCurrency(wallet.balance, currency)}
                         </span>
-                        {wallet.status !== 'ACTIVE' && (
+                        {wallet.status === 'FROZEN' && (
                             <span className={classes.customerWarning}>{t`This balance is frozen`}</span>
+                        )}
+                        {wallet.status === 'CLOSED' && (
+                            <span className={classes.customerWarning}>{t`This balance is closed`}</span>
                         )}
                         <Button variant="subtle" size="compact-sm" onClick={onClear}>
                             {t`Serve someone else`}

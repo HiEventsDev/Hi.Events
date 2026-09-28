@@ -1504,7 +1504,8 @@ export type CashlessTransactionType =
     | 'TOPUP_STAFF'
     | 'PURCHASE'
     | 'REVERSAL'
-    | 'REFUND_REMAINING';
+    | 'REFUND_REMAINING'
+    | 'CLOSURE';
 
 export type CashlessStaffPaymentMethod = 'CASH' | 'CARD_TERMINAL' | 'OTHER';
 
@@ -1517,6 +1518,41 @@ export interface CashlessSettings {
     cashless_refund_deadline_at: string | null;
     cashless_online_topup_enabled: boolean;
     cashless_topup_tax_and_fee_ids: number[];
+    cashless_closed_at: string | null;
+}
+
+export interface CashlessSalesPointSummary {
+    name: string;
+    spent: number;
+    purchases_count: number;
+    topped_up: number;
+}
+
+export interface CashlessProductSummary {
+    title: string;
+    quantity: number;
+    total: number;
+}
+
+export interface CashlessSummary {
+    wallets_total: number;
+    wallets_with_balance: number;
+    wallets_frozen: number;
+    wallets_closed: number;
+    outstanding_balance: number;
+    topped_up_online: number;
+    topped_up_staff: number;
+    spent: number;
+    refunded: number;
+    closed: number;
+    purchases_count: number;
+    sales_points: CashlessSalesPointSummary[];
+    top_products: CashlessProductSummary[];
+}
+
+export interface CashlessClosureResult {
+    wallets_closed: number;
+    amount_closed: number;
 }
 
 export interface CashlessTransactionItem {

@@ -76,6 +76,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     final public const CASHLESS_ALLOW_REMAINING_BALANCE_REFUND = 'cashless_allow_remaining_balance_refund';
     final public const CASHLESS_REFUND_DEADLINE_AT = 'cashless_refund_deadline_at';
     final public const CASHLESS_ONLINE_TOPUP_ENABLED = 'cashless_online_topup_enabled';
+    final public const CASHLESS_CLOSED_AT = 'cashless_closed_at';
 
     protected int $id;
     protected int $event_id;
@@ -143,6 +144,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     protected bool $cashless_allow_remaining_balance_refund = false;
     protected ?string $cashless_refund_deadline_at = null;
     protected bool $cashless_online_topup_enabled = true;
+    protected ?string $cashless_closed_at = null;
 
     public function toArray(): array
     {
@@ -213,6 +215,7 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
                     'cashless_allow_remaining_balance_refund' => $this->cashless_allow_remaining_balance_refund ?? null,
                     'cashless_refund_deadline_at' => $this->cashless_refund_deadline_at ?? null,
                     'cashless_online_topup_enabled' => $this->cashless_online_topup_enabled ?? null,
+                    'cashless_closed_at' => $this->cashless_closed_at ?? null,
                 ];
     }
 
@@ -941,5 +944,16 @@ abstract class EventSettingDomainObjectAbstract extends \HiEvents\DomainObjects\
     public function getCashlessOnlineTopupEnabled(): bool
     {
         return $this->cashless_online_topup_enabled;
+    }
+
+    public function setCashlessClosedAt(?string $cashless_closed_at): self
+    {
+        $this->cashless_closed_at = $cashless_closed_at;
+        return $this;
+    }
+
+    public function getCashlessClosedAt(): ?string
+    {
+        return $this->cashless_closed_at;
     }
 }

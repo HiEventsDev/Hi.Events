@@ -33,6 +33,7 @@ class GetCashlessSettingsHandler
             cashless_allow_remaining_balance_refund: $settings->getCashlessAllowRemainingBalanceRefund(),
             cashless_refund_deadline_at: $settings->getCashlessRefundDeadlineAt(),
             cashless_online_topup_enabled: $settings->getCashlessOnlineTopupEnabled(),
+            cashless_closed_at: $settings->getCashlessClosedAt(),
             cashless_topup_tax_and_fee_ids: $this->topupTaxAndFeeIds($settings->getCashlessTopupProductId()),
         );
     }
