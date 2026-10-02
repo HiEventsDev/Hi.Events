@@ -112,7 +112,7 @@ Gotchas:
 - **DON'T** create actions handling multiple entity types with optional parameters - create separate, focused actions instead
 - **DO** use base classes to share common validation and logic
 - **NEVER** use Laravel's `distinct` validation rule — it is O(n²) and runs before `isActionAuthorized`. Reject duplicates in a `withValidator` after-hook (see `UpdateEventSeatMapBandProductsRequest`)
-- The `token` auth cookie must stay `SameSite=Lax`, and CORS must never answer `*` with credentials when the frontend is known (`CorsAllowedOrigins` falls back to the `APP_FRONTEND_URL` site; only an install with no usable `APP_FRONTEND_URL` keeps the legacy wildcard, so upgrades don't break)
+- The `token` auth cookie is `SameSite=Lax` unless the browser reports the request as cross-site (`AuthCookieSameSite`: installs with the frontend and API on unrelated domains can only store a `None` cookie, so upgrades don't break) — never hardcode either value, and CORS must never answer `*` with credentials when the frontend is known (`CorsAllowedOrigins` falls back to the `APP_FRONTEND_URL` site; only an install with no usable `APP_FRONTEND_URL` keeps the legacy wildcard, so upgrades don't break)
 
 #### Exception Handling
 - **DON'T** use generic exceptions like `InvalidArgumentException` and `RuntimeException`

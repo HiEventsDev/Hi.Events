@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class HomepageFontFamilyTest extends TestCase
 {
-    public function tesb_values_array_contains_curated_fonts(): void
+    public function test_values_array_contains_curated_fonts(): void
     {
         $values = HomepageFontFamily::valuesArray();
 
@@ -18,7 +18,7 @@ class HomepageFontFamilyTest extends TestCase
         $this->assertContains('Bebas Neue', $values);
     }
 
-    public function tesb_values_are_unique_non_empty_strings(): void
+    public function test_values_are_unique_non_empty_strings(): void
     {
         $values = HomepageFontFamily::valuesArray();
 

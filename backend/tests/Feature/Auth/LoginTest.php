@@ -57,6 +57,21 @@ class LoginTest extends TestCase
         ]);
     }
 
+    public function test_login_from_a_cross_site_frontend_sets_a_cookie_the_browser_will_store(): void
+    {
+        $password = fake()->password(16);
+        $user = User::factory()->password($password)->withAccount()->create();
+
+        $response = $this->postJson(route('auth.login'), [
+            'email' => $user->email,
+            'password' => $password,
+        ], ['Sec-Fetch-Site' => 'cross-site']);
+
+        $response->assertSuccessful();
+        $this->assertSame('none', $response->getCookie('token', false)->getSameSite());
+        $this->assertTrue($response->getCookie('token', false)->isSecure());
+    }
+
     public function test_login_with_invalid_credentials(): void
     {
         $password = fake()->password(16);
