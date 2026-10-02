@@ -19,6 +19,7 @@ interface ProductPriceTierFormProps {
     form: UseFormReturnType<Product>,
     product?: Product,
     event?: Event,
+    isSeated: boolean,
 }
 
 export const defaultQuantityAppliesTo = (productType?: ProductType): ProductQuantityAppliesTo =>
@@ -28,10 +29,11 @@ interface QuantityFieldProps {
     form: UseFormReturnType<Product>;
     index: number;
     isRecurring: boolean;
+    isSeated: boolean;
     testId?: string;
 }
 
-export const QuantityField = ({form, index, isRecurring, testId}: QuantityFieldProps) => {
+export const QuantityField = ({form, index, isRecurring, isSeated, testId}: QuantityFieldProps) => {
     const appliesTo = form.values.prices?.[index]?.quantity_applies_to
         ?? defaultQuantityAppliesTo(form.values.product_type);
     const perDate = isRecurring && appliesTo === ProductQuantityAppliesTo.Occurrence;
@@ -96,11 +98,13 @@ export const QuantityField = ({form, index, isRecurring, testId}: QuantityFieldP
     return (
         <NumberInput
             min={0}
-            placeholder={t`Unlimited`}
+            placeholder={isSeated ? t`Limited by seats` : t`Unlimited`}
             {...form.getInputProps(`prices.${index}.initial_quantity_available`)}
             label={<InputLabelWithHelp label={t`Quantity Available`} helpText={helpText}/>}
+            description={isSeated ? t`Leave empty to sell every seat in its price bands` : undefined}
+            inputWrapperOrder={['label', 'input', 'description', 'error']}
             rightSection={scopeMenu}
-            rightSectionWidth={isRecurring ? 96 : undefined}
+            rightSectionWidth={scopeMenu ? 96 : undefined}
             rightSectionPointerEvents="all"
         />
     );
@@ -127,7 +131,7 @@ const SortableTierCard = ({index, sortable, children}: { index: number; sortable
     );
 };
 
-export const ProductPriceTierForm = ({form, product, event}: ProductPriceTierFormProps) => {
+export const ProductPriceTierForm = ({form, product, event, isSeated}: ProductPriceTierFormProps) => {
     const isRecurring = event?.type === EventType.RECURRING;
     const prices: ProductPrice[] = form.values.prices ?? [];
     const sortable = prices.length > 1;
@@ -177,6 +181,7 @@ export const ProductPriceTierForm = ({form, product, event}: ProductPriceTierFor
                                 form={form}
                                 index={index}
                                 isRecurring={isRecurring}
+                                isSeated={isSeated}
                                 testId={`product-tier-${index}-quantity-applies-to`}
                             />
                             <InputGroup>

@@ -1,6 +1,7 @@
 import {Event, EventOccurrence, LocationType} from "../types.ts";
 import {resolveEventLocation} from "./effectiveLocation.ts";
 import {formatAddress} from "./addressUtilities.ts";
+import {htmlToText} from "./helpers.ts";
 
 const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): string => {
     const effective = resolveEventLocation(event, occurrence ?? null);
@@ -21,13 +22,6 @@ const getEventLocation = (event: Event, occurrence?: EventOccurrence | null): st
 
 const formatICSDate = (date: string): string => {
     return new Date(date).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-};
-
-const stripHtml = (html: string): string => {
-    if (typeof document === 'undefined') return html?.replace(/<[^>]*>/g, '') || '';
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html || '';
-    return tmp.textContent || tmp.innerText || '';
 };
 
 const escapeICSText = (value: string): string => {
@@ -89,7 +83,7 @@ export const createICSContent = (event: Event, occurrence?: EventOccurrence): st
         `DTSTART:${formatICSDate(startDate)}`,
         `DTEND:${formatICSDate(endDate)}`,
         foldICSLine(`SUMMARY:${escapeICSText(title)}`),
-        foldICSLine(`DESCRIPTION:${escapeICSText(stripHtml(event.description_preview || ''))}`),
+        foldICSLine(`DESCRIPTION:${escapeICSText(htmlToText(event.description_preview))}`),
         foldICSLine(`LOCATION:${escapeICSText(getEventLocation(event, occurrence))}`),
         `DTSTAMP:${formatICSDate(new Date().toISOString())}`,
         `UID:${crypto.randomUUID()}@hi.events`,

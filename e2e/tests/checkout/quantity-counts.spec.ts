@@ -181,7 +181,7 @@ test.describe('remaining quantity counts', () => {
     await occurrences.bookedCell(rows.nth(0)).hover();
     await expect(occurrences.breakdownRow('capacity')).toHaveText('22');
     await expect(occurrences.breakdownRow('allocation')).toHaveText('20');
-    await expect(occurrences.breakdownTiers()).toHaveText(['Free Ticket5', 'VIP15']);
+    await expect(occurrences.breakdownAllocations()).toHaveText(['Free Ticket5', 'VIP15']);
     await expect(occurrences.breakdownRow('sellable')).toHaveText('20');
     await expect(occurrences.breakdownLimitedBy()).toHaveText('Limited by ticket allocation');
 
@@ -238,14 +238,14 @@ test.describe('remaining quantity counts', () => {
     const row = occurrences.occurrenceRows().first();
     await expect(occurrences.bookedCell(row)).toHaveText('0');
     await occurrences.bookedCell(row).hover();
-    await expect(occurrences.breakdownTiers()).toHaveText(['Free TicketUnlimited', 'VIP50', 'Season passAll dates · shared']);
+    await expect(occurrences.breakdownAllocations()).toHaveText(['Free TicketUnlimited', 'VIP50', 'Season passAll dates · shared']);
     await expect(occurrences.breakdownRow('sellable')).toHaveText('Unlimited');
 
     await occurrences.chooseRowAction(row, 'Products');
     await expect(occurrences.bookingSummary()).toHaveText('0 booked · no date limit');
     await occurrences.openBookingDetails();
     await expect(occurrences.breakdownRow('allocation')).toHaveText('50 + unlimited');
-    await expect(occurrences.breakdownTiers()).toHaveText(['Free TicketUnlimited', 'VIP50', 'Season passAll dates · shared']);
+    await expect(occurrences.breakdownAllocations()).toHaveText(['Free TicketUnlimited', 'VIP50', 'Season passAll dates · shared']);
     await occurrences.closeBookingDetails();
     await expect(occurrences.priceAvailability().nth(1)).toHaveText('0 sold · 50 left');
     void day1;

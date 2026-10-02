@@ -105,6 +105,27 @@ export interface AdminAccountDetail extends AdminAccount {
     is_manually_verified: boolean;
 }
 
+export interface AdminFeatureFlag {
+    key: string;
+    enabled_by_default: boolean;
+    enabled_override_count: number;
+    disabled_override_count: number;
+}
+
+export interface AdminFeatureFlagOverride {
+    account_id: number;
+    account_name: string;
+    enabled: boolean;
+    updated_at: string;
+}
+
+export interface AdminAccountFeatureFlag {
+    key: string;
+    enabled_by_default: boolean;
+    override: boolean | null;
+    enabled: boolean;
+}
+
 export interface UpdateAdminOrganizerVatSettingData {
     vat_registered?: boolean;
     vat_number?: string | null;
@@ -290,7 +311,7 @@ export interface AdminOrder {
     public_id: string;
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     total_gross: number;
     total_tax: number;
     total_fee: number;
@@ -662,6 +683,35 @@ export const adminClient = {
     updateAccountVerification: async (accountId: IdParam, isManuallyVerified: boolean) => {
         const response = await api.put(`admin/accounts/${accountId}/verification`, {
             is_manually_verified: isManuallyVerified
+        });
+        return response.data;
+    },
+
+    getFeatureFlags: async () => {
+        const response = await api.get<GenericDataResponse<AdminFeatureFlag[]>>('admin/feature-flags');
+        return response.data;
+    },
+
+    updateFeatureFlag: async (key: string, enabledByDefault: boolean) => {
+        const response = await api.put<GenericDataResponse<AdminFeatureFlag>>(`admin/feature-flags/${key}`, {
+            enabled_by_default: enabledByDefault
+        });
+        return response.data;
+    },
+
+    getFeatureFlagOverrides: async (key: string) => {
+        const response = await api.get<GenericDataResponse<AdminFeatureFlagOverride[]>>(`admin/feature-flags/${key}/overrides`);
+        return response.data;
+    },
+
+    getAccountFeatureFlags: async (accountId: IdParam) => {
+        const response = await api.get<GenericDataResponse<AdminAccountFeatureFlag[]>>(`admin/accounts/${accountId}/feature-flags`);
+        return response.data;
+    },
+
+    setAccountFeatureFlag: async (accountId: IdParam, key: string, enabled: boolean | null) => {
+        const response = await api.put<GenericDataResponse<AdminAccountFeatureFlag[]>>(`admin/accounts/${accountId}/feature-flags/${key}`, {
+            enabled
         });
         return response.data;
     },

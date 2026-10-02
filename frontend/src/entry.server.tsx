@@ -1,16 +1,22 @@
 import type * as express from "express";
+import {AsyncLocalStorage} from "node:async_hooks";
 import ReactDOMServer from "react-dom/server";
+import {i18n} from "@lingui/core";
 import {dehydrate, QueryClient} from "@tanstack/react-query";
 
 import {router} from "./router";
 import {App} from "./App";
-import {setAuthToken} from "./utilites/apiClient.ts";
 import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "react-router";
 import {dynamicActivateLocale} from "./locales.ts";
-import {setSsrQueryClient} from "./utilites/ssrQueryClient.ts";
+import {SsrRequestContext, setSsrRequestContextProvider} from "./utilites/ssrRequestContext.ts";
 import {generateThemeColors} from "./utilites/themeColors.ts";
+import {prefetchInstanceInfo} from "./ee/licensing/queries/prefetchInstanceInfo.ts";
 
 const themeColors = generateThemeColors();
+
+const requestContext = new AsyncLocalStorage<SsrRequestContext>();
+
+setSsrRequestContextProvider(() => requestContext.getStore());
 
 const getLocale = (req: express.Request): string => {
     if (req.cookies.locale) {
@@ -21,16 +27,18 @@ const getLocale = (req: express.Request): string => {
     return acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'en';
 }
 
-export async function render(params: {
+interface RenderParams {
     req: express.Request;
     res: express.Response;
-}) {
-    setAuthToken(params.req.cookies.token);
+    backendHeaders?: Record<string, string>;
+    licenceSimulation?: string;
+}
 
+export async function render(params: RenderParams) {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
-                staleTime: 60 * 1000, // 60 seconds - prevents immediate refetch on client
+                staleTime: 60 * 1000,
                 refetchOnWindowFocus: false,
                 networkMode: "always",
             },
@@ -40,7 +48,18 @@ export async function render(params: {
         },
     });
 
-    setSsrQueryClient(queryClient);
+    const context: SsrRequestContext = {
+        queryClient,
+        authToken: params.req.cookies?.token || undefined,
+        backendHeaders: params.backendHeaders ?? {},
+        licenceSimulation: params.licenceSimulation,
+    };
+
+    return requestContext.run(context, () => renderWithinContext(params, queryClient));
+}
+
+async function renderWithinContext(params: RenderParams, queryClient: QueryClient) {
+    await prefetchInstanceInfo(queryClient);
 
     const helmetContext = {};
 
@@ -52,10 +71,11 @@ export async function render(params: {
         throw context;
     }
 
-    await dynamicActivateLocale(getLocale(params.req));
+    const locale = await dynamicActivateLocale(getLocale(params.req));
 
     const routerWithContext = createStaticRouter(dataRoutes, context);
-    
+
+    i18n.activate(locale);
     const appHtml = ReactDOMServer.renderToString(
         <App
             queryClient={queryClient}
@@ -71,8 +91,6 @@ export async function render(params: {
     );
 
     const dehydratedState = dehydrate(queryClient);
-
-    setSsrQueryClient(null);
 
     return {
         appHtml: appHtml,

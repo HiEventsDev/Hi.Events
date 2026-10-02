@@ -23,6 +23,7 @@ import {Currency} from "../../common/Currency";
 import {formatDateWithLocale, prettyDate, relativeDate} from "../../../utilites/dates.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {capitalize} from "../../../utilites/stringHelper.ts";
+import {getBoxOfficeTenderLabel} from "../../../ee/box-office/utilites/boxOfficeTender.ts";
 import classes from './ManageOrderModal.module.scss';
 import {EditOrderPayload} from "../../../api/order.client.ts";
 import {
@@ -67,7 +68,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             form.initialize({
                 first_name: order.first_name,
                 last_name: order.last_name,
-                email: order.email,
+                email: order.email ?? "",
                 notes: order.notes || "",
             });
         }
@@ -131,10 +132,13 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
         },
     ];
 
+    const operatorName = order.box_office_operator_name;
     const fields: DrawerStat[] = [
         {
             label: t`Email`,
-            value: <Anchor href={'mailto:' + order.email} target="_blank">{order.email}</Anchor>,
+            value: order.email
+                ? <Anchor href={'mailto:' + order.email} target="_blank">{order.email}</Anchor>
+                : t`No email provided`,
         },
         ...(occurrences.length > 0 ? [{
             label: occurrences.length === 1 ? t`Occurrence` : t`Occurrences`,
@@ -147,9 +151,30 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                 </div>
             )),
         }] : []),
-        ...(order.payment_provider ? [{
+        ...(order.box_office_id ? [{
+            label: t`Sold via`,
+            value: operatorName ? t`Box office · ${operatorName}` : t`Box office`,
+        }, {
+            label: t`Tender`,
+            value: getBoxOfficeTenderLabel(order.box_office_tender) ?? t`Unpaid`,
+        }] : order.payment_provider ? [{
             label: t`Payment provider`,
             value: capitalize(order.payment_provider),
+        }] : []),
+        ...(order.box_office_tender === 'CASH' && order.box_office_amount_tendered != null ? [{
+            label: t`Cash tendered`,
+            value: (
+                <>
+                    <Currency currency={order.currency} price={order.box_office_amount_tendered}/>
+                    {(order.box_office_change_due ?? 0) > 0 && (
+                        <> · {t`Change`} <Currency currency={order.currency} price={order.box_office_change_due ?? 0}/></>
+                    )}
+                </>
+            ),
+        }] : []),
+        ...(order.box_office_reference ? [{
+            label: t`Reference`,
+            value: order.box_office_reference,
         }] : []),
         ...(order.promo_code ? [{
             label: t`Promo code`,
@@ -196,8 +221,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             subtitle={(
                 <>
                     <span>{buyerName}</span>
-                    <span className={classes.separator}>·</span>
-                    <span className={classes.email}>{order.email}</span>
+                    {order.email && (
+                        <>
+                            <span className={classes.separator}>·</span>
+                            <span className={classes.email}>{order.email}</span>
+                        </>
+                    )}
                 </>
             )}
         />
@@ -234,14 +263,14 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                             {...form.getInputProps("last_name")}
                             label={t`Last name`}
                             placeholder={t`Simpson`}
-                            required
+                            required={!order.box_office_id}
                         />
                     </InputGroup>
                     <TextInput
                         {...form.getInputProps("email")}
                         label={t`Email address`}
                         placeholder="homer@simpson.com"
-                        required
+                        required={!order.box_office_id}
                     />
                     <Textarea
                         label={

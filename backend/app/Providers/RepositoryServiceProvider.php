@@ -4,9 +4,22 @@ declare(strict_types=1);
 
 namespace HiEvents\Providers;
 
+use HiEvents\Enterprise\BoxOffice\Repository\Eloquent\BoxOfficeRepository;
+use HiEvents\Enterprise\BoxOffice\Repository\Eloquent\StripeTerminalReaderRepository;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\StripeTerminalReaderRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Eloquent\EventSeatMapBandProductRepository;
+use HiEvents\Enterprise\Seating\Repository\Eloquent\EventSeatMapRepository;
+use HiEvents\Enterprise\Seating\Repository\Eloquent\SeatClaimRepository;
+use HiEvents\Enterprise\Seating\Repository\Eloquent\SeatMapRepository;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapBandProductRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
+use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -27,6 +40,7 @@ use HiEvents\Repository\Eloquent\EventRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
 use HiEvents\Repository\Eloquent\EventSpamCheckRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
+use HiEvents\Repository\Eloquent\FeatureFlagRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
 use HiEvents\Repository\Eloquent\LocationRepository;
@@ -66,6 +80,7 @@ use HiEvents\Repository\Eloquent\WebhookRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -86,6 +101,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\FeatureFlagRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
 use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
@@ -132,6 +148,8 @@ class RepositoryServiceProvider extends ServiceProvider
     private static array $interfaceToConcreteMap = [
         UserRepositoryInterface::class => UserRepository::class,
         AccountRepositoryInterface::class => AccountRepository::class,
+        FeatureFlagRepositoryInterface::class => FeatureFlagRepository::class,
+        AccountFeatureFlagOverrideRepositoryInterface::class => AccountFeatureFlagOverrideRepository::class,
         AccountAttributionRepositoryInterface::class => AccountAttributionRepository::class,
         AccountDeletionRequestRepositoryInterface::class => AccountDeletionRequestRepository::class,
         EventRepositoryInterface::class => EventRepository::class,
@@ -159,6 +177,8 @@ class RepositoryServiceProvider extends ServiceProvider
         CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
         StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
         CheckInListRepositoryInterface::class => CheckInListRepository::class,
+        BoxOfficeRepositoryInterface::class => BoxOfficeRepository::class,
+        StripeTerminalReaderRepositoryInterface::class => StripeTerminalReaderRepository::class,
         AttendeeCheckInRepositoryInterface::class => AttendeeCheckInRepository::class,
         ProductCategoryRepositoryInterface::class => ProductCategoryRepository::class,
         InvoiceRepositoryInterface::class => InvoiceRepository::class,
@@ -188,6 +208,10 @@ class RepositoryServiceProvider extends ServiceProvider
         ProductOccurrenceVisibilityRepositoryInterface::class => ProductOccurrenceVisibilityRepository::class,
         ProductPriceOccurrenceOverrideRepositoryInterface::class => ProductPriceOccurrenceOverrideRepository::class,
         LocationRepositoryInterface::class => LocationRepository::class,
+        SeatMapRepositoryInterface::class => SeatMapRepository::class,
+        SeatClaimRepositoryInterface::class => SeatClaimRepository::class,
+        EventSeatMapRepositoryInterface::class => EventSeatMapRepository::class,
+        EventSeatMapBandProductRepositoryInterface::class => EventSeatMapBandProductRepository::class,
         EventLocationRepositoryInterface::class => EventLocationRepository::class,
     ];
 

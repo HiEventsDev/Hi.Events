@@ -8,19 +8,25 @@ use HiEvents\Constants;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductType;
+use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
+use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
+use HiEvents\Services\Domain\Product\ProductFilterService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\Feature\Support\InsertsRecurringEventRows;
+use Tests\Feature\Support\InsertsSeatMapRows;
 use Tests\TestCase;
 
 class AvailableProductQuantitiesFetchServiceTest extends TestCase
 {
     use DatabaseTransactions;
     use InsertsRecurringEventRows;
+    use InsertsSeatMapRows;
 
     private AvailableProductQuantitiesFetchService $service;
 
@@ -202,6 +208,140 @@ class AvailableProductQuantitiesFetchServiceTest extends TestCase
 
         $this->assertSame(6, $this->availableFor($priceId, $day1));
         $this->assertSame(6, $this->availableFor($priceId, null));
+    }
+
+    public function test_a_seated_tier_is_capped_by_its_own_quantity_below_the_free_seats(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: 3, appliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+
+        $row = $this->row($priceId, $occurrenceId);
+
+        $this->assertSame(3, $row->quantity_available);
+        $this->assertSame($this->premiumTierCapacity(), $row->seats_available);
+    }
+
+    public function test_a_seated_tier_larger_than_the_free_seats_is_capped_by_the_seats(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: 10000, appliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+
+        $this->assertSame($this->premiumTierCapacity(), $this->availableFor($priceId, $occurrenceId));
+    }
+
+    public function test_a_per_date_seated_tier_is_capped_on_each_date(): void
+    {
+        $day1 = $this->insertOccurrence(daysAhead: 1);
+        $day2 = $this->insertOccurrence(daysAhead: 2);
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: 2);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+        $this->sellTickets($productId, $priceId, $day1, 1);
+
+        $this->assertSame(1, $this->availableFor($priceId, $day1));
+        $this->assertSame(2, $this->availableFor($priceId, $day2));
+    }
+
+    public function test_a_seated_product_total_is_its_free_seats_not_the_sum_of_its_tiers(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $this->insertPrice($productId, initialQuantity: 10000, appliesTo: ProductQuantityAppliesTo::EVENT->name, label: 'Adult');
+        $this->insertPrice($productId, initialQuantity: 10000, appliesTo: ProductQuantityAppliesTo::EVENT->name, label: 'Child');
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+
+        $product = $this->app->make(ProductFilterService::class)->filterProducts(
+            $this->app->make(ProductRepositoryInterface::class)
+                ->loadRelation(ProductPriceDomainObject::class)
+                ->findWhere([ProductDomainObjectAbstract::ID => $productId]),
+            hideSoldOutProducts: false,
+            eventOccurrenceId: $occurrenceId,
+        )->first();
+
+        $this->assertSame($this->premiumTierCapacity(), $product->getQuantityAvailable());
+    }
+
+    public function test_a_capacity_assignment_still_caps_a_seated_product(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: null);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+        $this->insertCapacityAssignment($productId, capacity: 2, usedCapacity: 0);
+
+        $this->assertSame(2, $this->availableFor($priceId, $occurrenceId));
+    }
+
+    public function test_an_exhausted_capacity_assignment_closes_a_seated_product(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: null);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+        $this->insertCapacityAssignment($productId, capacity: 5, usedCapacity: 5);
+
+        $this->assertSame(0, $this->availableFor($priceId, $occurrenceId));
+    }
+
+    public function test_an_unseated_product_is_untouched_by_a_seat_map_on_the_same_event(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $seatedProductId = $this->insertProduct();
+        $unseatedProductId = $this->insertProduct();
+        $unseatedPriceId = $this->insertPrice($unseatedProductId, initialQuantity: 7, quantitySold: 2);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$seatedProductId]]);
+
+        $this->assertSame(5, $this->availableFor($unseatedPriceId, $occurrenceId));
+    }
+
+    private function premiumTierCapacity(): int
+    {
+        $capacity = 0;
+
+        foreach ($this->seatMapFixture('club')['areas'] as $area) {
+            foreach ($area['elements'] as $element) {
+                foreach ($element['seats'] ?? [] as $seat) {
+                    $capacity += $seat['band'] === 'b_premium' ? 1 : 0;
+                }
+
+                if (($element['type'] ?? null) === 'zone' && $element['band'] === 'b_premium') {
+                    $capacity += $element['capacity'];
+                }
+            }
+        }
+
+        return $capacity;
+    }
+
+    private function insertCapacityAssignment(int $productId, ?int $capacity, int $usedCapacity): void
+    {
+        $capacityAssignmentId = DB::table('capacity_assignments')->insertGetId([
+            'event_id' => $this->eventId,
+            'name' => 'Shared pool',
+            'capacity' => $capacity,
+            'used_capacity' => $usedCapacity,
+            'applies_to' => 'PRODUCTS',
+            'status' => 'ACTIVE',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('product_capacity_assignments')->insert([
+            'product_id' => $productId,
+            'capacity_assignment_id' => $capacityAssignmentId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function row(int $priceId, ?int $occurrenceId): AvailableProductQuantitiesDTO

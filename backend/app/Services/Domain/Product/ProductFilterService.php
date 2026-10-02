@@ -4,6 +4,7 @@ namespace HiEvents\Services\Domain\Product;
 
 use HiEvents\Constants;
 use HiEvents\DomainObjects\CapacityAssignmentDomainObject;
+use HiEvents\DomainObjects\EventSeatMapBandProductDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -12,12 +13,15 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
+use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\Tax\DTO\TaxCalculationResponse;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
 
@@ -29,6 +33,8 @@ class ProductFilterService
 
     private ?string $eventCurrency = null;
 
+    private bool $applyPlatformFee = true;
+
     public function __construct(
         private readonly TaxAndFeeCalculationService $taxCalculationService,
         private readonly ProductPriceService $productPriceService,
@@ -36,6 +42,7 @@ class ProductFilterService
         private readonly OrderPlatformFeePassThroughService $platformFeeService,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly ProductOccurrenceVisibilityRepositoryInterface $productOccurrenceVisibilityRepository,
+        private readonly SeatedProductLookupService $seatedProductLookup,
     ) {}
 
     /**
@@ -83,17 +90,24 @@ class ProductFilterService
         ?PromoCodeDomainObject $promoCode = null,
         bool $hideSoldOutProducts = true,
         ?int $eventOccurrenceId = null,
+        bool $allowPastOccurrence = false,
+        bool $applyPlatformFee = true,
     ): Collection {
         if ($products->isEmpty()) {
             return $products;
         }
 
+        $this->applyPlatformFee = $applyPlatformFee;
         $eventId = $products->first()->getEventId();
         $this->loadAccountConfiguration($eventId);
 
         $productQuantities = $this
             ->fetchAvailableProductQuantitiesService
-            ->getAvailableProductQuantities($eventId, eventOccurrenceId: $eventOccurrenceId);
+            ->getAvailableProductQuantities(
+                $eventId,
+                eventOccurrenceId: $eventOccurrenceId,
+                allowPastOccurrence: $allowPastOccurrence,
+            );
 
         $filteredProducts = $products
             ->map(fn (ProductDomainObject $product) => $this->processProduct($product, $productQuantities->productQuantities, $promoCode, $eventOccurrenceId))
@@ -160,6 +174,8 @@ class ProductFilterService
         ?PromoCodeDomainObject $promoCode = null,
         ?int $eventOccurrenceId = null,
     ): ProductDomainObject {
+        $this->setBandPrices($product, $promoCode, $eventOccurrenceId);
+
         if ($this->shouldProductBeDiscounted($promoCode, $product)) {
             $product->getProductPrices()?->each(function (ProductPriceDomainObject $price) use ($product, $promoCode, $eventOccurrenceId) {
                 $price->setPriceBeforeDiscount($price->getPrice());
@@ -188,13 +204,19 @@ class ProductFilterService
             $price->setQuantityReserved($priceQuantities?->quantity_reserved ?? 0);
         });
 
-        $productQuantities->each(function (AvailableProductQuantitiesDTO $quantity) use ($product) {
-            if ($quantity->capacities !== null && $quantity->capacities->isNotEmpty() && $quantity->product_id === $product->getId()) {
-                $product->setQuantityAvailable(
-                    $quantity->capacities->min(fn (CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
-                );
-            }
-        });
+        $productTotal = $productQuantities
+            ->filter(fn (AvailableProductQuantitiesDTO $quantity) => $quantity->product_id === $product->getId())
+            ->flatMap(fn (AvailableProductQuantitiesDTO $quantity) => array_merge(
+                ($quantity->capacities ?? collect())
+                    ->map(fn (CapacityAssignmentDomainObject $capacity) => $capacity->getAvailableCapacity())
+                    ->all(),
+                $quantity->seats_available === null ? [] : [$quantity->seats_available],
+            ))
+            ->min();
+
+        if ($productTotal !== null) {
+            $product->setQuantityAvailable($productTotal);
+        }
 
         return $product;
     }
@@ -237,25 +259,72 @@ class ProductFilterService
     private function processProductPrice(ProductDomainObject $product, ProductPriceDomainObject $price): void
     {
         if (! $price->isFree()) {
-            $taxAndFees = $this->taxCalculationService
-                ->calculateTaxAndFeesForProductPrice($product, $price);
-
-            $feeTotal = $taxAndFees->feeTotal;
-            $taxTotal = $taxAndFees->taxTotal;
-
-            $platformFee = $this->calculatePlatformFee($price->getPrice() + $feeTotal + $taxTotal);
-
-            if ($platformFee > 0) {
-                $feeTotal += $platformFee;
-                $this->addPlatformFeeToProduct($product);
-            }
+            $taxAndFees = $this->taxAndFeeTotals($product, $price->getPrice());
 
             $price
-                ->setTaxTotal(Currency::round($taxTotal))
-                ->setFeeTotal(Currency::round($feeTotal));
+                ->setTaxTotal(Currency::round($taxAndFees->taxTotal))
+                ->setFeeTotal(Currency::round($taxAndFees->feeTotal));
         }
 
         $price->setIsAvailable($this->getPriceAvailability($price, $product));
+    }
+
+    private function taxAndFeeTotals(ProductDomainObject $product, float $price): TaxCalculationResponse
+    {
+        $taxAndFees = $this->taxCalculationService->calculateTaxAndFeesForProduct($product, $price);
+
+        $platformFee = $this->applyPlatformFee
+            ? $this->calculatePlatformFee($price + $taxAndFees->feeTotal + $taxAndFees->taxTotal)
+            : 0.0;
+
+        if ($platformFee <= 0) {
+            return $taxAndFees;
+        }
+
+        $this->addPlatformFeeToProduct($product);
+
+        return new TaxCalculationResponse(
+            feeTotal: $taxAndFees->feeTotal + $platformFee,
+            taxTotal: $taxAndFees->taxTotal,
+            rollUp: $taxAndFees->rollUp,
+        );
+    }
+
+    private function setBandPrices(ProductDomainObject $product, ?PromoCodeDomainObject $promoCode, ?int $eventOccurrenceId): void
+    {
+        $links = $this->seatedProductLookup
+            ->linksForEvent($product->getEventId())
+            ->filter(fn (EventSeatMapBandProductDomainObject $link) => $link->getProductId() === $product->getId());
+
+        if ($links->isEmpty()) {
+            return;
+        }
+
+        $product->getProductPrices()?->each(fn (ProductPriceDomainObject $price) => $price->setBandPrices(
+            $links->mapWithKeys(fn (EventSeatMapBandProductDomainObject $link) => [
+                $link->getBandKey() => $this->priceIncludingTaxesAndFees(
+                    $product,
+                    $this->productPriceService->getPrice(
+                        $product,
+                        new OrderProductPriceDTO(quantity: 1, price_id: $price->getId()),
+                        $promoCode,
+                        $eventOccurrenceId,
+                        bandPriceAdjustment: Currency::fromMinorUnits($link->getPriceAdjustment(), $this->eventCurrency),
+                    )->price,
+                ),
+            ])->all(),
+        ));
+    }
+
+    private function priceIncludingTaxesAndFees(ProductDomainObject $product, float $price): float
+    {
+        if ($price <= 0.0) {
+            return 0.0;
+        }
+
+        $taxAndFees = $this->taxAndFeeTotals($product, $price);
+
+        return Currency::round($price + Currency::round($taxAndFees->taxTotal) + Currency::round($taxAndFees->feeTotal));
     }
 
     private function calculatePlatformFee(float $total): float

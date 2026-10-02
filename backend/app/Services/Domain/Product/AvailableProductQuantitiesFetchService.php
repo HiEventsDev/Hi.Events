@@ -8,9 +8,12 @@ use HiEvents\DomainObjects\Enums\CapacityAssignmentAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
 use HiEvents\DomainObjects\Status\CapacityAssignmentStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatAvailabilityService;
 use HiEvents\Repository\Interfaces\CapacityAssignmentRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -33,6 +36,8 @@ class AvailableProductQuantitiesFetchService
         private readonly EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
         private readonly SoldAndReservedQuantitiesService $soldAndReservedQuantities,
+        private readonly SeatAvailabilityService $seatAvailabilityService,
+        private readonly EventSeatMapLookupService $eventSeatMapLookup,
     ) {}
 
     public function getAvailableProductQuantities(
@@ -40,6 +45,7 @@ class AvailableProductQuantitiesFetchService
         bool $ignoreCache = false,
         ?int $eventOccurrenceId = null,
         bool $applyOccurrenceLimits = true,
+        bool $allowPastOccurrence = false,
     ): AvailableProductQuantitiesResponseDTO {
         if (! $ignoreCache && $eventOccurrenceId === null && $this->config->get('app.homepage_product_quantities_cache_ttl')) {
             $cachedData = $this->getDataFromCache($eventId);
@@ -83,14 +89,17 @@ class AvailableProductQuantitiesFetchService
             if ($isRecurring) {
                 $quantities = $this->applyPerOccurrenceQuantities($quantities, $eventId, $eventOccurrenceId);
             }
+            $quantities = $this->applySeatAvailability($quantities, $eventId, $eventOccurrenceId);
             if ($applyOccurrenceLimits) {
-                if ($this->occurrenceLimitsCapacity($occurrence)) {
+                if ($this->occurrenceLimitsCapacity($occurrence, $allowPastOccurrence)) {
                     $occurrenceReserved = $this->soldAndReservedQuantities->getReservedTicketsForOccurrence($eventOccurrenceId);
                 }
-                $quantities = $this->applyOccurrenceCapacity($quantities, $occurrence, $occurrenceReserved);
+                $quantities = $this->applyOccurrenceCapacity($quantities, $occurrence, $occurrenceReserved, $allowPastOccurrence);
             }
         } elseif ($isRecurring) {
-            $quantities = $this->ignorePerOccurrenceQuantities($quantities);
+            $quantities = $this->applySeatAvailability($this->ignorePerOccurrenceQuantities($quantities), $eventId, null);
+        } elseif ($this->eventSeatMapLookup->existsForEvent($eventId)) {
+            $quantities = $this->applySeatAvailability($quantities, $eventId, $this->soleOccurrenceId($eventId));
         }
 
         $finalData = new AvailableProductQuantitiesResponseDTO(
@@ -105,6 +114,34 @@ class AvailableProductQuantitiesFetchService
         }
 
         return $finalData;
+    }
+
+    private function applySeatAvailability(Collection $quantities, int $eventId, ?int $eventOccurrenceId): Collection
+    {
+        $freeByProduct = $this->seatAvailabilityService->freeCountByProduct($eventId, $eventOccurrenceId);
+
+        if ($freeByProduct === []) {
+            return $quantities;
+        }
+
+        return $quantities->map(function (AvailableProductQuantitiesDTO $dto) use ($freeByProduct) {
+            if (isset($freeByProduct[$dto->product_id])) {
+                $dto->seats_available = $freeByProduct[$dto->product_id];
+                $dto->quantity_available_before_seats = $dto->quantity_available;
+                $dto->quantity_available = $dto->quantity_available === Constants::INFINITE
+                    ? $dto->seats_available
+                    : min($dto->quantity_available, $dto->seats_available);
+            }
+
+            return $dto;
+        });
+    }
+
+    private function soleOccurrenceId(int $eventId): ?int
+    {
+        return $this->occurrenceRepository
+            ->findFirstWhere([EventOccurrenceDomainObjectAbstract::EVENT_ID => $eventId])
+            ?->getId();
     }
 
     private function applyPerOccurrenceQuantities(Collection $quantities, int $eventId, int $eventOccurrenceId): Collection
@@ -165,11 +202,11 @@ class AvailableProductQuantitiesFetchService
         });
     }
 
-    private function occurrenceLimitsCapacity(?EventOccurrenceDomainObject $occurrence): bool
+    private function occurrenceLimitsCapacity(?EventOccurrenceDomainObject $occurrence, bool $allowPastOccurrence): bool
     {
         return $occurrence !== null
             && ! $occurrence->isCancelled()
-            && ! $occurrence->isPast()
+            && ($allowPastOccurrence || ! $occurrence->isPast())
             && $occurrence->getCapacity() !== null;
     }
 
@@ -177,8 +214,9 @@ class AvailableProductQuantitiesFetchService
         Collection $quantities,
         ?EventOccurrenceDomainObject $occurrence,
         ?int $reservedForOccurrence,
+        bool $allowPastOccurrence,
     ): Collection {
-        if ($occurrence === null || $occurrence->isCancelled() || $occurrence->isPast()) {
+        if ($occurrence === null || $occurrence->isCancelled() || ($occurrence->isPast() && ! $allowPastOccurrence)) {
             return $quantities->map(function (AvailableProductQuantitiesDTO $dto) {
                 $dto->quantity_available = 0;
 

@@ -37,8 +37,9 @@ export interface UseCheckInOccurrenceFilterResult {
 export const useCheckInOccurrenceFilter = (
     checkInListShortId: string | undefined,
     occurrences: EventOccurrence[] | undefined,
+    enabled = true,
 ): UseCheckInOccurrenceFilterResult => {
-    const key = storageKey(checkInListShortId);
+    const key = enabled ? storageKey(checkInListShortId) : null;
     const [searchParams, setSearchParams] = useSearchParams();
     const [didClearStale, setDidClearStale] = useState(false);
 
@@ -56,7 +57,7 @@ export const useCheckInOccurrenceFilter = (
         setHasHydratedFromStorage(true);
     }, [key, searchParams, setSearchParams, hasHydratedFromStorage]);
 
-    const rawParam = searchParams.get(URL_PARAM);
+    const rawParam = enabled ? searchParams.get(URL_PARAM) : null;
     const occurrenceId = useMemo<number | null>(() => {
         if (!rawParam) return null;
         const parsed = Number(rawParam);

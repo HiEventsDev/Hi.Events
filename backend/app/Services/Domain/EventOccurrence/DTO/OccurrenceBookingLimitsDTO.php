@@ -7,7 +7,7 @@ use HiEvents\DataTransferObjects\BaseDataObject;
 class OccurrenceBookingLimitsDTO extends BaseDataObject
 {
     /**
-     * @param  OccurrenceTierAllocationDTO[]  $allocations
+     * @param  OccurrenceAllocationDTO[]  $allocations
      */
     public function __construct(
         public readonly ?int $capacity,

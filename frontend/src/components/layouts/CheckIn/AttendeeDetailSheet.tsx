@@ -182,7 +182,7 @@ export const AttendeeDetailSheet = ({
                                         <>
                                             <span className={classes.dot}>·</span>
                                             <span className={classes.product}>
-                                                <IconTicket size={12}/> {detail.product_title}
+                                                <IconTicket size={12}/> {[detail.product_title, detail.seat_label].filter(Boolean).join(' · ')}
                                             </span>
                                         </>
                                     )}

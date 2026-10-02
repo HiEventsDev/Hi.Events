@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\BoxOfficeDomainObject;
 use HiEvents\DomainObjects\Enums\BulkOccurrenceAction;
 use HiEvents\DomainObjects\Enums\LocationType;
 use HiEvents\DomainObjects\EventDomainObject;
@@ -11,8 +12,11 @@ use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\OrderItemDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\SeatClaimDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
 use HiEvents\Exceptions\InvalidOccurrenceDatesException;
 use HiEvents\Jobs\Occurrence\BulkCancelOccurrencesJob;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -51,6 +55,10 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
 
     private EventLocationCleaner|MockInterface $eventLocationCleaner;
 
+    private BoxOfficeRepositoryInterface|MockInterface $boxOfficeRepository;
+
+    private SeatClaimRepositoryInterface|MockInterface $seatClaimRepository;
+
     private DatabaseManager|MockInterface $databaseManager;
 
     private BulkUpdateOccurrencesHandler $handler;
@@ -70,6 +78,10 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
         $this->eventLocationUpserter = Mockery::mock(EventLocationUpserter::class);
         $this->eventLocationCleaner = Mockery::mock(EventLocationCleaner::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
+        $this->boxOfficeRepository = Mockery::mock(BoxOfficeRepositoryInterface::class);
+        $this->boxOfficeRepository->shouldReceive('findWhereIn')->byDefault()->andReturn(new Collection);
+        $this->seatClaimRepository = Mockery::mock(SeatClaimRepositoryInterface::class);
+        $this->seatClaimRepository->shouldReceive('deleteWhere')->byDefault()->andReturn(0);
 
         $this->event = Mockery::mock(EventDomainObject::class);
         $this->event->shouldReceive('getAccountId')->andReturn(7)->byDefault();
@@ -112,7 +124,9 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             $this->exclusionService,
             $this->eventLocationUpserter,
             $this->eventLocationCleaner,
+            $this->boxOfficeRepository,
             $this->databaseManager,
+            $this->seatClaimRepository,
         );
     }
 
@@ -600,10 +614,53 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             ->once()
             ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [10]]]);
 
+        $this->seatClaimRepository
+            ->shouldReceive('deleteWhere')
+            ->once()
+            ->with([
+                [SeatClaimDomainObjectAbstract::EVENT_OCCURRENCE_ID, 'in', [10]],
+                [SeatClaimDomainObjectAbstract::ORDER_ID, 'null', null],
+            ]);
+
         $this->exclusionService
             ->shouldReceive('addExclusions')
             ->once()
             ->with(1, ['2026-03-01 09:00:00']);
+
+        $result = $this->handler->handle($dto);
+
+        $this->assertEquals(1, $result->updated_count);
+    }
+
+    public function test_handle_skips_deletion_for_occurrences_a_box_office_is_fixed_to(): void
+    {
+        $dto = new BulkUpdateOccurrencesDTO(
+            event_id: 1,
+            action: BulkOccurrenceAction::DELETE,
+            timezone: 'UTC',
+            future_only: false,
+            skip_overridden: false,
+            occurrence_ids: [10, 11],
+        );
+
+        $this->occurrenceRepository
+            ->shouldReceive('findWhere')
+            ->once()
+            ->andReturn(new Collection([
+                $this->createOccurrenceMock(10, false, false, '2026-03-01 09:00:00'),
+                $this->createOccurrenceMock(11, false, false, '2026-03-08 09:00:00'),
+            ]));
+        $this->orderItemRepository->shouldReceive('findWhereIn')->once()->andReturn(new Collection);
+        $this->boxOfficeRepository
+            ->shouldReceive('findWhereIn')
+            ->once()
+            ->withArgs(fn ($field, $values, $additionalWhere = [], $columns = []) => $field === 'event_occurrence_id' && $values === [10, 11])
+            ->andReturn(new Collection([(new BoxOfficeDomainObject)->setEventOccurrenceId(11)]));
+
+        $this->occurrenceRepository
+            ->shouldReceive('deleteWhere')
+            ->once()
+            ->with([[EventOccurrenceDomainObjectAbstract::ID, 'in', [10]]]);
 
         $result = $this->handler->handle($dto);
 
@@ -662,7 +719,9 @@ class BulkUpdateOccurrencesHandlerTest extends TestCase
             $this->exclusionService,
             $this->eventLocationUpserter,
             $this->eventLocationCleaner,
+            $this->boxOfficeRepository,
             $this->databaseManager,
+            $this->seatClaimRepository,
         );
 
         $this->occurrenceRepository

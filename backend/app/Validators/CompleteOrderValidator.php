@@ -80,6 +80,7 @@ class CompleteOrderValidator extends BaseValidator
                 $products,
                 $eventSettings->getAttendeeDetailsCollectionMethod(),
             ),
+            'products.*.seat_uid' => ['nullable', 'string', 'max:24'],
             ...$addressRules,
         ];
     }

@@ -44,6 +44,14 @@ class EventContentAnonymizer implements AccountAnonymizerInterface
                 entity: 'waitlist_entries',
             ),
             $this->executor->scrub(
+                query: $this->databaseManager->table('box_offices')->whereIn('event_id', $context->eventIds),
+                entity: 'box_offices',
+                columnStrategies: [
+                    'pin_hash' => AnonymizationStrategy::NULLIFY,
+                ],
+                context: $context,
+            ),
+            $this->executor->scrub(
                 query: $this->databaseManager->table('event_settings')->whereIn('event_id', $context->eventIds),
                 entity: 'event_settings',
                 columnStrategies: [

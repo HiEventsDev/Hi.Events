@@ -5,14 +5,19 @@ namespace Tests\Unit\Services\Application\Handlers\Order;
 use Carbon\Carbon;
 use Exception;
 use HiEvents\DomainObjects\AttendeeDomainObject;
+use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAnswerDomainObject;
+use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
@@ -31,6 +36,7 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
@@ -68,6 +74,12 @@ class CompleteOrderHandlerTest extends TestCase
 
     private CheckoutSessionManagementService|MockInterface $sessionManagementService;
 
+    private SeatClaimService|MockInterface $seatClaimService;
+
+    private EventSeatMapLookupService|MockInterface $eventSeatMapLookup;
+
+    private SeatedOrderCompletionGuard|MockInterface $seatedOrderCompletionGuard;
+
     private EventOccurrenceRepositoryInterface|MockInterface $occurrenceRepository;
 
     protected function setUp(): void
@@ -104,6 +116,16 @@ class CompleteOrderHandlerTest extends TestCase
             ])
         )->byDefault();
 
+        $this->seatClaimService = Mockery::mock(SeatClaimService::class);
+        $this->seatClaimService->shouldReceive('claimsForOrder')->andReturn(collect())->byDefault();
+        $this->seatClaimService->shouldReceive('pairWithAttendees')->byDefault();
+
+        $this->seatedOrderCompletionGuard = Mockery::mock(SeatedOrderCompletionGuard::class);
+        $this->seatedOrderCompletionGuard->shouldReceive('assertSeatsHeld')->byDefault();
+
+        $this->eventSeatMapLookup = Mockery::mock(EventSeatMapLookupService::class);
+        $this->eventSeatMapLookup->shouldReceive('existsForEvent')->andReturnFalse()->byDefault();
+
         $this->completeOrderHandler = new CompleteOrderHandler(
             $this->orderRepository,
             $this->affiliateRepository,
@@ -115,6 +137,10 @@ class CompleteOrderHandlerTest extends TestCase
             $this->eventSettingsRepository,
             $this->sessionManagementService,
             new OccurrenceStatusValidator($this->occurrenceRepository),
+            $this->seatClaimService,
+            $this->seatedOrderCompletionGuard,
+            $this->eventSeatMapLookup,
+            new TransactionLockService(DB::getFacadeRoot()),
         );
     }
 
@@ -148,6 +174,42 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertTrue(true);
+    }
+
+    public function test_an_event_without_a_seat_map_never_reads_or_pairs_seat_claims(): void
+    {
+        $this->arrangeCompletableOrder($this->createMockOrder());
+
+        $this->seatClaimService->shouldNotReceive('claimsForOrder');
+        $this->seatClaimService->shouldNotReceive('pairWithAttendees');
+
+        $completed = $this->completeOrderHandler->handle('ABC123', $this->createMockCompleteOrderDTO());
+
+        $this->assertSame(1, $completed->getId());
+    }
+
+    public function test_an_order_holding_seat_claims_seats_its_attendees_and_pairs_the_claims(): void
+    {
+        $order = $this->createMockOrder();
+        $order->getOrderItems()->first()->setProductType(ProductType::TICKET->name);
+        $this->arrangeCompletableOrder($order);
+
+        $this->eventSeatMapLookup->shouldReceive('existsForEvent')->with(1)->andReturnTrue();
+        $this->seatClaimService->shouldReceive('claimsForOrder')->once()->with(1)->andReturn(collect([
+            (new SeatClaimDomainObject)->setProductPriceId(1)->setOrderItemId(1)->setSeatUid('e1.0.0')->setSeatLabel('A1'),
+        ]));
+        $this->seatClaimService->shouldReceive('pairWithAttendees')->once()->with(1);
+
+        $inserted = [];
+        $this->attendeeRepository->shouldReceive('insert')->andReturnUsing(function (array $rows) use (&$inserted) {
+            $inserted = $rows;
+
+            return true;
+        });
+
+        $this->completeOrderHandler->handle('ABC123', $this->createMockCompleteOrderDTO());
+
+        $this->assertSame('e1.0.0', $inserted[0]['seat_uid']);
     }
 
     public function test_handle_stores_unwrapped_order_answers_and_skips_blank_ones(): void
@@ -222,7 +284,7 @@ class CompleteOrderHandlerTest extends TestCase
         $this->completeOrderHandler->handle($orderShortId, $orderData);
 
         $this->assertSame(
-            [['SELECT pg_advisory_xact_lock(hashtext(?))', [$orderShortId]]],
+            [['SELECT pg_advisory_xact_lock(?, hashtext(?))', [TransactionLockService::ORDER_LOCK_KEYSPACE, $orderShortId]]],
             $this->executedStatements,
         );
     }
@@ -484,6 +546,18 @@ class CompleteOrderHandlerTest extends TestCase
         );
 
         $this->completeOrderHandler->handle($orderShortId, $orderData);
+    }
+
+    private function arrangeCompletableOrder(OrderDomainObject $order): void
+    {
+        $this->orderRepository->shouldReceive('findByShortId')->andReturn($order);
+        $this->orderRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->orderRepository->shouldReceive('updateFromArray')->andReturn($this->createMockOrder());
+        $this->productPriceRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockProductPrice()]));
+        $this->attendeeRepository->shouldReceive('insert')->andReturn(true)->byDefault();
+        $this->attendeeRepository->shouldReceive('findWhereIn')->andReturn(new Collection([$this->createMockAttendee()]));
+        $this->productQuantityUpdateService->shouldReceive('updateQuantitiesFromOrder');
+        $this->eventSettingsRepository->shouldReceive('findFirstWhere')->andReturn($this->createMockEventSetting());
     }
 
     private function createMockCompleteOrderDTO(): CompleteOrderDTO

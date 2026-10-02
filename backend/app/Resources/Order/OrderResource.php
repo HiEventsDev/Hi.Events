@@ -40,6 +40,15 @@ class OrderResource extends BaseResource
             'is_fully_refunded' => $this->isFullyRefunded(),
             'is_free_order' => $this->isFreeOrder(),
             'is_manually_created' => $this->getIsManuallyCreated(),
+            'box_office_id' => $this->getBoxOfficeId(),
+            $this->mergeWhen($this->isBoxOfficeOrder(), fn () => [
+                'box_office_operator_name' => $this->getBoxOfficeOperatorName(),
+                /** @var 'CASH'|'CARD'|'COMP'|'OTHER'|'FREE'|null */
+                'box_office_tender' => $this->getBoxOfficeTender(),
+                'box_office_amount_tendered' => $this->getBoxOfficeAmountTendered(),
+                'box_office_change_due' => $this->getBoxOfficeChangeDue(),
+                'box_office_reference' => $this->getBoxOfficeReference(),
+            ]),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'address' => $this->getAddress(),
             'notes' => $this->getNotes(),

@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
-use HiEvents\Locale;
 use HiEvents\Models\Account;
 use HiEvents\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,7 +28,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => Hash::make(fake()->password(16)),
             'timezone' => fake()->timezone(),
-            'locale' => fake()->randomElement(Locale::getSupportedLocales()),
+            'locale' => 'en',
         ];
     }
 

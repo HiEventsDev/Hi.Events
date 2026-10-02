@@ -203,7 +203,6 @@ export const CollectInformation = () => {
     const handleCopyOptionChange = (value: string) => {
         const option = value as 'none' | 'first' | 'all';
 
-        // Only allow copying if order details are complete
         if (option !== 'none' && !areOrderDetailsComplete()) {
             return;
         }
@@ -212,7 +211,6 @@ export const CollectInformation = () => {
         copyDetailsToAttendees(option);
     };
 
-    // Reset copy option if order details become incomplete
     useEffect(() => {
         if (copyOption !== 'none' && !areOrderDetailsComplete()) {
             setCopyOption('none');
@@ -239,7 +237,6 @@ export const CollectInformation = () => {
                     message: error?.response?.data?.message,
                 });
 
-                // if it's a 409, we need to redirect to the event page as the order is no longer valid
                 if (error.response.status === 409 && getEmbedMode() !== 'modal') {
                     navigate(eventHomepagePath(event as Event));
                 }
@@ -263,14 +260,18 @@ export const CollectInformation = () => {
         return productIdToQuestionMap;
     }
 
+    const seatsForItem = (orderItemId?: number) =>
+        (order?.seats ?? []).filter(seat => seat.order_item_id === orderItemId);
+
     const createProductsAndQuestions = (productIdToQuestionMap: Map<number, Question[]>) => {
         const products: any = [];
 
         orderItems?.forEach(orderItem => {
-            Array.from(Array(orderItem?.quantity)).map(() => {
+            Array.from(Array(orderItem?.quantity)).map((_, ticketIndex) => {
                 products.push({
                     product_price_id: orderItem?.product_price_id,
                     product_id: orderItem?.product_id,
+                    seat_uid: seatsForItem(orderItem?.id)[ticketIndex]?.seat_uid,
                     first_name: "",
                     last_name: "",
                     email: "",
@@ -338,7 +339,6 @@ export const CollectInformation = () => {
                 },
             });
         }
-        // prefill/lock intentionally omitted: they're memoized off query params that don't change during the page's lifetime
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
     useEffect(() => {
@@ -585,7 +585,6 @@ export const CollectInformation = () => {
                             </InputGroup>
 
                             <InputGroup>
-                                {/* Postal Code and Country */}
                                 <TextInput
                                     label={t`ZIP / Postal Code`}
                                     placeholder={t`ZIP or Postal Code`}
@@ -622,8 +621,6 @@ export const CollectInformation = () => {
                     }
 
                     if (!productRequiresDetails && !productHasQuestions) {
-                        // Still increment productIndex for each item in the quantity
-                        // to maintain correct form field indices
                         productIndex += orderItem.quantity ?? 0;
                         return null;
                     }
@@ -647,14 +644,12 @@ export const CollectInformation = () => {
                                     copyOption === 'all' || (copyOption === 'first' && isFirstTicketAttendee)
                                 );
 
-                                // Check if current values still match the order details
                                 const currentProduct = form.values.products[currentProductIndex];
                                 const valuesMatchOrder = currentProduct &&
                                     currentProduct.first_name === form.values.order.first_name &&
                                     currentProduct.last_name === form.values.order.last_name &&
                                     currentProduct.email === form.values.order.email;
 
-                                // Only show badge if copied AND values still match
                                 const showCopiedBadge = isCopied && productRequiresDetails && valuesMatchOrder;
 
                                 const productInputs = (
@@ -669,7 +664,8 @@ export const CollectInformation = () => {
                                                         {product.product_type === 'TICKET' ? t`Attendee` : t`Item`} {index + 1}
                                                     </h4>
                                                     <span className={classes.attendeeTicketType}>
-                                                        {orderItem?.item_name}
+                                                        {[orderItem?.item_name, seatsForItem(orderItem?.id)[index]?.seat_label]
+                                                            .filter(Boolean).join(' · ')}
                                                     </span>
                                                 </div>
                                             </div>

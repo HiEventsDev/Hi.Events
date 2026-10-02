@@ -31,6 +31,7 @@ class EventResource extends BaseResource
             'status' => $this->getStatus(),
             /** @var 'SINGLE'|'RECURRING' */
             'type' => $this->getType(),
+            'has_seat_map' => $this->getHasSeatMap(),
             'recurrence_rule' => $this->getRecurrenceRule(),
             /** @var 'UPCOMING'|'ONGOING'|'ENDED' */
             'lifecycle_status' => $this->getLifeCycleStatus(),

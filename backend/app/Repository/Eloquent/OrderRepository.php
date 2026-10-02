@@ -12,6 +12,8 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\BoxOffice\Repository\DTO\BoxOfficeSalesCountDTO;
+use HiEvents\Enterprise\BoxOffice\Repository\DTO\BoxOfficeSummaryRowDTO;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\Order;
 use HiEvents\Models\OrderItem;
@@ -286,5 +288,122 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->where('events.account_id', $accountId)
             ->where('orders.status', OrderStatus::COMPLETED->name)
             ->exists());
+    }
+
+    public function findByBoxOfficeId(int $boxOfficeId, QueryParamsDTO $params): LengthAwarePaginator
+    {
+        $where = [
+            [OrderDomainObjectAbstract::BOX_OFFICE_ID, '=', $boxOfficeId],
+            static function (Builder $builder) {
+                $builder
+                    ->whereIn(OrderDomainObjectAbstract::STATUS, [OrderStatus::COMPLETED->name, OrderStatus::CANCELLED->name])
+                    ->orWhere(static function (Builder $reserved) {
+                        $reserved
+                            ->where(OrderDomainObjectAbstract::STATUS, OrderStatus::RESERVED->name)
+                            ->where(OrderDomainObjectAbstract::RESERVED_UNTIL, '>', now());
+                    });
+            },
+        ];
+
+        if ($params->query) {
+            $where[] = static function (Builder $builder) use ($params) {
+                $builder
+                    ->where(
+                        DB::raw(
+                            sprintf(
+                                "(%s||' '||%s)",
+                                OrderDomainObjectAbstract::FIRST_NAME,
+                                OrderDomainObjectAbstract::LAST_NAME
+                            )
+                        ), 'ilike', '%'.$params->query.'%')
+                    ->orWhere(OrderDomainObjectAbstract::LAST_NAME, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(OrderDomainObjectAbstract::PUBLIC_ID, 'ilike', '%'.$params->query.'%')
+                    ->orWhere(OrderDomainObjectAbstract::EMAIL, 'ilike', '%'.$params->query.'%');
+            };
+        }
+
+        $this->model = $this->model->orderBy(OrderDomainObjectAbstract::CREATED_AT, 'desc');
+
+        return $this->paginateWhere(
+            where: $where,
+            limit: $params->per_page,
+            page: $params->page,
+        );
+    }
+
+    public function getBoxOfficeSalesCountsByIds(array $boxOfficeIds): Collection
+    {
+        if ($boxOfficeIds === []) {
+            return collect();
+        }
+
+        $placeholders = implode(',', array_fill(0, count($boxOfficeIds), '?'));
+
+        $rows = $this->db->select(
+            <<<SQL
+                SELECT box_office_id, COUNT(*) AS sales_count, COALESCE(SUM(total_gross), 0) AS gross_sales
+                FROM orders
+                WHERE box_office_id IN ($placeholders)
+                  AND status = ?
+                  AND deleted_at IS NULL
+                GROUP BY box_office_id
+            SQL,
+            array_merge($boxOfficeIds, [OrderStatus::COMPLETED->name]),
+        );
+
+        return collect($rows)->map(static fn ($row) => new BoxOfficeSalesCountDTO(
+            boxOfficeId: (int) $row->box_office_id,
+            salesCount: (int) $row->sales_count,
+            grossSales: (float) $row->gross_sales,
+        ));
+    }
+
+    public function getBoxOfficeSummary(int $boxOfficeId, string $timezone, ?string $from, ?string $to): Collection
+    {
+        $bindings = [
+            'timezone' => $timezone,
+            'box_office_id' => $boxOfficeId,
+            'status' => OrderStatus::COMPLETED->name,
+        ];
+        $rangeClause = '';
+
+        if ($from !== null) {
+            $rangeClause .= ' AND created_at >= :from';
+            $bindings['from'] = $from;
+        }
+
+        if ($to !== null) {
+            $rangeClause .= ' AND created_at <= :to';
+            $bindings['to'] = $to;
+        }
+
+        $rows = $this->db->select(
+            <<<SQL
+                SELECT
+                    box_office_tender AS tender,
+                    COALESCE(box_office_operator_name, '') AS operator_name,
+                    (created_at AT TIME ZONE 'UTC' AT TIME ZONE :timezone)::date AS day,
+                    COUNT(*) AS orders,
+                    COALESCE(SUM(total_gross), 0) AS gross,
+                    COALESCE(SUM(total_refunded), 0) AS refunded
+                FROM orders
+                WHERE box_office_id = :box_office_id
+                  AND status = :status
+                  AND deleted_at IS NULL
+                  $rangeClause
+                GROUP BY box_office_tender, box_office_operator_name, day
+                ORDER BY day
+            SQL,
+            $bindings,
+        );
+
+        return collect($rows)->map(static fn ($row) => new BoxOfficeSummaryRowDTO(
+            tender: (string) $row->tender,
+            operatorName: (string) $row->operator_name,
+            day: (string) $row->day,
+            orders: (int) $row->orders,
+            gross: (float) $row->gross,
+            refunded: (float) $row->refunded,
+        ));
     }
 }

@@ -1,0 +1,16 @@
+[
+  {"name": "taking seats from the end of an empty row leaves no orphan", "segment": ["1","2","3","4","5","6"], "taken": [], "selected": ["1","2"], "orphans": []},
+  {"name": "leaving one seat at the end of an empty row is an orphan", "segment": ["1","2","3","4","5","6"], "taken": [], "selected": ["2","3"], "orphans": ["1"]},
+  {"name": "leaving a single gap beside a sold seat is an orphan", "segment": ["1","2","3","4","5","6"], "taken": ["1"], "selected": ["3","4"], "orphans": ["2"]},
+  {"name": "taking the middle of a row can strand a seat at both ends", "segment": ["1","2","3","4","5"], "taken": [], "selected": ["2","3","4"], "orphans": ["1","5"]},
+  {"name": "an unavoidable orphan is allowed when the free run has exactly one seat more than needed", "segment": ["1","2","3","4","5","6"], "taken": ["1","5","6"], "selected": ["2","3"], "orphans": []},
+  {"name": "the same unavoidable case holds whichever end is left", "segment": ["1","2","3","4","5","6"], "taken": ["1","5","6"], "selected": ["3","4"], "orphans": []},
+  {"name": "a seat that was already isolated is never the buyer's fault", "segment": ["1","2","3","4","5","6"], "taken": ["2"], "selected": ["5","6"], "orphans": []},
+  {"name": "filling a free run completely leaves no orphan", "segment": ["1","2","3","4","5","6"], "taken": ["1","2"], "selected": ["3","4","5","6"], "orphans": []},
+  {"name": "splitting a party across a row can strand the seat between them", "segment": ["1","2","3","4","5","6","7"], "taken": [], "selected": ["1","2","4","5"], "orphans": ["3"]},
+  {"name": "a pair left between the party and a sold seat is fine", "segment": ["1","2","3","4","5","6"], "taken": ["6"], "selected": ["1","2"], "orphans": []},
+  {"name": "a single seat segment cannot be orphaned by taking it", "segment": ["1"], "taken": [], "selected": ["1"], "orphans": []},
+  {"name": "untouched segments are ignored", "segment": ["1","2","3"], "taken": ["2"], "selected": [], "orphans": []},
+  {"name": "taking one seat from a run of two is unavoidable", "segment": ["1","2","3","4"], "taken": ["1","4"], "selected": ["2"], "orphans": []},
+  {"name": "taking one seat from the middle of three strands both neighbours", "segment": ["1","2","3","4","5"], "taken": ["1","5"], "selected": ["3"], "orphans": ["2","4"]}
+]

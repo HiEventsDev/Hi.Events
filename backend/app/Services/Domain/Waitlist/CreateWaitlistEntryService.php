@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\EmailHelper;
 use HiEvents\Jobs\Waitlist\SendWaitlistConfirmationEmailJob;
@@ -19,6 +20,7 @@ class CreateWaitlistEntryService
     public function __construct(
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
         private readonly DatabaseManager $databaseManager,
+        private readonly SeatedProductLookupService $seatedProductLookup,
     ) {}
 
     /**
@@ -63,6 +65,10 @@ class CreateWaitlistEntryService
     {
         if ($product->getWaitlistEnabled() !== true) {
             throw new ResourceConflictException(__('Waitlist is not enabled for this product'));
+        }
+
+        if ($this->seatedProductLookup->isSeated($product->getId())) {
+            throw new ResourceConflictException(__('The waitlist is not available for reserved seating tickets'));
         }
     }
 

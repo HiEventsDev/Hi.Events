@@ -25,6 +25,11 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
 
     private bool $isLockedBehindEarlierTier = false;
 
+    /**
+     * @var array<string, float>|null
+     */
+    private ?array $bandPrices = null;
+
     public function getPriceBeforeDiscount(): ?float
     {
         return $this->priceBeforeDiscount;
@@ -129,6 +134,24 @@ class ProductPriceDomainObject extends Generated\ProductPriceDomainObjectAbstrac
     public function setIsLockedBehindEarlierTier(bool $isLocked): self
     {
         $this->isLockedBehindEarlierTier = $isLocked;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, float>|null
+     */
+    public function getBandPrices(): ?array
+    {
+        return $this->bandPrices;
+    }
+
+    /**
+     * @param  array<string, float>|null  $bandPrices
+     */
+    public function setBandPrices(?array $bandPrices): self
+    {
+        $this->bandPrices = $bandPrices;
 
         return $this;
     }

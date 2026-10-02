@@ -715,6 +715,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         <button
                             className={classes.scrollToTicketsButton}
                             onClick={() => continueButtonNode?.click()}
+                            data-testid="floating-checkout-button"
                         >
                             <IconTicket size={18}/>
                             {selectedCart.total > 0

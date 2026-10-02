@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Helper\EmailHelper;
 use HiEvents\Jobs\Waitlist\SendWaitlistConfirmationEmailJob;
@@ -26,12 +27,16 @@ class CreateWaitlistEntryServiceTest extends TestCase
 
     private MockInterface|DatabaseManager $databaseManager;
 
+    private SeatedProductLookupService|MockInterface $seatedProductLookup;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
+        $this->seatedProductLookup = Mockery::mock(SeatedProductLookupService::class);
+        $this->seatedProductLookup->shouldReceive('isSeated')->andReturn(false)->byDefault();
 
         $this->databaseManager
             ->shouldReceive('transaction')
@@ -42,6 +47,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
         $this->service = new CreateWaitlistEntryService(
             waitlistEntryRepository: $this->waitlistEntryRepository,
             databaseManager: $this->databaseManager,
+            seatedProductLookup: $this->seatedProductLookup,
         );
     }
 
@@ -63,6 +69,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+        $product->shouldReceive('getId')->andReturn(5);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -137,6 +144,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+        $product->shouldReceive('getId')->andReturn(5);
 
         $existingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
 
@@ -180,6 +188,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+        $product->shouldReceive('getId')->andReturn(5);
 
         $this->waitlistEntryRepository
             ->shouldReceive('findFirstWhere')
@@ -225,6 +234,7 @@ class CreateWaitlistEntryServiceTest extends TestCase
 
         $product = Mockery::mock(ProductDomainObject::class);
         $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+        $product->shouldReceive('getId')->andReturn(5);
 
         $existingEntry = Mockery::mock(WaitlistEntryDomainObject::class);
 
@@ -317,5 +327,28 @@ class CreateWaitlistEntryServiceTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    public function test_throws_exception_for_reserved_seating_product(): void
+    {
+        $dto = new CreateWaitlistEntryDTO(
+            event_id: 1,
+            product_price_id: 10,
+            email: 'test@example.com',
+            first_name: 'John',
+            last_name: 'Doe',
+            locale: 'en',
+        );
+
+        $product = Mockery::mock(ProductDomainObject::class);
+        $product->shouldReceive('getWaitlistEnabled')->andReturn(true);
+        $product->shouldReceive('getId')->andReturn(5);
+
+        $this->seatedProductLookup->shouldReceive('isSeated')->once()->with(5)->andReturn(true);
+        $this->waitlistEntryRepository->shouldNotReceive('create');
+
+        $this->expectException(ResourceConflictException::class);
+
+        $this->service->createEntry($dto, new EventSettingDomainObject, $product);
     }
 }

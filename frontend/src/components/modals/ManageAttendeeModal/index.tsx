@@ -14,7 +14,10 @@ import {AttendeeTicket} from "../../common/AttendeeTicket";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
 import classes from './ManageAttendeeModal.module.scss';
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import {AttendeeSeatField} from "../../../ee/seating/components/AttendeeSeatField";
+import {indexLayout, bandOf} from "../../../ee/seating/components/lib/layoutIndex.ts";
+import {useGetEventSeatMap} from "../../../ee/seating/queries/useGetEventSeatMap.ts";
 import {showSuccess} from "../../../utilites/notifications.tsx";
 import {ProductSelector} from "../../common/ProductSelector";
 import {GenericModalProps, IdParam, Product, ProductCategory, ProductType, QuestionAnswer} from "../../../types.ts";
@@ -46,6 +49,16 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
     const {data: attendee, refetch: refetchAttendee} = useGetAttendee(eventId, attendeeId);
     const {data: order} = useGetOrder(eventId, attendee?.order_id);
     const {data: event} = useGetEvent(eventId);
+    const seatMap = useGetEventSeatMap(eventId, !!event?.has_seat_map && !!attendee?.seat_uid).data;
+    const seatBandProductIds = useMemo(() => {
+        if (!seatMap || !attendee?.seat_uid) {
+            return null;
+        }
+        const band = bandOf(indexLayout(seatMap.layout), attendee.seat_uid);
+        return new Set(seatMap.band_products
+            .filter(link => link.band_key === band)
+            .flatMap(band => band.products.map(link => link.product_id)));
+    }, [seatMap, attendee?.seat_uid]);
     const errorHandler = useFormErrorResponseHandler();
     const mutation = useUpdateAttendee();
     const {getAttendeeActions, attendeeActionModals} = useAttendeeActions({
@@ -72,7 +85,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
             form.initialize({
                 first_name: attendee.first_name,
                 last_name: attendee.last_name,
-                email: attendee.email,
+                email: attendee.email ?? "",
                 notes: attendee.notes || "",
                 product_id: String(attendee.product_id),
                 product_price_id: attendee.product_price_id ? String(attendee.product_price_id) : "",
@@ -120,6 +133,11 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
         setIsEditing(false);
     };
 
+    const productCategories = (event.product_categories ?? []).map(category => seatBandProductIds ? {
+        ...category,
+        products: category.products?.filter(product => seatBandProductIds.has(Number(product.id))),
+    } : category) as ProductCategory[];
+
     const fullName = `${attendee.first_name} ${attendee.last_name}`;
     const questionAnswers = attendee.question_answers ?? [];
     const checkIns = attendee.check_ins ?? [];
@@ -148,9 +166,15 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
     ];
 
     const fields: DrawerStat[] = [
+        ...(attendee.seat_uid ? [{
+            label: t`Seat`,
+            value: <AttendeeSeatField eventId={eventId} attendee={attendee}/>,
+        }] : []),
         {
             label: t`Email`,
-            value: <Anchor href={'mailto:' + attendee.email} target="_blank">{attendee.email}</Anchor>,
+            value: attendee.email
+                ? <Anchor href={'mailto:' + attendee.email} target="_blank">{attendee.email}</Anchor>
+                : t`No email provided`,
         },
         {
             label: t`Language`,
@@ -174,7 +198,7 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                 </Avatar>
             )}
             title={<span>{fullName}</span>}
-            subtitle={<span>{attendee.email}</span>}
+            subtitle={attendee.email ? <span>{attendee.email}</span> : null}
         />
     );
 
@@ -202,16 +226,16 @@ export const ManageAttendeeModal = ({onClose, attendeeId}: ManageAttendeeModalPr
                         <TextInput {...form.getInputProps("first_name")} label={t`First name`}
                                    placeholder={t`Homer`} required/>
                         <TextInput {...form.getInputProps("last_name")} label={t`Last name`}
-                                   placeholder={t`Simpson`} required/>
+                                   placeholder={t`Simpson`} required={!order.box_office_id}/>
                     </InputGroup>
                     <InputGroup>
                         <TextInput {...form.getInputProps("email")} label={t`Email address`}
-                                   placeholder="homer@simpson.com" required/>
-                        {event?.product_categories && event.product_categories.length > 0 && (
+                                   placeholder="homer@simpson.com" required={!order.box_office_id}/>
+                        {productCategories.length > 0 && (
                             <ProductSelector
                                 placeholder={t`Select Product`}
                                 label={t`Product`}
-                                productCategories={event.product_categories as ProductCategory[]}
+                                productCategories={productCategories}
                                 form={form}
                                 productFieldName={"product_id"}
                                 includedProductTypes={[ProductType.Ticket]}

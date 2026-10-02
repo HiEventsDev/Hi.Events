@@ -27,13 +27,20 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
 
     private Collection $orderQuestions;
 
+    private bool $includeSeats = false;
+
     public function __construct(private QuestionAnswerFormatter $questionAnswerFormatter) {}
 
-    public function withData(LengthAwarePaginator|Collection $data, Collection $productQuestions, Collection $orderQuestions): AttendeesExport
-    {
+    public function withData(
+        LengthAwarePaginator|Collection $data,
+        Collection $productQuestions,
+        Collection $orderQuestions,
+        bool $includeSeats = false,
+    ): AttendeesExport {
         $this->data = $data;
         $this->productQuestions = $productQuestions;
         $this->orderQuestions = $orderQuestions;
+        $this->includeSeats = $includeSeats;
 
         return $this;
     }
@@ -61,12 +68,13 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             __('Product Name'),
             __('Event ID'),
             __('Occurrence Date'),
+            ...($this->includeSeats ? [__('Seat')] : []),
             __('Public ID'),
             __('Short ID'),
             __('Created Date'),
             __('Last Updated Date'),
             __('Notes'),
-        ], $productQuestionTitles, $orderQuestionsTitles);
+        ], $productQuestionTitles, $orderQuestionsTitles, [__('Sales Channel')]);
     }
 
     /**
@@ -135,12 +143,15 @@ class AttendeesExport implements FromCollection, WithHeadings, WithMapping, With
             $ticketName,
             $attendee->getEventId(),
             $occurrenceDate,
+            ...($this->includeSeats ? [$attendee->getSeatLabel()] : []),
             $attendee->getPublicId(),
             $attendee->getShortId(),
             Carbon::parse($attendee->getCreatedAt())->format('Y-m-d H:i:s'),
             Carbon::parse($attendee->getUpdatedAt())->format('Y-m-d H:i:s'),
             $attendee->getNotes(),
-        ], $productAnswers->toArray(), $orderAnswers->toArray());
+        ], $productAnswers->toArray(), $orderAnswers->toArray(), [
+            $attendee->getOrder()?->isBoxOfficeOrder() ? __('Box Office') : __('Online'),
+        ]);
     }
 
     public function styles(Worksheet $sheet): array

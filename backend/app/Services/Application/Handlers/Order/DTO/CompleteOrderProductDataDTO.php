@@ -13,10 +13,10 @@ class CompleteOrderProductDataDTO extends BaseDTO
         #[CollectionOf(OrderQuestionsDTO::class)]
         public readonly ?Collection $questions = null,
 
-        // Only relevant for products with product type 'TICKET'
         public readonly ?string $first_name = null,
         public readonly ?string $last_name = null,
         public readonly ?string $email = null,
+        public readonly ?string $seat_uid = null,
     ) {}
 
     public function isTicketProduct(): bool

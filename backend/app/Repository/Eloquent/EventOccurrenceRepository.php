@@ -2,8 +2,10 @@
 
 namespace HiEvents\Repository\Eloquent;
 
+use Carbon\CarbonInterface;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Models\EventOccurrence;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -35,12 +37,24 @@ class EventOccurrenceRepository extends BaseRepository implements EventOccurrenc
         return $this->handleSingleResult($model);
     }
 
+    public function findUpcomingIdsForEvent(int $eventId, ?CarbonInterface $endedAfter = null): array
+    {
+        return $this->runQuery(fn () => EventOccurrence::query()
+            ->where(EventOccurrenceDomainObjectAbstract::EVENT_ID, $eventId)
+            ->where(EventOccurrenceDomainObjectAbstract::STATUS, '!=', EventOccurrenceStatus::CANCELLED->name)
+            ->whereRaw('COALESCE(end_date, start_date) > ?', [$endedAfter ?? now()])
+            ->orderBy(EventOccurrenceDomainObjectAbstract::START_DATE)
+            ->pluck(EventOccurrenceDomainObjectAbstract::ID)
+            ->map(static fn (int|string $id) => (int) $id)
+            ->all());
+    }
+
     public function findByEventId(int $eventId, QueryParamsDTO $params): LengthAwarePaginator
     {
         $this->model = $this->model->newQuery()->orderBy(
             column: $this->validateSortColumn($params->sort_by, EventOccurrenceDomainObject::class),
             direction: $this->validateSortDirection($params->sort_direction, EventOccurrenceDomainObject::class),
-        );
+        )->orderBy(EventOccurrenceDomainObjectAbstract::ID);
 
         if (! empty($params->filter_fields)) {
             $this->applyFilterFields($params, EventOccurrenceDomainObject::getAllowedFilterFields());

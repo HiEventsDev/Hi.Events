@@ -39,6 +39,10 @@ interface ProductRepositoryInterface extends RepositoryInterface
 
     public function removeCheckInListFromProducts(int $checkInListId): void;
 
+    public function addBoxOfficeToProducts(int $boxOfficeId, array $productIds): void;
+
+    public function removeBoxOfficeFromProducts(int $boxOfficeId): void;
+
     public function removeCapacityAssignmentFromProducts(int $capacityAssignmentId): void;
 
     public function bulkUpdateProductsAndCategories(int $eventId, array $productUpdates, array $categoryUpdates): void;

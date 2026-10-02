@@ -9,6 +9,10 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -16,6 +20,7 @@ use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
+use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
 use HiEvents\Services\Domain\Order\OrderItemProcessingService;
 use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
@@ -23,6 +28,7 @@ use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -82,6 +88,12 @@ class CreateOrderHandlerTest extends TestCase
             $this->availabilityService,
             $this->occurrenceEligibilityService,
             $this->databaseManager,
+            Mockery::mock(SeatClaimService::class)->shouldIgnoreMissing(),
+            new SeatingEventLockService(
+                new TransactionLockService($this->databaseManager),
+                Mockery::mock(EventSeatMapLookupService::class)->shouldIgnoreMissing(),
+                Mockery::mock(SeatedProductLookupService::class)->shouldIgnoreMissing(),
+            ),
         );
     }
 
@@ -97,7 +109,7 @@ class CreateOrderHandlerTest extends TestCase
 
         $this->databaseManager->shouldReceive('statement')
             ->once()
-            ->with('SELECT pg_advisory_xact_lock(?)', [$eventId])
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, $eventId])
             ->andReturn(true);
 
         $this->setupSuccessfulOrderCreation($eventId);
@@ -185,7 +197,7 @@ class CreateOrderHandlerTest extends TestCase
 
         $order = Mockery::mock(OrderDomainObject::class);
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
-        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([Mockery::mock(OrderItemDomainObject::class)]));
+        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([new ProcessedOrderItemDTO(order_item: Mockery::mock(OrderItemDomainObject::class), seat_uids: [])]));
         $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
 
         $dto = $this->createMultiLineOrderDTO([
@@ -266,7 +278,7 @@ class CreateOrderHandlerTest extends TestCase
 
         $order = Mockery::mock(OrderDomainObject::class);
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
-        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([Mockery::mock(OrderItemDomainObject::class)]));
+        $this->orderItemProcessingService->shouldReceive('process')->andReturn(collect([new ProcessedOrderItemDTO(order_item: Mockery::mock(OrderItemDomainObject::class), seat_uids: [])]));
         $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);
 
         $dto = $this->createMultiLineOrderDTO([
@@ -440,7 +452,7 @@ class CreateOrderHandlerTest extends TestCase
 
         $this->orderManagementService->shouldReceive('createNewOrder')->andReturn($order);
 
-        $orderItems = collect([Mockery::mock(OrderItemDomainObject::class)]);
+        $orderItems = collect([new ProcessedOrderItemDTO(order_item: Mockery::mock(OrderItemDomainObject::class), seat_uids: [])]);
         $this->orderItemProcessingService->shouldReceive('process')->andReturn($orderItems);
 
         $this->orderManagementService->shouldReceive('updateOrderTotals')->andReturn($order);

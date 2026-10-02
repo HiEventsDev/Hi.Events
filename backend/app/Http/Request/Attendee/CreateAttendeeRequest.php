@@ -17,6 +17,7 @@ class CreateAttendeeRequest extends BaseRequest
             'product_id' => ['int', 'required'],
             'event_occurrence_id' => ['int', 'nullable', Rule::exists('event_occurrences', 'id')->where('event_id', $eventId)->whereNull('deleted_at')],
             'product_price_id' => ['int', 'nullable'],
+            'seat_uid' => ['nullable', 'string', 'max:24'],
             'email' => ['required', 'email'],
             'first_name' => ['string', 'required', 'max:40'],
             'last_name' => ['string', 'max:40'],

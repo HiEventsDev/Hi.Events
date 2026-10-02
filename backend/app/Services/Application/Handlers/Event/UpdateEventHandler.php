@@ -24,6 +24,7 @@ use HiEvents\Services\Application\Handlers\Event\DTO\UpdateEventDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -38,6 +39,7 @@ readonly class UpdateEventHandler
         private HtmlPurifierService $purifier,
         private EventOccurrenceRepositoryInterface $occurrenceRepository,
         private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -71,7 +73,7 @@ readonly class UpdateEventHandler
         $isCurrencyChanging = $eventData->currency !== null && $eventData->currency !== $existingEvent->getCurrency();
 
         if ($isCurrencyChanging) {
-            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$eventData->id]);
+            $this->transactionLockService->lockEvent($eventData->id);
             $this->guardCurrencyChange($eventData);
         }
 

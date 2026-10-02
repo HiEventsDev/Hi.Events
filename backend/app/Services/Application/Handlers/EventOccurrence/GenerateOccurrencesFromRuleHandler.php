@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventOccurrence\DTO\GenerateOccurrencesDTO;
 use HiEvents\Services\Domain\Event\EventOccurrenceGeneratorService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
 
@@ -18,6 +19,7 @@ class GenerateOccurrencesFromRuleHandler
         private readonly EventOccurrenceGeneratorService $generatorService,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly DatabaseManager $databaseManager,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     /**
@@ -26,7 +28,7 @@ class GenerateOccurrencesFromRuleHandler
     public function handle(GenerateOccurrencesDTO $dto): void
     {
         $this->databaseManager->transaction(function () use ($dto) {
-            $this->databaseManager->statement('SELECT pg_advisory_xact_lock(?)', [$dto->event_id]);
+            $this->transactionLockService->lockEvent($dto->event_id);
 
             $event = $this->eventRepository->findByIdLocked($dto->event_id);
 

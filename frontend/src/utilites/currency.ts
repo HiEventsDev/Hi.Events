@@ -9,6 +9,14 @@ export const formatCurrency = (value: number | string, currency = 'USD') => {
     return formatter.format(value as number);
 }
 
+const ZERO_DECIMAL_CURRENCIES = [
+    'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
+];
+
+export const isZeroDecimalCurrency = (currency: string): boolean => ZERO_DECIMAL_CURRENCIES.includes(currency.toUpperCase());
+
+export const minorUnitFactor = (currency: string): number => isZeroDecimalCurrency(currency) ? 1 : 100;
+
 export const getCurrencySymbol = (currencyCode: string): string => {
     const currencySymbols: { [key: string]: string } = {
         'USD': '$',   // United States Dollar

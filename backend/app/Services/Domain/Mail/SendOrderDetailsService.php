@@ -88,7 +88,7 @@ class SendOrderDetailsService
             $this->sendAttendeeTicketEmails($order, $event);
         }
 
-        if ($order->isOrderFailed()) {
+        if ($order->isOrderFailed() && $order->getEmail() !== null && ! $order->isBoxOfficeOrder()) {
             $this->mailer
                 ->to($order->getEmail())
                 ->locale($order->getLocale())
@@ -109,6 +109,10 @@ class SendOrderDetailsService
         ?InvoiceDomainObject $invoice = null,
         ?EventOccurrenceDomainObject $occurrence = null,
     ): void {
+        if ($order->getEmail() === null) {
+            return;
+        }
+
         $mail = $this->mailBuilderService->buildOrderSummaryMail(
             $order,
             $event,
@@ -143,7 +147,7 @@ class SendOrderDetailsService
     {
         $sentEmails = [];
         foreach ($order->getAttendees() as $attendee) {
-            if (in_array($attendee->getEmail(), $sentEmails, true)) {
+            if ($attendee->getEmail() === null || in_array($attendee->getEmail(), $sentEmails, true)) {
                 continue;
             }
 
@@ -169,7 +173,7 @@ class SendOrderDetailsService
             invoice: $order->getLatestInvoice(),
         );
 
-        if ($order->getIsManuallyCreated() || ! $event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
+        if ($order->getIsManuallyCreated() || $order->isBoxOfficeOrder() || ! $event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
             return;
         }
 

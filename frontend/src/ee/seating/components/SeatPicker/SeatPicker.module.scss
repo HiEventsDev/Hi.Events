@@ -1,0 +1,267 @@
+.layout {
+    display: flex;
+    height: calc(100dvh - 60px);
+    min-height: 0;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.stage {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ececf1;
+
+    @media (max-width: 768px) {
+        border-right: 0;
+    }
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #ececf1;
+    overflow-x: auto;
+}
+
+.map {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.zoomControls {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.legend {
+    padding: 8px 12px;
+    border-top: 1px solid #ececf1;
+}
+
+.basket {
+    width: 360px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    min-height: 0;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        max-height: 46dvh;
+        border-top: 1px solid #ececf1;
+        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.inlineBasket {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bestAvailable,
+.line {
+    :global(.mantine-InputWrapper-root) {
+        margin-bottom: 0;
+    }
+}
+
+.bestAvailable {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--hi-background-color-alt, #f6f5fa);
+}
+
+.bestAvailableRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stepperInput {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.lines {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.line {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hi-border, #f0f0f4);
+}
+
+.line:last-child {
+    border-bottom: 0;
+}
+
+.lineHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.typeOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.typeOption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--hi-border, #e0e0e8);
+    border-radius: 10px;
+    font-size: 15px;
+
+    @media (max-width: 768px) {
+        padding: 8px 10px;
+    }
+
+    &[data-checked] {
+        border-color: var(--hi-accent, #7b5db8);
+        background: var(--hi-soft-accent, #f3effa);
+        font-weight: 600;
+    }
+}
+
+.typeLabel {
+    display: block;
+}
+
+.typeDescription {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--hi-muted, #6b7280);
+}
+
+.typePrice {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--hi-border, #ececf1);
+}
+
+.listView {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 8px 12px;
+}
+
+.seatButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ticketDescription {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--hi-muted, #6b7280);
+
+    p {
+        margin: 0;
+    }
+}
+
+.extrasLayout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - 60px);
+}
+
+.extrasBody {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+
+    :global(.hi-product-widget-container) {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 0;
+    }
+}
+
+.extrasFooter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid #ececf1;
+
+    @media (max-width: 768px) {
+        display: grid;
+        grid-template-columns: auto 1fr;
+    }
+}
+
+.extrasTotal {
+    margin-left: auto;
+    text-align: right;
+}
+
+.extrasCheckout {
+    @media (max-width: 768px) {
+        grid-column: 1 / -1;
+    }
+}

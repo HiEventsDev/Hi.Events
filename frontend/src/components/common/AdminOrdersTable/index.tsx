@@ -108,7 +108,7 @@ const AdminOrdersTable = ({orders, onSort, sortBy, sortDirection}: AdminOrdersTa
                                 <Table.Td>
                                     <div>
                                         <Text size="sm" fw={500}>{order.first_name} {order.last_name}</Text>
-                                        <Text size="xs" c="dimmed">{order.email}</Text>
+                                        <Text size="xs" c="dimmed">{order.email || t`No email provided`}</Text>
                                     </div>
                                 </Table.Td>
                                 <Table.Td>

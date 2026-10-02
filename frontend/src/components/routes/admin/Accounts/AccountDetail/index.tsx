@@ -10,6 +10,7 @@ import {IconArrowLeft, IconCalendar, IconWorld, IconBuildingBank, IconUsers} fro
 import {showSuccess, showError} from "../../../../../utilites/notifications";
 import {AdminOrganizerSummary} from "../../../../../api/admin.client";
 import {OrganizerAdminModal} from "./OrganizerAdminModal";
+import {AccountFeatureFlags} from "./AccountFeatureFlags";
 import classes from "./AccountDetail.module.scss";
 
 const AccountDetail = () => {
@@ -182,6 +183,8 @@ const AccountDetail = () => {
                             />
                         </Stack>
                     </Card>
+
+                    <AccountFeatureFlags accountId={accountId!}/>
 
                     <Card className={classes.accountCard}>
                         <Stack gap="md">

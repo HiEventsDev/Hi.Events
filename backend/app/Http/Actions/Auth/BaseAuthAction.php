@@ -19,7 +19,7 @@ abstract class BaseAuthAction extends BaseAction
             name: 'token',
             value: $token,
             secure: true,
-            sameSite: 'None',
+            sameSite: 'Lax',
         );
     }
 

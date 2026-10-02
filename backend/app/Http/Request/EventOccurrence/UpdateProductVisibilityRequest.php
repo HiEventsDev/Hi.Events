@@ -10,7 +10,7 @@ class UpdateProductVisibilityRequest extends BaseRequest
     {
         return [
             'product_ids' => ['required', 'array', 'min:1'],
-            'product_ids.*' => ['integer', 'distinct'],
+            'product_ids.*' => ['integer'],
         ];
     }
 

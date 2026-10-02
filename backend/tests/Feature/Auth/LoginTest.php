@@ -46,6 +46,7 @@ class LoginTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertCookie('token');
+        $this->assertSame('lax', $response->getCookie('token', false)->getSameSite());
         $response->assertHeader('X-Auth-Token');
         $response->assertJsonStructure([
             'token',

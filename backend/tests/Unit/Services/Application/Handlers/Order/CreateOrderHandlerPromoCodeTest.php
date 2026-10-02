@@ -6,6 +6,10 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -17,6 +21,7 @@ use HiEvents\Services\Domain\Order\OrderManagementService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -110,6 +115,12 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
             $availabilityService,
             $occurrenceEligibilityService,
             $databaseManager,
+            Mockery::mock(SeatClaimService::class)->shouldIgnoreMissing(),
+            new SeatingEventLockService(
+                new TransactionLockService($databaseManager),
+                Mockery::mock(EventSeatMapLookupService::class)->shouldIgnoreMissing(),
+                Mockery::mock(SeatedProductLookupService::class)->shouldIgnoreMissing(),
+            ),
         );
 
         $dto = new CreateOrderPublicDTO(

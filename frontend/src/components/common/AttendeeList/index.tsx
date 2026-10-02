@@ -74,6 +74,7 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                                     {product?.title && (
                                         <Text size="xs" className={classes.product} lineClamp={1}>
                                             {product.title}
+                                            {attendee.seat_label && ` · ${attendee.seat_label}`}
                                         </Text>
                                     )}
                                 </div>
@@ -118,7 +119,6 @@ export const AttendeeList = ({order, products, refetchOrder, questionAnswers = [
                                 </Group>
                             </div>
 
-                            {/* Collapsible answers section */}
                             <Collapse expanded={isExpanded(attendee.id)}>
                                 <div className={classes.answersContainer}>
                                     <QuestionList

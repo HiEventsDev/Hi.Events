@@ -17,6 +17,7 @@ use HiEvents\Services\Application\Handlers\Event\UpdateEventHandler;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Bus;
 use Mockery;
@@ -67,6 +68,7 @@ class UpdateEventHandlerTest extends TestCase
             $this->purifier,
             $this->occurrenceRepository,
             new EventSpamCheckDispatchService($this->eventSpamCheckService),
+            new TransactionLockService($this->databaseManager),
         );
     }
 
@@ -88,7 +90,7 @@ class UpdateEventHandlerTest extends TestCase
         $this->databaseManager
             ->shouldReceive('statement')
             ->once()
-            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, 1]);
 
         $this->orderRepository
             ->shouldReceive('findFirstWhere')
@@ -127,7 +129,7 @@ class UpdateEventHandlerTest extends TestCase
         $this->databaseManager
             ->shouldReceive('statement')
             ->once()
-            ->with('SELECT pg_advisory_xact_lock(?)', [1]);
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::EVENT_LOCK_KEYSPACE, 1]);
 
         $this->orderRepository
             ->shouldReceive('findFirstWhere')

@@ -90,10 +90,11 @@ trait InsertsRecurringEventRows
         string $appliesTo = ProductQuantityAppliesTo::OCCURRENCE->name,
         int $quantitySold = 0,
         ?string $label = null,
+        float $price = 10.00,
     ): int {
         return DB::table('product_prices')->insertGetId([
             'product_id' => $productId,
-            'price' => 10.00,
+            'price' => $price,
             'label' => $label,
             'initial_quantity_available' => $initialQuantity,
             'quantity_applies_to' => $appliesTo,
@@ -117,9 +118,9 @@ trait InsertsRecurringEventRows
         ]);
     }
 
-    private function insertOrderItem(int $orderId, int $productId, int $priceId, int $occurrenceId, int $quantity, string $productType = ProductType::TICKET->name): void
+    private function insertOrderItem(int $orderId, int $productId, int $priceId, int $occurrenceId, int $quantity, string $productType = ProductType::TICKET->name): int
     {
-        DB::table('order_items')->insert([
+        return DB::table('order_items')->insertGetId([
             'order_id' => $orderId,
             'product_id' => $productId,
             'product_price_id' => $priceId,

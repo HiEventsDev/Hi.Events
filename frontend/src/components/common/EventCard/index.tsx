@@ -7,6 +7,7 @@ import {
     IconCopy,
     IconDotsVertical,
     IconEye,
+    IconArmchair,
     IconRepeat,
     IconSettings,
 } from "@tabler/icons-react";
@@ -181,6 +182,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
     const isEnded = event.lifecycle_status === 'ENDED';
     const isDraft = event.status === 'DRAFT';
     const isRecurring = event.type === EventType.RECURRING;
+    const isSeated = event.has_seat_map === true;
 
     const displayDate = (isRecurring && event.next_occurrence_start_date) || event.start_date;
     const hasDate = isValidDate(displayDate);
@@ -216,6 +218,11 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                 {isRecurring && (
                                     <span className={classes.compactRecurringIcon} aria-label={t`Recurring`}>
                                         <IconRepeat size={12}/>
+                                    </span>
+                                )}
+                                {isSeated && (
+                                    <span className={classes.compactRecurringIcon} aria-label={t`Reserved seating`}>
+                                        <IconArmchair size={12}/>
                                     </span>
                                 )}
                             </div>
@@ -311,9 +318,10 @@ export function EventCard({event, compact = false}: EventCardProps) {
                             </div>
                         )}
 
-                        {isRecurring && (
+                        {(isRecurring || isSeated) && (
                             <div className={classes.recurringBadge}>
-                                <IconRepeat size={12}/>
+                                {isRecurring && <IconRepeat size={12} aria-label={t`Recurring`}/>}
+                                {isSeated && <IconArmchair size={12} aria-label={t`Reserved seating`}/>}
                             </div>
                         )}
                     </div>
@@ -328,6 +336,12 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                         <span className={classes.recurringLabel}>
                                             <IconRepeat size={11}/>
                                             {t`Recurring`}
+                                        </span>
+                                    )}
+                                    {isSeated && (
+                                        <span className={classes.recurringLabel}>
+                                            <IconArmchair size={11}/>
+                                            {t`Seated`}
                                         </span>
                                     )}
                                 </span>

@@ -138,10 +138,15 @@ export interface PublicOrder {
 export interface OrderRecord {
   id: number;
   short_id: string;
+  public_id: string;
   status: string;
   payment_status?: string | null;
   email: string;
   total_gross: number;
+  box_office_id?: number | null;
+  box_office_tender?: string | null;
+  box_office_reference?: string | null;
+  order_items?: { event_occurrence_id?: number | null; band_key?: string | null; price?: number | string; product_price_id?: number; item_name?: string }[];
 }
 
 export interface AttendeeRecord {
@@ -152,6 +157,9 @@ export interface AttendeeRecord {
   last_name: string;
   email: string;
   status: string;
+  order_id: number;
+  product_id: number;
+  seat_label?: string | null;
 }
 
 export interface PromoCode {
@@ -271,6 +279,27 @@ export interface CreateTaxOrFeePayload {
   description?: string;
 }
 
+export interface BoxOffice {
+  id: number;
+  short_id: string;
+  name: string;
+  is_system_default: boolean;
+  has_pin: boolean;
+}
+
+export interface CreateBoxOfficePayload {
+  name: string;
+  description?: string;
+  product_ids?: number[];
+  event_occurrence_id?: number | null;
+  check_in_list_id?: number | null;
+  allow_price_override?: boolean;
+  allow_discounts?: boolean;
+  collect_order_questions?: boolean;
+  expires_at?: string;
+  activates_at?: string;
+}
+
 export interface CreateCheckInListPayload {
   name: string;
   description?: string;
@@ -290,6 +319,7 @@ export interface CreateAttendeePayload {
   amount_paid: number;
   send_confirmation_email: boolean;
   locale: string;
+  seat_uid?: string;
 }
 
 export interface CreateCapacityAssignmentPayload {

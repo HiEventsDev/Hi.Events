@@ -90,7 +90,7 @@ Webhooks are configured per event or organizer (see the *Webhooks* endpoints) an
 | `checkin.created`, `checkin.deleted` | `AttendeeCheckInResource` |
 | `occurrence.cancelled` | `EventOccurrenceResource` |
 
-`order.created` and `order.cancelled` additionally emit an `attendee.created` / `attendee.cancelled` webhook for each attendee on the order. Deliveries are signed: the `Signature` header contains an HMAC-SHA256 hash of the JSON body using your webhook's secret.
+`email` on an order payload is `null` for box office sales made without a buyer email. `order.created` and `order.cancelled` additionally emit an `attendee.created` / `attendee.cancelled` webhook for each attendee on the order. Deliveries are signed: the `Signature` header contains an HMAC-SHA256 hash of the JSON body using your webhook's secret.
 MARKDOWN,
     ],
 

@@ -68,7 +68,14 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             __('Notes'),
             __('Promo Code'),
             __('Opted In To Marketing'),
-        ], $questionTitles);
+        ], $questionTitles, [
+            __('Sales Channel'),
+            __('Tender'),
+            __('Operator'),
+            __('Amount Tendered'),
+            __('Change Due'),
+            __('Reference'),
+        ]);
     }
 
     /**
@@ -120,7 +127,14 @@ class OrdersExport implements FromCollection, WithHeadings, WithMapping, WithSty
             $order->getNotes(),
             $order->getPromoCode(),
             $order->getOptedIntoMarketingAt() ? 'Yes' : 'No',
-        ], $answers->toArray());
+        ], $answers->toArray(), [
+            $order->isBoxOfficeOrder() ? __('Box Office') : __('Online'),
+            $order->getBoxOfficeTender(),
+            $order->getBoxOfficeOperatorName(),
+            $order->getBoxOfficeAmountTendered(),
+            $order->getBoxOfficeChangeDue(),
+            $order->getBoxOfficeReference(),
+        ]);
     }
 
     public function styles(Worksheet $sheet): array

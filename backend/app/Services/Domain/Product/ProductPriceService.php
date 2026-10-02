@@ -14,6 +14,11 @@ use HiEvents\Services\Domain\Product\DTO\PriceDTO;
 
 class ProductPriceService
 {
+    /**
+     * @var array<string, float|null>
+     */
+    private array $overridePrices = [];
+
     public function __construct(
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $priceOverrideRepository,
     ) {}
@@ -35,8 +40,19 @@ class ProductPriceService
         OrderProductPriceDTO $productOrderDetail,
         ?PromoCodeDomainObject $promoCode,
         ?int $eventOccurrenceId = null,
+        bool $allowClientPrice = false,
+        float $bandPriceAdjustment = 0.0,
     ): PriceDTO {
         $price = $this->determineProductPrice($product, $productOrderDetail, $eventOccurrenceId);
+
+        if ($allowClientPrice && $productOrderDetail->price !== null && ! $product->isDonationType()) {
+            return new PriceDTO(
+                price: Currency::round($productOrderDetail->price),
+                price_before_discount: $price,
+            );
+        }
+
+        $price = $this->applyBandAdjustment($price, $bandPriceAdjustment);
 
         if ($product->getType() === ProductPriceType::FREE->name) {
             return new PriceDTO(0.00);
@@ -107,11 +123,24 @@ class ProductPriceService
             return null;
         }
 
-        $override = $this->priceOverrideRepository->findFirstWhere([
-            'event_occurrence_id' => $eventOccurrenceId,
-            'product_price_id' => $priceId,
-        ]);
+        $key = $priceId.':'.$eventOccurrenceId;
 
-        return $override?->getPrice();
+        if (! array_key_exists($key, $this->overridePrices)) {
+            $this->overridePrices[$key] = $this->priceOverrideRepository->findFirstWhere([
+                'event_occurrence_id' => $eventOccurrenceId,
+                'product_price_id' => $priceId,
+            ])?->getPrice();
+        }
+
+        return $this->overridePrices[$key];
+    }
+
+    private function applyBandAdjustment(float $price, float $adjustment): float
+    {
+        if ($adjustment === 0.0) {
+            return $price;
+        }
+
+        return max(0.0, Currency::round($price + $adjustment));
     }
 }

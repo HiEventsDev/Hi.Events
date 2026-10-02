@@ -127,11 +127,13 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
                         }}
                     />
                     <Stack gap="xs">
-                        <Checkbox
-                            {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
-                            label={t`Send refund notification email`}
-                            description={t`Customer will receive an email confirming the refund`}
-                        />
+                        {order.email && (
+                            <Checkbox
+                                {...form.getInputProps('notify_buyer', {type: 'checkbox'})}
+                                label={t`Send refund notification email`}
+                                description={t`Customer will receive an email confirming the refund`}
+                            />
+                        )}
 
                         {order.status !== 'CANCELLED' && (
                             <Checkbox

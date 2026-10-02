@@ -4,7 +4,9 @@ namespace HiEvents\Resources\Order;
 
 use Carbon\Carbon;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\BoxOffice\Http\Middleware\AuthenticateBoxOfficeSession;
 use HiEvents\Resources\Attendee\AttendeeResourcePublic;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\Event\EventResourcePublic;
@@ -72,9 +74,42 @@ class OrderResourcePublic extends BaseResource
                     fn ($attendee) => new AttendeeResourcePublic($attendee, $includePostCheckoutData),
                 )
             ),
+            'seats' => $this->when(
+                ! is_null($this->getSeatClaims()),
+                fn () => $this->getSeatClaims()->map(fn (SeatClaimDomainObject $claim) => [
+                    'seat_uid' => $claim->getSeatUid(),
+                    'seat_label' => $claim->getSeatLabel(),
+                    'order_item_id' => $claim->getOrderItemId(),
+                ])->values()
+            ),
             $this->mergeWhen($this->getSessionIdentifier() !== null, fn () => [
                 'session_identifier' => $this->getSessionIdentifier(),
             ]),
+            $this->mergeWhen($this->isBoxOfficeOrder() && $request->attributes->has(AuthenticateBoxOfficeSession::SESSION_ATTRIBUTE), fn () => [
+                'created_at' => $this->getCreatedAt(),
+                'box_office_operator_name' => $this->getBoxOfficeOperatorName(),
+                /** @var 'CASH'|'CARD'|'COMP'|'OTHER'|'FREE'|null */
+                'box_office_tender' => $this->getBoxOfficeTender(),
+                'box_office_amount_tendered' => $this->getBoxOfficeAmountTendered(),
+                'box_office_change_due' => $this->getBoxOfficeChangeDue(),
+                'box_office_reference' => $this->getBoxOfficeReference(),
+                'box_office_card_error' => $this->cardError(),
+            ]),
+        ];
+    }
+
+    private function cardError(): ?array
+    {
+        $error = $this->getStripePayment()?->getLastError();
+
+        if ($error === null) {
+            return null;
+        }
+
+        return [
+            'code' => $error['decline_code'] ?? $error['code'] ?? null,
+            'message' => $error['message'] ?? null,
+            'charge_id' => $error['charge_id'] ?? null,
         ];
     }
 }

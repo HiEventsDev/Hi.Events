@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
@@ -44,6 +45,7 @@ class ProductFilterServiceTest extends TestCase
             platformFeeService: Mockery::mock(OrderPlatformFeePassThroughService::class),
             eventRepository: $this->eventRepository,
             productOccurrenceVisibilityRepository: Mockery::mock(ProductOccurrenceVisibilityRepositoryInterface::class),
+            seatedProductLookup: Mockery::mock(SeatedProductLookupService::class, ['linksForEvent' => collect()]),
         );
     }
 

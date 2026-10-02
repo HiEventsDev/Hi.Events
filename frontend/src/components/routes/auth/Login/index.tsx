@@ -1,7 +1,6 @@
 import {Button, PasswordInput, TextInput, Collapse, UnstyledButton} from "@mantine/core";
 import {NavLink, useLocation} from "react-router";
 import {useMutation} from "@tanstack/react-query";
-import {notifications} from '@mantine/notifications';
 import {authClient} from "../../../../api/auth.client.ts";
 import {LoginData, LoginResponse} from "../../../../types.ts";
 import {useForm} from "@mantine/form";
@@ -48,12 +47,10 @@ const Login = () => {
             }
         },
 
-        onError: () => {
-            notifications.show({
-                message: t`Please check your email and password and try again`,
-                color: 'red',
-                position: 'top-center',
-            });
+        onError: (error: any) => {
+            showError(error?.response?.status === 429
+                ? t`Too many attempts. Please wait a minute and try again.`
+                : t`Please check your email and password and try again`);
         }
     });
 

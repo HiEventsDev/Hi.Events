@@ -108,9 +108,9 @@ const dayjsLocaleLoaders: Partial<Record<SupportedLocales, () => Promise<unknown
     fi: () => import("dayjs/locale/fi"),
 };
 
-export async function dynamicActivateLocale(locale: string) {
+export async function dynamicActivateLocale(locale: string): Promise<string> {
+    locale = availableLocales.includes(locale) ? locale : "en";
     try {
-        locale = availableLocales.includes(locale) ? locale : "en";
         const [module] = await Promise.all([
             import(`./locales/${locale}.po`),
             dayjsLocaleLoaders[locale as SupportedLocales]?.().catch((error) => console.error("Error loading dayjs locale:", error)),
@@ -119,8 +119,8 @@ export async function dynamicActivateLocale(locale: string) {
         i18n.activate(locale);
     } catch (error) {
         console.error("Error loading locale:", error);
-        // i18n.activate("en");
     }
+    return locale;
 }
 
 export const getSupportedLocale = (userLocale: string) => {
