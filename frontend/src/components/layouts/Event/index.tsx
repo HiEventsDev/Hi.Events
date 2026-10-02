@@ -17,10 +17,12 @@ import {
     IconSend,
     IconSettings,
     IconShare,
+    IconCashRegister,
     IconTicket,
     IconTrendingUp,
     IconUserQuestion,
     IconUsers,
+    IconArmchair,
     IconUsersGroup,
     IconWebhook,
     IconListCheck,
@@ -47,11 +49,13 @@ import {TopBarButton} from "../../common/TopBarButton";
 import {useWindowWidth} from "../../../hooks/useWindowWidth.ts";
 import {SidebarCallout} from "../../common/SidebarCallout";
 import {useGetMe} from "../../../queries/useGetMe.ts";
+import {FeatureFlag} from "../../../constants/featureFlags.ts";
 import {useResendEmailConfirmation} from "../../../mutations/useResendEmailConfirmation.ts";
 import {useMemo, useState} from "react";
 import {eventHomepageUrl} from "../../../utilites/urlHelper.ts";
 import {EventType} from "../../../types.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
+import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
 
 const EventLayout = () => {
@@ -67,6 +71,8 @@ const EventLayout = () => {
     const {data: event, isFetched: isEventFetched} = useGetEvent(eventId);
     const {isFetched: isEventSettingsFetched} = useGetEventSettings(eventId);
     const {data: eventCounts} = useGetEventCounts(eventId);
+    const seating = useLicensedFeature(FeatureFlag.SEATING);
+    const boxOffice = useLicensedFeature(FeatureFlag.BOX_OFFICE);
     const {data: me} = useGetMe();
 
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
@@ -117,6 +123,7 @@ const EventLayout = () => {
         {link: 'settings', label: t`Event Settings`, icon: IconSettings},
         {link: 'homepage-designer', label: t`Homepage Designer`, icon: IconPaint},
         {link: 'ticket-designer', label: t`Ticket Designer`, icon: IconTicket},
+        {link: 'seating', label: t`Seating`, icon: IconArmchair, showWhen: () => seating.isEnabled || !!event?.has_seat_map},
         {link: 'questions', label: t`Registration Questions`, icon: IconUserQuestion},
 
         // 3. Ticketing & Sales
@@ -130,6 +137,7 @@ const EventLayout = () => {
         {label: t`Guest Management`},
         {link: 'attendees', label: t`Attendees`, icon: IconUsers, badge: eventCounts?.total_attendees_registered},
         {link: 'check-in', label: t`Check-In Lists`, icon: IconQrcode},
+        {link: 'box-office', label: t`Box Office`, icon: IconCashRegister, showWhen: () => boxOffice.isVisible},
         {link: 'messages', label: t`Messages`, icon: IconSend},
         {link: 'sold-out-waitlist', label: t`Waitlist`, icon: IconListCheck},
         {

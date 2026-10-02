@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductOccurrenceVisibilityDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatSelectionValidationService;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
@@ -107,6 +108,7 @@ class OrderCreateRequestValidationServiceTest extends TestCase
             $this->availabilityService,
             $eligibilityService,
             $this->productPriceService,
+            Mockery::mock(SeatSelectionValidationService::class)->shouldIgnoreMissing(),
         );
     }
 

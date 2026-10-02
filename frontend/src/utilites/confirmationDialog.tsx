@@ -39,3 +39,19 @@ export const confirmationDialog = (
         onConfirm: () => onConfirm(),
     });
 }
+
+export const confirmationDialogAsync = (
+    message: string,
+    options?: ConfirmationDialogOptions,
+): Promise<boolean> => new Promise(resolve => {
+    modals.openConfirmModal({
+        title: message,
+        labels: {
+            confirm: options?.confirm || t`Confirm`,
+            cancel: options?.cancel || t`Cancel`,
+        },
+        onConfirm: () => resolve(true),
+        onCancel: () => resolve(false),
+        onClose: () => resolve(false),
+    });
+});

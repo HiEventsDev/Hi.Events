@@ -8,10 +8,18 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 
 abstract class BasePublicEventAction extends BaseAction
 {
+    protected function canUserViewEventWithId(int $eventId): bool
+    {
+        $event = app(EventRepositoryInterface::class)->findFirst($eventId);
+
+        return $event !== null && $this->canUserViewEvent($event);
+    }
+
     protected function canUserViewEvent(EventDomainObject $event): bool
     {
         if ($event->getStatus() === EventStatus::LIVE->name) {

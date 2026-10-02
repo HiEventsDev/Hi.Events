@@ -26,6 +26,7 @@ class CompleteOrderRequest extends BaseRequest
                 'order.address.zip_or_postal_code' => ['nullable', 'string', 'max:85'],
                 'order.address.country' => ['nullable', 'string', 'max:2'],
                 'products' => ['array'],
+                'products.*.seat_uid' => ['nullable', 'string', 'max:24'],
             ];
         }
 

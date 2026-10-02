@@ -107,14 +107,14 @@ export const useOrderActions = ({eventId, onManage, onEdit}: UseOrderActionsOpti
                 group: 'primary',
                 dataTestId: 'order-edit-button',
             },
-            {
+            !!order.email && {
                 key: 'message',
                 label: t`Message buyer`,
                 icon: <IconSend size={14}/>,
                 onClick: () => openModal(order, messageModal),
                 group: 'primary',
             },
-            order.status === 'COMPLETED' && {
+            order.status === 'COMPLETED' && !!order.email && {
                 key: 'resend',
                 label: t`Resend order email`,
                 icon: <IconRepeat size={14}/>,

@@ -28,7 +28,7 @@ export interface FinaliseOrderPayload {
 export interface EditOrderPayload {
     first_name: string,
     last_name: string,
-    email: string,
+    email: string | null,
     notes: string,
 }
 
@@ -36,6 +36,7 @@ export interface ProductPriceQuantityFormValue {
     price?: number,
     quantity: number,
     price_id: number,
+    seat_uids?: string[],
 }
 
 export interface ProductFormValue {

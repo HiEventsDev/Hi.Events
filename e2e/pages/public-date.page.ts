@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { CheckoutPage, type BuyerDetails } from './checkout.page';
-import { occurrenceDayLabel, PublicOccurrenceSelector } from './occurrence.page';
+import { PublicOccurrenceSelector } from './occurrence.page';
 import type { Occurrence } from '../api/types';
 
 export interface PublicDateEvent {
@@ -20,7 +20,7 @@ export class PublicDateView {
 
   async open(date: Occurrence): Promise<void> {
     await this.checkout.gotoPublicEvent(this.event.eventId, this.event.slug);
-    await this.selector.selectDay(occurrenceDayLabel(date.start_date));
+    await this.selector.selectDay(date.start_date);
     await expect(this.selector.productsLoadingOverlay()).toHaveCount(0);
   }
 

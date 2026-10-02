@@ -28,6 +28,7 @@ class OccurrencePurchaseEligibilityService
         bool $overrideCapacity = false,
         ?EventOccurrenceDomainObject $occurrence = null,
         ?int $reservedQuantity = null,
+        bool $allowPastOccurrence = false,
     ): EventOccurrenceDomainObject {
         $occurrence ??= $this->occurrenceRepository->findFirstWhere([
             'id' => $occurrenceId,
@@ -50,7 +51,7 @@ class OccurrencePurchaseEligibilityService
             ]);
         }
 
-        if ($occurrence->isPast()) {
+        if ($occurrence->isPast() && ! $allowPastOccurrence) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => $this->purchasabilityMessage(
                     $eventId,

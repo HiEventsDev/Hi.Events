@@ -1,0 +1,126 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.mapCard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.mapPreview {
+    display: block;
+    height: 140px;
+    background: var(--mantine-color-gray-0);
+    border-bottom: 1px solid var(--mantine-color-gray-2);
+}
+
+.mapDetails {
+    padding: 0 16px;
+}
+
+.mapName {
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+
+.muted {
+    color: var(--mantine-color-dimmed);
+    font-size: 13px;
+}
+
+.templates {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 10px;
+}
+
+.template,
+.scratchOption {
+    border: 1.5px solid var(--mantine-color-gray-3);
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        border-color: var(--mantine-color-gray-5);
+    }
+
+    &[data-selected="true"] {
+        border-color: var(--mantine-primary-color-filled);
+        box-shadow: 0 0 0 2px var(--mantine-primary-color-light);
+    }
+}
+
+.chooserHeading {
+    margin: 0 0 10px;
+    font-size: 15px;
+}
+
+.scratchOption {
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding: 14px 16px;
+    color: var(--mantine-color-text);
+    text-align: center;
+
+    > span {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+}
+
+.optionName {
+    font-weight: 600;
+}
+
+.templatesHeading {
+    margin: 14px 0 8px;
+    color: var(--mantine-color-dimmed);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.templateDescription {
+    padding: 0 8px 8px;
+    color: var(--mantine-color-dimmed);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.footNote {
+    margin: -6px 0 0;
+    color: var(--mantine-color-dimmed);
+    font-size: 13px;
+    text-align: center;
+}
+
+.templatePreview {
+    height: 84px;
+    pointer-events: none;
+}
+
+.templateLabel {
+    padding: 6px 8px 2px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.mapActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 0 16px 16px;
+}

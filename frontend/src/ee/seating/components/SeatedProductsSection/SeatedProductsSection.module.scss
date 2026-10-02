@@ -1,0 +1,124 @@
+.section {
+    background: var(--hi-card-bg, #fff);
+    border: 1.5px solid var(--hi-border, #e6e6ec);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 15px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px 0 12px;
+    overflow-x: auto;
+}
+
+.mapWrap {
+    position: relative;
+    height: 340px;
+    border-top: 1px solid var(--hi-border, #e6e6ec);
+    border-bottom: 1px solid var(--hi-border, #e6e6ec);
+
+    @media (max-width: 768px) {
+        height: 240px;
+    }
+}
+
+.heading {
+    margin: 0;
+    padding-left: 2px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.expandButton {
+    flex: none;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.zoomControls {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.tapToOpen {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 14px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+
+    &[data-always-on="true"] {
+        display: flex;
+    }
+
+    @media (max-width: 768px) {
+        display: flex;
+    }
+}
+
+.tapLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--hi-primary-color, #7b5db8);
+    color: var(--hi-primary-text-color, #fff);
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.tapMessage {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--hi-card-bg, #fff);
+    border: 1px solid var(--hi-border, #e6e6ec);
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.85;
+}
+
+.legend,
+.basketWrap {
+    padding: 0 16px;
+}
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.mapKey {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+}

@@ -82,7 +82,7 @@ class SendOccurrenceCancellationEmailJob implements ShouldQueue
             $attendees = $attendeeRepository->findWhereIn('id', $attendeeIdChunk);
 
             $attendees->each(function (AttendeeDomainObject $attendee) use ($mailer, $mailBuilderService, $event, $occurrence, &$sentEmails) {
-                if (in_array($attendee->getEmail(), $sentEmails, true)) {
+                if ($attendee->getEmail() === null || in_array($attendee->getEmail(), $sentEmails, true)) {
                     return;
                 }
 

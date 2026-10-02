@@ -15,7 +15,7 @@ class LiquidTemplateRenderer
     public function __construct()
     {
         $this->liquid = new Template;
-        $this->liquid->parse(''); // Initialize
+        $this->liquid->parse('');
     }
 
     public function render(string $template, array $context): string
@@ -212,6 +212,11 @@ class LiquidTemplateRenderer
                 'description' => __('The email of the person who placed the order'),
                 'example' => 'john@example.com',
             ],
+            [
+                'token' => '{{ order.seats }}',
+                'description' => __('The seats in the order, for reserved seating events'),
+                'example' => 'Stalls · C-14, Stalls · C-15',
+            ],
         ];
 
         $attendeeTokens = [
@@ -224,6 +229,11 @@ class LiquidTemplateRenderer
                 'token' => '{{ attendee.email }}',
                 'description' => __('The attendee\'s email'),
                 'example' => 'john@example.com',
+            ],
+            [
+                'token' => '{{ attendee.seat }}',
+                'description' => __('The attendee\'s seat, for reserved seating events'),
+                'example' => 'Stalls · C-14',
             ],
             [
                 'token' => '{{ ticket.name }}',

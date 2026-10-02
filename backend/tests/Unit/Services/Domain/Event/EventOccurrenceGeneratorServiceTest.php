@@ -68,6 +68,7 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
 
         $emptyBuilder = Mockery::mock(Builder::class);
         $emptyBuilder->shouldReceive('whereIn')->andReturnSelf();
+        $emptyBuilder->shouldReceive('whereNull')->andReturnSelf();
         $emptyBuilder->shouldReceive('distinct')->andReturnSelf();
         $emptyBuilder->shouldReceive('pluck')->andReturn(collect());
 
@@ -82,6 +83,12 @@ class EventOccurrenceGeneratorServiceTest extends TestCase
             ->andReturn($emptyBuilder);
         DB::shouldReceive('table')
             ->with('product_occurrence_visibility')
+            ->andReturn($emptyBuilder);
+        DB::shouldReceive('table')
+            ->with('seat_claims')
+            ->andReturn($emptyBuilder);
+        DB::shouldReceive('table')
+            ->with('box_offices')
             ->andReturn($emptyBuilder);
     }
 

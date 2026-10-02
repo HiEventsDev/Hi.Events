@@ -12,7 +12,7 @@ import {useCallback, useEffect, useState} from "react";
 import {IconInfoCircle, IconX} from "@tabler/icons-react";
 import {
     IdParam,
-    OccurrenceTierAllocation,
+    OccurrenceAllocation,
     ProductPriceOccurrenceOverride,
     ProductQuantityAppliesTo,
     ProductType,
@@ -220,7 +220,7 @@ export const OccurrenceProductSettings = ({occurrenceId}: OccurrenceProductSetti
         return getExistingOverride(priceId)?.quantity_available ?? initial ?? null;
     };
 
-    const tierAllocations: OccurrenceTierAllocation[] = products
+    const tierAllocations: OccurrenceAllocation[] = products
         .filter(product => product.product_type === ProductType.Ticket && enabledProductIds.has(product.id!))
         .flatMap(product => (product.prices ?? []).map(price => ({
             product_price_id: price.id!,

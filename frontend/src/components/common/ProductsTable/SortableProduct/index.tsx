@@ -48,11 +48,12 @@ interface SortableProductProps {
     category: ProductCategory;
     categories: ProductCategory[];
     isRecurringEvent?: boolean;
+    isSeated?: boolean;
 }
 
 const addonBadgeLabel = (count: number): string => count === 1 ? t`1 add-on` : t`${count} add-ons`;
 
-export const SortableProduct = ({product, currencyCode, category, categories, isRecurringEvent}: SortableProductProps) => {
+export const SortableProduct = ({product, currencyCode, category, categories, isRecurringEvent, isSeated}: SortableProductProps) => {
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
@@ -189,7 +190,7 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
         const initial = product.initial_quantity_available;
 
         if (!initial || initial <= 0) {
-            return null; // Unlimited
+            return null;
         }
 
         const percentage = Math.min((sold / initial) * 100, 100);
@@ -288,7 +289,6 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                 classes.productCard,
                 {[classes.soldOut]: product.is_sold_out}
             )}>
-                {/* Sort controls */}
                 <div className={classes.sortControls}>
                     <SortArrows
                         upArrowEnabled={canMoveUp}
@@ -299,9 +299,7 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                     />
                 </div>
 
-                {/* Main content */}
                 <div className={classes.productContent}>
-                    {/* Header row with badges */}
                     <div className={classes.productHeader}>
                         <div className={classes.badgeRow}>
                             <div className={classes.typeBadges}>
@@ -324,7 +322,7 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                                         {t`Product`}
                                     </Badge>
                                 )}
-                                {product.waitlist_enabled && (
+                                {product.waitlist_enabled && !isSeated && (
                                     <Badge
                                         variant="light"
                                         color="secondary"
@@ -422,9 +420,7 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                         </h3>
                     </div>
 
-                    {/* Details grid */}
                     <div className={classes.detailsGrid}>
-                        {/* Price */}
                         <div className={classes.detailItem}>
                             <span className={classes.detailLabel}>{t`Price`}</span>
                             <div className={classes.priceValue}>
@@ -445,13 +441,17 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                             </div>
                         </div>
 
-                        {/* Sales / Quantity */}
                         <div className={classes.detailItem}>
                             <span className={classes.detailLabel}>
                                 {isTicket ? t`Attendees` : t`Sold`}
                             </span>
                             <div className={classes.salesValue}>
-                                {quantityScope() === 'per-date' && perDateAllocation ? (
+                                {isSeated && !product.initial_quantity_available ? (
+                                    <span className={classes.salesCount}>
+                                        {Number(product.quantity_sold)}
+                                        <span className={classes.unlimited}>{t`Reserved seating`}</span>
+                                    </span>
+                                ) : quantityScope() === 'per-date' && perDateAllocation ? (
                                     <span className={classes.salesCount}>
                                         {Number(product.quantity_sold)}
                                         <span className={classes.salesTotal}> · {t`up to ${perDateAllocation} per date`}</span>
@@ -486,7 +486,6 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                             </div>
                         </div>
 
-                        {/* Sale period */}
                         <div className={classes.detailItem}>
                             <span className={classes.detailLabel}>{t`Sale Period`}</span>
                             <div className={classes.dateValue}>
@@ -524,7 +523,6 @@ export const SortableProduct = ({product, currencyCode, category, categories, is
                     </div>
                 </div>
 
-                {/* Actions */}
                 <div className={classes.actionSection}>
                     <Group wrap="nowrap" gap={0}>
                         <Menu shadow="md" width={200} position="bottom-end">

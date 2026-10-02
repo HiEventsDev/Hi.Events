@@ -1,0 +1,282 @@
+.designer {
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #e6e6ec;
+
+    :global(.mantine-InputWrapper-root) {
+        margin-bottom: 0;
+    }
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nameInput {
+    width: min(320px, 40vw);
+}
+
+.seatCount {
+    color: #6b6b76;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.topBarActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.areaTabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    border-bottom: 1px solid #e6e6ec;
+    overflow-x: auto;
+}
+
+.areaTab {
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #55536a;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+        background: #f3f3f7;
+    }
+
+    &[data-active="true"] {
+        background: #efeaff;
+        color: #40296c;
+        font-weight: 600;
+    }
+}
+
+.workspace {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    border-right: 1px solid #e6e6ec;
+}
+
+.canvasWrap {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    user-select: none;
+    background-color: #fafafb;
+    background-image: radial-gradient(circle, #d9d9e2 1px, transparent 1px);
+    cursor: default;
+
+    &[data-over-item="true"] {
+        cursor: move;
+    }
+
+    &[data-tool="pan"] {
+        cursor: grab;
+    }
+
+    &[data-tool="rows"],
+    &[data-tool="zone"],
+    &[data-tool="object"],
+    &[data-tool="table"],
+    &[data-tool="label"] {
+        cursor: crosshair;
+    }
+}
+
+.selectionOutline,
+.marquee,
+.draft {
+    fill: rgba(117, 95, 177, 0.08);
+    stroke: #755fb1;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.selectionOutline {
+    fill: none;
+    stroke-dasharray: 5 4;
+}
+
+.ghost {
+    fill: rgba(117, 95, 177, 0.28);
+    stroke: rgba(64, 41, 108, 0.45);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.ghostText {
+    fill: rgba(64, 41, 108, 0.5);
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+.draftSize {
+    fill: #40296c;
+    stroke: #fff;
+    stroke-width: 4px;
+    paint-order: stroke;
+    font-size: 13px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.handleStem {
+    stroke: #755fb1;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+}
+
+.handle,
+.polygonStart {
+    fill: #fff;
+    stroke: #755fb1;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+}
+
+.handle {
+    cursor: grab;
+}
+
+.zoomControls {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    gap: 4px;
+}
+
+.canvasHint {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #33324a;
+    color: #fff;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.sidePanel {
+    width: 280px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-left: 1px solid #e6e6ec;
+}
+
+.panelSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border-bottom: 1px solid #e6e6ec;
+}
+
+.panelSection :global(.mantine-InputWrapper-root),
+.panelSection :global(.mantine-Switch-root) {
+    margin-bottom: 0;
+}
+
+.panelHeading {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.panelHint {
+    margin: 0;
+    color: #6b6b76;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.iconRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.bandRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 6px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &[data-active="true"] {
+        border-color: #755fb1;
+        background: #f7f4ff;
+    }
+}
+
+.bandColor {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+}
+
+.bandName {
+    flex: 1;
+    min-width: 0;
+}
+
+.bandCount {
+    color: #6b6b76;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+    .sidePanel {
+        width: 220px;
+    }
+}

@@ -1,0 +1,55 @@
+.legend {
+    display: flex;
+    gap: 6px 14px;
+    font-size: 13px;
+
+    &[data-layout='inline'] {
+        flex-wrap: wrap;
+
+        @media (max-width: 768px) {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+    }
+
+    &[data-layout='stacked'] {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+    }
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+
+    [data-layout='stacked'] & {
+        gap: 8px;
+        white-space: normal;
+    }
+}
+
+.swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    flex: none;
+}
+
+.name {
+    font-weight: 600;
+
+    [data-layout='stacked'] & {
+        flex: 1;
+    }
+}
+
+.companionSwatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px dashed #33205a;
+    flex: none;
+}

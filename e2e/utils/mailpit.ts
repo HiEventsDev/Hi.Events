@@ -26,10 +26,10 @@ export class MailpitClient {
   constructor(private readonly request: APIRequestContext) {}
 
   async search(toAddress: string): Promise<MailpitSummary[]> {
-    const response = await this.request.get(
-      `${MAILPIT_URL}/api/v1/search?query=${encodeURIComponent(`to:"${toAddress}"`)}`,
-    );
-    if (!response.ok()) return [];
+    const response = await this.request
+      .get(`${MAILPIT_URL}/api/v1/search?query=${encodeURIComponent(`to:"${toAddress}"`)}`)
+      .catch(() => null);
+    if (!response?.ok()) return [];
     const body = (await response.json()) as { messages?: MailpitSummary[] };
     return body.messages ?? [];
   }

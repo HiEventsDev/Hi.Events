@@ -20,6 +20,7 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\EventLifecycleStatus;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -42,6 +43,7 @@ class GetPublicEventHandler
         private readonly ProductFilterService $productFilterService,
         private readonly EventPageViewIncrementService $eventPageViewIncrementService,
         private readonly PublicOccurrenceVisibilityService $occurrenceVisibilityService,
+        private readonly EventSeatMapLookupService $eventSeatMapLookupService,
     ) {}
 
     public function handle(GetPublicEventDTO $data): EventDomainObject
@@ -103,6 +105,8 @@ class GetPublicEventHandler
         if (! $data->isAuthenticated) {
             $this->eventPageViewIncrementService->increment($data->eventId, $data->ipAddress);
         }
+
+        $event->setHasSeatMap($this->eventSeatMapLookupService->existsForEvent($data->eventId));
 
         return $event->setProductCategories($this->productFilterService->filter(
             productsCategories: $event->getProductCategories(),

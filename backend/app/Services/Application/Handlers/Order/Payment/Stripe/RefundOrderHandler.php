@@ -133,11 +133,8 @@ class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
-        // Determine the correct Stripe platform for this refund
-        // Use the platform that was used for the original payment
         $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
 
-        // Create Stripe client for the original payment's platform
         $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
 
         $this->refundService->refundPayment(
@@ -146,7 +143,7 @@ class RefundOrderHandler
             stripeClient: $stripeClient
         );
 
-        if ($refundOrderDTO->notify_buyer) {
+        if ($refundOrderDTO->notify_buyer && $order->getEmail() !== null) {
             $this->notifyBuyer($order, $event, $amount);
         }
 

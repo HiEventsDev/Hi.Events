@@ -91,6 +91,21 @@ class AccountHardDeletionService
                 ->whereIn('event_id', $context->eventIds)
                 ->delete();
 
+            $boxOfficeIds = $connection->table('box_offices')
+                ->whereIn('event_id', $context->eventIds)
+                ->pluck('id')
+                ->all();
+
+            if ($boxOfficeIds !== []) {
+                $manifest['product_box_offices'] = $connection->table('product_box_offices')
+                    ->whereIn('box_office_id', $boxOfficeIds)
+                    ->delete();
+            }
+
+            $manifest['box_offices'] = $connection->table('box_offices')
+                ->whereIn('event_id', $context->eventIds)
+                ->delete();
+
             $manifest['questions'] = $connection->table('questions')
                 ->whereIn('event_id', $context->eventIds)
                 ->delete();

@@ -14,8 +14,12 @@ import type {
 import {
   awaitOfflinePayment,
   completePublicOrder,
+  createBoxOfficeOrder,
   createPublicOrder,
   getPublicOrder,
+  startBoxOfficeSession,
+  tenderBoxOfficeOrder,
+  type DoorOrder,
   type QuestionAnswer,
 } from './public-client';
 import { uniqueEmail, uniqueName } from '../utils/unique';
@@ -46,6 +50,7 @@ interface SeedOptions {
   prices?: { price: number; label?: string; initial_quantity_available?: number }[];
   sequentialTierReleaseEnabled?: boolean;
   attendeeDetails?: AttendeeDetailsCollection;
+  currency?: string;
 }
 
 export const setAttendeeDetailsCollection = (
@@ -54,7 +59,7 @@ export const setAttendeeDetailsCollection = (
   method: AttendeeDetailsCollection,
 ): Promise<void> => api.updateEventSettings(eventId, { attendee_details_collection_method: method });
 
-const futureStartDate = (): string => {
+export const futureStartDate = (): string => {
   const date = new Date();
   date.setDate(date.getDate() + 30);
   date.setHours(21, 0, 0, 0);
@@ -91,7 +96,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
     organizer_id: organizerId,
     start_date: opts.startDate ?? futureStartDate(),
     category,
-    currency: 'USD',
+    currency: opts.currency ?? 'USD',
     timezone: 'UTC',
   });
 
@@ -138,7 +143,7 @@ export interface SeededDraftEvent {
 export async function createDraftEvent(
   api: ApiClient,
   organizerId: number,
-  opts: { title?: string; attendeeDetails?: AttendeeDetailsCollection } = {},
+  opts: { title?: string; attendeeDetails?: AttendeeDetailsCollection; currency?: string } = {},
 ): Promise<SeededDraftEvent> {
   const title = opts.title ?? uniqueName('E2E Event');
   const event = await api.createEvent({
@@ -147,7 +152,7 @@ export async function createDraftEvent(
     organizer_id: organizerId,
     start_date: futureStartDate(),
     category: 'MUSIC',
-    currency: 'USD',
+    currency: opts.currency ?? 'USD',
     timezone: 'UTC',
   });
   await setAttendeeDetailsCollection(api, event.id, opts.attendeeDetails ?? 'PER_TICKET');
@@ -208,6 +213,7 @@ export interface OrderSeedOptions {
   promoCode?: string;
   affiliateCode?: string;
   eventOccurrenceId?: number;
+  seatUids?: string[];
   orderQuestions?: QuestionAnswer[];
   attendeeQuestions?: QuestionAnswer[];
 }
@@ -224,7 +230,11 @@ export async function createReservedOrder(
     products: [
       {
         product_id: event.productId,
-        quantities: [{ price_id: event.priceId, quantity: opts.quantity ?? 1 }],
+        quantities: [{
+          price_id: event.priceId,
+          quantity: opts.seatUids?.length ?? opts.quantity ?? 1,
+          ...(opts.seatUids ? { seat_uids: opts.seatUids } : {}),
+        }],
         ...(opts.eventOccurrenceId ? { event_occurrence_id: opts.eventOccurrenceId } : {}),
       },
     ],
@@ -245,7 +255,7 @@ export async function createCompletedOrder(
   const buyerEmail = opts.buyerEmail ?? uniqueEmail('buyer');
   const buyerFirstName = opts.buyerFirstName ?? 'Test';
   const buyerLastName = opts.buyerLastName ?? 'Buyer';
-  const quantity = opts.quantity ?? 1;
+  const quantity = opts.seatUids?.length ?? opts.quantity ?? 1;
 
   const { orderShortId, sessionId } = await createReservedOrder(publicApi, event, opts);
 
@@ -467,3 +477,135 @@ export async function createEventWithAttendee(
 export function createFreshOrganizer(api: ApiClient, name?: string): Promise<Organizer> {
   return api.createOrganizer(name ?? uniqueName('E2E Org'), { email: uniqueEmail('organizer') });
 }
+
+export interface SeededBoxOffice {
+  id: number;
+  short_id: string;
+  name: string;
+  is_system_default: boolean;
+  has_pin: boolean;
+  pin: string;
+}
+
+export async function defaultBoxOffice(api: ApiClient, eventId: number): Promise<SeededBoxOffice> {
+  const boxOffices = await api.listBoxOffices(eventId);
+  const systemDefault = boxOffices.find((boxOffice) => boxOffice.is_system_default);
+  if (!systemDefault) {
+    throw new Error(`Event ${eventId} has no system default box office`);
+  }
+  return api.resetBoxOfficePin(eventId, systemDefault.id);
+}
+
+export async function createDoorSale(
+  request: APIRequestContext,
+  boxOffice: SeededBoxOffice,
+  event: SeededEvent,
+  opts: { operatorName?: string; quantity?: number; tender?: 'CASH' | 'COMP' | 'OTHER'; amountTendered?: number } = {},
+): Promise<DoorOrder> {
+  const token = await startBoxOfficeSession(request, boxOffice.short_id, {
+    pin: boxOffice.pin,
+    operatorName: opts.operatorName ?? 'Sam',
+  });
+  const order = await createBoxOfficeOrder(request, boxOffice.short_id, token, [
+    { product_id: event.productId, product_price_id: event.priceId, quantity: opts.quantity ?? 1 },
+  ]);
+  const tender = opts.tender ?? 'CASH';
+  return tenderBoxOfficeOrder(request, boxOffice.short_id, token, order.short_id, {
+    tender,
+    ...(tender === 'CASH' ? { amount_tendered: opts.amountTendered ?? order.total_gross } : {}),
+    ...(tender === 'OTHER' ? { reference: 'Paid on SumUp' } : {}),
+  });
+}
+
+export interface SeatedEvent {
+  eventId: number;
+  slug: string;
+  productId: number;
+  priceId: number;
+  occurrenceId: number;
+}
+
+export type SeatMapFixture = 'theatre' | 'club' | 'empty';
+
+const seatMapFixture = (name: SeatMapFixture) => JSON.parse(
+  readFileSync(fileURLToPath(new URL(`../../backend/tests/Fixtures/seating/${name}.json`, import.meta.url)), 'utf8'),
+);
+
+export async function createFixtureSeatMap(api: ApiClient, organizerId: number, layout: SeatMapFixture, name = 'Main auditorium'): Promise<number> {
+  return (await api.createSeatMap(organizerId, name, seatMapFixture(layout))).id;
+}
+
+export async function attachFixtureSeatMap(
+  api: ApiClient,
+  organizerId: number,
+  eventId: number,
+  bandProducts: { band_key: string; products: { product_id: number; price_adjustment?: number }[] }[],
+  layout: 'theatre' | 'club' = 'theatre',
+): Promise<void> {
+  await api.attachSeatMap(eventId, await createFixtureSeatMap(api, organizerId, layout));
+  await api.linkSeatMapBands(eventId, bandProducts);
+}
+
+export async function createSeatedEvent(
+  api: ApiClient,
+  organizerId: number,
+  opts: { layout?: 'theatre' | 'club'; bandKey?: string; price?: number; recurringCount?: number; currency?: string } = {},
+): Promise<SeatedEvent & { occurrences: Occurrence[] }> {
+  const price = opts.price ?? 0;
+  const event = opts.recurringCount
+    ? await createDraftRecurringEvent(api, organizerId, opts.recurringCount)
+    : await createDraftEvent(api, organizerId, { currency: opts.currency });
+  const [category] = await api.listProductCategories(event.eventId);
+  const product = await api.createProduct(event.eventId, {
+    title: 'Premium Seat',
+    product_type: 'TICKET',
+    type: price > 0 ? 'PAID' : 'FREE',
+    product_category_id: category.id,
+    prices: [{ price }],
+  });
+
+  await attachFixtureSeatMap(api, organizerId, event.eventId, [{ band_key: opts.bandKey ?? 'b_premium', products: [{ product_id: product.id }] }], opts.layout);
+  await api.publishEvent(event.eventId);
+  const occurrences = [...await api.listOccurrences(event.eventId)].sort((a, b) => a.start_date.localeCompare(b.start_date));
+
+  return {
+    eventId: event.eventId,
+    slug: event.slug,
+    productId: product.id,
+    priceId: product.prices![0].id!,
+    occurrenceId: occurrences[0].id,
+    occurrences,
+  };
+}
+
+async function createDraftRecurringEvent(api: ApiClient, organizerId: number, count: number): Promise<{ eventId: number; slug: string }> {
+  const event = await api.createEvent({
+    title: uniqueName('E2E Seated Recurring'),
+    type: 'RECURRING',
+    organizer_id: organizerId,
+    start_date: futureStartDate(),
+    category: 'MUSIC',
+    currency: 'USD',
+    timezone: 'UTC',
+  });
+  await setAttendeeDetailsCollection(api, event.id, 'PER_TICKET');
+  await api.generateOccurrences(event.id, {
+    frequency: 'weekly',
+    range: { type: 'count', count },
+    days_of_week: ['friday'],
+    times_of_day: ['19:00'],
+    duration_minutes: 120,
+  });
+  return { eventId: event.id, slug: event.slug };
+}
+
+export const createSeatedOrder = (
+  publicApi: APIRequestContext,
+  event: SeatedEvent,
+  seatUids: string[],
+  opts: Omit<OrderSeedOptions, 'seatUids' | 'quantity'> = {},
+): Promise<SeededOrder> => createCompletedOrder(publicApi, event, {
+  eventOccurrenceId: event.occurrenceId,
+  ...opts,
+  seatUids,
+});

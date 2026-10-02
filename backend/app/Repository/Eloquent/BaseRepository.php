@@ -401,7 +401,6 @@ abstract class BaseRepository implements RepositoryInterface
                         break;
                 }
             } else {
-                // Simple equality condition
                 $this->model = $this->model->where($field, '=', $value);
             }
         }
@@ -493,6 +492,7 @@ abstract class BaseRepository implements RepositoryInterface
                     'gt' => '>',
                     'gte' => '>=',
                     'like' => 'LIKE',
+                    'ilike' => 'ILIKE',
                     'in' => 'IN',
                 ];
 
@@ -502,9 +502,7 @@ abstract class BaseRepository implements RepositoryInterface
 
                 $field = $prefix ? $prefix.'.'.$filterField->field : $filterField->field;
 
-                // Special handling for IN operator
                 if ($operator === 'IN') {
-                    // Ensure value is array or convert comma-separated string to array
                     $value = is_array($filterField->value)
                         ? $filterField->value
                         : explode(',', $filterField->value);

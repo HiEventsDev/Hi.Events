@@ -77,6 +77,7 @@ export class OccurrencePage {
   }
 
   async openBookingDetails(): Promise<void> {
+    await expect(this.breakdown()).toHaveCount(0);
     await this.dialog().locator('[data-testid="occurrence-booking-details-button"]:visible').click();
     await this.page.locator('[data-testid="occurrence-booking-breakdown"]:visible').waitFor();
   }
@@ -103,8 +104,8 @@ export class OccurrencePage {
     return this.breakdown().getByTestId(`occurrence-booking-row-${row}`).locator('span').last();
   }
 
-  breakdownTiers(): Locator {
-    return this.breakdown().getByTestId('occurrence-booking-row-tier');
+  breakdownAllocations(): Locator {
+    return this.breakdown().getByTestId('occurrence-booking-product-allocation');
   }
 
   breakdownLimitedBy(): Locator {
@@ -278,13 +279,8 @@ export class PublicOccurrenceSelector {
     throw new Error(`Could not navigate the occurrence calendar to the month of ${isoDate}`);
   }
 
-  async selectDay(label: RegExp): Promise<void> {
-    await this.calendar().waitFor();
-    await this.waitForMonthLoaded();
-    for (let attempt = 0; attempt < 2 && (await this.dayButton(label).count()) === 0; attempt++) {
-      await this.nextMonthButton().click();
-      await this.waitForMonthLoaded();
-    }
-    await this.dayButton(label).click();
+  async selectDay(isoDate: string): Promise<void> {
+    await this.navigateToMonthOf(isoDate);
+    await this.dayButton(occurrenceDayLabel(isoDate)).click();
   }
 }

@@ -7,7 +7,7 @@ import {SupportedLocales} from "../locales.ts";
 export interface EditAttendeeRequest {
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     notes?: string;
     product_id?: IdParam;
     product_price_id?: IdParam;
@@ -21,6 +21,7 @@ export interface CreateAttendeeRequest extends EditAttendeeRequest {
     locale: SupportedLocales,
     event_occurrence_id?: number | null,
     override_capacity?: boolean,
+    seat_uid?: string,
 }
 
 export const attendeesClient = {

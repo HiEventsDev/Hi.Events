@@ -31,6 +31,11 @@ class Order extends BaseModel
         return $this->hasMany(Attendee::class);
     }
 
+    public function seat_claims(): HasMany
+    {
+        return $this->hasMany(SeatClaim::class);
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
@@ -60,6 +65,8 @@ class Order extends BaseModel
             'total_discount' => 'float',
             'total_fee' => 'float',
             'total_refunded' => 'float',
+            'box_office_amount_tendered' => 'float',
+            'box_office_change_due' => 'float',
             'point_in_time_data' => 'array',
             'address' => 'array',
             'taxes_and_fees_rollup' => 'array',

@@ -11,8 +11,11 @@ import * as nodePath from "node:path";
 import * as nodeUrl from "node:url";
 import "dotenv/config";
 import * as Sentry from "@sentry/node";
+import {complianceHandler} from "./src/compliance/proxy.js";
 import {sitemapIndexHandler, sitemapEventsHandler, sitemapOrganizersHandler} from "./src/sitemap/proxy.js";
 import {htmlSafeJsonStringify} from "./src/utilites/safeScriptJson.js";
+import {backendRequestHeaders, licenceSimulation} from "./src/ssr/backendRequestHeaders.js";
+import {loggableError} from "./src/ssr/loggableError.js";
 
 installGlobals();
 
@@ -117,6 +120,8 @@ Sitemap: ${frontendUrl}/sitemap.xml
         res.status(200).send(robotsTxt);
     });
 
+    app.get('/compliance', complianceHandler);
+
     app.get('/sitemap.xml', sitemapIndexHandler);
     app.get('/sitemap-events-:page.xml', sitemapEventsHandler);
     app.get('/sitemap-organizers-:page.xml', sitemapOrganizersHandler);
@@ -148,7 +153,12 @@ Sitemap: ${frontendUrl}/sitemap.xml
             }
 
             const { appHtml, dehydratedState, helmetContext, themeColors, statusCode, renderErrors } = await render(
-                { req, res },
+                {
+                    req,
+                    res,
+                    backendHeaders: backendRequestHeaders(req),
+                    licenceSimulation: licenceSimulation(req),
+                },
                 ssrManifest
             );
 
@@ -208,7 +218,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
                 tags: { source: "ssr-render" },
                 extra: { url: req.originalUrl },
             });
-            console.error(error);
+            console.error(loggableError(error));
             res.status(500).send("Internal Server Error");
         }
     });
@@ -216,7 +226,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
     Sentry.setupExpressErrorHandler(app);
 
     app.use((error, req, res, _next) => {
-        console.error(error);
+        console.error(loggableError(error));
 
         if (res.headersSent) {
             return res.end();

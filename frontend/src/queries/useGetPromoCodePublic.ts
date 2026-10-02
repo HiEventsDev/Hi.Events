@@ -6,7 +6,7 @@ export const GET_PROMO_CODE_PUBLIC_QUERY_KEY = 'getPromoCodePublic';
 
 export const useGetPromoCodePublic = (eventId: IdParam, promoCode: string|null) => {
     return useQuery({
-        queryKey: [GET_PROMO_CODE_PUBLIC_QUERY_KEY, promoCode],
+        queryKey: [GET_PROMO_CODE_PUBLIC_QUERY_KEY, eventId, promoCode],
 
         queryFn: async () => {
            return await promoCodeClientPublic.validateCode(eventId, promoCode);

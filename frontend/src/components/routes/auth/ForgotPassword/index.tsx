@@ -28,8 +28,10 @@ export const ForgotPassword = () => {
             setShowSuccessMessage(true);
         },
 
-        onError: () => {
-            showError(t`Something went wrong, please try again, or contact support if the problem persists`);
+        onError: (error: any) => {
+            showError(error?.response?.status === 429
+                ? t`Too many attempts. Please wait a minute and try again.`
+                : t`Something went wrong, please try again, or contact support if the problem persists`);
         }
     });
 

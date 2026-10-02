@@ -40,6 +40,8 @@ import {useEffect, useRef, useState} from "react";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
+import {useGetEventSeatMap} from "../../../ee/seating/queries/useGetEventSeatMap.ts";
+import {seatedProductIds} from "../../../ee/seating/components/SeatPicker/ticketOptions.ts";
 import classes from './ProductForm.module.scss';
 import {Fieldset} from "../../common/Fieldset";
 import {Editor} from "../../common/Editor";
@@ -102,6 +104,8 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const {data: taxesAndFees} = useGetTaxesAndFees();
     const isRecurring = event?.type === EventType.RECURRING;
     const typeLocked = Number(product?.quantity_sold) > 0;
+    const seatMap = useGetEventSeatMap(eventId, !!event?.has_seat_map && !!product?.id).data;
+    const isSeated = !!product?.id && seatedProductIds(seatMap?.band_products ?? []).has(Number(product.id));
     const previousProductType = useRef(form.values.product_type);
 
     const handleTaxOrFeeCreated = (taxOrFee: TaxAndFee) => {
@@ -326,6 +330,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 form={form}
                                 index={0}
                                 isRecurring={isRecurring}
+                                isSeated={isSeated}
                                 testId="product-quantity-applies-to"
                             />
                         </InputGroup>
@@ -352,7 +357,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                                 </Callout>
                             )}
                             <div className={classes.priceTiers}>
-                                <ProductPriceTierForm product={product} form={form} event={event}/>
+                                <ProductPriceTierForm product={product} form={form} event={event} isSeated={isSeated}/>
                                 <Button
                                     className={classes.addTierButton}
                                     size={'xs'}
@@ -450,22 +455,24 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                     </div>
                 </LedgerRow>
 
-                <LedgerRow
-                    id="waitlist"
-                    icon={<IconUsers size={16}/>}
-                    label={t`Waitlist`}
-                    summary={waitlistSummary(form.values)}
-                    opened={openRows.has('waitlist')}
-                    onToggle={toggleRow}
-                >
-                    <Switch
-                        description={isRecurring
-                            ? t`Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date.`
-                            : t`Allow customers to join a waitlist when this product is sold out`}
-                        {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
-                        label={t`Enable Waitlist`}
-                    />
-                </LedgerRow>
+                {!isSeated && (
+                    <LedgerRow
+                        id="waitlist"
+                        icon={<IconUsers size={16}/>}
+                        label={t`Waitlist`}
+                        summary={waitlistSummary(form.values)}
+                        opened={openRows.has('waitlist')}
+                        onToggle={toggleRow}
+                    >
+                        <Switch
+                            description={isRecurring
+                                ? t`Allow customers to join a waitlist when this product is sold out. Customers join the waitlist for a specific date.`
+                                : t`Allow customers to join a waitlist when this product is sold out`}
+                            {...form.getInputProps(`waitlist_enabled`, {type: 'checkbox'})}
+                            label={t`Enable Waitlist`}
+                        />
+                    </LedgerRow>
+                )}
 
                 <LedgerRow
                     id="taxes"

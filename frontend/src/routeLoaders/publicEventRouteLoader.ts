@@ -2,6 +2,16 @@ import {LoaderFunctionArgs, redirect} from "react-router";
 import {promoCodeClientPublic} from "../api/promo-code.client.ts";
 import {getEventPublicQuery} from "../queries/useGetEventPublic.ts";
 import {getQueryClient} from "../utilites/ssrQueryClient.ts";
+import {loggableError} from "../ssr/loggableError.js";
+
+const validatePromoCode = async (eventId: string | undefined, promoCode: string): Promise<boolean | undefined> => {
+    try {
+        const {valid} = await promoCodeClientPublic.validateCode(eventId, promoCode);
+        return valid;
+    } catch {
+        return undefined;
+    }
+};
 
 export const publicEventRouteLoader = async ({params, request}: LoaderFunctionArgs) => {
     try {
@@ -11,16 +21,11 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
         const occurrenceIdParam = queryParams.get("occurrence_id");
         const occurrenceId = occurrenceIdParam ? Number(occurrenceIdParam) : null;
 
-        let promoCodeValid: boolean | undefined = undefined;
-
-        if (promoCode) {
-            const {valid} = await promoCodeClientPublic.validateCode(params.eventId, promoCode);
-            promoCodeValid = valid;
-        }
+        const promoCodeValid = promoCode ? await validatePromoCode(params.eventId, promoCode) : undefined;
 
         const eventQuery = getEventPublicQuery(
             params.eventId,
-            promoCode,
+            promoCodeValid === undefined ? null : promoCode,
             promoCodeValid ?? false,
             occurrenceId,
         );
@@ -36,7 +41,6 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
 
         return {event, promoCodeValid, promoCode, occurrenceId};
     } catch (error: any) {
-        // Re-throw redirect responses so React Router can handle them
         if (error instanceof Response) {
             throw error;
         }
@@ -45,7 +49,7 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
             return {event: null, promoCodeValid: undefined, promoCode: null};
         }
 
-        console.error(error);
+        console.error(loggableError(error));
         throw error;
     }
 };

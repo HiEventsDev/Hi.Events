@@ -25,4 +25,10 @@ interface OrderItemRepositoryInterface extends RepositoryInterface
      * @return array<int, int> product_price_id => highest quantity sold on any single occurrence
      */
     public function getMaxSoldPerOccurrenceByPrice(array $productPriceIds): array;
+
+    /**
+     * @param  int[]  $productIds
+     * @return int[] product ids held by an unexpired reservation
+     */
+    public function getProductIdsInLiveReservations(array $productIds): array;
 }

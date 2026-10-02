@@ -33,6 +33,14 @@ interface CheckInListTableProps {
     event?: Event;
 }
 
+export const checkInListUrl = (shortId: string) => `${window.location.origin}/check-in/${shortId}`;
+
+export const copyCheckInListLink = (shortId: string) => {
+    navigator.clipboard.writeText(checkInListUrl(shortId)).then(() => {
+        showSuccess(t`Check-In URL copied to clipboard`);
+    });
+};
+
 export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckInListTableProps) => {
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedCheckInListId, setSelectedCheckInListId] = useState<IdParam>();
@@ -198,20 +206,12 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                             {
                                 label: t`Copy Check-In URL`,
                                 icon: <IconCopy size={14}/>,
-                                onClick: () => {
-                                    navigator.clipboard.writeText(
-                                        `${window.location.origin}/check-in/${list.short_id}`
-                                    ).then(() => {
-                                        showSuccess(t`Check-In URL copied to clipboard`);
-                                    });
-                                }
+                                onClick: () => copyCheckInListLink(list.short_id),
                             },
                             {
                                 label: t`Open Check-In Page`,
                                 icon: <IconQrcode size={14}/>,
-                                onClick: () => {
-                                    window.open(`/check-in/${list.short_id}`, '_blank');
-                                },
+                                onClick: () => window.open(checkInListUrl(list.short_id), '_blank'),
                                 visible: isMobile,
                             },
                         ];
@@ -247,7 +247,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                         size="xs"
                                         variant="light"
                                         leftSection={<IconQrcode size={14}/>}
-                                        onClick={() => window.open(`/check-in/${list.short_id}`, '_blank')}
+                                        onClick={() => window.open(checkInListUrl(list.short_id), '_blank')}
                                         data-testid="check-in-list-open-button"
                                     >
                                         {t`Open Check-In`}
@@ -282,8 +282,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                     <>
                         <p>
                             <Trans>
-                                <p>
-                                    Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </p>
+                                A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed.
                             </Trans>
                         </p>
                         <Button

@@ -65,6 +65,9 @@
 ## {{ __('Order Summary') }}
 - **{{ __('Order Number:') }}** {{ $order->getPublicId() }}
 - **{{ __('Total Amount:') }}** {{ Currency::format($order->getTotalGross(), $event->getCurrency()) }}
+@if($order->getSeatLabels())
+- **{{ __('Seats:') }}** {{ implode(', ', $order->getSeatLabels()) }}
+@endif
 
 <x-mail::button :url="$orderUrl">
     {{ __('View Order Summary & Tickets') }}

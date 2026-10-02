@@ -18,6 +18,10 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatSelectionValidationService;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
@@ -123,6 +127,10 @@ class CreateAttendeeHandlerTest extends TestCase
             $this->occurrenceEligibilityService,
             $this->orderAuditLogService,
             $this->availableProductQuantitiesFetchService,
+            Mockery::mock(SeatSelectionValidationService::class)->shouldIgnoreMissing(),
+            Mockery::mock(SeatClaimService::class)->shouldIgnoreMissing(),
+            Mockery::mock(EventSeatMapLookupService::class)->shouldIgnoreMissing(),
+            Mockery::mock(SeatingEventLockService::class)->shouldIgnoreMissing(),
         );
     }
 

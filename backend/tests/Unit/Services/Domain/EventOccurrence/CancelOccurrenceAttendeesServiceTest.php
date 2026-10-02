@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Generated\AttendeeDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -38,6 +39,8 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
 
     private LoggerInterface|MockInterface $logger;
 
+    private SeatClaimService $seatClaimService;
+
     private CancelOccurrenceAttendeesService $service;
 
     protected function setUp(): void
@@ -52,6 +55,9 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->statisticsCancellationService = Mockery::mock(EventStatisticsCancellationService::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
+        $this->seatClaimService = Mockery::mock(SeatClaimService::class);
+
+        $this->seatClaimService->shouldReceive('releaseForAttendees')->zeroOrMoreTimes()->byDefault();
 
         $this->logger->shouldReceive('error')->zeroOrMoreTimes()->byDefault();
 
@@ -71,6 +77,7 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             $this->domainEventDispatcherService,
             $this->orderRepository,
             $this->statisticsCancellationService,
+            $this->seatClaimService,
             $this->logger,
         );
     }
@@ -124,6 +131,11 @@ class CancelOccurrenceAttendeesServiceTest extends TestCase
             ->times(3)
             ->with(Mockery::on(fn (AttendeeEvent $e) => $e->type === DomainEventType::ATTENDEE_CANCELLED
                 && in_array($e->attendeeId, [101, 102, 103], true)));
+
+        $this->seatClaimService
+            ->shouldReceive('releaseForAttendees')
+            ->once()
+            ->with([101, 102, 103]);
 
         $result = $this->service->cancelForOccurrence($eventId, $occurrenceId);
 

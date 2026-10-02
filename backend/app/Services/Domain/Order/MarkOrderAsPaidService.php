@@ -2,10 +2,7 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use Brick\Math\Exception\MathException;
 use HiEvents\DomainObjects\AttendeeDomainObject;
-use HiEvents\DomainObjects\Enums\PaymentProviders;
-use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventLocationDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -14,11 +11,9 @@ use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\LocationDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
-use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
-use HiEvents\DomainObjects\Status\OrderApplicationFeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Events\OrderStatusChangedEvent;
@@ -45,9 +40,8 @@ class MarkOrderAsPaidService
         private readonly InvoiceRepositoryInterface $invoiceRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
-        private readonly OrderApplicationFeeCalculationService $orderApplicationFeeCalculationService,
         private readonly EventRepositoryInterface $eventRepository,
-        private readonly OrderApplicationFeeService $orderApplicationFeeService,
+        private readonly OfflineApplicationFeeRecordService $offlineApplicationFeeRecordService,
         private readonly SendOrderDetailsService $sendOrderDetailsService,
         private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
     ) {}
@@ -108,9 +102,9 @@ class MarkOrderAsPaidService
                         ),
                     ],
                 ))
+                ->loadRelation(AttendeeDomainObject::class)
                 ->findById($orderId);
 
-            // Update affiliate sales if this order has an affiliate
             if ($updatedOrder->getAffiliateId()) {
                 $this->affiliateRepository->incrementSales(
                     $updatedOrder->getAffiliateId(),
@@ -132,7 +126,7 @@ class MarkOrderAsPaidService
                 ),
             );
 
-            $this->storeApplicationFeePayment($updatedOrder);
+            $this->offlineApplicationFeeRecordService->record($updatedOrder);
 
             $this->sendOrderDetailsService->sendCustomerOrderSummary(
                 order: $updatedOrder,
@@ -175,42 +169,6 @@ class MarkOrderAsPaidService
                 'order_id' => $updatedOrder->getId(),
                 'status' => AttendeeStatus::AWAITING_PAYMENT->name,
             ],
-        );
-    }
-
-    /**
-     * @throws MathException
-     */
-    private function storeApplicationFeePayment(OrderDomainObject $updatedOrder): void
-    {
-        /** @var EventDomainObject $event */
-        $event = $this->eventRepository
-            ->loadRelation(new Relationship(
-                domainObject: OrganizerDomainObject::class,
-                nested: [
-                    new Relationship(
-                        domainObject: OrganizerConfigurationDomainObject::class,
-                        name: 'organizer_configuration',
-                    ),
-                ],
-                name: 'organizer'
-            ))
-            ->findById($updatedOrder->getEventId());
-
-        $config = $event->getOrganizer()?->getOrganizerConfiguration();
-        if (! $config) {
-            return;
-        }
-
-        $this->orderApplicationFeeService->createOrderApplicationFee(
-            orderId: $updatedOrder->getId(),
-            applicationFeeAmountMinorUnit: $this->orderApplicationFeeCalculationService->calculateApplicationFee(
-                configuration: $config,
-                order: $updatedOrder,
-            )?->netApplicationFee?->toMinorUnit() ?? 0,
-            orderApplicationFeeStatus: OrderApplicationFeeStatus::AWAITING_PAYMENT,
-            paymentMethod: PaymentProviders::OFFLINE,
-            currency: $updatedOrder->getCurrency(),
         );
     }
 }

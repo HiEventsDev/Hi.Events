@@ -41,6 +41,7 @@ import {InlineOrderSummary} from "../../../common/InlineOrderSummary";
 import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
 import {CheckoutStepTitle} from "../../../layouts/Checkout/CheckoutStepTitle";
 import {EditAttendeeModal} from "./EditAttendeeModal";
+import {ChangeSeatButton} from "../../../../ee/seating/components/ChangeSeatButton";
 import {EditOrderModal} from "./EditOrderModal";
 
 import {useEditAttendeePublic} from "../../../../mutations/useEditAttendeePublic";
@@ -48,11 +49,10 @@ import {useEditOrderPublic} from "../../../../mutations/useEditOrderPublic";
 import {useResendAttendeeTicketPublic} from "../../../../mutations/useResendAttendeeTicketPublic";
 import {useResendOrderConfirmationPublic} from "../../../../mutations/useResendOrderConfirmationPublic";
 
-import {Attendee, Event, LocationType, Order, Product} from "../../../../types.ts";
+import {Attendee, Event, IdParam, LocationType, Order, Product} from "../../../../types.ts";
 import classes from './OrderSummaryAndProducts.module.scss';
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
-// Purchase tracking is handled by the parent Checkout layout
 
 const PaymentStatus = ({order}: { order: Order }) => {
     const paymentStatuses: Record<string, string> = {
@@ -80,12 +80,16 @@ const RefundStatusType = ({order}: { order: Order }) => {
 const GuestListItem = ({
     attendee,
     event,
+    orderShortId,
+    canChangeSeat,
     allowSelfEdit,
     onEditClick,
     onResendClick,
 }: {
     attendee: Attendee;
     event: Event;
+    orderShortId: string;
+    canChangeSeat: boolean;
     allowSelfEdit: boolean;
     onEditClick: () => void;
     onResendClick: () => void;
@@ -101,8 +105,10 @@ const GuestListItem = ({
                     {isCancelled && <span className={classes.cancelledBadge}>{t`Cancelled`}</span>}
                 </div>
                 <div className={classes.guestDetails}>
-                    <span className={classes.guestEmail}>{attendee.email}</span>
-                    <span className={classes.guestProduct}>{productTitle}</span>
+                    {attendee.email ? <span className={classes.guestEmail}>{attendee.email}</span> : null}
+                    <span className={classes.guestProduct}>
+                        {[productTitle, attendee.seat_label].filter(Boolean).join(' · ')}
+                    </span>
                 </div>
             </div>
             <div className={classes.guestActions}>
@@ -122,6 +128,9 @@ const GuestListItem = ({
                         <IconPrinter size={18}/>
                     </ActionIcon>
                 </Tooltip>
+                {canChangeSeat && attendee.seat_uid && !isCancelled && (
+                    <ChangeSeatButton eventId={event.id as IdParam} orderShortId={orderShortId} attendee={attendee}/>
+                )}
                 {allowSelfEdit && !isCancelled && (
                     <>
                         <Tooltip label={t`Edit Attendee`}>
@@ -133,15 +142,17 @@ const GuestListItem = ({
                                 <IconEdit size={18}/>
                             </ActionIcon>
                         </Tooltip>
-                        <Tooltip label={t`Resend Ticket`}>
-                            <ActionIcon
-                                variant="subtle"
-                                data-testid="resend-ticket-button"
-                                onClick={onResendClick}
-                            >
-                                <IconSend size={18}/>
-                            </ActionIcon>
-                        </Tooltip>
+                        {attendee.email ? (
+                            <Tooltip label={t`Resend Ticket`}>
+                                <ActionIcon
+                                    variant="subtle"
+                                    data-testid="resend-ticket-button"
+                                    onClick={onResendClick}
+                                >
+                                    <IconSend size={18}/>
+                                </ActionIcon>
+                            </Tooltip>
+                        ) : null}
                     </>
                 )}
             </div>
@@ -197,7 +208,7 @@ const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Eve
                 </div>
             )}
             <div className={classes.welcomeMessage}>{message}</div>
-            {isCompleted && (
+            {isCompleted && order.email && (
                 <div className={classes.confirmationText}>
                     {t`Confirmation sent to`} <strong>{order.email}</strong>
                 </div>
@@ -207,7 +218,7 @@ const WelcomeHeader = ({order, event, allowSelfEdit}: { order: Order; event: Eve
                     {t`Bookmark this page to manage your order anytime.`}
                 </div>
             )}
-            {isCancelled && (
+            {isCancelled && order.email && (
                 <div className={classes.confirmationText}>
                     {t`A cancellation notice has been sent to`} <strong>{order.email}</strong>
                 </div>
@@ -252,22 +263,24 @@ const OrderDetails = ({
                 label={t`Order Reference`}
                 value={order.public_id}
             />
-            <DetailItem
-                icon={IconMail}
-                label={t`Email`}
-                value={
-                    <Group gap="xs" wrap="nowrap">
-                        <span style={{wordBreak: 'break-all'}}>{order.email}</span>
-                        {allowSelfEdit && order.status !== 'CANCELLED' && (
-                            <Tooltip label={t`Resend Confirmation`}>
-                                <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
-                                    <IconSend size={14}/>
-                                </ActionIcon>
-                            </Tooltip>
-                        )}
-                    </Group>
-                }
-            />
+            {order.email ? (
+                <DetailItem
+                    icon={IconMail}
+                    label={t`Email`}
+                    value={
+                        <Group gap="xs" wrap="nowrap">
+                            <span style={{wordBreak: 'break-all'}}>{order.email}</span>
+                            {allowSelfEdit && order.status !== 'CANCELLED' && (
+                                <Tooltip label={t`Resend Confirmation`}>
+                                    <ActionIcon size="xs" variant="subtle" data-testid="resend-confirmation-button" onClick={onResendClick}>
+                                        <IconSend size={14}/>
+                                    </ActionIcon>
+                                </Tooltip>
+                            )}
+                        </Group>
+                    }
+                />
+            ) : null}
             <DetailItem
                 icon={IconCalendar}
                 label={t`Order Date`}
@@ -655,6 +668,8 @@ export const OrderSummaryAndProducts = () => {
                                         key={attendee.id}
                                         attendee={attendee}
                                         event={event}
+                                        orderShortId={orderShortId as string}
+                                        canChangeSeat={order.status === 'COMPLETED'}
                                         allowSelfEdit={allowSelfEdit}
                                         onEditClick={() => setEditingAttendee(attendee)}
                                         onResendClick={() => handleResendAttendeeTicket(attendee)}

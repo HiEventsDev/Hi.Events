@@ -66,7 +66,9 @@ const OrderField = ({orderId, eventId}: { orderId: IdParam, eventId: IdParam }) 
         <TextInput
             label={t`Recipient`}
             disabled
-            placeholder={`${order.first_name} ${order.last_name} <${order.email}>`}
+            placeholder={order.email
+                ? `${order.first_name} ${order.last_name} <${order.email}>`
+                : `${order.first_name} ${order.last_name}`}
         />
     )
 }

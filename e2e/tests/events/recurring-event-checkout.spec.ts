@@ -30,7 +30,7 @@ test.describe('recurring event checkout', () => {
     const checkout = new CheckoutPage(page);
     const selector = new PublicOccurrenceSelector(page);
     await checkout.gotoPublicEvent(event.eventId, event.slug);
-    await selector.selectDay(new RegExp(`^${weekday}, ${month} ${day},`));
+    await selector.selectDay(sorted[1].start_date);
 
     await expect(selector.slotHeaderDay()).toHaveText(`${weekday}, ${month} ${day}`);
     await expect(selector.productsLoadingOverlay()).toHaveCount(0);

@@ -33,6 +33,8 @@ class AttendeeResourcePublic extends JsonResource
             'last_name' => $this->getLastName(),
             'public_id' => $this->getPublicId(),
             'short_id' => $this->getShortId(),
+            'seat_uid' => $this->getSeatUid(),
+            'seat_label' => $this->getSeatLabel(),
             'product_id' => $this->getProductId(),
             'product_price_id' => $this->getProductPriceId(),
             'product' => $this->when((bool) $this->getProduct(), fn () => new ProductMinimalResourcePublic($this->getProduct())),
@@ -45,6 +47,10 @@ class AttendeeResourcePublic extends JsonResource
                 ),
             ),
             'locale' => $this->getLocale(),
+            'is_checked_in' => $this->when(
+                $this->getCheckIns() !== null,
+                fn () => $this->getCheckIns()->isNotEmpty(),
+            ),
         ];
     }
 }

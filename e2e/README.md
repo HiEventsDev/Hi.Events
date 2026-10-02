@@ -21,6 +21,9 @@ e2e/
     ├── auth/                registration
     ├── events/              event creation
     ├── checkout/            free + Stripe checkout
+    ├── box-office/          door sales: management + PIN, cash/comp/other/free
+                             tenders, discounts and price overrides, questions,
+                             sessions, orders tab, scan tab, card (Stripe-gated)
     └── management/          promo codes, questions, messages,
                              check-in lists, webhooks, editing a ticket
 ```
@@ -98,6 +101,11 @@ docker compose -f docker-compose.dev.yml exec backend php artisan dev:bootstrap 
   --email=superadmin@e2e.test --password='SuperAdminPass123!'
 ```
 
+Public order creation and promo-code lookup are rate limited per IP (`APP_PUBLIC_ORDER_RATE_LIMIT_PER_MINUTE`, default 60;
+`APP_PUBLIC_PROMO_CODE_RATE_LIMIT_PER_MINUTE`, default 10); the suite runs from one IP, so set both high (e.g. `100000`) in `backend/.env` first.
+
+Seating and box office specs need `APP_LICENCE_KEY=development` in `backend/.env`. Add it yourself: no install gets it by default, and without it there are no Enterprise features, even on `APP_ENV=local`. The dev stack ignores the `X-Hi-Licence-Simulation` header, so specs that simulate a licence state — including the Hi.Events Cloud feature-flag specs — only really run on the hermetic stack and skip or fail here.
+
 Then run specs directly (from `e2e/`), or the whole suite via the script (from the repo root):
 
 ```bash
@@ -129,6 +137,21 @@ Copy `.env.example` to `.env` to override defaults. All are optional.
 | `MAILPIT_URL`       | `http://localhost:8225`  | Mailpit HTTP API, for email assertions (8225 so it coexists with the dev stack's 8025) |
 | `E2E_SAAS_MODE`     | `false`                  | Must match the backend's `APP_SAAS_MODE_ENABLED`     |
 | `STRIPE_PUBLIC_KEY` | _(unset)_                | Stripe test-mode key; when unset the `@stripe` specs skip |
+| `E2E_STRIPE_CONNECT_ACCOUNT_ID` | _(unset)_    | An enabled Stripe Connect test account (`acct_…`) linked to each organizer by the seated card specs on a SaaS stack; they skip without it |
+| `E2E_COMPOSE_FILE`  | _(per stack)_            | Compose file whose `pgsql` service `utils/db.ts` runs SQL in |
+| `E2E_DB_USER`       | _(per stack)_            | Postgres user for `utils/db.ts`                       |
+| `E2E_DB_NAME`       | _(per stack)_            | Postgres database for `utils/db.ts`                   |
+
+### Direct database helpers
+
+A few states can't be reached through the API in test time (e.g. a checkout reservation
+running out). `utils/db.ts` covers these by running SQL through
+`docker compose exec -T pgsql psql` — `expireOrder(shortId)` moves an order's
+`reserved_until` an hour into the past. It targets the hermetic stack
+(`docker/e2e/docker-compose.e2e.yml`, `hievents`/`hievents_e2e`) by default and the dev stack
+(`docker/development/docker-compose.dev.yml`, `username`/`backend`) when `E2E_BASE_URL` is on
+port `8443`; override with the three variables above. Specs using it need the Docker CLI on the
+machine running Playwright.
 
 ### Stripe specs
 

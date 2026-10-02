@@ -22,6 +22,7 @@ class OrderItemResource extends BaseResource
             'quantity' => $this->getQuantity(),
             'product_id' => $this->getProductId(),
             'event_occurrence_id' => $this->getEventOccurrenceId(),
+            'band_key' => $this->getBandKey(),
             'item_name' => $this->getItemName(),
             'price_before_discount' => $this->getPriceBeforeDiscount(),
             'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),

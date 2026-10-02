@@ -60,6 +60,9 @@
 @if($productTitle)
 <strong>{{ __('Ticket:') }}</strong> {{ $productTitle }}<br>
 @endif
+@if($attendee->getSeatLabel())
+<strong>{{ __('Seat:') }}</strong> {{ $attendee->getSeatLabel() }}<br>
+@endif
 <strong>{{ __('Attendee:') }}</strong> {{ trim($attendee->getFirstName() . ' ' . $attendee->getLastName()) }}
 </div>
 @endif

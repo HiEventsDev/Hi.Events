@@ -2,10 +2,12 @@ import type { APIRequestContext, APIResponse } from '@playwright/test';
 import type {
   Affiliate,
   AttendeeRecord,
+  BoxOffice,
   CapacityAssignment,
   CheckInList,
   CreateAffiliatePayload,
   CreateAttendeePayload,
+  CreateBoxOfficePayload,
   CreateCapacityAssignmentPayload,
   CreateCheckInListPayload,
   CreateEmailTemplatePayload,
@@ -50,6 +52,19 @@ const unwrap = async <T>(promise: Promise<APIResponse>): Promise<T> => {
   const body = (await response.json()) as { data: T };
   return body.data;
 };
+
+export type SeatMapLayout = { schema: number; bands: unknown[]; areas: { id: string; name: string; elements: Record<string, unknown>[] }[] } & Record<string, unknown>;
+
+export interface OccupiedSeat {
+  seat_uid: string;
+  seat_label: string;
+  is_zone: boolean;
+  band_key: string;
+  status: 'HELD' | 'SOLD' | 'BLOCKED';
+  block_reason: string | null;
+  attendee_public_id: string | null;
+  attendee_name: string | null;
+}
 
 const check = async (promise: Promise<APIResponse>): Promise<void> => {
   const response = await promise;
@@ -97,11 +112,21 @@ export async function confirmEmailWithCode(
   }
 }
 
+interface CurrentUser {
+  id: number;
+  feature_flags: Record<string, boolean>;
+  licence: { status: string; invalid_reason: string | null; features_in_use: string[] };
+}
+
 export class ApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
   getAccount(): Promise<{ id: number; name: string }> {
     return unwrap<{ id: number; name: string }>(this.request.get('accounts', { headers: jsonHeaders }));
+  }
+
+  getMe(): Promise<CurrentUser> {
+    return unwrap<CurrentUser>(this.request.get('users/me', { headers: jsonHeaders }));
   }
 
   requestAccountDeletion(confirmation: string): Promise<{ id: number; status: string }> {
@@ -174,6 +199,10 @@ export class ApiClient {
     return this.setEventStatus(eventId, 'LIVE');
   }
 
+  getEvent(eventId: number): Promise<EventRecord> {
+    return unwrap<EventRecord>(this.request.get(`events/${eventId}`, { headers: jsonHeaders }));
+  }
+
   getEventSettings(eventId: number): Promise<EventSettings> {
     return unwrap<EventSettings>(this.request.get(`events/${eventId}/settings`, { headers: jsonHeaders }));
   }
@@ -209,6 +238,34 @@ export class ApiClient {
   createCheckInList(eventId: number, payload: CreateCheckInListPayload): Promise<CheckInList> {
     return unwrap<CheckInList>(
       this.request.post(`events/${eventId}/check-in-lists`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  listBoxOffices(eventId: number): Promise<BoxOffice[]> {
+    return unwrap<BoxOffice[]>(this.request.get(`events/${eventId}/box-offices?per_page=100`));
+  }
+
+  createBoxOffice(eventId: number, payload: CreateBoxOfficePayload): Promise<BoxOffice & { pin: string }> {
+    return unwrap<BoxOffice & { pin: string }>(
+      this.request.post(`events/${eventId}/box-offices`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  updateBoxOffice(eventId: number, boxOfficeId: number, payload: CreateBoxOfficePayload): Promise<BoxOffice> {
+    return unwrap<BoxOffice>(
+      this.request.put(`events/${eventId}/box-offices/${boxOfficeId}`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  resetBoxOfficePin(eventId: number, boxOfficeId: number): Promise<BoxOffice & { pin: string }> {
+    return unwrap<BoxOffice & { pin: string }>(
+      this.request.post(`events/${eventId}/box-offices/${boxOfficeId}/reset-pin`, { headers: jsonHeaders }),
+    );
+  }
+
+  registerTerminalReader(organizerId: number, payload: { registration_code: string; label: string }): Promise<{ id: number; label: string }> {
+    return unwrap<{ id: number; label: string }>(
+      this.request.post(`organizers/${organizerId}/stripe/terminal/readers`, { headers: jsonHeaders, data: payload }),
     );
   }
 
@@ -248,6 +305,97 @@ export class ApiClient {
 
   listOrders(eventId: number): Promise<OrderRecord[]> {
     return unwrap<OrderRecord[]>(this.request.get(`events/${eventId}/orders`, { headers: jsonHeaders }));
+  }
+
+  createSeatMap(organizerId: number, name: string, layout: unknown): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(
+      this.request.post(`organizers/${organizerId}/seat-maps`, { headers: jsonHeaders, data: { name, layout } }),
+    );
+  }
+
+  getSeatMap(organizerId: number, seatMapId: number): Promise<{ layout: { areas: { elements: { id: string; aisles?: number[]; seats?: { acc: boolean }[] }[] }[] } }> {
+    return unwrap(this.request.get(`organizers/${organizerId}/seat-maps/${seatMapId}`, { headers: jsonHeaders }));
+  }
+
+  attachSeatMap(eventId: number, seatMapId: number): Promise<void> {
+    return check(this.request.post(`events/${eventId}/seat-map`, { headers: jsonHeaders, data: { seat_map_id: seatMapId } }));
+  }
+
+  linkSeatMapBands(eventId: number, bandProducts: { band_key: string; products: { product_id: number; price_adjustment?: number }[] }[]): Promise<void> {
+    return check(
+      this.request.put(`events/${eventId}/seat-map/band-products`, {
+        headers: jsonHeaders,
+        data: { band_products: bandProducts },
+      }),
+    );
+  }
+
+  updateSeatMapRules(eventId: number, rules: { prevent_orphan_seats: boolean; max_seats_per_order: number | null; allow_seat_change: boolean }): Promise<void> {
+    return check(this.request.put(`events/${eventId}/seat-map/rules`, { headers: jsonHeaders, data: rules }));
+  }
+
+  blockSeats(eventId: number, occurrenceId: number, seatUids: string[], reason: string | null = null): Promise<void> {
+    return check(
+      this.request.post(`events/${eventId}/seat-blocks`, {
+        headers: jsonHeaders,
+        data: { event_occurrence_ids: [occurrenceId], seat_uids: seatUids, reason },
+      }),
+    );
+  }
+
+  duplicateEvent(eventId: number, title: string, startDate: string): Promise<EventRecord> {
+    return unwrap<EventRecord>(
+      this.request.post(`events/${eventId}/duplicate`, {
+        headers: jsonHeaders,
+        data: {
+          title,
+          start_date: startDate,
+          duplicate_products: true,
+          duplicate_questions: false,
+          duplicate_settings: true,
+          duplicate_promo_codes: false,
+          duplicate_capacity_assignments: false,
+          duplicate_check_in_lists: false,
+          duplicate_event_cover_image: false,
+          duplicate_webhooks: false,
+          duplicate_affiliates: false,
+          duplicate_ticket_logo: false,
+        },
+      }),
+    );
+  }
+
+  occupiedSeats(eventId: number, occurrenceId: number): Promise<OccupiedSeat[]> {
+    return unwrap<OccupiedSeat[]>(
+      this.request.get(`events/${eventId}/occurrences/${occurrenceId}/occupied-seats`, { headers: jsonHeaders }),
+    );
+  }
+
+  getEventSeatMap(eventId: number): Promise<{
+    version: number;
+    layout: SeatMapLayout;
+    source_seat_map: { id: number; name: string } | null;
+    band_products: { band_key: string; products: { product_id: number; price_adjustment: number }[] }[];
+    band_prices?: { band_key: string; product_price_id: number; price: number; price_including_taxes_and_fees: number }[];
+  }> {
+    return unwrap(this.request.get(`events/${eventId}/seat-map`, { headers: jsonHeaders }));
+  }
+
+  updateEventSeatMapLayout(
+    eventId: number,
+    layout: SeatMapLayout,
+    opts: { version?: number; confirmRelabel?: boolean } = {},
+  ): Promise<APIResponse> {
+    return this.request.put(`events/${eventId}/seat-map/layout`, {
+      headers: jsonHeaders,
+      data: { layout, version: opts.version, confirm_relabel: opts.confirmRelabel },
+    });
+  }
+
+  updateSeatMap(organizerId: number, seatMapId: number, name: string, layout: SeatMapLayout): Promise<void> {
+    return check(
+      this.request.put(`organizers/${organizerId}/seat-maps/${seatMapId}`, { headers: jsonHeaders, data: { name, layout } }),
+    );
   }
 
   async findOrderIdByShortId(eventId: number, orderShortId: string): Promise<number> {
@@ -327,6 +475,12 @@ export class ApiClient {
     );
   }
 
+  setOrganizerLocation(organizerId: number, locationId: number | null): Promise<void> {
+    return check(
+      this.request.patch(`organizers/${organizerId}/location`, { headers: jsonHeaders, data: { location_id: locationId } }),
+    );
+  }
+
   createOccurrence(eventId: number, payload: UpdateOccurrencePayload): Promise<Occurrence> {
     return unwrap<Occurrence>(
       this.request.post(`events/${eventId}/occurrences`, { headers: jsonHeaders, data: payload }),
@@ -370,6 +524,15 @@ export class AdminApiClient {
       this.request.put(`admin/accounts/${accountId}/messaging-tier`, {
         headers: jsonHeaders,
         data: { messaging_tier_id: messagingTierId },
+      }),
+    );
+  }
+
+  setAccountFeatureFlag(accountId: number, key: string, enabled: boolean | null): Promise<void> {
+    return check(
+      this.request.put(`admin/accounts/${accountId}/feature-flags/${key}`, {
+        headers: jsonHeaders,
+        data: { enabled },
       }),
     );
   }

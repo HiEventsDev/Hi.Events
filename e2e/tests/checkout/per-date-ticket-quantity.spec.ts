@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { CheckoutPage } from '../../pages/checkout.page';
-import { occurrenceDayLabel, PublicOccurrenceSelector } from '../../pages/occurrence.page';
+import { PublicOccurrenceSelector } from '../../pages/occurrence.page';
 import { ProductEditPage } from '../../pages/product-edit.page';
 import { createRecurringLiveEvent } from '../../api/factory';
 
@@ -21,7 +21,7 @@ test.describe('per-date ticket quantity', () => {
 
     const openDate = async (isoDate: string): Promise<void> => {
       await checkout.gotoPublicEvent(event.eventId, event.slug);
-      await selector.selectDay(occurrenceDayLabel(isoDate));
+      await selector.selectDay(isoDate);
       await expect(selector.productsLoadingOverlay()).toHaveCount(0);
       await expect(page.locator('.hi-product-row').filter({ hasText: event.productTitle })).toBeVisible();
     };

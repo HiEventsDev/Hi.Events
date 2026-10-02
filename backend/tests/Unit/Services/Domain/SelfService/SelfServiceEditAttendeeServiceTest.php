@@ -352,6 +352,47 @@ class SelfServiceEditAttendeeServiceTest extends TestCase
         });
     }
 
+    public function test_box_office_attendee_name_edit_sends_no_change_notification(): void
+    {
+        $attendee = Mockery::mock(AttendeeDomainObject::class);
+        $attendee->shouldReceive('getId')->andReturn(456);
+        $attendee->shouldReceive('getEventId')->andReturn(789);
+        $attendee->shouldReceive('getFirstName')->andReturn('Walk-up');
+        $attendee->shouldReceive('getLastName')->andReturn('');
+        $attendee->shouldReceive('getEmail')->andReturn(null);
+
+        $this->attendeeRepository
+            ->shouldReceive('updateWhere')
+            ->once()
+            ->andReturn(1);
+
+        $mockEventSettings = Mockery::mock(EventSettingDomainObject::class);
+        $mockEventSettings->shouldReceive('getSupportEmail')->andReturn('support@example.com');
+        $mockOrganizer = Mockery::mock(OrganizerDomainObject::class);
+        $mockEvent = Mockery::mock(EventDomainObject::class);
+        $mockEvent->shouldReceive('getEventSettings')->andReturn($mockEventSettings);
+        $mockEvent->shouldReceive('getOrganizer')->andReturn($mockOrganizer);
+
+        $this->eventRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->eventRepository->shouldReceive('findById')->with(789)->andReturn($mockEvent);
+
+        $this->orderAuditLogService->shouldReceive('logAttendeeUpdate')->once();
+
+        $result = $this->service->editAttendee(
+            attendee: $attendee,
+            firstName: 'Jane',
+            lastName: 'Smith',
+            email: null,
+            ipAddress: '192.168.1.1',
+            userAgent: 'Mozilla/5.0'
+        );
+
+        $this->assertTrue($result->success);
+        $this->assertFalse($result->emailChanged);
+
+        Mail::assertNotQueued(AttendeeDetailsChangedMail::class);
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();

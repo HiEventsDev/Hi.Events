@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {SortableProduct} from "./SortableProduct";
 import {SortableCategory} from "./SortableCategory";
 import classes from "./ProductsTable.module.scss";
 import {IdParam, Product, ProductCategory} from "../../../types.ts";
 import {ProductsBlankSlate} from "./ProductsBlankSlate";
+import {useGetEventSeatMap} from "../../../ee/seating/queries/useGetEventSeatMap.ts";
+import {seatedProductIds} from "../../../ee/seating/components/SeatPicker/ticketOptions.ts";
 
 export interface ProductCategoryListProps {
     initialCategories: ProductCategory[];
@@ -20,6 +22,8 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                                                         }) => {
     const [categories, setCategories] = useState<ProductCategory[]>(initialCategories);
     const [filteredCategories, setFilteredCategories] = useState<ProductCategory[]>(initialCategories);
+    const seatMap = useGetEventSeatMap(event?.id, !!event?.has_seat_map).data;
+    const seatedIds = useMemo(() => seatedProductIds(seatMap?.band_products ?? []), [seatMap]);
 
     useEffect(() => {
         setCategories(initialCategories);
@@ -90,6 +94,7 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                                 categories={categories}
                                                 category={category}
                                                 isRecurringEvent={event.type === 'RECURRING'}
+                                                isSeated={seatedIds.has(Number(product.id))}
                                             />
                                         ))}
                                     </div>

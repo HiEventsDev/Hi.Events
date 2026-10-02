@@ -19,23 +19,23 @@ class OccurrenceStatusValidator
     /**
      * @throws ResourceConflictException
      */
-    public function assertOrderOccurrencesArePurchasable(OrderDomainObject $order): void
+    public function assertOrderOccurrencesArePurchasable(OrderDomainObject $order, bool $allowPastOccurrence = false): void
     {
         foreach ($this->resolveOccurrences($order) as $occurrence) {
             if ($occurrence->isCancelled()) {
                 throw new ResourceConflictException(__('This event date has been cancelled'));
             }
 
-            if ($occurrence->isPast()) {
+            if ($occurrence->isPast() && ! $allowPastOccurrence) {
                 throw new ResourceConflictException(__('This event date has already ended'));
             }
         }
     }
 
-    public function findBlockingOccurrence(OrderDomainObject $order): ?EventOccurrenceDomainObject
+    public function findBlockingOccurrence(OrderDomainObject $order, bool $allowPastOccurrence = false): ?EventOccurrenceDomainObject
     {
         foreach ($this->resolveOccurrences($order) as $occurrence) {
-            if ($occurrence->isCancelled() || $occurrence->isPast()) {
+            if ($occurrence->isCancelled() || ($occurrence->isPast() && ! $allowPastOccurrence)) {
                 return $occurrence;
             }
         }

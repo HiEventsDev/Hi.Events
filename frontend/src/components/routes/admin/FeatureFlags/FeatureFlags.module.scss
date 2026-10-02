@@ -1,0 +1,31 @@
+.flagCard {
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-md);
+    padding: 1.25rem;
+}
+
+.flagHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.overrides {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.overrideRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+
+    & + & {
+        border-top: 1px solid var(--mantine-color-gray-1);
+    }
+}

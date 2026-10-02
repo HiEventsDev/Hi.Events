@@ -56,7 +56,13 @@ readonly class ResendAttendeeTicketHandler
         }
 
         if ($attendee->getStatus() !== AttendeeStatus::ACTIVE->name) {
-            throw new ResourceConflictException('You cannot resend the ticket of an inactive attendee');
+            throw new ResourceConflictException(__('You cannot resend the ticket of an inactive attendee'));
+        }
+
+        if ($attendee->getEmail() === null) {
+            throw new ResourceConflictException(
+                __('This attendee has no email address. Add one before resending the ticket.')
+            );
         }
 
         $event = $this->eventRepository

@@ -14,9 +14,17 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
+use HiEvents\DomainObjects\SeatClaimDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
+use HiEvents\Enterprise\Seating\Services\Domain\DTO\SeatSelectionDTO;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatSelectionValidationService;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\InvalidProductPriceId;
 use HiEvents\Exceptions\NoTicketsAvailableException;
@@ -60,10 +68,16 @@ class CreateAttendeeHandler
         private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
         private readonly OrderAuditLogService $orderAuditLogService,
         private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
+        private readonly SeatSelectionValidationService $seatSelectionValidationService,
+        private readonly SeatClaimService $seatClaimService,
+        private readonly EventSeatMapLookupService $eventSeatMapLookup,
+        private readonly SeatingEventLockService $seatingEventLock,
     ) {}
 
     /**
      * @throws NoTicketsAvailableException
+     * @throws SeatsUnavailableException
+     * @throws SeatSelectionInvalidException
      * @throws Throwable
      */
     public function handle(CreateAttendeeDTO $attendeeDTO): AttendeeDomainObject
@@ -82,6 +96,8 @@ class CreateAttendeeHandler
         );
 
         return $this->databaseManager->transaction(function () use ($attendeeDTO) {
+            $this->seatingEventLock->lock($attendeeDTO->event_id);
+
             $this->calculateTaxesAndFees($attendeeDTO);
 
             $order = $this->createOrder($attendeeDTO->event_id, $attendeeDTO);
@@ -101,26 +117,27 @@ class CreateAttendeeHandler
 
             $productPriceId = $this->getProductPriceId($attendeeDTO, $product);
 
-            $availableQuantity = $this->availableProductQuantitiesFetchService
-                ->getAvailableProductQuantities(
-                    $attendeeDTO->event_id,
-                    ignoreCache: true,
-                    eventOccurrenceId: $attendeeDTO->event_occurrence_id,
-                    applyOccurrenceLimits: false,
-                )
-                ->getAvailableQuantityForPrice($productPriceId);
+            $this->seatSelectionValidationService->validate($attendeeDTO->event_id, [[
+                'product_id' => $attendeeDTO->product_id,
+                'event_occurrence_id' => $attendeeDTO->event_occurrence_id,
+                'quantities' => [['quantity' => 1, 'seat_uids' => array_filter([$attendeeDTO->seat_uid])]],
+            ]], enforceSelectionRules: false);
 
-            if ($availableQuantity <= 0) {
-                throw new NoTicketsAvailableException(__('There are no tickets available. '.
-                    'If you would like to assign a product to this attendee,'.
-                    ' please adjust the product\'s available quantity.'));
+            if ($attendeeDTO->seat_uid === null) {
+                $this->assertTicketsAvailable($attendeeDTO, $productPriceId);
+            } elseif (! $attendeeDTO->override_capacity) {
+                $this->assertSharedPoolsHaveRoom($attendeeDTO);
             }
 
             $this->processTaxesAndFees($attendeeDTO);
 
             $orderItem = $this->createOrderItem($attendeeDTO, $order, $product, $productPriceId);
 
-            $attendee = $this->createAttendee($order, $attendeeDTO, $productPriceId);
+            $seatClaim = $this->claimSeat($order, $attendeeDTO, $orderItem);
+
+            $attendee = $this->createAttendee($order, $attendeeDTO, $productPriceId, $seatClaim);
+
+            $this->seatClaimService->pairWithAttendees($order->getId());
 
             $this->orderManagementService->updateOrderTotals($order, collect([$orderItem]));
 
@@ -141,6 +158,68 @@ class CreateAttendeeHandler
 
             return $attendee;
         });
+    }
+
+    /**
+     * @throws NoTicketsAvailableException
+     */
+    private function assertTicketsAvailable(CreateAttendeeDTO $attendeeDTO, int $productPriceId): void
+    {
+        $availableQuantity = $this->availableProductQuantitiesFetchService
+            ->getAvailableProductQuantities(
+                $attendeeDTO->event_id,
+                ignoreCache: true,
+                eventOccurrenceId: $attendeeDTO->event_occurrence_id,
+                applyOccurrenceLimits: false,
+            )
+            ->getAvailableQuantityForPrice($productPriceId);
+
+        if ($availableQuantity <= 0) {
+            throw new NoTicketsAvailableException(__('There are no tickets available. '.
+                'If you would like to assign a product to this attendee,'.
+                ' please adjust the product\'s available quantity.'));
+        }
+    }
+
+    /**
+     * @throws NoTicketsAvailableException
+     */
+    private function assertSharedPoolsHaveRoom(CreateAttendeeDTO $attendeeDTO): void
+    {
+        $fullPool = $this->availableProductQuantitiesFetchService
+            ->getAvailableProductQuantities(
+                $attendeeDTO->event_id,
+                ignoreCache: true,
+                eventOccurrenceId: $attendeeDTO->event_occurrence_id,
+                applyOccurrenceLimits: false,
+            )
+            ->firstOverflowingPool([$attendeeDTO->product_id => 1]);
+
+        if ($fullPool !== null) {
+            throw new NoTicketsAvailableException(__('The capacity shared by this ticket is full.'));
+        }
+    }
+
+    /**
+     * @throws SeatsUnavailableException
+     * @throws SeatSelectionInvalidException
+     */
+    private function claimSeat(OrderDomainObject $order, CreateAttendeeDTO $attendeeDTO, OrderItemDomainObject $orderItem): ?SeatClaimDomainObject
+    {
+        if ($attendeeDTO->seat_uid === null) {
+            return null;
+        }
+
+        $this->seatClaimService->claimForOrder($order, collect([new SeatSelectionDTO(
+            seat_uid: $attendeeDTO->seat_uid,
+            event_occurrence_id: $attendeeDTO->event_occurrence_id,
+            product_id: $attendeeDTO->product_id,
+            product_price_id: $orderItem->getProductPriceId(),
+            order_item_id: $orderItem->getId(),
+        )]), allowBlocked: true);
+
+        return $this->seatClaimService->claimsForOrder($order->getId())
+            ->first(fn (SeatClaimDomainObject $claim) => $claim->getSeatUid() === $attendeeDTO->seat_uid);
     }
 
     private function createOrder(int $eventId, CreateAttendeeDTO $attendeeDTO): OrderDomainObject
@@ -253,12 +332,19 @@ class CreateAttendeeHandler
                 OrderItemDomainObjectAbstract::PRODUCT_TYPE => $product->getProductType(),
                 OrderItemDomainObjectAbstract::TAXES_AND_FEES_ROLLUP => $this->taxAndFeeRollupService->getRollUp(),
                 OrderItemDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
+                OrderItemDomainObjectAbstract::BAND_KEY => $attendeeDTO->seat_uid === null
+                    ? null
+                    : $this->eventSeatMapLookup->bandOf($attendeeDTO->event_id, $attendeeDTO->seat_uid),
             ]
         );
     }
 
-    private function createAttendee(OrderDomainObject $order, CreateAttendeeDTO $attendeeDTO, int $productPriceId): AttendeeDomainObject
-    {
+    private function createAttendee(
+        OrderDomainObject $order,
+        CreateAttendeeDTO $attendeeDTO,
+        int $productPriceId,
+        ?SeatClaimDomainObject $seatClaim,
+    ): AttendeeDomainObject {
         return $this->attendeeRepository->create([
             AttendeeDomainObjectAbstract::EVENT_ID => $order->getEventId(),
             AttendeeDomainObjectAbstract::PRODUCT_ID => $attendeeDTO->product_id,
@@ -272,6 +358,8 @@ class CreateAttendeeHandler
             AttendeeDomainObjectAbstract::SHORT_ID => IdHelper::shortId(IdHelper::ATTENDEE_PREFIX),
             AttendeeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $attendeeDTO->event_occurrence_id,
             AttendeeDomainObjectAbstract::LOCALE => $attendeeDTO->locale,
+            AttendeeDomainObjectAbstract::SEAT_UID => $seatClaim?->getSeatUid(),
+            AttendeeDomainObjectAbstract::SEAT_LABEL => $seatClaim?->getSeatLabel(),
         ]);
     }
 

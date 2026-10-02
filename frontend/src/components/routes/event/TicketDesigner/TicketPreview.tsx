@@ -63,6 +63,7 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         product_id: mockProduct.id,
         product: mockProduct,
         product_price_id: 1,
+        seat_label: event.has_seat_map ? t`Stalls · C-14` : null,
         order_id: 1,
         order: {
             id: 1,

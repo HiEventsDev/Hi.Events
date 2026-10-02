@@ -68,6 +68,16 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
             ->all());
     }
 
+    public function getProductIdsInLiveReservations(array $productIds): array
+    {
+        return $this->runQuery(fn () => $this->reservedItemsQuery()
+            ->whereIn('order_items.product_id', $productIds)
+            ->distinct()
+            ->pluck('order_items.product_id')
+            ->map(fn ($productId) => (int) $productId)
+            ->all());
+    }
+
     private function reservedItemsQuery(): Builder
     {
         return OrderItem::query()
