@@ -82,4 +82,84 @@ class CreateOrganizerHandlerTest extends TestCase
 
         $this->assertSame('PURIFIED:<img src=x onerror=alert(1)>', $capturedAttributes['description']);
     }
+
+    public function test_first_day_of_week_is_stored_when_provided(): void
+    {
+        $attributes = $this->createOrganizer(new CreateOrganizerDTO(
+            name: 'Acme',
+            email: 'acme@test.com',
+            account_id: 1,
+            timezone: 'UTC',
+            currency: 'USD',
+            first_day_of_week: 0,
+        ));
+
+        $this->assertSame(0, $attributes['first_day_of_week']);
+    }
+
+    public function test_first_day_of_week_is_left_to_the_column_default_when_omitted(): void
+    {
+        $attributes = $this->createOrganizer(new CreateOrganizerDTO(
+            name: 'Acme',
+            email: 'acme@test.com',
+            account_id: 1,
+            timezone: 'UTC',
+            currency: 'USD',
+        ));
+
+        $this->assertArrayNotHasKey('first_day_of_week', $attributes);
+    }
+
+    private function createOrganizer(CreateOrganizerDTO $dto): array
+    {
+        $organizerRepository = Mockery::mock(OrganizerRepositoryInterface::class);
+        $organizerConfigurationRepository = Mockery::mock(OrganizerConfigurationRepositoryInterface::class);
+        $accountRepository = Mockery::mock(AccountRepositoryInterface::class);
+        $databaseManager = Mockery::mock(DatabaseManager::class);
+        $createDefaultOrganizerSettingsService = Mockery::mock(CreateDefaultOrganizerSettingsService::class);
+        $purifier = Mockery::mock(HtmlPurifierService::class);
+        $logger = Mockery::mock(LoggerInterface::class);
+
+        $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
+        $purifier->shouldReceive('purify')->andReturnUsing(fn ($v) => is_string($v) ? 'PURIFIED:'.$v : $v);
+
+        $defaultConfiguration = Mockery::mock(OrganizerConfigurationDomainObject::class);
+        $defaultConfiguration->shouldReceive('getId')->andReturn(99);
+        $accountRepository->shouldReceive('findFirst')->andReturn(null);
+        $organizerConfigurationRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['is_system_default' => true])
+            ->andReturn($defaultConfiguration);
+
+        $organizer = Mockery::mock(OrganizerDomainObject::class);
+        $organizer->shouldReceive('getId')->andReturn(5);
+
+        $capturedAttributes = null;
+        $organizerRepository
+            ->shouldReceive('create')
+            ->once()
+            ->andReturnUsing(function ($attributes) use (&$capturedAttributes, $organizer) {
+                $capturedAttributes = $attributes;
+
+                return $organizer;
+            });
+
+        $createDefaultOrganizerSettingsService->shouldReceive('createOrganizerSettings')->once();
+        $organizerRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $organizerRepository->shouldReceive('findById')->with(5)->andReturn($organizer);
+
+        $handler = new CreateOrganizerHandler(
+            $organizerRepository,
+            $organizerConfigurationRepository,
+            $accountRepository,
+            $databaseManager,
+            $createDefaultOrganizerSettingsService,
+            $purifier,
+            $logger,
+        );
+
+        $handler->handle($dto);
+
+        return $capturedAttributes;
+    }
 }
