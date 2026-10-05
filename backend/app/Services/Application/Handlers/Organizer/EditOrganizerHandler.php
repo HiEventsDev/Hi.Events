@@ -30,17 +30,23 @@ class EditOrganizerHandler
 
     private function editOrganizer(EditOrganizerDTO $organizerData): OrganizerDomainObject
     {
+        $attributes = [
+            'name' => $organizerData->name,
+            'email' => $organizerData->email,
+            'phone' => $organizerData->phone,
+            'website' => $organizerData->website,
+            'description' => $this->htmlPurifierService->purify($organizerData->description),
+            'account_id' => $organizerData->account_id,
+            'timezone' => $organizerData->timezone,
+            'currency' => $organizerData->currency,
+        ];
+
+        if ($organizerData->first_day_of_week !== null) {
+            $attributes['first_day_of_week'] = $organizerData->first_day_of_week;
+        }
+
         $this->organizerRepository->updateWhere(
-            attributes: [
-                'name' => $organizerData->name,
-                'email' => $organizerData->email,
-                'phone' => $organizerData->phone,
-                'website' => $organizerData->website,
-                'description' => $this->htmlPurifierService->purify($organizerData->description),
-                'account_id' => $organizerData->account_id,
-                'timezone' => $organizerData->timezone,
-                'currency' => $organizerData->currency,
-            ],
+            attributes: $attributes,
             where: [
                 'id' => $organizerData->id,
                 'account_id' => $organizerData->account_id,
