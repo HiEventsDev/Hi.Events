@@ -38,6 +38,7 @@ import AppLayout from "../AppLayout";
 import {NavLink, useLocation, useParams} from "react-router";
 import classes from './Event.module.scss';
 import {Button} from "@mantine/core";
+import {OrganizerDatesProvider} from "../../common/OrganizerDatesProvider";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {useUpdateEventStatus} from "../../../mutations/useUpdateEventStatus.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
@@ -211,109 +212,111 @@ const EventLayout = () => {
     };
 
     return (
-        <AppLayout
-            navItems={navItemsWithLoading}
-            breadcrumbItems={breadcrumbItems}
-            entityType="event"
-            topBarContent={(
-                <div className={classes.statusToggleContainer}>
-                    {isEventFetched && (
-                        <TopBarButton
-                            onClick={handleStatusToggle}
-                            data-testid="event-status-toggle"
-                            size="sm"
-                            leftSection={(event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
-                            rightSection={<IconChevronRight size={14}/>}
-                        >
-                            {event?.status === 'PENDING_MANUAL_REVIEW'
-                                ? <span>{t`Pending Review`}</span>
-                                : event?.status === 'DRAFT'
-                                    ? <span>{t`Draft`} <span
-                                        className={classes.statusAction}>{t`- Click to Publish`}</span></span>
-                                    : <span>{t`Live`} <span
-                                        className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
-                            }
-                        </TopBarButton>
-                    )}
-                </div>
-            )}
-            breadcrumbContentRight={(
-                <div className={classes.shareButton}>
-                    {event && (
-                        <>
-                            <Button
-                                onClick={open}
-                                variant="transparent"
-                                leftSection={<IconShare size={16}/>}
+        <OrganizerDatesProvider firstDayOfWeek={event?.organizer?.first_day_of_week}>
+            <AppLayout
+                navItems={navItemsWithLoading}
+                breadcrumbItems={breadcrumbItems}
+                entityType="event"
+                topBarContent={(
+                    <div className={classes.statusToggleContainer}>
+                        {isEventFetched && (
+                            <TopBarButton
+                                onClick={handleStatusToggle}
+                                data-testid="event-status-toggle"
+                                size="sm"
+                                leftSection={(event?.status === 'DRAFT' || event?.status === 'PENDING_MANUAL_REVIEW') ? <IconEyeOff size={16}/> : <IconEye size={16}/>}
+                                rightSection={<IconChevronRight size={14}/>}
                             >
-                                {t`Share Event`}
-                            </Button>
-
-                            <ShareModal
-                                url={eventHomepageUrl(event)}
-                                title={event.title}
-                                modalTitle={t`Share Event`}
-                                opened={opened}
-                                onClose={close}
-                            />
-
-                            <EventLiveCelebrationModal
-                                opened={celebrationOpened}
-                                onClose={closeCelebration}
-                                url={eventHomepageUrl(event)}
-                                eventTitle={event.title}
-                                eventId={String(event.id)}
-                            />
-
-                            {publishModalOpened && (
-                                <PublishEventModal
-                                    opened={publishModalOpened}
-                                    onClose={closePublishModal}
-                                    event={event}
-                                    onSuccess={() => {
-                                        closePublishModal();
-                                        openCelebration();
-                                    }}
-                                />
-                            )}
-                        </>
-                    )}
-                </div>
-            )}
-            actionGroupContent={(
-                <Button
-                    component={NavLink}
-                    to={`/event/${eventId}/${event?.slug}`}
-                    target={'_blank'}
-                    variant={'transparent'}
-                    leftSection={<IconExternalLink size={17}/>}
-                    className={classes.eventPageButton}
-                    title={t`Preview Event page`}
-                >
-                    <div className={classes.eventPageButtonText}>
-                                <span className={classes.desktop}>
-                                    {t`Preview Event page`}
-                                </span>
-                        <span className={classes.mobile}>
-                                    {t`Event Page`}
-                                </span>
+                                {event?.status === 'PENDING_MANUAL_REVIEW'
+                                    ? <span>{t`Pending Review`}</span>
+                                    : event?.status === 'DRAFT'
+                                        ? <span>{t`Draft`} <span
+                                            className={classes.statusAction}>{t`- Click to Publish`}</span></span>
+                                        : <span>{t`Live`} <span
+                                            className={classes.statusAction}>{t`- Click to Unpublish`}</span></span>
+                                }
+                            </TopBarButton>
+                        )}
                     </div>
+                )}
+                breadcrumbContentRight={(
+                    <div className={classes.shareButton}>
+                        {event && (
+                            <>
+                                <Button
+                                    onClick={open}
+                                    variant="transparent"
+                                    leftSection={<IconShare size={16}/>}
+                                >
+                                    {t`Share Event`}
+                                </Button>
 
-                </Button>
-            )}
-            sidebarFooter={
-                (me && !me.is_email_verified && !emailConfirmationResent ? (
-                    <SidebarCallout
-                        icon={<IconMailCheck size={20}/>}
-                        heading={t`Verify your email`}
-                        description={t`Confirm your email to access all features.`}
-                        buttonIcon={<IconMailForward size={16}/>}
-                        buttonText={t`Resend email`}
-                        onClick={() => handleEmailConfirmationResend()}
-                    />
-                ) : null)
-            }
-        />
+                                <ShareModal
+                                    url={eventHomepageUrl(event)}
+                                    title={event.title}
+                                    modalTitle={t`Share Event`}
+                                    opened={opened}
+                                    onClose={close}
+                                />
+
+                                <EventLiveCelebrationModal
+                                    opened={celebrationOpened}
+                                    onClose={closeCelebration}
+                                    url={eventHomepageUrl(event)}
+                                    eventTitle={event.title}
+                                    eventId={String(event.id)}
+                                />
+
+                                {publishModalOpened && (
+                                    <PublishEventModal
+                                        opened={publishModalOpened}
+                                        onClose={closePublishModal}
+                                        event={event}
+                                        onSuccess={() => {
+                                            closePublishModal();
+                                            openCelebration();
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
+                )}
+                actionGroupContent={(
+                    <Button
+                        component={NavLink}
+                        to={`/event/${eventId}/${event?.slug}`}
+                        target={'_blank'}
+                        variant={'transparent'}
+                        leftSection={<IconExternalLink size={17}/>}
+                        className={classes.eventPageButton}
+                        title={t`Preview Event page`}
+                    >
+                        <div className={classes.eventPageButtonText}>
+                                    <span className={classes.desktop}>
+                                        {t`Preview Event page`}
+                                    </span>
+                            <span className={classes.mobile}>
+                                        {t`Event Page`}
+                                    </span>
+                        </div>
+
+                    </Button>
+                )}
+                sidebarFooter={
+                    (me && !me.is_email_verified && !emailConfirmationResent ? (
+                        <SidebarCallout
+                            icon={<IconMailCheck size={20}/>}
+                            heading={t`Verify your email`}
+                            description={t`Confirm your email to access all features.`}
+                            buttonIcon={<IconMailForward size={16}/>}
+                            buttonText={t`Resend email`}
+                            onClick={() => handleEmailConfirmationResend()}
+                        />
+                    ) : null)
+                }
+            />
+        </OrganizerDatesProvider>
     );
 };
 

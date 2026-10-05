@@ -620,7 +620,7 @@ const OccurrencePicker = ({
                         <Loader size="sm" color="var(--widget-primary-color, #228be6)"/>
                     </div>
                 )}
-                <DatesProvider settings={{locale, firstDayOfWeek: 1, consistentWeeks: true}}>
+                <DatesProvider settings={{locale, firstDayOfWeek: event.organizer?.first_day_of_week ?? 1, consistentWeeks: true}}>
                     <DatePicker
                         className="hi-occurrence-datepicker"
                         size="md"
