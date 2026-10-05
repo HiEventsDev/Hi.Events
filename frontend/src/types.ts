@@ -2,6 +2,7 @@
  * @todo - This file needs to be organized better. Split into multiple files.
  */
 import {SupportedLocales} from "./locales.ts";
+import type {DayOfWeek} from "@mantine/dates";
 
 export type ConfigKeys = 
     | 'VITE_API_URL_SERVER'
@@ -687,6 +688,7 @@ export interface Organizer {
     description?: string;
     website?: string;
     timezone?: string;
+    first_day_of_week?: DayOfWeek;
     currency?: string;
     slug?: string;
     phone?: string;
