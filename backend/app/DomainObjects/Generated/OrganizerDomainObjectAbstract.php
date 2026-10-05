@@ -26,6 +26,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     final public const TIMEZONE = 'timezone';
     final public const STATUS = 'status';
     final public const STRIPE_TERMINAL_LOCATION_ID = 'stripe_terminal_location_id';
+    final public const FIRST_DAY_OF_WEEK = 'first_day_of_week';
 
     protected int $id;
     protected int $account_id;
@@ -43,6 +44,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     protected string $timezone;
     protected string $status = 'DRAFT';
     protected ?string $stripe_terminal_location_id = null;
+    protected int $first_day_of_week = 1;
 
     public function toArray(): array
     {
@@ -63,6 +65,7 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
                     'timezone' => $this->timezone ?? null,
                     'status' => $this->status ?? null,
                     'stripe_terminal_location_id' => $this->stripe_terminal_location_id ?? null,
+                    'first_day_of_week' => $this->first_day_of_week ?? null,
                 ];
     }
 
@@ -240,5 +243,16 @@ abstract class OrganizerDomainObjectAbstract extends \HiEvents\DomainObjects\Abs
     public function getStripeTerminalLocationId(): ?string
     {
         return $this->stripe_terminal_location_id;
+    }
+
+    public function setFirstDayOfWeek(int $first_day_of_week): self
+    {
+        $this->first_day_of_week = $first_day_of_week;
+        return $this;
+    }
+
+    public function getFirstDayOfWeek(): int
+    {
+        return $this->first_day_of_week;
     }
 }
