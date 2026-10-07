@@ -21,7 +21,7 @@ export const formatDate = (date: string, format: string, tz: string): string => 
     return dayjs.utc(date).tz(tz).format(format);
 };
 
-export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'chartDate' | 'dayMonthTime' | 'monthShort' | 'dayOfMonth' | 'dayName' | 'timeOnly' | 'timezone';
+export type DateFormatType = 'fullDateTime' | 'shortDateTime' | 'shortDate' | 'chartDate' | 'weekdayDate' | 'dayMonthTime' | 'monthShort' | 'dayOfMonth' | 'dayName' | 'timeOnly' | 'timezone';
 
 /**
  * Safely get a supported locale, falling back to 'en' if not supported.

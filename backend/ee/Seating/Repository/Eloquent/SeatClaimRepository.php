@@ -129,11 +129,11 @@ class SeatClaimRepository extends BaseRepository implements SeatClaimRepositoryI
             ->count());
     }
 
-    public function findLiveForOccurrence(int $occurrenceId): Collection
+    public function findLiveForOccurrences(array $occurrenceIds): Collection
     {
         return $this->runQuery(fn () => $this->liveClaims()
-            ->where('seat_claims.event_occurrence_id', $occurrenceId)
-            ->get(['seat_claims.seat_uid', 'seat_claims.is_zone', 'seat_claims.band_key']));
+            ->whereRaw('seat_claims.event_occurrence_id = ANY(?::bigint[])', [$this->bigintArray($occurrenceIds)])
+            ->get(['seat_claims.event_occurrence_id', 'seat_claims.seat_uid', 'seat_claims.is_zone', 'seat_claims.band_key']));
     }
 
     public function findTakenSeatUids(int $occurrenceId, array $except = []): array

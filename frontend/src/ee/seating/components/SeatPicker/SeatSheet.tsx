@@ -1,9 +1,10 @@
-import {useState} from "react";
+import {CSSProperties, useState} from "react";
 import {ActionIcon, Alert, Button, Group, Modal, NumberInput, Stack, Text} from "@mantine/core";
 import {IconAccessible, IconInfoCircle, IconMinus, IconPlus, IconUsers} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import {priceSummary, TicketOption} from "./ticketOptions.ts";
 import classes from "./SeatPicker.module.scss";
+import themeClasses from "../SeatingTheme.module.scss";
 
 export interface SeatSheetTarget {
     uid: string;
@@ -20,6 +21,7 @@ interface SeatSheetProps {
     target: SeatSheetTarget | null;
     currency: string;
     zIndex?: number;
+    themeStyle?: CSSProperties;
     onConfirm: (uid: string, quantity: number) => void;
     onClose: () => void;
 }
@@ -28,7 +30,7 @@ export const SeatSheet = ({target, ...props}: SeatSheetProps) => target
     ? <SeatSheetContent key={target.uid} target={target} {...props}/>
     : null;
 
-const SeatSheetContent = ({target, currency, zIndex, onConfirm, onClose}: SeatSheetProps & {target: SeatSheetTarget}) => {
+const SeatSheetContent = ({target, currency, zIndex, themeStyle, onConfirm, onClose}: SeatSheetProps & {target: SeatSheetTarget}) => {
     const [quantity, setQuantity] = useState(1);
     const isZone = target.zoneRemaining !== undefined;
     const maxQuantity = Math.max(1, target.zoneRemaining ?? 1);
@@ -36,7 +38,8 @@ const SeatSheetContent = ({target, currency, zIndex, onConfirm, onClose}: SeatSh
     const price = priceSummary(target.options.map(option => option.price), currency);
 
     return (
-        <Modal opened onClose={onClose} title={target.label} centered zIndex={zIndex}>
+        <Modal opened onClose={onClose} title={target.label} centered zIndex={zIndex}
+               className={themeClasses.themed} style={themeStyle}>
             <Stack gap="md">
                 {target.accessible && (
                     <Alert icon={<IconAccessible size={18}/>} color="blue">

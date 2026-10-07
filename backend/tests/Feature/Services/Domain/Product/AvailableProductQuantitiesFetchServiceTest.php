@@ -12,11 +12,13 @@ use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Tests\Feature\Support\InsertsRecurringEventRows;
 use Tests\Feature\Support\InsertsSeatMapRows;
@@ -302,6 +304,145 @@ class AvailableProductQuantitiesFetchServiceTest extends TestCase
         $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$seatedProductId]]);
 
         $this->assertSame(5, $this->availableFor($unseatedPriceId, $occurrenceId));
+    }
+
+    public function test_a_single_seated_event_counts_claims_on_its_date_in_the_event_wide_total(): void
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: null, appliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+        $this->insertHeldBackClaim($occurrenceId, 'b_premium');
+
+        $row = $this->row($priceId, null);
+
+        $this->assertSame($this->premiumTierCapacity() - 1, $row->seats_available);
+        $this->assertSame($this->premiumTierCapacity() - 1, $row->quantity_available);
+    }
+
+    public function test_a_recurring_seated_event_offers_the_full_band_in_the_event_wide_total(): void
+    {
+        $occurrenceId = $this->insertOccurrence();
+        $productId = $this->insertProduct();
+        $priceId = $this->insertPrice($productId, initialQuantity: null, appliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$productId]]);
+        $this->insertHeldBackClaim($occurrenceId, 'b_premium');
+
+        $row = $this->row($priceId, null);
+
+        $this->assertSame($this->premiumTierCapacity(), $row->seats_available);
+        $this->assertSame($this->premiumTierCapacity(), $row->quantity_available);
+    }
+
+    public function test_batched_event_wide_quantities_match_each_event_fetched_alone(): void
+    {
+        $eventIds = $this->insertMixedEvents();
+
+        $batched = $this->service->getEventWideQuantitiesForEvents($this->findEvents($eventIds));
+
+        $this->assertSame($eventIds, array_keys($batched));
+        foreach ($eventIds as $eventId) {
+            $this->assertEquals(
+                $this->service->getAvailableProductQuantities($eventId, ignoreCache: true),
+                $batched[$eventId],
+            );
+        }
+    }
+
+    public function test_batched_event_wide_quantities_use_the_same_number_of_queries_however_many_events(): void
+    {
+        $fewEventIds = $this->insertMixedEvents();
+        $manyEventIds = array_merge($fewEventIds, $this->insertMixedEvents(), $this->insertMixedEvents());
+
+        $this->assertSame(
+            $this->countBatchedQueries($fewEventIds),
+            $this->countBatchedQueries($manyEventIds),
+        );
+    }
+
+    public function test_batched_event_wide_quantities_are_served_from_and_written_to_the_cache(): void
+    {
+        config(['app.homepage_product_quantities_cache_ttl' => 60]);
+        $eventIds = $this->insertMixedEvents();
+        $events = $this->findEvents($eventIds);
+
+        $first = $this->service->getEventWideQuantitiesForEvents($events);
+
+        $queries = 0;
+        DB::listen(function () use (&$queries) {
+            $queries++;
+        });
+
+        $this->assertEquals($first, $this->service->getEventWideQuantitiesForEvents($events));
+        $this->assertSame(0, $queries);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function insertMixedEvents(): array
+    {
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $seatedOccurrenceId = $this->insertOccurrence();
+        $seatedProductId = $this->insertProduct();
+        $seatedPriceId = $this->insertPrice($seatedProductId, initialQuantity: 10000, appliesTo: ProductQuantityAppliesTo::EVENT->name);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$seatedProductId]]);
+        $this->insertCapacityAssignment($this->insertProduct(), capacity: 4, usedCapacity: 1);
+        $this->reserve($seatedProductId, $seatedPriceId, $seatedOccurrenceId, 2);
+        $seatedEventId = $this->eventId;
+
+        $this->eventId = $this->insertEvent();
+        $day1 = $this->insertOccurrence(daysAhead: 1);
+        $this->insertOccurrence(daysAhead: 2);
+        $perDateProductId = $this->insertProduct();
+        $perDatePriceId = $this->insertPrice($perDateProductId, initialQuantity: 5);
+        $this->sellTickets($perDateProductId, $perDatePriceId, $day1, 2);
+        $this->insertEventSeatMap($this->seatMapFixture('club'), ['b_premium' => [$this->insertProduct()]]);
+        $recurringEventId = $this->eventId;
+
+        $this->eventId = $this->insertEvent(EventType::SINGLE->name);
+        $this->insertOccurrence();
+        $this->insertPrice($this->insertProduct(ProductType::GENERAL->name), initialQuantity: 8, quantitySold: 3);
+        $plainEventId = $this->eventId;
+
+        return [$seatedEventId, $recurringEventId, $plainEventId];
+    }
+
+    private function findEvents(array $eventIds): Collection
+    {
+        return $this->app->make(EventRepositoryInterface::class)->findWhereIn('id', $eventIds);
+    }
+
+    private function countBatchedQueries(array $eventIds): int
+    {
+        $events = $this->findEvents($eventIds);
+        $this->app->forgetScopedInstances();
+        $this->app->make('cache')->flush();
+        $service = $this->app->make(AvailableProductQuantitiesFetchService::class);
+
+        $queries = 0;
+        DB::listen(function () use (&$queries) {
+            $queries++;
+        });
+
+        $service->getEventWideQuantitiesForEvents($events);
+
+        return $queries;
+    }
+
+    private function insertHeldBackClaim(int $occurrenceId, string $bandKey): void
+    {
+        DB::table('seat_claims')->insert([
+            'event_id' => $this->eventId,
+            'event_occurrence_id' => $occurrenceId,
+            'seat_uid' => 'held_'.uniqid(),
+            'band_key' => $bandKey,
+            'seat_label' => 'Held',
+            'held_back' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function premiumTierCapacity(): int

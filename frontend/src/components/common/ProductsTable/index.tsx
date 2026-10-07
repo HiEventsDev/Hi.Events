@@ -2,7 +2,8 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {SortableProduct} from "./SortableProduct";
 import {SortableCategory} from "./SortableCategory";
 import classes from "./ProductsTable.module.scss";
-import {IdParam, Product, ProductCategory} from "../../../types.ts";
+import {IdParam, Product, ProductCategory, ProductType} from "../../../types.ts";
+import {t} from "@lingui/macro";
 import {ProductsBlankSlate} from "./ProductsBlankSlate";
 import {useGetEventSeatMap} from "../../../ee/seating/queries/useGetEventSeatMap.ts";
 import {seatedProductIds} from "../../../ee/seating/components/SeatPicker/ticketOptions.ts";
@@ -85,7 +86,20 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                     />
                                 )}
                                 {category.products.length > 0 && (
-                                    <div className={classes.cards}>
+                                    <div className={classes.productList}>
+                                        <div className={classes.productListHeader} aria-hidden="true">
+                                            <span/>
+                                            <span className={classes.headerMain}>{t`Product`}</span>
+                                            <span className={classes.headerPrice}>{t`Price`}</span>
+                                            <span className={classes.headerSales}>
+                                                {category.products.every(product => product.product_type === ProductType.Ticket)
+                                                    ? t`Attendees`
+                                                    : t`Sold`}
+                                            </span>
+                                            <span className={classes.headerPeriod}>{t`Sale Period`}</span>
+                                            <span className={classes.headerStatus}>{t`Status`}</span>
+                                            <span/>
+                                        </div>
                                         {category.products.map((product: Product) => (
                                             <SortableProduct
                                                 key={product.id}
@@ -95,6 +109,7 @@ export const ProductCategoryList: React.FC<ProductCategoryListProps> = ({
                                                 category={category}
                                                 isRecurringEvent={event.type === 'RECURRING'}
                                                 isSeated={seatedIds.has(Number(product.id))}
+                                                eventTimezone={event.timezone}
                                             />
                                         ))}
                                     </div>

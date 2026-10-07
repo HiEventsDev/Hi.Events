@@ -1,53 +1,66 @@
-@use "../../../styles/mixins.scss";
-
-// ==========================================
-// Variables & Design Tokens
-// ==========================================
-
-$card-radius: var(--hi-radius-md, 8px);
+$card-radius: var(--hi-radius-lg, 10px);
 $card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-$card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-$transition-fast: 150ms ease;
-$transition-base: 200ms ease;
-
+$transition-fast: 120ms ease;
 
 $color-text-primary: #1f2937;
-$color-text-secondary: #6b7280;
-$color-text-muted: #9ca3af;
+$color-text-secondary: var(--hi-color-text-muted);
+$color-text-muted: var(--hi-color-text-tertiary);
 $color-border: #e5e7eb;
-$color-border-light: #f3f4f6;
-$color-success: #10b981;
-$color-money: #059669;
+$color-hairline: #f0eef3;
+$color-row-hover: color-mix(in srgb, var(--mantine-color-primary-0) 45%, #ffffff);
+$color-header-bg: #fcfbfd;
 
-// ==========================================
-// Category Container Styles
-// ==========================================
+$wide-row: 840px;
 
 .sortableCategory {
   margin-bottom: 24px;
-  transition: transform $transition-base, box-shadow $transition-base;
   border-radius: $card-radius;
   padding: var(--hi-spacing-lg);
   box-shadow: $card-shadow;
   border: 1px solid $color-border;
   background-color: #ffffff;
-
-  &:hover {
-    box-shadow: $card-shadow-hover;
-  }
+  overflow: hidden;
+  container-type: inline-size;
 }
 
 .categoryHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   gap: 12px;
 }
 
 .categoryActions {
   display: flex;
   gap: 8px;
+
+  @container (max-width: 420px) {
+    display: none;
+  }
+}
+
+.categoryMenu {
+  display: none;
+
+  @container (max-width: 420px) {
+    display: flex;
+  }
+}
+
+.actionCell .menuButton,
+.categoryMenu .menuButton {
+  --ai-size: 32px;
+
+  @media (hover: none) {
+    --ai-size: 40px;
+  }
+}
+
+.touchOnly {
+  @media (hover: hover) {
+    display: none;
+  }
 }
 
 .categoryAction {
@@ -63,456 +76,424 @@ $color-money: #059669;
   color: $color-text-primary;
 }
 
-.categoryDragHandle {
-  cursor: grab;
-  color: $color-text-muted;
-  transition: color $transition-fast;
-
-  &:hover {
-    color: $color-text-secondary;
-  }
-
-  &:active {
-    cursor: grabbing;
-  }
-}
-
-.dragHandle {
-  touch-action: none;
-  margin-top: 5px;
-}
-
-.dragHandleDisabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
 .categoryContent {
   min-height: 50px;
 }
 
-.isOver {
-  background-color: $color-border-light;
+.productList {
+  container-type: inline-size;
+  margin: 0 calc(-1 * var(--hi-spacing-lg)) calc(-1 * var(--hi-spacing-lg));
+  border-top: 1px solid $color-hairline;
 }
 
-.isDragging {
-  opacity: 0.6;
-  z-index: 1000;
+%rowGrid {
+  display: grid;
+  grid-template-columns: 32px minmax(200px, 1fr) minmax(88px, 140px) minmax(100px, 150px) minmax(120px, 180px) 96px 36px;
+  grid-template-areas: "sort main price sales period status action";
+  column-gap: 14px;
+  align-items: center;
 }
 
-.dragOverlay {
-  .sortableCategory,
-  .productCard {
-    transform: scale(1.02);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+.productListHeader {
+  @extend %rowGrid;
+  padding: 8px 12px 8px 8px;
+  background-color: $color-header-bg;
+  border-bottom: 1px solid $color-hairline;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $color-text-muted;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    display: none;
   }
 }
 
-.cards {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.headerMain {
+  grid-area: main;
 }
 
-// ==========================================
-// Product Card Styles
-// ==========================================
+.headerPrice {
+  grid-area: price;
+  text-align: right;
+}
 
-.productCard {
+.headerSales {
+  grid-area: sales;
+  text-align: right;
+}
+
+.headerPeriod {
+  grid-area: period;
+}
+
+.headerStatus {
+  grid-area: status;
+}
+
+.productRow {
+  @extend %rowGrid;
   position: relative;
-  box-sizing: border-box;
-  border-radius: $card-radius;
-  border: 1px solid $color-border;
-  background-color: #ffffff;
-  display: grid;
-  padding: 0;
-  overflow: hidden;
-  transition:
-          transform $transition-base,
-          box-shadow $transition-base,
-          border-color $transition-base;
-  grid-template-areas: "sort content action";
-  grid-template-columns: 44px 1fr auto;
+  padding: 12px 12px 12px 8px;
+  border-bottom: 1px solid $color-hairline;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   &:hover {
-    box-shadow: $card-shadow-hover;
-    border-color: darken($color-border, 5%);
+    background-color: $color-row-hover;
 
-    .actionButton {
-      background-color: $color-border-light;
+    .titleButton {
+      color: var(--mantine-color-primary-7);
     }
   }
 
-  @include mixins.respond-below(lg) {
+  @container (max-width: #{$wide-row - 1px}) {
+    grid-template-columns: 28px minmax(0, 1fr) 36px;
     grid-template-areas:
-      "sort content"
-      "sort action";
-    grid-template-columns: 40px 1fr;
-  }
+      "sort main action"
+      "sort stats stats";
+    column-gap: 10px;
+    row-gap: 8px;
+    padding: 12px 10px 12px 6px;
 
-  @include mixins.respond-below(sm) {
-    grid-template-areas:
-      "content"
-      "action";
-    grid-template-columns: 1fr;
-
-    .sortControls {
-      display: none;
+    @media (hover: none) {
+      grid-template-columns: minmax(0, 1fr) 40px;
+      grid-template-areas:
+        "main action"
+        "stats stats";
+      padding: 12px 8px 12px 16px;
     }
   }
 
   &.soldOut {
-    opacity: 0.7;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-                      -45deg,
-                      transparent,
-                      transparent 10px,
-                      rgba(0, 0, 0, 0.02) 10px,
-                      rgba(0, 0, 0, 0.02) 20px
-      );
-      pointer-events: none;
+    .titleButton,
+    .priceAmount {
+      color: $color-text-secondary;
     }
   }
 }
 
-
-// Sort controls
 .sortControls {
   grid-area: sort;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 12px 0;
-  border-right: 1px solid $color-border-light;
-  background-color: #fafafa;
-}
+  transition: opacity $transition-fast;
 
-// Main content area
-.productContent {
-  grid-area: content;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 20px;
-  gap: 14px;
-  min-width: 0;
+  @media (hover: hover) {
+    opacity: 0;
 
-  @include mixins.respond-below(sm) {
-    padding: 14px 16px;
-    gap: 12px;
+    .productRow:hover &,
+    .productRow:focus-within & {
+      opacity: 1;
+    }
+  }
+
+  @container (max-width: #{$wide-row - 1px}) {
+    @media (hover: none) {
+      display: none;
+    }
   }
 }
 
-// Header section
-.productHeader {
+.productMain {
+  grid-area: main;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.badgeRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.typeBadges {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.titleLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.typeIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: $color-text-muted;
 }
 
 .productTitle {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: $color-text-primary;
-  line-height: 1.4;
-
-  @include mixins.respond-below(sm) {
-    font-size: 15px;
-  }
-}
-
-.statusBadge {
-  flex-shrink: 0;
-  font-weight: 500;
-  text-transform: uppercase;
-  font-size: 10px;
-  letter-spacing: 0.5px;
-}
-
-// Details grid
-.detailsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-
-  @include mixins.respond-below(lg) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  @include mixins.respond-below(md) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  @include mixins.respond-below(xs) {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
-.detailItem {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
-.detailLabel {
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: $color-text-muted;
-}
+.titleButton {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: $color-text-primary;
+  text-align: left;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  transition: color $transition-fast;
 
-// Price styling
-.priceValue {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.priceAmount {
-  font-size: 16px;
-  font-weight: 700;
-  color: $color-money;
-  font-variant-numeric: tabular-nums;
-
-  @include mixins.respond-below(sm) {
-    font-size: 15px;
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-primary-5);
+    outline-offset: 2px;
+    border-radius: 3px;
   }
 }
 
-.freePrice {
-  color: $color-success;
+.metaChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.taxIndicator {
+.metaChip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
-  background-color: #fef3c7;
-  color: #92400e;
-  border-radius: 4px;
-  font-size: 11px;
+  padding: 1px 7px 1px 6px;
+  border-radius: 6px;
+  background-color: #f3f2f5;
+  color: #4b5563;
+  font-size: 12px;
   font-weight: 500;
-  cursor: help;
-  transition: background-color $transition-fast;
-
-  &:hover {
-    background-color: #fde68a;
-  }
+  line-height: 20px;
+  white-space: nowrap;
 
   svg {
     flex-shrink: 0;
+    color: var(--chip-icon-color);
   }
 }
 
-// Sales styling
-.salesValue {
+.productStats {
+  display: contents;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    grid-area: stats;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px 16px;
+    min-width: 0;
+
+    &::before {
+      content: '';
+      order: 2;
+      flex-basis: 100%;
+      height: 0;
+    }
+  }
+}
+
+.statusCell {
+  grid-area: status;
+  order: 0;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $color-text-primary;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--status-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-color) 18%, transparent);
+}
+
+.priceCell {
+  grid-area: price;
+  order: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  text-align: right;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+    text-align: left;
+  }
+}
+
+.priceAmount {
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-text-primary;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.freePrice {
+  color: var(--hi-color-success);
+}
+
+.taxIndicator {
+  font-size: 12px;
+  color: $color-text-secondary;
+  border-bottom: 1px dotted $color-text-muted;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.salesCell {
+  grid-area: sales;
+  order: 3;
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+  text-align: right;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+  }
+}
+
+.inlineLabel {
+  display: none;
+  font-size: 13px;
+  color: $color-text-secondary;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    display: inline;
+  }
 }
 
 .salesWithProgress {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: flex-end;
+  gap: 5px;
+  width: 100%;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+  }
 }
 
 .salesCount {
-  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
   font-weight: 600;
   color: $color-text-primary;
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
+  font-variant-numeric: tabular-nums;
 
-  @include mixins.respond-below(sm) {
-    font-size: 15px;
+  .salesWithProgress & {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 3px;
+  }
+
+  @container (max-width: #{$wide-row - 1px}) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
   }
 }
 
 .salesTotal {
-  font-size: 13px;
   font-weight: 400;
-  color: $color-text-muted;
+  color: $color-text-secondary;
 }
 
-.unlimited {
+.salesMeta {
   font-size: 12px;
   font-weight: 400;
-  color: $color-text-muted;
-  margin-left: 4px;
+  color: $color-text-secondary;
+  white-space: nowrap;
+
+  @container (max-width: #{$wide-row - 1px}) {
+    font-size: 13px;
+
+    &::before {
+      content: '·';
+      margin-right: 6px;
+    }
+  }
 }
 
 .salesProgress {
+  width: 100%;
   max-width: 120px;
 
-  @include mixins.respond-below(sm) {
-    max-width: 100%;
+  @container (max-width: #{$wide-row - 1px}) {
+    width: 56px;
   }
 }
 
 .lowStock {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  color: #ea580c;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  &::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #ea580c;
-    animation: pulse 2s infinite;
-  }
+  color: var(--mantine-color-orange-7);
+  white-space: nowrap;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.periodCell {
+  grid-area: period;
+  order: 4;
+  min-width: 0;
+  font-size: 13px;
+  color: $color-text-primary;
 }
 
-// Date styling
-.dateValue {
-  display: flex;
-  align-items: center;
-}
-
-.dateRange {
+.periodText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.dateItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
+.periodDate {
+  font-size: 12px;
   color: $color-text-secondary;
-  cursor: help;
 
-  svg {
-    color: $color-text-muted;
-    flex-shrink: 0;
+  @container (max-width: #{$wide-row - 1px}) {
+    display: none;
   }
 }
 
-.alwaysAvailable,
-.noEndDate {
-  font-size: 13px;
-  color: $color-text-muted;
-  font-style: italic;
+.periodMuted {
+  color: $color-text-secondary;
 }
 
-// Action section
-.actionSection {
+.actionCell {
   grid-area: action;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-  border-left: 1px solid $color-border-light;
-  background-color: #fafafa;
+  justify-content: flex-end;
+  align-self: center;
 
-  @include mixins.respond-below(lg) {
-    border-left: none;
-    border-top: 1px solid $color-border-light;
-    padding: 12px 16px;
-    justify-content: flex-start;
+  @container (max-width: #{$wide-row - 1px}) {
+    align-self: start;
   }
-}
-
-.actionButton {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background-color $transition-fast;
-
-  @include mixins.respond-below(lg) {
-    padding: 6px 12px;
-  }
-}
-
-.actionButtonText {
-  @include mixins.respond-above(lg) {
-    display: none;
-  }
-}
-
-.actionButtonIcon {
-  @include mixins.respond-below(lg) {
-    display: none;
-  }
-}
-
-
-// ==========================================
-// Drag Preview
-// ==========================================
-
-.dragPreview {
-  background-color: #fff;
-  border: 1px solid $color-border;
-  border-radius: $card-radius;
-  padding: 12px 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-
-  h3 {
-    margin: 0 0 4px;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  p {
-    margin: 0;
-    color: $color-text-secondary;
-    font-size: 13px;
-  }
-}
-
-.moreProducts {
-  background-color: $color-border-light;
-  border-radius: $card-radius;
-  padding: 12px 16px;
-  margin-top: 8px;
-  font-size: 13px;
-  color: $color-text-secondary;
-  text-align: center;
-}
-
-.isDragging {
-  opacity: 0.5;
-  box-shadow: $card-shadow;
 }

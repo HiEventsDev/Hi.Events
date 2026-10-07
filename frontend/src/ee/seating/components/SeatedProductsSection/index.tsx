@@ -1,4 +1,4 @@
-import {ReactNode, RefCallback} from "react";
+import {CSSProperties, ReactNode, RefCallback} from "react";
 import {Button} from "@mantine/core";
 import {IconArmchair, IconArrowsMaximize} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -12,9 +12,11 @@ import {SeatSheet} from "../SeatPicker/SeatSheet.tsx";
 import {SeatPrices} from "../SeatPicker/SeatPrices.tsx";
 import {SeatSelection} from "../SeatPicker/useSeatSelection.ts";
 import classes from "./SeatedProductsSection.module.scss";
+import themeClasses from "../SeatingTheme.module.scss";
 
 interface SeatedProductsSectionProps {
     sectionRef: RefCallback<HTMLDivElement>;
+    portalThemeStyle: CSSProperties | undefined;
     selection: SeatSelection;
     seatMap: PublicEventSeatMap;
     currency: string;
@@ -32,6 +34,7 @@ interface SeatedProductsSectionProps {
 
 export const SeatedProductsSection = ({
     sectionRef,
+    portalThemeStyle,
     selection,
     seatMap,
     currency,
@@ -51,7 +54,7 @@ export const SeatedProductsSection = ({
     const hasChoices = selection.lines.length > 0;
 
     return (
-        <div ref={sectionRef} className={classes.section} data-testid="seated-products-section">
+        <div ref={sectionRef} className={`${classes.section} ${themeClasses.themed}`} data-testid="seated-products-section">
             <div className={classes.toolbar}>
                 {seatMap.layout.areas.length > 1
                     ? <AreaTabs areas={seatMap.layout.areas} value={area.id} onChange={onAreaChange}/>
@@ -65,7 +68,7 @@ export const SeatedProductsSection = ({
                 )}
             </div>
 
-            <div className={classes.mapWrap}>
+            <div className={`${classes.mapWrap} ${themeClasses.lightCanvas}`}>
                 {!isCoveredByPicker && (
                     <SeatMapRenderer area={area} bands={index.bands} seatStates={selection.seatStates} interactive={isInteractive}
                                      zoneRemaining={selection.availability?.zone_remaining} zoneSelected={selection.zoneSelected}
@@ -114,12 +117,13 @@ export const SeatedProductsSection = ({
                             lostLabels={selection.lostLabels}
                             bestAvailableOptions={canFindBestAvailable ? selection.bestAvailableOptions : []}
                             isFindingSeats={selection.isFindingSeats}
+                            portalThemeStyle={portalThemeStyle}
                             onFindBestAvailable={selection.findBestAvailable}
                             onChangeOption={selection.changeOption}
                             onRemove={selection.removeLine}/>
 
                     {!isCoveredByPicker && (
-                        <SeatSheet target={selection.sheetTarget} currency={currency}
+                        <SeatSheet target={selection.sheetTarget} currency={currency} themeStyle={portalThemeStyle}
                                    onConfirm={selection.confirmSheet} onClose={() => selection.setSheetTarget(null)}/>
                     )}
                 </div>

@@ -42,8 +42,9 @@
   background: transparent;
   color: var(--hi-text, inherit);
 
-  &:hover {
+  &.control:hover {
     background: var(--hi-inset-bg, rgba(0, 0, 0, 0.05));
+    color: var(--hi-text, inherit);
   }
 }
 
@@ -51,8 +52,9 @@
   background: var(--hi-soft-accent, rgba(0, 0, 0, 0.06));
   color: var(--hi-accent, inherit);
 
-  &:hover {
+  &.control:hover {
     background: var(--hi-soft-accent-strong, var(--hi-soft-accent, rgba(0, 0, 0, 0.1)));
+    color: var(--hi-accent, inherit);
   }
 
   &[data-limit] {

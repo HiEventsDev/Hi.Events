@@ -51,6 +51,7 @@ class PartialUpdateOrganizerSettingsHandler
                 'linkedin' => $dto->getProvided('linkedinHandle', $organizerSettings->getSocialMediaHandle('linkedin')),
                 'discord' => $dto->getProvided('discordHandle', $organizerSettings->getSocialMediaHandle('discord')),
                 'tiktok' => $dto->getProvided('tiktokHandle', $organizerSettings->getSocialMediaHandle('tiktok')),
+                'bluesky' => $dto->getProvided('blueskyHandle', $organizerSettings->getSocialMediaHandle('bluesky')),
                 'youtube' => $dto->getProvided('youtubeHandle', $organizerSettings->getSocialMediaHandle('youtube')),
                 'snapchat' => $dto->getProvided('snapchatHandle', $organizerSettings->getSocialMediaHandle('snapchat')),
                 'twitch' => $dto->getProvided('twitchHandle', $organizerSettings->getSocialMediaHandle('twitch')),

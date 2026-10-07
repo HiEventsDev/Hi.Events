@@ -56,7 +56,7 @@ test.describe('recurring event checkout', () => {
     const checkout = new CheckoutPage(page);
     const selector = new PublicOccurrenceSelector(page);
     await checkout.gotoPublicEvent(event.eventId, event.slug);
-    await selector.calendar().waitFor();
+    await selector.openCalendar();
     for (let i = 0; i < monthsAhead; i++) {
       await selector.nextMonthButton().click();
     }
@@ -74,7 +74,7 @@ test.describe('recurring event checkout', () => {
     await expect(page.getByText(new RegExp(`${month} ${day}\\b`)).first()).toBeVisible();
   });
 
-  test('a deep link to a far-out occurrence anchors the calendar on its month', async ({ page, api, account }) => {
+  test('a deep link to a far-out occurrence selects it in the date strip and anchors the calendar on its month', async ({ page, api, account }) => {
     const event = await createRecurringLiveEvent(api, account.organizerId, { count: 20 });
     const sorted = [...event.occurrences].sort((a, b) => a.start_date.localeCompare(b.start_date));
     const target = sorted[sorted.length - 1];
@@ -84,7 +84,9 @@ test.describe('recurring event checkout', () => {
     const selector = new PublicOccurrenceSelector(page);
     await page.goto(`/event/${event.eventId}/${event.slug}?occurrence_id=${target.id}`);
 
-    await expect(selector.monthHeader()).toHaveText(`${month} ${year}`);
     await expect(selector.slotHeaderDay()).toHaveText(`${weekday}, ${month} ${day}`);
+    await expect(selector.dateCard(new RegExp(`^${weekday}, ${month} ${day},`))).toBeChecked();
+    await selector.openCalendar();
+    await expect(selector.monthHeader()).toHaveText(`${month} ${year}`);
   });
 });

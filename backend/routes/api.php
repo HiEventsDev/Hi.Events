@@ -732,7 +732,8 @@ $router->prefix('/public')->group(
 
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
-        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
+        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class)
+            ->middleware('cache.guest:10,page,per_page,sort_by,sort_direction,query,filter_fields,eventsStatus');
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
             ->middleware('throttle:5,1,organizer-contact');
 

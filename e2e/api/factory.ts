@@ -45,6 +45,7 @@ interface SeedOptions {
   productDescription?: string;
   quantityAvailable?: number;
   waitlistEnabled?: boolean;
+  hideWhenSoldOut?: boolean;
   showQuantityRemaining?: boolean;
   taxIds?: number[];
   prices?: { price: number; label?: string; initial_quantity_available?: number }[];
@@ -118,6 +119,7 @@ export async function createLiveEventWithProduct(api: ApiClient, opts: SeedOptio
       ...priceEntry,
     })),
     ...(opts.waitlistEnabled !== undefined ? { waitlist_enabled: opts.waitlistEnabled } : {}),
+    ...(opts.hideWhenSoldOut !== undefined ? { hide_when_sold_out: opts.hideWhenSoldOut } : {}),
     ...(opts.showQuantityRemaining !== undefined ? { show_quantity_remaining: opts.showQuantityRemaining } : {}),
     ...(opts.sequentialTierReleaseEnabled !== undefined ? { sequential_tier_release_enabled: opts.sequentialTierReleaseEnabled } : {}),
     ...(opts.taxIds ? { tax_and_fee_ids: opts.taxIds } : {}),

@@ -92,22 +92,20 @@ function buildCheckoutOptions(
     const paneLocation = pane.locator('.hi-slot-header-location');
     const standardRow = page.locator('.hi-product-row').filter({ hasText: 'Standard Ticket' });
 
-    await expect(page.getByRole('heading', { name: 'Select a Date & Time' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Choose a date' })).toBeVisible();
+    await selector.waitForDateStrip();
     for (const occurrence of occurrences) {
-      await selector.navigateToMonthOf(occurrence.start_date);
-      await expect(selector.dayButton(dayButtonLabel(occurrence.start_date))).toBeVisible();
+      await expect(selector.dateCard(dayButtonLabel(occurrence.start_date))).toBeVisible();
     }
 
-    await selector.navigateToMonthOf(first.start_date);
+    await expect(selector.dateCard(dayButtonLabel(first.start_date))).toBeChecked();
     await expect(selector.slotHeaderDay()).toHaveText(paneHeaderDay(first.start_date));
     await expect(paneTime).toContainText(/7:00\s?PM/i);
     await expect(paneLocation).toHaveCount(0);
     await expect(selector.productsLoadingOverlay()).toHaveCount(0);
     await expect(standardRow.getByText(BASE_STANDARD_INCLUSIVE).first()).toBeVisible();
 
-    const secondLabel = dayButtonLabel(second.start_date);
-    await selector.navigateToMonthOf(second.start_date);
-    await selector.dayButton(secondLabel).click();
+    await selector.selectDay(second.start_date);
     await expect(selector.slotHeaderDay()).toHaveText(paneHeaderDay(second.start_date));
     await expect(paneTime).toContainText(/7:00\s?PM/i);
     await expect(pane.getByText(OCCURRENCE_LABEL)).toBeVisible();

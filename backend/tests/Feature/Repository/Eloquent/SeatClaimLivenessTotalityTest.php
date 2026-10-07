@@ -50,7 +50,7 @@ class SeatClaimLivenessTotalityTest extends TestCase
 
         $this->insertSeatClaim($orderId, $seatUid, $heldBack);
 
-        $isLive = $this->repository->findLiveForOccurrence($this->occurrenceId)->contains('seat_uid', $seatUid);
+        $isLive = $this->repository->findLiveForOccurrences([$this->occurrenceId])->contains('seat_uid', $seatUid);
 
         $this->repository->deleteDeadClaimsForSeats([$this->occurrenceId], [$seatUid]);
         $isDead = DB::table('seat_claims')->where('seat_uid', $seatUid)->doesntExist();
@@ -89,7 +89,7 @@ class SeatClaimLivenessTotalityTest extends TestCase
 
         $orderIsLive = $this->orderIsLive($status, $reservedUntil, $softDeleted);
 
-        $this->assertSame($orderIsLive || $heldBack, $this->repository->findLiveForOccurrence($this->occurrenceId)->contains('seat_uid', $seatUid));
+        $this->assertSame($orderIsLive || $heldBack, $this->repository->findLiveForOccurrences([$this->occurrenceId])->contains('seat_uid', $seatUid));
 
         $this->repository->deleteDeadClaimsForSeats([$this->occurrenceId], [$seatUid]);
 
@@ -167,11 +167,11 @@ class SeatClaimLivenessTotalityTest extends TestCase
 
         $this->repository->deleteDeadClaimsForSeats([$this->occurrenceId], [$seatUid]);
 
-        $this->assertTrue($this->repository->findLiveForOccurrence($this->occurrenceId)->contains('seat_uid', $seatUid));
+        $this->assertTrue($this->repository->findLiveForOccurrences([$this->occurrenceId])->contains('seat_uid', $seatUid));
 
         $this->repository->deleteBlocks([$this->occurrenceId], [$seatUid]);
 
-        $this->assertFalse($this->repository->findLiveForOccurrence($this->occurrenceId)->contains('seat_uid', $seatUid));
+        $this->assertFalse($this->repository->findLiveForOccurrences([$this->occurrenceId])->contains('seat_uid', $seatUid));
     }
 
     private function insertSeatClaim(?int $orderId, string $seatUid, bool $heldBack = false): void

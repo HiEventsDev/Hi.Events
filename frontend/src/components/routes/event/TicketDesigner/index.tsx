@@ -1,72 +1,63 @@
-import {useEffect, useState} from "react";
-import classes from './TicketDesigner.module.scss';
+import {useEffect} from "react";
 import {useParams} from "react-router";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {IdParam} from "../../../../types.ts";
+import {EventSettings} from "../../../../types.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, ColorInput, Textarea, Accordion, Stack, Text, Group, Select} from "@mantine/core";
-import {IconColorSwatch, IconHelp, IconPrinter} from "@tabler/icons-react";
-import {Tooltip} from "../../../common/Tooltip";
+import {Button, ColorInput, Select, Text, Textarea, Tooltip} from "@mantine/core";
+import {IconCalendar, IconPalette, IconPhoto, IconPrinter, IconTextCaption} from "@tabler/icons-react";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {queryClient} from "../../../../utilites/queryClient.ts";
 import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {LoadingMask} from "../../../common/LoadingMask";
-import {TicketPreview} from "./TicketPreview";
+import {DesignerSection, DesignerShell} from "../../../common/DesignerShell";
+import {TicketDesignSettings, TicketPreview} from "./TicketPreview";
 
-interface TicketDesignSettings {
-    accent_color: string;
-    logo_image_id: IdParam;
-    footer_text: string | null;
-    date_display_mode: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
-    enabled: boolean;
-}
+const FOOTER_MAX_LENGTH = 500;
+
+const ACCENT_SWATCHES = [
+    '#333333',
+    '#8b5cf6',
+    '#6366f1',
+    '#2563eb',
+    '#0891b2',
+    '#059669',
+    '#ca8a04',
+    '#ea580c',
+    '#dc2626',
+    '#db2777',
+];
+
+const formValuesFromSettings = (settings: EventSettings['ticket_design_settings']): TicketDesignSettings => ({
+    accent_color: settings?.accent_color || '#333333',
+    footer_text: settings?.footer_text || '',
+    date_display_mode: settings?.date_display_mode || 'START_DATE_TIME',
+    enabled: settings?.enabled !== false,
+});
 
 const TicketDesigner = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const eventImagesQuery = useGetEventImages(eventId);
     const updateMutation = useUpdateEventSettings();
-
-    const [accordionValue, setAccordionValue] = useState<string[]>(['design']);
+    const formErrorHandle = useFormErrorResponseHandler();
 
     const existingLogo = eventImagesQuery.data?.find((image) => image.type === 'TICKET_LOGO');
 
     const form = useForm<TicketDesignSettings>({
-        initialValues: {
-            accent_color: '#333333',
-            logo_image_id: undefined,
-            footer_text: '',
-            date_display_mode: 'START_DATE_TIME',
-            enabled: true,
-        }
+        initialValues: formValuesFromSettings(undefined),
     });
 
-    const formErrorHandle = useFormErrorResponseHandler();
-
     useEffect(() => {
-        if (eventSettingsQuery?.isFetched && eventSettingsQuery?.data?.ticket_design_settings) {
-            const settings = eventSettingsQuery.data.ticket_design_settings;
-            form.setValues({
-                accent_color: settings.accent_color || '#333333',
-                logo_image_id: settings.logo_image_id || undefined,
-                footer_text: settings.footer_text || '',
-                date_display_mode: settings.date_display_mode || 'START_DATE_TIME',
-                enabled: settings.enabled !== false,
-            });
+        if (eventSettingsQuery.data && !form.isDirty()) {
+            const values = formValuesFromSettings(eventSettingsQuery.data.ticket_design_settings);
+            form.setValues(values);
+            form.resetDirty(values);
         }
-    }, [eventSettingsQuery.isFetched]);
-
-    useEffect(() => {
-        if (existingLogo?.id) {
-            form.setFieldValue('logo_image_id', existingLogo.id);
-        } else {
-            form.setFieldValue('logo_image_id', null);
-        }
-    }, [existingLogo?.id]);
+    }, [eventSettingsQuery.data]);
 
     const handleSubmit = (values: TicketDesignSettings) => {
         updateMutation.mutate(
@@ -74,16 +65,17 @@ const TicketDesigner = () => {
                 eventSettings: {
                     ticket_design_settings: {
                         accent_color: values.accent_color,
-                        logo_image_id: values.logo_image_id,
+                        logo_image_id: existingLogo?.id,
                         footer_text: values.footer_text || undefined,
                         date_display_mode: values.date_display_mode,
-                        enabled: values.enabled
+                        enabled: values.enabled,
                     }
                 },
                 eventId: eventId
             },
             {
                 onSuccess: () => {
+                    form.resetDirty(values);
                     showSuccess(t`Ticket design saved successfully`);
                 },
                 onError: (error) => {
@@ -103,136 +95,111 @@ const TicketDesigner = () => {
         return <LoadingMask/>;
     }
 
+    const isDisabled = updateMutation.isPending;
+    const hasUnsavedChanges = form.isDirty();
+
     return (
-        <div className={classes.container}>
-            <div className={classes.sidebar}>
-                <div className={classes.sticky}>
-                    <div className={classes.header}>
-                        <h2>{t`Ticket Design`}</h2>
-                        <Text c="dimmed" size="sm">{t`Brand your tickets with a custom logo, colors, and footer message.`}</Text>
-                    </div>
-
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <fieldset disabled={updateMutation.isPending} className={classes.fieldset}>
-                            <Accordion 
-                                multiple 
-                                value={accordionValue} 
-                                onChange={setAccordionValue}
-                                variant="contained"
-                                className={classes.accordion}
-                            >
-                                <Accordion.Item value="design" className={classes.accordionItem}>
-                                    <Accordion.Control icon={<IconColorSwatch size={20} />}>
-                                        <Text fw={500}>{t`Design Elements`}</Text>
-                                    </Accordion.Control>
-                                    <Accordion.Panel>
-                                        <Stack gap="lg">
-                                            <div>
-                                                <ColorInput
-                                                    format="hexa"
-                                                    label={t`Accent Color`}
-                                                    description={t`Used for borders, highlights, and QR code styling`}
-                                                    size="sm"
-                                                    {...form.getInputProps('accent_color')}
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <Group justify={'space-between'} mb="xs">
-                                                    <Text fw={500} size="sm">{t`Logo`}</Text>
-                                                    <Tooltip
-                                                        label={t`We recommend a square logo with minimum dimensions of 200x200px`}>
-                                                        <IconHelp size={16} style={{ color: 'var(--mantine-color-gray-6)' }}/>
-                                                    </Tooltip>
-                                                </Group>
-                                                <ImageUploadDropzone
-                                                    imageType="TICKET_LOGO"
-                                                    entityId={eventId}
-                                                    onUploadSuccess={handleImageChange}
-                                                    onDeleteSuccess={handleImageChange}
-                                                    existingImageData={{
-                                                        url: existingLogo?.url,
-                                                        id: existingLogo?.id,
-                                                    }}
-                                                    helpText={t`Logo will be displayed on the ticket`}
-                                                    displayMode="compact"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <Textarea
-                                                    label={t`Footer Text`}
-                                                    description={t`Optional text for disclaimers, contact info, or thank you notes (single line only)`}
-                                                    placeholder={t`Thank you for attending!`}
-                                                    rows={2}
-                                                    maxLength={500}
-                                                    {...form.getInputProps('footer_text')}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') {
-                                                            e.preventDefault();
-                                                        }
-                                                    }}
-                                                    onChange={(e) => {
-                                                        const value = e.currentTarget.value.replace(/\n/g, ' ');
-                                                        form.setFieldValue('footer_text', value);
-                                                    }}
-                                                />
-                                                <Text size="xs" c="dimmed" ta="right" mt={4}>
-                                                    {form.values.footer_text?.length || 0} / 500
-                                                </Text>
-                                            </div>
-
-                                            <div>
-                                                <Select
-                                                    label={t`Event date display`}
-                                                    description={t`Choose how the event date is shown on the ticket`}
-                                                    size="sm"
-                                                    allowDeselect={false}
-                                                    data={[
-                                                        {value: 'START_DATE_TIME', label: t`Only show start date and time`},
-                                                        {value: 'DATE_RANGE', label: t`Show entire date range`},
-                                                        {value: 'HIDDEN', label: t`Hide the date`},
-                                                    ]}
-                                                    {...form.getInputProps('date_display_mode')}
-                                                />
-                                            </div>
-                                        </Stack>
-                                    </Accordion.Panel>
-                                </Accordion.Item>
-                            </Accordion>
-
-                            <Stack gap="sm" mt="xl">
-                                <Button type="submit" fullWidth disabled={!form.isDirty()}>
-                                    {t`Save Ticket Design`}
-                                </Button>
-                            </Stack>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-
-            <div className={classes.preview}>
-                <div className={classes.previewHeader}>
-                    <h3>{t`Preview`}</h3>
-                    <Button 
-                        size="xs" 
-                        variant="light"
-                        leftSection={<IconPrinter size={14} />}
+        <DesignerShell
+            title={t`Ticket Design`}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={updateMutation.isPending}
+            onSave={() => form.onSubmit(handleSubmit)()}
+            onDiscard={() => form.reset()}
+            previewActions={(
+                <Tooltip
+                    label={t`Print preview uses your last saved design`}
+                    disabled={!hasUnsavedChanges}
+                    position="bottom-end"
+                    withArrow
+                >
+                    <Button
+                        size="compact-sm"
+                        variant="subtle"
+                        leftSection={<IconPrinter size={14}/>}
                         onClick={() => window?.open(`/manage/event/${eventId}/ticket-designer/print`, '_blank')}
                     >
                         {t`Print Preview`}
                     </Button>
-                </div>
-                
-                <div className={classes.previewContent}>
-                    <TicketPreview
-                        settings={form.values}
-                        eventId={eventId}
-                        logoUrl={existingLogo?.url}
-                    />
-                </div>
-            </div>
-        </div>
+                </Tooltip>
+            )}
+            preview={(
+                <TicketPreview
+                    settings={form.values}
+                    eventId={eventId}
+                    logo={existingLogo?.url ? {id: existingLogo.id, url: existingLogo.url} : undefined}
+                />
+            )}
+        >
+            <DesignerSection icon={<IconPhoto/>} title={t`Logo`}>
+                <Text size="xs" c="dimmed" mb="xs">
+                    {t`Square, at least 200 × 200px`}
+                </Text>
+                <ImageUploadDropzone
+                    imageType="TICKET_LOGO"
+                    entityId={eventId}
+                    onUploadSuccess={handleImageChange}
+                    onDeleteSuccess={handleImageChange}
+                    existingImageData={{
+                        url: existingLogo?.url,
+                        id: existingLogo?.id,
+                    }}
+                    helpText={t`Logo will be displayed on the ticket`}
+                    displayMode="compact"
+                />
+            </DesignerSection>
+
+            <DesignerSection icon={<IconPalette/>} title={t`Color`}>
+                <ColorInput
+                    format="hexa"
+                    label={t`Accent Color`}
+                    description={t`Used for borders, highlights, and QR code styling`}
+                    size="sm"
+                    swatches={ACCENT_SWATCHES}
+                    swatchesPerRow={10}
+                    disabled={isDisabled}
+                    {...form.getInputProps('accent_color')}
+                />
+            </DesignerSection>
+
+            <DesignerSection icon={<IconCalendar/>} title={t`Event Date`}>
+                <Select
+                    label={t`Event date display`}
+                    size="sm"
+                    allowDeselect={false}
+                    disabled={isDisabled}
+                    data={[
+                        {value: 'START_DATE_TIME', label: t`Only show start date and time`},
+                        {value: 'DATE_RANGE', label: t`Show entire date range`},
+                        {value: 'HIDDEN', label: t`Hide the date`},
+                    ]}
+                    {...form.getInputProps('date_display_mode')}
+                />
+            </DesignerSection>
+
+            <DesignerSection icon={<IconTextCaption/>} title={t`Footer`}>
+                <Textarea
+                    label={t`Footer Text`}
+                    description={t`Disclaimers, contact info or a thank-you note, on a single line`}
+                    placeholder={t`Thank you for attending!`}
+                    autosize
+                    minRows={2}
+                    maxLength={FOOTER_MAX_LENGTH}
+                    disabled={isDisabled}
+                    {...form.getInputProps('footer_text')}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                        }
+                    }}
+                    onChange={(e) => {
+                        form.setFieldValue('footer_text', e.currentTarget.value.replace(/\n/g, ' '));
+                    }}
+                />
+                <Text size="xs" c="dimmed" ta="right" mt={4}>
+                    {form.values.footer_text.length} / {FOOTER_MAX_LENGTH}
+                </Text>
+            </DesignerSection>
+        </DesignerShell>
     );
 };
 

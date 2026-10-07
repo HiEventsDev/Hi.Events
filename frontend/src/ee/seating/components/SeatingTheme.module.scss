@@ -1,0 +1,193 @@
+.themed {
+    --hi-accent-hover: color-mix(in srgb, var(--hi-accent) 86%, var(--hi-text));
+    --hi-accent-ink: color-mix(in srgb, var(--hi-accent) 70%, var(--hi-text));
+
+    --mantine-color-text: var(--hi-text);
+    --mantine-color-bright: var(--hi-text);
+    --mantine-color-body: var(--hi-card-bg);
+    --mantine-color-dimmed: var(--hi-muted);
+    --mantine-color-placeholder: var(--hi-muted);
+    --mantine-color-anchor: var(--hi-accent-ink);
+    --mantine-color-error: var(--hi-danger-text);
+    --mantine-color-default: var(--hi-card-bg);
+    --mantine-color-default-hover: var(--hi-soft-surface);
+    --mantine-color-default-color: var(--hi-text);
+    --mantine-color-default-border: var(--hi-border-strong);
+    --mantine-color-disabled: var(--hi-inset-bg);
+    --mantine-color-disabled-color: var(--hi-muted);
+    --mantine-color-disabled-border: var(--hi-hairline);
+
+    --mantine-primary-color-filled: var(--hi-accent);
+    --mantine-primary-color-filled-hover: var(--hi-accent-hover);
+    --mantine-primary-color-contrast: var(--hi-accent-contrast);
+    --mantine-primary-color-light: var(--hi-soft-accent);
+    --mantine-primary-color-light-hover: var(--hi-soft-accent-strong);
+    --mantine-primary-color-light-color: var(--hi-accent-ink);
+    --mantine-color-primary-filled: var(--hi-accent);
+    --mantine-color-primary-filled-hover: var(--hi-accent-hover);
+    --mantine-color-primary-light: var(--hi-soft-accent);
+    --mantine-color-primary-light-hover: var(--hi-soft-accent-strong);
+    --mantine-color-primary-light-color: var(--hi-accent-ink);
+    --mantine-color-primary-outline: var(--hi-accent);
+    --mantine-color-primary-outline-hover: var(--hi-soft-accent);
+    --mantine-color-primary-text: var(--hi-accent-ink);
+
+    --mantine-color-gray-light: transparent;
+    --mantine-color-gray-light-hover: var(--hi-soft-surface);
+    --mantine-color-gray-light-color: var(--hi-muted);
+
+    --mantine-color-blue-light: var(--hi-soft-accent);
+    --mantine-color-blue-light-color: var(--hi-accent-ink);
+    --mantine-color-blue-filled: var(--hi-accent);
+    --mantine-color-red-light: var(--hi-danger-soft);
+    --mantine-color-red-light-color: var(--hi-danger-text);
+    --mantine-color-red-filled: var(--hi-danger);
+    --mantine-color-yellow-light: var(--hi-warn-soft);
+    --mantine-color-yellow-light-color: var(--hi-warn-text);
+    --mantine-color-yellow-filled: var(--hi-warn);
+
+    color: var(--hi-text);
+
+    :global(.mantine-Button-root:is(:not([data-variant]), [data-variant='filled']):not(:disabled, [data-disabled])) {
+        color: var(--hi-accent-contrast);
+    }
+
+    :global(.mantine-Input-input) {
+        background-color: var(--hi-card-bg);
+        border-color: var(--hi-border-strong);
+        color: var(--hi-text);
+
+        &:focus,
+        &:focus-within {
+            border-color: var(--hi-accent);
+        }
+    }
+
+    :global(.mantine-Alert-message) {
+        color: var(--hi-text);
+    }
+
+    :global(.mantine-SegmentedControl-root) {
+        background-color: var(--hi-inset-bg);
+    }
+
+    :global(.mantine-SegmentedControl-indicator) {
+        background-color: var(--hi-card-bg);
+        box-shadow: 0 0 0 1px var(--hi-hairline);
+    }
+
+    :global(.mantine-SegmentedControl-label) {
+        color: var(--hi-muted);
+
+        &[data-active] {
+            color: var(--hi-text);
+        }
+    }
+
+    :global(.mantine-Tabs-tab) {
+        color: var(--hi-text);
+
+        &:hover:not([data-active]) {
+            background-color: var(--hi-soft-surface);
+        }
+
+        &[data-active] {
+            background-color: var(--hi-accent);
+            color: var(--hi-accent-contrast);
+        }
+    }
+
+    :global(.mantine-Accordion-item) {
+        --item-border-color: var(--hi-hairline);
+        --item-filled-color: var(--hi-soft-surface);
+    }
+
+    :global(.mantine-Accordion-control) {
+        color: var(--hi-text);
+
+        &:hover {
+            background-color: var(--hi-soft-surface);
+        }
+    }
+
+    :global(.mantine-RadioIndicator-indicator),
+    :global(.mantine-Radio-radio) {
+        background-color: var(--hi-card-bg);
+        border-color: var(--hi-border-strong);
+
+        &[data-checked] {
+            background-color: var(--hi-accent);
+            border-color: var(--hi-accent);
+            color: var(--hi-accent-contrast);
+        }
+    }
+
+    :global(.mantine-CloseButton-root) {
+        color: var(--hi-muted);
+
+        &:hover {
+            background-color: var(--hi-soft-surface);
+            color: var(--hi-text);
+        }
+    }
+
+    :global(.mantine-Modal-content),
+    :global(.mantine-Modal-header) {
+        background-color: var(--hi-bg);
+        color: var(--hi-text);
+    }
+
+    :global(.mantine-Modal-title) {
+        color: var(--hi-text);
+    }
+
+    :global(.hi-product-widget-container) {
+        --hi-bg: inherit;
+        --hi-text: inherit;
+        --hi-accent: inherit;
+        --hi-accent-contrast: inherit;
+        --hi-card-bg: inherit;
+        --hi-border: inherit;
+        --hi-border-strong: inherit;
+        --hi-hairline: inherit;
+        --hi-soft-accent: inherit;
+        --hi-soft-accent-strong: inherit;
+        --hi-soft-surface: inherit;
+        --hi-inset-bg: inherit;
+        --hi-muted: inherit;
+        --hi-danger: inherit;
+        --hi-danger-soft: inherit;
+        --hi-danger-text: inherit;
+        --hi-warn: inherit;
+        --hi-warn-soft: inherit;
+        --hi-warn-text: inherit;
+    }
+}
+
+.dropdown {
+    background-color: var(--hi-card-bg);
+    border-color: var(--hi-border);
+    color: var(--hi-text);
+
+    :global(.mantine-Select-option),
+    :global(.mantine-Combobox-option) {
+        color: var(--hi-text);
+
+        &:hover,
+        &[data-combobox-selected] {
+            background-color: var(--hi-soft-surface);
+        }
+
+        &[data-checked] {
+            background-color: var(--hi-soft-accent);
+        }
+    }
+}
+
+.lightCanvas {
+    --mantine-color-default: #ffffff;
+    --mantine-color-default-hover: #f4f4f7;
+    --mantine-color-default-color: #24223a;
+    --mantine-color-default-border: #d4d4dc;
+    color: #24223a;
+}

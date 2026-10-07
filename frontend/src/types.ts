@@ -600,6 +600,7 @@ export interface Event extends EventBase {
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
     upcoming_occurrences_sold_out?: boolean;
+    products_sold_out?: boolean;
     has_seat_map?: boolean;
     last_occurrence_date?: string | null;
     occurrences_month?: string | null;
@@ -718,6 +719,7 @@ export interface OrganizerSettings {
         linkedin?: string;
         youtube?: string;
         tiktok?: string;
+        bluesky?: string;
         snapchat?: string;
         twitch?: string;
         discord?: string;

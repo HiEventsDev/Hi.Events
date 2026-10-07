@@ -53,17 +53,39 @@ class EventSeatMapLookupService
 
     public function findSummaryForEvent(int $eventId): ?EventSeatMapDomainObject
     {
-        if (array_key_exists($eventId, $this->eventSeatMaps)) {
-            return $this->eventSeatMaps[$eventId];
+        return $this->findSummariesForEvents([$eventId])[$eventId];
+    }
+
+    /**
+     * @param  int[]  $eventIds
+     * @return array<int, EventSeatMapDomainObject|null>
+     */
+    public function findSummariesForEvents(array $eventIds): array
+    {
+        $unknownEventIds = array_values(array_filter(
+            $eventIds,
+            fn (int $eventId) => ! array_key_exists($eventId, $this->eventSeatMaps) && ! array_key_exists($eventId, $this->summaries),
+        ));
+
+        if ($unknownEventIds !== []) {
+            $found = $this->eventSeatMapRepository
+                ->loadRelation(EventSeatMapBandProductDomainObject::class)
+                ->findWhereIn(EventSeatMapDomainObjectAbstract::EVENT_ID, $unknownEventIds, columns: self::SUMMARY_COLUMNS)
+                ->keyBy(fn (EventSeatMapDomainObject $eventSeatMap) => $eventSeatMap->getEventId());
+
+            foreach ($unknownEventIds as $eventId) {
+                $this->summaries[$eventId] = $found->get($eventId);
+            }
         }
 
-        if (array_key_exists($eventId, $this->summaries)) {
-            return $this->summaries[$eventId];
+        $summaries = [];
+        foreach ($eventIds as $eventId) {
+            $summaries[$eventId] = array_key_exists($eventId, $this->eventSeatMaps)
+                ? $this->eventSeatMaps[$eventId]
+                : $this->summaries[$eventId];
         }
 
-        return $this->summaries[$eventId] = $this->eventSeatMapRepository
-            ->loadRelation(EventSeatMapBandProductDomainObject::class)
-            ->findFirstWhere([EventSeatMapDomainObjectAbstract::EVENT_ID => $eventId], self::SUMMARY_COLUMNS);
+        return $summaries;
     }
 
     public function findForEvent(int $eventId): ?EventSeatMapDomainObject
