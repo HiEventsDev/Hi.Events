@@ -34,7 +34,7 @@ class EventSeatMapLookupServiceTest extends TestCase
 
     public function test_an_event_without_a_seat_map_is_looked_up_once_for_every_read(): void
     {
-        $this->repository->shouldReceive('findFirstWhere')->once()->andReturnNull();
+        $this->repository->shouldReceive('findWhereIn')->once()->andReturn(collect());
 
         $this->assertFalse($this->service->existsForEvent(7));
         $this->assertFalse($this->service->existsForEvent(7));
@@ -46,7 +46,7 @@ class EventSeatMapLookupServiceTest extends TestCase
     public function test_forget_drops_a_remembered_absence(): void
     {
         $eventSeatMap = (new EventSeatMapDomainObject)->setId(3)->setEventId(7);
-        $this->repository->shouldReceive('findFirstWhere')->twice()->andReturn(null, $eventSeatMap);
+        $this->repository->shouldReceive('findWhereIn')->twice()->andReturn(collect(), collect([$eventSeatMap]));
 
         $this->assertFalse($this->service->existsForEvent(7));
 
@@ -60,6 +60,7 @@ class EventSeatMapLookupServiceTest extends TestCase
         $eventSeatMap = (new EventSeatMapDomainObject)->setId(3)->setEventId(7)
             ->setEventSeatMapBandProducts(collect([(new EventSeatMapBandProductDomainObject)->setProductId(11)->setBandKey('b_standard')]));
         $this->repository->shouldReceive('findFirstWhere')->once()->andReturn($eventSeatMap);
+        $this->repository->shouldNotReceive('findWhereIn');
 
         $this->assertSame($eventSeatMap, $this->service->findForEvent(7));
         $this->assertSame($eventSeatMap, $this->service->findSummaryForEvent(7));
@@ -70,10 +71,24 @@ class EventSeatMapLookupServiceTest extends TestCase
     {
         $summary = (new EventSeatMapDomainObject)->setId(3)->setEventId(7);
         $full = (new EventSeatMapDomainObject)->setId(3)->setEventId(7)->setLayout(['elements' => []]);
-        $this->repository->shouldReceive('findFirstWhere')->twice()->andReturn($summary, $full);
+        $this->repository->shouldReceive('findWhereIn')->once()->andReturn(collect([$summary]));
+        $this->repository->shouldReceive('findFirstWhere')->once()->andReturn($full);
 
         $this->assertTrue($this->service->existsForEvent(7));
         $this->assertSame($full, $this->service->findForEvent(7));
         $this->assertSame($full, $this->service->findSummaryForEvent(7));
+    }
+
+    public function test_summaries_for_many_events_are_fetched_in_one_query_and_remembered(): void
+    {
+        $seated = (new EventSeatMapDomainObject)->setId(3)->setEventId(7);
+        $this->repository->shouldReceive('findWhereIn')
+            ->once()
+            ->with('event_id', [7, 8], Mockery::any(), Mockery::any())
+            ->andReturn(collect([$seated]));
+
+        $this->assertSame([7 => $seated, 8 => null], $this->service->findSummariesForEvents([7, 8]));
+        $this->assertSame($seated, $this->service->findSummaryForEvent(7));
+        $this->assertFalse($this->service->existsForEvent(8));
     }
 }

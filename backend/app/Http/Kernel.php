@@ -7,6 +7,7 @@ use HiEvents\Enterprise\Licensing\Http\Middleware\ApplyLicenceSimulation;
 use HiEvents\Enterprise\Licensing\Http\Middleware\RequireLicensedFeature;
 use HiEvents\Http\Middleware\ApplySsrClientIp;
 use HiEvents\Http\Middleware\Authenticate;
+use HiEvents\Http\Middleware\CacheGuestJsonResponse;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
@@ -96,6 +97,7 @@ class Kernel extends HttpKernel
         'box-office.session' => AuthenticateBoxOfficeSession::class,
         'ee.licensed' => RequireLicensedFeature::class,
         'auth.session' => AuthenticateSession::class,
+        'cache.guest' => CacheGuestJsonResponse::class,
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,

@@ -6,6 +6,7 @@ namespace HiEvents\Enterprise\Seating\Services\Domain;
 
 use HiEvents\DomainObjects\EventSeatMapBandProductDomainObject;
 use HiEvents\DomainObjects\EventSeatMapDomainObject;
+use HiEvents\DomainObjects\Generated\EventSeatMapDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\SeatClaimStatus;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
@@ -31,7 +32,11 @@ class SeatAvailabilityService
     {
         $eventSeatMap = $this->eventSeatMapLookup->findSummaryForEvent($eventId);
 
-        return $eventSeatMap === null ? null : $this->availability($eventSeatMap, $occurrenceId);
+        return $eventSeatMap === null ? null : $this->availability(
+            $eventSeatMap,
+            $this->capacitiesFor([$eventSeatMap])[$eventSeatMap->getId()],
+            $this->seatClaimRepository->findLiveForOccurrences([$occurrenceId]),
+        );
     }
 
     /**
@@ -57,27 +62,50 @@ class SeatAvailabilityService
      */
     public function freeCountByProduct(int $eventId, ?int $occurrenceId): array
     {
-        $eventSeatMap = $this->eventSeatMapLookup->findSummaryForEvent($eventId);
-        if ($eventSeatMap === null || $eventSeatMap->getEventSeatMapBandProducts()->isEmpty()) {
-            return [];
-        }
-
-        $bandFree = $occurrenceId === null
-            ? $this->capacities($eventSeatMap)['bands']
-            : $this->availability($eventSeatMap, $occurrenceId)->band_free;
-
-        return $eventSeatMap->getEventSeatMapBandProducts()
-            ->toBase()
-            ->groupBy(fn (EventSeatMapBandProductDomainObject $link) => $link->getProductId())
-            ->map(fn ($links) => $links->sum(fn (EventSeatMapBandProductDomainObject $link) => $bandFree[$link->getBandKey()] ?? 0))
-            ->all();
+        return $this->freeCountByProductForEvents([$eventId => $occurrenceId])[$eventId] ?? [];
     }
 
-    private function availability(EventSeatMapDomainObject $eventSeatMap, int $occurrenceId): SeatAvailabilityDTO
+    /**
+     * @param  array<int, int|null>  $occurrenceIdsByEventId
+     * @return array<int, array<int, int>> free places keyed by event id, then seated product id
+     */
+    public function freeCountByProductForEvents(array $occurrenceIdsByEventId): array
     {
-        $capacities = $this->capacities($eventSeatMap);
-        $claims = $this->seatClaimRepository->findLiveForOccurrence($occurrenceId);
+        $eventSeatMaps = array_filter(
+            $this->eventSeatMapLookup->findSummariesForEvents(array_keys($occurrenceIdsByEventId)),
+            fn (?EventSeatMapDomainObject $eventSeatMap) => $eventSeatMap !== null
+                && $eventSeatMap->getEventSeatMapBandProducts()->isNotEmpty(),
+        );
 
+        $occurrenceIds = array_values(array_filter(array_intersect_key($occurrenceIdsByEventId, $eventSeatMaps)));
+        $claimsByOccurrenceId = $occurrenceIds === []
+            ? collect()
+            : $this->seatClaimRepository->findLiveForOccurrences($occurrenceIds)->groupBy('event_occurrence_id');
+        $capacitiesBySeatMapId = $this->capacitiesFor(array_values($eventSeatMaps));
+
+        $freeCounts = [];
+        foreach ($eventSeatMaps as $eventId => $eventSeatMap) {
+            $occurrenceId = $occurrenceIdsByEventId[$eventId];
+            $capacities = $capacitiesBySeatMapId[$eventSeatMap->getId()];
+            $bandFree = $occurrenceId === null
+                ? $capacities['bands']
+                : $this->availability($eventSeatMap, $capacities, $claimsByOccurrenceId->get($occurrenceId, collect()))->band_free;
+
+            $freeCounts[$eventId] = $eventSeatMap->getEventSeatMapBandProducts()
+                ->toBase()
+                ->groupBy(fn (EventSeatMapBandProductDomainObject $link) => $link->getProductId())
+                ->map(fn ($links) => $links->sum(fn (EventSeatMapBandProductDomainObject $link) => $bandFree[$link->getBandKey()] ?? 0))
+                ->all();
+        }
+
+        return $freeCounts;
+    }
+
+    /**
+     * @param  array{bands: array<string, int>, zones: array<string, int>}  $capacities
+     */
+    private function availability(EventSeatMapDomainObject $eventSeatMap, array $capacities, Collection $claims): SeatAvailabilityDTO
+    {
         $bandFree = $capacities['bands'];
         foreach ($claims as $claim) {
             if (isset($bandFree[$claim->band_key])) {
@@ -100,23 +128,63 @@ class SeatAvailabilityService
     }
 
     /**
+     * @param  EventSeatMapDomainObject[]  $eventSeatMaps
+     * @return array<int, array{bands: array<string, int>, zones: array<string, int>}> keyed by event seat map id
+     */
+    private function capacitiesFor(array $eventSeatMaps): array
+    {
+        $cacheKeys = [];
+        foreach ($eventSeatMaps as $eventSeatMap) {
+            $cacheKeys[$eventSeatMap->getId()] = sprintf(
+                'event_seat_map.%d.v%d.capacities.s%d',
+                $eventSeatMap->getId(),
+                $eventSeatMap->getVersion(),
+                self::CAPACITIES_CACHE_SHAPE,
+            );
+        }
+
+        $cached = $this->cache->getMultiple(array_values($cacheKeys));
+
+        $capacities = [];
+        foreach ($cacheKeys as $eventSeatMapId => $cacheKey) {
+            if (is_array($cached[$cacheKey] ?? null)) {
+                $capacities[$eventSeatMapId] = $cached[$cacheKey];
+            }
+        }
+
+        $uncachedIds = array_keys(array_diff_key($cacheKeys, $capacities));
+        if ($uncachedIds === []) {
+            return $capacities;
+        }
+
+        $computed = $this->eventSeatMapRepository
+            ->findWhereIn(EventSeatMapDomainObjectAbstract::ID, $uncachedIds)
+            ->mapWithKeys(fn (EventSeatMapDomainObject $eventSeatMap) => [
+                $eventSeatMap->getId() => $this->capacitiesOfLayout($eventSeatMap->getLayout()),
+            ])
+            ->all();
+
+        $this->cache->setMultiple(
+            array_combine(
+                array_map(fn (int $eventSeatMapId) => $cacheKeys[$eventSeatMapId], array_keys($computed)),
+                $computed,
+            ),
+            self::CAPACITIES_CACHE_TTL_SECONDS,
+        );
+
+        return $capacities + $computed;
+    }
+
+    /**
      * @return array{bands: array<string, int>, zones: array<string, int>}
      */
-    private function capacities(EventSeatMapDomainObject $eventSeatMap): array
+    private function capacitiesOfLayout(array $layout): array
     {
-        return $this->cache->remember(
-            sprintf('event_seat_map.%d.v%d.capacities.s%d', $eventSeatMap->getId(), $eventSeatMap->getVersion(), self::CAPACITIES_CACHE_SHAPE),
-            self::CAPACITIES_CACHE_TTL_SECONDS,
-            function () use ($eventSeatMap) {
-                $index = SeatMapIndex::fromLayout(
-                    $this->eventSeatMapRepository->findById($eventSeatMap->getId())->getLayout()
-                );
+        $index = SeatMapIndex::fromLayout($layout);
 
-                return [
-                    'bands' => $index->capacityByBand(),
-                    'zones' => array_map(static fn (array $zone) => $zone['capacity'], $index->zones()),
-                ];
-            },
-        );
+        return [
+            'bands' => $index->capacityByBand(),
+            'zones' => array_map(static fn (array $zone) => $zone['capacity'], $index->zones()),
+        ];
     }
 }

@@ -21,6 +21,7 @@ use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterfac
 use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
+use HiEvents\Services\Domain\Product\DTO\ProductFilterEventContextDTO;
 use HiEvents\Services\Domain\Tax\DTO\TaxCalculationResponse;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
 use Illuminate\Support\Collection;
@@ -55,6 +56,7 @@ class ProductFilterService
         bool $hideSoldOutProducts = true,
         ?int $eventOccurrenceId = null,
         bool $hideHiddenCategories = true,
+        ?ProductFilterEventContextDTO $eventContext = null,
     ): Collection {
         if ($productsCategories->isEmpty()) {
             return $productsCategories;
@@ -71,7 +73,13 @@ class ProductFilterService
             return $filteredCategories;
         }
 
-        $filteredProducts = $this->filterProducts($products, $promoCode, $hideSoldOutProducts, $eventOccurrenceId);
+        $filteredProducts = $this->filterProducts(
+            products: $products,
+            promoCode: $promoCode,
+            hideSoldOutProducts: $hideSoldOutProducts,
+            eventOccurrenceId: $eventOccurrenceId,
+            eventContext: $eventContext,
+        );
 
         return $filteredCategories
             ->each(fn (ProductCategoryDomainObject $category) => $category->setProducts(
@@ -92,6 +100,7 @@ class ProductFilterService
         ?int $eventOccurrenceId = null,
         bool $allowPastOccurrence = false,
         bool $applyPlatformFee = true,
+        ?ProductFilterEventContextDTO $eventContext = null,
     ): Collection {
         if ($products->isEmpty()) {
             return $products;
@@ -99,9 +108,9 @@ class ProductFilterService
 
         $this->applyPlatformFee = $applyPlatformFee;
         $eventId = $products->first()->getEventId();
-        $this->loadAccountConfiguration($eventId);
+        $this->loadAccountConfiguration($eventId, $eventContext);
 
-        $productQuantities = $this
+        $productQuantities = $eventContext?->productQuantities ?? $this
             ->fetchAvailableProductQuantitiesService
             ->getAvailableProductQuantities(
                 $eventId,
@@ -121,8 +130,16 @@ class ProductFilterService
         return $filteredProducts->values();
     }
 
-    private function loadAccountConfiguration(int $eventId): void
+    private function loadAccountConfiguration(int $eventId, ?ProductFilterEventContextDTO $eventContext): void
     {
+        if ($eventContext !== null) {
+            $this->eventSettings = $eventContext->event->getEventSettings();
+            $this->eventCurrency = $eventContext->event->getCurrency();
+            $this->organizerConfiguration = $eventContext->organizerConfiguration;
+
+            return;
+        }
+
         $event = $this->eventRepository
             ->loadRelation(EventSettingDomainObject::class)
             ->loadRelation(new Relationship(

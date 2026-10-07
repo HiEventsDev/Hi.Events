@@ -4,6 +4,8 @@ namespace Tests\Unit\Services\Domain\Product;
 
 use HiEvents\DomainObjects\Enums\ProductPriceType;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\OrganizerConfigurationDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
@@ -14,6 +16,7 @@ use HiEvents\Services\Domain\Order\OrderPlatformFeePassThroughService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesDTO;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
+use HiEvents\Services\Domain\Product\DTO\ProductFilterEventContextDTO;
 use HiEvents\Services\Domain\Product\ProductFilterService;
 use HiEvents\Services\Domain\Product\ProductPriceService;
 use HiEvents\Services\Domain\Tax\TaxAndFeeCalculationService;
@@ -66,6 +69,35 @@ class ProductFilterServiceTest extends TestCase
         $this->assertSame([$product], $result->all());
         $this->assertSame(5, $product->getProductPrices()->first()->getQuantityAvailable());
         $this->assertTrue($product->getProductPrices()->first()->isAvailable());
+    }
+
+    public function test_an_event_context_supplies_the_configuration_and_quantities_without_lookups(): void
+    {
+        $product = $this->createFreeProduct(id: 1, priceId: 100);
+        $eventSettings = new EventSettingDomainObject;
+        $organizerConfiguration = new OrganizerConfigurationDomainObject;
+        $event = (new EventDomainObject)
+            ->setId(self::EVENT_ID)
+            ->setCurrency('EUR')
+            ->setEventSettings($eventSettings);
+
+        $this->eventRepository->shouldNotReceive('findById');
+        $this->fetchAvailableProductQuantitiesService->shouldNotReceive('getAvailableProductQuantities');
+
+        $result = $this->service->filterProducts(
+            products: collect([$product]),
+            hideSoldOutProducts: false,
+            eventContext: new ProductFilterEventContextDTO(
+                event: $event,
+                organizerConfiguration: $organizerConfiguration,
+                productQuantities: new AvailableProductQuantitiesResponseDTO(productQuantities: collect([
+                    $this->createQuantityDto(productId: 1, priceId: 100, quantityAvailable: 0),
+                ])),
+            ),
+        );
+
+        $this->assertSame([$product], $result->all());
+        $this->assertTrue($product->isSoldOut());
     }
 
     public function test_filter_products_rejects_hidden_products_when_hiding(): void

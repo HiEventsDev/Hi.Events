@@ -1,4 +1,4 @@
-import {ReactNode, useEffect, useState} from "react";
+import {CSSProperties, ReactNode, useEffect, useState} from "react";
 import {Button, Modal, SegmentedControl, Text} from "@mantine/core";
 import {IconArrowLeft, IconList, IconMap2} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -14,12 +14,14 @@ import {SeatListView} from "./SeatListView.tsx";
 import {SeatSheet} from "./SeatSheet.tsx";
 import {SeatSelection} from "./useSeatSelection.ts";
 import classes from "./SeatPicker.module.scss";
+import themeClasses from "../SeatingTheme.module.scss";
 
 const PICKER_Z_INDEX = 10000;
 
 interface SeatPickerProps {
     opened: boolean;
     selection: SeatSelection;
+    themeStyle: CSSProperties | undefined;
     seatMap: PublicEventSeatMap;
     currency: string;
     canFindBestAvailable: boolean;
@@ -51,8 +53,8 @@ export const SeatPicker = (props: SeatPickerProps) => {
         <Modal opened={props.opened} onClose={props.onClose} fullScreen padding={0}
                withCloseButton={props.withCloseButton}
                title={isExtrasStep ? t`Anything else?` : t`Choose your seats`}
-               zIndex={PICKER_Z_INDEX}
-               styles={{header: {padding: '12px 16px', borderBottom: '1px solid var(--mantine-color-gray-2)'}, body: {padding: 0}}}>
+               zIndex={PICKER_Z_INDEX} className={themeClasses.themed} style={props.themeStyle}
+               styles={{header: {padding: '12px 16px', borderBottom: '1px solid var(--hi-hairline)'}, body: {padding: 0}}}>
             {isExtrasStep ? (
                 <div className={classes.extrasLayout} data-testid="seat-picker-extras-step">
                     <div className={classes.extrasBody}>
@@ -89,7 +91,7 @@ export const SeatPicker = (props: SeatPickerProps) => {
                         </div>
 
                         {viewMode === 'map' ? (
-                            <div className={classes.map} data-testid="seat-picker-map">
+                            <div className={`${classes.map} ${themeClasses.lightCanvas}`} data-testid="seat-picker-map">
                                 <SeatMapRenderer area={area} bands={index.bands} seatStates={selection.seatStates} interactive
                                                  wheelZoom="always"
                                                  zoneRemaining={selection.availability?.zone_remaining} zoneSelected={selection.zoneSelected}
@@ -121,6 +123,7 @@ export const SeatPicker = (props: SeatPickerProps) => {
                             isFindingSeats={selection.isFindingSeats} isContinuing={props.isContinuing}
                             continueLabel={props.extras !== null ? t`Next` : undefined}
                             dropdownZIndex={PICKER_Z_INDEX + 1}
+                            portalThemeStyle={props.themeStyle}
                             emptyState={(
                                 <SeatPrices bands={selection.legendBands} options={selection.options}
                                             ticketTypes={selection.ticketTypes} bandFree={selection.availability?.band_free}
@@ -133,7 +136,7 @@ export const SeatPicker = (props: SeatPickerProps) => {
                 </div>
             )}
 
-            <SeatSheet target={selection.sheetTarget} currency={props.currency} zIndex={PICKER_Z_INDEX + 1}
+            <SeatSheet target={selection.sheetTarget} currency={props.currency} zIndex={PICKER_Z_INDEX + 1} themeStyle={props.themeStyle}
                        onConfirm={selection.confirmSheet} onClose={() => selection.setSheetTarget(null)}/>
         </Modal>
     );

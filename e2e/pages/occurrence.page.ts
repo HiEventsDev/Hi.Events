@@ -230,6 +230,26 @@ export class PublicOccurrenceSelector {
     return this.page.getByRole('button', { name: label });
   }
 
+  dateCard(label: RegExp): Locator {
+    return this.page.getByRole('radio', { name: label });
+  }
+
+  moreDatesButton(): Locator {
+    return this.page.getByTestId('occurrence-more-dates-button');
+  }
+
+  async waitForDateStrip(): Promise<void> {
+    await this.page.locator('.hi-occurrence-selector').waitFor();
+    await expect(this.page.locator('.hi-date-strip[aria-busy="true"]')).toHaveCount(0);
+  }
+
+  async openCalendar(): Promise<void> {
+    await this.waitForDateStrip();
+    if (await this.calendar().isVisible()) return;
+    await this.moreDatesButton().click();
+    await this.calendar().waitFor();
+  }
+
   nextMonthButton(): Locator {
     return this.page.locator('.hi-dp-nav[data-direction="next"]');
   }
@@ -262,7 +282,7 @@ export class PublicOccurrenceSelector {
   async navigateToMonthOf(isoDate: string): Promise<void> {
     const target = new Date(isoDate);
     const targetIndex = target.getUTCFullYear() * 12 + target.getUTCMonth();
-    await this.calendar().waitFor();
+    await this.openCalendar();
     await this.waitForMonthLoaded();
     for (let attempt = 0; attempt < 24; attempt++) {
       const header = (await this.monthHeader().innerText()).trim();
@@ -280,6 +300,12 @@ export class PublicOccurrenceSelector {
   }
 
   async selectDay(isoDate: string): Promise<void> {
+    await this.waitForDateStrip();
+    const card = this.dateCard(occurrenceDayLabel(isoDate));
+    if (await card.count() > 0) {
+      await card.click();
+      return;
+    }
     await this.navigateToMonthOf(isoDate);
     await this.dayButton(occurrenceDayLabel(isoDate)).click();
   }

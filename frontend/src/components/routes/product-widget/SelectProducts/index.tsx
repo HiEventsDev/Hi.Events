@@ -68,6 +68,7 @@ import {OccurrenceSelector} from "../OccurrenceSelector";
 import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {firstApiError} from "../../../../utilites/apiErrors.ts";
+import {WIDGET_COLOR_PARAMS} from "../../../../utilites/widgetColors.ts";
 
 const AFFILIATE_EXPIRY_DAYS = 30;
 
@@ -806,6 +807,13 @@ const SelectProducts = (props: SelectProductsProps) => {
     const openSeatPicker = () => {
         if (opensSeatPickerInParentModal) {
             const params = new URLSearchParams({occurrence_id: String(seatingOccurrenceId)});
+            const widgetParams = new URLSearchParams(window.location.search);
+            WIDGET_COLOR_PARAMS.forEach(name => {
+                const value = widgetParams.get(name);
+                if (value) {
+                    params.set(name, value);
+                }
+            });
             if (form.values.promo_code) {
                 params.set('promo_code', form.values.promo_code);
             }
@@ -1202,9 +1210,6 @@ const SelectProducts = (props: SelectProductsProps) => {
             <p className={'hi-no-products-message'}>
                 {t`There are no products available for this date. Please choose another date.`}
             </p>
-            <Button type={'button'} variant={'outline'} onClick={clearSelectedOccurrence}>
-                {t`Choose another date`}
-            </Button>
         </div>
     );
 
@@ -1322,6 +1327,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             selectedOccurrenceId={selectedOccurrenceId}
                             pendingInitialOccurrenceId={pendingInitialOccurrenceId}
                             onSelect={(id, occurrence) => selectOccurrence(Number(id), occurrence)}
+                            onClearSelection={clearSelectedOccurrence}
                             colors={props.colors}
                             isProductsLoading={occurrenceEventRefetchMutation.isPending}
                             productSlot={productAreAvailable

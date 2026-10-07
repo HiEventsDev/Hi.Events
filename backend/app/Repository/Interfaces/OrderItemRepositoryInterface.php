@@ -12,9 +12,10 @@ interface OrderItemRepositoryInterface extends RepositoryInterface
     public function getReservedTicketQuantityForOccurrence(int $occurrenceId): int;
 
     /**
+     * @param  int[]  $eventIds
      * @return array<int, int> product_price_id => quantity
      */
-    public function getReservedQuantitiesByPrice(int $eventId, ?int $occurrenceId = null): array;
+    public function getReservedQuantitiesByPrice(array $eventIds, ?int $occurrenceId = null): array;
 
     /**
      * @return array<int, int> product_price_id => quantity

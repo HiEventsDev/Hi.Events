@@ -51,6 +51,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private bool $hasSeatMap = false;
 
+    private ?bool $productsSoldOut = null;
+
     private ?string $nextOccurrenceStartDate = null;
 
     private ?string $lastOccurrenceStartDate = null;
@@ -229,6 +231,18 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function getHasSeatMap(): bool
     {
         return $this->hasSeatMap;
+    }
+
+    public function setProductsSoldOut(?bool $productsSoldOut): self
+    {
+        $this->productsSoldOut = $productsSoldOut;
+
+        return $this;
+    }
+
+    public function getProductsSoldOut(): ?bool
+    {
+        return $this->productsSoldOut;
     }
 
     public function getStartDate(): ?string

@@ -5,6 +5,7 @@ import {useGetEventPublic} from "../../../../../queries/useGetEventPublic.ts";
 import {useGetPromoCodePublic} from "../../../../../queries/useGetPromoCodePublic.ts";
 import {getParentOrigin} from "../../../../../utilites/iframeResize.ts";
 import SelectProducts from "../../../../../components/routes/product-widget/SelectProducts";
+import {widgetColorsFromSearchParams} from "../../../../../utilites/widgetColors.ts";
 
 const SeatCheckout = () => {
     const {eventId} = useParams();
@@ -40,6 +41,7 @@ const SeatCheckout = () => {
 
     return (
         <SelectProducts event={event} widgetMode="normal" isSeatPickerPage initialOccurrenceId={occurrenceId}
+                        colors={widgetColorsFromSearchParams(searchParams)}
                         promoCode={promoCodeValid ? promoCode ?? undefined : undefined}
                         promoCodeValid={promoCodeValid}/>
     );
