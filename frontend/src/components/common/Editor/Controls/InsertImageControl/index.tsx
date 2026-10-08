@@ -42,9 +42,12 @@ export const InsertImageControl = () => {
             }
             setModalOpen(false);
             resetState();
-        } catch (error) {
-            console.log(error)
-            setUrlError(t`Please enter a valid image URL that points to an image.`);
+        } catch {
+            if (uploadedImageUrl) {
+                setUploadError(t`The uploaded image could not be loaded. Please try uploading it again.`);
+            } else {
+                setUrlError(t`Please enter a valid image URL that points to an image.`);
+            }
         } finally {
             setLoading(false);
         }
@@ -151,6 +154,11 @@ export const InsertImageControl = () => {
                                                 {t`Remove`}
                                             </Button>
                                         </Group>
+                                        {uploadError && (
+                                            <Text c="red" size="sm">
+                                                {uploadError}
+                                            </Text>
+                                        )}
                                     </>
                                 ) : (
                                     <>

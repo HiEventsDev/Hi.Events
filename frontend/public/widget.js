@@ -182,8 +182,10 @@
             iframe.src = src;
 
             const applySizing = () => {
-                const vw = window.innerWidth;
-                const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+                const vv = window.visualViewport;
+                const hasViewport = !!(vv && vv.width && vv.height);
+                const vw = hasViewport ? vv.width * vv.scale : window.innerWidth;
+                const vh = hasViewport ? vv.height * vv.scale : window.innerHeight;
 
                 if (vw <= MOBILE_BREAKPOINT) {
                     bs.alignItems = 'stretch';

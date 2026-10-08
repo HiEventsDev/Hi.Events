@@ -44,7 +44,7 @@ test.describe('add-on checkout', () => {
 
     await checkout.setQuantityForProduct('Festival Ticket', 0);
     await expect(page.getByText('Add Festival Ticket first')).toBeVisible();
-    await expect(page.locator('.hi-product-addon').filter({ hasText: 'Parking Pass' }).locator('input')).toBeHidden();
+    await expect(page.locator('.hi-product-addon').filter({ hasText: 'Parking Pass' }).locator('input')).toHaveValue('0');
 
     await checkout.setQuantityForProduct('Festival Ticket', 1);
     await checkout.setAddonQuantity('Parking Pass', 1);

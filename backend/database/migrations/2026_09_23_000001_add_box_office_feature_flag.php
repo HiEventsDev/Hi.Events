@@ -11,7 +11,7 @@ return new class extends Migration
 
         DB::table('feature_flags')->insertOrIgnore([
             'key' => 'box_office',
-            'enabled_by_default' => true,
+            'enabled_by_default' => false,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

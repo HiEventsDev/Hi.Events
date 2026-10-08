@@ -32,6 +32,7 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
         public readonly string|Optional|null $linkedinHandle,
         public readonly string|Optional|null $discordHandle,
         public readonly string|Optional|null $tiktokHandle,
+        public readonly string|Optional|null $blueskyHandle,
         public readonly string|Optional|null $youtubeHandle,
         public readonly string|Optional|null $snapchatHandle,
         public readonly string|Optional|null $twitchHandle,

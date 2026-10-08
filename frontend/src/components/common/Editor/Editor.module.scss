@@ -8,3 +8,48 @@
 
 .toolbar {
 }
+
+.inline {
+  border: 0;
+  background: transparent;
+
+  :global(.mantine-RichTextEditor-content) {
+    background: transparent;
+  }
+
+  :global(.ProseMirror) {
+    padding: 0;
+    min-height: 3em;
+    font-size: var(--mantine-font-size-md);
+    line-height: 1.5;
+  }
+
+  :global(.ProseMirror p) {
+    margin: 0 0 0.5em;
+  }
+
+  :global(.ProseMirror p.is-editor-empty:first-child::before) {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--mantine-color-gray-5);
+  }
+}
+
+.floatingControls {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-body);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.insertTrigger {
+  padding: 0;
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}

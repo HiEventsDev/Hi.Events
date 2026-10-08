@@ -56,6 +56,7 @@ const EventHomepagePreview = () => {
             event={previewEvent}
             promoCodeValid={undefined}
             promoCode={undefined}
+            isPreview
         />
     );
 };

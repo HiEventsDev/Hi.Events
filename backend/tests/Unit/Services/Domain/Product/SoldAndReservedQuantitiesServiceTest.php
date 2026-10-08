@@ -53,12 +53,12 @@ class SoldAndReservedQuantitiesServiceTest extends TestCase
 
     public function test_reservations_are_read_from_order_items(): void
     {
-        $this->orderItemRepository->shouldReceive('getReservedQuantitiesByPrice')->once()->with(7, null)->andReturn([1 => 1]);
-        $this->orderItemRepository->shouldReceive('getReservedQuantitiesByPrice')->once()->with(7, 5)->andReturn([1 => 0]);
+        $this->orderItemRepository->shouldReceive('getReservedQuantitiesByPrice')->once()->with([7], null)->andReturn([1 => 1]);
+        $this->orderItemRepository->shouldReceive('getReservedQuantitiesByPrice')->once()->with([7], 5)->andReturn([1 => 0]);
         $this->orderItemRepository->shouldReceive('getReservedTicketQuantityForOccurrence')->once()->with(5)->andReturn(6);
 
-        $this->assertSame([1 => 1], $this->service->getReservedByPrice(7));
-        $this->assertSame([1 => 0], $this->service->getReservedByPrice(7, 5));
+        $this->assertSame([1 => 1], $this->service->getReservedByPrice([7]));
+        $this->assertSame([1 => 0], $this->service->getReservedByPrice([7], 5));
         $this->assertSame(6, $this->service->getReservedTicketsForOccurrence(5));
     }
 }

@@ -5,6 +5,7 @@ import SelectProducts from "../../routes/product-widget/SelectProducts";
 import {useMemo} from "react";
 import {Loader} from "@mantine/core";
 import {t} from "@lingui/macro";
+import {widgetColorsFromSearchParams} from "../../../utilites/widgetColors.ts";
 
 const ProductWidget = () => {
     const {eventId} = useParams();
@@ -27,14 +28,7 @@ const ProductWidget = () => {
         const searchParams = new URLSearchParams(location.search);
 
         return {
-            colors: {
-                background: searchParams.get("BackgroundColor") || '#ffffff',
-                primary: searchParams.get("PrimaryColor") || '#7b5db8',
-                primaryText: searchParams.get("PrimaryTextColor") || '#000000',
-                secondary: searchParams.get("SecondaryColor") || '#7b5eb9',
-                secondaryText: searchParams.get("SecondaryTextColor") || '#ffffff',
-                bodyBackground: searchParams.get("BackgroundColor") || '#ffffff',
-            },
+            colors: widgetColorsFromSearchParams(searchParams),
             continueButtonText: searchParams.get("ContinueButtonText") || 'Continue',
             padding: searchParams.get("Padding") || '10px',
         };

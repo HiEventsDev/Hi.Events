@@ -168,6 +168,7 @@ export function Dashboard() {
                                 <IconChevronDown stroke={1.5}/>
                             }
                             pr={12}
+                            data-testid="create-new-menu-button"
                         >
                             {t`Create new`}
                         </Button>
@@ -180,6 +181,7 @@ export function Dashboard() {
                                 />
                             }
                             onClick={openCreateModal}
+                            data-testid="create-event-menu-item"
                         >
                             {t`Event`}
                         </Menu.Item>

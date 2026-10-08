@@ -42,9 +42,10 @@ interface SeatClaimRepositoryInterface extends RepositoryInterface
     public function countLiveForZone(int $occurrenceId, string $zoneUid, ?int $excludingOrderId = null): int;
 
     /**
-     * @return Collection<int, object{seat_uid: string, is_zone: bool, band_key: string}>
+     * @param  int[]  $occurrenceIds
+     * @return Collection<int, object{event_occurrence_id: int, seat_uid: string, is_zone: bool, band_key: string}>
      */
-    public function findLiveForOccurrence(int $occurrenceId): Collection;
+    public function findLiveForOccurrences(array $occurrenceIds): Collection;
 
     /**
      * @param  string[]  $except

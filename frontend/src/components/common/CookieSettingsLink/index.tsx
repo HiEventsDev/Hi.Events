@@ -3,7 +3,7 @@ import {t} from '@lingui/macro';
 import {isConsentBannerEnabled, isEmbedded, openCookieSettings} from '../../../utilites/cookieConsent';
 import classes from './CookieSettingsLink.module.scss';
 
-export const CookieSettingsLink = () => {
+export const CookieSettingsLink = ({className}: {className?: string}) => {
     const [hidden, setHidden] = useState(false);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export const CookieSettingsLink = () => {
     if (hidden || !isConsentBannerEnabled()) return null;
 
     return (
-        <button type="button" className={classes.link} onClick={openCookieSettings}>
+        <button type="button" className={className ? `${classes.link} ${className}` : classes.link} onClick={openCookieSettings}>
             {t`Cookie settings`}
         </button>
     );

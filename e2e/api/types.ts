@@ -42,6 +42,14 @@ export interface EventRecord {
   title: string;
   slug: string;
   status: EventStatus;
+  type?: EventType;
+  start_date?: string | null;
+  end_date?: string | null;
+  timezone?: string;
+  currency?: string;
+  category?: string;
+  description?: string | null;
+  organizer_id?: number;
 }
 
 export type EventImageType = 'EVENT_COVER' | 'TICKET_LOGO';
@@ -107,6 +115,7 @@ export interface CreateProductPayload {
   is_hidden_without_promo_code?: boolean;
   show_quantity_remaining?: boolean;
   waitlist_enabled?: boolean;
+  hide_when_sold_out?: boolean;
   sale_start_date?: string;
   sale_end_date?: string;
   sequential_tier_release_enabled?: boolean;

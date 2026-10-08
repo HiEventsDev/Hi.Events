@@ -1,320 +1,498 @@
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {useNavigate} from "react-router";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
-import {Event, EventType, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
-import React, {useEffect, useState} from "react";
+import {EventType, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {t} from "@lingui/macro";
-import {Anchor, Button, SegmentedControl, Select, TextInput} from "@mantine/core";
-import {hasLength, useForm} from "@mantine/form";
+import {Button, Kbd, Modal, Text, TextInput, UnstyledButton} from "@mantine/core";
+import {useForm} from "@mantine/form";
+import {getHotkeyHandler, useMediaQuery, useWindowEvent} from "@mantine/hooks";
 import {useCreateEvent} from "../../../mutations/useCreateEvent.ts";
-import {Editor} from "../../common/Editor";
 import {useGetOrganizers} from "../../../queries/useGetOrganizers.ts";
-import {IconCalendarEvent, IconCalendarRepeat, IconSparkles, IconUsers, IconX} from "@tabler/icons-react";
+import {IconArrowLeft, IconCalendarEvent, IconRepeat, IconWorld, IconX} from "@tabler/icons-react";
 import classes from "./CreateEventModal.module.scss";
 import {OrganizerCreateForm} from "../../forms/OrganizerForm";
 import dayjs from "dayjs";
-import {DateTimePicker} from "@mantine/dates";
 import {getEventCategories} from "../../../constants/eventCategories.ts";
-import {Callout} from "../../common/Callout";
-import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
+import {currencies} from "../../../../data/currencies.ts";
+import {timezones} from "../../../../data/timezones.ts";
+import {htmlToText} from "../../../utilites/helpers.ts";
+import {Editor} from "../../common/Editor";
+import {ChipSelect, ChipSelectOption} from "./ChipSelect.tsx";
+import {DateTimeChip} from "./DateTimeChip.tsx";
+import {PropertyChip} from "./PropertyChip.tsx";
+import {
+    currentDateTimeIn,
+    defaultStartDate,
+    formatChipDateTime,
+    formatChipEnd,
+    NAIVE_DATE_TIME_FORMAT
+} from "./dateTimeFormat.ts";
 
 interface CreateEventModalProps extends GenericModalProps {
     organizerId?: IdParam;
 }
 
+interface CreateEventFormValues {
+    title: string;
+    type: EventType;
+    start_date: string | null;
+    end_date: string | null;
+    organizer_id: string | null;
+    timezone: string | null;
+    currency: string | null;
+    category: string | null;
+    description: string;
+}
+
+const DESCRIPTION_MAX_LENGTH = 50000;
+
+const timezoneOptions: ChipSelectOption[] = timezones.map((timezone) => ({
+    value: timezone,
+    label: timezone.replace(/_/g, ' '),
+}));
+
+const currencyOptions: ChipSelectOption[] = Object.entries(currencies).map(([name, code]) => ({
+    value: code,
+    label: code,
+    description: name,
+}));
+
+const isMac = () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
+
 export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) => {
     const errorHandler = useFormErrorResponseHandler();
     const navigate = useNavigate();
+    const isMobile = useMediaQuery('(max-width: 600px)');
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
     const organizersQuery = useGetOrganizers();
+    const eventMutation = useCreateEvent();
+    const [createdOrganizers, setCreatedOrganizers] = useState<Organizer[]>([]);
+    const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
+    const [showDescription, setShowDescription] = useState(false);
 
-    const form = useForm<Partial<Event>>({
+    const containerRef = useRef<HTMLDivElement>(null);
+    const hasPickedStartDateRef = useRef(false);
+
+    useWindowEvent('keydown', (event) => {
+        if (event.key !== 'Escape' || event.isComposing) {
+            return;
+        }
+        const target = event.target as HTMLElement | null;
+        const dialog = containerRef.current?.closest('[role="dialog"]');
+        const isInsideModal = !!target && (target === document.body || !!dialog?.contains(target));
+        const isOwnedByOpenDropdown = target?.getAttribute('data-mantine-stop-propagation') === 'true';
+        if (isInsideModal && !isOwnedByOpenDropdown) {
+            onClose();
+        }
+    }, {capture: true});
+
+    const organizers = useMemo(() => {
+        const fetched = organizersQuery.data?.data ?? [];
+        const extra = createdOrganizers.filter((created) => !fetched.some((organizer) => organizer.id === created.id));
+        return [...fetched, ...extra];
+    }, [organizersQuery.data, createdOrganizers]);
+
+    const form = useForm<CreateEventFormValues>({
         initialValues: {
             title: '',
-            status: undefined,
             type: EventType.SINGLE,
-            start_date: dayjs().add(1, 'day').hour(21).minute(0).second(0).toISOString(),
-            end_date: undefined,
-            description: undefined,
-            organizer_id: organizerId ? String(organizerId) : undefined,
-            category: undefined,
+            start_date: defaultStartDate(),
+            end_date: null,
+            organizer_id: organizerId ? String(organizerId) : null,
+            timezone: null,
+            currency: null,
+            category: null,
+            description: '',
         },
         validate: {
-            title: hasLength({max: 150}, t`Event name should be less than 150 characters`),
+            title: (value) => {
+                if (!value.trim()) {
+                    return t`Give your event a name`;
+                }
+                if (value.length > 150) {
+                    return t`Event name should be less than 150 characters`;
+                }
+            },
+            start_date: (value, values) => {
+                if (values.type === EventType.SINGLE && !value) {
+                    return t`Choose when your event starts`;
+                }
+            },
             end_date: (value, values) => {
-                if (values.type === EventType.RECURRING) return;
-                if (value && values.start_date && dayjs(value).isBefore(dayjs(values.start_date))) {
+                if (values.type === EventType.RECURRING || !value || !values.start_date) {
+                    return;
+                }
+                if (!dayjs(value).isAfter(dayjs(values.start_date))) {
                     return t`End date must be after start date`;
                 }
             },
             organizer_id: (value) => {
                 if (!value) {
-                    return t`Organizer is required`;
+                    return t`Choose an organizer`;
                 }
             },
         },
-        validateInputOnChange: true,
     });
-    const eventMutation = useCreateEvent();
-    const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
 
-    useEffect(() => {
-        if (organizerId) {
-            form.setFieldValue('organizer_id', String(organizerId));
+    const setStartDate = (value: string) => {
+        const {start_date: previousStart, end_date: end} = form.values;
+        form.setFieldValue('start_date', value);
+        if (end && previousStart) {
+            const duration = dayjs(end).diff(dayjs(previousStart));
+            form.setFieldValue('end_date', dayjs(value).add(duration, 'ms').format(NAIVE_DATE_TIME_FORMAT));
         }
-    }, [organizerId]);
+    };
 
-    useEffect(() => {
-        if (organizersQuery.isFetched && organizersQuery.data?.data?.length === 1) {
-            form.setFieldValue('organizer_id', String(organizersQuery.data?.data[0].id));
+    const applyOrganizer = (organizer?: Organizer) => {
+        if (!organizer) {
+            return;
         }
-    }, [organizersQuery.isFetched]);
+        const timezone = organizer.timezone ?? account?.timezone ?? null;
+        form.setValues({
+            organizer_id: String(organizer.id),
+            currency: organizer.currency ?? account?.currency_code ?? null,
+            timezone,
+        });
+        if (!hasPickedStartDateRef.current) {
+            setStartDate(defaultStartDate(timezone));
+        }
+    };
 
     useEffect(() => {
-        if (isAccountFetched) {
-            form.setFieldValue('currency', account?.currency_code);
-            form.setFieldValue('timezone', account?.timezone);
+        if (!isAccountFetched) {
+            return;
+        }
+        if (!form.values.timezone) {
+            form.setFieldValue('timezone', account?.timezone ?? null);
+        }
+        if (!form.values.currency) {
+            form.setFieldValue('currency', account?.currency_code ?? null);
         }
     }, [isAccountFetched]);
 
     useEffect(() => {
-        if (form.values.organizer_id && organizersQuery.data) {
-            form.setFieldValue(
-                'currency',
-                organizersQuery.data.data
-                    .find((organizer) => organizer.id === Number(form.values.organizer_id))?.currency);
+        if (!organizersQuery.isFetched || !isAccountFetched) {
+            return;
         }
-    }, [form.values.organizer_id]);
+        const fetched = organizersQuery.data?.data ?? [];
+        if (fetched.length === 0) {
+            setShowCreateOrganizer(true);
+            return;
+        }
+        const preselected = organizerId
+            ? fetched.find((organizer) => String(organizer.id) === String(organizerId))
+            : fetched.length === 1 ? fetched[0] : undefined;
+        applyOrganizer(preselected);
+    }, [organizersQuery.isFetched, isAccountFetched]);
 
-    const handleCreate = (values: Partial<Event>) => {
+    const handleCreate = (values: CreateEventFormValues) => {
+        const isRecurring = values.type === EventType.RECURRING;
+        const hasDescription = htmlToText(values.description).trim().length > 0;
+
         eventMutation.mutateAsync({
-            eventData: values,
+            eventData: {
+                title: values.title.trim(),
+                type: values.type,
+                organizer_id: values.organizer_id ?? undefined,
+                timezone: values.timezone ?? undefined,
+                currency: values.currency ?? undefined,
+                category: values.category ?? undefined,
+                start_date: isRecurring ? undefined : values.start_date ?? undefined,
+                end_date: isRecurring ? undefined : values.end_date ?? undefined,
+                description: hasDescription ? values.description : undefined,
+            },
         }).then((data) => {
-            navigate(`/manage/event/${data.data.id}/dashboard?new_event=true`)
+            navigate(`/manage/event/${data.data.id}/dashboard?new_event=true`);
         }).catch((error) => {
             errorHandler(form, error);
         });
-    }
+    };
+
+    const submit = form.onSubmit(handleCreate);
+    const isRecurring = form.values.type === EventType.RECURRING;
+    const selectedOrganizer = organizers.find((organizer) => String(organizer.id) === form.values.organizer_id);
+
+    const categoryOptions: ChipSelectOption[] = getEventCategories().map((category) => ({
+        value: category.id,
+        label: `${category.emoji} ${category.name}`,
+    }));
+
+    const repeatOptions: ChipSelectOption[] = [
+        {value: EventType.SINGLE, label: t`Doesn't repeat`, description: t`One date`},
+        {value: EventType.RECURRING, label: t`Repeats`, description: t`Schedule set up next`},
+    ];
+
+    const propertyErrors = (['start_date', 'end_date', 'timezone', 'currency', 'category', 'description'] as const)
+        .map((field) => form.errors[field])
+        .filter(Boolean);
+
+    const handleOrganizerCreated = (organizer: Organizer) => {
+        setCreatedOrganizers((previous) => [...previous, organizer]);
+        setShowCreateOrganizer(false);
+        applyOrganizer(organizer);
+    };
+
+    const header = (
+        <div className={classes.header}>
+            {showCreateOrganizer ? (
+                <>
+                    {organizers.length > 0 && (
+                        <UnstyledButton
+                            type="button"
+                            className={classes.crumb}
+                            onClick={() => setShowCreateOrganizer(false)}
+                            data-testid="create-event-organizer-back"
+                        >
+                            <IconArrowLeft size={14}/>
+                            {t`Back`}
+                        </UnstyledButton>
+                    )}
+                    <span className={classes.headerTitle}>{t`New organizer`}</span>
+                </>
+            ) : (
+                <>
+                    {organizerId ? (
+                        <span className={classes.crumbStatic}>{selectedOrganizer?.name}</span>
+                    ) : (
+                        <ChipSelect
+                            variant="crumb"
+                            data={organizers.map((organizer) => ({
+                                value: String(organizer.id),
+                                label: organizer.name,
+                            }))}
+                            value={form.values.organizer_id}
+                            onChange={(value) => applyOrganizer(organizers.find((organizer) => String(organizer.id) === value))}
+                            placeholder={t`Choose organizer`}
+                            ariaLabel={t`Organizer`}
+                            dataTestId="create-event-organizer-select"
+                            invalid={!!form.errors.organizer_id}
+                            action={{
+                                label: t`New organizer`,
+                                onSelect: () => setShowCreateOrganizer(true),
+                                dataTestId: 'create-event-new-organizer',
+                            }}
+                        />
+                    )}
+                    <span className={classes.headerSeparator}>/</span>
+                    <span className={classes.headerTitle}>{t`New event`}</span>
+                </>
+            )}
+            <UnstyledButton
+                type="button"
+                className={classes.closeButton}
+                onClick={onClose}
+                aria-label={t`Close`}
+            >
+                <IconX size={16}/>
+            </UnstyledButton>
+        </div>
+    );
 
     return (
-        <div className={classes.modalOverlay} onClick={onClose}>
-            {/* Floating background emojis */}
-            <div className={classes.floatingEmojis}>
-                <span className={classes.floatingEmoji} style={{top: '10%', left: '15%', animationDelay: '0s'}}>🎉</span>
-                <span className={classes.floatingEmoji}
-                      style={{top: '20%', right: '20%', animationDelay: '2s'}}>✨</span>
-                <span className={classes.floatingEmoji} style={{top: '60%', left: '10%', animationDelay: '4s'}}>🥳</span>
-                <span className={classes.floatingEmoji}
-                      style={{bottom: '30%', right: '15%', animationDelay: '1s'}}>🎪</span>
-                <span className={classes.floatingEmoji}
-                      style={{bottom: '15%', left: '25%', animationDelay: '3s'}}>🌟</span>
-                <span className={classes.floatingEmoji} style={{top: '40%', right: '8%', animationDelay: '5s'}}>🎭</span>
-                <span className={classes.floatingEmoji}
-                      style={{top: '70%', left: '70%', animationDelay: '2.5s'}}>🎨</span>
-                <span className={classes.floatingEmoji}
-                      style={{top: '25%', left: '60%', animationDelay: '1.5s'}}>🎯</span>
-            </div>
+        <Modal
+            opened
+            onClose={onClose}
+            withCloseButton={false}
+            closeOnEscape={false}
+            size={580}
+            padding={0}
+            radius="md"
+            yOffset="12vh"
+            fullScreen={isMobile}
+            transitionProps={{transition: 'fade', duration: 150}}
+            classNames={{content: classes.content, body: classes.modalBody}}
+        >
+            <div ref={containerRef} className={classes.container}>
+                {header}
 
-            <div className={classes.modalContainer} onClick={(e) => e.stopPropagation()}>
-                <button
-                    className={classes.closeButton}
-                    onClick={onClose}
-                    aria-label={t`Close modal`}
-                >
-                    <IconX size={20}/>
-                </button>
-
-                <div className={classes.modalHeader}>
-                    <div className={classes.headerContent}>
-                        <div className={classes.magicWand}>✨</div>
-                        <h1 className={classes.headerTitle}>{t`Create Your Event`}</h1>
-                        <p className={classes.headerSubtitle}>{t`Tell us about your event`}</p>
+                {showCreateOrganizer ? (
+                    <div className={classes.organizerForm}>
+                        <OrganizerCreateForm
+                            onCancel={() => setShowCreateOrganizer(false)}
+                            onSuccess={handleOrganizerCreated}
+                        />
                     </div>
-                </div>
-
-                <div className={classes.modalContent}>
-                    <div className={classes.formContainer}>
-                        {showCreateOrganizer && (
-                            <div className={classes.createOrganizerCard}>
-                                <h3 className={classes.createOrganizerHeading}>
-                                    <IconUsers size={20}/>
-                                    {t`Create Organizer`}
-                                </h3>
-                                <OrganizerCreateForm
-                                    onCancel={() => setShowCreateOrganizer(false)}
-                                    onSuccess={(organizer: Organizer) => {
-                                        setShowCreateOrganizer(false);
-                                        form.setFieldValue('organizer_id', String(organizer.id));
-                                    }}/>
-                            </div>
-                        )}
-
-                        {!showCreateOrganizer && !organizerId && (
-                            <>
-                                <Select
-                                    {...form.getInputProps('organizer_id')}
-                                    label={t`Who is organizing this event?`}
-                                    required
-                                    leftSection={<IconUsers size={18}/>}
-                                    placeholder={t`Select organizer`}
-                                    data={organizersQuery.data?.data?.map((organizer) => ({
-                                        value: String(organizer.id),
-                                        label: organizer.name,
-                                    }))}
-                                    mb={0}
-                                />
-                                <div className={classes.createOrganizerLink}>
-                                    {t`or`} {'  '}
-                                    <Anchor href={'#'} variant={'transparent'}
-                                            onClick={() => setShowCreateOrganizer(true)}>
-                                        {t`create an organizer`}
-                                    </Anchor>
-                                </div>
-                            </>
-                        )}
-
-                        <form onSubmit={form.onSubmit(handleCreate)}>
+                ) : (
+                    <form
+                        className={classes.form}
+                        onSubmit={submit}
+                        onKeyDown={getHotkeyHandler([['mod+Enter', () => submit()]])}
+                        noValidate
+                    >
+                        <div className={classes.body}>
                             <TextInput
                                 {...form.getInputProps('title')}
-                                label={t`Event Name`}
-                                placeholder={t`Summer Music Festival ${new Date().getFullYear()}`}
-                                required
-                                size="lg"
-                                leftSection={<IconSparkles size={18}/>}
+                                variant="unstyled"
+                                placeholder={t`Event name`}
+                                aria-label={t`Event name`}
+                                maxLength={150}
+                                autoComplete="off"
+                                data-autofocus
+                                data-testid="create-event-title-input"
+                                classNames={{input: classes.titleInput}}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter' && !event.metaKey && !event.ctrlKey) {
+                                        event.preventDefault();
+                                    }
+                                }}
                             />
 
-                            <Select
-                                {...form.getInputProps('category')}
-                                label={t`Event Category`}
-                                placeholder={t`Select a category`}
-                                data={getEventCategories().map((category) => ({
-                                    value: category.id,
-                                    label: `${category.emoji} ${category.name}`,
-                                }))}
-                                size="lg"
-                                searchable
-                            />
-
-                            <div className={classes.editorField}>
-                                <Editor
-                                    label={t`Event Description`}
-                                    description={t`Tell people what to expect at your event`}
-                                    value={form.values.description || ''}
-                                    onChange={(value) => form.setFieldValue('description', value)}
-                                    error={form.errors.description as string}
-                                    editorType="simple"
-                                    maxLength={2000}
-                                    size="lg"
-                                />
-                            </div>
-
-                            <div>
-                                <SegmentedControl
-                                    fullWidth
-                                    size="md"
-                                    value={form.values.type || EventType.SINGLE}
-                                    onChange={(value) => {
-                                        form.setFieldValue('type', value as EventType);
-                                        if (value === EventType.RECURRING) {
-                                            form.setFieldValue('start_date', undefined);
-                                            form.setFieldValue('end_date', undefined);
-                                        } else {
-                                            form.setFieldValue('start_date', dayjs().add(1, 'day').hour(21).minute(0).second(0).toISOString());
-                                        }
-                                    }}
-                                    data={[
-                                        {
-                                            value: EventType.SINGLE,
-                                            label: (
-                                                <span style={{display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center'}}>
-                                                    <IconCalendarEvent size={16}/>
-                                                    {t`Single Event`}
-                                                </span>
-                                            ),
-                                        },
-                                        {
-                                            value: EventType.RECURRING,
-                                            label: (
-                                                <span style={{display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center'}}>
-                                                    <IconCalendarRepeat size={16}/>
-                                                    {t`Recurring Event`}
-                                                </span>
-                                            ),
-                                        },
-                                    ]}
-                                    mb="md"
-                                />
-                            </div>
-
-                            {form.values.type === EventType.RECURRING ? (
-                                <Callout
-                                    icon={<IconCalendarRepeat size={22} className={classes.recurringNoticeIcon}/>}
-                                    title={t`Occurrences can be configured after creation`}
-                                    children={t`You'll be able to set up dates, schedules, and recurrence rules in the next step.`}
-                                    className={classes.recurringNotice}
-                                />
-                            ) : (
-                                <div className={classes.dateTimeGrid}>
-                                    <DateTimePicker
-                                        label={t`Start Date & Time`}
-                                        {...form.getInputProps('start_date')}
-                                        required
-                                        size="md"
-                                        placeholder={t`Select start date and time`}
-                                        valueFormat={getDateTimePickerFormat()}
-                                        clearable
-                                        dropdownType="modal"
-                                        timePickerProps={{
-                                            format: '12h',
-                                            withDropdown: true,
-                                        }}
-                                        onChange={(value) => {
-                                            form.setFieldValue('start_date', value);
-
-                                            if (form.values.end_date && value && dayjs(form.values.end_date).isBefore(dayjs(value))) {
-                                                form.setFieldValue('end_date', dayjs(value).add(2, 'hours').toISOString());
-                                            }
-                                        }}
+                            {showDescription && (
+                                <div className={classes.description}>
+                                    <Editor
+                                        editorType="inline"
+                                        value={form.values.description}
+                                        onChange={(value) => form.setFieldValue('description', value)}
+                                        maxLength={DESCRIPTION_MAX_LENGTH}
+                                        placeholder={t`What should people expect?`}
+                                        ariaLabel={t`Description`}
+                                        dataTestId="create-event-description-input"
+                                        className={classes.descriptionEditor}
+                                        autoFocus
                                     />
-                                    <DateTimePicker
-                                        label={t`End Date & Time (optional)`}
-                                        {...form.getInputProps('end_date')}
-                                        size="md"
-                                        placeholder={t`Select end date and time`}
-                                        valueFormat={getDateTimePickerFormat()}
-                                        clearable
-                                        dropdownType="modal"
-                                        timePickerProps={{
-                                            format: '12h',
-                                            withDropdown: true,
-                                        }}
-                                        minDate={form.values.start_date ?? undefined}
-                                        onFocus={
-                                            () => {
-                                                if (!form.values.end_date && form.values.start_date) {
-                                                    form.setFieldValue('end_date', dayjs(form.values.start_date).add(2, 'hours').toISOString());
-                                                }
-                                            }
-                                        }
-
-                                    />
+                                    <div className={classes.descriptionMeta}>
+                                        <UnstyledButton
+                                            type="button"
+                                            className={classes.textButton}
+                                            onClick={() => {
+                                                form.setFieldValue('description', '');
+                                                setShowDescription(false);
+                                            }}
+                                        >
+                                            {t`Remove description`}
+                                        </UnstyledButton>
+                                    </div>
                                 </div>
                             )}
 
-                            <Button
-                                loading={eventMutation.isPending}
-                                fullWidth
-                                type={'submit'}
-                                size="xl"
-                                className={classes.createButton}
-                                leftSection={<IconCalendarEvent size={24}/>}
-                            >
-                                {t`Continue Setup`}
+                            {isRecurring && (
+                                <div className={classes.recurringNote} data-testid="create-event-recurring-note">
+                                    <IconRepeat size={15}/>
+                                    {t`You'll set the dates and schedule after the event is created.`}
+                                </div>
+                            )}
+
+                            <div className={classes.chips}>
+                                {!isRecurring && (
+                                    <>
+                                        <DateTimeChip
+                                            value={form.values.start_date}
+                                            onChange={(value) => {
+                                                hasPickedStartDateRef.current = true;
+                                                setStartDate(value);
+                                            }}
+                                            label={form.values.start_date ? formatChipDateTime(form.values.start_date) : t`Start date`}
+                                            empty={!form.values.start_date}
+                                            invalid={!!form.errors.start_date}
+                                            minDate={currentDateTimeIn(form.values.timezone)}
+                                            icon={<IconCalendarEvent size={15}/>}
+                                            ariaLabel={t`Start date and time`}
+                                            dataTestId="create-event-start-chip"
+                                        />
+                                        <DateTimeChip
+                                            value={form.values.end_date}
+                                            onChange={(value) => form.setFieldValue('end_date', value)}
+                                            label={form.values.end_date
+                                                ? t`Ends ${formatChipEnd(form.values.end_date, form.values.start_date)}`
+                                                : t`+ End time`}
+                                            empty={!form.values.end_date}
+                                            invalid={!!form.errors.end_date}
+                                            minDate={form.values.start_date}
+                                            seedValue={() => dayjs(form.values.start_date ?? undefined)
+                                                .add(2, 'hours')
+                                                .format(NAIVE_DATE_TIME_FORMAT)}
+                                            onClear={form.values.end_date ? () => form.setFieldValue('end_date', null) : undefined}
+                                            ariaLabel={t`End date and time`}
+                                            dataTestId="create-event-end-chip"
+                                        />
+                                    </>
+                                )}
+                                <ChipSelect
+                                    data={repeatOptions}
+                                    value={form.values.type}
+                                    onChange={(value) => form.setFieldValue('type', value as EventType)}
+                                    icon={<IconRepeat size={15}/>}
+                                    placeholder={t`Doesn't repeat`}
+                                    ariaLabel={t`Repeat`}
+                                    dataTestId="create-event-repeat-chip"
+                                />
+                                <ChipSelect
+                                    data={timezoneOptions}
+                                    value={form.values.timezone}
+                                    onChange={(value) => form.setFieldValue('timezone', value)}
+                                    icon={<IconWorld size={15}/>}
+                                    placeholder={t`Timezone`}
+                                    ariaLabel={t`Timezone`}
+                                    dataTestId="create-event-timezone-chip"
+                                    invalid={!!form.errors.timezone}
+                                    searchable
+                                />
+                                <ChipSelect
+                                    data={currencyOptions}
+                                    value={form.values.currency}
+                                    onChange={(value) => form.setFieldValue('currency', value)}
+                                    placeholder={t`Currency`}
+                                    ariaLabel={t`Currency`}
+                                    dataTestId="create-event-currency-chip"
+                                    invalid={!!form.errors.currency}
+                                    searchable
+                                />
+                                <ChipSelect
+                                    data={categoryOptions}
+                                    value={form.values.category}
+                                    onChange={(value) => form.setFieldValue('category', value)}
+                                    onClear={() => form.setFieldValue('category', null)}
+                                    placeholder={t`+ Category`}
+                                    ariaLabel={t`Category`}
+                                    dataTestId="create-event-category-chip"
+                                    searchable
+                                />
+                                {!showDescription && (
+                                    <PropertyChip
+                                        empty
+                                        onClick={() => setShowDescription(true)}
+                                        data-testid="create-event-description-button"
+                                    >
+                                        {t`+ Description`}
+                                    </PropertyChip>
+                                )}
+                            </div>
+
+                            {(propertyErrors.length > 0 || form.errors.organizer_id) && (
+                                <div className={classes.errors} role="alert">
+                                    {[form.errors.organizer_id, ...propertyErrors].filter(Boolean).map((error) => (
+                                        <Text key={String(error)} size="xs" c="red">{error}</Text>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={classes.footer}>
+                            <Text size="xs" c="dimmed" className={classes.footerHint}>
+                                {t`Next, you'll add tickets and set up your event page.`}
+                            </Text>
+                            <Button variant="default" onClick={onClose} type="button">
+                                {t`Cancel`}
                             </Button>
-                        </form>
-                    </div>
-                </div>
+                            <Button
+                                type="submit"
+                                loading={eventMutation.isPending}
+                                className={classes.submitButton}
+                                data-testid="create-event-submit-button"
+                                rightSection={(
+                                    <span className={classes.shortcut}>
+                                        <Kbd size="xs">{isMac() ? '⌘' : 'Ctrl'}</Kbd>
+                                        <Kbd size="xs">↵</Kbd>
+                                    </span>
+                                )}
+                            >
+                                {t`Create event`}
+                            </Button>
+                        </div>
+                    </form>
+                )}
             </div>
-        </div>
+        </Modal>
     );
-}
+};

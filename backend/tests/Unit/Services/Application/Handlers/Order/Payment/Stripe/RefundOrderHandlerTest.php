@@ -4,8 +4,10 @@ namespace Tests\Unit\Services\Application\Handlers\Order\Payment\Stripe;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\Status\OrderRefundStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
 use HiEvents\Mail\Order\OrderRefunded;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -19,6 +21,7 @@ use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Mockery;
 use Mockery\MockInterface;
+use Stripe\Refund;
 use Stripe\StripeClient;
 use Tests\TestCase;
 
@@ -91,6 +94,26 @@ class RefundOrderHandlerTest extends TestCase
         $this->assertSame($order, $this->handler->handle($this->givenDTO(notifyBuyer: true)));
     }
 
+    public function test_the_order_is_marked_refund_pending_before_the_stripe_refund_is_created(): void
+    {
+        $calls = [];
+
+        $order = $this->givenOrderIsFound(email: null, onUpdate: function (int $id, array $attributes) use (&$calls) {
+            $calls[] = 'mark:'.$attributes[OrderDomainObjectAbstract::REFUND_STATUS];
+        });
+        $this->givenEventIsFound();
+
+        $this->refundService->shouldReceive('refundPayment')->once()->andReturnUsing(function () use (&$calls) {
+            $calls[] = 'stripe-refund';
+
+            return Mockery::mock(Refund::class);
+        });
+
+        $this->handler->handle($this->givenDTO());
+
+        $this->assertSame(['mark:'.OrderRefundStatus::REFUND_PENDING->name, 'stripe-refund'], $calls);
+    }
+
     private function givenDTO(bool $notifyBuyer = false): RefundOrderDTO
     {
         return new RefundOrderDTO(
@@ -102,7 +125,7 @@ class RefundOrderHandlerTest extends TestCase
         );
     }
 
-    private function givenOrderIsFound(?string $email): OrderDomainObject
+    private function givenOrderIsFound(?string $email, ?callable $onUpdate = null): OrderDomainObject
     {
         $order = (new OrderDomainObject)
             ->setId(self::ORDER_ID)
@@ -120,7 +143,15 @@ class RefundOrderHandlerTest extends TestCase
             ->with(['event_id' => self::EVENT_ID, 'id' => self::ORDER_ID])
             ->andReturn($order);
 
-        $this->orderRepository->shouldReceive('updateFromArray')->once()->andReturn($order);
+        $this->orderRepository->shouldReceive('updateFromArray')
+            ->once()
+            ->andReturnUsing(function (int $id, array $attributes) use ($order, $onUpdate) {
+                if ($onUpdate) {
+                    $onUpdate($id, $attributes);
+                }
+
+                return $order;
+            });
 
         return $order;
     }

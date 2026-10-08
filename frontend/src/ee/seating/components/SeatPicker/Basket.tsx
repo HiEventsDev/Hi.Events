@@ -1,4 +1,4 @@
-import {ReactNode, useState} from "react";
+import {CSSProperties, ReactNode, useState} from "react";
 import {ActionIcon, Alert, Button, NumberInput, Radio, Select, Stack, Text} from "@mantine/core";
 import {IconAlertTriangle, IconArmchair, IconMinus, IconPlus, IconX} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -6,6 +6,7 @@ import {formatCurrency} from "../../../../utilites/currency.ts";
 import {htmlToText} from "../../../../utilites/helpers.ts";
 import {formatPrice, SeatChoice, TicketOption} from "./ticketOptions.ts";
 import classes from "./SeatPicker.module.scss";
+import themeClasses from "../SeatingTheme.module.scss";
 
 interface BasketLine {
     key: string;
@@ -32,6 +33,7 @@ interface BasketProps {
     isContinuing?: boolean;
     continueLabel?: string;
     dropdownZIndex?: number;
+    portalThemeStyle?: CSSProperties;
     emptyState?: ReactNode;
     afterLines?: ReactNode;
     onFindBestAvailable: (option: TicketOption, quantity: number) => void;
@@ -59,6 +61,8 @@ export const Basket = (props: BasketProps) => {
                     {props.bestAvailableOptions.length > 1 && (
                         <Select label={t`Ticket type`} allowDeselect={false}
                                 comboboxProps={{zIndex: props.dropdownZIndex}}
+                                classNames={{dropdown: `${themeClasses.themed} ${themeClasses.dropdown}`}}
+                                styles={{dropdown: props.portalThemeStyle}}
                                 data={props.bestAvailableOptions.map(option => ({
                                     value: String(option.price_id),
                                     label: option.label,

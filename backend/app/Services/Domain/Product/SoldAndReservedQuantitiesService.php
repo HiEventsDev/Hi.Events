@@ -14,11 +14,12 @@ class SoldAndReservedQuantitiesService
     ) {}
 
     /**
+     * @param  int[]  $eventIds
      * @return array<int, int> product_price_id => quantity held by unexpired reservations
      */
-    public function getReservedByPrice(int $eventId, ?int $eventOccurrenceId = null): array
+    public function getReservedByPrice(array $eventIds, ?int $eventOccurrenceId = null): array
     {
-        return $this->orderItemRepository->getReservedQuantitiesByPrice($eventId, $eventOccurrenceId);
+        return $this->orderItemRepository->getReservedQuantitiesByPrice($eventIds, $eventOccurrenceId);
     }
 
     public function getReservedTicketsForOccurrence(int $eventOccurrenceId): int

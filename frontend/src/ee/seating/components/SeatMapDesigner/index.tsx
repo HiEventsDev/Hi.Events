@@ -19,8 +19,8 @@ import {
     IconRosette,
 } from "@tabler/icons-react";
 import {t} from "@lingui/macro";
-import {useBlocker, useNavigate} from "react-router";
-import {confirmationDialogAsync} from "../../../../utilites/confirmationDialog.tsx";
+import {useNavigate} from "react-router";
+import {useUnsavedChangesGuard} from "../../../../hooks/useUnsavedChangesGuard.ts";
 import {showError} from "../../../../utilites/notifications.tsx";
 import {countSeats, rowLabel} from "../lib/generateSeats.ts";
 import {areaBounds} from "../lib/geometry.ts";
@@ -261,12 +261,6 @@ export const SeatMapDesigner = ({initialLayout, initialName, isNameEditable, bac
         }
     });
 
-    useWindowEvent('beforeunload', event => {
-        if (hasUnsavedChanges) {
-            event.preventDefault();
-        }
-    });
-
     const save = async () => {
         commitEdit();
         const problem = findLayoutProblem(layout);
@@ -283,16 +277,7 @@ export const SeatMapDesigner = ({initialLayout, initialName, isNameEditable, bac
         }
     };
 
-    const blocker = useBlocker(({currentLocation, nextLocation}) =>
-        hasUnsavedChanges && currentLocation.pathname !== nextLocation.pathname);
-
-    useEffect(() => {
-        if (blocker.state !== 'blocked') {
-            return;
-        }
-        confirmationDialogAsync(t`Leave without saving? Your changes to this seat map will be lost.`, {confirm: t`Leave`})
-            .then(confirmed => confirmed ? blocker.proceed() : blocker.reset());
-    }, [blocker.state]);
+    useUnsavedChangesGuard(hasUnsavedChanges, t`Leave without saving? Your changes to this seat map will be lost.`);
 
     const leave = () => navigate(backTo);
 

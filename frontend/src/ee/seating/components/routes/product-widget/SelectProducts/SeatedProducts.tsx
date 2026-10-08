@@ -1,4 +1,4 @@
-import {ReactNode, useEffect} from "react";
+import {ReactNode, useEffect, useRef} from "react";
 import {useInViewport} from "@mantine/hooks";
 import {IdParam, Product} from "../../../../../../types.ts";
 import {PublicEventSeatMap} from "../../../../api/seat-map.client.ts";
@@ -6,6 +6,7 @@ import {SeatedProductsSection} from "../../../SeatedProductsSection";
 import {SeatPicker} from "../../../SeatPicker";
 import {SeatChoice} from "../../../SeatPicker/ticketOptions.ts";
 import {useSeatSelection} from "../../../SeatPicker/useSeatSelection.ts";
+import {usePortalThemeStyle} from "../../../usePortalThemeStyle.ts";
 
 export interface SeatedProductsProps {
     eventId: IdParam;
@@ -42,23 +43,25 @@ export const SeatedProducts = (props: SeatedProductsProps) => {
         || selection.minimumWarnings.length > 0;
     const {onSelectionBlockedChange} = props;
     const canFindBestAvailable = props.occurrenceId !== undefined;
+    const themeSourceRef = useRef<HTMLDivElement>(null);
+    const portalThemeStyle = usePortalThemeStyle(themeSourceRef, props.pickerOpened || selection.sheetTarget !== null);
 
     useEffect(() => {
         onSelectionBlockedChange(isSelectionBlocked);
     }, [isSelectionBlocked, onSelectionBlockedChange]);
 
     return (
-        <>
-            <SeatedProductsSection sectionRef={sectionRef} selection={selection} seatMap={props.seatMap} currency={props.currency}
+        <div ref={themeSourceRef} style={{display: 'contents'}}>
+            <SeatedProductsSection sectionRef={sectionRef} portalThemeStyle={portalThemeStyle} selection={selection} seatMap={props.seatMap} currency={props.currency}
                                    canFindBestAvailable={canFindBestAvailable}
                                    disabled={props.disabled} disabledMessage={props.disabledMessage}
                                    selectsInline={props.selectsInline} isCoveredByPicker={props.pickerOpened}
                                    extrasCount={props.extrasCount} extrasTotal={props.extrasTotal} addons={props.addons}
                                    onAreaChange={props.onAreaChange} onOpenFullScreen={props.onOpenPicker}/>
-            <SeatPicker opened={props.pickerOpened} selection={selection} seatMap={props.seatMap} currency={props.currency}
+            <SeatPicker opened={props.pickerOpened} selection={selection} themeStyle={portalThemeStyle} seatMap={props.seatMap} currency={props.currency}
                         canFindBestAvailable={canFindBestAvailable} isContinuing={props.isContinuing}
                         withCloseButton={!props.isHostedInParentModal} extras={props.extras} extrasCount={props.extrasCount} extrasTotal={props.extrasTotal}
                         onAreaChange={props.onAreaChange} onContinue={props.onContinue} onClose={props.onClosePicker}/>
-        </>
+        </div>
     );
 };
