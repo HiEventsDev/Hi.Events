@@ -85,6 +85,14 @@ a {
   padding-bottom: 0 !important;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  input.mantine-Input-input,
+  textarea.mantine-Input-input,
+  select.mantine-Input-input {
+    font-size: 16px;
+  }
+}
+
 .mantine-Modal-content {
   @include mixins.scrollbar();
 }

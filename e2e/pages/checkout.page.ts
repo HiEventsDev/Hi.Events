@@ -13,12 +13,6 @@ export interface BuyerDetails {
 export async function setWidgetQuantity(scope: Locator | FrameLocator | CheckoutSurface, quantity: number): Promise<void> {
   const selector = scope.locator('.hi-product-quantity-selector').first();
   const input = selector.locator('input');
-  if (!(await input.isVisible())) {
-    if (quantity === 0) {
-      return;
-    }
-    await selector.getByRole('button', { name: 'Increase quantity' }).click();
-  }
   await input.fill(String(quantity));
   if (quantity !== 0) {
     await input.blur();
