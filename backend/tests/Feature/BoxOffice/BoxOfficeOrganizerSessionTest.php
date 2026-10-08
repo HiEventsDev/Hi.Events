@@ -3,6 +3,7 @@
 namespace Tests\Feature\BoxOffice;
 
 use HiEvents\DomainObjects\Enums\EventType;
+use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficePinService;
 use HiEvents\Models\User;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as ResponseCodes;
+use Tests\Concerns\ManagesFeatureFlags;
 use Tests\Feature\Support\InsertsRecurringEventRows;
 use Tests\TestCase;
 
@@ -18,6 +20,7 @@ class BoxOfficeOrganizerSessionTest extends TestCase
 {
     use DatabaseTransactions;
     use InsertsRecurringEventRows;
+    use ManagesFeatureFlags;
 
     private string $boxOfficeShortId;
 
@@ -34,6 +37,7 @@ class BoxOfficeOrganizerSessionTest extends TestCase
         DB::table('events')->where('id', $this->eventId)->update(['status' => EventStatus::LIVE->name]);
         DB::table('event_settings')->insert(['event_id' => $this->eventId, 'created_at' => now(), 'updated_at' => now()]);
         $this->insertOccurrence();
+        $this->setFeatureFlagOverride($this->accountId, FeatureFlag::BOX_OFFICE, true);
 
         $this->boxOfficeShortId = 'bo_'.uniqid();
         $this->boxOfficeId = DB::table('box_offices')->insertGetId([
