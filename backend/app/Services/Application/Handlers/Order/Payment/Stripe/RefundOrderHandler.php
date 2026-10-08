@@ -133,6 +133,8 @@ class RefundOrderHandler
             $this->orderCancelService->cancelOrder($order);
         }
 
+        $pendingOrder = $this->markOrderRefundPending($order);
+
         $paymentPlatform = $order->getStripePayment()->getStripePlatformEnum();
 
         $stripeClient = $this->stripeClientFactory->createForPlatform($paymentPlatform);
@@ -147,6 +149,6 @@ class RefundOrderHandler
             $this->notifyBuyer($order, $event, $amount);
         }
 
-        return $this->markOrderRefundPending($order);
+        return $pendingOrder;
     }
 }
