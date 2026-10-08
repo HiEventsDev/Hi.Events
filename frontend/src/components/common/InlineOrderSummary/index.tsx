@@ -48,8 +48,13 @@ export const InlineOrderSummary = ({
         return sum;
     }, 0) || 0;
 
+    const seatLabelsByItem = new Map<number, string[]>();
+    (order.seats ?? []).forEach(seat => {
+        seatLabelsByItem.set(seat.order_item_id, [...(seatLabelsByItem.get(seat.order_item_id) ?? []), seat.seat_label]);
+    });
+
     return (
-        <div className={classes.inlineOrderSummary}>
+        <div className={classes.inlineOrderSummary} data-testid="inline-order-summary">
             <div
                 className={classes.header}
                 onClick={() => setExpanded(!expanded)}
@@ -107,13 +112,19 @@ export const InlineOrderSummary = ({
                     <div className={classes.divider}/>
 
                     <div className={classes.lineItems}>
-                        {order.order_items?.map((item) => (
+                        {order.order_items?.map((item) => {
+                            const seatLabels = seatLabelsByItem.get(item.id) ?? [];
+
+                            return (
                             <div key={item.id} className={classes.lineItem}>
                                 <div className={classes.lineItemLeft}>
                                     <span title={item.item_name}
                                         className={classes.lineItemName}>{item.item_name}</span>
                                     {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                                     <span className={classes.lineItemQuantity}>× {item.quantity}</span>
+                                    {seatLabels.length > 0 && (
+                                        <span className={classes.lineItemSeats}>{seatLabels.join(', ')}</span>
+                                    )}
                                 </div>
                                 <div className={classes.lineItemPriceWrapper}>
                                     {!!item.price_before_discount && (
@@ -126,7 +137,8 @@ export const InlineOrderSummary = ({
                                     </span>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {order.promo_code && totalDiscount > 0 && (

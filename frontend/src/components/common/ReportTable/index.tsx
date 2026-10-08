@@ -15,7 +15,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {NoResultsSplash} from "../NoResultsSplash";
 import {OccurrenceSelect} from "../OccurrenceSelect";
-import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts";
+import {useGetAllEventOccurrences} from "../../../queries/useGetAllEventOccurrences.ts";
 import classes from './ReportTable.module.scss';
 
 dayjs.extend(utc);
@@ -81,13 +81,7 @@ const ReportTable = <T extends Record<string, any>>({
     const {reportType, eventId} = useParams();
 
     const isRecurring = event?.type === EventType.RECURRING;
-    const occurrencesQuery = useGetEventOccurrences(
-        eventId,
-        {pageNumber: 1, perPage: 500},
-        isRecurring && showOccurrenceFilter,
-        {includeStats: false},
-    );
-    const occurrences = occurrencesQuery?.data?.data || [];
+    const occurrences = useGetAllEventOccurrences(eventId, isRecurring && showOccurrenceFilter).data ?? [];
 
     const reportQuery = useGetEventReport(eventId, reportType, dateRange[0], dateRange[1], selectedOccurrenceId);
     const data = (reportQuery.data || []) as T[];

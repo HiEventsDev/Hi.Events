@@ -34,4 +34,25 @@ export class AdminPage {
   verificationSwitch(): Locator {
     return this.page.getByTestId('account-verification-switch');
   }
+
+  accountFeatureFlag(key: string): Locator {
+    return this.page.getByTestId(`account-feature-flag-${key}`);
+  }
+
+  async setAccountFeatureFlag(key: string, value: 'On' | 'Off'): Promise<void> {
+    await this.accountFeatureFlag(key).getByText(value, { exact: true }).click();
+  }
+
+  async gotoFeatureFlags(): Promise<void> {
+    await this.page.goto('/admin/feature-flags');
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async expandFeatureFlagOverrides(key: string): Promise<void> {
+    await this.page.getByTestId(`feature-flag-overrides-toggle-${key}`).click();
+  }
+
+  featureFlagOverrideRow(accountId: number): Locator {
+    return this.page.getByTestId(`feature-flag-override-${accountId}`);
+  }
 }

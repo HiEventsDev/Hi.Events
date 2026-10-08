@@ -75,6 +75,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'linkedin_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'discord_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'tiktok_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'bluesky_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'youtube_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'snapchat_handle' => ['sometimes', 'nullable', 'string', 'max:255'],
             'twitch_handle' => ['sometimes', 'nullable', 'string', 'max:255'],

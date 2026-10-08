@@ -38,7 +38,7 @@ import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 import {ShareComponent} from "../../common/ShareIcon";
 import {EventDateRange} from "../../common/EventDateRange";
 import {CalendarOptionsPopover} from "../../common/CalendarOptionsPopover";
-import {isDateInPast} from "../../../utilites/dates.ts";
+import {formatDateWithLocale, isDateInPast, isSameDayInTimezone} from "../../../utilites/dates.ts";
 import {formatCurrency} from "../../../utilites/currency.ts";
 import {UserGeneratedContent} from "../../common/UserGeneratedContent";
 
@@ -47,10 +47,11 @@ interface EventHomepageProps {
     promoCodeValid?: boolean;
     promoCode?: string;
     initialOccurrenceId?: number | null;
+    isPreview?: boolean;
 }
 
 const EventHomepage = ({...loaderData}: EventHomepageProps) => {
-    const {event, promoCodeValid, promoCode, initialOccurrenceId} = loaderData;
+    const {event, promoCodeValid, promoCode, initialOccurrenceId, isPreview = false} = loaderData;
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [contactModalOpen, setContactModalOpen] = useState(false);
     const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
@@ -208,11 +209,17 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
     const statusBadge = getStatusBadge();
     const getTicketsButtonText = event.settings?.get_tickets_button_text || t`Get Tickets`;
     const continueButtonText = event.settings?.continue_button_text || t`Continue`;
+    const canAddToCalendar = event.type !== EventType.RECURRING || !!selectedOccurrence;
+    const hasLaterDates = !!event.last_occurrence_date && !!event.next_occurrence_start_date
+        && !isSameDayInTimezone(event.last_occurrence_date, event.next_occurrence_start_date, event.timezone);
+    const lastOccurrenceDate = hasLaterDates
+        ? formatDateWithLocale(event.last_occurrence_date!, 'shortDate', event.timezone)
+        : null;
     const showFloatingCheckoutButton = selectedCart.quantity > 0 && !!continueButtonNode && !continueButtonInView;
 
     return (
         <>
-            {event?.status && event?.id && (
+            {!isPreview && event?.status && event?.id && (
                 <StatusToggle
                     entityType="event"
                     entityId={event.id}
@@ -350,10 +357,17 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                     <IconShare/>
                                                 </button>
                                             </ShareComponent>
-                                            {/* Future enhancement: Favorite/Heart button */}
-                                            {/* <button className={`${classes.actionButton} ${classes.favoriteButton}`} title={t`Save`}>
-                                                <IconHeart />
-                                            </button> */}
+                                            {canAddToCalendar && (
+                                                <CalendarOptionsPopover event={event} occurrence={selectedOccurrence}>
+                                                    <button
+                                                        className={classes.actionButton}
+                                                        title={t`Add to Calendar`}
+                                                        aria-label={t`Add to Calendar`}
+                                                    >
+                                                        <IconCalendarPlus/>
+                                                    </button>
+                                                </CalendarOptionsPopover>
+                                            )}
                                         </div>
                                     </div>
 
@@ -369,24 +383,13 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 <div className={classes.metaPrimary}>
                                                     <EventDateRange event={event} occurrence={selectedOccurrence}/>
                                                 </div>
-                                                {event.type === EventType.RECURRING && (
-                                                    <div className={classes.metaSecondary}>
-                                                        <IconCalendarRepeat size={14} style={{verticalAlign: 'middle', marginRight: 4}}/>
-                                                        {t`Recurring Event`}
+                                                {event.type === EventType.RECURRING && lastOccurrenceDate && (
+                                                    <div className={`${classes.metaSecondary} ${classes.metaSecondaryWithIcon}`}>
+                                                        <IconCalendarRepeat size={14}/>
+                                                        {t`Multiple dates until ${lastOccurrenceDate}`}
                                                     </div>
                                                 )}
                                             </div>
-                                            {(() => {
-                                                if (event.type === EventType.RECURRING && !selectedOccurrence) return null;
-                                                return (
-                                                    <CalendarOptionsPopover event={event} occurrence={selectedOccurrence}>
-                                                        <button className={classes.addToCalendarButton}>
-                                                            <IconCalendarPlus/>
-                                                            {t`Add to Calendar`}
-                                                        </button>
-                                                    </CalendarOptionsPopover>
-                                                );
-                                            })()}
                                         </div>
 
                                         {/* Event Ended */}
@@ -473,6 +476,30 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                         )}
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
+                                 id="tickets">
+                                <SelectProducts
+                                    colors={{
+                                        background: "transparent",
+                                        primary: "var(--event-primary-color)",
+                                        primaryText: "var(--event-primary-text-color)",
+                                        secondary: "var(--event-primary-color)",
+                                        secondaryText: "var(--event-accent-contrast)",
+                                        bodyBackground: "var(--event-bg-color)",
+                                    }}
+                                    continueButtonText={event.settings?.continue_button_text}
+                                    padding={"0px"}
+                                    event={event}
+                                    promoCodeValid={promoCodeValid}
+                                    promoCode={promoCode}
+                                    showPoweredBy={false}
+                                    initialOccurrenceId={initialOccurrenceId}
+                                    onSelectedOccurrenceChange={setSelectedOccurrence}
+                                    onCartChange={handleCartChange}
+                                    continueButtonRef={setContinueButtonNode}
+                                />
                             </div>
 
                             {/* About Section */}
@@ -564,31 +591,6 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                 </div>
                             )}
 
-                            {/* Tickets Section */}
-                            <div className={`${classes.section} ${classes.ticketsSection}`} ref={ticketsSectionRef}
-                                 id="tickets">
-                                <SelectProducts
-                                    colors={{
-                                        background: "transparent",
-                                        primary: "var(--event-primary-color)",
-                                        primaryText: "var(--event-primary-text-color)",
-                                        secondary: "var(--event-primary-color)",
-                                        secondaryText: "var(--event-accent-contrast)",
-                                        bodyBackground: "var(--event-bg-color)",
-                                    }}
-                                    continueButtonText={event.settings?.continue_button_text}
-                                    padding={"0px"}
-                                    event={event}
-                                    promoCodeValid={promoCodeValid}
-                                    promoCode={promoCode}
-                                    showPoweredBy={false}
-                                    initialOccurrenceId={initialOccurrenceId}
-                                    onSelectedOccurrenceChange={setSelectedOccurrence}
-                                    onCartChange={handleCartChange}
-                                    continueButtonRef={setContinueButtonNode}
-                                />
-                            </div>
-
                             {/* Organizer Section */}
                             {organizer && organizer.status === OrganizerStatus.LIVE && (
                                 <div className={classes.section} id="organizer">
@@ -643,6 +645,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                         {socialLinks.map(({platform, handle, config}) => {
                                                             const IconComponent = config.icon;
                                                             const url = config.baseUrl + handle;
+                                                            const label = config.name();
                                                             return (
                                                                 <a
                                                                     key={platform}
@@ -650,7 +653,8 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className={classes.socialLink}
-                                                                    title={platform}
+                                                                    title={label}
+                                                                    aria-label={label}
                                                                 >
                                                                     <IconComponent size={18}/>
                                                                 </a>
@@ -688,26 +692,24 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                     </div>
                                 </div>
                             )}
-                        </div>
-
-                        {/* Footer */}
-                        <div className={classes.footerSection}>
-                            <div className={classes.footerLinks}>
-                                <Anchor
-                                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
-                                    className={classes.footerLink}
-                                >
-                                    {t`Privacy Policy`}
-                                </Anchor>
-                                <Anchor
-                                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
-                                    className={classes.footerLink}
-                                >
-                                    {t`Terms of Service`}
-                                </Anchor>
+                            <div className={`${classes.section} ${classes.footerSection}`}>
+                                <PoweredByFooter className={classes.poweredByFooter}/>
+                                <div className={classes.footerLinks}>
+                                    <Anchor
+                                        href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-event-footer')}
+                                        className={classes.footerLink}
+                                    >
+                                        {t`Privacy Policy`}
+                                    </Anchor>
+                                    <Anchor
+                                        href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-event-footer')}
+                                        className={classes.footerLink}
+                                    >
+                                        {t`Terms of Service`}
+                                    </Anchor>
+                                    <CookieSettingsLink className={classes.cookieSettingsLink}/>
+                                </div>
                             </div>
-                            <PoweredByFooter className={classes.poweredByFooter}/>
-                            <CookieSettingsLink/>
                         </div>
                     </div>
 
@@ -715,6 +717,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                         <button
                             className={classes.scrollToTicketsButton}
                             onClick={() => continueButtonNode?.click()}
+                            data-testid="floating-checkout-button"
                         >
                             <IconTicket size={18}/>
                             {selectedCart.total > 0

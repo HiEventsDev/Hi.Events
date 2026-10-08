@@ -262,7 +262,7 @@ class OrderItemRepositoryTest extends TestCase
 
         $this->assertSame(
             [$this->productPriceId => 3, $otherPriceId => 2],
-            $this->repository->getReservedQuantitiesByPrice($this->eventId, $this->occurrenceId),
+            $this->repository->getReservedQuantitiesByPrice([$this->eventId], $this->occurrenceId),
         );
     }
 
@@ -274,7 +274,7 @@ class OrderItemRepositoryTest extends TestCase
         $deletedItemsOrder = $this->insertOrderWithItems(OrderStatus::RESERVED->name, now()->addHour(), [$this->occurrenceId => 6]);
         DB::table('order_items')->where('order_id', $deletedItemsOrder)->update(['deleted_at' => now()]);
 
-        $this->assertSame([$this->productPriceId => 7], $this->repository->getReservedQuantitiesByPrice($this->eventId));
+        $this->assertSame([$this->productPriceId => 7], $this->repository->getReservedQuantitiesByPrice([$this->eventId]));
     }
 
     public function test_sold_general_quantities_by_price_count_completed_and_offline_pending_orders(): void

@@ -1,6 +1,8 @@
-import { type Frame, type FrameLocator, type Locator, type Page } from '@playwright/test';
+import { expect, type Frame, type FrameLocator, type Locator, type Page } from '@playwright/test';
 
 export type CheckoutSurface = Page | Frame;
+
+const STRIPE_PAYMENT_FRAME = 'iframe[title="Secure payment input frame"][src*="elements-inner-payment"]';
 
 export interface BuyerDetails {
   firstName: string;
@@ -11,12 +13,6 @@ export interface BuyerDetails {
 export async function setWidgetQuantity(scope: Locator | FrameLocator | CheckoutSurface, quantity: number): Promise<void> {
   const selector = scope.locator('.hi-product-quantity-selector').first();
   const input = selector.locator('input');
-  if (!(await input.isVisible())) {
-    if (quantity === 0) {
-      return;
-    }
-    await selector.getByRole('button', { name: 'Increase quantity' }).click();
-  }
   await input.fill(String(quantity));
   if (quantity !== 0) {
     await input.blur();
@@ -79,10 +75,14 @@ export class CheckoutPage {
 
   async chooseOfflinePayment(): Promise<void> {
     const offlineTab = this.surface.getByRole('button', { name: 'Offline' });
+    const offlineButton = this.surface.getByTestId('offline-payment-button');
     if (await offlineTab.isVisible()) {
-      await offlineTab.click();
+      await expect(async () => {
+        await offlineTab.click();
+        await expect(offlineButton).toBeVisible({ timeout: 5_000 });
+      }).toPass({ timeout: 30_000 });
     }
-    await this.surface.getByTestId('offline-payment-button').click();
+    await offlineButton.click();
     await this.surface.waitForURL(/\/checkout\/\d+\/[^/]+\/summary/);
     await this.reloadSurface();
   }
@@ -104,7 +104,18 @@ export class CheckoutPage {
   }
 
   async fillFirstAttendee(details: BuyerDetails): Promise<void> {
-    await this.fillContact(1, details);
+    await this.fillAttendee(1, details);
+  }
+
+  async fillAttendee(position: number, details: BuyerDetails): Promise<void> {
+    await this.fillContact(position, details);
+  }
+
+  async fillOrderAndAttendees(details: BuyerDetails, attendeeCount: number): Promise<void> {
+    await expect(this.surface.getByLabel(/^First Name/)).toHaveCount(attendeeCount + 1);
+    for (let index = 0; index <= attendeeCount; index++) {
+      await this.fillContact(index, details);
+    }
   }
 
   async completeFreeOrder(): Promise<void> {
@@ -119,7 +130,7 @@ export class CheckoutPage {
   }
 
   async fillStripeCard(card = '4242424242424242'): Promise<void> {
-    const stripeFrame = this.page.frameLocator('iframe[title="Secure payment input frame"]');
+    const stripeFrame = this.page.frameLocator(STRIPE_PAYMENT_FRAME);
     await stripeFrame.getByPlaceholder('1234 1234 1234 1234').fill(card);
     await stripeFrame.getByPlaceholder('MM / YY').fill('12 / 34');
     await stripeFrame.getByPlaceholder('CVC').fill('123');
@@ -134,7 +145,7 @@ export class CheckoutPage {
   }
 
   private async waitForStripeFrameToSettle(): Promise<void> {
-    const frame = this.page.locator('iframe[title="Secure payment input frame"]');
+    const frame = this.page.locator(STRIPE_PAYMENT_FRAME);
     await this.page.waitForTimeout(500);
     let previousHeight = -1;
     for (let attempt = 0; attempt < 20; attempt++) {

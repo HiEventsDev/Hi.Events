@@ -32,7 +32,7 @@ test.describe('per-date quantity edge cases', () => {
 
     const view = new PublicDateView(page, event);
     await view.open(day1);
-    await expect(page.getByRole('button', { name: /Sold Out$/ })).toBeDisabled();
+    await expect(page.getByText('This date is sold out. Please choose another date.')).toBeVisible();
     await view.expectAvailable(day2);
   });
 

@@ -6,6 +6,8 @@ use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -19,6 +21,7 @@ use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
@@ -55,6 +58,10 @@ class PartialEditAttendeeHandlerTest extends TestCase
 
     private PartialEditAttendeeHandler $handler;
 
+    private SeatClaimService|MockInterface $seatClaimService;
+
+    private SeatedProductLookupService|MockInterface $seatedProductLookupService;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -70,6 +77,13 @@ class PartialEditAttendeeHandlerTest extends TestCase
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn (callable $callback) => $callback());
 
+        $this->seatClaimService = Mockery::mock(SeatClaimService::class);
+        $this->seatClaimService->shouldReceive('changeProductForAttendee')->andReturn(false)->byDefault();
+        $this->seatClaimService->shouldReceive('releaseForAttendee')->byDefault();
+
+        $this->seatedProductLookupService = Mockery::mock(SeatedProductLookupService::class);
+        $this->seatedProductLookupService->shouldReceive('isSeated')->andReturn(false)->byDefault();
+
         $this->handler = new PartialEditAttendeeHandler(
             $this->attendeeRepository,
             $this->orderRepository,
@@ -79,6 +93,8 @@ class PartialEditAttendeeHandlerTest extends TestCase
             $this->cancellationService,
             $this->reactivationService,
             Mockery::mock(LoggerInterface::class)->shouldIgnoreMissing(),
+            $this->seatClaimService,
+            $this->seatedProductLookupService,
         );
     }
 
@@ -141,6 +157,20 @@ class PartialEditAttendeeHandlerTest extends TestCase
                 && $event->productPriceId === self::PRODUCT_PRICE_ID
                 && $event->eventOccurrenceId === self::OCCURRENCE_ID
         );
+    }
+
+    public function test_a_cancelled_attendee_without_a_seat_cannot_be_reactivated_once_the_ticket_is_seated(): void
+    {
+        $this->givenAttendee(AttendeeStatus::CANCELLED);
+        $this->seatedProductLookupService->shouldReceive('isSeated')->once()->with(self::PRODUCT_ID)->andReturn(true);
+
+        $this->productQuantityService->shouldNotReceive('increaseQuantitySold');
+        $this->reactivationService->shouldNotReceive('incrementForReactivatedAttendee');
+        $this->attendeeRepository->shouldNotReceive('updateByIdWhere');
+
+        $this->expectException(ValidationException::class);
+
+        $this->handler->handle($this->dto(AttendeeStatus::ACTIVE));
     }
 
     public function test_cancelling_with_a_lowercase_status_releases_capacity_and_decrements_statistics(): void

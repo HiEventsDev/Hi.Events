@@ -1,0 +1,82 @@
+@use "../../../../../styles/mixins";
+
+.tabHost {
+  display: contents;
+}
+
+.tabHost[hidden] {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--hi-color-gray);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hi-text);
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chipButton {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.scopeButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.chipWarn {
+  background: color-mix(in srgb, #f08c00 14%, transparent);
+  color: #a15c00;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hi-color-gray-2);
+  font-size: 14px;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  color: var(--hi-color-gray-dark);
+}
+
+.infoValue {
+  font-weight: 600;
+  text-align: right;
+}
+
+.splash {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--hi-color-gray-dark);
+}

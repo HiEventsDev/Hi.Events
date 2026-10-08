@@ -110,7 +110,21 @@ export interface User {
     is_account_owner?: boolean;
     locale?: SupportedLocales;
     marketing_opted_in_at?: string | null;
+    feature_flags?: Record<string, boolean>;
+    licence?: LicenceSummary;
 }
+
+export type LicenceStatus = 'ACTIVE' | 'GRACE' | 'LAPSED' | 'NONE' | 'DEV';
+
+export interface LicenceSummary {
+    status: LicenceStatus;
+    expires_at: string | null;
+    grace_ends_at: string | null;
+    invalid_reason: string | null;
+    features_in_use: LicensedFeature[];
+}
+
+export type LicensedFeature = 'seating' | 'box_office' | 'white_label';
 
 export interface Account {
     id?: IdParam;
@@ -482,8 +496,8 @@ export interface EventOccurrence {
     updated_at?: string;
 }
 
-export interface OccurrenceTierAllocation {
-    product_price_id: IdParam;
+export interface OccurrenceAllocation {
+    product_price_id: IdParam | null;
     product_title: string;
     price_label: string | null;
     quantity: number | null;
@@ -494,7 +508,7 @@ export interface OccurrenceBookingLimits {
     capacity: number | null;
     allocation_total: number | null;
     sellable: number | null;
-    allocations: OccurrenceTierAllocation[];
+    allocations: OccurrenceAllocation[];
 }
 
 export interface OccurrenceProductAvailability {
@@ -586,6 +600,8 @@ export interface Event extends EventBase {
     occurrences?: EventOccurrence[];
     next_occurrence_start_date?: string | null;
     upcoming_occurrences_sold_out?: boolean;
+    products_sold_out?: boolean;
+    has_seat_map?: boolean;
     last_occurrence_date?: string | null;
     occurrences_month?: string | null;
 }
@@ -703,6 +719,7 @@ export interface OrganizerSettings {
         linkedin?: string;
         youtube?: string;
         tiktok?: string;
+        bluesky?: string;
         snapchat?: string;
         twitch?: string;
         discord?: string;
@@ -800,6 +817,7 @@ export interface ProductPrice {
     quantity_applies_to?: ProductQuantityAppliesTo;
     is_hidden?: boolean;
     quantity_remaining?: number;
+    band_prices?: Record<string, number>;
 }
 
 export interface Product {
@@ -864,6 +882,8 @@ export interface ProductCategory {
 
 export interface Attendee {
     id?: number;
+    seat_uid?: string | null;
+    seat_label?: string | null;
     product_id: number;
     product?: Product;
     product_price_id: number;
@@ -871,7 +891,7 @@ export interface Attendee {
     status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     notes?: string;
     order?: Order;
     public_id: string;
@@ -883,7 +903,8 @@ export interface Attendee {
     locale?: SupportedLocales;
     event_occurrence_id?: number;
     event_occurrence?: EventOccurrence;
-    check_in?: AttendeeCheckIn; // Use in contexts where a single check is expected, like dealing with a check-in list
+    check_in?: AttendeeCheckIn;
+    is_checked_in?: boolean;
     check_ins?: AttendeeCheckIn[];
 }
 
@@ -921,8 +942,15 @@ interface TaxesAndFeesRollup {
     taxes: TaxOrFee[];
 }
 
+export interface OrderSeat {
+    seat_uid: string;
+    seat_label: string;
+    order_item_id: number;
+}
+
 export interface Order {
     id: IdParam;
+    seats?: OrderSeat[];
     short_id: string;
     event_id: IdParam;
     first_name: string;
@@ -931,7 +959,7 @@ export interface Order {
     address: Address;
     payment_provider: PaymentProvider;
     notes?: string;
-    email: string;
+    email: string | null;
     reserved_until: string;
     total_before_additions: number;
     total_tax: number;
@@ -950,6 +978,13 @@ export interface Order {
     public_id: string;
     is_payment_required: boolean;
     is_manually_created: boolean;
+    box_office_id?: number | null;
+    box_office_operator_name?: string | null;
+    box_office_tender?: BoxOfficeTenderType | null;
+    box_office_amount_tendered?: number | null;
+    box_office_change_due?: number | null;
+    box_office_reference?: string | null;
+    box_office_card_error?: { code?: string | null; message?: string | null } | null;
     is_free_order: boolean;
     promo_code?: string;
     promo_code_id?: number;
@@ -978,6 +1013,7 @@ export interface OrderItem {
     price_before_discount?: number;
     price: number;
     quantity: number;
+    total_gross?: number;
     event_occurrence_id?: number;
     event_occurrence?: EventOccurrence;
 }
@@ -1045,6 +1081,186 @@ export interface CheckInList {
     public_show_order_details?: boolean;
 }
 
+export enum BoxOfficeTenderType {
+    CASH = 'CASH',
+    CARD = 'CARD',
+    COMP = 'COMP',
+    OTHER = 'OTHER',
+    FREE = 'FREE',
+}
+
+export interface BoxOffice {
+    id?: number;
+    short_id: string;
+    name: string;
+    description?: string | null;
+    event_id: number;
+    event_occurrence_id?: number | null;
+    event_occurrence?: EventOccurrence;
+    check_in_list_id?: number | null;
+    check_in_list?: {
+        id: number;
+        short_id: string;
+        name: string;
+    };
+    has_pin: boolean;
+    allow_price_override: boolean;
+    allow_discounts: boolean;
+    collect_order_questions: boolean;
+    is_system_default: boolean;
+    activates_at?: string | null;
+    expires_at?: string | null;
+    sales_count: number;
+    gross_sales: number;
+    currency?: string;
+    is_expired?: boolean;
+    is_active?: boolean;
+    products?: {
+        id: number;
+        title: string;
+    }[];
+}
+
+export type BoxOfficeRequest = {
+    name: string;
+    description?: string | null;
+    product_ids: IdParam[];
+    event_occurrence_id?: number | null;
+    check_in_list_id?: IdParam | null;
+    allow_price_override: boolean;
+    allow_discounts: boolean;
+    collect_order_questions: boolean;
+    activates_at?: string;
+    expires_at?: string;
+};
+
+export type BoxOfficeWithPin = BoxOffice & { pin: string };
+
+export interface BoxOfficeStatsTotals {
+    orders: number;
+    gross: number;
+    refunded: number;
+}
+
+export interface BoxOfficeStats extends BoxOfficeStatsTotals {
+    currency: string;
+    by_tender: (BoxOfficeStatsTotals & { tender: BoxOfficeTenderType })[];
+    by_operator: (BoxOfficeStatsTotals & { operator_name: string })[];
+    by_day: (BoxOfficeStatsTotals & { day: string })[];
+}
+
+export interface BoxOfficeStatsRange {
+    from: string | null;
+    to: string | null;
+}
+
+export interface TerminalReader {
+    id: number;
+    label: string;
+    device_type?: string | null;
+    status: 'online' | 'offline' | 'unknown' | 'unavailable';
+    is_available: boolean;
+}
+
+export interface TerminalReadersResponse {
+    readers: TerminalReader[];
+    stripe_configured: boolean;
+    stripe_connected: boolean;
+}
+
+export interface BoxOfficePublic {
+    short_id: string;
+    name: string;
+    description?: string | null;
+    has_pin: boolean;
+    is_expired: boolean;
+    is_active: boolean;
+    activates_at?: string | null;
+    allow_price_override: boolean;
+    allow_discounts: boolean;
+    collect_order_questions: boolean;
+    card_payments_enabled: boolean;
+    can_skip_pin: boolean;
+    readers: TerminalReader[];
+    occurrences: EventOccurrence[];
+    event: {
+        id: number;
+        title: string;
+        timezone: string;
+        currency: string;
+        type: EventType;
+        status: string;
+        price_display_mode?: string | null;
+    };
+}
+
+export interface BoxOfficeSession {
+    token: string;
+    expires_at: string;
+    operator_name: string;
+    event_occurrence?: EventOccurrence;
+    reader?: { id: number; label: string };
+    check_in_list_short_id: string | null;
+    check_in_available: boolean;
+    check_in_unavailable_reason: string | null;
+}
+
+export interface BoxOfficeProductPrice {
+    id: number;
+    label?: string | null;
+    price: number;
+    price_including_taxes_and_fees: number;
+    tax_total?: number | null;
+    fee_total?: number | null;
+    is_available: boolean;
+    quantity_remaining: number | null;
+    off_sale_reason: 'BEFORE_SALE_START' | 'AFTER_SALE_END' | null;
+    band_prices?: Record<string, number>;
+}
+
+export interface BoxOfficeProduct {
+    id: number;
+    title: string;
+    type: string;
+    product_type: ProductType;
+    description?: string | null;
+    max_per_order?: number | null;
+    product_category_id?: number | null;
+    is_hidden: boolean;
+    is_hidden_without_promo_code: boolean;
+    is_addon_only: boolean;
+    prices: BoxOfficeProductPrice[];
+    taxes?: TaxAndFee[];
+}
+
+export interface BoxOfficeCatalogue {
+    products: BoxOfficeProduct[];
+    questions: Question[];
+}
+
+export interface BoxOfficeOrderItemRequest {
+    product_id: number;
+    product_price_id: number;
+    quantity: number;
+    override_price?: number;
+    seat_uids?: string[];
+}
+
+export interface BoxOfficeOrderRequest {
+    idempotency_key: string;
+    items: BoxOfficeOrderItemRequest[];
+    discount?: { type: 'FIXED' | 'PERCENTAGE'; value: number } | null;
+    buyer?: { first_name?: string; last_name?: string; email?: string };
+    questions?: { question_id: number; response: any }[];
+    attendees?: { product_id: number; product_price_id: number; questions: { question_id: number; response: any }[] }[];
+}
+
+export interface BoxOfficeTenderRequest {
+    tender: 'CASH' | 'COMP' | 'OTHER';
+    amount_tendered?: number;
+    reference?: string;
+}
+
 export interface AttendeeDetailPublicCheckIn {
     id: number;
     short_id: string;
@@ -1079,10 +1295,11 @@ export interface AttendeeDetailPublic {
     public_id: string;
     first_name: string;
     last_name: string;
-    email: string;
+    email: string | null;
     status: 'ACTIVE' | 'CANCELLED' | 'AWAITING_PAYMENT';
     product_id: number;
     product_title: string | null;
+    seat_label?: string | null;
     event_occurrence: EventOccurrence | null;
     check_ins: AttendeeDetailPublicCheckIn[];
     visibility: {
@@ -1187,6 +1404,7 @@ export enum QueryFilterOperator {
     LessThan = 'lt',
     LessThanOrEquals = 'lte',
     Like = 'like',
+    ILike = 'ilike',
     NotLike = 'not_like',
     In = 'in',
 }
@@ -1323,6 +1541,7 @@ export enum ReportTypes {
     DailySales = 'daily_sales_report',
     PromoCodes = 'promo_codes_report',
     OccurrenceSummary = 'occurrence_summary',
+    SeatingSales = 'seating_sales',
 }
 
 export enum OrganizerReportTypes {
@@ -1351,7 +1570,7 @@ export interface WebhookLog {
     id: IdParam;
     webhook_id: IdParam;
     payload?: string;
-    response_code?: number; // 0 = no response
+    response_code?: number;
     response_body?: string;
     event_type: string;
     created_at: string;

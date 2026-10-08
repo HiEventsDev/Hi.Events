@@ -7,22 +7,29 @@ import { EventDefaults } from "./Sections/EventDefaults";
 import { PayoutsSettings } from "./Sections/PayoutsSettings";
 import { PlatformFeesSettings } from "./Sections/PlatformFeesSettings";
 import { DangerZoneSettings } from "./Sections/DangerZoneSettings";
+import { TerminalReadersSettings } from "../../../../ee/box-office/components/routes/organizer/Payments/TerminalReaders";
 import { TrackingPixelSettings } from "./Sections/TrackingPixelSettings";
 import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
 import { t } from "@lingui/macro";
 import { Box, Group, NavLink as MantineNavLink, Stack } from "@mantine/core";
-import { IconAlertTriangle, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
+import { IconAlertTriangle, IconDeviceMobile, IconBrandGoogleAnalytics, IconBrandStripe, IconInfoCircle, IconMapPin, IconShare, IconMail, IconCalendarEvent, IconPercentage, IconChartBar } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useMemo, useState } from "react";
 import { Card } from "../../../common/Card";
 import { useLocation, useParams } from "react-router";
 import { useGetAccount } from "../../../../queries/useGetAccount.ts";
+import { useGetMe } from "../../../../queries/useGetMe.ts";
+import { FeatureFlag } from "../../../../constants/featureFlags.ts";
+import { useLicensedFeature } from "../../../../ee/licensing/hooks/useLicensedFeature.ts";
 
 const Settings = () => {
     const { organizerId } = useParams();
     const { data: account } = useGetAccount();
     const isSaasMode = account?.is_saas_mode_enabled;
+    const { data: me } = useGetMe();
+    const canManageReaders = me?.role === 'ADMIN' || me?.role === 'SUPERADMIN';
+    const showCardReaders = useLicensedFeature(FeatureFlag.BOX_OFFICE).isVisible && canManageReaders;
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -44,12 +51,6 @@ const Settings = () => {
                 icon: IconMapPin,
                 component: AddressSettings
             },
-            // {
-            //     id: 'image-assets',
-            //     label: t`Images & Branding`,
-            //     icon: IconPhoto,
-            //     component: ImageAssetSettings
-            // },
             {
                 id: 'social-links',
                 label: t`Social Links`,
@@ -83,6 +84,13 @@ const Settings = () => {
             },
         ];
 
+        const cardReadersSection = {
+            id: 'card-readers',
+            label: t`Card Readers`,
+            icon: IconDeviceMobile,
+            component: TerminalReadersSettings,
+        };
+
         if (isSaasMode) {
             baseSections.splice(2, 0,
                 {
@@ -91,16 +99,19 @@ const Settings = () => {
                     icon: IconBrandStripe,
                     component: PayoutsSettings,
                 },
+                ...(showCardReaders ? [cardReadersSection] : []),
                 {
                     id: 'platform-fees',
                     label: t`Platform Fees`,
                     icon: IconPercentage,
                     component: PlatformFeesSettings,
                 });
+        } else if (showCardReaders) {
+            baseSections.splice(baseSections.length - 1, 0, cardReadersSection);
         }
 
         return baseSections;
-    }, [isSaasMode, organizerId]);
+    }, [showCardReaders, isSaasMode, organizerId]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const location = useLocation();

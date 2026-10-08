@@ -54,6 +54,11 @@ class Product extends BaseModel
         return $this->belongsToMany(CheckInList::class, 'product_check_in_lists');
     }
 
+    public function box_offices(): BelongsToMany
+    {
+        return $this->belongsToMany(BoxOffice::class, 'product_box_offices');
+    }
+
     public function product_category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class);

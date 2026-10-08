@@ -5,7 +5,7 @@ namespace HiEvents\Resources\EventOccurrence;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\EventLocation\EventLocationResource;
-use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceTierAllocationDTO;
+use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceAllocationDTO;
 use Illuminate\Http\Request;
 
 /**
@@ -41,7 +41,7 @@ class EventOccurrenceResource extends BaseResource
                 'capacity' => $this->getBookingLimits()->capacity,
                 'allocation_total' => $this->getBookingLimits()->allocation_total,
                 'sellable' => $this->getBookingLimits()->sellable,
-                'allocations' => array_map(fn (OccurrenceTierAllocationDTO $allocation) => [
+                'allocations' => array_map(fn (OccurrenceAllocationDTO $allocation) => [
                     'product_price_id' => $allocation->product_price_id,
                     'product_title' => $allocation->product_title,
                     'price_label' => $allocation->price_label,

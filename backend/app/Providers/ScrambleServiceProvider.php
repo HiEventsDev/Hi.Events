@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 
 class ScrambleServiceProvider extends ServiceProvider
 {
+    private const ACTION_NAMESPACE_PATTERN = '/^HiEvents\\\\(Enterprise\\\\(\w+)\\\\)?Http\\\\Actions\\\\/';
+
     public function register(): void
     {
         $this->app->bind(
@@ -40,11 +42,12 @@ class ScrambleServiceProvider extends ServiceProvider
                     return false;
                 }
 
-                return str_starts_with($route->getActionName(), 'HiEvents\\Http\\Actions\\');
+                return preg_match(self::ACTION_NAMESPACE_PATTERN, $route->getActionName()) === 1;
             })
             ->withOperationTransformers(static function (Operation $operation, RouteInfo $routeInfo): void {
                 $tag = Str::of((string) $routeInfo->className())
-                    ->after('Http\\Actions\\')
+                    ->replaceMatches(self::ACTION_NAMESPACE_PATTERN, '${2}\\\\')
+                    ->ltrim('\\')
                     ->beforeLast('\\')
                     ->replace('\\', ' / ');
 

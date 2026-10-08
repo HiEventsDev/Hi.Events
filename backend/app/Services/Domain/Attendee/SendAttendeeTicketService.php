@@ -24,6 +24,10 @@ class SendAttendeeTicketService
         EventSettingDomainObject $eventSettings,
         OrganizerDomainObject $organizer,
     ): void {
+        if ($attendee->getEmail() === null) {
+            return;
+        }
+
         $mail = $this->mailBuilderService->buildAttendeeTicketMail(
             $attendee,
             $order,

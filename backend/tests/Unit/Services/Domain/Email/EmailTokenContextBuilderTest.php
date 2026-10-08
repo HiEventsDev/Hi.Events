@@ -56,6 +56,7 @@ class EmailTokenContextBuilderTest extends TestCase
 
         $this->assertEquals('ORD-123456', $context['order']['number']);
         $this->assertEquals('$9,999.00', $context['order']['total']);
+        $this->assertEquals('Stalls · A-1, Stalls · A-2', $context['order']['seats']);
         $this->assertEquals('John', $context['order']['first_name']);
         $this->assertEquals('Doe', $context['order']['last_name']);
         $this->assertEquals('john@example.com', $context['order']['email']);
@@ -94,6 +95,7 @@ class EmailTokenContextBuilderTest extends TestCase
 
         $this->assertEquals('Jane Smith', $context['attendee']['name']);
         $this->assertEquals('jane@example.com', $context['attendee']['email']);
+        $this->assertEquals('Stalls · C-14', $context['attendee']['seat']);
 
         $this->assertEquals('General Admission', $context['ticket']['name']);
         $this->assertEquals('$4,999.00', $context['ticket']['price']);
@@ -178,7 +180,7 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertStringContainsString('bank.example', $instructions);
     }
 
-    public function test_context_values_stay_raw_for_plain_text_rendering(): void
+    public function test_contexb_values_stay_raw_for_plain_text_rendering(): void
     {
         $order = $this->createMockOrder('<b>John</b>');
         $event = $this->createMockEvent();
@@ -459,6 +461,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getOrderItems' => $orderItems,
             'getCurrency' => 'USD',
             'getLocale' => 'en',
+            'getSeatLabels' => ['Stalls · A-1', 'Stalls · A-2'],
         ]);
     }
 
@@ -515,6 +518,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getEmail' => 'jane@example.com',
             'getProductPriceId' => 123,
             'getShortId' => 'ATT123',
+            'getSeatLabel' => 'Stalls · C-14',
         ]);
     }
 }

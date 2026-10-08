@@ -2,6 +2,7 @@
 
 namespace HiEvents\Exceptions;
 
+use HiEvents\Enterprise\Licensing\Exceptions\FeatureNotLicensedException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    public const FEATURE_UNAVAILABLE_ERROR_CODE = 'FEATURE_UNAVAILABLE';
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -87,6 +90,13 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => $exception->getMessage() ?: 'Resource not found',
             ], 404);
+        }
+
+        if ($exception instanceof FeatureNotLicensedException || $exception instanceof FeatureNotEnabledException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'error_code' => self::FEATURE_UNAVAILABLE_ERROR_CODE,
+            ], Response::HTTP_FORBIDDEN);
         }
 
         return parent::render($request, $exception);

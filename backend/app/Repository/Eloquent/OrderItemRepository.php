@@ -32,10 +32,10 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
             ->sum('order_items.quantity'));
     }
 
-    public function getReservedQuantitiesByPrice(int $eventId, ?int $occurrenceId = null): array
+    public function getReservedQuantitiesByPrice(array $eventIds, ?int $occurrenceId = null): array
     {
         return $this->runQuery(fn () => $this->reservedItemsQuery()
-            ->where('orders.event_id', $eventId)
+            ->whereIn('orders.event_id', $eventIds)
             ->when($occurrenceId !== null, fn (Builder $query) => $query->where('order_items.event_occurrence_id', $occurrenceId))
             ->groupBy('order_items.product_price_id')
             ->selectRaw('order_items.product_price_id, SUM(order_items.quantity) AS quantity')
@@ -65,6 +65,16 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
             ->get()
             ->groupBy('product_price_id')
             ->map(fn ($rows) => (int) $rows->max('quantity'))
+            ->all());
+    }
+
+    public function getProductIdsInLiveReservations(array $productIds): array
+    {
+        return $this->runQuery(fn () => $this->reservedItemsQuery()
+            ->whereIn('order_items.product_id', $productIds)
+            ->distinct()
+            ->pluck('order_items.product_id')
+            ->map(fn ($productId) => (int) $productId)
             ->all());
     }
 

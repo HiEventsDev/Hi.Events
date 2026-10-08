@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Orders\Public;
 
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
@@ -15,6 +17,7 @@ use HiEvents\Services\Application\Locale\LocaleService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class CreateOrderActionPublic extends BaseAction
@@ -41,17 +44,27 @@ class CreateOrderActionPublic extends BaseAction
         $validatedData = $this->orderCreateRequestValidationService->validateRequestData($eventId, $request->all());
         $sessionId = $this->sessionIdentifierService->getSessionId();
 
-        $order = $this->orderHandler->handle(
-            eventId: $eventId,
-            createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
-                'is_user_authenticated' => $this->isUserAuthenticated(),
-                'promo_code' => $request->input('promo_code'),
-                'affiliate_code' => $request->input('affiliate_code'),
-                'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
-                'session_identifier' => $sessionId,
-                'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
-            ])
-        );
+        try {
+            $order = $this->orderHandler->handle(
+                eventId: $eventId,
+                createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
+                    'is_user_authenticated' => $this->isUserAuthenticated(),
+                    'promo_code' => $request->input('promo_code'),
+                    'affiliate_code' => $request->input('affiliate_code'),
+                    'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
+                    'session_identifier' => $sessionId,
+                    'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
+                ])
+            );
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages(['products' => $exception->getMessage()]);
+        } catch (SeatsUnavailableException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: ResponseCodes::HTTP_CONFLICT,
+                errors: ['unavailable_seat_uids' => $exception->getSeatUids()],
+            );
+        }
 
         $order->setSessionIdentifier($sessionId);
 

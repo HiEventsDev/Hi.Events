@@ -1,4 +1,4 @@
-import {Select, Text} from "@mantine/core";
+import {Select} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {useEffect, useMemo} from "react";
 import {
@@ -60,27 +60,21 @@ export const ThemeFontControl = ({value, onChange, disabled = false}: ThemeFontC
     );
 
     return (
-        <div>
-            <Select
-                label={t`Font Family`}
-                description={t`Choose a typeface that matches your brand. Fonts are self-hosted via Bunny Fonts.`}
-                size="sm"
-                value={selected}
-                onChange={handleChange}
-                data={data}
-                disabled={disabled}
-                searchable
-                allowDeselect={false}
-                nothingFoundMessage={t`No matching fonts`}
-                renderOption={renderOption}
-                styles={{
-                    input: {fontFamily: buildHomepageFontStack(selected)},
-                }}
-            />
-            <Text size="xs" c="dimmed" mt={6} style={{fontFamily: buildHomepageFontStack(selected)}}>
-                {t`The quick brown fox jumps over the lazy dog.`}
-            </Text>
-        </div>
+        <Select
+            label={t`Font Family`}
+            size="sm"
+            value={selected}
+            onChange={handleChange}
+            data={data}
+            disabled={disabled}
+            searchable
+            allowDeselect={false}
+            nothingFoundMessage={t`No matching fonts`}
+            renderOption={renderOption}
+            styles={{
+                input: {fontFamily: buildHomepageFontStack(selected)},
+            }}
+        />
     );
 };
 

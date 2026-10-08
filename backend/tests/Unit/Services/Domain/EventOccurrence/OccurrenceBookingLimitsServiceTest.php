@@ -5,9 +5,13 @@ namespace Tests\Unit\Services\Domain\EventOccurrence;
 use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSeatMapBandProductDomainObject;
+use HiEvents\DomainObjects\EventSeatMapDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatMapIndex;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
@@ -22,6 +26,8 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
 
     private ProductRepositoryInterface|MockInterface $productRepository;
 
+    private EventSeatMapLookupService|MockInterface $eventSeatMapLookup;
+
     private OccurrenceBookingLimitsService $service;
 
     protected function setUp(): void
@@ -31,7 +37,9 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
         $this->overrideRepository = Mockery::mock(ProductPriceOccurrenceOverrideRepositoryInterface::class);
         $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
         $this->productRepository->shouldReceive('loadRelation')->andReturnSelf();
-        $this->service = new OccurrenceBookingLimitsService($this->overrideRepository, $this->productRepository);
+        $this->eventSeatMapLookup = Mockery::mock(EventSeatMapLookupService::class);
+        $this->eventSeatMapLookup->shouldReceive('findForEvent')->andReturnNull()->byDefault();
+        $this->service = new OccurrenceBookingLimitsService($this->overrideRepository, $this->productRepository, $this->eventSeatMapLookup);
     }
 
     private function limitsFor(EventOccurrenceDomainObject $occurrence, $products)
@@ -158,6 +166,31 @@ class OccurrenceBookingLimitsServiceTest extends TestCase
         $limits = $this->limitsFor($this->occurrence(1, capacity: null), $products);
 
         $this->assertSame(['Stalls', 'Circle'], array_map(fn ($allocation) => $allocation->price_label, $limits->allocations));
+    }
+
+    public function test_seated_tickets_count_their_linked_seats_once_instead_of_their_own_quantity(): void
+    {
+        $this->overrideRepository->shouldReceive('findWhereIn')->andReturn(collect());
+        $layout = json_decode(file_get_contents(base_path('tests/Fixtures/seating/theatre.json')), true);
+        $this->eventSeatMapLookup->shouldReceive('indexFor')->andReturn(SeatMapIndex::fromLayout($layout));
+        $this->eventSeatMapLookup->shouldReceive('findForEvent')->andReturn((new EventSeatMapDomainObject)
+            ->setEventId(1)
+            ->setLayout($layout)
+            ->setEventSeatMapBandProducts(collect([
+                (new EventSeatMapBandProductDomainObject)->setBandKey('b_premium')->setProductId(1),
+                (new EventSeatMapBandProductDomainObject)->setBandKey('b_premium')->setProductId(2),
+            ])));
+
+        $limits = $this->limitsFor($this->occurrence(1, null), collect([
+            $this->product('Front', ProductType::TICKET, [[10, null, 5, ProductQuantityAppliesTo::OCCURRENCE]])->setId(1),
+            $this->product('Front Concession', ProductType::TICKET, [[11, null, null, ProductQuantityAppliesTo::OCCURRENCE]])->setId(2),
+            $this->product('Standing', ProductType::TICKET, [[12, null, 40, ProductQuantityAppliesTo::OCCURRENCE]])->setId(3),
+        ]));
+
+        $premiumSeats = SeatMapIndex::fromLayout($layout)->capacityByBand()['b_premium'];
+        $this->assertSame($premiumSeats + 40, $limits->sellable);
+        $this->assertSame([null, 12], array_map(fn ($allocation) => $allocation->product_price_id, $limits->allocations));
+        $this->assertSame('Seats · Premium', $limits->allocations[0]->product_title);
     }
 
     private function occurrence(int $id, ?int $capacity): EventOccurrenceDomainObject

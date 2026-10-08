@@ -6,9 +6,13 @@ namespace HiEvents\Services\Application\Handlers\EventOccurrence;
 
 use Carbon\CarbonImmutable;
 use HiEvents\DomainObjects\Enums\EventType;
+use HiEvents\DomainObjects\Generated\BoxOfficeDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Generated\SeatClaimDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -27,6 +31,8 @@ class DeleteEventOccurrenceHandler
         private readonly OrderItemRepositoryInterface $orderItemRepository,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly WaitlistEntryRepositoryInterface $waitlistEntryRepository,
+        private readonly SeatClaimRepositoryInterface $seatClaimRepository,
+        private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
         private readonly DatabaseManager $databaseManager,
     ) {}
 
@@ -70,6 +76,18 @@ class DeleteEventOccurrenceHandler
                 ]);
             }
 
+            $pinnedBoxOffice = $this->boxOfficeRepository->findFirstWhere([
+                BoxOfficeDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
+            ]);
+
+            if ($pinnedBoxOffice !== null) {
+                throw ValidationException::withMessages([
+                    'occurrence' => __('The box office ":name" sells only this date. Change its date before deleting this one.', [
+                        'name' => $pinnedBoxOffice->getName(),
+                    ]),
+                ]);
+            }
+
             $occurrenceStartDate = $occurrence->getStartDate();
 
             $this->waitlistEntryRepository->updateWhere(
@@ -85,6 +103,11 @@ class DeleteEventOccurrenceHandler
                     ]],
                 ],
             );
+
+            $this->seatClaimRepository->deleteWhere([
+                SeatClaimDomainObjectAbstract::EVENT_OCCURRENCE_ID => $occurrenceId,
+                [SeatClaimDomainObjectAbstract::ORDER_ID, 'null', null],
+            ]);
 
             $this->occurrenceRepository->deleteWhere([
                 EventOccurrenceDomainObjectAbstract::ID => $occurrenceId,

@@ -29,6 +29,7 @@ class AttendeeDetailPublicResource extends JsonResource
             'first_name' => $attendee->getFirstName(),
             'last_name' => $attendee->getLastName(),
             'status' => $attendee->getStatus(),
+            'seat_label' => $attendee->getSeatLabel(),
             'product_id' => $attendee->getProductId(),
             'product_title' => $product?->getTitle(),
             'event_occurrence' => $occurrence

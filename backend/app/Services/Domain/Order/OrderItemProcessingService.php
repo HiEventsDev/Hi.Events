@@ -13,6 +13,8 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Helper\Currency;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -21,6 +23,7 @@ use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Domain\Order\DTO\OrderItemPricingLineDTO;
 use HiEvents\Services\Domain\Order\DTO\OrderLineDiscountAllocationDTO;
+use HiEvents\Services\Domain\Order\DTO\ProcessedOrderItemDTO;
 use HiEvents\Services\Domain\Product\DTO\OrderProductPriceDTO;
 use HiEvents\Services\Domain\Product\DTO\PriceDTO;
 use HiEvents\Services\Domain\Product\ProductPriceService;
@@ -42,30 +45,38 @@ class OrderItemProcessingService
         private readonly OrderPlatformFeePassThroughService $platformFeeService,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly OrderDiscountAllocationService $orderDiscountAllocationService,
+        private readonly SeatedProductLookupService $seatedProductLookup,
+        private readonly EventSeatMapLookupService $eventSeatMapLookup,
     ) {}
 
     /**
      * @param  Collection<ProductOrderDetailsDTO>  $productsOrderDetails
+     * @return Collection<int, ProcessedOrderItemDTO>
      */
     public function process(
         OrderDomainObject $order,
         Collection $productsOrderDetails,
         EventDomainObject $event,
         ?PromoCodeDomainObject $promoCode,
+        bool $allowClientPrices = false,
+        bool $applyPlatformFee = true,
     ): Collection {
-        $this->loadPlatformFeeConfiguration($event->getId());
+        if ($applyPlatformFee) {
+            $this->loadPlatformFeeConfiguration($event->getId());
+        }
 
-        $pricingLines = $this->buildPricingLines($productsOrderDetails, $event, $promoCode);
+        $pricingLines = $this->buildPricingLines($productsOrderDetails, $event, $promoCode, $allowClientPrices);
 
         if ($promoCode?->isOrderLevelDiscount()) {
             $pricingLines = $this->applyOrderLevelDiscount($pricingLines, $promoCode, $event->getCurrency());
         }
 
-        return $pricingLines->map(function (OrderItemPricingLineDTO $line) use ($order, $event) {
-            return $this->orderRepository->addOrderItem(
+        return $pricingLines->map(fn (OrderItemPricingLineDTO $line) => new ProcessedOrderItemDTO(
+            order_item: $this->orderRepository->addOrderItem(
                 $this->calculateOrderItemData($line, $order, $event->getCurrency())
-            );
-        });
+            ),
+            seat_uids: $line->product_price->seat_uids,
+        ));
     }
 
     /**
@@ -76,6 +87,7 @@ class OrderItemProcessingService
         Collection $productsOrderDetails,
         EventDomainObject $event,
         ?PromoCodeDomainObject $promoCode,
+        bool $allowClientPrices,
     ): Collection {
         $pricingLines = collect();
 
@@ -96,14 +108,31 @@ class OrderItemProcessingService
 
             $eventOccurrenceId = $productOrderDetail->event_occurrence_id;
 
-            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($pricingLines, $promoCode, $product, $eventOccurrenceId) {
+            $productOrderDetail->quantities->each(function (OrderProductPriceDTO $productPrice) use ($pricingLines, $promoCode, $product, $event, $eventOccurrenceId, $allowClientPrices) {
                 if ($productPrice->quantity === 0) {
                     return;
                 }
+                $bandKey = $this->bandOfLine($event->getId(), $productPrice);
+
                 $pricingLines->push(new OrderItemPricingLineDTO(
                     product: $product,
-                    product_price: $productPrice,
-                    prices: $this->productPriceService->getPrice($product, $productPrice, $promoCode, $eventOccurrenceId),
+                    product_price: $productPrice->band_key === $bandKey
+                        ? $productPrice
+                        : new OrderProductPriceDTO(
+                            quantity: $productPrice->quantity,
+                            price_id: $productPrice->price_id,
+                            price: $productPrice->price,
+                            seat_uids: $productPrice->seat_uids,
+                            band_key: $bandKey,
+                        ),
+                    prices: $this->productPriceService->getPrice(
+                        $product,
+                        $productPrice,
+                        $promoCode,
+                        $eventOccurrenceId,
+                        $allowClientPrices,
+                        $this->bandPriceAdjustment($product->getId(), $bandKey, $event->getCurrency()),
+                    ),
                     event_occurrence_id: $eventOccurrenceId,
                 ));
             });
@@ -122,10 +151,15 @@ class OrderItemProcessingService
 
         return $pricingLines
             ->flatMap(static function (OrderItemPricingLineDTO $line, int $index) use ($allocations) {
-                return collect($allocations[$index])->map(static function (OrderLineDiscountAllocationDTO $allocation) use ($line) {
+                $seatOffset = 0;
+
+                return collect($allocations[$index])->map(static function (OrderLineDiscountAllocationDTO $allocation) use ($line, &$seatOffset) {
                     if ($allocation->per_unit_discount <= 0 && $allocation->quantity === $line->product_price->quantity) {
                         return $line;
                     }
+
+                    $seatUids = array_slice($line->product_price->seat_uids, $seatOffset, $allocation->quantity);
+                    $seatOffset += $allocation->quantity;
 
                     return new OrderItemPricingLineDTO(
                         product: $line->product,
@@ -133,6 +167,8 @@ class OrderItemProcessingService
                             quantity: $allocation->quantity,
                             price_id: $line->product_price->price_id,
                             price: $line->product_price->price,
+                            seat_uids: $seatUids,
+                            band_key: $line->product_price->band_key,
                         ),
                         prices: $allocation->per_unit_discount > 0
                             ? new PriceDTO(
@@ -218,7 +254,23 @@ class OrderItemProcessingService
             'total_gross' => $totalGross,
             'taxes_and_fees_rollup' => $rollUp,
             'event_occurrence_id' => $eventOccurrenceId,
+            'band_key' => $productPriceDetails->band_key,
         ];
+    }
+
+    private function bandOfLine(int $eventId, OrderProductPriceDTO $productPrice): ?string
+    {
+        return $productPrice->seat_uids === []
+            ? null
+            : $this->eventSeatMapLookup->bandOf($eventId, $productPrice->seat_uids[0]);
+    }
+
+    private function bandPriceAdjustment(int $productId, ?string $bandKey, string $currency): float
+    {
+        return Currency::fromMinorUnits(
+            $this->seatedProductLookup->priceAdjustmentFor($productId, $bandKey),
+            $currency,
+        );
     }
 
     private function calculatePlatformFee(float $total, int $quantity, string $currency): float

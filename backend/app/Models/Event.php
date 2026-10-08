@@ -61,6 +61,11 @@ class Event extends BaseModel
         return $this->hasMany(CheckInList::class);
     }
 
+    public function box_offices(): HasMany
+    {
+        return $this->hasMany(BoxOffice::class);
+    }
+
     public function capacity_assignments(): HasMany
     {
         return $this->hasMany(CapacityAssignment::class);
@@ -95,7 +100,6 @@ class Event extends BaseModel
     {
         parent::boot();
 
-        // todo - move into a domain service
         static::creating(
             static function (Event $event) {
                 $event->user_id = auth()->user()->id;

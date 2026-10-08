@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\Services\Application\Handlers\EventOccurrence;
 
+use HiEvents\DomainObjects\BoxOfficeDomainObject;
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\WaitlistEntryStatus;
+use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
+use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
@@ -33,6 +36,10 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
 
     private WaitlistEntryRepositoryInterface|MockInterface $waitlistEntryRepository;
 
+    private SeatClaimRepositoryInterface|MockInterface $seatClaimRepository;
+
+    private BoxOfficeRepositoryInterface|MockInterface $boxOfficeRepository;
+
     private DatabaseManager|MockInterface $databaseManager;
 
     private DeleteEventOccurrenceHandler $handler;
@@ -47,6 +54,11 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
         $this->attendeeRepository = Mockery::mock(AttendeeRepositoryInterface::class);
         $this->waitlistEntryRepository = Mockery::mock(WaitlistEntryRepositoryInterface::class);
         $this->databaseManager = Mockery::mock(DatabaseManager::class);
+        $this->seatClaimRepository = Mockery::mock(SeatClaimRepositoryInterface::class);
+
+        $this->seatClaimRepository->shouldReceive('deleteWhere')->byDefault()->andReturn(0);
+        $this->boxOfficeRepository = Mockery::mock(BoxOfficeRepositoryInterface::class);
+        $this->boxOfficeRepository->shouldReceive('findFirstWhere')->byDefault()->andReturnNull();
 
         $this->waitlistEntryRepository
             ->shouldReceive('updateWhere')
@@ -62,6 +74,8 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
             $this->orderItemRepository,
             $this->attendeeRepository,
             $this->waitlistEntryRepository,
+            $this->seatClaimRepository,
+            $this->boxOfficeRepository,
             $this->databaseManager,
         );
     }
@@ -208,6 +222,26 @@ class DeleteEventOccurrenceHandlerTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $this->handler->handle($eventId, $occurrenceId);
+    }
+
+    public function test_a_date_a_box_office_is_fixed_to_cannot_be_deleted(): void
+    {
+        $this->occurrenceRepository->shouldReceive('findFirstWhere')->once()->andReturn(Mockery::mock(EventOccurrenceDomainObject::class));
+        $this->orderItemRepository->shouldReceive('countWhere')->andReturn(0);
+        $this->attendeeRepository->shouldReceive('countWhere')->andReturn(0);
+        $this->boxOfficeRepository
+            ->shouldReceive('findFirstWhere')
+            ->once()
+            ->with(['event_occurrence_id' => 10])
+            ->andReturn((new BoxOfficeDomainObject)->setName('Front door'));
+        $this->occurrenceRepository->shouldNotReceive('deleteWhere');
+
+        try {
+            $this->handler->handle(1, 10);
+            $this->fail('Expected the pinned date to be protected');
+        } catch (ValidationException $exception) {
+            $this->assertStringContainsString('Front door', $exception->errors()['occurrence'][0]);
+        }
     }
 
     public function test_handle_throws_exception_when_occurrence_not_found(): void

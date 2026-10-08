@@ -14,6 +14,11 @@ export class ProductEditPage {
     await this.page.getByRole('heading', { name: 'Edit Product' }).waitFor();
   }
 
+  async openProductByTitle(title: string): Promise<void> {
+    await this.page.getByRole('button', { name: title, exact: true }).click();
+    await this.page.getByRole('heading', { name: 'Edit Product' }).waitFor();
+  }
+
   salesCount(index = 0): Locator {
     return this.page.locator('[class*="salesCount"]').nth(index);
   }

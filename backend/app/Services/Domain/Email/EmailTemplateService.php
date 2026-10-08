@@ -181,6 +181,7 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 <strong>Order Summary</strong><br>
 <strong>Order Number:</strong> {{ order.number }}<br>
 <strong>Total Amount:</strong> {{ order.total }}<br>
+{% if order.seats %}<strong>Seats:</strong> {{ order.seats }}<br>{% endif %}
 
 If you have any questions or need assistance, please contact <a href="mailto:{{ settings.support_email }}">{{ settings.support_email }}</a>.<br>
 
@@ -228,6 +229,7 @@ Please find your ticket details below.<br>
 <strong>Your Ticket</strong><br>
 <strong>Ticket Type:</strong> {{ ticket.name }}<br>
 <strong>Price:</strong> {{ ticket.price }}<br>
+{% if attendee.seat %}<strong>Seat:</strong> {{ attendee.seat }}<br>{% endif %}
 <strong>Attendee:</strong> {{ attendee.name }}<br>
 
 <strong>💡Remember:</strong> Please have your ticket ready when you arrive at the event.<br>

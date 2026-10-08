@@ -400,6 +400,7 @@ export const OrganizerDashboard = () => {
                                 variant="light"
                                 size="sm"
                                 mt="xs"
+                                data-testid="create-event-blank-slate-button"
                             >
                                 <Trans>Create event</Trans>
                             </Button>

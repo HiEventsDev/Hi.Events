@@ -38,6 +38,21 @@ test.describe('promo code checkout', () => {
     },
   );
 
+  test('a promo link applies its code when the page loads, and a bad link still shows the event', async ({ page, api, account }) => {
+    const event = await createLiveEventWithPaidTicket(api, account.organizerId);
+    const code = uniqueCode();
+    await api.createPromoCode(event.eventId, { code, discount_type: 'PERCENTAGE', discount: 10 });
+    const productRow = page.locator('.hi-product-row').filter({ hasText: event.productTitle });
+
+    await page.goto(`/event/${event.eventId}/${event.slug}?promo_code=${code}`);
+    await expect(productRow.getByText('$22.50')).toBeVisible();
+
+    await page.goto(`/event/${event.eventId}/${event.slug}?promo_code=${uniqueCode()}`);
+    await expect(page.getByRole('heading', { name: event.title }).first()).toBeVisible();
+    await expect(productRow.getByText('$25.00')).toBeVisible();
+    await expect(productRow.getByText('$22.50')).toHaveCount(0);
+  });
+
   test('a partial percentage code discounts every ticket', async ({ page, api, account }) => {
     const event = await createLiveEventWithPaidTicket(api, account.organizerId);
     const code = uniqueCode();

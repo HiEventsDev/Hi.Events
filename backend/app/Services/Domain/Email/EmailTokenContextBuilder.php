@@ -78,6 +78,7 @@ class EmailTokenContextBuilder
                 'email' => $order->getEmail() ?? '',
                 'is_awaiting_offline_payment' => $order->isOrderAwaitingOfflinePayment(),
                 'is_offline_payment' => $order->getPaymentProvider() === PaymentProviders::OFFLINE->value,
+                'seats' => implode(', ', $order->getSeatLabels()),
             ],
 
             'organizer' => [
@@ -141,6 +142,7 @@ class EmailTokenContextBuilder
         $baseContext['attendee'] = [
             'name' => $attendee->getFirstName().' '.$attendee->getLastName(),
             'email' => $attendee->getEmail() ?? '',
+            'seat' => $attendee->getSeatLabel() ?? '',
         ];
 
         $baseContext['ticket'] = [
@@ -247,6 +249,7 @@ class EmailTokenContextBuilder
                 'email' => 'john@example.com',
                 'is_awaiting_offline_payment' => false,
                 'is_offline_payment' => false,
+                'seats' => 'Stalls · C-14, Stalls · C-15',
                 'locale' => Locale::EN->value,
                 'currency' => 'USD',
             ],
@@ -285,6 +288,7 @@ class EmailTokenContextBuilder
             $baseContext['attendee'] = [
                 'name' => 'John Smith',
                 'email' => 'john@example.com',
+                'seat' => 'Stalls · C-14',
             ];
             $baseContext['ticket'] = [
                 'name' => 'VIP Pass',

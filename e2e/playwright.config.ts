@@ -1,8 +1,6 @@
+import 'dotenv/config';
 import { defineConfig, devices } from '@playwright/test';
-import { config as loadEnv } from 'dotenv';
 import { grantedConsentCookie } from './utils/consent';
-
-loadEnv();
 
 const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:8123';
 const isCI = !!process.env.CI;

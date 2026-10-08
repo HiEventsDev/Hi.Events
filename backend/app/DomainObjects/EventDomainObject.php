@@ -27,6 +27,8 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $checkInLists = null;
 
+    private ?Collection $boxOffices = null;
+
     private ?Collection $webhooks = null;
 
     private ?Collection $capacityAssignments = null;
@@ -46,6 +48,10 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     private ?EventLocationDomainObject $eventLocation = null;
 
     private bool $upcomingOccurrencesSoldOut = false;
+
+    private bool $hasSeatMap = false;
+
+    private ?bool $productsSoldOut = null;
 
     private ?string $nextOccurrenceStartDate = null;
 
@@ -215,6 +221,30 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
         return $this->upcomingOccurrencesSoldOut;
     }
 
+    public function setHasSeatMap(bool $hasSeatMap): self
+    {
+        $this->hasSeatMap = $hasSeatMap;
+
+        return $this;
+    }
+
+    public function getHasSeatMap(): bool
+    {
+        return $this->hasSeatMap;
+    }
+
+    public function setProductsSoldOut(?bool $productsSoldOut): self
+    {
+        $this->productsSoldOut = $productsSoldOut;
+
+        return $this;
+    }
+
+    public function getProductsSoldOut(): ?bool
+    {
+        return $this->productsSoldOut;
+    }
+
     public function getStartDate(): ?string
     {
         if ($this->eventOccurrences === null || $this->eventOccurrences->isEmpty()) {
@@ -365,6 +395,18 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setCheckInLists(?Collection $checkInLists): self
     {
         $this->checkInLists = $checkInLists;
+
+        return $this;
+    }
+
+    public function getBoxOffices(): ?Collection
+    {
+        return $this->boxOffices;
+    }
+
+    public function setBoxOffices(?Collection $boxOffices): self
+    {
+        $this->boxOffices = $boxOffices;
 
         return $this;
     }

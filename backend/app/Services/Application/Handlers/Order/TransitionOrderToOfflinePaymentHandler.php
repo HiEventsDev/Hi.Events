@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedOrderCompletionGuard;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\UnauthorizedException;
@@ -20,6 +21,7 @@ use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Database\DatabaseManager;
 
@@ -33,11 +35,15 @@ class TransitionOrderToOfflinePaymentHandler
         private readonly OccurrenceStatusValidator $occurrenceStatusValidator,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly CheckoutSessionManagementService $sessionManagementService,
+        private readonly SeatedOrderCompletionGuard $seatedOrderCompletionGuard,
+        private readonly TransactionLockService $transactionLockService,
     ) {}
 
     public function handle(TransitionOrderToOfflinePaymentPublicDTO $dto): OrderDomainObject
     {
         return $this->databaseManager->transaction(function () use ($dto) {
+            $this->transactionLockService->lockOrder($dto->orderShortId);
+
             /** @var OrderDomainObjectAbstract $order */
             $order = $this->orderRepository
                 ->loadRelation(OrderItemDomainObject::class)
@@ -62,6 +68,8 @@ class TransitionOrderToOfflinePaymentHandler
             $this->validateOfflinePayment($order, $eventSettings);
 
             $this->occurrenceStatusValidator->assertOrderOccurrencesArePurchasable($order);
+
+            $this->seatedOrderCompletionGuard->assertSeatsHeld($order);
 
             $this->updateOrderStatuses($order->getId());
 

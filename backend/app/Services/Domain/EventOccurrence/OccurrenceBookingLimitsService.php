@@ -2,17 +2,21 @@
 
 namespace HiEvents\Services\Domain\EventOccurrence;
 
+use HiEvents\DomainObjects\Enums\ProductQuantityAppliesTo;
 use HiEvents\DomainObjects\Enums\ProductType;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
+use HiEvents\DomainObjects\EventSeatMapBandProductDomainObject;
+use HiEvents\DomainObjects\EventSeatMapDomainObject;
 use HiEvents\DomainObjects\Generated\ProductDomainObjectAbstract;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\ProductPriceOccurrenceOverrideDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceAllocationDTO;
 use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceBookingLimitsDTO;
-use HiEvents\Services\Domain\EventOccurrence\DTO\OccurrenceTierAllocationDTO;
 use Illuminate\Support\Collection;
 
 class OccurrenceBookingLimitsService
@@ -20,6 +24,7 @@ class OccurrenceBookingLimitsService
     public function __construct(
         private readonly ProductPriceOccurrenceOverrideRepositoryInterface $overrideRepository,
         private readonly ProductRepositoryInterface $productRepository,
+        private readonly EventSeatMapLookupService $eventSeatMapLookup,
     ) {}
 
     /**
@@ -41,7 +46,7 @@ class OccurrenceBookingLimitsService
                 ],
             );
 
-        $limits = $this->forOccurrences($occurrences, $products);
+        $limits = $this->forOccurrences($occurrences, $products, $this->eventSeatMapLookup->findForEvent($eventId));
 
         $occurrences->each(
             fn (EventOccurrenceDomainObject $occurrence) => $occurrence->setBookingLimits($limits[$occurrence->getId()] ?? null)
@@ -53,8 +58,15 @@ class OccurrenceBookingLimitsService
      * @param  Collection<ProductDomainObject>  $products  products with prices loaded
      * @return array<int, OccurrenceBookingLimitsDTO> keyed by occurrence id
      */
-    private function forOccurrences(Collection $occurrences, Collection $products): array
+    private function forOccurrences(Collection $occurrences, Collection $products, ?EventSeatMapDomainObject $eventSeatMap): array
     {
+        $bandLinks = $eventSeatMap?->getEventSeatMapBandProducts() ?? collect();
+        $seatedProductIds = $bandLinks->map(fn (EventSeatMapBandProductDomainObject $link) => $link->getProductId())->unique()->all();
+        $unseatedProducts = $seatedProductIds === []
+            ? $products
+            : $products->reject(fn (ProductDomainObject $product) => in_array($product->getId(), $seatedProductIds, true));
+        $seatAllocations = $eventSeatMap === null ? [] : $this->seatAllocations($eventSeatMap, $bandLinks);
+
         $occurrenceIds = $occurrences->map(fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getId())->all();
 
         $overrides = $occurrenceIds === []
@@ -69,7 +81,8 @@ class OccurrenceBookingLimitsService
         foreach ($occurrences as $occurrence) {
             $limits[$occurrence->getId()] = $this->forOccurrence(
                 $occurrence,
-                $products,
+                $unseatedProducts,
+                $seatAllocations,
                 $overridesByOccurrence->get($occurrence->getId(), collect())
                     ->keyBy(fn (ProductPriceOccurrenceOverrideDomainObject $override) => $override->getProductPriceId()),
             );
@@ -78,13 +91,17 @@ class OccurrenceBookingLimitsService
         return $limits;
     }
 
+    /**
+     * @param  OccurrenceAllocationDTO[]  $seatAllocations
+     */
     private function forOccurrence(
         EventOccurrenceDomainObject $occurrence,
         Collection $products,
+        array $seatAllocations,
         Collection $overridesByPrice,
     ): OccurrenceBookingLimitsDTO {
-        $allocations = [];
-        $allocationTotal = 0;
+        $allocations = $seatAllocations;
+        $allocationTotal = array_sum(array_map(fn (OccurrenceAllocationDTO $allocation) => $allocation->quantity, $seatAllocations));
         $uncapped = false;
 
         /** @var ProductDomainObject $product */
@@ -106,7 +123,7 @@ class OccurrenceBookingLimitsService
                     $allocationTotal += $quantity;
                 }
 
-                $allocations[] = new OccurrenceTierAllocationDTO(
+                $allocations[] = new OccurrenceAllocationDTO(
                     product_price_id: $price->getId(),
                     product_title: $product->getTitle(),
                     price_label: $price->getLabel(),
@@ -126,6 +143,28 @@ class OccurrenceBookingLimitsService
             sellable: $limits === [] ? null : min($limits),
             allocations: $allocations,
         );
+    }
+
+    /**
+     * @param  Collection<EventSeatMapBandProductDomainObject>  $bandLinks
+     * @return OccurrenceAllocationDTO[]
+     */
+    private function seatAllocations(EventSeatMapDomainObject $eventSeatMap, Collection $bandLinks): array
+    {
+        $linkedBands = $bandLinks->map(fn (EventSeatMapBandProductDomainObject $link) => $link->getBandKey())->unique()->all();
+        $capacityByBand = $this->eventSeatMapLookup->indexFor($eventSeatMap->getEventId())->capacityByBand();
+        $bandNames = collect($eventSeatMap->getLayout()['bands'] ?? [])->pluck('name', 'key');
+
+        return collect($linkedBands)
+            ->map(fn (string $bandKey) => new OccurrenceAllocationDTO(
+                product_price_id: null,
+                product_title: __('Seats · :band', ['band' => $bandNames->get($bandKey, $bandKey)]),
+                price_label: null,
+                quantity: $capacityByBand[$bandKey] ?? 0,
+                applies_to: ProductQuantityAppliesTo::OCCURRENCE->name,
+            ))
+            ->values()
+            ->all();
     }
 
     private function allocationForDate(ProductPriceDomainObject $price, ?ProductPriceOccurrenceOverrideDomainObject $override): ?int

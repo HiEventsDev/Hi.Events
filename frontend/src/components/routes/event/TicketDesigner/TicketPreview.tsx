@@ -6,10 +6,9 @@ import {AttendeeTicket} from "../../../common/AttendeeTicket";
 import {resolveEventLocation} from "../../../../utilites/effectiveLocation.ts";
 import classes from './TicketPreview.module.scss';
 
-interface TicketDesignSettings {
+export interface TicketDesignSettings {
     accent_color: string;
-    logo_image_id: IdParam | null;
-    footer_text: string | null;
+    footer_text: string;
     date_display_mode: 'START_DATE_TIME' | 'DATE_RANGE' | 'HIDDEN';
     enabled: boolean;
 }
@@ -17,10 +16,10 @@ interface TicketDesignSettings {
 interface TicketPreviewProps {
     settings: TicketDesignSettings;
     eventId: IdParam;
-    logoUrl?: string;
+    logo?: {id: IdParam; url: string};
 }
 
-export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) => {
+export const TicketPreview = ({settings, eventId, logo}: TicketPreviewProps) => {
     const eventQuery = useGetEvent(eventId);
     const meQuery = useGetMe();
 
@@ -63,6 +62,7 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
         product_id: mockProduct.id,
         product: mockProduct,
         product_price_id: 1,
+        seat_label: event.has_seat_map ? t`Stalls · C-14` : null,
         order_id: 1,
         order: {
             id: 1,
@@ -92,18 +92,18 @@ export const TicketPreview = ({settings, eventId, logoUrl}: TicketPreviewProps) 
             ...event.settings,
             ticket_design_settings: {
                 accent_color: settings.accent_color,
-                logo_image_id: settings.logo_image_id,
+                logo_image_id: logo?.id,
                 footer_text: settings.footer_text,
                 date_display_mode: settings.date_display_mode,
                 enabled: settings.enabled
             },
         },
-        images: logoUrl && settings.logo_image_id ? [
+        images: logo ? [
             ...((event.images || []).filter(img => img.type !== 'TICKET_LOGO')),
             {
-                id: settings.logo_image_id,
+                id: logo.id,
                 type: 'TICKET_LOGO' as const,
-                url: logoUrl,
+                url: logo.url,
                 size_bytes: 0,
                 filename: ''
             }

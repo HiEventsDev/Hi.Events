@@ -94,7 +94,7 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 .wrapper {
   max-width: 920px;
   margin: 0 auto;
-  padding: 24px 24px 16px;
+  padding: 24px 24px 96px;
 
   @include mixins.respond-below(md) {
     padding: 0;
@@ -311,11 +311,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-
-  &.favoriteButton:hover {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-  }
 }
 
 .eventTitle {
@@ -381,6 +376,16 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.9rem;
 }
 
+.metaSecondaryWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
 .metaLink {
   display: inline-flex;
   align-items: center;
@@ -398,37 +403,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     text-decoration: underline;
-  }
-}
-
-.addToCalendarButton {
-  margin-left: auto;
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: $radius-sm;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--secondary-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all $transition-fast;
-
-  svg {
-    width: 0.9rem;
-    height: 0.9rem;
-  }
-
-  &:hover {
-    background: var(--accent-soft);
-    color: var(--primary-text-color);
-    border-color: var(--primary-color);
-  }
-
-  @include mixins.respond-below(md) {
-    display: none;
   }
 }
 
@@ -867,30 +841,52 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
 // Footer section
 .footerSection {
-  text-align: center;
-  padding: 40px 20px;
-  padding-bottom: 100px;
-  color: var(--secondary-text-color);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  color: var(--secondary-color);
   font-size: 0.85rem;
 
   @include mixins.respond-below(md) {
-    background-color: var(--content-bg-color);
-    border-top: 1px solid var(--border-color);
-    padding: 24px 20px;
+    flex-direction: column;
+    justify-content: center;
     padding-bottom: 120px;
-    margin: 0;
   }
 }
 
 .footerLinks {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.footerSection .poweredByFooter {
+  margin: 0;
+}
+
+.footerSection .cookieSettingsLink {
+  display: inline;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--secondary-color);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--primary-color);
+    opacity: 1;
+  }
 }
 
 .footerLink {
   color: var(--secondary-color);
+  font-size: inherit;
   text-decoration: none;
   transition: color $transition-fast;
 
@@ -926,7 +922,11 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 .scrollToTicketsButton {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  margin-inline: auto;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -946,7 +946,6 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   @include mixins.respond-below(sm) {
     bottom: 16px;
-    right: 16px;
     padding: 10px 16px;
     font-size: 0.8125rem;
   }

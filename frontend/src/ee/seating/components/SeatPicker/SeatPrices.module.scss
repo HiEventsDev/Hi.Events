@@ -1,0 +1,125 @@
+.prices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+}
+
+.key,
+.bandPrices {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.keyLine {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 6px 0;
+}
+
+.bandName {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-weight: 700;
+}
+
+.swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex: none;
+}
+
+.availability {
+    font-size: 14px;
+    color: var(--hi-muted, #6b7280);
+    white-space: nowrap;
+}
+
+.price {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.more {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    align-self: flex-start;
+    padding: 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--hi-accent, #7b5db8);
+
+    svg {
+        transition: transform 150ms ease;
+    }
+}
+
+.chevronOpen {
+    transform: rotate(180deg);
+}
+
+.allPrices {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+}
+
+.bandGroup {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hi-hairline, #ececf1);
+}
+
+.bandPrices {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-left: 22px;
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+    }
+}
+
+.ticketName {
+    font-weight: 600;
+}
+
+.subheading {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hi-muted, #6b7280);
+    padding: 8px 0 2px;
+}
+
+.descriptions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--hi-muted, #6b7280);
+
+    p {
+        margin: 0;
+    }
+}

@@ -92,6 +92,7 @@ class SendEventEmailMessagesService
             values: $messageData->attendee_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
+                ['email', 'not null', null],
             ],
             columns: ['first_name', 'last_name', 'email']
         );
@@ -104,6 +105,7 @@ class SendEventEmailMessagesService
         $additionalWhere = array_merge([
             'event_id' => $messageData->event_id,
             'status' => AttendeeStatus::ACTIVE->name,
+            ['email', 'not null', null],
         ], $this->occurrenceWhere($messageData));
 
         $attendees = $this->attendeeRepository->findWhereIn(
@@ -122,6 +124,10 @@ class SendEventEmailMessagesService
         OrderDomainObject $order,
     ): void {
         $this->sendEmailToMessageSender($messageData, $event);
+
+        if ($order->getEmail() === null) {
+            return;
+        }
 
         $this->sendMessage(
             emailAddress: $order->getEmail(),
@@ -144,7 +150,7 @@ class SendEventEmailMessagesService
 
         $sentEmails = [];
         $attendees->each(function (AttendeeDomainObject $attendee) use (&$sentEmails, $event, $messageData) {
-            if (in_array($attendee->getEmail(), $sentEmails, true)) {
+            if ($attendee->getEmail() === null || in_array($attendee->getEmail(), $sentEmails, true)) {
                 return;
             }
 
@@ -240,6 +246,10 @@ class SendEventEmailMessagesService
         $this->sendEmailToMessageSender($messageData, $event);
 
         $orders->each(function (OrderDomainObject $order) use ($messageData, $event) {
+            if ($order->getEmail() === null) {
+                return;
+            }
+
             $this->sendMessage(
                 emailAddress: $order->getEmail(),
                 fullName: $order->getFullName(),

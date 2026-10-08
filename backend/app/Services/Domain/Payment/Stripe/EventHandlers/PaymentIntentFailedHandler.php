@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Generated\StripePaymentDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\TerminalAttemptTracker;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -23,13 +24,18 @@ readonly class PaymentIntentFailedHandler
         private StripePaymentsRepository $stripePaymentsRepository,
         private DatabaseManager $databaseManager,
         private StripePaymentUpdateFromPaymentIntentService $stripePaymentUpdateFromPaymentIntentService,
+        private TerminalAttemptTracker $attemptTracker,
     ) {}
 
     /**
      * @throws Throwable
      */
-    public function handleEvent(PaymentIntent $paymentIntent): void
+    public function handleEvent(PaymentIntent $paymentIntent, ?int $eventCreatedAt = null): void
     {
+        if ($this->attemptTracker->predatesCurrentAttempt($paymentIntent->id, $eventCreatedAt)) {
+            return;
+        }
+
         $this->databaseManager->transaction(function () use ($paymentIntent) {
             /** @var StripePaymentDomainObjectAbstract $stripePayment */
             $stripePayment = $this->stripePaymentsRepository

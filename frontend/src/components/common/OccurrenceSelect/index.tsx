@@ -1,4 +1,4 @@
-import {CSSProperties, useMemo, useState} from "react";
+import {CSSProperties, ReactNode, useMemo, useState} from "react";
 import {Combobox, InputBase, ScrollArea, Text, useCombobox} from "@mantine/core";
 import {IconCalendar, IconSearch} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -18,6 +18,7 @@ interface OccurrenceSelectProps {
     allLabel?: string;
     filterCancelled?: boolean;
     style?: CSSProperties;
+    error?: ReactNode;
 }
 
 const MAX_VISIBLE = 50;
@@ -35,6 +36,7 @@ export const OccurrenceSelect = ({
     allLabel,
     filterCancelled = true,
     style,
+    error,
 }: OccurrenceSelectProps) => {
     const [search, setSearch] = useState('');
     const combobox = useCombobox({
@@ -87,6 +89,7 @@ export const OccurrenceSelect = ({
                     pointer
                     label={label}
                     description={description}
+                    error={error}
                     size={size}
                     mb={0}
                     styles={{input: {minWidth: 0, width: '100%'}}}

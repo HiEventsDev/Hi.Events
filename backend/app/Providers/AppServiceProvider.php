@@ -7,6 +7,10 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
+use HiEvents\Enterprise\Licensing\LicenceService;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
@@ -35,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
         $this->bindStripeServices();
         $this->bindCurrencyConversionClient();
         $this->bindGeoProvider();
+        $this->app->scoped(EventSeatMapLookupService::class);
+        $this->app->scoped(SeatedProductLookupService::class);
+        $this->app->scoped(LicenceService::class);
+        $this->app->scoped(BoxOfficeSessionService::class);
     }
 
     /**
@@ -140,7 +148,6 @@ class AppServiceProvider extends ServiceProvider
                     );
                 }
 
-                // Fallback to no-op client if no other client is available
                 return new NoOpCurrencyConversionClient(
                     logger: $this->app->make('log')
                 );

@@ -90,7 +90,7 @@ export const App: FC<
                                     </Helmet>
                                     {props.children}
                                 </ModalsProvider>
-                                <Notifications pauseResetOnHover="notification"/>
+                                <Notifications pauseResetOnHover="notification" zIndex={20000}/>
                                 {isConsentBannerEnabled() && <CookieConsentBanner/>}
                             </HydrationBoundary>
                         </QueryClientProvider>

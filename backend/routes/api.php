@@ -1,5 +1,55 @@
 <?php
 
+use HiEvents\Enterprise\BoxOffice\Http\Actions\CreateBoxOfficeAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\DeleteBoxOfficeAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficesAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeStatsAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Organizers\Stripe\Terminal\DeleteStripeTerminalReaderAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Organizers\Stripe\Terminal\GetStripeTerminalReadersAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Organizers\Stripe\Terminal\RegisterStripeTerminalReaderAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\AbandonBoxOfficeOrderPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\CancelBoxOfficeCardActionPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\CancelBoxOfficeOrderPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\CreateBoxOfficeOrderPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\CreateBoxOfficeSessionPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\EndBoxOfficeSessionPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeBestAvailableSeatsPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeOccupiedSeatsPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeOrderPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeOrdersPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeProductsPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficePublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\GetBoxOfficeSeatMapPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\ResendBoxOfficeOrderConfirmationPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\StartBoxOfficeCardPaymentPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\TenderBoxOfficeOrderPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\Public\UpdateBoxOfficeSessionPublicAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\ResetBoxOfficePinAction;
+use HiEvents\Enterprise\BoxOffice\Http\Actions\UpdateBoxOfficeAction;
+use HiEvents\Enterprise\Licensing\Http\Actions\GetCompliancePublicAction;
+use HiEvents\Enterprise\Licensing\Http\Actions\GetInstanceInfoPublicAction;
+use HiEvents\Enterprise\Licensing\Http\Actions\GetLicenceAdminAction;
+use HiEvents\Enterprise\Seating\Http\Actions\AttachEventSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\BlockSeatsAction;
+use HiEvents\Enterprise\Seating\Http\Actions\CreateSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\DeleteSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\DetachEventSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\GetEventSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\GetOccupiedSeatsAction;
+use HiEvents\Enterprise\Seating\Http\Actions\GetSeatMapAction;
+use HiEvents\Enterprise\Seating\Http\Actions\GetSeatMapsAction;
+use HiEvents\Enterprise\Seating\Http\Actions\MoveAttendeeSeatAction;
+use HiEvents\Enterprise\Seating\Http\Actions\Public\ChangeAttendeeSeatPublicAction;
+use HiEvents\Enterprise\Seating\Http\Actions\Public\GetBestAvailableSeatsPublicAction;
+use HiEvents\Enterprise\Seating\Http\Actions\Public\GetEventSeatMapPublicAction;
+use HiEvents\Enterprise\Seating\Http\Actions\Public\GetSeatAvailabilityPublicAction;
+use HiEvents\Enterprise\Seating\Http\Actions\ReleaseSeatBlocksAction;
+use HiEvents\Enterprise\Seating\Http\Actions\SyncEventSeatMapFromSourceAction;
+use HiEvents\Enterprise\Seating\Http\Actions\UpdateEventSeatMapBandProductsAction;
+use HiEvents\Enterprise\Seating\Http\Actions\UpdateEventSeatMapLayoutAction;
+use HiEvents\Enterprise\Seating\Http\Actions\UpdateEventSeatMapRulesAction;
+use HiEvents\Enterprise\Seating\Http\Actions\UpdateSeatMapAction;
 use HiEvents\Http\Actions\Accounts\CreateAccountAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
@@ -30,6 +80,11 @@ use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\RetryAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\RetryFailedJobAction;
+use HiEvents\Http\Actions\Admin\FeatureFlags\GetAccountFeatureFlagsAction;
+use HiEvents\Http\Actions\Admin\FeatureFlags\GetFeatureFlagOverridesAction;
+use HiEvents\Http\Actions\Admin\FeatureFlags\GetFeatureFlagsAction;
+use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateAccountFeatureFlagAction;
+use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateFeatureFlagAction;
 use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
 use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
 use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
@@ -159,7 +214,6 @@ use HiEvents\Http\Actions\Orders\ExportOrdersAction;
 use HiEvents\Http\Actions\Orders\GetOrderAction;
 use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MarkOrderAsPaidAction;
-use HiEvents\Http\Actions\Orders\MessageOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\CreatePaymentIntentActionPublic;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\GetPaymentIntentActionPublic;
@@ -264,6 +318,7 @@ use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookLogsAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhooksAction;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Router;
 
 /** @var Router|Router $router */
@@ -272,10 +327,10 @@ $router = app()->get('router');
 $router->prefix('/auth')->group(
     function (Router $router): void {
         // Auth
-        $router->post('/login', LoginAction::class)->name('auth.login');
+        $router->post('/login', LoginAction::class)->name('auth.login')->middleware('throttle:auth-login');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
         $router->post('/register', CreateAccountAction::class)->name('auth.register');
-        $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password');
+        $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password')->middleware('throttle:auth-forgot-password');
 
         // Invitations
         $router->get('/invitation/{invite_token}', GetUserInvitationAction::class)->name('auth.invitation');
@@ -351,12 +406,39 @@ $router->middleware(['auth:api'])->group(
         $router->post('/organizers/{organizer_id}/locations', CreateLocationAction::class);
         $router->get('/geo/status', GetGeoStatusAction::class);
         $router->get('/organizers/{organizer_id}/locations/autocomplete', GeoAutocompleteAction::class)
-            ->middleware('throttle:60,1');
+            ->middleware('throttle:60,1,geo-autocomplete');
         $router->get('/organizers/{organizer_id}/locations/places/{place_id}', GeoPlaceDetailsAction::class)
             ->where('place_id', '[A-Za-z0-9_\-]+')
-            ->middleware('throttle:60,1');
+            ->middleware('throttle:60,1,geo-place-details');
         $router->put('/organizers/{organizer_id}/locations/{location_id}', UpdateLocationAction::class);
         $router->delete('/organizers/{organizer_id}/locations/{location_id}', DeleteLocationAction::class);
+
+        $router->get('/organizers/{organizer_id}/seat-maps', GetSeatMapsAction::class);
+        $router->post('/organizers/{organizer_id}/seat-maps', CreateSeatMapAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->get('/organizers/{organizer_id}/seat-maps/{seat_map_id}', GetSeatMapAction::class);
+        $router->put('/organizers/{organizer_id}/seat-maps/{seat_map_id}', UpdateSeatMapAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->delete('/organizers/{organizer_id}/seat-maps/{seat_map_id}', DeleteSeatMapAction::class);
+
+        $router->get('/events/{event_id}/seat-map', GetEventSeatMapAction::class);
+        $router->post('/events/{event_id}/seat-map', AttachEventSeatMapAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->delete('/events/{event_id}/seat-map', DetachEventSeatMapAction::class);
+        $router->put('/events/{event_id}/seat-map/layout', UpdateEventSeatMapLayoutAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->put('/events/{event_id}/seat-map/band-products', UpdateEventSeatMapBandProductsAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->put('/events/{event_id}/seat-map/rules', UpdateEventSeatMapRulesAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->post('/events/{event_id}/seat-map/sync-from-source', SyncEventSeatMapFromSourceAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/occupied-seats', GetOccupiedSeatsAction::class)
+            ->middleware('cache.headers:no_cache;private;etag');
+        $router->post('/events/{event_id}/seat-blocks', BlockSeatsAction::class)
+            ->middleware('ee.licensed:seating');
+        $router->post('/events/{event_id}/seat-blocks/release', ReleaseSeatBlocksAction::class);
+        $router->put('/events/{event_id}/attendees/{attendee_id}/seat', MoveAttendeeSeatAction::class);
 
         // Stripe Connect - Organizer level
         $router->get('/organizers/{organizerId}/stripe/connect_accounts', GetStripeConnectAccountsAction::class);
@@ -364,6 +446,10 @@ $router->middleware(['auth:api'])->group(
         $router->post('/organizers/{organizerId}/stripe/copy_from/{sourceOrganizerId}', CopyStripeConnectAccountAction::class);
         $router->delete('/organizers/{organizerId}/stripe/connect_accounts/{stripeAccountId}', DisconnectStripeConnectAccountAction::class)
             ->where('stripeAccountId', '[A-Za-z0-9_]+');
+        $router->get('/organizers/{organizerId}/stripe/terminal/readers', GetStripeTerminalReadersAction::class);
+        $router->post('/organizers/{organizerId}/stripe/terminal/readers', RegisterStripeTerminalReaderAction::class)
+            ->middleware('ee.licensed:box_office');
+        $router->delete('/organizers/{organizerId}/stripe/terminal/readers/{readerId}', DeleteStripeTerminalReaderAction::class);
 
         // VAT Settings - Organizer level
         $router->get('/organizers/{organizerId}/vat-settings', GetOrganizerVatSettingAction::class);
@@ -435,7 +521,6 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/orders', GetOrdersAction::class);
         $router->get('/events/{event_id}/orders/{order_id}', GetOrderAction::class);
         $router->put('/events/{event_id}/orders/{order_id}', EditOrderAction::class);
-        $router->post('/events/{event_id}/orders/{order_id}/message', MessageOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/refund', RefundOrderAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/resend_confirmation', ResendOrderConfirmationAction::class);
         $router->post('/events/{event_id}/orders/{order_id}/cancel', CancelOrderAction::class);
@@ -498,6 +583,18 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/check-in-lists/{check_in_list_id}', GetCheckInListAction::class);
         $router->put('/events/{event_id}/check-in-lists/{check_in_list_id}', UpdateCheckInListAction::class);
         $router->delete('/events/{event_id}/check-in-lists/{check_in_list_id}', DeleteCheckInListAction::class);
+
+        // Box Offices
+        $router->post('/events/{event_id}/box-offices', CreateBoxOfficeAction::class)
+            ->middleware('ee.licensed:box_office');
+        $router->get('/events/{event_id}/box-offices', GetBoxOfficesAction::class);
+        $router->get('/events/{event_id}/box-offices/{box_office_id}', GetBoxOfficeAction::class);
+        $router->put('/events/{event_id}/box-offices/{box_office_id}', UpdateBoxOfficeAction::class)
+            ->middleware('ee.licensed:box_office');
+        $router->delete('/events/{event_id}/box-offices/{box_office_id}', DeleteBoxOfficeAction::class);
+        $router->get('/events/{event_id}/box-offices/{box_office_id}/stats', GetBoxOfficeStatsAction::class);
+        $router->post('/events/{event_id}/box-offices/{box_office_id}/reset-pin', ResetBoxOfficePinAction::class)
+            ->middleware('ee.licensed:box_office');
 
         // Webhooks
         $router->post('/events/{event_id}/webhooks', CreateWebhookAction::class);
@@ -590,6 +687,16 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         // Account Verification
         $router->put('/accounts/{account_id}/verification', UpdateAccountVerificationAction::class);
 
+        // Feature Flags
+        $router->get('/licence', GetLicenceAdminAction::class);
+        $router->get('/feature-flags', GetFeatureFlagsAction::class);
+        $router->put('/feature-flags/{key}', UpdateFeatureFlagAction::class);
+        $router->get('/feature-flags/{key}/overrides', GetFeatureFlagOverridesAction::class);
+        $router->get('/accounts/{account_id}/feature-flags', GetAccountFeatureFlagsAction::class)
+            ->whereNumber('account_id');
+        $router->put('/accounts/{account_id}/feature-flags/{key}', UpdateAccountFeatureFlagAction::class)
+            ->whereNumber('account_id');
+
         // Account Deletion Requests
         $router->get('/deletion-requests', GetAllAccountDeletionRequestsAction::class);
         $router->post('/accounts/{account_id}/deletion-request', AdminRequestAccountDeletionAction::class);
@@ -606,22 +713,36 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
  */
 $router->prefix('/public')->group(
     function (Router $router): void {
+        $router->get('/instance', GetInstanceInfoPublicAction::class)
+            ->middleware('cache.headers:public;max_age=300');
+        $router->get('/compliance', GetCompliancePublicAction::class)
+            ->middleware(['cache.headers:public;max_age=300', 'throttle:60,1,public-compliance']);
+
         // Events
         $router->get('/events/{event_id}', GetEventPublicAction::class);
         $router->get('/events/{event_id}/occurrences', GetEventOccurrencesPublicAction::class)
-            ->middleware('throttle:60,1');
+            ->middleware('throttle:60,1,public-occurrences');
+        $router->get('/events/{event_id}/seat-map', GetEventSeatMapPublicAction::class)
+            ->middleware('cache.headers:no_cache;private;etag');
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/seat-availability', GetSeatAvailabilityPublicAction::class)
+            ->withoutMiddleware(ThrottleRequests::class.':api')
+            ->middleware(['cache.headers:no_cache;private;etag', 'throttle:600,1,public-seat-availability']);
+        $router->get('/events/{event_id}/occurrences/{occurrence_id}/best-available-seats', GetBestAvailableSeatsPublicAction::class)
+            ->middleware('throttle:60,1,public-best-available-seats');
 
         // Organizers
         $router->get('/organizers/{organizer_id}', GetPublicOrganizerAction::class);
-        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class);
+        $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsPublicAction::class)
+            ->middleware('cache.guest:10,page,per_page,sort_by,sort_direction,query,filter_fields,eventsStatus');
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
-            ->middleware('throttle:5,1');
+            ->middleware('throttle:5,1,organizer-contact');
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);
 
         // Orders
-        $router->post('/events/{event_id}/order', CreateOrderActionPublic::class);
+        $router->post('/events/{event_id}/order', CreateOrderActionPublic::class)
+            ->middleware('throttle:public-order-create');
         $router->put('/events/{event_id}/order/{order_short_id}', CompleteOrderActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}', GetOrderActionPublic::class);
         $router->post('/events/{event_id}/order/{order_short_id}/abandon', AbandonOrderActionPublic::class);
@@ -633,13 +754,13 @@ $router->prefix('/public')->group(
 
         // Waitlist
         $router->post('/events/{event_id}/waitlist', CreateWaitlistEntryActionPublic::class)
-            ->middleware('throttle:10,1');
+            ->middleware('throttle:10,1,public-waitlist');
         $router->delete('/events/{event_id}/waitlist/{token}', CancelWaitlistEntryActionPublic::class)
-            ->middleware('throttle:10,1');
+            ->middleware('throttle:10,1,public-waitlist');
 
         // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class)
-            ->middleware('throttle:10,1');
+            ->middleware('throttle:public-promo-code');
 
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
@@ -649,7 +770,34 @@ $router->prefix('/public')->group(
         $router->get('/events/{event_id}/questions', GetQuestionsPublicAction::class);
 
         // Webhooks
-        $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
+        $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class)
+            ->withoutMiddleware(ThrottleRequests::class.':api');
+
+        // Box office
+        $router->get('/box-offices/{box_office_short_id}', GetBoxOfficePublicAction::class)
+            ->middleware('throttle:60,1,box-office-read');
+        $router->post('/box-offices/{box_office_short_id}/sessions', CreateBoxOfficeSessionPublicAction::class)
+            ->middleware('throttle:box-office-session')
+            ->middleware('ee.licensed:box_office');
+        $router->middleware('box-office.session')->group(function (Router $router): void {
+            $router->put('/box-offices/{box_office_short_id}/sessions/current', UpdateBoxOfficeSessionPublicAction::class);
+            $router->delete('/box-offices/{box_office_short_id}/sessions/current', EndBoxOfficeSessionPublicAction::class);
+            $router->get('/box-offices/{box_office_short_id}/products', GetBoxOfficeProductsPublicAction::class);
+            $router->get('/box-offices/{box_office_short_id}/seat-map', GetBoxOfficeSeatMapPublicAction::class);
+            $router->get('/box-offices/{box_office_short_id}/occupied-seats', GetBoxOfficeOccupiedSeatsPublicAction::class)
+                ->middleware('cache.headers:no_cache;private;etag');
+            $router->post('/box-offices/{box_office_short_id}/best-available-seats', GetBoxOfficeBestAvailableSeatsPublicAction::class);
+            $router->get('/box-offices/{box_office_short_id}/orders', GetBoxOfficeOrdersPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders', CreateBoxOfficeOrderPublicAction::class);
+            $router->get('/box-offices/{box_office_short_id}/orders/{order_short_id}', GetBoxOfficeOrderPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/card', StartBoxOfficeCardPaymentPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/card/cancel-action', CancelBoxOfficeCardActionPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/tender', TenderBoxOfficeOrderPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/cancel', CancelBoxOfficeOrderPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/abandon', AbandonBoxOfficeOrderPublicAction::class);
+            $router->post('/box-offices/{box_office_short_id}/orders/{order_short_id}/resend-confirmation', ResendBoxOfficeOrderConfirmationPublicAction::class)
+                ->middleware(['throttle:self-service-email', 'throttle:box-office-email']);
+        });
 
         // Check-In
         $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);
@@ -665,7 +813,7 @@ $router->prefix('/public')->group(
 
         // Ticket Lookup
         $router->post('/ticket-lookup', SendTicketLookupEmailAction::class)
-            ->middleware('throttle:10,1');
+            ->middleware('throttle:10,1,ticket-lookup');
         $router->get('/ticket-lookup/{token}', GetOrdersByLookupTokenAction::class);
 
         // Self-service order and attendee edits
@@ -675,6 +823,7 @@ $router->prefix('/public')->group(
 
             $router->patch('/attendees/{attendee_short_id}', EditAttendeePublicAction::class)->middleware('throttle:self-service-edit');
             $router->post('/attendees/{attendee_short_id}/resend-ticket', ResendAttendeeTicketPublicAction::class)->middleware('throttle:self-service-email');
+            $router->put('/attendees/{attendee_short_id}/seat', ChangeAttendeeSeatPublicAction::class)->middleware('throttle:self-service-edit');
         });
 
         // Sitemap

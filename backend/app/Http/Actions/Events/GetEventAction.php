@@ -14,6 +14,7 @@ use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -22,12 +23,10 @@ use Illuminate\Http\JsonResponse;
 
 class GetEventAction extends BaseAction
 {
-    private EventRepositoryInterface $eventRepository;
-
-    public function __construct(EventRepositoryInterface $eventRepository)
-    {
-        $this->eventRepository = $eventRepository;
-    }
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventSeatMapLookupService $eventSeatMapLookupService,
+    ) {}
 
     public function __invoke(int $eventId): JsonResponse
     {
@@ -53,6 +52,8 @@ class GetEventAction extends BaseAction
                 ])
             )
             ->findById($eventId);
+
+        $event->setHasSeatMap($this->eventSeatMapLookupService->existsForEvent($eventId));
 
         return $this->resourceResponse(EventResource::class, $event);
     }

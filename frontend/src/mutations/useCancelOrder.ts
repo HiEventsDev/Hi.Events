@@ -4,6 +4,8 @@ import {orderClient} from "../api/order.client.ts";
 import {GET_ORDER_QUERY_KEY} from "../queries/useGetOrder.ts";
 import {GET_EVENT_ORDERS_QUERY_KEY} from "../queries/useGetEventOrders.ts";
 import {GET_EVENT_COUNTS_QUERY_KEY} from "../queries/useGetEventCounts.ts";
+import {GET_OCCUPIED_SEATS_QUERY_KEY} from "../ee/seating/queries/useGetOccupiedSeats.ts";
+import {GET_SEAT_AVAILABILITY_QUERY_KEY} from "../ee/seating/queries/useGetSeatAvailability.ts";
 
 export const useCancelOrder = () => {
     const queryClient = useQueryClient();
@@ -23,6 +25,8 @@ export const useCancelOrder = () => {
                 queryKey: [GET_EVENT_ORDERS_QUERY_KEY, variables.eventId]
             });
             queryClient.invalidateQueries({queryKey: [GET_EVENT_COUNTS_QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey: [GET_OCCUPIED_SEATS_QUERY_KEY]});
+            queryClient.invalidateQueries({queryKey: [GET_SEAT_AVAILABILITY_QUERY_KEY]});
         }
     });
 }

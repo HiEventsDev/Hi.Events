@@ -2,7 +2,12 @@
 
 namespace HiEvents\Http;
 
+use HiEvents\Enterprise\BoxOffice\Http\Middleware\AuthenticateBoxOfficeSession;
+use HiEvents\Enterprise\Licensing\Http\Middleware\ApplyLicenceSimulation;
+use HiEvents\Enterprise\Licensing\Http\Middleware\RequireLicensedFeature;
+use HiEvents\Http\Middleware\ApplySsrClientIp;
 use HiEvents\Http\Middleware\Authenticate;
+use HiEvents\Http\Middleware\CacheGuestJsonResponse;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
@@ -43,6 +48,7 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
+        ApplySsrClientIp::class,
         HandleCors::class,
         PreventRequestsDuringMaintenance::class,
         ValidatePostSize::class,
@@ -50,6 +56,7 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
         HandleDeprecatedTimezones::class,
         VaporBinaryResponseMiddleware::class,
+        ApplyLicenceSimulation::class,
     ];
 
     /**
@@ -87,7 +94,10 @@ class Kernel extends HttpKernel
     protected $middlewareAliases = [
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
+        'box-office.session' => AuthenticateBoxOfficeSession::class,
+        'ee.licensed' => RequireLicensedFeature::class,
         'auth.session' => AuthenticateSession::class,
+        'cache.guest' => CacheGuestJsonResponse::class,
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,

@@ -58,6 +58,7 @@ const OrganizerHomepagePreview = () => {
         organizer={previewOrganizer}
         eventsData={eventsData}
         isPastEvents={false}
+        isPreview
     />;
 };
 

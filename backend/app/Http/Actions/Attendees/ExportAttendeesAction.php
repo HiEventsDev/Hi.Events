@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\QuestionAndAnswerViewDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Exports\AttendeesExport;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Eloquent\Value\Relationship;
@@ -24,6 +25,7 @@ class ExportAttendeesAction extends BaseAction
 {
     public function __construct(
         private readonly AttendeesExport $export,
+        private readonly EventSeatMapLookupService $eventSeatMapLookupService,
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly QuestionRepositoryInterface $questionRepository
     ) {}
@@ -84,7 +86,12 @@ class ExportAttendeesAction extends BaseAction
         ]);
 
         return Excel::download(
-            $this->export->withData($attendees, $productQuestions, $orderQuestions),
+            $this->export->withData(
+                $attendees,
+                $productQuestions,
+                $orderQuestions,
+                $this->eventSeatMapLookupService->existsForEvent($eventId),
+            ),
             'attendees.xlsx'
         );
     }

@@ -38,6 +38,11 @@ class Currency
         return $formatter->formatCurrency($amount, $currencyCode);
     }
 
+    public static function fromMinorUnits(int $minorUnits, string $currencyCode): float
+    {
+        return $minorUnits / (self::isZeroDecimalCurrency($currencyCode) ? 1 : 100);
+    }
+
     public static function round(float $value, $precision = 2): float
     {
         return round(

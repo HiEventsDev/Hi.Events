@@ -20,5 +20,7 @@ class AvailableProductQuantitiesDTO extends BaseDTO
         public string $quantity_applies_to = 'EVENT',
         /** @var Collection<CapacityAssignmentDomainObject> */
         public ?Collection $capacities = null,
+        public ?int $seats_available = null,
+        public ?int $quantity_available_before_seats = null,
     ) {}
 }

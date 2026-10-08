@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Auth;
 
+use HiEvents\Helper\AuthCookieSameSite;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Auth\AuthenticatedResponseResource;
 use HiEvents\Services\Application\Handlers\Auth\DTO\AuthenticatedResponseDTO;
@@ -19,7 +20,7 @@ abstract class BaseAuthAction extends BaseAction
             name: 'token',
             value: $token,
             secure: true,
-            sameSite: 'None',
+            sameSite: AuthCookieSameSite::forRequest(request()),
         );
     }
 

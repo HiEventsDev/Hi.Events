@@ -1,4 +1,4 @@
-import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Tooltip} from '@mantine/core';
+import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Text, Tooltip} from '@mantine/core';
 import {Attendee, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
@@ -79,7 +79,10 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
         return getCheckInCount(attendee) > 0;
     };
 
-    const handleCopyEmail = (email: string) => {
+    const handleCopyEmail = (email: string | null) => {
+        if (!email) {
+            return;
+        }
         clipboard.copy(email);
         showSuccess(t`Email address copied to clipboard`);
         setEmailPopoverId(null);
@@ -124,7 +127,11 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                     </div>
                                 </div>
                                 <div className={classes.emailRow}>
-                                    <Popover
+                                    {!info.row.original.email && (
+                                        <Text className={classes.attendeeEmail}
+                                              c="dimmed">{t`No email provided`}</Text>
+                                    )}
+                                    {info.row.original.email && <Popover
                                         opened={emailPopoverId === info.row.original.id}
                                         onChange={(opened) => {
                                             if (!opened) setEmailPopoverId(null);
@@ -164,7 +171,7 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                                 </Button>
                                             </Group>
                                         </Popover.Dropdown>
-                                    </Popover>
+                                    </Popover>}
                                     <div className={classes.emailActions}>
                                         {info.row.original.notes && (
                                             <Tooltip
@@ -217,6 +224,9 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                         length={25}
                                     />
                                 </div>
+                                {attendee.seat_label && (
+                                    <div className={classes.seatLabel}>{attendee.seat_label}</div>
+                                )}
                                 {occurrence && event?.timezone && (
                                     <span className={classes.occurrenceChip}>
                                         <IconCalendarEvent size={12}/>

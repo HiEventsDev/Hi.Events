@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Message;
 use Carbon\Carbon;
 use HiEvents\DomainObjects\Enums\MessageTypeEnum;
 use HiEvents\DomainObjects\MessageDomainObject;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\MessageStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Exceptions\MessagingTierLimitExceededException;
@@ -69,6 +70,8 @@ class SendMessageHandler
         if ($tierViolation !== null) {
             throw new MessagingTierLimitExceededException($tierViolation);
         }
+
+        $this->validateTargetedRecipientsAreContactable($messageData);
 
         $eligibilityFailure = $this->eligibilityService->checkEligibility(
             $messageData->account_id,
@@ -154,14 +157,16 @@ class SendMessageHandler
         $occurrenceCondition = $this->occurrenceWhere($messageData);
 
         return match ($messageData->type) {
-            MessageTypeEnum::INDIVIDUAL_ATTENDEES => count($messageData->attendee_ids ?? []),
+            MessageTypeEnum::INDIVIDUAL_ATTENDEES => $this->getAttendeeIds($messageData)->count(),
             MessageTypeEnum::ORDER_OWNER => 1,
             MessageTypeEnum::ALL_ATTENDEES => $this->attendeeRepository->countWhere(array_merge([
                 'event_id' => $messageData->event_id,
+                ['email', 'not null', null],
             ], $occurrenceCondition)),
             MessageTypeEnum::TICKET_HOLDERS => $this->attendeeRepository->countWhere(array_merge([
                 'event_id' => $messageData->event_id,
                 ['product_id', 'in', $messageData->product_ids ?? []],
+                ['email', 'not null', null],
             ], $occurrenceCondition)),
             MessageTypeEnum::ORDER_OWNERS_WITH_PRODUCT => $this->orderRepository->countOrdersAssociatedWithProducts(
                 eventId: $messageData->event_id,
@@ -192,6 +197,7 @@ class SendMessageHandler
             values: $messageData->attendee_ids,
             additionalWhere: [
                 'event_id' => $messageData->event_id,
+                ['email', 'not null', null],
             ],
             columns: ['id']
         );
@@ -215,9 +221,40 @@ class SendMessageHandler
 
     private function getOrderId(SendMessageDTO $messageData): ?int
     {
+        return $this->getOrder($messageData)?->getId();
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validateTargetedRecipientsAreContactable(SendMessageDTO $messageData): void
+    {
+        if ($messageData->type === MessageTypeEnum::INDIVIDUAL_ATTENDEES
+            && ! empty($messageData->attendee_ids)
+            && $this->getAttendeeIds($messageData)->isEmpty()) {
+            throw ValidationException::withMessages([
+                'attendee_ids' => [__('None of the selected attendees have an email address.')],
+            ]);
+        }
+
+        if ($messageData->type !== MessageTypeEnum::ORDER_OWNER) {
+            return;
+        }
+
+        $order = $this->getOrder($messageData);
+
+        if ($order !== null && $order->getEmail() === null) {
+            throw ValidationException::withMessages([
+                'order_id' => [__('This order has no email address.')],
+            ]);
+        }
+    }
+
+    private function getOrder(SendMessageDTO $messageData): ?OrderDomainObject
+    {
         return $this->orderRepository->findFirstWhere([
             'id' => $messageData->order_id,
             'event_id' => $messageData->event_id,
-        ])?->getId();
+        ]);
     }
 }

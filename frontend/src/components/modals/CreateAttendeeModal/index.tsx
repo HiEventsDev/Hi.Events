@@ -26,6 +26,7 @@ import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts
 import {useGetPriceOverrides} from "../../../queries/useGetPriceOverrides.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
 import {BouncingEmoji} from "../../common/BouncingEmoji";
+import {ManualSeatField} from "../../../ee/seating/components/ManualSeatField";
 import {Stack, Text} from "@mantine/core";
 
 export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
@@ -86,6 +87,10 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
             form.setFieldValue('override_capacity', false);
         }
     }, [occurrenceIsFull]);
+
+    useEffect(() => {
+        form.setFieldValue('seat_uid', undefined);
+    }, [form.values.product_id, form.values.event_occurrence_id]);
 
     const {data: priceOverrides} = useGetPriceOverrides(
         eventId,
@@ -259,6 +264,16 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                         {...(form.errors.event_occurrence_id ? {error: form.errors.event_occurrence_id} : {})}
                     />
                 )}
+
+                <ManualSeatField
+                    eventId={eventId}
+                    hasSeatMap={!!event?.has_seat_map}
+                    productId={form.values.product_id}
+                    occurrenceId={isRecurring ? form.values.event_occurrence_id ?? undefined : occurrencesData?.data?.[0]?.id}
+                    value={form.values.seat_uid}
+                    error={form.errors.seat_uid}
+                    onChange={seatUid => form.setFieldValue('seat_uid', seatUid)}
+                />
 
                 {occurrenceIsFull && (
                     <Callout

@@ -2,6 +2,8 @@
 
 namespace HiEvents\Console;
 
+use HiEvents\Enterprise\Licensing\Console\GenerateLicenceKeypairCommand;
+use HiEvents\Enterprise\Licensing\Console\IssueLicenceKeyCommand;
 use HiEvents\Jobs\Account\ProcessScheduledAccountDeletionsJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Jobs\Waitlist\ProcessExpiredWaitlistOffersJob;
@@ -12,6 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        GenerateLicenceKeypairCommand::class,
+        IssueLicenceKeyCommand::class,
+    ];
+
     protected function schedule(Schedule $schedule): void
     {
         $schedule->job(new SendScheduledMessagesJob)->everyMinute()->withoutOverlapping();

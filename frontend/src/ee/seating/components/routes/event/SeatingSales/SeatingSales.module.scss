@@ -1,0 +1,83 @@
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    :global(.mantine-InputWrapper-root) {
+        margin-bottom: 0;
+    }
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 16px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.map {
+    position: relative;
+    height: min(70vh, 720px);
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+
+    span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    i {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+    }
+}
+
+.sold {
+    background: #55536a;
+}
+
+.held {
+    background: #f59e0b;
+}
+
+.blocked {
+    border: 2px dashed #be123c;
+}
+
+.detail,
+.action {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.hint {
+    margin: 0;
+    color: var(--mantine-color-dimmed);
+    font-size: 13px;
+}

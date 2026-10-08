@@ -5,6 +5,11 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
+use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
+use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimLiveness;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
@@ -16,6 +21,7 @@ use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\AttendeeEvent;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Throwable;
@@ -31,6 +37,8 @@ class PartialEditAttendeeHandler
         private readonly EventStatisticsCancellationService $eventStatisticsCancellationService,
         private readonly EventStatisticsReactivationService $eventStatisticsReactivationService,
         private readonly LoggerInterface $logger,
+        private readonly SeatClaimService $seatClaimService,
+        private readonly SeatedProductLookupService $seatedProductLookupService,
     ) {}
 
     /**
@@ -59,6 +67,7 @@ class PartialEditAttendeeHandler
         $statusIsUpdated = $status && $status !== $attendee->getStatus();
 
         if ($statusIsUpdated) {
+            $this->adjustSeatClaim($status, $attendee);
             $this->adjustProductQuantity($status, $attendee);
             $this->adjustEventStatistics($status, $attendee);
         }
@@ -83,6 +92,55 @@ class PartialEditAttendeeHandler
             where: [
                 'event_id' => $data->event_id,
             ]);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function adjustSeatClaim(string $status, AttendeeDomainObject $attendee): void
+    {
+        if ($status === AttendeeStatus::CANCELLED->name) {
+            $this->seatClaimService->releaseForAttendee($attendee->getId());
+
+            return;
+        }
+
+        if ($attendee->getSeatUid() === null) {
+            if ($status === AttendeeStatus::ACTIVE->name && $this->seatedProductLookupService->isSeated($attendee->getProductId())) {
+                throw ValidationException::withMessages([
+                    'status' => __('This ticket now needs a seat, so this attendee cannot be reactivated. Add them again and choose a seat.'),
+                ]);
+            }
+
+            return;
+        }
+
+        if ($status !== AttendeeStatus::ACTIVE->name) {
+            if ($attendee->getStatus() === AttendeeStatus::CANCELLED->name) {
+                throw ValidationException::withMessages([
+                    'status' => __('A cancelled seated attendee can only be reactivated as active'),
+                ]);
+            }
+
+            return;
+        }
+
+        $order = $this->orderRepository->findById($attendee->getOrderId());
+        if (! SeatClaimLiveness::orderKeepsSeatsIndefinitely($order->getStatus())) {
+            throw ValidationException::withMessages([
+                'status' => __('A seated attendee cannot be reactivated on an order that is not complete'),
+            ]);
+        }
+
+        try {
+            $this->seatClaimService->reclaimForAttendee($attendee, $order);
+        } catch (SeatsUnavailableException) {
+            throw ValidationException::withMessages([
+                'status' => __('Seat :seat has since been given to someone else', ['seat' => $attendee->getSeatLabel()]),
+            ]);
+        } catch (SeatSelectionInvalidException $exception) {
+            throw ValidationException::withMessages(['status' => $exception->getMessage()]);
+        }
     }
 
     /**

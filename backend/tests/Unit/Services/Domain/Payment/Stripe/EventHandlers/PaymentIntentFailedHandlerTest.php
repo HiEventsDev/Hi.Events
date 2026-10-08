@@ -8,11 +8,14 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\StripePaymentDomainObject;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\TerminalAttemptTracker;
 use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentUpdateFromPaymentIntentService;
+use Illuminate\Cache\ArrayStore;
+use Illuminate\Cache\Repository;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Event;
 use Mockery;
@@ -43,6 +46,8 @@ class PaymentIntentFailedHandlerTest extends TestCase
 
     private StripePaymentUpdateCallLog $updateLog;
 
+    private TerminalAttemptTracker $attemptTracker;
+
     private PaymentIntentFailedHandler $handler;
 
     protected function setUp(): void
@@ -58,11 +63,14 @@ class PaymentIntentFailedHandlerTest extends TestCase
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')->andReturnUsing(fn ($callback) => $callback());
 
+        $this->attemptTracker = new TerminalAttemptTracker(new Repository(new ArrayStore));
+
         $this->handler = new PaymentIntentFailedHandler(
             $this->orderRepository,
             $this->stripePaymentsRepository,
             $databaseManager,
             new RecordingStripePaymentUpdateService($this->updateLog),
+            $this->attemptTracker,
         );
     }
 
@@ -70,6 +78,18 @@ class PaymentIntentFailedHandlerTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    public function test_a_decline_from_before_the_card_was_presented_again_is_ignored(): void
+    {
+        $this->attemptTracker->start(PaymentIntent::constructFrom(['id' => 'pi_test', 'latest_charge' => null]));
+        $this->stripePaymentsRepository->shouldNotReceive('findFirstWhere');
+        $this->orderRepository->shouldNotReceive('updateWhere');
+
+        $this->handler->handleEvent(PaymentIntent::constructFrom(['id' => 'pi_test']), time() - 60);
+
+        $this->assertSame(0, $this->updateLog->calls);
+        Event::assertNotDispatched(OrderStatusChangedEvent::class);
     }
 
     public function test_downgrades_an_order_that_is_still_awaiting_payment(): void

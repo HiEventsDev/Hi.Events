@@ -1,17 +1,17 @@
 import {t} from "@lingui/macro";
 import {Popover, Progress, UnstyledButton} from "@mantine/core";
 import {IconChevronDown} from "@tabler/icons-react";
-import {OccurrenceTierAllocation, ProductQuantityAppliesTo} from "../../../../../types.ts";
+import {OccurrenceAllocation, ProductQuantityAppliesTo} from "../../../../../types.ts";
 import {cappedAllocationTotal} from "../bookingLimits.ts";
 import classes from "./BookingSummary.module.scss";
 
 export interface BookingFigures {
     capacity: number | null;
     booked: number;
-    allocations: OccurrenceTierAllocation[];
+    allocations: OccurrenceAllocation[];
 }
 
-const allocationLimit = (allocations: OccurrenceTierAllocation[]): number | null => {
+const allocationLimit = (allocations: OccurrenceAllocation[]): number | null => {
     if (allocations.length === 0 || allocations.some((allocation) => allocation.quantity === null)) {
         return null;
     }
@@ -23,14 +23,14 @@ const sellableLimit = ({capacity, allocations}: Pick<BookingFigures, 'capacity' 
     return limits.length === 0 ? null : Math.min(...limits);
 };
 
-const tierValue = (allocation: OccurrenceTierAllocation): string => {
+const allocationRowValue = (allocation: OccurrenceAllocation): string => {
     if (allocation.applies_to === ProductQuantityAppliesTo.Event) {
         return t`All dates · shared`;
     }
     return allocation.quantity === null ? t`Unlimited` : String(allocation.quantity);
 };
 
-const allocationValue = (allocations: OccurrenceTierAllocation[]): string => {
+const allocationValue = (allocations: OccurrenceAllocation[]): string => {
     const cappedTotal = cappedAllocationTotal(allocations);
     const hasUnlimited = allocations.some((allocation) => allocation.quantity === null && allocation.applies_to !== ProductQuantityAppliesTo.Event);
     const hasShared = allocations.some((allocation) => allocation.applies_to === ProductQuantityAppliesTo.Event);
@@ -68,9 +68,9 @@ export const BookingBreakdown = ({capacity, booked, allocations}: BookingFigures
                 <span className={classes.value}>{allocationValue(allocations)}</span>
             </div>
             {allocations.map((allocation) => (
-                <div key={String(allocation.product_price_id)} className={classes.tierRow} data-testid="occurrence-booking-row-tier">
+                <div key={allocation.product_price_id ?? allocation.product_title} className={classes.allocationRow} data-testid="occurrence-booking-product-allocation">
                     <span>{allocation.price_label ?? allocation.product_title}</span>
-                    <span className={classes.value}>{tierValue(allocation)}</span>
+                    <span className={classes.value}>{allocationRowValue(allocation)}</span>
                 </div>
             ))}
             <div className={classes.totalRow} data-testid="occurrence-booking-row-sellable">

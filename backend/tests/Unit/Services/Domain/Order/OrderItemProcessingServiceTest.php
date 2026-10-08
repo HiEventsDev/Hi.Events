@@ -12,6 +12,8 @@ use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
+use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
@@ -155,6 +157,12 @@ class OrderItemProcessingServiceTest extends TestCase
                 rollUp: [],
             ));
 
+        $seatedProductLookup = Mockery::mock(SeatedProductLookupService::class);
+        $seatedProductLookup->shouldReceive('priceAdjustmentFor')->andReturn(0);
+
+        $eventSeatMapLookup = Mockery::mock(EventSeatMapLookupService::class);
+        $eventSeatMapLookup->shouldReceive('bandOf')->andReturn(null);
+
         $eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $eventRepository->shouldReceive('loadRelation')->andReturnSelf();
         $eventRepository->shouldReceive('findById')->andReturn($event);
@@ -169,6 +177,8 @@ class OrderItemProcessingServiceTest extends TestCase
             platformFeeService: Mockery::mock(OrderPlatformFeePassThroughService::class),
             eventRepository: $eventRepository,
             orderDiscountAllocationService: new OrderDiscountAllocationService,
+            seatedProductLookup: $seatedProductLookup,
+            eventSeatMapLookup: $eventSeatMapLookup,
         );
 
         return $service->process(

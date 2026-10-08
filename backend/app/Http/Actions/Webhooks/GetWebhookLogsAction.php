@@ -3,7 +3,6 @@
 namespace HiEvents\Http\Actions\Webhooks;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\WebhookLogDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Webhook\WebhookLogResource;
 use HiEvents\Services\Application\Handlers\Webhook\GetWebhookLogsHandler;
@@ -24,10 +23,6 @@ class GetWebhookLogsAction extends BaseAction
             accountId: $this->getAuthenticatedAccountId(),
             eventId: $eventId,
         );
-
-        $webhookLogs = $webhookLogs->sortBy(function (WebhookLogDomainObject $webhookLog) {
-            return $webhookLog->getId();
-        }, SORT_REGULAR, true);
 
         return $this->resourceResponse(
             resource: WebhookLogResource::class,

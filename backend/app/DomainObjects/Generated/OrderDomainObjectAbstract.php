@@ -14,6 +14,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const EVENT_ID = 'event_id';
     final public const PROMO_CODE_ID = 'promo_code_id';
     final public const AFFILIATE_ID = 'affiliate_id';
+    final public const BOX_OFFICE_ID = 'box_office_id';
     final public const SHORT_ID = 'short_id';
     final public const TOTAL_BEFORE_ADDITIONS = 'total_before_additions';
     final public const TOTAL_REFUNDED = 'total_refunded';
@@ -44,11 +45,18 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const NOTES = 'notes';
     final public const STATISTICS_DECREMENTED_AT = 'statistics_decremented_at';
     final public const OPTED_INTO_MARKETING_AT = 'opted_into_marketing_at';
+    final public const BOX_OFFICE_OPERATOR_NAME = 'box_office_operator_name';
+    final public const BOX_OFFICE_TENDER = 'box_office_tender';
+    final public const BOX_OFFICE_AMOUNT_TENDERED = 'box_office_amount_tendered';
+    final public const BOX_OFFICE_CHANGE_DUE = 'box_office_change_due';
+    final public const BOX_OFFICE_REFERENCE = 'box_office_reference';
+    final public const BOX_OFFICE_COMPLETED_AT = 'box_office_completed_at';
 
     protected int $id;
     protected int $event_id;
     protected ?int $promo_code_id = null;
     protected ?int $affiliate_id = null;
+    protected ?int $box_office_id = null;
     protected string $short_id;
     protected float $total_before_additions = 0.0;
     protected float $total_refunded = 0.0;
@@ -79,6 +87,12 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?string $notes = null;
     protected ?string $statistics_decremented_at = null;
     protected ?string $opted_into_marketing_at = null;
+    protected ?string $box_office_operator_name = null;
+    protected ?string $box_office_tender = null;
+    protected ?float $box_office_amount_tendered = null;
+    protected ?float $box_office_change_due = null;
+    protected ?string $box_office_reference = null;
+    protected ?string $box_office_completed_at = null;
 
     public function toArray(): array
     {
@@ -87,6 +101,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'event_id' => $this->event_id ?? null,
                     'promo_code_id' => $this->promo_code_id ?? null,
                     'affiliate_id' => $this->affiliate_id ?? null,
+                    'box_office_id' => $this->box_office_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'total_before_additions' => $this->total_before_additions ?? null,
                     'total_refunded' => $this->total_refunded ?? null,
@@ -117,6 +132,12 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'notes' => $this->notes ?? null,
                     'statistics_decremented_at' => $this->statistics_decremented_at ?? null,
                     'opted_into_marketing_at' => $this->opted_into_marketing_at ?? null,
+                    'box_office_operator_name' => $this->box_office_operator_name ?? null,
+                    'box_office_tender' => $this->box_office_tender ?? null,
+                    'box_office_amount_tendered' => $this->box_office_amount_tendered ?? null,
+                    'box_office_change_due' => $this->box_office_change_due ?? null,
+                    'box_office_reference' => $this->box_office_reference ?? null,
+                    'box_office_completed_at' => $this->box_office_completed_at ?? null,
                 ];
     }
 
@@ -162,6 +183,17 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getAffiliateId(): ?int
     {
         return $this->affiliate_id;
+    }
+
+    public function setBoxOfficeId(?int $box_office_id): self
+    {
+        $this->box_office_id = $box_office_id;
+        return $this;
+    }
+
+    public function getBoxOfficeId(): ?int
+    {
+        return $this->box_office_id;
     }
 
     public function setShortId(string $short_id): self
@@ -492,5 +524,71 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getOptedIntoMarketingAt(): ?string
     {
         return $this->opted_into_marketing_at;
+    }
+
+    public function setBoxOfficeOperatorName(?string $box_office_operator_name): self
+    {
+        $this->box_office_operator_name = $box_office_operator_name;
+        return $this;
+    }
+
+    public function getBoxOfficeOperatorName(): ?string
+    {
+        return $this->box_office_operator_name;
+    }
+
+    public function setBoxOfficeTender(?string $box_office_tender): self
+    {
+        $this->box_office_tender = $box_office_tender;
+        return $this;
+    }
+
+    public function getBoxOfficeTender(): ?string
+    {
+        return $this->box_office_tender;
+    }
+
+    public function setBoxOfficeAmountTendered(?float $box_office_amount_tendered): self
+    {
+        $this->box_office_amount_tendered = $box_office_amount_tendered;
+        return $this;
+    }
+
+    public function getBoxOfficeAmountTendered(): ?float
+    {
+        return $this->box_office_amount_tendered;
+    }
+
+    public function setBoxOfficeChangeDue(?float $box_office_change_due): self
+    {
+        $this->box_office_change_due = $box_office_change_due;
+        return $this;
+    }
+
+    public function getBoxOfficeChangeDue(): ?float
+    {
+        return $this->box_office_change_due;
+    }
+
+    public function setBoxOfficeReference(?string $box_office_reference): self
+    {
+        $this->box_office_reference = $box_office_reference;
+        return $this;
+    }
+
+    public function getBoxOfficeReference(): ?string
+    {
+        return $this->box_office_reference;
+    }
+
+    public function setBoxOfficeCompletedAt(?string $box_office_completed_at): self
+    {
+        $this->box_office_completed_at = $box_office_completed_at;
+        return $this;
+    }
+
+    public function getBoxOfficeCompletedAt(): ?string
+    {
+        return $this->box_office_completed_at;
     }
 }

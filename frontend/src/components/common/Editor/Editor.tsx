@@ -1,5 +1,7 @@
 import {Link, RichTextEditor} from "@mantine/tiptap";
 import {useEditor} from "@tiptap/react";
+import {BubbleMenu} from "@tiptap/react/menus";
+import {Placeholder} from "@tiptap/extensions";
 import StarterKit from '@tiptap/starter-kit';
 import {TextAlign} from '@tiptap/extension-text-align';
 import {Color, TextStyle} from '@tiptap/extension-text-style';
@@ -9,6 +11,7 @@ import classes from "./Editor.module.scss";
 import classNames from "classnames";
 import {Trans} from "@lingui/macro";
 import {InsertImageControl} from "./Controls/InsertImageControl";
+import {InlineInsertMenu} from "./Controls/InlineInsertMenu";
 import {ImageResize} from "./Extensions/ImageResizeExtension";
 import {Extension} from '@tiptap/core';
 
@@ -20,7 +23,11 @@ export interface EditorProps {
     required?: boolean;
     className?: string;
     error?: string | React.ReactNode;
-    editorType?: 'full' | 'simple';
+    editorType?: 'full' | 'simple' | 'inline';
+    placeholder?: string;
+    autoFocus?: boolean;
+    ariaLabel?: string;
+    dataTestId?: string;
     maxLength?: number;
     size?: MantineFontSize;
     additionalExtensions?: Extension[];
@@ -40,6 +47,10 @@ export const Editor = ({
                            size = 'md',
                            additionalExtensions = [],
                            additionalToolbarControls,
+                           placeholder,
+                           autoFocus = false,
+                           ariaLabel,
+                           dataTestId,
                        }: EditorProps) => {
     const [charError, setCharError] = useState<string | null | React.ReactNode>(null);
 
@@ -63,8 +74,16 @@ export const Editor = ({
             ImageResize,
             TextStyle,
             Color,
+            ...(placeholder ? [Placeholder.configure({placeholder})] : []),
             ...additionalExtensions
         ],
+        autofocus: autoFocus ? 'end' : false,
+        editorProps: {
+            attributes: {
+                ...(ariaLabel ? {'aria-label': ariaLabel} : {}),
+                ...(dataTestId ? {'data-testid': dataTestId} : {}),
+            },
+        },
         onUpdate: ({editor}) => {
             const html = editor.getHTML();
             const htmlLength = html.length;
@@ -103,8 +122,32 @@ export const Editor = ({
                     <InputDescription size={size}>{description}</InputDescription>
                 </div>
             )}
-            <RichTextEditor variant={'subtle'} editor={editor}>
-                <RichTextEditor.Toolbar sticky className={classes.toolbar}>
+            <RichTextEditor
+                variant={'subtle'}
+                editor={editor}
+                className={editorType === 'inline' ? classes.inline : undefined}
+            >
+                {editorType === 'inline' && editor && (
+                    <>
+                        <BubbleMenu editor={editor} className={classes.floatingControls}>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.Bold/>
+                                <RichTextEditor.Italic/>
+                                <RichTextEditor.Underline/>
+                                <RichTextEditor.Link/>
+                            </RichTextEditor.ControlsGroup>
+                            <RichTextEditor.ControlsGroup>
+                                <RichTextEditor.H2/>
+                                <RichTextEditor.H3/>
+                                <RichTextEditor.BulletList/>
+                                <RichTextEditor.OrderedList/>
+                            </RichTextEditor.ControlsGroup>
+                        </BubbleMenu>
+                        <InlineInsertMenu editor={editor}/>
+                    </>
+                )}
+
+                {editorType !== 'inline' && <RichTextEditor.Toolbar sticky className={classes.toolbar}>
                     {editorType === 'full' && (
                         <>
                             <RichTextEditor.ControlsGroup>
@@ -210,7 +253,7 @@ export const Editor = ({
                     )}
                     
                     {additionalToolbarControls}
-                </RichTextEditor.Toolbar>
+                </RichTextEditor.Toolbar>}
 
                 <RichTextEditor.Content/>
             </RichTextEditor>

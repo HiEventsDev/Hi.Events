@@ -21,6 +21,9 @@ import {withLoadingNotification} from "../../../utilites/withLoadingNotification
 import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences";
 import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
+import {useGetBoxOffices} from "../../../ee/box-office/queries/useGetBoxOffices";
+import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
+import {FeatureFlag} from "../../../constants/featureFlags.ts";
 
 const orderStatuses = [
     {label: t`Completed`, value: 'COMPLETED'},
@@ -40,6 +43,9 @@ export const Orders: React.FC = () => {
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
     const ordersQuery = useGetEventOrders(eventId, searchParams as QueryFilters);
     const {data: occurrencesData} = useGetEventOccurrences(eventId, {pageNumber: 1, perPage: 100} as QueryFilters, isRecurring);
+    const boxOfficeFeature = useLicensedFeature(FeatureFlag.BOX_OFFICE);
+    const {data: boxOfficesData} = useGetBoxOffices(eventId, null, boxOfficeFeature.isVisible);
+    const boxOffices = boxOfficeFeature.isVisible ? boxOfficesData?.data || [] : [];
     const orders = ordersQuery?.data?.data;
     const pagination = ordersQuery?.data?.meta;
     const [downloadPending, setDownloadPending] = useState(false);
@@ -60,7 +66,17 @@ export const Orders: React.FC = () => {
             label: t`Refund Status`,
             type: 'multi-select',
             options: refundStatuses
-        }
+        },
+        ...(boxOffices.length > 0 ? [{
+            field: 'box_office_id',
+            label: t`Box Office`,
+            type: 'multi-select' as const,
+            options: boxOffices.map(boxOffice => ({label: boxOffice.name, value: String(boxOffice.id)})),
+        }, {
+            field: 'box_office_operator_name',
+            label: t`Sold by`,
+            type: 'text' as const,
+        }] : []),
     ];
 
     const handleOccurrenceChange = (value: string | null) => {
@@ -89,6 +105,12 @@ export const Orders: React.FC = () => {
         }
         if (values.refund_status?.length > 0) {
             filterFields.refund_status = {operator: QueryFilterOperator.In, value: values.refund_status};
+        }
+        if (values.box_office_id?.length > 0) {
+            filterFields.box_office_id = {operator: QueryFilterOperator.In, value: values.box_office_id};
+        }
+        if (values.box_office_operator_name?.trim()) {
+            filterFields.box_office_operator_name = {operator: QueryFilterOperator.ILike, value: `%${values.box_office_operator_name.trim()}%`};
         }
 
         setSearchParams({

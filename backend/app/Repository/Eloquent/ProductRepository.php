@@ -11,6 +11,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Models\BoxOffice;
 use HiEvents\Models\CapacityAssignment;
 use HiEvents\Models\CheckInList;
 use HiEvents\Models\Product;
@@ -172,6 +173,31 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $checkInList = CheckInList::find($checkInListId);
 
         $checkInList?->products()->detach();
+    }
+
+    public function addBoxOfficeToProducts(int $boxOfficeId, array $productIds): void
+    {
+        $productIds = array_unique($productIds);
+
+        Product::whereNotIn('id', $productIds)
+            ->whereHas('box_offices', function ($query) use ($boxOfficeId) {
+                $query->where('box_office_id', $boxOfficeId);
+            })
+            ->each(function (Product $product) use ($boxOfficeId) {
+                $product->box_offices()->detach($boxOfficeId);
+            });
+
+        Product::whereIn('id', $productIds)
+            ->each(function (Product $product) use ($boxOfficeId) {
+                $product->box_offices()->syncWithoutDetaching([$boxOfficeId]);
+            });
+    }
+
+    public function removeBoxOfficeFromProducts(int $boxOfficeId): void
+    {
+        $boxOffice = BoxOffice::find($boxOfficeId);
+
+        $boxOffice?->products()->detach();
     }
 
     public function removeCapacityAssignmentFromProducts(int $capacityAssignmentId): void
