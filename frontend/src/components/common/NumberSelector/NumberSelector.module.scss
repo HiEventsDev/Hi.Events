@@ -10,12 +10,6 @@
   padding: 3px;
   background: var(--hi-card-bg, transparent);
   transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  &[data-empty] {
-    border-color: transparent;
-    background: transparent;
-    padding: 0;
-  }
 }
 
 .control {
@@ -76,19 +70,23 @@
   font-size: 14px !important;
   font-variant-numeric: tabular-nums;
   color: var(--hi-text, inherit) !important;
+
+  @media (hover: none) and (pointer: coarse) {
+    font-size: 16px !important;
+  }
 }
 
 .compact {
   min-height: 33px;
   padding: 2px;
 
-  &[data-empty] {
-    padding: 0;
-  }
-
   .input {
     min-width: 28px;
     width: 28px;
     font-size: 13px !important;
+
+    @media (hover: none) and (pointer: coarse) {
+      font-size: 16px !important;
+    }
   }
 }
