@@ -13,6 +13,7 @@ import {
     TextInput,
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {useDatesContext} from "@mantine/dates";
 import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
 import {
@@ -46,6 +47,14 @@ const DAYS_OF_WEEK = [
     {value: 'saturday', label: t`Sat`, full: t`Saturday`},
     {value: 'sunday', label: t`Sun`, full: t`Sunday`},
 ];
+
+const useDaysOfWeekInDisplayOrder = () => {
+    const {firstDayOfWeek} = useDatesContext();
+    return useMemo(
+        () => Array.from({length: 7}, (_, i) => DAYS_OF_WEEK[(firstDayOfWeek + i + 6) % 7]),
+        [firstDayOfWeek]
+    );
+};
 
 const FREQUENCIES = [
     {value: 'daily', label: t`Daily`},
@@ -337,26 +346,30 @@ const IntervalStepper = ({value, onChange}: { value: number; onChange: (value: n
     </div>
 );
 
-const DayDots = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => (
-    <div className={classes.dayDots}>
-        {DAYS_OF_WEEK.map(day => {
-            const isSelected = selected.includes(day.value);
-            return (
-                <button
-                    key={day.value}
-                    type="button"
-                    role="checkbox"
-                    aria-checked={isSelected}
-                    aria-label={day.full}
-                    className={classNames(classes.dayDot, isSelected && classes.selected)}
-                    onClick={() => onToggle(day.value)}
-                >
-                    <span>{day.label}</span>
-                </button>
-            );
-        })}
-    </div>
-);
+const DayDots = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => {
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
+
+    return (
+        <div className={classes.dayDots}>
+            {orderedDaysOfWeek.map(day => {
+                const isSelected = selected.includes(day.value);
+                return (
+                    <button
+                        key={day.value}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        aria-label={day.full}
+                        className={classNames(classes.dayDot, isSelected && classes.selected)}
+                        onClick={() => onToggle(day.value)}
+                    >
+                        <span>{day.label}</span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+};
 
 const MonthDayGrid = ({selected, onToggle}: { selected: string[]; onToggle: (value: string) => void }) => (
     <div className={classes.monthGrid}>
@@ -382,6 +395,8 @@ const MonthDayGrid = ({selected, onToggle}: { selected: string[]; onToggle: (val
 const monthIndexOf = (date: Date): number => date.getFullYear() * 12 + date.getMonth();
 
 const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeStart: string }) => {
+    const {firstDayOfWeek} = useDatesContext();
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
     const [viewMonth, setViewMonth] = useState<number | null>(null);
 
     const firstMonth = monthIndexOf(previewDates[0]);
@@ -405,7 +420,7 @@ const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeS
     const startDate = parseLocalDate(rangeStart);
     const firstOfMonth = new Date(year, monthOfYear, 1);
     const gridStart = new Date(firstOfMonth);
-    gridStart.setDate(gridStart.getDate() - ((gridStart.getDay() + 6) % 7));
+    gridStart.setDate(gridStart.getDate() - ((gridStart.getDay() - firstDayOfWeek + 7) % 7));
 
     const cells = Array.from({length: 42}, (_, i) => {
         const date = new Date(gridStart);
@@ -435,7 +450,7 @@ const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeS
                 </button>
             </div>
             <div className={classes.calendarWeekdays}>
-                {DAYS_OF_WEEK.map(day => <span key={day.value}>{day.label}</span>)}
+                {orderedDaysOfWeek.map(day => <span key={day.value}>{day.label}</span>)}
             </div>
             <div className={classes.calendarGrid}>
                 {cells.map((date, i) => {
@@ -470,6 +485,7 @@ interface RecurrenceScheduleDrawerProps extends GenericModalProps {
 }
 
 export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: RecurrenceScheduleDrawerProps) => {
+    const orderedDaysOfWeek = useDaysOfWeekInDisplayOrder();
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const generateMutation = useGenerateOccurrences();
@@ -754,7 +770,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
 
         let onPart = '';
         if (values.frequency === 'weekly') {
-            const dayList = DAYS_OF_WEEK
+            const dayList = orderedDaysOfWeek
                 .filter(day => values.days_of_week.includes(day.value))
                 .map(day => day.label)
                 .join(', ');
@@ -798,7 +814,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
             bold: onPart ? `${cadenceSummary} ${onPart}` : cadenceSummary,
             rest: `, ${times}, ${range}.`,
         };
-    }, [form.values, previewDates.length, validTimes, cadenceSummary]);
+    }, [form.values, previewDates.length, validTimes, cadenceSummary, orderedDaysOfWeek]);
 
     const dateCount = previewDates.length;
     const timesPerDay = validTimes.length;
@@ -972,7 +988,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                     />
                                     <Select
                                         aria-label={t`Day`}
-                                        data={DAYS_OF_WEEK.map(day => ({value: day.value, label: day.full}))}
+                                        data={orderedDaysOfWeek.map(day => ({value: day.value, label: day.full}))}
                                         className={classes.inlineSelect}
                                         {...form.getInputProps('day_of_week')}
                                     />

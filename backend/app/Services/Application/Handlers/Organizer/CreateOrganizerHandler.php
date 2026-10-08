@@ -38,7 +38,7 @@ class CreateOrganizerHandler
 
     private function createOrganizer(CreateOrganizerDTO $organizerData): OrganizerDomainObject
     {
-        $organizer = $this->organizerRepository->create([
+        $attributes = [
             'name' => $organizerData->name,
             'email' => $organizerData->email,
             'phone' => $organizerData->phone,
@@ -48,7 +48,13 @@ class CreateOrganizerHandler
             'timezone' => $organizerData->timezone,
             'currency' => $organizerData->currency,
             'organizer_configuration_id' => $this->resolveConfigurationId($organizerData->account_id),
-        ]);
+        ];
+
+        if ($organizerData->first_day_of_week !== null) {
+            $attributes['first_day_of_week'] = $organizerData->first_day_of_week;
+        }
+
+        $organizer = $this->organizerRepository->create($attributes);
 
         $this->createDefaultOrganizerSettingsService->createOrganizerSettings($organizer);
 

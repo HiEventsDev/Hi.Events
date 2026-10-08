@@ -18,5 +18,6 @@ class EditOrganizerDTO extends BaseDataObject
         public ?string $website = null,
         public ?string $description = null,
         public ?UploadedFile $logo = null,
+        public ?int $first_day_of_week = null,
     ) {}
 }

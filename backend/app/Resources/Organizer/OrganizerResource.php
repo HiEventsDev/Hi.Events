@@ -22,6 +22,7 @@ class OrganizerResource extends JsonResource
             'website' => $this->getWebsite(),
             'description' => $this->getDescription(),
             'timezone' => $this->getTimezone(),
+            'first_day_of_week' => $this->getFirstDayOfWeek(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),

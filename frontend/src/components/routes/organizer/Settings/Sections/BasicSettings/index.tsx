@@ -7,7 +7,7 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {Card} from "../../../../../common/Card";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
-import {Organizer} from "../../../../../../types.ts";
+import {DayOfWeek} from "@mantine/dates";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {currencies} from "../../../../../../../data/currencies.ts";
@@ -28,13 +28,27 @@ const Settings = () => {
             description: '',
             currency: '',
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            first_day_of_week: '1',
         }
     });
 
-    const handleSubmit = (values: Partial<Organizer>) => {
+    const daysOfWeek = [
+        {value: '0', label: t`Sunday`},
+        {value: '1', label: t`Monday`},
+        {value: '2', label: t`Tuesday`},
+        {value: '3', label: t`Wednesday`},
+        {value: '4', label: t`Thursday`},
+        {value: '5', label: t`Friday`},
+        {value: '6', label: t`Saturday`},
+    ];
+
+    const handleSubmit = (values: typeof form.values) => {
         organizerMutation.mutate({
             organizerId: organizerId,
-            organizerData: values,
+            organizerData: {
+                ...values,
+                first_day_of_week: Number(values.first_day_of_week) as DayOfWeek,
+            },
         }, {
             onSuccess: () => {
                 showSuccess(t`Successfully Updated Organizer`);
@@ -51,6 +65,7 @@ const Settings = () => {
             email: String(organizer?.email),
             currency: String(organizer?.currency),
             timezone: String(organizer?.timezone),
+            first_day_of_week: String(organizer?.first_day_of_week ?? 1),
             phone: String(organizer?.phone || ''),
             website: String(organizer?.website || ''),
             description: String(organizer?.description || ''),
@@ -125,6 +140,14 @@ const Settings = () => {
                             label={t`Timezone`}
                             placeholder={t`UTC`}
                             description={t`The default timezone for your events.`}
+                        />
+                        <Select
+                            {...form.getInputProps('first_day_of_week')}
+                            required
+                            allowDeselect={false}
+                            data={daysOfWeek}
+                            label={t`First day of the week`}
+                            description={t`The day calendars start on for your events.`}
                         />
                     </InputGroup>
 

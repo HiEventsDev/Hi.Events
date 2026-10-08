@@ -22,6 +22,7 @@ import { BreadcrumbItem, NavItem } from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
 import { NavLink, useLocation, useParams } from "react-router";
 import { Button, Modal, Stack, Text } from "@mantine/core";
+import { OrganizerDatesProvider } from "../../common/OrganizerDatesProvider";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
 import { useGeoStatus } from "../../../queries/useGeoStatus.ts";
 import { useState } from "react";
@@ -202,7 +203,7 @@ const OrganizerLayout = () => {
 
 
     return (
-        <>
+        <OrganizerDatesProvider firstDayOfWeek={organizer?.first_day_of_week}>
             <AppLayout
                 navItems={navItemsWithLoading}
                 breadcrumbItems={breadcrumbItems}
@@ -320,7 +321,7 @@ const OrganizerLayout = () => {
                     )}
                 </Stack>
             </Modal>
-        </>
+        </OrganizerDatesProvider>
     );
 };
 
