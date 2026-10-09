@@ -84,6 +84,10 @@ msgstr "{0} 個活動的 Webhook"
 msgid "{0} available"
 msgstr "{0}可用"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:97
+msgid "{0} cancelled"
+msgstr "{0} 已取消"
+
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "{0} created successfully"
 msgstr "成功創建 {0}"
@@ -120,7 +124,7 @@ msgstr "{0} 每張訂單限購 {1} 張"
 msgid "{0} items selected"
 msgstr "已選中 {0} 個項目"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:391
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:394
 msgid "{0} left"
 msgstr "剩餘 {0}"
 
@@ -157,6 +161,10 @@ msgstr "其他 {0} 項"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:309
 msgid "{0} places"
 msgstr "{0} 個位置"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:230
+msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
+msgstr "{0} 張已退款訂單包含此產品但尚未取消，因此仍計為已售出。如這些項目不應計算在內，請取消訂單。"
 
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:137
 msgid "{0} requires two-factor authentication for everyone on the team."
@@ -279,7 +287,7 @@ msgstr "已簽到 {checkedIn} / {total}"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "已完成 {totalCount} 個步驟中的 {completedCount} 個"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "{count} add-ons"
 msgstr "{count} 項附加產品"
@@ -457,7 +465,7 @@ msgstr "+1 天"
 msgid "+1 more date"
 msgstr "另有 1 個日期"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:517
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:520
 msgid "+Tax/Fees"
 msgstr "+稅/費"
 
@@ -511,7 +519,7 @@ msgstr "0 分 0 秒"
 msgid "1 Active Webhook"
 msgstr "1 個活動的 Webhook"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "1 add-on"
 msgstr "1 項附加產品"
@@ -893,8 +901,8 @@ msgstr "需要操作：需提供增值稅資料"
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/EntityActions/index.tsx:28
 #: src/components/common/OrdersTable/index.tsx:378
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:540
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:547
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:543
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:550
 #: src/components/common/WaitlistTable/index.tsx:56
 #: src/components/common/WaitlistTable/index.tsx:234
 #: src/components/routes/admin/FailedJobs/index.tsx:167
@@ -919,6 +927,7 @@ msgstr "激活日期"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:111
+#: src/components/modals/ProductPurchasesModal/index.tsx:246
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:211
@@ -936,6 +945,10 @@ msgstr "活躍活動"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:415
 msgid "Active payment methods"
 msgstr "已啟用的付款方式"
+
+#: src/components/routes/event/products.tsx:94
+msgid "Active purchases"
+msgstr "有效購買"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:430
 msgid "Activity"
@@ -1159,7 +1172,7 @@ msgstr "添加 Webhook"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "新增您的社交媒體帳號及網站網址。這些資訊將會顯示在您的公開主辦單位頁面。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:477
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:480
 #: src/components/forms/ProductForm/ledgerSummaries.ts:128
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:25
 msgid "Add-on only"
@@ -1340,6 +1353,7 @@ msgid "all"
 msgstr "全部"
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/modals/ProductPurchasesModal/index.tsx:250
 #: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:515
 msgid "All"
@@ -1389,8 +1403,9 @@ msgid "All dates"
 msgstr "所有日期"
 
 #: src/components/common/CheckInListTable/index.tsx:115
+#: src/components/modals/ProductPurchasesModal/index.tsx:276
 #: src/components/routes/event/attendees.tsx:235
-#: src/components/routes/event/orders.tsx:204
+#: src/components/routes/event/orders.tsx:224
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:104
 msgid "All Dates"
 msgstr "所有日期"
@@ -1431,6 +1446,10 @@ msgstr "所有場次"
 #: src/components/common/PromoCodeTable/index.tsx:139
 msgid "All Products"
 msgstr "所有產品"
+
+#: src/components/routes/event/products.tsx:97
+msgid "All purchases, including cancelled"
+msgstr "所有購買（包括已取消）"
 
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:109
 msgid "All Statuses"
@@ -1524,7 +1543,7 @@ msgstr "同時取消此訂單"
 msgid "Also refund this order"
 msgstr "同時退款此訂單"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:335
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
 msgid "Always available"
 msgstr "總是可用"
 
@@ -2162,7 +2181,7 @@ msgstr "位參加者"
 #: src/components/common/EventCard/index.tsx:388
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/common/StatBoxes/index.tsx:73
 #: src/components/layouts/Event/index.tsx:138
 #: src/components/modals/ManageOccurrenceModal/index.tsx:174
@@ -2284,7 +2303,7 @@ msgstr "等待中"
 msgid "Awaiting offline payment"
 msgstr "等待線下付款"
 
-#: src/components/routes/event/orders.tsx:31
+#: src/components/routes/event/orders.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
 msgid "Awaiting Offline Payment"
 msgstr "等待線下付款"
@@ -2296,6 +2315,9 @@ msgstr "待付款"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
 #: src/components/layouts/Checkout/index.tsx:322
+#: src/components/modals/ProductPurchasesModal/index.tsx:79
+#: src/components/modals/ProductPurchasesModal/index.tsx:209
+#: src/components/modals/ProductPurchasesModal/index.tsx:247
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:435
 msgid "Awaiting payment"
 msgstr "等待付款"
@@ -2540,7 +2562,7 @@ msgid "Box office"
 msgstr "售票處"
 
 #: src/components/layouts/Event/index.tsx:140
-#: src/components/routes/event/orders.tsx:72
+#: src/components/routes/event/orders.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:71
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:50
 msgid "Box Office"
@@ -2830,11 +2852,14 @@ msgstr "取消將取消與此訂單關聯的所有參與者，並將門票釋放
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/modals/ProductPurchasesModal/index.tsx:75
+#: src/components/modals/ProductPurchasesModal/index.tsx:210
+#: src/components/modals/ProductPurchasesModal/index.tsx:249
 #: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:213
-#: src/components/routes/event/orders.tsx:30
+#: src/components/routes/event/orders.tsx:31
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:426
@@ -2954,7 +2979,7 @@ msgid "Categories reordered successfully."
 msgstr "類別重新排序成功。"
 
 #: src/components/modals/CreateEventModal/index.tsx:447
-#: src/components/routes/event/products.tsx:99
+#: src/components/routes/event/products.tsx:139
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 msgid "Category"
 msgstr "類別"
@@ -3647,7 +3672,7 @@ msgstr "完成您的個人資料以加入團隊。"
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:426
 #: src/components/routes/admin/DeletionRequests/index.tsx:86
-#: src/components/routes/event/orders.tsx:29
+#: src/components/routes/event/orders.tsx:30
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
 msgstr "已完成"
@@ -4158,7 +4183,7 @@ msgid "Covers every ticket"
 msgstr "涵蓋所有門票"
 
 #: src/components/routes/event/attendees.tsx:253
-#: src/components/routes/event/products.tsx:77
+#: src/components/routes/event/products.tsx:117
 msgid "Create"
 msgstr "創建"
 
@@ -4227,7 +4252,7 @@ msgstr "建立推廣夥伴"
 msgid "Create an announcement to show a message to your users."
 msgstr "建立公告，向您的用戶顯示訊息。"
 
-#: src/components/routes/event/products.tsx:47
+#: src/components/routes/event/products.tsx:63
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "建立並設定待售門票和商品。"
 
@@ -4444,7 +4469,7 @@ msgstr "當前密碼"
 msgid "Currently assigned"
 msgstr "目前已指派"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Currently available for purchase"
 msgstr "目前可供購買"
 
@@ -4574,7 +4599,7 @@ msgstr "舞池"
 #: src/components/common/EntityActions/index.tsx:58
 #: src/components/common/LocationsTable/index.tsx:68
 #: src/components/common/OrganizerWebhookTable/index.tsx:116
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:590
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:601
 #: src/components/common/PromoCodeTable/index.tsx:189
 #: src/components/common/WebhookTable/index.tsx:116
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:98
@@ -4771,7 +4796,7 @@ msgid "delete"
 msgstr "刪除"
 
 #: src/components/common/LocationsTable/index.tsx:43
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:596
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:607
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:81
@@ -4876,7 +4901,7 @@ msgstr "刪除範本"
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "刪除這個分類？當中的所有產品亦會一併刪除。此操作無法復原。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:103
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
 msgid "Delete this product? This cannot be undone."
 msgstr "刪除這個產品？此操作無法復原。"
 
@@ -5103,7 +5128,7 @@ msgstr "沒有帳戶？<0>註冊</0>"
 msgid "Don't let buyers leave a single empty seat"
 msgstr "不允許買家留下單個空座位"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:465
 #: src/components/forms/ProductForm/index.tsx:294
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:35
 msgid "Donation"
@@ -5212,7 +5237,7 @@ msgstr ""
 "由於垃圾郵件風險較高，您必須連接Stripe帳戶才能向參與者發送訊息。\n"
 "這是為了確保所有活動組織者都經過驗證並承擔責任。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:569
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:580
 #: src/components/routes/admin/Announcements/index.tsx:218
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:56
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:241
@@ -5333,7 +5358,7 @@ msgstr "早起的鳥兒"
 msgid "Edit"
 msgstr "編輯"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:52
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:176
 msgid "Edit {0}"
@@ -5711,7 +5736,7 @@ msgstr "結束時間（選填）"
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:26
 #: src/components/common/EventStatusBadge/index.tsx:14
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
 msgid "Ended"
 msgstr "完工"
 
@@ -6205,9 +6230,10 @@ msgstr "到期"
 msgid "Expiry Date"
 msgstr "有效期"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:94
 #: src/components/routes/event/attendees.tsx:262
-#: src/components/routes/event/orders.tsx:228
+#: src/components/routes/event/orders.tsx:248
 msgid "Export"
 msgstr "出口"
 
@@ -6222,6 +6248,10 @@ msgstr "匯出CSV"
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "導出失敗。請重試。"
+
+#: src/components/routes/event/products.tsx:86
+msgid "Export purchases"
+msgstr "匯出購買記錄"
 
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
@@ -6243,7 +6273,7 @@ msgstr "正在導出與會者"
 msgid "Exporting complete. Downloading file..."
 msgstr "導出完成。正在下載文件..."
 
-#: src/components/routes/event/orders.tsx:144
+#: src/components/routes/event/orders.tsx:163
 msgid "Exporting Orders"
 msgstr "正在導出訂單"
 
@@ -6373,7 +6403,7 @@ msgstr "刪除任務失敗"
 msgid "Failed to delete organizer"
 msgstr "刪除主辦方失敗"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:112
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:115
 msgid "Failed to delete product. Please try again."
 msgstr "無法刪除產品，請再試一次。"
 
@@ -6399,9 +6429,14 @@ msgstr "匯出推廣夥伴失敗"
 msgid "Failed to export attendees"
 msgstr "導出與會者失敗"
 
-#: src/components/routes/event/orders.tsx:153
+#: src/components/routes/event/orders.tsx:172
 msgid "Failed to export orders"
 msgstr "導出訂單失敗"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:169
+#: src/components/routes/event/products.tsx:54
+msgid "Failed to export purchases. Please try again."
+msgstr "匯出購買記錄失敗，請重試。"
 
 #: src/components/common/OrganizerReportTable/index.tsx:206
 msgid "Failed to export report. Please try again."
@@ -6505,7 +6540,7 @@ msgstr "儲存增值稅設定失敗。請重試。"
 msgid "Failed to send message. Please try again."
 msgstr "發送訊息失敗。請再試一次。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:298
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:301
 msgid "Failed to sort products"
 msgstr "產品排序失敗"
 
@@ -6690,7 +6725,7 @@ msgstr "按日期篩選"
 msgid "Filter by Event"
 msgstr "按活動篩選"
 
-#: src/components/routes/event/orders.tsx:214
+#: src/components/routes/event/orders.tsx:234
 msgid "Filter Orders"
 msgstr "篩選訂單"
 
@@ -6899,8 +6934,8 @@ msgstr "大堂"
 #: src/components/common/Currency/index.tsx:128
 #: src/components/common/OrderSummary/index.tsx:58
 #: src/components/common/OrderSummary/index.tsx:111
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:153
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:163
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:156
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:166
 #: src/components/forms/ProductForm/index.tsx:293
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:33
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
@@ -7169,6 +7204,7 @@ msgid "Gross Revenue"
 msgstr "總收入"
 
 #: src/components/common/StatBoxes/index.tsx:94
+#: src/components/modals/ProductPurchasesModal/index.tsx:211
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:116
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Gross sales"
@@ -7285,8 +7321,8 @@ msgstr "Hi.Events 費用"
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
 msgstr "Hi.Events 平台費用及每筆交易的增值稅明細"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Hidden"
 msgstr "已隱藏"
 
@@ -7306,8 +7342,8 @@ msgstr "對所有人隱藏"
 msgid "Hidden from everyone — the master hide switch is on."
 msgstr "對所有人隱藏 — 總隱藏開關已開啟。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:144
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:473
 msgid "Hidden from public view"
 msgstr "隱藏於公眾視線之外"
 
@@ -7409,7 +7445,7 @@ msgstr "突出顯示訊息"
 msgid "Highlight this product"
 msgstr "突出顯示此產品"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:453
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:456
 #: src/components/forms/ProductForm/ledgerSummaries.ts:144
 msgid "Highlighted"
 msgstr "已突出顯示"
@@ -8595,7 +8631,7 @@ msgstr "訊息批准成功"
 msgid "Message attendee"
 msgstr "與會者留言"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:554
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:565
 msgid "Message Attendees"
 msgstr "留言參與者"
 
@@ -8700,7 +8736,7 @@ msgstr "其他"
 msgid "Miscellaneous Settings"
 msgstr "雜項設置"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:209
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:212
 msgid "mixed"
 msgstr "混合"
 
@@ -8761,6 +8797,7 @@ msgid "more"
 msgstr "更多"
 
 #: src/components/common/EntityActions/index.tsx:159
+#: src/components/common/EntityActions/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:175
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:174
 msgid "More actions"
@@ -8799,7 +8836,7 @@ msgid "Move attendee"
 msgstr "移動與會者"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:199
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:586
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:597
 msgid "Move down"
 msgstr "下移"
 
@@ -8812,7 +8849,7 @@ msgid "Move to area"
 msgstr "移至區域"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:192
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:578
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:589
 msgid "Move up"
 msgstr "上移"
 
@@ -9196,7 +9233,7 @@ msgstr "無電郵"
 msgid "No email provided"
 msgstr "未提供電郵"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:348
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:351
 msgid "No end date"
 msgstr "沒有結束日期"
 
@@ -9277,6 +9314,10 @@ msgstr "未找到訊息"
 msgid "No messages to show"
 msgstr "無信息顯示"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:314
+msgid "No name"
+msgstr "沒有姓名"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:188
 msgid "No occurrences available"
 msgstr "沒有可選場次"
@@ -9284,6 +9325,10 @@ msgstr "沒有可選場次"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:135
 msgid "No occurrences on this date"
 msgstr "該日沒有場次"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No one has bought this yet."
+msgstr "尚未有人購買。"
 
 #: src/components/common/QuestionsTable/index.tsx:491
 msgid "No order questions yet"
@@ -9373,6 +9418,10 @@ msgstr "尚無產品"
 #: src/components/common/PromoCodeTable/index.tsx:46
 msgid "No Promo Codes to show"
 msgstr "無促銷代碼顯示"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No purchases match these filters."
+msgstr "沒有符合這些篩選條件的購買記錄。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:38
 msgid "No reader (cash only)"
@@ -9789,12 +9838,12 @@ msgid "on {month} {day}"
 msgstr "於{month}{day}日"
 
 #: src/components/common/EventCard/index.tsx:102
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
 msgid "On Sale"
 msgstr "銷售中"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:139
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
 msgid "On sale {0}"
 msgstr "正在銷售 {0}"
 
@@ -9923,7 +9972,7 @@ msgstr "僅發送給具有這些狀態的訂單"
 msgid "Only show start date and time"
 msgstr "僅顯示開始日期和時間"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:479
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:482
 msgid "Only shown as an add-on to the products it's attached to"
 msgstr "只會在所連結的產品下以附加產品形式顯示"
 
@@ -9951,7 +10000,7 @@ msgstr "只有門票計入容量。T 恤是產品，其數量只是庫存，不�
 msgid "Only visible to buyers with an applicable promo code."
 msgstr "只有持有適用優惠碼的買家可見。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:471
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Only visible with promo code"
 msgstr "僅使用促銷代碼時可見"
 
@@ -10163,7 +10212,7 @@ msgstr "訂購參考"
 msgid "Order Refunded"
 msgstr "訂單已退款"
 
-#: src/components/routes/event/orders.tsx:60
+#: src/components/routes/event/orders.tsx:72
 msgid "Order Status"
 msgstr "訂單狀態"
 
@@ -10201,7 +10250,7 @@ msgid "Order was cancelled"
 msgstr "訂單已被取消"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:443
-#: src/components/routes/event/orders.tsx:219
+#: src/components/routes/event/orders.tsx:239
 msgid "orders"
 msgstr "張訂單"
 
@@ -10212,7 +10261,7 @@ msgstr "張訂單"
 #: src/components/routes/admin/Attribution/index.tsx:200
 #: src/components/routes/admin/Orders/index.tsx:44
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:59
-#: src/components/routes/event/orders.tsx:176
+#: src/components/routes/event/orders.tsx:196
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:118
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:144
@@ -10229,7 +10278,7 @@ msgstr "訂單"
 msgid "Orders Completed"
 msgstr "已完成訂單"
 
-#: src/components/routes/event/orders.tsx:148
+#: src/components/routes/event/orders.tsx:167
 msgid "Orders Exported"
 msgstr "訂單已導出"
 
@@ -10444,8 +10493,12 @@ msgstr "紙張"
 msgid "Partial refund"
 msgstr "部分退款"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:63
+msgid "Partially refunded"
+msgstr "部分退款"
+
 #: src/components/common/OrderStatusBadge/index.tsx:16
-#: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/orders.tsx:37
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:74
 msgid "Partially Refunded"
 msgstr "部分退款"
@@ -10512,7 +10565,7 @@ msgstr "帕特里克"
 msgid "patrick@acme.com"
 msgstr "patrick@acme.com"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/forms/WebhookForm/index.tsx:28
 msgid "Paused"
 msgstr "已暫停"
@@ -10634,7 +10687,7 @@ msgstr "等待審核"
 msgid "Per Attendee"
 msgstr "每位參與者"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:205
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:208
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:76
 msgid "per date"
 msgstr "每個日期"
@@ -10914,7 +10967,7 @@ msgstr "請選擇至少一個產品"
 
 #: src/components/routes/event/Affiliates/index.tsx:53
 #: src/components/routes/event/attendees.tsx:169
-#: src/components/routes/event/orders.tsx:154
+#: src/components/routes/event/orders.tsx:173
 msgid "Please try again."
 msgstr "請再試一次。"
 
@@ -10939,7 +10992,7 @@ msgstr "請稍候，我們正在準備導出您的與會者..."
 msgid "Please wait while we prepare your invoice..."
 msgstr "請稍候，我們正在準備您的發票..."
 
-#: src/components/routes/event/orders.tsx:145
+#: src/components/routes/event/orders.tsx:164
 msgid "Please wait while we prepare your orders for export..."
 msgstr "請稍候，我們正在準備導出您的訂單..."
 
@@ -11038,7 +11091,7 @@ msgstr "價格已修改"
 msgid "Price display mode"
 msgstr "價格顯示模式"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:148
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:151
 msgid "Price not set"
 msgstr "未設置價格"
 
@@ -11123,12 +11176,13 @@ msgid "Processing order"
 msgstr "處理訂單中"
 
 #: src/components/common/ProductsTable/index.tsx:92
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/common/WaitlistTable/index.tsx:173
 #: src/components/forms/ProductForm/index.tsx:231
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:167
+#: src/components/routes/event/orders.tsx:66
 msgid "Product"
 msgstr "產品"
 
@@ -11152,7 +11206,7 @@ msgstr "產品已創建"
 msgid "Product Deleted"
 msgstr "產品已刪除"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:109
 msgid "Product deleted successfully"
 msgstr "產品刪除成功"
 
@@ -11214,7 +11268,7 @@ msgstr "已售產品"
 msgid "Products Sold"
 msgstr "已售產品"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:297
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:300
 msgid "Products sorted successfully"
 msgstr "產品排序成功"
 
@@ -11282,7 +11336,7 @@ msgstr "促銷代碼可用於提供折扣、預售權限或為您的活動提供
 msgid "Promo Codes Report"
 msgstr "促銷代碼報告"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Promo Only"
 msgstr "僅限促銷"
 
@@ -11355,6 +11409,12 @@ msgstr "購買人"
 msgid "Purchaser email"
 msgstr "購買人電郵"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+#: src/components/modals/ProductPurchasesModal/index.tsx:190
+#: src/components/modals/ProductPurchasesModal/index.tsx:285
+msgid "Purchases"
+msgstr "購買記錄"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:44
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "將新金鑰填入 <0>APP_LICENCE_KEY</0> 並重新部署後端。"
@@ -11368,6 +11428,7 @@ msgid "QR code check-in"
 msgstr "二維碼簽到"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:170
+#: src/components/modals/ProductPurchasesModal/index.tsx:94
 msgid "Qty"
 msgstr "數量"
 
@@ -11634,6 +11695,7 @@ msgid "Refund amount"
 msgstr "退款金額"
 
 #: src/components/common/OrdersTable/index.tsx:293
+#: src/components/modals/ProductPurchasesModal/index.tsx:67
 msgid "Refund failed"
 msgstr "退款失敗"
 
@@ -11650,6 +11712,7 @@ msgid "Refund Order {0}"
 msgstr "退款訂單 {0}"
 
 #: src/components/common/OrdersTable/index.tsx:292
+#: src/components/modals/ProductPurchasesModal/index.tsx:65
 msgid "Refund pending"
 msgstr "退款待處理"
 
@@ -11662,7 +11725,7 @@ msgstr "退款處理中"
 msgid "Refund recorded successfully."
 msgstr "退款記錄成功。"
 
-#: src/components/routes/event/orders.tsx:66
+#: src/components/routes/event/orders.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:292
 msgid "Refund Status"
 msgstr "退款狀態"
@@ -11670,7 +11733,9 @@ msgstr "退款狀態"
 #: src/components/common/OrderStatusBadge/index.tsx:15
 #: src/components/common/OrderSummary/index.tsx:92
 #: src/components/common/StatBoxes/index.tsx:87
-#: src/components/routes/event/orders.tsx:35
+#: src/components/modals/ProductPurchasesModal/index.tsx:61
+#: src/components/modals/ProductPurchasesModal/index.tsx:248
+#: src/components/routes/event/orders.tsx:36
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:429
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:73
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:37
@@ -11945,7 +12010,7 @@ msgstr "預留座位"
 
 #: src/components/common/EventCard/index.tsx:224
 #: src/components/common/EventCard/index.tsx:324
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:358
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:361
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:39
 msgid "Reserved seating"
@@ -12194,12 +12259,12 @@ msgstr "銷售結束日期"
 msgid "Sale ended"
 msgstr "銷售已結束"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:343
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:143
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:346
 msgid "Sale ended {0}"
 msgstr "銷售已於 {0} 結束"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:344
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:347
 msgid "Sale ends {0}"
 msgstr "銷售於 {0} 結束"
 
@@ -12220,7 +12285,7 @@ msgstr "銷售期日期適用於日程中的所有日期。若要調整個別日
 msgid "Sale Start Date"
 msgstr "銷售開始日期"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:341
 msgid "Sale starts {0}"
 msgstr "銷售於 {0} 開始"
 
@@ -12234,7 +12299,7 @@ msgstr "銷售期"
 msgid "Sales"
 msgstr "銷售"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Sales are paused"
 msgstr "銷售已暫停"
 
@@ -12474,7 +12539,7 @@ msgstr "下一步設定時間表"
 msgid "Schedule starts on"
 msgstr "排程開始於"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
 #: src/components/routes/admin/Messages/index.tsx:125
 #: src/components/routes/event/messages.tsx:62
 msgid "Scheduled"
@@ -12549,7 +12614,8 @@ msgstr "按姓名、電郵或訂單編號搜尋"
 msgid "Search by name, email, or account..."
 msgstr "按姓名、電子郵件或帳戶搜索..."
 
-#: src/components/routes/event/orders.tsx:180
+#: src/components/modals/ProductPurchasesModal/index.tsx:259
+#: src/components/routes/event/orders.tsx:200
 msgid "Search by name, email, or order #..."
 msgstr "按姓名、電子郵件或訂單號搜索..."
 
@@ -12597,9 +12663,13 @@ msgstr "搜尋訊息..."
 msgid "Search orders"
 msgstr "搜尋訂單"
 
-#: src/components/routes/event/products.tsx:54
+#: src/components/routes/event/products.tsx:70
 msgid "Search products"
 msgstr "搜索產品"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:260
+msgid "Search purchases"
+msgstr "搜尋購買記錄"
 
 #: src/components/common/LocationPicker/index.tsx:326
 msgid "Search results"
@@ -13411,6 +13481,10 @@ msgstr "向未登入的工作人員顯示訂單詳情"
 msgid "Show question answers to non-logged-in staff"
 msgstr "向未登入的工作人員顯示問題回答"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:234
+msgid "Show refunded orders"
+msgstr "顯示已退款訂單"
+
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:59
 msgid "Show remaining capacity on event dates"
 msgstr "在活動日期上顯示餘下容量"
@@ -13552,14 +13626,16 @@ msgid "Social Links & Website"
 msgstr "社交連結與網站"
 
 #: src/components/common/ProductsTable/index.tsx:97
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/modals/ManageOccurrenceModal/index.tsx:186
+#: src/components/modals/ProductPurchasesModal/index.tsx:82
+#: src/components/modals/ProductPurchasesModal/index.tsx:208
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "已售出"
 
-#: src/components/routes/event/orders.tsx:77
+#: src/components/routes/event/orders.tsx:89
 msgid "Sold by"
 msgstr "銷售人員"
 
@@ -13586,7 +13662,7 @@ msgstr "已售罄"
 msgid "Sold out"
 msgstr "售罄"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:121
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
 #: src/components/layouts/EventHomepage/index.tsx:203
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:215
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
@@ -14372,7 +14448,7 @@ msgstr "税收"
 msgid "Taxes & fees"
 msgstr "稅項及費用"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:183
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:186
 msgid "Taxes & fees applied"
 msgstr "已套用稅項及費用"
 
@@ -15078,15 +15154,15 @@ msgstr "這將覆蓋所有可見性設置，並將該產品對所有客户隱藏
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "此預覽顯示您的郵件使用示例資料的外觀。實際郵件將使用真實值。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:110
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:113
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
 msgstr "此產品無法刪除，因為它與訂單關聯。您可以將其隱藏。"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:455
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:458
 msgid "This product is highlighted on the event page"
 msgstr "此產品在活動頁面上突出顯示"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:138
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
 msgid "This product is sold out"
 msgstr "此產品已售罄"
 
@@ -15205,8 +15281,8 @@ msgid "ticket"
 msgstr "入場券"
 
 #: src/components/common/AttendeeTicket/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/forms/ProductForm/index.tsx:224
 #: src/components/modals/CreateAttendeeModal/index.tsx:247
 #: src/components/modals/ManageAttendeeModal/index.tsx:147
@@ -15260,7 +15336,7 @@ msgstr "門票標誌"
 msgid "Ticket Not Found"
 msgstr "找不到門票"
 
-#: src/components/routes/event/products.tsx:89
+#: src/components/routes/event/products.tsx:129
 msgid "Ticket or Product"
 msgstr "票券或產品"
 
@@ -15304,7 +15380,7 @@ msgid "Tickets"
 msgstr "門票"
 
 #: src/components/layouts/Event/index.tsx:131
-#: src/components/routes/event/products.tsx:48
+#: src/components/routes/event/products.tsx:64
 msgid "Tickets & Products"
 msgstr "票券與產品"
 
@@ -15452,7 +15528,7 @@ msgstr "工具"
 msgid "Top Organizers (Last 14 Days)"
 msgstr "頂級主辦方（過去14天）"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:207
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:210
 msgid "total"
 msgstr "總計"
 
@@ -15845,6 +15921,10 @@ msgstr "不可用，請重新註冊"
 msgid "Undo"
 msgstr "復原"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+msgid "Unique buyers: {0}"
+msgstr "獨立買家：{0}"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
 msgstr "獨立客户"
@@ -15874,7 +15954,7 @@ msgstr "未知裝置"
 
 #: src/components/common/CapacityHelp/index.tsx:31
 #: src/components/common/CapacityHelp/index.tsx:51
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:401
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:404
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:101
 #: src/components/forms/PromoCodeForm/index.tsx:171
@@ -15953,7 +16033,7 @@ msgstr "未驗證"
 msgid "Up to {max} per order"
 msgstr "每張訂單最多 {max} 件"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:367
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:370
 msgid "up to {perDateAllocation} per date"
 msgstr "每個日期最多 {perDateAllocation}"
 
@@ -16463,7 +16543,7 @@ msgstr "查看訂單"
 msgid "View Order Details"
 msgstr "查看訂單詳情"
 
-#: src/components/routes/event/orders.tsx:175
+#: src/components/routes/event/orders.tsx:195
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "查看訂單詳情、退款和重新傳送確認。"
 
@@ -16475,6 +16555,10 @@ msgstr "查看主辦單位主頁"
 #: src/components/layouts/OrganizerHomepage/index.tsx:353
 msgid "View past events"
 msgstr "查看過往活動"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:557
+msgid "View purchases"
+msgstr "查看購買記錄"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartBar.tsx:21
 msgid "View sale"
@@ -16554,7 +16638,7 @@ msgstr "等待掃描…"
 msgid "Waitlist"
 msgstr "候補名單"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:459
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
 msgid "Waitlist Enabled"
 msgstr "候補名單已啟用"
 
@@ -17470,7 +17554,7 @@ msgstr "您的訂單已被取消。"
 msgid "Your order is awaiting payment"
 msgstr "您的訂單正在等待付款"
 
-#: src/components/routes/event/orders.tsx:149
+#: src/components/routes/event/orders.tsx:168
 msgid "Your orders have been exported successfully."
 msgstr "您的訂單已成功導出。"
 

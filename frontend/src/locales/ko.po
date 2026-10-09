@@ -84,6 +84,10 @@ msgstr "활성 웹훅 {0}개"
 msgid "{0} available"
 msgstr "{0}개 남음"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:97
+msgid "{0} cancelled"
+msgstr "{0}개 취소됨"
+
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "{0} created successfully"
 msgstr "{0}이(가) 성공적으로 생성되었습니다"
@@ -120,7 +124,7 @@ msgstr "{0}은(는) 주문당 {1}개로 제한됩니다"
 msgid "{0} items selected"
 msgstr "{0}개 항목 선택됨"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:391
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:394
 msgid "{0} left"
 msgstr "{0}개 남음"
 
@@ -157,6 +161,10 @@ msgstr "기타 항목 {0}개"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:309
 msgid "{0} places"
 msgstr "{0}개 자리"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:230
+msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
+msgstr "환불된 주문 {0}건에 이 상품이 포함되어 있지만 취소되지 않아 여전히 판매된 것으로 집계됩니다. 해당 항목을 집계에서 제외하려면 주문을 취소하세요."
 
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:137
 msgid "{0} requires two-factor authentication for everyone on the team."
@@ -279,7 +287,7 @@ msgstr "{checkedIn} / {total} 체크인됨"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{totalCount}단계 중 {completedCount}단계 완료"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "{count} add-ons"
 msgstr "추가 옵션 {count}개"
@@ -457,7 +465,7 @@ msgstr "+1일"
 msgid "+1 more date"
 msgstr "+1개 날짜 더"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:517
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:520
 msgid "+Tax/Fees"
 msgstr "+세금/수수료"
 
@@ -511,7 +519,7 @@ msgstr "0분 0초"
 msgid "1 Active Webhook"
 msgstr "활성 웹훅 1개"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "1 add-on"
 msgstr "추가 옵션 1개"
@@ -893,8 +901,8 @@ msgstr "조치 필요: 부가가치세 정보 필요"
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/EntityActions/index.tsx:28
 #: src/components/common/OrdersTable/index.tsx:378
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:540
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:547
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:543
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:550
 #: src/components/common/WaitlistTable/index.tsx:56
 #: src/components/common/WaitlistTable/index.tsx:234
 #: src/components/routes/admin/FailedJobs/index.tsx:167
@@ -919,6 +927,7 @@ msgstr "활성화 날짜"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:111
+#: src/components/modals/ProductPurchasesModal/index.tsx:246
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:211
@@ -936,6 +945,10 @@ msgstr "진행 중인 이벤트"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:415
 msgid "Active payment methods"
 msgstr "활성 결제 수단"
+
+#: src/components/routes/event/products.tsx:94
+msgid "Active purchases"
+msgstr "유효한 구매"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:430
 msgid "Activity"
@@ -1159,7 +1172,7 @@ msgstr "웹훅 추가"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "소셜 미디어 계정과 웹사이트 URL을 추가하세요. 공개 주최자 페이지에 표시됩니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:477
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:480
 #: src/components/forms/ProductForm/ledgerSummaries.ts:128
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:25
 msgid "Add-on only"
@@ -1340,6 +1353,7 @@ msgid "all"
 msgstr "전체"
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/modals/ProductPurchasesModal/index.tsx:250
 #: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:515
 msgid "All"
@@ -1389,8 +1403,9 @@ msgid "All dates"
 msgstr "모든 날짜"
 
 #: src/components/common/CheckInListTable/index.tsx:115
+#: src/components/modals/ProductPurchasesModal/index.tsx:276
 #: src/components/routes/event/attendees.tsx:235
-#: src/components/routes/event/orders.tsx:204
+#: src/components/routes/event/orders.tsx:224
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:104
 msgid "All Dates"
 msgstr "모든 날짜"
@@ -1431,6 +1446,10 @@ msgstr "모든 회차"
 #: src/components/common/PromoCodeTable/index.tsx:139
 msgid "All Products"
 msgstr "모든 상품"
+
+#: src/components/routes/event/products.tsx:97
+msgid "All purchases, including cancelled"
+msgstr "취소된 구매를 포함한 모든 구매"
 
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:109
 msgid "All Statuses"
@@ -1524,7 +1543,7 @@ msgstr "이 주문도 취소"
 msgid "Also refund this order"
 msgstr "이 주문도 환불"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:335
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
 msgid "Always available"
 msgstr "항상 이용 가능"
 
@@ -2162,7 +2181,7 @@ msgstr "참가자"
 #: src/components/common/EventCard/index.tsx:388
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/common/StatBoxes/index.tsx:73
 #: src/components/layouts/Event/index.tsx:138
 #: src/components/modals/ManageOccurrenceModal/index.tsx:174
@@ -2284,7 +2303,7 @@ msgstr "대기 중"
 msgid "Awaiting offline payment"
 msgstr "무통장 입금 대기 중"
 
-#: src/components/routes/event/orders.tsx:31
+#: src/components/routes/event/orders.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
 msgid "Awaiting Offline Payment"
 msgstr "무통장 입금 대기 중"
@@ -2296,6 +2315,9 @@ msgstr "결제 대기 중"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
 #: src/components/layouts/Checkout/index.tsx:322
+#: src/components/modals/ProductPurchasesModal/index.tsx:79
+#: src/components/modals/ProductPurchasesModal/index.tsx:209
+#: src/components/modals/ProductPurchasesModal/index.tsx:247
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:435
 msgid "Awaiting payment"
 msgstr "결제 대기 중"
@@ -2540,7 +2562,7 @@ msgid "Box office"
 msgstr "매표소"
 
 #: src/components/layouts/Event/index.tsx:140
-#: src/components/routes/event/orders.tsx:72
+#: src/components/routes/event/orders.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:71
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:50
 msgid "Box Office"
@@ -2830,11 +2852,14 @@ msgstr "취소하면 이 주문과 연결된 모든 참가자가 취소되고, �
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/modals/ProductPurchasesModal/index.tsx:75
+#: src/components/modals/ProductPurchasesModal/index.tsx:210
+#: src/components/modals/ProductPurchasesModal/index.tsx:249
 #: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:213
-#: src/components/routes/event/orders.tsx:30
+#: src/components/routes/event/orders.tsx:31
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:426
@@ -2954,7 +2979,7 @@ msgid "Categories reordered successfully."
 msgstr "카테고리 순서가 성공적으로 변경되었습니다."
 
 #: src/components/modals/CreateEventModal/index.tsx:447
-#: src/components/routes/event/products.tsx:99
+#: src/components/routes/event/products.tsx:139
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 msgid "Category"
 msgstr "카테고리"
@@ -3647,7 +3672,7 @@ msgstr "팀에 합류하려면 프로필을 완성하세요."
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:426
 #: src/components/routes/admin/DeletionRequests/index.tsx:86
-#: src/components/routes/event/orders.tsx:29
+#: src/components/routes/event/orders.tsx:30
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
 msgstr "완료됨"
@@ -4158,7 +4183,7 @@ msgid "Covers every ticket"
 msgstr "모든 티켓에 적용"
 
 #: src/components/routes/event/attendees.tsx:253
-#: src/components/routes/event/products.tsx:77
+#: src/components/routes/event/products.tsx:117
 msgid "Create"
 msgstr "생성"
 
@@ -4227,7 +4252,7 @@ msgstr "제휴사 생성"
 msgid "Create an announcement to show a message to your users."
 msgstr "사용자에게 메시지를 표시할 공지를 생성하세요."
 
-#: src/components/routes/event/products.tsx:47
+#: src/components/routes/event/products.tsx:63
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "판매할 티켓과 상품을 생성하고 설정하세요."
 
@@ -4444,7 +4469,7 @@ msgstr "현재 비밀번호"
 msgid "Currently assigned"
 msgstr "현재 할당됨"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Currently available for purchase"
 msgstr "현재 구매 가능"
 
@@ -4574,7 +4599,7 @@ msgstr "댄스 플로어"
 #: src/components/common/EntityActions/index.tsx:58
 #: src/components/common/LocationsTable/index.tsx:68
 #: src/components/common/OrganizerWebhookTable/index.tsx:116
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:590
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:601
 #: src/components/common/PromoCodeTable/index.tsx:189
 #: src/components/common/WebhookTable/index.tsx:116
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:98
@@ -4771,7 +4796,7 @@ msgid "delete"
 msgstr "삭제"
 
 #: src/components/common/LocationsTable/index.tsx:43
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:596
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:607
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:81
@@ -4876,7 +4901,7 @@ msgstr "템플릿 삭제"
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "이 카테고리를 삭제하시겠습니까? 카테고리에 속한 상품도 함께 삭제됩니다. 되돌릴 수 없습니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:103
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
 msgid "Delete this product? This cannot be undone."
 msgstr "이 상품을 삭제하시겠습니까? 되돌릴 수 없습니다."
 
@@ -5103,7 +5128,7 @@ msgstr "계정이 없으신가요? <0>회원가입</0>"
 msgid "Don't let buyers leave a single empty seat"
 msgstr "구매자가 좌석 하나만 비워두지 않도록 하세요"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:465
 #: src/components/forms/ProductForm/index.tsx:294
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:35
 msgid "Donation"
@@ -5212,7 +5237,7 @@ msgstr ""
 "스팸 위험이 높기 때문에 참가자에게 메시지를 보내려면 먼저 Stripe 계정을 연결해야 합니다.\n"
 "이는 모든 이벤트 주최자가 검증되고 책임질 수 있도록 하기 위함입니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:569
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:580
 #: src/components/routes/admin/Announcements/index.tsx:218
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:56
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:241
@@ -5333,7 +5358,7 @@ msgstr "얼리버드"
 msgid "Edit"
 msgstr "수정"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:52
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:176
 msgid "Edit {0}"
@@ -5711,7 +5736,7 @@ msgstr "종료 시간 (선택 사항)"
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:26
 #: src/components/common/EventStatusBadge/index.tsx:14
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
 msgid "Ended"
 msgstr "종료됨"
 
@@ -6205,9 +6230,10 @@ msgstr "만료"
 msgid "Expiry Date"
 msgstr "만료일"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:94
 #: src/components/routes/event/attendees.tsx:262
-#: src/components/routes/event/orders.tsx:228
+#: src/components/routes/event/orders.tsx:248
 msgid "Export"
 msgstr "내보내기"
 
@@ -6222,6 +6248,10 @@ msgstr "CSV 내보내기"
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "내보내기에 실패했습니다. 다시 시도해 주세요."
+
+#: src/components/routes/event/products.tsx:86
+msgid "Export purchases"
+msgstr "구매 내역 내보내기"
 
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
@@ -6243,7 +6273,7 @@ msgstr "참가자 내보내는 중"
 msgid "Exporting complete. Downloading file..."
 msgstr "내보내기 완료. 파일 다운로드 중..."
 
-#: src/components/routes/event/orders.tsx:144
+#: src/components/routes/event/orders.tsx:163
 msgid "Exporting Orders"
 msgstr "주문 내보내는 중"
 
@@ -6373,7 +6403,7 @@ msgstr "작업 삭제에 실패했습니다"
 msgid "Failed to delete organizer"
 msgstr "주최자 삭제에 실패했습니다"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:112
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:115
 msgid "Failed to delete product. Please try again."
 msgstr "상품 삭제에 실패했습니다. 다시 시도해 주세요."
 
@@ -6399,9 +6429,14 @@ msgstr "제휴사 내보내기에 실패했습니다"
 msgid "Failed to export attendees"
 msgstr "참가자 내보내기에 실패했습니다"
 
-#: src/components/routes/event/orders.tsx:153
+#: src/components/routes/event/orders.tsx:172
 msgid "Failed to export orders"
 msgstr "주문 내보내기에 실패했습니다"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:169
+#: src/components/routes/event/products.tsx:54
+msgid "Failed to export purchases. Please try again."
+msgstr "구매 내역을 내보내지 못했습니다. 다시 시도해 주세요."
 
 #: src/components/common/OrganizerReportTable/index.tsx:206
 msgid "Failed to export report. Please try again."
@@ -6505,7 +6540,7 @@ msgstr "부가가치세 설정 저장에 실패했습니다. 다시 시도해 �
 msgid "Failed to send message. Please try again."
 msgstr "메시지 전송에 실패했습니다. 다시 시도해 주세요."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:298
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:301
 msgid "Failed to sort products"
 msgstr "상품 정렬에 실패했습니다"
 
@@ -6690,7 +6725,7 @@ msgstr "날짜별 필터"
 msgid "Filter by Event"
 msgstr "이벤트별 필터"
 
-#: src/components/routes/event/orders.tsx:214
+#: src/components/routes/event/orders.tsx:234
 msgid "Filter Orders"
 msgstr "주문 필터"
 
@@ -6899,8 +6934,8 @@ msgstr "로비"
 #: src/components/common/Currency/index.tsx:128
 #: src/components/common/OrderSummary/index.tsx:58
 #: src/components/common/OrderSummary/index.tsx:111
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:153
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:163
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:156
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:166
 #: src/components/forms/ProductForm/index.tsx:293
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:33
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
@@ -7169,6 +7204,7 @@ msgid "Gross Revenue"
 msgstr "총매출"
 
 #: src/components/common/StatBoxes/index.tsx:94
+#: src/components/modals/ProductPurchasesModal/index.tsx:211
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:116
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Gross sales"
@@ -7285,8 +7321,8 @@ msgstr "Hi.Events 수수료"
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
 msgstr "거래별 Hi.Events 플랫폼 수수료 및 부가가치세 내역"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Hidden"
 msgstr "숨김"
 
@@ -7306,8 +7342,8 @@ msgstr "모두에게 숨김"
 msgid "Hidden from everyone — the master hide switch is on."
 msgstr "모두에게 숨김 — 전체 숨김 스위치가 켜져 있습니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:144
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:473
 msgid "Hidden from public view"
 msgstr "공개 화면에서 숨겨짐"
 
@@ -7409,7 +7445,7 @@ msgstr "강조 메시지"
 msgid "Highlight this product"
 msgstr "이 상품 강조하기"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:453
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:456
 #: src/components/forms/ProductForm/ledgerSummaries.ts:144
 msgid "Highlighted"
 msgstr "강조됨"
@@ -8595,7 +8631,7 @@ msgstr "메시지가 성공적으로 승인되었습니다"
 msgid "Message attendee"
 msgstr "참가자에게 메시지"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:554
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:565
 msgid "Message Attendees"
 msgstr "참가자에게 메시지"
 
@@ -8700,7 +8736,7 @@ msgstr "기타"
 msgid "Miscellaneous Settings"
 msgstr "기타 설정"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:209
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:212
 msgid "mixed"
 msgstr "혼합"
 
@@ -8761,6 +8797,7 @@ msgid "more"
 msgstr "더 보기"
 
 #: src/components/common/EntityActions/index.tsx:159
+#: src/components/common/EntityActions/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:175
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:174
 msgid "More actions"
@@ -8799,7 +8836,7 @@ msgid "Move attendee"
 msgstr "참석자 이동"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:199
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:586
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:597
 msgid "Move down"
 msgstr "아래로 이동"
 
@@ -8812,7 +8849,7 @@ msgid "Move to area"
 msgstr "구역으로 이동"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:192
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:578
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:589
 msgid "Move up"
 msgstr "위로 이동"
 
@@ -9196,7 +9233,7 @@ msgstr "이메일 없음"
 msgid "No email provided"
 msgstr "이메일이 제공되지 않음"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:348
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:351
 msgid "No end date"
 msgstr "종료일 없음"
 
@@ -9277,6 +9314,10 @@ msgstr "메시지를 찾을 수 없습니다"
 msgid "No messages to show"
 msgstr "표시할 메시지가 없습니다"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:314
+msgid "No name"
+msgstr "이름 없음"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:188
 msgid "No occurrences available"
 msgstr "이용 가능한 회차가 없습니다"
@@ -9284,6 +9325,10 @@ msgstr "이용 가능한 회차가 없습니다"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:135
 msgid "No occurrences on this date"
 msgstr "이 날짜에는 회차가 없습니다"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No one has bought this yet."
+msgstr "아직 구매한 사람이 없습니다."
 
 #: src/components/common/QuestionsTable/index.tsx:491
 msgid "No order questions yet"
@@ -9373,6 +9418,10 @@ msgstr "아직 상품이 없습니다"
 #: src/components/common/PromoCodeTable/index.tsx:46
 msgid "No Promo Codes to show"
 msgstr "표시할 프로모션 코드가 없습니다"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No purchases match these filters."
+msgstr "필터와 일치하는 구매 내역이 없습니다."
 
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:38
 msgid "No reader (cash only)"
@@ -9789,12 +9838,12 @@ msgid "on {month} {day}"
 msgstr "{month} {day}일"
 
 #: src/components/common/EventCard/index.tsx:102
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
 msgid "On Sale"
 msgstr "판매 중"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:139
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
 msgid "On sale {0}"
 msgstr "{0} 판매 중"
 
@@ -9923,7 +9972,7 @@ msgstr "다음 상태의 주문에만 발송"
 msgid "Only show start date and time"
 msgstr "시작 날짜와 시간만 표시"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:479
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:482
 msgid "Only shown as an add-on to the products it's attached to"
 msgstr "연결된 상품의 추가 상품으로만 표시됩니다"
 
@@ -9951,7 +10000,7 @@ msgstr "티켓만 수용 인원에 집계됩니다. 티셔츠는 상품이므로
 msgid "Only visible to buyers with an applicable promo code."
 msgstr "해당 프로모션 코드가 있는 구매자에게만 표시됩니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:471
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Only visible with promo code"
 msgstr "프로모션 코드로만 볼 수 있음"
 
@@ -10163,7 +10212,7 @@ msgstr "주문 참조번호"
 msgid "Order Refunded"
 msgstr "주문 환불됨"
 
-#: src/components/routes/event/orders.tsx:60
+#: src/components/routes/event/orders.tsx:72
 msgid "Order Status"
 msgstr "주문 상태"
 
@@ -10201,7 +10250,7 @@ msgid "Order was cancelled"
 msgstr "주문이 취소되었습니다"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:443
-#: src/components/routes/event/orders.tsx:219
+#: src/components/routes/event/orders.tsx:239
 msgid "orders"
 msgstr "주문"
 
@@ -10212,7 +10261,7 @@ msgstr "주문"
 #: src/components/routes/admin/Attribution/index.tsx:200
 #: src/components/routes/admin/Orders/index.tsx:44
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:59
-#: src/components/routes/event/orders.tsx:176
+#: src/components/routes/event/orders.tsx:196
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:118
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:144
@@ -10229,7 +10278,7 @@ msgstr "주문"
 msgid "Orders Completed"
 msgstr "완료된 주문"
 
-#: src/components/routes/event/orders.tsx:148
+#: src/components/routes/event/orders.tsx:167
 msgid "Orders Exported"
 msgstr "주문 내보내기 완료"
 
@@ -10444,8 +10493,12 @@ msgstr "용지"
 msgid "Partial refund"
 msgstr "부분 환불"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:63
+msgid "Partially refunded"
+msgstr "부분 환불됨"
+
 #: src/components/common/OrderStatusBadge/index.tsx:16
-#: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/orders.tsx:37
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:74
 msgid "Partially Refunded"
 msgstr "부분 환불됨"
@@ -10512,7 +10565,7 @@ msgstr "Patrick"
 msgid "patrick@acme.com"
 msgstr "patrick@acme.com"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/forms/WebhookForm/index.tsx:28
 msgid "Paused"
 msgstr "일시중지됨"
@@ -10634,7 +10687,7 @@ msgstr "검토 대기 중"
 msgid "Per Attendee"
 msgstr "참가자당"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:205
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:208
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:76
 msgid "per date"
 msgstr "날짜별"
@@ -10914,7 +10967,7 @@ msgstr "하나 이상의 상품을 선택해 주세요"
 
 #: src/components/routes/event/Affiliates/index.tsx:53
 #: src/components/routes/event/attendees.tsx:169
-#: src/components/routes/event/orders.tsx:154
+#: src/components/routes/event/orders.tsx:173
 msgid "Please try again."
 msgstr "다시 시도해 주세요."
 
@@ -10939,7 +10992,7 @@ msgstr "참가자 내보내기를 준비하는 동안 잠시 기다려 주세요
 msgid "Please wait while we prepare your invoice..."
 msgstr "인보이스를 준비하는 동안 잠시 기다려 주세요..."
 
-#: src/components/routes/event/orders.tsx:145
+#: src/components/routes/event/orders.tsx:164
 msgid "Please wait while we prepare your orders for export..."
 msgstr "주문 내보내기를 준비하는 동안 잠시 기다려 주세요..."
 
@@ -11038,7 +11091,7 @@ msgstr "가격 변경됨"
 msgid "Price display mode"
 msgstr "가격 표시 방식"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:148
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:151
 msgid "Price not set"
 msgstr "가격 미설정"
 
@@ -11123,12 +11176,13 @@ msgid "Processing order"
 msgstr "주문 처리 중"
 
 #: src/components/common/ProductsTable/index.tsx:92
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/common/WaitlistTable/index.tsx:173
 #: src/components/forms/ProductForm/index.tsx:231
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:167
+#: src/components/routes/event/orders.tsx:66
 msgid "Product"
 msgstr "상품"
 
@@ -11152,7 +11206,7 @@ msgstr "상품 생성됨"
 msgid "Product Deleted"
 msgstr "상품 삭제됨"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:109
 msgid "Product deleted successfully"
 msgstr "상품이 성공적으로 삭제되었습니다"
 
@@ -11214,7 +11268,7 @@ msgstr "판매된 상품"
 msgid "Products Sold"
 msgstr "판매된 상품"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:297
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:300
 msgid "Products sorted successfully"
 msgstr "상품이 성공적으로 정렬되었습니다"
 
@@ -11282,7 +11336,7 @@ msgstr "프로모션 코드를 사용해 할인, 사전 판매 접근, 이벤트
 msgid "Promo Codes Report"
 msgstr "프로모션 코드 보고서"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Promo Only"
 msgstr "프로모션 전용"
 
@@ -11355,6 +11409,12 @@ msgstr "구매자"
 msgid "Purchaser email"
 msgstr "구매자 이메일"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+#: src/components/modals/ProductPurchasesModal/index.tsx:190
+#: src/components/modals/ProductPurchasesModal/index.tsx:285
+msgid "Purchases"
+msgstr "구매 내역"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:44
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "새 키를 <0>APP_LICENCE_KEY</0>에 넣고 백엔드를 다시 배포하세요."
@@ -11368,6 +11428,7 @@ msgid "QR code check-in"
 msgstr "QR 코드 체크인"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:170
+#: src/components/modals/ProductPurchasesModal/index.tsx:94
 msgid "Qty"
 msgstr "수량"
 
@@ -11634,6 +11695,7 @@ msgid "Refund amount"
 msgstr "환불 금액"
 
 #: src/components/common/OrdersTable/index.tsx:293
+#: src/components/modals/ProductPurchasesModal/index.tsx:67
 msgid "Refund failed"
 msgstr "환불에 실패했습니다"
 
@@ -11650,6 +11712,7 @@ msgid "Refund Order {0}"
 msgstr "주문 {0} 환불"
 
 #: src/components/common/OrdersTable/index.tsx:292
+#: src/components/modals/ProductPurchasesModal/index.tsx:65
 msgid "Refund pending"
 msgstr "환불 대기 중"
 
@@ -11662,7 +11725,7 @@ msgstr "환불 대기 중"
 msgid "Refund recorded successfully."
 msgstr "환불이 기록되었습니다."
 
-#: src/components/routes/event/orders.tsx:66
+#: src/components/routes/event/orders.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:292
 msgid "Refund Status"
 msgstr "환불 상태"
@@ -11670,7 +11733,9 @@ msgstr "환불 상태"
 #: src/components/common/OrderStatusBadge/index.tsx:15
 #: src/components/common/OrderSummary/index.tsx:92
 #: src/components/common/StatBoxes/index.tsx:87
-#: src/components/routes/event/orders.tsx:35
+#: src/components/modals/ProductPurchasesModal/index.tsx:61
+#: src/components/modals/ProductPurchasesModal/index.tsx:248
+#: src/components/routes/event/orders.tsx:36
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:429
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:73
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:37
@@ -11945,7 +12010,7 @@ msgstr "지정 좌석"
 
 #: src/components/common/EventCard/index.tsx:224
 #: src/components/common/EventCard/index.tsx:324
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:358
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:361
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:39
 msgid "Reserved seating"
@@ -12194,12 +12259,12 @@ msgstr "판매 종료일"
 msgid "Sale ended"
 msgstr "판매 종료"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:343
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:143
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:346
 msgid "Sale ended {0}"
 msgstr "판매 종료: {0}"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:344
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:347
 msgid "Sale ends {0}"
 msgstr "판매 종료: {0}"
 
@@ -12220,7 +12285,7 @@ msgstr "판매 기간은 일정의 모든 날짜에 적용됩니다. 개별 날�
 msgid "Sale Start Date"
 msgstr "판매 시작일"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:341
 msgid "Sale starts {0}"
 msgstr "판매 시작: {0}"
 
@@ -12234,7 +12299,7 @@ msgstr "판매 기간"
 msgid "Sales"
 msgstr "판매"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Sales are paused"
 msgstr "판매가 일시중지되었습니다"
 
@@ -12474,7 +12539,7 @@ msgstr "일정은 다음 단계에서 설정"
 msgid "Schedule starts on"
 msgstr "일정 시작일"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
 #: src/components/routes/admin/Messages/index.tsx:125
 #: src/components/routes/event/messages.tsx:62
 msgid "Scheduled"
@@ -12549,7 +12614,8 @@ msgstr "이름, 이메일 또는 주문 번호로 검색"
 msgid "Search by name, email, or account..."
 msgstr "이름, 이메일 또는 계정으로 검색..."
 
-#: src/components/routes/event/orders.tsx:180
+#: src/components/modals/ProductPurchasesModal/index.tsx:259
+#: src/components/routes/event/orders.tsx:200
 msgid "Search by name, email, or order #..."
 msgstr "이름, 이메일 또는 주문번호로 검색..."
 
@@ -12597,9 +12663,13 @@ msgstr "메시지 검색..."
 msgid "Search orders"
 msgstr "주문 검색"
 
-#: src/components/routes/event/products.tsx:54
+#: src/components/routes/event/products.tsx:70
 msgid "Search products"
 msgstr "상품 검색"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:260
+msgid "Search purchases"
+msgstr "구매 내역 검색"
 
 #: src/components/common/LocationPicker/index.tsx:326
 msgid "Search results"
@@ -13411,6 +13481,10 @@ msgstr "로그인하지 않은 스태프에게 주문 상세 정보 표시"
 msgid "Show question answers to non-logged-in staff"
 msgstr "로그인하지 않은 스태프에게 질문 답변 표시"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:234
+msgid "Show refunded orders"
+msgstr "환불된 주문 보기"
+
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:59
 msgid "Show remaining capacity on event dates"
 msgstr "이벤트 날짜에 남은 정원 표시"
@@ -13552,14 +13626,16 @@ msgid "Social Links & Website"
 msgstr "소셜 링크 및 웹사이트"
 
 #: src/components/common/ProductsTable/index.tsx:97
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/modals/ManageOccurrenceModal/index.tsx:186
+#: src/components/modals/ProductPurchasesModal/index.tsx:82
+#: src/components/modals/ProductPurchasesModal/index.tsx:208
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "판매됨"
 
-#: src/components/routes/event/orders.tsx:77
+#: src/components/routes/event/orders.tsx:89
 msgid "Sold by"
 msgstr "판매자"
 
@@ -13586,7 +13662,7 @@ msgstr "매진"
 msgid "Sold out"
 msgstr "매진"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:121
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
 #: src/components/layouts/EventHomepage/index.tsx:203
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:215
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
@@ -14372,7 +14448,7 @@ msgstr "세금"
 msgid "Taxes & fees"
 msgstr "세금 및 수수료"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:183
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:186
 msgid "Taxes & fees applied"
 msgstr "세금 및 수수료 적용됨"
 
@@ -15078,15 +15154,15 @@ msgstr "이 설정은 모든 노출 설정을 재정의하며 모든 고객에�
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "이 미리보기는 샘플 데이터로 이메일이 어떻게 보이는지 보여줍니다. 실제 이메일에는 실제 값이 사용됩니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:110
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:113
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
 msgstr "이 상품은 주문에 연결되어 있어 삭제할 수 없습니다. 대신 숨길 수 있습니다."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:455
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:458
 msgid "This product is highlighted on the event page"
 msgstr "이 상품은 이벤트 페이지에서 강조 표시됩니다"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:138
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
 msgid "This product is sold out"
 msgstr "이 상품은 매진되었습니다"
 
@@ -15205,8 +15281,8 @@ msgid "ticket"
 msgstr "티켓"
 
 #: src/components/common/AttendeeTicket/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/forms/ProductForm/index.tsx:224
 #: src/components/modals/CreateAttendeeModal/index.tsx:247
 #: src/components/modals/ManageAttendeeModal/index.tsx:147
@@ -15260,7 +15336,7 @@ msgstr "티켓 로고"
 msgid "Ticket Not Found"
 msgstr "티켓을 찾을 수 없습니다"
 
-#: src/components/routes/event/products.tsx:89
+#: src/components/routes/event/products.tsx:129
 msgid "Ticket or Product"
 msgstr "티켓 또는 상품"
 
@@ -15304,7 +15380,7 @@ msgid "Tickets"
 msgstr "티켓"
 
 #: src/components/layouts/Event/index.tsx:131
-#: src/components/routes/event/products.tsx:48
+#: src/components/routes/event/products.tsx:64
 msgid "Tickets & Products"
 msgstr "티켓 및 상품"
 
@@ -15452,7 +15528,7 @@ msgstr "도구"
 msgid "Top Organizers (Last 14 Days)"
 msgstr "인기 주최자 (최근 14일)"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:207
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:210
 msgid "total"
 msgstr "합계"
 
@@ -15845,6 +15921,10 @@ msgstr "사용 불가, 다시 등록하세요"
 msgid "Undo"
 msgstr "실행 취소"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+msgid "Unique buyers: {0}"
+msgstr "고유 구매자: {0}"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
 msgstr "순 고객 수"
@@ -15874,7 +15954,7 @@ msgstr "알 수 없는 기기"
 
 #: src/components/common/CapacityHelp/index.tsx:31
 #: src/components/common/CapacityHelp/index.tsx:51
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:401
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:404
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:101
 #: src/components/forms/PromoCodeForm/index.tsx:171
@@ -15953,7 +16033,7 @@ msgstr "미인증"
 msgid "Up to {max} per order"
 msgstr "주문당 최대 {max}개"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:367
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:370
 msgid "up to {perDateAllocation} per date"
 msgstr "날짜당 최대 {perDateAllocation}"
 
@@ -16463,7 +16543,7 @@ msgstr "주문 보기"
 msgid "View Order Details"
 msgstr "주문 상세 정보 보기"
 
-#: src/components/routes/event/orders.tsx:175
+#: src/components/routes/event/orders.tsx:195
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "주문 상세 정보를 보고, 환불을 처리하고, 확인서를 재발송하세요."
 
@@ -16475,6 +16555,10 @@ msgstr "주최자 홈페이지 보기"
 #: src/components/layouts/OrganizerHomepage/index.tsx:353
 msgid "View past events"
 msgstr "지난 이벤트 보기"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:557
+msgid "View purchases"
+msgstr "구매 내역 보기"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartBar.tsx:21
 msgid "View sale"
@@ -16554,7 +16638,7 @@ msgstr "스캔 대기 중…"
 msgid "Waitlist"
 msgstr "대기자 명단"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:459
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
 msgid "Waitlist Enabled"
 msgstr "대기자 명단 활성화됨"
 
@@ -17470,7 +17554,7 @@ msgstr "주문이 취소되었습니다."
 msgid "Your order is awaiting payment"
 msgstr "주문이 결제 대기 중입니다"
 
-#: src/components/routes/event/orders.tsx:149
+#: src/components/routes/event/orders.tsx:168
 msgid "Your orders have been exported successfully."
 msgstr "주문이 성공적으로 내보내기되었습니다."
 

@@ -39,6 +39,15 @@ export class OrderPage {
     await this.page.getByRole('button', { name: 'Cancel Order' }).click();
   }
 
+  async filterByProduct(productTitle: string): Promise<void> {
+    await this.page.getByRole('button', { name: /Filters/ }).click();
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByRole('combobox', { name: 'Product' }).click();
+    await this.page.getByRole('option', { name: productTitle }).click();
+    await dialog.getByRole('button', { name: 'Apply' }).click();
+    await dialog.waitFor({ state: 'hidden' });
+  }
+
   exportButton(): Locator {
     return this.page.getByRole('button', { name: 'Export' });
   }

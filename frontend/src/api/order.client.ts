@@ -88,8 +88,11 @@ export const orderClient = {
         return response.data;
     },
 
-    exportOrders: async (eventId: IdParam, eventOccurrenceId?: number | null): Promise<Blob> => {
-        const body = eventOccurrenceId ? {event_occurrence_id: eventOccurrenceId} : {};
+    exportOrders: async (eventId: IdParam, eventOccurrenceId?: number | null, productIds: IdParam[] = []): Promise<Blob> => {
+        const body = {
+            ...(eventOccurrenceId ? {event_occurrence_id: eventOccurrenceId} : {}),
+            ...(productIds.length > 0 ? {product_ids: productIds} : {}),
+        };
         const response = await api.post(`events/${eventId}/orders/export`, body, {
             responseType: 'blob',
         });
