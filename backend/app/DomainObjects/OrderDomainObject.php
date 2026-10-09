@@ -331,8 +331,14 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     {
         return ! $this->isFreeOrder()
             && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
-            && in_array($this->getPaymentProvider(), [PaymentProviders::STRIPE->name, PaymentProviders::OFFLINE->name], true)
+            && ($this->getPaymentProvider() === PaymentProviders::STRIPE->name || $this->isPaidOutsidePlatform())
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
+    }
+
+    public function isPaidOutsidePlatform(): bool
+    {
+        return $this->getPaymentProvider() === PaymentProviders::OFFLINE->name
+            || ($this->getPaymentProvider() === null && $this->getIsManuallyCreated());
     }
 
     public function getAddressDTO(): ?AddressDTO

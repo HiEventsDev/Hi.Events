@@ -41,6 +41,20 @@ class ExportOrdersAction extends BaseAction
             ));
         }
 
+        $this->validate($request, [
+            'product_ids' => ['nullable', 'array', 'max:500'],
+            'product_ids.*' => ['integer'],
+        ]);
+
+        $productIds = array_map('intval', $request->input('product_ids') ?? []);
+        if ($productIds !== []) {
+            $filterFields->push(new FilterFieldDTO(
+                field: 'product_id',
+                operator: 'in',
+                value: implode(',', $productIds),
+            ));
+        }
+
         $orders = $this->orderRepository
             ->setMaxPerPage(10000)
             ->loadRelation(QuestionAndAnswerViewDomainObject::class)

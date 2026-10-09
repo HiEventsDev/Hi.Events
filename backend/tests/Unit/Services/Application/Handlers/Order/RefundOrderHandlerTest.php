@@ -68,6 +68,18 @@ class RefundOrderHandlerTest extends TestCase
         $this->assertSame($refundedOrder, $this->handler->handle($dto));
     }
 
+    public function test_a_manually_created_order_is_refunded_by_the_offline_handler(): void
+    {
+        $this->givenOrderIsFound(null, isManuallyCreated: true);
+        $refundedOrder = new OrderDomainObject;
+
+        $dto = $this->givenDTO();
+        $this->refundOfflineOrderHandler->shouldReceive('handle')->once()->with($dto)->andReturn($refundedOrder);
+        $this->refundStripeOrderHandler->shouldNotReceive('handle');
+
+        $this->assertSame($refundedOrder, $this->handler->handle($dto));
+    }
+
     public function test_a_missing_order_throws_a_not_found_exception(): void
     {
         $this->orderRepository->shouldReceive('findFirstWhere')->once()->andReturnNull();
@@ -88,11 +100,12 @@ class RefundOrderHandlerTest extends TestCase
         );
     }
 
-    private function givenOrderIsFound(string $paymentProvider): void
+    private function givenOrderIsFound(?string $paymentProvider, bool $isManuallyCreated = false): void
     {
         $order = (new OrderDomainObject)
             ->setId(self::ORDER_ID)
-            ->setPaymentProvider($paymentProvider);
+            ->setPaymentProvider($paymentProvider)
+            ->setIsManuallyCreated($isManuallyCreated);
 
         $this->orderRepository->shouldReceive('findFirstWhere')
             ->once()

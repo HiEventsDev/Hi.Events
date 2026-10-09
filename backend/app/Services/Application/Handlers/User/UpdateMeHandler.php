@@ -7,6 +7,7 @@ use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
+use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Mail\Mailer;
@@ -18,6 +19,7 @@ readonly class UpdateMeHandler
         private Hasher $hasher,
         private Mailer $mailer,
         private EncryptedPayloadService $encryptedPayloadService,
+        private TrustedDeviceService $trustedDeviceService,
     ) {}
 
     /**
@@ -31,6 +33,7 @@ readonly class UpdateMeHandler
         if ($this->isChangingPassword($updateUserData)) {
             $this->validateCurrentPassword($updateUserData, $existingUser);
             $updateArray['password'] = $this->hasher->make($updateUserData->password);
+            $this->trustedDeviceService->revokeAll($existingUser->getId());
         }
 
         if ($this->isUpdatingDetails($updateUserData)) {

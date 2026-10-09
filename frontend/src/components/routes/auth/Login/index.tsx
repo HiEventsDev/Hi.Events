@@ -2,9 +2,9 @@ import {Button, PasswordInput, TextInput, Collapse, UnstyledButton} from "@manti
 import {NavLink, useLocation} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {authClient} from "../../../../api/auth.client.ts";
-import {LoginData, LoginResponse} from "../../../../types.ts";
+import {IdParam, LoginData, LoginResponse, TwoFactorLoginRequest} from "../../../../types.ts";
 import {useForm} from "@mantine/form";
-import {redirectToPreviousUrl} from "../../../../api/client.ts";
+import {redirectToPreviousUrl, setPreviousUrl} from "../../../../api/client.ts";
 import classes from "./Login.module.scss";
 import {t, Trans} from "@lingui/macro";
 import {useEffect, useState} from "react";
@@ -12,6 +12,10 @@ import {ChooseAccountModal} from "../../../modals/ChooseAccountModal";
 import {useSendTicketLookupEmail} from "../../../../mutations/useSendTicketLookupEmail.ts";
 import {showError} from "../../../../utilites/notifications.tsx";
 import {IconTicket, IconChevronDown} from "@tabler/icons-react";
+import {TwoFactorChallenge} from "./TwoFactorChallenge.tsx";
+import {RecoveryCodeNotice} from "./RecoveryCodeNotice.tsx";
+
+type LoginStep = 'credentials' | 'two-factor' | 'recovery-notice';
 
 const Login = () => {
     const location = useLocation();
@@ -23,6 +27,11 @@ const Login = () => {
         }
     });
     const [showChooseAccount, setShowChooseAccount] = useState(false);
+    const [step, setStep] = useState<LoginStep>('credentials');
+    const [challengeToken, setChallengeToken] = useState<string | null>(null);
+    const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
+    const [accounts, setAccounts] = useState<LoginResponse['accounts']>([]);
+    const [recoveryCodesRemaining, setRecoveryCodesRemaining] = useState(0);
     const [ticketLookupOpen, setTicketLookupOpen] = useState(false);
 
     const ticketLookupForm = useForm({
@@ -32,19 +41,46 @@ const Login = () => {
     });
     const [ticketLookupSuccess, setTicketLookupSuccess] = useState(false);
 
-    const {mutate: loginUser, isPending, data} = useMutation({
+    const handleAuthenticated = (response: LoginResponse) => {
+        if (response.token) {
+            if (response.two_factor_recovery_codes_remaining !== undefined) {
+                setRecoveryCodesRemaining(response.two_factor_recovery_codes_remaining);
+                setStep('recovery-notice');
+                return;
+            }
+            redirectToPreviousUrl();
+            return;
+        }
+
+        if (response.accounts.length > 1) {
+            setAccounts(response.accounts);
+            setShowChooseAccount(true);
+        }
+    };
+
+    const resetToCredentials = (message?: string) => {
+        setStep('credentials');
+        setChallengeToken(null);
+        setTwoFactorError(null);
+        setShowChooseAccount(false);
+        form.setFieldValue('account_id', '');
+        if (message) {
+            showError(message);
+        }
+    };
+
+    const {mutate: loginUser, isPending} = useMutation({
         mutationFn: (userData: LoginData) => authClient.login(userData),
 
         onSuccess: (response: LoginResponse) => {
-            if (response.token) {
-                redirectToPreviousUrl();
+            if (response.two_factor_required && response.two_factor_challenge_token) {
+                setChallengeToken(response.two_factor_challenge_token);
+                setTwoFactorError(null);
+                setStep('two-factor');
                 return;
             }
 
-            if (response.accounts.length > 1) {
-                setShowChooseAccount(true);
-                return;
-            }
+            handleAuthenticated(response);
         },
 
         onError: (error: any) => {
@@ -54,11 +90,73 @@ const Login = () => {
         }
     });
 
+    const {mutate: verifyTwoFactor, isPending: isVerifying} = useMutation({
+        mutationFn: (request: TwoFactorLoginRequest) => authClient.loginWithTwoFactor(request),
+
+        onSuccess: handleAuthenticated,
+
+        onError: (error: any) => {
+            const status = error?.response?.status;
+            const data = error?.response?.data;
+
+            if (status === 401) {
+                resetToCredentials(data?.message ?? t`Your sign-in session has expired. Please sign in again.`);
+                return;
+            }
+
+            if (status === 429) {
+                setTwoFactorError(t`Too many attempts. Please wait a minute and try again.`);
+                return;
+            }
+
+            setTwoFactorError(data?.errors?.code?.[0]
+                ?? data?.errors?.recovery_code?.[0]
+                ?? t`Something went wrong. Please try again.`);
+        }
+    });
+
+    const chooseAccount = (accountId: IdParam) => {
+        if (challengeToken) {
+            verifyTwoFactor({challenge_token: challengeToken, account_id: accountId});
+            return;
+        }
+
+        form.setFieldValue('account_id', accountId as string);
+    };
+
     const ticketLookupMutation = useSendTicketLookupEmail();
 
     useEffect(() => {
         form.values.account_id && loginUser(form.values);
     }, [form.values.account_id]);
+
+    if (step === 'recovery-notice') {
+        return (
+            <RecoveryCodeNotice
+                remaining={recoveryCodesRemaining}
+                onManageCodes={() => {
+                    setPreviousUrl('/manage/profile/security');
+                    redirectToPreviousUrl();
+                }}
+                onContinue={redirectToPreviousUrl}
+            />
+        );
+    }
+
+    if (step === 'two-factor' && challengeToken) {
+        return (
+            <>
+                <TwoFactorChallenge
+                    isSubmitting={isVerifying}
+                    error={twoFactorError}
+                    onClearError={() => setTwoFactorError(null)}
+                    onSubmit={(payload) => verifyTwoFactor({challenge_token: challengeToken, ...payload})}
+                    onBack={() => resetToCredentials()}
+                />
+                {showChooseAccount && <ChooseAccountModal onAccountChosen={chooseAccount} accounts={accounts}/>}
+            </>
+        );
+    }
 
     const handleTicketLookup = (values: { email: string }) => {
         ticketLookupMutation.mutate(values.email, {
@@ -163,10 +261,7 @@ const Login = () => {
                 </Collapse>
             </div>
 
-            {(showChooseAccount && data) && <ChooseAccountModal onAccountChosen={(accountId) => {
-                form.setFieldValue('account_id', accountId as string);
-            }
-            } accounts={data.accounts}/>}
+            {showChooseAccount && <ChooseAccountModal onAccountChosen={chooseAccount} accounts={accounts}/>}
         </>
     )
 }

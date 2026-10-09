@@ -1,17 +1,18 @@
 import {Badge, Button, Menu, Stack, Text} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {AdminUser} from "../../../api/admin.client";
-import {IconChevronDown, IconCalendar, IconWorld} from "@tabler/icons-react";
+import {IconChevronDown, IconCalendar, IconShieldCheck, IconWorld} from "@tabler/icons-react";
 import classes from "./AdminUsersTable.module.scss";
 import {IdParam} from "../../../types";
 
 interface AdminUsersTableProps {
     users: AdminUser[];
     onImpersonate: (userId: IdParam, accountId: IdParam) => void;
+    onResetTwoFactor: (user: AdminUser) => void;
     isLoading?: boolean;
 }
 
-const AdminUsersTable = ({users, onImpersonate, isLoading}: AdminUsersTableProps) => {
+const AdminUsersTable = ({users, onImpersonate, onResetTwoFactor, isLoading}: AdminUsersTableProps) => {
     if (!users || users.length === 0) {
         return (
             <div className={classes.emptyState}>
@@ -71,6 +72,17 @@ const AdminUsersTable = ({users, onImpersonate, isLoading}: AdminUsersTableProps
                                 <span className={classes.userEmail}>{user.email}</span>
                             </div>
                             <div className={classes.cardActions}>
+                                {user.two_factor_enabled && (
+                                    <Button
+                                        size="xs"
+                                        variant="subtle"
+                                        color="red"
+                                        onClick={() => onResetTwoFactor(user)}
+                                        data-testid="admin-reset-two-factor-button"
+                                    >
+                                        {t`Reset 2FA`}
+                                    </Button>
+                                )}
                                 {!userIsSuperAdmin && impersonatableAccounts.length > 0 && (
                                     <>
                                         {impersonatableAccounts.length === 1 ? (
@@ -150,6 +162,12 @@ const AdminUsersTable = ({users, onImpersonate, isLoading}: AdminUsersTableProps
                                     <IconCalendar size={14} />
                                     <span>{formatDate(user.created_at)}</span>
                                 </div>
+                                {user.two_factor_enabled && (
+                                    <div className={classes.footerItem}>
+                                        <IconShieldCheck size={14} />
+                                        <span>{t`2FA on`}</span>
+                                    </div>
+                                )}
                                 {user.timezone && (
                                     <div className={classes.footerItem}>
                                         <IconWorld size={14} />

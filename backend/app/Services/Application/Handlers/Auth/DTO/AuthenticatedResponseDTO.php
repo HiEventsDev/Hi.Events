@@ -13,5 +13,6 @@ class AuthenticatedResponseDTO extends BaseDTO
         public int $expiresIn,
         public Collection $accounts,
         public UserDomainObject $user,
+        public ?int $recoveryCodesRemaining = null,
     ) {}
 }

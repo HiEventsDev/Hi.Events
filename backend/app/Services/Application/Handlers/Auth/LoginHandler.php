@@ -20,6 +20,7 @@ readonly class LoginHandler
             email: $loginCredentials->email,
             password: $loginCredentials->password,
             requestedAccountId: $loginCredentials->accountId,
+            trustedDeviceToken: $loginCredentials->trustedDeviceToken,
         );
 
         if ($loginResponse->accountId !== null) {

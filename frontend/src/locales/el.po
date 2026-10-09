@@ -84,6 +84,10 @@ msgstr "{0} Ενεργά Webhooks"
 msgid "{0} available"
 msgstr "{0} διαθέσιμα"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:97
+msgid "{0} cancelled"
+msgstr "{0} ακυρώθηκαν"
+
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
 msgid "{0} created successfully"
 msgstr "{0} δημιουργήθηκε επιτυχώς"
@@ -120,14 +124,18 @@ msgstr "Το {0} περιορίζεται σε {1} ανά παραγγελία"
 msgid "{0} items selected"
 msgstr "{0} στοιχεία επιλεγμένα"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:391
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:394
 msgid "{0} left"
 msgstr "{0} απομένουν"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:87
-#: src/components/layouts/AuthLayout/index.tsx:158
+#: src/components/layouts/AuthLayout/index.tsx:162
 msgid "{0} logo"
 msgstr "Λογότυπο {0}"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:149
+msgid "{0} of {1} remaining"
+msgstr "Απομένουν {0} από {1}"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:287
 msgid "{0} of {1} seats are taken."
@@ -153,6 +161,18 @@ msgstr "{0} ακόμη είδη"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:309
 msgid "{0} places"
 msgstr "{0} θέσεις"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:230
+msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
+msgstr "{0} επιστραμμένες παραγγελίες περιλαμβάνουν αυτό το προϊόν αλλά δεν έχουν ακυρωθεί, οπότε εξακολουθούν να μετρούν ως πωλήσεις. Ακυρώστε τις αν τα είδη δεν πρέπει να μετρούν."
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:137
+msgid "{0} requires two-factor authentication for everyone on the team."
+msgstr "Ο οργανισμός {0} απαιτεί έλεγχο ταυτότητας δύο παραγόντων από όλα τα μέλη της ομάδας."
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:219
+msgid "{0} requires two-factor authentication, so it can't be turned off."
+msgstr "Ο οργανισμός {0} απαιτεί έλεγχο ταυτότητας δύο παραγόντων, γι' αυτό δεν μπορεί να απενεργοποιηθεί."
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:78
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:316
@@ -223,6 +243,10 @@ msgstr "{activeCount} ενεργοποιημένα"
 msgid "{appName} logo"
 msgstr "Λογότυπο {appName}"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:19
+msgid "{appName} recovery codes"
+msgstr "Κωδικοί ανάκτησης {appName}"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:301
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr "{attendeeCount} συμμετέχοντες είναι εγγεγραμμένοι σε αυτή τη συνεδρία."
@@ -238,6 +262,10 @@ msgstr "{booked} κρατήσεις · χωρίς όριο ημερομηνία�
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:98
 msgid "{booked} of {sellable} booked"
 msgstr "{booked} από {sellable} κρατήσεις"
+
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:33
+msgid "{browser} on {os}"
+msgstr "{browser} σε {os}"
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:93
 msgid "{capacity} spots left"
@@ -259,7 +287,7 @@ msgstr "{checkedIn} / {total} με check-in"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{completedCount} από {totalCount} βήματα ολοκληρώθηκαν"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "{count} add-ons"
 msgstr "{count} πρόσθετα"
@@ -283,6 +311,10 @@ msgstr "πριν από {diffMin} λ."
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:25
 msgid "{diffSec}s ago"
 msgstr "πριν από {diffSec} δευτ."
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:71
+msgid "{enrolledCount} of {0} active members have it turned on"
+msgstr "{enrolledCount} από τα {0} ενεργά μέλη το έχουν ενεργοποιήσει"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:79
 #: src/components/common/WebhookTable/index.tsx:79
@@ -332,6 +364,10 @@ msgstr "{min}–{max} ανά παραγγελία"
 #: src/components/common/Countdown/index.tsx:72
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{minutes} λεπτά και {seconds} δευτερόλεπτα"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:47
+msgid "{notEnrolledCount} members haven't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
+msgstr "{notEnrolledCount} μέλη δεν έχουν ενεργοποιήσει ακόμη τον έλεγχο ταυτότητας δύο παραγόντων. Θα τους ζητηθεί να τον ρυθμίσουν πριν συνεχίσουν. Να γίνει υποχρεωτικός τώρα;"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:105
 msgid "{open} seats to choose"
@@ -429,9 +465,13 @@ msgstr "+1 ημέρα"
 msgid "+1 more date"
 msgstr "+1 ακόμη ημερομηνία"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:517
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:520
 msgid "+Tax/Fees"
 msgstr "+Φόρος/Χρεώσεις"
+
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:47
+msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
+msgstr "Ο λογαριασμός <0>{accountName}</0> απαιτεί έλεγχο ταυτότητας δύο παραγόντων από όλα τα μέλη της ομάδας. Ρυθμίστε τον τώρα για να συνεχίσετε. Χρειάζεται περίπου ένα λεπτό."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
@@ -479,7 +519,7 @@ msgstr "0 λεπτά και 0 δευτερόλεπτα"
 msgid "1 Active Webhook"
 msgstr "1 Ενεργό Webhook"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:55
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:57
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "1 add-on"
 msgstr "1 πρόσθετο"
@@ -511,6 +551,10 @@ msgstr "1 ώρα πριν την εκδήλωση"
 #: src/ee/box-office/components/layouts/BoxOffice/CartBar.tsx:23
 msgid "1 item"
 msgstr "1 είδος"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:46
+msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
+msgstr "1 μέλος δεν έχει ενεργοποιήσει ακόμη τον έλεγχο ταυτότητας δύο παραγόντων. Θα του ζητηθεί να τον ρυθμίσει πριν συνεχίσει. Να γίνει υποχρεωτικός τώρα;"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:160
 msgid "1 order"
@@ -553,6 +597,10 @@ msgstr "1 χωρίς θέση"
 msgid "1 week before event"
 msgstr "1 εβδομάδα πριν την εκδήλωση"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:139
+msgid "1. Get an authenticator app"
+msgstr "1. Αποκτήστε μια εφαρμογή ελέγχου ταυτότητας"
+
 #: src/components/common/CapacityHelp/index.tsx:28
 msgid "12 mats in the studio and one Drop-in ticket."
 msgstr "12 στρώματα στο στούντιο και ένα εισιτήριο μεμονωμένης συμμετοχής."
@@ -566,6 +614,10 @@ msgstr "Παράδειγμα Οδού 123"
 msgid "135+ currencies & 40+ payment methods"
 msgstr "Πάνω από 135 νομίσματα και πάνω από 40 τρόποι πληρωμής"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:147
+msgid "2. Scan this QR code"
+msgstr "2. Σαρώστε αυτόν τον κωδικό QR"
+
 #: src/components/common/WidgetEditor/index.tsx:230
 msgid "20"
 msgstr "20"
@@ -573,6 +625,10 @@ msgstr "20"
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "25 θέσεις ανά ημερομηνία, συν 30 μπλουζάκια για όλη τη σειρά."
+
+#: src/components/common/AdminUsersTable/index.tsx:168
+msgid "2FA on"
+msgstr "2FA ενεργό"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -826,7 +882,7 @@ msgstr "Ο λογαριασμός ενημερώθηκε επιτυχώς"
 msgid "Account verification revoked"
 msgstr "Η επαλήθευση του λογαριασμού ανακλήθηκε"
 
-#: src/components/common/AdminUsersTable/index.tsx:127
+#: src/components/common/AdminUsersTable/index.tsx:139
 #: src/components/layouts/Admin/index.tsx:16
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
@@ -845,8 +901,8 @@ msgstr "Απαιτείται Ενέργεια: Χρειάζονται Στοιχ
 #: src/components/common/AffiliateTable/index.tsx:167
 #: src/components/common/EntityActions/index.tsx:28
 #: src/components/common/OrdersTable/index.tsx:378
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:540
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:547
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:543
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:550
 #: src/components/common/WaitlistTable/index.tsx:56
 #: src/components/common/WaitlistTable/index.tsx:234
 #: src/components/routes/admin/FailedJobs/index.tsx:167
@@ -871,7 +927,8 @@ msgstr "Ημερομηνία ενεργοποίησης"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:111
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/modals/ProductPurchasesModal/index.tsx:246
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:211
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
@@ -888,6 +945,10 @@ msgstr "Ενεργές Εκδηλώσεις"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:415
 msgid "Active payment methods"
 msgstr "Ενεργοί τρόποι πληρωμής"
+
+#: src/components/routes/event/products.tsx:94
+msgid "Active purchases"
+msgstr "Ενεργές αγορές"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:430
 msgid "Activity"
@@ -1111,7 +1172,7 @@ msgstr "Προσθήκη Webhook"
 msgid "Add your social media handles and website URL. These will be displayed on your public organizer page."
 msgstr "Προσθέστε τα στοιχεία κοινωνικής δικτύωσης και την ιστοσελίδα σας. Θα εμφανιστούν στη δημόσια σελίδα του διοργανωτή."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:477
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:480
 #: src/components/forms/ProductForm/ledgerSummaries.ts:128
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:25
 msgid "Add-on only"
@@ -1180,7 +1241,7 @@ msgstr "Προσθέτει μια σελίδα, αναφέρει ονόματα 
 #: src/components/layouts/Admin/index.tsx:14
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 #: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "Διαχειριστής"
@@ -1225,7 +1286,7 @@ msgstr "Ο συνεργάτης δημιουργήθηκε επιτυχώς"
 msgid "Affiliate deleted successfully"
 msgstr "Ο συνεργάτης διαγράφηκε επιτυχώς"
 
-#: src/components/layouts/AuthLayout/index.tsx:23
+#: src/components/layouts/AuthLayout/index.tsx:24
 msgid "Affiliate program"
 msgstr "Πρόγραμμα συνεργατών"
 
@@ -1292,6 +1353,7 @@ msgid "all"
 msgstr "όλες"
 
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:133
+#: src/components/modals/ProductPurchasesModal/index.tsx:250
 #: src/components/routes/admin/DeletionRequests/index.tsx:88
 #: src/components/routes/event/OccurrencesTab/index.tsx:515
 msgid "All"
@@ -1341,8 +1403,9 @@ msgid "All dates"
 msgstr "Όλες οι ημερομηνίες"
 
 #: src/components/common/CheckInListTable/index.tsx:115
+#: src/components/modals/ProductPurchasesModal/index.tsx:276
 #: src/components/routes/event/attendees.tsx:235
-#: src/components/routes/event/orders.tsx:204
+#: src/components/routes/event/orders.tsx:224
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:104
 msgid "All Dates"
 msgstr "Όλες οι ημερομηνίες"
@@ -1384,6 +1447,10 @@ msgstr "Όλες οι ημερομηνίες"
 msgid "All Products"
 msgstr "Όλα τα Προϊόντα"
 
+#: src/components/routes/event/products.tsx:97
+msgid "All purchases, including cancelled"
+msgstr "Όλες οι αγορές, συμπεριλαμβανομένων των ακυρωμένων"
+
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:109
 msgid "All Statuses"
 msgstr "Όλες οι Καταστάσεις"
@@ -1392,6 +1459,10 @@ msgstr "Όλες οι Καταστάσεις"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:76
 msgid "All time"
 msgstr "Όλο το διάστημα"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:95
+msgid "All trusted devices removed"
+msgstr "Όλες οι αξιόπιστες συσκευές αφαιρέθηκαν"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
@@ -1472,7 +1543,7 @@ msgstr "Επίσης ακύρωση αυτής της παραγγελίας"
 msgid "Also refund this order"
 msgstr "Επίσης επιστροφή αυτής της παραγγελίας"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:335
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
 msgid "Always available"
 msgstr "Πάντα διαθέσιμο"
 
@@ -1604,6 +1675,10 @@ msgstr "Απαντήσεις"
 #: src/components/forms/CheckInListForm/index.tsx:207
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "Απαντήσεις που δόθηκαν κατά την ολοκλήρωση παραγγελίας (π.χ. επιλογή γεύματος)"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:141
+msgid "Any app that supports time-based codes (TOTP) will work. Already have one? Skip ahead."
+msgstr "Κάθε εφαρμογή που υποστηρίζει κωδικούς βάσει χρόνου (TOTP) είναι κατάλληλη. Έχετε ήδη μία; Προχωρήστε παρακάτω."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:126
 msgid "Any date"
@@ -1901,7 +1976,7 @@ msgstr "Είστε σίγουροι ότι θέλετε να επαναφέρε�
 msgid "Are you sure you want to restore this organizer?"
 msgstr "Είστε σίγουροι ότι θέλετε να επαναφέρετε αυτόν τον διοργανωτή;"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:50
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:73
 msgid "Are you sure you want to revoke this invitation?"
 msgstr "Σίγουρα θέλετε να ανακαλέσετε αυτή την πρόσκληση;"
 
@@ -2106,7 +2181,7 @@ msgstr "συμμετέχοντες"
 #: src/components/common/EventCard/index.tsx:388
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:60
 #: src/components/common/ProductsTable/index.tsx:96
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/common/StatBoxes/index.tsx:73
 #: src/components/layouts/Event/index.tsx:138
 #: src/components/modals/ManageOccurrenceModal/index.tsx:174
@@ -2167,6 +2242,14 @@ msgstr "Κοινό"
 msgid "August"
 msgstr "Αύγουστος"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:204
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:71
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:87
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:89
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:66
+msgid "Authentication code"
+msgstr "Κωδικός ελέγχου ταυτότητας"
+
 #: src/components/common/WidgetEditor/index.tsx:236
 msgid "Auto Resize"
 msgstr "Αυτόματη Αλλαγή Μεγέθους"
@@ -2220,7 +2303,7 @@ msgstr "Σε αναμονή"
 msgid "Awaiting offline payment"
 msgstr "Αναμονή πληρωμής εκτός σύνδεσης"
 
-#: src/components/routes/event/orders.tsx:31
+#: src/components/routes/event/orders.tsx:32
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:63
 msgid "Awaiting Offline Payment"
 msgstr "Αναμονή Πληρωμής Εκτός Σύνδεσης"
@@ -2232,6 +2315,9 @@ msgstr "Αναμονή πληρωμής"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
 #: src/components/layouts/Checkout/index.tsx:322
+#: src/components/modals/ProductPurchasesModal/index.tsx:79
+#: src/components/modals/ProductPurchasesModal/index.tsx:209
+#: src/components/modals/ProductPurchasesModal/index.tsx:247
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:435
 msgid "Awaiting payment"
 msgstr "Αναμονή πληρωμής"
@@ -2287,6 +2373,10 @@ msgstr "Επιστροφή στη σύνδεση"
 msgid "Back to messages"
 msgstr "Επιστροφή στα μηνύματα"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:227
+msgid "Back to QR code"
+msgstr "Πίσω στον κωδικό QR"
+
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:42
 msgid "Back to Reports"
 msgstr "Επιστροφή στις Αναφορές"
@@ -2304,6 +2394,10 @@ msgstr "Πίσω στην αναζήτηση"
 #: src/ee/seating/components/SeatPicker/index.tsx:66
 msgid "Back to seats"
 msgstr "Πίσω στις θέσεις"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
+msgid "Back to sign in"
+msgstr "Επιστροφή στη σύνδεση"
 
 #: src/components/common/ThemeColorControls/index.tsx:89
 msgid "Background"
@@ -2468,7 +2562,7 @@ msgid "Box office"
 msgstr "Ταμείο"
 
 #: src/components/layouts/Event/index.tsx:140
-#: src/components/routes/event/orders.tsx:72
+#: src/components/routes/event/orders.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:71
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:50
 msgid "Box Office"
@@ -2656,6 +2750,14 @@ msgstr "Καμπάνια"
 msgid "Can't check in"
 msgstr "Δεν είναι δυνατό το check-in"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:166
+msgid "Can't scan it? Enter a setup key instead"
+msgstr "Δεν μπορείτε να τον σαρώσετε; Εισαγάγετε ένα κλειδί ρύθμισης"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:158
+msgid "Can't use your authenticator app or recovery codes?"
+msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφαρμογή ελέγχου ταυτότητας ή τους κωδικούς ανάκτησης;"
+
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:131
@@ -2721,7 +2823,7 @@ msgstr "Ακύρωση διαγραφής"
 msgid "Cancel deletion request"
 msgstr "Ακύρωση αιτήματος διαγραφής"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:137
+#: src/components/routes/profile/ManageProfile/index.tsx:150
 msgid "Cancel email change"
 msgstr "Ακύρωση αλλαγής email"
 
@@ -2750,11 +2852,14 @@ msgstr "Η ακύρωση θα ακυρώσει όλους τους συμμετ
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:114
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:80
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:226
+#: src/components/modals/ProductPurchasesModal/index.tsx:75
+#: src/components/modals/ProductPurchasesModal/index.tsx:210
+#: src/components/modals/ProductPurchasesModal/index.tsx:249
 #: src/components/routes/admin/DeletionRequests/index.tsx:87
 #: src/components/routes/admin/Messages/index.tsx:126
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:213
-#: src/components/routes/event/orders.tsx:30
+#: src/components/routes/event/orders.tsx:31
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:21
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:120
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:426
@@ -2792,7 +2897,7 @@ msgstr "Η Ανάθεση Χωρητικότητας διαγράφηκε επι
 msgid "Capacity Assignments"
 msgstr "Αναθέσεις Χωρητικότητας"
 
-#: src/components/layouts/AuthLayout/index.tsx:29
+#: src/components/layouts/AuthLayout/index.tsx:30
 msgid "Capacity management"
 msgstr "Διαχείριση χωρητικότητας"
 
@@ -2874,7 +2979,7 @@ msgid "Categories reordered successfully."
 msgstr "Οι κατηγορίες αναδιατάχθηκαν επιτυχώς."
 
 #: src/components/modals/CreateEventModal/index.tsx:447
-#: src/components/routes/event/products.tsx:99
+#: src/components/routes/event/products.tsx:139
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 msgid "Category"
 msgstr "Κατηγορία"
@@ -2915,7 +3020,7 @@ msgstr "Ρέστα"
 msgid "Change duration"
 msgstr "Αλλαγή διάρκειας"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:239
+#: src/components/routes/profile/ManageProfile/index.tsx:252
 msgid "Change password"
 msgstr "Αλλαγή κωδικού"
 
@@ -3017,7 +3122,7 @@ msgstr "Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξα
 msgid "Check your email"
 msgstr "Ελέγξτε το email σας"
 
-#: src/components/routes/auth/Login/index.tsx:130
+#: src/components/routes/auth/Login/index.tsx:228
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Ελέγξτε τα εισερχόμενά σας! Εάν υπάρχουν εισιτήρια συνδεδεμένα με αυτό το email, θα λάβετε σύνδεσμο για προβολή."
@@ -3498,7 +3603,7 @@ msgstr "Έρχεται Σύντομα"
 msgid "Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event"
 msgstr "Λέξεις-κλειδιά χωρισμένες με κόμμα που περιγράφουν την εκδήλωση. Θα χρησιμοποιηθούν από μηχανές αναζήτησης για κατηγοριοποίηση και ευρετηρίαση"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:205
+#: src/components/routes/profile/ManageProfile/index.tsx:218
 msgid "Communication Preferences"
 msgstr "Προτιμήσεις Επικοινωνίας"
 
@@ -3567,7 +3672,7 @@ msgstr "Ολοκληρώστε το προφίλ σας για να συμμετ
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:426
 #: src/components/routes/admin/DeletionRequests/index.tsx:86
-#: src/components/routes/event/orders.tsx:29
+#: src/components/routes/event/orders.tsx:30
 #: src/components/routes/my-tickets/index.tsx:35
 msgid "Completed"
 msgstr "Ολοκληρωμένο"
@@ -3673,11 +3778,15 @@ msgstr "Επιβεβαίωση Διεύθυνσης Email"
 msgid "Confirm Email Change"
 msgstr "Επιβεβαίωση Αλλαγής Email"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:108
+msgid "Confirm it's you"
+msgstr "Επιβεβαιώστε ότι είστε εσείς"
+
 #: src/components/routes/auth/ResetPassword/index.tsx:71
 msgid "Confirm new password"
 msgstr "Επιβεβαίωση νέου κωδικού"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:237
+#: src/components/routes/profile/ManageProfile/index.tsx:250
 msgid "Confirm New Password"
 msgstr "Επιβεβαίωση Νέου Κωδικού"
 
@@ -3790,6 +3899,10 @@ msgstr "Επικοινωνία με {0}"
 msgid "Contact Email"
 msgstr "Email Επικοινωνίας"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:160
+msgid "Contact your account administrator or our support team. Once they've confirmed it's you, they can reset two-factor authentication so you can sign in with your password and set it up again."
+msgstr "Επικοινωνήστε με τον διαχειριστή του λογαριασμού σας ή με την ομάδα υποστήριξής μας. Αφού επιβεβαιώσουν ότι είστε εσείς, μπορούν να επαναφέρουν τον έλεγχο ταυτότητας δύο παραγόντων ώστε να συνδεθείτε με τον κωδικό σας και να τον ρυθμίσετε ξανά."
+
 #: src/components/routes/admin/Announcements/index.tsx:389
 #: src/components/routes/admin/Announcements/index.tsx:398
 #: src/components/routes/admin/Attribution/index.tsx:168
@@ -3800,6 +3913,7 @@ msgstr "Περιεχόμενο"
 msgid "Content is required"
 msgstr "Το περιεχόμενο είναι υποχρεωτικό"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
 #: src/components/layouts/EventHomepage/index.tsx:211
@@ -3829,6 +3943,10 @@ msgstr "Συνέχεια στην ολοκλήρωση αγοράς"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1296
 msgid "Continue to Checkout"
 msgstr "Συνέχεια στην Ολοκλήρωση Αγοράς"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:40
+msgid "Continue to dashboard"
+msgstr "Συνέχεια στον πίνακα ελέγχου"
 
 #: src/components/forms/OrganizerForm/index.tsx:128
 msgid "Continue to event creation"
@@ -3873,6 +3991,7 @@ msgstr "Ρυθμίσεις cookies"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:83
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
 #: src/components/modals/ManageOrderModal/index.tsx:205
@@ -3918,6 +4037,10 @@ msgstr "Αντιγραφή αναγνωριστικού λογαριασμού"
 #: src/components/common/AffiliateTable/index.tsx:183
 msgid "Copy Affiliate Link"
 msgstr "Αντιγραφή Συνδέσμου Συνεργάτη"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:83
+msgid "Copy all"
+msgstr "Αντιγραφή όλων"
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:89
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:94
@@ -3972,6 +4095,10 @@ msgstr "Αντιγραφή στοιχείων μου σε:"
 msgid "Copy PIN"
 msgstr "Αντιγραφή PIN"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:175
+msgid "Copy setup key"
+msgstr "Αντιγραφή κλειδιού ρύθμισης"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:67
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Αντιγράψτε ξανά το κλειδί από το email της άδειάς σας, χωρίς εισαγωγικά ή κενά."
@@ -4005,6 +4132,10 @@ msgstr "Δεν ήταν δυνατή η ανάκτηση των στοιχείω
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:280
 msgid "Could not save date"
 msgstr "Δεν ήταν δυνατή η αποθήκευση της ημερομηνίας"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:76
+msgid "Couldn't load your security settings"
+msgstr "Δεν ήταν δυνατή η φόρτωση των ρυθμίσεων ασφαλείας"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:258
 msgid "Couldn't refresh seat availability. Retrying…"
@@ -4052,7 +4183,7 @@ msgid "Covers every ticket"
 msgstr "Καλύπτει όλα τα εισιτήρια"
 
 #: src/components/routes/event/attendees.tsx:253
-#: src/components/routes/event/products.tsx:77
+#: src/components/routes/event/products.tsx:117
 msgid "Create"
 msgstr "Δημιουργία"
 
@@ -4121,7 +4252,7 @@ msgstr "Δημιουργία Συνεργάτη"
 msgid "Create an announcement to show a message to your users."
 msgstr "Δημιουργήστε μια ανακοίνωση για να εμφανίσετε ένα μήνυμα στους χρήστες σας."
 
-#: src/components/routes/event/products.tsx:47
+#: src/components/routes/event/products.tsx:63
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Δημιουργία και ρύθμιση εισιτηρίων και εμπορευμάτων προς πώληση."
 
@@ -4325,7 +4456,12 @@ msgstr "Η ετικέτα CTA είναι υποχρεωτική"
 msgid "Currency"
 msgstr "Νόμισμα"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:229
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:112
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:61
+msgid "Current password"
+msgstr "Τρέχων κωδικός"
+
+#: src/components/routes/profile/ManageProfile/index.tsx:242
 msgid "Current Password"
 msgstr "Τρέχων Κωδικός"
 
@@ -4333,7 +4469,7 @@ msgstr "Τρέχων Κωδικός"
 msgid "Currently assigned"
 msgstr "Ανατεθειμένο τώρα"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Currently available for purchase"
 msgstr "Διαθέσιμο για αγορά αυτή τη στιγμή"
 
@@ -4345,7 +4481,7 @@ msgstr "Καμπύλη"
 msgid "Curved rows and a balcony."
 msgstr "Καμπύλες σειρές και εξώστης."
 
-#: src/components/layouts/AuthLayout/index.tsx:16
+#: src/components/layouts/AuthLayout/index.tsx:17
 msgid "Custom branding"
 msgstr "Προσαρμοσμένη ταυτότητα μάρκας"
 
@@ -4357,7 +4493,7 @@ msgstr "Προσαρμοσμένη ημερομηνία και ώρα"
 msgid "Custom Maps URL"
 msgstr "Προσαρμοσμένο URL Χάρτη"
 
-#: src/components/layouts/AuthLayout/index.tsx:25
+#: src/components/layouts/AuthLayout/index.tsx:26
 msgid "Custom questions"
 msgstr "Προσαρμοσμένες ερωτήσεις"
 
@@ -4463,7 +4599,7 @@ msgstr "Πίστα χορού"
 #: src/components/common/EntityActions/index.tsx:58
 #: src/components/common/LocationsTable/index.tsx:68
 #: src/components/common/OrganizerWebhookTable/index.tsx:116
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:590
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:601
 #: src/components/common/PromoCodeTable/index.tsx:189
 #: src/components/common/WebhookTable/index.tsx:116
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:98
@@ -4660,7 +4796,7 @@ msgid "delete"
 msgstr "διαγραφή"
 
 #: src/components/common/LocationsTable/index.tsx:43
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:596
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:607
 #: src/components/common/PromoCodeTable/index.tsx:40
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/common/TaxAndFeeList/index.tsx:81
@@ -4765,7 +4901,7 @@ msgstr "Διαγραφή Προτύπου"
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Διαγραφή αυτής της κατηγορίας; Θα διαγραφούν και όλα τα προϊόντα της. Η ενέργεια δεν αναιρείται."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:103
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
 msgid "Delete this product? This cannot be undone."
 msgstr "Διαγραφή αυτού του προϊόντος; Η ενέργεια δεν αναιρείται."
 
@@ -4867,6 +5003,10 @@ msgstr "Άδεια ανάπτυξης"
 #: src/components/common/PoweredByFooter/index.tsx:98
 msgid "Development licence, not for production use"
 msgstr "Άδεια ανάπτυξης, όχι για παραγωγική χρήση"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:58
+msgid "Device removed"
+msgstr "Η συσκευή αφαιρέθηκε"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:82
 msgid "Diameter"
@@ -4980,7 +5120,7 @@ msgstr "Δεν επαναλαμβάνεται"
 msgid "Don't forget!"
 msgstr "Μην ξεχάσετε!"
 
-#: src/components/routes/auth/Login/index.tsx:79
+#: src/components/routes/auth/Login/index.tsx:177
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Δεν έχετε λογαριασμό; <0>Εγγραφείτε</0>"
 
@@ -4988,16 +5128,18 @@ msgstr "Δεν έχετε λογαριασμό; <0>Εγγραφείτε</0>"
 msgid "Don't let buyers leave a single empty seat"
 msgstr "Μην επιτρέπετε στους αγοραστές να αφήνουν μία μεμονωμένη κενή θέση"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:465
 #: src/components/forms/ProductForm/index.tsx:294
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:35
 msgid "Donation"
 msgstr "Δωρεά"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:245
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:72
 #: src/components/modals/CreateWebhookModal/index.tsx:72
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:57
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
 msgstr "Ολοκληρώθηκε"
@@ -5017,6 +5159,10 @@ msgstr "Το προσωπικό στην είσοδο συνδέεται με τ
 #: src/ee/seating/components/lib/templates.ts:176
 msgid "Doors"
 msgstr "Πόρτες"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:86
+msgid "Download"
+msgstr "Λήψη"
 
 #: src/components/common/CalendarOptionsPopover/index.tsx:39
 msgid "Download .ics"
@@ -5091,7 +5237,7 @@ msgstr ""
 "Due to the high risk of spam, you must connect a Stripe account before you can send messages to attendees.\n"
 "This is to ensure that all event organizers are verified and accountable."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:569
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:580
 #: src/components/routes/admin/Announcements/index.tsx:218
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:56
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:241
@@ -5169,6 +5315,10 @@ msgstr "π.χ., Σημαντική ενημέρωση για τα εισιτήρ
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "π.χ., Βασικό, Premium, Enterprise"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
+msgid "Each code can be used once to sign in if you lose access to your authenticator app."
+msgstr "Κάθε κωδικός μπορεί να χρησιμοποιηθεί μία φορά για σύνδεση αν χάσετε την πρόσβαση στην εφαρμογή ελέγχου ταυτότητας."
+
 #: src/components/modals/OfferWaitlistModal/index.tsx:134
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "Κάθε άτομο θα λάβει email με μια δεσμευμένη θέση για να ολοκληρώσει την αγορά του."
@@ -5208,7 +5358,7 @@ msgstr "Πρώιμη αγορά"
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:52
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:176
 msgid "Edit {0}"
@@ -5331,7 +5481,7 @@ msgstr "Επεξεργασία προγράμματος"
 msgid "Edit this event's seat map"
 msgstr "Επεξεργασία του χάρτη θέσεων αυτής της εκδήλωσης"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:152
 msgid "Edit user"
 msgstr "Επεξεργασία χρήστη"
 
@@ -5392,13 +5542,13 @@ msgstr "Επιλέξιμες Λίστες Check-In"
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
-#: src/components/routes/auth/Login/index.tsx:90
+#: src/components/routes/auth/Login/index.tsx:188
 #: src/components/routes/auth/Register/index.tsx:102
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/profile/ManageProfile/index.tsx:157
+#: src/components/routes/profile/ManageProfile/index.tsx:170
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
 msgid "Email"
 msgstr "Email"
@@ -5407,7 +5557,7 @@ msgstr "Email"
 msgid "Email & Notification Settings"
 msgstr "Ρυθμίσεις Email & Ειδοποιήσεων"
 
-#: src/components/layouts/AuthLayout/index.tsx:21
+#: src/components/layouts/AuthLayout/index.tsx:22
 msgid "Email & scheduled messages"
 msgstr "Email και προγραμματισμένα μηνύματα"
 
@@ -5442,21 +5592,21 @@ msgstr "Οι διευθύνσεις email δεν ταιριάζουν"
 msgid "Email Body"
 msgstr "Σώμα Email"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:88
+#: src/components/routes/profile/ManageProfile/index.tsx:95
 msgid "Email change cancelled successfully"
 msgstr "Η αλλαγή email ακυρώθηκε επιτυχώς"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:127
+#: src/components/routes/profile/ManageProfile/index.tsx:140
 msgid "Email change pending"
 msgstr "Αλλαγή email σε εκκρεμότητα"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:170
+#: src/components/routes/profile/ManageProfile/index.tsx:183
 msgid "Email confirmation resent"
 msgstr "Επαναποστολή επιβεβαίωσης email"
 
 #: src/components/layouts/Event/index.tsx:93
 #: src/components/layouts/OrganizerLayout/index.tsx:128
-#: src/components/routes/profile/ManageProfile/index.tsx:101
+#: src/components/routes/profile/ManageProfile/index.tsx:108
 msgid "Email confirmation resent successfully"
 msgstr "Η επιβεβαίωση email εστάλη ξανά επιτυχώς"
 
@@ -5470,7 +5620,7 @@ msgstr "Μήνυμα υποσέλιδου email"
 msgid "Email is required"
 msgstr "Το email είναι υποχρεωτικό"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:160
+#: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "Email not verified"
 msgstr "Το email δεν έχει επαληθευτεί"
 
@@ -5512,7 +5662,7 @@ msgstr "Script Ενσωμάτωσης"
 msgid "Embed Widget"
 msgstr "Ενσωμάτωση Widget"
 
-#: src/components/layouts/AuthLayout/index.tsx:22
+#: src/components/layouts/AuthLayout/index.tsx:23
 msgid "Embeddable widget"
 msgstr "Ενσωματώσιμο widget"
 
@@ -5586,7 +5736,7 @@ msgstr "Ώρα λήξης (προαιρετικό)"
 #: src/components/common/EventCard/index.tsx:91
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:26
 #: src/components/common/EventStatusBadge/index.tsx:14
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
 msgid "Ended"
 msgstr "Τελείωσε"
 
@@ -5676,12 +5826,24 @@ msgstr "Εισάγετε επώνυμο"
 msgid "Enter new password"
 msgstr "Εισάγετε νέο κωδικό"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:60
+msgid "Enter one of the recovery codes you saved when you turned on two-factor authentication. Each code works once."
+msgstr "Εισαγάγετε έναν από τους κωδικούς ανάκτησης που αποθηκεύσατε όταν ενεργοποιήσατε τον έλεγχο ταυτότητας δύο παραγόντων. Κάθε κωδικός ισχύει μία φορά."
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:198
+msgid "Enter the 6-digit code"
+msgstr "Εισαγάγετε τον 6ψήφιο κωδικό"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:59
+msgid "Enter the 6-digit code from your authenticator app."
+msgstr "Εισαγάγετε τον 6ψήφιο κωδικό από την εφαρμογή ελέγχου ταυτότητας."
+
 #: src/components/forms/AffiliateForm/index.tsx:39
 msgid "Enter unique affiliate code"
 msgstr "Εισάγετε μοναδικό κωδικό συνεργάτη"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:147
+#: src/components/routes/auth/Login/index.tsx:245
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Εισάγετε το email σας"
@@ -5693,6 +5855,10 @@ msgstr "Εισάγετε το email σας και θα σας στείλουμε
 #: src/components/common/ContactOrganizerModal/index.tsx:74
 msgid "Enter your name"
 msgstr "Εισάγετε το όνομά σας"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:109
+msgid "Enter your password to start setting up two-factor authentication."
+msgstr "Εισαγάγετε τον κωδικό σας για να ξεκινήσετε τη ρύθμιση του ελέγχου ταυτότητας δύο παραγόντων."
 
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:213
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
@@ -6002,6 +6168,14 @@ msgstr "Κάθε εκδήλωση έχει ταμείο"
 msgid "Every event has a check-in list"
 msgstr "Κάθε εκδήλωση έχει λίστα check-in"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:93
+msgid "Every trusted device will need a code at its next sign-in. Continue?"
+msgstr "Κάθε αξιόπιστη συσκευή θα χρειαστεί κωδικό στην επόμενη σύνδεση. Συνέχεια;"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:63
+msgid "Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue."
+msgstr "Όλα τα μέλη αυτού του λογαριασμού πρέπει να χρησιμοποιούν εφαρμογή ελέγχου ταυτότητας για να συνδεθούν. Όσα δεν την έχουν ρυθμίσει θα κληθούν να το κάνουν πριν συνεχίσουν."
+
 #: src/components/forms/ProductForm/index.tsx:393
 msgid "Everything else — tap to edit"
 msgstr "Όλα τα υπόλοιπα — πατήστε για επεξεργασία"
@@ -6056,9 +6230,10 @@ msgstr "Λήγει"
 msgid "Expiry Date"
 msgstr "Ημερομηνία Λήξης"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:94
 #: src/components/routes/event/attendees.tsx:262
-#: src/components/routes/event/orders.tsx:228
+#: src/components/routes/event/orders.tsx:248
 msgid "Export"
 msgstr "Εξαγωγή"
 
@@ -6073,6 +6248,10 @@ msgstr "Εξαγωγή CSV"
 #: src/mutations/useExportAnswers.ts:39
 msgid "Export failed. Please try again."
 msgstr "Η εξαγωγή απέτυχε. Παρακαλώ δοκιμάστε ξανά."
+
+#: src/components/routes/event/products.tsx:86
+msgid "Export purchases"
+msgstr "Εξαγωγή αγορών"
 
 #: src/mutations/useExportAnswers.ts:17
 msgid "Export started. Preparing file..."
@@ -6094,7 +6273,7 @@ msgstr "Εξαγωγή Συμμετεχόντων"
 msgid "Exporting complete. Downloading file..."
 msgstr "Εξαγωγή ολοκληρώθηκε. Λήψη αρχείου..."
 
-#: src/components/routes/event/orders.tsx:144
+#: src/components/routes/event/orders.tsx:163
 msgid "Exporting Orders"
 msgstr "Εξαγωγή Παραγγελιών"
 
@@ -6224,7 +6403,7 @@ msgstr "Αποτυχία διαγραφής εργασιών"
 msgid "Failed to delete organizer"
 msgstr "Αποτυχία διαγραφής διοργανωτή"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:112
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:115
 msgid "Failed to delete product. Please try again."
 msgstr "Αποτυχία διαγραφής του προϊόντος. Δοκιμάστε ξανά."
 
@@ -6250,9 +6429,14 @@ msgstr "Αποτυχία εξαγωγής συνεργατών"
 msgid "Failed to export attendees"
 msgstr "Αποτυχία εξαγωγής συμμετεχόντων"
 
-#: src/components/routes/event/orders.tsx:153
+#: src/components/routes/event/orders.tsx:172
 msgid "Failed to export orders"
 msgstr "Αποτυχία εξαγωγής παραγγελιών"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:169
+#: src/components/routes/event/products.tsx:54
+msgid "Failed to export purchases. Please try again."
+msgstr "Η εξαγωγή αγορών απέτυχε. Δοκιμάστε ξανά."
 
 #: src/components/common/OrganizerReportTable/index.tsx:206
 msgid "Failed to export report. Please try again."
@@ -6356,7 +6540,7 @@ msgstr "Αποτυχία αποθήκευσης ρυθμίσεων ΦΠΑ. Πα�
 msgid "Failed to send message. Please try again."
 msgstr "Αποτυχία αποστολής μηνύματος. Παρακαλώ δοκιμάστε ξανά."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:298
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:301
 msgid "Failed to sort products"
 msgstr "Αποτυχία ταξινόμησης προϊόντων"
 
@@ -6366,7 +6550,7 @@ msgstr "Αποτυχία εκκίνησης εργασίας εξαγωγής"
 
 #: src/components/routes/admin/Accounts/index.tsx:48
 #: src/components/routes/admin/Events/index.tsx:68
-#: src/components/routes/admin/Users/index.tsx:48
+#: src/components/routes/admin/Users/index.tsx:63
 msgid "Failed to start impersonation. Please try again."
 msgstr "Αποτυχία εκκίνησης υποκατάστασης. Παρακαλώ δοκιμάστε ξανά."
 
@@ -6541,7 +6725,7 @@ msgstr "Φιλτράρισμα κατά ημερομηνία"
 msgid "Filter by Event"
 msgstr "Φιλτράρισμα ανά Εκδήλωση"
 
-#: src/components/routes/event/orders.tsx:214
+#: src/components/routes/event/orders.tsx:234
 msgid "Filter Orders"
 msgstr "Φιλτράρισμα Παραγγελιών"
 
@@ -6625,7 +6809,7 @@ msgstr "Όνομα"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
-#: src/components/routes/profile/ManageProfile/index.tsx:153
+#: src/components/routes/profile/ManageProfile/index.tsx:166
 msgid "First Name"
 msgstr "Όνομα"
 
@@ -6733,7 +6917,7 @@ msgstr "για"
 msgid "For a number of dates"
 msgstr "Για αριθμό ημερομηνιών"
 
-#: src/components/routes/auth/Login/index.tsx:97
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Forgot password?"
 msgstr "Ξεχάσατε τον κωδικό;"
 
@@ -6750,8 +6934,8 @@ msgstr "Φουαγιέ"
 #: src/components/common/Currency/index.tsx:128
 #: src/components/common/OrderSummary/index.tsx:58
 #: src/components/common/OrderSummary/index.tsx:111
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:153
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:163
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:156
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:166
 #: src/components/forms/ProductForm/index.tsx:293
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:33
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
@@ -6767,6 +6951,10 @@ msgstr "Δωρεάν"
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:63
 msgid "Free order, no payment needed"
 msgstr "Δωρεάν παραγγελία, δεν απαιτείται πληρωμή"
+
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:9
+msgid "Free, open source, with end-to-end encrypted backups"
+msgstr "Δωρεάν, ανοιχτού κώδικα, με κρυπτογραφημένα αντίγραφα ασφαλείας από άκρο σε άκρο"
 
 #: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "French"
@@ -6833,7 +7021,7 @@ msgstr "Μπροστινή πίστα"
 msgid "Front right"
 msgstr "Μπροστά δεξιά"
 
-#: src/components/layouts/AuthLayout/index.tsx:27
+#: src/components/layouts/AuthLayout/index.tsx:28
 msgid "Full data ownership"
 msgstr "Πλήρης κυριότητα δεδομένων"
 
@@ -6881,6 +7069,19 @@ msgstr "Δημιουργία"
 #: src/components/forms/PromoCodeForm/index.tsx:80
 msgid "Generate code"
 msgstr "Δημιουργία κωδικού"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:159
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:85
+msgid "Generate new codes"
+msgstr "Δημιουργία νέων κωδικών"
+
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+msgid "Generate new recovery codes"
+msgstr "Δημιουργία νέων κωδικών ανάκτησης"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:25
+msgid "Generated {0}"
+msgstr "Δημιουργήθηκαν {0}"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
 msgid "German"
@@ -7003,6 +7204,7 @@ msgid "Gross Revenue"
 msgstr "Μεικτά Έσοδα"
 
 #: src/components/common/StatBoxes/index.tsx:94
+#: src/components/modals/ProductPurchasesModal/index.tsx:211
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:116
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:265
 msgid "Gross sales"
@@ -7119,8 +7321,8 @@ msgstr "Χρέωση Hi.Events"
 msgid "Hi.Events platform fees and VAT breakdown by transaction"
 msgstr "Χρεώσεις πλατφόρμας Hi.Events και ανάλυση ΦΠΑ ανά συναλλαγή"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Hidden"
 msgstr "Κρυφό"
 
@@ -7140,8 +7342,8 @@ msgstr "Κρυφό από όλους"
 msgid "Hidden from everyone — the master hide switch is on."
 msgstr "Κρυφό από όλους — ο κύριος διακόπτης απόκρυψης είναι ενεργός."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:144
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:473
 msgid "Hidden from public view"
 msgstr "Κρυφό από δημόσια προβολή"
 
@@ -7243,7 +7445,7 @@ msgstr "Μήνυμα Ανάδειξης"
 msgid "Highlight this product"
 msgstr "Ανάδειξη αυτού του προϊόντος"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:453
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:456
 #: src/components/forms/ProductForm/ledgerSummaries.ts:144
 msgid "Highlighted"
 msgstr "Αναδειγμένο"
@@ -7372,6 +7574,14 @@ msgstr "Συμφωνώ με τους <0>όρους και προϋποθέσει
 msgid "I confirm this is a transactional message related to this event"
 msgstr "Επιβεβαιώνω ότι πρόκειται για συναλλακτικό μήνυμα σχετικό με αυτή την εκδήλωση"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:98
+msgid "I have saved my recovery codes somewhere safe"
+msgstr "Έχω αποθηκεύσει τους κωδικούς ανάκτησης σε ασφαλές μέρος"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:190
+msgid "I've added it, continue"
+msgstr "Την πρόσθεσα, συνέχεια"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1268
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Εάν δεν άνοιξε αυτόματα νέα καρτέλα, κάντε κλικ στο κουμπί παρακάτω για να συνεχίσετε στην ολοκλήρωση αγοράς."
@@ -7392,13 +7602,21 @@ msgstr "Εάν είναι ενεργό, το προσωπικό check-in μπο�
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "Εάν είναι ενεργό, ο διοργανωτής θα λάβει ειδοποίηση email όταν υποβάλλεται νέα παραγγελία"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:133
+#: src/components/routes/profile/ManageProfile/index.tsx:146
 msgid "If you did not request this change, please immediately change your password."
 msgstr "Εάν δεν ζητήσατε αυτή την αλλαγή, αλλάξτε αμέσως τον κωδικό σας."
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:46
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Εάν έχετε λογαριασμό σε εμάς, θα λάβετε email με οδηγίες για την επαναφορά του κωδικού σας."
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:64
+msgid "If you lose your phone, each of these codes gets you in once. Store them in a password manager or print them and keep them somewhere safe. You won't see them again."
+msgstr "Αν χάσετε το τηλέφωνό σας, κάθε ένας από αυτούς τους κωδικούς σάς δίνει πρόσβαση μία φορά. Φυλάξτε τους σε διαχειριστή κωδικών ή εκτυπώστε τους και κρατήστε τους σε ασφαλές μέρος. Δεν θα τους δείτε ξανά."
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:33
+msgid "If you've lost your phone, turn two-factor authentication off and on again from your profile to connect a new authenticator app."
+msgstr "Αν έχετε χάσει το τηλέφωνό σας, απενεργοποιήστε και ενεργοποιήστε ξανά τον έλεγχο ταυτότητας δύο παραγόντων από το προφίλ σας για να συνδέσετε νέα εφαρμογή ελέγχου ταυτότητας."
 
 #: src/components/common/ImageUploadDropzone/index.tsx:124
 msgid "Image deleted successfully"
@@ -7418,8 +7636,8 @@ msgid "Images"
 msgstr "Εικόνες"
 
 #: src/components/common/AdminAccountsTable/index.tsx:134
-#: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
+#: src/components/common/AdminUsersTable/index.tsx:108
 msgid "Impersonate"
 msgstr "Υποκατάσταση"
 
@@ -7429,7 +7647,7 @@ msgstr "Υποκατάσταση Χρήστη"
 
 #: src/components/routes/admin/Accounts/index.tsx:38
 #: src/components/routes/admin/Events/index.tsx:58
-#: src/components/routes/admin/Users/index.tsx:38
+#: src/components/routes/admin/Users/index.tsx:53
 msgid "Impersonation started"
 msgstr "Η υποκατάσταση ξεκίνησε"
 
@@ -7486,7 +7704,7 @@ msgstr "Σε χρήση"
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
 #: src/components/modals/EditUserModal/index.tsx:112
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
 msgid "Inactive"
@@ -7571,7 +7789,7 @@ msgstr "Εισαγωγή Token Liquid"
 msgid "Instagram"
 msgstr "Instagram"
 
-#: src/components/layouts/AuthLayout/index.tsx:15
+#: src/components/layouts/AuthLayout/index.tsx:16
 msgid "Instant Stripe payouts"
 msgstr "Άμεσες πληρωμές Stripe"
 
@@ -7609,11 +7827,11 @@ msgstr "Μη έγκυρη σύνταξη Liquid. Παρακαλώ διορθώσ
 msgid "Invalid VAT number format"
 msgstr "Μη έγκυρη μορφή αριθμού ΦΠΑ"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:40
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:63
 msgid "Invitation resent!"
 msgstr "Η πρόσκληση εστάλη ξανά!"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:55
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:78
 msgid "Invitation revoked!"
 msgstr "Η πρόσκληση ανακλήθηκε!"
 
@@ -7629,7 +7847,7 @@ msgstr "Πρόσκληση Μέλους Ομάδας"
 msgid "Invite Team Members"
 msgstr "Πρόσκληση Μελών Ομάδας"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:147
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:184
 msgid "Invite User"
 msgstr "Πρόσκληση Χρήστη"
 
@@ -7637,7 +7855,7 @@ msgstr "Πρόσκληση Χρήστη"
 msgid "Invite Your Team"
 msgstr "Προσκαλέστε την Ομάδα σας"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 msgid "Invited"
 msgstr "Προσκεκλημένος"
 
@@ -7749,7 +7967,7 @@ msgstr "Ιούλιος"
 msgid "June"
 msgstr "Ιούνιος"
 
-#: src/components/routes/auth/Login/index.tsx:118
+#: src/components/routes/auth/Login/index.tsx:216
 msgid "Just looking for your tickets?"
 msgstr "Αναζητάτε μόνο τα εισιτήριά σας;"
 
@@ -7782,7 +8000,7 @@ msgstr "Να είστε σύντομοι — τα banner εμφανίζουν μ
 msgid "Keep me updated on news and events from {0}"
 msgstr "Ενημερώστε με για νέα και εκδηλώσεις από {0}"
 
-#: src/components/layouts/AuthLayout/index.tsx:43
+#: src/components/layouts/AuthLayout/index.tsx:44
 msgid "Keep the profit."
 msgstr "Κρατήστε το κέρδος."
 
@@ -7814,7 +8032,7 @@ msgstr "Οριζόντια"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:240
 #: src/components/modals/ManageAttendeeModal/index.tsx:180
-#: src/components/routes/profile/ManageProfile/index.tsx:197
+#: src/components/routes/profile/ManageProfile/index.tsx:210
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -7873,7 +8091,7 @@ msgstr "Τελευταίες 7 ημέρες"
 msgid "Last 90 days"
 msgstr "Τελευταίες 90 ημέρες"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:160
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:199
 msgid "Last login"
 msgstr "Τελευταία σύνδεση"
 
@@ -7896,7 +8114,7 @@ msgstr "Επώνυμο"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:692
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
-#: src/components/routes/profile/ManageProfile/index.tsx:155
+#: src/components/routes/profile/ManageProfile/index.tsx:168
 msgid "Last Name"
 msgstr "Επώνυμο"
 
@@ -7918,6 +8136,10 @@ msgstr "Τελευταία Ενεργοποίηση"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "Τελευταία Χρήση"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:48
+msgid "Last used {0}"
+msgstr "Τελευταία χρήση {0}"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:381
 msgid "Later"
@@ -8164,12 +8386,12 @@ msgstr "τοποθεσίες"
 msgid "Locations"
 msgstr "Τοποθεσίες"
 
-#: src/components/routes/auth/Login/index.tsx:106
+#: src/components/routes/auth/Login/index.tsx:204
 #: src/components/routes/auth/Register/index.tsx:76
 msgid "Log in"
 msgstr "Σύνδεση"
 
-#: src/components/routes/auth/Login/index.tsx:106
+#: src/components/routes/auth/Login/index.tsx:204
 msgid "Logging in"
 msgstr "Σύνδεση σε εξέλιξη"
 
@@ -8206,6 +8428,14 @@ msgstr "Αναζήτηση Εισιτηρίων μου"
 #: src/components/common/WidgetEditor/index.tsx:341
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Παράδειγμα κειμένου..."
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:150
+msgid "Lost access?"
+msgstr "Χάσατε την πρόσβαση;"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:220
+msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
+msgstr "Χάσατε το τηλέφωνό σας ή αλλάζετε εφαρμογή; Απενεργοποιήστε και ενεργοποιήστε ξανά για να συνδέσετε νέα εφαρμογή ελέγχου ταυτότητας."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Main auditorium"
@@ -8282,7 +8512,7 @@ msgstr "Διαχείριση παραγγελίας"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "Διαχείριση ρυθμίσεων πληρωμής και τιμολόγησης για αυτή την εκδήλωση."
 
-#: src/components/routes/profile/ManageProfile/index.tsx:112
+#: src/components/routes/profile/ManageProfile/index.tsx:119
 msgid "Manage Profile"
 msgstr "Διαχείριση Προφίλ"
 
@@ -8315,7 +8545,7 @@ msgstr "Διαχείριση στοιχείων λογαριασμού και π
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
 msgstr "Διαχείριση λίστας αναμονής εκδήλωσης, προβολή στατιστικών και προσφορά εισιτηρίων σε συμμετέχοντες."
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:146
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:183
 msgid "Manage your users and their permissions"
 msgstr "Διαχείριση χρηστών και δικαιωμάτων τους"
 
@@ -8401,7 +8631,7 @@ msgstr "Το μήνυμα εγκρίθηκε επιτυχώς"
 msgid "Message attendee"
 msgstr "Αποστολή μηνύματος σε συμμετέχοντα"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:554
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:565
 msgid "Message Attendees"
 msgstr "Αποστολή Μηνύματος σε Συμμετέχοντες"
 
@@ -8506,7 +8736,7 @@ msgstr "Διάφορα"
 msgid "Miscellaneous Settings"
 msgstr "Διάφορες Ρυθμίσεις"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:209
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:212
 msgid "mixed"
 msgstr "μικτό"
 
@@ -8567,6 +8797,7 @@ msgid "more"
 msgstr "ακόμη"
 
 #: src/components/common/EntityActions/index.tsx:159
+#: src/components/common/EntityActions/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:175
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:174
 msgid "More actions"
@@ -8605,7 +8836,7 @@ msgid "Move attendee"
 msgstr "Μετακίνηση συμμετέχοντα"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:199
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:586
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:597
 msgid "Move down"
 msgstr "Μετακίνηση κάτω"
 
@@ -8618,7 +8849,7 @@ msgid "Move to area"
 msgstr "Μετακίνηση σε περιοχή"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:192
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:578
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:589
 msgid "Move up"
 msgstr "Μετακίνηση πάνω"
 
@@ -8636,7 +8867,7 @@ msgstr "Πολλές ημερομηνίες έως {lastOccurrenceDate}"
 msgid "Multiple locations"
 msgstr "Πολλές τοποθεσίες"
 
-#: src/components/layouts/AuthLayout/index.tsx:28
+#: src/components/layouts/AuthLayout/index.tsx:29
 msgid "Multiple ticket types"
 msgstr "Πολλοί τύποι εισιτηρίων"
 
@@ -8715,7 +8946,7 @@ msgstr "Καθαρά Έσοδα"
 #: src/components/common/OrganizerWebhookTable/index.tsx:266
 #: src/components/common/PromoCodeTable/index.tsx:166
 #: src/components/common/WebhookTable/index.tsx:266
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:104
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:127
 msgid "Never"
 msgstr "Ποτέ"
 
@@ -8751,7 +8982,7 @@ msgid "New organizer"
 msgstr "Νέος διοργανωτής"
 
 #: src/components/routes/auth/ResetPassword/index.tsx:64
-#: src/components/routes/profile/ManageProfile/index.tsx:233
+#: src/components/routes/profile/ManageProfile/index.tsx:246
 msgid "New Password"
 msgstr "Νέος Κωδικός"
 
@@ -8824,7 +9055,7 @@ msgstr "Όχι - Είμαι ιδιώτης ή επιχείρηση μη εγγε
 msgid "No account overrides. Add one from an account's admin page."
 msgstr "Δεν υπάρχουν παρακάμψεις λογαριασμών. Προσθέστε μία από τη σελίδα διαχείρισης ενός λογαριασμού."
 
-#: src/components/common/AdminUsersTable/index.tsx:143
+#: src/components/common/AdminUsersTable/index.tsx:155
 msgid "No accounts"
 msgstr "Δεν υπάρχουν λογαριασμοί"
 
@@ -9002,7 +9233,7 @@ msgstr "Χωρίς email"
 msgid "No email provided"
 msgstr "Δεν δόθηκε email"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:348
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:351
 msgid "No end date"
 msgstr "Χωρίς ημερομηνία λήξης"
 
@@ -9083,6 +9314,10 @@ msgstr "Δεν βρέθηκαν μηνύματα"
 msgid "No messages to show"
 msgstr "Δεν υπάρχουν μηνύματα για εμφάνιση"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:314
+msgid "No name"
+msgstr "Χωρίς όνομα"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:188
 msgid "No occurrences available"
 msgstr "Δεν υπάρχουν διαθέσιμες ημερομηνίες"
@@ -9090,6 +9325,10 @@ msgstr "Δεν υπάρχουν διαθέσιμες ημερομηνίες"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:135
 msgid "No occurrences on this date"
 msgstr "Δεν υπάρχουν ημερομηνίες αυτή την ημέρα"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No one has bought this yet."
+msgstr "Κανείς δεν το έχει αγοράσει ακόμα."
 
 #: src/components/common/QuestionsTable/index.tsx:491
 msgid "No order questions yet"
@@ -9179,6 +9418,10 @@ msgstr "Δεν υπάρχουν Προϊόντα ακόμα"
 #: src/components/common/PromoCodeTable/index.tsx:46
 msgid "No Promo Codes to show"
 msgstr "Δεν υπάρχουν Κωδικοί Προσφοράς για εμφάνιση"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:294
+msgid "No purchases match these filters."
+msgstr "Καμία αγορά δεν ταιριάζει με αυτά τα φίλτρα."
 
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderPicker.tsx:38
 msgid "No reader (cash only)"
@@ -9276,7 +9519,7 @@ msgstr "Καμία προσεχής ημερομηνία"
 msgid "No upcoming events"
 msgstr "Δεν υπάρχουν επερχόμενες εκδηλώσεις"
 
-#: src/components/common/AdminUsersTable/index.tsx:18
+#: src/components/common/AdminUsersTable/index.tsx:19
 msgid "No users found"
 msgstr "Δεν βρέθηκαν χρήστες"
 
@@ -9353,6 +9596,10 @@ msgstr "Μη Επιλέξιμο"
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:201
 msgid "Not enough free seats for {0}"
 msgstr "Δεν υπάρχουν αρκετές ελεύθερες θέσεις για {0}"
+
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:56
+msgid "Not now, log out"
+msgstr "Όχι τώρα, αποσύνδεση"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:26
 msgid "Not on sale yet"
@@ -9495,8 +9742,10 @@ msgstr "κάθε μήνα"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:77
 #: src/components/forms/ProductForm/ledgerSummaries.ts:140
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "Ανενεργό"
 
@@ -9572,8 +9821,10 @@ msgid "on"
 msgstr "στις"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:136
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "On"
 msgstr "Ενεργό"
 
@@ -9587,12 +9838,12 @@ msgid "on {month} {day}"
 msgstr "στις {day} {month}"
 
 #: src/components/common/EventCard/index.tsx:102
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:133
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
 msgid "On Sale"
 msgstr "Σε Πώληση"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:139
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
 msgid "On sale {0}"
 msgstr "Σε πώληση {0}"
 
@@ -9619,6 +9870,10 @@ msgstr "Στη σελίδα Εισιτήρια & Προϊόντα, ορίστε 
 #: src/components/common/JoinWaitlistButton/index.tsx:25
 msgid "On the waitlist"
 msgstr "Στη λίστα αναμονής"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
+msgid "On your phone? Open in authenticator app"
+msgstr "Στο τηλέφωνό σας; Άνοιγμα στην εφαρμογή ελέγχου ταυτότητας"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
@@ -9717,7 +9972,7 @@ msgstr "Αποστολή μόνο σε παραγγελίες με αυτές τ
 msgid "Only show start date and time"
 msgstr "Εμφάνιση μόνο ημερομηνίας και ώρας έναρξης"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:479
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:482
 msgid "Only shown as an add-on to the products it's attached to"
 msgstr "Εμφανίζεται μόνο ως πρόσθετο στα προϊόντα με τα οποία συνδέεται"
 
@@ -9745,7 +10000,7 @@ msgstr "Μόνο τα εισιτήρια μετρούν στη χωρητικό�
 msgid "Only visible to buyers with an applicable promo code."
 msgstr "Ορατό μόνο σε αγοραστές με έγκυρο κωδικό προσφοράς."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:471
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:474
 msgid "Only visible with promo code"
 msgstr "Ορατό μόνο με κωδικό προσφοράς"
 
@@ -9778,6 +10033,10 @@ msgstr "Άνοιγμα ημερομηνίας"
 #: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "Άνοιγμα πλαϊνής μπάρας"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:154
+msgid "Open your authenticator app, tap the + button and scan the code."
+msgstr "Ανοίξτε την εφαρμογή ελέγχου ταυτότητας, πατήστε το κουμπί + και σαρώστε τον κωδικό."
 
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
@@ -9953,7 +10212,7 @@ msgstr "Αναφορά Παραγγελίας"
 msgid "Order Refunded"
 msgstr "Παραγγελία Επιστράφηκε"
 
-#: src/components/routes/event/orders.tsx:60
+#: src/components/routes/event/orders.tsx:72
 msgid "Order Status"
 msgstr "Κατάσταση Παραγγελίας"
 
@@ -9991,7 +10250,7 @@ msgid "Order was cancelled"
 msgstr "Η παραγγελία ακυρώθηκε"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:443
-#: src/components/routes/event/orders.tsx:219
+#: src/components/routes/event/orders.tsx:239
 msgid "orders"
 msgstr "παραγγελίες"
 
@@ -10002,7 +10261,7 @@ msgstr "παραγγελίες"
 #: src/components/routes/admin/Attribution/index.tsx:200
 #: src/components/routes/admin/Orders/index.tsx:44
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:59
-#: src/components/routes/event/orders.tsx:176
+#: src/components/routes/event/orders.tsx:196
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:78
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:118
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:144
@@ -10019,7 +10278,7 @@ msgstr "Παραγγελίες"
 msgid "Orders Completed"
 msgstr "Παραγγελίες Ολοκληρώθηκαν"
 
-#: src/components/routes/event/orders.tsx:148
+#: src/components/routes/event/orders.tsx:167
 msgid "Orders Exported"
 msgstr "Παραγγελίες Εξήχθησαν"
 
@@ -10053,7 +10312,7 @@ msgstr "Όνομα Οργανισμού"
 #: src/components/modals/CreateEventModal/index.tsx:267
 #: src/components/modals/EditUserModal/index.tsx:56
 #: src/components/modals/InviteUserModal/index.tsx:47
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 #: src/components/routes/admin/Dashboard/index.tsx:257
 #: src/components/routes/admin/Dashboard/index.tsx:306
 #: src/components/routes/admin/Dashboard/index.tsx:352
@@ -10234,8 +10493,12 @@ msgstr "Χαρτί"
 msgid "Partial refund"
 msgstr "Μερική επιστροφή"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:63
+msgid "Partially refunded"
+msgstr "Μερική επιστροφή χρημάτων"
+
 #: src/components/common/OrderStatusBadge/index.tsx:16
-#: src/components/routes/event/orders.tsx:36
+#: src/components/routes/event/orders.tsx:37
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:74
 msgid "Partially Refunded"
 msgstr "Μερικώς Επιστράφηκε"
@@ -10253,9 +10516,9 @@ msgid "Pass to Buyer"
 msgstr "Μεταβίβαση στον Αγοραστή"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:127
-#: src/components/routes/auth/Login/index.tsx:95
+#: src/components/routes/auth/Login/index.tsx:193
 #: src/components/routes/auth/Register/index.tsx:110
-#: src/components/routes/profile/ManageProfile/index.tsx:120
+#: src/components/routes/profile/ManageProfile/index.tsx:130
 msgid "Password"
 msgstr "Κωδικός"
 
@@ -10302,7 +10565,7 @@ msgstr "Παναγιώτης"
 msgid "patrick@acme.com"
 msgstr "panagiotis@papademos.gr"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:134
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/forms/WebhookForm/index.tsx:28
 msgid "Paused"
 msgstr "Σε Παύση"
@@ -10424,7 +10687,7 @@ msgstr "ΣΕ ΑΝΑΜΟΝΗ ΕΛΕΓΧΟΥ"
 msgid "Per Attendee"
 msgstr "Ανά Συμμετέχοντα"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:205
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:208
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:76
 msgid "per date"
 msgstr "ανά ημερομηνία"
@@ -10513,7 +10776,7 @@ msgstr "Οριστική διαγραφή αυτού του διοργανωτή
 msgid "Permanently remove this date"
 msgstr "Οριστική αφαίρεση αυτής της ημερομηνίας"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:148
+#: src/components/routes/profile/ManageProfile/index.tsx:161
 msgid "Personal Information"
 msgstr "Προσωπικές Πληροφορίες"
 
@@ -10615,7 +10878,7 @@ msgstr "Παρακαλώ προσθέστε τουλάχιστον μία επι
 msgid "Please check the provided information is correct"
 msgstr "Παρακαλώ ελέγξτε ότι οι παρεχόμενες πληροφορίες είναι σωστές"
 
-#: src/components/routes/auth/Login/index.tsx:53
+#: src/components/routes/auth/Login/index.tsx:89
 msgid "Please check your email and password and try again"
 msgstr "Παρακαλώ ελέγξτε το email και τον κωδικό σας και δοκιμάστε ξανά"
 
@@ -10624,7 +10887,7 @@ msgstr "Παρακαλώ ελέγξτε το email και τον κωδικό σ
 msgid "Please check your email is valid"
 msgstr "Παρακαλώ ελέγξτε ότι το email είναι έγκυρο"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:171
+#: src/components/routes/profile/ManageProfile/index.tsx:184
 msgid "Please check your email to confirm your email address"
 msgstr "Παρακαλώ ελέγξτε το email σας για επιβεβαίωση της διεύθυνσης"
 
@@ -10704,11 +10967,11 @@ msgstr "Παρακαλώ επιλέξτε τουλάχιστον ένα προϊ
 
 #: src/components/routes/event/Affiliates/index.tsx:53
 #: src/components/routes/event/attendees.tsx:169
-#: src/components/routes/event/orders.tsx:154
+#: src/components/routes/event/orders.tsx:173
 msgid "Please try again."
 msgstr "Παρακαλώ δοκιμάστε ξανά."
 
-#: src/components/routes/profile/ManageProfile/index.tsx:161
+#: src/components/routes/profile/ManageProfile/index.tsx:174
 msgid "Please verify your email address to access all features"
 msgstr "Παρακαλώ επαληθεύστε τη διεύθυνση email σας για πρόσβαση σε όλες τις λειτουργίες"
 
@@ -10729,7 +10992,7 @@ msgstr "Παρακαλώ περιμένετε ενώ προετοιμάζουμ�
 msgid "Please wait while we prepare your invoice..."
 msgstr "Παρακαλώ περιμένετε ενώ προετοιμάζουμε το τιμολόγιό σας..."
 
-#: src/components/routes/event/orders.tsx:145
+#: src/components/routes/event/orders.tsx:164
 msgid "Please wait while we prepare your orders for export..."
 msgstr "Παρακαλώ περιμένετε ενώ προετοιμάζουμε τις παραγγελίες σας για εξαγωγή..."
 
@@ -10828,7 +11091,7 @@ msgstr "Η τιμή άλλαξε"
 msgid "Price display mode"
 msgstr "Λειτουργία εμφάνισης τιμής"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:148
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:151
 msgid "Price not set"
 msgstr "Τιμή μη ορισμένη"
 
@@ -10860,6 +11123,7 @@ msgstr "Κύριο Χρώμα"
 msgid "Primary Text Color"
 msgstr "Κύριο Χρώμα Κειμένου"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:89
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
 msgid "Print"
 msgstr "Εκτύπωση"
@@ -10912,12 +11176,13 @@ msgid "Processing order"
 msgstr "Επεξεργασία παραγγελίας"
 
 #: src/components/common/ProductsTable/index.tsx:92
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/common/WaitlistTable/index.tsx:173
 #: src/components/forms/ProductForm/index.tsx:231
 #: src/components/modals/ManageAttendeeModal/index.tsx:237
 #: src/components/modals/OfferWaitlistModal/index.tsx:167
+#: src/components/routes/event/orders.tsx:66
 msgid "Product"
 msgstr "Προϊόν"
 
@@ -10941,7 +11206,7 @@ msgstr "Προϊόν Δημιουργήθηκε"
 msgid "Product Deleted"
 msgstr "Προϊόν Διαγράφηκε"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:106
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:109
 msgid "Product deleted successfully"
 msgstr "Το προϊόν διαγράφηκε επιτυχώς"
 
@@ -11003,15 +11268,15 @@ msgstr "Προϊόντα που πωλήθηκαν"
 msgid "Products Sold"
 msgstr "Προϊόντα που Πωλήθηκαν"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:297
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:300
 msgid "Products sorted successfully"
 msgstr "Τα προϊόντα ταξινομήθηκαν επιτυχώς"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:117
+#: src/components/routes/profile/ManageProfile/index.tsx:127
 msgid "Profile"
 msgstr "Προφίλ"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:70
+#: src/components/routes/profile/ManageProfile/index.tsx:77
 msgid "Profile updated successfully"
 msgstr "Το προφίλ ενημερώθηκε επιτυχώς"
 
@@ -11052,7 +11317,7 @@ msgstr "Χρήση κωδικού προσφοράς και ανάλυση εκ�
 msgid "promo codes"
 msgstr "κωδικοί προσφοράς"
 
-#: src/components/layouts/AuthLayout/index.tsx:19
+#: src/components/layouts/AuthLayout/index.tsx:20
 msgid "Promo codes"
 msgstr "Κωδικοί προσφοράς"
 
@@ -11071,13 +11336,17 @@ msgstr "Οι κωδικοί προσφοράς μπορούν να χρησιμ�
 msgid "Promo Codes Report"
 msgstr "Αναφορά Κωδικών Προσφοράς"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:467
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:470
 msgid "Promo Only"
 msgstr "Μόνο με Κωδικό"
 
 #: src/components/modals/SendMessageModal/index.tsx:577
 msgid "Promotional emails may result in account suspension"
 msgstr "Τα προωθητικά email ενδέχεται να οδηγήσουν σε αναστολή λογαριασμού"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:120
+msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
+msgstr "Προστατέψτε τον λογαριασμό σας με δεύτερο βήμα κατά τη σύνδεση. Ακόμη κι αν κάποιος μάθει τον κωδικό σας, δεν μπορεί να μπει χωρίς τον κωδικό από το τηλέφωνό σας."
 
 #: src/components/forms/QuestionForm/index.tsx:189
 msgid ""
@@ -11140,6 +11409,12 @@ msgstr "Αγοραστής"
 msgid "Purchaser email"
 msgstr "Email αγοραστή"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+#: src/components/modals/ProductPurchasesModal/index.tsx:190
+#: src/components/modals/ProductPurchasesModal/index.tsx:285
+msgid "Purchases"
+msgstr "Αγορές"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:44
 msgid "Put the new key in <0>APP_LICENCE_KEY</0> and redeploy the backend."
 msgstr "Βάλτε το νέο κλειδί στο <0>APP_LICENCE_KEY</0> και αναπτύξτε ξανά το backend."
@@ -11148,11 +11423,12 @@ msgstr "Βάλτε το νέο κλειδί στο <0>APP_LICENCE_KEY</0> και
 msgid "QR Code"
 msgstr "QR Code"
 
-#: src/components/layouts/AuthLayout/index.tsx:17
+#: src/components/layouts/AuthLayout/index.tsx:18
 msgid "QR code check-in"
 msgstr "Check-in με κωδικό QR"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:170
+#: src/components/modals/ProductPurchasesModal/index.tsx:94
 msgid "Qty"
 msgstr "Ποσ."
 
@@ -11242,7 +11518,7 @@ msgstr "Ο αναγνώστης δεν είναι διαθέσιμος"
 msgid "Ready to go live?"
 msgstr "Έτοιμοι να δημοσιεύσετε;"
 
-#: src/components/layouts/AuthLayout/index.tsx:20
+#: src/components/layouts/AuthLayout/index.tsx:21
 msgid "Real-time analytics"
 msgstr "Αναλύσεις σε πραγματικό χρόνο"
 
@@ -11277,7 +11553,7 @@ msgstr "Λόγοι"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:131
-#: src/components/routes/profile/ManageProfile/index.tsx:210
+#: src/components/routes/profile/ManageProfile/index.tsx:223
 msgid "Receive product updates from {0}."
 msgstr "Λήψη ενημερώσεων προϊόντων από {0}."
 
@@ -11328,6 +11604,7 @@ msgstr "Παραλήπτες"
 msgid "Recipients are available after the message is sent"
 msgstr "Οι παραλήπτες είναι διαθέσιμοι αφού αποσταλεί το μήνυμα"
 
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:28
 #: src/components/modals/SelectCheckInListModal/index.tsx:66
 msgid "Recommended"
 msgstr "Προτεινόμενο"
@@ -11335,6 +11612,15 @@ msgstr "Προτεινόμενο"
 #: src/components/modals/RefundOrderModal/index.tsx:160
 msgid "Record Refund"
 msgstr "Καταγραφή επιστροφής χρημάτων"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:105
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:74
+msgid "Recovery code"
+msgstr "Κωδικός ανάκτησης"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:147
+msgid "Recovery codes"
+msgstr "Κωδικοί ανάκτησης"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:80
 msgid "Rectangular"
@@ -11354,7 +11640,7 @@ msgstr "Επαναλαμβανόμενη εκδήλωση"
 msgid "Recurring Event Settings"
 msgstr "Ρυθμίσεις επαναλαμβανόμενης εκδήλωσης"
 
-#: src/components/layouts/AuthLayout/index.tsx:14
+#: src/components/layouts/AuthLayout/index.tsx:15
 msgid "Recurring events"
 msgstr "Επαναλαμβανόμενες εκδηλώσεις"
 
@@ -11409,6 +11695,7 @@ msgid "Refund amount"
 msgstr "Ποσό επιστροφής"
 
 #: src/components/common/OrdersTable/index.tsx:293
+#: src/components/modals/ProductPurchasesModal/index.tsx:67
 msgid "Refund failed"
 msgstr "Η επιστροφή απέτυχε"
 
@@ -11420,11 +11707,12 @@ msgstr "Αποτυχία Επιστροφής"
 msgid "Refund order"
 msgstr "Επιστροφή παραγγελίας"
 
-#: src/components/modals/RefundOrderModal/index.tsx:201
+#: src/components/modals/RefundOrderModal/index.tsx:197
 msgid "Refund Order {0}"
 msgstr "Επιστροφή Παραγγελίας {0}"
 
 #: src/components/common/OrdersTable/index.tsx:292
+#: src/components/modals/ProductPurchasesModal/index.tsx:65
 msgid "Refund pending"
 msgstr "Επιστροφή σε εκκρεμότητα"
 
@@ -11437,7 +11725,7 @@ msgstr "Επιστροφή σε Εκκρεμότητα"
 msgid "Refund recorded successfully."
 msgstr "Η επιστροφή χρημάτων καταγράφηκε με επιτυχία."
 
-#: src/components/routes/event/orders.tsx:66
+#: src/components/routes/event/orders.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:292
 msgid "Refund Status"
 msgstr "Κατάσταση Επιστροφής"
@@ -11445,7 +11733,9 @@ msgstr "Κατάσταση Επιστροφής"
 #: src/components/common/OrderStatusBadge/index.tsx:15
 #: src/components/common/OrderSummary/index.tsx:92
 #: src/components/common/StatBoxes/index.tsx:87
-#: src/components/routes/event/orders.tsx:35
+#: src/components/modals/ProductPurchasesModal/index.tsx:61
+#: src/components/modals/ProductPurchasesModal/index.tsx:248
+#: src/components/routes/event/orders.tsx:36
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:429
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:73
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:37
@@ -11462,7 +11752,7 @@ msgstr "Επιστράφηκε: {0}"
 msgid "Refunds"
 msgstr "Επιστροφές"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:179
+#: src/components/routes/profile/ManageProfile/index.tsx:192
 msgid "Regional Settings"
 msgstr "Περιφερειακές Ρυθμίσεις"
 
@@ -11518,6 +11808,10 @@ msgstr "Αφαίρεση"
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Αφαίρεση {0}"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:198
+msgid "Remove all"
+msgstr "Αφαίρεση όλων"
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:101
 msgid "Remove card reader"
@@ -11632,9 +11926,22 @@ msgstr "Αιτήθηκε από"
 msgid "Require Billing Address"
 msgstr "Υποχρεωτική Διεύθυνση Χρέωσης"
 
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:49
+msgid "Require two-factor"
+msgstr "Απαίτηση δύο παραγόντων"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:61
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:87
+msgid "Require two-factor authentication"
+msgstr "Απαίτηση ελέγχου ταυτότητας δύο παραγόντων"
+
 #: src/components/common/QuestionsTable/index.tsx:118
 msgid "Required"
 msgstr "Υποχρεωτικό"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:136
+msgid "Required by your organisation"
+msgstr "Απαιτείται από τον οργανισμό σας"
 
 #: src/components/common/CookieConsentBanner/index.tsx:95
 msgid "Required for the site to work, such as keeping you signed in."
@@ -11665,7 +11972,7 @@ msgstr "Επαναποστολή Email Επιβεβαίωσης"
 msgid "Resend email"
 msgstr "Επαναποστολή email"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:163
+#: src/components/routes/profile/ManageProfile/index.tsx:176
 msgid "Resend email confirmation"
 msgstr "Επαναποστολή επιβεβαίωσης email"
 
@@ -11673,7 +11980,7 @@ msgstr "Επαναποστολή επιβεβαίωσης email"
 msgid "Resend in {resendCooldown}s"
 msgstr "Επαναποστολή σε {resendCooldown}δ"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:127
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:164
 msgid "Resend invitation"
 msgstr "Επαναποστολή πρόσκλησης"
 
@@ -11689,7 +11996,7 @@ msgstr "Επαναποστολή Εισιτηρίου"
 msgid "Resend ticket email"
 msgstr "Επαναποστολή email εισιτηρίου"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:163
+#: src/components/routes/profile/ManageProfile/index.tsx:176
 msgid "Resending..."
 msgstr "Επαναποστολή..."
 
@@ -11703,7 +12010,7 @@ msgstr "κρατημένες θέσεις"
 
 #: src/components/common/EventCard/index.tsx:224
 #: src/components/common/EventCard/index.tsx:324
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:358
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:361
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
 #: src/ee/licensing/licenceNotice.ts:39
 msgid "Reserved seating"
@@ -11721,6 +12028,11 @@ msgstr "Δεσμευμένο μέχρι"
 msgid "Reset"
 msgstr "Επαναφορά"
 
+#: src/components/common/AdminUsersTable/index.tsx:83
+#: src/components/routes/admin/Users/index.tsx:37
+msgid "Reset 2FA"
+msgstr "Επαναφορά 2FA"
+
 #: src/components/routes/auth/ForgotPassword/index.tsx:59
 #: src/components/routes/auth/ResetPassword/index.tsx:75
 msgid "Reset password"
@@ -11737,6 +12049,15 @@ msgstr "Επαναφορά του PIN; Το συνδεδεμένο προσωπ�
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:38
 msgid "Reset to {0}"
 msgstr "Επαναφορά σε {0}"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:49
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:158
+msgid "Reset two-factor"
+msgstr "Επαναφορά ελέγχου δύο παραγόντων"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:44
+msgid "Reset two-factor authentication for {0}? Only do this once you've confirmed it's really them. They'll be able to sign in with just their password and will be emailed about the change."
+msgstr "Επαναφορά του ελέγχου ταυτότητας δύο παραγόντων για {0}; Κάντε το μόνο αφού επιβεβαιώσετε ότι είναι πράγματι το ίδιο άτομο. Θα μπορεί να συνδέεται μόνο με τον κωδικό του και θα ενημερωθεί με email για την αλλαγή."
 
 #: src/ee/seating/components/SeatMapZoomControls/index.tsx:21
 msgid "Reset view"
@@ -11856,7 +12177,11 @@ msgstr "Έλεγχος αλλαγών"
 msgid "Review events flagged as potential spam by the automated check"
 msgstr "Ελέγξτε τις εκδηλώσεις που επισημάνθηκαν ως πιθανό spam από τον αυτόματο έλεγχο"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:133
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:37
+msgid "Review security settings"
+msgstr "Έλεγχος ρυθμίσεων ασφαλείας"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:170
 msgid "Revoke invitation"
 msgstr "Ανάκληση πρόσκλησης"
 
@@ -11876,7 +12201,7 @@ msgstr "Δεξιά πτέρυγα"
 
 #: src/components/modals/EditUserModal/index.tsx:94
 #: src/components/modals/InviteUserModal/index.tsx:64
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:159
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:198
 msgid "Role"
 msgstr "Ρόλος"
 
@@ -11934,12 +12259,12 @@ msgstr "Ημερομηνία Λήξης Πώλησης"
 msgid "Sale ended"
 msgstr "Η πώληση έληξε"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:140
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:343
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:143
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:346
 msgid "Sale ended {0}"
 msgstr "Η πώληση έληξε {0}"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:344
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:347
 msgid "Sale ends {0}"
 msgstr "Η πώληση λήγει {0}"
 
@@ -11960,7 +12285,7 @@ msgstr "Οι ημερομηνίες της περιόδου πώλησης ισ�
 msgid "Sale Start Date"
 msgstr "Ημερομηνία Έναρξης Πώλησης"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:338
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:341
 msgid "Sale starts {0}"
 msgstr "Η πώληση ξεκινά {0}"
 
@@ -11974,7 +12299,7 @@ msgstr "Περίοδος πώλησης"
 msgid "Sales"
 msgstr "Πωλήσεις"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:142
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:145
 msgid "Sales are paused"
 msgstr "Οι πωλήσεις είναι σε παύση"
 
@@ -12090,6 +12415,10 @@ msgstr "Αποθήκευση Αλλαγών"
 msgid "Save choices"
 msgstr "Αποθήκευση επιλογών"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:82
+msgid "Save codes"
+msgstr "Αποθήκευση κωδικών"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:164
 msgid "Save fee override"
 msgstr "Αποθήκευση παράκαμψης χρέωσης"
@@ -12130,6 +12459,10 @@ msgstr "Αποθήκευση ρυθμίσεων ΦΠΑ"
 msgid "Save VAT Settings"
 msgstr "Αποθήκευση Ρυθμίσεων ΦΠΑ"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:62
+msgid "Save your recovery codes"
+msgstr "Αποθηκεύστε τους κωδικούς ανάκτησης"
+
 #: src/components/common/LocationPicker/index.tsx:183
 msgid "Saved location"
 msgstr "Αποθηκευμένη τοποθεσία"
@@ -12142,6 +12475,7 @@ msgstr "Αποθηκευμένες τοποθεσίες"
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
 msgstr "Η αποθήκευση μιας παράκαμψης δημιουργεί ξεχωριστή διαμόρφωση για αυτόν τον διοργανωτή, αν αυτή τη στιγμή χρησιμοποιεί την προεπιλογή του συστήματος."
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:80
 #: src/components/layouts/CheckIn/index.tsx:76
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:66
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/ScanTab.tsx:42
@@ -12205,7 +12539,7 @@ msgstr "Το πρόγραμμα ρυθμίζεται στη συνέχεια"
 msgid "Schedule starts on"
 msgstr "Το πρόγραμμα ξεκινά στις"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:127
 #: src/components/routes/admin/Messages/index.tsx:125
 #: src/components/routes/event/messages.tsx:62
 msgid "Scheduled"
@@ -12276,11 +12610,12 @@ msgstr "Αναζήτηση ανά όνομα ή email..."
 msgid "Search by name, email or order number"
 msgstr "Αναζήτηση με όνομα, email ή αριθμό παραγγελίας"
 
-#: src/components/routes/admin/Users/index.tsx:60
+#: src/components/routes/admin/Users/index.tsx:75
 msgid "Search by name, email, or account..."
 msgstr "Αναζήτηση ανά όνομα, email ή λογαριασμό..."
 
-#: src/components/routes/event/orders.tsx:180
+#: src/components/modals/ProductPurchasesModal/index.tsx:259
+#: src/components/routes/event/orders.tsx:200
 msgid "Search by name, email, or order #..."
 msgstr "Αναζήτηση ανά όνομα, email ή αριθμό παραγγελίας..."
 
@@ -12328,9 +12663,13 @@ msgstr "Αναζήτηση μηνυμάτων..."
 msgid "Search orders"
 msgstr "Αναζήτηση παραγγελιών"
 
-#: src/components/routes/event/products.tsx:54
+#: src/components/routes/event/products.tsx:70
 msgid "Search products"
 msgstr "Αναζήτηση προϊόντων"
+
+#: src/components/modals/ProductPurchasesModal/index.tsx:260
+msgid "Search purchases"
+msgstr "Αναζήτηση αγορών"
 
 #: src/components/common/LocationPicker/index.tsx:326
 msgid "Search results"
@@ -12511,6 +12850,14 @@ msgstr "Όνομα τμήματος"
 msgid "Secure Checkout"
 msgstr "Ασφαλής Ολοκλήρωση Αγοράς"
 
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:44
+msgid "Secure your account"
+msgstr "Ασφαλίστε τον λογαριασμό σας"
+
+#: src/components/routes/profile/ManageProfile/index.tsx:133
+msgid "Security"
+msgstr "Ασφάλεια"
+
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:129
 msgid "See all prices"
 msgstr "Δείτε όλες τις τιμές"
@@ -12548,7 +12895,7 @@ msgstr "Επιλέξτε μήνυμα για προβολή περιεχομέν
 msgid "Select a tier"
 msgstr "Επιλογή βαθμίδας"
 
-#: src/components/common/AdminUsersTable/index.tsx:100
+#: src/components/common/AdminUsersTable/index.tsx:112
 msgid "Select Account"
 msgstr "Επιλογή Λογαριασμού"
 
@@ -12716,7 +13063,7 @@ msgstr "Πώληση στην είσοδο"
 msgid "Sell cash only"
 msgstr "Πώληση μόνο με μετρητά"
 
-#: src/components/layouts/AuthLayout/index.tsx:42
+#: src/components/layouts/AuthLayout/index.tsx:43
 msgid "Sell out your event."
 msgstr "Εξαντλήστε τα εισιτήρια της εκδήλωσής σας."
 
@@ -12760,7 +13107,7 @@ msgstr "Πωλεί 1 προϊόν"
 msgid "Sells every product"
 msgstr "Πωλεί όλα τα προϊόντα"
 
-#: src/components/routes/auth/Login/index.tsx:157
+#: src/components/routes/auth/Login/index.tsx:255
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -12921,6 +13268,10 @@ msgstr "Ορίστε το ως <0>APP_LICENCE_KEY</0> στο περιβάλλο�
 msgid "Set it in each ticket's Quantity field on <0>Tickets & Products</0>, when you create or edit the ticket."
 msgstr "Ορίστε την στο πεδίο Ποσότητα κάθε εισιτηρίου στη σελίδα <0>Εισιτήρια & Προϊόντα</0>, όταν δημιουργείτε ή επεξεργάζεστε το εισιτήριο."
 
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:77
+msgid "Set it up"
+msgstr "Ρύθμιση"
+
 #: src/components/common/CapacityHelp/index.tsx:120
 msgid "Set it when you add dates, or on any single date under <0>Occurrence Schedule</0>."
 msgstr "Ορίστε την όταν προσθέτετε ημερομηνίες ή για μία ημερομηνία στο <0>Πρόγραμμα ημερομηνιών</0>."
@@ -12966,6 +13317,10 @@ msgstr "Ρύθμιση προγράμματος"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "Ορίστε τα εισιτήρια που θα πουλήσετε και τις τιμές τους"
+
+#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:21
+msgid "Set up two-factor authentication"
+msgstr "Ρύθμιση ελέγχου ταυτότητας δύο παραγόντων"
 
 #: src/components/routes/welcome/index.tsx:43
 msgid "Set up your organization"
@@ -13126,6 +13481,10 @@ msgstr "Εμφάνιση λεπτομερειών παραγγελίας σε μ
 msgid "Show question answers to non-logged-in staff"
 msgstr "Εμφάνιση απαντήσεων σε ερωτήσεις σε μη συνδεδεμένο προσωπικό"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:234
+msgid "Show refunded orders"
+msgstr "Εμφάνιση παραγγελιών με επιστροφή χρημάτων"
+
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:59
 msgid "Show remaining capacity on event dates"
 msgstr "Εμφάνιση υπολειπόμενης χωρητικότητας στις ημερομηνίες της εκδήλωσης"
@@ -13215,6 +13574,10 @@ msgstr "Συνδεδεμένος ως"
 msgid "Signed Up"
 msgstr "Εγγράφηκε"
 
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:15
+msgid "Simple and widely used, with optional cloud sync"
+msgstr "Απλή και ευρέως διαδεδομένη, με προαιρετικό συγχρονισμό στο cloud"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:229
 #: src/components/modals/ManageOrderModal/index.tsx:265
 msgid "Simpson"
@@ -13263,14 +13626,16 @@ msgid "Social Links & Website"
 msgstr "Κοινωνικοί Σύνδεσμοι & Ιστοσελίδα"
 
 #: src/components/common/ProductsTable/index.tsx:97
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:523
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/modals/ManageOccurrenceModal/index.tsx:186
+#: src/components/modals/ProductPurchasesModal/index.tsx:82
+#: src/components/modals/ProductPurchasesModal/index.tsx:208
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:50
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:150
 msgid "Sold"
 msgstr "Πωλήθηκε"
 
-#: src/components/routes/event/orders.tsx:77
+#: src/components/routes/event/orders.tsx:89
 msgid "Sold by"
 msgstr "Πωλήθηκε από"
 
@@ -13297,7 +13662,7 @@ msgstr "εξαντλημένο"
 msgid "Sold out"
 msgstr "Εξαντλήθηκε"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:121
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:124
 #: src/components/layouts/EventHomepage/index.tsx:203
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:215
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
@@ -13358,8 +13723,9 @@ msgstr "Κάτι πήγε στραβά κατά τη διαγραφή του Φ�
 msgid "Something went wrong, please try again, or contact support if the problem persists"
 msgstr "Κάτι πήγε στραβά, δοκιμάστε ξανά ή επικοινωνήστε με την υποστήριξη εάν το πρόβλημα επιμένει"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:44
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:59
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:47
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:67
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:82
 msgid "Something went wrong! Please try again"
 msgstr "Κάτι πήγε στραβά! Παρακαλώ δοκιμάστε ξανά"
 
@@ -13371,15 +13737,23 @@ msgstr "Κάτι πήγε στραβά."
 msgid "Something went wrong. Please try again later."
 msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξανά αργότερα."
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
 #: src/components/layouts/Event/index.tsx:97
 #: src/components/layouts/OrganizerLayout/index.tsx:132
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:38
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
-#: src/components/routes/auth/Login/index.tsx:69
+#: src/components/routes/admin/Users/index.tsx:35
+#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:167
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:363
-#: src/components/routes/profile/ManageProfile/index.tsx:91
-#: src/components/routes/profile/ManageProfile/index.tsx:105
+#: src/components/routes/profile/ManageProfile/index.tsx:98
+#: src/components/routes/profile/ManageProfile/index.tsx:112
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:40
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:59
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:96
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:32
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
 msgid "Something went wrong. Please try again."
 msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξανά."
@@ -13620,7 +13994,7 @@ msgstr "Στατιστικά"
 #: src/components/modals/EditUserModal/index.tsx:104
 #: src/components/modals/ManageAttendeeModal/index.tsx:151
 #: src/components/modals/ManageOrderModal/index.tsx:122
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:161
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:200
 #: src/components/routes/admin/Announcements/index.tsx:159
 #: src/components/routes/admin/Announcements/index.tsx:469
 #: src/components/routes/admin/Dashboard/index.tsx:405
@@ -13660,6 +14034,11 @@ msgstr "Ακόμα περιμένετε; Ελέγξτε την οθόνη του
 #: src/components/common/ImpersonationBanner/index.tsx:53
 msgid "Stop Impersonating"
 msgstr "Διακοπή Υποκατάστασης"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:52
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:55
+msgid "Stop trusting this device"
+msgstr "Να μην εμπιστεύομαι πλέον αυτή τη συσκευή"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
 msgid "Straight rows, central aisle."
@@ -14069,7 +14448,7 @@ msgstr "Φόροι"
 msgid "Taxes & fees"
 msgstr "Φόροι και χρεώσεις"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:183
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:186
 msgid "Taxes & fees applied"
 msgstr "Εφαρμόστηκαν φόροι & τέλη"
 
@@ -14077,7 +14456,7 @@ msgstr "Εφαρμόστηκαν φόροι & τέλη"
 msgid "Taxes and Fees"
 msgstr "Φόροι και Τέλη"
 
-#: src/components/layouts/AuthLayout/index.tsx:24
+#: src/components/layouts/AuthLayout/index.tsx:25
 msgid "Team collaboration"
 msgstr "Συνεργασία ομάδας"
 
@@ -14152,6 +14531,10 @@ msgstr "Ευχαριστούμε,"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:690
 msgid "That promo code is invalid"
 msgstr "Αυτός ο κωδικός προσφοράς δεν είναι έγκυρος"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:25
+msgid "That was your last recovery code. Generate a new set now so you don't get locked out."
+msgstr "Αυτός ήταν ο τελευταίος κωδικός ανάκτησης. Δημιουργήστε τώρα νέο σετ για να μη χάσετε την πρόσβαση."
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:819
 msgid "That's {totalOccurrences} sessions — the maximum is {max}. Shorten the range or frequency."
@@ -14419,7 +14802,7 @@ msgstr "Δεν υπάρχουν διαθέσιμα προϊόντα σε αυτ�
 msgid "There are no upcoming dates for this event"
 msgstr "Αυτή η εκδήλωση δεν έχει προσεχείς ημερομηνίες"
 
-#: src/components/modals/RefundOrderModal/index.tsx:184
+#: src/components/modals/RefundOrderModal/index.tsx:180
 msgid "There is a refund pending. Please wait for it to complete before requesting another refund."
 msgstr "Υπάρχει επιστροφή σε εκκρεμότητα. Παρακαλώ περιμένετε να ολοκληρωθεί πριν ζητήσετε άλλη."
 
@@ -14434,6 +14817,10 @@ msgstr "Παρουσιάστηκε σφάλμα κατά την επεξεργα
 #: src/hooks/useOrderActions.tsx:59
 msgid "There was an error sending your message"
 msgstr "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματός σας"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:186
+msgid "These browsers skip the code for 30 days after you trust them."
+msgstr "Αυτά τα προγράμματα περιήγησης παραλείπουν τον κωδικό για 30 ημέρες αφού τα εμπιστευτείτε."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:498
 msgid "These details are shown on the attendee's ticket and order summary for this date only."
@@ -14585,6 +14972,10 @@ msgstr "Αυτή η ημερομηνία έχει εξαντληθεί. Επιλ
 msgid "This date only"
 msgstr "Μόνο αυτή η ημερομηνία"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:45
+msgid "This device"
+msgstr "Αυτή η συσκευή"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:113
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "Αυτό αποσυνδέει το {stripeAccountId} από αυτόν τον διοργανωτή. Οι πωλήσεις εισιτηρίων επί πληρωμή θα σταματήσουν να λειτουργούν μέχρι να συνδέσετε ξανά έναν λογαριασμό Stripe."
@@ -14715,7 +15106,7 @@ msgstr "Αυτή η ημερομηνία έχει καλυφθεί πλήρως"
 msgid "This order has already been paid."
 msgstr "Αυτή η παραγγελία έχει ήδη πληρωθεί."
 
-#: src/components/modals/RefundOrderModal/index.tsx:188
+#: src/components/modals/RefundOrderModal/index.tsx:184
 msgid "This order has already been refunded."
 msgstr "Αυτή η παραγγελία έχει ήδη επιστραφεί."
 
@@ -14763,15 +15154,15 @@ msgstr "Αυτό παρακάμπτει όλες τις ρυθμίσεις ορ�
 msgid "This preview shows how your email will look with sample data. Actual emails will use real values."
 msgstr "Αυτή η προεπισκόπηση δείχνει πώς θα φαίνεται το email με δείγμα δεδομένων. Τα πραγματικά email θα χρησιμοποιούν πραγματικές τιμές."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:110
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:113
 msgid "This product cannot be deleted because it is associated with an order. You can hide it instead."
 msgstr "Αυτό το προϊόν δεν μπορεί να διαγραφεί γιατί σχετίζεται με παραγγελία. Μπορείτε να το αποκρύψετε."
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:455
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:458
 msgid "This product is highlighted on the event page"
 msgstr "Αυτό το προϊόν αναδεικνύεται στη σελίδα εκδήλωσης"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:138
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:141
 msgid "This product is sold out"
 msgstr "Αυτό το προϊόν έχει εξαντληθεί"
 
@@ -14880,14 +15271,18 @@ msgstr "Πέμ"
 msgid "Thursday"
 msgstr "Πέμπτη"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:185
+msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
+msgstr "Επιλέξτε \"Εμπιστεύομαι αυτή τη συσκευή\" κατά τη σύνδεση για να παραλείπεται ο κωδικός σε εκείνο το πρόγραμμα περιήγησης για 30 ημέρες."
+
 #: src/components/routes/my-tickets/index.tsx:102
 #: src/hooks/useAttendeeActions.tsx:113
 msgid "ticket"
 msgstr "εισιτήριο"
 
 #: src/components/common/AttendeeTicket/index.tsx:130
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:435
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:563
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:438
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:574
 #: src/components/forms/ProductForm/index.tsx:224
 #: src/components/modals/CreateAttendeeModal/index.tsx:247
 #: src/components/modals/ManageAttendeeModal/index.tsx:147
@@ -14941,7 +15336,7 @@ msgstr "Λογότυπο Εισιτηρίου"
 msgid "Ticket Not Found"
 msgstr "Εισιτήριο Δεν Βρέθηκε"
 
-#: src/components/routes/event/products.tsx:89
+#: src/components/routes/event/products.tsx:129
 msgid "Ticket or Product"
 msgstr "Εισιτήριο ή Προϊόν"
 
@@ -14985,7 +15380,7 @@ msgid "Tickets"
 msgstr "Εισιτήρια"
 
 #: src/components/layouts/Event/index.tsx:131
-#: src/components/routes/event/products.tsx:48
+#: src/components/routes/event/products.tsx:64
 msgid "Tickets & Products"
 msgstr "Εισιτήρια & Προϊόντα"
 
@@ -15071,7 +15466,7 @@ msgstr "Φορές Χρήσης"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:363
-#: src/components/routes/profile/ManageProfile/index.tsx:188
+#: src/components/routes/profile/ManageProfile/index.tsx:201
 msgid "Timezone"
 msgstr "Ζώνη Ώρας"
 
@@ -15118,7 +15513,8 @@ msgid "Tomorrow"
 msgstr "Αύριο"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:33
-#: src/components/routes/auth/Login/index.tsx:52
+#: src/components/routes/auth/Login/index.tsx:88
+#: src/components/routes/auth/Login/index.tsx:108
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "Πάρα πολλές προσπάθειες. Περιμένετε ένα λεπτό και δοκιμάστε ξανά."
@@ -15132,7 +15528,7 @@ msgstr "Εργαλεία"
 msgid "Top Organizers (Last 14 Days)"
 msgstr "Κορυφαίοι Διοργανωτές (Τελευταίες 14 Ημέρες)"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:207
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:210
 msgid "total"
 msgstr "σύνολο"
 
@@ -15240,6 +15636,15 @@ msgstr "Παρακολούθηση ανάπτυξης λογαριασμού κ�
 msgid "Tracking & Analytics"
 msgstr "Παρακολούθηση & Αναλυτικά"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:87
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:125
+msgid "Trust this device for 30 days"
+msgstr "Εμπιστοσύνη σε αυτή τη συσκευή για 30 ημέρες"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:182
+msgid "Trusted devices"
+msgstr "Αξιόπιστες συσκευές"
+
 #: src/components/common/ThemeColorControls/index.tsx:174
 msgid "Try a darker or lighter accent color."
 msgstr "Δοκιμάστε πιο σκούρο ή πιο ανοιχτό χρώμα έμφασης."
@@ -15253,6 +15658,7 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Προσαρμόστε τα φίλτρα για να δείτε περισσότερες ημερομηνίες."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1075
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:77
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
@@ -15260,7 +15666,7 @@ msgstr "Προσαρμόστε τα φίλτρα για να δείτε περι
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
-#: src/components/routes/auth/Login/index.tsx:138
+#: src/components/routes/auth/Login/index.tsx:236
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Δοκιμάστε άλλο email"
@@ -15286,6 +15692,28 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Τουρκικά"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:232
+msgid "Turn off"
+msgstr "Απενεργοποίηση"
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:50
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:118
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:216
+msgid "Turn off two-factor authentication"
+msgstr "Απενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων"
+
+#: src/components/routes/admin/Users/index.tsx:32
+msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
+msgstr "Απενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων για τον χρήστη {0}; Κάντε το μόνο αφού επιβεβαιώσετε την ταυτότητά του. Θα λάβει email και θα μπορεί να συνδεθεί μόνο με τον κωδικό του."
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:129
+msgid "Turn on two-factor authentication"
+msgstr "Ενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:75
+msgid "Turn on two-factor authentication for your own profile first."
+msgstr "Ενεργοποιήστε πρώτα τον έλεγχο ταυτότητας δύο παραγόντων στο δικό σας προφίλ."
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound off"
 msgstr "Απενεργοποίηση ήχου"
@@ -15307,6 +15735,37 @@ msgstr "Δύο θέσεις στο {0} ονομάζονται και οι δύο
 msgid "Two settings decide how many people can book a date. Whichever is lower is what you can sell."
 msgstr "Δύο ρυθμίσεις καθορίζουν πόσα άτομα μπορούν να κάνουν κράτηση για μια ημερομηνία. Η χαμηλότερη είναι αυτό που μπορείτε να πουλήσετε."
 
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:201
+msgid "Two-factor"
+msgstr "Δύο παράγοντες"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:109
+msgid "Two-factor authentication"
+msgstr "Έλεγχος ταυτότητας δύο παραγόντων"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:37
+msgid "Two-factor authentication is now optional"
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι πλέον προαιρετικός"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:36
+msgid "Two-factor authentication is now required"
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι πλέον υποχρεωτικός"
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:31
+msgid "Two-factor authentication is off"
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι ανενεργός"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:236
+#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:31
+msgid "Two-factor authentication is on"
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι ενεργός"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:46
+#: src/components/routes/admin/Users/index.tsx:34
+msgid "Two-factor authentication reset"
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων επαναφέρθηκε"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Announcements/index.tsx:158
 #: src/components/routes/admin/Attribution/index.tsx:171
@@ -15321,6 +15780,10 @@ msgstr "Τύπος"
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:106
 msgid "Type \"delete\" to confirm"
 msgstr "Πληκτρολογήστε \"delete\" για επιβεβαίωση"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+msgid "Type the code your authenticator app shows for {0}."
+msgstr "Πληκτρολογήστε τον κωδικό που εμφανίζει η εφαρμογή ελέγχου ταυτότητας για το {0}."
 
 #: src/components/routes/admin/Announcements/AnnouncementTargetPicker.tsx:54
 msgid "Type to search..."
@@ -15458,6 +15921,10 @@ msgstr "Μη διαθέσιμος, καταχωρίστε ξανά"
 msgid "Undo"
 msgstr "Αναίρεση"
 
+#: src/components/modals/ProductPurchasesModal/index.tsx:189
+msgid "Unique buyers: {0}"
+msgstr "Μοναδικοί αγοραστές: {0}"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:30
 msgid "Unique Customers"
 msgstr "Μοναδικοί Πελάτες"
@@ -15480,9 +15947,14 @@ msgstr "Άγνωστο"
 msgid "Unknown Attendee"
 msgstr "Άγνωστος Συμμετέχων"
 
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:27
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:34
+msgid "Unknown device"
+msgstr "Άγνωστη συσκευή"
+
 #: src/components/common/CapacityHelp/index.tsx:31
 #: src/components/common/CapacityHelp/index.tsx:51
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:401
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:404
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:43
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:101
 #: src/components/forms/PromoCodeForm/index.tsx:171
@@ -15561,7 +16033,7 @@ msgstr "Μη επαληθευμένος"
 msgid "Up to {max} per order"
 msgstr "Έως {max} ανά παραγγελία"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:367
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:370
 msgid "up to {perDateAllocation} per date"
 msgstr "έως {perDateAllocation} ανά ημερομηνία"
 
@@ -15609,7 +16081,7 @@ msgstr "Ενημέρωση ετικέτας"
 msgid "Update location"
 msgstr "Ενημέρωση τοποθεσίας"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:215
+#: src/components/routes/profile/ManageProfile/index.tsx:228
 msgid "Update profile"
 msgstr "Ενημέρωση προφίλ"
 
@@ -15717,6 +16189,15 @@ msgstr "Ο σαρωτής USB σε παύση"
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "Χρησιμοποιήστε <0>Liquid templating</0> για εξατομίκευση email"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
+msgid "Use a recovery code"
+msgstr "Χρήση κωδικού ανάκτησης"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+msgid "Use a recovery code instead"
+msgstr "Χρήση κωδικού ανάκτησης"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:449
 msgid "Use areas for separate parts of the venue, such as stalls and balcony. Best available seats are chosen nearest the stage."
 msgstr "Χρησιμοποιήστε περιοχές για ξεχωριστά τμήματα του χώρου, όπως πλατεία και εξώστης. Οι καλύτερες διαθέσιμες θέσεις επιλέγονται πιο κοντά στη σκηνή."
@@ -15750,6 +16231,11 @@ msgstr "Χρήση αυτής της θέσης"
 msgid "Use ticket price"
 msgstr "Χρήση τιμής εισιτηρίου"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+msgid "Use your authenticator app instead"
+msgstr "Χρήση της εφαρμογής ελέγχου ταυτότητας"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:155
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "Χρησιμοποιείται για περιγράμματα, ανάδειξη και στυλιζάρισμα QR code"
@@ -15766,12 +16252,12 @@ msgstr "Χρησιμοποιείται για την καρτέλα Σάρωση
 msgid "Used to measure and personalise ads."
 msgstr "Χρησιμοποιούνται για τη μέτρηση και εξατομίκευση διαφημίσεων."
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:158
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:197
 msgid "User"
 msgstr "Χρήστης"
 
 #: src/components/common/GlobalMenu/index.tsx:63
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:145
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:182
 msgid "User Management"
 msgstr "Διαχείριση Χρηστών"
 
@@ -15782,7 +16268,7 @@ msgstr "Διαχείριση Χρηστών"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 #: src/components/routes/admin/Dashboard/index.tsx:404
-#: src/components/routes/admin/Users/index.tsx:57
+#: src/components/routes/admin/Users/index.tsx:72
 msgid "Users"
 msgstr "Χρήστες"
 
@@ -15801,7 +16287,7 @@ msgstr "Τα χρησιμοποιείτε σε πραγματικές εκδηλ
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:83
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:146
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:126
-#: src/components/routes/profile/ManageProfile/index.tsx:189
+#: src/components/routes/profile/ManageProfile/index.tsx:202
 msgid "UTC"
 msgstr "UTC"
 
@@ -15932,9 +16418,22 @@ msgstr "Επαληθευμένο"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Οι επαληθευμένοι λογαριασμοί μπορούν να στέλνουν μηνύματα στους συμμετέχοντες και να διαχειρίζονται πρότυπα email. Η σύνδεση με το Stripe επαληθεύει αυτόματα έναν λογαριασμό."
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:81
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
+msgid "Verify"
+msgstr "Επαλήθευση"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:223
+msgid "Verify and turn on"
+msgstr "Επαλήθευση και ενεργοποίηση"
+
 #: src/components/routes/welcome/index.tsx:189
 msgid "Verify Email"
 msgstr "Επαλήθευση Email"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:136
+msgid "Verify recovery code"
+msgstr "Επαλήθευση κωδικού ανάκτησης"
 
 #: src/components/layouts/Event/index.tsx:308
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
@@ -16044,7 +16543,7 @@ msgstr "Προβολή Παραγγελίας"
 msgid "View Order Details"
 msgstr "Προβολή Λεπτομερειών Παραγγελίας"
 
-#: src/components/routes/event/orders.tsx:175
+#: src/components/routes/event/orders.tsx:195
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "Προβολή λεπτομερειών παραγγελίας, έκδοση επιστροφών και επαναποστολή επιβεβαιώσεων."
 
@@ -16056,6 +16555,10 @@ msgstr "Προβολή Αρχικής Διοργανωτή"
 #: src/components/layouts/OrganizerHomepage/index.tsx:353
 msgid "View past events"
 msgstr "Δείτε προηγούμενες εκδηλώσεις"
+
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:557
+msgid "View purchases"
+msgstr "Προβολή αγορών"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartBar.tsx:21
 msgid "View sale"
@@ -16125,7 +16628,7 @@ msgid "Waiting for scan…"
 msgstr "Αναμονή σάρωσης…"
 
 #: src/components/forms/ProductForm/index.tsx:462
-#: src/components/layouts/AuthLayout/index.tsx:18
+#: src/components/layouts/AuthLayout/index.tsx:19
 #: src/components/layouts/Event/index.tsx:142
 #: src/components/routes/event/Settings/index.tsx:90
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
@@ -16135,7 +16638,7 @@ msgstr "Αναμονή σάρωσης…"
 msgid "Waitlist"
 msgstr "Λίστα Αναμονής"
 
-#: src/components/common/ProductsTable/SortableProduct/index.tsx:459
+#: src/components/common/ProductsTable/SortableProduct/index.tsx:462
 msgid "Waitlist Enabled"
 msgstr "Λίστα Αναμονής Ενεργή"
 
@@ -16308,7 +16811,7 @@ msgstr "Το webhook δημιουργήθηκε επιτυχώς"
 msgid "Webhook deleted successfully"
 msgstr "Το webhook διαγράφηκε επιτυχώς"
 
-#: src/components/layouts/AuthLayout/index.tsx:26
+#: src/components/layouts/AuthLayout/index.tsx:27
 msgid "Webhook integrations"
 msgstr "Ενσωματώσεις webhook"
 
@@ -16381,7 +16884,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Please login to continue."
 msgstr "Καλώς ήρθατε! Παρακαλώ συνδεθείτε για να συνεχίσετε."
 
-#: src/components/routes/auth/Login/index.tsx:77
+#: src/components/routes/auth/Login/index.tsx:175
 msgid "Welcome back"
 msgstr "Καλώς ήρθατε ξανά"
 
@@ -16778,8 +17281,8 @@ msgid "You cannot edit the role or status of the account owner."
 msgstr "Δεν μπορείτε να επεξεργαστείτε τον ρόλο ή την κατάσταση του κατόχου λογαριασμού."
 
 #: src/components/modals/RefundOrderModal/index.tsx:179
-msgid "You cannot refund a manually created order."
-msgstr "Δεν μπορείτε να επιστρέψετε χειροκίνητα δημιουργημένη παραγγελία."
+#~ msgid "You cannot refund a manually created order."
+#~ msgstr "Δεν μπορείτε να επιστρέψετε χειροκίνητα δημιουργημένη παραγγελία."
 
 #: src/components/modals/ChooseAccountModal/index.tsx:14
 msgid "You have access to multiple accounts. Please choose one to continue."
@@ -16858,6 +17361,14 @@ msgstr "Πρέπει να επαληθεύσετε το email λογαριασμ
 msgid "You receive"
 msgstr "Λαμβάνετε"
 
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:28
+msgid "You used a recovery code. You have {remaining} recovery codes left."
+msgstr "Χρησιμοποιήσατε έναν κωδικό ανάκτησης. Σας απομένουν {remaining} κωδικοί ανάκτησης."
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:27
+msgid "You used a recovery code. You have 1 recovery code left."
+msgstr "Χρησιμοποιήσατε έναν κωδικό ανάκτησης. Σας απομένει 1 κωδικός ανάκτησης."
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Θα πρέπει να σημάνετε χειροκίνητα παραγγελία ως πληρωμένη. Αυτό μπορεί να γίνει στη σελίδα διαχείρισης παραγγελίας."
@@ -16898,6 +17409,14 @@ msgstr "Εγγράφεστε στη λίστα αναμονής για τις {o
 msgid "You're on the waitlist!"
 msgstr "Είστε στη λίστα αναμονής!"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:172
+msgid "You're running low. Generate a new set so you don't get locked out."
+msgstr "Σας απομένουν λίγοι κωδικοί. Δημιουργήστε νέο σετ για να μη χάσετε την πρόσβαση."
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
+msgid "You're signed in"
+msgstr "Έχετε συνδεθεί"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
 msgstr "Σας προσφέρθηκε μια θέση!"
@@ -16909,6 +17428,14 @@ msgstr "Αλλάξατε την ώρα της συνεδρίας"
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Το χρώμα έμφασης δεν ξεχωρίζει αρκετά σε αυτή τη λειτουργία."
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+msgid "your account"
+msgstr "ο λογαριασμός σας"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:119
+msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
+msgstr "Ο λογαριασμός σας ζητά κωδικό από την εφαρμογή ελέγχου ταυτότητας κατά τη σύνδεση. Ενεργοποιήθηκε {0}."
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
 msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
@@ -16925,6 +17452,10 @@ msgstr "Ο λογαριασμός σας έχει πλέον προγραμμα�
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."
 msgstr "Το όνομα λογαριασμού χρησιμοποιείται σε σελίδες εκδηλώσεων και σε email."
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:58
+msgid "Your account will only be protected by your password. Your recovery codes and trusted devices will be removed."
+msgstr "Ο λογαριασμός σας θα προστατεύεται μόνο από τον κωδικό σας. Οι κωδικοί ανάκτησης και οι αξιόπιστες συσκευές θα αφαιρεθούν."
 
 #: src/components/routes/event/Affiliates/index.tsx:48
 msgid "Your affiliates have been exported successfully."
@@ -16950,6 +17481,10 @@ msgstr "Η λίστα check-in δημιουργήθηκε επιτυχώς. Μο
 msgid "Your current order will be lost."
 msgstr "Η τρέχουσα παραγγελία σας θα χαθεί."
 
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:63
+msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
+msgstr "Οι τρέχοντες κωδικοί ανάκτησης θα πάψουν να λειτουργούν άμεσα. Εισαγάγετε έναν κωδικό από την εφαρμογή ελέγχου ταυτότητας για επιβεβαίωση."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:462
 msgid "Your Details"
 msgstr "Τα Στοιχεία σας"
@@ -16958,7 +17493,7 @@ msgstr "Τα Στοιχεία σας"
 msgid "Your Email"
 msgstr "Το Email σας"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:129
+#: src/components/routes/profile/ManageProfile/index.tsx:142
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "Το αίτημα αλλαγής email σε <0>{0}</0> εκκρεμεί. Ελέγξτε το email σας για επιβεβαίωση"
 
@@ -16999,6 +17534,10 @@ msgstr "Το Όνομά σας"
 msgid "Your new password must be at least 8 characters long."
 msgstr "Ο νέος κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες."
 
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+msgid "Your new recovery codes"
+msgstr "Οι νέοι κωδικοί ανάκτησής σας"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:612
 msgid "Your order details have been updated. A confirmation email has been sent to the new email address."
 msgstr "Τα στοιχεία παραγγελίας ενημερώθηκαν. Στάλθηκε email επιβεβαίωσης στη νέα διεύθυνση."
@@ -17015,7 +17554,7 @@ msgstr "Η παραγγελία σας ακυρώθηκε."
 msgid "Your order is awaiting payment"
 msgstr "Η παραγγελία σας αναμένει πληρωμή"
 
-#: src/components/routes/event/orders.tsx:149
+#: src/components/routes/event/orders.tsx:168
 msgid "Your orders have been exported successfully."
 msgstr "Οι παραγγελίες σας εξήχθησαν επιτυχώς."
 
@@ -17023,11 +17562,15 @@ msgstr "Οι παραγγελίες σας εξήχθησαν επιτυχώς."
 msgid "Your orders will appear here once they start rolling in."
 msgstr "Οι παραγγελίες σας θα εμφανίζονται εδώ μόλις αρχίσουν να έρχονται."
 
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:48
+msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
+msgstr "Ο οργανισμός σας απαιτεί έλεγχο ταυτότητας δύο παραγόντων. Ρυθμίστε τον τώρα για να συνεχίσετε. Χρειάζεται περίπου ένα λεπτό."
+
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
 msgstr "Η διεύθυνση του διοργανωτή σας"
 
-#: src/components/routes/auth/Login/index.tsx:102
+#: src/components/routes/auth/Login/index.tsx:200
 #: src/components/routes/auth/Register/index.tsx:111
 msgid "Your password"
 msgstr "Ο κωδικός σας"
@@ -17071,6 +17614,10 @@ msgstr "Η θέση σας άλλαξε"
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:117
 msgid "Your session expired. Sign in again to keep selling."
 msgstr "Η συνεδρία σας έληξε. Συνδεθείτε ξανά για να συνεχίσετε τις πωλήσεις."
+
+#: src/components/routes/auth/Login/index.tsx:103
+msgid "Your sign-in session has expired. Please sign in again."
+msgstr "Η συνεδρία σύνδεσής σας έληξε. Συνδεθείτε ξανά."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:116
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
