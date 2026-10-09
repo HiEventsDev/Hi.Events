@@ -128,6 +128,13 @@ Gotchas:
 - `BaseMail` is queued **and** `afterCommit()` — a mail sent inside a DB transaction that rolls back is silently discarded. Chain `->beforeCommit()` on the mailable when the send must survive a deliberate rollback (e.g. refund-and-reject webhook paths)
 - Promo usage, `products.sales_volume` and affiliate sales counters increment only when an order **completes** — any decrement must be gated on `isOrderCompleted()` (or equivalent) to stay symmetric
 
+#### Two-factor authentication
+- Login is two-step for enrolled users: `POST /auth/login` returns a cache-backed challenge token (no JWT), `POST /auth/login/two-factor` verifies a TOTP or recovery code and issues the token. Multi-account users verify once; the verified challenge is reused for account selection, so never re-send the password
+- Check codes only through `TwoFactorVerifier` — it holds the per-user lockout (10 failures / 15 min) that stops brute force across fresh challenges. TOTP replay is blocked by `users.two_factor_last_used_timestep` (compare-and-swap); recovery codes are stored as sha256 hashes (not app-key HMAC, so they survive `APP_KEY` rotation); the secret is encrypted with the app key. Starting setup and turning 2FA off both require the current password
+- Trusted devices are hashed rows in `user_trusted_devices` + the `hi_trusted_device` cookie. Revoke them whenever the password changes or 2FA is disabled/reset
+- `accounts.require_two_factor_authentication` is enforced by `EnsureTwoFactorEnrolled` (403 `TWO_FACTOR_SETUP_REQUIRED`, frontend redirects to `/auth/two-factor-setup`). New endpoints a not-yet-enrolled member needs must be added to its allowlist. Impersonation bypasses it
+- Locked-out users: account admins can reset members who belong only to their account (never the owner unless they are the owner, never superadmins); anyone else needs the superadmin reset in admin Users, or `php artisan user:reset-two-factor {email}` for self-hosters. All paths go through `TwoFactorResetService`
+
 #### Box office
 - Code lives under `backend/ee/BoxOffice/` (including Stripe Terminal) and `frontend/src/ee/box-office/`. Door endpoints are public (PIN session token): never expose attendee PII, and never cancel another live sale's reader prompt
 

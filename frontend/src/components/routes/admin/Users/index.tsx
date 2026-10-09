@@ -4,6 +4,9 @@ import {IconSearch} from "@tabler/icons-react";
 import {useState, useEffect} from "react";
 import {useGetAllUsers} from "../../../../queries/useGetAllUsers";
 import {useStartImpersonation} from "../../../../mutations/useStartImpersonation";
+import {useResetUserTwoFactor} from "../../../../mutations/useResetUserTwoFactor";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog";
+import {AdminUser} from "../../../../api/admin.client";
 import AdminUsersTable from "../../../common/AdminUsersTable";
 import {showError, showSuccess} from "../../../../utilites/notifications";
 import {IdParam} from "../../../../types";
@@ -22,6 +25,18 @@ const Users = () => {
     });
 
     const startImpersonationMutation = useStartImpersonation();
+    const resetTwoFactorMutation = useResetUserTwoFactor();
+
+    const handleResetTwoFactor = (user: AdminUser) => {
+        confirmationDialog(
+            t`Turn off two-factor authentication for ${user.email}? Only do this after confirming their identity. They will be emailed and can sign in with just their password.`,
+            () => resetTwoFactorMutation.mutate(user.id as IdParam, {
+                onSuccess: () => showSuccess(t`Two-factor authentication reset`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Something went wrong. Please try again.`),
+            }),
+            {confirm: t`Reset 2FA`},
+        );
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -73,6 +88,7 @@ const Users = () => {
                     <AdminUsersTable
                         users={usersData?.data || []}
                         onImpersonate={handleImpersonate}
+                        onResetTwoFactor={handleResetTwoFactor}
                         isLoading={startImpersonationMutation.isPending}
                     />
                 )}

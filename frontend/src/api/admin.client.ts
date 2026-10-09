@@ -526,6 +526,10 @@ export const adminClient = {
         return response.data;
     },
 
+    resetUserTwoFactor: async (userId: IdParam) => {
+        await api.post(`admin/users/${userId}/two-factor/reset`);
+    },
+
     stopImpersonation: async () => {
         const response = await api.post<StopImpersonationResponse>(
             'admin/stop-impersonation'

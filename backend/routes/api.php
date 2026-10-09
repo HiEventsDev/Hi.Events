@@ -56,6 +56,7 @@ use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusActio
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Accounts\UpdateAccountTwoFactorRequirementAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
@@ -99,6 +100,7 @@ use HiEvents\Http\Actions\Admin\SpamEvents\GetAllSpamEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
+use HiEvents\Http\Actions\Admin\Users\ResetUserTwoFactorAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
@@ -125,6 +127,7 @@ use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
+use HiEvents\Http\Actions\Auth\TwoFactorLoginAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
@@ -304,6 +307,14 @@ use HiEvents\Http\Actions\Users\GetUserAction;
 use HiEvents\Http\Actions\Users\GetUsersAction;
 use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
+use HiEvents\Http\Actions\Users\TwoFactor\BeginTwoFactorSetupAction;
+use HiEvents\Http\Actions\Users\TwoFactor\ConfirmTwoFactorSetupAction;
+use HiEvents\Http\Actions\Users\TwoFactor\DisableTwoFactorAction;
+use HiEvents\Http\Actions\Users\TwoFactor\GetTwoFactorStatusAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RegenerateRecoveryCodesAction;
+use HiEvents\Http\Actions\Users\TwoFactor\ResetAccountUserTwoFactorAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RevokeTrustedDeviceAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RevokeTrustedDevicesAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
 use HiEvents\Http\Actions\Waitlist\Organizer\CancelWaitlistEntryAction;
@@ -328,6 +339,7 @@ $router->prefix('/auth')->group(
     function (Router $router): void {
         // Auth
         $router->post('/login', LoginAction::class)->name('auth.login')->middleware('throttle:auth-login');
+        $router->post('/login/two-factor', TwoFactorLoginAction::class)->name('auth.login.two-factor')->middleware('throttle:auth-two-factor');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
         $router->post('/register', CreateAccountAction::class)->name('auth.register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password')->middleware('throttle:auth-forgot-password');
@@ -354,6 +366,13 @@ $router->middleware(['auth:api'])->group(
         // Users
         $router->get('/users/me', GetMeAction::class);
         $router->put('/users/me', UpdateMeAction::class);
+        $router->get('/users/me/two-factor', GetTwoFactorStatusAction::class);
+        $router->post('/users/me/two-factor/setup', BeginTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-setup');
+        $router->post('/users/me/two-factor/confirm', ConfirmTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-confirm');
+        $router->post('/users/me/two-factor/recovery-codes', RegenerateRecoveryCodesAction::class)->middleware('throttle:10,1,two-factor-recovery-codes');
+        $router->post('/users/me/two-factor/disable', DisableTwoFactorAction::class)->middleware('throttle:10,1,two-factor-disable');
+        $router->delete('/users/me/two-factor/trusted-devices', RevokeTrustedDevicesAction::class);
+        $router->delete('/users/me/two-factor/trusted-devices/{device_id}', RevokeTrustedDeviceAction::class)->whereNumber('device_id');
         $router->post('/users', CreateUserAction::class);
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
@@ -365,6 +384,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
         $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
         $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
+        $router->post('/users/{user_id}/two-factor/reset', ResetAccountUserTwoFactorAction::class)->whereNumber('user_id');
 
         // Announcements
         $router->get('/announcements/active', GetActiveAnnouncementsAction::class);
@@ -374,6 +394,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/accounts/deletion-request', RequestAccountDeletionAction::class);
         $router->delete('/accounts/deletion-request', CancelAccountDeletionAction::class);
         $router->get('/accounts/deletion-request', GetAccountDeletionStatusAction::class);
+        $router->put('/accounts/{account_id}/two-factor-requirement', UpdateAccountTwoFactorRequirementAction::class)->whereNumber('account_id');
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
 
@@ -657,6 +678,7 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
+        $router->post('/users/{user_id}/two-factor/reset', ResetUserTwoFactorAction::class)->whereNumber('user_id');
 
         // Failed Jobs
         $router->get('/failed-jobs', GetAllFailedJobsAction::class);

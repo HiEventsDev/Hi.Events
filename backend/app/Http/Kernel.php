@@ -10,6 +10,7 @@ use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\CacheGuestJsonResponse;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
+use HiEvents\Http\Middleware\EnsureTwoFactorEnrolled;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
 use HiEvents\Http\Middleware\LogImpersonationMiddleware;
 use HiEvents\Http\Middleware\PreventRequestForgery;
@@ -79,6 +80,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             SetAccountContext::class,
             EnsureAccountIsNotPendingDeletion::class,
+            EnsureTwoFactorEnrolled::class,
             SetUserLocaleMiddleware::class,
             LogImpersonationMiddleware::class,
         ],

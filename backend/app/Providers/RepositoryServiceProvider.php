@@ -74,6 +74,7 @@ use HiEvents\Repository\Eloquent\StripePayoutsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketLookupTokenRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
+use HiEvents\Repository\Eloquent\UserTrustedDeviceRepository;
 use HiEvents\Repository\Eloquent\WaitlistEntryRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
@@ -135,6 +136,7 @@ use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
@@ -147,6 +149,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     private static array $interfaceToConcreteMap = [
         UserRepositoryInterface::class => UserRepository::class,
+        UserTrustedDeviceRepositoryInterface::class => UserTrustedDeviceRepository::class,
         AccountRepositoryInterface::class => AccountRepository::class,
         FeatureFlagRepositoryInterface::class => FeatureFlagRepository::class,
         AccountFeatureFlagOverrideRepositoryInterface::class => AccountFeatureFlagOverrideRepository::class,
