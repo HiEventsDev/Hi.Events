@@ -948,6 +948,51 @@ export interface OrderSeat {
     order_item_id: number;
 }
 
+export enum ProductPurchaseStatus {
+    Sold = 'SOLD',
+    AwaitingPayment = 'AWAITING_PAYMENT',
+    Cancelled = 'CANCELLED',
+}
+
+export interface ProductPurchase {
+    order_id: number;
+    order_public_id: string;
+    order_status: 'COMPLETED' | 'CANCELLED' | 'AWAITING_OFFLINE_PAYMENT';
+    refund_status: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED' | null;
+    order_created_at: string;
+    currency: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    product_title: string;
+    product_price_id: number | null;
+    price_label: string | null;
+    event_occurrence_id: number | null;
+    occurrence_start_date: string | null;
+    sold_quantity: number;
+    awaiting_payment_quantity: number;
+    cancelled_quantity: number;
+    line_total: number | null;
+    status: ProductPurchaseStatus;
+}
+
+export interface ProductPurchaseSummary {
+    sold_quantity: number;
+    awaiting_payment_quantity: number;
+    cancelled_quantity: number;
+    buyer_count: number;
+    gross_sales: number;
+    refunded_order_count: number;
+}
+
+export interface ProductPurchaseExportFilters {
+    product_id?: IdParam;
+    event_occurrence_id?: IdParam;
+    statuses?: ProductPurchaseStatus[];
+    refund_statuses?: string[];
+    query?: string;
+}
+
 export interface Order {
     id: IdParam;
     seats?: OrderSeat[];

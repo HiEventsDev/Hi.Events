@@ -261,6 +261,9 @@ use HiEvents\Http\Actions\Products\DeleteProductAction;
 use HiEvents\Http\Actions\Products\EditProductAction;
 use HiEvents\Http\Actions\Products\GetProductAction;
 use HiEvents\Http\Actions\Products\GetProductsAction;
+use HiEvents\Http\Actions\Products\Purchases\ExportProductPurchasesAction;
+use HiEvents\Http\Actions\Products\Purchases\GetProductPurchasesAction;
+use HiEvents\Http\Actions\Products\Purchases\GetProductPurchaseSummaryAction;
 use HiEvents\Http\Actions\Products\SortProductsAction;
 use HiEvents\Http\Actions\PromoCodes\CreatePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\DeletePromoCodeAction;
@@ -491,6 +494,9 @@ $router->middleware(['auth:api'])->group(
         // Products
         $router->post('/events/{event_id}/products', CreateProductAction::class);
         $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
+        $router->post('/events/{event_id}/products/purchases/export', ExportProductPurchasesAction::class);
+        $router->get('/events/{event_id}/products/{product_id}/purchases', GetProductPurchasesAction::class);
+        $router->get('/events/{event_id}/products/{product_id}/purchases/summary', GetProductPurchaseSummaryAction::class);
         $router->put('/events/{event_id}/products/{ticket_id}', EditProductAction::class);
         $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
         $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
