@@ -61,6 +61,9 @@ export const userClient = {
         const response = await api.get<GenericDataResponse<User>>(`users/${userId}`);
         return response.data;
     },
+    resetTwoFactor: async (userId: IdParam) => {
+        await api.post(`users/${userId}/two-factor/reset`);
+    },
     deleteInvitation: async (userId: IdParam) => {
         const response = await api.delete(`users/${userId}/invitation`);
         return response.data;

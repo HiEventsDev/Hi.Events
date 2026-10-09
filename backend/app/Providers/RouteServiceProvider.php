@@ -35,6 +35,13 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(10)->by('auth-login|'.$this->normalisedEmail($request));
         });
 
+        RateLimiter::for('auth-two-factor', function (Request $request) {
+            return [
+                Limit::perMinute(10)->by('auth-two-factor|'.hash('sha256', (string) $request->input('challenge_token'))),
+                Limit::perMinute(30)->by('auth-two-factor-ip|'.$request->ip()),
+            ];
+        });
+
         RateLimiter::for('auth-forgot-password', function (Request $request) {
             return Limit::perHour(5)->by('auth-forgot-password|'.$this->normalisedEmail($request));
         });

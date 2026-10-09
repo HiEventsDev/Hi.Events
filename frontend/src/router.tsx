@@ -71,6 +71,13 @@ export const router: RouteObject[] = [
                     const AcceptInvitation = await import("./components/routes/auth/AcceptInvitation");
                     return { Component: AcceptInvitation.default };
                 }
+            },
+            {
+                path: "two-factor-setup",
+                async lazy() {
+                    const RequiredTwoFactorSetup = await import("./components/routes/auth/RequiredTwoFactorSetup");
+                    return { Component: RequiredTwoFactorSetup.default };
+                }
             }
         ]
     },
@@ -97,7 +104,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "profile",
+                path: "profile/:tab?",
                 async lazy() {
                     const ManageProfile = await import("./components/routes/profile/ManageProfile");
                     return { Component: ManageProfile.default };

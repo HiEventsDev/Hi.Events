@@ -77,12 +77,10 @@ class BasicEmailTemplateTest extends TestCase
 
     public function test_endpoints_require_authentication(): void
     {
-        // Test token endpoint without auth
         $response = $this->getJson('/email-templates/tokens/order_confirmation');
-        $response->assertStatus(ResponseCodes::HTTP_INTERNAL_SERVER_ERROR);
+        $response->assertStatus(ResponseCodes::HTTP_UNAUTHORIZED);
 
-        // Test organizer endpoint without auth (using dummy ID)
         $response = $this->getJson('/organizers/999/email-templates');
-        $response->assertStatus(ResponseCodes::HTTP_INTERNAL_SERVER_ERROR);
+        $response->assertStatus(ResponseCodes::HTTP_UNAUTHORIZED);
     }
 }

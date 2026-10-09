@@ -82,11 +82,56 @@ export interface HomepageThemeSettings {
 }
 
 export interface LoginResponse {
-    token?: string;
+    token?: string | null;
     token_type: string;
     expires_in: number;
     user: User;
     accounts: Account[];
+    two_factor_required?: boolean;
+    two_factor_challenge_token?: string;
+    two_factor_recovery_codes_remaining?: number;
+}
+
+export interface TwoFactorLoginRequest {
+    challenge_token: string;
+    code?: string;
+    recovery_code?: string;
+    account_id?: IdParam;
+    remember_device?: boolean;
+}
+
+export interface TrustedDevice {
+    id: IdParam;
+    user_agent: string | null;
+    ip_address: string | null;
+    last_used_at: string | null;
+    expires_at: string;
+    created_at: string;
+    is_current_device: boolean;
+}
+
+export interface TwoFactorStatus {
+    enabled: boolean;
+    confirmed_at: string | null;
+    recovery_codes_remaining: number;
+    recovery_codes_total: number;
+    trusted_devices: TrustedDevice[];
+    required_by_accounts: string[];
+}
+
+export interface TwoFactorSetup {
+    secret: string;
+    otpauth_uri: string;
+}
+
+export interface TwoFactorRecoveryCodes {
+    recovery_codes: string[];
+}
+
+export interface DisableTwoFactorRequest {
+    password: string;
+    code?: string;
+    recovery_code?: string;
 }
 
 export interface User {
@@ -102,6 +147,8 @@ export interface User {
     has_pending_email_change?: boolean;
     is_impersonating?: boolean;
     impersonator_id?: IdParam;
+    two_factor_enabled?: boolean;
+    two_factor_setup_required?: boolean;
     enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;
@@ -136,6 +183,7 @@ export interface Account {
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
     requires_manual_verification?: boolean;
+    require_two_factor_authentication?: boolean;
     deletion_request?: AccountDeletionRequest | null;
 }
 
@@ -219,6 +267,7 @@ export interface OrganizerStripeConnectAccountsResponse {
 export interface LoginData {
     email: string;
     password: string;
+    account_id?: IdParam;
 }
 
 export interface Image {

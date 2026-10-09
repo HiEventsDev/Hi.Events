@@ -63,6 +63,14 @@ The Hi.Events API powers event management, ticketing, and checkout.
 
 Management endpoints require a bearer token (JWT) obtained from `POST /auth/login`. Endpoints under `/public/*` — event pages, checkout, ticket lookup, check-in — require no authentication and are marked *(public)*.
 
+### Two-factor authentication
+
+When the user has two-factor authentication turned on, `POST /auth/login` returns `200` with `token: null`, `two_factor_required: true` and a `two_factor_challenge_token` that is valid for 10 minutes. Complete the login with `POST /auth/login/two-factor`, sending the challenge token plus either a 6-digit `code` from the user's authenticator app or a `recovery_code`. A wrong code returns `422`; an expired challenge, or too many wrong codes, returns `401` with `error_code: TWO_FACTOR_CHALLENGE_EXPIRED` and the login must start again. Users with several accounts verify once, then call `POST /auth/login/two-factor` again with the same challenge token and an `account_id`.
+
+Tokens work the same once issued: two-factor authentication is only checked at login.
+
+If an account requires two-factor authentication and the user has not set it up, authenticated endpoints return `403` with `error_code: TWO_FACTOR_SETUP_REQUIRED` until they do. `GET /users/me`, `GET /accounts`, the `/auth/*` endpoints and the `/users/me/two-factor/*` setup endpoints stay available.
+
 ## Stability
 
 This API is currently **unversioned and likely to change**. Endpoints, request fields, and response schemas may change between releases without notice, so pin your integration to a specific Hi.Events release and review the changelog when upgrading.

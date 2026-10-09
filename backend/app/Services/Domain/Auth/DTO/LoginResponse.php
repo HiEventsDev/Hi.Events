@@ -13,5 +13,8 @@ class LoginResponse extends BaseDTO
         public readonly ?string $token,
         public readonly UserDomainObject $user,
         public readonly ?int $accountId = null,
+        public readonly ?string $twoFactorChallengeToken = null,
+        public readonly ?int $recoveryCodesRemaining = null,
+        public readonly ?string $trustedDeviceToken = null,
     ) {}
 }

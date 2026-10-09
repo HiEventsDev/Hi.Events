@@ -7,8 +7,10 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Licensing\LicensedFeature;
 use HiEvents\Enterprise\Licensing\LicensedFeatureUsageService;
+use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
 use HiEvents\Services\Domain\FeatureFlag\FeatureFlagService;
 use Illuminate\Http\Request;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 
 /**
  * @mixin UserDomainObject
@@ -28,6 +30,10 @@ class MeResource extends UserResource
 
         return [
             ...parent::toArray($request),
+            'two_factor_setup_required' => $accountId !== null
+                && $this->getTwoFactorConfirmedAt() === null
+                && ! $this->isImpersonating()
+                && app(TwoFactorRequirementService::class)->isRequiredByAccount($accountId),
             /** @var array<string, bool> */
             'feature_flags' => (object) ($accountId !== null
                 ? app(FeatureFlagService::class)->getEnabledFlagsForAccount($accountId)
@@ -45,5 +51,14 @@ class MeResource extends UserResource
                 ),
             ],
         ];
+    }
+
+    private function isImpersonating(): bool
+    {
+        try {
+            return (bool) auth()->payload()->get('is_impersonating', false);
+        } catch (JWTException) {
+            return false;
+        }
     }
 }

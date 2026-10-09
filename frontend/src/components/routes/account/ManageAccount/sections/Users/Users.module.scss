@@ -1,3 +1,5 @@
+@use "../../../../../../styles/mixins.scss";
+
 .heading {
   padding: 10px 20px;
   margin-top: 20px;
@@ -26,3 +28,80 @@
   }
 }
 
+
+.policyCard {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: var(--hi-spacing-lg);
+}
+
+.policyIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--hi-accent-brand-soft);
+  color: var(--mantine-color-primary-6);
+
+  @include mixins.respond-below(sm) {
+    display: none;
+  }
+}
+
+.policyContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.policyTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--hi-text);
+}
+
+.policyText {
+  max-width: 560px;
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}
+
+.policyStat {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--hi-color-text-muted);
+}
+
+.policyMeter {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--hi-color-gray);
+
+  span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: var(--hi-color-success);
+  }
+}
+
+.policyHint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--hi-color-warning);
+}

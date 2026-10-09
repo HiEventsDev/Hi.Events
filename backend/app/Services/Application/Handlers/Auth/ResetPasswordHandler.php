@@ -9,6 +9,7 @@ use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Auth\DTO\ResetPasswordDTO;
 use HiEvents\Services\Domain\Auth\ResetPasswordTokenValidateService;
+use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Hashing\HashManager;
@@ -26,6 +27,7 @@ class ResetPasswordHandler
         private readonly DatabaseManager $databaseManager,
         private readonly LoggerInterface $logger,
         private readonly ResetPasswordTokenValidateService $passwordTokenValidateService,
+        private readonly TrustedDeviceService $trustedDeviceService,
     ) {}
 
     /**
@@ -42,6 +44,7 @@ class ResetPasswordHandler
             }
 
             $this->resetUserPassword($user->getId(), $resetPasswordData->password);
+            $this->trustedDeviceService->revokeAll($user->getId());
             $this->deleteResetToken($resetToken->getEmail());
             $this->logResetPasswordSuccess($user);
             $this->sendResetPasswordEmail($user);

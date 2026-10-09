@@ -1,4 +1,4 @@
-import {Navigate, Outlet} from "react-router";
+import {Navigate, Outlet, useLocation} from "react-router";
 import classes from "./Auth.module.scss";
 import {t} from "@lingui/macro";
 import {useGetMe} from "../../../queries/useGetMe.ts";
@@ -9,6 +9,7 @@ import {getConfig} from "../../../utilites/config.ts";
 import {isHiEvents} from "../../../utilites/helpers.ts";
 import {showInfo} from "../../../utilites/notifications.tsx";
 import {captureUtmData} from "../../../utilites/utm.ts";
+import {TWO_FACTOR_SETUP_PATH} from "../../../api/client.ts";
 
 const tickerFeatures = [
     t`Recurring events`,
@@ -125,6 +126,7 @@ const FeaturePanel = () => {
 
 const AuthLayout = () => {
     const me = useGetMe();
+    const location = useLocation();
     const clickCountRef = useRef(0);
     const clickTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -143,8 +145,10 @@ const AuthLayout = () => {
         }
     }, []);
 
-    if (me.isSuccess) {
-        return <Navigate to={'/manage/events'} />
+    const isTwoFactorSetupPage = location.pathname.startsWith(TWO_FACTOR_SETUP_PATH);
+
+    if (me.isSuccess && !isTwoFactorSetupPage) {
+        return <Navigate to={me.data?.two_factor_setup_required ? TWO_FACTOR_SETUP_PATH : '/manage/events'} />
     }
 
     return (

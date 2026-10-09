@@ -19,6 +19,7 @@ class AccountResource extends JsonResource
             'currency_code' => $this->getCurrencyCode(),
             'timezone' => $this->getTimezone(),
             'updated_at' => $this->getUpdatedAt(),
+            'require_two_factor_authentication' => $this->getRequireTwoFactorAuthentication(),
 
             'is_account_email_confirmed' => $this->getAccountVerifiedAt() !== null,
             'is_saas_mode_enabled' => config('app.saas_mode_enabled'),
