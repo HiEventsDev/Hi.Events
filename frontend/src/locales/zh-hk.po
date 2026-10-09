@@ -125,9 +125,13 @@ msgid "{0} left"
 msgstr "剩餘 {0}"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:87
-#: src/components/layouts/AuthLayout/index.tsx:158
+#: src/components/layouts/AuthLayout/index.tsx:162
 msgid "{0} logo"
 msgstr "{0} 標誌"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:149
+msgid "{0} of {1} remaining"
+msgstr "剩餘 {0}/{1}"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:287
 msgid "{0} of {1} seats are taken."
@@ -153,6 +157,14 @@ msgstr "其他 {0} 項"
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:309
 msgid "{0} places"
 msgstr "{0} 個位置"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:137
+msgid "{0} requires two-factor authentication for everyone on the team."
+msgstr "{0} 要求團隊中的所有人啟用雙重驗證。"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:219
+msgid "{0} requires two-factor authentication, so it can't be turned off."
+msgstr "{0} 要求啟用雙重驗證,因此無法關閉。"
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:78
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:316
@@ -223,6 +235,10 @@ msgstr "已啟用 {activeCount} 項"
 msgid "{appName} logo"
 msgstr "{appName} 標誌"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:19
+msgid "{appName} recovery codes"
+msgstr "{appName} 復原碼"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:301
 msgid "{attendeeCount} attendees are registered for this session."
 msgstr "本場次有 {attendeeCount} 位參加者已登記。"
@@ -238,6 +254,10 @@ msgstr "已預訂 {booked} · 該日期無限制"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:98
 msgid "{booked} of {sellable} booked"
 msgstr "已預訂 {booked}/{sellable}"
+
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:33
+msgid "{browser} on {os}"
+msgstr "{os} 上的 {browser}"
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:93
 msgid "{capacity} spots left"
@@ -283,6 +303,10 @@ msgstr "{diffMin} 分鐘前"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:25
 msgid "{diffSec}s ago"
 msgstr "{diffSec} 秒前"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:71
+msgid "{enrolledCount} of {0} active members have it turned on"
+msgstr "{0} 位活躍成員中已有 {enrolledCount} 位開啟"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:79
 #: src/components/common/WebhookTable/index.tsx:79
@@ -332,6 +356,10 @@ msgstr "每張訂單 {min}–{max} 件"
 #: src/components/common/Countdown/index.tsx:72
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{分}分鐘和{秒}秒鐘"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:47
+msgid "{notEnrolledCount} members haven't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
+msgstr "有 {notEnrolledCount} 位成員尚未開啟雙重驗證。他們需要先完成設定才能繼續。立即強制要求?"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:105
 msgid "{open} seats to choose"
@@ -433,6 +461,10 @@ msgstr "另有 1 個日期"
 msgid "+Tax/Fees"
 msgstr "+稅/費"
 
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:47
+msgid "<0>{accountName}</0> requires two-factor authentication for everyone on the team. Set it up now to continue. It takes about a minute."
+msgstr "<0>{accountName}</0> 要求團隊中的所有人啟用雙重驗證。請立即設定以繼續,大約只需一分鐘。"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
 msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
 msgstr "已設定 <0>APP_LICENCE_KEY</0>，但無法驗證該金鑰，因此預留座位及售票處仍處於鎖定狀態。"
@@ -512,6 +544,10 @@ msgstr "活動前1小時"
 msgid "1 item"
 msgstr "1 件"
 
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:46
+msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
+msgstr "有 1 位成員尚未開啟雙重驗證。他需要先完成設定才能繼續。立即強制要求?"
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:160
 msgid "1 order"
 msgstr "1 個訂單"
@@ -553,6 +589,10 @@ msgstr "1 張未選座"
 msgid "1 week before event"
 msgstr "活動前1週"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:139
+msgid "1. Get an authenticator app"
+msgstr "1. 取得驗證器應用程式"
+
 #: src/components/common/CapacityHelp/index.tsx:28
 msgid "12 mats in the studio and one Drop-in ticket."
 msgstr "工作室有 12 張墊子和一種單次票。"
@@ -566,6 +606,10 @@ msgstr "示例街123號"
 msgid "135+ currencies & 40+ payment methods"
 msgstr "135 種以上貨幣及 40 種以上付款方式"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:147
+msgid "2. Scan this QR code"
+msgstr "2. 掃描此 QR code"
+
 #: src/components/common/WidgetEditor/index.tsx:230
 msgid "20"
 msgstr "20"
@@ -573,6 +617,10 @@ msgstr "20"
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "每個日期 25 個名額，外加整個系列共 30 件 T 恤。"
+
+#: src/components/common/AdminUsersTable/index.tsx:168
+msgid "2FA on"
+msgstr "已開啟 2FA"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -826,7 +874,7 @@ msgstr "賬户更新成功"
 msgid "Account verification revoked"
 msgstr "已撤銷帳戶驗證"
 
-#: src/components/common/AdminUsersTable/index.tsx:127
+#: src/components/common/AdminUsersTable/index.tsx:139
 #: src/components/layouts/Admin/index.tsx:16
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
@@ -871,7 +919,7 @@ msgstr "激活日期"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/EditUserModal/index.tsx:111
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/event/attendees.tsx:29
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:211
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
@@ -1180,7 +1228,7 @@ msgstr "增加一頁，並顯示參加者姓名"
 #: src/components/layouts/Admin/index.tsx:14
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 #: src/components/routes/admin/DeletionRequests/index.tsx:150
 msgid "Admin"
 msgstr "管理員"
@@ -1225,7 +1273,7 @@ msgstr "推廣夥伴建立成功"
 msgid "Affiliate deleted successfully"
 msgstr "推廣夥伴刪除成功"
 
-#: src/components/layouts/AuthLayout/index.tsx:23
+#: src/components/layouts/AuthLayout/index.tsx:24
 msgid "Affiliate program"
 msgstr "聯盟推廣計劃"
 
@@ -1392,6 +1440,10 @@ msgstr "所有狀態"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:76
 msgid "All time"
 msgstr "全部時間"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:95
+msgid "All trusted devices removed"
+msgstr "已移除所有信任的裝置"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:182
 msgid "All upcoming"
@@ -1604,6 +1656,10 @@ msgstr "回答"
 #: src/components/forms/CheckInListForm/index.tsx:207
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "結帳時填寫的回答（例如餐飲選擇）"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:141
+msgid "Any app that supports time-based codes (TOTP) will work. Already have one? Skip ahead."
+msgstr "任何支援基於時間的驗證碼(TOTP)的應用程式均可使用。已經有了?請跳到下一步。"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:126
 msgid "Any date"
@@ -1901,7 +1957,7 @@ msgstr "您確定要恢復此活動嗎？它將作為草稿恢復。"
 msgid "Are you sure you want to restore this organizer?"
 msgstr "您確定要還原此主辦方嗎？"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:50
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:73
 msgid "Are you sure you want to revoke this invitation?"
 msgstr "確定要撤回這個邀請嗎？"
 
@@ -2167,6 +2223,14 @@ msgstr "受眾"
 msgid "August"
 msgstr "8 月"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:204
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:71
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:87
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:89
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:66
+msgid "Authentication code"
+msgstr "驗證碼"
+
 #: src/components/common/WidgetEditor/index.tsx:236
 msgid "Auto Resize"
 msgstr "自動調整大小"
@@ -2287,6 +2351,10 @@ msgstr "返回登錄"
 msgid "Back to messages"
 msgstr "返回訊息"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:227
+msgid "Back to QR code"
+msgstr "返回 QR code"
+
 #: src/components/routes/organizer/Reports/ReportLayout/index.tsx:42
 msgid "Back to Reports"
 msgstr "返回報告"
@@ -2304,6 +2372,10 @@ msgstr "返回搜尋"
 #: src/ee/seating/components/SeatPicker/index.tsx:66
 msgid "Back to seats"
 msgstr "返回選座"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
+msgid "Back to sign in"
+msgstr "返回登錄"
 
 #: src/components/common/ThemeColorControls/index.tsx:89
 msgid "Background"
@@ -2656,6 +2728,14 @@ msgstr "活動"
 msgid "Can't check in"
 msgstr "無法簽到"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:166
+msgid "Can't scan it? Enter a setup key instead"
+msgstr "無法掃描?改為輸入設定金鑰"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:158
+msgid "Can't use your authenticator app or recovery codes?"
+msgstr "無法使用驗證器應用程式或復原碼?"
+
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:57
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:131
@@ -2721,7 +2801,7 @@ msgstr "取消刪除"
 msgid "Cancel deletion request"
 msgstr "取消刪除請求"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:137
+#: src/components/routes/profile/ManageProfile/index.tsx:150
 msgid "Cancel email change"
 msgstr "取消更改電子郵件"
 
@@ -2792,7 +2872,7 @@ msgstr "容量分配刪除成功"
 msgid "Capacity Assignments"
 msgstr "容量分配"
 
-#: src/components/layouts/AuthLayout/index.tsx:29
+#: src/components/layouts/AuthLayout/index.tsx:30
 msgid "Capacity management"
 msgstr "容量管理"
 
@@ -2915,7 +2995,7 @@ msgstr "應找零"
 msgid "Change duration"
 msgstr "更改時長"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:239
+#: src/components/routes/profile/ManageProfile/index.tsx:252
 msgid "Change password"
 msgstr "更改密碼"
 
@@ -3017,7 +3097,7 @@ msgstr "請檢查網絡連線後再試。"
 msgid "Check your email"
 msgstr "查看你嘅電郵"
 
-#: src/components/routes/auth/Login/index.tsx:130
+#: src/components/routes/auth/Login/index.tsx:228
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "請檢查您的收件箱！如果此郵箱有關聯的票，您將收到查看連結。"
@@ -3498,7 +3578,7 @@ msgstr "即將推出"
 msgid "Comma seperated keywords that describe the event. These will be used by search engines to help categorize and index the event"
 msgstr "以逗號分隔的描述活動的關鍵字。搜索引擎將使用這些關鍵字來幫助對活動進行分類和索引"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:205
+#: src/components/routes/profile/ManageProfile/index.tsx:218
 msgid "Communication Preferences"
 msgstr "通訊偏好"
 
@@ -3673,11 +3753,15 @@ msgstr "確認電子郵件地址"
 msgid "Confirm Email Change"
 msgstr "確認電子郵件更改"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:108
+msgid "Confirm it's you"
+msgstr "確認是你本人"
+
 #: src/components/routes/auth/ResetPassword/index.tsx:71
 msgid "Confirm new password"
 msgstr "確認新密碼"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:237
+#: src/components/routes/profile/ManageProfile/index.tsx:250
 msgid "Confirm New Password"
 msgstr "確認新密碼"
 
@@ -3790,6 +3874,10 @@ msgstr "聯絡 {0}"
 msgid "Contact Email"
 msgstr "聯絡電郵"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:160
+msgid "Contact your account administrator or our support team. Once they've confirmed it's you, they can reset two-factor authentication so you can sign in with your password and set it up again."
+msgstr "請聯絡你的賬户管理員或我們的支援團隊。確認是你本人後,他們可以重設雙重驗證,讓你使用密碼登錄並重新設定。"
+
 #: src/components/routes/admin/Announcements/index.tsx:389
 #: src/components/routes/admin/Announcements/index.tsx:398
 #: src/components/routes/admin/Attribution/index.tsx:168
@@ -3800,6 +3888,7 @@ msgstr "內容"
 msgid "Content is required"
 msgstr "內容為必填"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:29
 #: src/components/common/WidgetEditor/index.tsx:222
 #: src/components/layouts/EventHomepage/index.tsx:211
@@ -3829,6 +3918,10 @@ msgstr "繼續結帳"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1296
 msgid "Continue to Checkout"
 msgstr "繼續結帳"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:40
+msgid "Continue to dashboard"
+msgstr "繼續前往控制台"
 
 #: src/components/forms/OrganizerForm/index.tsx:128
 msgid "Continue to event creation"
@@ -3873,6 +3966,7 @@ msgstr "Cookie 設定"
 
 #: src/components/common/AttendeeTicket/index.tsx:192
 #: src/components/common/CopyButton/index.tsx:13
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:83
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
 #: src/components/modals/ManageOrderModal/index.tsx:205
@@ -3918,6 +4012,10 @@ msgstr "複製帳戶 ID"
 #: src/components/common/AffiliateTable/index.tsx:183
 msgid "Copy Affiliate Link"
 msgstr "複製推廣連結"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:83
+msgid "Copy all"
+msgstr "全部複製"
 
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:89
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:94
@@ -3972,6 +4070,10 @@ msgstr "複製我的資料到："
 msgid "Copy PIN"
 msgstr "複製 PIN 碼"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:175
+msgid "Copy setup key"
+msgstr "複製設定金鑰"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:67
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "從授權電郵中重新複製金鑰，不要包含引號或空格。"
@@ -4005,6 +4107,10 @@ msgstr "無法取得地址詳情"
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:280
 msgid "Could not save date"
 msgstr "無法儲存日期"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:76
+msgid "Couldn't load your security settings"
+msgstr "無法載入你的安全設定"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:258
 msgid "Couldn't refresh seat availability. Retrying…"
@@ -4325,7 +4431,12 @@ msgstr "CTA標籤是必需的"
 msgid "Currency"
 msgstr "貨幣"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:229
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:112
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:61
+msgid "Current password"
+msgstr "目前密碼"
+
+#: src/components/routes/profile/ManageProfile/index.tsx:242
 msgid "Current Password"
 msgstr "當前密碼"
 
@@ -4345,7 +4456,7 @@ msgstr "曲線"
 msgid "Curved rows and a balcony."
 msgstr "弧形排列和樓座。"
 
-#: src/components/layouts/AuthLayout/index.tsx:16
+#: src/components/layouts/AuthLayout/index.tsx:17
 msgid "Custom branding"
 msgstr "自訂品牌形象"
 
@@ -4357,7 +4468,7 @@ msgstr "自訂日期和時間"
 msgid "Custom Maps URL"
 msgstr "自定義地圖 URL"
 
-#: src/components/layouts/AuthLayout/index.tsx:25
+#: src/components/layouts/AuthLayout/index.tsx:26
 msgid "Custom questions"
 msgstr "自訂問題"
 
@@ -4868,6 +4979,10 @@ msgstr "開發授權"
 msgid "Development licence, not for production use"
 msgstr "開發授權，不可用於正式環境"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:58
+msgid "Device removed"
+msgstr "裝置已移除"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:82
 msgid "Diameter"
 msgstr "直徑"
@@ -4980,7 +5095,7 @@ msgstr "不重複"
 msgid "Don't forget!"
 msgstr "別忘了！"
 
-#: src/components/routes/auth/Login/index.tsx:79
+#: src/components/routes/auth/Login/index.tsx:177
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "沒有帳戶？<0>註冊</0>"
 
@@ -4994,10 +5109,12 @@ msgstr "不允許買家留下單個空座位"
 msgid "Donation"
 msgstr "捐款"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:245
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:72
 #: src/components/modals/CreateWebhookModal/index.tsx:72
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:57
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
 msgstr "完成"
@@ -5017,6 +5134,10 @@ msgstr "門口工作人員用售票處連結加一個 PIN 碼登入，唔使開�
 #: src/ee/seating/components/lib/templates.ts:176
 msgid "Doors"
 msgstr "出入口"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:86
+msgid "Download"
+msgstr "下載"
 
 #: src/components/common/CalendarOptionsPopover/index.tsx:39
 msgid "Download .ics"
@@ -5168,6 +5289,10 @@ msgstr "例如：關於您門票的重要更新"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "例如：標準版、進階版、企業版"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
+msgid "Each code can be used once to sign in if you lose access to your authenticator app."
+msgstr "如果你無法存取驗證器應用程式,每個復原碼可用於登錄一次。"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:134
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
@@ -5331,7 +5456,7 @@ msgstr "編輯日程"
 msgid "Edit this event's seat map"
 msgstr "編輯此活動的座位圖"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:152
 msgid "Edit user"
 msgstr "編輯用户"
 
@@ -5392,13 +5517,13 @@ msgstr "符合條件的簽到列表"
 #: src/components/routes/admin/Dashboard/index.tsx:401
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
-#: src/components/routes/auth/Login/index.tsx:90
+#: src/components/routes/auth/Login/index.tsx:188
 #: src/components/routes/auth/Register/index.tsx:102
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/profile/ManageProfile/index.tsx:157
+#: src/components/routes/profile/ManageProfile/index.tsx:170
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
 msgid "Email"
 msgstr "電子郵件"
@@ -5407,7 +5532,7 @@ msgstr "電子郵件"
 msgid "Email & Notification Settings"
 msgstr "電子郵件和通知設置"
 
-#: src/components/layouts/AuthLayout/index.tsx:21
+#: src/components/layouts/AuthLayout/index.tsx:22
 msgid "Email & scheduled messages"
 msgstr "電郵與排程訊息"
 
@@ -5442,21 +5567,21 @@ msgstr "電子郵件地址不匹配"
 msgid "Email Body"
 msgstr "郵件正文"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:88
+#: src/components/routes/profile/ManageProfile/index.tsx:95
 msgid "Email change cancelled successfully"
 msgstr "電子郵件更改已成功取消"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:127
+#: src/components/routes/profile/ManageProfile/index.tsx:140
 msgid "Email change pending"
 msgstr "電子郵件更改待定"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:170
+#: src/components/routes/profile/ManageProfile/index.tsx:183
 msgid "Email confirmation resent"
 msgstr "重新發送電子郵件確認"
 
 #: src/components/layouts/Event/index.tsx:93
 #: src/components/layouts/OrganizerLayout/index.tsx:128
-#: src/components/routes/profile/ManageProfile/index.tsx:101
+#: src/components/routes/profile/ManageProfile/index.tsx:108
 msgid "Email confirmation resent successfully"
 msgstr "成功重新發送電子郵件確認"
 
@@ -5470,7 +5595,7 @@ msgstr "電子郵件頁腳信息"
 msgid "Email is required"
 msgstr "必須填寫電郵"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:160
+#: src/components/routes/profile/ManageProfile/index.tsx:173
 msgid "Email not verified"
 msgstr "電子郵件未經驗證"
 
@@ -5512,7 +5637,7 @@ msgstr "嵌入腳本"
 msgid "Embed Widget"
 msgstr "嵌入小工具"
 
-#: src/components/layouts/AuthLayout/index.tsx:22
+#: src/components/layouts/AuthLayout/index.tsx:23
 msgid "Embeddable widget"
 msgstr "可嵌入小工具"
 
@@ -5676,12 +5801,24 @@ msgstr "輸入姓氏"
 msgid "Enter new password"
 msgstr "輸入新密碼"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:60
+msgid "Enter one of the recovery codes you saved when you turned on two-factor authentication. Each code works once."
+msgstr "輸入你開啟雙重驗證時儲存的其中一個復原碼。每個復原碼只能使用一次。"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:198
+msgid "Enter the 6-digit code"
+msgstr "輸入 6 位數字驗證碼"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:59
+msgid "Enter the 6-digit code from your authenticator app."
+msgstr "輸入驗證器應用程式中的 6 位數字驗證碼。"
+
 #: src/components/forms/AffiliateForm/index.tsx:39
 msgid "Enter unique affiliate code"
 msgstr "輸入獨特推廣碼"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:147
+#: src/components/routes/auth/Login/index.tsx:245
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "輸入您的電郵地址"
@@ -5693,6 +5830,10 @@ msgstr "輸入您的電子郵件，我們將向您發送重置密碼的說明。
 #: src/components/common/ContactOrganizerModal/index.tsx:74
 msgid "Enter your name"
 msgstr "輸入您的姓名"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:109
+msgid "Enter your password to start setting up two-factor authentication."
+msgstr "請輸入密碼以開始設定雙重驗證。"
 
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:213
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
@@ -6001,6 +6142,14 @@ msgstr "每個活動都有售票處"
 #: src/components/routes/event/CheckInLists/index.tsx:40
 msgid "Every event has a check-in list"
 msgstr "每個活動都有簽到列表"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:93
+msgid "Every trusted device will need a code at its next sign-in. Continue?"
+msgstr "每部信任的裝置在下次登錄時都需要輸入驗證碼。是否繼續?"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:63
+msgid "Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue."
+msgstr "此賬户中的所有人都必須使用驗證器應用程式登錄。未啟用的成員需要先完成設定才能繼續。"
 
 #: src/components/forms/ProductForm/index.tsx:393
 msgid "Everything else — tap to edit"
@@ -6366,7 +6515,7 @@ msgstr "無法啟動導出任務"
 
 #: src/components/routes/admin/Accounts/index.tsx:48
 #: src/components/routes/admin/Events/index.tsx:68
-#: src/components/routes/admin/Users/index.tsx:48
+#: src/components/routes/admin/Users/index.tsx:63
 msgid "Failed to start impersonation. Please try again."
 msgstr "無法開始模擬。請重試。"
 
@@ -6625,7 +6774,7 @@ msgstr "姓名"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
-#: src/components/routes/profile/ManageProfile/index.tsx:153
+#: src/components/routes/profile/ManageProfile/index.tsx:166
 msgid "First Name"
 msgstr "姓名"
 
@@ -6733,7 +6882,7 @@ msgstr "共"
 msgid "For a number of dates"
 msgstr "按日期數量"
 
-#: src/components/routes/auth/Login/index.tsx:97
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Forgot password?"
 msgstr "忘記密碼？"
 
@@ -6767,6 +6916,10 @@ msgstr "免費"
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:63
 msgid "Free order, no payment needed"
 msgstr "免費訂單，無需付款"
+
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:9
+msgid "Free, open source, with end-to-end encrypted backups"
+msgstr "免費、開源,支援端對端加密備份"
 
 #: src/components/common/LanguageSwitcher/index.tsx:24
 msgid "French"
@@ -6833,7 +6986,7 @@ msgstr "前排企位"
 msgid "Front right"
 msgstr "前區右側"
 
-#: src/components/layouts/AuthLayout/index.tsx:27
+#: src/components/layouts/AuthLayout/index.tsx:28
 msgid "Full data ownership"
 msgstr "資料完全屬於你"
 
@@ -6881,6 +7034,19 @@ msgstr "產生"
 #: src/components/forms/PromoCodeForm/index.tsx:80
 msgid "Generate code"
 msgstr "產生代碼"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:159
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:85
+msgid "Generate new codes"
+msgstr "產生新復原碼"
+
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+msgid "Generate new recovery codes"
+msgstr "產生新的復原碼"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:25
+msgid "Generated {0}"
+msgstr "產生於 {0}"
 
 #: src/components/common/LanguageSwitcher/index.tsx:16
 msgid "German"
@@ -7372,6 +7538,14 @@ msgstr "我同意<0>條款和條件</0>。"
 msgid "I confirm this is a transactional message related to this event"
 msgstr "我確認這是與此活動相關的交易訊息"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:98
+msgid "I have saved my recovery codes somewhere safe"
+msgstr "我已將復原碼儲存在安全的地方"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:190
+msgid "I've added it, continue"
+msgstr "我已新增,繼續"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1268
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "如果未自動開啟新分頁，請點擊下方按鈕繼續結帳。"
@@ -7392,13 +7566,21 @@ msgstr "如果啟用，登記工作人員可以將與會者標記為已登記或
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "如果啟用，當有新訂單時，組織者將收到電子郵件通知"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:133
+#: src/components/routes/profile/ManageProfile/index.tsx:146
 msgid "If you did not request this change, please immediately change your password."
 msgstr "如果您沒有要求更改密碼，請立即更改密碼。"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:46
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "如果您在我們這裡有帳戶，您將收到一封電子郵件，其中包含如何重置密碼的說明。"
+
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:64
+msgid "If you lose your phone, each of these codes gets you in once. Store them in a password manager or print them and keep them somewhere safe. You won't see them again."
+msgstr "如果你遺失手機,以下每個復原碼都可讓你登錄一次。請將它們存放在密碼管理器中,或列印後妥善保管。你將無法再次查看這些復原碼。"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:33
+msgid "If you've lost your phone, turn two-factor authentication off and on again from your profile to connect a new authenticator app."
+msgstr "如果你遺失了手機,請在個人檔案中先關閉再重新開啟雙重驗證,以連接新的驗證器應用程式。"
 
 #: src/components/common/ImageUploadDropzone/index.tsx:124
 msgid "Image deleted successfully"
@@ -7418,8 +7600,8 @@ msgid "Images"
 msgstr "圖片"
 
 #: src/components/common/AdminAccountsTable/index.tsx:134
-#: src/components/common/AdminUsersTable/index.tsx:84
 #: src/components/common/AdminUsersTable/index.tsx:96
+#: src/components/common/AdminUsersTable/index.tsx:108
 msgid "Impersonate"
 msgstr "模擬"
 
@@ -7429,7 +7611,7 @@ msgstr "模擬用戶"
 
 #: src/components/routes/admin/Accounts/index.tsx:38
 #: src/components/routes/admin/Events/index.tsx:58
-#: src/components/routes/admin/Users/index.tsx:38
+#: src/components/routes/admin/Users/index.tsx:53
 msgid "Impersonation started"
 msgstr "模擬已開始"
 
@@ -7486,7 +7668,7 @@ msgstr "使用中"
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
 #: src/components/modals/EditUserModal/index.tsx:112
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:62
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
 msgid "Inactive"
@@ -7571,7 +7753,7 @@ msgstr "插入Liquid標記"
 msgid "Instagram"
 msgstr "Instagram"
 
-#: src/components/layouts/AuthLayout/index.tsx:15
+#: src/components/layouts/AuthLayout/index.tsx:16
 msgid "Instant Stripe payouts"
 msgstr "Stripe 即時撥款"
 
@@ -7609,11 +7791,11 @@ msgstr "無效的Liquid語法。請更正後再試。"
 msgid "Invalid VAT number format"
 msgstr "無效的增值稅號碼格式"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:40
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:63
 msgid "Invitation resent!"
 msgstr "再次發出邀請！"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:55
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:78
 msgid "Invitation revoked!"
 msgstr "撤銷邀請！"
 
@@ -7629,7 +7811,7 @@ msgstr "邀請團隊成員"
 msgid "Invite Team Members"
 msgstr "邀請團隊成員"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:147
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:184
 msgid "Invite User"
 msgstr "邀請用户"
 
@@ -7637,7 +7819,7 @@ msgstr "邀請用户"
 msgid "Invite Your Team"
 msgstr "邀請您的團隊"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:131
 msgid "Invited"
 msgstr "已邀請"
 
@@ -7749,7 +7931,7 @@ msgstr "7 月"
 msgid "June"
 msgstr "6 月"
 
-#: src/components/routes/auth/Login/index.tsx:118
+#: src/components/routes/auth/Login/index.tsx:216
 msgid "Just looking for your tickets?"
 msgstr "只是在找您的票？"
 
@@ -7782,7 +7964,7 @@ msgstr "請保持簡短 — 橫幅只顯示一行。{0}/200"
 msgid "Keep me updated on news and events from {0}"
 msgstr "讓我隨時了解來自 {0} 的新聞和活動"
 
-#: src/components/layouts/AuthLayout/index.tsx:43
+#: src/components/layouts/AuthLayout/index.tsx:44
 msgid "Keep the profit."
 msgstr "利潤全歸你。"
 
@@ -7814,7 +7996,7 @@ msgstr "橫向"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:240
 #: src/components/modals/ManageAttendeeModal/index.tsx:180
-#: src/components/routes/profile/ManageProfile/index.tsx:197
+#: src/components/routes/profile/ManageProfile/index.tsx:210
 msgid "Language"
 msgstr "語言"
 
@@ -7873,7 +8055,7 @@ msgstr "過去 7 天"
 msgid "Last 90 days"
 msgstr "過去 90 天"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:160
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:199
 msgid "Last login"
 msgstr "最後登錄"
 
@@ -7896,7 +8078,7 @@ msgstr "姓氏"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:692
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
-#: src/components/routes/profile/ManageProfile/index.tsx:155
+#: src/components/routes/profile/ManageProfile/index.tsx:168
 msgid "Last Name"
 msgstr "姓氏"
 
@@ -7918,6 +8100,10 @@ msgstr "最近觸發"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "最近一次使用"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:48
+msgid "Last used {0}"
+msgstr "上次使用 {0}"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:381
 msgid "Later"
@@ -8164,12 +8350,12 @@ msgstr "個地點"
 msgid "Locations"
 msgstr "地點"
 
-#: src/components/routes/auth/Login/index.tsx:106
+#: src/components/routes/auth/Login/index.tsx:204
 #: src/components/routes/auth/Register/index.tsx:76
 msgid "Log in"
 msgstr "登錄"
 
-#: src/components/routes/auth/Login/index.tsx:106
+#: src/components/routes/auth/Login/index.tsx:204
 msgid "Logging in"
 msgstr "登錄"
 
@@ -8206,6 +8392,14 @@ msgstr "查找我的門票"
 #: src/components/common/WidgetEditor/index.tsx:341
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:150
+msgid "Lost access?"
+msgstr "無法存取?"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:220
+msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
+msgstr "遺失手機或更換應用程式?請先關閉再重新開啟,以連接新的驗證器。"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Main auditorium"
@@ -8282,7 +8476,7 @@ msgstr "管理訂單"
 msgid "Manage payment and invoicing settings for this event."
 msgstr "管理此活動的支付和發票設置。"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:112
+#: src/components/routes/profile/ManageProfile/index.tsx:119
 msgid "Manage Profile"
 msgstr "管理簡介"
 
@@ -8315,7 +8509,7 @@ msgstr "管理賬户詳情和默認設置"
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
 msgstr "管理活動的候補名單，查看統計數據，並向參與者提供門票。"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:146
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:183
 msgid "Manage your users and their permissions"
 msgstr "管理用户及其權限"
 
@@ -8636,7 +8830,7 @@ msgstr "多個日期，截至 {lastOccurrenceDate}"
 msgid "Multiple locations"
 msgstr "多個地點"
 
-#: src/components/layouts/AuthLayout/index.tsx:28
+#: src/components/layouts/AuthLayout/index.tsx:29
 msgid "Multiple ticket types"
 msgstr "多種門票類型"
 
@@ -8715,7 +8909,7 @@ msgstr "淨收入"
 #: src/components/common/OrganizerWebhookTable/index.tsx:266
 #: src/components/common/PromoCodeTable/index.tsx:166
 #: src/components/common/WebhookTable/index.tsx:266
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:104
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:127
 msgid "Never"
 msgstr "從不"
 
@@ -8751,7 +8945,7 @@ msgid "New organizer"
 msgstr "新主辦方"
 
 #: src/components/routes/auth/ResetPassword/index.tsx:64
-#: src/components/routes/profile/ManageProfile/index.tsx:233
+#: src/components/routes/profile/ManageProfile/index.tsx:246
 msgid "New Password"
 msgstr "新密碼"
 
@@ -8824,7 +9018,7 @@ msgstr "否 - 我是個人或非增值稅註冊企業"
 msgid "No account overrides. Add one from an account's admin page."
 msgstr "沒有帳戶覆寫。可在帳戶的管理頁面新增。"
 
-#: src/components/common/AdminUsersTable/index.tsx:143
+#: src/components/common/AdminUsersTable/index.tsx:155
 msgid "No accounts"
 msgstr "無帳戶"
 
@@ -9276,7 +9470,7 @@ msgstr "沒有即將舉行的日期"
 msgid "No upcoming events"
 msgstr "沒有即將舉行的活動"
 
-#: src/components/common/AdminUsersTable/index.tsx:18
+#: src/components/common/AdminUsersTable/index.tsx:19
 msgid "No users found"
 msgstr "未找到用戶"
 
@@ -9353,6 +9547,10 @@ msgstr "不符合條件"
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:201
 msgid "Not enough free seats for {0}"
 msgstr "{0} 的空置座位不足"
+
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:56
+msgid "Not now, log out"
+msgstr "暫不設定,登出"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:26
 msgid "Not on sale yet"
@@ -9495,8 +9693,10 @@ msgstr "每月"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:77
 #: src/components/forms/ProductForm/ledgerSummaries.ts:140
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "關"
 
@@ -9572,8 +9772,10 @@ msgid "on"
 msgstr "於"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:136
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "On"
 msgstr "開"
 
@@ -9619,6 +9821,10 @@ msgstr "在「票務與產品」頁面，將早鳥票設為 5、標準票設為 
 #: src/components/common/JoinWaitlistButton/index.tsx:25
 msgid "On the waitlist"
 msgstr "已加入候補名單"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
+msgid "On your phone? Open in authenticator app"
+msgstr "在手機上?在驗證器應用程式中開啟"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:19
 msgid "Once you create an event, you'll see it here."
@@ -9778,6 +9984,10 @@ msgstr "開啟場次"
 #: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "打開側邊欄"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:154
+msgid "Open your authenticator app, tap the + button and scan the code."
+msgstr "開啟驗證器應用程式,點按 + 按鈕並掃描 QR code。"
 
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
@@ -10053,7 +10263,7 @@ msgstr "組織名稱"
 #: src/components/modals/CreateEventModal/index.tsx:267
 #: src/components/modals/EditUserModal/index.tsx:56
 #: src/components/modals/InviteUserModal/index.tsx:47
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:99
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
 #: src/components/routes/admin/Dashboard/index.tsx:257
 #: src/components/routes/admin/Dashboard/index.tsx:306
 #: src/components/routes/admin/Dashboard/index.tsx:352
@@ -10253,9 +10463,9 @@ msgid "Pass to Buyer"
 msgstr "轉嫁給買家"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:127
-#: src/components/routes/auth/Login/index.tsx:95
+#: src/components/routes/auth/Login/index.tsx:193
 #: src/components/routes/auth/Register/index.tsx:110
-#: src/components/routes/profile/ManageProfile/index.tsx:120
+#: src/components/routes/profile/ManageProfile/index.tsx:130
 msgid "Password"
 msgstr "密碼"
 
@@ -10513,7 +10723,7 @@ msgstr "永久刪除此主辦方及其所有活動。"
 msgid "Permanently remove this date"
 msgstr "永久移除此日期"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:148
+#: src/components/routes/profile/ManageProfile/index.tsx:161
 msgid "Personal Information"
 msgstr "個人資料"
 
@@ -10615,7 +10825,7 @@ msgstr "請至少添加一個選項"
 msgid "Please check the provided information is correct"
 msgstr "請檢查所提供的信息是否正確"
 
-#: src/components/routes/auth/Login/index.tsx:53
+#: src/components/routes/auth/Login/index.tsx:89
 msgid "Please check your email and password and try again"
 msgstr "請檢查您的電子郵件和密碼並重試"
 
@@ -10624,7 +10834,7 @@ msgstr "請檢查您的電子郵件和密碼並重試"
 msgid "Please check your email is valid"
 msgstr "請檢查您的電子郵件是否有效"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:171
+#: src/components/routes/profile/ManageProfile/index.tsx:184
 msgid "Please check your email to confirm your email address"
 msgstr "請檢查您的電子郵件以確認您的電子郵件地址"
 
@@ -10708,7 +10918,7 @@ msgstr "請選擇至少一個產品"
 msgid "Please try again."
 msgstr "請再試一次。"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:161
+#: src/components/routes/profile/ManageProfile/index.tsx:174
 msgid "Please verify your email address to access all features"
 msgstr "請驗證您的電子郵件地址，以訪問所有功能"
 
@@ -10860,6 +11070,7 @@ msgstr "主色調"
 msgid "Primary Text Color"
 msgstr "主要文字顏色"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:89
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
 msgid "Print"
 msgstr "列印"
@@ -11007,11 +11218,11 @@ msgstr "已售產品"
 msgid "Products sorted successfully"
 msgstr "產品排序成功"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:117
+#: src/components/routes/profile/ManageProfile/index.tsx:127
 msgid "Profile"
 msgstr "簡介"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:70
+#: src/components/routes/profile/ManageProfile/index.tsx:77
 msgid "Profile updated successfully"
 msgstr "成功更新個人資料"
 
@@ -11052,7 +11263,7 @@ msgstr "促銷碼使用情況及折扣明細"
 msgid "promo codes"
 msgstr "優惠碼"
 
-#: src/components/layouts/AuthLayout/index.tsx:19
+#: src/components/layouts/AuthLayout/index.tsx:20
 msgid "Promo codes"
 msgstr "優惠碼"
 
@@ -11078,6 +11289,10 @@ msgstr "僅限促銷"
 #: src/components/modals/SendMessageModal/index.tsx:577
 msgid "Promotional emails may result in account suspension"
 msgstr "促銷電子郵件可能導致帳戶被暫停"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:120
+msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
+msgstr "為你的賬户增加登錄時的第二道驗證。即使有人得知你的密碼,沒有手機上的驗證碼也無法登錄。"
 
 #: src/components/forms/QuestionForm/index.tsx:189
 msgid ""
@@ -11148,7 +11363,7 @@ msgstr "將新金鑰填入 <0>APP_LICENCE_KEY</0> 並重新部署後端。"
 msgid "QR Code"
 msgstr "二維碼"
 
-#: src/components/layouts/AuthLayout/index.tsx:17
+#: src/components/layouts/AuthLayout/index.tsx:18
 msgid "QR code check-in"
 msgstr "二維碼簽到"
 
@@ -11242,7 +11457,7 @@ msgstr "讀卡機不可用"
 msgid "Ready to go live?"
 msgstr "準備好發布了嗎？"
 
-#: src/components/layouts/AuthLayout/index.tsx:20
+#: src/components/layouts/AuthLayout/index.tsx:21
 msgid "Real-time analytics"
 msgstr "即時數據分析"
 
@@ -11277,7 +11492,7 @@ msgstr "原因"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:131
-#: src/components/routes/profile/ManageProfile/index.tsx:210
+#: src/components/routes/profile/ManageProfile/index.tsx:223
 msgid "Receive product updates from {0}."
 msgstr "接收 {0} 的產品更新。"
 
@@ -11328,6 +11543,7 @@ msgstr "收件人"
 msgid "Recipients are available after the message is sent"
 msgstr "收件人在訊息發送後可用"
 
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:28
 #: src/components/modals/SelectCheckInListModal/index.tsx:66
 msgid "Recommended"
 msgstr "建議"
@@ -11335,6 +11551,15 @@ msgstr "建議"
 #: src/components/modals/RefundOrderModal/index.tsx:160
 msgid "Record Refund"
 msgstr "記錄退款"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:105
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:74
+msgid "Recovery code"
+msgstr "復原碼"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:147
+msgid "Recovery codes"
+msgstr "復原碼"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:80
 msgid "Rectangular"
@@ -11354,7 +11579,7 @@ msgstr "重複活動"
 msgid "Recurring Event Settings"
 msgstr "重複活動設定"
 
-#: src/components/layouts/AuthLayout/index.tsx:14
+#: src/components/layouts/AuthLayout/index.tsx:15
 msgid "Recurring events"
 msgstr "重複活動"
 
@@ -11462,7 +11687,7 @@ msgstr "已退款：{0}"
 msgid "Refunds"
 msgstr "退款"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:179
+#: src/components/routes/profile/ManageProfile/index.tsx:192
 msgid "Regional Settings"
 msgstr "地區設定"
 
@@ -11518,6 +11743,10 @@ msgstr "移除"
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "移除 {0}"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:198
+msgid "Remove all"
+msgstr "全部移除"
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:101
 msgid "Remove card reader"
@@ -11632,9 +11861,22 @@ msgstr "請求人"
 msgid "Require Billing Address"
 msgstr "要求賬單地址"
 
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:49
+msgid "Require two-factor"
+msgstr "要求雙重驗證"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:61
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:87
+msgid "Require two-factor authentication"
+msgstr "要求啟用雙重驗證"
+
 #: src/components/common/QuestionsTable/index.tsx:118
 msgid "Required"
 msgstr "必填"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:136
+msgid "Required by your organisation"
+msgstr "由你的機構要求"
 
 #: src/components/common/CookieConsentBanner/index.tsx:95
 msgid "Required for the site to work, such as keeping you signed in."
@@ -11665,7 +11907,7 @@ msgstr "重新發送確認電郵"
 msgid "Resend email"
 msgstr "重新發送電郵"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:163
+#: src/components/routes/profile/ManageProfile/index.tsx:176
 msgid "Resend email confirmation"
 msgstr "重新發送電子郵件確認"
 
@@ -11673,7 +11915,7 @@ msgstr "重新發送電子郵件確認"
 msgid "Resend in {resendCooldown}s"
 msgstr "{resendCooldown}秒後重新發送"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:127
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:164
 msgid "Resend invitation"
 msgstr "重新發送邀請"
 
@@ -11689,7 +11931,7 @@ msgstr "重新發送門票"
 msgid "Resend ticket email"
 msgstr "重新發送門票電郵"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:163
+#: src/components/routes/profile/ManageProfile/index.tsx:176
 msgid "Resending..."
 msgstr "重新發送..."
 
@@ -11721,6 +11963,11 @@ msgstr "保留至"
 msgid "Reset"
 msgstr "重置"
 
+#: src/components/common/AdminUsersTable/index.tsx:83
+#: src/components/routes/admin/Users/index.tsx:37
+msgid "Reset 2FA"
+msgstr "重設 2FA"
+
 #: src/components/routes/auth/ForgotPassword/index.tsx:59
 #: src/components/routes/auth/ResetPassword/index.tsx:75
 msgid "Reset password"
@@ -11737,6 +11984,15 @@ msgstr "重設 PIN 碼？已登入的工作人員將被登出並需要新的 PIN
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:38
 msgid "Reset to {0}"
 msgstr "重設為 {0}"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:49
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:158
+msgid "Reset two-factor"
+msgstr "重設雙重驗證"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:44
+msgid "Reset two-factor authentication for {0}? Only do this once you've confirmed it's really them. They'll be able to sign in with just their password and will be emailed about the change."
+msgstr "要重設 {0} 的雙重驗證嗎？請在確認確實是本人後才操作。對方之後只需密碼即可登入，並會收到相關電郵通知。"
 
 #: src/ee/seating/components/SeatMapZoomControls/index.tsx:21
 msgid "Reset view"
@@ -11856,7 +12112,11 @@ msgstr "查看更改"
 msgid "Review events flagged as potential spam by the automated check"
 msgstr "審核被自動檢查標記為疑似垃圾內容的活動"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:133
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:37
+msgid "Review security settings"
+msgstr "檢視保安設定"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:170
 msgid "Revoke invitation"
 msgstr "撤銷邀請"
 
@@ -11876,7 +12136,7 @@ msgstr "右翼"
 
 #: src/components/modals/EditUserModal/index.tsx:94
 #: src/components/modals/InviteUserModal/index.tsx:64
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:159
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:198
 msgid "Role"
 msgstr "角色"
 
@@ -12090,6 +12350,10 @@ msgstr "保存更改"
 msgid "Save choices"
 msgstr "儲存選擇"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:82
+msgid "Save codes"
+msgstr "儲存復原碼"
+
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:164
 msgid "Save fee override"
 msgstr "儲存個別收費"
@@ -12130,6 +12394,10 @@ msgstr "儲存增值稅設定"
 msgid "Save VAT Settings"
 msgstr "儲存增值稅設定"
 
+#: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:62
+msgid "Save your recovery codes"
+msgstr "儲存你的復原碼"
+
 #: src/components/common/LocationPicker/index.tsx:183
 msgid "Saved location"
 msgstr "已儲存的地點"
@@ -12142,6 +12410,7 @@ msgstr "已儲存的地點"
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
 msgstr "如此主辦方目前使用系統預設設定，儲存個別設定時會為它建立專屬設定組合。"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:80
 #: src/components/layouts/CheckIn/index.tsx:76
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:66
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/ScanTab.tsx:42
@@ -12276,7 +12545,7 @@ msgstr "按姓名或電子郵件搜尋..."
 msgid "Search by name, email or order number"
 msgstr "按姓名、電郵或訂單編號搜尋"
 
-#: src/components/routes/admin/Users/index.tsx:60
+#: src/components/routes/admin/Users/index.tsx:75
 msgid "Search by name, email, or account..."
 msgstr "按姓名、電子郵件或帳戶搜索..."
 
@@ -12511,6 +12780,14 @@ msgstr "分區名稱"
 msgid "Secure Checkout"
 msgstr "安全結帳"
 
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:44
+msgid "Secure your account"
+msgstr "保護你的賬户"
+
+#: src/components/routes/profile/ManageProfile/index.tsx:133
+msgid "Security"
+msgstr "保安"
+
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:129
 msgid "See all prices"
 msgstr "查看所有價格"
@@ -12548,7 +12825,7 @@ msgstr "選擇一則訊息查看其內容"
 msgid "Select a tier"
 msgstr "選擇級別"
 
-#: src/components/common/AdminUsersTable/index.tsx:100
+#: src/components/common/AdminUsersTable/index.tsx:112
 msgid "Select Account"
 msgstr "選擇帳戶"
 
@@ -12716,7 +12993,7 @@ msgstr "現場售票"
 msgid "Sell cash only"
 msgstr "僅收現金"
 
-#: src/components/layouts/AuthLayout/index.tsx:42
+#: src/components/layouts/AuthLayout/index.tsx:43
 msgid "Sell out your event."
 msgstr "令你的活動座無虛席。"
 
@@ -12760,7 +13037,7 @@ msgstr "銷售 1 種商品"
 msgid "Sells every product"
 msgstr "銷售所有商品"
 
-#: src/components/routes/auth/Login/index.tsx:157
+#: src/components/routes/auth/Login/index.tsx:255
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -12921,6 +13198,10 @@ msgstr "在後端環境中將其設定為 <0>APP_LICENCE_KEY</0>。"
 msgid "Set it in each ticket's Quantity field on <0>Tickets & Products</0>, when you create or edit the ticket."
 msgstr "在<0>票務與產品</0>頁面建立或編輯門票時，在每種票的「數量」欄位中設定。"
 
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:77
+msgid "Set it up"
+msgstr "去設定"
+
 #: src/components/common/CapacityHelp/index.tsx:120
 msgid "Set it when you add dates, or on any single date under <0>Occurrence Schedule</0>."
 msgstr "在新增日期時設定，或在<0>日期安排</0>中為單一日期設定。"
@@ -12966,6 +13247,10 @@ msgstr "設定排程"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "設定你要售賣的門票及其價格"
+
+#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:21
+msgid "Set up two-factor authentication"
+msgstr "設定雙重驗證"
 
 #: src/components/routes/welcome/index.tsx:43
 msgid "Set up your organization"
@@ -13215,6 +13500,10 @@ msgstr "目前登入"
 msgid "Signed Up"
 msgstr "註冊時間"
 
+#: src/components/common/TwoFactor/AuthenticatorApps.tsx:15
+msgid "Simple and widely used, with optional cloud sync"
+msgstr "簡單且廣泛使用,可選雲端同步"
+
 #: src/components/modals/ManageAttendeeModal/index.tsx:229
 #: src/components/modals/ManageOrderModal/index.tsx:265
 msgid "Simpson"
@@ -13358,8 +13647,9 @@ msgstr "刪除税費時出了問題"
 msgid "Something went wrong, please try again, or contact support if the problem persists"
 msgstr "出現問題，請重試，或在問題持續時聯繫客服"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:44
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:59
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:47
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:67
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:82
 msgid "Something went wrong! Please try again"
 msgstr "出錯了！請重試"
 
@@ -13371,15 +13661,23 @@ msgstr "出問題了"
 msgid "Something went wrong. Please try again later."
 msgstr "出了點問題。請稍後再試。"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
 #: src/components/layouts/Event/index.tsx:97
 #: src/components/layouts/OrganizerLayout/index.tsx:132
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:72
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:38
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
-#: src/components/routes/auth/Login/index.tsx:69
+#: src/components/routes/admin/Users/index.tsx:35
+#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:167
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:363
-#: src/components/routes/profile/ManageProfile/index.tsx:91
-#: src/components/routes/profile/ManageProfile/index.tsx:105
+#: src/components/routes/profile/ManageProfile/index.tsx:98
+#: src/components/routes/profile/ManageProfile/index.tsx:112
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:40
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:59
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:96
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:32
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
 msgid "Something went wrong. Please try again."
 msgstr "出錯了。請重試。"
@@ -13620,7 +13918,7 @@ msgstr "統計"
 #: src/components/modals/EditUserModal/index.tsx:104
 #: src/components/modals/ManageAttendeeModal/index.tsx:151
 #: src/components/modals/ManageOrderModal/index.tsx:122
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:161
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:200
 #: src/components/routes/admin/Announcements/index.tsx:159
 #: src/components/routes/admin/Announcements/index.tsx:469
 #: src/components/routes/admin/Dashboard/index.tsx:405
@@ -13660,6 +13958,11 @@ msgstr "還在等待？請查看讀卡機螢幕。如果沒有顯示，請取消
 #: src/components/common/ImpersonationBanner/index.tsx:53
 msgid "Stop Impersonating"
 msgstr "停止模擬"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:52
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:55
+msgid "Stop trusting this device"
+msgstr "停止信任此裝置"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
 msgid "Straight rows, central aisle."
@@ -14077,7 +14380,7 @@ msgstr "已套用稅項及費用"
 msgid "Taxes and Fees"
 msgstr "税費"
 
-#: src/components/layouts/AuthLayout/index.tsx:24
+#: src/components/layouts/AuthLayout/index.tsx:25
 msgid "Team collaboration"
 msgstr "團隊協作"
 
@@ -14152,6 +14455,10 @@ msgstr "多謝，"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:690
 msgid "That promo code is invalid"
 msgstr "促銷代碼無效"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:25
+msgid "That was your last recovery code. Generate a new set now so you don't get locked out."
+msgstr "這是你最後一個復原碼。請立即產生一組新的復原碼,以免被鎖在賬户之外。"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:819
 msgid "That's {totalOccurrences} sessions — the maximum is {max}. Shorten the range or frequency."
@@ -14435,6 +14742,10 @@ msgstr "處理您的請求時出現錯誤。請重試。"
 msgid "There was an error sending your message"
 msgstr "發送信息時出現錯誤"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:186
+msgid "These browsers skip the code for 30 days after you trust them."
+msgstr "這些瀏覽器在被信任後 30 天內無需輸入驗證碼。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:498
 msgid "These details are shown on the attendee's ticket and order summary for this date only."
 msgstr "這些資料只會在此日期顯示於參加者的門票及訂單摘要上。"
@@ -14584,6 +14895,10 @@ msgstr "該日期已售罄，請選擇其他日期。"
 #: src/components/modals/SelectCheckInListModal/index.tsx:66
 msgid "This date only"
 msgstr "只限此日期"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:45
+msgid "This device"
+msgstr "此裝置"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:113
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
@@ -14880,6 +15195,10 @@ msgstr "四"
 msgid "Thursday"
 msgstr "星期四"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:185
+msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
+msgstr "登錄時剔選\"信任此裝置\",即可在該瀏覽器上 30 天內免輸驗證碼。"
+
 #: src/components/routes/my-tickets/index.tsx:102
 #: src/hooks/useAttendeeActions.tsx:113
 msgid "ticket"
@@ -15071,7 +15390,7 @@ msgstr "使用次數"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:363
-#: src/components/routes/profile/ManageProfile/index.tsx:188
+#: src/components/routes/profile/ManageProfile/index.tsx:201
 msgid "Timezone"
 msgstr "時區"
 
@@ -15118,7 +15437,8 @@ msgid "Tomorrow"
 msgstr "明天"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:33
-#: src/components/routes/auth/Login/index.tsx:52
+#: src/components/routes/auth/Login/index.tsx:88
+#: src/components/routes/auth/Login/index.tsx:108
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "嘗試次數過多。請稍等一分鐘後重試。"
@@ -15240,6 +15560,15 @@ msgstr "按歸因來源追蹤帳戶增長和表現"
 msgid "Tracking & Analytics"
 msgstr "追蹤與分析"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:87
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:125
+msgid "Trust this device for 30 days"
+msgstr "信任此裝置 30 天"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:182
+msgid "Trusted devices"
+msgstr "信任的裝置"
+
 #: src/components/common/ThemeColorControls/index.tsx:174
 msgid "Try a darker or lighter accent color."
 msgstr "請嘗試較深或較淺的強調色。"
@@ -15253,6 +15582,7 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "調整篩選條件即可查看更多日期。"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1075
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:77
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
@@ -15260,7 +15590,7 @@ msgstr "調整篩選條件即可查看更多日期。"
 msgid "Try again"
 msgstr "重試"
 
-#: src/components/routes/auth/Login/index.tsx:138
+#: src/components/routes/auth/Login/index.tsx:236
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "嘗試其他郵箱"
@@ -15286,6 +15616,28 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "土耳其語"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:232
+msgid "Turn off"
+msgstr "關閉"
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:50
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:118
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:216
+msgid "Turn off two-factor authentication"
+msgstr "關閉雙重驗證"
+
+#: src/components/routes/admin/Users/index.tsx:32
+msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
+msgstr "要為 {0} 關閉雙重驗證嗎?請在確認對方身分後再操作。系統會向對方發送電郵,對方之後僅用密碼即可登錄。"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:129
+msgid "Turn on two-factor authentication"
+msgstr "開啟雙重驗證"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:75
+msgid "Turn on two-factor authentication for your own profile first."
+msgstr "請先為你自己的個人檔案開啟雙重驗證。"
+
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound off"
 msgstr "關閉聲音"
@@ -15307,6 +15659,37 @@ msgstr "{0} 中有兩個座位都叫 {1}。請為其中一個高亮分區設定�
 msgid "Two settings decide how many people can book a date. Whichever is lower is what you can sell."
 msgstr "兩個設定決定一個日期可以預訂多少人。較低者即為可售數量。"
 
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:201
+msgid "Two-factor"
+msgstr "雙重驗證"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:109
+msgid "Two-factor authentication"
+msgstr "雙重驗證"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:37
+msgid "Two-factor authentication is now optional"
+msgstr "雙重驗證現已改為可選"
+
+#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:36
+msgid "Two-factor authentication is now required"
+msgstr "雙重驗證現已改為必須"
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:31
+msgid "Two-factor authentication is off"
+msgstr "雙重驗證已關閉"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:236
+#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:31
+msgid "Two-factor authentication is on"
+msgstr "雙重驗證已開啟"
+
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:46
+#: src/components/routes/admin/Users/index.tsx:34
+msgid "Two-factor authentication reset"
+msgstr "雙重驗證已重設"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:44
 #: src/components/routes/admin/Announcements/index.tsx:158
 #: src/components/routes/admin/Attribution/index.tsx:171
@@ -15321,6 +15704,10 @@ msgstr "類型"
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:106
 msgid "Type \"delete\" to confirm"
 msgstr "輸入\"刪除\"以確認"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+msgid "Type the code your authenticator app shows for {0}."
+msgstr "請輸入驗證器應用程式中為 {0} 顯示的驗證碼。"
 
 #: src/components/routes/admin/Announcements/AnnouncementTargetPicker.tsx:54
 msgid "Type to search..."
@@ -15480,6 +15867,11 @@ msgstr "未知"
 msgid "Unknown Attendee"
 msgstr "未知參會者"
 
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:27
+#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:34
+msgid "Unknown device"
+msgstr "未知裝置"
+
 #: src/components/common/CapacityHelp/index.tsx:31
 #: src/components/common/CapacityHelp/index.tsx:51
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:401
@@ -15609,7 +16001,7 @@ msgstr "更新標籤"
 msgid "Update location"
 msgstr "更新地點"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:215
+#: src/components/routes/profile/ManageProfile/index.tsx:228
 msgid "Update profile"
 msgstr "更新個人資料"
 
@@ -15717,6 +16109,15 @@ msgstr "USB 掃描器已暫停"
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "使用 <0>Liquid 模板</0> 個性化您的郵件"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
+msgid "Use a recovery code"
+msgstr "使用復原碼"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+msgid "Use a recovery code instead"
+msgstr "改用復原碼"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:449
 msgid "Use areas for separate parts of the venue, such as stalls and balcony. Best available seats are chosen nearest the stage."
 msgstr "使用區域來劃分場地的不同部分,例如正廳和樓座。系統會優先選擇離舞台最近的可用座位。"
@@ -15750,6 +16151,11 @@ msgstr "使用此座位"
 msgid "Use ticket price"
 msgstr "使用票種價格"
 
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+msgid "Use your authenticator app instead"
+msgstr "改用驗證器應用程式"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:155
 msgid "Used for borders, highlights, and QR code styling"
 msgstr "用於邊框、高亮和二維碼樣式"
@@ -15766,12 +16172,12 @@ msgstr "用於「掃描」分頁和售後報到"
 msgid "Used to measure and personalise ads."
 msgstr "用於衡量及個人化廣告。"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:158
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:197
 msgid "User"
 msgstr "用户"
 
 #: src/components/common/GlobalMenu/index.tsx:63
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:145
+#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:182
 msgid "User Management"
 msgstr "用户管理"
 
@@ -15782,7 +16188,7 @@ msgstr "用户管理"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 #: src/components/routes/admin/Dashboard/index.tsx:404
-#: src/components/routes/admin/Users/index.tsx:57
+#: src/components/routes/admin/Users/index.tsx:72
 msgid "Users"
 msgstr "用户"
 
@@ -15801,7 +16207,7 @@ msgstr "要在真實活動中使用它們？請取得企業版授權，並將其
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:83
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:146
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:126
-#: src/components/routes/profile/ManageProfile/index.tsx:189
+#: src/components/routes/profile/ManageProfile/index.tsx:202
 msgid "UTC"
 msgstr "世界協調時"
 
@@ -15932,9 +16338,22 @@ msgstr "已驗證"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "已驗證的帳戶可以向參加者傳送訊息並管理電郵範本。連接 Stripe 會自動驗證帳戶。"
 
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:81
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
+msgid "Verify"
+msgstr "驗證"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:223
+msgid "Verify and turn on"
+msgstr "驗證並開啟"
+
 #: src/components/routes/welcome/index.tsx:189
 msgid "Verify Email"
 msgstr "驗證電郵"
+
+#: src/components/routes/auth/Login/TwoFactorChallenge.tsx:136
+msgid "Verify recovery code"
+msgstr "驗證復原碼"
 
 #: src/components/layouts/Event/index.tsx:308
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
@@ -16125,7 +16544,7 @@ msgid "Waiting for scan…"
 msgstr "等待掃描…"
 
 #: src/components/forms/ProductForm/index.tsx:462
-#: src/components/layouts/AuthLayout/index.tsx:18
+#: src/components/layouts/AuthLayout/index.tsx:19
 #: src/components/layouts/Event/index.tsx:142
 #: src/components/routes/event/Settings/index.tsx:90
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
@@ -16308,7 +16727,7 @@ msgstr "Webhook 創建成功"
 msgid "Webhook deleted successfully"
 msgstr "Webhook 刪除成功"
 
-#: src/components/layouts/AuthLayout/index.tsx:26
+#: src/components/layouts/AuthLayout/index.tsx:27
 msgid "Webhook integrations"
 msgstr "Webhook 整合"
 
@@ -16381,7 +16800,7 @@ msgstr "微博"
 msgid "Welcome aboard! Please login to continue."
 msgstr "歡迎加入！請登錄以繼續。"
 
-#: src/components/routes/auth/Login/index.tsx:77
+#: src/components/routes/auth/Login/index.tsx:175
 msgid "Welcome back"
 msgstr "歡迎回來"
 
@@ -16858,6 +17277,14 @@ msgstr "您需要驗證您的帳户電子郵件才能發送消息。"
 msgid "You receive"
 msgstr "您收到"
 
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:28
+msgid "You used a recovery code. You have {remaining} recovery codes left."
+msgstr "你使用了一個復原碼。還剩 {remaining} 個復原碼。"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:27
+msgid "You used a recovery code. You have 1 recovery code left."
+msgstr "你使用了一個復原碼。還剩 1 個復原碼。"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:144
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "您必須手動將訂單標記為已支付。這可以在訂單管理頁面上完成。"
@@ -16898,6 +17325,14 @@ msgstr "您正在加入{occurrenceDate}的候補名單。"
 msgid "You're on the waitlist!"
 msgstr "您已加入候補名單！"
 
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:172
+msgid "You're running low. Generate a new set so you don't get locked out."
+msgstr "復原碼所剩不多。請產生一組新的,以免被鎖在賬户之外。"
+
+#: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
+msgid "You're signed in"
+msgstr "你已登錄"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
 msgstr "您已獲得一個名額！"
@@ -16909,6 +17344,14 @@ msgstr "你已更改場次時間"
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "在此模式下，您的強調色不夠突出。"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+msgid "your account"
+msgstr "你的賬户"
+
+#: src/components/routes/profile/ManageProfile/Security/index.tsx:119
+msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
+msgstr "你的賬户在登錄時會要求輸入驗證器應用程式中的驗證碼。開啟時間:{0}。"
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:92
 msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
@@ -16925,6 +17368,10 @@ msgstr "您的帳戶現已計劃刪除。"
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 msgid "Your account name is used on event pages and in emails."
 msgstr "您的賬户名稱會在活動頁面和電子郵件中使用。"
+
+#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:58
+msgid "Your account will only be protected by your password. Your recovery codes and trusted devices will be removed."
+msgstr "你的賬户將僅由密碼保護。你的復原碼和信任的裝置將被移除。"
 
 #: src/components/routes/event/Affiliates/index.tsx:48
 msgid "Your affiliates have been exported successfully."
@@ -16950,6 +17397,10 @@ msgstr "您的簽到名單已成功建立。與您的簽到工作人員共享以
 msgid "Your current order will be lost."
 msgstr "您當前的訂單將丟失。"
 
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:63
+msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
+msgstr "你目前的復原碼將立即失效。請輸入驗證器應用程式中的驗證碼以確認。"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:462
 msgid "Your Details"
 msgstr "您的詳細信息"
@@ -16958,7 +17409,7 @@ msgstr "您的詳細信息"
 msgid "Your Email"
 msgstr "您的電子郵件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:129
+#: src/components/routes/profile/ManageProfile/index.tsx:142
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "您要求將電子郵件更改為<0>{0}</0>的申請正在處理中。請檢查您的電子郵件以確認"
 
@@ -16999,6 +17450,10 @@ msgstr "您的姓名"
 msgid "Your new password must be at least 8 characters long."
 msgstr "您的新密碼必須至少為 8 個字元。"
 
+#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+msgid "Your new recovery codes"
+msgstr "你的新復原碼"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:612
 msgid "Your order details have been updated. A confirmation email has been sent to the new email address."
 msgstr "您的訂單詳情已更新。確認電郵已發送到新的電郵地址。"
@@ -17023,11 +17478,15 @@ msgstr "您的訂單已成功導出。"
 msgid "Your orders will appear here once they start rolling in."
 msgstr "您的訂單一旦開始滾動，就會出現在這裏。"
 
+#: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:48
+msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
+msgstr "你的機構要求啟用雙重驗證。請立即設定以繼續,大約只需一分鐘。"
+
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
 msgstr "您主辦單位的地址"
 
-#: src/components/routes/auth/Login/index.tsx:102
+#: src/components/routes/auth/Login/index.tsx:200
 #: src/components/routes/auth/Register/index.tsx:111
 msgid "Your password"
 msgstr "您的密碼"
@@ -17071,6 +17530,10 @@ msgstr "您的座位已更換"
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:117
 msgid "Your session expired. Sign in again to keep selling."
 msgstr "工作階段已過期。請重新登入以繼續銷售。"
+
+#: src/components/routes/auth/Login/index.tsx:103
+msgid "Your sign-in session has expired. Please sign in again."
+msgstr "你的登錄階段已過期,請重新登錄。"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:116
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."

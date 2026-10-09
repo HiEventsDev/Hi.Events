@@ -299,6 +299,27 @@ export class ApiClient {
     );
   }
 
+  beginTwoFactorSetup(password: string): Promise<{ secret: string; otpauth_uri: string }> {
+    return unwrap<{ secret: string; otpauth_uri: string }>(
+      this.request.post('users/me/two-factor/setup', { headers: jsonHeaders, data: { password } }),
+    );
+  }
+
+  confirmTwoFactorSetup(code: string): Promise<{ recovery_codes: string[] }> {
+    return unwrap<{ recovery_codes: string[] }>(
+      this.request.post('users/me/two-factor/confirm', { headers: jsonHeaders, data: { code } }),
+    );
+  }
+
+  setTwoFactorRequirement(accountId: number, required: boolean): Promise<void> {
+    return check(
+      this.request.put(`accounts/${accountId}/two-factor-requirement`, {
+        headers: jsonHeaders,
+        data: { require_two_factor_authentication: required },
+      }),
+    );
+  }
+
   inviteUser(payload: InviteUserPayload): Promise<{ id: number }> {
     return unwrap<{ id: number }>(this.request.post('users', { headers: jsonHeaders, data: payload }));
   }

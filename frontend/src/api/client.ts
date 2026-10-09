@@ -7,6 +7,7 @@ const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
 const LOGIN_PATH = "/auth/login";
+export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
 const PREVIOUS_URL_KEY = 'previous_url';
 
 // todo - This isn't scalable, we need to better way to manage this
@@ -58,6 +59,13 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        if (status === 403 && error.response.data?.error_code === 'TWO_FACTOR_SETUP_REQUIRED') {
+            if (!currentPath.startsWith(TWO_FACTOR_SETUP_PATH)) {
+                window?.location?.replace(TWO_FACTOR_SETUP_PATH);
+            }
+            return Promise.reject(error);
+        }
+
         if (status === 403 && error.response.data?.error_code === 'FEATURE_UNAVAILABLE') {
             return Promise.reject(error);
         }
@@ -73,6 +81,10 @@ api.interceptors.response.use(
 );
 
 axios.defaults.withCredentials = true;
+
+export const setPreviousUrl = (url: string) => {
+    window?.localStorage?.setItem(PREVIOUS_URL_KEY, url);
+};
 
 export const redirectToPreviousUrl = () => {
     const previousUrl = window?.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
