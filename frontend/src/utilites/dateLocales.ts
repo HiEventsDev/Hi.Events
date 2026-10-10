@@ -280,4 +280,17 @@ export const localeFormats: Record<SupportedLocales, {
         timezone: 'z',
         dateTimePicker: 'YYYY년 M월 D일 A h:mm'
     },
+    'ja': { fullDateTime: 'YYYY年M月D日 (ddd) HH:mm',
+        shortDateTime: 'YYYY/MM/DD HH:mm',
+        shortDate: 'YYYY/MM/DD',
+        chartDate: 'M/D',
+        weekdayDate: 'M月D日 (ddd)',
+        dayMonthTime: 'M月D日 HH:mm',
+        monthShort: 'M月',
+        dayOfMonth: 'D',
+        dayName: 'MMMM D日 dddd',
+        timeOnly: 'HH:mm',
+        timezone: 'z',
+        dateTimePicker: 'YYYY年MM月DD日 HH:mm'
+    },
 };
