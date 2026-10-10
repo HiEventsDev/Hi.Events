@@ -29,6 +29,7 @@ enum Locale: string
     case SK = 'sk';
     case EL = 'el';
     case KO = 'ko';
+    case JA = 'ja';
 
     public static function getSupportedLocales(): array
     {
