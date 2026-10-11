@@ -17,6 +17,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $eventSettings->getInvoiceLabel() ?? __('Invoice') }} #{{ $invoice->getInvoiceNumber() }}</title>
     <style>
+        @if($embedCjkFont)
+        @font-face {
+            font-family: 'Noto Sans SC';
+            src: url('{{ resource_path('fonts/NotoSansSC-Regular.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Noto Sans SC';
+            src: url('{{ resource_path('fonts/NotoSansSC-Bold.ttf') }}') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @endif
+
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +40,7 @@
         }
 
         body {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             font-size: 12px;
             line-height: 1.5;
             color: #1a1a1a;
@@ -41,7 +57,7 @@
         }
 
         .logo-title {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             font-size: 28px;
             font-weight: 700;
             color: #1a1a1a;
@@ -50,7 +66,7 @@
         }
 
         .header-event-name {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             font-size: 12px;
             color: #666;
             margin: 0;
@@ -72,7 +88,7 @@
             padding: 4px 14px;
             margin-top: 6px;
             border-radius: 4px;
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             font-size: 11px;
             font-weight: bold;
             letter-spacing: 0.5px;
@@ -110,7 +126,7 @@
         }
 
         .info-label {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             color: #888;
             font-size: 10px;
             font-weight: bold;
@@ -121,9 +137,9 @@
         }
 
         .info-value {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
+            font-family: 'DejaVu Sans', 'Noto Sans SC', sans-serif;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         .billing-section {
