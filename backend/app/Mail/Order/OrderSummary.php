@@ -2,7 +2,6 @@
 
 namespace HiEvents\Mail\Order;
 
-use Barryvdh\DomPDF\Facade\Pdf;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
@@ -12,6 +11,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Order\InvoicePdfRenderer;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -84,13 +84,13 @@ class OrderSummary extends BaseMail
             return [];
         }
 
-        $invoice = Pdf::loadView('invoice', [
-            'order' => $this->order,
-            'event' => $this->event,
-            'organizer' => $this->organizer,
-            'eventSettings' => $this->eventSettings,
-            'invoice' => $this->invoice,
-        ]);
+        $invoice = app(InvoicePdfRenderer::class)->render(
+            order: $this->order,
+            event: $this->event,
+            organizer: $this->organizer,
+            eventSettings: $this->eventSettings,
+            invoice: $this->invoice,
+        );
 
         return [
             Attachment::fromData(
