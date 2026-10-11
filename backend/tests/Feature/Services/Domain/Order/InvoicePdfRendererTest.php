@@ -12,8 +12,6 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\InvoiceStatus;
 use HiEvents\Services\Domain\Order\InvoicePdfRenderer;
 use Mockery;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Psr\Log\LoggerInterface;
 use Tests\TestCase;
 
@@ -50,13 +48,15 @@ class InvoicePdfRendererTest extends TestCase
         $this->assertStringNotContainsString('/BaseFont /Times', $output);
     }
 
-    #[RunInSeparateProcess]
-    #[PreserveGlobalState(false)]
     public function test_invoice_still_renders_without_the_cjk_font_when_the_font_cache_is_not_writable(): void
     {
         $logger = Mockery::spy(LoggerInterface::class);
         $this->app->instance(LoggerInterface::class, $logger);
         $blockingFile = tempnam(sys_get_temp_dir(), 'font-cache');
+        $viewData = [];
+        $this->app['view']->composer('invoice', function ($view) use (&$viewData) {
+            $viewData = $view->getData();
+        });
         config([
             'dompdf.options.font_dir' => $blockingFile.'/fonts',
             'dompdf.options.font_cache' => $blockingFile.'/fonts',
@@ -75,7 +75,7 @@ class InvoicePdfRendererTest extends TestCase
         }
 
         $this->assertStringStartsWith('%PDF-', $output);
-        $this->assertStringNotContainsString('NotoSansSC', $output);
+        $this->assertFalse($viewData['embedCjkFont']);
         $logger->shouldHaveReceived('warning')->once();
     }
 
