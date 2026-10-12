@@ -8,9 +8,12 @@ test.describe('admin dashboard', () => {
     const admin = new AdminPage(superAdminPage);
     await admin.gotoDashboard();
 
-    await expect(superAdminPage.getByRole('heading', { name: 'Admin Dashboard', exact: true })).toBeVisible();
-    await expect(superAdminPage.getByText('Total Users')).toBeVisible();
-    await expect(superAdminPage.getByText('Total Accounts')).toBeVisible();
+    await expect(superAdminPage.getByRole('heading', { name: 'Dashboard', exact: true })).toBeVisible();
+    await expect(superAdminPage.getByText('Platform commission')).toBeVisible();
+    await expect(superAdminPage.getByTestId('admin-dashboard-attention-item')).toHaveCount(4);
+
+    await admin.selectDashboardPeriod('Last 24 hours');
+    await expect(superAdminPage.getByText('Top selling events')).toBeVisible();
 
     await admin.openAccountsFromSidebar();
     await expect(superAdminPage.getByRole('heading', { name: 'Accounts', exact: true })).toBeVisible();

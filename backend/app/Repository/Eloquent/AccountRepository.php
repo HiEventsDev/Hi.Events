@@ -70,6 +70,7 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
             ->withCount(['events', 'users'])
             ->with([
                 'messagingTier',
+                'active_deletion_request',
                 'organizers.organizer_configuration',
                 'organizers.organizer_vat_setting',
                 'users' => function ($query) {
