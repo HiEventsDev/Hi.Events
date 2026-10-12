@@ -68,6 +68,11 @@ class AdminAccountDetailResource extends BaseResource
                     'role' => $user->pivot->role,
                 ];
             }),
+            'active_deletion_request' => $this->resource->active_deletion_request ? [
+                'id' => $this->resource->active_deletion_request->id,
+                'scheduled_deletion_at' => $this->resource->active_deletion_request->scheduled_deletion_at,
+                'expected_outcome' => $this->resource->active_deletion_request->expected_outcome,
+            ] : null,
             'messaging_tier' => $this->resource->messagingTier
                 ? new AccountMessagingTierResource(
                     AccountMessagingTierDomainObject::hydrateFromModel($this->resource->messagingTier)

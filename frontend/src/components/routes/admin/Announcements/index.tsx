@@ -188,8 +188,8 @@ const Announcements = () => {
                                                             <Badge variant="outline" color="gray" size="sm">{target.label}</Badge>
                                                         </Tooltip>
                                                     </Table.Td>
-                                                    <Table.Td>{isDraft ? '—' : announcement.seen_count}</Table.Td>
-                                                    <Table.Td>{isDraft ? '—' : announcement.dismissed_count}</Table.Td>
+                                                    <Table.Td>{announcement.seen_count}</Table.Td>
+                                                    <Table.Td>{announcement.dismissed_count}</Table.Td>
                                                     <Table.Td>
                                                         <Text size="sm" c="dimmed">
                                                             {new Date(announcement.updated_at).toLocaleDateString()}

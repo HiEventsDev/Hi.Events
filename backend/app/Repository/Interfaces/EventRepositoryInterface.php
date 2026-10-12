@@ -18,8 +18,6 @@ interface EventRepositoryInterface extends RepositoryInterface
 
     public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator;
 
-    public function getUpcomingEventsForAdmin(int $perPage): LengthAwarePaginator;
-
     public function getAllEventsForAdmin(
         ?string $search = null,
         int $perPage = 20,

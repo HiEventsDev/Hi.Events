@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Http\Actions\Admin;
 
+use HiEvents\Jobs\Account\ExecuteAccountDeletionJob;
 use HiEvents\Models\User;
 use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
 use HiEvents\Services\Domain\Event\EventSpamCheckService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 
@@ -41,6 +43,7 @@ class SpamEventsTest extends TestCase
         $this->getJson('/admin/spam-events', $this->authHeaders($adminToken))->assertStatus(403);
         $this->postJson("/admin/spam-events/{$this->eventId}/approve", [], $this->authHeaders($adminToken))->assertStatus(403);
         $this->postJson("/admin/spam-events/{$this->eventId}/confirm-spam", [], $this->authHeaders($adminToken))->assertStatus(403);
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", [], $this->authHeaders($adminToken))->assertStatus(403);
     }
 
     public function test_list_returns_flagged_events_with_verdict(): void
@@ -103,6 +106,95 @@ class SpamEventsTest extends TestCase
             ->assertJsonCount(0, 'data');
     }
 
+    public function test_list_includes_event_slug_for_public_page_link(): void
+    {
+        $this->getJson('/admin/spam-events', $this->authHeaders())
+            ->assertStatus(200)
+            ->assertJsonPath('data.0.event_slug', 'spam-test-event');
+    }
+
+    public function test_delete_removes_event_and_confirms_spam_without_touching_account(): void
+    {
+        Queue::fake();
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", [], $this->authHeaders())
+            ->assertStatus(200);
+
+        $this->assertNotNull(DB::table('events')->where('id', $this->eventId)->value('deleted_at'));
+        $this->assertSame('CONFIRMED_SPAM', DB::table('event_spam_checks')->where('event_id', $this->eventId)->value('status'));
+        $this->assertSame(0, DB::table('account_deletion_requests')->where('account_id', $this->accountId)->count());
+        Queue::assertNotPushed(ExecuteAccountDeletionJob::class);
+
+        $this->getJson('/admin/spam-events', $this->authHeaders())->assertJsonCount(0, 'data');
+    }
+
+    public function test_delete_with_account_queues_immediate_account_deletion(): void
+    {
+        Queue::fake();
+        $spammerAccountId = $this->moveEventToNewAccount();
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", ['delete_account' => true], $this->authHeaders())
+            ->assertStatus(200);
+
+        $this->assertNotNull(DB::table('events')->where('id', $this->eventId)->value('deleted_at'));
+
+        $deletionRequest = DB::table('account_deletion_requests')->where('account_id', $spammerAccountId)->first();
+        $this->assertNotNull($deletionRequest);
+        $this->assertSame('REQUESTED', $deletionRequest->status);
+        $this->assertSame('ADMIN', $deletionRequest->initiated_by);
+
+        Queue::assertPushed(
+            ExecuteAccountDeletionJob::class,
+            fn (ExecuteAccountDeletionJob $job) => $job->deletionRequestId === $deletionRequest->id,
+        );
+    }
+
+    public function test_delete_with_account_is_refused_for_account_with_superadmin_member(): void
+    {
+        Queue::fake();
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", ['delete_account' => true], $this->authHeaders())
+            ->assertStatus(409);
+
+        $this->assertNull(DB::table('events')->where('id', $this->eventId)->value('deleted_at'));
+        $this->assertSame(0, DB::table('account_deletion_requests')->where('account_id', $this->accountId)->count());
+        Queue::assertNotPushed(ExecuteAccountDeletionJob::class);
+    }
+
+    public function test_delete_returns_not_found_for_event_not_awaiting_review(): void
+    {
+        DB::table('events')->where('id', $this->eventId)->update(['status' => 'LIVE']);
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", [], $this->authHeaders())
+            ->assertStatus(404);
+
+        $this->assertNull(DB::table('events')->where('id', $this->eventId)->value('deleted_at'));
+    }
+
+    public function test_delete_keeps_event_when_account_deletion_is_refused(): void
+    {
+        Queue::fake();
+        $spammerAccountId = $this->moveEventToNewAccount();
+
+        DB::table('account_deletion_requests')->insert([
+            'account_id' => $spammerAccountId,
+            'requested_by_user_id' => $this->user->id,
+            'initiated_by' => 'USER',
+            'status' => 'REQUESTED',
+            'expected_outcome' => 'HARD_DELETE',
+            'scheduled_deletion_at' => now()->addDays(30),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->postJson("/admin/spam-events/{$this->eventId}/delete", ['delete_account' => true], $this->authHeaders())
+            ->assertStatus(409);
+
+        $this->assertNull(DB::table('events')->where('id', $this->eventId)->value('deleted_at'));
+        $this->assertSame('FLAGGED', DB::table('event_spam_checks')->where('event_id', $this->eventId)->value('status'));
+        Queue::assertNotPushed(ExecuteAccountDeletionJob::class);
+    }
+
     public function test_organizer_cannot_send_pending_manual_review_status(): void
     {
         $this->putJson(
@@ -136,6 +228,14 @@ class SpamEventsTest extends TestCase
         $token = JWTAuth::claims(['account_id' => $accountId])->fromUser($user);
 
         return [$user, $token, $accountId];
+    }
+
+    private function moveEventToNewAccount(): int
+    {
+        [, , $spammerAccountId] = $this->makeAuthenticatedUser('ADMIN');
+        DB::table('events')->where('id', $this->eventId)->update(['account_id' => $spammerAccountId]);
+
+        return $spammerAccountId;
     }
 
     private function makeOrganizer(): int
