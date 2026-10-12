@@ -75,7 +75,6 @@ use HiEvents\Http\Actions\Admin\DeletionRequests\AdminExecuteAccountDeletionActi
 use HiEvents\Http\Actions\Admin\DeletionRequests\AdminRequestAccountDeletionAction;
 use HiEvents\Http\Actions\Admin\DeletionRequests\GetAllAccountDeletionRequestsAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
-use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
@@ -96,6 +95,7 @@ use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
 use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\ApproveSpamEventAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\ConfirmSpamEventAction;
+use HiEvents\Http\Actions\Admin\SpamEvents\DeleteSpamEventAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\GetAllSpamEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
@@ -680,7 +680,6 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->delete('/configurations/{configuration_id}', DeleteConfigurationAction::class);
         $router->get('/users', GetAllUsersAction::class);
         $router->get('/events', GetAllAdminEventsAction::class);
-        $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
@@ -701,6 +700,7 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/spam-events', GetAllSpamEventsAction::class);
         $router->post('/spam-events/{event_id}/approve', ApproveSpamEventAction::class);
         $router->post('/spam-events/{event_id}/confirm-spam', ConfirmSpamEventAction::class);
+        $router->post('/spam-events/{event_id}/delete', DeleteSpamEventAction::class)->whereNumber('event_id');
 
         // Announcements
         $router->get('/announcements', GetAllAnnouncementsAction::class);

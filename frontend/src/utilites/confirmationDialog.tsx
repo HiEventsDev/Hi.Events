@@ -5,6 +5,7 @@ interface ConfirmationDialogOptions {
     confirm?: string;
     cancel?: string;
     useCheckoutColors?: boolean;
+    destructive?: boolean;
 }
 
 export const confirmationDialog = (
@@ -36,6 +37,7 @@ export const confirmationDialog = (
         title: message,
         labels,
         styles: checkoutStyles,
+        confirmProps: options?.destructive ? {color: 'red'} : undefined,
         onConfirm: () => onConfirm(),
     });
 }

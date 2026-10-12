@@ -19,6 +19,7 @@ class AdminSpamEventResource extends BaseResource
             'id' => $this->getId(),
             'event_id' => $this->getEventId(),
             'event_title' => $event?->getTitle(),
+            'event_slug' => $event?->getSlug(),
             'event_description' => trim(strip_tags($event?->getDescription() ?? '')),
             'organizer_name' => $event?->getOrganizer()?->getName(),
             'account_name' => $event?->getAccount()?->getName(),

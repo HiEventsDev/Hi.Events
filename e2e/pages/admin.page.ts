@@ -55,4 +55,19 @@ export class AdminPage {
   featureFlagOverrideRow(accountId: number): Locator {
     return this.page.getByTestId(`feature-flag-override-${accountId}`);
   }
+
+  async selectDashboardPeriod(label: 'Last 24 hours' | 'Last 7 days' | 'Last 30 days'): Promise<void> {
+    await this.page.getByTestId('admin-dashboard-period').getByText(label, { exact: true }).click();
+  }
+
+  accountImpersonateButtons(): Locator {
+    return this.page.getByTestId('admin-account-impersonate-button');
+  }
+
+  async scheduleAccountDeletion(accountName: string, reason: string): Promise<void> {
+    await this.page.getByTestId('admin-delete-account-button').click();
+    await this.page.getByLabel('Reason').fill(reason);
+    await this.page.getByLabel('Type the account name to confirm').fill(accountName);
+    await this.page.getByTestId('admin-delete-account-confirm-button').click();
+  }
 }
