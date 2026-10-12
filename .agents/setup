@@ -24,7 +24,7 @@ php_packages=(
   "php$php_version-intl" "php$php_version-mbstring" "php$php_version-pgsql" "php$php_version-sqlite3"
   "php$php_version-xml" "php$php_version-zip" "php$php_version-imagick" "php$php_version-redis"
 )
-apt_packages=("${php_packages[@]}" "postgresql-$pg_version" postgresql-client unzip)
+apt_packages=("${php_packages[@]}" "postgresql-$pg_version" postgresql-client nginx unzip)
 missing=()
 for pkg in "${apt_packages[@]}"; do
   dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q 'install ok installed' || missing+=("$pkg")
@@ -38,6 +38,9 @@ if ((${#missing[@]})); then
   fi
   sudo apt-get update -qq
   sudo -E apt-get install -y -qq --no-install-recommends "${missing[@]}"
+fi
+if systemctl is-enabled --quiet nginx 2>/dev/null; then
+  sudo systemctl disable --now nginx
 fi
 done_step
 
@@ -129,6 +132,7 @@ if ! grep -Fqx "$notes_marker" "$agents_file" 2>/dev/null; then
 - PHP 8.5, Composer, and PostgreSQL 15 are installed natively. Postgres runs under systemd on 127.0.0.1:5432 (role `username` / `password`, databases `backend` and `hievents_test`); the hostname `pgsql` resolves to 127.0.0.1, so `backend/.env` and `backend/.env.testing` work unchanged.
 - `backend/.env` is set up for a native dev server: `php artisan serve --port 8000` (API at http://localhost:8000, no `/api` prefix), mail goes to the log, files use local disks, no Redis or Mailpit.
 - `frontend/.env` points at that API; run the SSR dev server with `yarn dev:ssr` in `frontend/` (http://localhost:5678).
+- `amp orb services ensure` starts the whole app behind one portal (`.amp/services.yaml`): nginx routes `/api/` to the backend and everything else to the frontend, like the Docker dev stack.
 EOF
 fi
 done_step

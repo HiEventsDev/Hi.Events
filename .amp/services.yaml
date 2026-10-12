@@ -1,0 +1,20 @@
+services:
+  web:
+    command: mkdir -p /tmp/hievents-nginx && sed "s/__PORT__/$PORT/" .amp/nginx.conf > /tmp/hievents-nginx/nginx.conf && exec /usr/sbin/nginx -e stderr -c /tmp/hievents-nginx/nginx.conf
+    portal:
+      url: /
+      title: Hi.Events
+      description: Register a new account to sign in. Emails are printed to the backend service log (amp orb service logs backend).
+  backend:
+    command: . ../.amp/public-url-env.sh && exec php artisan serve --host=127.0.0.1 --port="$PORT"
+    cwd: backend
+    port: 8000
+    env:
+      WEB_URL: ${services.web.publicURL}
+      PHP_CLI_SERVER_WORKERS: "4"
+  frontend:
+    command: . ../.amp/public-url-env.sh && exec yarn dev:ssr
+    cwd: frontend
+    port: 5678
+    env:
+      WEB_URL: ${services.web.publicURL}
