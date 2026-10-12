@@ -49,7 +49,7 @@ export const LanguageSwitcher = () => {
             case "ko":
                 return t`Korean`;
             case "ja":
-                return t`Japanese`;                
+                return t`Japanese`;
             default:
                 // Defensive fallback: if a new locale is added to SupportedLocales
                 // but not handled here, return the locale code itself rather than

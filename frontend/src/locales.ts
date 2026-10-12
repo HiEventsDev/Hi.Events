@@ -66,7 +66,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     sk: `Slovak`,
     el: `Greek`,
     ko: `Korean`,
-    ja: `日本語`,
+    ja: `Japanese`,
     fi: `Finnish`,
 };
 
@@ -108,7 +108,7 @@ const dayjsLocaleLoaders: Partial<Record<SupportedLocales, () => Promise<unknown
     sk: () => import("dayjs/locale/sk"),
     el: () => import("dayjs/locale/el"),
     ko: () => import("dayjs/locale/ko"),
-    ja: () => import("dayjs/locale/ja"),    
+    ja: () => import("dayjs/locale/ja"),
     fi: () => import("dayjs/locale/fi"),
 };
 
