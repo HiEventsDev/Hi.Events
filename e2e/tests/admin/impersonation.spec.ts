@@ -1,6 +1,7 @@
 import { test, expect } from '../../fixtures';
 import { createLiveEventWithProduct } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
+import { AdminPage } from '../../pages/admin.page';
 
 test.describe('admin impersonation', () => {
   test('a superadmin impersonates an organizer and returns to the admin context', { tag: '@admin' }, async ({ freshAccount, superAdminPage }) => {
@@ -28,6 +29,18 @@ test.describe('admin impersonation', () => {
 
     await superAdminPage.goto('/admin');
     await superAdminPage.waitForLoadState('networkidle');
-    await expect(superAdminPage.getByRole('heading', { name: 'Admin Dashboard', exact: true })).toBeVisible();
+    await expect(superAdminPage.getByRole('heading', { name: 'Dashboard', exact: true })).toBeVisible();
+  });
+
+  test('a superadmin impersonates a user from the account page', { tag: '@admin' }, async ({ freshAccount, superAdminPage, adminApi }) => {
+    const accountId = await adminApi.findAccountIdByEmail(freshAccount.email);
+
+    const admin = new AdminPage(superAdminPage);
+    await admin.gotoAccount(accountId);
+    await admin.accountImpersonateButtons().first().click();
+
+    await expect(superAdminPage.getByText(/You are impersonating/)).toBeVisible();
+    await superAdminPage.getByRole('button', { name: 'Stop Impersonating' }).click();
+    await expect(superAdminPage.getByText(/You are impersonating/)).toHaveCount(0);
   });
 });

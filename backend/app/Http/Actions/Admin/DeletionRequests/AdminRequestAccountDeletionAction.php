@@ -8,10 +8,10 @@ use HiEvents\DomainObjects\Enums\AccountDeletionInitiator;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Request\Admin\AdminRequestAccountDeletionRequest;
 use HiEvents\Resources\Account\AccountDeletionRequestResource;
 use HiEvents\Services\Domain\Account\AccountDeletionService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
@@ -24,7 +24,7 @@ class AdminRequestAccountDeletionAction extends BaseAction
     /**
      * @throws Throwable
      */
-    public function __invoke(Request $request, int $accountId): JsonResponse
+    public function __invoke(AdminRequestAccountDeletionRequest $request, int $accountId): JsonResponse
     {
         $this->minimumAllowedRole(Role::SUPERADMIN);
 
@@ -34,6 +34,7 @@ class AdminRequestAccountDeletionAction extends BaseAction
                 requestedByUserId: $this->getAuthenticatedUser()->getId(),
                 initiator: AccountDeletionInitiator::ADMIN,
                 reason: $request->input('reason'),
+                executeImmediately: $request->boolean('execute_immediately'),
             );
         } catch (CannotDeleteEntityException $exception) {
             return $this->errorResponse(
