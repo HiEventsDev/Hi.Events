@@ -229,6 +229,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "email-delivery",
+                async lazy() {
+                    const EmailDelivery = await import("./components/routes/admin/EmailDelivery");
+                    return { Component: EmailDelivery.default };
+                }
+            },
+            {
                 path: "failed-jobs",
                 async lazy() {
                     const FailedJobs = await import("./components/routes/admin/FailedJobs");

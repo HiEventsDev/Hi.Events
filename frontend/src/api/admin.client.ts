@@ -164,6 +164,22 @@ export interface AdminStats {
 
 export type AdminDashboardPeriod = '24h' | '7d' | '30d';
 
+export interface AdminEmailDeliveryCategoryStats {
+    category: string | null;
+    sent: number;
+    delivered: number;
+    permanent_bounces: number;
+    transient_bounces: number;
+    complaints: number;
+    opened: number;
+    clicked: number;
+}
+
+export interface AdminEmailDeliveryStats {
+    delivery_webhook_configured: boolean;
+    categories: AdminEmailDeliveryCategoryStats[];
+}
+
 export interface AdminCommissionAmount {
     gross: number;
     net: number;
@@ -493,6 +509,13 @@ export const adminClient = {
     getStats: async () => {
         const response = await api.get<AdminStats>('admin/stats');
         return response.data;
+    },
+
+    getEmailDeliveryStats: async (period: AdminDashboardPeriod) => {
+        const response = await api.get<{ data: AdminEmailDeliveryStats }>('admin/email-deliveries/stats', {
+            params: {period},
+        });
+        return response.data.data;
     },
 
     getDashboardData: async (period: AdminDashboardPeriod) => {

@@ -183,6 +183,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             ->all();
     }
 
+    public function getSingleEventOccurrence(): ?EventOccurrenceDomainObject
+    {
+        $occurrences = ($this->getOrderItems() ?? collect())
+            ->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrence())
+            ->filter()
+            ->unique(fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getId());
+
+        return $occurrences->count() === 1 ? $occurrences->first() : null;
+    }
+
     public function isPaymentRequired(): bool
     {
         return (int) ceil($this->getTotalGross()) > 0;

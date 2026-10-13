@@ -74,6 +74,7 @@ use HiEvents\Http\Actions\Admin\DeletionRequests\AdminCancelAccountDeletionActio
 use HiEvents\Http\Actions\Admin\DeletionRequests\AdminExecuteAccountDeletionAction;
 use HiEvents\Http\Actions\Admin\DeletionRequests\AdminRequestAccountDeletionAction;
 use HiEvents\Http\Actions\Admin\DeletionRequests\GetAllAccountDeletionRequestsAction;
+use HiEvents\Http\Actions\Admin\EmailDeliveries\GetEmailDeliveryStatsAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
@@ -147,6 +148,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListStatsPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
+use HiEvents\Http\Actions\Common\Webhooks\HandleEmailDeliveryWebhookPublicAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateEventEmailTemplateAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateOrganizerEmailTemplateAction;
@@ -733,6 +735,9 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
 
         // System Info
         $router->get('/system-info', GetSystemInfoAction::class);
+
+        // Email Deliveries
+        $router->get('/email-deliveries/stats', GetEmailDeliveryStatsAction::class);
     }
 );
 
@@ -799,6 +804,8 @@ $router->prefix('/public')->group(
 
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class)
+            ->withoutMiddleware(ThrottleRequests::class.':api');
+        $router->post('/webhooks/email-delivery/{provider}', HandleEmailDeliveryWebhookPublicAction::class)
             ->withoutMiddleware(ThrottleRequests::class.':api');
 
         // Box office
