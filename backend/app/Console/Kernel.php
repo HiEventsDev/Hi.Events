@@ -7,6 +7,7 @@ use HiEvents\Enterprise\Licensing\Console\IssueLicenceKeyCommand;
 use HiEvents\Jobs\Account\ProcessScheduledAccountDeletionsJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Jobs\Waitlist\ProcessExpiredWaitlistOffersJob;
+use HiEvents\Models\EmailDelivery;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendScheduledMessagesJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new ProcessExpiredWaitlistOffersJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new ProcessScheduledAccountDeletionsJob)->hourly()->withoutOverlapping();
+        $schedule->command('model:prune', ['--model' => [EmailDelivery::class]])->daily()->withoutOverlapping();
 
         $schedule->call(function (): void {
             $count = DB::table('failed_jobs')->count();

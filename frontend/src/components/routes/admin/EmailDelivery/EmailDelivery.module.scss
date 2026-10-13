@@ -1,0 +1,41 @@
+.container {
+    padding: var(--mantine-spacing-xl);
+
+    @media (max-width: 600px) {
+        padding: var(--mantine-spacing-md);
+    }
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.totals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--mantine-color-gray-7);
+    font-size: var(--mantine-font-size-sm);
+}
+
+.numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.warning {
+    color: var(--mantine-color-red-7);
+    font-weight: 600;
+}
+
+.empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--mantine-color-gray-6);
+    font-size: var(--mantine-font-size-sm);
+}
