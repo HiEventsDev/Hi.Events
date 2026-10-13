@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\EventSettings\DTO\UpdateEventSettingsDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -17,6 +18,7 @@ class UpdateEventSettingsHandler
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
         private readonly HtmlPurifierService $purifier,
         private readonly DatabaseManager $databaseManager,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -116,6 +118,8 @@ class UpdateEventSettingsHandler
                     'event_id' => $settings->event_id,
                 ]);
         });
+
+        $this->eventSpamCheckDispatchService->dispatchForEvent($settings->event_id);
 
         if ($settings->waitlist_auto_process && ! $wasAutoProcessEnabled) {
             event(new CapacityChangedEvent(

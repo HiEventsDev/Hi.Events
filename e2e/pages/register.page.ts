@@ -5,7 +5,7 @@ export class RegisterPage {
 
   async goto(): Promise<void> {
     await this.page.goto('/auth/register');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.getByLabel(/^First Name/).waitFor();
   }
 
   async register(details: { firstName: string; lastName?: string; email: string; password: string }): Promise<void> {

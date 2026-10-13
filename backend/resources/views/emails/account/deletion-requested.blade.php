@@ -4,7 +4,7 @@
 @php /** @var string $cancelLink */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $account->getName()]) }},
+{{ __('Hi') }},
 
 {{ __('We have received a request to delete your :appName account. Your account has been deactivated and is scheduled for permanent deletion on :date.', ['appName' => config('app.name'), 'date' => $scheduledDeletionDate]) }}
 

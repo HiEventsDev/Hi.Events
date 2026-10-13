@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Feature\Auth;
 
 use HiEvents\Models\Account;
+use HiEvents\Models\AccountAttribution;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\RateLimiter;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
@@ -164,5 +167,88 @@ class RegisterTest extends TestCase
             ['Accept' => 'application/json']
         );
         $response->assertJsonValidationErrors(['invite_token']);
+    }
+
+    public function test_rejects_scam_text_in_the_name(): void
+    {
+        Config::set('app.disable_registration', false);
+
+        $response = $this->postJson(self::REGISTER_ROUTE, $this->registrationPayload([
+            'first_name' => 'Your crypto purchase USD 364 success via PayPal. INV ID UTRX4 If unauthorized call +1(805)891-5965 xvc',
+        ]));
+
+        $response->assertJsonValidationErrors(['first_name']);
+        $this->assertDatabaseMissing('users', ['email' => 'new.organizer@example.com']);
+    }
+
+    public function test_oversized_tracking_parameters_never_block_registration(): void
+    {
+        Config::set('app.disable_registration', false);
+
+        $utmRaw = [];
+        foreach (range(1, 40) as $index) {
+            $utmRaw['utm_param_'.$index] = str_repeat('x', 5000);
+        }
+
+        $response = $this->postJson(self::REGISTER_ROUTE, $this->registrationPayload([
+            'utm_source' => 'google',
+            'utm_raw' => $utmRaw,
+        ]));
+
+        $response->assertStatus(201);
+
+        $storedRaw = AccountAttribution::query()
+            ->where('account_id', Account::where('email', 'new.organizer@example.com')->value('id'))
+            ->value('utm_raw');
+
+        $this->assertCount(20, $storedRaw);
+        $this->assertSame(255, mb_strlen($storedRaw['utm_param_1']));
+    }
+
+    public function test_requires_a_turnstile_token_when_turnstile_is_configured(): void
+    {
+        Config::set('app.disable_registration', false);
+        Config::set('services.turnstile.secret_key', 'secret');
+        Http::fake(['challenges.cloudflare.com/*' => Http::response(['success' => false])]);
+
+        $response = $this->postJson(self::REGISTER_ROUTE, $this->registrationPayload([
+            'turnstile_token' => 'bad-token',
+        ]));
+
+        $response->assertJsonValidationErrors(['turnstile_token']);
+        $this->assertDatabaseMissing('users', ['email' => 'new.organizer@example.com']);
+    }
+
+    public function test_registration_is_throttled_per_ip(): void
+    {
+        Config::set('app.disable_registration', true);
+        Config::set('app.register_rate_limit_per_hour', 3);
+        RateLimiter::clear('');
+
+        $statuses = [];
+
+        foreach (range(1, 4) as $attempt) {
+            $statuses[] = $this->postJson(self::REGISTER_ROUTE, $this->registrationPayload([
+                'email' => 'attempt'.$attempt.'@example.com',
+            ]))->status();
+        }
+
+        $this->assertNotContains(429, array_slice($statuses, 0, 3));
+        $this->assertSame(429, $statuses[3]);
+    }
+
+    private function registrationPayload(array $overrides = []): array
+    {
+        return [
+            'first_name' => 'Ana María',
+            'last_name' => 'Nguyễn',
+            'email' => 'new.organizer@example.com',
+            'password' => 'a-long-enough-password',
+            'password_confirmation' => 'a-long-enough-password',
+            'timezone' => 'UTC',
+            'currency_code' => 'USD',
+            'locale' => 'en',
+            ...$overrides,
+        ];
     }
 }

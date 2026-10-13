@@ -1,9 +1,8 @@
-@php /** @var string $accountName */ @endphp
 @php /** @var string $scheduledDeletionDate */ @endphp
 @php /** @var string $cancelLink */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $accountName]) }},
+{{ __('Hi') }},
 
 {{ __('This is a reminder that your :appName account is scheduled for permanent deletion on :date.', ['appName' => config('app.name'), 'date' => $scheduledDeletionDate]) }}
 

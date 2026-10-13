@@ -1,9 +1,8 @@
-@php /** @var \HiEvents\DomainObjects\UserDomainObject $user */ @endphp
 @php /** @var int $recoveryCodesRemaining */ @endphp
 @php /** @var string $securityUrl */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
+{{ __('Hi') }},
 
 {{ __('A recovery code was just used to sign in to your :appName account.', ['appName' => config('app.name')]) }}
 

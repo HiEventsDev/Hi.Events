@@ -232,7 +232,7 @@ class SeatOrderItemBindingTest extends TestCase
                 ), $lines)),
                 event_occurrence_id: $this->occurrenceId,
             )]),
-            is_user_authenticated: true,
+            can_order_unpublished_event: true,
             session_identifier: sha1(uniqid('', true)),
             order_locale: 'en',
             promo_code: $promoCode,

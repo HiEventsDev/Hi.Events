@@ -234,7 +234,7 @@ export const OrganizerHomepage = ({
                                                                 <a
                                                                     href={getGoogleMapsUrl(organizer.location!.structured_address!)}
                                                                     target="_blank"
-                                                                    rel="noopener noreferrer"
+                                                                    rel="nofollow ugc noopener noreferrer"
                                                                     className={classes.mapLink}
                                                                 >
                                                                     <span>{getShortLocationDisplay(organizer.location!.structured_address!)}</span>
@@ -248,7 +248,7 @@ export const OrganizerHomepage = ({
                                                                 <a
                                                                     href={websiteUrl}
                                                                     target="_blank"
-                                                                    rel="noopener noreferrer"
+                                                                    rel="nofollow ugc noopener noreferrer"
                                                                 >
                                                                     {websiteHostname}
                                                                 </a>
@@ -269,7 +269,7 @@ export const OrganizerHomepage = ({
                                                                         component="a"
                                                                         href={url}
                                                                         target="_blank"
-                                                                        rel="noopener noreferrer"
+                                                                        rel="nofollow ugc noopener noreferrer"
                                                                         title={label}
                                                                         aria-label={label}
                                                                         className={classes.socialIcon}

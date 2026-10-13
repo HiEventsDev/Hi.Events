@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\ProductCategory;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use HiEvents\Services\Application\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
 class EditProductCategoryHandler
@@ -12,6 +13,7 @@ class EditProductCategoryHandler
     public function __construct(
         private readonly ProductCategoryRepositoryInterface $productCategoryRepository,
         private readonly HtmlPurifierService $purifier,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     public function handle(UpsertProductCategoryDTO $dto): ProductCategoryDomainObject
@@ -28,6 +30,8 @@ class EditProductCategoryHandler
                 'event_id' => $dto->event_id,
             ],
         );
+
+        $this->eventSpamCheckDispatchService->dispatchForEvent($dto->event_id);
 
         return $this->productCategoryRepository->findFirstWhere([
             'id' => $dto->product_category_id,

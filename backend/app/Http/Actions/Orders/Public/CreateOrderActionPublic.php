@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Orders\Public;
 
+use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
+use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Order\CreateOrderRequest;
 use HiEvents\Http\ResponseCodes;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Resources\Order\OrderResourcePublic;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
@@ -27,7 +30,7 @@ class CreateOrderActionPublic extends BaseAction
         private readonly OrderCreateRequestValidationService $orderCreateRequestValidationService,
         private readonly CheckoutSessionManagementService $sessionIdentifierService,
         private readonly LocaleService $localeService,
-
+        private readonly EventRepositoryInterface $eventRepository,
     ) {}
 
     /**
@@ -48,13 +51,18 @@ class CreateOrderActionPublic extends BaseAction
             $order = $this->orderHandler->handle(
                 eventId: $eventId,
                 createOrderPublicDTO: CreateOrderPublicDTO::fromArray([
-                    'is_user_authenticated' => $this->isUserAuthenticated(),
+                    'can_order_unpublished_event' => $this->authenticatedAccountOwnsEvent($eventId),
                     'promo_code' => $request->input('promo_code'),
                     'affiliate_code' => $request->input('affiliate_code'),
                     'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
                     'session_identifier' => $sessionId,
                     'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),
                 ])
+            );
+        } catch (EventNotOpenForOrdersException $exception) {
+            return $this->errorResponse(
+                message: $exception->getMessage(),
+                statusCode: ResponseCodes::HTTP_FORBIDDEN,
             );
         } catch (SeatSelectionInvalidException $exception) {
             throw ValidationException::withMessages(['products' => $exception->getMessage()]);
@@ -77,5 +85,17 @@ class CreateOrderActionPublic extends BaseAction
         return $response->withCookie(
             cookie: $this->sessionIdentifierService->getSessionCookie(),
         );
+    }
+
+    private function authenticatedAccountOwnsEvent(int $eventId): bool
+    {
+        if (! $this->isUserAuthenticated()) {
+            return false;
+        }
+
+        return $this->eventRepository->findFirstWhere([
+            EventDomainObjectAbstract::ID => $eventId,
+            EventDomainObjectAbstract::ACCOUNT_ID => $this->getAuthenticatedAccountId(),
+        ]) !== null;
     }
 }

@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\ProductCategory;
 
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\Services\Application\Handlers\ProductCategory\DTO\UpsertProductCategoryDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\ProductCategory\CreateProductCategoryService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 
@@ -12,6 +13,7 @@ class CreateProductCategoryHandler
     public function __construct(
         private readonly CreateProductCategoryService $productCategoryService,
         private readonly HtmlPurifierService $purifier,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     public function handle(UpsertProductCategoryDTO $dto): ProductCategoryDomainObject
@@ -25,6 +27,10 @@ class CreateProductCategoryHandler
             $dto->no_products_message ?? __('There are no products available in this category'
             ));
 
-        return $this->productCategoryService->createCategory($productCategory);
+        $createdCategory = $this->productCategoryService->createCategory($productCategory);
+
+        $this->eventSpamCheckDispatchService->dispatchForEvent($dto->event_id);
+
+        return $createdCategory;
     }
 }

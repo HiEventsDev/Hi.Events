@@ -42,6 +42,6 @@ class TwoFactorResetService
         $this->mailer
             ->to($user->getEmail())
             ->locale($user->getLocale())
-            ->send(new TwoFactorDisabledMail($user, resetByAdministrator: true));
+            ->send(new TwoFactorDisabledMail(resetByAdministrator: true));
     }
 }

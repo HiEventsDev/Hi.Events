@@ -6,6 +6,7 @@ namespace HiEvents\Http\Request\Order;
 
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Validators\CompleteOrderValidator;
+use HiEvents\Validators\Rules\PersonNameRule;
 
 class CompleteOrderRequest extends BaseRequest
 {
@@ -13,8 +14,8 @@ class CompleteOrderRequest extends BaseRequest
     {
         if ($this->route() === null) {
             return [
-                'order.first_name' => ['required', 'string', 'max:40'],
-                'order.last_name' => ['required', 'string', 'max:40'],
+                'order.first_name' => ['required', 'string', 'max:40', new PersonNameRule],
+                'order.last_name' => ['required', 'string', 'max:40', new PersonNameRule],
                 'order.email' => ['required', 'email'],
                 'order.email_confirmation' => ['required', 'email', 'same:order.email'],
                 'order.questions' => ['array'],

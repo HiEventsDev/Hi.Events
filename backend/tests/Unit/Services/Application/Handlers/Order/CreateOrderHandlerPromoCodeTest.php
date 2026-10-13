@@ -62,6 +62,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
         $event = Mockery::mock(EventDomainObject::class);
         $event->shouldReceive('getEventSettings')->andReturn($eventSettings);
         $event->shouldReceive('getCurrency')->andReturn('USD');
+        $event->shouldReceive('getStatus')->andReturn('LIVE');
 
         $eventRepository = Mockery::mock(EventRepositoryInterface::class);
         $eventRepository->shouldReceive('loadRelation')->andReturnSelf();
@@ -125,7 +126,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
 
         $dto = new CreateOrderPublicDTO(
             products: collect(),
-            is_user_authenticated: true,
+            can_order_unpublished_event: true,
             session_identifier: 'sess-123',
             order_locale: 'en',
             promo_code: 'save50',
