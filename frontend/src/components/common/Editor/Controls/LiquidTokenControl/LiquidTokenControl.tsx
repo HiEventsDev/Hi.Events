@@ -10,9 +10,22 @@ export interface LiquidTokenControlProps {
     excludeTokens?: string[];
 }
 
+export interface LiquidTokenMenuProps {
+    tokens?: EmailTemplateToken[];
+}
+
 export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTokenControlProps) => {
+    const {data: tokensData} = useGetEmailTemplateTokens(templateType);
+
+    const tokens = tokensData?.tokens.filter(token =>
+        !token.token.startsWith('{% if') && !excludeTokens.includes(token.token)
+    );
+
+    return <LiquidTokenMenu tokens={tokens}/>;
+};
+
+export const LiquidTokenMenu = ({tokens}: LiquidTokenMenuProps) => {
     const {editor} = useRichTextEditorContext();
-    const {data: tokensData, isLoading} = useGetEmailTemplateTokens(templateType);
 
     const insertToken = (token: EmailTemplateToken) => {
         if (editor) {
@@ -20,7 +33,7 @@ export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTok
         }
     };
 
-    if (isLoading || !tokensData?.tokens) {
+    if (!tokens) {
         return (
             <RichTextEditor.Control
                 title={t`Loading tokens...`}
@@ -31,10 +44,6 @@ export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTok
             </RichTextEditor.Control>
         );
     }
-
-    const tokens = tokensData.tokens.filter(token =>
-        !token.token.startsWith('{% if') && !excludeTokens.includes(token.token)
-    );
 
     return (
         <Menu shadow="md" width={380} position="bottom-start" withinPortal>
@@ -52,7 +61,7 @@ export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTok
                     <Trans>Available Tokens</Trans>
                 </Menu.Label>
 
-                <ScrollArea h={400}>
+                <ScrollArea.Autosize mah={400}>
                     {tokens.map((token, index) => (
                         <Menu.Item
                             key={index}
@@ -77,7 +86,7 @@ export const LiquidTokenControl = ({templateType, excludeTokens = []}: LiquidTok
                             </div>
                         </Menu.Item>
                     ))}
-                </ScrollArea>
+                </ScrollArea.Autosize>
             </Menu.Dropdown>
         </Menu>
     );

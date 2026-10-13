@@ -1,0 +1,131 @@
+.layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+
+    @media (max-width: 1000px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.listItem {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-md);
+    padding: 0.875rem 1rem;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+
+    &:hover {
+        border-color: var(--mantine-color-gray-4);
+    }
+}
+
+.listItemActive {
+    border-color: var(--mantine-primary-color-filled);
+    box-shadow: 0 0 0 1px var(--mantine-primary-color-filled);
+
+    &:hover {
+        border-color: var(--mantine-primary-color-filled);
+    }
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--mantine-color-gray-4);
+}
+
+.statusDotLive {
+    background: var(--mantine-color-green-6);
+    box-shadow: 0 0 0 3px var(--mantine-color-green-1);
+}
+
+.workspace {
+    background: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+}
+
+.workspaceHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--mantine-color-default-border);
+
+    :global(.mantine-Switch-root) {
+        margin-bottom: 0;
+    }
+}
+
+.panes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+    @media (max-width: 1400px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.editorPane {
+    padding: 1.5rem;
+    min-width: 0;
+}
+
+.previewPane {
+    padding: 1.5rem;
+    background: var(--mantine-color-gray-0);
+    border-left: 1px solid var(--mantine-color-default-border);
+    min-width: 0;
+
+    @media (max-width: 1400px) {
+        border-left: none;
+        border-top: 1px solid var(--mantine-color-default-border);
+    }
+}
+
+.inbox {
+    background: var(--mantine-color-white);
+    border: 1px solid var(--mantine-color-default-border);
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.inboxHeader {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--mantine-color-default-border);
+}
+
+.inboxFrame {
+    display: block;
+    width: 100%;
+    height: 620px;
+    border: 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--mantine-color-default-border);
+}

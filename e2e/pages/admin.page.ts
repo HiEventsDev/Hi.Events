@@ -70,4 +70,25 @@ export class AdminPage {
     await this.page.getByLabel('Type the account name to confirm').fill(accountName);
     await this.page.getByTestId('admin-delete-account-confirm-button').click();
   }
+
+  async gotoLifecycleEmails(): Promise<void> {
+    await this.page.goto('/admin/lifecycle-emails');
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  async selectLifecycleEmail(nudgeType: string): Promise<void> {
+    await this.page.getByTestId(`lifecycle-email-item-${nudgeType}`).click();
+  }
+
+  lifecycleEmailSubject(): Locator {
+    return this.page.getByRole('textbox', { name: 'Subject' });
+  }
+
+  lifecycleEmailPreviewFrame() {
+    return this.page.frameLocator('iframe[title="Email preview"]');
+  }
+
+  async saveLifecycleEmail(): Promise<void> {
+    await this.page.getByTestId('lifecycle-email-save-button').click();
+  }
 }

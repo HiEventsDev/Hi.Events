@@ -218,6 +218,10 @@ msgstr "已選中 {0} 個座位"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "已售出或保留的 {0} 個座位將在其票面上重新命名：{1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "已發送 {0} 封 · 過去 30 天 {1} 封"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0} 個已售"
@@ -626,6 +630,10 @@ msgstr "2. 掃描此 QR code"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "主辦方建立付費門票或開始連接 Stripe 24 小時後，如果 Stripe 仍未連接。Stripe 不支援的國家/地區將會略過。"
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "每個日期 25 個名額，外加整個系列共 30 件 T 恤。"
@@ -633,6 +641,18 @@ msgstr "每個日期 25 個名額，外加整個系列共 30 件 T 恤。"
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "已開啟 2FA"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "建立草稿活動 3 天後，如果帳戶下沒有任何已上線的活動。"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "註冊 3 天後，如果帳戶持有人已確認電郵但尚未建立活動。"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "已上線的即將舉行付費活動最後一次編輯或其主辦方連接 Stripe（以較遲者為準）7 日後，如果該帳戶從未有過訂單。"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "帳戶 · {0}"
 msgid "Account · {0} · {1}"
 msgstr "帳戶 · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "賬戶刪除已取消"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "帳戶刪除已被封鎖"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "賬戶刪除已加入隊列"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "帳戶資訊"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "帳戶已標記為已驗證"
 
@@ -870,7 +890,7 @@ msgstr "帳戶名稱"
 msgid "Account Name"
 msgstr "賬户名稱"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "找不到帳戶"
 
@@ -895,7 +915,7 @@ msgstr "賬户設置"
 msgid "Account updated successfully"
 msgstr "賬户更新成功"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "已撤銷帳戶驗證"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "個賬戶"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "增加一頁"
 msgid "Adds a page, names attendees"
 msgstr "增加一頁，並顯示參加者姓名"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "需要管理員存取權限"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "管理儀表板"
 
@@ -1664,7 +1684,7 @@ msgstr "公告標題"
 msgid "Announcement updated"
 msgstr "公告已更新"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "公告"
@@ -2075,7 +2095,7 @@ msgstr "指派其他方案"
 msgid "Assign plan"
 msgstr "指派方案"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "分配的級別"
 
@@ -2280,6 +2300,10 @@ msgstr "自動提供已啟用"
 msgid "Auto-Process Waitlist"
 msgstr "自動處理候補名單"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "協助遇到困難的組織者的自動電郵。系統每小時掃描一次，僅針對電郵啟用之後發生的行為。"
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "當容量可用時自動向下一個人提供門票。如果停用，您可以從候補名單頁面手動處理候補名單。"
@@ -2308,7 +2332,7 @@ msgstr "{dayName}的可選時間"
 msgid "Available to Refund"
 msgstr "可退款"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "可用標記"
 
@@ -2365,7 +2389,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "返回"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "返回帳戶"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "模糊封面"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "內文"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "正文是必需的"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "公司名稱"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "按鈕文字"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "按鈕標籤"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "按鈕標籤為必填項目"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2834,7 +2868,7 @@ msgstr "取消日期"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "取消刪除"
@@ -3760,7 +3794,7 @@ msgstr "配置名稱對最終用戶可見。固定費用將按當前匯率轉換
 msgid "Configuration updated successfully"
 msgstr "配置更新成功"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "配置"
@@ -3776,6 +3810,10 @@ msgstr "設定結帳時如何收集參與者資料"
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "配置稅費"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "設定生命週期郵件發送器以發送測試電郵"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "建立您自己的活動"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "CTA標籤是必需的"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "危險區"
 msgid "Dark"
 msgstr "深色"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "刪除已選的 {count} 個日期？有訂單的日期會略過。此操
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "刪除帳戶"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "刪除地點"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "立即刪除"
 
@@ -4960,7 +4998,7 @@ msgstr "永久刪除"
 msgid "Delete Template"
 msgstr "刪除範本"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "是否立即刪除此賬戶，而不等待寬限期結束？此操作無法撤銷。"
 
@@ -5005,7 +5043,7 @@ msgstr "已刪除的帳戶"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "刪除帳戶會立即將其停用：所有已發佈的活動將被取消發佈，存取權限將被停用。30 天寬限期過後，刪除將成為永久性。在這 30 天內您可以隨時取消。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "已安排在 {0} 刪除。"
 
@@ -5017,7 +5055,7 @@ msgstr "刪除已加入執行佇列"
 msgid "Deletion request cancelled"
 msgstr "刪除請求已取消"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "刪除請求"
@@ -5126,6 +5164,10 @@ msgstr "捨棄"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "捨棄變更？"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "捨棄未儲存的變更？"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "正在下載發票"
 msgid "Draft"
 msgstr "草稿"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "草稿活動未發佈"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "拖曳繪製舞台。在右側將其更改為吧枱、舞池、入口、柱子或牆。"
@@ -5401,6 +5447,10 @@ msgstr "例如：關於您門票的重要更新"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "例如：標準版、進階版、企業版"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "每個帳戶最多收到一次此電郵。"
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,7 +5675,7 @@ msgstr "符合條件的簽到列表"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
@@ -5697,7 +5747,7 @@ msgstr "重新發送電子郵件確認"
 msgid "Email confirmation resent successfully"
 msgstr "成功重新發送電子郵件確認"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "電郵送達"
@@ -5716,9 +5766,21 @@ msgstr "必須填寫電郵"
 msgid "Email not verified"
 msgstr "電子郵件未經驗證"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "電郵預覽"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "郵件預覽"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "電郵已儲存"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "電郵已儲存並開始發送"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "活動已建立"
 msgid "Event custom template"
 msgstr "活動自定義範本"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "活動儀表板"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "活動詳情"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "事件成功複製"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "活動 ID：{0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "活動已成功還原"
 msgid "Event Settings"
 msgstr "活動設定"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "活動設定"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "活動已更新"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "失敗時間"
 msgid "Failed jobs"
 msgstr "失敗的工作"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "失敗任務"
@@ -6418,7 +6493,7 @@ msgstr "批准活動失敗"
 msgid "Failed to assign configuration"
 msgstr "分配配置失敗"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "取消賬戶刪除失敗"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "建立範本失敗"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "刪除賬戶失敗"
 
@@ -6669,7 +6744,7 @@ msgstr "無法開始模擬。請重試。"
 msgid "Failed to stop impersonation. Please try again."
 msgstr "無法停止模擬。請重試。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "更新帳戶驗證失敗"
 
@@ -6701,7 +6776,7 @@ msgstr "更新活動狀態失敗"
 msgid "Failed to update feature flag"
 msgstr "更新功能開關失敗"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "更新訊息級別失敗"
 
@@ -6745,7 +6820,7 @@ msgstr "功能開關已更新"
 msgid "Feature flags"
 msgstr "功能開關"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "功能開關"
@@ -6987,7 +7062,7 @@ msgstr "被標記活動詳情"
 msgid "Flagged events"
 msgstr "已標記的活動"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "被標記的活動"
@@ -7758,7 +7833,7 @@ msgstr "圖片"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "模擬"
 
@@ -7892,10 +7967,14 @@ msgstr "插入"
 msgid "Insert Image"
 msgstr "插入圖片"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "插入Liquid標記"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "透過工具列中的大括號按鈕插入個人化變數。"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "圖庫"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "授權"
@@ -8379,6 +8458,12 @@ msgstr "授權 ID"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "無法識別授權金鑰"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "生命週期電郵"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "連結已過期或無效"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "允許連結"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "連結至：{0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "已上線"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "未來 7 天內開始的上線場次，按規模由大至小排列。預計這些場次前後會有簽到和頁面瀏覽高峰。"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "已上線但未有銷售的活動"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "個上線活動"
@@ -8444,6 +8537,10 @@ msgstr "上線活動會立即取消發佈。有已完成訂單的賬戶將被匿
 msgid "Live preview"
 msgstr "即時預覽"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "自 {0} 起上線"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "載入最新版本"
@@ -8456,8 +8553,8 @@ msgstr "已載入的日期"
 msgid "Loading preview..."
 msgstr "載入預覽中..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "載入標記中..."
 
@@ -8604,7 +8701,7 @@ msgstr "將此問題作為必答題"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "手動添加與會者"
 msgid "Manually Add Attendee"
 msgstr "手動添加與會者"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "手動驗證"
 
@@ -8717,11 +8814,11 @@ msgstr "標記為已支付"
 msgid "Mark as validated (admin override)"
 msgstr "標示為已核實（管理員特批）"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "最大訊息數 / 24小時"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "最大收件人數 / 訊息"
 
@@ -8809,7 +8906,7 @@ msgstr "訊息已排程"
 msgid "Message Sent"
 msgstr "發送的信息"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "待審批的訊息"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "訊息級別"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "訊息級別更新成功"
 
@@ -9178,7 +9275,7 @@ msgstr "下一步：核對訂單"
 msgid "Nightlife"
 msgstr "夜生活"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "否"
@@ -9397,6 +9494,10 @@ msgstr "沒有可顯示的已結束活動。"
 msgid "No Enterprise licence"
 msgstr "沒有企業版授權"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "未建立活動"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "此期間沒有活動頁面瀏覽量"
@@ -9436,6 +9537,10 @@ msgstr "沒有授權"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "未設定授權金鑰，因此預留座位及售票處已關閉。如要解鎖這些功能，請在後端環境中設定 APP_LICENCE_KEY 並重新部署後端。使用 Docker Compose 時，請執行 docker compose up -d，因為 docker compose restart 不會重新載入環境變數。"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "尚未向此帳戶發送任何生命週期電郵。"
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "每月"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "關"
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "張訂單"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "組織者姓名"
 msgid "Organizer Not Found"
 msgstr "找不到主辦單位"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "組織者收款設定"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "主辦方已成功還原"
@@ -10530,7 +10640,7 @@ msgstr "主辦單位狀態已更新"
 msgid "Organizer/default template will be used"
 msgstr "將使用組織者/預設範本"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "主辦方"
 
@@ -11222,6 +11332,10 @@ msgstr "預覽結帳表單"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "預覽活動頁面"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "使用範例資料預覽"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -12536,6 +12650,7 @@ msgstr "星期六"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "選擇類別"
 msgid "Select a message to view its contents"
 msgstr "選擇一則訊息查看其內容"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "選擇級別"
 
@@ -13158,7 +13273,7 @@ msgstr "選擇開始時間"
 msgid "Select status"
 msgstr "選擇狀態"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "為此帳戶選擇訊息級別。這控制訊息限制和連結權限。"
 
@@ -13325,6 +13440,10 @@ msgstr "發送重置連結"
 msgid "Send Test"
 msgstr "發送測試"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "發送測試電郵給我"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "傳送至所有場次，或指定其中一個"
@@ -13332,6 +13451,14 @@ msgstr "傳送至所有場次，或指定其中一個"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "發送您的第一則訊息"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "發送中"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "由於未設定生命週期郵件發送器，發送已關閉。你仍然可以編輯及預覽範本。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -14230,6 +14357,10 @@ msgstr "還在等待？請查看讀卡機螢幕。如果沒有顯示，請取消
 msgid "Stop Impersonating"
 msgstr "停止模擬"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "不再接收協助你設定及管理活動的電郵。有關訂單及帳戶的電郵仍會照常發送。"
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "Stripe 付款 ID"
 msgid "Stripe payments are not enabled for this event."
 msgstr "此活動未啟用 Stripe 支付。"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "Stripe 設定未完成"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Stripe Terminal 讀卡機"
@@ -14303,12 +14438,15 @@ msgstr "錄影廠"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "主題"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "主題是必需的"
 
@@ -14713,6 +14851,10 @@ msgstr "關鍵字"
 msgid "Terms of Service"
 msgstr "服務條款"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "測試電郵已發送到您的收件匣"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "文本"
@@ -14747,7 +14889,7 @@ msgstr "到此為止"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "在你續期之前，將再次顯示「Powered by Hi.Events」標示。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "該賬戶有已完成的訂單，因此將被匿名化。"
 
@@ -14755,7 +14897,7 @@ msgstr "該賬戶有已完成的訂單，因此將被匿名化。"
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "隊列處理該任務後，賬戶將立即被刪除。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "該賬戶將被永久刪除。"
 
@@ -14876,6 +15018,10 @@ msgstr "您要查找的頁面不存在"
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "平台費用會添加到票價中。買家支付更多，但您會收到完整的票價。"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "無法呈現預覽"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "顯示給客户的價格將包括税費。"
@@ -14963,6 +15109,10 @@ msgstr "此活動日期和時間所使用的時區。"
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "活動標題，將顯示在搜索引擎結果中，並在社交媒體上分享時顯示。默認情況下，將使用事件標題"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "取消訂閱連結可能不完整。請嘗試從電郵中重新開啟。"
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15300,6 +15450,10 @@ msgstr "此連結無效或已過期。"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "此連結不再有效"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "此連結無效"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15681,7 +15835,7 @@ msgstr "使用次數"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15933,6 +16087,10 @@ msgstr "關閉聲音"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "開啟聲音"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "啟用此電郵？此後符合觸發條件的組織者將開始收到該電郵。"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16213,13 +16371,21 @@ msgstr "未付款"
 msgid "Unpaid Order"
 msgstr "未付款訂單"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "取消發佈所有活動，並刪除或匿名化此賬戶及其用戶。"
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "未儲存的變更"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "取消訂閱"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "取消訂閱提示及提醒"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16245,7 +16411,7 @@ msgstr "未命名門票"
 msgid "Untrusted"
 msgstr "不受信任"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "未驗證"
 
@@ -16491,10 +16657,10 @@ msgstr "位用戶"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "用户"
@@ -16518,7 +16684,7 @@ msgstr "要在真實活動中使用它們？請取得企業版授權，並將其
 msgid "UTC"
 msgstr "世界協調時"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "UTM 分析"
 
@@ -16610,11 +16776,11 @@ msgstr "平台費用的增值稅處理：歐盟增值稅註冊企業可使用反
 msgid "VAT validation service temporarily unavailable"
 msgstr "增值稅驗證服務暫時無法使用"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "增值稅：{0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "增值稅：未登記"
 
@@ -16623,7 +16789,7 @@ msgstr "增值稅：未登記"
 msgid "Venue Name"
 msgstr "地點名稱"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "驗證"
 
@@ -16635,13 +16801,13 @@ msgstr "驗證碼"
 msgid "Verification email sent. Check your inbox."
 msgstr "驗證電郵已傳送，請查看收件匣。"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "已驗證"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "已驗證的帳戶可以向參加者傳送訊息並管理電郵範本。連接 Stripe 會自動驗證帳戶。"
 
@@ -17412,7 +17578,7 @@ msgstr "每年"
 msgid "years"
 msgstr "年"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "是"
@@ -17600,6 +17766,10 @@ msgstr "你使用了一個復原碼。還剩 1 個復原碼。"
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "您必須手動將訂單標記為已支付。這可以在訂單管理頁面上完成。"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "你將不會再收到此類電郵。有關訂單及帳戶的電郵仍會照常發送。"
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "在創建簽到列表之前，您需要先獲得票。"
@@ -17643,6 +17813,10 @@ msgstr "復原碼所剩不多。請產生一組新的,以免被鎖在賬户之�
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "你已登錄"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "你已取消訂閱"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"

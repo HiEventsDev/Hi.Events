@@ -218,6 +218,10 @@ msgstr "Vybrané sedadlá: {0}"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "{0} už predaných alebo zadržaných miest bude na lístkoch premenovaných: {1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "Odoslané: {0} · {1} za posledných 30 dní"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0} predaných"
@@ -626,6 +630,10 @@ msgstr "2. Naskenujte tento QR kód"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "24 hodín po tom, čo organizátor vytvorí platenú vstupenku alebo začne pripájať Stripe, ak Stripe stále nie je pripojený. Preskočí sa v krajinách, ktoré Stripe nepodporuje."
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "25 miest na dátum plus 30 tričiek na celú sériu."
@@ -633,6 +641,18 @@ msgstr "25 miest na dátum plus 30 tričiek na celú sériu."
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "2FA zapnuté"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "3 dni po vytvorení konceptu udalosti, ak nič na účte nie je aktívne."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "3 dni po registrácii, ak vlastník účtu potvrdil e-mail, ale ešte nevytvoril žiadne podujatie."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "7 dní po poslednej úprave zverejneného nadchádzajúceho plateného podujatia alebo po pripojení Stripe jeho organizátorom (podľa toho, čo nastalo neskôr), ak účet nikdy nemal objednávku."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "Účet · {0}"
 msgid "Account · {0} · {1}"
 msgstr "Účet · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "Odstránenie účtu bolo zrušené"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "Vymazanie účtu je zablokované"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "Odstránenie účtu bolo zaradené do frontu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "Informácie o účte"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "Účet označený ako overený"
 
@@ -870,7 +890,7 @@ msgstr "Názov účtu"
 msgid "Account Name"
 msgstr "Názov účtu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "Účet nebol nájdený"
 
@@ -895,7 +915,7 @@ msgstr "Nastavenia účtu"
 msgid "Account updated successfully"
 msgstr "Účet bol úspešne aktualizovaný"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "Overenie účtu zrušené"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "účtov"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "Pridá stranu"
 msgid "Adds a page, names attendees"
 msgstr "Pridá stranu s menami účastníkov"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "Vyžaduje sa prístup správcu"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Panel správcu"
 
@@ -1664,7 +1684,7 @@ msgstr "Názov oznámenia"
 msgid "Announcement updated"
 msgstr "Oznámenie aktualizované"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Oznámenia"
@@ -2075,7 +2095,7 @@ msgstr "Priradiť iný plán"
 msgid "Assign plan"
 msgstr "Priradiť plán"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "Priradená úroveň"
 
@@ -2280,6 +2300,10 @@ msgstr "Automatická ponuka je povolená"
 msgid "Auto-Process Waitlist"
 msgstr "Automatické spracovanie zoznamu čakateľov"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "Automatické e-maily, ktoré pomáhajú organizátorom, ktorí sa zasekli. Kontrola beží každú hodinu a zachytí iba aktivitu po zapnutí e-mailu."
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Automaticky ponúkať lístky ďalšej osobe, keď sa uvoľní kapacita. Ak je zakázané, môžete manuálne spracovať zoznam čakateľov na stránke Zoznam čakateľov."
@@ -2308,7 +2332,7 @@ msgstr "Dostupné časy — {dayName}"
 msgid "Available to Refund"
 msgstr "Dostupné na vrátenie"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "Dostupné tokeny"
 
@@ -2365,7 +2389,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Späť"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "Späť na účty"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "Rozmazaná titulná fotka"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "Obsah"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "Telo správy je povinné"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "Názov firmy"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "Označenie tlačidla"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "Popis tlačidla"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "Popis tlačidla je povinný"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2834,7 +2868,7 @@ msgstr "Zrušiť termín"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "Zrušiť vymazanie"
@@ -3760,7 +3794,7 @@ msgstr "Názvy konfigurácií sú viditeľné pre koncových používateľov. Pe
 msgid "Configuration updated successfully"
 msgstr "Konfigurácia bola úspešne aktualizovaná"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfigurácie"
@@ -3776,6 +3810,10 @@ msgstr "Nakonfigurujte spôsob zberu údajov účastníkov počas pokladne"
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "Nakonfigurujte dane a poplatky"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "Nakonfigurujte odosielateľa e-mailov životného cyklu na odosielanie testovacích e-mailov"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "Vytvorte vlastnú udalosť"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "Popis CTA je povinný"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "Nebezpečná zóna"
 msgid "Dark"
 msgstr "Tmavý"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "Odstrániť {count} vybraných termín(ov)? Termíny s objednávkami sa 
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "Vymazať účet"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "Vymazať miesto"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "Odstrániť teraz"
 
@@ -4960,7 +4998,7 @@ msgstr "Odstrániť natrvalo"
 msgid "Delete Template"
 msgstr "Odstrániť šablónu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "Odstrániť tento účet hneď namiesto čakania na ochrannú lehotu? Túto akciu nie je možné vrátiť späť."
 
@@ -5005,7 +5043,7 @@ msgstr "Vymazaný účet"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "Vymazanie účtu ho okamžite deaktivuje: všetky zverejnené podujatia budú stiahnuté a prístup bude zablokovaný. Po 30-dňovej ochrannej lehote sa vymazanie stane trvalým. Počas týchto 30 dní môžete kedykoľvek zrušiť."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "Odstránenie je naplánované na {0}."
 
@@ -5017,7 +5055,7 @@ msgstr "Vymazanie zaradené na vykonanie"
 msgid "Deletion request cancelled"
 msgstr "Žiadosť o vymazanie zrušená"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "Žiadosti o vymazanie"
@@ -5126,6 +5164,10 @@ msgstr "Zahodiť"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "Zahodiť zmeny?"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "Zahodiť neuložené zmeny?"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "Sťahovanie faktúry"
 msgid "Draft"
 msgstr "Koncept"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "Koncept udalosti nie je zverejnený"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Potiahnutím nakreslite pódium. Zmeňte ho na bar, tanečný parket, vchod, stĺp alebo stenu vpravo."
@@ -5401,6 +5447,10 @@ msgstr "napr. Dôležitá aktualizácia o vašich lístkoch"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "napr. Štandard, Prémiový, Enterprise"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "Každý účet dostane tento e-mail najviac raz."
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,7 +5675,7 @@ msgstr "Oprávnené zoznamy odbavení"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
@@ -5697,7 +5747,7 @@ msgstr "Potvrdenie e-mailu znovu odoslané"
 msgid "Email confirmation resent successfully"
 msgstr "Potvrdenie e-mailu bolo úspešne znovu odoslané"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "Doručovanie e-mailov"
@@ -5716,9 +5766,21 @@ msgstr "E-mail je povinný"
 msgid "Email not verified"
 msgstr "E-mail nie je overený"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "Náhľad e-mailu"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "Náhľad e-mailu"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "E-mail uložený"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "E-mail uložený a odosiela sa"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "Udalosť vytvorená"
 msgid "Event custom template"
 msgstr "Vlastná šablóna udalosti"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "Prehľad udalosti"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "Podrobnosti udalosti"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "Udalosť bola úspešne duplikovaná"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "ID udalosti: {0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "Udalosť bola úspešne obnovená"
 msgid "Event Settings"
 msgstr "Nastavenia udalosti"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "Nastavenie podujatia"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "Udalosť aktualizovaná"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "Zlyhalo o"
 msgid "Failed jobs"
 msgstr "Neúspešné úlohy"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Neúspešné úlohy"
@@ -6418,7 +6493,7 @@ msgstr "Podujatie sa nepodarilo schváliť"
 msgid "Failed to assign configuration"
 msgstr "Nepodarilo sa priradiť konfiguráciu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "Zrušenie odstránenia účtu zlyhalo"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "Nepodarilo sa vytvoriť šablónu"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "Odstránenie účtu zlyhalo"
 
@@ -6669,7 +6744,7 @@ msgstr "Nepodarilo sa spustiť zosobnenie. Skúste to znovu."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Nepodarilo sa zastaviť zosobnenie. Skúste to znovu."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "Nepodarilo sa aktualizovať overenie účtu"
 
@@ -6701,7 +6776,7 @@ msgstr "Nepodarilo sa aktualizovať stav udalosti"
 msgid "Failed to update feature flag"
 msgstr "Nepodarilo sa aktualizovať príznak funkcie"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "Nepodarilo sa aktualizovať úroveň správ"
 
@@ -6745,7 +6820,7 @@ msgstr "Príznak funkcie aktualizovaný"
 msgid "Feature flags"
 msgstr "Príznaky funkcií"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "Príznaky funkcií"
@@ -6987,7 +7062,7 @@ msgstr "Podrobnosti označeného podujatia"
 msgid "Flagged events"
 msgstr "Označené udalosti"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "Označené podujatia"
@@ -7758,7 +7833,7 @@ msgstr "Obrázky"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "Zosobniť"
 
@@ -7892,10 +7967,14 @@ msgstr "Vložiť"
 msgid "Insert Image"
 msgstr "Vložiť obrázok"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "Vložiť Liquid token"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "Personalizované tokeny vložíte tlačidlom so zloženými zátvorkami na paneli nástrojov."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "Knižnica"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "Licencia"
@@ -8379,6 +8458,12 @@ msgstr "ID licencie"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "Licenčný kľúč nebol rozpoznaný"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "E-maily životného cyklu"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "Odkaz vypršal alebo je neplatný"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "Povolené odkazy"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "Odkazuje na: {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "Aktívne"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "Aktívne termíny začínajúce v nasledujúcich 7 dňoch, od najväčších. Očakávajte registrácie na vstupe a návštevnosť stránok v ich okolí."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "Zverejnené podujatie bez predaja"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "aktívnych udalostí"
@@ -8444,6 +8537,10 @@ msgstr "Aktívne udalosti sa okamžite zrušia z publikovania. Účty s dokonče
 msgid "Live preview"
 msgstr "Živý náhľad"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "Aktívne od {0}"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "Načítať najnovšiu verziu"
@@ -8456,8 +8553,8 @@ msgstr "Načítané termíny"
 msgid "Loading preview..."
 msgstr "Načítavanie náhľadu..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "Načítavanie tokenov..."
 
@@ -8604,7 +8701,7 @@ msgstr "Urobiť túto otázku povinnou"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "Manuálne pridať účastníka"
 msgid "Manually Add Attendee"
 msgstr "Manuálne pridať účastníka"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "Ručne overené"
 
@@ -8717,11 +8814,11 @@ msgstr "Označiť ako zaplatené"
 msgid "Mark as validated (admin override)"
 msgstr "Označiť ako overené (rozhodnutie správcu)"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "Max. správ / 24 h"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "Max. príjemcov / správa"
 
@@ -8809,7 +8906,7 @@ msgstr "Správa naplánovaná"
 msgid "Message Sent"
 msgstr "Správa odoslaná"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "Správy na schválenie"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "Úroveň správ"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "Úroveň správ bola úspešne aktualizovaná"
 
@@ -9178,7 +9275,7 @@ msgstr "Ďalej: skontrolujte objednávku"
 msgid "Nightlife"
 msgstr "Nočný život"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "Nie"
@@ -9397,6 +9494,10 @@ msgstr "Žiadne ukončené udalosti na zobrazenie."
 msgid "No Enterprise licence"
 msgstr "Žiadna licencia Enterprise"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "Žiadne vytvorené podujatie"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "V tomto období nie sú žiadne zobrazenia stránok udalostí"
@@ -9436,6 +9537,10 @@ msgstr "Bez licencie"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Nie je nastavený licenčný kľúč, preto sú rezervované miesta a pokladňa vypnuté. Ak ich chcete odomknúť, nastavte APP_LICENCE_KEY v prostredí backendu a backend znova nasaďte. Pri Docker Compose použite docker compose up -d, pretože docker compose restart prostredie znova nenačíta."
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "Na tento účet neboli odoslané žiadne e-maily životného cyklu."
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "každého mesiaca"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "Vyp."
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "objednávky"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "Meno organizátora"
 msgid "Organizer Not Found"
 msgstr "Organizátor nenájdený"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "Nastavenia výplat organizátora"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "Organizátor bol úspešne obnovený"
@@ -10530,7 +10640,7 @@ msgstr "Stav organizátora aktualizovaný"
 msgid "Organizer/default template will be used"
 msgstr "Bude použitá šablóna organizátora/predvolená šablóna"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "Organizátori"
 
@@ -11222,6 +11332,10 @@ msgstr "Náhľad formulára pokladne"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "Náhľad stránky udalosti"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "Náhľad s ukážkovými údajmi"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -12536,6 +12650,7 @@ msgstr "Sobota"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "Vybrať kategóriu"
 msgid "Select a message to view its contents"
 msgstr "Vyberte správu na zobrazenie jej obsahu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "Vybrať úroveň"
 
@@ -13158,7 +13273,7 @@ msgstr "Vybrať čas začiatku"
 msgid "Select status"
 msgstr "Vybrať stav"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "Vybrať úroveň správ pre tento účet. Toto riadi limity správ a oprávnenia odkazov."
 
@@ -13325,6 +13440,10 @@ msgstr "Odoslať odkaz na obnovenie"
 msgid "Send Test"
 msgstr "Odoslať test"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "Poslať test mne"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "Odošlite na všetky termíny alebo vyberte konkrétny"
@@ -13332,6 +13451,14 @@ msgstr "Odošlite na všetky termíny alebo vyberte konkrétny"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "Odošlite svoju prvú správu"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "Odosielanie"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "Odosielanie je vypnuté, pretože nie je nakonfigurovaný odosielateľ e-mailov životného cyklu. Šablóny môžete stále upravovať a zobraziť ich ukážku."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -14230,6 +14357,10 @@ msgstr "Stále čakáte? Skontrolujte obrazovku čítačky. Ak nič nezobrazuje,
 msgid "Stop Impersonating"
 msgstr "Zastaviť zosobnenie"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "Prestaňte dostávať e-maily, ktoré vám pomáhajú nastaviť a viesť vaše podujatia. E-maily o vašich objednávkach a účte sa budú naďalej odosielať."
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "ID platby Stripe"
 msgid "Stripe payments are not enabled for this event."
 msgstr "Platby Stripe nie sú pre túto udalosť povolené."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "Nastavenie Stripe nie je dokončené"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Čítačka Stripe Terminal"
@@ -14303,12 +14438,15 @@ msgstr "Štúdio"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "Predmet"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "Predmet je povinný"
 
@@ -14713,6 +14851,10 @@ msgstr "Výraz"
 msgid "Terms of Service"
 msgstr "Podmienky služby"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "Testovací e-mail bol odoslaný do vašej schránky"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "Text"
@@ -14747,7 +14889,7 @@ msgstr "To je všetko"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "Oznam „Powered by Hi.Events“ sa znova zobrazuje, kým licenciu neobnovíte."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Účet má dokončené objednávky, preto bude anonymizovaný."
 
@@ -14755,7 +14897,7 @@ msgstr "Účet má dokončené objednávky, preto bude anonymizovaný."
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "Účet bude odstránený hneď, ako front prevezme úlohu."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "Účet bude natrvalo odstránený."
 
@@ -14876,6 +15018,10 @@ msgstr "Stránka, ktorú hľadáte, neexistuje"
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "Poplatok platformy sa pripočíta k cene lístka. Kupujúci zaplatia viac, ale vy dostanete plnú cenu lístka."
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "Náhľad sa nepodarilo vykresliť"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "Cena zobrazená zákazníkovi bude zahŕňať dane a poplatky."
@@ -14963,6 +15109,10 @@ msgstr "Časové pásmo používané pre dátumy a časy tohto podujatia."
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "Názov udalosti, ktorý sa zobrazí vo výsledkoch vyhľadávačov a pri zdieľaní na sociálnych sieťach. Predvolene sa použije názov udalosti"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "Odkaz na odhlásenie môže byť neúplný. Skúste ho znova otvoriť z e-mailu."
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15300,6 +15450,10 @@ msgstr "Tento odkaz je neplatný alebo vypršal."
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "Tento odkaz už nie je platný"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "Tento odkaz nie je platný"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15681,7 +15835,7 @@ msgstr "Počet použití"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15933,6 +16087,10 @@ msgstr "Vypnúť zvuk"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "Zapnúť zvuk"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "Zapnúť tento e-mail? Organizátori, ktorí od teraz spĺňajú podmienku spúšťača, ho začnú dostávať."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16213,13 +16371,21 @@ msgstr "Nezaplatené"
 msgid "Unpaid Order"
 msgstr "Nezaplatená objednávka"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "Zrušiť publikovanie všetkých udalostí a odstrániť alebo anonymizovať tento účet a jeho používateľov."
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "Neuložené zmeny"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "Odhlásiť sa"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "Odhlásiť sa z tipov a pripomienok"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16245,7 +16411,7 @@ msgstr "Lístok bez názvu"
 msgid "Untrusted"
 msgstr "Nedôveryhodné"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "Neoverené"
 
@@ -16491,10 +16657,10 @@ msgstr "používateľov"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "Používatelia"
@@ -16518,7 +16684,7 @@ msgstr "Používate ich na skutočných podujatiach? Získajte licenciu Enterpri
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "UTM analytika"
 
@@ -16610,11 +16776,11 @@ msgstr "Zaobchádzanie s DPH pre poplatky platformy: firmy registrované pre DPH
 msgid "VAT validation service temporarily unavailable"
 msgstr "Služba overenia DPH je dočasne nedostupná"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "DPH: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "DPH: neregistrovaný"
 
@@ -16623,7 +16789,7 @@ msgstr "DPH: neregistrovaný"
 msgid "Venue Name"
 msgstr "Názov miesta konania"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "Overenie"
 
@@ -16635,13 +16801,13 @@ msgstr "Overovací kód"
 msgid "Verification email sent. Check your inbox."
 msgstr "Overovací e-mail odoslaný. Skontrolujte si doručenú poštu."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "Overené"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Overené účty môžu posielať správy účastníkom a spravovať e-mailové šablóny. Pripojenie služby Stripe overí účet automaticky."
 
@@ -17412,7 +17578,7 @@ msgstr "Ročne"
 msgid "years"
 msgstr "roky"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "Áno"
@@ -17600,6 +17766,10 @@ msgstr "Použili ste záložný kód. Zostáva vám 1 záložný kód."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Objednávku budete musieť označiť ako zaplatenú manuálne. Môžete to urobiť na stránke správy objednávky."
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "Tieto e-maily už nebudete dostávať. E-maily o vašich objednávkach a účte sa budú naďalej odosielať."
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Pred vytvorením zoznamu odbavení potrebujete lístok."
@@ -17643,6 +17813,10 @@ msgstr "Dochádzajú vám kódy. Vygenerujte si novú sadu, aby ste sa nezamkli.
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "Ste prihlásený(á)"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "Boli ste odhlásený"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"

@@ -18,6 +18,7 @@ import {useAdminExecuteDeletionRequest} from "../../../../../mutations/useAdminE
 import {useAdminCancelDeletionRequest} from "../../../../../mutations/useAdminCancelDeletionRequest";
 import {confirmationDialog} from "../../../../../utilites/confirmationDialog";
 import classes from "./AccountDetail.module.scss";
+import {getLifecycleEmailLabel} from "../../LifecycleEmails/lifecycleEmailLabels";
 
 const AccountDetail = () => {
     const {accountId} = useParams();
@@ -35,6 +36,7 @@ const AccountDetail = () => {
     const account = accountData?.data;
     const messagingTiers = messagingTiersData?.data || [];
     const organizers = account?.organizers ?? [];
+    const lifecycleNudges = account?.lifecycle_nudges;
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return '-';
@@ -307,6 +309,38 @@ const AccountDetail = () => {
                                 </Stack>
                             </Stack>
                         </Card>
+                    )}
+
+                    {lifecycleNudges && (
+                    <Card className={classes.accountCard}>
+                        <Stack gap="md">
+                            <Text size="lg" fw={600}>{t`Lifecycle Emails`}</Text>
+                            {lifecycleNudges.length === 0 ? (
+                                <Text size="sm" c="dimmed">{t`No lifecycle emails have been sent to this account.`}</Text>
+                            ) : (
+                                <Stack gap="xs">
+                                    {lifecycleNudges.map((nudge) => (
+                                        <Group
+                                            key={nudge.nudge_type}
+                                            justify="space-between"
+                                            wrap="nowrap"
+                                            className={classes.userItem}
+                                        >
+                                            <Stack gap={2}>
+                                                <Text size="sm" fw={500}>
+                                                    {getLifecycleEmailLabel(nudge.nudge_type).name}
+                                                </Text>
+                                                {nudge.event_id && (
+                                                    <Text size="xs" c="dimmed">{t`Event ID: ${nudge.event_id}`}</Text>
+                                                )}
+                                            </Stack>
+                                            <Badge size="sm" variant="light">{formatDate(nudge.sent_at)}</Badge>
+                                        </Group>
+                                    ))}
+                                </Stack>
+                            )}
+                        </Stack>
+                    </Card>
                     )}
 
                     {account.users && account.users.length > 0 && (
