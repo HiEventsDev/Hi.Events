@@ -52,7 +52,7 @@ class ConfirmTwoFactorSetupHandler
         $this->mailer
             ->to($user->getEmail())
             ->locale($user->getLocale())
-            ->send(new TwoFactorEnabledMail($user));
+            ->send(new TwoFactorEnabledMail);
 
         return $recoveryCodes;
     }

@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\ProductDomainObject;
 use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\Status\EventOccurrenceStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
@@ -69,6 +70,24 @@ class CreateWaitlistEntryHandlerTest extends TestCase
         parent::tearDown();
     }
 
+    public function test_rejects_waitlist_sign_ups_for_events_that_are_not_live(): void
+    {
+        $this->eventRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['id' => 10])
+            ->andReturn((new EventDomainObject)->setType('SINGLE')->setStatus('DRAFT'));
+
+        $this->createWaitlistEntryService->shouldNotReceive('createEntry');
+        $this->expectException(ResourceNotFoundException::class);
+
+        $this->handler->handle(new CreateWaitlistEntryDTO(
+            event_id: 10,
+            product_price_id: 20,
+            email: 'victim@example.com',
+            first_name: 'Buyer',
+        ));
+    }
+
     public function test_single_event_without_occurrence_id_resolves_to_first_occurrence(): void
     {
         $dto = new CreateWaitlistEntryDTO(
@@ -80,7 +99,8 @@ class CreateWaitlistEntryHandlerTest extends TestCase
 
         $event = new EventDomainObject;
         $event->setType('SINGLE');
-        $this->eventRepository->shouldReceive('findById')->with(10)->andReturn($event);
+        $event->setStatus('LIVE');
+        $this->eventRepository->shouldReceive('findFirstWhere')->with(['id' => 10])->andReturn($event);
 
         $firstOccurrence = (new EventOccurrenceDomainObject)
             ->setId(42)

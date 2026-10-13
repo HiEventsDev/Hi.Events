@@ -217,7 +217,6 @@ class AccountDeletionService
         $accountId = $deletionRequest->getAccountId();
         $account = $this->accountRepository->findById($accountId);
         $recipientEmail = $account->getEmail();
-        $recipientName = $account->getName();
 
         $outcome = $this->determineOutcome($accountId);
 
@@ -235,7 +234,6 @@ class AccountDeletionService
         Cache::forget($this->getPendingDeletionCacheKey($accountId));
 
         Mail::to($recipientEmail)->queue(new AccountDeletionCompletedEmail(
-            accountName: $recipientName,
             wasAnonymized: $outcome === AccountDeletionOutcome::ANONYMIZE,
         ));
 

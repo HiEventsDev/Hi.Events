@@ -12,7 +12,7 @@ class UpdateAccountRequest extends FormRequest
         $currencies = include __DIR__.'/../../../../data/currencies.php';
 
         return [
-            'name' => 'required|string',
+            'name' => 'required|string|max:100',
             'timezone' => 'required|timezone:all',
             'currency_code' => [Rule::in(array_values($currencies))],
         ];

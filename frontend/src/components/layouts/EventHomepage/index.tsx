@@ -464,7 +464,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                         <a
                                                             href={mapUrl}
                                                             target="_blank"
-                                                            rel="noopener noreferrer"
+                                                            rel="nofollow ugc noopener noreferrer"
                                                             className={classes.metaLink}
                                                         >
                                                             {t`View on Google Maps`}
@@ -537,7 +537,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                 <a
                                                     href={mapUrl}
                                                     target="_blank"
-                                                    rel="noopener noreferrer"
+                                                    rel="nofollow ugc noopener noreferrer"
                                                     className={classes.directionsLink}
                                                 >
                                                     <IconArrowUpRight/>
@@ -549,7 +549,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                             <a
                                                 href={mapUrl}
                                                 target="_blank"
-                                                rel="noopener noreferrer"
+                                                rel="nofollow ugc noopener noreferrer"
                                                 className={classes.mapContainer}
                                             >
                                                 <svg
@@ -623,7 +623,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                             <a
                                                                 href={getGoogleMapsUrl(organizerLocation!)}
                                                                 target="_blank"
-                                                                rel="noopener noreferrer"
+                                                                rel="nofollow ugc noopener noreferrer"
                                                             >
                                                                 {getShortLocationDisplay(organizerLocation)}
                                                             </a>
@@ -651,7 +651,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                                     key={platform}
                                                                     href={url}
                                                                     target="_blank"
-                                                                    rel="noopener noreferrer"
+                                                                    rel="nofollow ugc noopener noreferrer"
                                                                     className={classes.socialLink}
                                                                     title={label}
                                                                     aria-label={label}
@@ -669,7 +669,7 @@ const EventHomepage = ({...loaderData}: EventHomepageProps) => {
                                                             <a
                                                                 href={websiteUrl}
                                                                 target="_blank"
-                                                                rel="noopener noreferrer"
+                                                                rel="nofollow ugc noopener noreferrer"
                                                                 className={classes.socialLink}
                                                                 title={hostname}
                                                             >

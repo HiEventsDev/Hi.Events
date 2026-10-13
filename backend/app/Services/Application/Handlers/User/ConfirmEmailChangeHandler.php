@@ -27,12 +27,22 @@ readonly class ConfirmEmailChangeHandler
     public function handle(ConfirmEmailChangeDTO $data): UserDomainObject
     {
         return $this->databaseManager->transaction(function () use ($data) {
-            ['id' => $userId] = $this->encryptedPayloadService->decryptPayload($data->token);
+            $payload = $this->encryptedPayloadService->decryptPayload($data->token);
+            $userId = $payload['id'];
 
             $user = $this->userRepository->findByIdAndAccountId($userId, $data->accountId);
 
-            if ($user->getPendingEmail() === null) {
+            if ($user->getPendingEmail() === null || ($payload['email'] ?? null) !== $user->getPendingEmail()) {
                 throw new ResourceConflictException(__('No email change pending'));
+            }
+
+            $userWithEmail = $this->userRepository->findFirstWhere([
+                ['email', 'ilike', addcslashes($user->getPendingEmail(), '\\%_')],
+                ['id', '!=', $userId],
+            ]);
+
+            if ($userWithEmail !== null) {
+                throw new ResourceConflictException(__('This email address is already in use.'));
             }
 
             $this->userRepository->updateWhere(

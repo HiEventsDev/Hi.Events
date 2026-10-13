@@ -17,6 +17,7 @@ use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistratio
 use HiEvents\Services\Application\Handlers\Auth\DTO\LoginCredentialsDTO;
 use HiEvents\Services\Application\Handlers\Auth\LoginHandler;
 use HiEvents\Services\Application\Locale\LocaleService;
+use HiEvents\Services\Infrastructure\Turnstile\TurnstileVerifier;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -24,10 +25,15 @@ use Throwable;
 
 class CreateAccountAction extends BaseAuthAction
 {
+    private const MAX_UTM_RAW_PARAMS = 20;
+
+    private const MAX_UTM_RAW_LENGTH = 255;
+
     public function __construct(
         private readonly CreateAccountHandler $createAccountHandler,
         private readonly LoginHandler $loginHandler,
         private readonly LocaleService $localeService,
+        private readonly TurnstileVerifier $turnstileVerifier,
     ) {}
 
     /**
@@ -36,6 +42,12 @@ class CreateAccountAction extends BaseAuthAction
      */
     public function __invoke(CreateAccountRequest $request): JsonResponse
     {
+        if (! $this->turnstileVerifier->verify($request->validated('turnstile_token'), $this->getClientIp($request))) {
+            throw ValidationException::withMessages([
+                'turnstile_token' => __('Please complete the security check and try again.'),
+            ]);
+        }
+
         try {
             $accountData = $this->createAccountHandler->handle(CreateAccountDTO::fromArray([
                 'first_name' => $request->validated('first_name'),
@@ -58,7 +70,7 @@ class CreateAccountAction extends BaseAuthAction
                 'landing_page' => $request->validated('landing_page'),
                 'gclid' => $request->validated('gclid'),
                 'fbclid' => $request->validated('fbclid'),
-                'utm_raw' => $request->validated('utm_raw'),
+                'utm_raw' => $this->sanitizeUtmRaw($request->validated('utm_raw')),
             ]));
         } catch (EmailAlreadyExists $e) {
             throw ValidationException::withMessages([
@@ -98,5 +110,22 @@ class CreateAccountAction extends BaseAuthAction
             data: $accountData,
             statusCode: ResponseCodes::HTTP_CREATED,
         ), $loginResponse->token);
+    }
+
+    private function sanitizeUtmRaw(?array $utmRaw): ?array
+    {
+        if ($utmRaw === null) {
+            return null;
+        }
+
+        $sanitized = collect($utmRaw)
+            ->filter(fn (mixed $value, mixed $key) => is_string($key) && is_scalar($value))
+            ->take(self::MAX_UTM_RAW_PARAMS)
+            ->mapWithKeys(fn (mixed $value, string $key) => [
+                mb_substr($key, 0, self::MAX_UTM_RAW_LENGTH) => mb_substr((string) $value, 0, self::MAX_UTM_RAW_LENGTH),
+            ])
+            ->all();
+
+        return $sanitized === [] ? null : $sanitized;
     }
 }

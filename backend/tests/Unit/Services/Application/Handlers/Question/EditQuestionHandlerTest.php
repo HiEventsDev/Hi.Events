@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\QuestionTypeEnum;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
 use HiEvents\Services\Application\Handlers\Question\EditQuestionHandler;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Question\EditQuestionService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Mockery;
@@ -34,7 +35,7 @@ class EditQuestionHandlerTest extends TestCase
                 return $question;
             });
 
-        $handler = new EditQuestionHandler($editQuestionService, $purifier);
+        $handler = new EditQuestionHandler($editQuestionService, $purifier, Mockery::mock(EventSpamCheckDispatchService::class)->shouldIgnoreMissing());
 
         $dto = new UpsertQuestionDTO(
             title: 'Dietary requirements',

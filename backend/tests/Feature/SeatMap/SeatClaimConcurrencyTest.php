@@ -296,7 +296,7 @@ class SeatClaimConcurrencyTest extends TestCase
                 )]),
                 event_occurrence_id: $this->occurrenceId,
             )]),
-            is_user_authenticated: false,
+            can_order_unpublished_event: false,
             session_identifier: sha1(uniqid('', true)),
             order_locale: 'en',
         ));

@@ -9,6 +9,8 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Domain\Order\InvoicePdfRenderer;
 use Illuminate\Mail\Mailables\Attachment;
@@ -18,8 +20,10 @@ use Illuminate\Mail\Mailables\Envelope;
 /**
  * @uses /backend/resources/views/emails/orders/summary.blade.php
  */
-class OrderSummary extends BaseMail
+class OrderSummary extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
     public function __construct(

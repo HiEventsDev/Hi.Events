@@ -6,6 +6,7 @@ namespace HiEvents\Http\Request\User;
 
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validators\Rules\PersonNameRule;
 use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends BaseRequest
@@ -13,8 +14,8 @@ class CreateUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|min:1',
-            'last_name' => 'min:1|nullable',
+            'first_name' => PersonNameRule::rules(),
+            'last_name' => PersonNameRule::rules(required: false),
             'role' => ['required', Rule::in(Role::getAssignableRoles())],
             'email' => [
                 'required',

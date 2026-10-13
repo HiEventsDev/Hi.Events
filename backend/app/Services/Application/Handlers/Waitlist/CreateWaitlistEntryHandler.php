@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Waitlist;
 
 use HiEvents\DomainObjects\Enums\EventType;
 use HiEvents\DomainObjects\Generated\EventOccurrenceDomainObjectAbstract;
+use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\ResourceNotFoundException;
@@ -36,15 +37,19 @@ class CreateWaitlistEntryHandler
      */
     public function handle(CreateWaitlistEntryDTO $dto): WaitlistEntryDomainObject
     {
-        $event = $this->eventRepository->findById($dto->event_id);
-        if ($event !== null && $event->isRecurring() && $dto->event_occurrence_id === null) {
+        $event = $this->eventRepository->findFirstWhere(['id' => $dto->event_id]);
+
+        if ($event === null || $event->getStatus() !== EventStatus::LIVE->name) {
+            throw new ResourceNotFoundException(__('Event not found'));
+        }
+
+        if ($event->isRecurring() && $dto->event_occurrence_id === null) {
             throw ValidationException::withMessages([
                 'event_occurrence_id' => __('An event date must be selected.'),
             ]);
         }
 
-        if ($event !== null
-            && $event->getType() === EventType::SINGLE->name
+        if ($event->getType() === EventType::SINGLE->name
             && $dto->event_occurrence_id === null
         ) {
             $occurrence = $this->occurrenceRepository

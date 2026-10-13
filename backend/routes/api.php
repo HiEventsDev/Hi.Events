@@ -346,7 +346,7 @@ $router->prefix('/auth')->group(
         $router->post('/login', LoginAction::class)->name('auth.login')->middleware('throttle:auth-login');
         $router->post('/login/two-factor', TwoFactorLoginAction::class)->name('auth.login.two-factor')->middleware('throttle:auth-two-factor');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
-        $router->post('/register', CreateAccountAction::class)->name('auth.register');
+        $router->post('/register', CreateAccountAction::class)->name('auth.register')->middleware('throttle:auth-register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password')->middleware('throttle:auth-forgot-password');
 
         // Invitations
@@ -370,7 +370,7 @@ $router->middleware(['auth:api'])->group(
 
         // Users
         $router->get('/users/me', GetMeAction::class);
-        $router->put('/users/me', UpdateMeAction::class);
+        $router->put('/users/me', UpdateMeAction::class)->middleware('throttle:user-update-me');
         $router->get('/users/me/two-factor', GetTwoFactorStatusAction::class);
         $router->post('/users/me/two-factor/setup', BeginTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-setup');
         $router->post('/users/me/two-factor/confirm', ConfirmTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-confirm');
@@ -378,17 +378,17 @@ $router->middleware(['auth:api'])->group(
         $router->post('/users/me/two-factor/disable', DisableTwoFactorAction::class)->middleware('throttle:10,1,two-factor-disable');
         $router->delete('/users/me/two-factor/trusted-devices', RevokeTrustedDevicesAction::class);
         $router->delete('/users/me/two-factor/trusted-devices/{device_id}', RevokeTrustedDeviceAction::class)->whereNumber('device_id');
-        $router->post('/users', CreateUserAction::class);
+        $router->post('/users', CreateUserAction::class)->middleware('throttle:user-invite');
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
         $router->put('/users/{user_id}', UpdateUserAction::class);
         $router->post('/users/{user_id}/email-change/{changeToken}', ConfirmEmailChangeAction::class);
-        $router->post('/users/{user_id}/invitation', ResendInvitationAction::class);
+        $router->post('/users/{user_id}/invitation', ResendInvitationAction::class)->middleware('throttle:user-invite');
         $router->delete('/users/{user_id}/invitation', DeleteInvitationAction::class);
         $router->delete('/users/{user_id}/email-change', CancelEmailChangeAction::class);
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
-        $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
-        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
+        $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class)->middleware('throttle:user-email-confirmation');
+        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class)->middleware('throttle:user-email-confirmation-code');
         $router->post('/users/{user_id}/two-factor/reset', ResetAccountUserTwoFactorAction::class)->whereNumber('user_id');
 
         // Announcements
@@ -796,7 +796,8 @@ $router->prefix('/public')->group(
             ->middleware('throttle:public-promo-code');
 
         // Stripe payment gateway
-        $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class)
+            ->middleware('throttle:public-payment-intent');
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
 
         // Questions

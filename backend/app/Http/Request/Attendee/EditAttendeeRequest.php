@@ -2,22 +2,24 @@
 
 namespace HiEvents\Http\Request\Attendee;
 
+use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
+use HiEvents\Validators\Rules\PersonNameRule;
 use HiEvents\Validators\Rules\RulesHelper;
 
 class EditAttendeeRequest extends BaseRequest
 {
-    private ?bool $isBoxOfficeAttendee = null;
+    private ?AttendeeDomainObject $attendee = null;
 
     public function rules(): array
     {
         return [
             'email' => $this->isBoxOfficeAttendee() ? RulesHelper::OPTIONAL_EMAIL : RulesHelper::REQUIRED_EMAIL,
-            'first_name' => RulesHelper::REQUIRED_STRING,
-            'last_name' => $this->isBoxOfficeAttendee() ? RulesHelper::STRING : RulesHelper::REQUIRED_STRING,
+            'first_name' => [...RulesHelper::REQUIRED_STRING, new PersonNameRule($this->attendee()?->getFirstName())],
+            'last_name' => [...($this->isBoxOfficeAttendee() ? RulesHelper::STRING : RulesHelper::REQUIRED_STRING), new PersonNameRule($this->attendee()?->getLastName())],
             'product_id' => RulesHelper::REQUIRED_NUMERIC,
             'product_price_id' => RulesHelper::REQUIRED_NUMERIC,
             'notes' => RulesHelper::OPTIONAL_TEXT_MEDIUM_LENGTH,
@@ -41,17 +43,16 @@ class EditAttendeeRequest extends BaseRequest
 
     private function isBoxOfficeAttendee(): bool
     {
-        if ($this->isBoxOfficeAttendee !== null) {
-            return $this->isBoxOfficeAttendee;
-        }
+        return $this->attendee()?->getOrder()?->isBoxOfficeOrder() ?? false;
+    }
 
-        $attendee = app(AttendeeRepositoryInterface::class)
+    private function attendee(): ?AttendeeDomainObject
+    {
+        return $this->attendee ??= app(AttendeeRepositoryInterface::class)
             ->loadRelation(new Relationship(domainObject: OrderDomainObject::class, name: 'order'))
             ->findFirstWhere([
                 'id' => $this->route('attendee_id'),
                 'event_id' => $this->route('event_id'),
             ]);
-
-        return $this->isBoxOfficeAttendee = $attendee?->getOrder()?->isBoxOfficeOrder() ?? false;
     }
 }

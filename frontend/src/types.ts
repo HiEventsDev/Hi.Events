@@ -4,6 +4,7 @@
 import {SupportedLocales} from "./locales.ts";
 
 export type ConfigKeys = 
+    | 'VITE_TURNSTILE_SITE_KEY'
     | 'VITE_API_URL_SERVER'
     | 'VITE_API_URL_CLIENT'
     | 'VITE_FRONTEND_URL'
@@ -56,6 +57,7 @@ export interface RegisterAccountRequest extends AcceptInvitationRequest {
     gclid?: string | null;
     fbclid?: string | null;
     utm_raw?: Record<string, string> | null;
+    turnstile_token?: string;
 }
 
 export interface ResetPasswordRequest {
@@ -1367,7 +1369,6 @@ export interface AttendeeDetailPublicCheckIn {
 export interface AttendeeDetailPublicOrder {
     id: number;
     public_id: string;
-    short_id: string;
     status: string;
     total_gross: number;
     currency: string;
