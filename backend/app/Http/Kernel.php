@@ -10,6 +10,7 @@ use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\CacheGuestJsonResponse;
 use HiEvents\Http\Middleware\EncryptCookies;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
+use HiEvents\Http\Middleware\EnsureLifecycleEmailsAvailable;
 use HiEvents\Http\Middleware\EnsureTwoFactorEnrolled;
 use HiEvents\Http\Middleware\HandleDeprecatedTimezones;
 use HiEvents\Http\Middleware\LogImpersonationMiddleware;
@@ -98,6 +99,7 @@ class Kernel extends HttpKernel
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'box-office.session' => AuthenticateBoxOfficeSession::class,
         'ee.licensed' => RequireLicensedFeature::class,
+        'lifecycle-emails' => EnsureLifecycleEmailsAvailable::class,
         'auth.session' => AuthenticateSession::class,
         'cache.guest' => CacheGuestJsonResponse::class,
         'cache.headers' => SetCacheHeaders::class,

@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\DomainObjects\Enums\LifecycleNudgeType;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\CreateBoxOfficeAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\DeleteBoxOfficeAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeAction;
@@ -88,6 +89,10 @@ use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateAccountFeatureFlagAction;
 use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateFeatureFlagAction;
 use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
 use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\GetLifecycleEmailsAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\PreviewLifecycleEmailAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\SendTestLifecycleEmailAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\UpdateLifecycleEmailAction;
 use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
 use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
@@ -201,6 +206,7 @@ use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
 use HiEvents\Http\Actions\Images\DeleteImageAction;
+use HiEvents\Http\Actions\LifecycleEmails\UnsubscribeFromLifecycleEmailsAction;
 use HiEvents\Http\Actions\Locations\CreateLocationAction;
 use HiEvents\Http\Actions\Locations\DeleteLocationAction;
 use HiEvents\Http\Actions\Locations\GeoAutocompleteAction;
@@ -710,6 +716,18 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->put('/announcements/{announcement_id}', UpdateAnnouncementAction::class);
         $router->delete('/announcements/{announcement_id}', DeleteAnnouncementAction::class);
 
+        // Lifecycle Emails
+        $router->middleware('lifecycle-emails')->group(static function (Router $router): void {
+            $router->get('/lifecycle-emails', GetLifecycleEmailsAction::class);
+            $router->put('/lifecycle-emails/{nudge_type}', UpdateLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray());
+            $router->post('/lifecycle-emails/{nudge_type}/preview', PreviewLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray());
+            $router->post('/lifecycle-emails/{nudge_type}/test', SendTestLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray())
+                ->middleware('throttle:10,1,admin-lifecycle-email-test');
+        });
+
         // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);
         $router->put('/accounts/{account_id}/messaging-tier', UpdateAccountMessagingTierAction::class);
@@ -807,6 +825,8 @@ $router->prefix('/public')->group(
             ->withoutMiddleware(ThrottleRequests::class.':api');
         $router->post('/webhooks/email-delivery/{provider}', HandleEmailDeliveryWebhookPublicAction::class)
             ->withoutMiddleware(ThrottleRequests::class.':api');
+        $router->post('/lifecycle-emails/unsubscribe/{token}', UnsubscribeFromLifecycleEmailsAction::class)
+            ->middleware(['lifecycle-emails', 'throttle:30,1,lifecycle-email-unsubscribe']);
 
         // Box office
         $router->get('/box-offices/{box_office_short_id}', GetBoxOfficePublicAction::class)

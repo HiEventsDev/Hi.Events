@@ -2,11 +2,11 @@
 
 namespace HiEvents\Services\Infrastructure\Email;
 
-use Exception;
 use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use Liquid\Exception\ParseException;
 use Liquid\Template;
 use RuntimeException;
+use Throwable;
 
 class LiquidTemplateRenderer
 {
@@ -24,7 +24,7 @@ class LiquidTemplateRenderer
             $this->liquid->parse($template);
 
             return $this->liquid->render($context);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new RuntimeException('Failed to render template: '.$e->getMessage(), 0, $e);
         }
     }

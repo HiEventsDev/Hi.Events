@@ -218,6 +218,10 @@ msgstr "{0} szék kiválasztva"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "{0} már eladott vagy lefoglalt hely át lesz nevezve a jegyeken: {1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "{0} elküldve · {1} az elmúlt 30 napban"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0} eladva"
@@ -626,6 +630,10 @@ msgstr "2. Olvassa be ezt a QR-kódot"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "24 órával azután, hogy egy szervező fizetős jegyet hoz létre vagy elkezdi a Stripe összekapcsolását, ha a Stripe még mindig nincs összekapcsolva. A Stripe által nem támogatott országoknál kimarad."
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "25 hely dátumonként, plusz 30 póló az egész sorozatra."
@@ -633,6 +641,18 @@ msgstr "25 hely dátumonként, plusz 30 póló az egész sorozatra."
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "2FA bekapcsolva"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "3 nappal a piszkozat esemény létrehozása után, ha a fiókban semmi sem él."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "3 nappal a regisztráció után, ha a fiók tulajdonosa megerősítette az e-mail-címét, de még nem hozott létre eseményt."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "7 nappal egy élő, közelgő fizetős esemény utolsó szerkesztése vagy a szervező Stripe-összekapcsolása után (amelyik későbbi), ha a fióknak még soha nem volt rendelése."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "Fiók · {0}"
 msgid "Account · {0} · {1}"
 msgstr "Fiók · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "A fiók törlése visszavonva"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "A fiók törlése le van tiltva"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "A fiók törlése sorba állítva"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "Fiók információk"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "A fiók ellenőrzöttként megjelölve"
 
@@ -870,7 +890,7 @@ msgstr "Fiók neve"
 msgid "Account Name"
 msgstr "Fióknév"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "Fiók nem található"
 
@@ -895,7 +915,7 @@ msgstr "Fiókbeállítások"
 msgid "Account updated successfully"
 msgstr "Fiók sikeresen frissítve"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "A fiók ellenőrzése visszavonva"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "fiók"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "Egy oldalt ad hozzá"
 msgid "Adds a page, names attendees"
 msgstr "Egy oldalt ad hozzá, feltünteti a résztvevők nevét"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "Rendszergazdai hozzáférés szükséges"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Admin vezérlőpult"
 
@@ -1664,7 +1684,7 @@ msgstr "Közlemény címe"
 msgid "Announcement updated"
 msgstr "Közlemény frissítve"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Közlemények"
@@ -2075,7 +2095,7 @@ msgstr "Másik csomag hozzárendelése"
 msgid "Assign plan"
 msgstr "Csomag hozzárendelése"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "Hozzárendelt szint"
 
@@ -2280,6 +2300,10 @@ msgstr "Az automatikus ajánlat engedélyezve van"
 msgid "Auto-Process Waitlist"
 msgstr "Várólista automatikus feldolgozása"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "Automatikus e-mailek, amelyek segítenek az elakadt szervezőknek. A futtatás óránként történik, és csak az e-mail bekapcsolása után történő tevékenységeket érinti."
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Automatikusan ajánljon jegyeket a következő személynek, amikor kapacitás szabadul fel. Ha letiltva, manuálisan dolgozhatja fel a várólistát a Várólista oldalról."
@@ -2308,7 +2332,7 @@ msgstr "Elérhető időpontok – {dayName}"
 msgid "Available to Refund"
 msgstr "Visszatérítésre elérhető"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "Elérhető tokenek"
 
@@ -2365,7 +2389,7 @@ msgstr "Awesome Organizer Kft."
 msgid "Back"
 msgstr "Vissza"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "Vissza a fiókokhoz"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "Elmosott borítókép"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "Törzs"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "A törzs kötelező"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "Cégnév"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "Gombfelirat"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "Gomb felirat"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "A gomb felirata kötelező"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2834,7 +2868,7 @@ msgstr "Időpont lemondása"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "Törlés megszakítása"
@@ -3760,7 +3794,7 @@ msgstr "A konfigurációs nevek láthatók a végfelhasználók számára. A fix
 msgid "Configuration updated successfully"
 msgstr "Konfiguráció sikeresen frissítve"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfigurációk"
@@ -3776,6 +3810,10 @@ msgstr "Állítsa be, hogyan gyűjtse a résztvevők adatait a pénztárnál"
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "Adók és díjak beállítása"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "Állítsd be az életciklus-levelezőt a teszt e-mailek küldéséhez"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "Hozza létre saját eseményét"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "CTA címke kötelező"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "Veszélyzóna"
 msgid "Dark"
 msgstr "Sötét"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "Törli a kiválasztott {count} időpontot? A megrendeléssel rendelkező
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "Fiók törlése"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "Helyszín törlése"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "Törlés most"
 
@@ -4960,7 +4998,7 @@ msgstr "Végleges törlés"
 msgid "Delete Template"
 msgstr "Sablon törlése"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "Törli most ezt a fiókot a türelmi idő lejártának megvárása helyett? Ez nem vonható vissza."
 
@@ -5005,7 +5043,7 @@ msgstr "Törölt fiók"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "A fiók törlése azonnal deaktiválja azt: minden közzétett esemény visszavonásra kerül, és a hozzáférés letiltásra kerül. A 30 napos türelmi időszak után a törlés véglegessé válik. A 30 nap alatt bármikor megszakíthatja."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "A törlés ütemezett időpontja: {0}."
 
@@ -5017,7 +5055,7 @@ msgstr "Törlés végrehajtásra ütemezve"
 msgid "Deletion request cancelled"
 msgstr "Törlési kérelem megszakítva"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "Törlési kérelmek"
@@ -5126,6 +5164,10 @@ msgstr "Elvetés"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "Elveti a módosításokat?"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "Elveti a nem mentett módosításokat?"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "Számla letöltése"
 msgid "Draft"
 msgstr "Piszkozat"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "Nem közzétett piszkozat esemény"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Húzással rajzolj színpadot. Alakítsd bárrá, táncparketté, bejárattá, oszloppá vagy fallá jobb oldalt."
@@ -5401,6 +5447,10 @@ msgstr "pl. Fontos frissítés a jegyeiről"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "pl. Alap, Prémium, Vállalati"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "Minden fiók legfeljebb egyszer kapja meg ezt az e-mailt."
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,7 +5675,7 @@ msgstr "Jogosult bejelentkezési listák"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
@@ -5697,7 +5747,7 @@ msgstr "E-mail megerősítés újraküldve"
 msgid "Email confirmation resent successfully"
 msgstr "E-mail megerősítés sikeresen újraküldve"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "E-mail kézbesítés"
@@ -5716,9 +5766,21 @@ msgstr "E-mail cím kötelező"
 msgid "Email not verified"
 msgstr "E-mail nem ellenőrzött"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "E-mail előnézet"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "E-mail előnézet"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "E-mail mentve"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "E-mail mentve, a küldés elindult"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "Esemény létrehozva"
 msgid "Event custom template"
 msgstr "Esemény egyedi sablon"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "Esemény vezérlőpult"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "Esemény részletei"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "Esemény sikeresen másolva"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "Esemény azonosítója: {0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "Az esemény sikeresen visszaállítva"
 msgid "Event Settings"
 msgstr "Esemény beállítások"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "Esemény beállítása"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "Esemény frissítve"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "Sikertelen időpontja"
 msgid "Failed jobs"
 msgstr "Sikertelen feladatok"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Sikertelen feladatok"
@@ -6418,7 +6493,7 @@ msgstr "Az esemény jóváhagyása sikertelen"
 msgid "Failed to assign configuration"
 msgstr "A konfiguráció hozzárendelése sikertelen"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "Nem sikerült visszavonni a fiók törlését"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "A sablon létrehozása sikertelen"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "Nem sikerült törölni a fiókot"
 
@@ -6669,7 +6744,7 @@ msgstr "A megszemélyesítés indítása sikertelen. Kérjük, próbálja újra.
 msgid "Failed to stop impersonation. Please try again."
 msgstr "A megszemélyesítés leállítása sikertelen. Kérjük, próbálja újra."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "A fiók ellenőrzésének frissítése sikertelen"
 
@@ -6701,7 +6776,7 @@ msgstr "Nem sikerült frissíteni az esemény állapotát"
 msgid "Failed to update feature flag"
 msgstr "Nem sikerült frissíteni a funkciókapcsolót"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "Az üzenetküldési szint frissítése sikertelen"
 
@@ -6745,7 +6820,7 @@ msgstr "Funkciókapcsoló frissítve"
 msgid "Feature flags"
 msgstr "Funkciókapcsolók"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "Funkciókapcsolók"
@@ -6987,7 +7062,7 @@ msgstr "Megjelölt esemény részletei"
 msgid "Flagged events"
 msgstr "Megjelölt események"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "Megjelölt események"
@@ -7758,7 +7833,7 @@ msgstr "Képek"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "Megszemélyesítés"
 
@@ -7892,10 +7967,14 @@ msgstr "Beszúrás"
 msgid "Insert Image"
 msgstr "Kép beszúrása"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "Liquid token beszúrása"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "Személyre szabott tokeneket az eszköztár kapcsos zárójel gombjával szúrhat be."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "Könyvtár"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "Licenc"
@@ -8379,6 +8458,12 @@ msgstr "Licencazonosító"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "A licenckulcs nem ismerhető fel"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "Életciklus e-mailek"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "A link lejárt vagy érvénytelen"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "Linkek engedélyezve"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "Hivatkozás ide: {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "Élő"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "A következő 7 napban kezdődő élő időpontok, a legnagyobbakkal kezdve. Számíts bejelentkezésekre és oldalforgalomra ezek környékén."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "Élő esemény eladások nélkül"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "élő esemény"
@@ -8444,6 +8537,10 @@ msgstr "Az élő események azonnal visszavonásra kerülnek a közzétételből
 msgid "Live preview"
 msgstr "Élő előnézet"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "Élő {0} óta"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "Legújabb verzió betöltése"
@@ -8456,8 +8553,8 @@ msgstr "Betöltött időpontok"
 msgid "Loading preview..."
 msgstr "Előnézet betöltése..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "Tokenek betöltése..."
 
@@ -8604,7 +8701,7 @@ msgstr "Tegye kötelezővé ezt a kérdést"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "Résztvevő manuális hozzáadása"
 msgid "Manually Add Attendee"
 msgstr "Résztvevő manuális hozzáadása"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "Kézzel ellenőrizve"
 
@@ -8717,11 +8814,11 @@ msgstr "Fizetettként jelölés"
 msgid "Mark as validated (admin override)"
 msgstr "Megjelölés érvényesítettként (rendszergazdai felülbírálás)"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "Max üzenetek / 24ó"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "Max címzettek / üzenet"
 
@@ -8809,7 +8906,7 @@ msgstr "Üzenet ütemezve"
 msgid "Message Sent"
 msgstr "Üzenet elküldve"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "Jóváhagyandó üzenetek"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "Üzenetküldési szint"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "Üzenetküldési szint sikeresen frissítve"
 
@@ -9178,7 +9275,7 @@ msgstr "Következik: megrendelés ellenőrzése"
 msgid "Nightlife"
 msgstr "Éjszakai élet"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "Nem"
@@ -9397,6 +9494,10 @@ msgstr "Nincs megjeleníthető befejezett esemény."
 msgid "No Enterprise licence"
 msgstr "Nincs Enterprise licenc"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "Nincs létrehozott esemény"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "Ebben az időszakban nincs eseményoldal-megtekintés"
@@ -9436,6 +9537,10 @@ msgstr "Nincs licenc"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Nincs beállítva licenckulcs, ezért a foglalt ülőhelyek és a helyszíni jegypénztár ki vannak kapcsolva. A feloldásukhoz állítsd be az APP_LICENCE_KEY értéket a backend környezetében, és telepítsd újra a backendet. Docker Compose esetén a docker compose up -d parancsot használd, mert a docker compose restart nem tölti be újra a környezetet."
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "Erre a fiókra még nem küldtek életciklus e-mailt."
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "minden hónapban"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "Ki"
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "megrendelés"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "Szervező neve"
 msgid "Organizer Not Found"
 msgstr "Szervező nem található"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "Szervezői kifizetési beállítások"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "A szervező sikeresen visszaállítva"
@@ -10530,7 +10640,7 @@ msgstr "Szervező állapota frissítve"
 msgid "Organizer/default template will be used"
 msgstr "Szervező/alapértelmezett sablon lesz használva"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "Szervezők"
 
@@ -11222,6 +11332,10 @@ msgstr "Pénztári űrlap előnézete"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "Eseményoldal előnézete"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "Előnézet mintaadatokkal"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -12536,6 +12650,7 @@ msgstr "Szombat"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "Válasszon egy kategóriát"
 msgid "Select a message to view its contents"
 msgstr "Válasszon egy üzenetet a tartalom megtekintéséhez"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "Válasszon szintet"
 
@@ -13158,7 +13273,7 @@ msgstr "Kezdési idő kiválasztása"
 msgid "Select status"
 msgstr "Állapot kiválasztása"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "Válassza ki az üzenetküldési szintet ehhez a fiókhoz. Ez szabályozza az üzenetkorlátokat és a link engedélyeket."
 
@@ -13325,6 +13440,10 @@ msgstr "Visszaállítási link küldése"
 msgid "Send Test"
 msgstr "Teszt küldése"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "Teszt küldése nekem"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "Küldés minden időpontra, vagy válasszon egy konkrétat"
@@ -13332,6 +13451,14 @@ msgstr "Küldés minden időpontra, vagy válasszon egy konkrétat"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "Küldje el első üzenetét"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "Küldés"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "A küldés ki van kapcsolva, mert nincs beállítva életciklus-levelező. A sablonokat továbbra is szerkesztheted és megtekintheted."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -14230,6 +14357,10 @@ msgstr "Még mindig vársz? Nézd meg az olvasó kijelzőjét. Ha nem mutat semm
 msgid "Stop Impersonating"
 msgstr "Megszemélyesítés leállítása"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "Ne kapj több olyan e-mailt, amely az események beállításában és lebonyolításában segít. A rendelésekkel és a fiókoddal kapcsolatos e-maileket továbbra is megkapod."
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "Stripe fizetési azonosító"
 msgid "Stripe payments are not enabled for this event."
 msgstr "A Stripe fizetések nincsenek engedélyezve ehhez az eseményhez."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "A Stripe beállítása nincs befejezve"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Stripe Terminal olvasó"
@@ -14303,12 +14438,15 @@ msgstr "Stúdió"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "Tárgy"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "Tárgy kötelező"
 
@@ -14713,6 +14851,10 @@ msgstr "Kulcsszó"
 msgid "Terms of Service"
 msgstr "Szolgáltatási feltételek"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "A teszt e-mail megérkezett a postafiókjába"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "Szöveg"
@@ -14747,7 +14889,7 @@ msgstr "Ennyi volt"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "A „Powered by Hi.Events” felirat újra megjelenik, amíg meg nem újítod a licencet."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "A fióknak teljesített megrendelései vannak, ezért anonimizálásra kerül."
 
@@ -14755,7 +14897,7 @@ msgstr "A fióknak teljesített megrendelései vannak, ezért anonimizálásra k
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "A fiók törlésre kerül, amint a sor felveszi a feladatot."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "A fiók véglegesen törlésre kerül."
 
@@ -14876,6 +15018,10 @@ msgstr "A keresett oldal nem létezik."
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "A platformdíj hozzáadódik a jegyárhoz. A vevők többet fizetnek, de Ön megkapja a teljes jegyárat."
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "Az előnézetet nem sikerült megjeleníteni"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "Az ügyfélnek megjelenő ár tartalmazza az adókat és díjakat."
@@ -14959,6 +15105,10 @@ msgstr "Az esemény dátumaihoz és időpontjaihoz használt időzóna."
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "Az esemény címe, amely megjelenik a keresőmotorok találatai között és a közösségi médiában való megosztáskor. Alapértelmezés szerint az esemény címe kerül felhasználásra."
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "A leiratkozási link hiányos lehet. Próbáld meg újra megnyitni az e-mailből."
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15296,6 +15446,10 @@ msgstr "Ez a link érvénytelen vagy lejárt."
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "Ez a link már nem érvényes"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "Ez a link érvénytelen"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15677,7 +15831,7 @@ msgstr "Felhasználások száma"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15929,6 +16083,10 @@ msgstr "Hang kikapcsolása"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "Hang bekapcsolása"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "Bekapcsolja ezt az e-mailt? Mostantól az eseményindítónak megfelelő szervezők megkapják."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16209,13 +16367,21 @@ msgstr "Fizetetlen"
 msgid "Unpaid Order"
 msgstr "Kifizetetlen megrendelés"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "Az összes esemény közzétételének visszavonása, valamint a fiók és felhasználói törlése vagy anonimizálása."
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "Nem mentett módosítások"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "Leiratkozás"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "Leiratkozás a tippekről és emlékeztetőkről"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16241,7 +16407,7 @@ msgstr "Névtelen jegy"
 msgid "Untrusted"
 msgstr "Nem megbízható"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "Nem ellenőrzött"
 
@@ -16487,10 +16653,10 @@ msgstr "felhasználó"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "Felhasználók"
@@ -16514,7 +16680,7 @@ msgstr "Valódi eseményekhez használod őket? Szerezz be egy Enterprise licenc
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "UTM elemzés"
 
@@ -16606,11 +16772,11 @@ msgstr "ÁFA kezelés a platform díjaknál: EU ÁFA-s vállalkozások használh
 msgid "VAT validation service temporarily unavailable"
 msgstr "ÁFA érvényesítési szolgáltatás átmenetileg nem elérhető"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "Áfa: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "Áfa: nem regisztrált"
 
@@ -16619,7 +16785,7 @@ msgstr "Áfa: nem regisztrált"
 msgid "Venue Name"
 msgstr "Helyszín neve"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "Ellenőrzés"
 
@@ -16631,13 +16797,13 @@ msgstr "Ellenőrző kód"
 msgid "Verification email sent. Check your inbox."
 msgstr "Ellenőrző e-mail elküldve. Nézze meg a postaládáját."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "Ellenőrzött"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Az ellenőrzött fiókok üzeneteket küldhetnek a résztvevőknek és kezelhetik az e-mail sablonokat. A Stripe csatlakoztatása automatikusan ellenőrzi a fiókot."
 
@@ -17408,7 +17574,7 @@ msgstr "Évente"
 msgid "years"
 msgstr "év"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "Igen"
@@ -17596,6 +17762,10 @@ msgstr "Helyreállítási kódot használt. Még 1 helyreállítási kódja mara
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Manuálisan kell fizetettként megjelölnie egy megrendelést. Ez a megrendelés kezelése oldalon tehető meg."
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "Nem kapsz több ilyen e-mailt. A rendelésekkel és a fiókoddal kapcsolatos e-maileket továbbra is megkapod."
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Szüksége lesz egy jegyre, mielőtt létrehozhat egy bejelentkezési listát."
@@ -17639,6 +17809,10 @@ msgstr "Fogyóban vannak a kódok. Hozzon létre új készletet, hogy ne zárjá
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "Be van jelentkezve"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "Leiratkoztál"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"

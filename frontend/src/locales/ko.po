@@ -218,6 +218,10 @@ msgstr "좌석 {0}개 선택됨"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "이미 판매되었거나 보류된 좌석 {0}석의 이름이 티켓에서 변경됩니다: {1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "{0}건 발송 · 최근 30일 {1}건"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0}석 판매"
@@ -626,6 +630,10 @@ msgstr "2. QR 코드 스캔"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "주최자가 유료 티켓을 만들거나 Stripe 연결을 시작한 후 24시간이 지나도 Stripe가 연결되지 않은 경우. Stripe가 지원하지 않는 국가는 제외됩니다."
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "날짜당 25자리, 그리고 전체 기간 동안 티셔츠 30장."
@@ -633,6 +641,18 @@ msgstr "날짜당 25자리, 그리고 전체 기간 동안 티셔츠 30장."
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "2FA 사용 중"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "초안 이벤트를 만든 지 3일 후, 계정에 공개 중인 이벤트가 없는 경우."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "가입 3일 후, 계정 소유자가 이메일을 확인했지만 아직 이벤트를 만들지 않은 경우."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "게시된 예정 유료 이벤트가 마지막으로 수정되었거나 주최자가 Stripe를 연결한 시점 중 늦은 시점으로부터 7일 후, 계정에 주문이 한 번도 없는 경우."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "계정 · {0}"
 msgid "Account · {0} · {1}"
 msgstr "계정 · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "계정 삭제가 취소되었습니다"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "계정 삭제가 차단되었습니다"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "계정 삭제가 대기열에 추가되었습니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "계정 정보"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "계정이 인증됨으로 표시되었습니다"
 
@@ -870,7 +890,7 @@ msgstr "계정 이름"
 msgid "Account Name"
 msgstr "계정 이름"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "계정을 찾을 수 없습니다"
 
@@ -895,7 +915,7 @@ msgstr "계정 설정"
 msgid "Account updated successfully"
 msgstr "계정이 성공적으로 수정되었습니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "계정 인증이 취소되었습니다"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "개 계정"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "페이지 추가"
 msgid "Adds a page, names attendees"
 msgstr "페이지 추가, 참석자 이름 표시"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "관리자 권한 필요"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "관리자 대시보드"
 
@@ -1664,7 +1684,7 @@ msgstr "공지 제목"
 msgid "Announcement updated"
 msgstr "공지가 수정되었습니다"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "공지"
@@ -2075,7 +2095,7 @@ msgstr "다른 플랜 할당"
 msgid "Assign plan"
 msgstr "플랜 할당"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "할당된 등급"
 
@@ -2280,6 +2300,10 @@ msgstr "자동 제안이 활성화되어 있습니다"
 msgid "Auto-Process Waitlist"
 msgstr "대기자 명단 자동 처리"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "막힌 주최자를 돕는 자동 이메일입니다. 매시간 점검하며 이메일을 켠 이후에 발생한 활동만 대상으로 합니다."
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "자리가 생기면 다음 대기자에게 자동으로 티켓을 제안합니다. 비활성화하면 대기자 명단 페이지에서 수동으로 처리할 수 있습니다."
@@ -2308,7 +2332,7 @@ msgstr "{dayName} 이용 가능 시간"
 msgid "Available to Refund"
 msgstr "환불 가능 금액"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "사용 가능한 토큰"
 
@@ -2365,7 +2389,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "뒤로"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "계정으로 돌아가기"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "흐린 커버"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "본문"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "본문을 입력해 주세요"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "사업자명"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "버튼 라벨"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "버튼 레이블"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "버튼 라벨은 필수입니다"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2834,7 +2868,7 @@ msgstr "날짜 취소"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "삭제 취소"
@@ -3760,7 +3794,7 @@ msgstr "설정 이름은 최종 사용자에게 표시됩니다. 고정 수수�
 msgid "Configuration updated successfully"
 msgstr "설정이 성공적으로 수정되었습니다"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "설정"
@@ -3776,6 +3810,10 @@ msgstr "결제 중 참가자 정보를 수집하는 방식을 설정하세요"
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "세금 및 수수료 설정"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "테스트 이메일을 보내려면 라이프사이클 메일러를 설정하세요"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "나만의 이벤트 만들기"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "CTA 레이블을 입력해 주세요"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "위험 구역"
 msgid "Dark"
 msgstr "다크"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "선택한 {count}개 날짜를 삭제하시겠습니까? 주문이 있�
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "계정 삭제"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "위치 삭제"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "지금 삭제"
 
@@ -4960,7 +4998,7 @@ msgstr "영구 삭제"
 msgid "Delete Template"
 msgstr "템플릿 삭제"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "유예 기간을 기다리지 않고 지금 이 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
 
@@ -5005,7 +5043,7 @@ msgstr "삭제된 계정"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "계정을 삭제하면 즉시 비활성화됩니다. 게시된 모든 이벤트가 게시 취소되고 접근이 차단됩니다. 30일의 유예 기간이 지나면 삭제가 영구적으로 확정됩니다. 이 30일 동안 언제든지 취소할 수 있습니다."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "삭제가 {0}에 예정되어 있습니다."
 
@@ -5017,7 +5055,7 @@ msgstr "삭제가 실행 대기열에 추가되었습니다"
 msgid "Deletion request cancelled"
 msgstr "삭제 요청이 취소되었습니다"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "삭제 요청"
@@ -5126,6 +5164,10 @@ msgstr "취소"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "변경 사항을 취소하시겠습니까?"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "저장하지 않은 변경 사항을 취소하시겠습니까?"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "인보이스 다운로드 중"
 msgid "Draft"
 msgstr "초안"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "초안 이벤트 미게시"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "드래그해 무대를 그리세요. 오른쪽에서 바, 댄스 플로어, 입구, 기둥 또는 벽으로 변경하세요."
@@ -5401,6 +5447,10 @@ msgstr "예: 티켓에 대한 중요 업데이트"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "예: Standard, Premium, Enterprise"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "각 계정은 이 이메일을 최대 한 번 받습니다."
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,7 +5675,7 @@ msgstr "해당하는 체크인 목록"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
@@ -5697,7 +5747,7 @@ msgstr "이메일 확인이 재발송되었습니다"
 msgid "Email confirmation resent successfully"
 msgstr "이메일 확인이 성공적으로 재발송되었습니다"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "이메일 전달"
@@ -5716,9 +5766,21 @@ msgstr "이메일을 입력해 주세요"
 msgid "Email not verified"
 msgstr "이메일이 인증되지 않았습니다"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "이메일 미리보기"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "이메일 미리보기"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "이메일이 저장되었습니다"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "이메일이 저장되어 발송 중입니다"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "이벤트 생성됨"
 msgid "Event custom template"
 msgstr "이벤트 맞춤 템플릿"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "이벤트 대시보드"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "이벤트 상세 정보"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "이벤트가 성공적으로 복제되었습니다"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "이벤트 ID: {0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "이벤트가 성공적으로 복원되었습니다"
 msgid "Event Settings"
 msgstr "이벤트 설정"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "이벤트 설정"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "이벤트 수정됨"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "실패 시각"
 msgid "Failed jobs"
 msgstr "실패한 작업"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "실패한 작업"
@@ -6418,7 +6493,7 @@ msgstr "이벤트 승인에 실패했습니다"
 msgid "Failed to assign configuration"
 msgstr "설정 적용에 실패했습니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "계정 삭제를 취소하지 못했습니다"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "템플릿 생성에 실패했습니다"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "계정을 삭제하지 못했습니다"
 
@@ -6669,7 +6744,7 @@ msgstr "대리 로그인 시작에 실패했습니다. 다시 시도해 주세�
 msgid "Failed to stop impersonation. Please try again."
 msgstr "대리 로그인 종료에 실패했습니다. 다시 시도해 주세요."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "계정 인증 업데이트에 실패했습니다"
 
@@ -6701,7 +6776,7 @@ msgstr "이벤트 상태 수정에 실패했습니다"
 msgid "Failed to update feature flag"
 msgstr "기능 플래그를 업데이트하지 못했습니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "메시지 등급 수정에 실패했습니다"
 
@@ -6745,7 +6820,7 @@ msgstr "기능 플래그가 업데이트되었습니다"
 msgid "Feature flags"
 msgstr "기능 플래그"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "기능 플래그"
@@ -6987,7 +7062,7 @@ msgstr "신고된 이벤트 상세 정보"
 msgid "Flagged events"
 msgstr "신고된 이벤트"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "신고된 이벤트"
@@ -7758,7 +7833,7 @@ msgstr "이미지"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "대리 로그인"
 
@@ -7892,10 +7967,14 @@ msgstr "삽입"
 msgid "Insert Image"
 msgstr "이미지 삽입"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "Liquid 토큰 삽입"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "도구 모음의 중괄호 버튼으로 개인화 토큰을 삽입하세요."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "라이브러리"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "라이선스"
@@ -8379,6 +8458,12 @@ msgstr "라이선스 ID"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "라이선스 키를 인식할 수 없음"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "라이프사이클 이메일"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "링크가 만료되었거나 유효하지 않습니다"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "링크 허용됨"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "링크 대상: {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "공개"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "향후 7일 이내에 시작하는 라이브 일정이며 규모가 큰 순서로 표시됩니다. 이 일정 전후로 체크인과 페이지 트래픽이 예상됩니다."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "판매가 없는 게시된 이벤트"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "개 라이브 이벤트"
@@ -8444,6 +8537,10 @@ msgstr "라이브 이벤트는 즉시 게시 취소됩니다. 완료된 주문�
 msgid "Live preview"
 msgstr "실시간 미리보기"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "{0}부터 공개 중"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "최신 버전 불러오기"
@@ -8456,8 +8553,8 @@ msgstr "불러온 날짜"
 msgid "Loading preview..."
 msgstr "미리보기 불러오는 중..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "토큰 불러오는 중..."
 
@@ -8604,7 +8701,7 @@ msgstr "이 질문을 필수로 설정"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "참가자 수동 추가"
 msgid "Manually Add Attendee"
 msgstr "참가자 수동 추가"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "수동 인증됨"
 
@@ -8717,11 +8814,11 @@ msgstr "결제 완료로 표시"
 msgid "Mark as validated (admin override)"
 msgstr "검증됨으로 표시 (관리자 재정의)"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "최대 메시지 수 / 24시간"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "최대 수신자 수 / 메시지"
 
@@ -8809,7 +8906,7 @@ msgstr "메시지 예약됨"
 msgid "Message Sent"
 msgstr "메시지 전송됨"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "승인 대기 메시지"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "메시지 등급"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "메시지 등급이 성공적으로 수정되었습니다"
 
@@ -9178,7 +9275,7 @@ msgstr "다음: 주문 확인"
 msgid "Nightlife"
 msgstr "나이트라이프"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "아니요"
@@ -9397,6 +9494,10 @@ msgstr "표시할 종료된 이벤트가 없습니다."
 msgid "No Enterprise licence"
 msgstr "Enterprise 라이선스 없음"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "생성된 이벤트 없음"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "이 기간에 이벤트 페이지 조회가 없습니다"
@@ -9436,6 +9537,10 @@ msgstr "라이선스 없음"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "라이선스 키가 설정되지 않아 지정 좌석 및 현장 매표소 기능이 꺼져 있습니다. 활성화하려면 백엔드 환경에 APP_LICENCE_KEY를 설정하고 백엔드를 다시 배포하세요. Docker Compose에서는 docker compose restart로는 환경이 다시 로드되지 않으므로 docker compose up -d를 사용하세요."
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "이 계정으로 발송된 라이프사이클 이메일이 없습니다."
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "매월"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "끄기"
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "주문"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "주최자 이름"
 msgid "Organizer Not Found"
 msgstr "주최자를 찾을 수 없습니다"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "주최자 정산 설정"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "주최자가 성공적으로 복원되었습니다"
@@ -10530,7 +10640,7 @@ msgstr "주최자 상태가 업데이트되었습니다"
 msgid "Organizer/default template will be used"
 msgstr "주최자/기본 템플릿이 사용됩니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "주최자"
 
@@ -11222,6 +11332,10 @@ msgstr "결제 양식 미리보기"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "이벤트 페이지 미리보기"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "샘플 데이터로 미리보기"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -12536,6 +12650,7 @@ msgstr "토요일"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "카테고리 선택"
 msgid "Select a message to view its contents"
 msgstr "내용을 보려면 메시지를 선택하세요"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "등급 선택"
 
@@ -13158,7 +13273,7 @@ msgstr "시작 시간 선택"
 msgid "Select status"
 msgstr "상태 선택"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "이 계정의 메시지 등급을 선택하세요. 메시지 한도와 링크 권한을 제어합니다."
 
@@ -13325,6 +13440,10 @@ msgstr "재설정 링크 보내기"
 msgid "Send Test"
 msgstr "테스트 보내기"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "나에게 테스트 보내기"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "모든 회차에 보내거나 특정 회차를 선택하세요"
@@ -13332,6 +13451,14 @@ msgstr "모든 회차에 보내거나 특정 회차를 선택하세요"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "첫 메시지를 보내보세요"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "발송 중"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "라이프사이클 메일러가 설정되지 않아 발송이 꺼져 있습니다. 템플릿은 계속 편집하고 미리 볼 수 있습니다."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -14230,6 +14357,10 @@ msgstr "아직 기다리는 중인가요? 리더기 화면을 확인하세요. �
 msgid "Stop Impersonating"
 msgstr "대리 로그인 종료"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "이벤트 설정과 운영을 돕는 이메일을 더 이상 받지 않습니다. 주문 및 계정 관련 이메일은 계속 발송됩니다."
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "Stripe 결제 ID"
 msgid "Stripe payments are not enabled for this event."
 msgstr "이 이벤트에는 Stripe 결제가 활성화되어 있지 않습니다."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "Stripe 설정 미완료"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Stripe Terminal 리더기"
@@ -14303,12 +14438,15 @@ msgstr "스튜디오"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "제목"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "제목을 입력해 주세요"
 
@@ -14713,6 +14851,10 @@ msgstr "기간"
 msgid "Terms of Service"
 msgstr "서비스 약관"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "테스트 이메일을 받은편지함으로 보냈습니다"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "텍스트"
@@ -14747,7 +14889,7 @@ msgstr "모두 끝났습니다"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "라이선스를 갱신할 때까지 “Powered by Hi.Events” 문구가 다시 표시됩니다."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "이 계정에는 완료된 주문이 있으므로 익명 처리됩니다."
 
@@ -14755,7 +14897,7 @@ msgstr "이 계정에는 완료된 주문이 있으므로 익명 처리됩니다
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "대기열이 작업을 처리하는 즉시 계정이 삭제됩니다."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "계정이 영구적으로 삭제됩니다."
 
@@ -14876,6 +15018,10 @@ msgstr "찾고 있는 페이지가 존재하지 않습니다"
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "플랫폼 수수료가 티켓 가격에 추가됩니다. 구매자가 더 많이 지불하지만, 판매자는 티켓 전체 가격을 받습니다."
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "미리보기를 렌더링할 수 없습니다"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "고객에게 표시되는 가격에는 세금과 수수료가 포함됩니다."
@@ -14959,6 +15105,10 @@ msgstr "이 이벤트의 날짜와 시간에 사용되는 시간대입니다."
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "검색엔진 결과와 소셜 미디어 공유 시 표시될 이벤트 제목입니다. 기본값으로 이벤트 제목이 사용됩니다"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "수신 거부 링크가 불완전할 수 있습니다. 이메일에서 다시 열어 보세요."
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15296,6 +15446,10 @@ msgstr "이 링크는 유효하지 않거나 만료되었습니다."
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "이 링크는 더 이상 유효하지 않습니다"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "이 링크는 유효하지 않습니다"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15677,7 +15831,7 @@ msgstr "사용 횟수"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15929,6 +16083,10 @@ msgstr "소리 끄기"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "소리 켜기"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "이 이메일을 켜시겠습니까? 지금부터 트리거 조건에 해당하는 주최자가 이 이메일을 받게 됩니다."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16209,13 +16367,21 @@ msgstr "미결제"
 msgid "Unpaid Order"
 msgstr "미결제 주문"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "모든 이벤트의 게시를 취소하고 이 계정과 사용자를 삭제하거나 익명 처리합니다."
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "저장되지 않은 변경 사항"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "수신 거부"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "팁 및 알림 수신 거부"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16241,7 +16407,7 @@ msgstr "제목 없는 티켓"
 msgid "Untrusted"
 msgstr "신뢰할 수 없음"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "미인증"
 
@@ -16487,10 +16653,10 @@ msgstr "명의 사용자"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "사용자"
@@ -16514,7 +16680,7 @@ msgstr "실제 이벤트에 사용하나요? Enterprise 라이선스를 받아 �
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "UTM 분석"
 
@@ -16606,11 +16772,11 @@ msgstr "플랫폼 수수료의 부가가치세 처리: EU 부가가치세 등록
 msgid "VAT validation service temporarily unavailable"
 msgstr "부가가치세 검증 서비스를 일시적으로 사용할 수 없습니다"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "VAT: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "VAT: 미등록"
 
@@ -16619,7 +16785,7 @@ msgstr "VAT: 미등록"
 msgid "Venue Name"
 msgstr "장소명"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "인증"
 
@@ -16631,13 +16797,13 @@ msgstr "인증 코드"
 msgid "Verification email sent. Check your inbox."
 msgstr "인증 이메일을 보냈습니다. 받은 편지함을 확인하세요."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "인증됨"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "인증된 계정은 참가자에게 메시지를 보내고 이메일 템플릿을 관리할 수 있습니다. Stripe를 연결하면 계정이 자동으로 인증됩니다."
 
@@ -17408,7 +17574,7 @@ msgstr "매년"
 msgid "years"
 msgstr "년"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "예"
@@ -17596,6 +17762,10 @@ msgstr "복구 코드를 사용했습니다. 남은 복구 코드는 1개입니�
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "주문을 수동으로 결제 완료 처리해야 합니다. 주문 관리 페이지에서 가능합니다."
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "더 이상 이러한 이메일을 받지 않습니다. 주문 및 계정 관련 이메일은 계속 발송됩니다."
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "체크인 목록을 생성하려면 먼저 티켓이 필요합니다."
@@ -17639,6 +17809,10 @@ msgstr "남은 코드가 얼마 없습니다. 계정이 잠기지 않도록 새 
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "로그인되었습니다"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "수신 거부되었습니다"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"

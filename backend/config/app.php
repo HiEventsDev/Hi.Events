@@ -71,6 +71,9 @@ return [
         'ticket_lookup' => '/my-tickets/%s',
         'account_danger_zone' => '/account/danger-zone',
         'profile_security' => '/manage/profile/security',
+        'event_dashboard' => '/manage/event/%d/dashboard',
+        'welcome' => '/welcome',
+        'lifecycle_email_unsubscribe' => '/emails/unsubscribe/%s',
     ],
 
     /**

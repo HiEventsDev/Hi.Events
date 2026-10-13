@@ -1,6 +1,6 @@
 import {prefetchOnIdle} from "../../../../../utilites/helpers.ts";
 import {createLazyModule} from "../../../../../utilites/lazyModule.ts";
-import type {LiquidTokenControlProps} from "./LiquidTokenControl";
+import type {LiquidTokenControlProps, LiquidTokenMenuProps} from "./LiquidTokenControl";
 
 const liquidTokenControlModule = createLazyModule(() => import("./LiquidTokenControl"));
 
@@ -14,4 +14,14 @@ export const LiquidTokenControl = (props: LiquidTokenControlProps) => {
     }
 
     return <module.LiquidTokenControl {...props}/>;
+};
+
+export const LiquidTokenMenu = (props: LiquidTokenMenuProps) => {
+    const module = liquidTokenControlModule.useModule();
+
+    if (!module) {
+        return null;
+    }
+
+    return <module.LiquidTokenMenu {...props}/>;
 };

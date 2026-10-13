@@ -218,6 +218,10 @@ msgstr "{0} paikkaa valittu"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "{0} jo myytyä tai pidätettyä paikkaa nimetään uudelleen niiden lipuissa: {1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "{0} lähetetty · {1} viimeisen 30 päivän aikana"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0} myyty"
@@ -626,6 +630,10 @@ msgstr "2. Skannaa tämä QR-koodi"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "24 tuntia sen jälkeen, kun järjestäjä luo maksullisen lipun tai aloittaa Stripen yhdistämisen, jos Stripeä ei ole vieläkään yhdistetty. Ohitetaan maissa, joita Stripe ei tue."
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "25 paikkaa per päivämäärä sekä 30 T-paitaa koko sarjan aikana."
@@ -633,6 +641,18 @@ msgstr "25 paikkaa per päivämäärä sekä 30 T-paitaa koko sarjan aikana."
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "2FA käytössä"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "3 päivää luonnostapahtuman luomisen jälkeen, jos tilillä ei ole yhtään julkaistua tapahtumaa."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "3 päivää rekisteröitymisen jälkeen, jos tilin omistaja on vahvistanut sähköpostinsa mutta ei ole luonut tapahtumaa."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "7 päivää julkaistun, tulevan maksullisen tapahtuman viimeisimmästä muokkauksesta tai siitä, kun sen järjestäjä yhdisti Stripen (kumpi on myöhemmin), jos tilillä ei ole koskaan ollut tilausta."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "Tili · {0}"
 msgid "Account · {0} · {1}"
 msgstr "Tili · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "Tilin poisto peruttu"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "Tilin poistaminen on estetty"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "Tilin poisto jonossa"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "Tilitiedot"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "Tili vahvistettu"
 
@@ -870,7 +890,7 @@ msgstr "Tilin nimi"
 msgid "Account Name"
 msgstr "Tilin nimi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "Tiliä ei löydy"
 
@@ -895,7 +915,7 @@ msgstr "Tiliasetukset"
 msgid "Account updated successfully"
 msgstr "Tili päivitetty onnistuneesti"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "Tilin vahvistus peruttu"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "tiliä"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "Lisää sivun"
 msgid "Adds a page, names attendees"
 msgstr "Lisää sivun, näyttää osallistujien nimet"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "Ylläpitäjän oikeudet vaaditaan"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Ylläpitohallintapaneeli"
 
@@ -1664,7 +1684,7 @@ msgstr "Ilmoituksen otsikko"
 msgid "Announcement updated"
 msgstr "Ilmoitus päivitetty"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Ilmoitukset"
@@ -2075,7 +2095,7 @@ msgstr "Määritä eri suunnitelma"
 msgid "Assign plan"
 msgstr "Määritä suunnitelma"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "Määritetty taso"
 
@@ -2280,6 +2300,10 @@ msgstr "Automaattinen tarjous on käytössä"
 msgid "Auto-Process Waitlist"
 msgstr "Käsittele jonotuslista automaattisesti"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "Automaattiset sähköpostit, jotka auttavat jumiin jääneitä järjestäjiä. Tarkistus ajetaan tunneittain, ja se koskee vain toimintaa, joka tapahtuu sähköpostin käyttöönoton jälkeen."
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Tarjoa lippuja automaattisesti seuraavalle henkilölle, kun kapasiteettia vapautuu. Jos pois käytöstä, voit käsitellä jonotuslistaa manuaalisesti Jonotuslista-sivulta."
@@ -2308,7 +2332,7 @@ msgstr "Saatavilla olevat ajat: {dayName}"
 msgid "Available to Refund"
 msgstr "Hyvitettävissä"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "Käytettävissä olevat tunnisteet"
 
@@ -2365,7 +2389,7 @@ msgstr "Awesome Organizer Ltd."
 msgid "Back"
 msgstr "Takaisin"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "Takaisin tileihin"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "Sumennettu kansikuva"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "Sisältö"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "Viesti on pakollinen"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "Yrityksen nimi"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "Painikkeen teksti"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "Painikkeen teksti"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "Painikkeen teksti on pakollinen"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2834,7 +2868,7 @@ msgstr "Peruuta päivämäärä"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "Peruuta poistaminen"
@@ -3760,7 +3794,7 @@ msgstr "Konfiguraation nimet näkyvät loppukäyttäjille. Kiinteät maksut muun
 msgid "Configuration updated successfully"
 msgstr "Konfiguraatio päivitettiin onnistuneesti"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfiguraatiot"
@@ -3776,6 +3810,10 @@ msgstr "Määritä, miten osallistujatiedot kerätään kassalla."
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "Määritä verot ja maksut"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "Määritä elinkaarisähköpostien lähettäjä lähettääksesi testisähköposteja"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "Luo oma tapahtumasi"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "CTA-etiketti on pakollinen"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "Vaaravyöhyke"
 msgid "Dark"
 msgstr "Tumma"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "Poistetaanko {count} valittua päivää? Tilauksia sisältävät päivä
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "Poista tili"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "Poista sijainti"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "Poista nyt"
 
@@ -4960,7 +4998,7 @@ msgstr "Poista pysyvästi"
 msgid "Delete Template"
 msgstr "Poista malli"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "Poistetaanko tämä tili nyt odottamatta harkinta-aikaa? Tätä ei voi perua."
 
@@ -5005,7 +5043,7 @@ msgstr "Tilin poisto peruutettu"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "Tilin poistaminen poistattaa sen välittömästi käytöstä: kaikki julkaistut tapahtumat poistetaan julkaistuina ja käyttö estetään. 30 päivän karenssin jälkeen poisto muuttuu pysyväksi. Voit peruuttaa sen milloin tahansa näiden 30 päivän aikana."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "Poisto on ajastettu ajankohtaan {0}."
 
@@ -5017,7 +5055,7 @@ msgstr "Poisto odottaa suoritusta"
 msgid "Deletion request cancelled"
 msgstr "Poistopyyntö peruutettu"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "Poistopyynnöt"
@@ -5126,6 +5164,10 @@ msgstr "Hylkää"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "Hylätäänkö muutokset?"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "Hylätäänkö tallentamattomat muutokset?"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "Ladataan laskua"
 msgid "Draft"
 msgstr "Luonnos"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "Luonnostapahtumaa ei ole julkaistu"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Vedä piirtääksesi lavan. Muuta se baariksi, tanssilattiaksi, sisäänkäynniksi, pilariksi tai seinäksi oikealla paneelissa."
@@ -5401,6 +5447,10 @@ msgstr "esim. Tärkeä päivitys lippuihisi liittyen"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "esim. Perus, Premium, Enterprise"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "Kukin tili saa tämän sähköpostin enintään kerran."
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,7 +5675,7 @@ msgstr "Kelpoiset sisäänkirjautumislistat"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
@@ -5697,7 +5747,7 @@ msgstr "Sähköpostivarmistus lähetetty uudelleen"
 msgid "Email confirmation resent successfully"
 msgstr "Sähköpostivarmistus lähetettiin uudelleen onnistuneesti"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "Sähköpostien toimitus"
@@ -5716,9 +5766,21 @@ msgstr "Sähköpostiosoite on pakollinen"
 msgid "Email not verified"
 msgstr "Sähköpostia ei ole vahvistettu"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "Sähköpostin esikatselu"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "Sähköpostin esikatselu"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "Sähköposti tallennettu"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "Sähköposti tallennettu ja lähetys käynnissä"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "Tapahtuma luotu"
 msgid "Event custom template"
 msgstr "Tapahtuman mukautettu malli"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "Tapahtuman kojelauta"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "Tapahtumatiedot"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "Tapahtuma monistettu onnistuneesti"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "Tapahtuman tunnus: {0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "Tapahtuma palautettu onnistuneesti"
 msgid "Event Settings"
 msgstr "Tapahtuma-asetukset"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "Tapahtuman luonti"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "Tapahtuma päivitetty"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "Epäonnistui"
 msgid "Failed jobs"
 msgstr "Epäonnistuneet työt"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Epäonnistuneet tehtävät"
@@ -6418,7 +6493,7 @@ msgstr "Tapahtuman hyväksyminen epäonnistui"
 msgid "Failed to assign configuration"
 msgstr "Määrityksen kohdistaminen epäonnistui"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "Tilin poiston peruminen epäonnistui"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "Mallin luonti epäonnistui"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "Tilin poistaminen epäonnistui"
 
@@ -6669,7 +6744,7 @@ msgstr "Henkilöitymisen aloittaminen epäonnistui. Yritä uudelleen."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Henkilöitymisen lopettaminen epäonnistui. Yritä uudelleen."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "Tilin vahvistamisen päivittäminen epäonnistui"
 
@@ -6701,7 +6776,7 @@ msgstr "Tapahtuman tilan päivitys epäonnistui"
 msgid "Failed to update feature flag"
 msgstr "Ominaisuuslipun päivitys epäonnistui"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "Viestitasojen päivitys epäonnistui"
 
@@ -6745,7 +6820,7 @@ msgstr "Ominaisuuslippu päivitetty"
 msgid "Feature flags"
 msgstr "Ominaisuusliput"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "Ominaisuusliput"
@@ -6987,7 +7062,7 @@ msgstr "Merkityn tapahtuman tiedot"
 msgid "Flagged events"
 msgstr "Merkityt tapahtumat"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "Merkityt tapahtumat"
@@ -7758,7 +7833,7 @@ msgstr "Kuvat"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "Impersonoi"
 
@@ -7892,10 +7967,14 @@ msgstr "Lisää"
 msgid "Insert Image"
 msgstr "Lisää kuva"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "Lisää Liquid-token"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "Lisää mukautettuja tunnisteita työkalupalkin aaltosulkupainikkeesta."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "Kirjasto"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "Lisenssi"
@@ -8379,6 +8458,12 @@ msgstr "Lisenssin tunnus"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "Lisenssiavainta ei tunnistettu"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "Elinkaarisähköpostit"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "Linkki on vanhentunut tai virheellinen"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "Linkit sallittu"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "Linkki kohteeseen: {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "Live"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "Seuraavien 7 päivän aikana alkavat julkaistut ajankohdat, suurimmat ensin. Odotettavissa sisäänkirjautumisia ja sivuliikennettä näiden ympärillä."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "Julkaistu tapahtuma ilman myyntiä"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "julkaistua tapahtumaa"
@@ -8444,6 +8537,10 @@ msgstr "Julkaistujen tapahtumien julkaisu perutaan heti. Tilit, joilla on valmii
 msgid "Live preview"
 msgstr "Live-esikatselu"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "Julkaistu {0} alkaen"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "Lataa uusin versio"
@@ -8456,8 +8553,8 @@ msgstr "Ladatut päivät"
 msgid "Loading preview..."
 msgstr "Esikatselua ladataan..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "Tokeneita ladataan..."
 
@@ -8604,7 +8701,7 @@ msgstr "Tee tästä kysymyksestä pakollinen"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "Lisää osallistuja manuaalisesti"
 msgid "Manually Add Attendee"
 msgstr "Lisää osallistuja manuaalisesti"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "Manuaalisesti vahvistettu"
 
@@ -8717,11 +8814,11 @@ msgstr "Merkitse maksetuksi"
 msgid "Mark as validated (admin override)"
 msgstr "Merkitse validoiduksi (ylläpitäjän yliajo)"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "Enimmäisviestit / 24 h"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "Enimmäisvastaanottajat / viesti"
 
@@ -8809,7 +8906,7 @@ msgstr "Viestintä ajoitettu"
 msgid "Message Sent"
 msgstr "Viestintä lähetetty"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "Hyväksyttävät viestit"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "Viestintätaso"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "Viestintätaso päivitettiin onnistuneesti"
 
@@ -9178,7 +9275,7 @@ msgstr "Seuraavaksi: tarkastele tilaustasi"
 msgid "Nightlife"
 msgstr "Yöelämä"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "Ei"
@@ -9397,6 +9494,10 @@ msgstr "Ei näytettäviä päättyneitä tapahtumia."
 msgid "No Enterprise licence"
 msgstr "Ei Enterprise-lisenssiä"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "Ei luotuja tapahtumia"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "Ei tapahtumasivun katseluita tällä jaksolla"
@@ -9436,6 +9537,10 @@ msgstr "Ei lisenssiä"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Lisenssiavainta ei ole asetettu, joten varatut istumapaikat ja lipunmyynti ovella ovat pois päältä. Avaa ne asettamalla APP_LICENCE_KEY taustajärjestelmän ympäristöön ja ottamalla taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä aja docker compose up -d, koska docker compose restart ei lataa ympäristöä uudelleen."
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "Tälle tilille ei ole lähetetty elinkaarisähköposteja."
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "joka kuukausi"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "Pois päältä"
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "tilaukset"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "Järjestäjän nimi"
 msgid "Organizer Not Found"
 msgstr "Järjestäjää ei löytynyt"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "Järjestäjän maksuasetukset"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "Järjestäjä palautettiin onnistuneesti."
@@ -10530,7 +10640,7 @@ msgstr "Järjestäjän tila päivitettiin."
 msgid "Organizer/default template will be used"
 msgstr "Järjestäjän/oletuspohja käytetään."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "Järjestäjät"
 
@@ -11222,6 +11332,10 @@ msgstr "Esikatsele kassalomaketta"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "Esikatsele tapahtumasivua"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "Esikatsele esimerkkitiedoilla"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -12536,6 +12650,7 @@ msgstr "Lauantai"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "Valitse kategoria"
 msgid "Select a message to view its contents"
 msgstr "Valitse viesti nähdäksesi sen sisällön"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "Valitse taso"
 
@@ -13158,7 +13273,7 @@ msgstr "Valitse aloitusaika"
 msgid "Select status"
 msgstr "Valitse tila"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "Valitse tämän tilin viestintätaso. Tämä vaikuttaa viestien määrään ja linkkien käyttöoikeuksiin."
 
@@ -13325,6 +13440,10 @@ msgstr "Lähetä palautuslinkki"
 msgid "Send Test"
 msgstr "Lähetä testi"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "Lähetä testi minulle"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "Lähetä kaikille tapahtumakerroille tai valitse tietty"
@@ -13332,6 +13451,14 @@ msgstr "Lähetä kaikille tapahtumakerroille tai valitse tietty"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "Lähetä ensimmäinen viestisi"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "Lähetys"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "Lähetys on pois päältä, koska elinkaarisähköpostien lähettäjää ei ole määritetty. Voit silti muokata ja esikatsella pohjia."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -14230,6 +14357,10 @@ msgstr "Odotatko yhä? Tarkista lukijan näyttö. Jos siinä ei näy mitään, p
 msgid "Stop Impersonating"
 msgstr "Lopeta käyttäjänä toimiminen"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "Lopeta tapahtumiesi määrittämisessä ja järjestämisessä auttavien sähköpostien vastaanottaminen. Tilauksiisi ja tiliisi liittyviä sähköposteja lähetetään edelleen."
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "Stripe-maksun tunnus"
 msgid "Stripe payments are not enabled for this event."
 msgstr "Stripen maksut eivät ole käytössä tässä tapahtumassa."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "Stripen käyttöönotto kesken"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Stripe Terminal -lukija"
@@ -14303,12 +14438,15 @@ msgstr "Studio"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "Aihe"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "Aihe on pakollinen"
 
@@ -14713,6 +14851,10 @@ msgstr "Termi"
 msgid "Terms of Service"
 msgstr "Käyttöehdot"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "Testisähköposti lähetetty postilaatikkoosi"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "Teksti"
@@ -14747,7 +14889,7 @@ msgstr "Se on paketissa"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "”Powered by Hi.Events” -ilmoitus näytetään taas, kunnes jatkat lisenssiä."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Tilillä on valmiita tilauksia, joten se anonymisoidaan."
 
@@ -14755,7 +14897,7 @@ msgstr "Tilillä on valmiita tilauksia, joten se anonymisoidaan."
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "Tili poistetaan heti, kun jono käsittelee tehtävän."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "Tili poistetaan pysyvästi."
 
@@ -14876,6 +15018,10 @@ msgstr "Etsimääsi sivua ei ole olemassa"
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "Palvelumaksu lisätään lipun hintaan. Ostajat maksavat enemmän, mutta saat lipun hinnan kokonaisuudessaan."
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "Esikatselua ei voitu muodostaa"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "Asiakkaalle näytettävä hinta sisältää verot ja maksut."
@@ -14959,6 +15105,10 @@ msgstr "Tämän tapahtuman päivämäärissä ja kellonajoissa käytettävä aik
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "Tapahtuman nimi, joka näytetään hakukoneiden tuloksissa ja jaettaessa tapahtumaa sosiaalisessa mediassa. Oletusarvoisesti käytetään tapahtuman nimeä"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "Peruutuslinkki voi olla puutteellinen. Yritä avata se uudelleen sähköpostista."
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15296,6 +15446,10 @@ msgstr "Tämä linkki ei kelpaa tai on vanhentunut."
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "Tämä linkki ei ole enää voimassa"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "Tämä linkki ei ole kelvollinen"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15677,7 +15831,7 @@ msgstr "Käyttökerrat"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15929,6 +16083,10 @@ msgstr "Poista äänet käytöstä"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "Ota äänet käyttöön"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "Otetaanko tämä sähköposti käyttöön? Järjestäjät, jotka täyttävät laukaisuehdon tästä lähtien, alkavat saada sen."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16209,13 +16367,21 @@ msgstr "Maksamatta"
 msgid "Unpaid Order"
 msgstr "Maksamaton tilaus"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "Poista kaikkien tapahtumien julkaisu ja poista tai anonymisoi tämä tili ja sen käyttäjät."
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "Tallentamattomia muutoksia"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "Peruuta tilaus"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "Peruuta vinkit ja muistutukset"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16241,7 +16407,7 @@ msgstr "Nimetön lippu"
 msgid "Untrusted"
 msgstr "Epäluotettu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "Vahvistamaton"
 
@@ -16487,10 +16653,10 @@ msgstr "käyttäjää"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "Käyttäjät"
@@ -16514,7 +16680,7 @@ msgstr "Käytätkö niitä oikeissa tapahtumissa? Hanki Enterprise-lisenssi ja a
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "UTM-analytiikka"
 
@@ -16606,11 +16772,11 @@ msgstr "Palvelumaksujen ALV-käsittely: ALV-rekisteröidyt EU-yritykset voivat k
 msgid "VAT validation service temporarily unavailable"
 msgstr "ALV-tunnisteen vahvistuspalvelu ei ole tilapäisesti käytettävissä"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "ALV: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "ALV: ei rekisteröity"
 
@@ -16619,7 +16785,7 @@ msgstr "ALV: ei rekisteröity"
 msgid "Venue Name"
 msgstr "Tapahtumapaikan nimi"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "Vahvistus"
 
@@ -16631,13 +16797,13 @@ msgstr "Vahvistuskoodi"
 msgid "Verification email sent. Check your inbox."
 msgstr "Vahvistussähköposti lähetetty. Tarkista saapuneet viestisi."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "Vahvistettu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Vahvistetut käyttäjät voivat lähtettää osallistujille sähköpostiviestejä ja hallita viestipohjia. Stripen yhdistäminen vahvistaa tilin automaattisesti."
 
@@ -17408,7 +17574,7 @@ msgstr "Vuosittain"
 msgid "years"
 msgstr "vuotta"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "Kyllä"
@@ -17596,6 +17762,10 @@ msgstr "Käytit palautuskoodin. Palautuskoodeja on jäljellä 1."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Sinun on merkittävä tilaus maksetuksi manuaalisesti. Voit tehdä tämän tilauksen hallintasivulla."
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "Et saa enää näitä sähköposteja. Tilauksiisi ja tiliisi liittyviä sähköposteja lähetetään edelleen."
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Tarvitset lipun ennen kuin voit luoda sisäänkirjautumislistan."
@@ -17639,6 +17809,10 @@ msgstr "Koodit alkavat loppua. Luo uusi sarja, jotta et jää ulos tilistäsi."
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "Olet kirjautunut sisään"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "Tilaus on peruutettu"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
