@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Question;
 
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Services\Application\Handlers\Question\DTO\UpsertQuestionDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Question\CreateQuestionService;
 use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Throwable;
@@ -13,6 +14,7 @@ class CreateQuestionHandler
     public function __construct(
         private readonly CreateQuestionService $createQuestionService,
         private readonly HtmlPurifierService $purifier,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -30,9 +32,13 @@ class CreateQuestionHandler
             ->setIsHidden($createQuestionDTO->is_hidden)
             ->setDescription($this->purifier->purify($createQuestionDTO->description));
 
-        return $this->createQuestionService->createQuestion(
+        $createdQuestion = $this->createQuestionService->createQuestion(
             $question,
             $createQuestionDTO->product_ids,
         );
+
+        $this->eventSpamCheckDispatchService->dispatchForEvent($createQuestionDTO->event_id);
+
+        return $createdQuestion;
     }
 }

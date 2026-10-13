@@ -123,6 +123,6 @@ class TwoFactorLoginHandler
         $this->mailer
             ->to($user->getEmail())
             ->locale($user->getLocale())
-            ->send(new TwoFactorRecoveryCodeUsedMail($user, $recoveryCodesRemaining));
+            ->send(new TwoFactorRecoveryCodeUsedMail($recoveryCodesRemaining));
     }
 }

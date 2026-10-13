@@ -16,6 +16,7 @@ use HiEvents\DomainObjects\Status\AffiliateStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
+use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -30,7 +31,6 @@ use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\PromoCode\PromoCodeUsageValidationService;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -133,10 +133,19 @@ class CreateOrderHandler
         ]);
     }
 
+    /**
+     * @throws EventNotOpenForOrdersException
+     */
     public function validateEventStatus(EventDomainObject $event, CreateOrderPublicDTO $createOrderPublicDTO): void
     {
-        if (! $createOrderPublicDTO->is_user_authenticated && $event->getStatus() !== EventStatus::LIVE->name) {
-            throw new UnauthorizedException(
+        if ($event->getStatus() === EventStatus::PENDING_MANUAL_REVIEW->name) {
+            throw new EventNotOpenForOrdersException(
+                __('This event is not live.')
+            );
+        }
+
+        if (! $createOrderPublicDTO->can_order_unpublished_event && $event->getStatus() !== EventStatus::LIVE->name) {
+            throw new EventNotOpenForOrdersException(
                 __('This event is not live.')
             );
         }

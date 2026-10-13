@@ -67,7 +67,7 @@ class UpdateEventHandlerTest extends TestCase
             $this->orderRepository,
             $this->purifier,
             $this->occurrenceRepository,
-            new EventSpamCheckDispatchService($this->eventSpamCheckService),
+            new EventSpamCheckDispatchService($this->eventSpamCheckService, Mockery::mock(EventRepositoryInterface::class)),
             new TransactionLockService($this->databaseManager),
         );
     }

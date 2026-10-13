@@ -4,7 +4,9 @@ namespace HiEvents\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
+use HiEvents\Mail\User\EmailChangeRequestedMail;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
@@ -24,6 +26,7 @@ readonly class UpdateMeHandler
 
     /**
      * @throws PasswordInvalidException
+     * @throws ResourceConflictException
      */
     public function handle(UpdateMeDTO $updateUserData): UserDomainObject
     {
@@ -45,8 +48,10 @@ readonly class UpdateMeHandler
             ];
 
             if ($this->isChangingEmail($updateUserData, $existingUser)) {
+                $this->assertEmailIsAvailable($updateUserData->email, $existingUser->getId());
                 $updateArray['pending_email'] = $updateUserData->email;
-                $this->sendEmailChangeConfirmation($existingUser);
+                $this->sendEmailChangeConfirmation($existingUser, $updateUserData->email);
+                $this->notifyCurrentAddressOfEmailChange($existingUser);
             }
         }
 
@@ -94,13 +99,41 @@ readonly class UpdateMeHandler
         );
     }
 
-    private function sendEmailChangeConfirmation(UserDomainObject $existingUser): void
+    /**
+     * @throws ResourceConflictException
+     */
+    private function assertEmailIsAvailable(string $email, int $userId): void
     {
+        $userWithEmail = $this->userRepository->findFirstWhere([
+            ['email', 'ilike', addcslashes($email, '\\%_')],
+            ['id', '!=', $userId],
+        ]);
+
+        if ($userWithEmail !== null) {
+            throw new ResourceConflictException(__('This email address is already in use.'));
+        }
+    }
+
+    private function notifyCurrentAddressOfEmailChange(UserDomainObject $existingUser): void
+    {
+        if ($existingUser->getEmailVerifiedAt() === null) {
+            return;
+        }
+
         $this->mailer
             ->to($existingUser->getEmail())
             ->locale($existingUser->getLocale())
-            ->send(new ConfirmEmailChangeMail($existingUser, $this->encryptedPayloadService->encryptPayload([
+            ->send(new EmailChangeRequestedMail);
+    }
+
+    private function sendEmailChangeConfirmation(UserDomainObject $existingUser, string $newEmail): void
+    {
+        $this->mailer
+            ->to($newEmail)
+            ->locale($existingUser->getLocale())
+            ->send(new ConfirmEmailChangeMail($newEmail, $this->encryptedPayloadService->encryptPayload([
                 'id' => $existingUser->getId(),
+                'email' => $newEmail,
             ]))
             );
     }

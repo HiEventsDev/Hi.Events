@@ -13,6 +13,7 @@ use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
+use HiEvents\Exceptions\EventNotOpenForOrdersException;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
@@ -101,6 +102,36 @@ class CreateOrderHandlerTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    public function test_rejects_orders_on_unpublished_events_from_outside_the_account(): void
+    {
+        $this->expectException(EventNotOpenForOrdersException::class);
+
+        $this->handler->validateEventStatus(
+            (new EventDomainObject)->setStatus(EventStatus::DRAFT->name),
+            $this->createOrderDTO(),
+        );
+    }
+
+    public function test_allows_the_events_own_account_to_order_on_a_draft_event(): void
+    {
+        $this->handler->validateEventStatus(
+            (new EventDomainObject)->setStatus(EventStatus::DRAFT->name),
+            $this->dtoForAccountMember(),
+        );
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function test_rejects_orders_on_events_pending_review_even_from_the_events_own_account(): void
+    {
+        $this->expectException(EventNotOpenForOrdersException::class);
+
+        $this->handler->validateEventStatus(
+            (new EventDomainObject)->setStatus(EventStatus::PENDING_MANUAL_REVIEW->name),
+            $this->dtoForAccountMember(),
+        );
     }
 
     public function test_acquires_advisory_lock_before_creating_order(): void
@@ -378,7 +409,7 @@ class CreateOrderHandlerTest extends TestCase
     private function createMultiLineOrderDTO(array $lines): CreateOrderPublicDTO
     {
         return CreateOrderPublicDTO::fromArray([
-            'is_user_authenticated' => false,
+            'can_order_unpublished_event' => false,
             'session_identifier' => 'test-session',
             'order_locale' => 'en',
             'products' => collect($lines)->map(fn (array $line) => ProductOrderDetailsDTO::fromArray([
@@ -394,10 +425,20 @@ class CreateOrderHandlerTest extends TestCase
         ]);
     }
 
+    private function dtoForAccountMember(): CreateOrderPublicDTO
+    {
+        return CreateOrderPublicDTO::fromArray([
+            'can_order_unpublished_event' => true,
+            'session_identifier' => 'test-session',
+            'order_locale' => 'en',
+            'products' => collect(),
+        ]);
+    }
+
     private function createOrderDTO(int $productId = 10, int $priceId = 100, int $quantity = 1): CreateOrderPublicDTO
     {
         return CreateOrderPublicDTO::fromArray([
-            'is_user_authenticated' => false,
+            'can_order_unpublished_event' => false,
             'session_identifier' => 'test-session',
             'order_locale' => 'en',
             'products' => collect([

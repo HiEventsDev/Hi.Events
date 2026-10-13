@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\User\UpdateMeRequest;
 use HiEvents\Resources\User\UserResource;
@@ -43,6 +44,10 @@ class UpdateMeAction extends BaseAction
         } catch (PasswordInvalidException) {
             throw ValidationException::withMessages([
                 'current_password' => 'The current password does not match our records.',
+            ]);
+        } catch (ResourceConflictException $exception) {
+            throw ValidationException::withMessages([
+                'email' => $exception->getMessage(),
             ]);
         }
     }

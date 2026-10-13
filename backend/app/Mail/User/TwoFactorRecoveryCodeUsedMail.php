@@ -2,7 +2,6 @@
 
 namespace HiEvents\Mail\User;
 
-use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
 use Illuminate\Mail\Mailables\Content;
@@ -14,7 +13,6 @@ use Illuminate\Mail\Mailables\Envelope;
 class TwoFactorRecoveryCodeUsedMail extends BaseMail
 {
     public function __construct(
-        private readonly UserDomainObject $user,
         private readonly int $recoveryCodesRemaining,
     ) {
         parent::__construct();
@@ -32,7 +30,6 @@ class TwoFactorRecoveryCodeUsedMail extends BaseMail
         return new Content(
             markdown: 'emails.user.two-factor-recovery-code-used',
             with: [
-                'user' => $this->user,
                 'recoveryCodesRemaining' => $this->recoveryCodesRemaining,
                 'securityUrl' => Url::getFrontEndUrlFromConfig(Url::PROFILE_SECURITY),
             ]

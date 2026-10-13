@@ -8,12 +8,16 @@ use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
-class OccurrenceCancellationMail extends BaseMail
+class OccurrenceCancellationMail extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
     public function __construct(

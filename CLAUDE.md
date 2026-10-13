@@ -144,6 +144,14 @@ Gotchas:
 - Code lives under `backend/ee/Seating/` and `frontend/src/ee/seating/`. A product is seated iff a price **band** links to it (never call a band a tier), and `seat_claims` has no status column — HELD/SOLD/BLOCKED derive from the owning order via `SeatClaimRepository`, so never add a sweeper or stored status
 - Any new path that sells a ticket must claim a seat (under `SeatingEventLockService::lock`, order lock first) or refuse seated products, and anything that voids a ticket must release its claim. Rules that exist in both PHP and TS are pinned to `backend/tests/Fixtures/seating/` — change the fixture first
 
+#### Abuse & spam
+- Treat every user-typed string that can reach an email to an unverified address as a spam vector. Never greet with a user-supplied name in account/auth emails, and validate person-name fields with `PersonNameRule` (blocks URLs, phone numbers, markup; allows every script)
+- Buyer/attendee mail that carries event content implements `ContainsEventContent` (+ `ProvidesEventContent`). `BaseMail::send()` swaps it for the content-free `UnpublishedEventUpdateMail` while the event is DRAFT or PENDING_MANUAL_REVIEW, unless every recipient is a verified member of the event's account. New event-scoped mailables must implement the interface
+- Public orders on non-LIVE events are only allowed for the event's own account, and never on PENDING_MANUAL_REVIEW events. Waitlist joins and organizer contact require LIVE
+- Any handler that edits public event/organizer content must call `EventSpamCheckDispatchService` (`dispatchForEvent` / `dispatchForOrganizer`), and new public text fields belong in `EventSpamCheckContentService`. Once an admin has APPROVED an event it is never auto-demoted again — a later spam verdict stores a FLAGGED check and only emails support
+- `ReportSuspiciousActivityJob` runs every 5 minutes in SaaS mode and emails `APP_PLATFORM_SUPPORT_EMAIL` (deduped for 24h). Add new abuse signals to `SuspiciousActivityDetector`
+- Sign-up can be gated by Cloudflare Turnstile (`TURNSTILE_SECRET_KEY` + `VITE_TURNSTILE_SITE_KEY`); it is a no-op when unset and fails open if Cloudflare is unreachable
+
 #### Client IP & rate limits
 - Inline `throttle:N,1` routes share one counter per IP — always pass a name (`throttle:10,1,public-waitlist`). Never change the `APP_TRUSTED_PROXIES` default or add env knobs here; self-hosters run every kind of proxy
 - SSR renders run concurrently: per-request state lives in `AsyncLocalStorage` (`utilites/ssrRequestContext.ts`), never in axios defaults or module globals

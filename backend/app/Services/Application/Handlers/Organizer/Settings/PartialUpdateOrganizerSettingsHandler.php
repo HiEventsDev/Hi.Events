@@ -7,12 +7,14 @@ use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 
 class PartialUpdateOrganizerSettingsHandler
 {
     public function __construct(
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
@@ -88,6 +90,8 @@ class PartialUpdateOrganizerSettingsHandler
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),
         ]);
+
+        $this->eventSpamCheckDispatchService->dispatchForOrganizer($organizer->getId());
 
         return $this->organizerSettingsRepository->findFirst($organizerSettings->getId());
     }

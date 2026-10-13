@@ -13,7 +13,6 @@ use Illuminate\Mail\Mailables\Envelope;
 class AccountDeletionReminderEmail extends BaseMail
 {
     public function __construct(
-        private readonly string $accountName,
         private readonly string $scheduledDeletionDate,
     ) {
         parent::__construct();
@@ -34,7 +33,6 @@ class AccountDeletionReminderEmail extends BaseMail
         return new Content(
             markdown: 'emails.account.deletion-reminder',
             with: [
-                'accountName' => $this->accountName,
                 'scheduledDeletionDate' => $this->scheduledDeletionDate,
                 'cancelLink' => Url::getFrontEndUrlFromConfig(Url::ACCOUNT_DANGER_ZONE),
             ],

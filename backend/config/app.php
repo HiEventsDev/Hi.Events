@@ -29,6 +29,8 @@ return [
     'ssr_shared_secret' => env('APP_SSR_SHARED_SECRET'),
     'public_order_rate_limit_per_minute' => env('APP_PUBLIC_ORDER_RATE_LIMIT_PER_MINUTE', 60),
     'public_promo_code_rate_limit_per_minute' => env('APP_PUBLIC_PROMO_CODE_RATE_LIMIT_PER_MINUTE', 10),
+    'register_rate_limit_per_hour' => env('APP_REGISTER_RATE_LIMIT_PER_HOUR', 10),
+    'public_payment_intent_rate_limit_per_hour' => env('APP_PUBLIC_PAYMENT_INTENT_RATE_LIMIT_PER_HOUR', 120),
     'stripe_connect_account_type' => env('APP_STRIPE_CONNECT_ACCOUNT_TYPE', 'express'),
     'platform_support_email' => env('APP_PLATFORM_SUPPORT_EMAIL', 'support@example.com'),
     'event_spam_check_enabled' => env('APP_EVENT_SPAM_CHECK_ENABLED', false),

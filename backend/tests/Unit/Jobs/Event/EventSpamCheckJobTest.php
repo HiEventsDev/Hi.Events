@@ -171,6 +171,40 @@ class EventSpamCheckJobTest extends TestCase
         $this->runJob();
     }
 
+    public function test_admin_approved_event_stays_live_and_only_support_is_alerted(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $this->arrangePreviouslyApprovedEvent(existingCheckForHash: null);
+        $this->eventSpamCheckService->shouldReceive('checkContent')->once()->andReturn(
+            $this->makeResult(isSpam: true),
+        );
+
+        $this->eventRepository->shouldNotReceive('updateWhere');
+        $this->eventSpamCheckRepository
+            ->shouldReceive('create')
+            ->once()
+            ->with(Mockery::on(fn ($attrs) => $attrs['status'] === EventSpamCheckStatus::FLAGGED->name));
+        $this->accountRepository->shouldReceive('findByEventId')->andReturn(new AccountDomainObject);
+
+        $this->expectMail('support@example.com', EventFlaggedAsSpamMail::class);
+
+        $this->runJob();
+    }
+
+    public function test_admin_approved_event_is_not_rechecked_for_already_flagged_content(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $this->arrangePreviouslyApprovedEvent(
+            existingCheckForHash: (new EventSpamCheckDomainObject)->setStatus(EventSpamCheckStatus::FLAGGED->name),
+        );
+        $this->eventSpamCheckService->shouldNotReceive('checkContent');
+        $this->mailer->shouldNotReceive('to');
+
+        $this->runJob();
+    }
+
     public function test_lost_demotion_race_skips_row_and_mails(): void
     {
         $this->expectNotToPerformAssertions();
@@ -214,6 +248,23 @@ class EventSpamCheckJobTest extends TestCase
         $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn(self::CONTENT_HASH);
         $this->eventSpamCheckRepository->shouldReceive('findFirstWhere')->andReturnNull();
         $this->supportEmail = $supportEmail;
+    }
+
+    private function arrangePreviouslyApprovedEvent(?EventSpamCheckDomainObject $existingCheckForHash): void
+    {
+        $this->eventSpamCheckService->shouldReceive('isEnabled')->andReturnTrue();
+        $this->eventSpamCheckContentService->shouldReceive('loadEvent')->andReturn(
+            $this->makeEvent(EventStatus::LIVE->name),
+        );
+        $this->eventSpamCheckService->shouldReceive('hashContent')->andReturn(self::CONTENT_HASH);
+        $this->eventSpamCheckRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1, 'content_hash' => self::CONTENT_HASH])
+            ->andReturn($existingCheckForHash);
+        $this->eventSpamCheckRepository
+            ->shouldReceive('findFirstWhere')
+            ->with(['event_id' => 1, 'status' => EventSpamCheckStatus::APPROVED->name])
+            ->andReturn((new EventSpamCheckDomainObject)->setStatus(EventSpamCheckStatus::APPROVED->name));
     }
 
     private ?string $supportEmail = 'support@example.com';

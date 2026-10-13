@@ -16,6 +16,8 @@ use HiEvents\Helper\AddressHelper;
 use HiEvents\Helper\StringHelper;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
@@ -28,8 +30,10 @@ use Spatie\IcalendarGenerator\Components\Event;
 /**
  * @uses /backend/resources/views/emails/orders/attendee-ticket.blade.php
  */
-class AttendeeTicketMail extends BaseMail
+class AttendeeTicketMail extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
     public function __construct(

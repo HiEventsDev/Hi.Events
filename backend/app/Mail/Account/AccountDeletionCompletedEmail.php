@@ -12,7 +12,6 @@ use Illuminate\Mail\Mailables\Envelope;
 class AccountDeletionCompletedEmail extends BaseMail
 {
     public function __construct(
-        private readonly string $accountName,
         private readonly bool $wasAnonymized,
     ) {
         parent::__construct();
@@ -32,7 +31,6 @@ class AccountDeletionCompletedEmail extends BaseMail
         return new Content(
             markdown: 'emails.account.deletion-completed',
             with: [
-                'accountName' => $this->accountName,
                 'wasAnonymized' => $this->wasAnonymized,
             ],
         );

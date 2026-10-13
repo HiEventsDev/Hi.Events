@@ -12,7 +12,7 @@ class CreateOrderPublicDTO extends BaseDTO
          * @var Collection<ProductOrderDetailsDTO>
          */
         public readonly Collection $products,
-        public readonly bool $is_user_authenticated,
+        public readonly bool $can_order_unpublished_event,
         public readonly string $session_identifier,
         public readonly ?string $order_locale = null,
         public readonly ?string $promo_code = null,

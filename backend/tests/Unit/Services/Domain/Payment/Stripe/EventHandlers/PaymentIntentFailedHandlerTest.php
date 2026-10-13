@@ -13,6 +13,7 @@ use HiEvents\Events\OrderStatusChangedEvent;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Payment\Stripe\EventHandlers\PaymentIntentFailedHandler;
+use HiEvents\Services\Domain\Payment\Stripe\PaymentIntentFailureGuard;
 use HiEvents\Services\Domain\Payment\Stripe\StripePaymentUpdateFromPaymentIntentService;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\Repository;
@@ -71,6 +72,7 @@ class PaymentIntentFailedHandlerTest extends TestCase
             $databaseManager,
             new RecordingStripePaymentUpdateService($this->updateLog),
             $this->attemptTracker,
+            Mockery::mock(PaymentIntentFailureGuard::class)->shouldIgnoreMissing(),
         );
     }
 
