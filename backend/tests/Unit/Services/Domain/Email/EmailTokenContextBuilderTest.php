@@ -233,6 +233,40 @@ class EmailTokenContextBuilderTest extends TestCase
         $this->assertEquals('', $context['occurrence']['label']);
     }
 
+    public function test_uses_the_orders_only_occurrence_when_none_is_passed(): void
+    {
+        $occurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00')
+            ->setLabel('Evening');
+        $order = $this->createMockOrder(occurrence: $occurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings()
+        );
+
+        $this->assertEquals('March 10, 2024', $context['event']['date']);
+        $this->assertEquals('Evening', $context['occurrence']['label']);
+        $this->assertEquals('Amazing Event - Evening', $context['event']['title']);
+    }
+
+    public function test_explicit_occurrence_wins_over_the_orders_occurrences(): void
+    {
+        $orderOccurrence = (new EventOccurrenceDomainObject)
+            ->setId(7)
+            ->setStartDate('2024-03-10 18:00:00')
+            ->setEndDate('2024-03-10 20:00:00');
+        $order = $this->createMockOrder(occurrence: $orderOccurrence);
+
+        $context = $this->contextBuilder->buildOrderConfirmationContext(
+            $order, $this->createMockEvent(), $this->createMockOrganizer(), $this->createMockEventSettings(), $this->createMockOccurrence()
+        );
+
+        $this->assertEquals('Afternoon Show', $context['occurrence']['label']);
+        $this->assertNotEquals('March 10, 2024', $context['event']['date']);
+    }
+
     public function test_event_in_person_location_in_token_context(): void
     {
         $order = $this->createMockOrder();
@@ -438,7 +472,7 @@ class EmailTokenContextBuilderTest extends TestCase
         ]);
     }
 
-    private function createMockOrder(string $firstName = 'John'): OrderDomainObject
+    private function createMockOrder(string $firstName = 'John', ?EventOccurrenceDomainObject $occurrence = null): OrderDomainObject
     {
         $orderItem = Mockery::mock(OrderItemDomainObject::class, [
             'getProductPriceId' => 123,
@@ -462,6 +496,7 @@ class EmailTokenContextBuilderTest extends TestCase
             'getCurrency' => 'USD',
             'getLocale' => 'en',
             'getSeatLabels' => ['Stalls · A-1', 'Stalls · A-2'],
+            'getSingleEventOccurrence' => $occurrence,
         ]);
     }
 

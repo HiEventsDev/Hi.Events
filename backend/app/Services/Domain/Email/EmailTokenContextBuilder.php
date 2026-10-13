@@ -38,6 +38,8 @@ class EmailTokenContextBuilder
         EventSettingDomainObject $eventSettings,
         ?EventOccurrenceDomainObject $occurrence = null,
     ): array {
+        $occurrence ??= $order->getSingleEventOccurrence();
+
         $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
         $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
 

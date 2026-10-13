@@ -24,7 +24,13 @@ test.describe('per-order attendee details checkout', () => {
     await checkout.completeFreeOrder();
 
     await expect(page.getByText(`You're going to ${event.title}`)).toBeVisible();
-    await mailpit.waitForMessage(buyerEmail);
+    const ticketEmail = await mailpit.waitForMessage(buyerEmail, { subjectContains: 'Your Tickets for' });
+    await mailpit.waitForMessage(buyerEmail, { subjectContains: 'Your Order is Confirmed' });
+    expect(await mailpit.search(buyerEmail)).toHaveLength(2);
+
+    const ticketLinks = (await mailpit.getLinks(ticketEmail.ID))
+      .filter((link) => new RegExp(`/product/${event.eventId}/[^/]+$`).test(link));
+    expect(new Set(ticketLinks).size).toBe(2);
 
     const attendees = new AttendeePage(authedPage);
     await attendees.goto(event.eventId);

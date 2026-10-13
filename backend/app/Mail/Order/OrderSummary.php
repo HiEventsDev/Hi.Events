@@ -3,7 +3,6 @@
 namespace HiEvents\Mail\Order;
 
 use HiEvents\DomainObjects\EventDomainObject;
-use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\InvoiceDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
@@ -29,7 +28,6 @@ class OrderSummary extends BaseMail
         private readonly OrganizerDomainObject $organizer,
         private readonly EventSettingDomainObject $eventSettings,
         private readonly ?InvoiceDomainObject $invoice,
-        private readonly ?EventOccurrenceDomainObject $occurrence = null,
         ?RenderedEmailTemplateDTO $renderedTemplate = null,
     ) {
         $this->renderedTemplate = $renderedTemplate;
@@ -60,7 +58,6 @@ class OrderSummary extends BaseMail
             );
         }
 
-        // Fallback to original template
         return new Content(
             markdown: 'emails.orders.summary',
             with: [
@@ -68,7 +65,7 @@ class OrderSummary extends BaseMail
                 'event' => $this->event,
                 'order' => $this->order,
                 'organizer' => $this->organizer,
-                'occurrence' => $this->occurrence ?? null,
+                'occurrence' => $this->order->getSingleEventOccurrence(),
                 'orderUrl' => sprintf(
                     Url::getFrontEndUrlFromConfig(Url::ORDER_SUMMARY),
                     $this->event->getId(),
