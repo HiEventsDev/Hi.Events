@@ -1270,7 +1270,7 @@ msgid "Admin Access Required"
 msgstr "Wymagany dostęp administratora"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:34
+#: src/components/layouts/Admin/index.tsx:35
 msgid "Admin Dashboard"
 msgstr "Panel administratora"
 
@@ -3508,6 +3508,10 @@ msgstr "Kliknij, aby wznowić sprzedaż"
 msgid "Click to view notes"
 msgstr "Kliknij, aby zobaczyć notatki"
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:102
+msgid "Clicked"
+msgstr "Kliknięte"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
 msgid "close"
 msgstr "zamknij"
@@ -3756,7 +3760,7 @@ msgstr "Nazwy konfiguracji są widoczne dla użytkowników końcowych. Opłaty s
 msgid "Configuration updated successfully"
 msgstr "Konfiguracja zaktualizowana pomyślnie"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfiguracje"
@@ -5018,6 +5022,14 @@ msgstr "Żądanie usunięcia anulowane"
 msgid "Deletion Requests"
 msgstr "Żądania usunięcia"
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:62
+msgid "delivered"
+msgstr "dostarczone"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:97
+msgid "Delivered"
+msgstr "Dostarczone"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:83
 msgid "Depth"
 msgstr "Głębokość"
@@ -5614,6 +5626,7 @@ msgstr "Kwalifikujące się listy weryfikacyjne"
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
 #: src/components/routes/auth/Login/index.tsx:188
@@ -5683,6 +5696,11 @@ msgstr "Potwierdzenie e-mail wysłane ponownie"
 #: src/components/routes/profile/ManageProfile/index.tsx:108
 msgid "Email confirmation resent successfully"
 msgstr "Potwierdzenie e-mail wysłane ponownie pomyślnie"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/EmailDelivery/index.tsx:56
+msgid "Email Delivery"
+msgstr "Dostarczanie e-maili"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:67
 msgid "Email footer message"
@@ -6379,7 +6397,7 @@ msgstr "Nie powiodło się o"
 msgid "Failed jobs"
 msgstr "Nieudane zadania"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:26
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Nieudane zadania"
@@ -6727,7 +6745,7 @@ msgstr "Zaktualizowano flagę funkcji"
 msgid "Feature flags"
 msgstr "Flagi funkcji"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "Flagi funkcji"
@@ -7334,6 +7352,14 @@ msgstr "Goście"
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
 msgstr "Trwa teraz"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:63
+msgid "hard bounces"
+msgstr "twarde odbicia"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:98
+msgid "Hard bounces"
+msgstr "Twarde odbicia"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:161
 msgid "Hard delete"
@@ -8145,6 +8171,7 @@ msgstr "Ostatnie 14 dni"
 #: src/components/common/ReportTable/index.tsx:47
 #: src/components/routes/admin/Attribution/index.tsx:77
 #: src/components/routes/admin/Dashboard/index.tsx:31
+#: src/components/routes/admin/EmailDelivery/index.tsx:14
 msgid "Last 24 hours"
 msgstr "Ostatnie 24 godziny"
 
@@ -8153,6 +8180,7 @@ msgstr "Ostatnie 24 godziny"
 #: src/components/common/ReportTable/index.tsx:51
 #: src/components/routes/admin/Attribution/index.tsx:79
 #: src/components/routes/admin/Dashboard/index.tsx:33
+#: src/components/routes/admin/EmailDelivery/index.tsx:16
 msgid "Last 30 days"
 msgstr "Ostatnie 30 dni"
 
@@ -8171,6 +8199,7 @@ msgstr "Ostatnie 6 miesięcy"
 #: src/components/common/ReportTable/index.tsx:49
 #: src/components/routes/admin/Attribution/index.tsx:78
 #: src/components/routes/admin/Dashboard/index.tsx:32
+#: src/components/routes/admin/EmailDelivery/index.tsx:15
 msgid "Last 7 days"
 msgstr "Ostatnie 7 dni"
 
@@ -8334,7 +8363,7 @@ msgid "Library"
 msgstr "Biblioteka"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:29
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "Licencja"
@@ -9352,6 +9381,10 @@ msgstr "Brak e-maila"
 msgid "No email provided"
 msgstr "Nie podano adresu e-mail"
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:89
+msgid "No emails sent in this period"
+msgstr "W tym okresie nie wysłano żadnych e-maili"
+
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:351
 msgid "No end date"
 msgstr "Brak daty zakończenia"
@@ -10115,6 +10148,10 @@ msgstr "Widoczne tylko dla kupujących z odpowiednim kodem promocyjnym."
 msgid "Only visible with promo code"
 msgstr "Widoczne tylko z kodem promocyjnym"
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:140
+msgid "Open and click rates are a share of delivered emails and only cover streams with tracking turned on. Hard bounces are highlighted at 2% or more."
+msgstr "Współczynniki otwarć i kliknięć liczone są względem dostarczonych e-maili i obejmują tylko strumienie z włączonym śledzeniem. Twarde odbicia są wyróżniane od 2%."
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:220
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:271
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:78
@@ -10153,6 +10190,10 @@ msgstr "Otwórz pasek boczny"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:154
 msgid "Open your authenticator app, tap the + button and scan the code."
 msgstr "Otwórz aplikację uwierzytelniającą, dotknij przycisku + i zeskanuj kod."
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:101
+msgid "Opened"
+msgstr "Otwarte"
 
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
@@ -10499,6 +10540,7 @@ msgid "Organizers can only manage events and products. They cannot manage users,
 msgstr "Organizatorzy mogą zarządzać tylko wydarzeniami i produktami. Nie mogą zarządzać użytkownikami, ustawieniami konta ani informacjami rozliczeniowymi."
 
 #: src/components/common/OrdersTable/index.tsx:327
+#: src/components/routes/admin/EmailDelivery/index.tsx:31
 #: src/constants/eventCategories.ts:31
 msgid "Other"
 msgstr "Inne"
@@ -13299,6 +13341,11 @@ msgstr "Wysyłanie do czytnika…"
 msgid "Sending..."
 msgstr "Wysyłanie..."
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:59
+msgid "sent"
+msgstr "wysłane"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:96
 #: src/components/routes/admin/Messages/index.tsx:123
 msgid "Sent"
 msgstr "Wysłane"
@@ -13307,6 +13354,10 @@ msgstr "Wysłane"
 #: src/components/routes/admin/Messages/index.tsx:306
 msgid "Sent By"
 msgstr "Wysłane przez"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:80
+msgid "Sent emails are recorded, but delivery, bounce, open and click data needs a delivery webhook. Set POSTMARK_WEBHOOK_SECRET and point your Postmark streams at {0}, using the secret as the basic auth password."
+msgstr "Wysłane e-maile są rejestrowane, ale dane o dostarczeniu, odbiciach, otwarciach i kliknięciach wymagają webhooka dostarczeń. Ustaw POSTMARK_WEBHOOK_SECRET i skieruj strumienie Postmark na {0}, używając sekretu jako hasła uwierzytelniania podstawowego."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:218
 msgid "Sent to attendees when a scheduled date is cancelled"
@@ -13758,6 +13809,10 @@ msgstr "Linki społecznościowe"
 msgid "Social Links & Website"
 msgstr "Linki społecznościowe i strona internetowa"
 
+#: src/components/routes/admin/EmailDelivery/index.tsx:99
+msgid "Soft bounces"
+msgstr "Miękkie odbicia"
+
 #: src/components/common/ProductsTable/index.tsx:97
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:526
 #: src/components/modals/ManageOccurrenceModal/index.tsx:186
@@ -13902,6 +13957,10 @@ msgstr "Stanowisko dźwiękowca, miejsca sponsorów…"
 #: src/components/routes/admin/Attribution/index.tsx:165
 msgid "Source"
 msgstr "Źródło"
+
+#: src/components/routes/admin/EmailDelivery/index.tsx:100
+msgid "Spam complaints"
+msgstr "Zgłoszenia spamu"
 
 #: src/components/common/LanguageSwitcher/index.tsx:22
 msgid "Spanish"
