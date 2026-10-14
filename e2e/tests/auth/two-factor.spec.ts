@@ -247,7 +247,7 @@ test.describe('two-factor authentication', () => {
     const resetButton = superAdminPage.getByTestId('admin-reset-two-factor-button');
     await expect(resetButton).toHaveCount(1, { timeout: 30_000 });
     await resetButton.click();
-    await superAdminPage.getByRole('button', { name: 'Reset 2FA' }).last().click();
+    await superAdminPage.getByRole('dialog').getByRole('button', { name: 'Reset 2FA' }).click();
     await expect(superAdminPage.getByText('Two-factor authentication reset')).toBeVisible();
     await expect(resetButton).toHaveCount(0);
 
