@@ -116,6 +116,14 @@ return [
             'address' => env('MAIL_LIFECYCLE_FROM_ADDRESS', env('MAIL_FROM_ADDRESS', 'hello@hi.events')),
             'name' => env('MAIL_LIFECYCLE_FROM_NAME', env('MAIL_FROM_NAME', 'Hi.Events')),
         ],
+        'reply_to' => [
+            'address' => env('MAIL_LIFECYCLE_REPLY_TO_ADDRESS'),
+            'name' => env('MAIL_LIFECYCLE_REPLY_TO_NAME', env('MAIL_LIFECYCLE_FROM_NAME', env('MAIL_FROM_NAME', 'Hi.Events'))),
+        ],
+        'signature' => [
+            'name' => env('MAIL_LIFECYCLE_SIGNATURE_NAME', 'The Hi.Events team'),
+            'title' => env('MAIL_LIFECYCLE_SIGNATURE_TITLE'),
+        ],
     ],
 
     /*

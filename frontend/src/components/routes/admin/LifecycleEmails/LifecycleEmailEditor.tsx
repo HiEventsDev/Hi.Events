@@ -54,7 +54,7 @@ export const LifecycleEmailEditor = ({email, sendingConfigured, onDirtyChange}: 
         validate: {
             subject: (value) => (!value.trim() ? t`Subject is required` : null),
             body: (value) => (!value.trim() ? t`Body is required` : null),
-            cta_label: (value) => (!value.trim() ? t`Button label is required` : null),
+            cta_label: (value) => (!value.trim() ? t`Link text is required` : null),
         },
     });
 
@@ -152,7 +152,7 @@ export const LifecycleEmailEditor = ({email, sendingConfigured, onDirtyChange}: 
                             additionalToolbarControls={<LiquidTokenMenu tokens={email.tokens}/>}
                         />
                         <TextInput
-                            label={t`Button label`}
+                            label={t`Link text`}
                             description={t`Links to: ${label.destination}`}
                             required
                             {...form.getInputProps('cta_label')}
