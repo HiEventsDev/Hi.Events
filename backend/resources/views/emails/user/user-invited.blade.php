@@ -1,9 +1,8 @@
-@php /** @var \HiEvents\DomainObjects\UserDomainObject $invitedUser */ @endphp
 @php /** @var string $inviteLink */ @endphp
 @php /** @var string $appName */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $invitedUser->getFirstName()]) }},
+{{ __('Hi') }},
 
 {{ __('You\'ve been invited to join :appName.', ['appName' => $appName]) }}
 

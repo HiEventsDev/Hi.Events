@@ -5,8 +5,10 @@ namespace HiEvents\Services\Domain\Event;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Event\DTO\EventSpamCheckContentDTO;
@@ -21,10 +23,13 @@ class EventSpamCheckContentService
     {
         /** @var EventDomainObject|null $event */
         $event = $this->eventRepository
-            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, name: 'organizer'))
+            ->loadRelation(new Relationship(domainObject: OrganizerDomainObject::class, nested: [
+                new Relationship(domainObject: OrganizerSettingDomainObject::class, name: 'organizer_settings'),
+            ], name: 'organizer'))
             ->loadRelation(new Relationship(domainObject: EventSettingDomainObject::class, name: 'event_settings'))
             ->loadRelation(new Relationship(domainObject: ProductDomainObject::class))
             ->loadRelation(new Relationship(domainObject: ProductCategoryDomainObject::class))
+            ->loadRelation(new Relationship(domainObject: QuestionDomainObject::class))
             ->findFirstWhere(['id' => $eventId]);
 
         return $event;
@@ -40,6 +45,7 @@ class EventSpamCheckContentService
                 ...$this->settingsContent($event),
                 ...$this->productContent($event),
                 ...$this->categoryContent($event),
+                ...$this->questionContent($event),
             ], static fn (?string $value): bool => $value !== null && trim($value) !== ''),
         );
     }
@@ -55,9 +61,16 @@ class EventSpamCheckContentService
             return [];
         }
 
+        $settings = $organizer->getOrganizerSettings();
+
         return [
             'organizer name' => $organizer->getName(),
             'organizer description' => $organizer->getDescription(),
+            'organizer website' => $organizer->getWebsite(),
+            'organizer settings website' => $settings?->getWebsiteUrl(),
+            'organizer seo title' => $settings?->getSeoTitle(),
+            'organizer seo description' => $settings?->getSeoDescription(),
+            'organizer seo keywords' => $settings?->getSeoKeywords(),
         ];
     }
 
@@ -77,6 +90,12 @@ class EventSpamCheckContentService
             'pre-checkout message' => $settings->getPreCheckoutMessage(),
             'post-checkout message' => $settings->getPostCheckoutMessage(),
             'offline payment instructions' => $settings->getOfflinePaymentInstructions(),
+            'email footer message' => $settings->getEmailFooterMessage(),
+            'online event connection details' => $settings->getOnlineEventConnectionDetails(),
+            'maps url' => $settings->getMapsUrl(),
+            'seo title' => $settings->getSeoTitle(),
+            'seo description' => $settings->getSeoDescription(),
+            'seo keywords' => $settings->getSeoKeywords(),
         ];
     }
 
@@ -107,6 +126,22 @@ class EventSpamCheckContentService
             /** @var ProductCategoryDomainObject $category */
             $content['category '.($index + 1).' name'] = $category->getName();
             $content['category '.($index + 1).' description'] = $category->getDescription();
+        }
+
+        return $content;
+    }
+
+    /**
+     * @return array<string, ?string>
+     */
+    private function questionContent(EventDomainObject $event): array
+    {
+        $content = [];
+
+        foreach ($event->getQuestions() ?? [] as $index => $question) {
+            /** @var QuestionDomainObject $question */
+            $content['question '.($index + 1).' title'] = $question->getTitle();
+            $content['question '.($index + 1).' description'] = $question->getDescription();
         }
 
         return $content;

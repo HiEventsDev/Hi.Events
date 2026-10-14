@@ -71,6 +71,6 @@ class DisableTwoFactorHandler
         $this->mailer
             ->to($user->getEmail())
             ->locale($user->getLocale())
-            ->send(new TwoFactorDisabledMail($user));
+            ->send(new TwoFactorDisabledMail);
     }
 }

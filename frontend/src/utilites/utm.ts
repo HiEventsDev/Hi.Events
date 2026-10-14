@@ -16,6 +16,7 @@ const PAID_CLICK_ID_PARAMS = ['gclid', 'gbraid', 'wbraid', 'fbclid'];
 const RAW_PARAMS = [...PAID_CLICK_ID_PARAMS, 'gad_source', 'gad_campaignid', 'ref'];
 const MAX_VALUE_LENGTH = 255;
 const MAX_URL_LENGTH = 2048;
+const MAX_RAW_PARAMS = 20;
 
 const clip = (value: string | null, max: number) => (value ? value.slice(0, max) : null);
 
@@ -26,8 +27,8 @@ export function captureUtmData(): void {
 
     const rawParams: Record<string, string> = {};
     params.forEach((value, key) => {
-        if (key.startsWith('utm_') || RAW_PARAMS.includes(key)) {
-            rawParams[key] = value;
+        if ((key.startsWith('utm_') || RAW_PARAMS.includes(key)) && Object.keys(rawParams).length < MAX_RAW_PARAMS) {
+            rawParams[key.slice(0, MAX_VALUE_LENGTH)] = value.slice(0, MAX_VALUE_LENGTH);
         }
     });
 

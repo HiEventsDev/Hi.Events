@@ -1,9 +1,8 @@
-@php /** @var \HiEvents\DomainObjects\UserDomainObject $user */ @endphp
 @php /** @var bool $resetByAdministrator */ @endphp
 @php /** @var string $securityUrl */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
+{{ __('Hi') }},
 
 @if($resetByAdministrator)
 {{ __('An administrator has reset two-factor authentication on your :appName account. You can now sign in with just your password.', ['appName' => config('app.name')]) }}

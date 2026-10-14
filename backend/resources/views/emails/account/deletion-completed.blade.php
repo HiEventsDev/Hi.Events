@@ -1,8 +1,7 @@
-@php /** @var string $accountName */ @endphp
 @php /** @var bool $wasAnonymized */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $accountName]) }},
+{{ __('Hi') }},
 
 {{ __('Your :appName account has been permanently deleted.', ['appName' => config('app.name')]) }}
 

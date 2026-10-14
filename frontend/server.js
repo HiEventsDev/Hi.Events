@@ -136,6 +136,17 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return next();
     });
 
+    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|welcome|admin)(\/|$)/;
+
+    app.use("*", (req, res, next) => {
+        if (frameProtectedPathPattern.test(req.originalUrl.replace(base, "/").split("?")[0])) {
+            res.setHeader("Content-Security-Policy", "frame-ancestors 'self'");
+            res.setHeader("X-Frame-Options", "SAMEORIGIN");
+        }
+
+        return next();
+    });
+
     app.use("*", async (req, res) => {
         const url = req.originalUrl.replace(base, "");
 

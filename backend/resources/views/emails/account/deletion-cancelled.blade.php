@@ -1,7 +1,7 @@
 @php /** @var \HiEvents\DomainObjects\AccountDomainObject $account */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $account->getName()]) }},
+{{ __('Hi') }},
 
 {{ __('The deletion of your :appName account has been cancelled. Your account is active again.', ['appName' => config('app.name')]) }}
 

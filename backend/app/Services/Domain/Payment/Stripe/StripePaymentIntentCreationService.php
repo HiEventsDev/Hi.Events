@@ -13,6 +13,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
+use Stripe\PaymentIntent;
 use Stripe\StripeClient;
 use Throwable;
 
@@ -35,10 +36,10 @@ class StripePaymentIntentCreationService
         ?string $accountId = null,
     ): string {
         try {
-            return $stripeClient->paymentIntents->retrieve(
+            $paymentIntent = $stripeClient->paymentIntents->retrieve(
                 id: $paymentIntentId,
                 opts: $accountId ? ['stripe_account' => $accountId] : []
-            )->client_secret;
+            );
         } catch (ApiErrorException $exception) {
             $this->logger->error("Stripe payment intent retrieval failed: {$exception->getMessage()}", [
                 'exception' => $exception,
@@ -49,6 +50,14 @@ class StripePaymentIntentCreationService
                 __('There was an error communicating with the payment provider. Please try again later.')
             );
         }
+
+        if ($paymentIntent->status === PaymentIntent::STATUS_CANCELED) {
+            throw new CreatePaymentIntentFailedException(
+                __('This payment was cancelled after too many failed attempts. Please start a new order.')
+            );
+        }
+
+        return $paymentIntent->client_secret;
     }
 
     /**

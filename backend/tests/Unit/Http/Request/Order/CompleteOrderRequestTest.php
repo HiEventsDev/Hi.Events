@@ -6,6 +6,7 @@ namespace Tests\Unit\Http\Request\Order;
 
 use HiEvents\Http\Request\Order\CompleteOrderRequest;
 use HiEvents\Validators\CompleteOrderValidator;
+use HiEvents\Validators\Rules\PersonNameRule;
 use Illuminate\Routing\Route;
 use Mockery;
 use Tests\TestCase;
@@ -18,7 +19,8 @@ class CompleteOrderRequestTest extends TestCase
 
         $rules = $request->rules();
 
-        $this->assertSame(['required', 'string', 'max:40'], $rules['order.first_name']);
+        $this->assertSame(['required', 'string', 'max:40'], array_slice($rules['order.first_name'], 0, 3));
+        $this->assertInstanceOf(PersonNameRule::class, $rules['order.first_name'][3]);
         $this->assertSame(['required', 'email', 'same:order.email'], $rules['order.email_confirmation']);
         $this->assertArrayHasKey('order.questions', $rules);
         $this->assertArrayHasKey('order.address', $rules);

@@ -2,9 +2,14 @@
 @php /** @var \HiEvents\DomainObjects\AccountDomainObject $account */ @endphp
 @php /** @var array $verdict */ @endphp
 @php /** @var string $reviewUrl */ @endphp
+@php /** @var bool $eventStillLive */ @endphp
 
 <x-mail::message>
+@if($eventStillLive)
+{{ __('An event you previously approved has been flagged as potential spam after a content change. It is still live. Review it and unpublish it if needed.') }}
+@else
 {{ __('An event has been flagged as potential spam and unpublished pending manual review.') }}
+@endif
 
 ## {{ __('Event Details') }}
 

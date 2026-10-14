@@ -13,6 +13,10 @@ class ResendEmailConfirmationHandler
 
     public function handle(UserDomainObject $user, int $accountId): void
     {
+        if ($user->getEmailVerifiedAt() !== null) {
+            return;
+        }
+
         $this->emailConfirmationService->sendConfirmation($user, $accountId);
     }
 }

@@ -69,4 +69,9 @@ class Account extends BaseModel
             ->where('status', AccountDeletionRequestStatus::REQUESTED->name)
             ->latestOfMany();
     }
+
+    public function lifecycleNudges(): HasMany
+    {
+        return $this->hasMany(AccountLifecycleNudge::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Request\Waitlist;
 
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Validators\Rules\PersonNameRule;
 use Illuminate\Validation\Rule;
 
 class CreateWaitlistEntryRequest extends BaseRequest
@@ -21,8 +22,8 @@ class CreateWaitlistEntryRequest extends BaseRequest
                     ->whereNull('deleted_at'),
             ],
             'email' => ['required', 'email', 'max:255'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['nullable', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255', new PersonNameRule],
+            'last_name' => ['nullable', 'string', 'max:255', new PersonNameRule],
         ];
     }
 }

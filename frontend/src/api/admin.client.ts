@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {GenericDataResponse, GenericPaginatedResponse, IdParam, User} from "../types";
+import {EmailTemplateToken, GenericDataResponse, GenericPaginatedResponse, IdParam, User} from "../types";
 
 export interface AdminUser extends User {
     accounts?: AccountWithRole[];
@@ -99,6 +99,12 @@ export interface AdminOrganizerSummary {
     vat_setting: AdminOrganizerVatSetting | null;
 }
 
+export interface AdminLifecycleNudge {
+    nudge_type: string;
+    sent_at: string;
+    event_id: number | null;
+}
+
 export interface AdminAccountDetail extends AdminAccount {
     messaging_tier?: AccountMessagingTier;
     organizers: AdminOrganizerSummary[];
@@ -108,11 +114,41 @@ export interface AdminAccountDetail extends AdminAccount {
         scheduled_deletion_at: string;
         expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
     } | null;
+    lifecycle_nudges?: AdminLifecycleNudge[];
 }
 
 export interface AdminRequestAccountDeletionPayload {
     reason?: string;
     execute_immediately: boolean;
+}
+
+export type LifecycleNudgeType = 'NO_EVENT_CREATED' | 'STRIPE_ONBOARDING_INCOMPLETE' | 'EVENT_DRAFT_STALE' | 'LIVE_EVENT_NO_SALES';
+
+export interface LifecycleEmailContent {
+    subject: string;
+    body: string;
+    cta_label: string;
+}
+
+export interface AdminLifecycleEmail extends LifecycleEmailContent {
+    nudge_type: LifecycleNudgeType;
+    enabled_at: string | null;
+    is_customised: boolean;
+    sent_total: number;
+    sent_last_30_days: number;
+    tokens: EmailTemplateToken[];
+}
+
+export interface AdminLifecycleEmailsResponse {
+    data: AdminLifecycleEmail[];
+    meta: {
+        sending_configured: boolean;
+    };
+}
+
+export interface LifecycleEmailPreview {
+    subject: string;
+    html: string;
 }
 
 export interface AdminFeatureFlag {
@@ -778,6 +814,25 @@ export const adminClient = {
             enabled
         });
         return response.data;
+    },
+
+    getLifecycleEmails: async () => {
+        const response = await api.get<AdminLifecycleEmailsResponse>('admin/lifecycle-emails');
+        return response.data;
+    },
+
+    updateLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent & { enabled: boolean }) => {
+        const response = await api.put<GenericDataResponse<AdminLifecycleEmail>>(`admin/lifecycle-emails/${nudgeType}`, data);
+        return response.data;
+    },
+
+    previewLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent) => {
+        const response = await api.post<GenericDataResponse<LifecycleEmailPreview>>(`admin/lifecycle-emails/${nudgeType}/preview`, data);
+        return response.data;
+    },
+
+    sendTestLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent) => {
+        await api.post(`admin/lifecycle-emails/${nudgeType}/test`, data);
     },
 
     getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {

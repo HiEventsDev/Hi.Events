@@ -8,14 +8,18 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
 /**
  * @uses /backend/resources/views/emails/orders/order-failed.blade.php
  */
-class OrderFailed extends BaseMail
+class OrderFailed extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     public function __construct(
         private readonly OrderDomainObject $order,
         private readonly EventDomainObject $event,

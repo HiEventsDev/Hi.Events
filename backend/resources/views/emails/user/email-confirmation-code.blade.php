@@ -1,8 +1,7 @@
-@php /** @var \HiEvents\DomainObjects\UserDomainObject $user */ @endphp
 @php /** @var string $code */ @endphp
 
 <x-mail::message>
-{{ __('Hi :name', ['name' => $user->getFirstName()]) }},
+{{ __('Hi') }},
 
 {{ __('Welcome to :appName! We\'re excited to have you aboard!', ['appName' => config('app.name')]) }}
 

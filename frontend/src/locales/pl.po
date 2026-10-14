@@ -218,6 +218,10 @@ msgstr "Wybrano {0} miejsc"
 msgid "{0} seats that are already sold or held will be renamed on their tickets: {1}"
 msgstr "{0} miejsc już sprzedanych lub wstrzymanych zostanie przemianowanych na biletach: {1}"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:80
+msgid "{0} sent · {1} in the last 30 days"
+msgstr "Wysłano: {0} · {1} w ciągu ostatnich 30 dni"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:321
 msgid "{0} sold"
 msgstr "{0} sprzedanych"
@@ -626,6 +630,10 @@ msgstr "2. Zeskanuj ten kod QR"
 msgid "20"
 msgstr "20"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
+msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
+msgstr "24 godziny po tym, jak organizator utworzy płatny bilet lub zacznie łączyć Stripe, jeśli Stripe nadal nie jest połączony. Pomijane w krajach, których Stripe nie obsługuje."
+
 #: src/components/common/CapacityHelp/index.tsx:61
 msgid "25 places per date, plus 30 T-shirts across the whole run."
 msgstr "25 miejsc na datę oraz 30 koszulek na całą serię."
@@ -633,6 +641,18 @@ msgstr "25 miejsc na datę oraz 30 koszulek na całą serię."
 #: src/components/common/AdminUsersTable/index.tsx:168
 msgid "2FA on"
 msgstr "2FA włączone"
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:20
+msgid "3 days after a draft event is created, if nothing on the account is live."
+msgstr "3 dni po utworzeniu wydarzenia roboczego, jeśli nic na koncie nie jest aktywne."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:8
+msgid "3 days after signup, if the account owner has confirmed their email but hasn't created an event."
+msgstr "3 dni po rejestracji, jeśli właściciel konta potwierdził e-mail, ale nie utworzył jeszcze wydarzenia."
+
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:26
+msgid "7 days after a live upcoming paid event was last edited or its organizer connected Stripe, whichever is later, if the account has never had an order."
+msgstr "7 dni po ostatniej edycji opublikowanego, nadchodzącego płatnego wydarzenia lub po połączeniu Stripe przez jego organizatora (w zależności od tego, co nastąpiło później), jeśli konto nigdy nie miało zamówienia."
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:297
 msgid "A box office lets staff sell tickets at the door with cash, comps, or a card reader. Share the link with your team, no account needed."
@@ -837,7 +857,7 @@ msgstr "Konto · {0}"
 msgid "Account · {0} · {1}"
 msgstr "Konto · {0} · {1}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:76
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:78
 msgid "Account deletion cancelled"
 msgstr "Usunięcie konta anulowane"
 
@@ -850,15 +870,15 @@ msgid "Account deletion is blocked"
 msgstr "Usunięcie konta jest zablokowane"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:28
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:70
 msgid "Account deletion queued"
 msgstr "Usunięcie konta dodane do kolejki"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:142
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:144
 msgid "Account Information"
 msgstr "Informacja o koncie"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:58
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:60
 msgid "Account marked as verified"
 msgstr "Konto oznaczone jako zweryfikowane"
 
@@ -870,7 +890,7 @@ msgstr "Nazwa konta"
 msgid "Account Name"
 msgstr "Nazwa konta"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:111
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
 msgid "Account not found"
 msgstr "Nie znaleziono konta"
 
@@ -895,7 +915,7 @@ msgstr "Ustawienia konta"
 msgid "Account updated successfully"
 msgstr "Pomyślnie zaktualizowano konto"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:59
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
 msgid "Account verification revoked"
 msgstr "Weryfikacja konta cofnięta"
 
@@ -904,7 +924,7 @@ msgid "accounts"
 msgstr "kont"
 
 #: src/components/common/AdminUsersTable/index.tsx:139
-#: src/components/layouts/Admin/index.tsx:16
+#: src/components/layouts/Admin/index.tsx:18
 #: src/components/routes/admin/Accounts/index.tsx:57
 #: src/components/routes/admin/Attribution/index.tsx:194
 msgid "Accounts"
@@ -1256,7 +1276,7 @@ msgstr "Dodaje stronę"
 msgid "Adds a page, names attendees"
 msgstr "Dodaje stronę z nazwiskami uczestników"
 
-#: src/components/layouts/Admin/index.tsx:14
+#: src/components/layouts/Admin/index.tsx:16
 #: src/components/modals/EditUserModal/index.tsx:50
 #: src/components/modals/InviteUserModal/index.tsx:41
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:122
@@ -1270,7 +1290,7 @@ msgid "Admin Access Required"
 msgstr "Wymagany dostęp administratora"
 
 #: src/components/common/GlobalMenu/index.tsx:71
-#: src/components/layouts/Admin/index.tsx:35
+#: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "Panel administratora"
 
@@ -1536,7 +1556,7 @@ msgstr "Zezwalaj wyszukiwarkom na indeksowanie tego wydarzenia"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Prawie gotowe! Czekamy tylko na przetworzenie Twojej płatności. To powinno zająć tylko kilka sekund."
 
-#: src/components/routes/auth/Register/index.tsx:73
+#: src/components/routes/auth/Register/index.tsx:81
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Masz już konto? <0>{0}</0>"
 
@@ -1664,7 +1684,7 @@ msgstr "Tytuł ogłoszenia"
 msgid "Announcement updated"
 msgstr "Ogłoszenie zaktualizowane"
 
-#: src/components/layouts/Admin/index.tsx:22
+#: src/components/layouts/Admin/index.tsx:24
 #: src/components/routes/admin/Announcements/index.tsx:119
 msgid "Announcements"
 msgstr "Ogłoszenia"
@@ -2075,7 +2095,7 @@ msgstr "Przypisz inny plan"
 msgid "Assign plan"
 msgstr "Przypisz plan"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:227
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "Przypisany poziom"
 
@@ -2280,6 +2300,10 @@ msgstr "Automatyczne proponowanie biletów jest włączone"
 msgid "Auto-Process Waitlist"
 msgstr "Automatyczne przetwarzanie listy oczekujących"
 
+#: src/components/routes/admin/LifecycleEmails/index.tsx:41
+msgid "Automatic emails that help organizers who get stuck. The sweep runs hourly and only reaches activity that happens after an email is turned on."
+msgstr "Automatyczne e-maile, które pomagają organizatorom, którzy utknęli. Skanowanie działa co godzinę i obejmuje tylko aktywność po włączeniu e-maila."
+
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Automatycznie proponuj bilety osobom na liście, gdy znów będą dostępne. Jeśli wyłączone, możesz ręcznie zarządzać listą oczekujących ze strony Listy oczekujących."
@@ -2308,7 +2332,7 @@ msgstr "Dostępne godziny — {dayName}"
 msgid "Available to Refund"
 msgstr "Dostępne do zwrotu"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:61
 msgid "Available Tokens"
 msgstr "Dostępne tokeny"
 
@@ -2365,7 +2389,7 @@ msgstr "Świetny Organizator Sp. z o.o."
 msgid "Back"
 msgstr "Wstecz"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:133
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:135
 msgid "Back to Accounts"
 msgstr "Powrót do kont"
 
@@ -2545,7 +2569,12 @@ msgstr "Bluesky"
 msgid "Blurred cover"
 msgstr "Rozmyta okładka"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:146
+msgid "Body"
+msgstr "Treść"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:47
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:56
 msgid "Body is required"
 msgstr "Treść jest wymagana"
 
@@ -2667,12 +2696,17 @@ msgid "Business name"
 msgstr "Nazwa firmy"
 
 #: src/components/routes/admin/Announcements/index.tsx:455
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:155
 msgid "Button label"
 msgstr "Etykieta przycisku"
 
 #: src/components/common/EmailTemplateEditor/CTAConfiguration.tsx:27
 msgid "Button Label"
 msgstr "Etykieta przycisku"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:57
+msgid "Button label is required"
+msgstr "Etykieta przycisku jest wymagana"
 
 #: src/components/routes/event/HomepageDesigner/index.tsx:161
 msgid "Button Text"
@@ -2727,7 +2761,7 @@ msgstr "Według operatora"
 msgid "By payment type"
 msgstr "Według metody płatności"
 
-#: src/components/routes/auth/Register/index.tsx:139
+#: src/components/routes/auth/Register/index.tsx:149
 msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Rejestrując się, zgadzasz się na nasze <0>Warunki korzystania z usługi</0> i <1>Politykę prywatności</1>."
 
@@ -2834,7 +2868,7 @@ msgstr "Odwołaj termin"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:37
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:104
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:372
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
 msgid "Cancel deletion"
 msgstr "Anuluj usunięcie"
@@ -3760,7 +3794,7 @@ msgstr "Nazwy konfiguracji są widoczne dla użytkowników końcowych. Opłaty s
 msgid "Configuration updated successfully"
 msgstr "Konfiguracja zaktualizowana pomyślnie"
 
-#: src/components/layouts/Admin/index.tsx:27
+#: src/components/layouts/Admin/index.tsx:30
 #: src/components/routes/admin/Configurations/index.tsx:60
 msgid "Configurations"
 msgstr "Konfiguracje"
@@ -3776,6 +3810,10 @@ msgstr "Skonfiguruj, jak zbierane są dane uczestnika podczas płatności"
 #: src/components/common/PlatformFeesSettings/index.tsx:264
 msgid "Configure Taxes & Fees"
 msgstr "Skonfiguruj podatki i opłaty"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:194
+msgid "Configure the lifecycle mailer to send test emails"
+msgstr "Skonfiguruj nadawcę e-maili cyklu życia, aby wysyłać e-maile testowe"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:242
 msgid "Configure which products are available for this date, and optionally adjust prices or per-date quantities."
@@ -3819,12 +3857,12 @@ msgid "Confirm New Password"
 msgstr "Potwierdź nowe hasło"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:134
-#: src/components/routes/auth/Register/index.tsx:117
+#: src/components/routes/auth/Register/index.tsx:125
 msgid "Confirm password"
 msgstr "Potwierdź hasło"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:133
-#: src/components/routes/auth/Register/index.tsx:116
+#: src/components/routes/auth/Register/index.tsx:124
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Potwierdź hasło"
@@ -4444,7 +4482,7 @@ msgid "Create your own event"
 msgstr "Utwórz własne wydarzenie"
 
 #: src/components/common/LocationsTable/index.tsx:110
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:151
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
@@ -4483,7 +4521,7 @@ msgstr "Etykieta CTA jest wymagana"
 #: src/components/modals/CreateEventModal/index.tsx:435
 #: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:73
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:168
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:51
@@ -4658,7 +4696,7 @@ msgstr "Strefa zagrożenia"
 msgid "Dark"
 msgstr "Ciemny"
 
-#: src/components/layouts/Admin/index.tsx:15
+#: src/components/layouts/Admin/index.tsx:17
 #: src/components/layouts/Event/index.tsx:107
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
@@ -4863,8 +4901,8 @@ msgstr "Usunąć {count} wybranych termin(ów)? Terminy z zamówieniami zostaną
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:148
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:155
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
 msgid "Delete account"
 msgstr "Usuń konto"
 
@@ -4942,8 +4980,8 @@ msgid "Delete location"
 msgstr "Usuń lokalizację"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:88
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:365
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:73
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:399
 msgid "Delete now"
 msgstr "Usuń teraz"
 
@@ -4960,7 +4998,7 @@ msgstr "Usuń trwale"
 msgid "Delete Template"
 msgstr "Usuń szablon"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:66
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:68
 msgid "Delete this account now instead of waiting for the grace period? This cannot be undone."
 msgstr "Usunąć to konto teraz, zamiast czekać na okres karencji? Tej operacji nie można cofnąć."
 
@@ -5005,7 +5043,7 @@ msgstr "Usunięte konto"
 msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
 msgstr "Usunięcie konta natychmiast je dezaktywuje: wszystkie opublikowane wydarzenia zostają wycofane, a dostęp zostaje wyłączony. Po 30-dniowym okresie karencji usunięcie staje się trwałe. Możesz anulować w dowolnym momencie w ciągu tych 30 dni."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:353
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
 msgstr "Usunięcie zaplanowano na {0}."
 
@@ -5017,7 +5055,7 @@ msgstr "Usunięcie dodane do kolejki wykonania"
 msgid "Deletion request cancelled"
 msgstr "Żądanie usunięcia anulowane"
 
-#: src/components/layouts/Admin/index.tsx:24
+#: src/components/layouts/Admin/index.tsx:27
 #: src/components/routes/admin/DeletionRequests/index.tsx:75
 msgid "Deletion Requests"
 msgstr "Żądania usunięcia"
@@ -5126,6 +5164,10 @@ msgstr "Odrzuć"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:726
 msgid "Discard changes?"
 msgstr "Odrzucić zmiany?"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:28
+msgid "Discard your unsaved changes?"
+msgstr "Odrzucić niezapisane zmiany?"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:182
 msgid "Disclaimers, contact info or a thank-you note, on a single line"
@@ -5288,6 +5330,10 @@ msgstr "Pobieranie faktury"
 msgid "Draft"
 msgstr "Wersja robocza"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:19
+msgid "Draft event not published"
+msgstr "Wydarzenie robocze nieopublikowane"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "Przeciągnij, aby narysować scenę. Zmień ją na bar, parkiet, wejście, filar lub ścianę po prawej."
@@ -5401,6 +5447,10 @@ msgstr "np. Ważna aktualizacja dotycząca twoich biletów"
 #: src/components/routes/admin/Configurations/index.tsx:226
 msgid "e.g., Standard, Premium, Enterprise"
 msgstr "np. Standard, Premium, Enterprise"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:190
+msgid "Each account receives this email at most once."
+msgstr "Każde konto otrzymuje ten e-mail najwyżej raz."
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:24
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
@@ -5625,12 +5675,12 @@ msgstr "Kwalifikujące się listy weryfikacyjne"
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:138
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:147
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/AcceptInvitation/index.tsx:112
 #: src/components/routes/auth/ForgotPassword/index.tsx:67
 #: src/components/routes/auth/Login/index.tsx:188
-#: src/components/routes/auth/Register/index.tsx:102
+#: src/components/routes/auth/Register/index.tsx:110
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -5697,7 +5747,7 @@ msgstr "Potwierdzenie e-mail wysłane ponownie"
 msgid "Email confirmation resent successfully"
 msgstr "Potwierdzenie e-mail wysłane ponownie pomyślnie"
 
-#: src/components/layouts/Admin/index.tsx:25
+#: src/components/layouts/Admin/index.tsx:28
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "Dostarczanie e-maili"
@@ -5716,9 +5766,21 @@ msgstr "E-mail jest wymagany"
 msgid "Email not verified"
 msgstr "E-mail nie zweryfikowany"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:179
+msgid "Email preview"
+msgstr "Podgląd e-maila"
+
 #: src/components/common/EmailTemplateEditor/EmailTemplatePreviewPane.tsx:27
 msgid "Email Preview"
 msgstr "Podgląd e-mail"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved"
+msgstr "E-mail zapisany"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:98
+msgid "Email saved and sending"
+msgstr "E-mail zapisany i wysyłany"
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:349
 #: src/components/routes/organizer/Settings/index.tsx:68
@@ -6068,6 +6130,11 @@ msgstr "Wydarzenie utworzone"
 msgid "Event custom template"
 msgstr "Niestandardowy szablon wydarzenia"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:21
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:27
+msgid "Event dashboard"
+msgstr "Panel wydarzenia"
+
 #: src/components/routes/event/TicketDesigner/index.tsx:164
 #: src/components/routes/my-tickets/index.tsx:79
 #: src/components/routes/organizer/Reports/CheckInSummaryReport/index.tsx:29
@@ -6106,6 +6173,10 @@ msgstr "Szczegóły wydarzenia"
 #: src/components/modals/DuplicateEventModal/index.tsx:90
 msgid "Event duplicated successfully"
 msgstr "Wydarzenie zostało pomyślnie zduplikowane"
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:334
+msgid "Event ID: {0}"
+msgstr "ID wydarzenia: {0}"
 
 #: src/components/common/PeriodSelector/index.tsx:124
 msgid "Event lifetime"
@@ -6155,6 +6226,10 @@ msgstr "Wydarzenie zostało pomyślnie przywrócone"
 msgid "Event Settings"
 msgstr "Ustawienia wydarzenia"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:9
+msgid "Event setup"
+msgstr "Tworzenie wydarzenia"
+
 #: src/components/common/EventCard/index.tsx:80
 #: src/components/common/StatusToggle/index.tsx:62
 #: src/components/layouts/Event/index.tsx:207
@@ -6191,10 +6266,10 @@ msgid "Event Updated"
 msgstr "Wydarzenie zaktualizowane"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
-#: src/components/layouts/Admin/index.tsx:18
+#: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:326
 #: src/components/layouts/OrganizerLayout/index.tsx:109
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:178
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
@@ -6397,7 +6472,7 @@ msgstr "Nie powiodło się o"
 msgid "Failed jobs"
 msgstr "Nieudane zadania"
 
-#: src/components/layouts/Admin/index.tsx:26
+#: src/components/layouts/Admin/index.tsx:29
 #: src/components/routes/admin/FailedJobs/index.tsx:114
 msgid "Failed Jobs"
 msgstr "Nieudane zadania"
@@ -6418,7 +6493,7 @@ msgstr "Nie udało się zatwierdzić wydarzenia"
 msgid "Failed to assign configuration"
 msgstr "Nie udało się przypisać konfiguracji"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:77
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:79
 msgid "Failed to cancel account deletion"
 msgstr "Nie udało się anulować usunięcia konta"
 
@@ -6471,7 +6546,7 @@ msgid "Failed to create template"
 msgstr "Nie udało się utworzyć szablonu"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:33
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:69
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:71
 msgid "Failed to delete account"
 msgstr "Nie udało się usunąć konta"
 
@@ -6669,7 +6744,7 @@ msgstr "Nie udało się rozpocząć personifikacji. Spróbuj ponownie."
 msgid "Failed to stop impersonation. Please try again."
 msgstr "Nie udało się zatrzymać personifikacji. Spróbuj ponownie."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:61
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:63
 msgid "Failed to update account verification"
 msgstr "Nie udało się zaktualizować weryfikacji konta"
 
@@ -6701,7 +6776,7 @@ msgstr "Nie udało się zaktualizować statusu wydarzenia"
 msgid "Failed to update feature flag"
 msgstr "Nie udało się zaktualizować flagi funkcji"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:50
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:52
 msgid "Failed to update messaging tier"
 msgstr "Nie udało się zaktualizować poziomu wiadomości"
 
@@ -6745,7 +6820,7 @@ msgstr "Zaktualizowano flagę funkcji"
 msgid "Feature flags"
 msgstr "Flagi funkcji"
 
-#: src/components/layouts/Admin/index.tsx:28
+#: src/components/layouts/Admin/index.tsx:31
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "Flagi funkcji"
@@ -6915,7 +6990,7 @@ msgstr "Imię"
 #: src/components/modals/InviteUserModal/index.tsx:57
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
-#: src/components/routes/auth/Register/index.tsx:88
+#: src/components/routes/auth/Register/index.tsx:96
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -6987,7 +7062,7 @@ msgstr "Szczegóły oznaczonego wydarzenia"
 msgid "Flagged events"
 msgstr "Oznaczone wydarzenia"
 
-#: src/components/layouts/Admin/index.tsx:21
+#: src/components/layouts/Admin/index.tsx:23
 #: src/components/routes/admin/SpamEvents/index.tsx:138
 msgid "Flagged Events"
 msgstr "Oznaczone wydarzenia"
@@ -7224,7 +7299,7 @@ msgstr "Odbieraj płatności"
 msgid "Get paid with Stripe"
 msgstr "Odbieraj płatności przez Stripe"
 
-#: src/components/routes/auth/Register/index.tsx:71
+#: src/components/routes/auth/Register/index.tsx:79
 msgid "Get started"
 msgstr "Zacznij"
 
@@ -7758,7 +7833,7 @@ msgstr "Obrazy"
 #: src/components/common/AdminAccountsTable/index.tsx:134
 #: src/components/common/AdminUsersTable/index.tsx:96
 #: src/components/common/AdminUsersTable/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:336
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:370
 msgid "Impersonate"
 msgstr "Podszywaj się"
 
@@ -7892,10 +7967,14 @@ msgstr "Wstaw"
 msgid "Insert Image"
 msgstr "Wstaw obraz"
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:43
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:44
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:52
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:53
 msgid "Insert Liquid Token"
 msgstr "Wstaw token Liquid"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:147
+msgid "Insert personalised tokens from the braces button in the toolbar."
+msgstr "Wstawiaj spersonalizowane tokeny za pomocą przycisku z nawiasami klamrowymi na pasku narzędzi."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:53
 #: src/constants/socialMediaConfig.ts:28
@@ -8051,7 +8130,7 @@ msgid "Job queued for retry"
 msgstr "Zadanie w kolejce do ponowienia"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
-#: src/components/routes/auth/Register/index.tsx:89
+#: src/components/routes/auth/Register/index.tsx:97
 msgid "John"
 msgstr "Jan"
 
@@ -8226,7 +8305,7 @@ msgstr "Nazwisko"
 #: src/components/modals/InviteUserModal/index.tsx:58
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:102
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -8363,7 +8442,7 @@ msgid "Library"
 msgstr "Biblioteka"
 
 #: src/components/common/GlobalMenu/index.tsx:79
-#: src/components/layouts/Admin/index.tsx:29
+#: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
 msgstr "Licencja"
@@ -8379,6 +8458,12 @@ msgstr "ID licencji"
 #: src/ee/licensing/components/LicenceModal/index.tsx:61
 msgid "Licence key not recognised"
 msgstr "Nie rozpoznano klucza licencyjnego"
+
+#: src/components/layouts/Admin/index.tsx:25
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:317
+#: src/components/routes/admin/LifecycleEmails/index.tsx:39
+msgid "Lifecycle Emails"
+msgstr "E-maile cyklu życia"
 
 #: src/components/common/ThemeColorControls/index.tsx:148
 msgid "Light"
@@ -8405,9 +8490,13 @@ msgstr "Link wygasł lub jest nieprawidłowy"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:251
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "Linki dozwolone"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:156
+msgid "Links to: {0}"
+msgstr "Prowadzi do: {0}"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:500
 msgid "List"
@@ -8428,6 +8517,10 @@ msgstr "Na żywo"
 msgid "Live dates starting in the next 7 days, largest first. Expect check-in and page traffic around these."
 msgstr "Aktywne terminy rozpoczynające się w ciągu najbliższych 7 dni, od największych. Spodziewaj się odpraw i ruchu na stronach w ich okolicy."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:25
+msgid "Live event with no sales"
+msgstr "Opublikowane wydarzenie bez sprzedaży"
+
 #: src/components/routes/admin/Dashboard/index.tsx:184
 msgid "live events"
 msgstr "aktywnych wydarzeń"
@@ -8444,6 +8537,10 @@ msgstr "Aktywne wydarzenia są natychmiast wycofywane z publikacji. Konta z zako
 msgid "Live preview"
 msgstr "Podgląd na żywo"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:122
+msgid "Live since {0}"
+msgstr "Aktywne od {0}"
+
 #: src/ee/seating/components/SeatMapDesigner/useSeatMapVersion.ts:26
 msgid "Load latest version"
 msgstr "Wczytaj najnowszą wersję"
@@ -8456,8 +8553,8 @@ msgstr "Wczytane terminy"
 msgid "Loading preview..."
 msgstr "Ładowanie podglądu..."
 
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:26
-#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:27
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
+#: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
 msgstr "Ładowanie tokenów..."
 
@@ -8517,7 +8614,7 @@ msgid "Locations"
 msgstr "Lokalizacje"
 
 #: src/components/routes/auth/Login/index.tsx:204
-#: src/components/routes/auth/Register/index.tsx:76
+#: src/components/routes/auth/Register/index.tsx:84
 msgid "Log in"
 msgstr "Zaloguj się"
 
@@ -8604,7 +8701,7 @@ msgstr "Pytanie obowiązkowe"
 #: src/components/common/OrganizerWebhookTable/index.tsx:96
 #: src/components/common/PromoCodeTable/index.tsx:175
 #: src/components/layouts/OrganizerLayout/index.tsx:108
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:302
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:84
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:241
 msgid "Manage"
@@ -8697,7 +8794,7 @@ msgstr "Dodaj uczestnika ręcznie"
 msgid "Manually Add Attendee"
 msgstr "Dodaj uczestnika ręcznie"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:203
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:205
 msgid "Manually verified"
 msgstr "Zweryfikowane ręcznie"
 
@@ -8717,11 +8814,11 @@ msgstr "Oznacz jako opłacone"
 msgid "Mark as validated (admin override)"
 msgstr "Oznacz jako zweryfikowane (decyzja administratora)"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:239
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
 msgstr "Maks wiadomości / 24h"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:245
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:247
 msgid "Max Recipients / Message"
 msgstr "Maks odbiorców / wiadomość"
 
@@ -8809,7 +8906,7 @@ msgstr "Wiadomość zaplanowana"
 msgid "Message Sent"
 msgstr "Wiadomość wysłana"
 
-#: src/components/layouts/Admin/index.tsx:20
+#: src/components/layouts/Admin/index.tsx:22
 #: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/messages.tsx:225
 msgid "Messages"
@@ -8820,11 +8917,11 @@ msgid "Messages to approve"
 msgstr "Wiadomości do zatwierdzenia"
 
 #: src/components/common/AdminAccountsTable/index.tsx:96
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:218
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:220
 msgid "Messaging Tier"
 msgstr "Poziom wiadomości"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:49
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:51
 msgid "Messaging tier updated successfully"
 msgstr "Poziom wiadomości zaktualizowany pomyślnie"
 
@@ -9178,7 +9275,7 @@ msgstr "Dalej: sprawdź zamówienie"
 msgid "Nightlife"
 msgstr "Życie nocne"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "No"
 msgstr "Nie"
@@ -9397,6 +9494,10 @@ msgstr "Brak zakończonych wydarzeń do wyświetlenia."
 msgid "No Enterprise licence"
 msgstr "Brak licencji Enterprise"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:7
+msgid "No event created"
+msgstr "Brak utworzonego wydarzenia"
+
 #: src/components/routes/admin/Dashboard/index.tsx:289
 msgid "No event page views in this period"
 msgstr "Brak wyświetleń stron wydarzeń w tym okresie"
@@ -9436,6 +9537,10 @@ msgstr "Brak licencji"
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
 msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
 msgstr "Nie ustawiono klucza licencyjnego, więc miejsca rezerwowane i kasa biletowa są wyłączone. Aby je odblokować, ustaw APP_LICENCE_KEY w środowisku backendu i wdróż backend ponownie. W Docker Compose użyj docker compose up -d, ponieważ docker compose restart nie wczytuje ponownie środowiska."
+
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
+msgid "No lifecycle emails have been sent to this account."
+msgstr "Na to konto nie wysłano żadnych e-maili cyklu życia."
 
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:43
 msgid "No limit"
@@ -9889,6 +9994,7 @@ msgstr "każdego miesiąca"
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:114
 msgid "Off"
 msgstr "Wył."
@@ -10416,7 +10522,7 @@ msgid "orders"
 msgstr "zamówienia"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
-#: src/components/layouts/Admin/index.tsx:19
+#: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:132
 #: src/components/modals/ManageOccurrenceModal/index.tsx:178
 #: src/components/routes/admin/Attribution/index.tsx:200
@@ -10508,6 +10614,10 @@ msgstr "Nazwa organizatora"
 msgid "Organizer Not Found"
 msgstr "Organizator nie znaleziony"
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:15
+msgid "Organizer payout settings"
+msgstr "Ustawienia wypłat organizatora"
+
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:62
 msgid "Organizer restored successfully"
 msgstr "Organizator został pomyślnie przywrócony"
@@ -10530,7 +10640,7 @@ msgstr "Status organizatora zaktualizowany"
 msgid "Organizer/default template will be used"
 msgstr "Zostanie użyty szablon organizatora/domyślny"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:264
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 msgid "Organizers"
 msgstr "Organizatorzy"
 
@@ -10676,7 +10786,7 @@ msgstr "Przekaż kupującemu"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:127
 #: src/components/routes/auth/Login/index.tsx:193
-#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/auth/Register/index.tsx:118
 #: src/components/routes/profile/ManageProfile/index.tsx:130
 msgid "Password"
 msgstr "Hasło"
@@ -10685,7 +10795,7 @@ msgstr "Hasło"
 msgid "Password must be a minimum  of 8 characters"
 msgstr "Hasło musi mieć minimum 8 znaków"
 
-#: src/components/routes/auth/Register/index.tsx:36
+#: src/components/routes/auth/Register/index.tsx:37
 msgid "Password must be at least 8 characters"
 msgstr "Hasło musi mieć co najmniej 8 znaków"
 
@@ -10694,7 +10804,7 @@ msgid "Password reset successfully. Please login with your new password."
 msgstr "Hasło zostało pomyślnie zresetowane. Zaloguj się nowym hasłem."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:32
-#: src/components/routes/auth/Register/index.tsx:37
+#: src/components/routes/auth/Register/index.tsx:38
 msgid "Passwords are not the same"
 msgstr "Hasła nie są takie same"
 
@@ -11046,7 +11156,7 @@ msgid "Please check your email and password and try again"
 msgstr "Sprawdź swój email i hasło i spróbuj ponownie"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:33
-#: src/components/routes/auth/Register/index.tsx:38
+#: src/components/routes/auth/Register/index.tsx:39
 msgid "Please check your email is valid"
 msgstr "Sprawdź, czy Twój email jest prawidłowy"
 
@@ -11222,6 +11332,10 @@ msgstr "Podgląd formularza płatności"
 #: src/components/layouts/Event/index.tsx:295
 msgid "Preview Event page"
 msgstr "Podgląd strony wydarzenia"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:165
+msgid "Preview with sample data"
+msgstr "Podgląd z przykładowymi danymi"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:421
 msgid "Previous month"
@@ -11710,7 +11824,7 @@ msgid "Reasons"
 msgstr "Powody"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
-#: src/components/routes/auth/Register/index.tsx:131
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/profile/ManageProfile/index.tsx:223
 msgid "Receive product updates from {0}."
 msgstr "Otrzymuj aktualizacje produktów od {0}."
@@ -11914,7 +12028,7 @@ msgstr "Zwroty"
 msgid "Regional Settings"
 msgstr "Ustawienia regionalne"
 
-#: src/components/routes/auth/Register/index.tsx:135
+#: src/components/routes/auth/Register/index.tsx:145
 msgid "Register"
 msgstr "Zarejestruj się"
 
@@ -12536,6 +12650,7 @@ msgstr "Sobota"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:118
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:311
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -13058,7 +13173,7 @@ msgstr "Wybierz kategorię"
 msgid "Select a message to view its contents"
 msgstr "Wybierz wiadomość, aby zobaczyć jej treść"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:232
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:234
 msgid "Select a tier"
 msgstr "Wybierz poziom"
 
@@ -13158,7 +13273,7 @@ msgstr "Wybierz czas rozpoczęcia"
 msgid "Select status"
 msgstr "Wybierz status"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:228
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:230
 msgid "Select the messaging tier for this account. This controls message limits and link permissions."
 msgstr "Wybierz poziom wiadomości dla tego konta. To kontroluje limity wiadomości i uprawnienia do łączy."
 
@@ -13325,6 +13440,10 @@ msgstr "Wyślij link resetowania"
 msgid "Send Test"
 msgstr "Wyślij test"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:205
+msgid "Send test to me"
+msgstr "Wyślij test do mnie"
+
 #: src/components/modals/SendMessageModal/index.tsx:360
 msgid "Send to all occurrences, or choose a specific one"
 msgstr "Wyślij do wszystkich terminów albo wybierz konkretny"
@@ -13332,6 +13451,14 @@ msgstr "Wyślij do wszystkich terminów albo wybierz konkretny"
 #: src/components/routes/event/messages.tsx:335
 msgid "Send your first message"
 msgstr "Wyślij swoją pierwszą wiadomość"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:131
+msgid "Sending"
+msgstr "Wysyłanie"
+
+#: src/components/routes/admin/LifecycleEmails/index.tsx:47
+msgid "Sending is off because no lifecycle mailer is configured. You can still edit and preview templates."
+msgstr "Wysyłanie jest wyłączone, ponieważ nie skonfigurowano nadawcy e-maili cyklu życia. Nadal możesz edytować szablony i wyświetlać ich podgląd."
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:171
 msgid "Sending to reader…"
@@ -13788,7 +13915,7 @@ msgid "Slovak"
 msgstr "Słowacki"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:103
-#: src/components/routes/auth/Register/index.tsx:95
+#: src/components/routes/auth/Register/index.tsx:103
 msgid "Smith"
 msgstr "Smith"
 
@@ -14230,6 +14357,10 @@ msgstr "Nadal czekasz? Sprawdź ekran czytnika. Jeśli nic nie pokazuje, anuluj 
 msgid "Stop Impersonating"
 msgstr "Zatrzymaj personifikację"
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:44
+msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
+msgstr "Przestań otrzymywać e-maile, które pomagają w konfiguracji i prowadzeniu wydarzeń. E-maile dotyczące zamówień i konta nadal będą wysyłane."
+
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:52
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:55
 msgid "Stop trusting this device"
@@ -14285,6 +14416,10 @@ msgstr "Identyfikator płatności Stripe"
 msgid "Stripe payments are not enabled for this event."
 msgstr "Płatności Stripe nie są włączone dla tego wydarzenia."
 
+#: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:13
+msgid "Stripe setup not finished"
+msgstr "Konfiguracja Stripe niedokończona"
+
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:95
 msgid "Stripe Terminal reader"
 msgstr "Czytnik Stripe Terminal"
@@ -14303,12 +14438,15 @@ msgstr "Studio"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:131
 #: src/components/modals/SendMessageModal/index.tsx:440
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:141
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:174
 #: src/components/routes/admin/Messages/index.tsx:162
 #: src/components/routes/admin/Messages/index.tsx:273
 msgid "Subject"
 msgstr "Temat"
 
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:46
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:55
 msgid "Subject is required"
 msgstr "Temat jest wymagany"
 
@@ -14713,6 +14851,10 @@ msgstr "Fraza"
 msgid "Terms of Service"
 msgstr "Warunki korzystania z usługi"
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
+msgid "Test email sent to your inbox"
+msgstr "Testowy e-mail wysłano na Twoją skrzynkę"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Text"
 msgstr "Tekst"
@@ -14747,7 +14889,7 @@ msgstr "To już koniec"
 msgid "The \"Powered by Hi.Events\" notice is shown again until you renew."
 msgstr "Informacja „Powered by Hi.Events” jest znowu wyświetlana do czasu odnowienia licencji."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:356
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:390
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Konto ma zakończone zamówienia, więc zostanie zanonimizowane."
 
@@ -14755,7 +14897,7 @@ msgstr "Konto ma zakończone zamówienia, więc zostanie zanonimizowane."
 msgid "The account will be deleted as soon as the queue picks up the job."
 msgstr "Konto zostanie usunięte, gdy tylko kolejka przejmie zadanie."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:357
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:391
 msgid "The account will be permanently deleted."
 msgstr "Konto zostanie trwale usunięte."
 
@@ -14876,6 +15018,10 @@ msgstr "Strona, której szukasz, nie istnieje"
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
 msgstr "Opłata platformy jest dodawana do ceny biletu. Kupujący płacą więcej, ale Ty otrzymujesz pełną cenę biletu."
 
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:35
+msgid "The preview could not be rendered"
+msgstr "Nie udało się wyrenderować podglądu"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:57
 msgid "The price displayed to the customer will include taxes and fees."
 msgstr "Cena wyświetlana klientowi będzie zawierać podatki i opłaty."
@@ -14934,6 +15080,10 @@ msgstr "Nie udało się zaktualizować mapy miejsc"
 msgid "The seats could not be updated"
 msgstr "Nie udało się zaktualizować miejsc"
 
+#: src/components/common/Turnstile/index.tsx:107
+msgid "The security check could not load. Turn off content or ad blockers for this page, or try another browser."
+msgstr "Nie udało się załadować weryfikacji bezpieczeństwa. Wyłącz blokery treści lub reklam dla tej strony albo spróbuj innej przeglądarki."
+
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:52
 msgid "The session for \"{title}\" originally scheduled for {0} has been rescheduled."
 msgstr "Sesja wydarzenia „{title}”, pierwotnie zaplanowana na {0}, została przełożona."
@@ -14959,6 +15109,10 @@ msgstr "Strefa czasowa używana dla dat i godzin tego wydarzenia."
 #: src/components/routes/organizer/Settings/Sections/SeoSettings/index.tsx:63
 msgid "The title of the event that will be displayed in search engine results and when sharing on social media. By default, the event title will be used"
 msgstr "Tytuł wydarzenia, który będzie wyświetlany w wynikach wyszukiwarki i podczas udostępniania w mediach społecznościowych. Domyślnie zostanie użyty tytuł wydarzenia"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:33
+msgid "The unsubscribe link may be incomplete. Try opening it again from the email."
+msgstr "Link do wypisania może być niekompletny. Spróbuj otworzyć go ponownie z wiadomości e-mail."
 
 #: src/utilites/imageUploadValidation.ts:26
 msgid "The upload didn't reach the server. Check your connection, and if the file is large, try a smaller image (max 5MB)."
@@ -15296,6 +15450,10 @@ msgstr "Ten link jest nieprawidłowy lub wygasł."
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:27
 msgid "This link is no longer valid"
 msgstr "Ten link nie jest już ważny"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:31
+msgid "This link isn't valid"
+msgstr "Ten link jest nieprawidłowy"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:69
 msgid "This message will be included in the footer of all emails sent from this event"
@@ -15677,7 +15835,7 @@ msgstr "Liczba użyć"
 #: src/components/modals/CreateEventModal/index.tsx:425
 #: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:82
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:159
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
@@ -15929,6 +16087,10 @@ msgstr "Wyłącz dźwięk"
 #: src/components/layouts/CheckIn/tabs/ScanTab.tsx:94
 msgid "Turn sound on"
 msgstr "Włącz dźwięk"
+
+#: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:91
+msgid "Turn this email on? Organizers who match the trigger from now on will start receiving it."
+msgstr "Włączyć ten e-mail? Organizatorzy spełniający warunek wyzwalacza od teraz zaczną go otrzymywać."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:79
 #: src/constants/socialMediaConfig.ts:36
@@ -16209,13 +16371,21 @@ msgstr "Nieopłacony"
 msgid "Unpaid Order"
 msgstr "Nieopłacone zamówienie"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:379
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:413
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "Wycofaj z publikacji wszystkie wydarzenia oraz usuń lub zanonimizuj to konto i jego użytkowników."
 
 #: src/components/common/DesignerShell/index.tsx:74
 msgid "Unsaved changes"
 msgstr "Niezapisane zmiany"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:52
+msgid "Unsubscribe"
+msgstr "Wypisz się"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:42
+msgid "Unsubscribe from tips and reminders"
+msgstr "Wypisz się z porad i przypomnień"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1076
 msgid "until"
@@ -16241,7 +16411,7 @@ msgstr "Bilet bez nazwy"
 msgid "Untrusted"
 msgstr "Niezaufane"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 msgid "Unverified"
 msgstr "Niezweryfikowane"
 
@@ -16487,10 +16657,10 @@ msgstr "użytkowników"
 
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
-#: src/components/layouts/Admin/index.tsx:17
+#: src/components/layouts/Admin/index.tsx:19
 #: src/components/routes/account/ManageAccount/index.tsx:30
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:185
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:315
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
 msgid "Users"
 msgstr "Użytkownicy"
@@ -16514,7 +16684,7 @@ msgstr "Używasz ich na prawdziwych wydarzeniach? Uzyskaj licencję Enterprise i
 msgid "UTC"
 msgstr "UTC"
 
-#: src/components/layouts/Admin/index.tsx:23
+#: src/components/layouts/Admin/index.tsx:26
 msgid "UTM Analytics"
 msgstr "Analityka UTM"
 
@@ -16606,11 +16776,11 @@ msgstr "Traktowanie VAT dla opłat platformy: firmy zarejestrowane jako podatnic
 msgid "VAT validation service temporarily unavailable"
 msgstr "Usługa walidacji VAT tymczasowo niedostępna"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:287
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
 msgstr "VAT: {0}"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:292
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:294
 msgid "VAT: not registered"
 msgstr "VAT: niezarejestrowany"
 
@@ -16619,7 +16789,7 @@ msgstr "VAT: niezarejestrowany"
 msgid "Venue Name"
 msgstr "Nazwa obiektu"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:196
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
 msgid "Verification"
 msgstr "Weryfikacja"
 
@@ -16631,13 +16801,13 @@ msgstr "Kod weryfikacyjny"
 msgid "Verification email sent. Check your inbox."
 msgstr "E-mail weryfikacyjny wysłany. Sprawdź skrzynkę odbiorczą."
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:198
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
 msgid "Verified"
 msgstr "Zweryfikowany"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:204
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:206
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Zweryfikowane konta mogą wysyłać wiadomości do uczestników i zarządzać szablonami e-mail. Połączenie ze Stripe automatycznie weryfikuje konto."
 
@@ -17368,7 +17538,7 @@ msgstr "W toku"
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
 #: src/components/modals/EditQuestionModal/index.tsx:101
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:135
+#: src/components/routes/auth/Register/index.tsx:145
 msgid "Working..."
 msgstr "W toku..."
 
@@ -17408,7 +17578,7 @@ msgstr "Rocznie"
 msgid "years"
 msgstr "lata"
 
-#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
+#: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 msgid "Yes"
 msgstr "Tak"
@@ -17596,6 +17766,10 @@ msgstr "Użyto kodu odzyskiwania. Pozostał 1 kod odzyskiwania."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Będziesz musiał ręcznie oznaczyć zamówienie jako opłacone. Można to zrobić na stronie zarządzania zamówieniem."
 
+#: src/components/routes/emails/Unsubscribe/index.tsx:21
+msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
+msgstr "Nie będziesz już otrzymywać tych e-maili. E-maile dotyczące zamówień i konta nadal będą wysyłane."
+
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
 msgstr "Zanim utworzysz listę weryfikacyjną, musisz dodać przynajmniej jeden bilet."
@@ -17639,6 +17813,10 @@ msgstr "Kończą Ci się kody. Wygeneruj nowy zestaw, aby nie zostać zablokowan
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:22
 msgid "You're signed in"
 msgstr "Jesteś zalogowany(-a)"
+
+#: src/components/routes/emails/Unsubscribe/index.tsx:19
+msgid "You're unsubscribed"
+msgstr "Wypisano Cię"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
@@ -17794,7 +17972,7 @@ msgid "Your organizer address"
 msgstr "Adres organizatora"
 
 #: src/components/routes/auth/Login/index.tsx:200
-#: src/components/routes/auth/Register/index.tsx:111
+#: src/components/routes/auth/Register/index.tsx:119
 msgid "Your password"
 msgstr "Twoje hasło"
 

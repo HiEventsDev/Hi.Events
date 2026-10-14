@@ -29,7 +29,7 @@ class ImageStorageService
                 replace: '',
                 subject: $image->getClientOriginalName()
             )
-        ).'-'.Str::random(5).'.'.$image->getClientOriginalExtension();
+        ).'-'.Str::random(5).'.'.($image->guessExtension() ?? 'jpg');
 
         $disk = $this->config->get('filesystems.public');
 

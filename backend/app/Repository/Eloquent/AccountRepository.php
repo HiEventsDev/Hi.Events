@@ -71,6 +71,7 @@ class AccountRepository extends BaseRepository implements AccountRepositoryInter
             ->with([
                 'messagingTier',
                 'active_deletion_request',
+                'lifecycleNudges',
                 'organizers.organizer_configuration',
                 'organizers.organizer_vat_setting',
                 'users' => function ($query) {

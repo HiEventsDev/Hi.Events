@@ -20,6 +20,7 @@ use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
 use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
+use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -44,6 +45,7 @@ use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\FeatureFlagRepository;
 use HiEvents\Repository\Eloquent\ImageRepository;
 use HiEvents\Repository\Eloquent\InvoiceRepository;
+use HiEvents\Repository\Eloquent\LifecycleEmailTemplateRepository;
 use HiEvents\Repository\Eloquent\LocationRepository;
 use HiEvents\Repository\Eloquent\MessageRepository;
 use HiEvents\Repository\Eloquent\OrderApplicationFeeRepository;
@@ -72,6 +74,7 @@ use HiEvents\Repository\Eloquent\QuestionRepository;
 use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
 use HiEvents\Repository\Eloquent\StripePayoutsRepository;
+use HiEvents\Repository\Eloquent\SuspiciousActivityRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketLookupTokenRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
@@ -83,6 +86,7 @@ use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -107,6 +111,7 @@ use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\FeatureFlagRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\InvoiceRepositoryInterface;
+use HiEvents\Repository\Interfaces\LifecycleEmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\LocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderApplicationFeeRepositoryInterface;
@@ -135,6 +140,7 @@ use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
+use HiEvents\Repository\Interfaces\SuspiciousActivityRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
@@ -155,6 +161,8 @@ class RepositoryServiceProvider extends ServiceProvider
         AccountRepositoryInterface::class => AccountRepository::class,
         FeatureFlagRepositoryInterface::class => FeatureFlagRepository::class,
         AccountFeatureFlagOverrideRepositoryInterface::class => AccountFeatureFlagOverrideRepository::class,
+        LifecycleEmailTemplateRepositoryInterface::class => LifecycleEmailTemplateRepository::class,
+        AccountLifecycleNudgeRepositoryInterface::class => AccountLifecycleNudgeRepository::class,
         AccountAttributionRepositoryInterface::class => AccountAttributionRepository::class,
         AccountDeletionRequestRepositoryInterface::class => AccountDeletionRequestRepository::class,
         EventRepositoryInterface::class => EventRepository::class,
@@ -198,6 +206,7 @@ class RepositoryServiceProvider extends ServiceProvider
         QuestionAndAnswerViewRepositoryInterface::class => QuestionAndAnswerViewRepository::class,
         OutgoingMessageRepositoryInterface::class => OutgoingMessageRepository::class,
         EmailDeliveryRepositoryInterface::class => EmailDeliveryRepository::class,
+        SuspiciousActivityRepositoryInterface::class => SuspiciousActivityRepository::class,
         OrganizerSettingsRepositoryInterface::class => OrganizerSettingsRepository::class,
         EmailTemplateRepositoryInterface::class => EmailTemplateRepository::class,
         OrganizerStripePlatformRepositoryInterface::class => OrganizerStripePlatformRepository::class,

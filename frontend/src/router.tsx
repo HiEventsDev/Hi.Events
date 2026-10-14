@@ -262,6 +262,13 @@ export const router: RouteObject[] = [
                     const Announcements = await import("./components/routes/admin/Announcements");
                     return { Component: Announcements.default };
                 }
+            },
+            {
+                path: "lifecycle-emails",
+                async lazy() {
+                    const LifecycleEmails = await import("./components/routes/admin/LifecycleEmails");
+                    return { Component: LifecycleEmails.default };
+                }
             }
         ]
     },
@@ -759,6 +766,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const BoxOffice = await import("./ee/box-office/components/layouts/BoxOffice");
             return { Component: BoxOffice.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/emails/unsubscribe/:token",
+        async lazy() {
+            const Unsubscribe = await import("./components/routes/emails/Unsubscribe");
+            return { Component: Unsubscribe.default };
         },
         errorElement: <ErrorPage />,
     },

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Jobs\Event;
 
+use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventSpamCheckStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Mail\Admin\EventFlaggedAsSpamMail;
@@ -80,10 +81,26 @@ class EventSpamCheckJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
             return;
         }
 
+        $wasApprovedByAdmin = $eventSpamCheckRepository->findFirstWhere([
+            'event_id' => $this->eventId,
+            'status' => EventSpamCheckStatus::APPROVED->name,
+        ]) !== null;
+
+        if ($wasApprovedByAdmin && $existingCheck !== null) {
+            return;
+        }
+
         $result = $eventSpamCheckService->checkContent($content);
 
         if (! $result->isSpam) {
             $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::CLEAN, $contentHash);
+
+            return;
+        }
+
+        if ($wasApprovedByAdmin) {
+            $this->storeCheck($eventSpamCheckRepository, $result, EventSpamCheckStatus::FLAGGED, $contentHash);
+            $this->notifySupport($mailer, $config, $accountRepository, $event, $result, eventStillLive: true);
 
             return;
         }
@@ -118,16 +135,30 @@ class EventSpamCheckJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
                 $mailer->to($organizerEmail)->send(new EventPendingManualReviewMail($event));
             }
 
-            $supportEmail = $config->get('app.platform_support_email');
-
-            if ($supportEmail) {
-                $account = $accountRepository->findByEventId($event->getId());
-
-                $mailer->to($supportEmail)->send(
-                    new EventFlaggedAsSpamMail($event, $account, $result->toVerdictArray())
-                );
-            }
+            $this->notifySupport($mailer, $config, $accountRepository, $event, $result, eventStillLive: false);
         });
+    }
+
+    private function notifySupport(
+        Mailer $mailer,
+        Repository $config,
+        AccountRepositoryInterface $accountRepository,
+        EventDomainObject $event,
+        EventSpamCheckResultDTO $result,
+        bool $eventStillLive,
+    ): void {
+        $supportEmail = $config->get('app.platform_support_email');
+
+        if (! $supportEmail) {
+            return;
+        }
+
+        $mailer->to($supportEmail)->send(new EventFlaggedAsSpamMail(
+            event: $event,
+            account: $accountRepository->findByEventId($event->getId()),
+            verdict: $result->toVerdictArray(),
+            eventStillLive: $eventStillLive,
+        ));
     }
 
     public function failed(Throwable $exception): void

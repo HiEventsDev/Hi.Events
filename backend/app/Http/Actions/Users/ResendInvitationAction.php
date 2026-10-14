@@ -4,6 +4,7 @@ namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\User\SendUserInvitationService;
@@ -32,7 +33,11 @@ class ResendInvitationAction extends BaseAction
             return $this->errorResponse(__('User status is not Invited'));
         }
 
-        $this->invitationService->sendInvitation($user, $this->getAuthenticatedAccountId());
+        try {
+            $this->invitationService->sendInvitation($user, $this->getAuthenticatedAccountId());
+        } catch (AccountNotVerifiedException $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_FORBIDDEN);
+        }
 
         return $this->noContentResponse();
     }

@@ -17,6 +17,7 @@ class EventFlaggedAsSpamMail extends BaseMail
         private readonly EventDomainObject $event,
         private readonly AccountDomainObject $account,
         private readonly array $verdict,
+        private readonly bool $eventStillLive = false,
     ) {
         parent::__construct();
     }
@@ -38,6 +39,7 @@ class EventFlaggedAsSpamMail extends BaseMail
                 'event' => $this->event,
                 'account' => $this->account,
                 'verdict' => $this->verdict,
+                'eventStillLive' => $this->eventStillLive,
                 'reviewUrl' => config('app.frontend_url').'/admin/spam-events',
             ]
         );

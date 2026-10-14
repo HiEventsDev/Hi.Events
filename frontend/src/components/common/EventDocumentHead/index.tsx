@@ -124,7 +124,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             {image && <meta name="twitter:image" content={image}/>}
             <meta name="twitter:card" content="summary_large_image"/>
 
-            <meta name="robots" content="index, follow"/>
+            <meta name="robots" content={eventSettings?.allow_search_engine_indexing === false ? "noindex, nofollow" : "index, follow"}/>
 
             <link rel="canonical" href={url}/>
 

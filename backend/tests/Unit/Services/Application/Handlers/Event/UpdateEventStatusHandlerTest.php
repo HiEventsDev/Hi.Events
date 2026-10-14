@@ -51,7 +51,7 @@ class UpdateEventStatusHandlerTest extends TestCase
             $this->accountRepository,
             new NullLogger,
             $databaseManager,
-            new EventSpamCheckDispatchService($this->eventSpamCheckService),
+            new EventSpamCheckDispatchService($this->eventSpamCheckService, Mockery::mock(EventRepositoryInterface::class)),
         );
 
         $this->accountRepository
