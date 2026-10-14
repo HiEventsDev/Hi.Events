@@ -1,7 +1,7 @@
-import {api} from './client.ts';
+import {publicApi} from './public-client.ts';
 
 export const lifecycleEmailClient = {
     unsubscribe: async (token: string) => {
-        await api.post(`public/lifecycle-emails/unsubscribe/${token}`);
+        await publicApi.post(`lifecycle-emails/unsubscribe/${token}`);
     },
 }
