@@ -36,6 +36,8 @@ class AccountDeletionExecutionTest extends TestCase
 
     private Event $event;
 
+    private Event $otherEvent;
+
     private Order $order;
 
     private Attendee $attendee;
@@ -119,6 +121,39 @@ class AccountDeletionExecutionTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $this->sharedUser->id]);
         $this->assertDatabaseHas('accounts', ['id' => $this->otherAccount->id]);
         $this->assertDatabaseCount('question_answers', 1);
+    }
+
+    public function test_hard_deletion_removes_spam_checks_and_releases_reviewer(): void
+    {
+        $doomedCheckId = $this->seedSpamCheck($this->event->id, $this->soleUser->id);
+        $survivingCheckId = $this->seedSpamCheck($this->otherEvent->id, $this->soleUser->id);
+
+        $manifest = $this->app->make(AccountHardDeletionService::class)
+            ->deleteAccount($this->account->id);
+
+        $this->assertSame(1, $manifest['event_spam_checks']);
+        $this->assertDatabaseMissing('event_spam_checks', ['id' => $doomedCheckId]);
+        $this->assertDatabaseMissing('events', ['id' => $this->event->id]);
+        $this->assertDatabaseMissing('users', ['id' => $this->soleUser->id]);
+        $this->assertDatabaseHas('event_spam_checks', [
+            'id' => $survivingCheckId,
+            'event_id' => $this->otherEvent->id,
+            'reviewed_by_user_id' => null,
+        ]);
+    }
+
+    private function seedSpamCheck(int $eventId, int $reviewedByUserId): int
+    {
+        return DB::table('event_spam_checks')->insertGetId([
+            'event_id' => $eventId,
+            'status' => 'CONFIRMED_SPAM',
+            'content_hash' => str_repeat('a', 64),
+            'checked_at' => now(),
+            'reviewed_by_user_id' => $reviewedByUserId,
+            'reviewed_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function seedAccountGraph(): void
@@ -253,7 +288,7 @@ class AccountDeletionExecutionTest extends TestCase
             'status' => 'LIVE',
         ]);
 
-        $otherEvent = $this->seedEvent('Surviving Event', $this->otherAccount->id, $otherOrganizer->id, $this->sharedUser->id, 'evt_survivor');
+        $this->otherEvent = $otherEvent = $this->seedEvent('Surviving Event', $this->otherAccount->id, $otherOrganizer->id, $this->sharedUser->id, 'evt_survivor');
 
         $otherQuestion = Question::forceCreate([
             'event_id' => $otherEvent->id,

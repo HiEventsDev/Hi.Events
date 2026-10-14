@@ -110,6 +110,10 @@ class AccountHardDeletionService
                 ->whereIn('event_id', $context->eventIds)
                 ->delete();
 
+            $manifest['event_spam_checks'] = $connection->table('event_spam_checks')
+                ->whereIn('event_id', $context->eventIds)
+                ->delete();
+
             foreach ([
                 'event_statistics',
                 'event_daily_statistics',
@@ -165,6 +169,10 @@ class AccountHardDeletionService
             $manifest['event_logs'] = $connection->table('event_logs')
                 ->whereIn('user_id', $context->soleUserIds)
                 ->delete();
+
+            $manifest['event_spam_check_reviewers'] = $connection->table('event_spam_checks')
+                ->whereIn('reviewed_by_user_id', $context->soleUserIds)
+                ->update(['reviewed_by_user_id' => null]);
         }
 
         $manifest['accounts'] = $connection->table('accounts')

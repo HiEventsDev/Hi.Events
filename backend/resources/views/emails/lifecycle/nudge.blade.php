@@ -10,7 +10,7 @@
     {{ $ctaLabel }}
 </x-mail::button>
 
-<x-mail::subcopy>
+<x-slot:subcopy>
 {{ __('You are receiving this because you have a :app_name organizer account.', ['app_name' => config('app.name')]) }} [{{ __('Unsubscribe') }}]({{ $unsubscribeUrl }})
-</x-mail::subcopy>
+</x-slot:subcopy>
 </x-mail::message>
