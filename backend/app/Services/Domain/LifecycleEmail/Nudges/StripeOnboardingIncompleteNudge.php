@@ -59,10 +59,9 @@ class StripeOnboardingIncompleteNudge implements LifecycleNudgeInterface
             subject: 'Connect Stripe to start selling paid tickets',
             body: <<<'HTML'
 <p>Hi {{ first_name }},</p>
-<p><strong>{{ organizer.name }}</strong> has paid tickets, but Stripe isn't connected yet. Until it is, people can't pay by card and you can't receive payouts.</p>
-<p>Connecting takes about five minutes. Stripe will ask for your business details and a bank account for payouts. If you already started, you'll pick up where you left off.</p>
-<p>If something got in the way, just reply to this email and we'll help.</p>
-<p>The Hi.Events team</p>
+<p>{{ organizer.name }} has paid tickets, but Stripe isn't connected yet, so people can't pay by card and you can't receive payouts.</p>
+<p>It takes about five minutes. Stripe asks for your business details and a bank account for payouts, and if you already started you'll pick up where you left off.</p>
+<p>If something got in the way, reply to this email and I'll help.</p>
 HTML,
             ctaLabel: 'Connect Stripe',
         );

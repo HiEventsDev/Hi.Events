@@ -57,10 +57,9 @@ class EventDraftStaleNudge implements LifecycleNudgeInterface
             subject: '{{ event.title }} is waiting to be published',
             body: <<<'HTML'
 <p>Hi {{ first_name }},</p>
-<p><strong>{{ event.title }}</strong> is still a draft, so nobody can buy tickets yet.</p>
-<p>When you're ready, open your event dashboard to check your tickets and event page, then publish it to start selling.</p>
-<p>Stuck on something? Reply to this email and we'll help you get it live.</p>
-<p>The Hi.Events team</p>
+<p>I noticed {{ event.title }} is still a draft, so nobody can buy tickets yet.</p>
+<p>When you're ready, check your tickets and event page, then publish it to start selling.</p>
+<p>If something's holding you back, reply to this email and I'll help you get it live.</p>
 HTML,
             ctaLabel: 'Open your event',
         );
