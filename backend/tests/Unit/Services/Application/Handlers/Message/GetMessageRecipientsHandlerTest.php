@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Application\Handlers\Message;
 use HiEvents\DomainObjects\MessageDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\DTO\QueryParamsDTO;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\MessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\GetMessageRecipientsHandler;
@@ -47,6 +48,11 @@ class GetMessageRecipientsHandlerTest extends TestCase
 
         $paginator = new LengthAwarePaginator([], 0, 100);
         $this->outgoingMessageRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->with(m::on(fn (Relationship $relationship) => $relationship->getName() === 'email_delivery'))
+            ->andReturnSelf();
+        $this->outgoingMessageRepository
             ->shouldReceive('paginateWhere')
             ->once()
             ->with(['event_id' => $eventId, 'message_id' => $messageId], 100)
@@ -71,6 +77,11 @@ class GetMessageRecipientsHandlerTest extends TestCase
             ->andReturn($message);
 
         $paginator = new LengthAwarePaginator([], 0, 25);
+        $this->outgoingMessageRepository
+            ->shouldReceive('loadRelation')
+            ->once()
+            ->with(m::on(fn (Relationship $relationship) => $relationship->getName() === 'email_delivery'))
+            ->andReturnSelf();
         $this->outgoingMessageRepository
             ->shouldReceive('paginateWhere')
             ->once()

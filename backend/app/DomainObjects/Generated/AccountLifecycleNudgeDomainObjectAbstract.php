@@ -25,6 +25,8 @@ abstract class AccountLifecycleNudgeDomainObjectAbstract extends AbstractDomainO
 
     final public const UPDATED_AT = 'updated_at';
 
+    final public const PROVIDER_MESSAGE_ID = 'provider_message_id';
+
     protected int $id;
 
     protected int $account_id;
@@ -37,6 +39,8 @@ abstract class AccountLifecycleNudgeDomainObjectAbstract extends AbstractDomainO
 
     protected ?string $updated_at = null;
 
+    protected ?string $provider_message_id = null;
+
     public function toArray(): array
     {
         return [
@@ -46,6 +50,7 @@ abstract class AccountLifecycleNudgeDomainObjectAbstract extends AbstractDomainO
             'event_id' => $this->event_id ?? null,
             'created_at' => $this->created_at ?? null,
             'updated_at' => $this->updated_at ?? null,
+            'provider_message_id' => $this->provider_message_id ?? null,
         ];
     }
 
@@ -119,5 +124,17 @@ abstract class AccountLifecycleNudgeDomainObjectAbstract extends AbstractDomainO
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setProviderMessageId(?string $provider_message_id): self
+    {
+        $this->provider_message_id = $provider_message_id;
+
+        return $this;
+    }
+
+    public function getProviderMessageId(): ?string
+    {
+        return $this->provider_message_id;
     }
 }

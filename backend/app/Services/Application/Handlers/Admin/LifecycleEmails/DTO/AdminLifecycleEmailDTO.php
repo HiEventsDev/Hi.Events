@@ -13,6 +13,10 @@ class AdminLifecycleEmailDTO extends BaseDataObject
         public LifecycleEmailTemplateDTO $template,
         public int $sentTotal,
         public int $sentLastThirtyDays,
+        public int $delivered,
+        public int $bounced,
+        public int $opened,
+        public int $clicked,
         public array $tokens,
     ) {}
 }

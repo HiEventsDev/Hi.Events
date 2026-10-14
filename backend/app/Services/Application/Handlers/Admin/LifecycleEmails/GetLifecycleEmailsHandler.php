@@ -39,6 +39,10 @@ class GetLifecycleEmailsHandler
             template: $template,
             sentTotal: $counts?->total ?? 0,
             sentLastThirtyDays: $counts?->lastThirtyDays ?? 0,
+            delivered: $counts?->delivered ?? 0,
+            bounced: $counts?->bounced ?? 0,
+            opened: $counts?->opened ?? 0,
+            clicked: $counts?->clicked ?? 0,
             tokens: $this->nudgeRegistry->for($template->nudgeType)->tokens(),
         );
     }

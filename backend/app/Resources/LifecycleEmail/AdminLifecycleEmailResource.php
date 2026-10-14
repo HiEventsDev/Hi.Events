@@ -25,6 +25,10 @@ class AdminLifecycleEmailResource extends BaseResource
             'is_customised' => $this->template->isCustomised,
             'sent_total' => $this->sentTotal,
             'sent_last_30_days' => $this->sentLastThirtyDays,
+            'delivered_total' => $this->delivered,
+            'bounced_total' => $this->bounced,
+            'opened_total' => $this->opened,
+            'clicked_total' => $this->clicked,
             'tokens' => $this->tokens,
         ];
     }

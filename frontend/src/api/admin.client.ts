@@ -136,6 +136,10 @@ export interface AdminLifecycleEmail extends LifecycleEmailContent {
     is_customised: boolean;
     sent_total: number;
     sent_last_30_days: number;
+    delivered_total: number;
+    bounced_total: number;
+    opened_total: number;
+    clicked_total: number;
     tokens: EmailTemplateToken[];
 }
 
