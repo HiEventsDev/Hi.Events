@@ -12,6 +12,7 @@ class AccountLifecycleNudge extends BaseModel
             'account_id',
             'nudge_type',
             'event_id',
+            'provider_message_id',
         ];
     }
 }

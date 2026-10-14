@@ -61,6 +61,8 @@ interface AccountLifecycleNudgeRepositoryInterface extends RepositoryInterface
 
     public function release(int $accountId, LifecycleNudgeType $nudgeType): void;
 
+    public function recordProviderMessageId(int $accountId, LifecycleNudgeType $nudgeType, string $providerMessageId): void;
+
     /**
      * @return array<string, LifecycleNudgeSendCountsDTO>
      */

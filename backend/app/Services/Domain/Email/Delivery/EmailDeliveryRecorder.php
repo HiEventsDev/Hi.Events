@@ -9,15 +9,13 @@ use HiEvents\Repository\Interfaces\EmailDeliveryRepositoryInterface;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mime\Message;
 use Throwable;
 
 class EmailDeliveryRecorder
 {
-    private const SES_MESSAGE_ID_HEADER = 'X-Message-ID';
-
     public function __construct(
         private readonly EmailDeliveryRepositoryInterface $emailDeliveryRepository,
+        private readonly EmailProviderMessageIdResolver $providerMessageIdResolver,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -26,7 +24,7 @@ class EmailDeliveryRecorder
         try {
             $this->emailDeliveryRepository->create([
                 EmailDeliveryDomainObjectAbstract::CATEGORY => $this->category($mailableClass),
-                EmailDeliveryDomainObjectAbstract::PROVIDER_MESSAGE_ID => $this->providerMessageId($sentMessage),
+                EmailDeliveryDomainObjectAbstract::PROVIDER_MESSAGE_ID => $this->providerMessageIdResolver->resolve($sentMessage),
             ]);
         } catch (Throwable $e) {
             $this->logger->error('Failed to record an outgoing email delivery', [
@@ -44,20 +42,5 @@ class EmailDeliveryRecorder
         }
 
         return Str::snake((string) preg_replace('/(Mail|Email)$/', '', class_basename($mailableClass)));
-    }
-
-    private function providerMessageId(SentMessage $sentMessage): string
-    {
-        $originalMessage = $sentMessage->getOriginalMessage();
-
-        if ($originalMessage instanceof Message) {
-            $sesMessageId = $originalMessage->getHeaders()->get(self::SES_MESSAGE_ID_HEADER)?->getBodyAsString();
-
-            if ($sesMessageId !== null && $sesMessageId !== '') {
-                return $sesMessageId;
-            }
-        }
-
-        return $sentMessage->getMessageId();
     }
 }

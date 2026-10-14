@@ -79,6 +79,11 @@ const LifecycleEmails = () => {
                                             <Text size="xs" c="dimmed">
                                                 {t`${email.sent_total} sent · ${email.sent_last_30_days} in the last 30 days`}
                                             </Text>
+                                            {email.sent_total > 0 && (
+                                                <Text size="xs" c="dimmed" data-testid={`lifecycle-email-delivery-${email.nudge_type}`}>
+                                                    {t`${email.delivered_total} delivered · ${email.opened_total} opened · ${email.clicked_total} clicked · ${email.bounced_total} bounced`}
+                                                </Text>
+                                            )}
                                         </Stack>
                                     </UnstyledButton>
                                 );

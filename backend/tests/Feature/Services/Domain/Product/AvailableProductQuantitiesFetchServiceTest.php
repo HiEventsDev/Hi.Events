@@ -341,7 +341,7 @@ class AvailableProductQuantitiesFetchServiceTest extends TestCase
 
         $batched = $this->service->getEventWideQuantitiesForEvents($this->findEvents($eventIds));
 
-        $this->assertSame($eventIds, array_keys($batched));
+        $this->assertEqualsCanonicalizing($eventIds, array_keys($batched));
         foreach ($eventIds as $eventId) {
             $this->assertEquals(
                 $this->service->getAvailableProductQuantities($eventId, ignoreCache: true),

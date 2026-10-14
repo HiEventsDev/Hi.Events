@@ -1471,8 +1471,11 @@ export interface OutgoingMessage {
     id?: IdParam;
     message_id: number;
     recipient: string;
-    status: string;
+    status: 'SENT' | 'FAILED';
     subject: string;
+    delivered_at: string | null;
+    bounced_at: string | null;
+    complained_at: string | null;
     created_at?: string;
 }
 
