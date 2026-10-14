@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export type ProductLedgerRow =
   | 'description'
@@ -64,6 +64,12 @@ export class ProductCreatePage {
 
   hiddenSwitch(): Locator {
     return this.page.getByLabel('Hide this product from customers');
+  }
+
+  async hideFromCustomers(): Promise<void> {
+    await expect(async () => {
+      await this.hiddenSwitch().check({ timeout: 2_000 });
+    }).toPass({ timeout: 15_000 });
   }
 
   sequentialReleaseSwitch(): Locator {

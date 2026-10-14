@@ -5,6 +5,7 @@ import type {ApiClient} from '../../api/api-client';
 import {createDraftEvent, createSeatedEvent} from '../../api/factory';
 import {AttendeePage} from '../../pages/attendee.page';
 import {CheckoutPage} from '../../pages/checkout.page';
+import {OrganizerPage} from '../../pages/organizer.page';
 import {SeatPickerPage} from '../../pages/seat-picker.page';
 import {simulateLicence, withLicence} from '../../utils/licence';
 import {uniqueEmail} from '../../utils/unique';
@@ -97,13 +98,9 @@ test.describe('reserved seating with the feature flag off on Hi.Events Cloud', (
     test.skip((await cloudApi.getMe()).feature_flags.seating, NO_SIMULATION);
     await simulateLicence(page, 'CLOUD');
 
-    await page.goto(`/manage/organizer/${account.organizerId}/events`);
-    await page.waitForLoadState('networkidle');
-    await page.getByPlaceholder('Search by event name...').fill(title);
-    await page.waitForURL(/query=/);
-    await page.waitForLoadState('networkidle');
-    await page.locator('a').filter({has: page.getByRole('heading', {name: title})}).getByRole('button').click();
-    await page.getByTestId('event-duplicate-menu-item').click();
+    const organizer = new OrganizerPage(page);
+    await organizer.searchEvents(account.organizerId, title);
+    await organizer.openEventDuplicateModal(title);
     await page.getByRole('dialog').getByLabel(/^Name/).fill(`${title} copy`);
     await page.getByRole('button', {name: 'Duplicate Event'}).click();
 

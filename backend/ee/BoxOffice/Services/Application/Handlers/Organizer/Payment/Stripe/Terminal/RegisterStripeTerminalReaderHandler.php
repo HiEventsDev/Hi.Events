@@ -4,6 +4,7 @@ namespace HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\Organizer\
 
 use HiEvents\DomainObjects\StripeTerminalReaderDomainObject;
 use HiEvents\Enterprise\BoxOffice\Exceptions\Stripe\TerminalLocationAddressMissingException;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeReaderCache;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\StripeTerminalReaderService;
 use HiEvents\Enterprise\Licensing\LicensedFeatureUsageService;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -17,6 +18,7 @@ class RegisterStripeTerminalReaderHandler
         private readonly OrganizerTerminalLookupService $organizerLookup,
         private readonly StripeTerminalReaderService $readerService,
         private readonly LicensedFeatureUsageService $featureUsage,
+        private readonly BoxOfficeReaderCache $readerCache,
     ) {}
 
     /**
@@ -35,6 +37,7 @@ class RegisterStripeTerminalReaderHandler
         );
 
         $this->featureUsage->forget();
+        $this->readerCache->forget($organizerId);
 
         return $reader;
     }

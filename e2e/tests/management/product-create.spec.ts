@@ -149,7 +149,7 @@ test.describe('product creation', () => {
     await products.openLedgerRow('sale-window');
     await authedPage.getByRole('textbox', { name: 'Sale Start Date' }).fill(saleStart);
     await products.openLedgerRow('access');
-    await products.hiddenSwitch().check();
+    await products.hideFromCustomers();
     await products.submitCreate();
 
     await expect(authedPage.getByRole('heading', { name: title })).toBeVisible();

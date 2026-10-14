@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures';
 import { EventSettingsPage } from '../../pages/event-settings.page';
+import { OrganizerPage } from '../../pages/organizer.page';
 import { createDraftEvent, createDraftEventWithTicket, createLiveEventWithFreeTicket } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 import { nonSaasOnly, saasOnly } from '../../utils/mode';
@@ -69,17 +70,9 @@ test.describe('event lifecycle', () => {
     const event = await createLiveEventWithFreeTicket(api, account.organizerId);
     const duplicateTitle = uniqueName('E2E Duplicate');
 
-    await authedPage.goto(`/manage/organizer/${account.organizerId}/events`);
-    await authedPage.waitForLoadState('networkidle');
-    await authedPage.getByPlaceholder('Search by event name...').fill(event.title);
-    await authedPage.waitForURL(/query=/);
-    await authedPage.waitForLoadState('networkidle');
-
-    const sourceCard = authedPage
-      .locator('a')
-      .filter({ has: authedPage.getByRole('heading', { name: event.title }) });
-    await sourceCard.getByRole('button').click();
-    await authedPage.getByTestId('event-duplicate-menu-item').click();
+    const organizer = new OrganizerPage(authedPage);
+    await organizer.searchEvents(account.organizerId, event.title);
+    await organizer.openEventDuplicateModal(event.title);
 
     const nameInput = authedPage.getByRole('dialog').getByLabel(/^Name/);
     await expect(nameInput).toHaveValue(event.title);
@@ -88,13 +81,9 @@ test.describe('event lifecycle', () => {
 
     await authedPage.waitForURL(/\/manage\/event\/\d+/);
 
-    await authedPage.goto(`/manage/organizer/${account.organizerId}/events`);
-    await authedPage.waitForLoadState('networkidle');
-    await authedPage.getByPlaceholder('Search by event name...').fill(duplicateTitle);
+    await organizer.searchEvents(account.organizerId, duplicateTitle);
 
-    const duplicateCard = authedPage
-      .locator('a')
-      .filter({ has: authedPage.getByRole('heading', { name: duplicateTitle }) });
+    const duplicateCard = organizer.eventCard(duplicateTitle);
     await expect(duplicateCard).toBeVisible();
     await expect(duplicateCard.getByText('Draft')).toBeVisible();
   });

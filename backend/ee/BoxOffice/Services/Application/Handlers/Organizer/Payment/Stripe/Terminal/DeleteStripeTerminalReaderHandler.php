@@ -2,6 +2,7 @@
 
 namespace HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\Organizer\Payment\Stripe\Terminal;
 
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeReaderCache;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\StripeTerminalReaderService;
 use HiEvents\Enterprise\Licensing\LicensedFeatureUsageService;
 use HiEvents\Exceptions\ResourceNotFoundException;
@@ -12,6 +13,7 @@ class DeleteStripeTerminalReaderHandler
         private readonly OrganizerTerminalLookupService $organizerLookup,
         private readonly StripeTerminalReaderService $readerService,
         private readonly LicensedFeatureUsageService $featureUsage,
+        private readonly BoxOfficeReaderCache $readerCache,
     ) {}
 
     /**
@@ -21,5 +23,6 @@ class DeleteStripeTerminalReaderHandler
     {
         $this->readerService->delete($this->organizerLookup->findOrFail($organizerId, $accountId), $readerId);
         $this->featureUsage->forget();
+        $this->readerCache->forget($organizerId);
     }
 }
