@@ -55,14 +55,13 @@ class NoEventCreatedNudge implements LifecycleNudgeInterface
             subject: 'Your first event is a few minutes away',
             body: <<<'HTML'
 <p>Hi {{ first_name }},</p>
-<p>Thanks for signing up to Hi.Events. You haven't created an event yet, so here's the short version of how it works:</p>
+<p>I'm Dave, I run Hi.Events. I noticed you signed up but haven't created an event yet, so here's the short version of how it works:</p>
 <ol>
 <li>Create your event and add a date, a location and a description.</li>
 <li>Add your tickets. Free tickets work straight away, and for paid tickets you connect Stripe to get paid.</li>
 <li>Publish it and share your event page, or embed the ticket widget on your own website.</li>
 </ol>
-<p>If you're not sure Hi.Events fits what you're planning, reply to this email and tell us about it.</p>
-<p>The Hi.Events team</p>
+<p>If you're not sure Hi.Events fits what you're planning, just reply and tell me about it.</p>
 HTML,
             ctaLabel: 'Create your first event',
         );

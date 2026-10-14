@@ -10,24 +10,22 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\Public\DTO\BoxOfficePublicDTO;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeOperatorAuthorizer;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeReaderCache;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\DTO\TerminalReaderDTO;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\StripeTerminalReaderService;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Support\Collection;
 
 class GetBoxOfficePublicHandler
 {
-    private const READERS_CACHE_SECONDS = 30;
-
     public function __construct(
         private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly StripeTerminalReaderService $readerService,
         private readonly BoxOfficeOperatorAuthorizer $operatorAuthorizer,
-        private readonly Cache $cache,
+        private readonly BoxOfficeReaderCache $readerCache,
     ) {}
 
     /**
@@ -61,9 +59,8 @@ class GetBoxOfficePublicHandler
      */
     private function availableReaders(int $organizerId): Collection
     {
-        $readers = $this->cache->remember(
-            'box_office_readers:'.$organizerId,
-            self::READERS_CACHE_SECONDS,
+        $readers = $this->readerCache->remember(
+            $organizerId,
             fn () => $this->readerService
                 ->listForOrganizer($this->organizerRepository
                     ->loadRelation(OrganizerStripePlatformDomainObject::class)

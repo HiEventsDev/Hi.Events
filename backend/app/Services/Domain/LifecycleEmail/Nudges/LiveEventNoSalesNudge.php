@@ -58,14 +58,13 @@ class LiveEventNoSalesNudge implements LifecycleNudgeInterface
             subject: 'A few ways to get your first sale for {{ event.title }}',
             body: <<<'HTML'
 <p>Hi {{ first_name }},</p>
-<p><strong>{{ event.title }}</strong> is live and Stripe is connected, but no tickets have sold yet. Most first sales come from the organizer sharing the event themselves, so here's what tends to work:</p>
+<p>{{ event.title }} is live, but no tickets have sold yet. Most first sales come from organizers sharing the event themselves, so here's what tends to work:</p>
 <ol>
 <li>Share your event page link wherever your audience already is: your newsletter, social profiles and group chats.</li>
 <li>Embed the ticket widget on your own website so people can buy without leaving it.</li>
 <li>Create a promo code for an early-bird or friends discount to give people a reason to buy now.</li>
 </ol>
-<p>If something on the event page isn't working the way you expected, reply to this email and we'll take a look.</p>
-<p>The Hi.Events team</p>
+<p>If something on the event page isn't working the way you expected, reply and I'll take a look.</p>
 HTML,
             ctaLabel: 'Open your event',
         );
