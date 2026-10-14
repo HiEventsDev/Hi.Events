@@ -7,10 +7,11 @@ import {NavLink, useLocation, useNavigate} from "react-router";
 import {t, Trans} from "@lingui/macro";
 import classes from "./Register.module.scss";
 import {getClientLocale} from "../../../../locales.ts";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
 import {getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
+import {Turnstile} from "../../../common/Turnstile";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -40,10 +41,16 @@ export const Register = () => {
     });
     const errorHandler = useFormErrorResponseHandler();
     const mutate = useRegisterAccount();
+    const [turnstileToken, setTurnstileToken] = useState('');
+    const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
     const registerUser = (data: RegisterAccountRequest) => {
         const utmData = getStoredUtmData();
-        const registrationData = utmData ? {...data, ...utmData} : data;
+        const registrationData = {
+            ...data,
+            ...(utmData ?? {}),
+            ...(turnstileToken ? {turnstile_token: turnstileToken} : {}),
+        };
 
         mutate.mutate({registerData: registrationData}, {
             onSuccess: () => {
@@ -51,6 +58,7 @@ export const Register = () => {
                 navigate(`/welcome${location.search}`);
             },
             onError: (error: any) => {
+                setTurnstileResetKey((key) => key + 1);
                 errorHandler(form, error, error.response?.data?.message);
             },
         });
@@ -130,6 +138,8 @@ export const Register = () => {
                         {...form.getInputProps('marketing_opt_in', {type: 'checkbox'})}
                         label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
                     />
+
+                    <Turnstile onToken={setTurnstileToken} resetKey={turnstileResetKey}/>
 
                     <Button color="secondary.5" type="submit" fullWidth disabled={mutate.isPending}>
                         {mutate.isPending ? t`Working...` : t`Register`}

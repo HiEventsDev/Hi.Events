@@ -12,11 +12,15 @@ use HiEvents\DomainObjects\ProductPriceDomainObject;
 use HiEvents\DomainObjects\WaitlistEntryDomainObject;
 use HiEvents\Helper\Url;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
-class WaitlistConfirmationMail extends BaseMail
+class WaitlistConfirmationMail extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     public function __construct(
         private readonly WaitlistEntryDomainObject $entry,
         private readonly EventDomainObject $event,

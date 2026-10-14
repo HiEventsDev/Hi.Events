@@ -55,7 +55,6 @@ class EmailConfirmationService
                 ->to($user->getEmail())
                 ->locale($user->getLocale())
                 ->send(new EmailConfirmationCodeEmail(
-                    $user,
                     $this->emailVerificationCodeService->storeAndReturnCode($user->getEmail()),
                 ));
 
@@ -68,6 +67,6 @@ class EmailConfirmationService
 
         $this->mailer
             ->to($user->getEmail())
-            ->send(new ConfirmEmailAddressEmail($user, $token));
+            ->send(new ConfirmEmailAddressEmail($token));
     }
 }

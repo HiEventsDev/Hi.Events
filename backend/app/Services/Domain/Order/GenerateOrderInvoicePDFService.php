@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Domain\Order;
 
-use Barryvdh\DomPDF\Facade\Pdf;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -17,6 +16,7 @@ class GenerateOrderInvoicePDFService
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly InvoiceRepositoryInterface $invoiceRepository,
+        private readonly InvoicePdfRenderer $invoicePdfRenderer,
     ) {}
 
     public function generatePdfFromOrderShortId(string $orderShortId, int $eventId): InvoicePdfResponseDTO
@@ -55,13 +55,13 @@ class GenerateOrderInvoicePDFService
         }
 
         return new InvoicePdfResponseDTO(
-            pdf: Pdf::loadView('invoice', [
-                'order' => $order,
-                'event' => $order->getEvent(),
-                'organizer' => $order->getEvent()->getOrganizer(),
-                'eventSettings' => $order->getEvent()->getEventSettings(),
-                'invoice' => $invoice,
-            ]),
+            pdf: $this->invoicePdfRenderer->render(
+                order: $order,
+                event: $order->getEvent(),
+                organizer: $order->getEvent()->getOrganizer(),
+                eventSettings: $order->getEvent()->getEventSettings(),
+                invoice: $invoice,
+            ),
             filename: $invoice->getInvoiceNumber().'.pdf'
         );
     }

@@ -22,6 +22,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Product\DTO\UpsertProductDTO;
+use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
 use HiEvents\Services\Domain\Product\ProductAddonAssociationService;
 use HiEvents\Services\Domain\Product\ProductPriceUpdateService;
 use HiEvents\Services\Domain\ProductCategory\GetProductCategoryService;
@@ -52,6 +53,7 @@ class EditProductHandler
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
         private readonly SeatedProductLookupService $seatedProductLookup,
         private readonly EventSeatMapBandProductRepositoryInterface $bandProductRepository,
+        private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
     ) {}
 
     /**
@@ -102,6 +104,8 @@ class EditProductHandler
                 $productsData,
                 $oldPriceQuantities,
             );
+
+            $this->eventSpamCheckDispatchService->dispatchForEvent($productsData->event_id);
 
             return $this->productRepository
                 ->loadRelation(ProductPriceDomainObject::class)

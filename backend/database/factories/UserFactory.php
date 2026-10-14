@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Models\Account;
 use HiEvents\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -50,6 +51,21 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * @param  string[]  $recoveryCodes
+     */
+    public function withTwoFactor(string $secret, array $recoveryCodes = []): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'two_factor_secret' => Crypt::encryptString($secret),
+            'two_factor_confirmed_at' => now(),
+            'two_factor_recovery_codes' => json_encode(array_map(
+                static fn (string $code) => hash('sha256', preg_replace('/[^a-z0-9]/', '', strtolower($code))),
+                $recoveryCodes,
+            )),
         ]);
     }
 

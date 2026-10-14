@@ -183,6 +183,16 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
             ->all();
     }
 
+    public function getSingleEventOccurrence(): ?EventOccurrenceDomainObject
+    {
+        $occurrences = ($this->getOrderItems() ?? collect())
+            ->map(fn (OrderItemDomainObject $item) => $item->getEventOccurrence())
+            ->filter()
+            ->unique(fn (EventOccurrenceDomainObject $occurrence) => $occurrence->getId());
+
+        return $occurrences->count() === 1 ? $occurrences->first() : null;
+    }
+
     public function isPaymentRequired(): bool
     {
         return (int) ceil($this->getTotalGross()) > 0;
@@ -331,8 +341,14 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     {
         return ! $this->isFreeOrder()
             && $this->getStatus() !== OrderPaymentStatus::AWAITING_OFFLINE_PAYMENT->name
-            && in_array($this->getPaymentProvider(), [PaymentProviders::STRIPE->name, PaymentProviders::OFFLINE->name], true)
+            && ($this->getPaymentProvider() === PaymentProviders::STRIPE->name || $this->isPaidOutsidePlatform())
             && $this->getRefundStatus() !== OrderRefundStatus::REFUNDED->name;
+    }
+
+    public function isPaidOutsidePlatform(): bool
+    {
+        return $this->getPaymentProvider() === PaymentProviders::OFFLINE->name
+            || ($this->getPaymentProvider() === null && $this->getIsManuallyCreated());
     }
 
     public function getAddressDTO(): ?AddressDTO

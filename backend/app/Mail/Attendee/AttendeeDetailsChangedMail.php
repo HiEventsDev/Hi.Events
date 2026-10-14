@@ -6,14 +6,18 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Mail\BaseMail;
+use HiEvents\Mail\Concerns\ContainsEventContent;
+use HiEvents\Mail\Concerns\ProvidesEventContent;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
 /**
  * @uses /backend/resources/views/emails/orders/attendee-details-changed.blade.php
  */
-class AttendeeDetailsChangedMail extends BaseMail
+class AttendeeDetailsChangedMail extends BaseMail implements ContainsEventContent
 {
+    use ProvidesEventContent;
+
     public function __construct(
         private readonly string $ticketTitle,
         private readonly EventDomainObject $event,

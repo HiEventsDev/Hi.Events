@@ -6,22 +6,26 @@ use HiEvents\DomainObjects\AccountDeletionRequestDomainObject;
 use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\AccountDeletionInitiator;
 use HiEvents\DomainObjects\Enums\AccountDeletionOutcome;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\AccountDeletionRequestStatus;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Exceptions\AccountDeletionRequestNotFoundException;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Jobs\Account\ExecuteAccountDeletionJob;
 use HiEvents\Mail\Account\AccountDeletionCancelledEmail;
 use HiEvents\Mail\Account\AccountDeletionCompletedEmail;
 use HiEvents\Mail\Account\AccountDeletionRequestedEmail;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Account\AccountAnonymizationService;
 use HiEvents\Services\Domain\Account\AccountDeletionService;
 use HiEvents\Services\Domain\Account\AccountHardDeletionService;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Mockery\MockInterface;
@@ -44,6 +48,8 @@ class AccountDeletionServiceTest extends TestCase
 
     private AccountHardDeletionService|MockInterface $hardDeletionService;
 
+    private AccountUserRepositoryInterface|MockInterface $accountUserRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -56,6 +62,7 @@ class AccountDeletionServiceTest extends TestCase
         $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
         $this->anonymizationService = Mockery::mock(AccountAnonymizationService::class);
         $this->hardDeletionService = Mockery::mock(AccountHardDeletionService::class);
+        $this->accountUserRepository = Mockery::mock(AccountUserRepositoryInterface::class);
 
         $databaseManager = Mockery::mock(DatabaseManager::class);
         $databaseManager->shouldReceive('transaction')
@@ -68,6 +75,7 @@ class AccountDeletionServiceTest extends TestCase
             $this->orderRepository,
             $this->anonymizationService,
             $this->hardDeletionService,
+            $this->accountUserRepository,
             $databaseManager,
             new NullLogger,
         );
@@ -153,6 +161,27 @@ class AccountDeletionServiceTest extends TestCase
         Mail::assertQueued(AccountDeletionRequestedEmail::class);
     }
 
+    public function test_immediate_deletion_queues_execution_without_grace_period_email(): void
+    {
+        Bus::fake();
+        $this->mockNoActiveRequest();
+        $this->mockUpcomingEventsWithCompletedOrders([]);
+        $this->orderRepository->shouldReceive('accountHasCompletedOrders')->andReturnFalse();
+        $this->accountRepository->shouldReceive('findById')->with(1)->andReturn($this->makeAccount());
+        $this->accountUserRepository->shouldReceive('countWhere')->andReturn(0);
+        $this->eventRepository->shouldReceive('updateWhere')->andReturn(1);
+
+        $this->deletionRequestRepository->shouldReceive('create')
+            ->once()
+            ->withArgs(fn (array $attributes) => $attributes['scheduled_deletion_at']->diffInMinutes(now(), true) < 1)
+            ->andReturn($this->makeDeletionRequest());
+
+        $result = $this->service->requestDeletion(1, 5, AccountDeletionInitiator::ADMIN, executeImmediately: true);
+
+        Mail::assertNotQueued(AccountDeletionRequestedEmail::class);
+        Bus::assertDispatched(ExecuteAccountDeletionJob::class, fn (ExecuteAccountDeletionJob $job) => $job->deletionRequestId === $result->getId());
+    }
+
     public function test_request_deletion_throws_when_gated(): void
     {
         $this->mockActiveRequest();
@@ -160,6 +189,20 @@ class AccountDeletionServiceTest extends TestCase
         $this->expectException(CannotDeleteEntityException::class);
 
         $this->service->requestDeletion(1, 5, AccountDeletionInitiator::ACCOUNT_OWNER);
+    }
+
+    public function test_admin_cannot_request_deletion_of_account_with_superadmin_member(): void
+    {
+        $this->mockNoActiveRequest();
+        $this->mockUpcomingEventsWithCompletedOrders([]);
+        $this->accountUserRepository->shouldReceive('countWhere')
+            ->with(['account_id' => 1, 'role' => Role::SUPERADMIN->name])
+            ->andReturn(1);
+        $this->deletionRequestRepository->shouldNotReceive('create');
+
+        $this->expectException(CannotDeleteEntityException::class);
+
+        $this->service->requestDeletion(1, 5, AccountDeletionInitiator::ADMIN);
     }
 
     public function test_cancel_deletion_updates_request_and_sends_email(): void

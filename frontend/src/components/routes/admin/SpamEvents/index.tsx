@@ -1,8 +1,10 @@
 import {
     ActionIcon,
     Badge,
+    Button,
     Container,
     Group,
+    Menu,
     Modal,
     Pagination,
     ScrollArea,
@@ -15,18 +17,30 @@ import {
     Tooltip
 } from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconBan, IconCalendarEvent, IconCheck, IconEye, IconSearch} from "@tabler/icons-react";
+import {
+    IconBan,
+    IconCalendarEvent,
+    IconCheck,
+    IconDotsVertical,
+    IconExternalLink,
+    IconEye,
+    IconSearch,
+    IconTrash,
+    IconUserX
+} from "@tabler/icons-react";
 import {useEffect, useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import {Link} from "react-router";
 import {useGetAdminSpamEvents} from "../../../../queries/useGetAdminSpamEvents";
 import {useApproveSpamEvent} from "../../../../mutations/useApproveSpamEvent";
 import {useConfirmSpamEvent} from "../../../../mutations/useConfirmSpamEvent";
+import {useDeleteSpamEvent} from "../../../../mutations/useDeleteSpamEvent";
+import {eventHomepageUrl} from "../../../../utilites/urlHelper";
 import {relativeDate} from "../../../../utilites/dates";
 import {AdminSpamEvent} from "../../../../api/admin.client";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog";
 import {showError, showSuccess} from "../../../../utilites/notifications";
-import {IdParam} from "../../../../types";
+import {Event, IdParam} from "../../../../types";
 import tableStyles from "../../../../styles/admin-table.module.scss";
 
 const SpamEvents = () => {
@@ -45,6 +59,7 @@ const SpamEvents = () => {
 
     const approveMutation = useApproveSpamEvent();
     const confirmSpamMutation = useConfirmSpamEvent();
+    const deleteSpamEventMutation = useDeleteSpamEvent();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -55,7 +70,7 @@ const SpamEvents = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const isActing = approveMutation.isPending || confirmSpamMutation.isPending;
+    const isActing = approveMutation.isPending || confirmSpamMutation.isPending || deleteSpamEventMutation.isPending;
 
     const handleApprove = (eventId: IdParam) => {
         confirmationDialog(t`Are you sure this event is not spam? It will be published immediately.`, () => {
@@ -84,6 +99,28 @@ const SpamEvents = () => {
             });
         });
     };
+
+    const handleDelete = (spamEvent: AdminSpamEvent, deleteAccount: boolean) => {
+        const accountLabel = spamEvent.account_email || spamEvent.account_name || '';
+        const message = deleteAccount
+            ? t`Delete this event and immediately delete the account ${accountLabel}? This cannot be undone.`
+            : t`Delete this event? It will be marked as spam and removed.`;
+
+        confirmationDialog(message, () => {
+            setActingEventId(spamEvent.event_id);
+            deleteSpamEventMutation.mutate({eventId: spamEvent.event_id, deleteAccount}, {
+                onSuccess: () => {
+                    showSuccess(deleteAccount ? t`Event deleted and account deletion queued` : t`Event deleted`);
+                    closeDetailModal();
+                },
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Failed to delete event`),
+                onSettled: () => setActingEventId(null),
+            });
+        }, {confirm: deleteAccount ? t`Delete event & account` : t`Delete event`, destructive: true});
+    };
+
+    const eventPageUrl = (spamEvent: AdminSpamEvent) =>
+        eventHomepageUrl({id: spamEvent.event_id, slug: spamEvent.event_slug} as Event);
 
     const handleViewSpamEvent = (spamEvent: AdminSpamEvent) => {
         setSelectedSpamEvent(spamEvent);
@@ -130,7 +167,7 @@ const SpamEvents = () => {
                                         <Table.Th>{t`Account`}</Table.Th>
                                         <Table.Th>{t`Confidence`}</Table.Th>
                                         <Table.Th>{t`Checked`}</Table.Th>
-                                        <Table.Th style={{width: 110}}></Table.Th>
+                                        <Table.Th></Table.Th>
                                     </Table.Tr>
                                 </Table.Thead>
                                 <Table.Tbody>
@@ -163,7 +200,7 @@ const SpamEvents = () => {
                                                 <Text size="sm">{relativeDate(spamEvent.checked_at)}</Text>
                                             </Table.Td>
                                             <Table.Td>
-                                                <Group gap="xs">
+                                                <Group gap={4} wrap="nowrap">
                                                     <Tooltip label={t`View Details`}>
                                                         <ActionIcon
                                                             variant="subtle"
@@ -198,6 +235,51 @@ const SpamEvents = () => {
                                                             <IconBan size={16}/>
                                                         </ActionIcon>
                                                     </Tooltip>
+                                                    <Tooltip label={t`Open event page`}>
+                                                        <ActionIcon
+                                                            variant="subtle"
+                                                            color="gray"
+                                                            component="a"
+                                                            href={eventPageUrl(spamEvent)}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            data-testid="open-spam-event-page-button"
+                                                        >
+                                                            <IconExternalLink size={16}/>
+                                                        </ActionIcon>
+                                                    </Tooltip>
+                                                    <Menu position="bottom-end" withinPortal>
+                                                        <Menu.Target>
+                                                            <ActionIcon
+                                                                variant="subtle"
+                                                                color="gray"
+                                                                aria-label={t`More actions`}
+                                                                data-testid="spam-event-more-actions-button"
+                                                                loading={deleteSpamEventMutation.isPending && actingEventId === spamEvent.event_id}
+                                                                disabled={isActing && actingEventId !== spamEvent.event_id}
+                                                            >
+                                                                <IconDotsVertical size={16}/>
+                                                            </ActionIcon>
+                                                        </Menu.Target>
+                                                        <Menu.Dropdown>
+                                                            <Menu.Item
+                                                                color="red"
+                                                                leftSection={<IconTrash size={14}/>}
+                                                                onClick={() => handleDelete(spamEvent, false)}
+                                                                data-testid="delete-spam-event-menu-item"
+                                                            >
+                                                                {t`Delete event`}
+                                                            </Menu.Item>
+                                                            <Menu.Item
+                                                                color="red"
+                                                                leftSection={<IconUserX size={14}/>}
+                                                                onClick={() => handleDelete(spamEvent, true)}
+                                                                data-testid="delete-spam-event-and-account-menu-item"
+                                                            >
+                                                                {t`Delete event & account`}
+                                                            </Menu.Item>
+                                                        </Menu.Dropdown>
+                                                    </Menu>
                                                 </Group>
                                             </Table.Td>
                                         </Table.Tr>
@@ -271,6 +353,26 @@ const SpamEvents = () => {
                                 </Stack>
                             </div>
                         )}
+                        <Group justify="space-between" mt="sm">
+                            <Button
+                                variant="subtle"
+                                component="a"
+                                href={eventPageUrl(selectedSpamEvent)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                leftSection={<IconExternalLink size={14}/>}
+                            >
+                                {t`Open event page`}
+                            </Button>
+                            <Group gap="xs">
+                                <Button variant="light" color="red" onClick={() => handleDelete(selectedSpamEvent, false)}>
+                                    {t`Delete event`}
+                                </Button>
+                                <Button color="red" onClick={() => handleDelete(selectedSpamEvent, true)}>
+                                    {t`Delete event & account`}
+                                </Button>
+                            </Group>
+                        </Group>
                     </Stack>
                 )}
             </Modal>

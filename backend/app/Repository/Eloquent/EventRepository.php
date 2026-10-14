@@ -147,34 +147,6 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
             ->orderBy(EventDomainObjectAbstract::ID);
     }
 
-    public function getUpcomingEventsForAdmin(int $perPage): LengthAwarePaginator
-    {
-        $now = now();
-        $next24Hours = now()->addDay();
-
-        $this->model = $this->model
-            ->select('events.*')
-            ->whereExists(function ($query) use ($now, $next24Hours) {
-                $query->select(DB::raw(1))
-                    ->from('event_occurrences')
-                    ->whereColumn('event_occurrences.event_id', 'events.id')
-                    ->whereNull('event_occurrences.deleted_at')
-                    ->where('event_occurrences.start_date', '>=', $now)
-                    ->where('event_occurrences.start_date', '<=', $next24Hours)
-                    ->where('event_occurrences.status', 'ACTIVE');
-            })
-            ->whereIn(EventDomainObjectAbstract::STATUS, [
-                EventStatus::LIVE->name,
-            ])
-            ->orderBy(EventDomainObjectAbstract::CREATED_AT, 'desc');
-
-        $this->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'));
-        $this->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'));
-        $this->loadRelation(new Relationship(EventOccurrenceDomainObject::class));
-
-        return $this->paginate($perPage);
-    }
-
     public function getAllEventsForAdmin(
         ?string $search = null,
         int $perPage = 20,

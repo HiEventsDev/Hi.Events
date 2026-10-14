@@ -128,6 +128,18 @@ class RefundOfflineOrderHandlerTest extends TestCase
         $this->handler->handle($this->givenDTO(amount: 50.0, notifyBuyer: true));
     }
 
+    public function test_a_manually_created_order_can_be_refunded(): void
+    {
+        $order = $this->givenOrderIsFound(paymentProvider: null, isManuallyCreated: true);
+        $this->givenOrderIsRefreshedAfterRefund();
+
+        $this->offlineOrderRefundService->shouldReceive('refundOrder')
+            ->once()
+            ->withArgs(fn (OrderDomainObject $refundOrder): bool => $refundOrder === $order);
+
+        $this->handler->handle($this->givenDTO(amount: 100.0));
+    }
+
     public function test_a_non_offline_order_cannot_be_refunded(): void
     {
         $this->givenOrderIsFound(paymentProvider: PaymentProviders::STRIPE->name);
@@ -176,10 +188,11 @@ class RefundOfflineOrderHandlerTest extends TestCase
     }
 
     private function givenOrderIsFound(
-        string $paymentProvider = PaymentProviders::OFFLINE->name,
+        ?string $paymentProvider = PaymentProviders::OFFLINE->name,
         string $status = OrderStatus::COMPLETED->name,
         ?string $refundStatus = null,
         float $totalRefunded = 0.0,
+        bool $isManuallyCreated = false,
     ): OrderDomainObject {
         $order = (new OrderDomainObject)
             ->setId(self::ORDER_ID)
@@ -190,7 +203,8 @@ class RefundOfflineOrderHandlerTest extends TestCase
             ->setStatus($status)
             ->setRefundStatus($refundStatus)
             ->setTotalGross(100.0)
-            ->setTotalRefunded($totalRefunded);
+            ->setTotalRefunded($totalRefunded)
+            ->setIsManuallyCreated($isManuallyCreated);
 
         $this->orderRepository->shouldReceive('findFirstWhere')
             ->once()

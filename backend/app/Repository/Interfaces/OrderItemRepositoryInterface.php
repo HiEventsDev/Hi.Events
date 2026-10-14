@@ -3,6 +3,11 @@
 namespace HiEvents\Repository\Interfaces;
 
 use HiEvents\DomainObjects\OrderItemDomainObject;
+use HiEvents\Repository\DTO\ProductPurchase\ProductPurchaseDTO;
+use HiEvents\Repository\DTO\ProductPurchase\ProductPurchaseFilterDTO;
+use HiEvents\Repository\DTO\ProductPurchase\ProductPurchaseSummaryDTO;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\LazyCollection;
 
 /**
  * @extends RepositoryInterface<OrderItemDomainObject>
@@ -32,4 +37,16 @@ interface OrderItemRepositoryInterface extends RepositoryInterface
      * @return int[] product ids held by an unexpired reservation
      */
     public function getProductIdsInLiveReservations(array $productIds): array;
+
+    /**
+     * @return LengthAwarePaginator<ProductPurchaseDTO>
+     */
+    public function findProductPurchases(ProductPurchaseFilterDTO $filter, int $page, int $perPage): LengthAwarePaginator;
+
+    /**
+     * @return LazyCollection<int, ProductPurchaseDTO>
+     */
+    public function getAllProductPurchases(ProductPurchaseFilterDTO $filter): LazyCollection;
+
+    public function getProductPurchaseSummary(ProductPurchaseFilterDTO $filter): ProductPurchaseSummaryDTO;
 }

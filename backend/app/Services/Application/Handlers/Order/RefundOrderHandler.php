@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\Order;
 
-use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
@@ -39,7 +38,7 @@ class RefundOrderHandler
             ]));
         }
 
-        if ($order->getPaymentProvider() === PaymentProviders::OFFLINE->name) {
+        if ($order->isPaidOutsidePlatform()) {
             return $this->refundOfflineOrderHandler->handle($refundOrderDTO);
         }
 

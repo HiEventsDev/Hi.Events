@@ -50,4 +50,30 @@ test.describe('offline orders', () => {
     await expect(row.getByText('Cancelled')).toBeVisible();
     await expect(row.getByText(/Refunded/)).toBeVisible();
   });
+
+  test('an organizer cancels a paid manually created order and refunds it in one step', async ({ authedPage, api, account }) => {
+    const event = await createLiveEventWithPaidTicket(api, account.organizerId, 25);
+    const buyerEmail = uniqueEmail('manual');
+    await api.createAttendee(event.eventId, {
+      product_id: event.productId,
+      product_price_id: event.priceId,
+      email: buyerEmail,
+      first_name: 'Manual',
+      last_name: 'Attendee',
+      amount_paid: 25,
+      send_confirmation_email: false,
+      locale: 'en',
+    });
+
+    const orders = new OrderPage(authedPage);
+    await orders.goto(event.eventId);
+    await orders.chooseRowAction(buyerEmail, 'Cancel order');
+
+    await expect(authedPage.getByRole('checkbox', { name: 'Also refund this order' })).toBeChecked();
+    await orders.confirmCancelOrder();
+
+    const row = orders.rowByEmail(buyerEmail);
+    await expect(row.getByText('Cancelled')).toBeVisible();
+    await expect(row.getByText(/Refunded/)).toBeVisible();
+  });
 });

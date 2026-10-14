@@ -5,6 +5,7 @@ import {SupportedLocales} from "./locales.ts";
 import type {DayOfWeek} from "@mantine/dates";
 
 export type ConfigKeys = 
+    | 'VITE_TURNSTILE_SITE_KEY'
     | 'VITE_API_URL_SERVER'
     | 'VITE_API_URL_CLIENT'
     | 'VITE_FRONTEND_URL'
@@ -57,6 +58,7 @@ export interface RegisterAccountRequest extends AcceptInvitationRequest {
     gclid?: string | null;
     fbclid?: string | null;
     utm_raw?: Record<string, string> | null;
+    turnstile_token?: string;
 }
 
 export interface ResetPasswordRequest {
@@ -83,11 +85,56 @@ export interface HomepageThemeSettings {
 }
 
 export interface LoginResponse {
-    token?: string;
+    token?: string | null;
     token_type: string;
     expires_in: number;
     user: User;
     accounts: Account[];
+    two_factor_required?: boolean;
+    two_factor_challenge_token?: string;
+    two_factor_recovery_codes_remaining?: number;
+}
+
+export interface TwoFactorLoginRequest {
+    challenge_token: string;
+    code?: string;
+    recovery_code?: string;
+    account_id?: IdParam;
+    remember_device?: boolean;
+}
+
+export interface TrustedDevice {
+    id: IdParam;
+    user_agent: string | null;
+    ip_address: string | null;
+    last_used_at: string | null;
+    expires_at: string;
+    created_at: string;
+    is_current_device: boolean;
+}
+
+export interface TwoFactorStatus {
+    enabled: boolean;
+    confirmed_at: string | null;
+    recovery_codes_remaining: number;
+    recovery_codes_total: number;
+    trusted_devices: TrustedDevice[];
+    required_by_accounts: string[];
+}
+
+export interface TwoFactorSetup {
+    secret: string;
+    otpauth_uri: string;
+}
+
+export interface TwoFactorRecoveryCodes {
+    recovery_codes: string[];
+}
+
+export interface DisableTwoFactorRequest {
+    password: string;
+    code?: string;
+    recovery_code?: string;
 }
 
 export interface User {
@@ -103,6 +150,8 @@ export interface User {
     has_pending_email_change?: boolean;
     is_impersonating?: boolean;
     impersonator_id?: IdParam;
+    two_factor_enabled?: boolean;
+    two_factor_setup_required?: boolean;
     enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;
@@ -137,6 +186,7 @@ export interface Account {
     is_account_email_confirmed?: boolean;
     is_saas_mode_enabled?: boolean;
     requires_manual_verification?: boolean;
+    require_two_factor_authentication?: boolean;
     deletion_request?: AccountDeletionRequest | null;
 }
 
@@ -220,6 +270,7 @@ export interface OrganizerStripeConnectAccountsResponse {
 export interface LoginData {
     email: string;
     password: string;
+    account_id?: IdParam;
 }
 
 export interface Image {
@@ -950,6 +1001,51 @@ export interface OrderSeat {
     order_item_id: number;
 }
 
+export enum ProductPurchaseStatus {
+    Sold = 'SOLD',
+    AwaitingPayment = 'AWAITING_PAYMENT',
+    Cancelled = 'CANCELLED',
+}
+
+export interface ProductPurchase {
+    order_id: number;
+    order_public_id: string;
+    order_status: 'COMPLETED' | 'CANCELLED' | 'AWAITING_OFFLINE_PAYMENT';
+    refund_status: 'REFUND_PENDING' | 'REFUND_FAILED' | 'REFUNDED' | 'PARTIALLY_REFUNDED' | null;
+    order_created_at: string;
+    currency: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    product_title: string;
+    product_price_id: number | null;
+    price_label: string | null;
+    event_occurrence_id: number | null;
+    occurrence_start_date: string | null;
+    sold_quantity: number;
+    awaiting_payment_quantity: number;
+    cancelled_quantity: number;
+    line_total: number | null;
+    status: ProductPurchaseStatus;
+}
+
+export interface ProductPurchaseSummary {
+    sold_quantity: number;
+    awaiting_payment_quantity: number;
+    cancelled_quantity: number;
+    buyer_count: number;
+    gross_sales: number;
+    refunded_order_count: number;
+}
+
+export interface ProductPurchaseExportFilters {
+    product_id?: IdParam;
+    event_occurrence_id?: IdParam;
+    statuses?: ProductPurchaseStatus[];
+    refund_statuses?: string[];
+    query?: string;
+}
+
 export interface Order {
     id: IdParam;
     seats?: OrderSeat[];
@@ -1275,7 +1371,6 @@ export interface AttendeeDetailPublicCheckIn {
 export interface AttendeeDetailPublicOrder {
     id: number;
     public_id: string;
-    short_id: string;
     status: string;
     total_gross: number;
     currency: string;
@@ -1378,8 +1473,11 @@ export interface OutgoingMessage {
     id?: IdParam;
     message_id: number;
     recipient: string;
-    status: string;
+    status: 'SENT' | 'FAILED';
     subject: string;
+    delivered_at: string | null;
+    bounced_at: string | null;
+    complained_at: string | null;
     created_at?: string;
 }
 

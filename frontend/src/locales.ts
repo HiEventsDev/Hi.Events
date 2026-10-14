@@ -19,9 +19,10 @@ export type SupportedLocales =
     | "sk"
     | "el"
     | "ko"
+    | "ja"
     | "fi";
 
-export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu", "pl", "se", "sk", "el", "ko", "fi"];
+export const availableLocales = ["en", "de", "fr", "it", "nl", "pt", "es", "zh-cn", "zh-hk", "pt-br", "vi", "tr", "hu", "pl", "se", "sk", "el", "ko", "ja", "fi"];
 
 export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     en: '🇬🇧',
@@ -42,6 +43,7 @@ export const localeToFlagEmojiMap: Record<SupportedLocales, string> = {
     sk: '🇸🇰',
     el: '🇬🇷',
     ko: '🇰🇷',
+    ja: '🇯🇵',
     fi: '🇫🇮',
 };
 
@@ -64,6 +66,7 @@ export const localeToNameMap: Record<SupportedLocales, string> = {
     sk: `Slovak`,
     el: `Greek`,
     ko: `Korean`,
+    ja: `Japanese`,
     fi: `Finnish`,
 };
 
@@ -105,6 +108,7 @@ const dayjsLocaleLoaders: Partial<Record<SupportedLocales, () => Promise<unknown
     sk: () => import("dayjs/locale/sk"),
     el: () => import("dayjs/locale/el"),
     ko: () => import("dayjs/locale/ko"),
+    ja: () => import("dayjs/locale/ja"),
     fi: () => import("dayjs/locale/fi"),
 };
 

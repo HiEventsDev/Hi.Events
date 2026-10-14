@@ -23,11 +23,13 @@ return [
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
+        'webhook_secret' => env('POSTMARK_WEBHOOK_SECRET'),
     ],
 
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'token' => env('AWS_SESSION_TOKEN'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
@@ -49,6 +51,10 @@ return [
         // Primary platform for new organizers
         'primary_platform' => env('STRIPE_PRIMARY_PLATFORM'),
     ],
+    'turnstile' => [
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+    ],
+
     'open_exchange_rates' => [
         'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
     ],

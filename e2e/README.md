@@ -242,9 +242,9 @@ To run against a SaaS stack, bring the stack up with `E2E_SAAS_MODE=true` (sets 
 backend's `APP_SAAS_MODE_ENABLED`) and run with `E2E_SAAS_MODE=true`. The account
 fixture then pulls the verification PIN from Mailpit and confirms the email before use.
 
-Known gap: SaaS-mode Stripe checkout requires a connected Stripe account
-(`organizer_stripe_platforms`), which cannot be onboarded headlessly. The Stripe spec
-targets non-SaaS platform-account charges until a seeded-connected-account helper exists.
+SaaS-mode Stripe specs need `E2E_STRIPE_CONNECT_ACCOUNT_ID`: an enabled Stripe Connect test
+account (`acct_…`) belonging to the platform whose `STRIPE_SECRET_KEY` the stack uses. The specs
+link it to each organizer in the database (`enableStripePayments`) and skip without it.
 
 Known gap: in SaaS mode the message composer hides its form behind "Connect Stripe to
 enable messaging" until the account is manually verified, so composer-driven specs only
@@ -258,13 +258,24 @@ The HTML report, traces, and stack logs are uploaded as artifacts on every run.
 
 Lanes:
 
-- **Pull requests** run the `@smoke` lane only (`--grep @smoke`) — one fast,
-  load-bearing check per feature area. Tag discipline matters: exactly one `@smoke`
-  test per area.
-- **Pushes to `main`/`develop`/release branches** and a **nightly cron** run the full
-  suite, sharded across two parallel jobs (each with its own hermetic stack).
-- Adding the **`full-e2e` label** to a PR forces the full sharded lane on that PR.
+- **Pull requests** run the `@smoke` lane only (`--grep @smoke`) against a self-hosted
+  stack: one fast, load-bearing check per feature area. Tag discipline matters: exactly
+  one `@smoke` test per area.
+- **Pushes to `main`/`develop`**, a **nightly cron** (03:00 UTC) and **manual runs**
+  (`workflow_dispatch`) run the full suite twice, against a self-hosted stack
+  (`E2E_SAAS_MODE=false`) and a SaaS stack (`E2E_SAAS_MODE=true`), each sharded across two
+  parallel jobs with their own hermetic stack.
+- Adding the **`full-e2e` label** to a PR forces the full lane on that PR.
 
-The Stripe checkout spec runs only when the repository secrets `STRIPE_TEST_PUBLIC_KEY`
-and `STRIPE_TEST_SECRET_KEY` (Stripe **test-mode** keys) are set; otherwise it skips,
-keeping fork PRs green.
+A final `summary` job merges every shard's `results.json` (via `scripts/github-summary.mjs`)
+into one report on the run's summary page (and as a PR comment): a pass/fail table per
+mode, each failure with its error, the tests that only passed on retry, jobs that never
+produced a report, and why tests were skipped.
+
+Repository secrets (all optional; the specs that need them skip without them, keeping fork
+PRs green):
+
+| Secret | Used for |
+| --- | --- |
+| `STRIPE_TEST_PUBLIC_KEY`, `STRIPE_TEST_SECRET_KEY` | Stripe **test-mode** keys for the `@stripe` specs |
+| `E2E_STRIPE_CONNECT_ACCOUNT_ID` | `@stripe` specs on the SaaS stack (see [SaaS mode](#saas-mode)) |

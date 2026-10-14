@@ -1,5 +1,5 @@
 import {api} from "./client";
-import {GenericDataResponse, GenericPaginatedResponse, IdParam, User} from "../types";
+import {EmailTemplateToken, GenericDataResponse, GenericPaginatedResponse, IdParam, User} from "../types";
 
 export interface AdminUser extends User {
     accounts?: AccountWithRole[];
@@ -99,10 +99,60 @@ export interface AdminOrganizerSummary {
     vat_setting: AdminOrganizerVatSetting | null;
 }
 
+export interface AdminLifecycleNudge {
+    nudge_type: string;
+    sent_at: string;
+    event_id: number | null;
+}
+
 export interface AdminAccountDetail extends AdminAccount {
     messaging_tier?: AccountMessagingTier;
     organizers: AdminOrganizerSummary[];
     is_manually_verified: boolean;
+    active_deletion_request: {
+        id: IdParam;
+        scheduled_deletion_at: string;
+        expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
+    } | null;
+    lifecycle_nudges?: AdminLifecycleNudge[];
+}
+
+export interface AdminRequestAccountDeletionPayload {
+    reason?: string;
+    execute_immediately: boolean;
+}
+
+export type LifecycleNudgeType = 'NO_EVENT_CREATED' | 'STRIPE_ONBOARDING_INCOMPLETE' | 'EVENT_DRAFT_STALE' | 'LIVE_EVENT_NO_SALES';
+
+export interface LifecycleEmailContent {
+    subject: string;
+    body: string;
+    cta_label: string;
+}
+
+export interface AdminLifecycleEmail extends LifecycleEmailContent {
+    nudge_type: LifecycleNudgeType;
+    enabled_at: string | null;
+    is_customised: boolean;
+    sent_total: number;
+    sent_last_30_days: number;
+    delivered_total: number;
+    bounced_total: number;
+    opened_total: number;
+    clicked_total: number;
+    tokens: EmailTemplateToken[];
+}
+
+export interface AdminLifecycleEmailsResponse {
+    data: AdminLifecycleEmail[];
+    meta: {
+        sending_configured: boolean;
+    };
+}
+
+export interface LifecycleEmailPreview {
+    subject: string;
+    html: string;
 }
 
 export interface AdminFeatureFlag {
@@ -152,37 +202,69 @@ export interface AdminStats {
     total_tickets_sold: number;
 }
 
-export interface PopularEvent {
+export type AdminDashboardPeriod = '24h' | '7d' | '30d';
+
+export interface AdminEmailDeliveryCategoryStats {
+    category: string | null;
+    sent: number;
+    delivered: number;
+    permanent_bounces: number;
+    transient_bounces: number;
+    complaints: number;
+    opened: number;
+    clicked: number;
+}
+
+export interface AdminEmailDeliveryStats {
+    delivery_webhook_configured: boolean;
+    categories: AdminEmailDeliveryCategoryStats[];
+}
+
+export interface AdminCommissionAmount {
+    gross: number;
+    net: number;
+}
+
+export interface AdminCommissionByCurrency extends Record<AdminDashboardPeriod, AdminCommissionAmount> {
+    currency: string;
+}
+
+export interface AdminSalesByCurrency {
+    currency: string;
+    orders_count: number;
+    total: number;
+}
+
+interface AdminDashboardEventBase {
     id: IdParam;
     title: string;
-    start_date: string;
-    end_date: string | null;
+    slug: string;
+    account_id: IdParam;
+    account_name: string | null;
+    organizer_name: string | null;
+}
+
+export interface AdminTopSellingEvent extends AdminDashboardEventBase {
     status: string;
     currency: string;
-    organizer_name: string | null;
-    account_name: string | null;
-    products_sold: number;
-    sales_total_gross: number;
-    orders_created: number;
+    tickets_sold: number;
+    orders_count: number;
+    sales_total: number;
 }
 
-export interface MostViewedEvent {
-    id: IdParam;
-    title: string;
-    start_date: string;
-    end_date: string | null;
+export interface AdminMostViewedEvent extends AdminDashboardEventBase {
     status: string;
-    organizer_name: string | null;
-    account_name: string | null;
-    total_views: number;
+    views: number;
+    orders_count: number;
 }
 
-export interface TopOrganizer {
-    id: IdParam;
-    name: string;
-    account_name: string | null;
-    events_count: number;
-    total_products_sold: number;
+export interface AdminUpcomingEvent extends AdminDashboardEventBase {
+    timezone: string;
+    occurrence_id: IdParam;
+    start_date: string;
+    capacity: number | null;
+    attendees_count: number;
+    orders_last_24h: number;
 }
 
 export interface RecentAccount {
@@ -193,23 +275,40 @@ export interface RecentAccount {
     stripe_connect_setup_complete: boolean;
     account_verified_at: string | null;
     events_count: number;
-    users_count: number;
+}
+
+export interface AdminDashboardAttention {
+    flagged_events: number;
+    messages_pending_review: number;
+    failed_jobs: number;
+    pending_deletion_requests: number;
+}
+
+export interface AdminTopCommissionAccount {
+    id: IdParam;
+    name: string;
+    email: string;
+    currency: string;
+    orders_count: number;
+    gross: number;
+    net: number;
 }
 
 export interface AdminDashboardData {
-    popular_events: PopularEvent[];
-    most_viewed_events: MostViewedEvent[];
-    top_organizers: TopOrganizer[];
+    period: AdminDashboardPeriod;
+    attention: AdminDashboardAttention;
+    commission_by_currency: AdminCommissionByCurrency[];
+    views_since: string;
+    sales_by_currency: AdminSalesByCurrency[];
+    orders_count: number;
+    tickets_sold: number;
+    signups_count: number;
+    events_created_count: number;
+    top_selling_events: AdminTopSellingEvent[];
+    top_accounts_by_commission: AdminTopCommissionAccount[];
+    most_viewed_events: AdminMostViewedEvent[];
+    upcoming_events: AdminUpcomingEvent[];
     recent_accounts: RecentAccount[];
-    recent_revenue: number;
-    recent_orders_count: number;
-    recent_orders_total: number;
-    recent_signups_count: number;
-}
-
-export interface GetAdminDashboardParams {
-    days?: number;
-    limit?: number;
 }
 
 export interface StartImpersonationRequest {
@@ -400,6 +499,7 @@ export interface AdminSpamEvent {
     id: IdParam;
     event_id: IdParam;
     event_title: string;
+    event_slug: string;
     event_description: string;
     organizer_name: string | null;
     account_name: string | null;
@@ -451,12 +551,16 @@ export const adminClient = {
         return response.data;
     },
 
-    getDashboardData: async (params: GetAdminDashboardParams = {}) => {
+    getEmailDeliveryStats: async (period: AdminDashboardPeriod) => {
+        const response = await api.get<{ data: AdminEmailDeliveryStats }>('admin/email-deliveries/stats', {
+            params: {period},
+        });
+        return response.data.data;
+    },
+
+    getDashboardData: async (period: AdminDashboardPeriod) => {
         const response = await api.get<AdminDashboardData>('admin/dashboard', {
-            params: {
-                days: params.days || 14,
-                limit: params.limit || 10,
-            }
+            params: {period},
         });
         return response.data;
     },
@@ -478,15 +582,6 @@ export const adminClient = {
                 page: params.page || 1,
                 per_page: params.per_page || 20,
                 search: params.search || undefined,
-            }
-        });
-        return response.data;
-    },
-
-    getUpcomingEvents: async (perPage: number = 10) => {
-        const response = await api.get<GenericPaginatedResponse<any>>('admin/events/upcoming', {
-            params: {
-                per_page: perPage,
             }
         });
         return response.data;
@@ -524,6 +619,10 @@ export const adminClient = {
             { account_id: accountId }
         );
         return response.data;
+    },
+
+    resetUserTwoFactor: async (userId: IdParam) => {
+        await api.post(`admin/users/${userId}/two-factor/reset`);
     },
 
     stopImpersonation: async () => {
@@ -673,6 +772,11 @@ export const adminClient = {
         return response.data;
     },
 
+    deleteSpamEvent: async (eventId: IdParam, deleteAccount: boolean) => {
+        const response = await api.post(`admin/spam-events/${eventId}/delete`, {delete_account: deleteAccount});
+        return response.data;
+    },
+
     updateAccountMessagingTier: async (accountId: IdParam, tierId: number) => {
         const response = await api.put(`admin/accounts/${accountId}/messaging-tier`, {
             messaging_tier_id: tierId
@@ -716,6 +820,25 @@ export const adminClient = {
         return response.data;
     },
 
+    getLifecycleEmails: async () => {
+        const response = await api.get<AdminLifecycleEmailsResponse>('admin/lifecycle-emails');
+        return response.data;
+    },
+
+    updateLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent & { enabled: boolean }) => {
+        const response = await api.put<GenericDataResponse<AdminLifecycleEmail>>(`admin/lifecycle-emails/${nudgeType}`, data);
+        return response.data;
+    },
+
+    previewLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent) => {
+        const response = await api.post<GenericDataResponse<LifecycleEmailPreview>>(`admin/lifecycle-emails/${nudgeType}/preview`, data);
+        return response.data;
+    },
+
+    sendTestLifecycleEmail: async (nudgeType: LifecycleNudgeType, data: LifecycleEmailContent) => {
+        await api.post(`admin/lifecycle-emails/${nudgeType}/test`, data);
+    },
+
     getMessagingTiers: async (): Promise<GenericDataResponse<AccountMessagingTier[]>> => {
         const response = await api.get<GenericDataResponse<AccountMessagingTier[]>>('admin/messaging-tiers');
         return response.data;
@@ -733,8 +856,8 @@ export const adminClient = {
         return response.data;
     },
 
-    requestAccountDeletion: async (accountId: IdParam, reason?: string) => {
-        const response = await api.post(`admin/accounts/${accountId}/deletion-request`, {reason});
+    requestAccountDeletion: async (accountId: IdParam, payload: AdminRequestAccountDeletionPayload) => {
+        const response = await api.post(`admin/accounts/${accountId}/deletion-request`, payload);
         return response.data;
     },
 

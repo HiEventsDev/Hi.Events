@@ -71,6 +71,13 @@ export const router: RouteObject[] = [
                     const AcceptInvitation = await import("./components/routes/auth/AcceptInvitation");
                     return { Component: AcceptInvitation.default };
                 }
+            },
+            {
+                path: "two-factor-setup",
+                async lazy() {
+                    const RequiredTwoFactorSetup = await import("./components/routes/auth/RequiredTwoFactorSetup");
+                    return { Component: RequiredTwoFactorSetup.default };
+                }
             }
         ]
     },
@@ -97,7 +104,7 @@ export const router: RouteObject[] = [
                 }
             },
             {
-                path: "profile",
+                path: "profile/:tab?",
                 async lazy() {
                     const ManageProfile = await import("./components/routes/profile/ManageProfile");
                     return { Component: ManageProfile.default };
@@ -222,6 +229,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "email-delivery",
+                async lazy() {
+                    const EmailDelivery = await import("./components/routes/admin/EmailDelivery");
+                    return { Component: EmailDelivery.default };
+                }
+            },
+            {
                 path: "failed-jobs",
                 async lazy() {
                     const FailedJobs = await import("./components/routes/admin/FailedJobs");
@@ -247,6 +261,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Announcements = await import("./components/routes/admin/Announcements");
                     return { Component: Announcements.default };
+                }
+            },
+            {
+                path: "lifecycle-emails",
+                async lazy() {
+                    const LifecycleEmails = await import("./components/routes/admin/LifecycleEmails");
+                    return { Component: LifecycleEmails.default };
                 }
             }
         ]
@@ -745,6 +766,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const BoxOffice = await import("./ee/box-office/components/layouts/BoxOffice");
             return { Component: BoxOffice.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/emails/unsubscribe/:token",
+        async lazy() {
+            const Unsubscribe = await import("./components/routes/emails/Unsubscribe");
+            return { Component: Unsubscribe.default };
         },
         errorElement: <ErrorPage />,
     },

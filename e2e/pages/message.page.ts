@@ -32,6 +32,13 @@ export class MessagePage {
     await this.page.getByRole('heading', { name: 'Recipients' }).waitFor();
   }
 
+  recipientStatus(email: string): Locator {
+    return this.page
+      .getByTestId('message-recipient-row')
+      .filter({ hasText: email })
+      .getByTestId('message-recipient-status');
+  }
+
   async cancelScheduledMessage(): Promise<void> {
     this.page.once('dialog', (dialog) => dialog.accept());
     await this.page.getByRole('button', { name: 'Cancel', exact: true }).click();

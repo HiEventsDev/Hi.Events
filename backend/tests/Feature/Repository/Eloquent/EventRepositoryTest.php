@@ -120,22 +120,6 @@ class EventRepositoryTest extends TestCase
         $this->assertNotNull($event->getAccount());
     }
 
-    public function test_get_upcoming_events_for_admin_hydrates_occurrence_dates(): void
-    {
-        $eventId = $this->createEvent('Upcoming admin event '.uniqid(), status: 'LIVE');
-        $this->createOccurrence($eventId, now()->addHours(2), now()->addHours(4));
-
-        $result = $this->app->make(EventRepository::class)->getUpcomingEventsForAdmin(perPage: 100);
-
-        /** @var EventDomainObject|null $event */
-        $event = collect($result->items())->first(fn (EventDomainObject $e) => $e->getId() === $eventId);
-
-        $this->assertNotNull($event, 'LIVE event with an occurrence in the next 24h should appear in the upcoming admin list');
-        $this->assertNotNull($event->getStartDate(), 'Upcoming admin list must hydrate occurrences so start_date resolves');
-        $this->assertNotNull($event->getOrganizer());
-        $this->assertNotNull($event->getAccount());
-    }
-
     public function test_get_all_events_for_admin_sorts_by_earliest_occurrence_start_date(): void
     {
         $earlyId = $this->createEvent('Sort early '.uniqid());

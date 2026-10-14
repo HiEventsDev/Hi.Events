@@ -10,5 +10,6 @@ class LoginCredentialsDTO extends BaseDTO
         public readonly string $email,
         public readonly string $password,
         public readonly ?int $accountId = null,
+        public readonly ?string $trustedDeviceToken = null,
     ) {}
 }

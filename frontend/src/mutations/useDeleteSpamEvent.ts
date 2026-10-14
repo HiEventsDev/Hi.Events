@@ -1,0 +1,16 @@
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {adminClient} from "../api/admin.client";
+import {IdParam} from "../types";
+import {GET_ADMIN_SPAM_EVENTS_QUERY_KEY} from "../queries/useGetAdminSpamEvents";
+
+export const useDeleteSpamEvent = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({eventId, deleteAccount}: { eventId: IdParam, deleteAccount: boolean }) =>
+            adminClient.deleteSpamEvent(eventId, deleteAccount),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: GET_ADMIN_SPAM_EVENTS_QUERY_KEY});
+        },
+    });
+};

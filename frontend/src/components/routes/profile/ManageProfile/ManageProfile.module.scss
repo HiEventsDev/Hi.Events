@@ -1,8 +1,20 @@
+@use "../../../../styles/mixins.scss";
+
 .container {
   margin-bottom: var(--hi-spacing-xl);
 
   .tabsCard {
     padding: 0;
+
+    @include mixins.respond-below(sm) {
+      :global(.mantine-Tabs-tabSection) {
+        display: none;
+      }
+
+      :global(.mantine-Tabs-tab) {
+        padding-inline: 0.5rem;
+      }
+    }
   }
 
   .emailChangeAlert {
@@ -11,6 +23,10 @@
 
   .tabWrapper {
     padding: var(--hi-spacing-xl);
+
+    @include mixins.respond-below(sm) {
+      padding: var(--hi-spacing-lg) var(--hi-spacing-md);
+    }
   }
 
   .fieldsetLegend {

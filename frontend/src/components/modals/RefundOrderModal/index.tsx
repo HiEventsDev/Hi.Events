@@ -175,10 +175,6 @@ export const RefundOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     }
 
     const getModalBody = () => {
-        if (order.is_manually_created) {
-            return <CannotRefund message={t`You cannot refund a manually created order.`}/>
-        }
-
         if (isRefundPending) {
             return <CannotRefund
                 message={t`There is a refund pending. Please wait for it to complete before requesting another refund.`}/>

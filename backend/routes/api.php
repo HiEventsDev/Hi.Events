@@ -1,5 +1,6 @@
 <?php
 
+use HiEvents\DomainObjects\Enums\LifecycleNudgeType;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\CreateBoxOfficeAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\DeleteBoxOfficeAction;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\GetBoxOfficeAction;
@@ -56,6 +57,7 @@ use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusActio
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
+use HiEvents\Http\Actions\Accounts\UpdateAccountTwoFactorRequirementAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAllAccountsAction as GetAllAdminAccountsAction;
 use HiEvents\Http\Actions\Admin\Accounts\UpdateAccountMessagingTierAction;
@@ -73,8 +75,8 @@ use HiEvents\Http\Actions\Admin\DeletionRequests\AdminCancelAccountDeletionActio
 use HiEvents\Http\Actions\Admin\DeletionRequests\AdminExecuteAccountDeletionAction;
 use HiEvents\Http\Actions\Admin\DeletionRequests\AdminRequestAccountDeletionAction;
 use HiEvents\Http\Actions\Admin\DeletionRequests\GetAllAccountDeletionRequestsAction;
+use HiEvents\Http\Actions\Admin\EmailDeliveries\GetEmailDeliveryStatsAction;
 use HiEvents\Http\Actions\Admin\Events\GetAllEventsAction as GetAllAdminEventsAction;
-use HiEvents\Http\Actions\Admin\Events\GetUpcomingEventsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteAllFailedJobsAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\DeleteFailedJobAction;
 use HiEvents\Http\Actions\Admin\FailedJobs\GetAllFailedJobsAction;
@@ -87,6 +89,10 @@ use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateAccountFeatureFlagAction;
 use HiEvents\Http\Actions\Admin\FeatureFlags\UpdateFeatureFlagAction;
 use HiEvents\Http\Actions\Admin\GetMessagingTiersAction;
 use HiEvents\Http\Actions\Admin\GetSystemInfoAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\GetLifecycleEmailsAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\PreviewLifecycleEmailAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\SendTestLifecycleEmailAction;
+use HiEvents\Http\Actions\Admin\LifecycleEmails\UpdateLifecycleEmailAction;
 use HiEvents\Http\Actions\Admin\Messages\ApproveMessageAction;
 use HiEvents\Http\Actions\Admin\Messages\GetAllMessagesAction as GetAllAdminMessagesAction;
 use HiEvents\Http\Actions\Admin\Orders\GetAllOrdersAction;
@@ -95,10 +101,12 @@ use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerConfigurationAction;
 use HiEvents\Http\Actions\Admin\Organizers\UpdateOrganizerVatSettingAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\ApproveSpamEventAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\ConfirmSpamEventAction;
+use HiEvents\Http\Actions\Admin\SpamEvents\DeleteSpamEventAction;
 use HiEvents\Http\Actions\Admin\SpamEvents\GetAllSpamEventsAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminDashboardDataAction;
 use HiEvents\Http\Actions\Admin\Stats\GetAdminStatsAction;
 use HiEvents\Http\Actions\Admin\Users\GetAllUsersAction;
+use HiEvents\Http\Actions\Admin\Users\ResetUserTwoFactorAction;
 use HiEvents\Http\Actions\Admin\Users\StartImpersonationAction;
 use HiEvents\Http\Actions\Admin\Users\StopImpersonationAction;
 use HiEvents\Http\Actions\Affiliates\CreateAffiliateAction;
@@ -125,6 +133,7 @@ use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
+use HiEvents\Http\Actions\Auth\TwoFactorLoginAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
 use HiEvents\Http\Actions\CapacityAssignments\DeleteCapacityAssignmentAction;
@@ -144,6 +153,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListStatsPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\GetColorThemesAction;
+use HiEvents\Http\Actions\Common\Webhooks\HandleEmailDeliveryWebhookPublicAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateEventEmailTemplateAction;
 use HiEvents\Http\Actions\EmailTemplates\CreateOrganizerEmailTemplateAction;
@@ -196,6 +206,7 @@ use HiEvents\Http\Actions\EventSettings\GetPlatformFeePreviewAction;
 use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
 use HiEvents\Http\Actions\Images\DeleteImageAction;
+use HiEvents\Http\Actions\LifecycleEmails\UnsubscribeFromLifecycleEmailsAction;
 use HiEvents\Http\Actions\Locations\CreateLocationAction;
 use HiEvents\Http\Actions\Locations\DeleteLocationAction;
 use HiEvents\Http\Actions\Locations\GeoAutocompleteAction;
@@ -261,6 +272,9 @@ use HiEvents\Http\Actions\Products\DeleteProductAction;
 use HiEvents\Http\Actions\Products\EditProductAction;
 use HiEvents\Http\Actions\Products\GetProductAction;
 use HiEvents\Http\Actions\Products\GetProductsAction;
+use HiEvents\Http\Actions\Products\Purchases\ExportProductPurchasesAction;
+use HiEvents\Http\Actions\Products\Purchases\GetProductPurchasesAction;
+use HiEvents\Http\Actions\Products\Purchases\GetProductPurchaseSummaryAction;
 use HiEvents\Http\Actions\Products\SortProductsAction;
 use HiEvents\Http\Actions\PromoCodes\CreatePromoCodeAction;
 use HiEvents\Http\Actions\PromoCodes\DeletePromoCodeAction;
@@ -304,6 +318,14 @@ use HiEvents\Http\Actions\Users\GetUserAction;
 use HiEvents\Http\Actions\Users\GetUsersAction;
 use HiEvents\Http\Actions\Users\ResendEmailConfirmationAction;
 use HiEvents\Http\Actions\Users\ResendInvitationAction;
+use HiEvents\Http\Actions\Users\TwoFactor\BeginTwoFactorSetupAction;
+use HiEvents\Http\Actions\Users\TwoFactor\ConfirmTwoFactorSetupAction;
+use HiEvents\Http\Actions\Users\TwoFactor\DisableTwoFactorAction;
+use HiEvents\Http\Actions\Users\TwoFactor\GetTwoFactorStatusAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RegenerateRecoveryCodesAction;
+use HiEvents\Http\Actions\Users\TwoFactor\ResetAccountUserTwoFactorAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RevokeTrustedDeviceAction;
+use HiEvents\Http\Actions\Users\TwoFactor\RevokeTrustedDevicesAction;
 use HiEvents\Http\Actions\Users\UpdateMeAction;
 use HiEvents\Http\Actions\Users\UpdateUserAction;
 use HiEvents\Http\Actions\Waitlist\Organizer\CancelWaitlistEntryAction;
@@ -328,8 +350,9 @@ $router->prefix('/auth')->group(
     function (Router $router): void {
         // Auth
         $router->post('/login', LoginAction::class)->name('auth.login')->middleware('throttle:auth-login');
+        $router->post('/login/two-factor', TwoFactorLoginAction::class)->name('auth.login.two-factor')->middleware('throttle:auth-two-factor');
         $router->post('/logout', LogoutAction::class)->name('auth.logout');
-        $router->post('/register', CreateAccountAction::class)->name('auth.register');
+        $router->post('/register', CreateAccountAction::class)->name('auth.register')->middleware('throttle:auth-register');
         $router->post('/forgot-password', ForgotPasswordAction::class)->name('auth.forgot-password')->middleware('throttle:auth-forgot-password');
 
         // Invitations
@@ -353,18 +376,26 @@ $router->middleware(['auth:api'])->group(
 
         // Users
         $router->get('/users/me', GetMeAction::class);
-        $router->put('/users/me', UpdateMeAction::class);
-        $router->post('/users', CreateUserAction::class);
+        $router->put('/users/me', UpdateMeAction::class)->middleware('throttle:user-update-me');
+        $router->get('/users/me/two-factor', GetTwoFactorStatusAction::class);
+        $router->post('/users/me/two-factor/setup', BeginTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-setup');
+        $router->post('/users/me/two-factor/confirm', ConfirmTwoFactorSetupAction::class)->middleware('throttle:10,1,two-factor-confirm');
+        $router->post('/users/me/two-factor/recovery-codes', RegenerateRecoveryCodesAction::class)->middleware('throttle:10,1,two-factor-recovery-codes');
+        $router->post('/users/me/two-factor/disable', DisableTwoFactorAction::class)->middleware('throttle:10,1,two-factor-disable');
+        $router->delete('/users/me/two-factor/trusted-devices', RevokeTrustedDevicesAction::class);
+        $router->delete('/users/me/two-factor/trusted-devices/{device_id}', RevokeTrustedDeviceAction::class)->whereNumber('device_id');
+        $router->post('/users', CreateUserAction::class)->middleware('throttle:user-invite');
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
         $router->put('/users/{user_id}', UpdateUserAction::class);
         $router->post('/users/{user_id}/email-change/{changeToken}', ConfirmEmailChangeAction::class);
-        $router->post('/users/{user_id}/invitation', ResendInvitationAction::class);
+        $router->post('/users/{user_id}/invitation', ResendInvitationAction::class)->middleware('throttle:user-invite');
         $router->delete('/users/{user_id}/invitation', DeleteInvitationAction::class);
         $router->delete('/users/{user_id}/email-change', CancelEmailChangeAction::class);
         $router->post('/users/{user_id}/confirm-email/{resetToken}', ConfirmEmailAddressAction::class);
-        $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class);
-        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class);
+        $router->post('/users/{user_id}/resend-email-confirmation', ResendEmailConfirmationAction::class)->middleware('throttle:user-email-confirmation');
+        $router->post('/users/{user_id}/confirm-email-with-code', ConfirmEmailWithCodeAction::class)->middleware('throttle:user-email-confirmation-code');
+        $router->post('/users/{user_id}/two-factor/reset', ResetAccountUserTwoFactorAction::class)->whereNumber('user_id');
 
         // Announcements
         $router->get('/announcements/active', GetActiveAnnouncementsAction::class);
@@ -374,6 +405,7 @@ $router->middleware(['auth:api'])->group(
         $router->post('/accounts/deletion-request', RequestAccountDeletionAction::class);
         $router->delete('/accounts/deletion-request', CancelAccountDeletionAction::class);
         $router->get('/accounts/deletion-request', GetAccountDeletionStatusAction::class);
+        $router->put('/accounts/{account_id}/two-factor-requirement', UpdateAccountTwoFactorRequirementAction::class)->whereNumber('account_id');
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
 
@@ -491,6 +523,9 @@ $router->middleware(['auth:api'])->group(
         // Products
         $router->post('/events/{event_id}/products', CreateProductAction::class);
         $router->post('/events/{event_id}/products/sort', SortProductsAction::class);
+        $router->post('/events/{event_id}/products/purchases/export', ExportProductPurchasesAction::class);
+        $router->get('/events/{event_id}/products/{product_id}/purchases', GetProductPurchasesAction::class);
+        $router->get('/events/{event_id}/products/{product_id}/purchases/summary', GetProductPurchaseSummaryAction::class);
         $router->put('/events/{event_id}/products/{ticket_id}', EditProductAction::class);
         $router->get('/events/{event_id}/products/{ticket_id}', GetProductAction::class);
         $router->delete('/events/{event_id}/products/{ticket_id}', DeleteProductAction::class);
@@ -653,10 +688,10 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->delete('/configurations/{configuration_id}', DeleteConfigurationAction::class);
         $router->get('/users', GetAllUsersAction::class);
         $router->get('/events', GetAllAdminEventsAction::class);
-        $router->get('/events/upcoming', GetUpcomingEventsAction::class);
         $router->get('/orders', GetAllOrdersAction::class);
         $router->post('/impersonate/{user_id}', StartImpersonationAction::class);
         $router->post('/stop-impersonation', StopImpersonationAction::class);
+        $router->post('/users/{user_id}/two-factor/reset', ResetUserTwoFactorAction::class)->whereNumber('user_id');
 
         // Failed Jobs
         $router->get('/failed-jobs', GetAllFailedJobsAction::class);
@@ -673,12 +708,25 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
         $router->get('/spam-events', GetAllSpamEventsAction::class);
         $router->post('/spam-events/{event_id}/approve', ApproveSpamEventAction::class);
         $router->post('/spam-events/{event_id}/confirm-spam', ConfirmSpamEventAction::class);
+        $router->post('/spam-events/{event_id}/delete', DeleteSpamEventAction::class)->whereNumber('event_id');
 
         // Announcements
         $router->get('/announcements', GetAllAnnouncementsAction::class);
         $router->post('/announcements', CreateAnnouncementAction::class);
         $router->put('/announcements/{announcement_id}', UpdateAnnouncementAction::class);
         $router->delete('/announcements/{announcement_id}', DeleteAnnouncementAction::class);
+
+        // Lifecycle Emails
+        $router->middleware('lifecycle-emails')->group(static function (Router $router): void {
+            $router->get('/lifecycle-emails', GetLifecycleEmailsAction::class);
+            $router->put('/lifecycle-emails/{nudge_type}', UpdateLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray());
+            $router->post('/lifecycle-emails/{nudge_type}/preview', PreviewLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray());
+            $router->post('/lifecycle-emails/{nudge_type}/test', SendTestLifecycleEmailAction::class)
+                ->whereIn('nudge_type', LifecycleNudgeType::valuesArray())
+                ->middleware('throttle:10,1,admin-lifecycle-email-test');
+        });
 
         // Messaging Tiers
         $router->get('/messaging-tiers', GetMessagingTiersAction::class);
@@ -705,6 +753,9 @@ $router->prefix('/admin')->middleware(['auth:api'])->group(
 
         // System Info
         $router->get('/system-info', GetSystemInfoAction::class);
+
+        // Email Deliveries
+        $router->get('/email-deliveries/stats', GetEmailDeliveryStatsAction::class);
     }
 );
 
@@ -763,7 +814,8 @@ $router->prefix('/public')->group(
             ->middleware('throttle:public-promo-code');
 
         // Stripe payment gateway
-        $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
+        $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class)
+            ->middleware('throttle:public-payment-intent');
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
 
         // Questions
@@ -772,6 +824,10 @@ $router->prefix('/public')->group(
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class)
             ->withoutMiddleware(ThrottleRequests::class.':api');
+        $router->post('/webhooks/email-delivery/{provider}', HandleEmailDeliveryWebhookPublicAction::class)
+            ->withoutMiddleware(ThrottleRequests::class.':api');
+        $router->post('/lifecycle-emails/unsubscribe/{token}', UnsubscribeFromLifecycleEmailsAction::class)
+            ->middleware(['lifecycle-emails', 'throttle:30,1,lifecycle-email-unsubscribe']);
 
         // Box office
         $router->get('/box-offices/{box_office_short_id}', GetBoxOfficePublicAction::class)

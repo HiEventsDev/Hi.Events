@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\Public\GetBoxOfficePublicHandler;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeOperatorAuthorizer;
+use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeReaderCache;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\DTO\TerminalReaderDTO;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\DTO\TerminalReadersResponseDTO;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\Payment\Stripe\Terminal\StripeTerminalReaderService;
@@ -23,6 +24,8 @@ class GetBoxOfficePublicHandlerTest extends TestCase
     private MockInterface|StripeTerminalReaderService $readerService;
 
     private GetBoxOfficePublicHandler $handler;
+
+    private BoxOfficeReaderCache $readerCache;
 
     protected function setUp(): void
     {
@@ -48,7 +51,7 @@ class GetBoxOfficePublicHandlerTest extends TestCase
             $organizerRepository,
             $this->readerService,
             $operatorAuthorizer,
-            new Repository(new ArrayStore(serializesValues: true)),
+            $this->readerCache = new BoxOfficeReaderCache(new Repository(new ArrayStore(serializesValues: true))),
         );
     }
 
@@ -76,5 +79,23 @@ class GetBoxOfficePublicHandlerTest extends TestCase
         $this->assertCount(1, $second->readers);
         $this->assertInstanceOf(TerminalReaderDTO::class, $second->readers->first());
         $this->assertSame('Front desk', $second->readers->first()->label);
+    }
+
+    public function test_forgetting_the_organizer_cache_refetches_the_reader_list(): void
+    {
+        $this->readerService->shouldReceive('listForOrganizer')->twice()->andReturn(
+            new TerminalReadersResponseDTO(readers: collect(), stripe_configured: true, stripe_connected: true),
+            new TerminalReadersResponseDTO(
+                readers: collect([new TerminalReaderDTO(id: 9, label: 'New', device_type: null, status: 'online', is_available: true)]),
+                stripe_configured: true,
+                stripe_connected: true,
+            ),
+        );
+
+        $this->assertFalse($this->handler->handle('bo_x')->card_payments_enabled);
+
+        $this->readerCache->forget(3);
+
+        $this->assertTrue($this->handler->handle('bo_x')->card_payments_enabled);
     }
 }

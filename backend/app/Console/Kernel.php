@@ -4,9 +4,12 @@ namespace HiEvents\Console;
 
 use HiEvents\Enterprise\Licensing\Console\GenerateLicenceKeypairCommand;
 use HiEvents\Enterprise\Licensing\Console\IssueLicenceKeyCommand;
+use HiEvents\Jobs\Abuse\ReportSuspiciousActivityJob;
 use HiEvents\Jobs\Account\ProcessScheduledAccountDeletionsJob;
+use HiEvents\Jobs\Lifecycle\SendLifecycleNudgesJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Jobs\Waitlist\ProcessExpiredWaitlistOffersJob;
+use HiEvents\Services\Domain\LifecycleEmail\LifecycleEmailSender;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +27,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendScheduledMessagesJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new ProcessExpiredWaitlistOffersJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new ProcessScheduledAccountDeletionsJob)->hourly()->withoutOverlapping();
+        $schedule->job(new ReportSuspiciousActivityJob)->everyFiveMinutes()->withoutOverlapping()->when(fn () => (bool) config('app.saas_mode_enabled'));
+        $schedule->job(new SendLifecycleNudgesJob)->hourly()->withoutOverlapping()
+            ->when(static fn (): bool => app(LifecycleEmailSender::class)->isConfigured());
 
         $schedule->call(function (): void {
             $count = DB::table('failed_jobs')->count();

@@ -128,6 +128,6 @@ test.describe('taxes and fees', () => {
 
     await products.openEditModal();
     await products.openLedgerRow('taxes');
-    await expect(page.getByRole('dialog').getByText(new RegExp(`^${taxName}`))).toBeVisible();
+    await expect(page.getByTestId('product-form-column').getByText(new RegExp(`^${taxName}`))).toBeVisible();
   });
 });

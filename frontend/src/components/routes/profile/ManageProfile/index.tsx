@@ -4,7 +4,7 @@ import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {Button, Checkbox, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
 import classes from "./ManageProfile.module.scss";
 import {useEffect, useState} from "react";
-import {IconMail, IconPassword, IconUser, IconWorld} from "@tabler/icons-react";
+import {IconMail, IconPassword, IconShieldLock, IconUser, IconWorld} from "@tabler/icons-react";
 import {Callout} from "../../../common/Callout";
 import {timezones} from "../../../../../data/timezones.ts";
 import {useUpdateMe} from "../../../../mutations/useUpdateMe.ts";
@@ -18,6 +18,10 @@ import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../
 import {Fieldset} from "../../../common/Fieldset";
 import {InputGroup} from "../../../common/InputGroup";
 import {getConfig} from "../../../../utilites/config.ts";
+import {useNavigate, useParams} from "react-router";
+import {Security} from "./Security";
+
+const PROFILE_TABS = ['profile', 'password', 'security'];
 
 const localeSelectData = Object.keys(localeToNameMap).map(locale => ({
     value: locale,
@@ -26,6 +30,9 @@ const localeSelectData = Object.keys(localeToNameMap).map(locale => ({
 
 export const ManageProfile = () => {
     const {data: me, isFetching} = useGetMe();
+    const {tab} = useParams();
+    const navigate = useNavigate();
+    const activeTab = tab && PROFILE_TABS.includes(tab) ? tab : 'profile';
     const mutation = useUpdateMe();
     const cancelEmailChangeMutation = useCancelEmailChange();
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
@@ -111,13 +118,19 @@ export const ManageProfile = () => {
         <div className={classes.container}>
             <h1>{t`Manage Profile`}</h1>
             <Card className={classes.tabsCard}>
-                <Tabs defaultValue="profile">
+                <Tabs
+                    value={activeTab}
+                    onChange={(value) => navigate(value === 'profile' ? '/manage/profile' : `/manage/profile/${value}`, {replace: true})}
+                >
                     <Tabs.List grow>
                         <Tabs.Tab value="profile" leftSection={<IconUser/>}>
                             {t`Profile`}
                         </Tabs.Tab>
                         <Tabs.Tab value="password" leftSection={<IconPassword/>}>
                             {t`Password`}
+                        </Tabs.Tab>
+                        <Tabs.Tab value="security" leftSection={<IconShieldLock/>} data-testid="profile-security-tab">
+                            {t`Security`}
                         </Tabs.Tab>
                     </Tabs.List>
                     <Tabs.Panel value="profile">
@@ -239,6 +252,12 @@ export const ManageProfile = () => {
                                             type={'submit'}>{t`Change password`}</Button>
                                 </fieldset>
                             </form>
+                        </div>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="security">
+                        <div className={classes.tabWrapper}>
+                            {activeTab === 'security' && <Security me={me}/>}
                         </div>
                     </Tabs.Panel>
                 </Tabs>

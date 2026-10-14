@@ -4,6 +4,7 @@ namespace HiEvents\Http\Request\User;
 
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Locale;
+use HiEvents\Validators\Rules\PersonNameRule;
 use Illuminate\Validation\Rules\Password;
 
 class UpdateMeRequest extends BaseRequest
@@ -15,8 +16,8 @@ class UpdateMeRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
-            'last_name' => 'required_without_all:current_password,password,password_confirmation|min:1',
+            'first_name' => $this->nameRules($this->user()?->first_name),
+            'last_name' => $this->nameRules($this->user()?->last_name),
             'email' => 'required_without_all:current_password,password,password_confirmation|email',
             'timezone' => 'required_without_all:current_password,password,password_confirmation|timezone',
             'locale' => 'required_without_all:current_password,password,password_confirmation|in:'.implode(',', Locale::getSupportedLocales()),
@@ -31,6 +32,17 @@ class UpdateMeRequest extends BaseRequest
                 Password::min(8),
             ],
             'marketing_opt_in' => 'boolean|nullable',
+        ];
+    }
+
+    private function nameRules(?string $currentValue): array
+    {
+        return [
+            'required_without_all:current_password,password,password_confirmation',
+            'string',
+            'min:1',
+            'max:'.PersonNameRule::maxLengthFor($currentValue),
+            new PersonNameRule($currentValue),
         ];
     }
 }

@@ -63,6 +63,11 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                     $query->where('order_items.event_occurrence_id', $occurrenceFilter->value);
                 });
             }
+
+            $productFilter = $params->filter_fields->firstWhere('field', 'product_id');
+            if ($productFilter?->value) {
+                $this->applyProductFilter($productFilter->value);
+            }
         }
 
         $this->model = $this->model->orderBy(
@@ -75,6 +80,20 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             limit: $params->per_page,
             page: $params->page,
         );
+    }
+
+    private function applyProductFilter(string $value): void
+    {
+        $productIds = array_values(array_filter(
+            array_map('intval', explode(',', $value)),
+            static fn (int $productId) => $productId > 0,
+        ));
+
+        $this->model = $this->model->where(static function (Builder $builder) use ($productIds) {
+            $builder
+                ->whereHas('order_items', static fn (Builder $query) => $query->whereIn('order_items.product_id', $productIds))
+                ->orWhereHas('attendees', static fn (Builder $query) => $query->whereIn('attendees.product_id', $productIds));
+        });
     }
 
     public function findByOrganizerId(int $organizerId, int $accountId, QueryParamsDTO $params): LengthAwarePaginator

@@ -30,6 +30,14 @@ class Url
 
     public const ACCOUNT_DANGER_ZONE = 'app.frontend_urls.account_danger_zone';
 
+    public const PROFILE_SECURITY = 'app.frontend_urls.profile_security';
+
+    public const EVENT_DASHBOARD = 'app.frontend_urls.event_dashboard';
+
+    public const WELCOME = 'app.frontend_urls.welcome';
+
+    public const LIFECYCLE_EMAIL_UNSUBSCRIBE = 'app.frontend_urls.lifecycle_email_unsubscribe';
+
     public static function getFrontEndUrlFromConfig(string $key, array $queryParams = []): string
     {
         $url = config('app.frontend_url').config($key);

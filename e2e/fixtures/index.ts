@@ -1,9 +1,9 @@
 import { test as base, type APIRequest, type APIRequestContext, type BrowserContext, type Page } from '@playwright/test';
-import { AdminApiClient, ApiClient, login } from '../api/api-client';
+import { AdminApiClient, ApiClient } from '../api/api-client';
 import { MailpitClient } from '../utils/mailpit';
 import { bootstrapAccount, type AccountContext, type AccountIdentity } from './account.fixture';
 import { buildStorageState, openAuthedPage } from './auth.fixture';
-import { API_BASE_URL, BASE_URL, IS_SAAS_MODE, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD } from '../utils/env';
+import { API_BASE_URL, BASE_URL, IS_SAAS_MODE, SUPERADMIN_EMAIL } from '../utils/env';
 import { uniqueName } from '../utils/unique';
 
 export interface FreshAccount extends AccountIdentity {
@@ -18,6 +18,8 @@ interface SuperAdminAuth {
 
 const TRUSTED_MESSAGING_TIER_ID = 2;
 
+const superAdminToken = (): string | null => process.env.E2E_SUPERADMIN_TOKEN || null;
+
 /**
  * In SaaS mode a new account cannot message attendees or manage email templates until it is
  * verified, and its messages are held for review on the default tier. Grant both so specs
@@ -28,13 +30,10 @@ const TRUSTED_MESSAGING_TIER_ID = 2;
  */
 const grantMessagingPrivileges = async (
   playwright: { request: APIRequest },
-  anon: APIRequestContext,
   account: { id: number },
 ): Promise<void> => {
-  let token: string;
-  try {
-    ({ token } = await login(anon, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD));
-  } catch {
+  const token = superAdminToken();
+  if (!token) {
     return;
   }
 
@@ -94,7 +93,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
       const organizer = await api.createOrganizer(uniqueName('E2E Org'));
 
       if (IS_SAAS_MODE) {
-        await grantMessagingPrivileges(playwright, anon, await api.getAccount());
+        await grantMessagingPrivileges(playwright, await api.getAccount());
       }
 
       await use({ ...identity, organizerId: organizer.id, api });
@@ -113,22 +112,9 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   ],
 
   superAdminAuth: [
-    async ({ playwright }, use) => {
-      const anon = await newApiContext(playwright);
-      let auth: SuperAdminAuth | null = null;
-      try {
-        const { token } = await login(anon, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD);
-        auth = { token };
-      } catch (error) {
-        if (process.env.CI) {
-          throw new Error(
-            `Superadmin login failed in CI — check the "Provisioning superadmin" step in e2e/run-e2e.sh. ${error}`,
-          );
-        }
-      } finally {
-        await anon.dispose();
-      }
-      await use(auth);
+    async ({}, use) => {
+      const token = superAdminToken();
+      await use(token ? { token } : null);
     },
     { scope: 'worker' },
   ],

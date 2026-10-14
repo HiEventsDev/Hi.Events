@@ -90,7 +90,7 @@ class MultiDateSeatedOrderTest extends TestCase
                 )]),
                 event_occurrence_id: $occurrenceId,
             ))->values(),
-            is_user_authenticated: true,
+            can_order_unpublished_event: true,
             session_identifier: sha1(uniqid('', true)),
             order_locale: 'en',
             promo_code: null,

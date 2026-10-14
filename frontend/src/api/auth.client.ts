@@ -4,6 +4,7 @@ import {
     LoginData,
     LoginResponse, RegisterAccountRequest,
     ResetPasswordRequest,
+    TwoFactorLoginRequest,
     User
 } from "../types.ts";
 import {api} from './client.ts';
@@ -21,6 +22,11 @@ export const authClient = {
 
     login: async (user: LoginData) => {
         const response = await api.post<LoginResponse>('auth/login', user);
+        return response.data;
+    },
+
+    loginWithTwoFactor: async (request: TwoFactorLoginRequest) => {
+        const response = await api.post<LoginResponse>('auth/login/two-factor', request);
         return response.data;
     },
 

@@ -11,6 +11,7 @@ import {
     IconPackage,
     IconPuzzle,
     IconPencil,
+    IconReceipt,
     IconSend,
     IconSparkles,
     IconTicket,
@@ -38,6 +39,7 @@ import {showError, showSuccess} from "../../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {EditProductModal} from "../../../modals/EditProductModal";
 import {SendMessageModal} from "../../../modals/SendMessageModal";
+import {ProductPurchasesModal} from "../../../modals/ProductPurchasesModal";
 import {SortArrows} from "../../SortArrows";
 import {useSortProducts} from "../../../../mutations/useSortProducts.ts";
 import {DuplicateProductModal} from "../../../modals/DuplicateProductModal";
@@ -86,6 +88,7 @@ export const SortableProduct = ({
     const [isEditModalOpen, editModal] = useDisclosure(false);
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
+    const [isPurchasesModalOpen, purchasesModal] = useDisclosure(false);
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
     const sortMutation = useSortProducts();
@@ -546,6 +549,14 @@ export const SortableProduct = ({
                         <Menu.Dropdown>
                             <Menu.Label>{t`Actions`}</Menu.Label>
 
+                            <Menu.Item
+                                onClick={() => handleModalClick(product.id, purchasesModal)}
+                                leftSection={<IconReceipt size={14}/>}
+                                data-testid="product-purchases-menu-item"
+                            >
+                                {t`View purchases`}
+                            </Menu.Item>
+
                             {isTicket && (
                                 <Menu.Item
                                     onClick={() => handleModalClick(product.id, messageModal)}
@@ -603,6 +614,7 @@ export const SortableProduct = ({
             {isDuplicateModalOpen &&
                 <DuplicateProductModal originalProductId={productId} onClose={duplicateModal.close}/>}
             {isEditModalOpen && <EditProductModal productId={productId} onClose={editModal.close}/>}
+            {isPurchasesModalOpen && <ProductPurchasesModal productId={productId} onClose={purchasesModal.close}/>}
             {isMessageModalOpen && (
                 <SendMessageModal
                     onClose={messageModal.close}

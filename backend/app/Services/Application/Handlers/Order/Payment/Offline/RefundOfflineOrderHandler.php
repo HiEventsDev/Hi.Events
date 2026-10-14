@@ -2,7 +2,6 @@
 
 namespace HiEvents\Services\Application\Handlers\Order\Payment\Offline;
 
-use HiEvents\DomainObjects\Enums\PaymentProviders;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
@@ -84,7 +83,7 @@ class RefundOfflineOrderHandler
      */
     private function validateRefundability(OrderDomainObject $order, float $amount): void
     {
-        if ($order->getPaymentProvider() !== PaymentProviders::OFFLINE->name) {
+        if (! $order->isPaidOutsidePlatform()) {
             throw new RefundNotPossibleException(__('This order was not paid with an offline payment method.'));
         }
 

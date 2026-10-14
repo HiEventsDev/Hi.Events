@@ -1,9 +1,10 @@
-import {useQuery} from "@tanstack/react-query";
-import {adminClient, GetAdminDashboardParams} from "../api/admin.client";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
+import {adminClient, AdminDashboardPeriod} from "../api/admin.client";
 
-export const useGetAdminDashboardData = (params: GetAdminDashboardParams = {}) => {
+export const useGetAdminDashboardData = (period: AdminDashboardPeriod) => {
     return useQuery({
-        queryKey: ['admin', 'dashboard', params.days, params.limit],
-        queryFn: () => adminClient.getDashboardData(params),
+        queryKey: ['admin', 'dashboard', period],
+        queryFn: () => adminClient.getDashboardData(period),
+        placeholderData: keepPreviousData,
     });
 };

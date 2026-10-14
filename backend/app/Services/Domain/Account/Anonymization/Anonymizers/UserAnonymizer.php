@@ -40,6 +40,11 @@ class UserAnonymizer implements AccountAnonymizerInterface
                 entity: 'personal_access_tokens',
             );
 
+            $results[] = $this->executor->delete(
+                query: $this->databaseManager->table('user_trusted_devices')->whereIn('user_id', $context->soleUserIds),
+                entity: 'user_trusted_devices',
+            );
+
             $results[] = $this->executor->scrub(
                 query: $this->databaseManager->table('users')->whereIn('id', $context->soleUserIds),
                 entity: 'users',
@@ -50,6 +55,10 @@ class UserAnonymizer implements AccountAnonymizerInterface
                     'pending_email' => AnonymizationStrategy::NULLIFY,
                     'password' => AnonymizationStrategy::RANDOM_TOKEN,
                     'remember_token' => AnonymizationStrategy::NULLIFY,
+                    'two_factor_secret' => AnonymizationStrategy::NULLIFY,
+                    'two_factor_recovery_codes' => AnonymizationStrategy::NULLIFY,
+                    'two_factor_confirmed_at' => AnonymizationStrategy::NULLIFY,
+                    'two_factor_last_used_timestep' => AnonymizationStrategy::NULLIFY,
                 ],
                 context: $context,
             );

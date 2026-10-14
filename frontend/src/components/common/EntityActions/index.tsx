@@ -157,7 +157,7 @@ export const EntityActionBar = ({actions}: { actions: EntityAction[] }) => {
                 <Menu shadow="md" width={210} position="bottom-end">
                     <Menu.Target>
                         <Tooltip label={t`More actions`} withArrow position="bottom">
-                            <ActionIcon variant="subtle" color="gray" size="lg" radius="xl">
+                            <ActionIcon variant="subtle" color="gray" size="lg" radius="xl" aria-label={t`More actions`}>
                                 <IconDotsVertical size={16}/>
                             </ActionIcon>
                         </Tooltip>

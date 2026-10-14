@@ -29,6 +29,7 @@ class AdminUserResource extends BaseResource
             'timezone' => $this->resource->timezone,
             'locale' => $this->resource->locale,
             'is_email_verified' => $this->resource->email_verified_at !== null,
+            'two_factor_enabled' => $this->resource->two_factor_confirmed_at !== null,
             'created_at' => $this->resource->created_at,
             'accounts' => $accounts,
         ];

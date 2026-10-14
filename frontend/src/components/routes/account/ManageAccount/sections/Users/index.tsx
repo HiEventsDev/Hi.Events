@@ -1,7 +1,7 @@
 import {useGetUsers} from "../../../../../../queries/useGetUsers.ts";
 import {Avatar, Badge, Button, Group, Menu, Table, Text} from "@mantine/core";
 import classes from "./Users.module.scss";
-import {IconDotsVertical, IconEye, IconSend, IconUser, IconUserShield} from "@tabler/icons-react";
+import {IconDotsVertical, IconEye, IconSend, IconShieldCheck, IconShieldOff, IconUser, IconUserShield} from "@tabler/icons-react";
 import {getInitials} from "../../../../../../utilites/helpers.ts";
 import {t} from "@lingui/macro";
 import {Card} from "../../../../../common/Card";
@@ -10,13 +10,17 @@ import {relativeDate} from "../../../../../../utilites/dates.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {InviteUserModal} from "../../../../../modals/InviteUserModal";
 import {EditUserModal} from "../../../../../modals/EditUserModal";
-import {User} from "../../../../../../types.ts";
+import {IdParam, User} from "../../../../../../types.ts";
 import {useState} from "react";
 import {useResendUserInvitation} from "../../../../../../mutations/useResendUserInvitation.ts";
 import {showError, showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useDeleteUserInvitation} from "../../../../../../mutations/useDeleteUserInvitation.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
 import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
+import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {TwoFactorPolicy} from "./TwoFactorPolicy.tsx";
+import {useGetMe} from "../../../../../../queries/useGetMe.ts";
+import {useResetAccountUserTwoFactor} from "../../../../../../mutations/useResetAccountUserTwoFactor.ts";
 
 const Users = () => {
     const usersQuery = useGetUsers();
@@ -26,6 +30,25 @@ const Users = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const isUserAdmin = useIsCurrentUserAdmin();
+    const {data: me} = useGetMe();
+    const resetTwoFactorMutation = useResetAccountUserTwoFactor();
+
+    const canResetTwoFactor = (user: User) => isUserAdmin
+        && !!user.two_factor_enabled
+        && user.id !== me?.id
+        && (!user.is_account_owner || !!me?.is_account_owner);
+
+    const handleResetTwoFactor = (user: User) => {
+        confirmationDialog(
+            t`Reset two-factor authentication for ${user.email}? Only do this once you've confirmed it's really them. They'll be able to sign in with just their password and will be emailed about the change.`,
+            () => resetTwoFactorMutation.mutate(user.id as IdParam, {
+                onSuccess: () => showSuccess(t`Two-factor authentication reset`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Something went wrong! Please try again`),
+            }),
+            {confirm: t`Reset two-factor`},
+        );
+    }
 
     const handleEdit = (user: User) => {
         setSelectedUser(user);
@@ -108,6 +131,13 @@ const Users = () => {
                     {user.status === 'ACTIVE' ? t`Active` : user.status === 'INVITED' ? t`Invited` : user.status === 'INACTIVE' ? t`Inactive` : user.status}
                 </Badge>
             </Table.Td>
+            <Table.Td>
+                {user.two_factor_enabled ? (
+                    <Badge color="green" variant="light" leftSection={<IconShieldCheck size={12}/>}>{t`On`}</Badge>
+                ) : (
+                    <Badge color="gray" variant="light">{t`Off`}</Badge>
+                )}
+            </Table.Td>
             <Table.Td width={'60px'}>
                 <Menu shadow="md" width={200}>
                     <Menu.Target>
@@ -121,6 +151,13 @@ const Users = () => {
                                    leftSection={<IconEye size={14}/>}>
                             {t`Edit user`}
                         </Menu.Item>
+                        {canResetTwoFactor(user) && (
+                            <Menu.Item color={'red'} onClick={() => handleResetTwoFactor(user)}
+                                       leftSection={<IconShieldOff size={14}/>}
+                                       data-testid="team-reset-two-factor-menu-item">
+                                {t`Reset two-factor`}
+                            </Menu.Item>
+                        )}
                         {user.status === 'INVITED' && (
                             <Menu.Item onClick={() => handleResendInvitation(user)}
                                        leftSection={<IconSend size={14}/>}>
@@ -149,6 +186,8 @@ const Users = () => {
                 buttonDataTestId="team-invite-button"
             />
 
+            {isUserAdmin && users && <TwoFactorPolicy users={users}/>}
+
             <Card style={{padding: 0, position: 'relative'}}>
                 <LoadingMask/>
                 <Table.ScrollContainer className={classes.table} minWidth={800}>
@@ -159,6 +198,8 @@ const Users = () => {
                                 <Table.Th>{t`Role`}</Table.Th>
                                 <Table.Th>{t`Last login`}</Table.Th>
                                 <Table.Th>{t`Status`}</Table.Th>
+                                <Table.Th>{t`Two-factor`}</Table.Th>
+                                <Table.Th/>
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>{rows}</Table.Tbody>
