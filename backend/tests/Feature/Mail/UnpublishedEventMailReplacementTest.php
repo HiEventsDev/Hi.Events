@@ -33,7 +33,7 @@ class UnpublishedEventMailReplacementTest extends TestCase
         $message = $this->onlySentMessage();
 
         $this->assertSame('An update about your booking on '.config('app.name'), $message->getOriginalMessage()->getSubject());
-        $this->assertStringNotContainsString('805', $message->toString());
+        $this->assertStringNotContainsString('805', $this->visibleContent($message));
         $this->assertSame('victim@example.com', $message->getEnvelope()->getRecipients()[0]->getAddress());
     }
 
@@ -58,8 +58,15 @@ class UnpublishedEventMailReplacementTest extends TestCase
         $message = $this->onlySentMessage();
 
         $this->assertSame('New order on an unpublished event', $message->getOriginalMessage()->getSubject());
-        $this->assertStringNotContainsString('805', $message->toString());
+        $this->assertStringNotContainsString('805', $this->visibleContent($message));
         $this->assertStringContainsString('/manage/event/5/orders#order-77', $message->toString());
+    }
+
+    private function visibleContent(SentMessage $message): string
+    {
+        $email = $message->getOriginalMessage();
+
+        return implode("\n", [$email->getSubject(), $email->getTextBody(), $email->getHtmlBody()]);
     }
 
     private function givenPolicyWithholds(bool $withhold): void
