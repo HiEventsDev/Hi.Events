@@ -121,6 +121,19 @@ class LifecycleNudgeSweepServiceTest extends TestCase
         ]);
     }
 
+    public function test_records_the_provider_message_id_on_the_nudge(): void
+    {
+        $account = $this->seedAccountWithOwner('owner@example.com', verified: true);
+        $this->seedEvent($account, createdDaysAgo: 5);
+
+        $this->sweep();
+
+        $providerMessageId = DB::table('account_lifecycle_nudges')
+            ->where('account_id', $account->id)
+            ->value('provider_message_id');
+        $this->assertNotEmpty($providerMessageId);
+    }
+
     public function test_sends_from_the_lifecycle_sender_address(): void
     {
         config(['mail.lifecycle.from' => ['address' => 'hello@updates.example.com', 'name' => 'Updates']]);

@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\OutgoingMessageStatus;
 use HiEvents\Mail\Event\EventMessage;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Message\DTO\SendMessageDTO;
+use HiEvents\Services\Domain\Email\Delivery\EmailProviderMessageIdResolver;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,37 +27,22 @@ class SendEventEmailJob implements ShouldQueue
         private readonly SendMessageDTO $messageData,
     ) {}
 
-    /**
-     * @throws Throwable
-     */
     public function handle(
         Mailer $mailer,
         OutgoingMessageRepositoryInterface $outgoingMessageRepository,
+        EmailProviderMessageIdResolver $providerMessageIdResolver,
     ): void {
-        try {
-            $mailer
-                ->to($this->email, $this->toName)
-                ->send($this->eventMessage);
-        } catch (Throwable $exception) {
-            $outgoingMessageRepository->create([
-                OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
-                OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
-                OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::FAILED->name,
-                OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
-                OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
-            ]);
-
-            throw $exception;
-        }
+        $sentMessage = $mailer
+            ->to($this->email, $this->toName)
+            ->sendNow($this->eventMessage);
 
         try {
-            $outgoingMessageRepository->create([
-                OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
-                OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
-                OutgoingMessageDomainObjectAbstract::STATUS => OutgoingMessageStatus::SENT->name,
-                OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
-                OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
-            ]);
+            $outgoingMessageRepository->create($this->outgoingMessageAttributes(
+                OutgoingMessageStatus::SENT,
+                $sentMessage === null
+                    ? null
+                    : $providerMessageIdResolver->resolve($sentMessage->getSymfonySentMessage()),
+            ));
         } catch (Throwable $exception) {
             logger()?->error('Failed to record sent event email', [
                 'message_id' => $this->messageData->id,
@@ -64,5 +50,24 @@ class SendEventEmailJob implements ShouldQueue
                 'error' => $exception->getMessage(),
             ]);
         }
+    }
+
+    public function failed(?Throwable $exception): void
+    {
+        app(OutgoingMessageRepositoryInterface::class)->create(
+            $this->outgoingMessageAttributes(OutgoingMessageStatus::FAILED, null),
+        );
+    }
+
+    private function outgoingMessageAttributes(OutgoingMessageStatus $status, ?string $providerMessageId): array
+    {
+        return [
+            OutgoingMessageDomainObjectAbstract::MESSAGE_ID => $this->messageData->id,
+            OutgoingMessageDomainObjectAbstract::EVENT_ID => $this->messageData->event_id,
+            OutgoingMessageDomainObjectAbstract::STATUS => $status->name,
+            OutgoingMessageDomainObjectAbstract::RECIPIENT => $this->email,
+            OutgoingMessageDomainObjectAbstract::SUBJECT => $this->messageData->subject,
+            OutgoingMessageDomainObjectAbstract::PROVIDER_MESSAGE_ID => $providerMessageId,
+        ];
     }
 }

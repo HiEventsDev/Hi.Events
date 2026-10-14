@@ -141,6 +141,52 @@ class LifecycleEmailAdminTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_the_list_reports_delivery_outcomes_for_each_nudge_type(): void
+    {
+        $this->insertNudge('EVENT_DRAFT_STALE', 'pm-opened', [
+            'delivered_at' => now(), 'first_opened_at' => now(), 'first_clicked_at' => now(),
+        ]);
+        $this->insertNudge('EVENT_DRAFT_STALE', 'pm-bounced', ['bounced_at' => now(), 'bounce_type' => 'HARD']);
+        $this->insertNudge('EVENT_DRAFT_STALE', null, null);
+        $this->insertNudge('NO_EVENT_CREATED', 'pm-delivered', ['delivered_at' => now()]);
+
+        $emails = collect($this->getJson('/admin/lifecycle-emails', $this->headers($this->superAdminToken))
+            ->assertStatus(ResponseCodes::HTTP_OK)
+            ->json('data'))
+            ->keyBy('nudge_type');
+
+        $this->assertSame(
+            ['sent_total' => 3, 'delivered_total' => 1, 'bounced_total' => 1, 'opened_total' => 1, 'clicked_total' => 1],
+            collect($emails['EVENT_DRAFT_STALE'])->only(['sent_total', 'delivered_total', 'bounced_total', 'opened_total', 'clicked_total'])->all(),
+        );
+        $this->assertSame(1, $emails['NO_EVENT_CREATED']['delivered_total']);
+        $this->assertSame(0, $emails['NO_EVENT_CREATED']['opened_total']);
+        $this->assertSame(0, $emails['LIVE_EVENT_NO_SALES']['sent_total']);
+    }
+
+    private function insertNudge(string $nudgeType, ?string $providerMessageId, ?array $delivery): void
+    {
+        $user = User::factory()->withAccount()->create();
+
+        DB::table('account_lifecycle_nudges')->insert([
+            'account_id' => $user->accounts()->first()->id,
+            'nudge_type' => $nudgeType,
+            'provider_message_id' => $providerMessageId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        if ($delivery !== null) {
+            DB::table('email_deliveries')->insert([
+                'category' => 'lifecycle_nudge',
+                'provider_message_id' => $providerMessageId,
+                'created_at' => now(),
+                'updated_at' => now(),
+                ...$delivery,
+            ]);
+        }
+    }
+
     private function content(): array
     {
         return [

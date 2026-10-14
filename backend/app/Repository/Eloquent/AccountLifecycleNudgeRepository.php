@@ -287,19 +287,35 @@ class AccountLifecycleNudgeRepository extends BaseRepository implements AccountL
         ]);
     }
 
+    public function recordProviderMessageId(int $accountId, LifecycleNudgeType $nudgeType, string $providerMessageId): void
+    {
+        $this->updateWhere(
+            ['provider_message_id' => $providerMessageId],
+            ['account_id' => $accountId, 'nudge_type' => $nudgeType->name],
+        );
+    }
+
     public function countsByType(CarbonInterface $recentSince): array
     {
-        return $this->runQuery(fn () => $this->model
-            ->toBase()
-            ->groupBy('nudge_type')
-            ->select('nudge_type')
-            ->selectRaw('COUNT(*) AS total')
-            ->selectRaw('COUNT(*) FILTER (WHERE created_at >= ?) AS recent', [$recentSince->toDateTimeString()])
+        return $this->runQuery(fn () => $this->db->table('account_lifecycle_nudges as n')
+            ->leftJoin('email_deliveries as d', 'd.provider_message_id', '=', 'n.provider_message_id')
+            ->groupBy('n.nudge_type')
+            ->select('n.nudge_type')
+            ->selectRaw('COUNT(DISTINCT n.id) AS total')
+            ->selectRaw('COUNT(DISTINCT n.id) FILTER (WHERE n.created_at >= ?) AS recent', [$recentSince->toDateTimeString()])
+            ->selectRaw('COUNT(DISTINCT n.id) FILTER (WHERE d.delivered_at IS NOT NULL) AS delivered')
+            ->selectRaw('COUNT(DISTINCT n.id) FILTER (WHERE d.bounced_at IS NOT NULL) AS bounced')
+            ->selectRaw('COUNT(DISTINCT n.id) FILTER (WHERE d.first_opened_at IS NOT NULL) AS opened')
+            ->selectRaw('COUNT(DISTINCT n.id) FILTER (WHERE d.first_clicked_at IS NOT NULL) AS clicked')
             ->get()
             ->mapWithKeys(static fn ($row) => [
                 $row->nudge_type => new LifecycleNudgeSendCountsDTO(
                     total: (int) $row->total,
                     lastThirtyDays: (int) $row->recent,
+                    delivered: (int) $row->delivered,
+                    bounced: (int) $row->bounced,
+                    opened: (int) $row->opened,
+                    clicked: (int) $row->clicked,
                 ),
             ])
             ->all());

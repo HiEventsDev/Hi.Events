@@ -58,7 +58,7 @@ class LifecycleNudgeSweepService
                 $nudgedEmails[$candidate->email] = true;
 
                 try {
-                    $this->sender->send($candidate->email, $this->templateService->buildMail($template, $candidate->recipient));
+                    $providerMessageId = $this->sender->send($candidate->email, $this->templateService->buildMail($template, $candidate->recipient));
                     $sent++;
                 } catch (Throwable $e) {
                     if ($this->isTransient($e)) {
@@ -77,12 +77,31 @@ class LifecycleNudgeSweepService
                         'nudge_type' => $nudge->type()->name,
                         'error' => $this->describe($e),
                     ]);
+
+                    continue;
+                }
+
+                if ($providerMessageId !== null) {
+                    $this->recordProviderMessageId($candidate->accountId, $nudge, $providerMessageId);
                 }
             }
         }
 
         if ($sent > 0) {
             $this->logger->info('Lifecycle nudges sent', ['sent_count' => $sent]);
+        }
+    }
+
+    private function recordProviderMessageId(int $accountId, LifecycleNudgeInterface $nudge, string $providerMessageId): void
+    {
+        try {
+            $this->nudgeRepository->recordProviderMessageId($accountId, $nudge->type(), $providerMessageId);
+        } catch (Throwable $e) {
+            $this->logger->warning('Failed to record the provider message id of a lifecycle nudge', [
+                'account_id' => $accountId,
+                'nudge_type' => $nudge->type()->name,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

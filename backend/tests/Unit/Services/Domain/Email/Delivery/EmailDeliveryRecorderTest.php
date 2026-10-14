@@ -6,6 +6,7 @@ namespace Tests\Unit\Services\Domain\Email\Delivery;
 
 use HiEvents\Repository\Interfaces\EmailDeliveryRepositoryInterface;
 use HiEvents\Services\Domain\Email\Delivery\EmailDeliveryRecorder;
+use HiEvents\Services\Domain\Email\Delivery\EmailProviderMessageIdResolver;
 use Mockery;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
@@ -30,7 +31,7 @@ class EmailDeliveryRecorderTest extends TestCase
 
         $this->repository = Mockery::mock(EmailDeliveryRepositoryInterface::class);
         $this->logger = Mockery::mock(LoggerInterface::class);
-        $this->recorder = new EmailDeliveryRecorder($this->repository, $this->logger);
+        $this->recorder = new EmailDeliveryRecorder($this->repository, new EmailProviderMessageIdResolver, $this->logger);
     }
 
     public function test_records_the_category_and_the_message_id_the_transport_reported(): void
