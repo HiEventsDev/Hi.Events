@@ -12,6 +12,7 @@ import {useDeleteTaxOrFee} from "../../../mutations/useDeleteTaxOrFee.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
 import {t} from "@lingui/macro";
+import {WriteAccess} from "../WriteAccess";
 
 export const TaxAndFeeList = () => {
     const {data: taxesAndFees, isFetched} = useGetTaxesAndFees();
@@ -58,30 +59,32 @@ export const TaxAndFeeList = () => {
                                 {tax.type.toLocaleLowerCase()}
                             </div>
                             <div className={classes.action}>
-                                <Menu shadow="md" width={200}>
-                                    <Menu.Target>
-                                        <Button size={'compact-xs'} variant={'transparent'} className={classes.menuButton}>
-                                            <IconDotsVertical size={14}/>
-                                        </Button>
-                                    </Menu.Target>
+                                <WriteAccess>
+                                    <Menu shadow="md" width={200}>
+                                        <Menu.Target>
+                                            <Button size={'compact-xs'} variant={'transparent'} className={classes.menuButton}>
+                                                <IconDotsVertical size={14}/>
+                                            </Button>
+                                        </Menu.Target>
 
-                                    <Menu.Dropdown>
-                                        <Menu.Item
-                                            leftSection={<IconPencil size={14}/>}
-                                            onClick={() => handleEdit(tax)}
-                                        >
-                                            {t`Edit`}
-                                        </Menu.Item>
+                                        <Menu.Dropdown>
+                                            <Menu.Item
+                                                leftSection={<IconPencil size={14}/>}
+                                                onClick={() => handleEdit(tax)}
+                                            >
+                                                {t`Edit`}
+                                            </Menu.Item>
 
-                                        <Menu.Item
-                                            color={'red'}
-                                            leftSection={<IconTrash size={14}/>}
-                                            onClick={() => handleDelete(tax)}
-                                        >
-                                            {t`Delete`}
-                                        </Menu.Item>
-                                    </Menu.Dropdown>
-                                </Menu>
+                                            <Menu.Item
+                                                color={'red'}
+                                                leftSection={<IconTrash size={14}/>}
+                                                onClick={() => handleDelete(tax)}
+                                            >
+                                                {t`Delete`}
+                                            </Menu.Item>
+                                        </Menu.Dropdown>
+                                    </Menu>
+                                </WriteAccess>
                             </div>
                         </div>
                         <div className={classes.body}>

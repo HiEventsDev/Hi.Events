@@ -20,6 +20,8 @@ class DeleteEmailTemplateHandler
         $template = $this->emailTemplateRepository->findFirstWhere([
             'id' => $dto->id,
             'account_id' => $dto->account_id,
+            'event_id' => $dto->event_id,
+            'organizer_id' => $dto->organizer_id,
         ]);
 
         if (! $template) {

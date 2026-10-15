@@ -3,8 +3,10 @@
 namespace HiEvents\Resources\User;
 
 use Exception;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use Illuminate\Http\Request;
 
 /**
@@ -31,10 +33,12 @@ class UserResource extends BaseResource
             'full_name' => $this->getFullName(),
             'email' => $this->getEmail(),
             'is_email_verified' => $this->getEmailVerifiedAt() !== null,
-            'has_pending_email_change' => $this->getPendingEmail() !== null,
             'locale' => $this->getLocale(),
             'two_factor_enabled' => $this->getTwoFactorConfirmedAt() !== null,
-            'marketing_opted_in_at' => $this->getMarketingOptedInAt(),
+            $this->mergeWhen($this->isCurrentUser(), fn () => [
+                'has_pending_email_change' => $this->getPendingEmail() !== null,
+                'marketing_opted_in_at' => $this->getMarketingOptedInAt(),
+            ]),
             $this->mergeWhen($isImpersonating, [
                 'is_impersonating' => true,
                 'impersonator_id' => $impersonatorId,
@@ -48,10 +52,33 @@ class UserResource extends BaseResource
                 'last_login_at' => $this->getCurrentAccountUser()?->getLastLoginAt(),
                 'status' => $this->getCurrentAccountUser()?->getStatus(),
                 'account_id' => $this->getCurrentAccountUser()?->getAccountId(),
+                'notify_new_orders' => $this->getCurrentAccountUser()?->getNotifyNewOrders(),
+                'access' => $this->accessSummary(),
             ]),
-            $this->mergeWhen($this->getPendingEmail() !== null, [
+            $this->mergeWhen($this->isCurrentUser() && $this->getPendingEmail() !== null, fn () => [
                 'pending_email' => $this->getPendingEmail(),
             ]),
+        ];
+    }
+
+    private function isCurrentUser(): bool
+    {
+        return auth()->id() !== null && (int) auth()->id() === $this->getId();
+    }
+
+    private function accessSummary(): array
+    {
+        $access = app(AccountUserAccessService::class)->forAccountUser($this->getCurrentAccountUser());
+
+        return [
+            /** @var 'ACCOUNT'|'RESTRICTED' */
+            'scope' => $access->scope->value,
+            /** @var int[] */
+            'organizer_ids' => $access->organizerIds,
+            /** @var int[] */
+            'event_ids' => $access->eventIds,
+            /** @var array<int, 'EDIT'|'VIEW_FINANCIALS'|'ISSUE_REFUNDS'|'MANAGE_PAYMENTS'|'DELETE_EVENTS'|'MANAGE_TEAM'|'MANAGE_ACCOUNT'> */
+            'permissions' => array_map(static fn (Permission $permission) => $permission->value, $access->permissions),
         ];
     }
 }

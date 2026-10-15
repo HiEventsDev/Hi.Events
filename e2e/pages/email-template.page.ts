@@ -57,4 +57,8 @@ export class EmailTemplatePage {
   async openPreviewTab(): Promise<void> {
     await this.editorDialog().getByRole('tab', { name: 'Preview' }).click();
   }
+
+  previewBody(): Locator {
+    return this.editorDialog().frameLocator('iframe[title="Email preview"]').locator('body');
+  }
 }

@@ -2,10 +2,12 @@
 
 namespace HiEvents\Http\Actions\Organizers\Stats;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\GetOrganizerStatsRequestDTO;
 use HiEvents\Services\Application\Handlers\Organizer\GetOrganizerStatsHandler;
+use HiEvents\Services\Domain\Auth\Access\FinancialStatsRedactor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -39,7 +41,9 @@ class GetOrganizerStatsAction extends BaseAction
         ));
 
         return $this->jsonResponse(
-            data: $organizerStats,
+            data: $this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS)
+                ? app(FinancialStatsRedactor::class)->redact($organizerStats)
+                : $organizerStats,
             wrapInData: true,
         );
     }

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\GetCheckInListAttendeeDetailPublicHandler;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
 use Illuminate\Support\Collection;
 use Mockery as m;
@@ -20,6 +21,8 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
 
     private AttendeeRepositoryInterface $attendeeRepository;
 
+    private AccountUserAccessService $accessService;
+
     private GetCheckInListAttendeeDetailPublicHandler $handler;
 
     protected function setUp(): void
@@ -28,11 +31,13 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
 
         $this->checkInListRepository = m::mock(CheckInListRepositoryInterface::class);
         $this->attendeeRepository = m::mock(AttendeeRepositoryInterface::class);
+        $this->accessService = m::mock(AccountUserAccessService::class);
 
         $this->handler = new GetCheckInListAttendeeDetailPublicHandler(
             $this->attendeeRepository,
             $this->checkInListRepository,
             new CheckInListActivityValidator,
+            $this->accessService,
         );
     }
 
@@ -108,6 +113,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $attendee->shouldReceive('getCheckIns')->andReturn(null);
 
         $this->setupRepos($checkInList, $attendee);
+        $this->accessService->shouldReceive('currentMemberCanAccessEvent')->once()->andReturnTrue();
 
         $result = $this->handler->handle('short-id', 'A-123', staffAccountId: 77);
 
@@ -129,6 +135,7 @@ class GetCheckInListAttendeeDetailPublicHandlerTest extends TestCase
         $attendee->shouldReceive('getCheckIns')->andReturn(null);
 
         $this->setupRepos($checkInList, $attendee);
+        $this->accessService->shouldReceive('currentMemberCanAccessEvent')->once()->andReturnFalse();
 
         $result = $this->handler->handle('short-id', 'A-123', staffAccountId: 88);
 

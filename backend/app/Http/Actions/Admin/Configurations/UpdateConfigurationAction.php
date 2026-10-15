@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Configurations;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\OrganizerConfigurationRepositoryInterface;
 use HiEvents\Resources\Organizer\OrganizerConfigurationResource;
@@ -20,7 +19,7 @@ class UpdateConfigurationAction extends BaseAction
 
     public function __invoke(Request $request, int $configurationId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',

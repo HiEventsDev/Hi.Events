@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Orders\Public;
 
-use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Exceptions\EventNotOpenForOrdersException;
@@ -17,6 +17,7 @@ use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Application\Handlers\Order\DTO\ProductOrderDetailsDTO;
 use HiEvents\Services\Application\Locale\LocaleService;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Order\OrderCreateRequestValidationService;
 use HiEvents\Services\Infrastructure\Session\CheckoutSessionManagementService;
 use Illuminate\Http\JsonResponse;
@@ -31,6 +32,7 @@ class CreateOrderActionPublic extends BaseAction
         private readonly CheckoutSessionManagementService $sessionIdentifierService,
         private readonly LocaleService $localeService,
         private readonly EventRepositoryInterface $eventRepository,
+        private readonly AccountUserAccessService $accessService,
     ) {}
 
     /**
@@ -93,9 +95,9 @@ class CreateOrderActionPublic extends BaseAction
             return false;
         }
 
-        return $this->eventRepository->findFirstWhere([
-            EventDomainObjectAbstract::ID => $eventId,
-            EventDomainObjectAbstract::ACCOUNT_ID => $this->getAuthenticatedAccountId(),
-        ]) !== null;
+        $event = $this->eventRepository->findFirst($eventId);
+
+        return $event !== null
+            && $this->accessService->currentMemberCanAccessEvent($event, Permission::EDIT);
     }
 }

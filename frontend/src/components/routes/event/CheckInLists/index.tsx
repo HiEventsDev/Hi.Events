@@ -1,4 +1,5 @@
 import {PageBody} from "../../../common/PageBody";
+import {CreateButton} from "../../../common/CreateButton";
 import {PageTitle} from "../../../common/PageTitle";
 import {t, Trans} from "@lingui/macro";
 import {useParams} from "react-router";
@@ -67,13 +68,13 @@ const CheckInLists = () => {
                         <IconCopy size={18}/>
                     </ActionIcon>
                 </Tooltip>
-                <Button
+                <CreateButton
                     leftSection={<IconPlus/>}
                     variant={'light'}
                     size={'sm'}
                     data-testid="checkin-list-create-button"
                     onClick={openCreateModal}>{t`Create Check-In List`}
-                </Button>
+                </CreateButton>
             </div>
 
             <TableSkeleton isVisible={!checkInLists || checkInListsQuery.isFetching}/>

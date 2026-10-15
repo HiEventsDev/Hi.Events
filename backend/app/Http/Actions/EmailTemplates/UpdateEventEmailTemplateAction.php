@@ -41,7 +41,17 @@ class UpdateEventEmailTemplateAction extends BaseEmailTemplateAction
         $validated = $this->validateUpdateEmailTemplateRequest($request);
 
         try {
-            $existingTemplate = $this->emailTemplateRepository->findById($templateId);
+            $existingTemplate = $this->emailTemplateRepository->findFirstWhere([
+                'id' => $templateId,
+                'account_id' => $this->getAuthenticatedAccountId(),
+                'event_id' => $eventId,
+                'organizer_id' => null,
+            ]);
+
+            if ($existingTemplate === null) {
+                throw new EmailTemplateNotFoundException(__('Email template not found'));
+            }
+
             $templateType = EmailTemplateType::from($existingTemplate->getTemplateType());
 
             $cta = [

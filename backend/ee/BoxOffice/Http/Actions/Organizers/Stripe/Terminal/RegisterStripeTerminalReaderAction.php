@@ -2,7 +2,7 @@
 
 namespace HiEvents\Enterprise\BoxOffice\Http\Actions\Organizers\Stripe\Terminal;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Enterprise\BoxOffice\Exceptions\Stripe\TerminalLocationAddressMissingException;
 use HiEvents\Enterprise\BoxOffice\Http\Actions\BaseBoxOfficeAction;
@@ -10,11 +10,13 @@ use HiEvents\Enterprise\BoxOffice\Http\Request\Organizer\RegisterStripeTerminalR
 use HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\Organizer\Payment\Stripe\Terminal\RegisterStripeTerminalReaderHandler;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\Stripe\StripeClientConfigurationException;
+use HiEvents\Http\Attributes\RequiresPermission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Stripe\Exception\ApiErrorException;
 
+#[RequiresPermission(Permission::MANAGE_PAYMENTS)]
 class RegisterStripeTerminalReaderAction extends BaseBoxOfficeAction
 {
     public function __construct(
@@ -23,7 +25,7 @@ class RegisterStripeTerminalReaderAction extends BaseBoxOfficeAction
 
     public function __invoke(RegisterStripeTerminalReaderRequest $request, int $organizerId): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
         $this->assertBoxOfficeEnabled();
 
         try {

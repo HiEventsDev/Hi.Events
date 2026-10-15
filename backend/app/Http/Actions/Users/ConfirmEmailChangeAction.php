@@ -5,6 +5,7 @@ namespace HiEvents\Http\Actions\Users;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Resources\User\UserResource;
 use HiEvents\Services\Application\Handlers\User\ConfirmEmailChangeHandler;
 use HiEvents\Services\Application\Handlers\User\DTO\ConfirmEmailChangeDTO;
@@ -15,6 +16,7 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpCodes;
 use Throwable;
 
+#[AllowedForReadOnlyUsers]
 class ConfirmEmailChangeAction extends BaseAction
 {
     private ConfirmEmailChangeHandler $confirmEmailChangeHandler;

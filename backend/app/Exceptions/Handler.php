@@ -99,6 +99,13 @@ class Handler extends ExceptionHandler
             ], Response::HTTP_FORBIDDEN);
         }
 
+        if ($exception instanceof CodedAccessException) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'error_code' => $exception::ERROR_CODE,
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         return parent::render($request, $exception);
     }
 }

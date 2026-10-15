@@ -53,13 +53,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function findUsersByAccountId(int $accountId): ?Collection
     {
-        $users = $this->model->whereHas('accounts', function ($query) use ($accountId) {
-            $query->where('account_id', $accountId);
-        })->get();
-
-        $users = $this->handleResults($users);
-
-        return $users->sortByDesc(fn (UserDomainObject $user) => $user->getUpdatedAt());
+        return $this->runQuery(fn () => $this->handleResults(
+            $this->model->whereHas('accounts', function ($query) use ($accountId) {
+                $query->where('account_id', $accountId)->whereNull('account_users.deleted_at');
+            })->get()
+        ))->sortByDesc(fn (UserDomainObject $user) => $user->getUpdatedAt());
     }
 
     public function getAllUsersWithAccounts(?string $search, int $perPage): LengthAwarePaginator

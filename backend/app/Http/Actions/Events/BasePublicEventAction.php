@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use Illuminate\Support\Facades\Log;
 
 abstract class BasePublicEventAction extends BaseAction
@@ -26,11 +27,11 @@ abstract class BasePublicEventAction extends BaseAction
             return true;
         }
 
-        if ($this->isUserAuthenticated() && $event->getAccountId() === $this->getAuthenticatedAccountId()) {
+        if (app(AccountUserAccessService::class)->currentMemberCanAccessEvent($event)) {
             return true;
         }
 
-        if ($this->isUserAuthenticated() && $this->getAuthenticatedUserRole() === Role::SUPERADMIN) {
+        if ($this->isUserAuthenticated() && $this->getAuthenticatedUser()->getCurrentAccountUser()?->getRole() === Role::SUPERADMIN->name) {
             Log::debug(__('Superadmin user is viewing non-live event with ID :eventId', [
                 'eventId' => $event->getId(),
                 'accountId' => $this->getAuthenticatedAccountId(),

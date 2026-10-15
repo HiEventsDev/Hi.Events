@@ -1,4 +1,5 @@
 import {PageBody} from "../../../common/PageBody";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {EventDetailsForm} from "./Sections/EventDetailsForm";
 import {LocationSettings} from "./Sections/LocationSettings";
 import {HomepageAndCheckoutSettings} from "./Sections/HomepageAndCheckoutSettings";
@@ -40,6 +41,7 @@ export const Settings = () => {
     const {eventId} = useParams();
     const {data: event} = useGetEvent(eventId);
     const isRecurring = event?.type === EventType.RECURRING;
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
 
     const SECTIONS = useMemo(() => {
         const baseSections = [
@@ -106,7 +108,7 @@ export const Settings = () => {
             }
         ];
 
-        if (isSaasMode) {
+        if (isSaasMode && canViewFinancials) {
             baseSections.splice(baseSections.length - 1, 0, {
                 id: 'platform-fees',
                 label: t`Platform Fees`,
@@ -116,7 +118,7 @@ export const Settings = () => {
         }
 
         return baseSections;
-    }, [isSaasMode, isRecurring]);
+    }, [isSaasMode, isRecurring, canViewFinancials]);
 
     const isLargeScreen = useMediaQuery('(min-width: 1200px)', true);
     const [activeSection, setActiveSection] = useState(() => {

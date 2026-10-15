@@ -21,6 +21,8 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const IS_ACCOUNT_OWNER = 'is_account_owner';
     final public const LAST_LOGIN_AT = 'last_login_at';
     final public const STATUS = 'status';
+    final public const ACCESS_SCOPE = 'access_scope';
+    final public const NOTIFY_NEW_ORDERS = 'notify_new_orders';
 
     protected int $id;
     protected int $account_id;
@@ -33,6 +35,8 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected bool $is_account_owner = false;
     protected ?string $last_login_at = null;
     protected string $status = 'INVITED';
+    protected string $access_scope = 'ACCOUNT';
+    protected bool $notify_new_orders = false;
 
     public function toArray(): array
     {
@@ -48,6 +52,8 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'is_account_owner' => $this->is_account_owner ?? null,
                     'last_login_at' => $this->last_login_at ?? null,
                     'status' => $this->status ?? null,
+                    'access_scope' => $this->access_scope ?? null,
+                    'notify_new_orders' => $this->notify_new_orders ?? null,
                 ];
     }
 
@@ -170,5 +176,27 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function setAccessScope(string $access_scope): self
+    {
+        $this->access_scope = $access_scope;
+        return $this;
+    }
+
+    public function getAccessScope(): string
+    {
+        return $this->access_scope;
+    }
+
+    public function setNotifyNewOrders(bool $notify_new_orders): self
+    {
+        $this->notify_new_orders = $notify_new_orders;
+        return $this;
+    }
+
+    public function getNotifyNewOrders(): bool
+    {
+        return $this->notify_new_orders;
     }
 }

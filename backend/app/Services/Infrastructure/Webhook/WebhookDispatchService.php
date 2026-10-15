@@ -25,6 +25,7 @@ use HiEvents\Resources\Event\EventResource;
 use HiEvents\Resources\EventOccurrence\EventOccurrenceResource;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Resources\Product\ProductResource;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Psr\Log\LoggerInterface;
@@ -41,6 +42,7 @@ class WebhookDispatchService
         private readonly AttendeeCheckInRepositoryInterface $attendeeCheckInRepository,
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventOccurrenceRepositoryInterface $eventOccurrenceRepository,
+        private readonly AccountUserAccessService $accessService,
     ) {}
 
     public function dispatchEventWebhook(DomainEventType $eventType, int $eventId): void
@@ -191,6 +193,12 @@ class WebhookDispatchService
         $webhooks = $this->webhookRepository->findEnabledByEventId($eventId)
             ->filter(fn (WebhookDomainObject $webhook) => in_array($eventType->value, $webhook->getEventTypes(), true));
 
+        if ($webhooks->isEmpty()) {
+            return;
+        }
+
+        $resolvedPayload = $this->accessService->withoutMemberRestrictions(fn () => $payload->resolve());
+
         foreach ($webhooks as $webhook) {
             $this->logger->info("Dispatching webhook for event ID: $eventId and webhook ID: {$webhook->getId()}");
 
@@ -199,7 +207,7 @@ class WebhookDispatchService
                 ->payload([
                     'event_type' => $eventType->value,
                     'event_sent_at' => now()->toIso8601String(),
-                    'payload' => $payload->resolve(),
+                    'payload' => $resolvedPayload,
                 ])
                 ->useSecret($webhook->getSecret())
                 ->meta([

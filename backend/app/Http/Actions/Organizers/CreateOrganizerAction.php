@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Actions\Organizers;
 
+use HiEvents\Exceptions\AccessRestrictedException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Organizer\UpsertOrganizerRequest;
 use HiEvents\Http\ResponseCodes;
@@ -16,6 +17,10 @@ class CreateOrganizerAction extends BaseAction
 
     public function __invoke(UpsertOrganizerRequest $request): JsonResponse
     {
+        if ($this->getAuthenticatedAccess()->isRestricted()) {
+            throw new AccessRestrictedException;
+        }
+
         $organizerData = array_merge(
             $request->validated(),
             [

@@ -1,4 +1,5 @@
 import {useParams} from "react-router";
+import {CreateButton} from "../../common/CreateButton";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
@@ -6,7 +7,6 @@ import {PromoCodeTable} from "../../common/PromoCodeTable";
 import {SearchBarWrapper} from "../../common/SearchBar";
 import {useDisclosure} from "@mantine/hooks";
 import {Pagination} from "../../common/Pagination";
-import {Button} from "@mantine/core";
 import {IconPlus} from "@tabler/icons-react";
 import {ToolBar} from "../../common/ToolBar";
 import {useGetEventPromoCodes} from "../../../queries/useGetEventPromoCodes.ts";
@@ -54,9 +54,9 @@ export const PromoCodes = () => {
                     resultCount={pagination?.total}
                     resultLabel={t`promo codes`}
                 >
-                    <Button color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>} data-testid="promo-code-create-button">
+                    <CreateButton color={'green'} size={'sm'} onClick={openCreateModal} rightSection={<IconPlus/>} data-testid="promo-code-create-button">
                         Create
-                    </Button>
+                    </CreateButton>
                 </ToolBar>
 
                 <TableSkeleton isVisible={!promoCodes || !event}/>

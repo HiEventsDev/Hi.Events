@@ -4,12 +4,14 @@ namespace HiEvents\Http\Actions\Questions;
 
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Jobs\Question\ExportAnswersJob;
 use HiEvents\Services\Infrastructure\Jobs\JobPollingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
 
+#[AllowedForReadOnlyUsers]
 class ExportQuestionAnswersAction extends BaseAction
 {
     public function __construct(private JobPollingService $jobPollingService) {}

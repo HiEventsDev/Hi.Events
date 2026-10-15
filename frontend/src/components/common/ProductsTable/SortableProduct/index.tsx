@@ -1,4 +1,6 @@
 import {CSSProperties, MouseEvent, ReactNode, useState} from 'react';
+import {WriteAccess} from "../../WriteAccess";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {
     IconArrowDown,
     IconArrowUp,
@@ -89,6 +91,8 @@ export const SortableProduct = ({
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [isMessageModalOpen, messageModal] = useDisclosure(false);
     const [isPurchasesModalOpen, purchasesModal] = useDisclosure(false);
+    const {can, isReadOnly} = useAccess();
+    const canViewFinancials = can('VIEW_FINANCIALS');
     const [productId, setProductId] = useState<IdParam>();
     const deleteMutation = useDeleteProduct();
     const sortMutation = useSortProducts();
@@ -533,81 +537,85 @@ export const SortableProduct = ({
                 </div>
 
                 <div className={classes.actionCell} onClick={stopRowClick}>
-                    <Menu shadow="md" width={210} position="bottom-end">
-                        <Menu.Target>
-                            <ActionIcon
-                                variant="subtle"
-                                color="gray"
-                                radius="md"
-                                className={classes.menuButton}
-                                aria-label={t`Actions`}
-                                data-testid="product-manage-button"
-                            >
-                                <IconDots size={18}/>
-                            </ActionIcon>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                            <Menu.Label>{t`Actions`}</Menu.Label>
-
-                            <Menu.Item
-                                onClick={() => handleModalClick(product.id, purchasesModal)}
-                                leftSection={<IconReceipt size={14}/>}
-                                data-testid="product-purchases-menu-item"
-                            >
-                                {t`View purchases`}
-                            </Menu.Item>
-
-                            {isTicket && (
-                                <Menu.Item
-                                    onClick={() => handleModalClick(product.id, messageModal)}
-                                    leftSection={<IconSend size={14}/>}
+                    {(canViewFinancials || !isReadOnly) && (
+                        <Menu shadow="md" width={210} position="bottom-end">
+                            <Menu.Target>
+                                <ActionIcon
+                                    variant="subtle"
+                                    color="gray"
+                                    radius="md"
+                                    className={classes.menuButton}
+                                    aria-label={t`Actions`}
+                                    data-testid="product-manage-button"
                                 >
-                                    {t`Message Attendees`}
-                                </Menu.Item>
-                            )}
+                                    <IconDots size={18}/>
+                                </ActionIcon>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                                <Menu.Label>{t`Actions`}</Menu.Label>
 
-                            <Menu.Item
-                                onClick={() => handleModalClick(product.id, editModal)}
-                                leftSection={<IconPencil size={14}/>}
-                                data-testid="product-edit-menu-item"
-                            >
-                                <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
-                            </Menu.Item>
-                            <Menu.Item
-                                onClick={() => handleModalClick(product.id, duplicateModal)}
-                                leftSection={<IconCopyPlus size={14}/>}
-                            >
-                                {t`Duplicate`}
-                            </Menu.Item>
+                                {canViewFinancials && <Menu.Item
+                                    onClick={() => handleModalClick(product.id, purchasesModal)}
+                                    leftSection={<IconReceipt size={14}/>}
+                                    data-testid="product-purchases-menu-item"
+                                >
+                                    {t`View purchases`}
+                                </Menu.Item>}
 
-                            <Menu.Item
-                                className={classes.touchOnly}
-                                leftSection={<IconArrowUp size={14}/>}
-                                disabled={!canMoveUp}
-                                onClick={() => handleSort(product.id, 'up')}
-                            >
-                                {t`Move up`}
-                            </Menu.Item>
-                            <Menu.Item
-                                className={classes.touchOnly}
-                                leftSection={<IconArrowDown size={14}/>}
-                                disabled={!canMoveDown}
-                                onClick={() => handleSort(product.id, 'down')}
-                            >
-                                {t`Move down`}
-                            </Menu.Item>
+                                <WriteAccess>
+                                    {isTicket && (
+                                        <Menu.Item
+                                            onClick={() => handleModalClick(product.id, messageModal)}
+                                            leftSection={<IconSend size={14}/>}
+                                        >
+                                            {t`Message Attendees`}
+                                        </Menu.Item>
+                                    )}
 
-                            <Menu.Divider/>
-                            <Menu.Label>{t`Danger zone`}</Menu.Label>
-                            <Menu.Item
-                                onClick={() => handleDeleteProduct(product.id, product.event_id)}
-                                color="red"
-                                leftSection={<IconTrash size={14}/>}
-                            >
-                                {t`Delete`}
-                            </Menu.Item>
-                        </Menu.Dropdown>
-                    </Menu>
+                                    <Menu.Item
+                                        onClick={() => handleModalClick(product.id, editModal)}
+                                        leftSection={<IconPencil size={14}/>}
+                                        data-testid="product-edit-menu-item"
+                                    >
+                                        <Trans>Edit {isTicket ? t`Ticket` : t`Product`}</Trans>
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        onClick={() => handleModalClick(product.id, duplicateModal)}
+                                        leftSection={<IconCopyPlus size={14}/>}
+                                    >
+                                        {t`Duplicate`}
+                                    </Menu.Item>
+
+                                    <Menu.Item
+                                        className={classes.touchOnly}
+                                        leftSection={<IconArrowUp size={14}/>}
+                                        disabled={!canMoveUp}
+                                        onClick={() => handleSort(product.id, 'up')}
+                                    >
+                                        {t`Move up`}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        className={classes.touchOnly}
+                                        leftSection={<IconArrowDown size={14}/>}
+                                        disabled={!canMoveDown}
+                                        onClick={() => handleSort(product.id, 'down')}
+                                    >
+                                        {t`Move down`}
+                                    </Menu.Item>
+
+                                    <Menu.Divider/>
+                                    <Menu.Label>{t`Danger zone`}</Menu.Label>
+                                    <Menu.Item
+                                        onClick={() => handleDeleteProduct(product.id, product.event_id)}
+                                        color="red"
+                                        leftSection={<IconTrash size={14}/>}
+                                    >
+                                        {t`Delete`}
+                                    </Menu.Item>
+                                </WriteAccess>
+                            </Menu.Dropdown>
+                        </Menu>
+                    )}
                 </div>
             </div>
 

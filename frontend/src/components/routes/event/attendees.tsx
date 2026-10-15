@@ -1,4 +1,5 @@
 import {useParams} from "react-router";
+import {CreateButton} from "../../common/CreateButton";
 import {useGetAttendees} from "../../../queries/useGetAttendees.ts";
 import {PageTitle} from "../../common/PageTitle";
 import {PageBody} from "../../common/PageBody";
@@ -249,9 +250,9 @@ const Attendees = () => {
                     resultCount={pagination?.total}
                     resultLabel={t`attendees`}
                 >
-                    <Button color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
+                    <CreateButton color={'green'} size={'sm'} data-testid="attendee-create-button" onClick={openCreateModal} rightSection={<IconPlus/>}>
                         {t`Create`}
-                    </Button>
+                    </CreateButton>
 
                     <Button color={'green'}
                             size={'sm'}

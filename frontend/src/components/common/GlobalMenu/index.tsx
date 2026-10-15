@@ -1,4 +1,5 @@
 import {Avatar, Menu, Text, UnstyledButton} from "@mantine/core";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {ReactNode} from "react";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {
@@ -36,6 +37,7 @@ interface Link {
 
 export const GlobalMenu = () => {
     const {data: me} = useGetMe();
+    const {can, isRestricted, canCreateOrganizers} = useAccess();
     const licenceNotice = useLicenceNotice();
     const [licenceModalOpen, {open: openLicenceModal, close: closeLicenceModal}] = useDisclosure(false);
     const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] = useDisclosure(false);
@@ -51,14 +53,17 @@ export const GlobalMenu = () => {
             icon: IconUser,
             link: "/manage/profile",
         },
-        {
+    ];
+
+    if (!isRestricted) {
+        links.push({
             label: t`Account Settings`,
             icon: IconSettingsCog,
             link: `/account/settings`,
-        },
-    ];
+        });
+    }
 
-    if (me?.role === 'ADMIN' || me?.role === 'SUPERADMIN') {
+    if (can('MANAGE_TEAM')) {
         links.push({
             label: t`User Management`,
             icon: IconUsers,
@@ -99,14 +104,16 @@ export const GlobalMenu = () => {
         });
     }
 
-    links.push({
-        label: t`Create Organizer`,
-        icon: IconPlus,
-        onClick: (event: any) => {
-            event.preventDefault();
-            openCreateOrganizerModal();
-        }
-    });
+    if (canCreateOrganizers) {
+        links.push({
+            label: t`Create Organizer`,
+            icon: IconPlus,
+            onClick: (event: any) => {
+                event.preventDefault();
+                openCreateOrganizerModal();
+            }
+        });
+    }
 
     links.push({
         label: t`Logout`,

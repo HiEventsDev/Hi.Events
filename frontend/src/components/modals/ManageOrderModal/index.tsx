@@ -1,4 +1,5 @@
 import {GenericModalProps, IdParam, Product, QuestionAnswer} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -49,6 +50,7 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
     const [isEditing, setIsEditing] = useState(false);
     const errorHandler = useFormErrorResponseHandler();
     const mutation = useEditOrder();
+    const access = useAccess();
     const {getOrderActions, orderActionModals} = useOrderActions({
         eventId,
         onEdit: () => setIsEditing(true),
@@ -109,11 +111,12 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
             .map(item => [item.event_occurrence!.id, item.event_occurrence!])).values()
     );
 
+    const canViewFinancials = access.can('VIEW_FINANCIALS');
     const stats: DrawerStat[] = [
-        {
+        ...(canViewFinancials ? [{
             label: t`Total`,
             value: <Currency currency={order.currency} price={order.total_gross}/>,
-        },
+        }] : []),
         {
             label: t`Items`,
             value: (order.order_items ?? []).reduce((total, item) => total + item.quantity, 0),
@@ -298,9 +301,11 @@ export const ManageOrderModal = ({onClose, orderId}: GenericModalProps & ManageO
                         <SideDrawerFields fields={fields}/>
                     </SideDrawerSection>
 
-                    <SideDrawerSection title={t`Order Summary`} surface>
-                        <OrderSummary event={event} order={order}/>
-                    </SideDrawerSection>
+                    {canViewFinancials && (
+                        <SideDrawerSection title={t`Order Summary`} surface>
+                            <OrderSummary event={event} order={order}/>
+                        </SideDrawerSection>
+                    )}
 
                     {order.notes && (
                         <SideDrawerSection title={t`Notes`}>

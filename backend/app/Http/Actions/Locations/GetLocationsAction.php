@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Locations;
 
 use HiEvents\DomainObjects\LocationDomainObject;
-use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Resources\Location\LocationResource;
@@ -21,7 +20,7 @@ class GetLocationsAction extends BaseAction
 
     public function __invoke(int $organizerId, Request $request): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
+        $this->isOrganizerReadAuthorized($organizerId);
 
         $locations = $this->handler->handle(
             organizerId: $organizerId,

@@ -1,4 +1,6 @@
 import {Button, Group, Menu, Table as MantineTable, Text} from "@mantine/core";
+import {WriteAccess} from "../WriteAccess";
+import {CreateButton} from "../CreateButton";
 import {IconDotsVertical, IconPencil, IconPlus, IconTrash} from "@tabler/icons-react";
 import {useDisclosure} from "@mantine/hooks";
 import {useState} from "react";
@@ -46,35 +48,37 @@ export const LocationsTable = ({locations, openCreateModal}: LocationsTableProps
 
     const ActionMenu = ({location}: { location: Location }) => (
         <Group wrap="nowrap" gap={0} justify="flex-end">
-            <Menu shadow="md" width={200}>
-                <Menu.Target>
-                    <Button size="xs" variant="transparent">
-                        <IconDotsVertical/>
-                    </Button>
-                </Menu.Target>
+            <WriteAccess>
+                <Menu shadow="md" width={200}>
+                    <Menu.Target>
+                        <Button size="xs" variant="transparent">
+                            <IconDotsVertical/>
+                        </Button>
+                    </Menu.Target>
 
-                <Menu.Dropdown>
-                    <Menu.Label>{t`Manage`}</Menu.Label>
-                    <Menu.Item
-                        leftSection={<IconPencil size={14}/>}
-                        onClick={() => {
-                            setSelectedLocation(location);
-                            openEditModal();
-                        }}
-                    >
-                        {t`Edit location`}
-                    </Menu.Item>
-                    <Menu.Divider/>
-                    <Menu.Label>{t`Danger zone`}</Menu.Label>
-                    <Menu.Item
-                        color="red"
-                        leftSection={<IconTrash size={14}/>}
-                        onClick={() => handleDelete(location)}
-                    >
-                        {t`Delete location`}
-                    </Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
+                    <Menu.Dropdown>
+                        <Menu.Label>{t`Manage`}</Menu.Label>
+                        <Menu.Item
+                            leftSection={<IconPencil size={14}/>}
+                            onClick={() => {
+                                setSelectedLocation(location);
+                                openEditModal();
+                            }}
+                        >
+                            {t`Edit location`}
+                        </Menu.Item>
+                        <Menu.Divider/>
+                        <Menu.Label>{t`Danger zone`}</Menu.Label>
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={14}/>}
+                            onClick={() => handleDelete(location)}
+                        >
+                            {t`Delete location`}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
+            </WriteAccess>
         </Group>
     );
 
@@ -88,12 +92,12 @@ export const LocationsTable = ({locations, openCreateModal}: LocationsTableProps
                         <p>
                             {t`Reusable venues appear here automatically as you create events with addresses, and you can add your own.`}
                         </p>
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Add Location`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />

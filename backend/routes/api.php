@@ -305,6 +305,8 @@ use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
+use HiEvents\Http\Actions\Team\GetEventTeamAction;
+use HiEvents\Http\Actions\Team\GetOrganizerTeamAction;
 use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
 use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
@@ -420,6 +422,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
         $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
+        $router->get('/organizers/{organizer_id}/team', GetOrganizerTeamAction::class);
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
@@ -533,6 +536,7 @@ $router->middleware(['auth:api'])->group(
 
         // Stats
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
+        $router->get('/events/{event_id}/team', GetEventTeamAction::class);
         $router->get('/events/{event_id}/counts', GetEventCountsAction::class);
 
         // Email Templates - Event level

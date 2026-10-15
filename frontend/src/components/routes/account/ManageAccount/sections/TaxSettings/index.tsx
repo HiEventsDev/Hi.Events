@@ -6,9 +6,11 @@ import accountClasses from "../../ManageAccount.module.scss";
 import {Card} from "../../../../../common/Card";
 import {HeadingCard} from "../../../../../common/HeadingCard";
 import {LoadingMask} from "../../../../../common/LoadingMask";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 
 export const TaxSettings = () => {
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
+    const {isReadOnly} = useAccess();
 
     return (
         <>
@@ -16,7 +18,7 @@ export const TaxSettings = () => {
                 heading={t`Tax & Fees`}
                 subHeading={t`Manage taxes and fees which can be applied to your products`}
                 buttonText={t`Add Tax or Fee`}
-                buttonAction={openCreateModal}
+                buttonAction={isReadOnly ? undefined : openCreateModal}
             />
             <Card className={accountClasses.tabContent}>
                 <LoadingMask/>

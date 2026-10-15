@@ -2,7 +2,7 @@
 
 namespace HiEvents\Http\Actions\Organizers\Stripe;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\StripePlatform;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Exceptions\CreateStripeConnectAccountFailedException;
@@ -10,6 +10,7 @@ use HiEvents\Exceptions\CreateStripeConnectAccountLinksFailedException;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Exceptions\SaasModeEnabledException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Organizer\Stripe\OrganizerStripeConnectAccountResponseResource;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\CreateStripeConnectAccountHandler;
 use HiEvents\Services\Application\Handlers\Organizer\Payment\Stripe\DTO\CreateStripeConnectAccountDTO;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
+#[RequiresPermission(Permission::MANAGE_PAYMENTS)]
 class CreateStripeConnectAccountAction extends BaseAction
 {
     public function __construct(
@@ -29,7 +31,7 @@ class CreateStripeConnectAccountAction extends BaseAction
      */
     public function __invoke(int $organizerId, Request $request): JsonResponse
     {
-        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($organizerId, OrganizerDomainObject::class);
 
         try {
             $result = $this->createStripeConnectAccountHandler->handle(CreateStripeConnectAccountDTO::from([

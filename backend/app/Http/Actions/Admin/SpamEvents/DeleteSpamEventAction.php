@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\SpamEvents;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Admin\DeleteSpamEventRequest;
@@ -25,7 +24,7 @@ class DeleteSpamEventAction extends BaseAction
      */
     public function __invoke(DeleteSpamEventRequest $request, int $eventId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $deleteAccount = $request->boolean('delete_account');
 

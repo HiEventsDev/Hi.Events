@@ -1,4 +1,5 @@
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
+import {WriteAccess} from "../../../common/WriteAccess";
 import {useDisclosure} from "@mantine/hooks";
 import {Event, QueryFilters} from "../../../../types.ts";
 import {useParams} from "react-router";
@@ -51,16 +52,18 @@ const Events = () => {
                     />
                 )}
             >
-                <Button
-                    color={'green'}
-                    rightSection={
-                        <IconCalendarPlus stroke={1.5}/>
-                    }
-                    onClick={openCreateModal}
-                    pr={12}
-                >
-                    {t`Create Event`}
-                </Button>
+                <WriteAccess>
+                    <Button
+                        color={'green'}
+                        rightSection={
+                            <IconCalendarPlus stroke={1.5}/>
+                        }
+                        onClick={openCreateModal}
+                        pr={12}
+                    >
+                        {t`Create Event`}
+                    </Button>
+                </WriteAccess>
             </ToolBar>
 
             <EventsDashboardStatusButtons

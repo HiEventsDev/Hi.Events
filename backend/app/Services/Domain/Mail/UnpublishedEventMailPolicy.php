@@ -2,10 +2,13 @@
 
 namespace HiEvents\Services\Domain\Mail;
 
+use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Generated\EventDomainObjectAbstract;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 
@@ -38,8 +41,11 @@ class UnpublishedEventMailPolicy
             return false;
         }
 
-        $verifiedMemberEmails = ($this->userRepository->findUsersByAccountId($event->getAccountId()) ?? collect())
-            ->filter(fn (UserDomainObject $user) => $user->getEmailVerifiedAt() !== null)
+        $verifiedMemberEmails = ($this->userRepository
+            ->loadRelation(new Relationship(domainObject: AccountUserDomainObject::class, name: 'currentAccountUser'))
+            ->findUsersByAccountId($event->getAccountId()) ?? collect())
+            ->filter(fn (UserDomainObject $user) => $user->getEmailVerifiedAt() !== null
+                && $user->getCurrentAccountUser()?->getStatus() === UserStatus::ACTIVE->name)
             ->map(fn (UserDomainObject $user) => mb_strtolower(trim($user->getEmail())))
             ->all();
 

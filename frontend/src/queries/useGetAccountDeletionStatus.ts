@@ -4,9 +4,10 @@ import {accountClient} from "../api/account.client.ts";
 
 export const GET_ACCOUNT_DELETION_STATUS_QUERY_KEY = 'getAccountDeletionStatus';
 
-export const useGetAccountDeletionStatus = () => {
+export const useGetAccountDeletionStatus = (enabled = true) => {
     return useQuery<AccountDeletionStatus>({
         queryKey: [GET_ACCOUNT_DELETION_STATUS_QUERY_KEY],
+        enabled,
 
         queryFn: async () => {
             const {data} = await accountClient.getDeletionStatus();

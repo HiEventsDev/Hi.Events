@@ -1,4 +1,5 @@
 import React from 'react';
+import {WriteAccess} from "../../WriteAccess";
 import {
     IconArrowDown,
     IconArrowUp,
@@ -128,86 +129,90 @@ export const SortableCategory: React.FC<SortableCategoryProps> = ({
                         )}
                     </h2>
 
-                    <div className={classes.categoryActions}>
-                        <SortArrows
-                            upArrowEnabled={upSortEnabled}
-                            downArrowEnabled={downSortEnabled}
-                            onSortUp={() => handleSort('up')}
-                            onSortDown={() => handleSort('down')}
-                        />
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={openCreateModal}
-                            title={t`Create category`}
-                            aria-label={t`Create category`}
-                            variant={'transparent'}
-                        >
-                            <IconPlus size={20}/>
-                        </ActionIcon>
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={editModal.open}
-                            title={t`Edit category`}
-                            aria-label={t`Edit category`}
-                            variant={'transparent'}
-                        >
-                            <IconPencil size={20}/>
-                        </ActionIcon>
-                        <ActionIcon
-                            className={classes.categoryAction}
-                            onClick={handleDelete}
-                            title={t`Delete category`}
-                            aria-label={t`Delete category`}
-                            variant={'transparent'}
-                        >
-                            {isLastCategory ? <IconTrashOff size={20}/> : <IconTrash size={20}/>}
-                        </ActionIcon>
-                    </div>
+                    <WriteAccess>
+                        <div className={classes.categoryActions}>
+                            <SortArrows
+                                upArrowEnabled={upSortEnabled}
+                                downArrowEnabled={downSortEnabled}
+                                onSortUp={() => handleSort('up')}
+                                onSortDown={() => handleSort('down')}
+                            />
+                            <ActionIcon
+                                className={classes.categoryAction}
+                                onClick={openCreateModal}
+                                title={t`Create category`}
+                                aria-label={t`Create category`}
+                                variant={'transparent'}
+                            >
+                                <IconPlus size={20}/>
+                            </ActionIcon>
+                            <ActionIcon
+                                className={classes.categoryAction}
+                                onClick={editModal.open}
+                                title={t`Edit category`}
+                                aria-label={t`Edit category`}
+                                variant={'transparent'}
+                            >
+                                <IconPencil size={20}/>
+                            </ActionIcon>
+                            <ActionIcon
+                                className={classes.categoryAction}
+                                onClick={handleDelete}
+                                title={t`Delete category`}
+                                aria-label={t`Delete category`}
+                                variant={'transparent'}
+                            >
+                                {isLastCategory ? <IconTrashOff size={20}/> : <IconTrash size={20}/>}
+                            </ActionIcon>
+                        </div>
+                    </WriteAccess>
 
                     <div className={classes.categoryMenu}>
-                        <Menu shadow="md" width={200} position="bottom-end">
-                            <Menu.Target>
-                                <ActionIcon
-                                    variant="subtle"
-                                    color="gray"
-                                    radius="md"
-                                    className={classes.menuButton}
-                                    aria-label={t`More actions`}
-                                >
-                                    <IconDots size={18}/>
-                                </ActionIcon>
-                            </Menu.Target>
-                            <Menu.Dropdown>
-                                <Menu.Item leftSection={<IconPlus size={14}/>} onClick={openCreateModal}>
-                                    {t`Add Product`}
-                                </Menu.Item>
-                                <Menu.Item leftSection={<IconPencil size={14}/>} onClick={editModal.open}>
-                                    {t`Edit category`}
-                                </Menu.Item>
-                                <Menu.Item
-                                    leftSection={<IconArrowUp size={14}/>}
-                                    disabled={!upSortEnabled}
-                                    onClick={() => handleSort('up')}
-                                >
-                                    {t`Move up`}
-                                </Menu.Item>
-                                <Menu.Item
-                                    leftSection={<IconArrowDown size={14}/>}
-                                    disabled={!downSortEnabled}
-                                    onClick={() => handleSort('down')}
-                                >
-                                    {t`Move down`}
-                                </Menu.Item>
-                                <Menu.Divider/>
-                                <Menu.Item
-                                    color="red"
-                                    leftSection={isLastCategory ? <IconTrashOff size={14}/> : <IconTrash size={14}/>}
-                                    onClick={handleDelete}
-                                >
-                                    {t`Delete category`}
-                                </Menu.Item>
-                            </Menu.Dropdown>
-                        </Menu>
+                        <WriteAccess>
+                            <Menu shadow="md" width={200} position="bottom-end">
+                                <Menu.Target>
+                                    <ActionIcon
+                                        variant="subtle"
+                                        color="gray"
+                                        radius="md"
+                                        className={classes.menuButton}
+                                        aria-label={t`More actions`}
+                                    >
+                                        <IconDots size={18}/>
+                                    </ActionIcon>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                    <Menu.Item leftSection={<IconPlus size={14}/>} onClick={openCreateModal}>
+                                        {t`Add Product`}
+                                    </Menu.Item>
+                                    <Menu.Item leftSection={<IconPencil size={14}/>} onClick={editModal.open}>
+                                        {t`Edit category`}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconArrowUp size={14}/>}
+                                        disabled={!upSortEnabled}
+                                        onClick={() => handleSort('up')}
+                                    >
+                                        {t`Move up`}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconArrowDown size={14}/>}
+                                        disabled={!downSortEnabled}
+                                        onClick={() => handleSort('down')}
+                                    >
+                                        {t`Move down`}
+                                    </Menu.Item>
+                                    <Menu.Divider/>
+                                    <Menu.Item
+                                        color="red"
+                                        leftSection={isLastCategory ? <IconTrashOff size={14}/> : <IconTrash size={14}/>}
+                                        onClick={handleDelete}
+                                    >
+                                        {t`Delete category`}
+                                    </Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                        </WriteAccess>
                     </div>
                 </div>
                 <div className={classes.categoryContent}>

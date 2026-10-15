@@ -1,4 +1,5 @@
 import {ReactNode} from "react";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {AreaChart} from "@mantine/charts";
 import {t} from "@lingui/macro";
 import {Card} from "../Card";
@@ -60,7 +61,10 @@ export const ProductSalesChartCard = ({dailyStats, timezone, dateRangeLabel, syn
     </ChartCard>
 );
 
-export const RevenueChartCard = ({dailyStats, timezone, dateRangeLabel, syncId, currency}: StatsChartCardProps & {
+export const RevenueChartCard = (props: StatsChartCardProps & { currency: string }) =>
+    useAccess().can('VIEW_FINANCIALS') ? <RevenueChart {...props}/> : null;
+
+const RevenueChart = ({dailyStats, timezone, dateRangeLabel, syncId, currency}: StatsChartCardProps & {
     currency: string;
 }) => (
     <ChartCard title={t`Revenue`} dateRangeLabel={dateRangeLabel}>

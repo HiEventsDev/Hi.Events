@@ -2,15 +2,17 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Exceptions\AccountNotVerifiedException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\User\SendUserInvitationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+#[RequiresPermission(Permission::MANAGE_TEAM)]
 class ResendInvitationAction extends BaseAction
 {
     private UserRepositoryInterface $userRepository;
@@ -25,8 +27,6 @@ class ResendInvitationAction extends BaseAction
 
     public function __invoke(int $userId): JsonResponse|Response
     {
-        $this->minimumAllowedRole(Role::ADMIN);
-
         $user = $this->userRepository->findByIdAndAccountId($userId, $this->getAuthenticatedAccountId());
 
         if ($user->getCurrentAccountUser()?->getStatus() !== UserStatus::INVITED->name) {

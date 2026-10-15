@@ -6,6 +6,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
 use HiEvents\Mail\User\EmailChangeRequestedMail;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Application\Handlers\User\UpdateMeHandler;
@@ -43,6 +44,7 @@ class UpdateMeHandlerTest extends TestCase
             Mail::getFacadeRoot(),
             $this->encryptedPayloadService,
             Mockery::mock(TrustedDeviceService::class),
+            Mockery::mock(AccountUserRepositoryInterface::class),
         );
     }
 

@@ -155,12 +155,53 @@ export interface User {
     pending_email?: string;
     last_login_at?: string;
     status?: 'ACTIVE' | 'INACTIVE' | 'INVITED';
-    role?: 'ADMIN' | 'ORGANIZER' | 'SUPERADMIN';
+    role?: UserRole;
     is_account_owner?: boolean;
+    notify_new_orders?: boolean;
+    access?: UserAccess;
     locale?: SupportedLocales;
     marketing_opted_in_at?: string | null;
     feature_flags?: Record<string, boolean>;
     licence?: LicenceSummary;
+}
+
+export type UserRole = 'ADMIN' | 'ORGANIZER' | 'VIEWER' | 'SUPERADMIN';
+
+export type AccessScope = 'ACCOUNT' | 'RESTRICTED';
+
+export type Permission =
+    | 'EDIT'
+    | 'VIEW_FINANCIALS'
+    | 'ISSUE_REFUNDS'
+    | 'MANAGE_PAYMENTS'
+    | 'DELETE_EVENTS'
+    | 'MANAGE_TEAM'
+    | 'MANAGE_ACCOUNT';
+
+export type AdjustablePermission = 'VIEW_FINANCIALS' | 'ISSUE_REFUNDS';
+
+export interface UserAccess {
+    scope: AccessScope;
+    organizer_ids: number[];
+    event_ids: number[];
+    permissions: Permission[];
+}
+
+export interface TeamMemberAccess {
+    user_id: number;
+    first_name: string;
+    last_name: string | null;
+    email: string;
+    role: UserRole;
+    status: 'ACTIVE' | 'INACTIVE' | 'INVITED';
+    access_via: 'ACCOUNT' | 'ORGANIZER' | 'EVENT';
+}
+
+export interface TeamAccessRequest {
+    access_scope: AccessScope;
+    organizer_ids: number[];
+    event_ids: number[];
+    permissions: Partial<Record<AdjustablePermission, boolean>>;
 }
 
 export type LicenceStatus = 'ACTIVE' | 'GRACE' | 'LAPSED' | 'NONE' | 'DEV';
@@ -1602,11 +1643,11 @@ export interface TaxAndFee {
     account_id?: IdParam;
 }
 
-export interface InviteUserRequest {
+export interface InviteUserRequest extends TeamAccessRequest {
     email: string;
     first_name: string;
     last_name: string;
-    role: string;
+    role: UserRole;
 }
 
 export interface SortableItem {

@@ -6,8 +6,11 @@ use HiEvents\DomainObjects\Enums\AttendeeDetailsCollectionMethod;
 use HiEvents\DomainObjects\Enums\HomepageBackgroundType;
 use HiEvents\DomainObjects\Enums\HomepageFontFamily;
 use HiEvents\DomainObjects\Enums\OrganizerHomepageVisibility;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
+use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
 
@@ -23,6 +26,7 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                 }
 
                 $isSaasMode = config('app.saas_mode_enabled');
+                $existingTagManagerIds = $this->existingTagManagerIds();
 
                 foreach ($pixels as $index => $pixel) {
                     $providerValue = $pixel['provider'] ?? null;
@@ -33,6 +37,18 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                         $validator->errors()->add(
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
+                        );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && ! in_array($pixelId, $existingTagManagerIds, true)
+                        && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::MANAGE_ACCOUNT)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Only account admins can add a Google Tag Manager container.')
                         );
 
                         continue;
@@ -121,5 +137,21 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'tracking_pixels.*.enabled' => ['required', 'boolean'],
             'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
         ];
+    }
+
+    /**
+     * @return string[]
+     */
+    private function existingTagManagerIds(): array
+    {
+        $pixels = app(OrganizerSettingsRepositoryInterface::class)
+            ->findFirstWhere(['organizer_id' => (int) $this->route('organizer_id')])
+            ?->getTrackingPixels();
+
+        return collect(is_string($pixels) ? json_decode($pixels, true) : $pixels)
+            ->filter(fn ($pixel) => is_array($pixel) && ($pixel['provider'] ?? null) === TrackingPixelProvider::GOOGLE_TAG_MANAGER->value)
+            ->map(fn (array $pixel) => (string) ($pixel['pixel_id'] ?? ''))
+            ->values()
+            ->all();
     }
 }

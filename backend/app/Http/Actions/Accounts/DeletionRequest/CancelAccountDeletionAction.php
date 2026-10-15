@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Accounts\DeletionRequest;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Exceptions\AccountDeletionRequestNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Account\AccountDeletionRequestResource;
 use HiEvents\Services\Application\Handlers\Account\DeletionRequest\CancelAccountDeletionHandler;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
+#[RequiresPermission(Permission::MANAGE_ACCOUNT)]
 class CancelAccountDeletionAction extends BaseAction
 {
     public function __construct(
@@ -24,8 +26,6 @@ class CancelAccountDeletionAction extends BaseAction
      */
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ADMIN);
-
         try {
             $deletionRequest = $this->cancelAccountDeletionHandler->handle(
                 accountId: $this->getAuthenticatedAccountId(),

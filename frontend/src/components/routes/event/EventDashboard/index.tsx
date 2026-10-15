@@ -1,4 +1,5 @@
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {useLocation, useNavigate, useParams} from "react-router";
 import {PageTitle} from "../../../common/PageTitle";
 import {PageBody} from "../../../common/PageBody";
@@ -45,6 +46,7 @@ export const EventDashboard = () => {
     const location = useLocation();
     const eventQuery = useGetEvent(eventId);
     const {data: me} = useGetMe();
+    const {isReadOnly} = useAccess();
     const event = eventQuery?.data;
 
     const defaultDateRangeRef = useRef<PeriodPreset | null>(null);
@@ -188,7 +190,7 @@ export const EventDashboard = () => {
         return `${startStr} - ${endStr}`;
     })();
 
-    const shouldShowChecklist = !!(event && accountIsFetched);
+    const shouldShowChecklist = !!(event && accountIsFetched) && !isReadOnly;
 
     return (
         <PageBody>

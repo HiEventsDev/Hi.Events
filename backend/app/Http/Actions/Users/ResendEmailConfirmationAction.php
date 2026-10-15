@@ -3,11 +3,13 @@
 namespace HiEvents\Http\Actions\Users;
 
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\User\ResendEmailConfirmationHandler;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
+#[AllowedForReadOnlyUsers]
 class ResendEmailConfirmationAction extends BaseAction
 {
     public function __construct(

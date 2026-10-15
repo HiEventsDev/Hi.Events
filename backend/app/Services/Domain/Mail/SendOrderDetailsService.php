@@ -32,6 +32,7 @@ class SendOrderDetailsService
         private readonly Mailer $mailer,
         private readonly SendAttendeeTicketService $sendAttendeeTicketService,
         private readonly MailBuilderService $mailBuilderService,
+        private readonly TeamOrderNotificationRecipientService $teamRecipientService,
     ) {}
 
     public function sendOrderSummaryAndTicketEmails(OrderDomainObject $order): void
@@ -153,12 +154,27 @@ class SendOrderDetailsService
             invoice: $order->getLatestInvoice(),
         );
 
-        if ($order->getIsManuallyCreated() || $order->isBoxOfficeOrder() || ! $event->getEventSettings()->getNotifyOrganizerOfNewOrders()) {
+        if ($order->getIsManuallyCreated() || $order->isBoxOfficeOrder()) {
             return;
         }
 
-        $this->mailer
-            ->to($event->getOrganizer()->getEmail())
-            ->send(new OrderSummaryForOrganizer($order, $event));
+        $notifiesOrganizer = $event->getEventSettings()->getNotifyOrganizerOfNewOrders();
+
+        if ($notifiesOrganizer) {
+            $this->mailer
+                ->to($event->getOrganizer()->getEmail())
+                ->send(new OrderSummaryForOrganizer($order, $event));
+        }
+
+        $teamRecipients = $this->teamRecipientService->recipientsFor(
+            event: $event,
+            excludeEmail: $notifiesOrganizer ? $event->getOrganizer()->getEmail() : null,
+        );
+
+        foreach ($teamRecipients as $email) {
+            $this->mailer
+                ->to($email)
+                ->send(new OrderSummaryForOrganizer($order, $event));
+        }
     }
 }

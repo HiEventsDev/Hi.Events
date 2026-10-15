@@ -7,6 +7,7 @@ use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
 use HiEvents\Mail\User\EmailChangeRequestedMail;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
@@ -22,6 +23,7 @@ readonly class UpdateMeHandler
         private Mailer $mailer,
         private EncryptedPayloadService $encryptedPayloadService,
         private TrustedDeviceService $trustedDeviceService,
+        private AccountUserRepositoryInterface $accountUserRepository,
     ) {}
 
     /**
@@ -67,6 +69,16 @@ readonly class UpdateMeHandler
                 'id' => $updateUserData->id,
             ]
         );
+
+        if ($updateUserData->notify_new_orders !== null) {
+            $this->accountUserRepository->updateWhere(
+                attributes: ['notify_new_orders' => $updateUserData->notify_new_orders],
+                where: [
+                    'user_id' => $updateUserData->id,
+                    'account_id' => $updateUserData->account_id,
+                ],
+            );
+        }
 
         return $this->userRepository->findByIdAndAccountId($updateUserData->id, $updateUserData->account_id);
     }

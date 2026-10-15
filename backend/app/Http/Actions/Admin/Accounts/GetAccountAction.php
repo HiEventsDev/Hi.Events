@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Accounts;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Account\AdminAccountDetailResource;
 use HiEvents\Services\Application\Handlers\Admin\GetAccountHandler;
@@ -18,7 +17,7 @@ class GetAccountAction extends BaseAction
 
     public function __invoke(int $accountId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $account = $this->handler->handle($accountId);
 

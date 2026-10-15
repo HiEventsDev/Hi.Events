@@ -15,6 +15,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Services\Application\Handlers\CheckInList\Public\DTO\PublicAttendeeDetailDTO;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\CheckInList\CheckInListActivityValidator;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -25,6 +26,7 @@ class GetCheckInListAttendeeDetailPublicHandler
         private readonly AttendeeRepositoryInterface $attendeeRepository,
         private readonly CheckInListRepositoryInterface $checkInListRepository,
         private readonly CheckInListActivityValidator $checkInListActivityValidator,
+        private readonly AccountUserAccessService $accessService,
     ) {}
 
     public function handle(string $shortId, string $attendeePublicId, ?int $staffAccountId): PublicAttendeeDetailDTO
@@ -96,7 +98,7 @@ class GetCheckInListAttendeeDetailPublicHandler
             return false;
         }
 
-        return $event->getAccountId() === $staffAccountId;
+        return $this->accessService->currentMemberCanAccessEvent($event);
     }
 
     private function verifyAttendeeBelongsToCheckInList(

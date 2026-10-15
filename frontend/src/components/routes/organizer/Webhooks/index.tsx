@@ -1,5 +1,6 @@
 import { t } from "@lingui/macro";
-import { Badge, Button, Group, Box } from "@mantine/core"
+import {CreateButton} from "../../../common/CreateButton";
+import { Badge, Group, Box } from "@mantine/core"
 import { IconPlus } from "@tabler/icons-react";
 import { Card } from "../../../common/Card";
 import { useDisclosure } from "@mantine/hooks";
@@ -31,9 +32,9 @@ export default function Webhooks() {
             <Box>
                 <Card>
                     <Group justify="space-between">
-                        <Button color={'green'} rightSection={<IconPlus />} onClick={openCreateModal} data-testid="webhook-add-button">
+                        <CreateButton color={'green'} rightSection={<IconPlus />} onClick={openCreateModal} data-testid="webhook-add-button">
                             {t`Add Webhook`}
-                        </Button>
+                        </CreateButton>
                         <Badge
                             variant="transparent"
                             size="lg"

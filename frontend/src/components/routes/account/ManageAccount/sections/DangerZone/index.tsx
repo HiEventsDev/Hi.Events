@@ -1,4 +1,5 @@
-import {Alert, Button, Modal, Textarea, TextInput} from "@mantine/core";
+import {Alert, Button, Modal, Textarea, TextInput, Text} from "@mantine/core";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {useForm} from "@mantine/form";
 import {useDisclosure} from "@mantine/hooks";
 import {IconAlertTriangle, IconTrash} from "@tabler/icons-react";
@@ -18,7 +19,8 @@ import classes from "./DangerZone.module.scss";
 
 const DangerZone = () => {
     const accountQuery = useGetAccount();
-    const deletionStatusQuery = useGetAccountDeletionStatus();
+    const canManageAccount = useAccess().can('MANAGE_ACCOUNT');
+    const deletionStatusQuery = useGetAccountDeletionStatus(canManageAccount);
     const {data: me} = useGetMe();
     const requestDeletionMutation = useRequestAccountDeletion();
     const cancelDeletionMutation = useCancelAccountDeletion();
@@ -35,6 +37,10 @@ const DangerZone = () => {
     const account = accountQuery.data;
     const deletionStatus = deletionStatusQuery.data;
     const isOwner = !!me?.is_account_owner;
+
+    if (!canManageAccount) {
+        return <Text c="dimmed">{t`Only account admins can manage account deletion.`}</Text>;
+    }
 
     if (!account || !deletionStatus) {
         return <LoadingMask/>;

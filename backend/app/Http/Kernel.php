@@ -9,6 +9,7 @@ use HiEvents\Http\Middleware\ApplySsrClientIp;
 use HiEvents\Http\Middleware\Authenticate;
 use HiEvents\Http\Middleware\CacheGuestJsonResponse;
 use HiEvents\Http\Middleware\EncryptCookies;
+use HiEvents\Http\Middleware\EnforceAccountUserAccess;
 use HiEvents\Http\Middleware\EnsureAccountIsNotPendingDeletion;
 use HiEvents\Http\Middleware\EnsureLifecycleEmailsAvailable;
 use HiEvents\Http\Middleware\EnsureTwoFactorEnrolled;
@@ -81,6 +82,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             SetAccountContext::class,
             EnsureAccountIsNotPendingDeletion::class,
+            EnforceAccountUserAccess::class,
             EnsureTwoFactorEnrolled::class,
             SetUserLocaleMiddleware::class,
             LogImpersonationMiddleware::class,

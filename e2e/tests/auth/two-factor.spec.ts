@@ -224,7 +224,7 @@ test.describe('two-factor authentication', () => {
     const memberRow = team.userRow(memberEmail);
     await expect(memberRow.getByText('On', { exact: true })).toBeVisible();
 
-    await memberRow.getByRole('button').click();
+    await memberRow.getByTestId('team-member-actions').click();
     await ownerPage.getByTestId('team-reset-two-factor-menu-item').click();
     await ownerPage.getByRole('button', { name: 'Reset two-factor' }).click();
     await expect(ownerPage.getByText('Two-factor authentication reset')).toBeVisible();

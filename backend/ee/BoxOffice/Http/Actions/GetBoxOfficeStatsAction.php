@@ -2,14 +2,17 @@
 
 namespace HiEvents\Enterprise\BoxOffice\Http\Actions;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Enterprise\BoxOffice\Http\Request\GetBoxOfficeStatsRequest;
 use HiEvents\Enterprise\BoxOffice\Resources\BoxOfficeStatsResource;
 use HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\DTO\GetBoxOfficeStatsDTO;
 use HiEvents\Enterprise\BoxOffice\Services\Application\Handlers\GetBoxOfficeStatsHandler;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetBoxOfficeStatsAction extends BaseAction
 {
     public function __construct(

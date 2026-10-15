@@ -9,6 +9,7 @@ const BASE_URL = isSsr()
 const LOGIN_PATH = "/auth/login";
 export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
 const PREVIOUS_URL_KEY = 'previous_url';
+const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE'];
 
 // todo - This isn't scalable, we need to better way to manage this
 const ALLOWED_UNAUTHENTICATED_PATHS = [
@@ -67,7 +68,7 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if (status === 403 && error.response.data?.error_code === 'FEATURE_UNAVAILABLE') {
+        if (status === 403 && ACCESS_ERROR_CODES.includes(error.response.data?.error_code)) {
             return Promise.reject(error);
         }
 

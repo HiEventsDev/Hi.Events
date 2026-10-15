@@ -15,6 +15,7 @@ use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicOrganizerEventsDTO;
 use HiEvents\Services\Application\Handlers\Event\GetPublicEventsHandler;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\ProductFilterEventContextDTO;
@@ -43,6 +44,8 @@ class GetPublicEventsHandlerTest extends TestCase
     private array $quantitiesByEventId = [];
 
     private GetPublicEventsHandler $handler;
+
+    private AccountUserAccessService $accessService;
 
     private OrganizerConfigurationDomainObject $organizerConfiguration;
 
@@ -76,12 +79,16 @@ class GetPublicEventsHandlerTest extends TestCase
                 ->setAccountId(10)
                 ->setOrganizerConfiguration($this->organizerConfiguration));
 
+        $this->accessService = m::mock(AccountUserAccessService::class);
+        $this->accessService->shouldReceive('currentMemberCanAccessOrganizer')->andReturnTrue()->byDefault();
+
         $this->handler = new GetPublicEventsHandler(
             $this->eventRepository,
             $this->organizerRepository,
             $this->productFilterService,
             $this->productQuantitiesFetchService,
             $this->eventSeatMapLookup,
+            $this->accessService,
         );
     }
 

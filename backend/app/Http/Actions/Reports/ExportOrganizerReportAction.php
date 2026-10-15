@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Actions\Reports;
 
 use HiEvents\DomainObjects\Enums\OrganizerReportTypes;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Report\GetOrganizerReportRequest;
@@ -35,6 +36,10 @@ class ExportOrganizerReportAction extends BaseAction
 
         if (! in_array($reportType, OrganizerReportTypes::valuesArray(), true)) {
             throw new BadRequestHttpException(__('Invalid report type.'));
+        }
+
+        if (OrganizerReportTypes::from($reportType)->isFinancial()) {
+            $this->requirePermission(Permission::VIEW_FINANCIALS);
         }
 
         $reportData = $this->reportHandler->handle(

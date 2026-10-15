@@ -13,7 +13,7 @@ import {showSuccess} from "../../../../../../utilites/notifications.tsx";
 import {useFormErrorResponseHandler} from "../../../../../../hooks/useFormErrorResponseHandler.tsx";
 import {Account} from "../../../../../../types.ts";
 import {LoadingMask} from "../../../../../common/LoadingMask";
-import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 
 const AccountSettings = () => {
     const form = useForm({
@@ -26,7 +26,8 @@ const AccountSettings = () => {
     const accountQuery = useGetAccount();
     const updateMutation = useUpdateAccount();
     const formErrorHandler = useFormErrorResponseHandler();
-    const isUserAdmin = useIsCurrentUserAdmin();
+    const {can} = useAccess();
+    const isUserAdmin = can('MANAGE_ACCOUNT');
 
     useEffect(() => {
         if (accountQuery.data) {
