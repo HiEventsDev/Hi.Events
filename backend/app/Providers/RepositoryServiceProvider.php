@@ -23,6 +23,8 @@ use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
+use HiEvents\Repository\Eloquent\AccountUserAccessGrantRepository;
+use HiEvents\Repository\Eloquent\AccountUserPermissionRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AffiliateRepository;
 use HiEvents\Repository\Eloquent\AnnouncementRepository;
@@ -89,6 +91,8 @@ use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserAccessGrantRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserPermissionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AnnouncementRepositoryInterface;
@@ -187,6 +191,8 @@ class RepositoryServiceProvider extends ServiceProvider
         EventSettingsRepositoryInterface::class => EventSettingsRepository::class,
         OrganizerRepositoryInterface::class => OrganizerRepository::class,
         AccountUserRepositoryInterface::class => AccountUserRepository::class,
+        AccountUserAccessGrantRepositoryInterface::class => AccountUserAccessGrantRepository::class,
+        AccountUserPermissionRepositoryInterface::class => AccountUserPermissionRepository::class,
         CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
         StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
         CheckInListRepositoryInterface::class => CheckInListRepository::class,

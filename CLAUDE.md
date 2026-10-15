@@ -99,6 +99,7 @@ Gotchas:
 - **DON'T** add comments — see the comments rule above. No exceptions for "this seems useful context".
 - **NEVER leave dead code.** Code that has no production callers — unused methods, unused DTO fields, unused constants, columns that are written but never read, classes only called from tests — must be deleted, not left "for future use". This applies to both backend and frontend. If you add a method speculatively, wire it to a real caller in the same change or remove it. The same rule applies after refactors: if something becomes unreferenced, it goes. Confirm with grep before claiming a method or class is reachable.
 - **ALWAYS** sanitize user-provided content with `HtmlPurifierService` before storing, especially content rendered as HTML
+- Liquid templates must also be purified **after** rendering (filters like `url_decode`/`append` build markup the stored-template purify can't see), and dashboard previews of rendered email HTML go in a `sandbox=""` iframe, never `dangerouslySetInnerHTML`
 
 #### DTOs
 - Use Spatie Laravel Data package for all new DTOs
@@ -139,6 +140,17 @@ Gotchas:
 - Filter candidates in SQL before `LIMIT`, never in PHP after it, or old ineligible rows starve newer ones
 - Every candidate query also skips accounts nudged in the last 3 days (`quietPeriodStart()`), and anchors its trigger on a timestamp that old data can't move: nothing that a bulk `UPDATE` touches (`updated_at`) unless it's also bounded by a creation date after `enabled_at`
 - Stripe nudges skip accounts whose signup timezone is in a country Stripe Connect can't onboard (`StripeConnectTimezones`) — those organizers start onboarding but almost never finish. Don't use `organizer_stripe_platforms.stripe_account_details->country` instead: unfinished Express accounts report the platform default (`IE`)
+
+#### Team access & permissions
+- Roles (Admin/Organizer/Viewer) are presets of `Permission`s (`Role::defaultPermissions()`). Enforcement checks permissions, never role names (Superadmin aside). Only `Permission::adjustable()` can be overridden per member (`account_user_permissions`); admins always hold every permission
+- `account_users.access_scope = RESTRICTED` limits a member to `account_user_access_grants`: an organizer grant covers all its events (including future ones); an event grant also gives read-only access to the parent organizer (`isOrganizerReadAuthorized`). A restricted member with no grants has no access, never full access
+- Scope is enforced in `IsAuthorizedService`. Whole-endpoint permissions go on the action as `#[RequiresPermission(...)]`, checked by `EnforceAccountUserAccess`; members without `EDIT` get 403 `READ_ONLY_ROLE` on any non-GET unless the action has `#[AllowedForReadOnlyUsers]`. Every new logged-in action must check access or be listed in `AccessCoverageTest`, which also pins the financial endpoints
+- Every child id in a route or request body (order, price, template, product…) must be looked up scoped to the parent the action authorized (`event_id`/`organizer_id`/`product_id`), and a miss must 404/422 before any write or domain event. Restricted members turn any unscoped lookup into a cross-event (or cross-account) write
+- Money in resources goes inside `mergeWhen($this->isPermitted(Permission::VIEW_FINANCIALS), ...)`; stats DTOs go through `FinancialStatsRedactor`. Requests with no logged-in account user (queued webhooks, public routes) see full data
+- Payloads built outside the member's own view (webhooks, anything that may run inside a sync-queue request) must resolve through `AccountUserAccessService::withoutMemberRestrictions()`, or they get redacted with the triggering member's permissions
+- Bearer keys are capabilities: staff responses return `orders.short_id` only to members with EDIT + VIEW_FINANCIALS (it unlocks the public order page and self-service edits). Check-in list links are deliberately shareable with door staff. VIEW_FINANCIALS hides money in the dashboard; it does not stop an EDIT member from configuring outbound channels (organizer email, email templates, analytics pixels) or running the door, which shows door sales
+- Public "same account" checks (draft previews, test orders, check-in staff view) use `AccountUserAccessService::currentMemberCanAccessEvent/Organizer`, never a raw account id comparison
+- `AccountUserAccessService` caches the current member's access per request, keyed by the JWT string. Never key it on decoded payload claims: resources call `isPermitted()` hundreds of times per list response
 
 #### Two-factor authentication
 - Login is two-step for enrolled users: `POST /auth/login` returns a cache-backed challenge token (no JWT), `POST /auth/login/two-factor` verifies a TOTP or recovery code and issues the token. Multi-account users verify once; the verified challenge is reused for account selection, so never re-send the password
@@ -197,6 +209,11 @@ Gotchas:
 - **DON'T** include unnecessary React imports
 - **ALWAYS** add translations when adding new user-facing strings - use Lingui `t` function or `Trans` component
 - **IMMEDIATELY** after adding translatable strings, add translations for all supported languages (use `/translations` skill for the workflow)
+
+#### Permissions & read-only members
+- Check access with `useAccess()` (`can`, `canManageOrganizer`, `isReadOnly`, `isRestricted`), never `me.role`. 403s carrying `ACCESS_RESTRICTED`, `PERMISSION_REQUIRED` or `READ_ONLY_ROLE` must not send the user to login
+- Never render a write control unguarded. `CreateButton` (`components/common/CreateButton`) replaces `Button` for every create/add action and hides itself for read-only members; give `ActionMenu` items that write `requiresEdit: true`; wrap any other write UI (menus, compose/edit buttons, inline toggles) in `WriteAccess` (`components/common/WriteAccess`). Hide money and refund controls with `can('VIEW_FINANCIALS')` / `can('ISSUE_REFUNDS')`. `SortArrows` and the sidebar (empty sections) already handle it
+- Team member role/access/permission inputs live in `TeamAccessFields` (with `TeamFormSection`/`TeamFormFooter`) and are shared by the invite and edit modals; reuse them rather than building another form
 
 #### Data Fetching
 - Use React Query for all API interactions

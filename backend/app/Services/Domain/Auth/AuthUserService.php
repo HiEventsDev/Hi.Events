@@ -2,8 +2,6 @@
 
 namespace HiEvents\Services\Domain\Auth;
 
-use Exception;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Models\User;
@@ -11,15 +9,13 @@ use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use Illuminate\Auth\AuthManager;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Payload;
+use Throwable;
 
-readonly class AuthUserService
+class AuthUserService
 {
     public function __construct(
-        /**
-         * @var AuthManager
-         */
-        private AuthManager $authManager,
-        private AccountUserRepositoryInterface $accountUserRepository,
+        private readonly AuthManager $authManager,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
     ) {}
 
     public function getAuthenticatedAccountId(): ?int
@@ -38,6 +34,17 @@ readonly class AuthUserService
         return $payload->get('account_id');
     }
 
+    public function getAuthenticatedTokenKey(): ?string
+    {
+        try {
+            $token = $this->authManager->guard()->getToken();
+        } catch (Throwable) {
+            return null;
+        }
+
+        return $token === null ? null : (string) $token;
+    }
+
     public function getAuthenticatedUserId(): ?int
     {
         if (! $this->authManager->check()) {
@@ -45,26 +52,6 @@ readonly class AuthUserService
         }
 
         return (int) $this->authManager->id();
-    }
-
-    public function getAuthenticatedUserRole(): ?Role
-    {
-        if (! $this->authManager->check()) {
-            return null;
-        }
-
-        try {
-            /** @var Payload $payload */
-            $payload = $this->authManager->payload();
-        } catch (JWTException) {
-            return null;
-        }
-
-        try {
-            return Role::from($payload->get('role'));
-        } catch (Exception) {
-            return null;
-        }
     }
 
     public function getUser(): UserDomainObject|DomainObjectInterface|null

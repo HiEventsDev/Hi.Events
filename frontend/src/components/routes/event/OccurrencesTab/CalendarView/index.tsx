@@ -1,6 +1,7 @@
 import React, {useMemo, useRef, useState} from "react";
+import {CreateButton} from "../../../../common/CreateButton";
 import {t} from "@lingui/macro";
-import {ActionIcon, Button, Menu, Popover, Text} from "@mantine/core";
+import {ActionIcon, Menu, Popover, Text} from "@mantine/core";
 import {
     IconChevronLeft,
     IconChevronRight,
@@ -134,14 +135,14 @@ export const CalendarView = ({
                     <div className={classes.popoverEmpty}>
                         <Text size="sm" c="dimmed" mb="sm">{t`No occurrences on this date`}</Text>
                         {onCreate && (
-                            <Button
+                            <CreateButton
                                 size="compact-sm"
                                 variant="light"
                                 leftSection={<IconPlus size={14}/>}
                                 onClick={() => closeAndDo(() => onCreate(selectedDate))}
                             >
                                 {t`Add a date`}
-                            </Button>
+                            </CreateButton>
                         )}
                     </div>
                 ) : (

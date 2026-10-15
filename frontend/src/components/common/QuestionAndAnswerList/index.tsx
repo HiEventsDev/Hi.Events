@@ -11,6 +11,7 @@ import {ReactNode, useState} from "react";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
 import {formatAnswer} from "../../../utilites/questionHelper.ts";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
+import {WriteAccess} from "../WriteAccess";
 
 interface QuestionAndAnswerListProps {
     questionAnswers: QuestionAnswer[];
@@ -132,17 +133,19 @@ const QuestionItem = ({qa, isEditing, toggleEditMode, onEditAnswer, eventId, hid
                     {answer
                         ? <Text size="sm" className={classes.answer}>{answer}</Text>
                         : <Text size="sm" className={classes.emptyAnswer}>—</Text>}
-                    <Tooltip label={t`Edit Answer`} position="bottom" withArrow>
-                        <ActionIcon
-                            variant="subtle"
-                            radius="xl"
-                            size="sm"
-                            className={classes.editButton}
-                            onClick={() => toggleEditMode(qa.question_id)}
-                        >
-                            <IconEdit size={16}/>
-                        </ActionIcon>
-                    </Tooltip>
+                    <WriteAccess>
+                        <Tooltip label={t`Edit Answer`} position="bottom" withArrow>
+                            <ActionIcon
+                                variant="subtle"
+                                radius="xl"
+                                size="sm"
+                                className={classes.editButton}
+                                onClick={() => toggleEditMode(qa.question_id)}
+                            >
+                                <IconEdit size={16}/>
+                            </ActionIcon>
+                        </Tooltip>
+                    </WriteAccess>
                 </div>
             )}
         </div>

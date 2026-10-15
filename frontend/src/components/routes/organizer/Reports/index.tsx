@@ -1,4 +1,5 @@
 import {PageTitle} from "../../../common/PageTitle";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
 import {PageBody} from "../../../common/PageBody";
 import {IconChartBar, IconChevronRight, IconReceipt, IconReceiptTax, IconReportMoney, IconUserCheck} from "@tabler/icons-react";
@@ -11,6 +12,7 @@ import {OrganizerReportTypes} from "../../../../types.ts";
 const OrganizerReports = () => {
     const {organizerId} = useParams();
 
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const reports = [
         {
             id: OrganizerReportTypes.RevenueSummary,
@@ -51,7 +53,7 @@ const OrganizerReports = () => {
                 {t`Reports`}
             </PageTitle>
 
-            {reports.map((report) => (
+            {reports.filter((report) => canViewFinancials || report.id === OrganizerReportTypes.CheckInSummary).map((report) => (
                 <UnstyledButton component={Link} key={report.id} to={`/manage/organizer/${organizerId}/report/${report.id}`}>
                     <Card className={classes.reportType}>
                         <div className={classes.icon}>

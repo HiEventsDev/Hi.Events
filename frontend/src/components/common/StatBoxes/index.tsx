@@ -1,4 +1,5 @@
 import {useMemo} from "react";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {t} from "@lingui/macro";
 import {KpiCell, KpiGrid} from "../KpiGrid";
@@ -58,6 +59,7 @@ export const StatBoxes = ({occurrenceId, dateRange, event}: StatBoxesProps = {})
         enabled: compareToPrevious,
     });
 
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const isLoading = currentStatsQuery.isLoading || (compareToPrevious && previousStatsQuery.isLoading);
     const current = currentStatsQuery.data;
     const previous = compareToPrevious ? previousStatsQuery.data : undefined;
@@ -112,7 +114,10 @@ export const StatBoxes = ({occurrenceId, dateRange, event}: StatBoxesProps = {})
         },
     ];
 
-    const visibleCells = occurrenceId ? cells.filter((cell) => cell.key !== 'page_views') : cells;
+    const financialCells = ['refunded', 'gross_sales'];
+    const visibleCells = cells
+        .filter((cell) => !occurrenceId || cell.key !== 'page_views')
+        .filter((cell) => canViewFinancials || !financialCells.includes(cell.key));
 
     return (
         <KpiGrid>

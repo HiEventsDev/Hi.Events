@@ -33,6 +33,7 @@ class DeleteOrganizerEmailTemplateAction extends BaseEmailTemplateAction
                 new DeleteEmailTemplateDTO(
                     id: $templateId,
                     account_id: $this->getAuthenticatedAccountId(),
+                    organizer_id: $organizerId,
                 )
             );
         } catch (EmailTemplateNotFoundException $e) {

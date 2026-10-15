@@ -2,7 +2,7 @@ import {IconUsers, IconBuildingBank, IconLayoutDashboard, IconCalendar, IconRece
 import {t} from "@lingui/macro";
 import {NavItem, BreadcrumbItem} from "../AppLayout/types";
 import AppLayout from "../AppLayout";
-import {useIsCurrentUserSuperAdmin} from "../../../hooks/useIsCurrentUserAdmin.ts";
+import {useIsCurrentUserSuperAdmin} from "../../../hooks/useIsCurrentUserSuperAdmin.ts";
 import {useGetAdminFeatureFlags} from "../../../queries/useGetAdminFeatureFlags.ts";
 import {useGetAdminLifecycleEmails} from "../../../queries/useGetAdminLifecycleEmails.ts";
 import {useNavigate} from "react-router";

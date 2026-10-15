@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\LifecycleEmails;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\LifecycleEmail\AdminLifecycleEmailResource;
 use HiEvents\Services\Application\Handlers\Admin\LifecycleEmails\GetLifecycleEmailsHandler;
@@ -20,7 +19,7 @@ class GetLifecycleEmailsAction extends BaseAction
 
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         return $this->resourceResponse(
             resource: AdminLifecycleEmailResource::class,

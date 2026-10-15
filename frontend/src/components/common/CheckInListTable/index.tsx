@@ -1,4 +1,5 @@
 import {Anchor, Badge, Button, Progress} from '@mantine/core';
+import {CreateButton} from "../CreateButton";
 import {CheckInList, Event, EventType, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
@@ -197,6 +198,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                         const manageItems = [
                             {
                                 label: t`Edit Check-In List`,
+                                requiresEdit: true,
                                 icon: <IconPencil size={14}/>,
                                 onClick: () => {
                                     setSelectedCheckInListId(list.id as IdParam);
@@ -224,6 +226,7 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                 items: [
                                     {
                                         label: t`Delete Check-In List`,
+                                        requiresEdit: true,
                                         icon: <IconTrash size={14}/>,
                                         onClick: () => {
                                             confirmationDialog(
@@ -285,12 +288,12 @@ export const CheckInListTable = ({checkInLists, openCreateModal, event}: CheckIn
                                 A check-in list lets staff scan tickets at the door on a phone, tablet, or USB scanner. Share the link with your team, no account needed.
                             </Trans>
                         </p>
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Create Check-In List`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />

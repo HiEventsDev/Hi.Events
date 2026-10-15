@@ -2,7 +2,7 @@
 
 namespace HiEvents\Enterprise\BoxOffice\Services\Domain;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\UnauthorizedException;
@@ -29,7 +29,7 @@ class BoxOfficeOperatorAuthorizer
                 EventDomainObject::class,
                 $user,
                 $accountId,
-                Role::ORGANIZER,
+                Permission::EDIT,
             );
         } catch (UnauthorizedException) {
             return false;

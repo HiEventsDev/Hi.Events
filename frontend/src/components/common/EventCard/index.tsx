@@ -1,4 +1,5 @@
 import {ActionIcon, Tooltip} from '@mantine/core';
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {Event, EventType, IdParam, LocationType, Product} from "../../../types.ts";
 import classes from "./EventCard.module.scss";
 import {NavLink, useNavigate} from "react-router";
@@ -45,6 +46,7 @@ interface EventCardProps {
 
 export function EventCard({event, compact = false}: EventCardProps) {
     const navigate = useNavigate();
+    const access = useAccess();
     const [isDuplicateModalOpen, duplicateModal] = useDisclosure(false);
     const [eventId, setEventId] = useState<IdParam>();
     const statusToggleMutation = useUpdateEventStatus();
@@ -161,11 +163,13 @@ export function EventCard({event, compact = false}: EventCardProps) {
                     icon: <IconCopy size={14}/>,
                     onClick: handleDuplicate,
                     dataTestId: 'event-duplicate-menu-item',
+                    visible: !access.isReadOnly && access.canManageOrganizer(event.organizer_id),
                 },
                 {
                     label: event?.status === 'ARCHIVED' ? t`Restore event` : t`Archive event`,
                     icon: <IconArchive size={14}/>,
                     onClick: handleStatusToggle,
+                    visible: !access.isReadOnly,
                 },
             ],
         },
@@ -173,6 +177,7 @@ export function EventCard({event, compact = false}: EventCardProps) {
 
     const locationText = getLocationText();
 
+    const canViewFinancials = access.can('VIEW_FINANCIALS');
     const revenue = event?.statistics?.sales_total_gross || 0;
     const attendees = event?.statistics?.attendees_registered || 0;
 
@@ -265,10 +270,10 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                 <span className={classes.compactStatValue}>{formatNumber(attendees)}</span>
                                 <span className={classes.compactStatLabel}>{t`Attendees`}</span>
                             </div>
-                            <div className={classes.compactStat}>
+                            {canViewFinancials && <div className={classes.compactStat}>
                                 <span className={classes.compactStatValue}>{formatCurrency(revenue, event?.currency)}</span>
                                 <span className={classes.compactStatLabel}>{t`Revenue`}</span>
-                            </div>
+                            </div>}
                         </div>
 
                         <div className={classes.compactMenuButton} onClick={(e) => e.preventDefault()}>
@@ -354,25 +359,29 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                 )}
                             </div>
                             <div className={classes.footer}>
-                                <span
-                                    role="link"
-                                    tabIndex={0}
-                                    className={classes.organizer}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        navigate(`/manage/organizer/${event?.organizer?.id}`);
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
+                                {access.canManageOrganizer(event.organizer_id) ? (
+                                    <span
+                                        role="link"
+                                        tabIndex={0}
+                                        className={classes.organizer}
+                                        onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             navigate(`/manage/organizer/${event?.organizer?.id}`);
-                                        }
-                                    }}
-                                >
-                                    {event?.organizer?.name}
-                                </span>
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                navigate(`/manage/organizer/${event?.organizer?.id}`);
+                                            }
+                                        }}
+                                    >
+                                        {event?.organizer?.name}
+                                    </span>
+                                ) : (
+                                    <span className={classes.organizer}>{event?.organizer?.name}</span>
+                                )}
                                 {ticketAvailability && (
                                     <span className={`${classes.ticketStatus} ${classes[`ticket-${ticketAvailability.status}`]}`}>
                                         {ticketAvailability.text}
@@ -388,14 +397,14 @@ export function EventCard({event, compact = false}: EventCardProps) {
                                     <span className={classes.statLabel}>{t`Attendees`}</span>
                                 </div>
                             </Tooltip>
-                            <Tooltip label={t`Gross revenue`} withArrow position="top">
+                            {canViewFinancials && <Tooltip label={t`Gross revenue`} withArrow position="top">
                                 <div className={classes.stat}>
                                     <span className={classes.statValueRevenue}>
                                         {formatCurrency(revenue, event?.currency)}
                                     </span>
                                     <span className={classes.statLabel}>{t`Revenue`}</span>
                                 </div>
-                            </Tooltip>
+                            </Tooltip>}
                         </div>
 
                         <div className={classes.menuButton} onClick={(e) => e.preventDefault()}>

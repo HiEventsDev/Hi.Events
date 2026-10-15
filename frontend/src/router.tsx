@@ -370,6 +370,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "team",
+                async lazy() {
+                    const OrganizerTeam = await import("./components/routes/organizer/Team");
+                    return { Component: OrganizerTeam.default };
+                }
+            },
+            {
                 path: "locations",
                 async lazy() {
                     const Locations = await import("./components/routes/organizer/Locations");
@@ -605,6 +612,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Webhooks = await import("./components/routes/event/Webhooks");
                     return { Component: Webhooks.default };
+                }
+            },
+            {
+                path: "team",
+                async lazy() {
+                    const EventTeam = await import("./components/routes/event/Team");
+                    return { Component: EventTeam.default };
                 }
             }
         ]

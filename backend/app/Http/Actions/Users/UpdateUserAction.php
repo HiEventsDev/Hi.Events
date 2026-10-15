@@ -2,18 +2,22 @@
 
 namespace HiEvents\Http\Actions\Users;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\CannotUpdateResourceException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\User\UpdateUserRequest;
 use HiEvents\Resources\User\UserResource;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateUserDTO;
 use HiEvents\Services\Application\Handlers\User\UpdateUserHandler;
+use HiEvents\Services\Domain\Auth\Access\DTO\AccountUserAccessData;
+use HiEvents\Services\Domain\Auth\Access\Exception\InvalidAccessGrantException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
+#[RequiresPermission(Permission::MANAGE_TEAM)]
 class UpdateUserAction extends BaseAction
 {
     private UpdateUserHandler $updateUserHandler;
@@ -31,7 +35,6 @@ class UpdateUserAction extends BaseAction
         $this->isActionAuthorized(
             entityId: $userId,
             entityType: UserDomainObject::class,
-            minimumRole: Role::ADMIN
         );
 
         $authenticatedUser = $this->getAuthenticatedUser();
@@ -40,6 +43,7 @@ class UpdateUserAction extends BaseAction
             'id' => $userId,
             'account_id' => $this->getAuthenticatedAccountId(),
             'updated_by_user_id' => $authenticatedUser->getId(),
+            'access' => $request->has('access_scope') ? AccountUserAccessData::buildFromValidated($request->validated()) : null,
         ];
 
         try {
@@ -47,6 +51,10 @@ class UpdateUserAction extends BaseAction
         } catch (CannotUpdateResourceException $e) {
             throw ValidationException::withMessages([
                 'role' => $e->getMessage(),
+            ]);
+        } catch (InvalidAccessGrantException $e) {
+            throw ValidationException::withMessages([
+                'access_scope' => $e->getMessage(),
             ]);
         }
 

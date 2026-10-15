@@ -42,7 +42,7 @@ test.describe('email templates', () => {
     await templates.openPreviewTab();
 
     await expect(templates.editorDialog().getByText(subject, { exact: true })).toBeVisible();
-    await expect(templates.editorDialog().getByText(bodyText)).toBeVisible();
+    await expect(templates.previewBody()).toContainText(bodyText);
   });
 
   test('an organizer deletes an event-level template and the card resets', async ({ authedPage, api, account }) => {

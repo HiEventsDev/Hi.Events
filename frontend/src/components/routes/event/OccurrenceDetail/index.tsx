@@ -1,4 +1,5 @@
 import {useNavigate, useParams} from "react-router";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {t} from "@lingui/macro";
 import {Checkbox, Skeleton, Text} from "@mantine/core";
 import {useCallback, useMemo, useRef, useState} from "react";
@@ -44,6 +45,7 @@ const OccurrenceDetail = () => {
     const deleteMutation = useDeleteEventOccurrence();
     const reactivateMutation = useReactivateOccurrence();
     const refundRef = useRef(false);
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
 
     const handleCancel = useCallback((occId: number) => {
         const orderCount = occurrence?.statistics?.orders_created ?? 0;
@@ -61,10 +63,12 @@ const OccurrenceDetail = () => {
                             {t`This date has ${orderCount} order(s) that will be affected.`}
                         </Text>
                     )}
-                    <Checkbox
-                        label={t`Refund all orders for this date`}
-                        onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
-                    />
+                    {canIssueRefunds && (
+                        <Checkbox
+                            label={t`Refund all orders for this date`}
+                            onChange={(e) => { refundRef.current = e.currentTarget.checked; }}
+                        />
+                    )}
                 </>
             ),
             labels: {confirm: t`Cancel Date`, cancel: t`Go Back`},

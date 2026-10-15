@@ -2,6 +2,7 @@
 
 namespace HiEvents\Http\Request\User;
 
+use HiEvents\DomainObjects\Enums\AccountUserAccessScope;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
@@ -12,6 +13,8 @@ use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends BaseRequest
 {
+    use ValidatesAccountUserAccess;
+
     private ?UserDomainObject $targetUser = null;
 
     public function rules(): array
@@ -21,6 +24,8 @@ class UpdateUserRequest extends BaseRequest
             'last_name' => PersonNameRule::rules(required: false, currentValue: $this->targetUser()?->getLastName()),
             'status' => Rule::in([UserStatus::INACTIVE->name, UserStatus::ACTIVE->name]), // don't allow INVITED
             'role' => Rule::in(Role::getAssignableRoles()),
+            ...$this->accessRules(),
+            'access_scope' => ['nullable', 'required_with:organizer_ids,event_ids,permissions', Rule::in(AccountUserAccessScope::valuesArray())],
         ];
     }
 

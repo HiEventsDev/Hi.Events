@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Announcements;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\AnnouncementNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Announcement\DeleteAnnouncementHandler;
@@ -18,7 +17,7 @@ class DeleteAnnouncementAction extends BaseAction
 
     public function __invoke(int $announcementId): Response
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         try {
             $this->handler->handle($announcementId);

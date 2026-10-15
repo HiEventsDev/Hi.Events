@@ -53,8 +53,20 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
         return $this->findEvents($where, $params);
     }
 
-    public function findEvents(array $where, QueryParamsDTO $params): LengthAwarePaginator
-    {
+    public function findEvents(
+        array $where,
+        QueryParamsDTO $params,
+        ?array $restrictToOrganizerIds = null,
+        ?array $restrictToEventIds = null,
+    ): LengthAwarePaginator {
+        if ($restrictToOrganizerIds !== null || $restrictToEventIds !== null) {
+            $where[] = static function (Builder $builder) use ($restrictToOrganizerIds, $restrictToEventIds) {
+                $builder
+                    ->whereIn(EventDomainObjectAbstract::ORGANIZER_ID, $restrictToOrganizerIds ?? [])
+                    ->orWhereIn(EventDomainObjectAbstract::ID, $restrictToEventIds ?? []);
+            };
+        }
+
         if (! empty($params->query)) {
             $where[] = static function (Builder $builder) use ($params) {
                 $builder

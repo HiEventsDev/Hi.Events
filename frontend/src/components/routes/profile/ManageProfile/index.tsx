@@ -1,4 +1,5 @@
 import {Card} from "../../../common/Card";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 import {useForm, UseFormReturnType} from "@mantine/form";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {Button, Checkbox, NativeSelect, PasswordInput, Select, Tabs, TextInput} from "@mantine/core";
@@ -34,6 +35,7 @@ export const ManageProfile = () => {
     const navigate = useNavigate();
     const activeTab = tab && PROFILE_TABS.includes(tab) ? tab : 'profile';
     const mutation = useUpdateMe();
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const cancelEmailChangeMutation = useCancelEmailChange();
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
     const errorHandler = useFormErrorResponseHandler();
@@ -46,6 +48,7 @@ export const ManageProfile = () => {
             timezone: me?.timezone,
             locale: me?.locale,
             marketing_opt_in: me?.marketing_opted_in_at !== null,
+            notify_new_orders: !!me?.notify_new_orders,
         },
     });
 
@@ -65,6 +68,7 @@ export const ManageProfile = () => {
             timezone: me?.timezone,
             locale: me?.locale,
             marketing_opt_in: me?.marketing_opted_in_at !== null,
+            notify_new_orders: !!me?.notify_new_orders,
         });
     }, [me]);
 
@@ -222,6 +226,14 @@ export const ManageProfile = () => {
                                             {...profileForm.getInputProps('marketing_opt_in', {type: 'checkbox'})}
                                             label={<Trans>Receive product updates from {getConfig("VITE_APP_NAME", "Hi.Events")}.</Trans>}
                                         />
+                                        {canViewFinancials && (
+                                            <Checkbox
+                                                mt="sm"
+                                                {...profileForm.getInputProps('notify_new_orders', {type: 'checkbox'})}
+                                                label={t`Email me about new orders on the events I can access`}
+                                                data-testid="profile-notify-new-orders"
+                                            />
+                                        )}
                                     </Fieldset>
 
                                     <Button fullWidth loading={mutation.isPending} mt="lg"

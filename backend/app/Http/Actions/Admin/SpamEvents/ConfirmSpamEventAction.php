@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\SpamEvents;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Admin\ConfirmSpamEventHandler;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +16,7 @@ class ConfirmSpamEventAction extends BaseAction
 
     public function __invoke(int $eventId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $this->handler->handle($eventId, $this->getAuthenticatedUser()->getId());
 

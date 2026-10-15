@@ -1,4 +1,5 @@
 import {useMemo, useState} from "react";
+import {CreateButton} from "../../../../../../components/common/CreateButton";
 import {ActionIcon, Button, Modal, Stack, TextInput} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {IconPencil, IconPencilPlus, IconPlus, IconTrash} from "@tabler/icons-react";
@@ -144,10 +145,10 @@ export default function SeatMaps() {
             {isLocked && <LicenceLockedCallout/>}
 
             {!isLocked && seatMaps && seatMaps.length > 0 && (
-                <Button color="green" size="sm" mb="md" onClick={open} rightSection={<IconPlus/>}
+                <CreateButton color="green" size="sm" mb="md" onClick={open} rightSection={<IconPlus/>}
                         data-testid="seat-map-create-button">
                     {t`Create seat map`}
-                </Button>
+                </CreateButton>
             )}
 
             <TableSkeleton isVisible={!seatMaps}/>
@@ -156,10 +157,10 @@ export default function SeatMaps() {
                 <NoResultsSplash imageHref="/blank-slate/seat-maps.svg" heading={t`No seat maps yet`}
                                  subHeading={<p>{t`Start from a template such as a theatre, banquet or club layout, then attach the map to any event.`}</p>}>
                     {!isLocked && (
-                        <Button color="green" onClick={open} rightSection={<IconPlus/>}
+                        <CreateButton color="green" onClick={open} rightSection={<IconPlus/>}
                                 data-testid="seat-map-create-button">
                             {t`Create seat map`}
-                        </Button>
+                        </CreateButton>
                     )}
                 </NoResultsSplash>
             )}

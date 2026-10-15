@@ -3,10 +3,12 @@
 namespace HiEvents\Http\Actions\EmailTemplates;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\EmailTemplate\PreviewEmailTemplateHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+#[AllowedForReadOnlyUsers]
 class PreviewEventEmailTemplateAction extends BaseEmailTemplateAction
 {
     public function __construct(

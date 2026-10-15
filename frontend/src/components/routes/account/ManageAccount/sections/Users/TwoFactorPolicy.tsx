@@ -1,8 +1,7 @@
 import {Button, Switch} from "@mantine/core";
-import {t, Trans} from "@lingui/macro";
+import {t} from "@lingui/macro";
 import {IconShieldLock} from "@tabler/icons-react";
 import {NavLink} from "react-router";
-import {Card} from "../../../../../common/Card";
 import {useGetAccount} from "../../../../../../queries/useGetAccount.ts";
 import {useGetMe} from "../../../../../../queries/useGetMe.ts";
 import {useUpdateAccountTwoFactorRequirement} from "../../../../../../mutations/useUpdateAccountTwoFactorRequirement.ts";
@@ -55,21 +54,13 @@ export const TwoFactorPolicy = ({users}: TwoFactorPolicyProps) => {
     };
 
     return (
-        <Card className={classes.policyCard}>
-            <div className={classes.policyIcon}><IconShieldLock size={22} stroke={1.75}/></div>
+        <div className={classes.policy}>
+            <div className={classes.policyIcon}><IconShieldLock size={18} stroke={1.75}/></div>
             <div className={classes.policyContent}>
                 <div className={classes.policyTitle}>{t`Require two-factor authentication`}</div>
                 <p className={classes.policyText}>
                     {t`Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue.`}
                 </p>
-                <div className={classes.policyStat}>
-                    <span className={classes.policyMeter}>
-                        <span
-                            style={{width: `${activeUsers.length ? (enrolledCount / activeUsers.length) * 100 : 0}%`}}
-                        />
-                    </span>
-                    <Trans>{enrolledCount} of {activeUsers.length} active members have it turned on</Trans>
-                </div>
                 {!selfEnrolled && !isRequired && (
                     <div className={classes.policyHint}>
                         {t`Turn on two-factor authentication for your own profile first.`}
@@ -87,6 +78,6 @@ export const TwoFactorPolicy = ({users}: TwoFactorPolicyProps) => {
                 aria-label={t`Require two-factor authentication`}
                 data-testid="account-require-two-factor-switch"
             />
-        </Card>
+        </div>
     );
 };

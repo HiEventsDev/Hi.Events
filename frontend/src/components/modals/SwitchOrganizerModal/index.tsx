@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {Modal} from '../../common/Modal';
 import {useGetOrganizers} from '../../../queries/useGetOrganizers';
 import {IconArrowsHorizontal, IconBuilding, IconArchive, IconChevronDown, IconChevronRight, IconPlus} from '@tabler/icons-react';
@@ -26,6 +27,7 @@ export const SwitchOrganizerModal: React.FC<SwitchOrganizerModalProps> = ({
     const navigate = useNavigate();
     const {organizerId: currentOrganizerId} = useParams();
     const {data: organizers, isLoading} = useGetOrganizers();
+    const {canManageOrganizer, canCreateOrganizers} = useAccess();
     const [showArchived, setShowArchived] = useState(false);
 
     const handleOrganizerSelect = (organizerId: IdParam) => {
@@ -33,9 +35,10 @@ export const SwitchOrganizerModal: React.FC<SwitchOrganizerModalProps> = ({
         onClose();
     };
 
+    const manageableOrganizers = organizers?.data?.filter(org => canManageOrganizer(org.id)) || [];
     const allOrganizers = excludeCurrentOrganizer
-        ? organizers?.data?.filter(org => String(org.id) !== String(currentOrganizerId)) || []
-        : organizers?.data || [];
+        ? manageableOrganizers.filter(org => String(org.id) !== String(currentOrganizerId))
+        : manageableOrganizers;
     const activeOrganizers = allOrganizers.filter(org => org.status !== OrganizerStatus.ARCHIVED);
     const archivedOrganizers = allOrganizers.filter(org => org.status === OrganizerStatus.ARCHIVED);
 
@@ -85,16 +88,18 @@ export const SwitchOrganizerModal: React.FC<SwitchOrganizerModalProps> = ({
                             </>
                         )}
 
-                        <button
-                            className={classes.createButton}
-                            onClick={() => {
-                                onClose();
-                                onCreateOrganizer?.();
-                            }}
-                        >
-                            <IconPlus size={18}/>
-                            <Trans>Create Organizer</Trans>
-                        </button>
+                        {canCreateOrganizers && (
+                            <button
+                                className={classes.createButton}
+                                onClick={() => {
+                                    onClose();
+                                    onCreateOrganizer?.();
+                                }}
+                            >
+                                <IconPlus size={18}/>
+                                <Trans>Create Organizer</Trans>
+                            </button>
+                        )}
 
                         {archivedOrganizers.length > 0 && (
                             <>

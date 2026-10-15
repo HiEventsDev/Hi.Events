@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Affiliates;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exports\AffiliatesExport;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+#[AllowedForReadOnlyUsers]
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class ExportAffiliatesAction extends BaseAction
 {
     public function __construct(

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Announcements;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Announcement\UpsertAnnouncementRequest;
 use HiEvents\Resources\Announcement\AdminAnnouncementResource;
@@ -21,7 +20,7 @@ class CreateAnnouncementAction extends BaseAction
 
     public function __invoke(UpsertAnnouncementRequest $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $announcement = $this->handler->handle(new UpsertAnnouncementDTO(
             title: $request->validated('title'),

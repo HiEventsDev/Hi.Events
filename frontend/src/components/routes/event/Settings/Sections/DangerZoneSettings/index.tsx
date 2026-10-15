@@ -12,13 +12,13 @@ import {showSuccess, showError} from "../../../../../../utilites/notifications.t
 import {confirmationDialog} from "../../../../../../utilites/confirmationDialog.tsx";
 import {EventStatus} from "../../../../../../types.ts";
 import {IconTrash, IconArchive, IconArrowBackUp} from "@tabler/icons-react";
-import {useIsCurrentUserAdmin} from "../../../../../../hooks/useIsCurrentUserAdmin.ts";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
 import {BouncingEmoji} from "../../../../../common/BouncingEmoji";
 
 export const DangerZoneSettings = () => {
     const {eventId} = useParams();
     const navigate = useNavigate();
-    const isAdmin = useIsCurrentUserAdmin();
+    const isAdmin = useAccess().can('DELETE_EVENTS');
     const {data: deletionStatus, isLoading: isDeletionStatusLoading} = useGetEventDeletionStatus(eventId!);
     const {data: event} = useGetEvent(eventId!);
     const deleteMutation = useDeleteEvent();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Attribution;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Admin\GetUtmAttributionStatsRequest;
 use HiEvents\Services\Application\Handlers\Admin\DTO\GetUtmAttributionStatsDTO;
@@ -19,7 +18,7 @@ class GetUtmAttributionStatsAction extends BaseAction
 
     public function __invoke(GetUtmAttributionStatsRequest $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $dto = GetUtmAttributionStatsDTO::from([
             'group_by' => $request->validated('group_by') ?? 'source',

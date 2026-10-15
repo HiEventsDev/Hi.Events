@@ -1,4 +1,5 @@
 import {useParams} from "react-router";
+import {WriteAccess} from "../../common/WriteAccess";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useDisclosure} from "@mantine/hooks";
 import {MessageRecipientsModal} from "../../modals/MessageRecipientsModal";
@@ -70,15 +71,17 @@ const MessagePreview = ({message, eventId, onBack, eventTimezone}: { message: Me
                             {message.status}
                         </Badge>
                         {message.status === 'SCHEDULED' && (
-                            <Button
-                                variant="light"
-                                color="red"
-                                size="compact-xs"
-                                onClick={handleCancel}
-                                loading={cancelMutation.isPending}
-                            >
-                                <IconX size={12}/> {t`Cancel`}
-                            </Button>
+                            <WriteAccess>
+                                <Button
+                                    variant="light"
+                                    color="red"
+                                    size="compact-xs"
+                                    onClick={handleCancel}
+                                    loading={cancelMutation.isPending}
+                                >
+                                    <IconX size={12}/> {t`Cancel`}
+                                </Button>
+                            </WriteAccess>
                         )}
                     </div>
                 </div>
@@ -227,15 +230,17 @@ export const Messages = () => {
                                 <span className={classes.messageCount}>{totalMessages}</span>
                             )}
                         </div>
-                        <Button
-                            variant="filled"
-                            size="compact-sm"
-                            onClick={openSendModal}
-                            leftSection={<IconSend size={14}/>}
-                            data-testid="message-compose-button"
-                        >
-                            {t`Compose`}
-                        </Button>
+                        <WriteAccess>
+                            <Button
+                                variant="filled"
+                                size="compact-sm"
+                                onClick={openSendModal}
+                                leftSection={<IconSend size={14}/>}
+                                data-testid="message-compose-button"
+                            >
+                                {t`Compose`}
+                            </Button>
+                        </WriteAccess>
                     </div>
 
                     <div className={classes.searchBar}>
@@ -273,14 +278,16 @@ export const Messages = () => {
                                 ))}
                                 <div className={classes.ghostCta}>
                                     <p>{t`Your messages will appear here`}</p>
-                                    <Button
-                                        variant="light"
-                                        size="compact-sm"
-                                        onClick={openSendModal}
-                                        leftSection={<IconSend size={14}/>}
-                                    >
-                                        {t`Compose`}
-                                    </Button>
+                                    <WriteAccess>
+                                        <Button
+                                            variant="light"
+                                            size="compact-sm"
+                                            onClick={openSendModal}
+                                            leftSection={<IconSend size={14}/>}
+                                        >
+                                            {t`Compose`}
+                                        </Button>
+                                    </WriteAccess>
                                 </div>
                             </div>
                         )}

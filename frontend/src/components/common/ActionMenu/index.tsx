@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Group, Menu} from '@mantine/core';
 import {IconDotsVertical} from '@tabler/icons-react';
+import {useAccess} from "../../../hooks/useAccess.ts";
 
 export interface MenuItem {
     label: string;
@@ -8,6 +9,7 @@ export interface MenuItem {
     onClick: () => void;
     color?: string;
     visible?: boolean;
+    requiresEdit?: boolean;
     dataTestId?: string;
 }
 
@@ -34,6 +36,18 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                                                           target = <DefaultTarget/>,
                                                           dataTestId
                                                       }) => {
+    const {isReadOnly} = useAccess();
+    const visibleGroups = itemsGroups
+        .map(group => ({
+            ...group,
+            items: group.items.filter(item => item.visible !== false && !(item.requiresEdit && isReadOnly)),
+        }))
+        .filter(group => group.items.length > 0);
+
+    if (visibleGroups.length === 0) {
+        return null;
+    }
+
     return (
         <>
             <Menu shadow="md" width={200}>
@@ -44,11 +58,11 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                    {itemsGroups.map((group, groupIndex) => (
+                    {visibleGroups.map((group, groupIndex) => (
                         <React.Fragment key={groupIndex}>
-                            {group.showDividerAbove && <Menu.Divider/>}
+                            {groupIndex > 0 && group.showDividerAbove && <Menu.Divider/>}
                             <Menu.Label>{group.label}</Menu.Label>
-                            {group.items.map((item, itemIndex) => item.visible !== false && (
+                            {group.items.map((item, itemIndex) => (
                                 <Menu.Item
                                     key={itemIndex}
                                     color={item.color}

@@ -17,11 +17,12 @@ import {
     IconUsersGroup,
     IconWebhook
 } from "@tabler/icons-react";
+import { useAccess } from "../../../hooks/useAccess.ts";
 import { t } from "@lingui/macro";
 import { BreadcrumbItem, NavItem } from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import { NavLink, useLocation, useParams } from "react-router";
-import { Button, Modal, Stack, Text } from "@mantine/core";
+import { Navigate, NavLink, useLocation, useParams } from "react-router";
+import { Badge, Button, Modal, Stack, Text } from "@mantine/core";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
 import { useGeoStatus } from "../../../queries/useGeoStatus.ts";
 import { useState } from "react";
@@ -60,7 +61,8 @@ const OrganizerLayout = () => {
         close: closeEmailVerificationModal
     }] = useDisclosure(false);
     const { data: organizerResposne } = useGetOrganizers();
-    const organizers = organizerResposne?.data;
+    const { canManageOrganizer, can, isReadOnly, isLoaded: isAccessLoaded } = useAccess();
+    const organizers = organizerResposne?.data?.filter(org => canManageOrganizer(org.id));
     const { data: account } = useGetAccount();
     const seating = useLicensedFeature(FeatureFlag.SEATING);
     const resendEmailConfirmationMutation = useResendEmailConfirmation();
@@ -82,7 +84,7 @@ const OrganizerLayout = () => {
             isActive: () => false,
             showWhen: () => organizers && organizers.length > 1,
         },
-        ...(showPayoutsSection && !isStripeConnected ? [
+        ...(showPayoutsSection && !isStripeConnected && can('MANAGE_PAYMENTS') ? [
             { label: t`Get Paid` },
             {
                 link: 'settings#payouts',
@@ -107,17 +109,20 @@ const OrganizerLayout = () => {
 
         { label: t`Manage` },
         { link: 'events', label: t`Events`, icon: IconCalendar },
-        { link: 'settings', label: t`Settings`, icon: IconSettings },
+        { link: 'settings', label: t`Settings`, icon: IconSettings, showWhen: () => !isReadOnly },
 
         { label: t`Tools` },
-        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint },
+        { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
 
         { label: t`Library` },
         { link: 'locations', label: t`Locations`, icon: IconMapPin },
-        { link: 'seat-maps', label: t`Seat Maps`, icon: IconArmchair, showWhen: () => seating.isVisible },
+        { link: 'seat-maps', label: t`Seat Maps`, icon: IconArmchair, showWhen: () => !isReadOnly && seating.isVisible },
 
         { label: t`Integrations` },
-        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook },
+        { link: 'webhooks', label: t`Webhooks`, icon: IconWebhook, showWhen: () => can('VIEW_FINANCIALS') },
+
+        { label: t`Team` },
+        { link: 'team', label: t`Team Access`, icon: IconUsersGroup, showWhen: () => can('MANAGE_TEAM') },
     ];
 
     const handleEmailConfirmationResend = () => {
@@ -174,7 +179,7 @@ const OrganizerLayout = () => {
             link: `/manage/organizer/${organizerId}`,
             content: organizer?.name,
         },
-        {
+        ...(isReadOnly ? [] : [{
             content: (
                 <span
                     className={classes.createEventBreadcrumb}
@@ -183,10 +188,10 @@ const OrganizerLayout = () => {
                     <IconCalendarPlus size={16} /> {t`Create Event`}
                 </span>
             ),
-        }
+        }]),
     ];
 
-    const callouts: CalloutConfig[] = [
+    const callouts: CalloutConfig[] = !can('MANAGE_TEAM') ? [] : [
         {
             icon: <IconUsersGroup size={20} />,
             heading: t`Invite Your Team`,
@@ -200,6 +205,9 @@ const OrganizerLayout = () => {
         },
     ];
 
+    if (isAccessLoaded && !canManageOrganizer(organizerId)) {
+        return <Navigate to={'/manage/events'} replace/>;
+    }
 
     return (
         <>
@@ -209,7 +217,8 @@ const OrganizerLayout = () => {
                 entityType="organizer"
                 topBarContent={(
                     <div className={classes.statusToggleContainer}>
-                        {organizer && (
+                        {isReadOnly && <Badge variant="white" color="dark" data-testid="view-only-badge">{t`View only`}</Badge>}
+                        {organizer && !isReadOnly && (
                             <TopBarButton
                                 onClick={handleStatusToggle}
                                 size="sm"

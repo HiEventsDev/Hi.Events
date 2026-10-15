@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EmailTemplateService
@@ -16,6 +17,7 @@ class EmailTemplateService
         private readonly LiquidTemplateRenderer $liquidRenderer,
         private readonly EmailTokenContextBuilder $tokenBuilder,
         private readonly EmailContextHtmlEscaper $contextHtmlEscaper,
+        private readonly HtmlPurifierService $purifier,
     ) {}
 
     public function getTemplateByType(
@@ -35,7 +37,7 @@ class EmailTemplateService
     public function renderTemplate(EmailTemplateDomainObject $template, array $context): RenderedEmailTemplateDTO
     {
         $renderedSubject = $this->liquidRenderer->render($template->getSubject(), $context);
-        $renderedBody = $this->liquidRenderer->render($template->getBody(), $this->contextHtmlEscaper->escape($context));
+        $renderedBody = $this->renderBody($template->getBody(), $context);
 
         $cta = null;
 
@@ -73,7 +75,7 @@ class EmailTemplateService
     {
         $context = $this->tokenBuilder->buildPreviewContext($type->value);
 
-        $renderedBody = $this->liquidRenderer->render($body, $this->contextHtmlEscaper->escape($context));
+        $renderedBody = $this->renderBody($body, $context);
 
         if ($cta && isset($cta['label'])) {
             $ctaUrl = $this->getValueFromDotNotation($context, $cta['url_token'] ?? '') ?? '#';
@@ -92,6 +94,13 @@ class EmailTemplateService
             'body' => $renderedBody,
             'context' => $context,
         ];
+    }
+
+    private function renderBody(string $body, array $context): string
+    {
+        return (string) $this->purifier->purify(
+            $this->liquidRenderer->render($body, $this->contextHtmlEscaper->escape($context)),
+        );
     }
 
     public function validateTemplate(string $subject, string $body): array

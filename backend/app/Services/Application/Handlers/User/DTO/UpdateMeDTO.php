@@ -17,5 +17,6 @@ class UpdateMeDTO extends BaseDTO
         public readonly ?string $current_password,
         public readonly ?string $locale,
         public readonly ?bool $marketing_opt_in = null,
+        public readonly ?bool $notify_new_orders = null,
     ) {}
 }

@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\Services\Domain\Mail;
 
+use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
@@ -29,9 +31,12 @@ class UnpublishedEventMailPolicyTest extends TestCase
         $this->userRepository = Mockery::mock(UserRepositoryInterface::class);
         $this->policy = new UnpublishedEventMailPolicy($this->eventRepository, $this->userRepository);
 
+        $this->userRepository->shouldReceive('loadRelation')->andReturnSelf();
         $this->userRepository->shouldReceive('findUsersByAccountId')->with(9)->andReturn(collect([
-            (new UserDomainObject)->setEmail('Owner@Example.com')->setEmailVerifiedAt('2026-01-01 00:00:00'),
-            (new UserDomainObject)->setEmail('unverified@example.com')->setEmailVerifiedAt(null),
+            $this->member('Owner@Example.com', '2026-01-01 00:00:00', UserStatus::ACTIVE),
+            $this->member('unverified@example.com', null, UserStatus::ACTIVE),
+            $this->member('invited@example.com', '2026-01-01 00:00:00', UserStatus::INVITED),
+            $this->member('inactive@example.com', '2026-01-01 00:00:00', UserStatus::INACTIVE),
         ]));
     }
 
@@ -72,6 +77,14 @@ class UnpublishedEventMailPolicyTest extends TestCase
         $this->givenEventStatus(EventStatus::DRAFT->name);
 
         $this->assertFalse($this->policy->shouldWithholdEventContent($this->event(), ['owner@example.com']));
+    }
+
+    public function test_withholds_content_from_invited_and_inactive_members(): void
+    {
+        $this->givenEventStatus(EventStatus::DRAFT->name);
+
+        $this->assertTrue($this->policy->shouldWithholdEventContent($this->event(), ['invited@example.com']));
+        $this->assertTrue($this->policy->shouldWithholdEventContent($this->event(), ['inactive@example.com']));
     }
 
     public function test_withholds_content_from_unverified_members(): void
@@ -118,5 +131,13 @@ class UnpublishedEventMailPolicyTest extends TestCase
     private function event(): EventDomainObject
     {
         return (new EventDomainObject)->setId(5)->setAccountId(9)->setStatus(EventStatus::DRAFT->name);
+    }
+
+    private function member(string $email, ?string $verifiedAt, UserStatus $status): UserDomainObject
+    {
+        return (new UserDomainObject)
+            ->setEmail($email)
+            ->setEmailVerifiedAt($verifiedAt)
+            ->setCurrentAccountUser((new AccountUserDomainObject)->setStatus($status->name));
     }
 }

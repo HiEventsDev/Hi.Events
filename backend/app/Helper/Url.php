@@ -32,6 +32,8 @@ class Url
 
     public const PROFILE_SECURITY = 'app.frontend_urls.profile_security';
 
+    public const ACCOUNT_USERS = 'app.frontend_urls.account_users';
+
     public const EVENT_DASHBOARD = 'app.frontend_urls.event_dashboard';
 
     public const WELCOME = 'app.frontend_urls.welcome';

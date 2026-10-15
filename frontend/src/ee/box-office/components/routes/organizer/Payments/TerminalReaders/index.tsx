@@ -1,4 +1,5 @@
-import {ActionIcon, Badge, Button, Group} from "@mantine/core";
+import {ActionIcon, Badge, Group} from "@mantine/core";
+import {CreateButton} from "../../../../../../../components/common/CreateButton";
 import {IconDeviceMobile, IconPlus, IconRefresh, IconTrash} from "@tabler/icons-react";
 import {t, Trans} from "@lingui/macro";
 import {useDisclosure} from "@mantine/hooks";
@@ -109,9 +110,9 @@ export const TerminalReadersSettings = () => {
                     </div>
                     <Group mt="md">
                         {!isLocked && (
-                            <Button leftSection={<IconPlus size={16}/>} onClick={openAdd} data-testid="terminal-reader-add-button">
+                            <CreateButton leftSection={<IconPlus size={16}/>} onClick={openAdd} data-testid="terminal-reader-add-button">
                                 {t`Add reader`}
-                            </Button>
+                            </CreateButton>
                         )}
                         <ActionIcon variant="light" aria-label={t`Refresh reader status`} onClick={() => readersQuery.refetch()}>
                             <IconRefresh size={16}/>

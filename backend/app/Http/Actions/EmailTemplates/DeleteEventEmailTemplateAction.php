@@ -33,6 +33,7 @@ class DeleteEventEmailTemplateAction extends BaseEmailTemplateAction
                 new DeleteEmailTemplateDTO(
                     id: $templateId,
                     account_id: $this->getAuthenticatedAccountId(),
+                    event_id: $eventId,
                 )
             );
         } catch (EmailTemplateNotFoundException $e) {

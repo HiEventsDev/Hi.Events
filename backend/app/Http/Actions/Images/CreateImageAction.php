@@ -22,11 +22,17 @@ class CreateImageAction extends BaseAction
      */
     public function __invoke(CreateImageRequest $request): JsonResponse
     {
+        $imageType = $request->has('image_type') ? ImageType::fromName($request->input('image_type')) : null;
+
+        if ($imageType !== null && $request->filled('entity_id')) {
+            $this->isActionAuthorized((int) $request->input('entity_id'), $imageType->getEntityType());
+        }
+
         $image = $this->createImageHandler->handle(new CreateImageDTO(
             userId: $this->getAuthenticatedUser()->getId(),
             accountId: $this->getAuthenticatedAccountId(),
             image: $request->file('image'),
-            imageType: $request->has('image_type') ? ImageType::fromName($request->input('image_type')) : null,
+            imageType: $imageType,
             entityId: $request->input('entity_id'),
         ));
 

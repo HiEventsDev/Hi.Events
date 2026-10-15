@@ -125,7 +125,7 @@ class ProductPriceUpdateServiceTest extends TestCase
         $this->productPriceRepository->shouldReceive('updateWhere')->once()->with(
             Mockery::on(fn (array $attributes) => $attributes['quantity_applies_to'] === 'OCCURRENCE'
                 && $attributes['initial_quantity_available'] === 10),
-            ['id' => 1],
+            ['id' => 1, 'product_id' => 1],
         );
 
         $productsData = $this->createUpsertDTO(ProductPriceType::PAID, [
@@ -201,7 +201,7 @@ class ProductPriceUpdateServiceTest extends TestCase
 
         $this->productPriceRepository->shouldReceive('updateWhere')->once()->with(
             Mockery::on(fn (array $attributes) => $attributes['quantity_applies_to'] === 'EVENT'),
-            ['id' => 1],
+            ['id' => 1, 'product_id' => 1],
         );
 
         $productsData = $this->createUpsertDTO(ProductPriceType::PAID, [
@@ -219,7 +219,7 @@ class ProductPriceUpdateServiceTest extends TestCase
 
         $this->productPriceRepository->shouldReceive('updateWhere')->once()->with(
             Mockery::on(fn (array $attributes) => $attributes['quantity_applies_to'] === 'EVENT'),
-            ['id' => 1],
+            ['id' => 1, 'product_id' => 1],
         );
 
         $productsData = $this->createUpsertDTO(ProductPriceType::PAID, [
@@ -237,7 +237,7 @@ class ProductPriceUpdateServiceTest extends TestCase
 
         $this->productPriceRepository->shouldReceive('updateWhere')->once()->with(
             Mockery::on(fn (array $attributes) => $attributes['quantity_applies_to'] === 'OCCURRENCE'),
-            ['id' => 1],
+            ['id' => 1, 'product_id' => 1],
         );
 
         $productsData = $this->createUpsertDTO(ProductPriceType::PAID, [
@@ -246,6 +246,23 @@ class ProductPriceUpdateServiceTest extends TestCase
 
         $this->service->updatePrices($product, $productsData, $existingPrices, $event);
         $this->assertTrue(true);
+    }
+
+    public function test_rejects_a_price_id_that_belongs_to_another_product(): void
+    {
+        $existingPrices = new Collection([$this->createExistingPrice(id: 1, quantitySold: 0, label: 'Tier 1')]);
+        [$product, $event] = $this->createProductAndEvent($existingPrices);
+
+        $this->productPriceRepository->shouldNotReceive('updateWhere');
+        $this->productPriceRepository->shouldNotReceive('create');
+
+        $productsData = $this->createUpsertDTO(ProductPriceType::TIERED, [
+            new ProductPriceDTO(price: 10.00, label: 'Tier 1', id: 1),
+            new ProductPriceDTO(price: 0.00, label: 'Stolen', id: 99),
+        ]);
+
+        $this->expectException(ValidationException::class);
+        $this->service->updatePrices($product, $productsData, $existingPrices, $event);
     }
 
     public function test_rewrites_order_to_match_submitted_tier_sequence(): void

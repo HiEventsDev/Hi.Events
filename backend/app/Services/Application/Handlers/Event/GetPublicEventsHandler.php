@@ -21,6 +21,7 @@ use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Event\DTO\GetPublicOrganizerEventsDTO;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\DTO\AvailableProductQuantitiesResponseDTO;
 use HiEvents\Services\Domain\Product\DTO\ProductFilterEventContextDTO;
@@ -36,6 +37,7 @@ class GetPublicEventsHandler
         private readonly ProductFilterService $productFilterService,
         private readonly AvailableProductQuantitiesFetchService $productQuantitiesFetchService,
         private readonly EventSeatMapLookupService $eventSeatMapLookup,
+        private readonly AccountUserAccessService $accessService,
     ) {}
 
     public function handle(GetPublicOrganizerEventsDTO $dto): LengthAwarePaginator
@@ -46,8 +48,8 @@ class GetPublicEventsHandler
                 name: 'organizer_configuration',
             ))
             ->findById($dto->organizerId);
-        $isOrganizersOwnView = $dto->authenticatedAccountId
-            && $organizer->getAccountId() === $dto->authenticatedAccountId;
+        $isOrganizersOwnView = $dto->authenticatedAccountId !== null
+            && $this->accessService->currentMemberCanAccessOrganizer($organizer);
 
         return $this->fetchEvents($dto, (bool) $isOrganizersOwnView, $organizer->getOrganizerConfiguration());
     }

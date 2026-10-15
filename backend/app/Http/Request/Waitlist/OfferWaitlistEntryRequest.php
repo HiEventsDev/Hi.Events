@@ -3,6 +3,7 @@
 namespace HiEvents\Http\Request\Waitlist;
 
 use HiEvents\Http\Request\BaseRequest;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
 class OfferWaitlistEntryRequest extends BaseRequest
@@ -12,8 +13,21 @@ class OfferWaitlistEntryRequest extends BaseRequest
         $eventId = $this->route('event_id');
 
         return [
-            'product_price_id' => ['required_without:entry_id', 'integer', 'exists:product_prices,id'],
-            'entry_id' => ['required_without:product_price_id', 'integer', 'exists:waitlist_entries,id'],
+            'product_price_id' => [
+                'required_without:entry_id',
+                'integer',
+                Rule::exists('product_prices', 'id')
+                    ->whereNull('deleted_at')
+                    ->where(fn (Builder $query) => $query->whereIn(
+                        'product_id',
+                        fn (Builder $products) => $products->select('id')->from('products')->where('event_id', $eventId),
+                    )),
+            ],
+            'entry_id' => [
+                'required_without:product_price_id',
+                'integer',
+                Rule::exists('waitlist_entries', 'id')->where('event_id', $eventId),
+            ],
             'quantity' => ['sometimes', 'integer', 'min:1', 'max:50'],
             'event_occurrence_id' => [
                 'nullable',

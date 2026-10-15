@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Admin\DeletionRequests;
 
 use HiEvents\DomainObjects\Enums\AccountDeletionInitiator;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Admin\AdminRequestAccountDeletionRequest;
@@ -26,7 +25,7 @@ class AdminRequestAccountDeletionAction extends BaseAction
      */
     public function __invoke(AdminRequestAccountDeletionRequest $request, int $accountId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         try {
             $deletionRequest = $this->accountDeletionService->requestDeletion(

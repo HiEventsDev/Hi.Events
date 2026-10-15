@@ -52,6 +52,7 @@ class ProductPriceUpdateService
             $prices = $productsData->prices;
         }
 
+        $this->validatePriceIdsBelongToProduct($prices, $existingPrices);
         $this->validateQuantityAvailable($prices, $existingPrices, $productsData->product_type, $event->isRecurring(), $defaultAppliesTo);
 
         $order = 1;
@@ -80,11 +81,28 @@ class ProductPriceUpdateService
             } else {
                 $this->productPriceRepository->updateWhere($attributes, [
                     'id' => $price->id,
+                    'product_id' => $product->getId(),
                 ]);
             }
         }
 
         $this->deletePrices($prices, $existingPrices);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validatePriceIdsBelongToProduct(Collection $prices, Collection $existingPrices): void
+    {
+        $existingIds = $existingPrices->map(fn (ProductPriceDomainObject $price) => $price->getId())->all();
+
+        foreach ($prices as $index => $price) {
+            if ($price->id !== null && ! in_array($price->id, $existingIds, true)) {
+                throw ValidationException::withMessages([
+                    "prices.$index.id" => __('This price does not belong to this product.'),
+                ]);
+            }
+        }
     }
 
     /**

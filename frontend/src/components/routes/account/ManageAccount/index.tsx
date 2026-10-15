@@ -2,15 +2,19 @@ import {Card} from "../../../common/Card";
 import {Tabs} from "@mantine/core";
 import classes from "./ManageAccount.module.scss";
 import {IconAdjustmentsCog, IconAlertTriangle, IconReceiptTax, IconUsers} from "@tabler/icons-react";
-import {Outlet, useLocation, useNavigate} from "react-router";
+import {Navigate, Outlet, useLocation, useNavigate} from "react-router";
 import {t} from "@lingui/macro";
-import {useIsCurrentUserAdmin} from "../../../../hooks/useIsCurrentUserAdmin.ts";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 
 export const ManageAccount = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const tabValue = location.pathname.split('/').pop() || 'settings';
-    const isUserAdmin = useIsCurrentUserAdmin();
+    const {can, isRestricted} = useAccess();
+
+    if (isRestricted) {
+        return <Navigate to={'/manage/events'} replace/>;
+    }
 
     return (
         <div className={classes.container}>
@@ -25,13 +29,13 @@ export const ManageAccount = () => {
                             {t`Tax & Fees`}
                         </Tabs.Tab>
 
-                        {isUserAdmin && (
+                        {can('MANAGE_TEAM') && (
                             <Tabs.Tab value="users" leftSection={<IconUsers/>}>
                                 {t`Users`}
                             </Tabs.Tab>
                         )}
 
-                        {isUserAdmin && (
+                        {can('MANAGE_ACCOUNT') && (
                             <Tabs.Tab value="danger-zone" leftSection={<IconAlertTriangle/>} data-testid="danger-zone-tab">
                                 {t`Danger Zone`}
                             </Tabs.Tab>

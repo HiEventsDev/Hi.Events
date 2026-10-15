@@ -72,6 +72,7 @@ return [
         'organizer_order_summary' => '/manage/event/%d/orders#order-%d',
         'ticket_lookup' => '/my-tickets/%s',
         'account_danger_zone' => '/account/danger-zone',
+        'account_users' => '/account/users',
         'profile_security' => '/manage/profile/security',
         'event_dashboard' => '/manage/event/%d/dashboard',
         'welcome' => '/welcome',

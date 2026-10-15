@@ -8,6 +8,7 @@ use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\TwoFactorLockedOutException;
 use HiEvents\Exceptions\TwoFactorRequiredByAccountException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Http\Request\User\TwoFactor\DisableTwoFactorRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DisableTwoFactorHandler;
@@ -16,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
+#[AllowedForReadOnlyUsers]
 class DisableTwoFactorAction extends BaseAction
 {
     public function __construct(

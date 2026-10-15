@@ -2,12 +2,15 @@
 
 namespace HiEvents\Http\Actions\Organizers\Webhooks;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Webhook\WebhookResource;
 use HiEvents\Services\Application\Handlers\Webhook\GetWebhookHandler;
 use Illuminate\Http\JsonResponse;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetOrganizerWebhookAction extends BaseAction
 {
     public function __construct(

@@ -17,7 +17,7 @@ export const Modal = (props: MantineModalProps & ModalProps) => {
                 opacity: 0.55,
                 blur: 3,
             }}
-            size={'xl'}
+            size={props.size ?? 'xl'}
             withCloseButton={true}
             title={props.heading}
             closeOnClickOutside={false}

@@ -2,9 +2,11 @@
 
 namespace HiEvents\Http\Actions\Orders\Payment;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\RefundNotPossibleException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Order\RefundOrderRequest;
 use HiEvents\Resources\Order\OrderResource;
 use HiEvents\Services\Application\Handlers\Order\DTO\RefundOrderDTO;
@@ -14,6 +16,7 @@ use Illuminate\Validation\ValidationException;
 use Stripe\Exception\ApiErrorException;
 use Throwable;
 
+#[RequiresPermission(Permission::ISSUE_REFUNDS)]
 class RefundOrderAction extends BaseAction
 {
     public function __construct(private readonly RefundOrderHandler $refundOrderHandler) {}

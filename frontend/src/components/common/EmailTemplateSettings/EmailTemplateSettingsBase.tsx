@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {CreateButton} from "../CreateButton";
 import {ActionIcon, Badge, Button, Group, LoadingOverlay, Modal, Paper, Stack, Text} from '@mantine/core';
 import {IconBrandStripe, IconEdit, IconMail, IconPlus, IconTrash} from '@tabler/icons-react';
 import {Callout} from '../Callout';
@@ -304,7 +305,7 @@ export const EmailTemplateSettingsBase = ({
                             </ActionIcon>
                         </>
                     ) : (
-                        <Button
+                        <CreateButton
                             size="xs"
                             leftSection={<IconPlus size={16}/>}
                             data-testid="email-template-create-button"
@@ -312,7 +313,7 @@ export const EmailTemplateSettingsBase = ({
                             disabled={isModifyDisabled}
                         >
                             <Trans>Create Custom Template</Trans>
-                        </Button>
+                        </CreateButton>
                     )}
                 </Group>
             </Group>
