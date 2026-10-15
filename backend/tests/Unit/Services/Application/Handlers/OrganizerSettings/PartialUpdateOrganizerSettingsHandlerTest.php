@@ -9,6 +9,7 @@ use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
 use HiEvents\Services\Application\Handlers\Organizer\Settings\PartialUpdateOrganizerSettingsHandler;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\HomepageSectionsSanitizer;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
@@ -34,6 +35,7 @@ class PartialUpdateOrganizerSettingsHandlerTest extends TestCase
             organizerSettingsRepository: $this->settingsRepository,
             organizerRepository: $this->organizerRepository,
             eventSpamCheckDispatchService: Mockery::mock(EventSpamCheckDispatchService::class)->shouldIgnoreMissing(),
+            homepageSectionsSanitizer: Mockery::mock(HomepageSectionsSanitizer::class),
         );
     }
 

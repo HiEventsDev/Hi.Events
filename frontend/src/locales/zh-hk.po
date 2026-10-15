@@ -13,13 +13,13 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/layouts/Event/index.tsx:247
-#: src/components/layouts/OrganizerLayout/index.tsx:231
+#: src/components/layouts/Event/index.tsx:249
+#: src/components/layouts/OrganizerLayout/index.tsx:233
 msgid "- Click to Publish"
 msgstr "- 點擊發布"
 
-#: src/components/layouts/Event/index.tsx:249
-#: src/components/layouts/OrganizerLayout/index.tsx:233
+#: src/components/layouts/Event/index.tsx:251
+#: src/components/layouts/OrganizerLayout/index.tsx:235
 msgid "- Click to Unpublish"
 msgstr "- 點擊取消發布"
 
@@ -80,7 +80,7 @@ msgstr "{0} 個無障礙座位"
 msgid "{0} Active Webhooks"
 msgstr "{0} 個活動的 Webhook"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:936
+#: src/components/routes/product-widget/SelectProducts/index.tsx:938
 msgid "{0} available"
 msgstr "{0}可用"
 
@@ -247,6 +247,10 @@ msgstr "{0}更新成功"
 msgid "{activeCount} enabled"
 msgstr "已啟用 {activeCount} 項"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:328
+msgid "{addCount, plural, one {# person to add} other {# people to add}}"
+msgstr "{addCount, plural, other {待新增 # 人}}"
+
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:101
 msgid "{appName} logo"
 msgstr "{appName} 標誌"
@@ -338,6 +342,18 @@ msgstr "空餘 {free} 個"
 msgid "{free} left"
 msgstr "僅剩 {free} 個"
 
+#: src/components/routes/event/Lineup/LineupStats.tsx:28
+msgid "{hidden} hidden"
+msgstr "{hidden} 個已隱藏"
+
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:37
+msgid "{hours} h"
+msgstr "{hours} 小時"
+
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:37
+msgid "{hours} h {remainder} min"
+msgstr "{hours} 小時 {remainder} 分鐘"
+
 #: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
 msgstr "{hours} 小時, {minutes} 分鐘, 和 {seconds} 秒"
@@ -354,6 +370,10 @@ msgstr "{label} 是供輪椅使用者陪同人士使用的陪同座位"
 msgid "{label} is a wheelchair space"
 msgstr "{label} 是輪椅位"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:619
+msgid "{linkCount, plural, one {# link} other {# links}}"
+msgstr "{linkCount, plural, other {# 個連結}}"
+
 #: src/ee/seating/components/routes/event/SeatMapDesigner/index.tsx:19
 msgid "{listed} and {remaining} more"
 msgstr "{listed} 及另外 {remaining} 個"
@@ -366,13 +386,26 @@ msgstr "受影響的場次共有 {loadedAffectedAttendees} 位參加者已登記
 msgid "{min}–{max} per order"
 msgstr "每張訂單 {min}–{max} 件"
 
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:34
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:154
+msgid "{minutes} min"
+msgstr "{minutes} 分鐘"
+
 #: src/components/common/Countdown/index.tsx:72
 msgid "{minutes} minutes and {seconds} seconds"
 msgstr "{分}分鐘和{秒}秒鐘"
 
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:55
+msgid "{name} added to the lineup"
+msgstr "已將 {name} 加入陣容"
+
 #: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:46
 msgid "{notEnrolledCount} members haven't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "有 {notEnrolledCount} 位成員尚未開啟雙重驗證。他們需要先完成設定才能繼續。立即強制要求?"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:530
+msgid "{onLineup} already on the lineup"
+msgstr "{onLineup} 人已在陣容中"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:105
 msgid "{open} seats to choose"
@@ -390,13 +423,33 @@ msgstr "{organizerCount} 個主辦方"
 msgid "{organizerName}'s first event"
 msgstr "{組織者名稱}的首次活動"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
+msgid "{people}, {slots}"
+msgstr "{people}，{slots}"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:155
+msgid "{people}, {slots}, {updated} updated"
+msgstr "{people}，{slots}，{updated} 項已更新"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:150
+msgid "{peopleAdded, plural, one {# person added} other {# people added}}"
+msgstr "{peopleAdded, plural, other {已新增 # 人}}"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:95
 msgid "{productCount} ticket types configured"
 msgstr "已設定 {productCount} 種門票類型"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:209
+msgid "{provider} video found"
+msgstr "已找到 {provider} 影片"
+
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:59
 msgid "{remaining} left"
 msgstr "剩餘 {remaining}"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:532
+msgid "{repeatSlots} already scheduled"
+msgstr "{repeatSlots} 個已安排"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:296
 msgid "{seatCount} seats"
@@ -410,9 +463,30 @@ msgstr "{seatsToChoose} 張未選座"
 msgid "{selected} selected"
 msgstr "已選中 {selected} 個"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:327
+msgid "{slotCount, plural, one {# time slot} other {# time slots}}"
+msgstr "{slotCount, plural, other {# 個時段}}"
+
+#: src/components/routes/event/Lineup/AgendaList.tsx:50
+#: src/components/routes/event/Lineup/PeopleRail.tsx:167
+msgid "{slotCount} slots"
+msgstr "{slotCount} 個時段"
+
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:652
 msgid "{slotCount} times available"
 msgstr "有 {slotCount} 個可選時間"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:329
+msgid "{slots}, {people}"
+msgstr "{slots}，{people}"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:329
+msgid "{slots}, {people}, {updateCount} to update"
+msgstr "{slots}，{people}，{updateCount} 項待更新"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:151
+msgid "{slotsAdded, plural, one {# time slot added} other {# time slots added}}"
+msgstr "{slotsAdded, plural, other {已新增 # 個時段}}"
 
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:297
 msgid "{sold} sold · {left} left"
@@ -433,6 +507,10 @@ msgstr "{0}的{title}"
 #: src/components/common/EventCard/index.tsx:140
 msgid "{totalCount} ticket types"
 msgstr "{totalCount} 種門票類型"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:34
+msgid "{unscheduled} without a time"
+msgstr "{unscheduled} 個未安排時間"
 
 #: src/components/common/Currency/index.tsx:59
 msgid "+ {formattedAmount} fees"
@@ -462,9 +540,17 @@ msgstr "+ 結束時間"
 msgid "+{0} more currencies"
 msgstr "另外 {0} 種貨幣"
 
+#: src/components/routes/organizer/People/index.tsx:179
+msgid "+{extra} more"
+msgstr "+{extra} 個"
+
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:178
 msgid "+{moreDatesCount} more dates"
 msgstr "另有 {moreDatesCount} 個日期"
+
+#: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
+msgid "+{remaining} more"
+msgstr "另外 {remaining} 項"
 
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:98
 msgid "+1 234 567 890"
@@ -498,7 +584,7 @@ msgstr "<0>APP_LICENCE_KEY=development</0> 會為開發及測試解鎖預留座�
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
 msgstr "<0>簽到列表幫助您按日期、區域或票務類型管理活動入場。您可以將票務連結到特定列表，如VIP區域或第1天通行證，並與工作人員共享安全的簽到連結。無需帳戶。簽到適用於移動裝置、桌面或平板電腦，使用裝置相機或HID USB掃描器。                                </0>"
 
-#: src/components/common/WidgetEditor/index.tsx:334
+#: src/components/common/WidgetEditor/index.tsx:344
 msgid "<0>https://</0>your-website.com"
 msgstr "<0>https://</0>your-website.com"
 
@@ -593,6 +679,11 @@ msgstr "1 個座位"
 msgid "1 seat to choose"
 msgstr "尚需選擇 1 個座位"
 
+#: src/components/routes/event/Lineup/AgendaList.tsx:50
+#: src/components/routes/event/Lineup/PeopleRail.tsx:167
+msgid "1 slot"
+msgstr "1 個時段"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:634
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:92
 msgid "1 ticket"
@@ -639,7 +730,7 @@ msgstr "135 種以上貨幣及 40 種以上付款方式"
 msgid "2. Scan this QR code"
 msgstr "2. 掃描此 QR code"
 
-#: src/components/common/WidgetEditor/index.tsx:230
+#: src/components/common/WidgetEditor/index.tsx:234
 msgid "20"
 msgstr "20"
 
@@ -711,6 +802,18 @@ msgstr "只需幾個簡單步驟，你就可以開始售票。"
 msgid "A fixed amount per product. E.g, $0.50 per product"
 msgstr "每個產品的固定金額。例如，每個產品$0.50"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:223
+msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
+msgstr "相簿最多可包含 {MAX_GALLERY_PHOTOS} 張相片。"
+
+#: src/utilites/homepageSections.ts:51
+msgid "A grid of photos that opens full screen."
+msgstr "相片網格，點擊可全螢幕查看。"
+
+#: src/utilites/homepageSections.ts:49
+msgid "A heading and formatted text. Travel info, house rules, anything."
+msgstr "標題及格式化文字。交通資訊、場地規則等皆可。"
+
 #: src/components/forms/ProductCategoryForm/index.tsx:24
 msgid "A message to display when there are no products in this category."
 msgstr "當此類別中沒有產品時顯示的訊息。"
@@ -726,6 +829,10 @@ msgstr "新嘅驗證碼已經發送到你嘅電郵"
 #: src/components/forms/TaxAndFeeForm/index.tsx:29
 msgid "A percentage of the product price. E.g., 3.5% of the product price"
 msgstr "產品價格的百分比。例如，3.5%的產品價格"
+
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:66
+msgid "A profile can have up to {MAX_IMAGES} photos."
+msgstr "每個檔案最多可有 {MAX_IMAGES} 張相片。"
 
 #: src/components/forms/PromoCodeForm/index.tsx:147
 msgid "A promo code with no discount can be used to reveal hidden products."
@@ -772,6 +879,10 @@ msgstr "如果沒有其他方式安排該組人員,則仍允許留下單個座�
 msgid "A standard tax, like VAT or GST"
 msgstr "標準税，如增值税或消費税"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:112
+msgid "A time slot can have up to 50 people"
+msgstr "每個時段最多可加入 50 人"
+
 #: src/components/routes/admin/Announcements/index.tsx:314
 msgid "A URL is required when a button label is set"
 msgstr "設定按鈕文字後必須填寫連結"
@@ -779,6 +890,10 @@ msgstr "設定按鈕文字後必須填寫連結"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:923
 msgid "A weekday pattern"
 msgstr "按星期模式"
+
+#: src/utilites/homepageSections.ts:55
+msgid "A YouTube or Vimeo video, loaded when someone presses play."
+msgstr "YouTube 或 Vimeo 影片，按下播放時才載入。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:130
 msgid "Abandon sale"
@@ -792,9 +907,15 @@ msgstr "放棄此銷售？讀卡機上等待中的拍卡付款將被取消，其
 msgid "Abandoned"
 msgstr "已放棄"
 
-#: src/components/layouts/EventHomepage/index.tsx:509
+#: src/components/layouts/EventHomepage/index.tsx:261
+#: src/components/layouts/OrganizerHomepage/index.tsx:292
+#: src/utilites/homepageSections.ts:18
 msgid "About"
 msgstr "關於"
+
+#: src/components/layouts/EventHomepage/Lineup/LineupGrid.tsx:44
+msgid "About {name}"
+msgstr "關於 {name}"
 
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:166
 msgid "About the tickets"
@@ -958,6 +1079,14 @@ msgstr "賬戶"
 msgid "Accounts ({0})"
 msgstr "帳戶（{0}）"
 
+#: src/components/routes/event/Lineup/LineupStats.tsx:40
+msgid "Across {days} days"
+msgstr "共 {days} 天"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:40
+msgid "Across 1 day"
+msgstr "共 1 天"
+
 #: src/components/routes/organizer/Payments/Vat/VatSettings.tsx:36
 msgid "Action Required: VAT Information Needed"
 msgstr "需要操作：需提供增值稅資料"
@@ -971,8 +1100,13 @@ msgstr "需要操作：需提供增值稅資料"
 #: src/components/common/WaitlistTable/index.tsx:57
 #: src/components/common/WaitlistTable/index.tsx:237
 #: src/components/routes/admin/FailedJobs/index.tsx:167
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:187
 msgid "Actions"
 msgstr "操作"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:144
+msgid "Actions for {name}"
+msgstr "{name} 的操作"
 
 #: src/hooks/useAttendeeActions.tsx:116
 msgid "Activate"
@@ -1020,10 +1154,12 @@ msgid "Activity"
 msgstr "動態"
 
 #: src/components/common/TeamAccessPanel/index.tsx:119
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:96
 msgid "Add"
 msgstr "新增"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:502
+#: src/components/routes/product-widget/SelectProducts/index.tsx:504
 msgid "Add {0} first"
 msgstr "請先加入 {0}"
 
@@ -1038,6 +1174,11 @@ msgstr "加入與品牌風格一致的封面圖片和主題"
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:144
 msgid "Add a date"
 msgstr "新增日期"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:64
+msgid "Add a description"
+msgstr "新增描述"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:137
 msgid "Add a description and venue so attendees know what to expect"
@@ -1055,9 +1196,22 @@ msgstr "為此簽到列表添加描述"
 msgid "Add a Single Date"
 msgstr "新增單一日期"
 
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:91
+msgid "Add a speaker, artist or host…"
+msgstr "新增講者、藝人或主持…"
+
+#: src/components/routes/event/Lineup/index.tsx:337
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:68
+msgid "Add a stage or room"
+msgstr "新增舞台或場地"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:71
 msgid "Add a text label"
 msgstr "添加文本標籤"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:82
+msgid "Add a title or pick someone from the lineup"
+msgstr "新增標題或從陣容中選擇人員"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:337
 msgid "Add an area"
@@ -1066,6 +1220,10 @@ msgstr "添加區域"
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
 msgid "Add an email to send the tickets"
 msgstr "新增電郵以傳送門票"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:104
+msgid "Add an end time or a duration"
+msgstr "請新增結束時間或時長"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:994
 msgid "Add another time"
@@ -1086,6 +1244,10 @@ msgstr "添加關於訂單的備註。這些信息不會對客户可見。"
 #: src/components/modals/ManageOrderModal/index.tsx:286
 msgid "Add any notes about the order..."
 msgstr "添加關於訂單的備註..."
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:76
+msgid "Add at least one question below."
+msgstr "請在下方新增至少一個問題。"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:535
 msgid "Add at least one time"
@@ -1147,6 +1309,10 @@ msgstr "新增活動詳情"
 msgid "Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)"
 msgstr "添加線下支付的説明（例如，銀行轉賬詳情、支票寄送地址、付款截止日期）"
 
+#: src/components/routes/event/Lineup/ProfileLinksField.tsx:63
+msgid "Add link"
+msgstr "新增連結"
+
 #: src/components/common/LocationsTable/index.tsx:99
 #: src/components/modals/LocationEditModal/index.tsx:125
 #: src/components/modals/LocationEditModal/index.tsx:162
@@ -1170,6 +1336,15 @@ msgstr "加一"
 msgid "Add Option"
 msgstr "添加選項"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
+#: src/components/routes/event/Lineup/index.tsx:329
+msgid "Add people"
+msgstr "新增人員"
+
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:130
+msgid "Add photos"
+msgstr "新增相片"
+
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:69
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:186
 msgid "Add Product"
@@ -1178,6 +1353,10 @@ msgstr "添加產品"
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:52
 msgid "Add Product to Category"
 msgstr "將產品添加到類別"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:163
+msgid "Add question"
+msgstr "新增問題"
 
 #: src/components/common/QuestionsTable/index.tsx:234
 #: src/components/common/QuestionsTable/index.tsx:490
@@ -1188,6 +1367,30 @@ msgstr "新增問題"
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:114
 msgid "Add reader"
 msgstr "新增讀卡機"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:155
+msgid "Add section"
+msgstr "新增區塊"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:213
+msgid "Add slot"
+msgstr "新增時段"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:74
+msgid "Add some text below."
+msgstr "請在下方新增一些文字。"
+
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:91
+msgid "Add someone from your saved profiles…"
+msgstr "從已儲存的簡介中新增…"
+
+#: src/components/routes/event/Lineup/index.tsx:231
+msgid "Add stage or room"
+msgstr "新增舞台或場地"
+
+#: src/components/routes/event/Lineup/index.tsx:335
+msgid "Add stages or rooms"
+msgstr "新增舞台或場地"
 
 #: src/ee/seating/components/SeatPicker/SeatListView.tsx:31
 msgid "Add standing tickets"
@@ -1215,10 +1418,19 @@ msgstr "添加機票"
 msgid "Add tier"
 msgstr "增加層級"
 
+#: src/components/routes/event/Lineup/AgendaList.tsx:36
+#: src/components/routes/event/Lineup/index.tsx:239
+msgid "Add time slot"
+msgstr "新增時段"
+
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:107
+msgid "Add to calendar"
+msgstr "加入日曆"
+
 #: src/components/common/AddEventToCalendarButton/index.tsx:15
 #: src/components/common/AddToCalendarCTA/index.tsx:25
-#: src/components/layouts/EventHomepage/index.tsx:364
-#: src/components/layouts/EventHomepage/index.tsx:365
+#: src/components/layouts/EventHomepage/index.tsx:601
+#: src/components/layouts/EventHomepage/index.tsx:602
 msgid "Add to Calendar"
 msgstr "添加到日曆"
 
@@ -1252,9 +1464,13 @@ msgid "Add-on products"
 msgstr "附加產品"
 
 #: src/components/forms/ProductForm/index.tsx:536
-#: src/components/routes/product-widget/SelectProducts/index.tsx:499
+#: src/components/routes/product-widget/SelectProducts/index.tsx:501
 msgid "Add-ons"
 msgstr "附加產品"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:234
+msgid "Added"
+msgstr "已新增"
 
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:81
 msgid "Added at checkout"
@@ -1369,8 +1585,8 @@ msgstr "唔會追蹤推廣夥伴銷售。呢個會停用該推廣夥伴。"
 msgid "Affiliate updated successfully"
 msgstr "推廣夥伴更新成功"
 
-#: src/components/layouts/Event/index.tsx:142
-#: src/components/modals/DuplicateEventModal/index.tsx:58
+#: src/components/layouts/Event/index.tsx:144
+#: src/components/modals/DuplicateEventModal/index.tsx:59
 #: src/components/routes/event/Affiliates/index.tsx:67
 msgid "Affiliates"
 msgstr "合作夥伴"
@@ -1386,6 +1602,10 @@ msgstr "推廣夥伴幫助你追蹤合作夥伴同KOL產生嘅銷售。建立推
 #: src/components/routes/welcome/index.tsx:418
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "活動建立後，你可以在控制台選擇重複的頻率。"
+
+#: src/utilites/lineup.ts:28
+msgid "Agenda"
+msgstr "議程"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:45
 msgid "Aisles after seats"
@@ -1481,6 +1701,10 @@ msgstr "所有日期"
 msgid "All dates · shared"
 msgstr "所有日期 · 共用"
 
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:74
+msgid "All days"
+msgstr "所有日期"
+
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Ended Events"
 msgstr "所有已結束活動"
@@ -1522,6 +1746,10 @@ msgstr "所有購買（包括已取消）"
 msgid "All roles"
 msgstr "所有角色"
 
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:131
+msgid "All stages"
+msgstr "所有舞台"
+
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:109
 msgid "All Statuses"
 msgstr "所有狀態"
@@ -1547,6 +1775,10 @@ msgstr "所有即將舉行的活動"
 #: src/components/routes/admin/Announcements/index.tsx:425
 msgid "All users"
 msgstr "所有用戶"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:28
+msgid "All visible"
+msgstr "全部可見"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:167
 msgid "Allow attendees associated with unpaid orders to check in"
@@ -1602,6 +1834,10 @@ msgstr "已新增"
 msgid "Already Refunded"
 msgstr "已退款"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:129
+msgid "Already scheduled"
+msgstr "已安排"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:193
 msgid "Already use Stripe on another organizer? Reuse that connection."
 msgstr "已在其他主辦方使用 Stripe？可重用該連線。"
@@ -1621,6 +1857,14 @@ msgstr "總是可用"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:53
 msgid "Always on sale"
 msgstr "一直發售"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
+msgid "Always shown. Move it to change where tickets appear on the page."
+msgstr "一律顯示。移動它可調整門票在頁面上的位置。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:72
+msgid "Always shown. Move it to change where your events list appears."
+msgstr "始終顯示。移動它以更改活動列表的顯示位置。"
 
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:96
 msgid "AM/PM"
@@ -1731,6 +1975,14 @@ msgstr "公告"
 msgid "Anonymize"
 msgstr "匿名化"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:185
+msgid "Answer"
+msgstr "答案"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:188
+msgid "Answer {number}"
+msgstr "答案 {number}"
+
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:147
 msgid "Answer questions"
 msgstr "回答問題"
@@ -1783,15 +2035,20 @@ msgstr "任何擁有此連結和 PIN 碼的人都可以為此活動售票，就�
 msgid "Anything else?"
 msgstr "還需要其他嗎？"
 
-#: src/components/common/WidgetEditor/index.tsx:216
+#: src/components/common/WidgetEditor/index.tsx:220
 msgid "Appearance"
 msgstr "外觀"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1160
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:307
+#: src/components/routes/organizer/People/index.tsx:115
+msgid "Appears on"
+msgstr "出現於"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1162
 msgid "applied"
 msgstr "應用"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1159
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1161
 msgid "applied — {0} off your order"
 msgstr "已應用 — 訂單立減 {0}"
 
@@ -1828,7 +2085,7 @@ msgid "Applies to every tier of this ticket"
 msgstr "適用於此票種的每個價格級距"
 
 #: src/components/common/FilterModal/index.tsx:284
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1191
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1193
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:41
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:91
 msgid "Apply"
@@ -1895,6 +2152,7 @@ msgstr "封存此主辦方。這也將封存屬於此主辦方的所有活動。
 
 #: src/components/common/EventCard/index.tsx:90
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:32
+#: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
 msgid "Archived"
 msgstr "已歸檔"
 
@@ -1999,15 +2257,15 @@ msgstr "您確定要刪除此 Webhook 嗎？"
 msgid "Are you sure you want to leave?"
 msgstr "您確定要離開嗎？"
 
-#: src/components/layouts/Event/index.tsx:206
+#: src/components/layouts/Event/index.tsx:208
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "您確定要將此活動設為草稿嗎？這將使公眾無法看到該活動"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:159
+#: src/components/layouts/OrganizerLayout/index.tsx:161
 msgid "Are you sure you want to make this organizer draft? This will make the organizer page invisible to the public"
 msgstr "您確定要將此主辦單位設為草稿嗎？這將使該頁面對公眾隱藏。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:160
+#: src/components/layouts/OrganizerLayout/index.tsx:162
 msgid "Are you sure you want to make this organizer public? This will make the organizer page visible to the public"
 msgstr "您確定要將此主辦單位設為公開嗎？這將使該頁面對公眾可見。"
 
@@ -2147,6 +2405,10 @@ msgstr "必須選擇至少一種事件類型"
 msgid "At least one product must stay available for this date. To make the date inaccessible, cancel it from the schedule instead."
 msgstr "此日期至少要保留一項可售產品。若想令該日期無法存取，請改為在排程中取消它。"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:242
+msgid "At this event"
+msgstr "今次活動"
+
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 msgid "Attach a venue seat map to sell reserved seats for this event."
 msgstr "為此活動關聯場地座位圖,以銷售指定座位。"
@@ -2258,7 +2520,7 @@ msgstr "位參加者"
 #: src/components/common/ProductsTable/index.tsx:96
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:530
 #: src/components/common/StatBoxes/index.tsx:75
-#: src/components/layouts/Event/index.tsx:146
+#: src/components/layouts/Event/index.tsx:148
 #: src/components/modals/ManageOccurrenceModal/index.tsx:177
 #: src/components/modals/ManageOrderModal/index.tsx:317
 #: src/components/routes/admin/Dashboard/index.tsx:367
@@ -2326,7 +2588,7 @@ msgstr "8 月"
 msgid "Authentication code"
 msgstr "驗證碼"
 
-#: src/components/common/WidgetEditor/index.tsx:236
+#: src/components/common/WidgetEditor/index.tsx:246
 msgid "Auto Resize"
 msgstr "自動調整大小"
 
@@ -2346,7 +2608,7 @@ msgstr "協助遇到困難的組織者的自動電郵。系統每小時掃描一
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "當容量可用時自動向下一個人提供門票。如果停用，您可以從候補名單頁面手動處理候補名單。"
 
-#: src/components/common/WidgetEditor/index.tsx:238
+#: src/components/common/WidgetEditor/index.tsx:248
 msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
 msgstr "根據內容自動調整小工具高度。停用時，小工具將填滿容器的高度。"
 
@@ -2419,6 +2681,8 @@ msgstr "Awesome Events 有限公司"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:47
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:78
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
@@ -2484,7 +2748,7 @@ msgid "Background"
 msgstr "背景"
 
 #: src/components/common/ThemeColorControls/index.tsx:110
-#: src/components/common/WidgetEditor/index.tsx:181
+#: src/components/common/WidgetEditor/index.tsx:185
 msgid "Background Color"
 msgstr "背景顏色"
 
@@ -2589,6 +2853,15 @@ msgstr "最佳可用座位"
 msgid "Bigger map"
 msgstr "放大座位圖"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:74
+msgctxt "Lineup spreadsheet column"
+msgid "Billing"
+msgstr "排位"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:245
+msgid "Billing"
+msgstr "級別"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:555
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:306
 msgid "Billing Address"
@@ -2597,6 +2870,16 @@ msgstr "賬單地址"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:177
 msgid "Billing Settings"
 msgstr "賬單設置"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:77
+msgctxt "Lineup spreadsheet column"
+msgid "Bio"
+msgstr "簡介"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:234
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:296
+msgid "Bio"
+msgstr "簡介"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:70
 #: src/constants/socialMediaConfig.ts:33
@@ -2650,7 +2933,7 @@ msgstr "售票處"
 msgid "Box office"
 msgstr "售票處"
 
-#: src/components/layouts/Event/index.tsx:148
+#: src/components/layouts/Event/index.tsx:150
 #: src/components/routes/event/orders.tsx:86
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:74
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:50
@@ -2709,6 +2992,14 @@ msgstr "售票處已更新"
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙語"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
+msgid "Build the schedule"
+msgstr "建立排程"
+
+#: src/components/routes/event/Lineup/index.tsx:359
+msgid "Build your lineup"
+msgstr "建立你的陣容"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:253
 msgid "Built-in fraud protection"
 msgstr "內建防詐騙保護"
@@ -2745,7 +3036,7 @@ msgstr "按鈕文字"
 msgid "Button Label"
 msgstr "按鈕標籤"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:161
+#: src/components/routes/event/HomepageDesigner/index.tsx:201
 msgid "Button Text"
 msgstr "按鈕文字"
 
@@ -2852,6 +3143,10 @@ msgstr "可以查看財務資料"
 msgid "Can't check in"
 msgstr "無法簽到"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:131
+msgid "Can't import"
+msgstr "無法匯入"
+
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:166
 msgid "Can't scan it? Enter a setup key instead"
 msgstr "無法掃描?改為輸入設定金鑰"
@@ -2877,6 +3172,8 @@ msgstr "無法使用驗證器應用程式或復原碼?"
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
 #: src/components/routes/admin/DeletionRequests/index.tsx:178
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:374
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:215
 #: src/components/routes/event/messages.tsx:82
 #: src/components/routes/event/OccurrencesTab/index.tsx:540
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
@@ -2999,7 +3296,7 @@ msgstr "容量分配創建成功"
 msgid "Capacity Assignment deleted successfully"
 msgstr "容量分配刪除成功"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:53
+#: src/components/modals/DuplicateEventModal/index.tsx:54
 msgid "Capacity Assignments"
 msgstr "容量分配"
 
@@ -3007,7 +3304,7 @@ msgstr "容量分配"
 msgid "Capacity management"
 msgstr "容量管理"
 
-#: src/components/layouts/Event/index.tsx:153
+#: src/components/layouts/Event/index.tsx:155
 msgid "Capacity Management"
 msgstr "容量管理"
 
@@ -3214,8 +3511,8 @@ msgstr "檢查金鑰"
 msgid "Check out"
 msgstr "取消簽到"
 
-#: src/components/layouts/EventHomepage/index.tsx:351
-#: src/components/layouts/EventHomepage/index.tsx:352
+#: src/components/layouts/EventHomepage/index.tsx:588
+#: src/components/layouts/EventHomepage/index.tsx:589
 msgid "Check out this event: {0}"
 msgstr "看看這個活動：{0}"
 
@@ -3231,6 +3528,10 @@ msgstr "請檢查網絡連線後再試。"
 #: src/components/routes/welcome/index.tsx:144
 msgid "Check your email"
 msgstr "查看你嘅電郵"
+
+#: src/components/routes/event/Lineup/index.tsx:347
+msgid "Check your event page"
+msgstr "查看活動頁面"
 
 #: src/components/routes/auth/Login/index.tsx:228
 #: src/components/routes/my-tickets/index.tsx:191
@@ -3303,8 +3604,8 @@ msgstr "未找到簽到列表"
 msgid "Check-in Lists"
 msgstr "簽到列表"
 
-#: src/components/layouts/Event/index.tsx:147
-#: src/components/modals/DuplicateEventModal/index.tsx:54
+#: src/components/layouts/Event/index.tsx:149
+#: src/components/modals/DuplicateEventModal/index.tsx:55
 #: src/components/routes/event/CheckInLists/index.tsx:38
 msgid "Check-In Lists"
 msgstr "簽到列表"
@@ -3372,6 +3673,11 @@ msgstr "已簽到"
 msgid "Checked in ({checkedInCount}/{attendeeCount})"
 msgstr "已報到（{checkedInCount}/{attendeeCount}）"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:371
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:540
+msgid "Checking your saved profiles…"
+msgstr "正在檢查你已儲存的檔案…"
+
 #: src/components/routes/event/Settings/index.tsx:62
 msgid "Checkout"
 msgstr "結賬"
@@ -3418,7 +3724,7 @@ msgstr "選擇一個設定組合"
 msgid "Choose a date"
 msgstr "選擇日期"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1104
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1106
 msgid "Choose a date to see the seats"
 msgstr "選擇日期以查看座位"
 
@@ -3455,6 +3761,14 @@ msgstr "在座位圖上選擇座位以加入訂單"
 msgid "Choose a time"
 msgstr "選擇時間"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:409
+msgid "Choose an .xlsx or .csv file under 10 MB."
+msgstr "請選擇小於 10 MB 的 .xlsx 或 .csv 檔案。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:140
+msgid "Choose an .xlsx or .csv file."
+msgstr "請選擇 .xlsx 或 .csv 檔案。"
+
 #: src/components/modals/ChooseAccountModal/index.tsx:13
 msgid "Choose an account"
 msgstr "選擇賬户"
@@ -3471,6 +3785,11 @@ msgstr "選擇主辦方"
 #: src/components/routes/events/Dashboard/index.tsx:236
 msgid "Choose an Organizer"
 msgstr "選擇一個主辦單位"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:507
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:516
+msgid "Choose another file"
+msgstr "選擇其他檔案"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:212
 msgid "Choose another reader"
@@ -3602,19 +3921,22 @@ msgstr "點擊查看備註"
 msgid "Clicked"
 msgstr "已點擊"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1199
 msgid "close"
 msgstr "關閉"
 
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/forms/ProductForm/ProductDrawer.tsx:100
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:51
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:105
 #: src/components/modals/CreateEventModal/index.tsx:287
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:172
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:874
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1198
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1200
 msgid "Close"
 msgstr "關閉"
 
@@ -3655,7 +3977,7 @@ msgstr "代碼長度必須在 3 至 50 個字符之間"
 msgid "Code must be no more than 20 characters"
 msgstr "代碼唔可以超過20個字元"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:198
+#: src/components/layouts/OrganizerLayout/index.tsx:200
 msgid "Collaborate with your team to create amazing events together."
 msgstr "與您的團隊合作，一起創造精彩活動。"
 
@@ -3692,7 +4014,7 @@ msgstr "顏色模式"
 msgid "Color must be a valid hex color code. Example: #ffffff"
 msgstr "顏色必須是有效的十六進制顏色代碼。例如#ffffff"
 
-#: src/components/common/WidgetEditor/index.tsx:173
+#: src/components/common/WidgetEditor/index.tsx:177
 msgid "Colors"
 msgstr "顏色"
 
@@ -3803,7 +4125,7 @@ msgstr "已完成訂單"
 msgid "Completed Orders"
 msgstr "已完成訂單"
 
-#: src/components/common/WidgetEditor/index.tsx:293
+#: src/components/common/WidgetEditor/index.tsx:303
 msgid "Component Code"
 msgstr "組件代碼"
 
@@ -3927,11 +4249,11 @@ msgstr "確認密碼"
 msgid "Confirm Spam"
 msgstr "確認為垃圾內容"
 
-#: src/components/layouts/Event/index.tsx:324
+#: src/components/layouts/Event/index.tsx:326
 msgid "Confirm your email to access all features."
 msgstr "請確認您的電郵地址以使用所有功能。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:327
+#: src/components/layouts/OrganizerLayout/index.tsx:329
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "確認電郵已發送！請檢查您的收件匣。"
 
@@ -4012,8 +4334,10 @@ msgid "Consecutive"
 msgstr "連續"
 
 #: src/components/common/WaitlistTable/index.tsx:155
-#: src/components/layouts/EventHomepage/index.tsx:688
-#: src/components/layouts/OrganizerHomepage/index.tsx:290
+#: src/components/layouts/EventHomepage/index.tsx:434
+#: src/components/layouts/OrganizerHomepage/index.tsx:186
+#: src/components/layouts/OrganizerHomepage/index.tsx:301
+#: src/utilites/homepageSections.ts:30
 msgid "Contact"
 msgstr "聯絡"
 
@@ -4041,19 +4365,19 @@ msgstr "內容為必填"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:131
 #: src/components/common/WidgetEditor/index.tsx:29
-#: src/components/common/WidgetEditor/index.tsx:222
-#: src/components/layouts/EventHomepage/index.tsx:211
-#: src/components/routes/event/HomepageDesigner/index.tsx:166
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1135
+#: src/components/common/WidgetEditor/index.tsx:226
+#: src/components/layouts/EventHomepage/index.tsx:214
+#: src/components/routes/event/HomepageDesigner/index.tsx:206
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1137
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "繼續"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:164
+#: src/components/routes/event/HomepageDesigner/index.tsx:204
 msgid "Continue Button"
 msgstr "繼續按鈕"
 
-#: src/components/common/WidgetEditor/index.tsx:221
+#: src/components/common/WidgetEditor/index.tsx:225
 msgid "Continue Button Text"
 msgstr "繼續按鈕文字"
 
@@ -4066,7 +4390,7 @@ msgstr "繼續設置"
 msgid "Continue to checkout"
 msgstr "繼續結帳"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1296
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "Continue to Checkout"
 msgstr "繼續結帳"
 
@@ -4229,6 +4553,10 @@ msgstr "複製 PIN 碼"
 msgid "Copy setup key"
 msgstr "複製設定金鑰"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:237
+msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
+msgstr "從試算表複製若干列（包括標題列），然後貼上到這裡。"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:67
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "從授權電郵中重新複製金鑰，不要包含引號或空格。"
@@ -4246,13 +4574,53 @@ msgstr "複製到剪貼簿"
 msgid "Copy URL"
 msgstr "複製 URL"
 
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:78
+msgid "Could not add to the lineup. Please try again."
+msgstr "無法加入陣容，請重試。"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:158
+msgid "Could not delete {profileName}"
+msgstr "無法刪除 {profileName}"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:62
+msgid "Could not delete {spaceName}"
+msgstr "無法刪除 {spaceName}"
+
 #: src/components/common/LocationsTable/index.tsx:42
 msgid "Could not delete location"
 msgstr "無法刪除地點"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:283
+msgid "Could not download the template. Please try again."
+msgstr "無法下載範本，請重試。"
+
+#: src/components/routes/event/Lineup/index.tsx:119
+msgid "Could not export the run sheet. Please try again."
+msgstr "無法匯出流程表，請重試。"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:114
+msgid "Could not move this slot. Please try again."
+msgstr "無法移動此時段，請再試一次。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:245
 msgid "Could not prepare the bulk update."
 msgstr "無法準備批次更新。"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:79
+msgid "Could not remove {name}"
+msgstr "無法移除 {name}"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:146
+msgid "Could not remove {profileName}"
+msgstr "無法移除 {profileName}"
+
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:76
+msgid "Could not remove the photo"
+msgstr "無法移除相片"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:133
+msgid "Could not remove the time slot"
+msgstr "無法移除時段"
 
 #: src/components/common/AddressAutocomplete/index.tsx:61
 #: src/components/common/LocationPicker/index.tsx:153
@@ -4262,6 +4630,26 @@ msgstr "無法取得地址詳情"
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:281
 msgid "Could not save date"
 msgstr "無法儲存日期"
+
+#: src/components/routes/event/Lineup/PeopleRail.tsx:59
+msgid "Could not save the new order. Please try again."
+msgstr "無法儲存新排序，請再試一次。"
+
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:92
+msgid "Could not save the photo order. Please try again."
+msgstr "無法儲存相片順序，請重試。"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:132
+msgid "Could not schedule this slot. Please try again."
+msgstr "無法安排此時段，請再試一次。"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:72
+msgid "Could not update {name}"
+msgstr "無法更新 {name}"
+
+#: src/hooks/useImageUploads.ts:43
+msgid "Could not upload {fileName}"
+msgstr "無法上載 {fileName}"
 
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:76
 msgid "Couldn't load your security settings"
@@ -4291,8 +4679,8 @@ msgstr "統計包含所有即將舉行的日期。每人將獲得其所選日期
 msgid "Cover"
 msgstr "封面"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:122
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:113
+#: src/components/routes/event/HomepageDesigner/index.tsx:162
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:150
 msgid "Cover Image"
 msgstr "封面圖片"
 
@@ -4300,11 +4688,11 @@ msgstr "封面圖片"
 msgid "Cover image added"
 msgstr "封面圖片已新增"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:136
+#: src/components/routes/event/HomepageDesigner/index.tsx:176
 msgid "Cover image will be displayed at the top of your event page"
 msgstr "封面圖片將顯示在活動頁面頂部"
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:127
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
 msgid "Cover image will be displayed at the top of your organizer page"
 msgstr "封面圖片將顯示在您的主辦單位頁面頂部"
 
@@ -4317,6 +4705,10 @@ msgstr "涵蓋所有門票"
 msgid "Create"
 msgstr "創建"
 
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:142
+msgid "Create \"{query}\""
+msgstr "建立「{query}」"
+
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:59
 msgid "Create {0}"
 msgstr "創建 {0}"
@@ -4325,7 +4717,7 @@ msgstr "創建 {0}"
 msgid "Create {0} Template"
 msgstr "建立{0}範本"
 
-#: src/components/common/WidgetEditor/index.tsx:161
+#: src/components/common/WidgetEditor/index.tsx:165
 msgid "Create a custom widget to sell tickets on your site."
 msgstr "建立自訂小工具以在您的網站上銷售門票。"
 
@@ -4458,7 +4850,7 @@ msgid "Create event"
 msgstr "建立活動"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
-#: src/components/layouts/OrganizerLayout/index.tsx:188
+#: src/components/layouts/OrganizerLayout/index.tsx:190
 #: src/components/routes/organizer/Events/index.tsx:64
 msgid "Create Event"
 msgstr "創建活動"
@@ -4485,6 +4877,10 @@ msgstr "創建組織器"
 msgid "Create Product"
 msgstr "創建產品"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
+msgid "Create profile"
+msgstr "建立簡介"
+
 #: src/components/modals/CreatePromoCodeModal/index.tsx:52
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
 msgid "Create Promo Code"
@@ -4508,6 +4904,10 @@ msgstr "創建座位圖"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:53
 msgid "Create Tax or Fee"
 msgstr "創建税費"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:330
+msgid "Create the profile first, then add photos here."
+msgstr "請先建立簡介，然後在此新增相片。"
 
 #: src/components/modals/CreateProductModal/index.tsx:88
 msgid "Create Ticket or Product"
@@ -4543,6 +4943,10 @@ msgstr "建立您自己的活動"
 #: src/components/routes/admin/Messages/index.tsx:310
 msgid "Created"
 msgstr "已建立"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:659
+msgid "Creates new profiles for {newNames}"
+msgstr "將為 {newNames} 建立新檔案"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:603
 msgid "Creating {0} dates. This may take a moment."
@@ -4733,6 +5137,7 @@ msgstr "舞池"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:607
 #: src/components/common/PromoCodeTable/index.tsx:194
 #: src/components/common/WebhookTable/index.tsx:121
+#: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:253
 msgid "Danger zone"
@@ -4753,7 +5158,7 @@ msgid "Dark"
 msgstr "深色"
 
 #: src/components/layouts/Admin/index.tsx:17
-#: src/components/layouts/Event/index.tsx:114
+#: src/components/layouts/Event/index.tsx:115
 #: src/components/routes/admin/Dashboard/index.tsx:179
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:60
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:158
@@ -4765,6 +5170,7 @@ msgstr "Dashboard"
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/WaitlistTable/index.tsx:187
 #: src/components/forms/QuestionForm/index.tsx:136
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:171
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:56
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:24
@@ -4773,6 +5179,11 @@ msgstr "Dashboard"
 #: src/ee/box-office/components/layouts/BoxOffice/OccurrenceSwitchSheet.tsx:47
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:168
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:242
+msgid "Date"
+msgstr "日期"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:83
+msgctxt "Lineup spreadsheet column"
 msgid "Date"
 msgstr "日期"
 
@@ -4808,6 +5219,10 @@ msgstr "日期已刪除"
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:377
 msgid "Date deleted successfully"
 msgstr "日期已成功刪除"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:100
+msgid "Date not recognised. Use a format like 2027-07-16."
+msgstr "無法識別日期。請使用類似 2027-07-16 的格式。"
 
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:75
 msgid "Date range"
@@ -4859,8 +5274,17 @@ msgstr "每月某日"
 msgid "Day one capacity"
 msgstr "第一天容量"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:553
+msgid "Day/Month"
+msgstr "日/月"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:97
 msgid "days"
+msgstr "日"
+
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:107
+#: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:93
+msgid "Days"
 msgstr "日"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:922
@@ -4943,6 +5367,8 @@ msgstr "刪除"
 #: src/components/common/TaxAndFeeList/index.tsx:83
 #: src/components/routes/admin/Announcements/index.tsx:226
 #: src/components/routes/admin/FailedJobs/index.tsx:209
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:64
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:93
 #: src/components/routes/event/OccurrencesTab/index.tsx:548
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:68
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:245
@@ -4963,6 +5389,14 @@ msgstr "刪除 {0}"
 #: src/components/routes/event/OccurrencesTab/index.tsx:271
 msgid "Delete {count} selected date(s)? Dates with orders will be skipped. This cannot be undone."
 msgstr "刪除已選的 {count} 個日期？有訂單的日期會略過。此操作無法復原。"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:152
+msgid "Delete {profileName} everywhere? They will be removed from every event lineup and schedule for this organizer. This can't be undone."
+msgstr "要在所有地方刪除 {profileName} 嗎？該人員將從此主辦方所有活動的陣容和時間表中移除。此操作無法復原。"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:56
+msgid "Delete {spaceName}? Time slots on it stay on the schedule without a stage."
+msgstr "刪除 {spaceName}？其中的時段會保留在時間表中，但不再連結舞台。"
 
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:154
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:161
@@ -5059,6 +5493,14 @@ msgstr "刪除主辦方"
 msgid "Delete Permanently"
 msgstr "永久刪除"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:160
+msgid "Delete profile"
+msgstr "刪除檔案"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:197
+msgid "Delete profile everywhere"
+msgstr "在所有地方刪除檔案"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:132
 msgid "Delete Template"
 msgstr "刪除範本"
@@ -5143,12 +5585,19 @@ msgstr "深度"
 #: src/components/forms/ProductForm/index.tsx:404
 #: src/components/forms/TaxAndFeeForm/index.tsx:81
 #: src/components/modals/CreateEventModal/index.tsx:351
-#: src/components/modals/DuplicateEventModal/index.tsx:116
+#: src/components/modals/DuplicateEventModal/index.tsx:118
 #: src/components/routes/admin/SpamEvents/index.tsx:317
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:190
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:196
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:98
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:86
 msgid "Description"
 msgstr "説明"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:90
+msgctxt "Lineup spreadsheet column"
+msgid "Description"
+msgstr "描述"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:138
 msgid "Description and venue added"
@@ -5162,7 +5611,7 @@ msgstr "簽到工作人員的描述"
 msgid "Description for staff"
 msgstr "給工作人員的說明"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:152
+#: src/components/modals/DuplicateEventModal/index.tsx:154
 msgid "Deselect All"
 msgstr "取消全選"
 
@@ -5180,7 +5629,7 @@ msgstr "桌面"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:416
 #: src/components/routes/product-widget/CollectInformation/index.tsx:435
-#: src/components/routes/product-widget/SelectProducts/index.tsx:557
+#: src/components/routes/product-widget/SelectProducts/index.tsx:559
 msgid "Details"
 msgstr "詳細信息"
 
@@ -5212,6 +5661,10 @@ msgstr "收唔到驗證碼？"
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:481
 msgid "Different location"
 msgstr "不同地點"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
+msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
+msgstr "緊接在「活動」下方時，它是活動列表中的「往期」分頁。放在其他位置時，會顯示您最近的往期活動。"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:403
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:411
@@ -5284,7 +5737,7 @@ msgstr "關閉公告"
 msgid "Dismiss setup checklist"
 msgstr "隱藏設定清單"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1313
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1315
 msgid "Dismiss this message"
 msgstr "關閉此訊息"
 
@@ -5361,9 +5814,13 @@ msgstr "出入口"
 msgid "Download"
 msgstr "下載"
 
-#: src/components/common/CalendarOptionsPopover/index.tsx:39
+#: src/components/common/CalendarOptionsPopover/index.tsx:45
 msgid "Download .ics"
 msgstr "下載 .ics"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:454
+msgid "Download a template with your current lineup"
+msgstr "下載包含目前陣容的範本"
 
 #: src/components/common/DownloadCsvButton/index.tsx:48
 msgid "Download CSV"
@@ -5385,16 +5842,21 @@ msgstr "下載二維碼"
 msgid "Download sales, attendee, and financial reports for all completed orders."
 msgstr "下載所有已完成訂單的銷售、參與者和財務報告。"
 
+#: src/components/routes/event/Lineup/index.tsx:141
+msgid "Download spreadsheet (.xlsx)"
+msgstr "下載試算表 (.xlsx)"
+
 #: src/components/layouts/Checkout/index.tsx:186
 #: src/hooks/useOrderActions.tsx:80
 msgid "Downloading Invoice"
 msgstr "正在下載發票"
 
 #: src/components/common/EventCard/index.tsx:99
-#: src/components/layouts/Event/index.tsx:246
-#: src/components/layouts/OrganizerLayout/index.tsx:230
+#: src/components/layouts/Event/index.tsx:248
+#: src/components/layouts/OrganizerLayout/index.tsx:232
 #: src/components/routes/admin/Announcements/index.tsx:183
 #: src/components/routes/admin/Announcements/index.tsx:472
+#: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
 msgid "Draft"
 msgstr "草稿"
 
@@ -5402,9 +5864,34 @@ msgstr "草稿"
 msgid "Draft event not published"
 msgstr "草稿活動未發佈"
 
+#: src/components/routes/event/Lineup/index.tsx:342
+msgid "Drag people onto the timetable or add time slots with a form."
+msgstr "將人員拖到時間表上，或透過表格新增時段。"
+
+#: src/components/routes/event/Lineup/PeopleRail.tsx:98
+msgid "Drag the handle to reorder. Drag a name onto the timetable to schedule it."
+msgstr "拖動手柄以排序。將名字拖到時間表上即可安排時間。"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:70
 msgid "Drag to draw a stage. Change it to a bar, dance floor, entrance, pillar or wall on the right."
 msgstr "拖曳繪製舞台。在右側將其更改為吧枱、舞池、入口、柱子或牆。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:215
+#: src/components/routes/event/Lineup/PeopleRail.tsx:134
+msgid "Drag to reorder"
+msgstr "拖放以重新排序"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:117
+msgid "Drag to reorder. Hidden sections stay saved but don't show on your organizer page."
+msgstr "拖曳以重新排序。隱藏的區塊會保留，但不會顯示在您的主辦方頁面上。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:116
+msgid "Drag to reorder. Sections marked Empty appear on your event page once they have content."
+msgstr "拖曳以重新排序。標記為「空」的分區在有內容後會顯示在活動頁面上。"
+
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:138
+msgid "Drag to reorder. The first photo is used on the lineup."
+msgstr "拖動以排序。第一張相片會用於陣容。"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:69
 msgid "Draw a stage or other object"
@@ -5417,6 +5904,10 @@ msgstr "繪製站立區"
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:63
 msgid "Draw rows of seats"
 msgstr "繪製座位排"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:423
+msgid "Drop a spreadsheet here or click to choose"
+msgstr "將試算表拖放到此處，或按一下選擇"
 
 #: src/components/common/CapacityHelp/index.tsx:31
 msgid "Drop-in"
@@ -5457,12 +5948,12 @@ msgstr "複製日期"
 msgid "Duplicate event"
 msgstr "複製活動"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:101
-#: src/components/modals/DuplicateEventModal/index.tsx:181
+#: src/components/modals/DuplicateEventModal/index.tsx:103
+#: src/components/modals/DuplicateEventModal/index.tsx:183
 msgid "Duplicate Event"
 msgstr "複製活動"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:138
+#: src/components/modals/DuplicateEventModal/index.tsx:140
 msgid "Duplicate Options"
 msgstr "複製選項"
 
@@ -5470,6 +5961,11 @@ msgstr "複製選項"
 #: src/components/modals/DuplicateProductModal/index.tsx:132
 msgid "Duplicate Product"
 msgstr "複製產品"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:86
+msgctxt "Lineup spreadsheet column"
+msgid "Duration (min)"
+msgstr "時長（分鐘）"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:122
 msgid "Duration must be at least 1 minute."
@@ -5483,9 +5979,25 @@ msgstr "荷蘭語"
 msgid "e.g. 180 (3 hours)"
 msgstr "例如 180（3小時）"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:287
+msgid "e.g. Founder at Acme, or Berlin techno"
+msgstr "例如：Acme 創辦人，或柏林 Techno"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:138
+msgid "e.g. Is there parking?"
+msgstr "例如：有泊車位嗎？"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:255
+msgid "e.g. Keynote, Closing set, Moderator"
+msgstr "例如：主題演講、壓軸演出、主持"
+
 #: src/components/routes/admin/Announcements/index.tsx:457
 msgid "e.g. Learn more"
 msgstr "例如：了解更多"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:72
+msgid "e.g. Main Stage, Room 2B, The Tent"
+msgstr "例如：主舞台、2B 會議室、帳篷舞台"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:455
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:459
@@ -5495,6 +6007,10 @@ msgstr "例如：上午場"
 #: src/components/routes/admin/Announcements/index.tsx:382
 msgid "e.g. New feature: Waitlists"
 msgstr "例如：新功能：候補名單"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:153
+msgid "e.g. Opening remarks, Lunch, Doors open"
+msgstr "例如：開幕致辭、午餐、開始入場"
 
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:139
 msgid "e.g. Sam"
@@ -5574,6 +6090,10 @@ msgstr "編輯 {0}"
 msgid "Edit {0} Template"
 msgstr "編輯{0}範本"
 
+#: src/components/routes/event/Lineup/LineupPreview.tsx:98
+msgid "Edit {name}"
+msgstr "編輯 {name}"
+
 #: src/components/common/AffiliateTable/index.tsx:173
 #: src/components/modals/EditAffiliateModal/index.tsx:81
 #: src/components/modals/EditAffiliateModal/index.tsx:93
@@ -5635,9 +6155,25 @@ msgstr "編輯配置"
 msgid "Edit Date"
 msgstr "編輯日期"
 
+#: src/components/routes/event/Lineup/LineupPreview.tsx:121
+msgid "Edit details"
+msgstr "編輯詳情"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:266
+msgid "Edit in Tickets & Products"
+msgstr "在「票券與產品」中編輯"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:60
 msgid "Edit individual seats"
 msgstr "編輯單個座位"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:62
+msgid "Edit it in Event Settings"
+msgstr "在活動設定中編輯"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:66
+msgid "Edit it in Settings"
+msgstr "在設定中編輯"
 
 #: src/components/common/LocationsTable/index.tsx:68
 msgid "Edit location"
@@ -5687,9 +6223,17 @@ msgstr "編輯日程"
 msgid "Edit Schedule"
 msgstr "編輯日程"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:68
+msgid "Edit stage or room"
+msgstr "編輯舞台或場地"
+
 #: src/ee/seating/components/routes/event/Seating/index.tsx:122
 msgid "Edit this event's seat map"
 msgstr "編輯此活動的座位圖"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:139
+msgid "Edit time slot"
+msgstr "編輯時段"
 
 #: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:171
 msgid "Edit user"
@@ -5808,8 +6352,8 @@ msgstr "電子郵件更改待定"
 msgid "Email confirmation resent"
 msgstr "重新發送電子郵件確認"
 
-#: src/components/layouts/Event/index.tsx:95
-#: src/components/layouts/OrganizerLayout/index.tsx:133
+#: src/components/layouts/Event/index.tsx:96
+#: src/components/layouts/OrganizerLayout/index.tsx:135
 #: src/components/routes/profile/ManageProfile/index.tsx:112
 msgid "Email confirmation resent successfully"
 msgstr "成功重新發送電子郵件確認"
@@ -5863,7 +6407,7 @@ msgstr "郵件範本"
 msgid "Email to send tickets"
 msgstr "傳送門票的電郵"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:306
+#: src/components/layouts/OrganizerLayout/index.tsx:308
 msgid "Email Verification Required"
 msgstr "需要電郵驗證"
 
@@ -5875,12 +6419,12 @@ msgstr "電郵已驗證"
 msgid "Email verified successfully!"
 msgstr "電郵驗證成功！"
 
-#: src/components/common/WidgetEditor/index.tsx:246
-#: src/components/common/WidgetEditor/index.tsx:275
+#: src/components/common/WidgetEditor/index.tsx:256
+#: src/components/common/WidgetEditor/index.tsx:285
 msgid "Embed Code"
 msgstr "嵌入代碼"
 
-#: src/components/common/WidgetEditor/index.tsx:262
+#: src/components/common/WidgetEditor/index.tsx:272
 msgid "Embed Script"
 msgstr "嵌入腳本"
 
@@ -5899,6 +6443,10 @@ msgstr "表情符號"
 #: src/components/routes/admin/Announcements/index.tsx:308
 msgid "Emoji is required for modals"
 msgstr "彈窗必須設定表情符號"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:225
+msgid "Empty"
+msgstr "空"
 
 #: src/components/common/SelfServiceSettings/index.tsx:19
 msgid "Enable attendee self-service"
@@ -5934,8 +6482,21 @@ msgstr "已啟用"
 msgid "Enabled for everyone"
 msgstr "為所有人啟用"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:85
+msgctxt "Lineup spreadsheet column"
+msgid "End"
+msgstr "結束"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:135
+msgid "End"
+msgstr "結束"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:447
+msgid "End can be after midnight. Separate several people with a semicolon."
+msgstr "結束時間可以遲於午夜。多人之間請用分號分隔。"
+
 #: src/components/common/AdminEventsTable/index.tsx:109
-#: src/components/modals/DuplicateEventModal/index.tsx:131
+#: src/components/modals/DuplicateEventModal/index.tsx:133
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:454
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:127
 msgid "End Date"
@@ -5970,10 +6531,22 @@ msgstr "完工"
 msgid "Ended {0}"
 msgstr "已於 {0} 結束"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:181
+msgid "Ends"
+msgstr "結束"
+
 #: src/components/modals/CreateEventModal/index.tsx:399
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:46
 msgid "Ends {0}"
 msgstr "{0} 結束"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:106
+msgid "Ends before it starts"
+msgstr "結束時間早於開始時間"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:183
+msgid "Ends the next day"
+msgstr "翌日結束"
 
 #: src/components/common/LanguageSwitcher/index.tsx:18
 #: src/components/common/LanguageSwitcher/index.tsx:75
@@ -5984,6 +6557,10 @@ msgstr "英語"
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:132
 msgid "Enter a capacity value or choose unlimited."
 msgstr "請輸入容量數值或選擇不限。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:359
+msgid "Enter a full link starting with https://"
+msgstr "請輸入以 https:// 開頭的完整連結"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:142
 msgid "Enter a label or choose to remove it."
@@ -6190,7 +6767,7 @@ msgstr "活動已成功封存"
 msgid "Event confirmed as spam"
 msgstr "活動已確認為垃圾內容"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:55
+#: src/components/modals/DuplicateEventModal/index.tsx:56
 msgid "Event Cover Image"
 msgstr "活動封面圖片"
 
@@ -6246,7 +6823,7 @@ msgstr "活動已成功刪除"
 msgid "Event Details"
 msgstr "活動詳情"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:90
+#: src/components/modals/DuplicateEventModal/index.tsx:92
 msgid "Event duplicated successfully"
 msgstr "事件成功複製"
 
@@ -6285,11 +6862,11 @@ msgstr "活動不可用"
 msgid "Event not live"
 msgstr "活動未上線"
 
-#: src/components/layouts/Event/index.tsx:313
+#: src/components/layouts/Event/index.tsx:315
 msgid "Event Page"
 msgstr "活動頁面"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:114
+#: src/components/routes/event/HomepageDesigner/index.tsx:141
 msgid "Event Preview"
 msgstr "活動預覽"
 
@@ -6297,7 +6874,7 @@ msgstr "活動預覽"
 msgid "Event restored successfully"
 msgstr "活動已成功還原"
 
-#: src/components/layouts/Event/index.tsx:131
+#: src/components/layouts/Event/index.tsx:132
 #: src/components/routes/event/Settings/index.tsx:175
 msgid "Event Settings"
 msgstr "活動設定"
@@ -6308,14 +6885,14 @@ msgstr "活動設定"
 
 #: src/components/common/EventCard/index.tsx:82
 #: src/components/common/StatusToggle/index.tsx:62
-#: src/components/layouts/Event/index.tsx:217
+#: src/components/layouts/Event/index.tsx:219
 #: src/components/modals/PublishEventModal/index.tsx:129
 msgid "Event status update failed. Please try again later"
 msgstr "活動狀態更新失敗。請稍後再試"
 
 #: src/components/common/EventCard/index.tsx:79
 #: src/components/common/StatusToggle/index.tsx:54
-#: src/components/layouts/Event/index.tsx:214
+#: src/components/layouts/Event/index.tsx:216
 msgid "Event status updated"
 msgstr "事件狀態已更新"
 
@@ -6343,15 +6920,21 @@ msgstr "活動已更新"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
 #: src/components/layouts/Admin/index.tsx:20
-#: src/components/layouts/OrganizerHomepage/index.tsx:326
-#: src/components/layouts/OrganizerLayout/index.tsx:111
+#: src/components/layouts/OrganizerHomepage/index.tsx:218
+#: src/components/layouts/OrganizerLayout/index.tsx:112
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:44
+#: src/utilites/homepageSections.ts:28
 msgid "Events"
 msgstr "活動"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:228
+msgid "Events are always shown"
+msgstr "活動始終顯示"
 
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:120
 #: src/components/routes/organizer/Reports/index.tsx:25
@@ -6424,6 +7007,18 @@ msgstr "所有主辦方和活動，包括新建立的。"
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "每部信任的裝置在下次登錄時都需要輸入驗證碼。是否繼續?"
 
+#: src/components/routes/event/Lineup/index.tsx:54
+msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
+msgstr "本活動所有出場人員，以及他們的地點和時間。新增後會即時顯示在活動頁面上。"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:22
+msgid "Everyone else"
+msgstr "其他人員"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:34
+msgid "Everyone has a time"
+msgstr "所有人都已安排時間"
+
 #: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:62
 msgid "Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue."
 msgstr "此賬户中的所有人都必須使用驗證器應用程式登錄。未啟用的成員需要先完成設定才能繼續。"
@@ -6440,6 +7035,14 @@ msgstr "所有可以查看或管理此活動的人。"
 msgid "Everything else — tap to edit"
 msgstr "其餘所有內容 — 輕觸即可編輯"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:537
+msgid "Everything looks good"
+msgstr "一切正常"
+
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:295
+msgid "Everywhere"
+msgstr "所有地方"
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:92
 msgid "Exact"
 msgstr "剛好"
@@ -6451,6 +7054,10 @@ msgstr "例子：「您是如何得知我們的？」、「發票公司名稱」
 #: src/components/common/QuestionsTable/index.tsx:507
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "例子：「T恤尺碼」、「餐飲偏好」、「職位」"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:424
+msgid "Excel (.xlsx) or CSV. You'll see exactly what will change before anything is saved."
+msgstr "Excel (.xlsx) 或 CSV。儲存前你會清楚看到將有哪些更改。"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:166
 #: src/components/routes/admin/FailedJobs/index.tsx:265
@@ -6493,6 +7100,7 @@ msgstr "有效期"
 #: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:97
 #: src/components/routes/event/attendees.tsx:263
+#: src/components/routes/event/Lineup/index.tsx:136
 #: src/components/routes/event/orders.tsx:250
 msgid "Export"
 msgstr "出口"
@@ -6897,6 +7505,10 @@ msgstr "驗證電郵失敗"
 msgid "Family"
 msgstr "親子"
 
+#: src/utilites/homepageSections.ts:38
+msgid "FAQ"
+msgstr "常見問題"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:247
 msgid "Fast payouts to your bank"
 msgstr "快速將款項轉入你的銀行"
@@ -6913,6 +7525,11 @@ msgstr "功能開關"
 #: src/components/routes/admin/FeatureFlags/index.tsx:127
 msgid "Feature Flags"
 msgstr "功能開關"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:20
+#: src/utilites/lineup.ts:47
+msgid "Featured"
+msgstr "特邀"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:91
 msgid "Features"
@@ -7172,7 +7789,7 @@ msgstr "閃光燈開啟"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:172
+#: src/components/routes/event/HomepageDesigner/index.tsx:212
 msgid "Floating Button"
 msgstr "浮動按鈕"
 
@@ -7199,6 +7816,10 @@ msgstr "共"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1062
 msgid "For a number of dates"
 msgstr "按日期數量"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:81
+msgid "For events across more than one venue"
+msgstr "適用於跨多個場地的活動"
 
 #: src/components/routes/auth/Login/index.tsx:195
 msgid "Forgot password?"
@@ -7256,7 +7877,7 @@ msgstr "星期五"
 msgid "From"
 msgstr "從"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:975
+#: src/components/routes/product-widget/SelectProducts/index.tsx:977
 msgid "From {0}"
 msgstr "{0} 起"
 
@@ -7328,7 +7949,7 @@ msgstr "日後"
 msgid "Future dates only"
 msgstr "只限日後的日期"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:59
+#: src/components/modals/DuplicateEventModal/index.tsx:61
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "日後的日期會被複製，容量重設為零"
 
@@ -7384,11 +8005,11 @@ msgstr "取得授權"
 msgid "Get an Enterprise licence key."
 msgstr "取得企業版授權金鑰。"
 
-#: src/components/layouts/EventHomepage/index.tsx:544
+#: src/components/layouts/EventHomepage/index.tsx:295
 msgid "Get Directions"
 msgstr "取得路線"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:88
+#: src/components/layouts/OrganizerLayout/index.tsx:89
 msgid "Get Paid"
 msgstr "收款"
 
@@ -7400,8 +8021,8 @@ msgstr "用 Stripe 收款"
 msgid "Get started"
 msgstr "開始使用"
 
-#: src/components/layouts/EventHomepage/index.tsx:210
-#: src/components/routes/event/HomepageDesigner/index.tsx:174
+#: src/components/layouts/EventHomepage/index.tsx:213
+#: src/components/routes/event/HomepageDesigner/index.tsx:214
 msgid "Get Tickets"
 msgstr "購票"
 
@@ -7417,6 +8038,10 @@ msgstr "GitHub"
 #: src/components/common/TeamAccessPanel/index.tsx:106
 msgid "Give an existing member access"
 msgstr "為現有成員授予存取權限"
+
+#: src/components/routes/event/Lineup/index.tsx:341
+msgid "Give everyone a time"
+msgstr "為所有人安排時間"
 
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
@@ -7459,7 +8084,7 @@ msgstr "前往座位設定"
 msgid "Good to know"
 msgstr "注意事項"
 
-#: src/components/common/CalendarOptionsPopover/index.tsx:30
+#: src/components/common/CalendarOptionsPopover/index.tsx:33
 msgid "Google Calendar"
 msgstr "谷歌日曆"
 
@@ -7511,11 +8136,15 @@ msgstr "銷售總額"
 msgid "Gross Sales"
 msgstr "總銷售額"
 
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:83
+msgid "Group by stage or room"
+msgstr "按舞台或房間分組"
+
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:341
 msgid "Guest"
 msgstr "嘉賓"
 
-#: src/components/layouts/Event/index.tsx:145
+#: src/components/layouts/Event/index.tsx:147
 msgid "Guest Management"
 msgstr "賓客管理"
 
@@ -7541,13 +8170,25 @@ msgstr "硬退信"
 msgid "Hard delete"
 msgstr "徹底刪除"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1147
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1149
 msgid "Have a promo code?"
 msgstr "有促銷代碼嗎？"
 
 #: src/ee/seating/components/lib/templates.ts:129
 msgid "Head"
 msgstr "主家席"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:273
+msgid "Heading"
+msgstr "標題"
+
+#: src/utilites/lineup.ts:45
+msgid "Headliner"
+msgstr "壓軸"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:18
+msgid "Headliners"
+msgstr "壓軸"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 msgid "Height"
@@ -7588,11 +8229,11 @@ msgstr "幫助我們了解網站的使用情況。"
 msgid "Here are all the tickets associated with your email address."
 msgstr "以下是與您郵箱關聯的所有票。"
 
-#: src/components/common/WidgetEditor/index.tsx:303
+#: src/components/common/WidgetEditor/index.tsx:313
 msgid "Here is an example of how you can use the component in your application."
 msgstr "這是如何在應用程式中使用該組件的範例。"
 
-#: src/components/common/WidgetEditor/index.tsx:290
+#: src/components/common/WidgetEditor/index.tsx:300
 msgid "Here is the React component you can use to embed the widget in your application."
 msgstr "這是您可以用來在應用程式中嵌入小工具的 React 組件。"
 
@@ -7619,16 +8260,32 @@ msgstr "Hi.Events 平台費用及每筆交易的增值稅明細"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:620
+#: src/components/routes/event/Lineup/LineupPreview.tsx:107
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:318
 msgid "Hidden"
 msgstr "已隱藏"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:79
+msgctxt "Lineup spreadsheet column"
+msgid "Hidden"
+msgstr "隱藏"
 
 #: src/components/forms/ProductForm/visibilityStatus.ts:50
 msgid "Hidden — sales ended {end}."
 msgstr "已隱藏 — 銷售已於 {end} 結束。"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:77
+msgid "Hidden automatically when empty."
+msgstr "內容為空時自動隱藏。"
+
 #: src/components/common/QuestionsTable/index.tsx:119
 msgid "Hidden from attendees - only visible to organizers"
 msgstr "對參與者隱藏 - 僅主辦方可見"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:162
+msgid "Hidden from event page: {hiddenNames}"
+msgstr "在活動頁面隱藏：{hiddenNames}"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:151
 msgid "Hidden from everyone"
@@ -7643,6 +8300,10 @@ msgstr "對所有人隱藏 — 總隱藏開關已開啟。"
 msgid "Hidden from public view"
 msgstr "隱藏於公眾視線之外"
 
+#: src/components/routes/event/Lineup/PeopleRail.tsx:172
+msgid "Hidden from your event page"
+msgstr "在活動頁面上隱藏"
+
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:23
 msgid "Hidden online"
 msgstr "線上隱藏"
@@ -7652,8 +8313,8 @@ msgid "Hidden questions are only visible to the event organizer and not to the c
 msgstr "隱藏問題只有活動組織者可以看到，客户看不到。"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
-#: src/components/routes/product-widget/SelectProducts/index.tsx:858
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1090
+#: src/components/routes/product-widget/SelectProducts/index.tsx:860
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1092
 msgid "Hide"
 msgstr "隱藏"
 
@@ -7677,6 +8338,11 @@ msgstr "隱藏日曆"
 msgid "Hide details"
 msgstr "隱藏詳情"
 
+#: src/components/routes/event/Lineup/LineupPreview.tsx:124
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:261
+msgid "Hide from event page"
+msgstr "在活動頁面隱藏"
+
 #: src/components/routes/admin/Announcements/index.tsx:495
 msgid "Hide Preview"
 msgstr "隱藏預覽"
@@ -7696,6 +8362,11 @@ msgstr "除非用户有適用的促銷代碼，否則隱藏產品"
 #: src/components/forms/ProductForm/index.tsx:452
 msgid "Hide product when sold out"
 msgstr "售罄時隱藏產品"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:228
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:234
+msgid "Hide section"
+msgstr "隱藏區塊"
 
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:66
 msgid "Hide sold out dates and times"
@@ -7762,13 +8433,13 @@ msgstr "保留 {0} 個座位"
 msgid "Hold back {0} seats on {dateCount} dates"
 msgstr "在 {dateCount} 個日期保留 {0} 個座位"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:112
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:101
+#: src/components/routes/event/HomepageDesigner/index.tsx:139
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:125
 msgid "Homepage Design"
 msgstr "主頁設計"
 
-#: src/components/layouts/Event/index.tsx:132
-#: src/components/layouts/OrganizerLayout/index.tsx:115
+#: src/components/layouts/Event/index.tsx:134
+#: src/components/layouts/OrganizerLayout/index.tsx:116
 msgid "Homepage Designer"
 msgstr "首頁設計器"
 
@@ -7776,6 +8447,10 @@ msgstr "首頁設計器"
 #: src/components/modals/ManageOrderModal/index.tsx:262
 msgid "Homer"
 msgstr "荷馬"
+
+#: src/utilites/lineup.ts:34
+msgid "Hosts"
+msgstr "主持"
 
 #: src/components/modals/CreateEventModal/DateTimeChip.tsx:94
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:388
@@ -7878,7 +8553,7 @@ msgstr "我已將復原碼儲存在安全的地方"
 msgid "I've added it, continue"
 msgstr "我已新增,繼續"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1268
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1270
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "如果未自動開啟新分頁，請點擊下方按鈕繼續結帳。"
 
@@ -7926,8 +8601,8 @@ msgstr "圖片上傳成功"
 msgid "Image URL"
 msgstr "圖片網址"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:120
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:109
+#: src/components/routes/event/HomepageDesigner/index.tsx:160
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:146
 msgid "Images"
 msgstr "圖片"
 
@@ -7951,6 +8626,15 @@ msgstr "模擬已開始"
 #: src/components/common/ImpersonationBanner/index.tsx:23
 msgid "Impersonation stopped"
 msgstr "模擬已停止"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:382
+#: src/components/routes/event/Lineup/index.tsx:104
+msgid "Import"
+msgstr "匯入"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:336
+msgid "Import lineup & schedule"
+msgstr "匯入陣容及日程"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:112
 msgid "Important Notice"
@@ -7977,6 +8661,10 @@ msgstr "實體 — 設定場地"
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:84
 msgid "In progress"
 msgstr "進行中"
+
+#: src/components/routes/event/Lineup/EventStatusBadge.tsx:14
+msgid "In review"
+msgstr "審核中"
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:159
 msgid "In someone's basket"
@@ -8082,8 +8770,8 @@ msgstr "Instagram"
 msgid "Instant Stripe payouts"
 msgstr "Stripe 即時撥款"
 
-#: src/components/layouts/Event/index.tsx:159
-#: src/components/layouts/OrganizerLayout/index.tsx:121
+#: src/components/layouts/Event/index.tsx:161
+#: src/components/layouts/OrganizerLayout/index.tsx:123
 msgid "Integrations"
 msgstr "整合"
 
@@ -8140,11 +8828,11 @@ msgstr "邀請成員，設定他們可以查看和執行的操作，並確保登
 msgid "Invite someone"
 msgstr "邀請成員"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:200
+#: src/components/layouts/OrganizerLayout/index.tsx:202
 msgid "Invite Team Members"
 msgstr "邀請團隊成員"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:197
+#: src/components/layouts/OrganizerLayout/index.tsx:199
 msgid "Invite Your Team"
 msgstr "邀請您的團隊"
 
@@ -8182,7 +8870,7 @@ msgstr "簽發日期"
 msgid "It happens on more than one date"
 msgstr "它在多個日期舉行"
 
-#: src/components/layouts/ProductWidget/index.tsx:51
+#: src/components/layouts/ProductWidget/index.tsx:53
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "它可能已取消發佈或被移除。請檢查連結後再試一次。"
 
@@ -8240,7 +8928,7 @@ msgstr "約翰"
 msgid "Johnson"
 msgstr "約翰遜"
 
-#: src/components/layouts/EventHomepage/index.tsx:416
+#: src/components/layouts/EventHomepage/index.tsx:650
 msgid "Join from anywhere"
 msgstr "隨時隨地加入"
 
@@ -8301,6 +8989,10 @@ msgstr "讓我隨時了解來自 {0} 的新聞和活動"
 #: src/components/layouts/AuthLayout/index.tsx:44
 msgid "Keep the profit."
 msgstr "利潤全歸你。"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:262
+msgid "Keep them off the public lineup and schedule until you're ready to announce"
+msgstr "在準備好公佈之前，不在公開陣容和時間表中顯示"
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -8449,6 +9141,10 @@ msgstr "較後"
 msgid "Latest check-ins"
 msgstr "最新簽到"
 
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:95
+msgid "Layout"
+msgstr "版面"
+
 #: src/hooks/useUnsavedChangesGuard.ts:24
 msgid "Leave"
 msgstr "離開"
@@ -8507,6 +9203,10 @@ msgstr "左側"
 msgid "Left wing"
 msgstr "左翼"
 
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:136
+msgid "Length"
+msgstr "時長"
+
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:46
 msgid "Let buyers change their seat after booking"
 msgstr "允許買家在預訂後更換座位"
@@ -8539,7 +9239,7 @@ msgstr "字母"
 msgid "Letters skipping I and O"
 msgstr "字母（略過 I 和 O）"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:117
+#: src/components/layouts/OrganizerLayout/index.tsx:118
 msgid "Library"
 msgstr "圖庫"
 
@@ -8583,6 +9283,27 @@ msgstr "受座位數限制"
 msgid "Limited by ticket allocation"
 msgstr "受票務分配限制"
 
+#: src/components/routes/event/Lineup/LineupPreview.tsx:119
+#: src/utilites/homepageSections.ts:20
+#: src/utilites/lineup.ts:24
+#: src/utilites/lineup.ts:36
+msgid "Lineup"
+msgstr "陣容"
+
+#: src/components/layouts/Event/index.tsx:133
+#: src/components/modals/DuplicateEventModal/index.tsx:60
+#: src/components/routes/event/Lineup/index.tsx:55
+msgid "Lineup & Schedule"
+msgstr "陣容與時間表"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:77
+msgid "Lineup & Schedule page"
+msgstr "陣容與排程頁面"
+
+#: src/components/routes/event/Lineup/ProfileLinksField.tsx:39
+msgid "Link {linkNumber}"
+msgstr "連結 {linkNumber}"
+
 #: src/components/routes/my-tickets/index.tsx:177
 msgid "Link Expired or Invalid"
 msgstr "連結已過期或無效"
@@ -8600,6 +9321,17 @@ msgstr "連結文字為必填項"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:78
+msgctxt "Lineup spreadsheet column"
+msgid "Links"
+msgstr "連結"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:230
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:333
+#: src/components/routes/organizer/People/index.tsx:116
+msgid "Links"
+msgstr "連結"
+
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:253
 msgid "Links Allowed"
 msgstr "允許連結"
@@ -8608,6 +9340,8 @@ msgstr "允許連結"
 msgid "Links to: {0}"
 msgstr "連結至：{0}"
 
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:97
+#: src/components/routes/event/Lineup/index.tsx:219
 #: src/components/routes/event/OccurrencesTab/index.tsx:508
 msgid "List"
 msgstr "清單"
@@ -8617,9 +9351,10 @@ msgid "List view"
 msgstr "列表檢視"
 
 #: src/components/common/EventCard/index.tsx:102
-#: src/components/layouts/Event/index.tsx:248
-#: src/components/layouts/OrganizerLayout/index.tsx:232
+#: src/components/layouts/Event/index.tsx:250
+#: src/components/layouts/OrganizerLayout/index.tsx:234
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
+#: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 msgid "Live"
 msgstr "已上線"
 
@@ -8684,17 +9419,22 @@ msgstr "正在加載 Webhook"
 msgid "Loading..."
 msgstr "加載中..."
 
+#: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:67
+msgid "Loads content from {service}"
+msgstr "從 {service} 載入內容"
+
 #: src/components/common/AttendeeTicket/index.tsx:120
 #: src/components/common/AttendeeTicket/index.tsx:127
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
-#: src/components/layouts/EventHomepage/index.tsx:522
+#: src/components/layouts/EventHomepage/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
 #: src/components/routes/event/Settings/index.tsx:56
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 #: src/components/routes/my-tickets/index.tsx:90
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:349
+#: src/utilites/homepageSections.ts:24
 msgid "Location"
 msgstr "地點"
 
@@ -8718,7 +9458,7 @@ msgstr "地點更新"
 msgid "locations"
 msgstr "個地點"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:118
+#: src/components/layouts/OrganizerLayout/index.tsx:119
 #: src/components/routes/organizer/Locations/index.tsx:31
 msgid "Locations"
 msgstr "地點"
@@ -8733,7 +9473,7 @@ msgid "Logging in"
 msgstr "登錄"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:133
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:134
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:171
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
 msgid "Logo"
 msgstr "標誌"
@@ -8746,13 +9486,17 @@ msgstr "標誌與封面"
 msgid "Logo and cover image for your organizer"
 msgstr "您主辦單位的標誌與封面圖片"
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:148
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:185
 msgid "Logo will be displayed in the header"
 msgstr "標誌將顯示於頁首"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:146
 msgid "Logo will be displayed on the ticket"
 msgstr "標誌將顯示在門票上"
+
+#: src/utilites/homepageSections.ts:57
+msgid "Logos of your sponsors and partners, with links."
+msgstr "您的贊助商及合作夥伴的標誌，附連結。"
 
 #: src/components/common/GlobalMenu/index.tsx:119
 msgid "Logout"
@@ -8762,7 +9506,7 @@ msgstr "註銷"
 msgid "Look Up My Tickets"
 msgstr "查找我的門票"
 
-#: src/components/common/WidgetEditor/index.tsx:341
+#: src/components/common/WidgetEditor/index.tsx:351
 msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 
@@ -8791,6 +9535,14 @@ msgstr "主層"
 msgid "Main Office"
 msgstr "總部辦公室"
 
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:172
+msgid "Main photo"
+msgstr "主相片"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:89
+msgid "Make {tierName}"
+msgstr "設為{tierName}"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:180
 msgid "Make billing address mandatory during checkout"
 msgstr "在結賬時強制要求填寫賬單地址"
@@ -8810,7 +9562,7 @@ msgstr "將此問題作為必答題"
 #: src/components/common/LocationsTable/index.tsx:60
 #: src/components/common/OrganizerWebhookTable/index.tsx:98
 #: src/components/common/PromoCodeTable/index.tsx:177
-#: src/components/layouts/OrganizerLayout/index.tsx:110
+#: src/components/layouts/OrganizerLayout/index.tsx:111
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
@@ -8848,6 +9600,10 @@ msgstr "管理訂單"
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:100
 msgid "Manage payment and invoicing settings for this event."
 msgstr "管理此活動的支付和發票設置。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:77
+msgid "Manage people, stages and times on the"
+msgstr "管理人員、舞台及時間，請前往"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:123
 msgid "Manage Profile"
@@ -9033,7 +9789,7 @@ msgid "Message Sent"
 msgstr "發送的信息"
 
 #: src/components/layouts/Admin/index.tsx:22
-#: src/components/layouts/Event/index.tsx:149
+#: src/components/layouts/Event/index.tsx:151
 #: src/components/routes/event/messages.tsx:228
 msgid "Messages"
 msgstr "信息"
@@ -9093,6 +9849,14 @@ msgstr "其他"
 msgid "Miscellaneous Settings"
 msgstr "雜項設置"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:234
+msgid "Missing"
+msgstr "缺少"
+
+#: src/components/routes/organizer/People/index.tsx:69
+msgid "Missing a photo"
+msgstr "缺少相片"
+
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:216
 msgid "mixed"
 msgstr "混合"
@@ -9136,6 +9900,10 @@ msgstr "個月"
 msgid "Month"
 msgstr "月"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:554
+msgid "Month/Day"
+msgstr "月/日"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:54
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:42
 msgid "Monthly"
@@ -9149,11 +9917,16 @@ msgstr "個月"
 msgid "more"
 msgstr "更多"
 
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:256
+msgid "More"
+msgstr "更多"
+
 #: src/components/common/EntityActions/index.tsx:159
 #: src/components/common/EntityActions/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:179
 #: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:165
 #: src/components/routes/admin/SpamEvents/index.tsx:256
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:207
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:180
 msgid "More actions"
 msgstr "更多操作"
@@ -9192,6 +9965,7 @@ msgstr "移動與會者"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:203
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:603
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:129
 msgid "Move down"
 msgstr "下移"
 
@@ -9199,12 +9973,17 @@ msgstr "下移"
 msgid "Move its seats to another band first"
 msgstr "請先將其座位移到其他價位區"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:247
+msgid "Move left"
+msgstr "向左移"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:234
 msgid "Move to area"
 msgstr "移至區域"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:196
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:595
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:126
 msgid "Move up"
 msgstr "上移"
 
@@ -9212,12 +9991,12 @@ msgstr "上移"
 msgid "Multi line text box"
 msgstr "多行文本框"
 
-#: src/components/layouts/EventHomepage/index.tsx:389
+#: src/components/layouts/EventHomepage/index.tsx:625
 msgid "Multiple dates until {lastOccurrenceDate}"
 msgstr "多個日期，截至 {lastOccurrenceDate}"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/EventHomepage/index.tsx:182
+#: src/components/layouts/EventHomepage/index.tsx:185
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:85
 msgid "Multiple locations"
 msgstr "多個地點"
@@ -9248,7 +10027,7 @@ msgstr "我的簡介"
 msgid "My Tickets"
 msgstr "我的票"
 
-#: src/components/common/WidgetEditor/index.tsx:364
+#: src/components/common/WidgetEditor/index.tsx:375
 msgid "Nam placerat elementum..."
 msgstr "Nam placerat elementum..."
 
@@ -9261,10 +10040,13 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/ProductCategoryForm/index.tsx:16
 #: src/components/forms/ProductForm/index.tsx:200
 #: src/components/forms/TaxAndFeeForm/index.tsx:61
-#: src/components/modals/DuplicateEventModal/index.tsx:110
+#: src/components/modals/DuplicateEventModal/index.tsx:112
 #: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 #: src/components/routes/admin/Configurations/index.tsx:224
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:278
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:71
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:80
+#: src/components/routes/organizer/People/index.tsx:114
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:90
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:65
@@ -9274,10 +10056,21 @@ msgstr "Nam placerat elementum..."
 msgid "Name"
 msgstr "名稱"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:73
+msgctxt "Lineup spreadsheet column"
+msgid "Name"
+msgstr "名稱"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:96
+msgid "Name is missing"
+msgstr "缺少姓名"
+
 #: src/components/common/ContactOrganizerModal/index.tsx:32
 #: src/components/modals/CreateAffiliateModal/index.tsx:28
 #: src/components/modals/EditAffiliateModal/index.tsx:33
 #: src/components/routes/admin/Configurations/index.tsx:167
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:77
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:34
 msgid "Name is required"
 msgstr "必須填寫名稱"
 
@@ -9293,6 +10086,10 @@ msgstr "導航至與會者"
 msgid "Need to switch Stripe accounts? Disconnect this one."
 msgstr "需要更換 Stripe 帳戶？中斷此帳戶。"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:108
+msgid "Needs a title or at least one person"
+msgstr "需要標題或至少一位人員"
+
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:85
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:36
 msgid "Net Revenue"
@@ -9304,6 +10101,10 @@ msgstr "淨收入"
 #: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:149
 msgid "Never"
 msgstr "從不"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
+msgid "New"
+msgstr "新增"
 
 #: src/components/routes/admin/Dashboard/index.tsx:242
 msgid "New accounts"
@@ -9353,9 +10154,26 @@ msgstr "新密碼"
 msgid "New PIN"
 msgstr "新 PIN 碼"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:180
+#: src/components/routes/organizer/People/index.tsx:81
+msgid "New profile"
+msgstr "新增檔案"
+
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:143
+msgid "New profile, saved for future events"
+msgstr "新簡介，會儲存以供日後活動使用"
+
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:193
 msgid "New sale"
 msgstr "新銷售"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:533
+msgid "new stages or rooms"
+msgstr "個新舞台或房間"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:139
+msgid "New time slot"
+msgstr "新增時段"
 
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:53
 msgid "New time:"
@@ -9373,6 +10191,10 @@ msgstr "下一步"
 msgid "Next attendee"
 msgstr "下一位參加者"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:115
+msgid "Next day"
+msgstr "後一天"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:431
 msgid "Next month"
 msgstr "下個月"
@@ -9380,6 +10202,10 @@ msgstr "下個月"
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:162
 msgid "Next occurrence"
 msgstr "下一場次"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:111
+msgid "Next photo"
+msgstr "下一張相片"
 
 #: src/components/modals/CreateEventModal/index.tsx:475
 msgid "Next, you'll add tickets and set up your event page."
@@ -9511,6 +10337,10 @@ msgstr "未及時出示卡片"
 #: src/components/common/KpiGrid/index.tsx:58
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:215
 msgid "No change"
+msgstr "沒有變更"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:127
+msgid "No changes"
 msgstr "沒有變更"
 
 #: src/components/common/CheckInListList/index.tsx:45
@@ -9766,7 +10596,7 @@ msgstr "沒有其他可用的主辦單位"
 msgid "No Paid Orders"
 msgstr "無付費訂單"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:347
+#: src/components/layouts/OrganizerHomepage/index.tsx:241
 msgid "No past events"
 msgstr "沒有過往活動"
 
@@ -9782,6 +10612,11 @@ msgstr "無需支付"
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:124
 msgid "No payment will be recorded. The tickets are issued free of charge and the order total becomes zero."
 msgstr "不會記錄任何付款。門票免費發放，訂單總額變為零。"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:104
+#: src/components/routes/organizer/People/index.tsx:166
+msgid "No photo"
+msgstr "沒有相片"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:100
 msgid "No PIN"
@@ -9810,6 +10645,10 @@ msgstr "無產品訊息"
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:40
 msgid "No Products Yet"
 msgstr "尚無產品"
+
+#: src/components/routes/organizer/People/index.tsx:133
+msgid "No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page."
+msgstr "尚未有簡介。可在此建立，或直接在活動的「陣容與時間表」頁面新增人員。"
 
 #: src/components/common/PromoCodeTable/index.tsx:48
 msgid "No Promo Codes to show"
@@ -9886,6 +10725,16 @@ msgstr "沒有搜索結果。"
 msgid "No seat maps yet"
 msgstr "尚無座位圖"
 
+#: src/components/routes/event/Lineup/AgendaList.tsx:88
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:63
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:164
+msgid "No stage"
+msgstr "沒有舞台"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:55
+msgid "No stage or room"
+msgstr "無舞台或房間"
+
 #: src/components/common/AddressAutocomplete/index.tsx:99
 #: src/components/common/LocationPicker/index.tsx:338
 msgid "No suggestions"
@@ -9911,11 +10760,19 @@ msgstr "暫無可關聯的票種"
 msgid "No tickets to sell"
 msgstr "沒有可售門票"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
+msgid "No time slots yet."
+msgstr "暫無時段。"
+
+#: src/components/routes/event/Lineup/AgendaList.tsx:34
+msgid "No time slots yet. Add one here or drag someone onto the timetable."
+msgstr "尚未有時段。可在此新增，或將人員拖到時間表上。"
+
 #: src/components/common/EventDateRange/index.tsx:68
 msgid "No upcoming dates"
 msgstr "沒有即將舉行的日期"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:347
+#: src/components/layouts/OrganizerHomepage/index.tsx:241
 msgid "No upcoming events"
 msgstr "沒有即將舉行的活動"
 
@@ -9941,6 +10798,31 @@ msgstr "沒有 Webhooks"
 msgid "No, keep me here"
 msgstr "否，保留在此"
 
+#: src/components/routes/event/Lineup/index.tsx:249
+msgid "Nobody has been added to this event's lineup yet."
+msgstr "此活動的陣容尚未加入任何人。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
+msgid "Nobody is on the lineup yet, or everyone is hidden."
+msgstr "陣容中尚未有人，或所有人都已隱藏。"
+
+#: src/components/routes/organizer/People/index.tsx:134
+msgid "Nobody matches these filters."
+msgstr "沒有符合篩選條件的人員。"
+
+#: src/components/routes/event/Lineup/PeopleRail.tsx:77
+msgid "Nobody on the lineup yet."
+msgstr "陣容中尚未有人。"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:28
+#: src/components/routes/event/Lineup/LineupStats.tsx:34
+msgid "Nobody yet"
+msgstr "暫無人員"
+
+#: src/components/routes/event/Lineup/PeopleRail.tsx:77
+msgid "Nobody yet. Search your saved profiles or type a new name above."
+msgstr "暫無人員。搜尋已儲存的簡介，或在上方輸入新名字。"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:294
 msgid "non-edited"
 msgstr "未編輯"
@@ -9959,6 +10841,7 @@ msgid "None (cash only)"
 msgstr "無（僅現金）"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:29
+#: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "None yet"
 msgstr "暫時未有"
 
@@ -10001,13 +10884,26 @@ msgstr "尚未加入"
 msgid "Not now, log out"
 msgstr "暫不設定,登出"
 
+#: src/components/routes/organizer/People/index.tsx:70
+#: src/components/routes/organizer/People/index.tsx:172
+msgid "Not on any event"
+msgstr "未出現在任何活動"
+
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:26
 msgid "Not on sale yet"
 msgstr "尚未開售"
 
+#: src/components/routes/event/Lineup/PeopleRail.tsx:167
+msgid "Not scheduled"
+msgstr "未安排"
+
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:202
 msgid "Not selling as {signedInName}?"
 msgstr "唔係以 {signedInName} 嘅身份售票？"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:251
+msgid "Not shown yet."
+msgstr "尚未顯示。"
 
 #: src/ee/seating/components/SeatPicker/Basket.tsx:59
 msgid "Not sure where to sit?"
@@ -10032,8 +10928,21 @@ msgstr "向買家顯示的説明"
 #: src/components/modals/ManageAttendeeModal/index.tsx:271
 #: src/components/modals/ManageOrderModal/index.tsx:281
 #: src/components/modals/ManageOrderModal/index.tsx:311
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:139
 msgid "Notes"
 msgstr "備註"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:96
+msgid "Nothing has been scheduled yet."
+msgstr "尚未安排任何內容。"
+
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:149
+msgid "Nothing is scheduled on {filteredSpaceName} this day."
+msgstr "當日 {filteredSpaceName} 沒有安排。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:325
+msgid "Nothing new to import"
+msgstr "沒有可匯入的新內容"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:153
 msgid "Nothing to print yet"
@@ -10101,7 +11010,7 @@ msgstr "場次"
 msgid "Occurrence Cancelled"
 msgstr "場次已取消"
 
-#: src/components/layouts/Event/index.tsx:127
+#: src/components/layouts/Event/index.tsx:128
 #: src/components/routes/event/OccurrencesTab/index.tsx:499
 msgid "Occurrence Schedule"
 msgstr "場次排程"
@@ -10116,7 +11025,7 @@ msgstr "場次概覽"
 msgid "Occurrences"
 msgstr "場次"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:59
+#: src/components/modals/DuplicateEventModal/index.tsx:61
 msgid "Occurrences (future only)"
 msgstr "場次（只限日後）"
 
@@ -10238,6 +11147,14 @@ msgstr "於{dayList}"
 msgid "on {month} {day}"
 msgstr "於{month}{day}日"
 
+#: src/components/routes/organizer/People/index.tsx:68
+msgid "On live events"
+msgstr "於已上線的活動"
+
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:228
+msgid "On now"
+msgstr "進行中"
+
 #: src/components/common/EventCard/index.tsx:104
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:140
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:32
@@ -10319,7 +11236,7 @@ msgstr "網上 — 請填寫連線資料"
 msgid "Online & in-person"
 msgstr "網上及實體"
 
-#: src/components/layouts/EventHomepage/index.tsx:183
+#: src/components/layouts/EventHomepage/index.tsx:186
 msgid "Online & in-person — see schedule"
 msgstr "網上及實體 — 詳見排程"
 
@@ -10328,7 +11245,7 @@ msgstr "網上及實體 — 詳見排程"
 msgid "Online event"
 msgstr "網上活動"
 
-#: src/components/layouts/EventHomepage/index.tsx:414
+#: src/components/layouts/EventHomepage/index.tsx:648
 #: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:168
 msgid "Online Event"
 msgstr "線上活動"
@@ -10376,6 +11293,10 @@ msgstr "只作附加產品提供"
 #: src/components/routes/admin/Announcements/index.tsx:470
 msgid "Only published announcements are shown to users"
 msgstr "只有已發佈的公告才會向用戶顯示"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:580
+msgid "Only rows to fix"
+msgstr "只顯示需修正的行"
 
 #: src/components/modals/SendMessageModal/index.tsx:423
 msgid "Only send to orders with these statuses"
@@ -10449,6 +11370,7 @@ msgstr "開啟簽到頁面"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:238
 #: src/components/routes/admin/SpamEvents/index.tsx:365
+#: src/components/routes/event/Lineup/index.tsx:351
 msgid "Open event page"
 msgstr "開啟活動頁面"
 
@@ -10456,9 +11378,17 @@ msgstr "開啟活動頁面"
 msgid "Open occurrence"
 msgstr "開啟場次"
 
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:36
+msgid "Open photo {photoNumber}"
+msgstr "開啟相片 {photoNumber}"
+
 #: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "打開側邊欄"
+
+#: src/components/routes/event/Lineup/index.tsx:343
+msgid "Open timetable"
+msgstr "開啟時間表"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:154
 msgid "Open your authenticator app, tap the + button and scan the code."
@@ -10471,6 +11401,10 @@ msgstr "已開啟"
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
 msgstr "方案 {i}"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:46
+msgid "Optional"
+msgstr "選填"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:263
 msgid "Optional additional information to appear on all invoices (e.g., payment terms, late payment fees, return policy)"
@@ -10488,9 +11422,17 @@ msgstr "在選擇器中顯示的可選暱稱，例如\"總部會議室\""
 msgid "Optional prefix for invoice numbers (e.g., INV-)"
 msgstr "發票編號的可選前綴（例如，INV-）"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:152
+msgid "Optional when someone from the lineup is picked"
+msgstr "從陣容中選擇人員時可選填"
+
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:50
 msgid "Optional, kept on the deletion record"
 msgstr "可選，將保存在刪除記錄中"
+
+#: src/components/routes/event/Lineup/index.tsx:336
+msgid "Optional. Useful when things happen in more than one place at the same time."
+msgstr "選填。適用於同一時間在多個地點進行的活動。"
 
 #: src/components/common/QuestionsTable/index.tsx:132
 msgid "options"
@@ -10503,6 +11445,10 @@ msgstr "選項"
 #: src/components/routes/event/OccurrencesTab/index.tsx:658
 msgid "or add a single date"
 msgstr "或新增單一日期"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:437
+msgid "Or copy rows, headers included, from Google Sheets or Excel and paste them here."
+msgstr "或從 Google Sheets 或 Excel 複製行（包括標題列）並貼上到此處。"
 
 #: src/components/modals/PublishEventModal/index.tsx:85
 msgid "Or enable offline payments and disable Stripe"
@@ -10690,7 +11636,7 @@ msgstr "張訂單"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
 #: src/components/layouts/Admin/index.tsx:21
-#: src/components/layouts/Event/index.tsx:140
+#: src/components/layouts/Event/index.tsx:142
 #: src/components/modals/ManageOccurrenceModal/index.tsx:181
 #: src/components/routes/admin/Attribution/index.tsx:200
 #: src/components/routes/admin/Dashboard/index.tsx:236
@@ -10744,12 +11690,13 @@ msgstr "組織名稱"
 #: src/components/common/AdminEventsTable/index.tsx:89
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
-#: src/components/layouts/EventHomepage/index.tsx:598
+#: src/components/layouts/EventHomepage/index.tsx:344
 #: src/components/modals/CreateEventModal/index.tsx:269
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
 #: src/components/routes/events/Dashboard/index.tsx:198
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:368
+#: src/utilites/homepageSections.ts:26
 msgid "Organizer"
 msgstr "主辦方"
 
@@ -10757,8 +11704,8 @@ msgstr "主辦方"
 msgid "Organizer archived successfully"
 msgstr "主辦方已成功封存"
 
-#: src/components/layouts/Event/index.tsx:107
-#: src/components/layouts/OrganizerLayout/index.tsx:99
+#: src/components/layouts/Event/index.tsx:108
+#: src/components/layouts/OrganizerLayout/index.tsx:100
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:158
 msgid "Organizer Dashboard"
 msgstr "主辦單位儀表板"
@@ -10767,7 +11714,7 @@ msgstr "主辦單位儀表板"
 msgid "Organizer deleted successfully"
 msgstr "主辦方已成功刪除"
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:103
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:127
 msgid "Organizer Homepage Preview"
 msgstr "主辦方主頁預覽"
 
@@ -10788,17 +11735,21 @@ msgstr "組織者收款設定"
 msgid "Organizer restored successfully"
 msgstr "主辦方已成功還原"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:50
+msgid "Organizer settings"
+msgstr "主辦方設定"
+
 #: src/components/routes/organizer/Settings/index.tsx:170
 msgid "Organizer Settings"
 msgstr "主辦單位設定"
 
 #: src/components/common/StatusToggle/index.tsx:63
-#: src/components/layouts/OrganizerLayout/index.tsx:171
+#: src/components/layouts/OrganizerLayout/index.tsx:173
 msgid "Organizer status update failed. Please try again later"
 msgstr "更新主辦單位狀態失敗。請稍後再試。"
 
 #: src/components/common/StatusToggle/index.tsx:55
-#: src/components/layouts/OrganizerLayout/index.tsx:168
+#: src/components/layouts/OrganizerLayout/index.tsx:170
 msgid "Organizer status updated"
 msgstr "主辦單位狀態已更新"
 
@@ -10862,7 +11813,7 @@ msgstr "個別設定已移除"
 msgid "Override the global default for this account."
 msgstr "為此帳戶覆寫全域預設值。"
 
-#: src/components/layouts/Event/index.tsx:113
+#: src/components/layouts/Event/index.tsx:114
 msgid "Overview"
 msgstr "總覽"
 
@@ -10871,7 +11822,7 @@ msgstr "總覽"
 msgid "Owner"
 msgstr "擁有者"
 
-#: src/components/common/WidgetEditor/index.tsx:227
+#: src/components/common/WidgetEditor/index.tsx:231
 msgid "Padding"
 msgstr "內邊距"
 
@@ -10987,7 +11938,7 @@ msgstr "密碼重置成功。請使用新密碼登錄。"
 msgid "Passwords are not the same"
 msgstr "密碼不一樣"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:338
+#: src/components/layouts/OrganizerHomepage/index.tsx:231
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
 msgid "Past"
@@ -10997,13 +11948,35 @@ msgstr "過去"
 msgid "Past due"
 msgstr "已逾期"
 
-#: src/components/common/WidgetEditor/index.tsx:272
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
+#: src/utilites/homepageSections.ts:32
+msgid "Past events"
+msgstr "往期活動"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:440
+msgid "Paste"
+msgstr "貼上"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:209
+msgid "Paste a YouTube or Vimeo link"
+msgstr "貼上 YouTube 或 Vimeo 連結"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:78
+msgid "Paste a YouTube or Vimeo link below."
+msgstr "請在下方貼上 YouTube 或 Vimeo 連結。"
+
+#: src/components/common/WidgetEditor/index.tsx:282
 msgid "Paste this where you want the widget to appear."
 msgstr "將此貼上到您希望小工具顯示的位置。"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:111
 msgid "Paste URL"
 msgstr "貼上網址"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:240
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:240
+msgid "Pasted rows"
+msgstr "貼上的行"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:215
 msgid "Patrick"
@@ -11134,7 +12107,7 @@ msgid "Pending review"
 msgstr "等待審核"
 
 #: src/components/common/EventCard/index.tsx:96
-#: src/components/layouts/Event/index.tsx:244
+#: src/components/layouts/Event/index.tsx:246
 #: src/components/routes/admin/Messages/index.tsx:124
 msgid "Pending Review"
 msgstr "待審核"
@@ -11142,6 +12115,32 @@ msgstr "待審核"
 #: src/components/common/EventStatusBadge/index.tsx:31
 msgid "PENDING REVIEW"
 msgstr "等待審核"
+
+#: src/components/layouts/OrganizerLayout/index.tsx:120
+#: src/components/routes/organizer/People/index.tsx:77
+msgid "People"
+msgstr "人員"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:89
+msgctxt "Lineup spreadsheet column"
+msgid "People"
+msgstr "人員"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:575
+msgid "People ({peopleRowCount})"
+msgstr "人員（{peopleRowCount}）"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:449
+msgid "People are matched by name, so existing profiles are updated rather than duplicated."
+msgstr "人員按姓名配對，因此現有檔案會被更新而不會重複建立。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:448
+msgid "People sheet"
+msgstr "人員工作表"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:529
+msgid "people to add"
+msgstr "位待新增人員"
 
 #: src/components/common/QuestionsTable/index.tsx:325
 msgid "Per Attendee"
@@ -11252,9 +12251,35 @@ msgstr "個人資料"
 msgid "Phone"
 msgstr "電話"
 
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:68
+msgid "Photo {photoNumber}"
+msgstr "相片 {photoNumber}"
+
+#: src/utilites/homepageSections.ts:36
+msgid "Photo gallery"
+msgstr "相片集"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:86
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:229
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:327
+msgid "Photos"
+msgstr "相片"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:72
+msgid "Pick a date"
+msgstr "選擇日期"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:73
+msgid "Pick a start time"
+msgstr "選擇開始時間"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:532
 msgid "Pick an end date"
 msgstr "選擇結束日期"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:76
+msgid "Pick an end time"
+msgstr "選擇結束時間"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:540
 msgid "Pick at least one day of the month"
@@ -11295,7 +12320,7 @@ msgstr "Pinterest"
 msgid "Place tables"
 msgstr "放置桌子"
 
-#: src/components/common/WidgetEditor/index.tsx:259
+#: src/components/common/WidgetEditor/index.tsx:269
 msgid "Place this in the <head> of your website."
 msgstr "將此放置在您網站的 <head> 中。"
 
@@ -11337,6 +12362,14 @@ msgstr "平台費用"
 msgid "Platform Fees Report"
 msgstr "平台費用報告"
 
+#: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:66
+msgid "Play on {service}"
+msgstr "在 {service} 播放"
+
+#: src/components/layouts/EventHomepage/Sections/VideoSection.tsx:65
+msgid "Plays from {provider}"
+msgstr "由 {provider} 播放"
+
 #: src/components/forms/QuestionForm/index.tsx:31
 msgid "Please add at least one option"
 msgstr "請至少添加一個選項"
@@ -11363,7 +12396,7 @@ msgstr "請檢查您的電子郵件以確認您的電子郵件地址"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "請查看門票上的最新時間。你的門票仍然有效 — 除非新時間不合適，否則毋須任何操作。如有疑問，請直接回覆此電郵。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1259
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1261
 msgid "Please continue in the new tab"
 msgstr "請在新標籤頁中繼續"
 
@@ -11417,7 +12450,7 @@ msgstr "請重新開始結賬流程。"
 msgid "Please return to the event page to start over."
 msgstr "請返回活動頁面重新開始。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:736
+#: src/components/routes/product-widget/SelectProducts/index.tsx:738
 msgid "Please select a date and time"
 msgstr "請選擇日期和時間"
 
@@ -11429,7 +12462,7 @@ msgstr "請選擇日期範圍"
 msgid "Please select an image."
 msgstr "請選擇圖片。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:764
+#: src/components/routes/product-widget/SelectProducts/index.tsx:766
 msgid "Please select at least one product"
 msgstr "請選擇至少一個產品"
 
@@ -11516,6 +12549,7 @@ msgstr "透過在多種門票類型之間共享庫存來防止超賣。"
 #: src/components/common/DesignerShell/index.tsx:103
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
 #: src/components/routes/admin/Announcements/index.tsx:495
+#: src/components/routes/event/Lineup/index.tsx:217
 msgid "Preview"
 msgstr "預覽"
 
@@ -11523,8 +12557,8 @@ msgstr "預覽"
 msgid "Preview checkout form"
 msgstr "預覽結帳表單"
 
-#: src/components/layouts/Event/index.tsx:306
-#: src/components/layouts/Event/index.tsx:310
+#: src/components/layouts/Event/index.tsx:308
+#: src/components/layouts/Event/index.tsx:312
 msgid "Preview Event page"
 msgstr "預覽活動頁面"
 
@@ -11532,9 +12566,17 @@ msgstr "預覽活動頁面"
 msgid "Preview with sample data"
 msgstr "使用範例資料預覽"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/index.tsx:88
+msgid "Previous day"
+msgstr "前一天"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:422
 msgid "Previous month"
 msgstr "上個月"
+
+#: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:108
+msgid "Previous photo"
+msgstr "上一張相片"
 
 #: src/components/common/AttendeeTicket/index.tsx:137
 #: src/components/common/ProductsTable/index.tsx:93
@@ -11583,15 +12625,16 @@ msgstr "價格等級"
 msgid "Pricing"
 msgstr "定價"
 
-#: src/components/common/WidgetEditor/index.tsx:187
+#: src/components/common/WidgetEditor/index.tsx:191
 msgid "Primary Color"
 msgstr "主色調"
 
-#: src/components/common/WidgetEditor/index.tsx:193
+#: src/components/common/WidgetEditor/index.tsx:197
 msgid "Primary Text Color"
 msgstr "主要文字顏色"
 
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:89
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:86
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
 msgid "Print"
 msgstr "列印"
@@ -11625,13 +12668,17 @@ msgstr "打印票"
 msgid "Print to PDF"
 msgstr "列印為PDF"
 
+#: src/components/routes/event/Lineup/index.tsx:150
+msgid "Printable run sheet"
+msgstr "可列印的流程表"
+
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:206
 msgid "Printed {0}"
 msgstr "列印於 {0}"
 
 #: src/components/common/CookieConsentBanner/index.tsx:82
-#: src/components/layouts/EventHomepage/index.tsx:702
-#: src/components/layouts/OrganizerHomepage/index.tsx:394
+#: src/components/layouts/EventHomepage/index.tsx:726
+#: src/components/layouts/OrganizerHomepage/index.tsx:199
 msgid "Privacy Policy"
 msgstr "私隱政策"
 
@@ -11717,7 +12764,7 @@ msgid "Product(s)"
 msgstr "產品"
 
 #: src/components/common/PromoCodeTable/index.tsx:74
-#: src/components/modals/DuplicateEventModal/index.tsx:49
+#: src/components/modals/DuplicateEventModal/index.tsx:50
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:420
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:58
 msgid "Products"
@@ -11738,19 +12785,36 @@ msgstr "已售產品"
 msgid "Products sorted successfully"
 msgstr "產品排序成功"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/profile/ManageProfile/index.tsx:131
 msgid "Profile"
 msgstr "簡介"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:121
+msgid "Profile created. You can add photos now."
+msgstr "簡介已建立，現在可以新增相片。"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:155
+msgid "Profile deleted"
+msgstr "檔案已刪除"
 
 #: src/components/routes/profile/ManageProfile/index.tsx:81
 msgid "Profile updated successfully"
 msgstr "成功更新個人資料"
 
+#: src/components/routes/organizer/People/index.tsx:67
+msgid "Profiles"
+msgstr "簡介"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:273
+msgid "Profiles belong to the organizer. You need access to the organizer to edit them."
+msgstr "檔案屬於主辦方。你需要擁有該主辦方的存取權限才能編輯。"
+
 #: src/components/common/CheckIn/CheckInInfoModal.tsx:47
 msgid "Progress"
 msgstr "進度"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:646
+#: src/components/routes/product-widget/SelectProducts/index.tsx:648
 msgid "Promo {promo_code} code applied"
 msgstr "已使用促銷 {promo_code} 代碼"
 
@@ -11787,8 +12851,8 @@ msgstr "優惠碼"
 msgid "Promo codes"
 msgstr "優惠碼"
 
-#: src/components/layouts/Event/index.tsx:141
-#: src/components/modals/DuplicateEventModal/index.tsx:52
+#: src/components/layouts/Event/index.tsx:143
+#: src/components/modals/DuplicateEventModal/index.tsx:53
 #: src/components/routes/event/promo-codes.tsx:34
 msgid "Promo Codes"
 msgstr "促銷代碼"
@@ -11910,6 +12974,11 @@ msgstr "可用數量"
 msgid "Quantity this date"
 msgstr "此日期數量"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:125
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:142
+msgid "Question {number}"
+msgstr "問題 {number}"
+
 #: src/components/forms/CheckInListForm/index.tsx:205
 msgid "Question answers"
 msgstr "問題回答"
@@ -11926,7 +12995,8 @@ msgstr "問題描述"
 msgid "Question Title"
 msgstr "問題標題"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:50
+#: src/components/layouts/EventHomepage/Sections/FaqSection.tsx:17
+#: src/components/modals/DuplicateEventModal/index.tsx:51
 msgid "Questions"
 msgstr "問題"
 
@@ -11934,6 +13004,10 @@ msgstr "問題"
 #: src/components/modals/ManageOrderModal/index.tsx:328
 msgid "Questions & Answers"
 msgstr "問與答"
+
+#: src/utilites/homepageSections.ts:53
+msgid "Questions and answers people can expand."
+msgstr "可展開查看的問與答。"
 
 #: src/components/common/QuestionsTable/index.tsx:192
 msgid "Questions reordered"
@@ -11976,13 +13050,17 @@ msgstr "重新啟用"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "重新啟用此日期？它會重新開放售票。"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:314
+#: src/components/layouts/OrganizerHomepage/index.tsx:460
 msgid "Read more"
 msgstr "閱讀更多"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
 msgstr "讀卡機不可用"
+
+#: src/components/routes/organizer/People/index.tsx:70
+msgid "Ready to add to a lineup"
+msgstr "可加入陣容"
 
 #: src/components/modals/PublishEventModal/index.tsx:147
 msgid "Ready to go live?"
@@ -12236,7 +13314,7 @@ msgid "Register"
 msgstr "註冊"
 
 #: src/components/common/QuestionsTable/index.tsx:423
-#: src/components/layouts/Event/index.tsx:135
+#: src/components/layouts/Event/index.tsx:137
 msgid "Registration Questions"
 msgstr "註冊問題"
 
@@ -12266,7 +13344,7 @@ msgstr "餘下"
 msgid "Remaining Uses"
 msgstr "剩餘使用次數"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1166
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1168
 msgid "remove"
 msgstr "去除"
 
@@ -12275,7 +13353,11 @@ msgstr "去除"
 #: src/components/common/TeamAccessPanel/index.tsx:165
 #: src/components/common/WaitlistTable/index.tsx:81
 #: src/components/common/WaitlistTable/index.tsx:117
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1167
+#: src/components/routes/event/Lineup/LineupPreview.tsx:81
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:148
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:135
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:208
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1169
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
@@ -12288,6 +13370,14 @@ msgstr "移除 {0}"
 #: src/components/common/TeamAccessPanel/index.tsx:78
 msgid "Remove {0}'s access here?"
 msgstr "移除 {0} 在此處的存取權限？"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:76
+msgid "Remove {name} from this event's lineup? Their profile stays saved for other events."
+msgstr "要將 {name} 從此活動陣容中移除嗎？其檔案仍會保留，可用於其他活動。"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:140
+msgid "Remove {profileName} from this event's lineup? Their profile stays saved for other events."
+msgstr "要將 {profileName} 從此活動陣容中移除嗎？其檔案仍會保留，可用於其他活動。"
 
 #: src/components/common/TeamAccessPanel/index.tsx:80
 msgid "Remove access"
@@ -12309,13 +13399,25 @@ msgstr "移除描述"
 msgid "Remove discount"
 msgstr "移除折扣"
 
+#: src/components/routes/event/Lineup/LineupPreview.tsx:135
+msgid "Remove from lineup"
+msgstr "從陣容中移除"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:303
 msgid "Remove from map"
 msgstr "從地圖中移除"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
+msgid "Remove from this lineup"
+msgstr "從此陣容中移除"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
 msgstr "從所有日期移除標籤"
+
+#: src/components/routes/event/Lineup/ProfileLinksField.tsx:46
+msgid "Remove link"
+msgstr "移除連結"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:75
 msgid "Remove one"
@@ -12329,6 +13431,15 @@ msgstr "移除覆寫"
 msgid "Remove overrides for this date"
 msgstr "移除此日期的覆寫設定"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:250
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:181
+msgid "Remove photo"
+msgstr "移除相片"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:132
+msgid "Remove question"
+msgstr "移除問題"
+
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:96
 msgid "Remove seat {0}"
 msgstr "移除座位 {0}"
@@ -12337,9 +13448,17 @@ msgstr "移除座位 {0}"
 msgid "Remove seat map"
 msgstr "移除座位圖"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:292
+msgid "Remove section"
+msgstr "移除區塊"
+
 #: src/components/routes/event/Settings/Sections/RecurringEventSettings/index.tsx:67
 msgid "Remove sold out dates and times from the event page entirely. When disabled, they remain visible and are labelled as sold out."
 msgstr "從活動頁面完全移除已售罄的日期和時間。停用時，它們仍然可見並標示為已售罄。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:307
+msgid "Remove sponsor"
+msgstr "移除贊助商"
 
 #: src/ee/seating/components/routes/event/Seating/index.tsx:54
 msgid "Remove the seat map from this event? Tickets go back to being sold by quantity."
@@ -12349,9 +13468,18 @@ msgstr "從此活動中移除座位圖?門票將恢復按數量銷售。"
 msgid "Remove this card reader? Staff using it will be asked to pick another reader or take cash. You can pair it again later."
 msgstr "移除此讀卡機？正在使用的工作人員將需要選擇其他讀卡機或收現金。以後可以重新配對。"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:127
+msgid "Remove this time slot from the schedule?"
+msgstr "要從時間表中移除此時段嗎？"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1033
 msgid "Remove time"
 msgstr "移除時間"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:78
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:143
+msgid "Removed from the lineup"
+msgstr "已從陣容中移除"
 
 #: src/ee/seating/components/routes/event/SeatMapDesigner/index.tsx:72
 msgid "Rename and save"
@@ -12378,6 +13506,10 @@ msgstr "重新發售此日期？之前已取消的門票不會回復 — 受影�
 msgid "Repeat"
 msgstr "重複"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:129
+msgid "Repeated"
+msgstr "重複"
+
 #: src/components/modals/CreateEventModal/index.tsx:225
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:887
 msgid "Repeats"
@@ -12387,8 +13519,8 @@ msgstr "重複"
 msgid "Report not found"
 msgstr "未找到報告"
 
-#: src/components/layouts/Event/index.tsx:117
-#: src/components/layouts/OrganizerLayout/index.tsx:105
+#: src/components/layouts/Event/index.tsx:118
+#: src/components/layouts/OrganizerLayout/index.tsx:106
 #: src/components/routes/event/Reports/index.tsx:53
 #: src/components/routes/organizer/Reports/index.tsx:53
 msgid "Reports"
@@ -12448,11 +13580,11 @@ msgstr "重新發送驗證碼"
 msgid "Resend Confirmation"
 msgstr "重新發送確認"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:323
+#: src/components/layouts/OrganizerLayout/index.tsx:325
 msgid "Resend Confirmation Email"
 msgstr "重新發送確認電郵"
 
-#: src/components/layouts/Event/index.tsx:326
+#: src/components/layouts/Event/index.tsx:328
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:162
 msgid "Resend email"
 msgstr "重新發送電郵"
@@ -12690,6 +13822,12 @@ msgstr "右翼"
 
 #: src/components/common/TeamAccessFields/index.tsx:175
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:196
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:254
+msgid "Role"
+msgstr "角色"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:75
+msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "角色"
 
@@ -12721,9 +13859,21 @@ msgstr "行間距"
 msgid "Rows"
 msgstr "行"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:535
+msgid "rows to fix"
+msgstr "行需修正"
+
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:32
 msgid "Rules saved"
 msgstr "規則已儲存"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:92
+msgid "Run sheet"
+msgstr "流程表"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:60
+msgid "Run sheet · {eventTitle}"
+msgstr "流程表 · {eventTitle}"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1055
 msgid "Runs"
@@ -12802,7 +13952,7 @@ msgstr "銷售已暫停"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:24
 #: src/components/common/ProductPriceAvailability/index.tsx:63
-#: src/components/layouts/EventHomepage/index.tsx:197
+#: src/components/layouts/EventHomepage/index.tsx:200
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:33
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 msgid "Sales ended"
@@ -12850,6 +14000,10 @@ msgstr "銷售額："
 msgid "Same as event"
 msgstr "與活動相同"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:82
+msgid "Same as the event"
+msgstr "與活動相同"
+
 #: src/components/common/PlatformFeesSettings/index.tsx:175
 msgid "Sample ticket price"
 msgstr "示例票價"
@@ -12871,6 +14025,7 @@ msgstr "星期六"
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:119
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:96
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -12899,6 +14054,7 @@ msgid "Save Box Office"
 msgstr "儲存售票處"
 
 #: src/components/modals/EditUserModal/index.tsx:102
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
 msgid "Save changes"
 msgstr "儲存變更"
 
@@ -12941,6 +14097,10 @@ msgstr "儲存日程"
 msgid "Save Settings"
 msgstr "保存設置"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:213
+msgid "Save slot"
+msgstr "儲存時段"
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:257
 msgid "Save Social Links"
 msgstr "儲存社交連結"
@@ -12965,6 +14125,15 @@ msgstr "儲存增值稅設定"
 msgid "Save your recovery codes"
 msgstr "儲存你的復原碼"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
+msgid "Saved"
+msgstr "已儲存"
+
+#: src/components/routes/organizer/People/index.tsx:67
+msgid "Saved for this organizer"
+msgstr "已為此主辦方儲存"
+
 #: src/components/common/LocationPicker/index.tsx:183
 msgid "Saved location"
 msgstr "已儲存的地點"
@@ -12972,6 +14141,18 @@ msgstr "已儲存的地點"
 #: src/components/common/LocationPicker/index.tsx:314
 msgid "Saved locations"
 msgstr "已儲存的地點"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:123
+msgid "Saved profile"
+msgstr "已儲存的檔案"
+
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:114
+msgid "Saved profiles"
+msgstr "已儲存的簡介"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:167
+msgid "Saved to this organizer so you can reuse it at any event"
+msgstr "已儲存至此主辦單位，可在任何活動中重用"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:157
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
@@ -13005,8 +14186,16 @@ msgid "Scenarios"
 msgstr "情境範例"
 
 #: src/components/routes/event/EventDashboard/UpcomingOccurrences/index.tsx:73
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:59
+#: src/utilites/homepageSections.ts:22
+#: src/utilites/lineup.ts:34
+#: src/utilites/lineup.ts:36
 msgid "Schedule"
 msgstr "排程"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:574
+msgid "Schedule ({slotRowCount})"
+msgstr "日程（{slotRowCount}）"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:105
 msgid "Schedule added"
@@ -13041,12 +14230,17 @@ msgstr "日程預覽"
 msgid "Schedule set up next"
 msgstr "下一步設定時間表"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:446
+msgid "Schedule sheet"
+msgstr "日程工作表"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1071
 msgid "Schedule starts on"
 msgstr "排程開始於"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:131
 #: src/components/routes/admin/Messages/index.tsx:125
+#: src/components/routes/event/Lineup/LineupStats.tsx:32
 #: src/components/routes/event/messages.tsx:63
 msgid "Scheduled"
 msgstr "已排程"
@@ -13115,6 +14309,10 @@ msgstr "按名稱或電郵搜尋並選擇一個或多個"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:80
 msgid "Search by name or email..."
 msgstr "按姓名或電子郵件搜尋..."
+
+#: src/components/routes/organizer/People/index.tsx:106
+msgid "Search by name or tagline"
+msgstr "按名稱或標語搜尋"
 
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/OrdersTab.tsx:55
 msgid "Search by name, email or order number"
@@ -13197,6 +14395,10 @@ msgstr "搜尋結果"
 msgid "Search saved locations or find an address..."
 msgstr "搜尋已儲存的地點或尋找地址..."
 
+#: src/components/routes/event/Lineup/index.tsx:330
+msgid "Search your saved profiles or type a new name in the {lineupLabel} panel. Add a photo, bio and links to each."
+msgstr "搜尋已儲存的簡介，或在{lineupLabel}面板輸入新名字。可為每人新增相片、簡介和連結。"
+
 #: src/components/common/SearchBar/index.tsx:35
 msgid "Search..."
 msgstr "搜索..."
@@ -13264,7 +14466,7 @@ msgstr "座位圖已儲存"
 msgid "Seat map updated"
 msgstr "座位圖已更新"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:119
+#: src/components/layouts/OrganizerLayout/index.tsx:121
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:142
 msgid "Seat Maps"
 msgstr "座位圖"
@@ -13295,7 +14497,7 @@ msgstr "座位間距"
 msgid "Seated"
 msgstr "對號入座"
 
-#: src/components/layouts/Event/index.tsx:134
+#: src/components/layouts/Event/index.tsx:136
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:40
 #: src/ee/seating/components/routes/event/Seating/index.tsx:62
 #: src/ee/seating/components/routes/event/Seating/index.tsx:67
@@ -13348,11 +14550,11 @@ msgstr "座位：{seatList}"
 msgid "Second"
 msgstr "第二個"
 
-#: src/components/common/WidgetEditor/index.tsx:199
+#: src/components/common/WidgetEditor/index.tsx:203
 msgid "Secondary Color"
 msgstr "次要顏色"
 
-#: src/components/common/WidgetEditor/index.tsx:205
+#: src/components/common/WidgetEditor/index.tsx:209
 msgid "Secondary Text Color"
 msgstr "次要文字顏色"
 
@@ -13363,6 +14565,15 @@ msgstr "分區"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:42
 msgid "Section name"
 msgstr "分區名稱"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:240
+msgid "Section settings"
+msgstr "區塊設定"
+
+#: src/components/routes/event/HomepageDesigner/index.tsx:147
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
+msgid "Sections"
+msgstr "區塊"
 
 #: src/components/common/InlineOrderSummary/index.tsx:243
 msgid "Secure Checkout"
@@ -13376,11 +14587,15 @@ msgstr "保護你的賬户"
 msgid "Security"
 msgstr "保安"
 
+#: src/components/routes/product-widget/SelectProducts/WidgetLineupStrip.tsx:43
+msgid "See all"
+msgstr "查看全部"
+
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:129
 msgid "See all prices"
 msgstr "查看所有價格"
 
-#: src/components/layouts/EventHomepage/index.tsx:441
+#: src/components/layouts/EventHomepage/index.tsx:675
 msgid "See schedule"
 msgstr "查看排程"
 
@@ -13421,7 +14636,7 @@ msgstr "選擇帳戶"
 msgid "Select all"
 msgstr "全選"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:141
+#: src/components/modals/DuplicateEventModal/index.tsx:143
 msgid "Select All"
 msgstr "全選"
 
@@ -13828,6 +15043,10 @@ msgstr "設定 PIN 碼"
 msgid "Set the end time of each date to be this long after its start time."
 msgstr "將每個日期的結束時間設為開始時間之後的這段間隔。"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:46
+msgid "Set the location"
+msgstr "設定地點"
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:217
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
 msgstr "設置發票編號的起始編號。一旦發票生成，就無法更改。"
@@ -13840,7 +15059,7 @@ msgstr "設為不限（移除限制）"
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "設定重複排程以自動建立日期，或逐個新增。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:91
+#: src/components/layouts/OrganizerLayout/index.tsx:92
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "設定收款"
@@ -13883,12 +15102,12 @@ msgstr "設定、更改或清除此日期的地點或網上資料"
 msgid "Setting updated"
 msgstr "設定已更新"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:112
-#: src/components/modals/DuplicateEventModal/index.tsx:51
+#: src/components/layouts/OrganizerLayout/index.tsx:113
+#: src/components/modals/DuplicateEventModal/index.tsx:52
 msgid "Settings"
 msgstr "設置"
 
-#: src/components/layouts/Event/index.tsx:124
+#: src/components/layouts/Event/index.tsx:125
 msgid "Setup & Design"
 msgstr "設定與設計"
 
@@ -13917,8 +15136,8 @@ msgid "Shape"
 msgstr "形狀"
 
 #: src/components/common/ShareIcon/index.tsx:30
-#: src/components/layouts/EventHomepage/index.tsx:356
-#: src/components/layouts/OrganizerLayout/index.tsx:252
+#: src/components/layouts/EventHomepage/index.tsx:593
+#: src/components/layouts/OrganizerLayout/index.tsx:254
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
 #: src/components/modals/ShareModal/index.tsx:186
@@ -13931,15 +15150,15 @@ msgstr "分享"
 msgid "Share Affiliate Link"
 msgstr "分享推廣連結"
 
-#: src/components/layouts/Event/index.tsx:264
-#: src/components/layouts/Event/index.tsx:270
+#: src/components/layouts/Event/index.tsx:266
+#: src/components/layouts/Event/index.tsx:272
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:102
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:131
 msgid "Share Event"
 msgstr "分享活動"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:249
-#: src/components/layouts/OrganizerLayout/index.tsx:291
+#: src/components/layouts/OrganizerLayout/index.tsx:251
+#: src/components/layouts/OrganizerLayout/index.tsx:293
 msgid "Share Organizer Page"
 msgstr "分享主辦單位頁面"
 
@@ -13992,9 +15211,17 @@ msgstr "顯示整個日期範圍"
 msgid "Show fewer platforms"
 msgstr "顯示較少平台"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:314
+#: src/components/routes/organizer/People/index.tsx:69
+msgid "Show initials instead"
+msgstr "改為顯示姓名縮寫"
+
+#: src/components/layouts/OrganizerHomepage/index.tsx:460
 msgid "Show less"
 msgstr "收起"
+
+#: src/components/common/WidgetEditor/index.tsx:240
+msgid "Show lineup"
+msgstr "顯示陣容"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
 msgid "Show marketing opt-in checkbox"
@@ -14004,14 +15231,18 @@ msgstr "顯示營銷訂閱複選框"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "預設顯示營銷訂閱複選框"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:858
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1090
+#: src/components/routes/product-widget/SelectProducts/index.tsx:860
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1092
 msgid "Show more"
 msgstr "顯示更多"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:228
 msgid "Show more platforms"
 msgstr "顯示更多平台"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:124
+msgid "Show on event page"
+msgstr "在活動頁面顯示"
 
 #: src/components/forms/CheckInListForm/index.tsx:230
 msgid "Show order details to non-logged-in staff"
@@ -14033,9 +15264,18 @@ msgstr "在活動日期上顯示餘下容量"
 msgid "Show remaining capacity to buyers"
 msgstr "向買家顯示餘下容量"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:228
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:234
+msgid "Show section"
+msgstr "顯示區塊"
+
 #: src/components/routes/event/Settings/Sections/MiscSettings/index.tsx:61
 msgid "Show tax and fees separately"
 msgstr "單獨顯示税費"
+
+#: src/components/common/WidgetEditor/index.tsx:242
+msgid "Show the people from your lineup above the tickets."
+msgstr "在門票上方顯示陣容中的人員。"
 
 #: src/components/common/OrganizerReportTable/index.tsx:355
 msgid "Showing {0} of {totalRows} records"
@@ -14050,11 +15290,15 @@ msgstr "正在顯示第 {0}–{1} 個，共 {2} 個"
 msgid "Showing {MAX_VISIBLE} of {totalAvailable} dates. Type to search."
 msgstr "正在顯示 {totalAvailable} 個日期中的 {MAX_VISIBLE} 個。輸入即可搜尋。"
 
+#: src/components/routes/organizer/People/index.tsx:68
+msgid "Showing on a public event page"
+msgstr "正於公開活動頁面顯示"
+
 #: src/components/modals/SendMessageModal/index.tsx:351
 msgid "Showing the first {0} — the remaining {1} session(s) will still be targeted when the message is sent."
 msgstr "只顯示首 {0} 個 — 傳送訊息時仍會涵蓋其餘 {1} 個場次。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:165
+#: src/components/routes/event/HomepageDesigner/index.tsx:205
 msgid "Shown below the ticket list"
 msgstr "顯示在門票列表下方"
 
@@ -14062,7 +15306,7 @@ msgstr "顯示在門票列表下方"
 msgid "Shown bouncing at the top of the modal"
 msgstr "在彈窗頂部彈跳顯示"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:173
+#: src/components/routes/event/HomepageDesigner/index.tsx:213
 msgid "Shown on scroll and jumps to the tickets section"
 msgstr "捲動時顯示，並跳至門票區域"
 
@@ -14093,6 +15337,26 @@ msgstr "顯示常用地址字段，包括國家"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:60
 msgid "Shows remaining"
 msgstr "顯示餘下數量"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
+msgid "Shows the venue and a map. Hidden automatically for online events."
+msgstr "顯示場地及地圖。網上活動會自動隱藏。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:62
+msgid "Shows your event description."
+msgstr "顯示你的活動描述。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:65
+msgid "Shows your organizer description. Placed above every other section, it appears in your profile card."
+msgstr "顯示您的主辦方簡介。放在所有其他區塊之上時，會顯示在您的個人資料卡中。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:81
+msgid "Shows your organizer profile with a contact button."
+msgstr "顯示你的主辦方資料及聯絡按鈕。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:70
+msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
+msgstr "顯示您的社交連結及聯絡按鈕。放在所有其他區塊之上時，會顯示在您的個人資料卡中。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:302
 msgid "Sign in again to keep selling"
@@ -14146,6 +15410,10 @@ msgstr "略過 30 天寬限期。此操作無法撤銷。"
 #: src/components/routes/welcome/index.tsx:559
 msgid "Skip this step"
 msgstr "跳過此步驟"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:563
+msgid "Skipped sheets without recognisable columns:"
+msgstr "已略過沒有可識別欄位的工作表："
 
 #: src/components/common/LanguageSwitcher/index.tsx:46
 msgid "Slovak"
@@ -14215,7 +15483,7 @@ msgid "Sold out"
 msgstr "售罄"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:128
-#: src/components/layouts/EventHomepage/index.tsx:203
+#: src/components/layouts/EventHomepage/index.tsx:206
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:221
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:22
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:336
@@ -14247,6 +15515,18 @@ msgstr "純色"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:293
 msgid "Some details are hidden from public access. Log in to view everything."
 msgstr "部分資料不會公開。登入後可查看全部內容。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:522
+msgid "Some rows were rejected and nothing was imported. Fix the highlighted rows in your spreadsheet, then choose the file again."
+msgstr "部分列被拒絕，未有匯入任何內容。請在試算表中修正標示的列，然後重新選擇檔案。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:319
+msgid "Some rows were rejected. Nothing was changed."
+msgstr "部分列被拒絕，未有作出任何變更。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:110
+msgid "Some text is too long. Names and titles can be up to 255 characters, roles and stages up to 100."
+msgstr "部分文字太長。姓名及標題最多 255 個字元，角色及舞台最多 100 個字元。"
 
 #: src/components/common/ThemeColorControls/index.tsx:170
 msgid "Some text may be hard to read"
@@ -14289,8 +15569,8 @@ msgid "Something went wrong. Please try again later."
 msgstr "出了點問題。請稍後再試。"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
-#: src/components/layouts/Event/index.tsx:99
-#: src/components/layouts/OrganizerLayout/index.tsx:137
+#: src/components/layouts/Event/index.tsx:100
+#: src/components/layouts/OrganizerLayout/index.tsx:139
 #: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:78
 #: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:37
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
@@ -14298,7 +15578,7 @@ msgstr "出了點問題。請稍後再試。"
 #: src/components/routes/auth/Login/index.tsx:114
 #: src/components/routes/auth/Login/index.tsx:167
 #: src/components/routes/my-tickets/index.tsx:162
-#: src/components/routes/product-widget/SelectProducts/index.tsx:363
+#: src/components/routes/product-widget/SelectProducts/index.tsx:365
 #: src/components/routes/profile/ManageProfile/index.tsx:102
 #: src/components/routes/profile/ManageProfile/index.tsx:116
 #: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:40
@@ -14309,7 +15589,7 @@ msgstr "出了點問題。請稍後再試。"
 msgid "Something went wrong. Please try again."
 msgstr "出錯了。請重試。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:773
+#: src/components/routes/product-widget/SelectProducts/index.tsx:775
 msgid "Sorry, this promo code is not recognized"
 msgstr "對不起，此優惠代碼不可用"
 
@@ -14328,6 +15608,18 @@ msgstr "垃圾郵件投訴"
 #: src/components/common/LanguageSwitcher/index.tsx:22
 msgid "Spanish"
 msgstr "西班牙語"
+
+#: src/utilites/lineup.ts:28
+msgid "Speakers"
+msgstr "講者"
+
+#: src/components/routes/event/Lineup/index.tsx:360
+msgid "Speakers for a conference, artists for a festival, hosts for a workshop. It all works the same way."
+msgstr "會議的講者、音樂節的藝人、工作坊的主持，用法都一樣。"
+
+#: src/components/routes/organizer/People/index.tsx:76
+msgid "Speakers, artists and hosts you can add to any of this organizer's events. Edit a profile once and every event shows the change."
+msgstr "可加入此主辦單位任何活動的講者、藝人和主持。只需編輯一次簡介，所有活動都會同步更新。"
 
 #: src/components/routes/admin/Announcements/index.tsx:426
 msgid "Specific accounts"
@@ -14353,9 +15645,22 @@ msgstr "按日子、區域或門票類型分拆簽到。將連結分享給工作
 msgid "Split door sales by entrance, date, or ticket type. You'll get a link and a PIN to share with staff — no account needed on their end."
 msgstr "按入口、日期或票種拆分門口銷售。你會獲得連結和 PIN 碼分享給工作人員，他們無需帳戶。"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:301
+msgid "Sponsor name"
+msgstr "贊助商名稱"
+
+#: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
+#: src/utilites/homepageSections.ts:42
+msgid "Sponsors"
+msgstr "贊助商"
+
 #: src/constants/eventCategories.ts:9
 msgid "Sports"
 msgstr "體育"
+
+#: src/components/routes/event/Lineup/ProfileLinksField.tsx:23
+msgid "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, a website and more. Each link gets the right icon automatically."
+msgstr "支援 Spotify、YouTube、SoundCloud、Instagram、LinkedIn、網站等。每個連結會自動配上相應圖示。"
 
 #: src/components/routes/event/TicketDesigner/index.tsx:135
 msgid "Square, at least 200 × 200px"
@@ -14381,6 +15686,13 @@ msgstr "工作人員須知"
 msgid "Staff need a PIN to sign in, so we generated one. Share the link and PIN below with your door staff."
 msgstr "工作人員需要 PIN 碼先可以登入，我哋已經生成咗一個。請將下面嘅連結同 PIN 碼交畀門口工作人員。"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:87
+msgctxt "Lineup spreadsheet column"
+msgid "Stage"
+msgstr "舞台"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:137
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:144
 #: src/ee/seating/components/lib/templates.ts:96
 #: src/ee/seating/components/lib/templates.ts:126
 #: src/ee/seating/components/lib/templates.ts:143
@@ -14393,6 +15705,26 @@ msgstr "舞台"
 #: src/ee/seating/components/lib/templates.ts:170
 msgid "Stage & screen"
 msgstr "舞台與銀幕"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
+msgid "Stage added"
+msgstr "舞台已新增"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:59
+msgid "Stage deleted"
+msgstr "舞台已刪除"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:159
+msgid "Stage or room"
+msgstr "舞台或場地"
+
+#: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:100
+msgid "Stages"
+msgstr "舞台"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:44
+msgid "Stages & rooms"
+msgstr "舞台與場地"
 
 #: src/ee/seating/components/lib/templates.ts:110
 #: src/ee/seating/components/lib/templates.ts:111
@@ -14424,6 +15756,7 @@ msgstr "池座 E–K"
 
 #: src/components/common/CapacityHelp/index.tsx:42
 #: src/ee/seating/components/lib/templates.ts:29
+#: src/utilites/lineup.ts:49
 msgid "Standard"
 msgstr "標準票"
 
@@ -14440,6 +15773,15 @@ msgstr "企位區和夾層。"
 msgid "Standing gallery"
 msgstr "企位樓廊"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:84
+msgctxt "Lineup spreadsheet column"
+msgid "Start"
+msgstr "開始"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:134
+msgid "Start"
+msgstr "開始"
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:48
 msgid "Start check-in"
 msgstr "開始簽到"
@@ -14449,7 +15791,7 @@ msgid "Start date"
 msgstr "開始日期"
 
 #: src/components/common/AdminEventsTable/index.tsx:98
-#: src/components/modals/DuplicateEventModal/index.tsx:126
+#: src/components/modals/DuplicateEventModal/index.tsx:128
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:448
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:122
 msgid "Start Date"
@@ -14488,11 +15830,16 @@ msgstr "以 {signedInName} 嘅身份開始售票"
 msgid "Start time"
 msgstr "開始時間"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:98
+msgid "Start time is missing"
+msgstr "缺少開始時間"
+
 #: src/components/common/AddressAutocomplete/index.tsx:87
 msgid "Start typing a venue or address..."
 msgstr "開始輸入場地或地址..."
 
 #: src/components/routes/admin/Dashboard/index.tsx:366
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:176
 msgid "Starts"
 msgstr "開始時間"
 
@@ -14788,8 +16135,8 @@ msgstr "成功更新活動"
 msgid "Successfully Updated Event Defaults"
 msgstr "成功更新活動預設值"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:92
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:81
+#: src/components/routes/event/HomepageDesigner/index.tsx:119
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:93
 msgid "Successfully Updated Homepage Design"
 msgstr "成功更新主頁設計"
 
@@ -14868,7 +16215,7 @@ msgstr "Webhook 更新成功"
 msgid "Summary"
 msgstr "摘要"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:111
+#: src/components/modals/DuplicateEventModal/index.tsx:113
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 msgid "Summer Music Festival {0}"
 msgstr "夏日音樂節 {0}"
@@ -14898,7 +16245,7 @@ msgstr "瑞典語"
 msgid "Switch date"
 msgstr "切換日期"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:81
+#: src/components/layouts/OrganizerLayout/index.tsx:82
 #: src/components/modals/SwitchOrganizerModal/index.tsx:49
 msgid "Switch Organizer"
 msgstr "切換主辦單位"
@@ -14931,6 +16278,15 @@ msgstr "T 恤、水杯等周邊"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:79
 msgid "Table name"
 msgstr "桌子名稱"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:76
+msgctxt "Lineup spreadsheet column"
+msgid "Tagline"
+msgstr "標語"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:286
+msgid "Tagline"
+msgstr "標語"
 
 #: src/ee/seating/components/SeatLegend.tsx:24
 msgid "Taken"
@@ -15030,16 +16386,16 @@ msgstr "已套用稅項及費用"
 msgid "Taxes and Fees"
 msgstr "税費"
 
-#: src/components/layouts/Event/index.tsx:162
-#: src/components/layouts/OrganizerLayout/index.tsx:124
+#: src/components/layouts/Event/index.tsx:164
+#: src/components/layouts/OrganizerLayout/index.tsx:126
 #: src/components/routes/account/ManageAccount/sections/Users/index.tsx:147
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 msgid "Team"
 msgstr "團隊"
 
-#: src/components/layouts/Event/index.tsx:163
-#: src/components/layouts/OrganizerLayout/index.tsx:125
+#: src/components/layouts/Event/index.tsx:165
+#: src/components/layouts/OrganizerLayout/index.tsx:127
 msgid "Team Access"
 msgstr "團隊存取權限"
 
@@ -15096,8 +16452,8 @@ msgstr "付款方式"
 msgid "Term"
 msgstr "關鍵字"
 
-#: src/components/layouts/EventHomepage/index.tsx:708
-#: src/components/layouts/OrganizerHomepage/index.tsx:400
+#: src/components/layouts/EventHomepage/index.tsx:732
+#: src/components/layouts/OrganizerHomepage/index.tsx:205
 msgid "Terms of Service"
 msgstr "服務條款"
 
@@ -15105,7 +16461,9 @@ msgstr "服務條款"
 msgid "Test email sent to your inbox"
 msgstr "測試電郵已發送到您的收件匣"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:45
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
+#: src/utilites/homepageSections.ts:34
 msgid "Text"
 msgstr "文本"
 
@@ -15118,10 +16476,22 @@ msgstr "感謝您的參與！"
 msgid "Thanks,"
 msgstr "多謝，"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:339
-#: src/components/routes/product-widget/SelectProducts/index.tsx:690
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:210
+msgid "That doesn't look like a YouTube or Vimeo video link"
+msgstr "這看來不是 YouTube 或 Vimeo 影片連結"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:162
+msgid "That overlaps \"{conflict}\" on the same stage"
+msgstr "與同一舞台上的「{conflict}」時間重疊"
+
+#: src/components/routes/product-widget/SelectProducts/index.tsx:341
+#: src/components/routes/product-widget/SelectProducts/index.tsx:692
 msgid "That promo code is invalid"
 msgstr "促銷代碼無效"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:163
+msgid "That slot can't go there"
+msgstr "該時段無法放在此處"
 
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:25
 msgid "That was your last recovery code. Generate a new set now so you don't get locked out."
@@ -15227,9 +16597,18 @@ msgstr "活動會取得自己的副本，因此在這裡的修改絕不會影響
 msgid "The event you're looking for is not available at the moment. It may have been removed, expired, or the URL might be incorrect."
 msgstr "您查找的活動目前不可用。它可能已被刪除、過期或 URL 不正確。"
 
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:139
+msgid "The first photo is used on the lineup. Square or portrait photos at least 600px wide look best."
+msgstr "第一張相片將用於陣容展示。闊度至少 600px 的正方形或直向相片效果最佳。"
+
 #: src/components/modals/CancelOrderModal/index.tsx:78
 msgid "The full order amount will be refunded to the customer's original payment method."
 msgstr "訂單全額將退款至客戶的原始付款方式。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:302
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
+msgid "The import failed. Nothing was changed. Please try again."
+msgstr "匯入失敗，未有作出任何變更。請再試一次。"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -15239,6 +16618,10 @@ msgstr "與會者接收電子郵件的語言。"
 msgid "The licence key was rejected"
 msgstr "授權金鑰被拒絕"
 
+#: src/components/routes/event/Lineup/index.tsx:348
+msgid "The lineup and schedule follow your event's colours and fonts automatically."
+msgstr "陣容和時間表會自動沿用活動的顏色和字型。"
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:30
 msgid "The link you are trying to access has expired or is no longer valid. Please check your email for an updated link to manage your order."
 msgstr "您嘗試存取的連結已過期或不再有效。請檢查您的電郵以獲取管理訂單的更新連結。"
@@ -15247,7 +16630,7 @@ msgstr "您嘗試存取的連結已過期或不再有效。請檢查您的電郵
 msgid "The link you clicked is invalid."
 msgstr "您點擊的鏈接無效。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:994
+#: src/components/routes/product-widget/SelectProducts/index.tsx:996
 msgid "The maximum number of products for {0}is {1}"
 msgstr "{0}的最大產品數量是{1}"
 
@@ -15346,6 +16729,10 @@ msgstr "「{title}」原定於 {0} 的場次已改期。"
 msgid "The size of the room. The total number of people who can attend a date across every ticket. Leave it empty for no limit."
 msgstr "場地大小。所有票種合計可參加某個日期的總人數。留空表示不限。"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:78
+msgid "The slot needs some length"
+msgstr "時段需要有一定長度"
+
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:156
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:187
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
@@ -15400,24 +16787,24 @@ msgstr "劇院"
 msgid "Theatre with sections"
 msgstr "分區劇院"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:141
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:155
+#: src/components/routes/event/HomepageDesigner/index.tsx:181
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:192
 msgid "Theme & Colors"
 msgstr "主題與顏色"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1211
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1213
 msgid "There are no products available for this date. Please choose another date."
 msgstr "此日期沒有可售產品，請選擇其他日期。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:795
+#: src/components/routes/product-widget/SelectProducts/index.tsx:797
 msgid "There are no products available for this event"
 msgstr "此活動沒有可用產品"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:867
+#: src/components/routes/product-widget/SelectProducts/index.tsx:869
 msgid "There are no products available in this category"
 msgstr "此類別中沒有可用產品"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:792
+#: src/components/routes/product-widget/SelectProducts/index.tsx:794
 msgid "There are no upcoming dates for this event"
 msgstr "此活動沒有即將舉行的日期"
 
@@ -15436,6 +16823,10 @@ msgstr "處理您的請求時出現錯誤。請重試。"
 #: src/hooks/useOrderActions.tsx:63
 msgid "There was an error sending your message"
 msgstr "發送信息時出現錯誤"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:537
+msgid "These are skipped"
+msgstr "這些將被略過"
 
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:186
 msgid "These browsers skip the code for 30 days after you trust them."
@@ -15461,7 +16852,7 @@ msgstr "這些價格適用於日程中的所有日期，每個級別的數量可
 msgid "These seats are sold out"
 msgstr "這些座位已售罄"
 
-#: src/components/common/WidgetEditor/index.tsx:178
+#: src/components/common/WidgetEditor/index.tsx:182
 msgid "These settings apply only to copied embed code and won't be stored."
 msgstr "這些設定僅適用於複製的嵌入代碼，不會被儲存。"
 
@@ -15525,6 +16916,10 @@ msgstr "此售票處目前無法使用。"
 msgid "This box office no longer exists. Ask the organizer for a new link."
 msgstr "此售票處已不存在。請向主辦方索取新連結。"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:137
+msgid "This browser can't open .xlsx files. Save the file as CSV and try again."
+msgstr "此瀏覽器無法開啟 .xlsx 檔案。請將檔案另存為 CSV 後重試。"
+
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:62
 msgid "This category doesn't have any products yet."
 msgstr "此類別尚無任何產品。"
@@ -15583,7 +16978,7 @@ msgstr "此日期屬於過去。它仍會被建立，但不會在參加者看到
 msgid "This date is marked sold out."
 msgstr "此日期已標示為售罄。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:744
+#: src/components/routes/product-widget/SelectProducts/index.tsx:746
 msgid "This date is no longer available. Please select another date."
 msgstr "此日期已不可選，請另選一個日期。"
 
@@ -15603,7 +16998,7 @@ msgstr "此裝置"
 msgid "This disconnects {stripeAccountId} from this organizer. Paid ticket sales will stop working until you connect a Stripe account again."
 msgstr "此操作將中斷 {stripeAccountId} 與此主辦方的連接。在您重新連接 Stripe 帳戶之前，付費門票銷售將無法進行。"
 
-#: src/components/layouts/EventHomepage/index.tsx:402
+#: src/components/layouts/EventHomepage/index.tsx:637
 msgid "This event has ended"
 msgstr "此活動已結束"
 
@@ -15611,11 +17006,15 @@ msgstr "此活動已結束"
 msgid "This event has no seat map, so there is no plan to print. Attach one in the seating settings."
 msgstr "此活動沒有座位圖，因此沒有可列印的內容。請在座位設定中新增一個。"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:46
+msgid "This event has no single in-person venue."
+msgstr "此活動沒有單一的實體場地。"
+
 #: src/components/modals/PublishEventModal/index.tsx:96
 msgid "This event has no tickets or products yet, so attendees won't be able to register."
 msgstr "此活動尚未有門票或商品，參加者將無法報名。"
 
-#: src/components/layouts/ProductWidget/index.tsx:50
+#: src/components/layouts/ProductWidget/index.tsx:52
 msgid "This event is not available"
 msgstr "此活動無法使用"
 
@@ -15627,7 +17026,7 @@ msgstr "呢個活動未發佈"
 msgid "This event is not published. Sales are still recorded."
 msgstr "此活動未發布。銷售仍會被記錄。"
 
-#: src/components/layouts/Event/index.tsx:197
+#: src/components/layouts/Event/index.tsx:199
 msgid "This event is pending manual review and cannot be published until the review is complete."
 msgstr "該活動正在等待人工審核，審核完成前無法發佈。"
 
@@ -15643,7 +17042,7 @@ msgstr "該活動正在等待人工審核，審核完成前無法更改其狀態
 msgid "This event is pending manual review. Its status cannot be changed until the review is complete."
 msgstr "該活動正在等待人工審核。審核完成前無法更改其狀態。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:791
+#: src/components/routes/product-widget/SelectProducts/index.tsx:793
 msgid "This event is sold out"
 msgstr "此活動已售罄"
 
@@ -15938,7 +17337,7 @@ msgstr "門票設計"
 msgid "Ticket design saved successfully"
 msgstr "門票設計儲存成功"
 
-#: src/components/layouts/Event/index.tsx:133
+#: src/components/layouts/Event/index.tsx:135
 msgid "Ticket Designer"
 msgstr "門票設計器"
 
@@ -15963,7 +17362,7 @@ msgstr "票務持有人"
 msgid "Ticket ID"
 msgstr "門票 ID"
 
-#: src/components/modals/DuplicateEventModal/index.tsx:56
+#: src/components/modals/DuplicateEventModal/index.tsx:57
 msgid "Ticket Logo"
 msgstr "門票標誌"
 
@@ -15987,9 +17386,13 @@ msgstr "票價"
 msgid "Ticket resent successfully"
 msgstr "門票重新發送成功"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:787
+#: src/components/routes/product-widget/SelectProducts/index.tsx:789
 msgid "Ticket sales have ended for this event"
 msgstr "此活動的售票已結束"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:265
+msgid "Ticket titles come from your product categories."
+msgstr "票券標題來自你的產品分類。"
 
 #: src/ee/seating/components/SeatPicker/Basket.tsx:62
 #: src/ee/seating/components/SeatPicker/Basket.tsx:128
@@ -16000,7 +17403,7 @@ msgstr "門票類型"
 msgid "Ticket Type"
 msgstr "門票類型"
 
-#: src/components/layouts/Event/index.tsx:138
+#: src/components/layouts/Event/index.tsx:140
 msgid "Ticketing & Sales"
 msgstr "票務與銷售"
 
@@ -16012,13 +17415,18 @@ msgstr "門票"
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
+#: src/utilites/homepageSections.ts:16
 msgid "Tickets"
 msgstr "門票"
 
-#: src/components/layouts/Event/index.tsx:139
+#: src/components/layouts/Event/index.tsx:141
 #: src/components/routes/event/products.tsx:68
 msgid "Tickets & Products"
 msgstr "票券與產品"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:228
+msgid "Tickets are always shown"
+msgstr "門票一律顯示"
 
 #: src/components/modals/OfferWaitlistModal/index.tsx:94
 msgid "Tickets are automatically offered to waitlisted customers when capacity becomes available."
@@ -16081,9 +17489,46 @@ msgstr "時間"
 msgid "Time left"
 msgstr "剩餘時間"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:102
+msgid "Time not recognised. Use a format like 19:30 or 7:30 PM."
+msgstr "無法識別時間。請使用類似 19:30 或 7:30 PM 的格式。"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:139
+msgid "Time slot"
+msgstr "時段"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:118
+msgid "Time slot added"
+msgstr "時段已新增"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:130
+msgid "Time slot removed"
+msgstr "時段已移除"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:118
+msgid "Time slot updated"
+msgstr "時段已更新"
+
+#: src/components/routes/event/Lineup/LineupStats.tsx:38
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:233
+msgid "Time slots"
+msgstr "時段"
+
+#: src/components/modals/DuplicateEventModal/index.tsx:60
+msgid "Time slots move with the new start date"
+msgstr "時段會隨新的開始日期一併移動"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:531
+msgid "time slots to add"
+msgstr "個待新增時段"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:987
 msgid "Times"
 msgstr "時間"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:545
+msgid "Times are read in the event's time zone ({timezone})."
+msgstr "時間按活動的時區（{timezone}）讀取。"
 
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:656
 msgid "Times in {timezoneAbbr}"
@@ -16096,6 +17541,10 @@ msgstr "使用次數"
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:25
 msgid "Times Used"
 msgstr "使用次數"
+
+#: src/utilites/lineup.ts:24
+msgid "Timetable"
+msgstr "時間表"
 
 #: src/components/forms/OrganizerForm/index.tsx:59
 #: src/components/modals/CreateEventModal/index.tsx:427
@@ -16116,6 +17565,12 @@ msgstr "為頁面背後的模糊封面圖片著色"
 
 #: src/components/routes/admin/Announcements/index.tsx:157
 #: src/components/routes/admin/Announcements/index.tsx:381
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:151
+msgid "Title"
+msgstr "標題"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:88
+msgctxt "Lineup spreadsheet column"
 msgid "Title"
 msgstr "標題"
 
@@ -16159,7 +17614,11 @@ msgstr "明天"
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "嘗試次數過多。請稍等一分鐘後重試。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:114
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:114
+msgid "Too many rows in one import"
+msgstr "單次匯入的行數過多"
+
+#: src/components/layouts/OrganizerLayout/index.tsx:115
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:357
 msgid "Tools"
 msgstr "工具"
@@ -16289,7 +17748,7 @@ msgstr "換個搜尋字詞或篩選條件試試"
 msgid "Try adjusting your filters to see more dates."
 msgstr "調整篩選條件即可查看更多日期。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1075
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1077
 #: src/components/routes/profile/ManageProfile/Security/index.tsx:77
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
@@ -16421,6 +17880,10 @@ msgstr "類型"
 msgid "Type \"delete\" to confirm"
 msgstr "輸入\"刪除\"以確認"
 
+#: src/components/routes/event/Lineup/QuickAddPerson.tsx:110
+msgid "Type a name to create a profile"
+msgstr "輸入名字以建立簡介"
+
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:73
 msgid "Type the account name to confirm"
 msgstr "輸入賬戶名稱以確認"
@@ -16433,8 +17896,8 @@ msgstr "請輸入驗證器應用程式中為 {0} 顯示的驗證碼。"
 msgid "Type to search..."
 msgstr "輸入以搜尋..."
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:150
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:164
+#: src/components/routes/event/HomepageDesigner/index.tsx:190
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:201
 msgid "Typography"
 msgstr "排版"
 
@@ -16477,7 +17940,7 @@ msgstr "無法完成銷售"
 msgid "Unable to create product. Please check the your details"
 msgstr "無法創建產品。請檢查您的詳細信息"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:326
+#: src/components/routes/product-widget/SelectProducts/index.tsx:328
 msgid "Unable to create product. Please check your details"
 msgstr "無法創建產品。請檢查您的詳細信息"
 
@@ -16505,7 +17968,7 @@ msgstr "無法加入候補名單"
 msgid "Unable to load attendee details."
 msgstr "無法載入參加者詳情。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:380
+#: src/components/routes/product-widget/SelectProducts/index.tsx:382
 msgid "Unable to load products for this date. Please try again."
 msgstr "無法載入此日期的產品，請再試一次。"
 
@@ -16615,7 +18078,7 @@ msgstr "未知裝置"
 msgid "Unlimited"
 msgstr "無限制"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:929
+#: src/components/routes/product-widget/SelectProducts/index.tsx:931
 msgid "Unlimited available"
 msgstr "無限供應"
 
@@ -16630,6 +18093,10 @@ msgstr "未命名"
 #: src/components/common/LocationPicker/index.tsx:67
 msgid "Unnamed location"
 msgstr "未命名地點"
+
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:86
+msgid "Unnamed venue"
+msgstr "未命名場地"
 
 #: src/components/common/AttendeeTicket/index.tsx:92
 #: src/components/modals/ManageOrderModal/index.tsx:162
@@ -16669,6 +18136,11 @@ msgstr "直至 {end}"
 msgid "Until a date"
 msgstr "直到某個日期"
 
+#: src/components/routes/event/Lineup/AgendaList.tsx:80
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:77
+msgid "Untitled"
+msgstr "未命名"
+
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:109
 msgid "Untitled product"
 msgstr "未命名產品"
@@ -16693,9 +18165,13 @@ msgstr "每張訂單最多 {max} 件"
 msgid "up to {perDateAllocation} per date"
 msgstr "每個日期最多 {perDateAllocation}"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:273
+msgid "Up to 40 photos, at least 400 × 300px. The first one is shown largest."
+msgstr "最多 40 張相片，尺寸至少 400 × 300px。第一張顯示最大。"
+
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
-#: src/components/layouts/OrganizerHomepage/index.tsx:332
+#: src/components/layouts/OrganizerHomepage/index.tsx:225
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
 msgid "Upcoming"
@@ -16712,6 +18188,10 @@ msgstr "即將舉行的活動"
 #: src/components/routes/admin/Dashboard/index.tsx:355
 msgid "Upcoming events by size"
 msgstr "即將舉行的活動（按規模）"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:125
+msgid "Update"
+msgstr "更新"
 
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:59
 msgid "Update {0}"
@@ -16803,6 +18283,18 @@ msgstr "上傳主辦單位的標誌"
 msgid "Upload Image"
 msgstr "上傳圖片"
 
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:80
+msgid "Upload some photos below."
+msgstr "請在下方上載一些相片。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:324
+msgid "Upload sponsor logos"
+msgstr "上載贊助商標誌"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:82
+msgid "Upload sponsor logos below."
+msgstr "請在下方上載贊助商標誌。"
+
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:139
 msgid "Uploading image..."
 msgstr "正在上傳圖片..."
@@ -16825,7 +18317,7 @@ msgstr "URL 是必填項"
 msgid "URL must start with http:// or https://"
 msgstr "連結必須以 http:// 或 https:// 開頭"
 
-#: src/components/common/WidgetEditor/index.tsx:306
+#: src/components/common/WidgetEditor/index.tsx:316
 msgid "Usage Example"
 msgstr "使用範例"
 
@@ -16848,6 +18340,12 @@ msgstr "USB 掃描器已暫停"
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:154
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "使用 <0>Liquid 模板</0> 個性化您的郵件"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:263
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
+#: src/components/routes/event/Lineup/ProfileImagesField.tsx:123
+msgid "Use a JPG, PNG or WebP image under 5MB."
+msgstr "請使用小於 5MB 的 JPG、PNG 或 WebP 圖片。"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 msgid "Use a recovery code"
@@ -17045,6 +18543,10 @@ msgstr "增值稅：{0}"
 msgid "VAT: not registered"
 msgstr "增值稅：未登記"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:80
+msgid "Venue"
+msgstr "場地"
+
 #: src/components/common/LocationPicker/index.tsx:230
 #: src/components/modals/LocationEditModal/index.tsx:140
 msgid "Venue Name"
@@ -17089,7 +18591,7 @@ msgstr "驗證電郵"
 msgid "Verify recovery code"
 msgstr "驗證復原碼"
 
-#: src/components/layouts/Event/index.tsx:323
+#: src/components/layouts/Event/index.tsx:325
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:156
 msgid "Verify your email"
 msgstr "驗證您的電郵"
@@ -17102,9 +18604,21 @@ msgstr "驗證你的電郵，參加者才可以收到門票"
 msgid "Verifying..."
 msgstr "驗證緊..."
 
+#: src/utilites/homepageSections.ts:40
+msgid "Video"
+msgstr "影片"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:205
+msgid "Video link"
+msgstr "影片連結"
+
 #: src/components/common/LanguageSwitcher/index.tsx:38
 msgid "Vietnamese"
 msgstr "越南語"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:98
+msgid "View {name}"
+msgstr "查看 {name}"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:70
 msgid "View All"
@@ -17126,6 +18640,10 @@ msgstr "查看全部簽到名單"
 msgid "View all messages sent across the platform"
 msgstr "查看平台上發送的所有訊息"
 
+#: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:32
+msgid "View all past events"
+msgstr "查看所有往期活動"
+
 #: src/components/routes/organizer/Reports/index.tsx:52
 msgid "View and download reports across all your events. Only completed orders are included."
 msgstr "查看和下載所有活動的報告。僅包含已完成的訂單。"
@@ -17141,6 +18659,10 @@ msgstr "查看與會者"
 #: src/components/common/AttendeeList/index.tsx:104
 msgid "View Attendee Details"
 msgstr "查看參會者詳情"
+
+#: src/components/routes/event/Lineup/LineupPreview.tsx:121
+msgid "View details"
+msgstr "查看詳情"
 
 #: src/components/common/AdminAccountsTable/index.tsx:73
 #: src/components/routes/admin/FailedJobs/index.tsx:190
@@ -17171,7 +18693,7 @@ msgstr "查看活動頁面"
 msgid "View logs"
 msgstr "查看日誌"
 
-#: src/components/layouts/EventHomepage/index.tsx:585
+#: src/components/layouts/EventHomepage/index.tsx:332
 msgid "View Map"
 msgstr "查看地圖"
 
@@ -17179,12 +18701,16 @@ msgstr "查看地圖"
 msgid "View Message"
 msgstr "查看訊息"
 
-#: src/components/layouts/EventHomepage/index.tsx:470
+#: src/components/routes/event/Lineup/index.tsx:69
+msgid "View on event page"
+msgstr "在活動頁面查看"
+
+#: src/components/layouts/EventHomepage/index.tsx:704
 msgid "View on Google Maps"
 msgstr "在谷歌地圖上查看"
 
-#: src/components/layouts/Event/index.tsx:234
-#: src/components/layouts/OrganizerLayout/index.tsx:220
+#: src/components/layouts/Event/index.tsx:236
+#: src/components/layouts/OrganizerLayout/index.tsx:222
 msgid "View only"
 msgstr "僅供查看"
 
@@ -17205,12 +18731,12 @@ msgstr "查看訂單詳情"
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "查看訂單詳情、退款和重新傳送確認。"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:267
-#: src/components/layouts/OrganizerLayout/index.tsx:270
+#: src/components/layouts/OrganizerLayout/index.tsx:269
+#: src/components/layouts/OrganizerLayout/index.tsx:272
 msgid "View Organizer Homepage"
 msgstr "查看主辦單位主頁"
 
-#: src/components/layouts/OrganizerHomepage/index.tsx:353
+#: src/components/layouts/OrganizerHomepage/index.tsx:247
 msgid "View past events"
 msgstr "查看過往活動"
 
@@ -17258,6 +18784,14 @@ msgstr "VIP簽到列表"
 msgid "VIP Ticket"
 msgstr "貴賓票"
 
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:220
+#~ msgid "Visibility"
+#~ msgstr "可見度"
+
+#: src/components/routes/event/Lineup/ProfileDrawer.tsx:220
+#~ msgid "Visible"
+#~ msgstr "可見"
+
 #: src/components/forms/ProductForm/visibilityStatus.ts:41
 msgid "Visible from {start} — hidden until sales open."
 msgstr "由 {start} 起可見 — 開售前保持隱藏。"
@@ -17300,7 +18834,7 @@ msgstr "等待掃描…"
 
 #: src/components/forms/ProductForm/index.tsx:462
 #: src/components/layouts/AuthLayout/index.tsx:19
-#: src/components/layouts/Event/index.tsx:150
+#: src/components/layouts/Event/index.tsx:152
 #: src/components/routes/event/Settings/index.tsx:92
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:73
@@ -17349,6 +18883,10 @@ msgstr "無法中斷此 Stripe 帳戶的連接。請重試。"
 msgid "We couldn't find any orders associated with this email address."
 msgstr "我們找不到與此郵箱關聯的訂單。"
 
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:505
+msgid "We couldn't find any rows to import. Add a header row with column names like Name, Start and End."
+msgstr "找不到可匯入的列。請加入包含「姓名」、「開始」、「結束」等欄名的標題列。"
+
 #: src/components/common/ProductsTable/ProductsBlankSlate/index.tsx:25
 msgid "We couldn't find any tickets matching {0}"
 msgstr "我們找不到與{0}匹配的任何門票"
@@ -17385,7 +18923,7 @@ msgstr "我們無法加載數據。請重試。"
 msgid "We couldn't load the products. Please try again."
 msgstr "無法載入商品，請再試一次。"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1072
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1074
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:457
 msgid "We couldn't load the seating map. Please try again."
 msgstr "無法載入座位圖，請重試。"
@@ -17394,9 +18932,21 @@ msgstr "無法載入座位圖，請重試。"
 msgid "We couldn't load this box office"
 msgstr "無法載入此售票處"
 
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:28
+msgid "We couldn't load this run sheet. Check you have access to this event and try again."
+msgstr "無法載入此流程表。請確認你有權存取此活動，然後再試一次。"
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:97
 msgid "We couldn't reach Stripe just now. Please try again in a moment."
 msgstr "目前無法連接 Stripe，請稍後再試。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:142
+msgid "We couldn't read that file. Check it's a valid .xlsx or .csv file."
+msgstr "無法讀取該檔案。請檢查它是否為有效的 .xlsx 或 .csv 檔案。"
+
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:275
+msgid "We couldn't read your clipboard. Press Ctrl+V or ⌘+V to paste instead."
+msgstr "無法讀取你的剪貼簿。請改按 Ctrl+V 或 ⌘+V 貼上。"
 
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:108
 msgid "We couldn't reorder the categories. Please try again."
@@ -17410,12 +18960,12 @@ msgstr "載入此頁面時遇到問題。請重試。"
 msgid "We partner with Stripe to send payouts straight to your bank account."
 msgstr "我們與 Stripe 合作，將款項直接轉入你的銀行帳戶。"
 
-#: src/components/routes/event/HomepageDesigner/index.tsx:123
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:114
+#: src/components/routes/event/HomepageDesigner/index.tsx:163
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:151
 msgid "We recommend dimensions of 1950px by 650px, a ratio of 3:1, and a maximum file size of 5MB"
 msgstr "我們建議尺寸為 2160px x 1080px，文件大小不超過 5MB"
 
-#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:135
+#: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:172
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "我們建議尺寸為 400x400 像素，檔案大小不超過 5MB"
 
@@ -17512,14 +19062,15 @@ msgstr "Webhook 不會發送通知"
 msgid "Webhook will send notifications"
 msgstr "Webhook 將發送通知"
 
-#: src/components/layouts/Event/index.tsx:161
-#: src/components/layouts/OrganizerLayout/index.tsx:122
-#: src/components/modals/DuplicateEventModal/index.tsx:57
+#: src/components/layouts/Event/index.tsx:163
+#: src/components/layouts/OrganizerLayout/index.tsx:124
+#: src/components/modals/DuplicateEventModal/index.tsx:58
 #: src/components/routes/event/Webhooks/index.tsx:33
 #: src/components/routes/organizer/Webhooks/index.tsx:31
 msgid "Webhooks"
 msgstr "Webhooks"
 
+#: src/components/common/ProfileLinkIcon/index.tsx:61
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:102
 msgid "Website"
 msgstr "網站"
@@ -17578,6 +19129,10 @@ msgstr "歡迎嚟到 {0}，呢度係你所有活動嘅列表"
 #: src/constants/eventCategories.ts:20
 msgid "Wellness"
 msgstr "健康養生"
+
+#: src/components/routes/event/Lineup/RunSheetPrint.tsx:138
+msgid "What"
+msgstr "內容"
 
 #: src/components/forms/ProductForm/index.tsx:342
 msgid "What are Tiered Products?"
@@ -17787,21 +19342,25 @@ msgstr "白標"
 msgid "Who should be asked this question?"
 msgstr "這個問題應該問誰？"
 
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:143
+msgid "Who's on?"
+msgstr "出場人員"
+
 #: src/components/common/TeamAccessFields/index.tsx:112
 #: src/components/common/TeamAccessPanel/index.tsx:87
 #: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:34
 msgid "Whole account"
 msgstr "整個帳戶"
 
-#: src/components/layouts/Event/index.tsx:160
+#: src/components/layouts/Event/index.tsx:162
 msgid "Widget Embed"
 msgstr "嵌入小部件"
 
-#: src/components/common/WidgetEditor/index.tsx:324
+#: src/components/common/WidgetEditor/index.tsx:334
 msgid "Widget Preview"
 msgstr "小工具預覽"
 
-#: src/components/common/WidgetEditor/index.tsx:160
+#: src/components/common/WidgetEditor/index.tsx:164
 msgid "Widget Settings"
 msgstr "小工具設定"
 
@@ -17818,7 +19377,7 @@ msgstr "工作"
 #: src/components/modals/CreateProductCategoryModal/index.tsx:56
 #: src/components/modals/CreatePromoCodeModal/index.tsx:57
 #: src/components/modals/CreateQuestionModal/index.tsx:75
-#: src/components/modals/DuplicateEventModal/index.tsx:181
+#: src/components/modals/DuplicateEventModal/index.tsx:183
 #: src/components/modals/EditProductCategoryModal/index.tsx:70
 #: src/components/modals/EditPromoCodeModal/index.tsx:85
 #: src/components/modals/EditQuestionModal/index.tsx:101
@@ -17865,6 +19424,7 @@ msgstr "年"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
 msgid "Yes"
 msgstr "是"
 
@@ -18019,7 +19579,7 @@ msgstr "必須先創建機票，然後才能手動添加與會者。"
 msgid "You must have at least one price tier"
 msgstr "您必須至少有一個價格等級"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:312
+#: src/components/layouts/OrganizerLayout/index.tsx:314
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "在更新主辦單位狀態之前，您必須先驗證您的電郵地址。"
 
@@ -18155,7 +19715,7 @@ msgstr "您的與會者已成功導出。"
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "與會者註冊參加活動後，就會出現在這裏。您也可以手動添加與會者。"
 
-#: src/components/common/WidgetEditor/index.tsx:339
+#: src/components/common/WidgetEditor/index.tsx:349
 msgid "Your awesome website 🎉"
 msgstr "您的精彩網站 🎉"
 
@@ -18182,6 +19742,10 @@ msgstr "您的電子郵件"
 #: src/components/routes/profile/ManageProfile/index.tsx:146
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "您要求將電子郵件更改為<0>{0}</0>的申請正在處理中。請檢查您的電子郵件以確認"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:34
+msgid "Your event has no description yet."
+msgstr "您的活動尚未有描述。"
 
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:48
 msgid "Your event is live!"
@@ -18255,6 +19819,14 @@ msgstr "你的機構要求啟用雙重驗證。請立即設定以繼續,大約�
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
 msgstr "您主辦單位的地址"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:64
+msgid "Your organizer has no description yet."
+msgstr "您的主辦方尚未有簡介。"
+
+#: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:50
+msgid "Your organizer profile isn't published."
+msgstr "您的主辦方資料尚未發佈。"
 
 #: src/components/routes/auth/Login/index.tsx:200
 #: src/components/routes/auth/Register/index.tsx:119

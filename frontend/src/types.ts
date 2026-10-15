@@ -326,7 +326,46 @@ export interface Image {
     lqip_base64?: string | null;
 }
 
-export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO';
+export type ImageType = 'EVENT_COVER' | 'EDITOR_IMAGE' | 'ORGANIZER_LOGO' | 'ORGANIZER_COVER' | 'ORGANIZER_IMAGE' | 'TICKET_LOGO' | 'PROFILE_IMAGE' | 'EVENT_GALLERY' | 'EVENT_SPONSOR_LOGO' | 'ORGANIZER_GALLERY' | 'ORGANIZER_SPONSOR_LOGO';
+
+export type HomepageSectionType =
+    'TICKETS'
+    | 'ABOUT'
+    | 'LINEUP'
+    | 'SCHEDULE'
+    | 'LOCATION'
+    | 'ORGANIZER'
+    | 'EVENTS'
+    | 'CONTACT'
+    | 'PAST_EVENTS'
+    | 'TEXT'
+    | 'GALLERY'
+    | 'FAQ'
+    | 'VIDEO'
+    | 'SPONSORS';
+
+export interface HomepageSectionFaq {
+    question: string;
+    answer?: string | null;
+}
+
+export interface HomepageSectionSponsor {
+    image_id: number;
+    name?: string | null;
+    url?: string | null;
+}
+
+export interface HomepageSection {
+    id: string;
+    type: HomepageSectionType;
+    enabled: boolean;
+    heading?: string | null;
+    body?: string | null;
+    faqs?: HomepageSectionFaq[];
+    video_url?: string | null;
+    image_ids?: number[];
+    sponsors?: HomepageSectionSponsor[];
+}
 
 export type PaymentProvider = 'STRIPE' | 'OFFLINE';
 
@@ -399,6 +438,7 @@ export interface EventSettings {
 
     // Simplified homepage theme settings (new 2-color + mode system)
     homepage_theme_settings?: HomepageThemeSettings;
+    homepage_sections?: HomepageSection[] | null;
 
     // Waitlist settings
     waitlist_auto_process?: boolean;
@@ -480,6 +520,7 @@ export interface EventDuplicatePayload extends EventBase {
     duplicate_ticket_logo: boolean;
     duplicate_webhooks: boolean;
     duplicate_affiliates: boolean;
+    duplicate_lineup: boolean;
     duplicate_occurrences?: boolean;
 }
 
@@ -803,6 +844,7 @@ export interface OrganizerSettings {
     default_allow_attendee_self_edit?: boolean;
     homepage_visibility: 'PUBLIC' | 'PRIVATE' | 'PASSWORD_PROTECTED';
     homepage_theme_settings: HomepageThemeSettings;
+    homepage_sections?: HomepageSection[] | null;
     website_url?: string;
     social_media_handles?: {
         facebook?: string;

@@ -1,14 +1,17 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {useParams} from "react-router";
 import {useGetOrganizerSettings} from "../../../../queries/useGetOrganizerSettings.ts";
 import {useUpdateOrganizerSettings} from "../../../../mutations/useUpdateOrganizerSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {HomepageThemeSettings, OrganizerSettings} from "../../../../types.ts";
+import {HomepageSection, HomepageThemeSettings, OrganizerSettings} from "../../../../types.ts";
+import {cleanHomepageSections, resolveOrganizerHomepageSections} from "../../../../utilites/homepageSections.ts";
+import {SectionsEditor} from "../../event/HomepageDesigner/SectionsEditor";
+import {organizerSectionEmptyState, SectionEmptyState} from "../../event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Group, Stack, Text} from "@mantine/core";
-import {IconHelp, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
+import {IconHelp, IconLayoutList, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {GET_ORGANIZER_QUERY_KEY, useGetOrganizer} from "../../../../queries/useGetOrganizer.ts";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
@@ -23,6 +26,7 @@ import {DesignerSection} from "../../../common/DesignerShell";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
+    homepage_sections: HomepageSection[];
 }
 
 const OrganizerHomepageDesigner = () => {
@@ -34,10 +38,15 @@ const OrganizerHomepageDesigner = () => {
 
     const existingLogo = organizerQuery.data?.images?.find((image) => image.type === 'ORGANIZER_LOGO');
     const existingCover = organizerQuery.data?.images?.find((image) => image.type === 'ORGANIZER_COVER');
+    const sectionImageIds = (organizerQuery.data?.images ?? [])
+        .filter(image => image.type === 'ORGANIZER_GALLERY' || image.type === 'ORGANIZER_SPONSOR_LOGO')
+        .map(image => image.id)
+        .join('.');
 
     const form = useForm<FormValues>({
         initialValues: {
             homepage_theme_settings: getDefaultThemeSettings(),
+            homepage_sections: resolveOrganizerHomepageSections(),
         }
     });
 
@@ -45,6 +54,7 @@ const OrganizerHomepageDesigner = () => {
         if (organizerSettingsQuery.data && !form.isDirty()) {
             const values = {
                 homepage_theme_settings: validateThemeSettings(organizerSettingsQuery.data.homepage_theme_settings),
+                homepage_sections: resolveOrganizerHomepageSections(organizerSettingsQuery.data.homepage_sections),
             };
             form.setValues(values);
             form.resetDirty(values);
@@ -56,10 +66,11 @@ const OrganizerHomepageDesigner = () => {
     const preview = useHomepagePreview({
         path: organizerPreviewPath(organizerId),
         ready: organizerSettingsQuery.isFetched && organizerQuery.isFetched,
-        imageVersion: `cover_image_id=${existingCover?.id}&logo_image_id=${existingLogo?.id}`,
+        imageVersion: `cover_image_id=${existingCover?.id}&logo_image_id=${existingLogo?.id}&section_images=${sectionImageIds}`,
         messageType: 'UPDATE_ORGANIZER_SETTINGS',
         settings: {
             homepage_theme_settings: validateThemeSettings(form.values.homepage_theme_settings),
+            homepage_sections: cleanHomepageSections(form.values.homepage_sections),
             logoUrl: existingLogo?.url,
             coverUrl: existingCover?.url,
         },
@@ -68,6 +79,7 @@ const OrganizerHomepageDesigner = () => {
     const handleSubmit = (values: FormValues) => {
         const organizerSettings: Partial<OrganizerSettings> = {
             homepage_theme_settings: validateThemeSettings(values.homepage_theme_settings),
+            homepage_sections: cleanHomepageSections(values.homepage_sections),
         };
 
         updateMutation.mutate(
@@ -96,6 +108,18 @@ const OrganizerHomepageDesigner = () => {
         });
     };
 
+    const emptyStates = useMemo(() => {
+        const imageIds = new Set((organizerQuery.data?.images ?? []).map(image => Number(image.id)));
+        const states = new Map<string, SectionEmptyState>();
+        form.values.homepage_sections.forEach(section => {
+            const state = organizerSectionEmptyState(section, organizerQuery.data, imageIds);
+            if (state) {
+                states.set(section.id, state);
+            }
+        });
+        return states;
+    }, [form.values.homepage_sections, organizerQuery.data]);
+
     return (
         <HomepageDesigner
             title={t`Homepage Design`}
@@ -106,6 +130,19 @@ const OrganizerHomepageDesigner = () => {
             onSave={() => form.onSubmit(handleSubmit)()}
             onDiscard={() => form.reset()}
         >
+            <DesignerSection icon={<IconLayoutList/>} title={t`Sections`}>
+                <SectionsEditor
+                    variant="organizer"
+                    entityId={organizerId!}
+                    sections={form.values.homepage_sections}
+                    images={organizerQuery.data?.images ?? []}
+                    emptyStates={emptyStates}
+                    disabled={isDisabled}
+                    onChange={update => form.setFieldValue('homepage_sections', update)}
+                    onImagesChanged={handleImageChange}
+                />
+            </DesignerSection>
+
             <DesignerSection icon={<IconPhoto/>} title={t`Images`}>
                 <Stack gap="lg">
                     <div>

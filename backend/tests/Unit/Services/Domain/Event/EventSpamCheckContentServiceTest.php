@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Tests\Unit\Services\Domain\Event;
 
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\EventLineupEntryDomainObject;
+use HiEvents\DomainObjects\EventScheduleItemDomainObject;
 use HiEvents\DomainObjects\EventSettingDomainObject;
+use HiEvents\DomainObjects\EventSpaceDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\OrganizerSettingDomainObject;
 use HiEvents\DomainObjects\ProductCategoryDomainObject;
 use HiEvents\DomainObjects\ProductDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\DomainObjects\QuestionDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Event\EventSpamCheckContentService;
@@ -59,6 +63,79 @@ class EventSpamCheckContentServiceTest extends TestCase
             'question 1 title' => 'Dietary requirements',
             'question 1 description' => '<p>Question blurb</p>',
         ], $content->supplementaryContent);
+    }
+
+    public function test_collects_lineup_and_schedule_content(): void
+    {
+        $event = (new EventDomainObject)
+            ->setId(1)
+            ->setAccountId(9)
+            ->setTitle('Festival')
+            ->setEventLineupEntries(new Collection([
+                (new EventLineupEntryDomainObject)
+                    ->setRoleLabel('Headliner')
+                    ->setProfile((new ProfileDomainObject)
+                        ->setName('Nova Lights')
+                        ->setTagline('Berlin techno')
+                        ->setBio('<p>Artist bio</p>')
+                        ->setLinks([['type' => 'WEBSITE', 'url' => 'https://nova.example'], ['type' => 'SPOTIFY', 'url' => 'https://open.spotify.com/a']])),
+            ]))
+            ->setEventSpaces(new Collection([(new EventSpaceDomainObject)->setName('Main Stage')]))
+            ->setEventScheduleItems(new Collection([
+                (new EventScheduleItemDomainObject)->setTitle('Closing set')->setDescription('<p>Set notes</p>'),
+            ]));
+
+        $this->assertSame([
+            'lineup 1 role' => 'Headliner',
+            'lineup 1 name' => 'Nova Lights',
+            'lineup 1 tagline' => 'Berlin techno',
+            'lineup 1 bio' => '<p>Artist bio</p>',
+            'lineup 1 links' => 'https://nova.example https://open.spotify.com/a',
+            'space 1 name' => 'Main Stage',
+            'schedule item 1 title' => 'Closing set',
+            'schedule item 1 description' => '<p>Set notes</p>',
+        ], $this->service->buildForEvent($event)->supplementaryContent);
+    }
+
+    public function test_collects_homepage_section_content(): void
+    {
+        $event = (new EventDomainObject)
+            ->setId(1)
+            ->setAccountId(9)
+            ->setTitle('Festival')
+            ->setEventSettings((new EventSettingDomainObject)->setHomepageSections([
+                ['id' => 'a', 'type' => 'TEXT', 'heading' => 'Travel', 'body' => '<p>Bus</p>'],
+                ['id' => 'b', 'type' => 'FAQ', 'faqs' => [['question' => 'Parking?', 'answer' => '<p>Yes</p>']]],
+                ['id' => 'c', 'type' => 'SPONSORS', 'sponsors' => [['image_id' => 1, 'name' => 'Acme', 'url' => 'https://acme.example']]],
+            ]));
+
+        $content = $this->service->buildForEvent($event)->supplementaryContent;
+
+        $this->assertSame('Travel', $content['homepage section 1 heading']);
+        $this->assertSame('<p>Bus</p>', $content['homepage section 1 body']);
+        $this->assertSame('Parking?', $content['homepage section 2 question 1']);
+        $this->assertSame('Acme https://acme.example', $content['homepage section 3 sponsor 1']);
+    }
+
+    public function test_collects_organizer_homepage_section_content(): void
+    {
+        $event = (new EventDomainObject)
+            ->setId(1)
+            ->setAccountId(9)
+            ->setTitle('Festival')
+            ->setOrganizer((new OrganizerDomainObject)
+                ->setName('Promoter')
+                ->setOrganizerSettings((new OrganizerSettingDomainObject)->setHomepageSections([
+                    ['id' => 'events', 'type' => 'EVENTS', 'enabled' => true],
+                    ['id' => 'a', 'type' => 'TEXT', 'heading' => 'Our story', 'body' => '<p>Since 2010</p>'],
+                    ['id' => 'v', 'type' => 'VIDEO', 'video_url' => 'https://youtu.be/abcdefgh'],
+                ])));
+
+        $content = $this->service->buildForEvent($event)->supplementaryContent;
+
+        $this->assertSame('Our story', $content['organizer homepage section 2 heading']);
+        $this->assertSame('<p>Since 2010</p>', $content['organizer homepage section 2 body']);
+        $this->assertSame('https://youtu.be/abcdefgh', $content['organizer homepage section 3 video']);
     }
 
     public function test_all_html_covers_description_and_supplementary_content(): void

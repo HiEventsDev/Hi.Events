@@ -1,6 +1,7 @@
 import {LoaderFunctionArgs, redirect} from "react-router";
 import {promoCodeClientPublic} from "../api/promo-code.client.ts";
 import {getEventPublicQuery} from "../queries/useGetEventPublic.ts";
+import {getEventLineupPublicQuery} from "../queries/useGetEventLineupPublic.ts";
 import {getQueryClient} from "../utilites/ssrQueryClient.ts";
 import {loggableError} from "../ssr/loggableError.js";
 
@@ -30,7 +31,10 @@ export const publicEventRouteLoader = async ({params, request}: LoaderFunctionAr
             occurrenceId,
         );
 
-        const event = await getQueryClient().fetchQuery(eventQuery);
+        const [event] = await Promise.all([
+            getQueryClient().fetchQuery(eventQuery),
+            getQueryClient().prefetchQuery(getEventLineupPublicQuery(params.eventId)),
+        ]);
 
         if (event && event.slug && params.eventSlug !== event.slug) {
             const searchString = queryParams.toString();

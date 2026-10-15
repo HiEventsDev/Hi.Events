@@ -51,6 +51,7 @@ const OrganizerHomepagePreview = () => {
         settings: {
             ...organizerSettingsQuery.data,
             homepage_theme_settings: previewSettings?.homepage_theme_settings || organizerSettingsQuery.data.homepage_theme_settings,
+            homepage_sections: previewSettings?.homepage_sections ?? organizerSettingsQuery.data.homepage_sections,
         }
     };
 

@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProfileRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Images\CreateImageHandler;
 use HiEvents\Services\Application\Handlers\Images\DTO\CreateImageDTO;
 use HiEvents\Services\Domain\Image\ImageUploadService;
@@ -34,7 +35,8 @@ class CreateImageHandlerTest extends TestCase
             $this->imageUploadService,
             $organizerRepository,
             $eventRepository,
-            $imageRepository
+            $imageRepository,
+            m::mock(ProfileRepositoryInterface::class),
         );
     }
 

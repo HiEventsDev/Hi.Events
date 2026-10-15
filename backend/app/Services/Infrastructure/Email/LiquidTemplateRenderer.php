@@ -265,9 +265,32 @@ class LiquidTemplateRenderer
             ],
         ];
 
+        $lineupTokens = [
+            [
+                'token' => '{{ lineup.heading }}',
+                'description' => __('Heading for the lineup block, such as Lineup'),
+                'example' => 'Lineup',
+            ],
+            [
+                'token' => '{{ lineup.names | join: ", " }}',
+                'description' => __('Headliners on the attendee\'s date who aren\'t already listed under the key times'),
+                'example' => 'Velvet Harbour, The Northern Arcs',
+            ],
+            [
+                'token' => '{% for slot in lineup.slots %}{{ slot.time }} {{ slot.title }} {{ slot.stage }}{% endfor %}',
+                'description' => __('Key times from the schedule for the attendee\'s date'),
+                'example' => 'Fri 25 Apr · 9:30 PM Velvet Harbour Main Stage',
+            ],
+            [
+                'token' => '{{ lineup.url }}',
+                'description' => __('Link to the full schedule on the event page'),
+                'example' => 'https://example.com/event/123/summer-fest#schedule',
+            ],
+        ];
+
         return match ($type) {
-            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens),
-            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens),
+            EmailTemplateType::ORDER_CONFIRMATION => array_merge($commonTokens, $orderTokens, $lineupTokens),
+            EmailTemplateType::ATTENDEE_TICKET => array_merge($commonTokens, $orderTokens, $attendeeTokens, $lineupTokens),
             EmailTemplateType::OCCURRENCE_CANCELLATION => array_merge($commonTokens, $cancellationTokens),
         };
     }

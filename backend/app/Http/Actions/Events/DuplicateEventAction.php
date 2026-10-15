@@ -51,6 +51,7 @@ class DuplicateEventAction extends BaseAction
                 duplicateTicketLogo: $request->validated('duplicate_ticket_logo'),
                 duplicateWebhooks: $request->validated('duplicate_webhooks'),
                 duplicateAffiliates: $request->validated('duplicate_affiliates'),
+                duplicateLineup: $request->validated('duplicate_lineup') ?? true,
                 duplicateOccurrences: $request->validated('duplicate_occurrences') ?? true,
                 description: $request->validated('description'),
                 endDate: $request->validated('end_date'),

@@ -44,6 +44,8 @@ class AccountDeletionExecutionTest extends TestCase
 
     private Question $question;
 
+    private int $profileId;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -100,6 +102,12 @@ class AccountDeletionExecutionTest extends TestCase
             'stripe_account_id' => 'acct_deltest123',
             'name' => 'Anonymized',
         ]);
+
+        $profile = DB::table('profiles')->where('id', $this->profileId)->first();
+        $this->assertNotSame('Ada Speaker', $profile->name);
+        $this->assertNull($profile->tagline);
+        $this->assertNull($profile->bio);
+        $this->assertNull($profile->links);
 
         $this->assertNotEmpty($manifest);
         $this->assertContains('orders', array_column($manifest, 'entity'));
@@ -221,6 +229,16 @@ class AccountDeletionExecutionTest extends TestCase
         ]);
 
         $this->event = $this->seedEvent('Past Event', $this->account->id, $organizer->id, $this->soleUser->id, 'evt_doomed');
+        $this->profileId = DB::table('profiles')->insertGetId([
+            'account_id' => $this->account->id,
+            'organizer_id' => $organizer->id,
+            'name' => 'Ada Speaker',
+            'tagline' => 'CTO',
+            'bio' => '<p>Personal bio</p>',
+            'links' => json_encode([['type' => 'WEBSITE', 'url' => 'https://ada.example.com']]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $product = Product::forceCreate([
             'event_id' => $this->event->id,

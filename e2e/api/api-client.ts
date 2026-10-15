@@ -165,6 +165,40 @@ export class ApiClient {
     return unwrap<ImageRecord>(this.request.post(`events/${eventId}/images`, { multipart: { image, type } }));
   }
 
+  createLineupProfile(organizerId: number, payload: { name: string; tagline?: string; links?: string[] }): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`organizers/${organizerId}/profiles`, { headers: jsonHeaders, data: payload }));
+  }
+
+  addLineupEntry(
+    eventId: number,
+    payload: { profile_id: number; billing_tier: 'HEADLINER' | 'FEATURED' | 'STANDARD'; is_hidden?: boolean },
+  ): Promise<{ id: number }> {
+    return unwrap<{ id: number }>(this.request.post(`events/${eventId}/lineup/entries`, { headers: jsonHeaders, data: payload }));
+  }
+
+  getLineup(eventId: number): Promise<{
+    entries: { profile: { name: string; tagline: string | null; links: { type: string; url: string }[] } }[];
+    schedule_items: { starts_at: string }[];
+  }> {
+    return unwrap(this.request.get(`events/${eventId}/lineup`, { headers: jsonHeaders }));
+  }
+
+  importLineup(
+    eventId: number,
+    payload: {
+      people: { name: string; billing_tier?: 'HEADLINER' | 'FEATURED' | 'STANDARD' }[];
+      slots: { starts_at: string; ends_at: string; stage?: string; title?: string; people: string[] }[];
+    },
+  ): Promise<void> {
+    return this.request
+      .post(`events/${eventId}/lineup/import`, { headers: jsonHeaders, data: payload })
+      .then(async (response) => {
+        if (!response.ok()) {
+          throw new Error(`POST lineup/import → ${response.status()}: ${await response.text()}`);
+        }
+      });
+  }
+
   listProductCategories(eventId: number): Promise<ProductCategory[]> {
     return unwrap<ProductCategory[]>(this.request.get(`events/${eventId}/product-categories`, { headers: jsonHeaders }));
   }

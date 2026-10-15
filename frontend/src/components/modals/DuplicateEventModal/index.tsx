@@ -36,6 +36,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
             duplicate_ticket_logo: true,
             duplicate_webhooks: true,
             duplicate_affiliates: true,
+            duplicate_lineup: true,
             duplicate_occurrences: true,
         }
     });
@@ -56,6 +57,7 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
         { key: 'duplicate_ticket_logo', label: t`Ticket Logo` },
         { key: 'duplicate_webhooks', label: t`Webhooks` },
         { key: 'duplicate_affiliates', label: t`Affiliates` },
+        { key: 'duplicate_lineup', label: t`Lineup & Schedule`, description: isRecurring ? undefined : t`Time slots move with the new start date` },
         ...(isRecurring ? [{ key: 'duplicate_occurrences' as const, label: t`Occurrences (future only)`, description: t`Future dates will be copied with capacity reset to zero` }] : []),
     ];
 

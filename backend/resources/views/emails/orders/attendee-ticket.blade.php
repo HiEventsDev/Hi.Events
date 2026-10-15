@@ -4,6 +4,7 @@
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
 @php /** @var array<int, array{attendee: \HiEvents\DomainObjects\AttendeeDomainObject, occurrence: ?\HiEvents\DomainObjects\EventOccurrenceDomainObject, venueName: ?string, addressString: ?string, ticketUrl: string}> $tickets */ @endphp
+@php /** @var \HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO|null $lineup */ @endphp
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
 @php
@@ -74,6 +75,8 @@
 </x-mail::button>
 
 @endforeach
+@include('emails.partials.lineup-highlights', ['lineup' => $lineup])
+
 {{ __('If you have any questions or need assistance, please reply to this email or contact the event organizer') }}
 {{ __('at') }} <a href="mailto:{{$eventSettings->getSupportEmail()}}">{{$eventSettings->getSupportEmail()}}</a>.
 

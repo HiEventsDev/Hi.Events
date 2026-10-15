@@ -11,6 +11,7 @@ import {
     IconEyeOff,
     IconArmchair,
     IconMapPin,
+    IconMicrophone2,
     IconPaint,
     IconSettings,
     IconShare,
@@ -116,6 +117,7 @@ const OrganizerLayout = () => {
 
         { label: t`Library` },
         { link: 'locations', label: t`Locations`, icon: IconMapPin },
+        { link: 'people', label: t`People`, icon: IconMicrophone2 },
         { link: 'seat-maps', label: t`Seat Maps`, icon: IconArmchair, showWhen: () => !isReadOnly && seating.isVisible },
 
         { label: t`Integrations` },

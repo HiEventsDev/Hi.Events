@@ -5,6 +5,7 @@
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\EventOccurrenceDomainObject|null $occurrence */ @endphp
 @php /** @var string $orderUrl */ @endphp
+@php /** @var \HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO|null $lineup */ @endphp
 
 @php /** @see \HiEvents\Mail\Order\OrderSummary */ @endphp
 
@@ -51,6 +52,8 @@
 @endif
 
 </p>
+
+@include('emails.partials.lineup-highlights', ['lineup' => $lineup])
 
 @if($eventSettings->getPostCheckoutMessage() && $order->isOrderCompleted())
 <p>
