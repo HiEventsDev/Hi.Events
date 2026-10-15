@@ -736,7 +736,9 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .profileModal {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--event-content-bg-color);
   color: var(--event-primary-text-color);
   font-family: var(--theme-font-family, inherit);
@@ -745,6 +747,13 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 .profileModalBody {
   position: relative;
   padding: 0;
+}
+
+.dialogControls {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 0;
 }
 
 .profileClose {
@@ -1008,7 +1017,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   height: 36px;
   border: 0;
   border-radius: 50%;
-  background: var(--event-accent-soft);
+  background: linear-gradient(var(--event-accent-soft), var(--event-accent-soft)), var(--event-content-bg-color);
   color: var(--event-primary-text-color);
   cursor: pointer;
 }

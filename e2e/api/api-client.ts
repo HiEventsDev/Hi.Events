@@ -165,7 +165,7 @@ export class ApiClient {
     return unwrap<ImageRecord>(this.request.post(`events/${eventId}/images`, { multipart: { image, type } }));
   }
 
-  createLineupProfile(organizerId: number, payload: { name: string; tagline?: string; links?: string[] }): Promise<{ id: number }> {
+  createLineupProfile(organizerId: number, payload: { name: string; tagline?: string; bio?: string; links?: string[] }): Promise<{ id: number }> {
     return unwrap<{ id: number }>(this.request.post(`organizers/${organizerId}/profiles`, { headers: jsonHeaders, data: payload }));
   }
 

@@ -249,7 +249,7 @@ test.describe('lineup for visitors', () => {
     await page.goto('about:blank');
     await page.goto(sessionUrl);
     await expect(page.getByTestId('session-modal')).toContainText(headliner);
-    await page.getByTestId('session-modal').getByRole('button', { name: 'Close' }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
     await expect(page).not.toHaveURL(/#session-/);
 
     await page.goto(`/widget/${event.eventId}?ShowLineup=true`);

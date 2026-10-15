@@ -73,7 +73,7 @@ export const SessionModal = ({event, lineup, item, entriesById, portalTarget, on
             title={title}
             classNames={{content: classes.profileModal, body: classes.profileModalBody, header: classes.visuallyHidden}}
         >
-            <div className={classes.sessionHeader} data-space-index={space ? spaceIndex % 6 : undefined} data-has-back={onBack ? true : undefined} data-testid="session-modal">
+            <div className={classes.dialogControls}>
                 {onBack && (
                     <button type="button" className={classes.dialogBack} onClick={onBack} aria-label={t`Back`}>
                         <IconArrowLeft size={18}/>
@@ -82,6 +82,8 @@ export const SessionModal = ({event, lineup, item, entriesById, portalTarget, on
                 <button type="button" className={classes.sessionClose} onClick={onClose} aria-label={t`Close`}>
                     <IconX size={18}/>
                 </button>
+            </div>
+            <div className={classes.sessionHeader} data-space-index={space ? spaceIndex % 6 : undefined} data-has-back={onBack ? true : undefined} data-testid="session-modal">
                 {space && (
                     <span className={classes.sessionSpace}>
                         <span className={classes.spaceDot} data-space-index={spaceIndex % 6}/>

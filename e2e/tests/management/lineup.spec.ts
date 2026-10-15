@@ -96,4 +96,30 @@ test.describe('event lineup and schedule', () => {
     await expect(lineupSection).toContainText(announced);
     await expect(lineupSection).not.toContainText(secret);
   });
+
+  test('a long profile scrolls inside its popup on a phone and keeps the close button in reach', async ({ page, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const name = uniqueName('Headliner');
+    const headliner = await api.createLineupProfile(account.organizerId, {
+      name,
+      bio: Array.from({ length: 12 }, (_, index) => `<p>Chapter ${index + 1} of a biography long enough to run well past the bottom of a phone screen.</p>`).join(''),
+      links: ['https://open.spotify.com/artist/4tZwfgrHOc3mvqYlEYSvVi'],
+    });
+    await api.addLineupEntry(event.eventId, { profile_id: headliner.id, billing_tier: 'HEADLINER' });
+
+    await page.setViewportSize({ width: 390, height: 664 });
+    await new PublicEventPage(page).goto(event.eventId, event.slug);
+    await page.getByTestId('event-lineup-section').getByRole('button', { name: `About ${name}` }).click();
+
+    const profile = page.getByRole('dialog', { name });
+    const lastChapter = profile.getByText('Chapter 12 of a biography');
+    await expect(profile.getByRole('heading', { name, level: 3 })).toBeVisible();
+    await expect(lastChapter).not.toBeInViewport();
+
+    await profile.getByRole('heading', { name, level: 3 }).hover();
+    await page.mouse.wheel(0, 4000);
+
+    await expect(lastChapter).toBeInViewport();
+    await expect(profile.getByRole('button', { name: 'Close' })).toBeInViewport();
+  });
 });

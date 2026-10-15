@@ -43,14 +43,16 @@ export const ProfileModal = ({event, entry, lineup, portalTarget, onClose, onBac
             title={profile.name}
             classNames={{content: classes.profileModal, body: classes.profileModalBody, header: classes.visuallyHidden}}
         >
-            {onBack && (
-                <button type="button" className={classes.dialogBack} onClick={onBack} aria-label={t`Back`}>
-                    <IconArrowLeft size={18}/>
+            <div className={classes.dialogControls}>
+                {onBack && (
+                    <button type="button" className={classes.dialogBack} onClick={onBack} aria-label={t`Back`}>
+                        <IconArrowLeft size={18}/>
+                    </button>
+                )}
+                <button type="button" className={classes.profileClose} onClick={onClose} aria-label={t`Close`}>
+                    <IconX size={18}/>
                 </button>
-            )}
-            <button type="button" className={classes.profileClose} onClick={onClose} aria-label={t`Close`}>
-                <IconX size={18}/>
-            </button>
+            </div>
 
             <div className={classes.profileHero} data-empty={!photo || undefined} style={photo?.avg_colour ? {backgroundColor: photo.avg_colour} : undefined}>
                 {photo
