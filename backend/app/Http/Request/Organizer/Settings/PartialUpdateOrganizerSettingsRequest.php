@@ -26,7 +26,6 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                 }
 
                 $isSaasMode = config('app.saas_mode_enabled');
-                $existingTagManagerIds = $this->existingTagManagerIds();
 
                 foreach ($pixels as $index => $pixel) {
                     $providerValue = $pixel['provider'] ?? null;
@@ -43,8 +42,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                     }
 
                     if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
-                        && ! in_array($pixelId, $existingTagManagerIds, true)
                         && app(AccountUserAccessService::class)->isWithheldFromCurrentUser(Permission::MANAGE_ACCOUNT)
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
                     ) {
                         $validator->errors()->add(
                             "tracking_pixels.{$index}.provider",
