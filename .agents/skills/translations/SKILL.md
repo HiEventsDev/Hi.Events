@@ -1,64 +1,34 @@
 ---
 name: translations
-description: Frontend translation workflow using Lingui - extracting, adding, and compiling translations for all supported languages
+description: Add or update frontend translations with Lingui. Use after adding or changing any user-facing frontend string, to extract it, translate it into every supported locale and compile.
 ---
 
-# Frontend Translation Workflow (Lingui)
+# Frontend translations (Lingui)
 
-IMPORTANT: Always update translations as you develop features. When adding new translatable strings, immediately add translations for all supported languages.
+Every new or changed user-facing string is translated into all supported locales in the same change.
 
-## Core Commands
+## Steps
 
 ```bash
 cd frontend
-
-# Extract translatable strings (use --clean for accurate counts)
-yarn messages:extract --clean
-
-# Compile translations for production
-yarn messages:compile
-
-# Check for untranslated strings
-cd scripts && ./list_untranslated_strings.sh
+yarn messages:extract --clean   # the table shows missing translations per locale
 ```
 
-## Process
+1. Add a translation to every `.po` file in `frontend/src/locales/` except `en.po` (English is the source):
 
-1. **Extract**: `yarn messages:extract --clean`
-2. **Check**: Look at the output table for missing translation counts
-3. **Add translations**: Update the `.po` files for each language
-4. **Verify**: Run extract again to confirm 0 missing
-5. **Compile**: `yarn messages:compile`
+   ```po
+   #: src/path/to/component.tsx:123
+   msgid "Your English String"
+   msgstr "Translated String"
+   ```
 
-## Adding Translations
+2. Run `yarn messages:extract --clean` again and confirm 0 missing for each locale.
+3. Run `yarn messages:compile`.
 
-Add entries to each locale's `.po` file in `frontend/src/locales/`:
-
-```po
-#: src/path/to/component.tsx:123
-msgid "Your English String"
-msgstr "Translated String"
-```
-
-## Supported Languages
-
-| Code | Language |
-|------|----------|
-| en | English (source - no translation needed) |
-| de | Deutsch |
-| es | Espanol |
-| fr | Francais |
-| pt | Portugues |
-| pt-br | Portugues do Brasil |
-| it | Italiano |
-| nl | Nederlands |
-| zh-cn | Simplified Chinese |
-| zh-hk | Traditional Chinese (HK) |
-| vi | Tieng Viet |
-| ru | Russian (currently untranslated) |
+`frontend/scripts/list_untranslated_strings.sh` lists anything still untranslated.
 
 ## Troubleshooting
 
-- **Counts seem wrong**: Use `--clean` flag to remove obsolete entries
-- **Translation not appearing**: Run `yarn messages:compile` after adding
-- **Syntax errors**: Check for proper escaping of quotes in `.po` files
+- Counts look wrong: run extract with `--clean` to drop obsolete entries.
+- Translation not showing: run `yarn messages:compile`.
+- `.po` syntax errors: check the escaping of quotes.
