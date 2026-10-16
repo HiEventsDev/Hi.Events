@@ -1,20 +1,24 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {useParams} from "react-router";
 import {useGetEventSettings} from "../../../../queries/useGetEventSettings.ts";
 import {useUpdateEventSettings} from "../../../../mutations/useUpdateEventSettings.ts";
 import {useFormErrorResponseHandler} from "../../../../hooks/useFormErrorResponseHandler.tsx";
-import {EventSettings, HomepageThemeSettings} from "../../../../types.ts";
+import {EventSettings, HomepageSection, HomepageThemeSettings} from "../../../../types.ts";
+import {cleanHomepageSections, resolveHomepageSections} from "../../../../utilites/homepageSections.ts";
+import {SectionsEditor} from "./SectionsEditor";
+import {SectionEmptyState, sectionEmptyState} from "./SectionsEditor/sectionEmptyState.ts";
+import {useGetEventLineupPublic} from "../../../../queries/useGetEventLineupPublic.ts";
 import {showSuccess} from "../../../../utilites/notifications.tsx";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Group, Stack, Text, TextInput} from "@mantine/core";
-import {IconClick, IconHelp, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
+import {IconClick, IconHelp, IconLayoutList, IconPalette, IconPhoto, IconTypography} from "@tabler/icons-react";
 import {Tooltip} from "../../../common/Tooltip";
 import {GET_EVENT_IMAGES_QUERY_KEY, useGetEventImages} from "../../../../queries/useGetEventImages.ts";
 import {eventPreviewPath} from "../../../../utilites/urlHelper.ts";
 import {ImageUploadDropzone} from "../../../common/ImageUploadDropzone";
 import {queryClient} from "../../../../utilites/queryClient.ts";
-import {GET_EVENT_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEventPublic.ts";
+import {GET_EVENT_PUBLIC_QUERY_KEY, useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
 import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
@@ -23,12 +27,14 @@ import {DesignerSection} from "../../../common/DesignerShell";
 
 interface FormValues {
     homepage_theme_settings: Partial<HomepageThemeSettings>;
+    homepage_sections: HomepageSection[];
     continue_button_text: string;
     get_tickets_button_text: string;
 }
 
 const formValuesFromSettings = (settings: EventSettings): FormValues => ({
     homepage_theme_settings: validateThemeSettings(settings.homepage_theme_settings),
+    homepage_sections: resolveHomepageSections(settings.homepage_sections),
     continue_button_text: settings.continue_button_text || '',
     get_tickets_button_text: settings.get_tickets_button_text || '',
 });
@@ -38,13 +44,20 @@ const HomepageDesigner = () => {
     const eventSettingsQuery = useGetEventSettings(eventId);
     const eventImagesQuery = useGetEventImages(eventId);
     const updateMutation = useUpdateEventSettings();
+    const publicEventQuery = useGetEventPublic(eventId);
+    const lineupQuery = useGetEventLineupPublic(eventId);
     const formErrorHandle = useFormErrorResponseHandler();
 
     const existingCover = eventImagesQuery.data?.find((image) => image.type === 'EVENT_COVER');
+    const sectionImageIds = (eventImagesQuery.data ?? [])
+        .filter(image => image.type === 'EVENT_GALLERY' || image.type === 'EVENT_SPONSOR_LOGO')
+        .map(image => image.id)
+        .join('.');
 
     const form = useForm<FormValues>({
         initialValues: {
             homepage_theme_settings: getDefaultThemeSettings(),
+            homepage_sections: resolveHomepageSections(),
             continue_button_text: '',
             get_tickets_button_text: '',
         }
@@ -60,13 +73,26 @@ const HomepageDesigner = () => {
 
     const isDisabled = eventSettingsQuery.isLoading || updateMutation.isPending;
 
+    const emptyStates = useMemo(() => {
+        const imageIds = new Set((eventImagesQuery.data ?? []).map(image => Number(image.id)));
+        const states = new Map<string, SectionEmptyState>();
+        form.values.homepage_sections.forEach(section => {
+            const state = sectionEmptyState(section, publicEventQuery.data, lineupQuery.data, imageIds);
+            if (state) {
+                states.set(section.id, state);
+            }
+        });
+        return states;
+    }, [form.values.homepage_sections, publicEventQuery.data, lineupQuery.data, eventImagesQuery.data]);
+
     const preview = useHomepagePreview({
         path: eventPreviewPath(eventId),
         ready: eventSettingsQuery.isFetched && eventImagesQuery.isFetched,
-        imageVersion: `cover_image_id=${existingCover?.id}`,
+        imageVersion: `cover_image_id=${existingCover?.id}&section_images=${sectionImageIds}`,
         messageType: 'UPDATE_SETTINGS',
         settings: {
             homepage_theme_settings: validateThemeSettings(form.values.homepage_theme_settings),
+            homepage_sections: cleanHomepageSections(form.values.homepage_sections),
             continue_button_text: form.values.continue_button_text,
             get_tickets_button_text: form.values.get_tickets_button_text,
         },
@@ -77,6 +103,7 @@ const HomepageDesigner = () => {
 
         const eventSettings: Partial<EventSettings> = {
             homepage_theme_settings: validatedTheme,
+            homepage_sections: cleanHomepageSections(values.homepage_sections),
             continue_button_text: values.continue_button_text,
             get_tickets_button_text: values.get_tickets_button_text,
             homepage_primary_color: validatedTheme.accent,
@@ -117,6 +144,19 @@ const HomepageDesigner = () => {
             onSave={() => form.onSubmit(handleSubmit)()}
             onDiscard={() => form.reset()}
         >
+            <DesignerSection icon={<IconLayoutList/>} title={t`Sections`}>
+                <SectionsEditor
+                    variant="event"
+                    entityId={eventId!}
+                    sections={form.values.homepage_sections}
+                    images={eventImagesQuery.data ?? []}
+                    emptyStates={emptyStates}
+                    disabled={isDisabled}
+                    onChange={update => form.setFieldValue('homepage_sections', update)}
+                    onImagesChanged={handleImageChange}
+                />
+            </DesignerSection>
+
             <DesignerSection icon={<IconPhoto/>} title={t`Images`}>
                 <Group justify="space-between" mb="xs">
                     <Text fw={500} size="sm">{t`Cover Image`}</Text>

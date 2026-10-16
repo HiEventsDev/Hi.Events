@@ -34,6 +34,8 @@ test.describe('read-only and permission spot checks', () => {
     await freshAccount.api.createCapacityAssignment(event.eventId, { name: uniqueShort('Cap'), capacity: 10, status: 'ACTIVE', product_ids: [event.productId] });
     await freshAccount.api.createOrganizerLocation(freshAccount.organizerId, { name: 'Main Hall', structured_address: { city: 'Dublin', country: 'IE' } });
     await freshAccount.api.createQuestion(event.eventId, { title: 'Dietary needs', type: 'SINGLE_LINE_TEXT', belongs_to: 'ORDER', product_ids: [], required: false, is_hidden: false });
+    const speaker = await freshAccount.api.createLineupProfile(freshAccount.organizerId, { name: 'Ada Speaker' });
+    await freshAccount.api.addLineupEntry(event.eventId, { profile_id: speaker.id, billing_tier: 'HEADLINER' });
 
     const { page } = await invitedMember(freshAccount, mailpit, publicApi, browser, { role: 'VIEWER' });
     const base = `/manage/event/${event.eventId}`;
@@ -56,6 +58,18 @@ test.describe('read-only and permission spot checks', () => {
     await expectReadOnlyPage(page, `${base}/affiliates`, /Affiliates/);
     await expect(page.getByText(affiliateCode).first()).toBeVisible();
     await expectReadOnlyPage(page, `${base}/messages`, /Messages/);
+    await expectReadOnlyPage(page, `${base}/lineup`, /Lineup & Schedule/);
+    await expect(page.getByTestId('lineup-people-list')).toContainText('Ada Speaker');
+    await expect(page.getByTestId('lineup-quick-add-input')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Drag to reorder' })).toHaveCount(0);
+    await expect(page.getByTestId('lineup-import-button')).toHaveCount(0);
+    await page.getByTestId('lineup-export-button').click();
+    const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('lineup-export-xlsx').click()]);
+    expect(download.suggestedFilename()).toMatch(/-run-sheet\.xlsx$/);
+    await page.goto(`${base}/lineup/print`);
+    await expect(page.getByText('Run sheet', { exact: true })).toBeVisible();
+    await expectReadOnlyPage(page, `/manage/organizer/${freshAccount.organizerId}/people`, /People/);
+    await expect(page.getByTestId('people-create-button')).toHaveCount(0);
 
     await page.goto(`${base}/promo-codes`);
     await openFirstRowMenu(page, promoCode);
@@ -125,6 +139,10 @@ test.describe('read-only and permission spot checks', () => {
 
     await page.goto(`/manage/event/${event.eventId}/dashboard`);
     await expect(page.getByRole('link', { name: 'Organizer Dashboard' })).toHaveCount(0);
+
+    await page.goto(`/manage/event/${event.eventId}/lineup`);
+    await expect(page.getByTestId('lineup-export-button')).toBeVisible();
+    await expect(page.getByTestId('lineup-import-button')).toHaveCount(0);
 
     await page.goto(`/manage/organizer/${freshAccount.organizerId}/dashboard`);
     await expect(page).toHaveURL(/\/manage\/events/);

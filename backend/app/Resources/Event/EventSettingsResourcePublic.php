@@ -2,6 +2,7 @@
 
 namespace HiEvents\Resources\Event;
 
+use HiEvents\DomainObjects\Enums\HomepageSectionType;
 use HiEvents\DomainObjects\EventSettingDomainObject;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -81,6 +82,7 @@ class EventSettingsResourcePublic extends JsonResource
 
             // Homepage theme settings
             'homepage_theme_settings' => $this->getHomepageThemeSettings(),
+            'homepage_sections' => HomepageSectionType::publicSections($this->getHomepageSections()),
 
             // Self-service settings
             'allow_attendee_self_edit' => $this->getAllowAttendeeSelfEdit(),

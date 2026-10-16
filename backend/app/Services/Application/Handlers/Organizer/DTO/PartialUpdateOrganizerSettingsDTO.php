@@ -57,6 +57,7 @@ class PartialUpdateOrganizerSettingsDTO extends BaseDataObject
 
         // Simplified homepage theme settings
         public readonly array|Optional|null $homepageThemeSettings,
+        public readonly array|Optional|null $homepageSections,
 
         // SEO
         public readonly string|Optional|null $seoKeywords,

@@ -6,8 +6,10 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
+use HiEvents\DomainObjects\Generated\ProfileDomainObjectAbstract;
 use HiEvents\DomainObjects\ImageDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\TaxAndFeesDomainObject;
 use HiEvents\DomainObjects\UserDomainObject;
@@ -19,6 +21,7 @@ use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\ImageRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProfileRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
@@ -67,6 +70,7 @@ readonly class IsAuthorizedService
         $result = match ($entityType) {
             EventDomainObject::class => $this->validateEvent($entityId, $authAccountId, $access),
             OrganizerDomainObject::class => $this->validateOrganizer($entityId, $authAccountId, $access, readOnly: false),
+            ProfileDomainObject::class => $this->validateProfile($entityId, $authAccountId, $access),
             ImageDomainObject::class => $this->validateImage($entityId, $authAccountId, $authUser, $access),
             AccountDomainObject::class => $this->rejectRestricted(
                 $access,
@@ -164,6 +168,7 @@ readonly class IsAuthorizedService
         return match ($image->getEntityType()) {
             EventDomainObject::class => $this->validateEvent($image->getEntityId(), $authAccountId, $access),
             OrganizerDomainObject::class => $this->validateOrganizer($image->getEntityId(), $authAccountId, $access, readOnly: false),
+            ProfileDomainObject::class => $this->validateProfile($image->getEntityId(), $authAccountId, $access),
             UserDomainObject::class => ! $access->isRestricted() || $image->getEntityId() === $authUser->getId(),
             default => ! $access->isRestricted(),
         };
@@ -185,6 +190,20 @@ readonly class IsAuthorizedService
             'account_id' => $authAccountId,
             'user_id' => $user->getId(),
         ]) !== null;
+    }
+
+    private function validateProfile(int $profileId, int $authAccountId, AccountUserAccess $access): bool
+    {
+        $profile = $this->app->make(ProfileRepositoryInterface::class)->findFirstWhere([
+            ProfileDomainObjectAbstract::ID => $profileId,
+            ProfileDomainObjectAbstract::ACCOUNT_ID => $authAccountId,
+        ]);
+
+        if ($profile === null) {
+            return false;
+        }
+
+        return $this->validateOrganizer($profile->getOrganizerId(), $authAccountId, $access, readOnly: false);
     }
 
     private function validateTax(int $taxOrFeeId, int $authAccountId): bool

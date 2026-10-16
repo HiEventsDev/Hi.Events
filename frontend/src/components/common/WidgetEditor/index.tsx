@@ -29,6 +29,7 @@ export const WidgetEditor = () => {
             continue_button_text: t`Continue`,
             padding: 20,
             autoResize: true,
+            showLineup: false,
         },
         validate: {
             background_color: matches(colorRegex, colorMessage),
@@ -61,6 +62,7 @@ export const WidgetEditor = () => {
             'data-hievents-locale="en" ' +
             'data-hievents-padding="' + form.values.padding + 'px" ' +
             'data-hievents-autoresize="' + form.values.autoResize + '" ' +
+            (form.values.showLineup ? 'data-hievents-show-lineup="true" ' : '') +
             'data-hievents-continue-button-text="' + form.values.continue_button_text + '" ' +
             'class="hievents-widget">' +
             '</div>'
@@ -78,7 +80,8 @@ const HiEventsWidget = ({
   backgroundColor = "${form.values.background_color}",
   widgetType = "widget",
   widgetVersion = "1.0",
-  locale = "en"
+  locale = "en",
+  showLineup = ${form.values.showLineup}
 }) => {
   useEffect(() => {
     const script = document.createElement('script');
@@ -102,6 +105,7 @@ const HiEventsWidget = ({
       data-hievents-widget-type={widgetType}
       data-hievents-widget-version={widgetVersion}
       data-hievents-locale={locale}
+      data-hievents-show-lineup={showLineup ? "true" : undefined}
       className="hievents-widget"
     />
   );
@@ -233,6 +237,12 @@ export default App;
                                         size="sm"
                                     />
                                     <Switch
+                                        label={t`Show lineup`}
+                                        {...form.getInputProps('showLineup', {type: 'checkbox'})}
+                                        description={t`Show the people from your lineup above the tickets.`}
+                                        data-testid="widget-show-lineup-switch"
+                                    />
+                                    <Switch
                                         label={t`Auto Resize`}
                                         {...form.getInputProps('autoResize', {type: 'checkbox'})}
                                         description={t`Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container.`}
@@ -356,6 +366,7 @@ export default App;
                                     }}
                                     continueButtonText={form.values.continue_button_text}
                                     padding={form.values.padding + 'px'}
+                                    showLineup={form.values.showLineup}
                                 />
                             }
                         </div>

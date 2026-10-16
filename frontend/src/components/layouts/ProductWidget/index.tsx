@@ -31,6 +31,8 @@ const ProductWidget = () => {
             colors: widgetColorsFromSearchParams(searchParams),
             continueButtonText: searchParams.get("ContinueButtonText") || 'Continue',
             padding: searchParams.get("Padding") || '10px',
+            // eslint-disable-next-line lingui/no-unlocalized-strings
+            showLineup: searchParams.get("ShowLineup") === 'true',
         };
     }, [location.search]);
 
@@ -77,6 +79,7 @@ const ProductWidget = () => {
                 colors={settings.colors}
                 continueButtonText={settings.continueButtonText}
                 padding={settings.padding}
+                showLineup={settings.showLineup}
             />
         </div>
     );

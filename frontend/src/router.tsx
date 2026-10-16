@@ -384,6 +384,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "people",
+                async lazy() {
+                    const People = await import("./components/routes/organizer/People");
+                    return { Component: People.default };
+                }
+            },
+            {
                 path: "seat-maps",
                 async lazy() {
                     const SeatMaps = await import("./ee/seating/components/routes/organizer/SeatMaps");
@@ -500,6 +507,13 @@ export const router: RouteObject[] = [
                 async lazy() {
                     const Affiliates = await import("./components/routes/event/Affiliates");
                     return { Component: Affiliates.default };
+                }
+            },
+            {
+                path: "lineup",
+                async lazy() {
+                    const Lineup = await import("./components/routes/event/Lineup");
+                    return { Component: Lineup.default };
                 }
             },
             {
@@ -748,6 +762,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const TicketDesignerPrint = await import("./components/routes/event/TicketDesigner/TicketDesignerPrint");
             return { Component: TicketDesignerPrint.default };
+        },
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/manage/event/:eventId/lineup/print",
+        async lazy() {
+            const RunSheetPrint = await import("./components/routes/event/Lineup/RunSheetPrint");
+            return { Component: RunSheetPrint.default };
         },
         errorElement: <ErrorPage />
     },

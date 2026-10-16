@@ -124,6 +124,9 @@ class PartialUpdateEventSettingsHandler
                 'homepage_theme_settings' => array_key_exists('homepage_theme_settings', $eventSettingsDTO->settings)
                     ? $eventSettingsDTO->settings['homepage_theme_settings']
                     : $existingSettings->getHomepageThemeSettings(),
+                'homepage_sections' => array_key_exists('homepage_sections', $eventSettingsDTO->settings)
+                    ? $eventSettingsDTO->settings['homepage_sections']
+                    : $existingSettings->getHomepageSections(),
 
                 // Self-service settings
                 'allow_attendee_self_edit' => $eventSettingsDTO->settings['allow_attendee_self_edit'] ?? $existingSettings->getAllowAttendeeSelfEdit(),

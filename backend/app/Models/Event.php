@@ -86,6 +86,21 @@ class Event extends BaseModel
         return $this->hasMany(Affiliate::class);
     }
 
+    public function event_lineup_entries(): HasMany
+    {
+        return $this->hasMany(EventLineupEntry::class);
+    }
+
+    public function event_spaces(): HasMany
+    {
+        return $this->hasMany(EventSpace::class);
+    }
+
+    public function event_schedule_items(): HasMany
+    {
+        return $this->hasMany(EventScheduleItem::class);
+    }
+
     public function event_occurrences(): HasMany
     {
         return $this->hasMany(EventOccurrence::class);

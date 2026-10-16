@@ -182,6 +182,14 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
+
 {% if settings.post_checkout_message %}
 <strong>Additional Information</strong><br>
 {{ settings.post_checkout_message }}<br>
@@ -234,6 +242,14 @@ Please find your ticket details below.<br>
 <strong>Time:</strong> {{ event.time }}<br>
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
+
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
 
 <strong>Your Ticket</strong><br>
 <strong>Ticket Type:</strong> {{ ticket.name }}<br>

@@ -274,6 +274,16 @@ class EmailTokenContextBuilder
             'label' => 'Session A',
         ];
 
+        $baseContext['lineup'] = [
+            'heading' => __('Lineup'),
+            'names' => ['Velvet Harbour', 'The Northern Arcs', 'Mira Solenne'],
+            'slots' => [
+                ['time' => 'Fri 25 Apr · 9:30 PM', 'title' => 'Velvet Harbour', 'stage' => __('Main Stage')],
+                ['time' => 'Sat 26 Apr · 10:00 PM', 'title' => 'The Northern Arcs', 'stage' => __('Main Stage')],
+            ],
+            'url' => 'https://example.com/event/123/summer-fest#schedule',
+        ];
+
         $baseContext['event_location'] = [
             'type' => LocationType::IN_PERSON->name,
             'is_online' => false,

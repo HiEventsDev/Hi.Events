@@ -65,6 +65,7 @@ import {getEmbedParentUrl, getParentOrigin, sendHeightToParent} from "../../../.
 import {Constants} from "../../../../constants.ts";
 import {clearWaitlistJoinedForEvent} from "../../../../hooks/useWaitlistJoined.ts";
 import {OccurrenceSelector} from "../OccurrenceSelector";
+import {WidgetLineupStrip} from "./WidgetLineupStrip.tsx";
 import {CHECKOUT_PREFILL_PARAM_KEYS} from "../../../../hooks/useCheckoutPrefill.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {firstApiError} from "../../../../utilites/apiErrors.ts";
@@ -131,6 +132,7 @@ interface SelectProductsProps {
     checkoutMode?: 'modal' | 'new-tab';
     isSeatPickerPage?: boolean;
     showPoweredBy?: boolean;
+    showLineup?: boolean;
     initialOccurrenceId?: number | null;
     onSelectedOccurrenceChange?: (occurrence?: EventOccurrence) => void;
     onCartChange?: (cart: {quantity: number; total: number}) => void;
@@ -1315,6 +1317,12 @@ const SelectProducts = (props: SelectProductsProps) => {
                         </div>
                     </div>
                 </Modal>
+            )}
+            {props.showLineup && event && !eventHasEnded && (
+                <WidgetLineupStrip
+                    event={event}
+                    occurrence={isRecurring ? event.occurrences?.find(occurrence => occurrence.id === selectedOccurrenceId) : undefined}
+                />
             )}
             {(event && !eventHasEnded && (showRecurringSelector || (!isRecurring && productAreAvailable))) && (
                 <form target={'__blank'} onSubmit={form.onSubmit(handleProductSelection as any)}>

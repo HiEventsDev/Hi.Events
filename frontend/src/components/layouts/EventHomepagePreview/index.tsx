@@ -1,13 +1,14 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import {LoadingOverlay} from "@mantine/core";
-import {Event, HomepageThemeSettings} from "../../../types.ts";
+import {Event, HomepageSection, HomepageThemeSettings} from "../../../types.ts";
 import {useGetEventPublic} from "../../../queries/useGetEventPublic.ts";
 import {EventNotAvailable} from "../EventHomepage/EventNotAvailable";
 import EventHomepage from "../EventHomepage";
 
 interface PreviewSettings {
     homepage_theme_settings?: Partial<HomepageThemeSettings>;
+    homepage_sections?: HomepageSection[];
     continue_button_text?: string;
     get_tickets_button_text?: string;
 }
@@ -45,6 +46,7 @@ const EventHomepagePreview = () => {
             settings: {
                 ...event.settings,
                 homepage_theme_settings: previewSettings.homepage_theme_settings as HomepageThemeSettings || event.settings.homepage_theme_settings,
+                homepage_sections: previewSettings.homepage_sections ?? event.settings.homepage_sections,
                 continue_button_text: previewSettings.continue_button_text ?? event.settings.continue_button_text,
                 get_tickets_button_text: previewSettings.get_tickets_button_text ?? event.settings.get_tickets_button_text,
             }

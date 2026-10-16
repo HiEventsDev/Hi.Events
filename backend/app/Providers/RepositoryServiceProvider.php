@@ -36,12 +36,16 @@ use HiEvents\Repository\Eloquent\CheckInListRepository;
 use HiEvents\Repository\Eloquent\EmailDeliveryRepository;
 use HiEvents\Repository\Eloquent\EmailTemplateRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
+use HiEvents\Repository\Eloquent\EventLineupEntryRepository;
 use HiEvents\Repository\Eloquent\EventLocationRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
+use HiEvents\Repository\Eloquent\EventScheduleItemPerformerRepository;
+use HiEvents\Repository\Eloquent\EventScheduleItemRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
+use HiEvents\Repository\Eloquent\EventSpaceRepository;
 use HiEvents\Repository\Eloquent\EventSpamCheckRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\FeatureFlagRepository;
@@ -69,6 +73,7 @@ use HiEvents\Repository\Eloquent\ProductOccurrenceVisibilityRepository;
 use HiEvents\Repository\Eloquent\ProductPriceOccurrenceOverrideRepository;
 use HiEvents\Repository\Eloquent\ProductPriceRepository;
 use HiEvents\Repository\Eloquent\ProductRepository;
+use HiEvents\Repository\Eloquent\ProfileRepository;
 use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAndAnswerViewRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
@@ -104,12 +109,16 @@ use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailDeliveryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventLineupEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventScheduleItemPerformerRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventScheduleItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSpaceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\FeatureFlagRepositoryInterface;
@@ -137,6 +146,7 @@ use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterfac
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProfileRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -174,6 +184,11 @@ class RepositoryServiceProvider extends ServiceProvider
         OrderRepositoryInterface::class => OrderRepository::class,
         AttendeeRepositoryInterface::class => AttendeeRepository::class,
         AffiliateRepositoryInterface::class => AffiliateRepository::class,
+        ProfileRepositoryInterface::class => ProfileRepository::class,
+        EventLineupEntryRepositoryInterface::class => EventLineupEntryRepository::class,
+        EventSpaceRepositoryInterface::class => EventSpaceRepository::class,
+        EventScheduleItemRepositoryInterface::class => EventScheduleItemRepository::class,
+        EventScheduleItemPerformerRepositoryInterface::class => EventScheduleItemPerformerRepository::class,
         OrderItemRepositoryInterface::class => OrderItemRepository::class,
         QuestionRepositoryInterface::class => QuestionRepository::class,
         QuestionAnswerRepositoryInterface::class => QuestionAnswerRepository::class,

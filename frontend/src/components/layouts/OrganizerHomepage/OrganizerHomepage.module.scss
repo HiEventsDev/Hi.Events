@@ -448,6 +448,54 @@ $transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+.sectionCard {
+  @extend .eventsSection;
+  padding: 28px 32px;
+  --event-primary-color: var(--primary-color);
+  --event-primary-text-color: var(--primary-text-color);
+  --event-secondary-color: var(--secondary-color);
+  --event-border-color: var(--border-color);
+  --event-accent-muted: var(--accent-muted);
+
+  @include mixins.respond-below(md) {
+    padding: 24px 20px;
+    border-top: none;
+  }
+
+  .description {
+    margin-top: 0;
+  }
+}
+
+.sectionCardHeader {
+  margin-bottom: 18px;
+}
+
+.pastEventsFooter {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.footerCard {
+  @extend .eventsSection;
+
+  .footerSection {
+    border-top: none;
+  }
+}
+
+.heroAboutHeading {
+  margin: 20px 0 0;
+  font-family: $font-display;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-text-color);
+
+  + .descriptionBlock {
+    margin-top: 8px;
+  }
+}
+
 .eventsHeader {
   padding: 24px 32px;
   border-bottom: 1px solid var(--border-color);

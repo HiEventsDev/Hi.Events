@@ -35,6 +35,12 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
 
     private ?Collection $affiliates = null;
 
+    private ?Collection $eventLineupEntries = null;
+
+    private ?Collection $eventSpaces = null;
+
+    private ?Collection $eventScheduleItems = null;
+
     private ?Collection $eventOccurrences = null;
 
     private ?EventSettingDomainObject $settings = null;
@@ -479,6 +485,42 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
     public function setEventLocation(?EventLocationDomainObject $eventLocation): self
     {
         $this->eventLocation = $eventLocation;
+
+        return $this;
+    }
+
+    public function getEventLineupEntries(): ?Collection
+    {
+        return $this->eventLineupEntries;
+    }
+
+    public function setEventLineupEntries(?Collection $eventLineupEntries): self
+    {
+        $this->eventLineupEntries = $eventLineupEntries;
+
+        return $this;
+    }
+
+    public function getEventSpaces(): ?Collection
+    {
+        return $this->eventSpaces;
+    }
+
+    public function setEventSpaces(?Collection $eventSpaces): self
+    {
+        $this->eventSpaces = $eventSpaces;
+
+        return $this;
+    }
+
+    public function getEventScheduleItems(): ?Collection
+    {
+        return $this->eventScheduleItems;
+    }
+
+    public function setEventScheduleItems(?Collection $eventScheduleItems): self
+    {
+        $this->eventScheduleItems = $eventScheduleItems;
 
         return $this;
     }

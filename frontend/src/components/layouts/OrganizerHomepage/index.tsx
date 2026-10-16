@@ -2,8 +2,8 @@ import {useLocation, useNavigate} from "react-router";
 import {ActionIcon, Anchor} from '@mantine/core';
 import {EventCard} from './EventCard';
 import classes from './OrganizerHomepage.module.scss';
-import React, {useEffect, useRef, useState} from 'react';
-import {Event, GenericPaginatedResponse, Organizer} from "../../../types.ts";
+import React, {Fragment, useEffect, useRef, useState} from 'react';
+import {Event, GenericPaginatedResponse, HomepageSection, Organizer} from "../../../types.ts";
 import {OrganizerDocumentHead} from "../../common/OrganizerDocumentHead";
 import {IconCalendarOff, IconExternalLink, IconMail, IconMapPin, IconWorld} from '@tabler/icons-react';
 import {t} from "@lingui/macro";
@@ -21,6 +21,10 @@ import {ensureHomepageFontLoaded} from "../../../utilites/fontLoader.ts";
 import {useOrganizerTrackingPixels} from "../../../hooks/useOrganizerTrackingPixels";
 import {CookieSettingsLink} from "../../common/CookieSettingsLink";
 import {UserGeneratedContent} from "../../common/UserGeneratedContent";
+import {resolveOrganizerHomepageSections} from "../../../utilites/homepageSections.ts";
+import {organizerHomepageLayout} from "../../../utilites/homepageSectionLayout.ts";
+import {CustomHomepageSection} from "../EventHomepage/Sections";
+import {OrganizerPastEventsSection} from "./OrganizerPastEventsSection.tsx";
 
 interface OrganizerHomepageProps {
     organizer?: Organizer;
@@ -82,6 +86,12 @@ export const OrganizerHomepage = ({
         organizer?.settings?.tracking_pixels
     );
 
+    const themeSettings = validateThemeSettings(organizer?.settings?.homepage_theme_settings);
+
+    useEffect(() => {
+        ensureHomepageFontLoaded(themeSettings.font_family);
+    }, [themeSettings.font_family]);
+
     if (!organizer) {
         return null;
     }
@@ -116,15 +126,8 @@ export const OrganizerHomepage = ({
 
     const events = eventsData?.data || [];
 
-    // Theme settings
-    const rawThemeSettings = organizer?.settings?.homepage_theme_settings;
-    const themeSettings = validateThemeSettings(rawThemeSettings);
     const cssVars = computeThemeVariables(themeSettings);
     const backgroundType = themeSettings.background_type;
-
-    useEffect(() => {
-        ensureHomepageFontLoaded(themeSettings.font_family);
-    }, [themeSettings.font_family]);
 
     const themeStyles = {
         '--organizer-bg-color': themeSettings.background,
@@ -140,6 +143,179 @@ export const OrganizerHomepage = ({
         '--theme-font-family': cssVars['--theme-font-family'],
         fontFamily: cssVars['--theme-font-family'],
     } as React.CSSProperties;
+
+    const layout = organizerHomepageLayout(resolveOrganizerHomepageSections(organizer.settings?.homepage_sections));
+    const sectionClasses = {
+        section: classes.sectionCard,
+        sectionHeader: classes.sectionCardHeader,
+        sectionTitle: classes.eventsTitle,
+    };
+
+    const contactActions = (
+        <div className={classes.profileActions}>
+            {(socialLinks.length > 0) && (
+                <div className={classes.socialLinks}>
+                    {socialLinks.map(({platform, handle, config}) => {
+                        const IconComponent = config.icon;
+                        const url = config.baseUrl + handle;
+                        const label = config.name();
+                        return (
+                            <ActionIcon
+                                key={platform}
+                                component="a"
+                                href={url}
+                                target="_blank"
+                                rel="nofollow ugc noopener noreferrer"
+                                title={label}
+                                aria-label={label}
+                                className={classes.socialIcon}
+                                variant="subtle"
+                                size="md"
+                            >
+                                <IconComponent size={16}/>
+                            </ActionIcon>
+                        );
+                    })}
+                </div>
+            )}
+            <button
+                onClick={() => setContactModalOpen(true)}
+                className={classes.contactButton}
+            >
+                <IconMail size={14} style={{marginRight: 6}}/>
+                {t`Contact`}
+            </button>
+        </div>
+    );
+
+    const footer = (
+        <div className={classes.footerSection}>
+            <PoweredByFooter className={classes.poweredByFooter}/>
+            <div className={classes.footerLinks}>
+                <Anchor
+                    href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
+                    className={classes.footerLink}
+                >
+                    {t`Privacy Policy`}
+                </Anchor>
+                <Anchor
+                    href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
+                    className={classes.footerLink}
+                >
+                    {t`Terms of Service`}
+                </Anchor>
+                <CookieSettingsLink className={classes.cookieSettingsLink}/>
+            </div>
+        </div>
+    );
+
+    const renderEventsBlock = (heading: string | null | undefined, includesPastEvents: boolean, withFooter: boolean) => {
+        const showPastToggle = includesPastEvents || isPastEvents;
+
+        return (
+            <div key="events" className={classes.eventsSection} ref={eventsSectionRef} data-testid="organizer-events-section">
+                <div className={classes.eventsHeader}>
+                    <h2 className={classes.eventsTitle}>{heading || t`Events`}</h2>
+                    {showPastToggle && (
+                        <div className={classes.filterToggle}>
+                            <button
+                                className={`${classes.filterButton} ${!isPastEvents ? classes.filterButtonActive : ''}`}
+                                onClick={() => handleFilterChange(false)}
+                            >
+                                {t`Upcoming`}
+                            </button>
+                            <button
+                                className={`${classes.filterButton} ${isPastEvents ? classes.filterButtonActive : ''}`}
+                                onClick={() => handleFilterChange(true)}
+                            >
+                                {t`Past`}
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                <div className={classes.eventsList}>
+                    {events.length === 0 ? (
+                        <div className={classes.noEvents}>
+                            <IconCalendarOff size={32}/>
+                            <p>{isPastEvents ? t`No past events` : t`No upcoming events`}</p>
+                            {!isPastEvents && showPastToggle && (
+                                <button
+                                    className={classes.noEventsLink}
+                                    onClick={() => handleFilterChange(true)}
+                                >
+                                    {t`View past events`}
+                                </button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className={classes.eventsContainer}>
+                            {events.map((event) => (
+                                <EventCard
+                                    key={event.id}
+                                    event={event as Event}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
+                    <div className={classes.paginationWrapper}>
+                        <Pagination
+                            size="sm"
+                            siblings={1}
+                            marginTop={0}
+                            total={eventsData.meta.last_page}
+                            value={eventsData.meta.current_page}
+                            onChange={(page) => {
+                                const newPath = isPastEvents
+                                    ? `${organizerHomepagePath(organizer)}/past-events?page=${page}`
+                                    : `${organizerHomepagePath(organizer)}?page=${page}`;
+                                navigate(newPath, {state: KEEP_EVENTS_IN_VIEW});
+                            }}
+                            className={classes.paginationComponent}
+                        />
+                    </div>
+                )}
+                {withFooter && footer}
+            </div>
+        );
+    };
+
+    const renderSection = (section: HomepageSection) => {
+        switch (section.type) {
+            case 'ABOUT':
+                return organizer.description ? (
+                    <section className={classes.sectionCard} data-testid="homepage-section-about">
+                        <div className={classes.sectionCardHeader}>
+                            <h2 className={classes.eventsTitle}>{section.heading || t`About`}</h2>
+                        </div>
+                        <UserGeneratedContent className={classes.description} html={organizer.description}/>
+                    </section>
+                ) : null;
+            case 'CONTACT':
+                return (
+                    <section className={classes.sectionCard} data-testid="homepage-section-contact">
+                        <div className={classes.sectionCardHeader}>
+                            <h2 className={classes.eventsTitle}>{section.heading || t`Contact`}</h2>
+                        </div>
+                        {contactActions}
+                    </section>
+                );
+            case 'PAST_EVENTS':
+                return (
+                    <OrganizerPastEventsSection
+                        organizer={organizer}
+                        section={section}
+                        sectionClasses={sectionClasses}
+                        onViewAll={() => handleFilterChange(true)}
+                    />
+                );
+            default:
+                return <CustomHomepageSection images={organizer.images ?? []} section={section} sectionClasses={sectionClasses}/>;
+        }
+    };
 
     return (
         <>
@@ -256,45 +432,15 @@ export const OrganizerHomepage = ({
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className={classes.profileActions}>
-                                                    {(socialLinks.length > 0) && (
-                                                        <div className={classes.socialLinks}>
-                                                            {socialLinks.map(({platform, handle, config}) => {
-                                                                const IconComponent = config.icon;
-                                                                const url = config.baseUrl + handle;
-                                                                const label = config.name();
-                                                                return (
-                                                                    <ActionIcon
-                                                                        key={platform}
-                                                                        component="a"
-                                                                        href={url}
-                                                                        target="_blank"
-                                                                        rel="nofollow ugc noopener noreferrer"
-                                                                        title={label}
-                                                                        aria-label={label}
-                                                                        className={classes.socialIcon}
-                                                                        variant="subtle"
-                                                                        size="md"
-                                                                    >
-                                                                        <IconComponent size={16}/>
-                                                                    </ActionIcon>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    )}
-                                                    <button
-                                                        onClick={() => setContactModalOpen(true)}
-                                                        className={classes.contactButton}
-                                                    >
-                                                        <IconMail size={14} style={{marginRight: 6}}/>
-                                                        {t`Contact`}
-                                                    </button>
-                                                </div>
+                                                {layout.heroContact && contactActions}
                                             </div>
                                         </div>
                                     </div>
-                                    {organizer?.description && (
+                                    {layout.heroAbout && organizer?.description && (
                                         <>
+                                            {layout.heroAbout.heading && (
+                                                <h2 className={classes.heroAboutHeading}>{layout.heroAbout.heading}</h2>
+                                            )}
                                             <div
                                                 ref={descriptionRef}
                                                 className={`${classes.descriptionBlock}${descriptionExpanded ? '' : ` ${classes.descriptionClamp}`}`}
@@ -320,89 +466,16 @@ export const OrganizerHomepage = ({
                             </div>
                         </div>
 
-                        {/* Events Section */}
-                        <div className={classes.eventsSection} ref={eventsSectionRef}>
-                            <div className={classes.eventsHeader}>
-                                <h2 className={classes.eventsTitle}>{t`Events`}</h2>
-                                <div className={classes.filterToggle}>
-                                    <button
-                                        className={`${classes.filterButton} ${!isPastEvents ? classes.filterButtonActive : ''}`}
-                                        onClick={() => handleFilterChange(false)}
-                                    >
-                                        {t`Upcoming`}
-                                    </button>
-                                    <button
-                                        className={`${classes.filterButton} ${isPastEvents ? classes.filterButtonActive : ''}`}
-                                        onClick={() => handleFilterChange(true)}
-                                    >
-                                        {t`Past`}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={classes.eventsList}>
-                                {events.length === 0 ? (
-                                    <div className={classes.noEvents}>
-                                        <IconCalendarOff size={32}/>
-                                        <p>{isPastEvents ? t`No past events` : t`No upcoming events`}</p>
-                                        {!isPastEvents && (
-                                            <button
-                                                className={classes.noEventsLink}
-                                                onClick={() => handleFilterChange(true)}
-                                            >
-                                                {t`View past events`}
-                                            </button>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className={classes.eventsContainer}>
-                                        {events.map((event) => (
-                                            <EventCard
-                                                key={event.id}
-                                                event={event as Event}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {eventsData && eventsData.meta.total > eventsData.meta.per_page && (
-                                <div className={classes.paginationWrapper}>
-                                    <Pagination
-                                        size="sm"
-                                        siblings={1}
-                                        marginTop={0}
-                                        total={eventsData.meta.last_page}
-                                        value={eventsData.meta.current_page}
-                                        onChange={(page) => {
-                                            const newPath = isPastEvents
-                                                ? `${organizerHomepagePath(organizer)}/past-events?page=${page}`
-                                                : `${organizerHomepagePath(organizer)}?page=${page}`;
-                                            navigate(newPath, {state: KEEP_EVENTS_IN_VIEW});
-                                        }}
-                                        className={classes.paginationComponent}
-                                    />
-                                </div>
-                            )}
-                            <div className={classes.footerSection}>
-                                <PoweredByFooter className={classes.poweredByFooter}/>
-                                <div className={classes.footerLinks}>
-                                    <Anchor
-                                        href={getConfig('VITE_PRIVACY_URL', 'https://hi.events/privacy-policy?utm_source=app-organizer-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Privacy Policy`}
-                                    </Anchor>
-                                    <Anchor
-                                        href={getConfig('VITE_TOS_URL', 'https://hi.events/terms-of-service?utm_source=app-organizer-footer')}
-                                        className={classes.footerLink}
-                                    >
-                                        {t`Terms of Service`}
-                                    </Anchor>
-                                    <CookieSettingsLink className={classes.cookieSettingsLink}/>
-                                </div>
-                            </div>
-                        </div>
+                        {layout.blocks.map((block, index) => {
+                            const isLast = index === layout.blocks.length - 1;
+                            if (block.kind === 'events') {
+                                return renderEventsBlock(block.section.heading, block.includesPastEvents, isLast);
+                            }
+                            return <Fragment key={block.section.id}>{renderSection(block.section)}</Fragment>;
+                        })}
+                        {layout.blocks[layout.blocks.length - 1]?.kind !== 'events' && (
+                            <div className={classes.footerCard}>{footer}</div>
+                        )}
                     </div>
 
                     {/* Contact Modal */}
