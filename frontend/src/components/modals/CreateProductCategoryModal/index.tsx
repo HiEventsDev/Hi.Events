@@ -1,5 +1,5 @@
 import {GenericModalProps, ProductCategory} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
@@ -52,9 +52,12 @@ export const CreateProductCategoryModal = ({onClose}: GenericModalProps) => {
                     {t`Categories allow you to group products together. For example, you might have a category for "Tickets" and another for "Merchandise".`}
                 </Callout>
                 <ProductCategoryForm form={form}/>
-                <Button type="submit" fullWidth disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Create Category`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Create Category`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

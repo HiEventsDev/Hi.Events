@@ -55,7 +55,7 @@ test.describe('two-factor authentication', () => {
     await expect(notice).toContainText('You have 9 recovery codes left');
     await page.getByTestId('two-factor-manage-codes').click();
 
-    await expect(page).toHaveURL(/\/manage\/profile\/security/);
+    await expect(page).toHaveURL(/\/settings\/security/);
     await expect(page.getByTestId('two-factor-recovery-remaining')).toHaveText('9 of 10 remaining');
     await page.context().close();
 

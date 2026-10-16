@@ -1,7 +1,7 @@
 import {t} from "@lingui/macro";
 import {EventDuplicatePayload, EventType, GenericModalProps, IdParam} from "../../../types.ts";
 import {Button, Switch, TextInput, Group, ActionIcon, Tooltip, Grid} from "@mantine/core";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {useForm} from "@mantine/form";
 import {useDuplicateEvent} from "../../../mutations/useDuplicateEvent.ts";
 import {Editor} from "../../common/Editor";
@@ -179,9 +179,12 @@ export const DuplicateEventModal = ({onClose, eventId}: DuplicateEventModalProps
                         </Grid>
                     </Card>
                 </fieldset>
-                <Button type="submit" fullWidth disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Duplicate Event`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Duplicate Event`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     )

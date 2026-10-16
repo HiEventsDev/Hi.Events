@@ -1,11 +1,11 @@
 import {useMemo} from "react";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, Group, MultiSelect, Select, TextInput} from "@mantine/core";
+import {Button, MultiSelect, Select, TextInput} from "@mantine/core";
 import {TimeInput} from "@mantine/dates";
 import {IconTrash} from "@tabler/icons-react";
 import dayjs from "dayjs";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {Editor} from "../../../../common/Editor";
 import {UserGeneratedContent} from "../../../../common/UserGeneratedContent";
 import {Event} from "../../../../../types.ts";
@@ -201,18 +201,18 @@ export const ScheduleItemModal = ({event, lineup, item, draft, onSaved, onClose}
                         />
                     )}
                 {!isReadOnly && (
-                    <Group justify="space-between" mt="sm">
-                        {item
-                            ? (
-                                <Button variant="subtle" color="red" leftSection={<IconTrash size={16}/>} onClick={remove}>
-                                    {t`Remove`}
-                                </Button>
-                            )
-                            : <span/>}
+                    <ModalFooter
+                        start={item && (
+                            <Button variant="subtle" color="red" leftSection={<IconTrash size={16}/>} onClick={remove}>
+                                {t`Remove`}
+                            </Button>
+                        )}
+                    >
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                         <Button type="submit" loading={upsertMutation.isPending} data-testid="lineup-slot-save-button">
                             {item ? t`Save slot` : t`Add slot`}
                         </Button>
-                    </Group>
+                    </ModalFooter>
                 )}
             </form>
         </Modal>

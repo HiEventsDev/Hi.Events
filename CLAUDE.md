@@ -238,6 +238,8 @@ Gotchas:
 #### UI & Styling
 - Use Mantine UI components for UI elements
 - Prefer SCSS modules over Mantine layout components for layout styling
+- Create/edit modals use `common/Modal` with a `ModalFooter` (Cancel + primary action; `start` for a destructive or secondary action) — never a full-width submit button. The shared `Modal` goes full-screen on phones and keeps the footer pinned
+- Account and personal settings live under `/settings/*` (`layouts/SettingsLayout`) and are built from `common/SettingsPage` (`SettingsPage`, `SettingsSection`, `SettingsRow`, `SettingsSaveFooter`). Old `/account/*` and `/manage/profile*` URLs redirect there because sent emails still link to them
 - `global.scss` gives every `.mantine-InputWrapper-root` and `.mantine-Switch-root` a bottom margin, which misaligns inputs placed inline in a row. Don't compensate with a magic `mt`/`mb` on the sibling; zero it for that row: `.row :global(.mantine-InputWrapper-root) { margin-bottom: 0; }`
 
 #### E2E Tests

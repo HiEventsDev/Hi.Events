@@ -1,5 +1,5 @@
 import {GenericModalProps, IdParam} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {WebhookForm} from "../../forms/WebhookForm";
 import {useForm} from "@mantine/form";
@@ -79,13 +79,15 @@ export const EditWebhookModal = ({
             {webhook && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <WebhookForm form={form} isEventContext/>
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={editMutation.isPending}
-                    >
-                        {t`Edit Webhook`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={editMutation.isPending}
+                        >
+                            {t`Save Changes`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

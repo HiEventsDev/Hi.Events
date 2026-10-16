@@ -18,7 +18,7 @@ import {
     IconUsers,
     IconX,
 } from "@tabler/icons-react";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {InputGroup} from "../../../../common/InputGroup";
 import {Callout} from "../../../../common/Callout";
 import {
@@ -557,16 +557,13 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     onChange={(value) => form.setFieldValue('show_available_capacity', value as CapacityVisibility)}
                                 />
                             </div>
-
-                            <Button
-                                type="submit"
-                                fullWidth
-                                size="md"
-                                loading={isPending}
-                            >
+                        </fieldset>
+                        <ModalFooter inline={isEditing}>
+                            <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                            <Button type="submit" loading={isPending} disabled={isCancelled}>
                                 {isEditing ? t`Save Changes` : t`Create Date`}
                             </Button>
-                        </fieldset>
+                        </ModalFooter>
                     </form>
 
                     {isEditing && (

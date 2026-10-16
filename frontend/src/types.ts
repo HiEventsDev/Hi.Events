@@ -245,6 +245,7 @@ export interface AccountDeletionStatus {
     can_request_deletion: boolean;
     cannot_delete_reason: string | null;
     expected_outcome: 'HARD_DELETE' | 'ANONYMIZE';
+    blocking_events: { id: number; title: string }[];
 }
 
 export interface AccountConfiguration {

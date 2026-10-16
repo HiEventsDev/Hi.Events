@@ -34,7 +34,7 @@ export class CapacityPage {
 
   async submitEdit(capacity: number): Promise<void> {
     await this.capacityInput().fill(String(capacity));
-    await this.page.getByRole('dialog').getByRole('button', { name: 'Edit Capacity Assignment' }).click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Save Changes' }).click();
   }
 
   async confirmAction(): Promise<void> {

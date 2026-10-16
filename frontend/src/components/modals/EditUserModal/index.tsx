@@ -1,6 +1,6 @@
 import {useForm} from "@mantine/form";
 import {GenericModalProps, TeamAccessRequest, User,} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Avatar, Badge, Button, SimpleGrid, TextInput} from "@mantine/core";
 import {Callout} from "../../common/Callout";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -8,7 +8,6 @@ import {t, Trans} from "@lingui/macro";
 import {
     TeamAccessFields,
     teamAccessInitialValues,
-    TeamFormFooter,
     TeamFormSection,
     toTeamAccessPayload
 } from "../../common/TeamAccessFields";
@@ -86,14 +85,14 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                             <TextInput required {...form.getInputProps('last_name')} label={t`Last Name`}/>
                         </SimpleGrid>
                         <p className={classes.hint}>
-                            <Trans>Members change their own email in <NavLink target={'_blank'} to={'/manage/profile'}>profile settings</NavLink>.</Trans>
+                            <Trans>Members change their own email in <NavLink target={'_blank'} to={'/settings/profile'}>profile settings</NavLink>.</Trans>
                         </p>
                     </TeamFormSection>
 
                     <TeamAccessFields form={form} disabled={isLocked}/>
                 </fieldset>
 
-                <TeamFormFooter>
+                <ModalFooter>
                     <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                     <Button
                         loading={editMutation.isPending}
@@ -101,7 +100,7 @@ export const EditUserModal = ({onClose, user}: EditUserModalProps) => {
                         data-testid="edit-team-member-submit">
                         {t`Save changes`}
                     </Button>
-                </TeamFormFooter>
+                </ModalFooter>
             </form>
         </Modal>
     )

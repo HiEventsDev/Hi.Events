@@ -14,7 +14,7 @@ import AnnouncementDisplay from "../../common/AnnouncementDisplay";
 interface AppLayoutProps {
     navItems: NavItem[];
     breadcrumbItems: BreadcrumbItem[];
-    entityType: 'event' | 'organizer';
+    entityType: 'event' | 'organizer' | 'settings';
     topBarContent?: React.ReactNode;
     breadcrumbContentRight?: React.ReactNode;
     actionGroupContent?: React.ReactNode;

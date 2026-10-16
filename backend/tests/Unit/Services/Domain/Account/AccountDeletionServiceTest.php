@@ -115,6 +115,22 @@ class AccountDeletionServiceTest extends TestCase
         $this->assertStringContainsString('Summer Festival, Winter Gala', $reason);
     }
 
+    public function test_describe_cannot_delete_reason_is_null_without_blockers(): void
+    {
+        $this->assertNull($this->service->describeCannotDeleteReason(false, collect()));
+    }
+
+    public function test_blocking_events_are_upcoming_events_with_completed_orders(): void
+    {
+        $this->mockUpcomingEventsWithCompletedOrders(['Summer Festival', 'Winter Gala']);
+
+        $titles = $this->service->getBlockingEvents(1)
+            ->map(fn (EventDomainObject $event) => $event->getTitle())
+            ->all();
+
+        $this->assertSame(['Summer Festival', 'Winter Gala'], $titles);
+    }
+
     public function test_outcome_is_hard_delete_when_account_has_no_completed_orders(): void
     {
         $this->orderRepository->shouldReceive('accountHasCompletedOrders')->with(1)->andReturnFalse();

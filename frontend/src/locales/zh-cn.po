@@ -88,10 +88,6 @@ msgstr "{0}可用"
 msgid "{0} cancelled"
 msgstr "{0} 已取消"
 
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
-msgid "{0} created successfully"
-msgstr "成功创建 {0}"
-
 #: src/components/routes/admin/Configurations/index.tsx:84
 msgid "{0} Default"
 msgstr "{0} 默认"
@@ -137,7 +133,7 @@ msgstr "剩余 {0}"
 msgid "{0} logo"
 msgstr "{0} 标志"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:149
+#: src/components/routes/settings/Security/index.tsx:139
 msgid "{0} of {1} remaining"
 msgstr "剩余 {0}/{1}"
 
@@ -170,18 +166,18 @@ msgstr "{0} 个位置"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} 个已退款订单包含此产品但尚未取消，因此仍计为已售出。如果这些商品不应计入，请取消这些订单。"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0} 要求团队中的所有人启用双重验证。"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:219
+#: src/components/routes/settings/Security/index.tsx:192
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} 要求启用双重验证,因此无法关闭。"
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:81
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:316
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:97
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:184
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:98
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:187
 #: src/ee/seating/components/SeatPicker/Basket.tsx:188
 msgid "{0} seats"
 msgstr "{0} 个座位"
@@ -239,10 +235,6 @@ msgstr "{0} 个站位"
 msgid "{0} tickets"
 msgstr "{0}张门票"
 
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:42
-msgid "{0} updated successfully"
-msgstr "{0}更新成功"
-
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:417
 msgid "{activeCount} enabled"
 msgstr "已启用 {activeCount} 项"
@@ -275,7 +267,7 @@ msgstr "已预订 {booked} · 该日期无限制"
 msgid "{booked} of {sellable} booked"
 msgstr "已预订 {booked}/{sellable}"
 
-#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:33
+#: src/components/routes/settings/Security/describeDevice.ts:33
 msgid "{browser} on {os}"
 msgstr "{os} 上的 {browser}"
 
@@ -326,7 +318,7 @@ msgstr "{diffSec} 秒前"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:41
+#: src/components/routes/settings/Team/MemberRow.tsx:41
 msgid "{eventCount} events"
 msgstr "{eventCount} 个事件"
 
@@ -370,7 +362,7 @@ msgstr "{label} 是供轮椅使用者陪同人员使用的陪同座位"
 msgid "{label} is a wheelchair space"
 msgstr "{label} 是轮椅位"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:619
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:620
 msgid "{linkCount, plural, one {# link} other {# links}}"
 msgstr "{linkCount, plural, other {# 个链接}}"
 
@@ -399,11 +391,11 @@ msgstr "{分}分钟和{秒}秒钟"
 msgid "{name} added to the lineup"
 msgstr "已将 {name} 添加到阵容"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:46
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:46
 msgid "{notEnrolledCount} members haven't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "有 {notEnrolledCount} 位成员尚未开启双重验证。他们需要先完成设置才能继续。立即强制要求?"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:530
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:531
 msgid "{onLineup} already on the lineup"
 msgstr "{onLineup} 人已在阵容中"
 
@@ -415,7 +407,7 @@ msgstr "还需选择 {open} 个座位"
 msgid "{open} to seat"
 msgstr "{open} 张未选座"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:40
+#: src/components/routes/settings/Team/MemberRow.tsx:40
 msgid "{organizerCount} organizers"
 msgstr "{organizerCount} 个主办方"
 
@@ -447,7 +439,7 @@ msgstr "找到 {provider} 视频"
 msgid "{remaining} left"
 msgstr "剩余 {remaining}"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:532
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:533
 msgid "{repeatSlots} already scheduled"
 msgstr "{repeatSlots} 个已安排"
 
@@ -524,15 +516,15 @@ msgstr "+ {formattedAmount} 费用及税费"
 msgid "+ {formattedAmount} tax"
 msgstr "+ {formattedAmount} 税费"
 
-#: src/components/modals/CreateEventModal/index.tsx:448
+#: src/components/modals/CreateEventModal/index.tsx:447
 msgid "+ Category"
 msgstr "+ 类别"
 
-#: src/components/modals/CreateEventModal/index.tsx:459
+#: src/components/modals/CreateEventModal/index.tsx:458
 msgid "+ Description"
 msgstr "+ 描述"
 
-#: src/components/modals/CreateEventModal/index.tsx:400
+#: src/components/modals/CreateEventModal/index.tsx:399
 msgid "+ End time"
 msgstr "+ 结束时间"
 
@@ -540,7 +532,7 @@ msgstr "+ 结束时间"
 msgid "+{0} more currencies"
 msgstr "另外 {0} 种货币"
 
-#: src/components/routes/organizer/People/index.tsx:179
+#: src/components/routes/organizer/People/index.tsx:181
 msgid "+{extra} more"
 msgstr "+{extra} 个"
 
@@ -643,7 +635,7 @@ msgstr "开始日期后1天"
 msgid "1 day before event"
 msgstr "活动前1天"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:41
+#: src/components/routes/settings/Team/MemberRow.tsx:41
 msgid "1 event"
 msgstr "1 个活动"
 
@@ -655,7 +647,7 @@ msgstr "活动前1小时"
 msgid "1 item"
 msgstr "1 件"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:45
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:45
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "有 1 位成员尚未开启双重验证。他需要先完成设置才能继续。立即强制要求?"
 
@@ -663,7 +655,7 @@ msgstr "有 1 位成员尚未开启双重验证。他需要先完成设置才能
 msgid "1 order"
 msgstr "1 个订单"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:40
+#: src/components/routes/settings/Team/MemberRow.tsx:40
 msgid "1 organizer"
 msgstr "1 个主办方"
 
@@ -782,25 +774,13 @@ msgstr "签到列表让工作人员可在现场用手机、平板或 USB 扫码�
 msgid "A date input. Perfect for asking for a date of birth etc."
 msgstr "日期输入字段。非常适合询问出生日期等。"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:88
-msgid "A default {type} is automaticaly applied to all new products. You can override this on a per product basis."
-msgstr "默认的{type}会自动应用于所有新产品。您可以为每个产品单独覆盖此设置。"
-
 #: src/components/forms/QuestionForm/index.tsx:126
 msgid "A Dropdown input allows only one selection"
 msgstr "下拉式输入法只允许一个选择"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:20
-msgid "A fee, like a booking fee or a service fee"
-msgstr "费用，如预订费或服务费"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:199
 msgid "A few quick steps and you're ready to start selling."
 msgstr "只需几个简单步骤，你就可以开始售票了。"
-
-#: src/components/forms/TaxAndFeeForm/index.tsx:35
-msgid "A fixed amount per product. E.g, $0.50 per product"
-msgstr "每个产品的固定金额。例如，每个产品$0.50"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:223
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
@@ -825,10 +805,6 @@ msgstr "多行文本输入"
 #: src/components/routes/welcome/index.tsx:118
 msgid "A new verification code has been sent to your email"
 msgstr "新的验证码已发送到您的邮箱"
-
-#: src/components/forms/TaxAndFeeForm/index.tsx:29
-msgid "A percentage of the product price. E.g., 3.5% of the product price"
-msgstr "产品价格的百分比。例如，3.5%的产品价格"
 
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:66
 msgid "A profile can have up to {MAX_IMAGES} photos."
@@ -874,10 +850,6 @@ msgstr "每个产品一个问题。例如，您的T恤尺码是多少？"
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:41
 msgid "A single seat is still allowed when there is no other way to seat the party."
 msgstr "如果没有其他方式安排该组人员,则仍允许留下单个座位。"
-
-#: src/components/forms/TaxAndFeeForm/index.tsx:14
-msgid "A standard tax, like VAT or GST"
-msgstr "标准税，如增值税或消费税"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:112
 msgid "A time slot can have up to 50 people"
@@ -957,7 +929,7 @@ msgstr "接受邀请"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:599
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:197
+#: src/components/routes/settings/Team/index.tsx:196
 msgid "Access"
 msgstr "访问权限"
 
@@ -982,8 +954,7 @@ msgid "Accessible"
 msgstr "无障碍"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/routes/account/ManageAccount/index.tsx:26
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:57
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1006,11 +977,11 @@ msgstr "账户 · {0} · {1}"
 msgid "Account deletion cancelled"
 msgstr "账户删除已取消"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:75
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:78
 msgid "Account deletion has been cancelled."
 msgstr "账户删除已取消。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:116
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:120
 msgid "Account deletion is blocked"
 msgstr "账户删除已被阻止"
 
@@ -1027,12 +998,9 @@ msgstr "账户信息"
 msgid "Account marked as verified"
 msgstr "账户已标记为已验证"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:171
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:183
+#: src/components/routes/settings/Account/index.tsx:73
 msgid "Account name"
-msgstr "账户名称"
-
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:63
-msgid "Account Name"
 msgstr "账户名称"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:113
@@ -1051,12 +1019,11 @@ msgstr "账户所有者"
 msgid "Account scheduled for deletion in 30 days"
 msgstr "账户已安排在 30 天后删除"
 
-#: src/components/common/GlobalMenu/index.tsx:60
-#: src/components/routes/account/ManageAccount/index.tsx:21
+#: src/components/common/GlobalMenu/index.tsx:63
 msgid "Account Settings"
 msgstr "账户设置"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:43
+#: src/components/routes/settings/Account/index.tsx:55
 msgid "Account updated successfully"
 msgstr "账户更新成功"
 
@@ -1104,6 +1071,10 @@ msgstr "需要操作:需要提供增值税信息"
 msgid "Actions"
 msgstr "操作"
 
+#: src/components/routes/settings/TaxesAndFees/index.tsx:62
+msgid "Actions for {0}"
+msgstr "{0} 的操作"
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:144
 msgid "Actions for {name}"
 msgstr "{name} 的操作"
@@ -1126,17 +1097,17 @@ msgstr "激活日期"
 #: src/components/forms/AffiliateForm/index.tsx:21
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:19
 #: src/components/modals/ProductPurchasesModal/index.tsx:246
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:28
 #: src/components/routes/event/attendees.tsx:30
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:217
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:20
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:57
+#: src/components/routes/settings/Team/MemberRow.tsx:28
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:187
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:26
 msgid "Active"
 msgstr "活跃"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:159
+#: src/components/routes/settings/Team/index.tsx:158
 msgid "Active members"
 msgstr "活跃成员"
 
@@ -1155,7 +1126,7 @@ msgstr "动态"
 
 #: src/components/common/TeamAccessPanel/index.tsx:119
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
-#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:96
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:98
 msgid "Add"
 msgstr "添加"
 
@@ -1200,7 +1171,7 @@ msgstr "添加单个日期"
 msgid "Add a speaker, artist or host…"
 msgstr "添加演讲者、艺人或主持人…"
 
-#: src/components/routes/event/Lineup/index.tsx:337
+#: src/components/routes/event/Lineup/index.tsx:339
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:68
 msgid "Add a stage or room"
 msgstr "添加舞台或会场"
@@ -1315,7 +1286,7 @@ msgstr "添加链接"
 
 #: src/components/common/LocationsTable/index.tsx:99
 #: src/components/modals/LocationEditModal/index.tsx:125
-#: src/components/modals/LocationEditModal/index.tsx:162
+#: src/components/modals/LocationEditModal/index.tsx:164
 #: src/components/routes/organizer/Locations/index.tsx:55
 msgid "Add Location"
 msgstr "添加地点"
@@ -1323,10 +1294,6 @@ msgstr "添加地点"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1049
 msgid "Add multiple times if you run several sessions per day."
 msgstr "如果一天举办多个场次，可添加多个时间。"
-
-#: src/components/common/HeadingCard/index.tsx:28
-msgid "Add New"
-msgstr "添加新内容"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:86
 msgid "Add one"
@@ -1337,7 +1304,7 @@ msgid "Add Option"
 msgstr "添加选项"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
-#: src/components/routes/event/Lineup/index.tsx:329
+#: src/components/routes/event/Lineup/index.tsx:331
 msgid "Add people"
 msgstr "添加人员"
 
@@ -1384,11 +1351,11 @@ msgstr "请在下方添加一些文字。"
 msgid "Add someone from your saved profiles…"
 msgstr "从已保存的简介中添加…"
 
-#: src/components/routes/event/Lineup/index.tsx:231
+#: src/components/routes/event/Lineup/index.tsx:233
 msgid "Add stage or room"
 msgstr "添加舞台或会场"
 
-#: src/components/routes/event/Lineup/index.tsx:335
+#: src/components/routes/event/Lineup/index.tsx:337
 msgid "Add stages or rooms"
 msgstr "添加舞台或会场"
 
@@ -1396,9 +1363,11 @@ msgstr "添加舞台或会场"
 msgid "Add standing tickets"
 msgstr "添加站票"
 
-#: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:20
-msgid "Add Tax or Fee"
-msgstr "加税或费用"
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:45
+#: src/components/routes/settings/TaxesAndFees/index.tsx:98
+#: src/components/routes/settings/TaxesAndFees/index.tsx:124
+msgid "Add tax or fee"
+msgstr "添加税费"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:291
 msgid "Add this attendee anyway (override capacity)"
@@ -1419,11 +1388,11 @@ msgid "Add tier"
 msgstr "增加层级"
 
 #: src/components/routes/event/Lineup/AgendaList.tsx:36
-#: src/components/routes/event/Lineup/index.tsx:239
+#: src/components/routes/event/Lineup/index.tsx:241
 msgid "Add time slot"
 msgstr "添加时段"
 
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:107
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:109
 msgid "Add to calendar"
 msgstr "添加到日历"
 
@@ -1433,6 +1402,10 @@ msgstr "添加到日历"
 #: src/components/layouts/EventHomepage/index.tsx:602
 msgid "Add to Calendar"
 msgstr "添加到日历"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:114
+msgid "Add to new products automatically"
+msgstr "自动添加到新产品"
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:91
 msgid "Add to order"
@@ -1475,6 +1448,10 @@ msgstr "已添加"
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:81
 msgid "Added at checkout"
 msgstr "结账时添加"
+
+#: src/components/routes/settings/TaxesAndFees/index.tsx:50
+msgid "Added to new products automatically"
+msgstr "已自动添加到新产品"
 
 #: src/components/common/PlatformFeesSettings/index.tsx:257
 msgid "Additional Fees"
@@ -1535,13 +1512,13 @@ msgstr "管理员"
 msgid "Admin Access Required"
 msgstr "需要管理员访问权限"
 
-#: src/components/common/GlobalMenu/index.tsx:76
+#: src/components/common/GlobalMenu/index.tsx:71
 #: src/components/layouts/Admin/index.tsx:38
 msgid "Admin Dashboard"
 msgstr "管理仪表板"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:136
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:161
+#: src/components/routes/settings/Team/index.tsx:137
+#: src/components/routes/settings/Team/index.tsx:160
 msgid "Admins"
 msgstr "管理员"
 
@@ -1742,7 +1719,7 @@ msgstr "所有产品"
 msgid "All purchases, including cancelled"
 msgstr "所有购买（包括已取消）"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:185
+#: src/components/routes/settings/Team/index.tsx:184
 msgid "All roles"
 msgstr "所有角色"
 
@@ -1759,7 +1736,7 @@ msgstr "所有状态"
 msgid "All time"
 msgstr "全部时间"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:95
+#: src/components/routes/settings/Security/index.tsx:96
 msgid "All trusted devices removed"
 msgstr "已移除所有受信任设备"
 
@@ -1876,7 +1853,6 @@ msgid "Amazing, Event, Keywords..."
 msgstr "令人惊叹, 活动, 关键词..."
 
 #: src/components/common/OrdersTable/index.tsx:280
-#: src/components/forms/TaxAndFeeForm/index.tsx:71
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:212
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:69
 msgid "Amount"
@@ -1902,7 +1878,7 @@ msgstr "收款金额"
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
 msgstr "与此推广员关联的邮箱。推广员不会收到通知。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:77
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:78
 msgid "An empty plan. Draw your own rows, tables and standing areas."
 msgstr "空白平面图。自行绘制排、桌和站立区域。"
 
@@ -2040,7 +2016,7 @@ msgid "Appearance"
 msgstr "外观"
 
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:307
-#: src/components/routes/organizer/People/index.tsx:115
+#: src/components/routes/organizer/People/index.tsx:116
 msgid "Appears on"
 msgstr "出现在"
 
@@ -2099,10 +2075,6 @@ msgstr "应用更改"
 msgid "Apply Changes"
 msgstr "应用更改"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:86
-msgid "Apply this {type} to all new products"
-msgstr "将此{type}应用于所有新产品"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:340
 msgid "Apply to"
 msgstr "应用到"
@@ -2153,6 +2125,7 @@ msgstr "归档此主办方。这也将归档属于此主办方的所有活动。
 #: src/components/common/EventCard/index.tsx:90
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:32
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:12
+#: src/components/routes/settings/Organizers/index.tsx:21
 msgid "Archived"
 msgstr "已归档"
 
@@ -2236,7 +2209,7 @@ msgstr "确定要删除这张图片吗？"
 msgid "Are you sure you want to delete this promo code?"
 msgstr "您确定要删除此促销代码吗？"
 
-#: src/components/common/TaxAndFeeList/index.tsx:34
+#: src/components/routes/settings/TaxesAndFees/index.tsx:32
 msgid "Are you sure you want to delete this tax or fee? It will no longer be applied to new orders."
 msgstr "确定要删除该税费吗？之后的新订单将不再收取。"
 
@@ -2309,7 +2282,7 @@ msgstr "您确定要恢复此活动吗？它将作为草稿恢复。"
 msgid "Are you sure you want to restore this organizer?"
 msgstr "您确定要恢复此主办方吗？"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:113
+#: src/components/routes/settings/Team/index.tsx:114
 msgid "Are you sure you want to revoke this invitation?"
 msgstr "确定要撤销这个邀请吗？"
 
@@ -2394,6 +2367,10 @@ msgstr "分配方案"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:229
 msgid "Assigned Tier"
 msgstr "分配的级别"
+
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:48
+msgid "At least 8 characters."
+msgstr "至少 8 个字符。"
 
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:37
 #: src/components/modals/CreateWebhookModal/index.tsx:37
@@ -2582,9 +2559,9 @@ msgstr "8 月"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:204
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:71
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:87
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:89
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:66
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:80
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:82
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:60
 msgid "Authentication code"
 msgstr "验证码"
 
@@ -2673,7 +2650,8 @@ msgstr "等待付款"
 msgid "Awaiting Payment"
 msgstr "等待付款"
 
-#: src/components/forms/OrganizerForm/index.tsx:29
+#: src/components/forms/OrganizerForm/index.tsx:33
+#: src/components/modals/CreateOrganizerModal/index.tsx:31
 msgid "Awesome Events Ltd."
 msgstr "精彩活动有限公司"
 
@@ -2681,8 +2659,9 @@ msgstr "精彩活动有限公司"
 msgid "Awesome Organizer Ltd."
 msgstr "Awesome Organizer Ltd."
 
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:47
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:48
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:78
+#: src/components/layouts/SettingsLayout/index.tsx:53
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
@@ -2794,7 +2773,7 @@ msgstr "横幅"
 msgid "Banner content must be 200 characters or less"
 msgstr "横幅内容不得超过 200 个字符"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:31
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
 msgid "Banquet"
 msgstr "宴会"
 
@@ -2832,10 +2811,6 @@ msgstr "基于上方的整体销售期，而非按日期设置"
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:63
 msgid "Basic Information"
 msgstr "基本信息"
-
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:132
-msgid "Because this account has completed orders, transaction records (amounts, dates, and invoice details) will be retained in an anonymized form for legal and tax purposes. All personal information will be permanently removed."
-msgstr "由于此账户存在已完成的订单，交易记录（金额、日期和发票详情）将以匿名形式保留，用于法律和税务目的。所有个人信息将被永久删除。"
 
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:26
 msgid "Before taxes and fees"
@@ -2907,6 +2882,10 @@ msgstr "已预订"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:61
 msgid "Booking limit for this date"
 msgstr "此日期的预订上限"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:28
+msgid "Booking or service fee"
+msgstr "预订费或服务费"
 
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:218
 msgid "Bookmark this page to manage your order anytime."
@@ -2996,7 +2975,7 @@ msgstr "巴西葡萄牙语"
 msgid "Build the schedule"
 msgstr "创建排期"
 
-#: src/components/routes/event/Lineup/index.tsx:359
+#: src/components/routes/event/Lineup/index.tsx:361
 msgid "Build your lineup"
 msgstr "打造你的阵容"
 
@@ -3101,9 +3080,9 @@ msgstr "按门票类型"
 msgid "Bypass Application Fees"
 msgstr "绕过应用费用"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:52
-msgid "Calculation Type"
-msgstr "计算类型"
+#: src/components/forms/TaxAndFeeForm/index.tsx:91
+msgid "Calculation type"
+msgstr "计算方式"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:509
 msgid "Calendar"
@@ -3135,7 +3114,7 @@ msgid "Can see events, orders and attendees but can't change anything."
 msgstr "可以查看活动、订单和参与者，但不能做任何修改。"
 
 #: src/components/common/TeamAccessFields/index.tsx:244
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:59
+#: src/components/routes/settings/Team/MemberRow.tsx:59
 msgid "Can see financials"
 msgstr "可以查看财务数据"
 
@@ -3164,27 +3143,63 @@ msgstr "无法使用验证器应用或恢复码?"
 #: src/components/common/WaitlistTable/index.tsx:117
 #: src/components/common/WaitlistTable/index.tsx:138
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
-#: src/components/modals/CreateEventModal/index.tsx:478
-#: src/components/modals/EditUserModal/index.tsx:97
-#: src/components/modals/InviteUserModal/index.tsx:70
+#: src/components/modals/CreateAffiliateModal/index.tsx:88
+#: src/components/modals/CreateAttendeeModal/index.tsx:335
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:75
+#: src/components/modals/CreateCheckInListModal/index.tsx:106
+#: src/components/modals/CreateEventModal/index.tsx:477
+#: src/components/modals/CreateOrganizerModal/index.tsx:66
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:89
+#: src/components/modals/CreateProductCategoryModal/index.tsx:56
+#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreateQuestionModal/index.tsx:75
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:52
+#: src/components/modals/CreateWebhookModal/index.tsx:89
+#: src/components/modals/DuplicateEventModal/index.tsx:183
+#: src/components/modals/EditAffiliateModal/index.tsx:104
+#: src/components/modals/EditCapacityAssignmentModal/index.tsx:70
+#: src/components/modals/EditCheckInListModal/index.tsx:102
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:82
+#: src/components/modals/EditProductCategoryModal/index.tsx:71
+#: src/components/modals/EditPromoCodeModal/index.tsx:85
+#: src/components/modals/EditQuestionModal/index.tsx:101
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:43
+#: src/components/modals/EditUserModal/index.tsx:96
+#: src/components/modals/EditWebhookModal/index.tsx:83
+#: src/components/modals/InviteUserModal/index.tsx:69
+#: src/components/modals/LocationEditModal/index.tsx:162
 #: src/components/modals/ManageAttendeeModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:241
 #: src/components/modals/PublishEventModal/index.tsx:212
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:80
+#: src/components/routes/admin/Announcements/index.tsx:500
+#: src/components/routes/admin/Configurations/index.tsx:269
 #: src/components/routes/admin/DeletionRequests/index.tsx:178
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:374
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:376
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:215
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:211
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:96
 #: src/components/routes/event/messages.tsx:82
 #: src/components/routes/event/OccurrencesTab/index.tsx:540
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
+#: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:507
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:562
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:67
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1157
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:64
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:69
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
 #: src/ee/box-office/components/layouts/BoxOffice/BoxOfficeSeatMap.tsx:280
+#: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:60
+#: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:96
+#: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
@@ -3211,14 +3226,14 @@ msgstr "取消刷卡支付"
 #: src/components/routes/event/OccurrencesTab/cancelOccurrenceDialog.tsx:53
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:329
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:348
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:589
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:586
 msgid "Cancel Date"
 msgstr "取消日期"
 
 #: src/components/common/PendingDeletionBanner/index.tsx:39
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:110
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:406
 #: src/components/routes/admin/DeletionRequests/index.tsx:232
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:101
 msgid "Cancel deletion"
 msgstr "取消删除"
 
@@ -3226,7 +3241,7 @@ msgstr "取消删除"
 msgid "Cancel deletion request"
 msgstr "取消删除请求"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:154
+#: src/components/routes/settings/Profile/index.tsx:142
 msgid "Cancel email change"
 msgstr "取消更改电子邮件"
 
@@ -3241,6 +3256,10 @@ msgstr "取消订单"
 #: src/components/modals/CancelOrderModal/index.tsx:57
 msgid "Cancel Order {0}"
 msgstr "取消订单 {0}"
+
+#: src/components/routes/settings/Account/index.tsx:108
+msgid "Cancel the account deletion to make changes."
+msgstr "取消账户删除后才能进行更改。"
 
 #: src/components/modals/CancelOrderModal/index.tsx:66
 msgid "Canceling will cancel all attendees associated with this order, and release the tickets back into the available pool."
@@ -3381,7 +3400,7 @@ msgstr "类别帮助您组织产品。此标题将在公共活动页面上显示
 msgid "Categories reordered successfully."
 msgstr "类别重新排序成功。"
 
-#: src/components/modals/CreateEventModal/index.tsx:449
+#: src/components/modals/CreateEventModal/index.tsx:448
 #: src/components/routes/event/products.tsx:146
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
 msgid "Category"
@@ -3423,7 +3442,9 @@ msgstr "应找零"
 msgid "Change duration"
 msgstr "修改时长"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:264
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
+#: src/components/routes/settings/Security/index.tsx:227
 msgid "Change password"
 msgstr "更改密码"
 
@@ -3461,7 +3482,7 @@ msgstr "已修改 {count} 个日期的时长"
 msgid "Changes from the venue seat map"
 msgstr "与场地座位图的差异"
 
-#: src/components/modals/EditUserModal/index.tsx:48
+#: src/components/modals/EditUserModal/index.tsx:47
 msgid "Changes saved"
 msgstr "更改已保存"
 
@@ -3472,6 +3493,14 @@ msgstr "收款"
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:172
 msgid "Charge {0}"
 msgstr "收款 {0}"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:99
+msgid "Charged as a percentage of each product's price."
+msgstr "按每个产品价格的百分比收取。"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:100
+msgid "Charged per product, in the event's currency."
+msgstr "按每个产品收取，以活动的货币计价。"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:399
 msgid "Charges"
@@ -3529,7 +3558,7 @@ msgstr "请检查网络连接后重试。"
 msgid "Check your email"
 msgstr "查看您的邮箱"
 
-#: src/components/routes/event/Lineup/index.tsx:347
+#: src/components/routes/event/Lineup/index.tsx:349
 msgid "Check your event page"
 msgstr "查看活动页面"
 
@@ -3673,8 +3702,8 @@ msgstr "已签到"
 msgid "Checked in ({checkedInCount}/{attendeeCount})"
 msgstr "已签到（{checkedInCount}/{attendeeCount}）"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:371
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:540
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:372
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:541
 msgid "Checking your saved profiles…"
 msgstr "正在检查您已保存的资料…"
 
@@ -3761,7 +3790,7 @@ msgstr "在座位图上选择座位以加入订单"
 msgid "Choose a time"
 msgstr "选择时间"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:409
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:410
 msgid "Choose an .xlsx or .csv file under 10 MB."
 msgstr "请选择小于 10 MB 的 .xlsx 或 .csv 文件。"
 
@@ -3786,8 +3815,8 @@ msgstr "选择主办方"
 msgid "Choose an Organizer"
 msgstr "选择一个组织者"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:507
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:516
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:508
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:517
 msgid "Choose another file"
 msgstr "选择其他文件"
 
@@ -3928,7 +3957,7 @@ msgstr "关闭"
 #: src/components/common/SideDrawer/index.tsx:117
 #: src/components/forms/ProductForm/ProductDrawer.tsx:100
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:51
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:105
 #: src/components/modals/CreateEventModal/index.tsx:287
@@ -3944,7 +3973,7 @@ msgstr "关闭"
 msgid "Close sidebar"
 msgstr "关闭侧边栏"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
 msgstr "俱乐部"
 
@@ -4043,10 +4072,6 @@ msgstr "以逗号分隔的描述活动的关键字。搜索引擎将使用这些
 msgid "Commission"
 msgstr "佣金"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:222
-msgid "Communication Preferences"
-msgstr "通信偏好"
-
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:180
 #: src/ee/box-office/utilites/boxOfficeTender.ts:11
 msgid "Comp"
@@ -4134,7 +4159,7 @@ msgstr "组件代码"
 msgid "Compose"
 msgstr "撰写"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Conference"
 msgstr "会议"
 
@@ -4227,11 +4252,8 @@ msgid "Confirm it's you"
 msgstr "确认是你本人"
 
 #: src/components/routes/auth/ResetPassword/index.tsx:71
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:54
 msgid "Confirm new password"
-msgstr "确认新密码"
-
-#: src/components/routes/profile/ManageProfile/index.tsx:262
-msgid "Confirm New Password"
 msgstr "确认新密码"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:134
@@ -4345,7 +4367,11 @@ msgstr "联系"
 msgid "Contact {0}"
 msgstr "联系 {0}"
 
-#: src/components/forms/OrganizerForm/index.tsx:35
+#: src/components/modals/CreateOrganizerModal/index.tsx:39
+msgid "Contact email"
+msgstr "联系邮箱"
+
+#: src/components/forms/OrganizerForm/index.tsx:39
 msgid "Contact Email"
 msgstr "联系邮箱"
 
@@ -4381,7 +4407,7 @@ msgstr "继续按钮"
 msgid "Continue Button Text"
 msgstr "继续按钮文字"
 
-#: src/components/forms/OrganizerForm/index.tsx:130
+#: src/components/forms/OrganizerForm/index.tsx:144
 #: src/components/routes/welcome/index.tsx:472
 msgid "Continue Setup"
 msgstr "继续设置"
@@ -4398,7 +4424,7 @@ msgstr "继续结账"
 msgid "Continue to dashboard"
 msgstr "继续前往控制台"
 
-#: src/components/forms/OrganizerForm/index.tsx:128
+#: src/components/forms/OrganizerForm/index.tsx:142
 msgid "Continue to event creation"
 msgstr "继续创建活动"
 
@@ -4594,7 +4620,7 @@ msgstr "无法删除地点"
 msgid "Could not download the template. Please try again."
 msgstr "无法下载模板，请重试。"
 
-#: src/components/routes/event/Lineup/index.tsx:119
+#: src/components/routes/event/Lineup/index.tsx:121
 msgid "Could not export the run sheet. Please try again."
 msgstr "无法导出流程单，请重试。"
 
@@ -4651,7 +4677,7 @@ msgstr "无法更新 {name}"
 msgid "Could not upload {fileName}"
 msgstr "无法上传 {fileName}"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:76
+#: src/components/routes/settings/Security/index.tsx:73
 msgid "Couldn't load your security settings"
 msgstr "无法加载你的安全设置"
 
@@ -4709,10 +4735,6 @@ msgstr "创建"
 msgid "Create \"{query}\""
 msgstr "创建“{query}”"
 
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:59
-msgid "Create {0}"
-msgstr "创建 {0}"
-
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:112
 msgid "Create {0} Template"
 msgstr "创建{0}模板"
@@ -4742,7 +4764,7 @@ msgid "Create a Promo Code"
 msgstr "创建促销代码"
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:55
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:63
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:64
 msgid "Create a seat map"
 msgstr "创建座位图"
 
@@ -4759,10 +4781,6 @@ msgstr "创建票单"
 msgid "Create a ticket, then link it to a band so buyers can pick a seat. Donation tickets and other product types can't be seated."
 msgstr "请先创建票种，再将其关联到价位区，买家即可选座。捐赠票和其他商品类型无法选座。"
 
-#: src/components/modals/CreateOrganizerModal/index.tsx:24
-msgid "Create additional organizers to manage separate brands, departments, or event series under one account. Each organizer has its own events, settings, and public page."
-msgstr "创建额外的主办方来管理一个账户下的独立品牌、部门或活动系列。每个主办方拥有自己的活动、设置和公开页面。"
-
 #: src/components/common/AffiliateTable/index.tsx:69
 #: src/components/modals/CreateAffiliateModal/index.tsx:77
 #: src/components/modals/CreateAffiliateModal/index.tsx:93
@@ -4778,21 +4796,22 @@ msgstr "创建公告，向您的用户展示消息。"
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "创建并配置待售门票和商品。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:107
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:111
 msgid "Create and start designing"
 msgstr "创建并开始设计"
 
 #: src/components/routes/admin/Announcements/index.tsx:125
 #: src/components/routes/admin/Announcements/index.tsx:365
-#: src/components/routes/admin/Announcements/index.tsx:502
+#: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "创建公告"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:335
+#: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
 msgstr "创建与会者"
 
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:315
+#: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:63
 #: src/ee/box-office/components/modals/CreateBoxOfficeModal/index.tsx:102
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:105
 msgid "Create Box Office"
@@ -4800,7 +4819,7 @@ msgstr "创建售票处"
 
 #: src/components/common/CapacityAssignmentList/index.tsx:61
 #: src/components/modals/CreateCapacityAssignmentModal/index.tsx:68
-#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:79
+#: src/components/modals/CreateCapacityAssignmentModal/index.tsx:80
 #: src/components/routes/event/CapacityAssignments/index.tsx:62
 msgid "Create Capacity Assignment"
 msgstr "创建容量分配"
@@ -4811,12 +4830,13 @@ msgid "Create category"
 msgstr "创建类别"
 
 #: src/components/modals/CreateProductCategoryModal/index.tsx:45
-#: src/components/modals/CreateProductCategoryModal/index.tsx:56
+#: src/components/modals/CreateProductCategoryModal/index.tsx:58
 msgid "Create Category"
 msgstr "创建类别"
 
 #: src/components/common/CheckInListList/index.tsx:60
 #: src/components/common/CheckInListTable/index.tsx:295
+#: src/components/modals/CreateCheckInListModal/index.tsx:91
 #: src/components/modals/CreateCheckInListModal/index.tsx:112
 #: src/components/routes/event/CheckInLists/index.tsx:76
 msgid "Create Check-In List"
@@ -4824,7 +4844,7 @@ msgstr "创建签到列表"
 
 #: src/components/routes/admin/Configurations/index.tsx:65
 #: src/components/routes/admin/Configurations/index.tsx:205
-#: src/components/routes/admin/Configurations/index.tsx:273
+#: src/components/routes/admin/Configurations/index.tsx:274
 msgid "Create Configuration"
 msgstr "创建配置"
 
@@ -4836,7 +4856,7 @@ msgstr "为此活动创建自定义邮件模板以覆盖组织者默认设置"
 msgid "Create Custom Template"
 msgstr "创建自定义模板"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
 msgid "Create Date"
 msgstr "创建日期"
 
@@ -4844,7 +4864,7 @@ msgstr "创建日期"
 msgid "Create discounts, access codes for hidden tickets, and special offers."
 msgstr "创建折扣、隐藏门票的访问码和特别优惠。"
 
-#: src/components/modals/CreateEventModal/index.tsx:492
+#: src/components/modals/CreateEventModal/index.tsx:491
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:412
 msgid "Create event"
 msgstr "创建活动"
@@ -4854,6 +4874,10 @@ msgstr "创建活动"
 #: src/components/routes/organizer/Events/index.tsx:64
 msgid "Create Event"
 msgstr "创建活动"
+
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
+msgid "Create fee"
+msgstr "创建费用"
 
 #: src/components/forms/ProductForm/index.tsx:562
 msgid "Create more tickets or products to offer them as add-ons"
@@ -4867,8 +4891,13 @@ msgstr "创建新的"
 msgid "Create new password"
 msgstr "创建新密码"
 
-#: src/components/common/GlobalMenu/index.tsx:109
-#: src/components/modals/CreateOrganizerModal/index.tsx:18
+#: src/components/modals/CreateOrganizerModal/index.tsx:22
+#: src/components/modals/CreateOrganizerModal/index.tsx:68
+#: src/components/routes/settings/Organizers/index.tsx:76
+msgid "Create organizer"
+msgstr "创建主办方"
+
+#: src/components/common/GlobalMenu/index.tsx:104
 #: src/components/modals/SwitchOrganizerModal/index.tsx:100
 msgid "Create Organizer"
 msgstr "创建组织器"
@@ -4882,12 +4911,12 @@ msgid "Create profile"
 msgstr "创建简介"
 
 #: src/components/modals/CreatePromoCodeModal/index.tsx:52
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
+#: src/components/modals/CreatePromoCodeModal/index.tsx:59
 msgid "Create Promo Code"
 msgstr "创建促销代码"
 
 #: src/components/modals/CreateQuestionModal/index.tsx:70
-#: src/components/modals/CreateQuestionModal/index.tsx:75
+#: src/components/modals/CreateQuestionModal/index.tsx:77
 msgid "Create Question"
 msgstr "创建问题"
 
@@ -4895,13 +4924,16 @@ msgstr "创建问题"
 msgid "Create schedule"
 msgstr "创建日程"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:150
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:162
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:153
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:165
 msgid "Create seat map"
 msgstr "创建座位图"
 
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
+msgid "Create tax"
+msgstr "创建税项"
+
 #: src/components/forms/ProductForm/index.tsx:504
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:53
 msgid "Create Tax or Fee"
 msgstr "创建税费"
 
@@ -4917,10 +4949,10 @@ msgstr "创建门票或产品"
 msgid "Create trackable links to reward partners who promote your event."
 msgstr "创建可追踪链接以奖励推广您活动的合作伙伴。"
 
-#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:82
-#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:93
-#: src/components/modals/CreateWebhookModal/index.tsx:82
-#: src/components/modals/CreateWebhookModal/index.tsx:92
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:84
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:95
+#: src/components/modals/CreateWebhookModal/index.tsx:84
+#: src/components/modals/CreateWebhookModal/index.tsx:94
 msgid "Create Webhook"
 msgstr "创建 Webhook"
 
@@ -4944,7 +4976,7 @@ msgstr "创建您自己的活动"
 msgid "Created"
 msgstr "已创建"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:659
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:660
 msgid "Creates new profiles for {newNames}"
 msgstr "将为 {newNames} 创建新档案"
 
@@ -4956,7 +4988,7 @@ msgstr "正在创建 {0} 个日期。这可能需要一些时间。"
 msgid "Creating Event..."
 msgstr "正在创建活动..."
 
-#: src/components/forms/OrganizerForm/index.tsx:130
+#: src/components/forms/OrganizerForm/index.tsx:144
 msgid "Creating Organizer..."
 msgstr "正在创建主办方..."
 
@@ -4964,7 +4996,7 @@ msgstr "正在创建主办方..."
 msgid "Creating your event, please wait"
 msgstr "正在创建您的活动，请稍候"
 
-#: src/components/forms/OrganizerForm/index.tsx:128
+#: src/components/forms/OrganizerForm/index.tsx:142
 msgid "Creating your organizer profile, please wait"
 msgstr "正在创建您的主办方资料，请稍候"
 
@@ -4977,10 +5009,10 @@ msgid "CTA label is required"
 msgstr "CTA标签是必需的"
 
 #: src/components/common/OrganizerReportTable/index.tsx:306
-#: src/components/forms/OrganizerForm/index.tsx:50
+#: src/components/forms/OrganizerForm/index.tsx:51
+#: src/components/modals/CreateEventModal/index.tsx:436
 #: src/components/modals/CreateEventModal/index.tsx:437
-#: src/components/modals/CreateEventModal/index.tsx:438
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:74
+#: src/components/modals/CreateOrganizerModal/index.tsx:50
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:170
 #: src/components/routes/admin/Dashboard/index.tsx:205
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:136
@@ -4988,16 +5020,14 @@ msgstr "CTA标签是必需的"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:116
+#: src/components/routes/settings/Account/index.tsx:79
 msgid "Currency"
 msgstr "货币"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:112
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:61
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:54
 msgid "Current password"
-msgstr "当前密码"
-
-#: src/components/routes/profile/ManageProfile/index.tsx:254
-msgid "Current Password"
 msgstr "当前密码"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:111
@@ -5012,7 +5042,7 @@ msgstr "当前可购买"
 msgid "Curve"
 msgstr "曲线"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:30
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:31
 msgid "Curved rows and a balcony."
 msgstr "弧形排列和阳台。"
 
@@ -5139,15 +5169,14 @@ msgstr "舞池"
 #: src/components/common/WebhookTable/index.tsx:121
 #: src/components/routes/event/Lineup/LineupPreview.tsx:132
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:103
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:167
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:253
 msgid "Danger zone"
 msgstr "危险区"
 
 #: src/components/common/DangerZone/index.tsx:30
 #: src/components/common/EntityActions/index.tsx:32
-#: src/components/routes/account/ManageAccount/index.tsx:40
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:86
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:576
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:573
 #: src/components/routes/event/Settings/index.tsx:104
 #: src/components/routes/organizer/Settings/index.tsx:81
 msgid "Danger Zone"
@@ -5274,7 +5303,7 @@ msgstr "每月某日"
 msgid "Day one capacity"
 msgstr "第一天容量"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:553
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:554
 msgid "Day/Month"
 msgstr "日/月"
 
@@ -5291,12 +5320,12 @@ msgstr "天"
 msgid "Days of the month"
 msgstr "每月日期"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:100
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:178
+#: src/components/routes/settings/Team/index.tsx:101
+#: src/components/routes/settings/Team/MemberRow.tsx:178
 msgid "Deactivate"
 msgstr "停用"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:100
+#: src/components/routes/settings/Team/index.tsx:101
 msgid "Deactivate {0}? They won't be able to sign in until you reactivate them."
 msgstr "停用 {0}？在你重新启用之前，对方将无法登录。"
 
@@ -5315,6 +5344,7 @@ msgstr "减少数量"
 #: src/components/common/CheckInListTable/index.tsx:87
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:117
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:292
+#: src/components/routes/settings/TaxesAndFees/index.tsx:51
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:96
 msgid "Default"
 msgstr "默认"
@@ -5364,13 +5394,13 @@ msgstr "删除"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
 #: src/components/common/PromoCodeTable/index.tsx:42
 #: src/components/common/QuestionsTable/index.tsx:158
-#: src/components/common/TaxAndFeeList/index.tsx:83
 #: src/components/routes/admin/Announcements/index.tsx:226
 #: src/components/routes/admin/FailedJobs/index.tsx:209
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:64
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:93
 #: src/components/routes/event/OccurrencesTab/index.tsx:548
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:68
+#: src/components/routes/settings/TaxesAndFees/index.tsx:71
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:245
 msgid "Delete"
 msgstr "删除"
@@ -5380,7 +5410,7 @@ msgid "Delete \"{0}\"?"
 msgstr "删除\"{0}\"？"
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:39
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:195
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:198
 #: src/ee/seating/components/SeatMapDesigner/BandsPanel.tsx:36
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:350
 msgid "Delete {0}"
@@ -5398,10 +5428,12 @@ msgstr "要在所有位置删除 {profileName} 吗？该人员将从此主办方
 msgid "Delete {spaceName}? Time slots on it stay on the schedule without a stage."
 msgstr "删除 {spaceName}？其中的时段会保留在日程中，但不再关联舞台。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:154
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:161
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:383
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:421
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:112
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:158
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:171
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:206
 msgid "Delete account"
 msgstr "删除账户"
 
@@ -5441,7 +5473,7 @@ msgid "Delete code"
 msgstr "删除代码"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:366
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:603
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:600
 msgid "Delete Date"
 msgstr "删除日期"
 
@@ -5529,7 +5561,7 @@ msgstr "删除这个产品？此操作无法撤销。"
 msgid "Delete this question? This cannot be undone."
 msgstr "删除此问题？此操作无法撤销。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:132
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:135
 msgid "Delete this seat map? Events that already use it keep their own copy."
 msgstr "删除此座位图?已使用它的活动将保留各自的副本。"
 
@@ -5545,10 +5577,6 @@ msgstr "已删除 {0} 个日期"
 #: src/components/routes/admin/DeletionRequests/index.tsx:143
 msgid "Deleted account"
 msgstr "已删除的账户"
-
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:124
-msgid "Deleting your account deactivates it immediately: all published events are unpublished and access is disabled. After a 30-day grace period, the deletion becomes permanent. You can cancel at any time during those 30 days."
-msgstr "删除账户会立即将其停用：所有已发布的活动将被取消发布，访问权限将被禁用。30 天宽限期过后，删除将变为永久性。在这 30 天内您可以随时取消。"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:387
 msgid "Deletion is scheduled for {0}."
@@ -5583,8 +5611,8 @@ msgstr "深度"
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:398
 #: src/components/forms/ProductForm/index.tsx:404
-#: src/components/forms/TaxAndFeeForm/index.tsx:81
-#: src/components/modals/CreateEventModal/index.tsx:351
+#: src/components/forms/TaxAndFeeForm/index.tsx:106
+#: src/components/modals/CreateEventModal/index.tsx:350
 #: src/components/modals/DuplicateEventModal/index.tsx:118
 #: src/components/routes/admin/SpamEvents/index.tsx:317
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:190
@@ -5622,8 +5650,8 @@ msgstr "桌面"
 
 #: src/components/common/ProgressStepper/index.tsx:18
 #: src/components/common/ProgressStepper/index.tsx:23
-#: src/components/modals/EditUserModal/index.tsx:83
-#: src/components/modals/InviteUserModal/index.tsx:53
+#: src/components/modals/EditUserModal/index.tsx:82
+#: src/components/modals/InviteUserModal/index.tsx:52
 #: src/components/modals/ManageAttendeeModal/index.tsx:266
 #: src/components/modals/ManageOrderModal/index.tsx:300
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
@@ -5646,7 +5674,7 @@ msgstr "开发许可证"
 msgid "Development licence, not for production use"
 msgstr "开发许可证，不可用于生产环境"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:58
+#: src/components/routes/settings/Security/index.tsx:49
 msgid "Device removed"
 msgstr "设备已移除"
 
@@ -5676,6 +5704,7 @@ msgid "Disabling this capacity will track sales but not stop them when the limit
 msgstr "禁用此容量将跟踪销售情况，但不会在达到限制时停止销售"
 
 #: src/components/common/DesignerShell/index.tsx:85
+#: src/components/common/SettingsPage/index.tsx:92
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:733
 msgid "Discard"
@@ -5762,7 +5791,7 @@ msgid "Document Label"
 msgstr "文档标签"
 
 #: src/components/modals/CreateEventModal/index.tsx:224
-#: src/components/modals/CreateEventModal/index.tsx:418
+#: src/components/modals/CreateEventModal/index.tsx:417
 msgid "Doesn't repeat"
 msgstr "不重复"
 
@@ -5786,10 +5815,10 @@ msgstr "捐赠"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:245
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
-#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:72
-#: src/components/modals/CreateWebhookModal/index.tsx:72
+#: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
+#: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:57
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
 msgstr "完成"
@@ -5818,7 +5847,7 @@ msgstr "下载"
 msgid "Download .ics"
 msgstr "下载 .ics"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:454
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:455
 msgid "Download a template with your current lineup"
 msgstr "下载包含当前阵容的模板"
 
@@ -5842,7 +5871,7 @@ msgstr "下载二维码"
 msgid "Download sales, attendee, and financial reports for all completed orders."
 msgstr "下载所有已完成订单的销售、参与者和财务报告。"
 
-#: src/components/routes/event/Lineup/index.tsx:141
+#: src/components/routes/event/Lineup/index.tsx:143
 msgid "Download spreadsheet (.xlsx)"
 msgstr "下载电子表格 (.xlsx)"
 
@@ -5857,6 +5886,7 @@ msgstr "正在下载发票"
 #: src/components/routes/admin/Announcements/index.tsx:183
 #: src/components/routes/admin/Announcements/index.tsx:472
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
+#: src/components/routes/settings/Organizers/index.tsx:23
 msgid "Draft"
 msgstr "草稿"
 
@@ -5864,7 +5894,7 @@ msgstr "草稿"
 msgid "Draft event not published"
 msgstr "草稿活动未发布"
 
-#: src/components/routes/event/Lineup/index.tsx:342
+#: src/components/routes/event/Lineup/index.tsx:344
 msgid "Drag people onto the timetable or add time slots with a form."
 msgstr "将人员拖到时间表上，或通过表单添加时段。"
 
@@ -5905,7 +5935,7 @@ msgstr "绘制站立区"
 msgid "Draw rows of seats"
 msgstr "绘制座位排"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:423
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:424
 msgid "Drop a spreadsheet here or click to choose"
 msgstr "将电子表格拖放到此处，或点击选择"
 
@@ -5949,7 +5979,7 @@ msgid "Duplicate event"
 msgstr "复制活动"
 
 #: src/components/modals/DuplicateEventModal/index.tsx:103
-#: src/components/modals/DuplicateEventModal/index.tsx:183
+#: src/components/modals/DuplicateEventModal/index.tsx:185
 msgid "Duplicate Event"
 msgstr "复制活动"
 
@@ -6040,6 +6070,10 @@ msgstr "每个账户最多收到一次此邮件。"
 msgid "Each code can be used once to sign in if you lose access to your authenticator app."
 msgstr "如果您无法访问验证器应用,每个恢复码可用于登录一次。"
 
+#: src/components/routes/settings/Organizers/index.tsx:73
+msgid "Each organizer has its own public page, branding, payouts and event defaults."
+msgstr "每个主办方都有自己的公开页面、品牌、收款和活动默认设置。"
+
 #: src/components/modals/OfferWaitlistModal/index.tsx:134
 msgid "Each person will receive an email with a reserved spot to complete their purchase."
 msgstr "每个人将收到一封包含预留名额的电子邮件，以完成购买。"
@@ -6068,21 +6102,20 @@ msgstr "早起的鸟儿"
 #: src/components/common/DesignerShell/index.tsx:60
 #: src/components/common/LocationPicker/index.tsx:197
 #: src/components/common/QuestionsTable/index.tsx:150
-#: src/components/common/TaxAndFeeList/index.tsx:75
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:160
 #: src/components/routes/admin/Announcements/index.tsx:211
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:252
+#: src/components/routes/settings/TaxesAndFees/index.tsx:68
+#: src/components/routes/settings/Team/MemberRow.tsx:160
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:147
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:192
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:195
 #: src/hooks/useAttendeeActions.tsx:94
 #: src/hooks/useOrderActions.tsx:108
 msgid "Edit"
 msgstr "编辑"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:580
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:52
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:177
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:180
 msgid "Edit {0}"
 msgstr "编辑 {0}"
 
@@ -6126,7 +6159,6 @@ msgid "Edit Capacity"
 msgstr "编辑容量"
 
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:66
-#: src/components/modals/EditCapacityAssignmentModal/index.tsx:74
 msgid "Edit Capacity Assignment"
 msgstr "编辑容量分配"
 
@@ -6139,7 +6171,6 @@ msgstr "编辑类别"
 #: src/components/common/CheckInListList/index.tsx:147
 #: src/components/common/CheckInListTable/index.tsx:200
 #: src/components/modals/EditCheckInListModal/index.tsx:77
-#: src/components/modals/EditCheckInListModal/index.tsx:107
 msgid "Edit Check-In List"
 msgstr "编辑签到列表"
 
@@ -6158,6 +6189,10 @@ msgstr "编辑日期"
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "Edit details"
 msgstr "编辑详情"
+
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:36
+msgid "Edit fee"
+msgstr "编辑费用"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:266
 msgid "Edit in Tickets & Products"
@@ -6183,7 +6218,7 @@ msgstr "编辑地点"
 msgid "Edit Location"
 msgstr "编辑地点"
 
-#: src/components/modals/EditUserModal/index.tsx:55
+#: src/components/modals/EditUserModal/index.tsx:54
 msgid "Edit member"
 msgstr "编辑成员"
 
@@ -6191,27 +6226,20 @@ msgstr "编辑成员"
 msgid "Edit Order Details"
 msgstr "编辑订单详情"
 
-#: src/components/modals/EditOrganizerModal/index.tsx:63
-msgid "Edit Organizer"
-msgstr "编辑组织器"
-
 #: src/components/modals/EditProductModal/index.tsx:113
 #: src/components/modals/EditProductModal/index.tsx:117
 msgid "Edit Product"
 msgstr "编辑产品"
 
 #: src/components/modals/EditProductCategoryModal/index.tsx:62
-#: src/components/modals/EditProductCategoryModal/index.tsx:70
 msgid "Edit Product Category"
 msgstr "编辑产品类别"
 
 #: src/components/modals/EditPromoCodeModal/index.tsx:80
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
 msgid "Edit Promo Code"
 msgstr "编辑促销代码"
 
 #: src/components/modals/EditQuestionModal/index.tsx:95
-#: src/components/modals/EditQuestionModal/index.tsx:101
 msgid "Edit Question"
 msgstr "编辑问题"
 
@@ -6227,6 +6255,10 @@ msgstr "编辑日程"
 msgid "Edit stage or room"
 msgstr "编辑舞台或会场"
 
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:36
+msgid "Edit tax"
+msgstr "编辑税项"
+
 #: src/ee/seating/components/routes/event/Seating/index.tsx:122
 msgid "Edit this event's seat map"
 msgstr "编辑此活动的座位图"
@@ -6235,7 +6267,7 @@ msgstr "编辑此活动的座位图"
 msgid "Edit time slot"
 msgstr "编辑时段"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:171
+#: src/components/routes/settings/Team/MemberRow.tsx:171
 msgid "Edit user"
 msgstr "编辑用户"
 
@@ -6245,9 +6277,7 @@ msgid "Edit webhook"
 msgstr "编辑 Webhook"
 
 #: src/components/modals/EditOrganizerWebhookModal/index.tsx:65
-#: src/components/modals/EditOrganizerWebhookModal/index.tsx:86
 #: src/components/modals/EditWebhookModal/index.tsx:66
-#: src/components/modals/EditWebhookModal/index.tsx:87
 msgid "Edit Webhook"
 msgstr "编辑 Webhook"
 
@@ -6263,14 +6293,6 @@ msgstr "编辑器"
 msgid "Education"
 msgstr "教育"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:74
-msgid "eg. 2.50 for $2.50"
-msgstr "例如2.50 换 2.50"
-
-#: src/components/forms/TaxAndFeeForm/index.tsx:74
-msgid "eg. 23.5 for 23.5%"
-msgstr "例如23.5 表示 23.5%"
-
 #: src/components/routes/admin/Messages/index.tsx:325
 msgid "Eligibility Failures"
 msgstr "资格失败"
@@ -6282,7 +6304,7 @@ msgstr "符合条件的签到列表"
 #: src/components/common/OrderDetails/index.tsx:34
 #: src/components/common/QuestionsTable/index.tsx:263
 #: src/components/forms/AffiliateForm/index.tsx:89
-#: src/components/modals/InviteUserModal/index.tsx:62
+#: src/components/modals/InviteUserModal/index.tsx:61
 #: src/components/modals/JoinWaitlistModal/index.tsx:189
 #: src/components/modals/ManageAttendeeModal/index.tsx:174
 #: src/components/modals/ManageOrderModal/index.tsx:141
@@ -6296,7 +6318,7 @@ msgstr "符合条件的签到列表"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/profile/ManageProfile/index.tsx:174
+#: src/components/routes/settings/Profile/index.tsx:170
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
 msgid "Email"
 msgstr "电子邮件"
@@ -6340,21 +6362,17 @@ msgstr "电子邮件地址不匹配"
 msgid "Email Body"
 msgstr "邮件正文"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:99
+#: src/components/routes/settings/Profile/index.tsx:83
 msgid "Email change cancelled successfully"
 msgstr "电子邮件更改已成功取消"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:144
+#: src/components/routes/settings/Profile/index.tsx:129
 msgid "Email change pending"
 msgstr "电子邮件更改待定"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:187
-msgid "Email confirmation resent"
-msgstr "重新发送电子邮件确认"
-
 #: src/components/layouts/Event/index.tsx:96
 #: src/components/layouts/OrganizerLayout/index.tsx:135
-#: src/components/routes/profile/ManageProfile/index.tsx:112
+#: src/components/routes/settings/Profile/index.tsx:91
 msgid "Email confirmation resent successfully"
 msgstr "成功重新发送电子邮件确认"
 
@@ -6373,11 +6391,11 @@ msgstr "电子邮件页脚信息"
 msgid "Email is required"
 msgstr "邮箱为必填项"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:233
+#: src/components/routes/settings/Profile/index.tsx:216
 msgid "Email me about new orders on the events I can access"
 msgstr "我可访问的活动有新订单时给我发邮件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:177
+#: src/components/routes/settings/Profile/index.tsx:109
 msgid "Email not verified"
 msgstr "电子邮件未经验证"
 
@@ -6491,7 +6509,7 @@ msgstr "结束"
 msgid "End"
 msgstr "结束"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:447
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:448
 msgid "End can be after midnight. Separate several people with a semicolon."
 msgstr "结束时间可以晚于午夜。多人之间请用分号分隔。"
 
@@ -6502,7 +6520,7 @@ msgstr "结束时间可以晚于午夜。多人之间请用分号分隔。"
 msgid "End Date"
 msgstr "结束日期"
 
-#: src/components/modals/CreateEventModal/index.tsx:408
+#: src/components/modals/CreateEventModal/index.tsx:407
 msgid "End date and time"
 msgstr "结束日期和时间"
 
@@ -6535,7 +6553,7 @@ msgstr "已于 {0} 结束"
 msgid "Ends"
 msgstr "结束"
 
-#: src/components/modals/CreateEventModal/index.tsx:399
+#: src/components/modals/CreateEventModal/index.tsx:398
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:46
 msgid "Ends {0}"
 msgstr "{0} 结束"
@@ -6720,7 +6738,6 @@ msgstr "必要"
 msgid "Estimated total"
 msgstr "预计合计"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:75
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:137
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:117
 msgid "EUR"
@@ -6799,7 +6816,6 @@ msgstr "活动日期"
 msgid "Event date display"
 msgstr "活动日期显示"
 
-#: src/components/routes/account/ManageAccount/sections/EventDefaultsSettings/index.tsx:5
 #: src/components/routes/organizer/Settings/index.tsx:45
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:73
 msgid "Event Defaults"
@@ -6839,8 +6855,8 @@ msgstr "活动全周期"
 msgid "Event location & venue details"
 msgstr "活动地点和场地详情"
 
+#: src/components/modals/CreateEventModal/index.tsx:328
 #: src/components/modals/CreateEventModal/index.tsx:329
-#: src/components/modals/CreateEventModal/index.tsx:330
 #: src/components/routes/welcome/index.tsx:375
 msgid "Event name"
 msgstr "活动名称"
@@ -7003,11 +7019,11 @@ msgstr "每个活动都有签到列表"
 msgid "Every organizer and event, including new ones."
 msgstr "所有主办方和活动，包括新建的。"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:93
+#: src/components/routes/settings/Security/index.tsx:94
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "每台受信任设备在下次登录时都需要输入验证码。是否继续?"
 
-#: src/components/routes/event/Lineup/index.tsx:54
+#: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
 msgstr "本活动的所有出场人员，以及他们的地点和时间。添加后会立即显示在活动页面上。"
 
@@ -7019,7 +7035,7 @@ msgstr "其他人员"
 msgid "Everyone has a time"
 msgstr "所有人都已安排时间"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:62
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:62
 msgid "Everyone on this account must use an authenticator app to sign in. Members without it are asked to set it up before they can continue."
 msgstr "此账户中的所有人都必须使用验证器应用登录。未启用的成员需要先完成设置才能继续。"
 
@@ -7035,7 +7051,7 @@ msgstr "所有可以查看或管理此活动的人。"
 msgid "Everything else — tap to edit"
 msgstr "其他所有内容 — 点按可编辑"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:537
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:538
 msgid "Everything looks good"
 msgstr "一切正常"
 
@@ -7055,7 +7071,7 @@ msgstr "示例：\"您是如何了解我们的？\"、\"发票公司名称\""
 msgid "Examples: \"T-shirt size\", \"Meal preference\", \"Job title\""
 msgstr "示例：\"T恤尺码\"、\"餐饮偏好\"、\"职位\""
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:424
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:425
 msgid "Excel (.xlsx) or CSV. You'll see exactly what will change before anything is saved."
 msgstr "Excel (.xlsx) 或 CSV。保存前你会清楚看到将发生哪些更改。"
 
@@ -7100,7 +7116,7 @@ msgstr "有效期"
 #: src/components/modals/ProductPurchasesModal/index.tsx:203
 #: src/components/routes/event/Affiliates/index.tsx:97
 #: src/components/routes/event/attendees.tsx:263
-#: src/components/routes/event/Lineup/index.tsx:136
+#: src/components/routes/event/Lineup/index.tsx:138
 #: src/components/routes/event/orders.tsx:250
 msgid "Export"
 msgstr "出口"
@@ -7539,19 +7555,21 @@ msgstr "功能"
 msgid "February"
 msgstr "2 月"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:18
-#: src/components/forms/TaxAndFeeForm/index.tsx:39
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:59
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:42
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:52
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:59
+#: src/components/forms/TaxAndFeeForm/index.tsx:27
 msgid "Fee"
 msgstr "费用"
+
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
+msgid "Fee created"
+msgstr "费用已创建"
 
 #: src/components/routes/admin/Configurations/index.tsx:232
 msgid "Fee Currency"
 msgstr "费用货币"
+
+#: src/components/routes/settings/TaxesAndFees/index.tsx:34
+msgid "Fee deleted"
+msgstr "费用已删除"
 
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:50
 msgid "Fee Handling"
@@ -7561,11 +7579,16 @@ msgstr "费用处理"
 msgid "Fee override saved"
 msgstr "单独费率已保存"
 
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:28
+msgid "Fee updated"
+msgstr "费用已更新"
+
 #: src/components/common/InlineOrderSummary/index.tsx:168
 #: src/components/common/OrdersTable/index.tsx:291
 #: src/components/forms/ProductForm/index.tsx:493
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:54
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:89
+#: src/components/routes/settings/TaxesAndFees/index.tsx:112
 msgid "Fees"
 msgstr "费用"
 
@@ -7617,7 +7640,7 @@ msgstr "按日期筛选"
 msgid "Filter by Event"
 msgstr "按活动筛选"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:190
+#: src/components/routes/settings/Team/index.tsx:189
 msgid "Filter by role"
 msgstr "按角色筛选"
 
@@ -7691,13 +7714,15 @@ msgstr "第一张发票号码"
 #: src/components/modals/ManageOrderModal/index.tsx:261
 #: src/components/routes/product-widget/CollectInformation/index.tsx:473
 #: src/components/routes/product-widget/CollectInformation/index.tsx:685
+#: src/components/routes/settings/Profile/index.tsx:154
+#: src/components/routes/settings/Profile/index.tsx:155
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:70
 msgid "First name"
 msgstr "姓名"
 
 #: src/components/common/QuestionsTable/index.tsx:261
-#: src/components/modals/EditUserModal/index.tsx:85
-#: src/components/modals/InviteUserModal/index.tsx:55
+#: src/components/modals/EditUserModal/index.tsx:84
+#: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:97
 #: src/components/routes/auth/Register/index.tsx:96
@@ -7705,7 +7730,6 @@ msgstr "姓名"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:55
-#: src/components/routes/profile/ManageProfile/index.tsx:170
 msgid "First Name"
 msgstr "姓名"
 
@@ -7739,11 +7763,8 @@ msgstr "适应屏幕"
 msgid "Fix issues to publish"
 msgstr "请先解决问题再发布"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:33
-msgid "Fixed"
-msgstr "固定式"
-
 #: src/components/forms/PromoCodeForm/index.tsx:102
+#: src/components/forms/TaxAndFeeForm/index.tsx:89
 msgid "Fixed amount"
 msgstr "固定金额"
 
@@ -7953,6 +7974,11 @@ msgstr "仅未来日期"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "未来日期将被复制，容量重置为零"
 
+#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/routes/settings/Account/index.tsx:66
+msgid "General"
+msgstr "常规"
+
 #: src/components/common/CapacityHelp/index.tsx:64
 msgid "General admission"
 msgstr "普通票"
@@ -7978,12 +8004,12 @@ msgstr "生成"
 msgid "Generate code"
 msgstr "生成代码"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:159
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:85
+#: src/components/routes/settings/Security/index.tsx:160
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "生成新恢复码"
 
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:39
 msgid "Generate new recovery codes"
 msgstr "生成新的恢复码"
 
@@ -8039,7 +8065,7 @@ msgstr "GitHub"
 msgid "Give an existing member access"
 msgstr "为现有成员授予访问权限"
 
-#: src/components/routes/event/Lineup/index.tsx:341
+#: src/components/routes/event/Lineup/index.tsx:343
 msgid "Give everyone a time"
 msgstr "为所有人安排时间"
 
@@ -8212,12 +8238,13 @@ msgstr "保留座位"
 msgid "Held-back seats are kept off sale. Only sell it if you are sure."
 msgstr "已保留的座位不对外销售。请仅在确定时出售。"
 
-#: src/components/forms/OrganizerForm/index.tsx:36
+#: src/components/forms/OrganizerForm/index.tsx:40
+#: src/components/modals/CreateOrganizerModal/index.tsx:40
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:81
 msgid "hello@awesome-events.com"
 msgstr "hello@awesome-events.com"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:178
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:193
 msgid "Help us improve by telling us why you're leaving"
 msgstr "告诉我们您离开的原因，帮助我们改进"
 
@@ -8260,7 +8287,7 @@ msgstr "Hi.Events 平台费用和每笔交易的增值税明细"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:620
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:621
 #: src/components/routes/event/Lineup/LineupPreview.tsx:107
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:318
 msgid "Hidden"
@@ -8343,7 +8370,7 @@ msgstr "隐藏详情"
 msgid "Hide from event page"
 msgstr "在活动页面隐藏"
 
-#: src/components/routes/admin/Announcements/index.tsx:495
+#: src/components/routes/admin/Announcements/index.tsx:496
 msgid "Hide Preview"
 msgstr "隐藏预览"
 
@@ -8505,7 +8532,7 @@ msgstr "需要多少个?"
 msgid "How VAT is applied to the platform fees we charge you."
 msgstr "我们向你收取的平台费如何计征增值税。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:69
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:70
 msgid "How would you like to start?"
 msgstr "您想如何开始？"
 
@@ -8573,7 +8600,11 @@ msgstr "如果启用，登记工作人员可以将与会者标记为已登记或
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "如果启用，当有新订单时，组织者将收到电子邮件通知"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:150
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:174
+msgid "If you cancel within 30 days, access comes back, but your events stay unpublished until you publish them again."
+msgstr "如果您在 30 天内取消，访问权限将恢复，但您的活动将保持未发布状态，直到您重新发布。"
+
+#: src/components/routes/settings/Profile/index.tsx:134
 msgid "If you did not request this change, please immediately change your password."
 msgstr "如果您没有要求更改密码，请立即更改密码。"
 
@@ -8627,8 +8658,8 @@ msgstr "模拟已开始"
 msgid "Impersonation stopped"
 msgstr "模拟已停止"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:382
-#: src/components/routes/event/Lineup/index.tsx:104
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:384
+#: src/components/routes/event/Lineup/index.tsx:106
 msgid "Import"
 msgstr "导入"
 
@@ -8680,9 +8711,10 @@ msgstr "使用中"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:280
 #: src/components/forms/AffiliateForm/index.tsx:27
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:25
-#: src/components/modals/EditUserModal/index.tsx:66
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:26
+#: src/components/modals/EditUserModal/index.tsx:65
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:62
+#: src/components/routes/settings/TaxesAndFees/index.tsx:54
+#: src/components/routes/settings/Team/MemberRow.tsx:26
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:192
 msgid "Inactive"
 msgstr "不活动"
@@ -8804,23 +8836,23 @@ msgstr "无效的Liquid语法。请更正后再试。"
 msgid "Invalid VAT number format"
 msgstr "无效的增值税号格式"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:108
+#: src/components/routes/settings/Team/index.tsx:109
 msgid "Invitation resent!"
 msgstr "再次发出邀请！"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:115
+#: src/components/routes/settings/Team/index.tsx:116
 msgid "Invitation revoked!"
 msgstr "撤销邀请！"
 
-#: src/components/modals/InviteUserModal/index.tsx:51
+#: src/components/modals/InviteUserModal/index.tsx:50
 msgid "Invite a team member"
 msgstr "邀请团队成员"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:153
+#: src/components/routes/settings/Team/index.tsx:151
 msgid "Invite member"
 msgstr "邀请成员"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:149
+#: src/components/routes/settings/Team/index.tsx:148
 msgid "Invite people, choose what they can see and do, and keep sign-in secure."
 msgstr "邀请成员，设置他们可以查看和执行的操作，并确保登录安全。"
 
@@ -8836,8 +8868,8 @@ msgstr "邀请团队成员"
 msgid "Invite Your Team"
 msgstr "邀请您的团队"
 
-#: src/components/modals/EditUserModal/index.tsx:65
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:24
+#: src/components/modals/EditUserModal/index.tsx:64
+#: src/components/routes/settings/Team/MemberRow.tsx:24
 msgid "Invited"
 msgstr "已邀请"
 
@@ -9022,7 +9054,7 @@ msgstr "横向"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:240
 #: src/components/modals/ManageAttendeeModal/index.tsx:180
-#: src/components/routes/profile/ManageProfile/index.tsx:214
+#: src/components/routes/settings/Profile/index.tsx:182
 msgid "Language"
 msgstr "语言"
 
@@ -9083,20 +9115,22 @@ msgstr "过去 7 天"
 msgid "Last 90 days"
 msgstr "过去 90 天"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:199
+#: src/components/routes/settings/Team/index.tsx:198
 msgid "Last active"
 msgstr "最近活跃"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:267
+#: src/components/routes/settings/Profile/index.tsx:161
+#: src/components/routes/settings/Profile/index.tsx:162
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:71
 msgid "Last name"
 msgstr "姓氏"
 
 #: src/components/common/QuestionsTable/index.tsx:262
-#: src/components/modals/EditUserModal/index.tsx:86
-#: src/components/modals/InviteUserModal/index.tsx:56
+#: src/components/modals/EditUserModal/index.tsx:85
+#: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:102
 #: src/components/routes/auth/Register/index.tsx:102
@@ -9106,7 +9140,6 @@ msgstr "姓氏"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:692
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:62
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:62
-#: src/components/routes/profile/ManageProfile/index.tsx:172
 msgid "Last Name"
 msgstr "姓氏"
 
@@ -9129,7 +9162,7 @@ msgstr "最近触发"
 msgid "Last Used"
 msgstr "最近一次使用"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:48
+#: src/components/routes/settings/Security/index.tsx:39
 msgid "Last used {0}"
 msgstr "上次使用 {0}"
 
@@ -9243,7 +9276,7 @@ msgstr "字母（跳过 I 和 O）"
 msgid "Library"
 msgstr "图库"
 
-#: src/components/common/GlobalMenu/index.tsx:84
+#: src/components/common/GlobalMenu/index.tsx:79
 #: src/components/layouts/Admin/index.tsx:32
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:51
 msgid "Licence"
@@ -9292,7 +9325,7 @@ msgstr "阵容"
 
 #: src/components/layouts/Event/index.tsx:133
 #: src/components/modals/DuplicateEventModal/index.tsx:60
-#: src/components/routes/event/Lineup/index.tsx:55
+#: src/components/routes/event/Lineup/index.tsx:56
 msgid "Lineup & Schedule"
 msgstr "阵容与日程"
 
@@ -9328,7 +9361,7 @@ msgstr "链接"
 
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:230
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:333
-#: src/components/routes/organizer/People/index.tsx:116
+#: src/components/routes/organizer/People/index.tsx:117
 msgid "Links"
 msgstr "链接"
 
@@ -9341,7 +9374,7 @@ msgid "Links to: {0}"
 msgstr "链接到：{0}"
 
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:97
-#: src/components/routes/event/Lineup/index.tsx:219
+#: src/components/routes/event/Lineup/index.tsx:221
 #: src/components/routes/event/OccurrencesTab/index.tsx:508
 msgid "List"
 msgstr "列表"
@@ -9355,6 +9388,7 @@ msgstr "列表视图"
 #: src/components/layouts/OrganizerLayout/index.tsx:234
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
+#: src/components/routes/settings/Organizers/index.tsx:19
 msgid "Live"
 msgstr "上线"
 
@@ -9498,7 +9532,7 @@ msgstr "标志将显示在票券上"
 msgid "Logos of your sponsors and partners, with links."
 msgstr "您的赞助商和合作伙伴的标志，附带链接。"
 
-#: src/components/common/GlobalMenu/index.tsx:119
+#: src/components/common/GlobalMenu/index.tsx:114
 msgid "Logout"
 msgstr "注销"
 
@@ -9514,11 +9548,11 @@ msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat el
 msgid "Lost access?"
 msgstr "无法访问?"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:220
+#: src/components/routes/settings/Security/index.tsx:193
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "丢失手机或更换应用?请先关闭再重新开启,以连接新的验证器。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:65
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 msgid "Main auditorium"
 msgstr "主礼堂"
 
@@ -9605,10 +9639,6 @@ msgstr "管理此活动的支付和发票设置。"
 msgid "Manage people, stages and times on the"
 msgstr "管理人员、舞台和时间，请前往"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:123
-msgid "Manage Profile"
-msgstr "管理简介"
-
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:107
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:114
 msgid "Manage schedule"
@@ -9622,17 +9652,9 @@ msgstr "管理排期"
 msgid "Manage seat maps"
 msgstr "管理座位图"
 
-#: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:19
-msgid "Manage taxes and fees which can be applied to your products"
-msgstr "管理可以应用于您的产品的税费"
-
 #: src/components/modals/CreateAttendeeModal/index.tsx:176
 msgid "Manage tickets"
 msgstr "管理机票"
-
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:55
-msgid "Manage your account details and default settings"
-msgstr "管理账户详情和默认设置"
 
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:72
 msgid "Manage your event's waitlist, view stats, and offer tickets to attendees."
@@ -9708,19 +9730,19 @@ msgstr "5 月"
 msgid "Medium"
 msgstr "媒介"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:195
+#: src/components/routes/settings/Team/index.tsx:194
 msgid "Member"
 msgstr "成员"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:95
+#: src/components/routes/settings/Team/index.tsx:96
 msgid "Member deactivated"
 msgstr "成员已停用"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:95
+#: src/components/routes/settings/Team/index.tsx:96
 msgid "Member reactivated"
 msgstr "成员已重新启用"
 
-#: src/components/modals/EditUserModal/index.tsx:89
+#: src/components/modals/EditUserModal/index.tsx:88
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "成员可在<0>个人资料设置</0>中自行更改邮箱。"
 
@@ -9900,7 +9922,7 @@ msgstr "个月"
 msgid "Month"
 msgstr "月"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:554
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:555
 msgid "Month/Day"
 msgstr "月/日"
 
@@ -9924,10 +9946,10 @@ msgstr "更多"
 #: src/components/common/EntityActions/index.tsx:159
 #: src/components/common/EntityActions/index.tsx:160
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:179
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:165
 #: src/components/routes/admin/SpamEvents/index.tsx:256
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:207
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:180
+#: src/components/routes/settings/Team/MemberRow.tsx:165
 msgid "More actions"
 msgstr "更多操作"
 
@@ -10019,7 +10041,7 @@ msgstr "我的精彩活动描述"
 msgid "My amazing event title..."
 msgstr "我的精彩活动标题..."
 
-#: src/components/common/GlobalMenu/index.tsx:52
+#: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "我的简介"
 
@@ -10039,17 +10061,17 @@ msgstr "Nam placerat elementum..."
 #: src/components/forms/ProductCategoryForm/index.tsx:15
 #: src/components/forms/ProductCategoryForm/index.tsx:16
 #: src/components/forms/ProductForm/index.tsx:200
-#: src/components/forms/TaxAndFeeForm/index.tsx:61
+#: src/components/forms/TaxAndFeeForm/index.tsx:62
 #: src/components/modals/DuplicateEventModal/index.tsx:112
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:64
 #: src/components/routes/admin/Configurations/index.tsx:224
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:278
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:71
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:80
-#: src/components/routes/organizer/People/index.tsx:114
+#: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
+#: src/components/routes/settings/Profile/index.tsx:150
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:90
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:65
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
@@ -10098,7 +10120,7 @@ msgstr "净收入"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:149
+#: src/components/routes/settings/Team/MemberRow.tsx:149
 msgid "Never"
 msgstr "从不"
 
@@ -10140,13 +10162,20 @@ msgstr "新标签"
 msgid "New location"
 msgstr "新地点"
 
+#: src/components/routes/settings/Profile/index.tsx:215
+msgid "New order emails"
+msgstr "新订单邮件"
+
 #: src/components/modals/CreateEventModal/index.tsx:253
 #: src/components/modals/CreateEventModal/index.tsx:273
 msgid "New organizer"
 msgstr "新主办方"
 
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:47
+msgid "New password"
+msgstr "新密码"
+
 #: src/components/routes/auth/ResetPassword/index.tsx:64
-#: src/components/routes/profile/ManageProfile/index.tsx:258
 msgid "New Password"
 msgstr "新密码"
 
@@ -10155,7 +10184,7 @@ msgid "New PIN"
 msgstr "新 PIN 码"
 
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:180
-#: src/components/routes/organizer/People/index.tsx:81
+#: src/components/routes/organizer/People/index.tsx:82
 msgid "New profile"
 msgstr "新建档案"
 
@@ -10167,7 +10196,7 @@ msgstr "新简介，将保存以供日后活动使用"
 msgid "New sale"
 msgstr "新销售"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:533
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:534
 msgid "new stages or rooms"
 msgstr "个新舞台或房间"
 
@@ -10207,7 +10236,7 @@ msgstr "下一场次"
 msgid "Next photo"
 msgstr "下一张照片"
 
-#: src/components/modals/CreateEventModal/index.tsx:475
+#: src/components/modals/CreateEventModal/index.tsx:474
 msgid "Next, you'll add tickets and set up your event page."
 msgstr "接下来，您将添加门票并设置活动页面。"
 
@@ -10237,7 +10266,7 @@ msgstr "否"
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "否 - 我是个人或未注册增值税的企业"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:44
+#: src/components/routes/settings/Team/MemberRow.tsx:44
 msgid "No access yet"
 msgstr "暂无访问权限"
 
@@ -10483,7 +10512,7 @@ msgstr "没有失败的任务"
 msgid "No filters available"
 msgstr "没有可用筛选器"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:51
+#: src/components/routes/settings/Team/MemberRow.tsx:51
 msgid "No financials"
 msgstr "无财务权限"
 
@@ -10532,11 +10561,11 @@ msgstr "无匹配项"
 msgid "No matching fonts"
 msgstr "没有匹配的字体"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:211
+#: src/components/routes/settings/Team/index.tsx:210
 msgid "No members match your search."
 msgstr "没有符合搜索条件的成员。"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:211
+#: src/components/routes/settings/Team/index.tsx:210
 msgid "No members yet."
 msgstr "还没有成员。"
 
@@ -10588,6 +10617,10 @@ msgstr "该日期还没有订单。"
 msgid "No organizer context available."
 msgstr "没有可用的主办方上下文。"
 
+#: src/components/routes/settings/Organizers/index.tsx:42
+msgid "No organizers yet."
+msgstr "还没有主办方。"
+
 #: src/components/modals/SwitchOrganizerModal/index.tsx:60
 msgid "No other organizers available"
 msgstr "无其他可用组织者"
@@ -10614,7 +10647,7 @@ msgid "No payment will be recorded. The tickets are issued free of charge and th
 msgstr "不会记录任何付款。门票免费发放，订单总额变为零。"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:104
-#: src/components/routes/organizer/People/index.tsx:166
+#: src/components/routes/organizer/People/index.tsx:168
 msgid "No photo"
 msgstr "无照片"
 
@@ -10646,7 +10679,7 @@ msgstr "无产品消息"
 msgid "No Products Yet"
 msgstr "尚无产品"
 
-#: src/components/routes/organizer/People/index.tsx:133
+#: src/components/routes/organizer/People/index.tsx:134
 msgid "No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page."
 msgstr "还没有简介。可在此创建，或直接在活动的“阵容与日程”页面添加人员。"
 
@@ -10674,7 +10707,7 @@ msgstr "没有最近的账户注册"
 msgid "No recipients found"
 msgstr "未找到收件人"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:55
+#: src/components/routes/settings/Team/MemberRow.tsx:55
 msgid "No refunds"
 msgstr "无退款权限"
 
@@ -10721,7 +10754,7 @@ msgid "No search results."
 msgstr "没有搜索结果。"
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:49
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:157
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:160
 msgid "No seat maps yet"
 msgstr "尚无座位图"
 
@@ -10740,9 +10773,9 @@ msgstr "无舞台或房间"
 msgid "No suggestions"
 msgstr "没有建议"
 
-#: src/components/common/TaxAndFeeList/index.tsx:111
-msgid "No Taxes or Fees have been added."
-msgstr "未加收任何税费。"
+#: src/components/routes/settings/TaxesAndFees/index.tsx:92
+msgid "No taxes or fees yet"
+msgstr "还没有税费"
 
 #: src/components/routes/my-tickets/index.tsx:237
 msgid "No Tickets Found"
@@ -10798,7 +10831,7 @@ msgstr "没有 Webhooks"
 msgid "No, keep me here"
 msgstr "否，保留在此"
 
-#: src/components/routes/event/Lineup/index.tsx:249
+#: src/components/routes/event/Lineup/index.tsx:251
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "此活动的阵容中还没有添加任何人。"
 
@@ -10806,7 +10839,7 @@ msgstr "此活动的阵容中还没有添加任何人。"
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "阵容中还没有人，或所有人都已隐藏。"
 
-#: src/components/routes/organizer/People/index.tsx:134
+#: src/components/routes/organizer/People/index.tsx:135
 msgid "Nobody matches these filters."
 msgstr "没有符合筛选条件的人员。"
 
@@ -10876,7 +10909,7 @@ msgstr "不符合条件"
 msgid "Not enough free seats for {0}"
 msgstr "{0} 的空闲座位不足"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:149
+#: src/components/routes/settings/Team/MemberRow.tsx:149
 msgid "Not joined yet"
 msgstr "尚未加入"
 
@@ -10885,7 +10918,7 @@ msgid "Not now, log out"
 msgstr "暂不设置,退出登录"
 
 #: src/components/routes/organizer/People/index.tsx:70
-#: src/components/routes/organizer/People/index.tsx:172
+#: src/components/routes/organizer/People/index.tsx:174
 msgid "Not on any event"
 msgstr "未出现在任何活动中"
 
@@ -10900,6 +10933,10 @@ msgstr "未安排"
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:202
 msgid "Not selling as {signedInName}?"
 msgstr "不是以 {signedInName} 的身份售票？"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:107
+msgid "Not shown to buyers."
+msgstr "不向买家显示。"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:251
 msgid "Not shown yet."
@@ -10960,7 +10997,7 @@ msgstr "暂无显示内容"
 msgid "Notification Settings"
 msgstr "通知设置"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:590
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:587
 msgid "Notify attendees and stop sales"
 msgstr "通知参与者并停止售票"
 
@@ -11051,11 +11088,11 @@ msgstr "每月"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:77
 #: src/components/forms/ProductForm/ledgerSummaries.ts:140
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:144
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:112
+#: src/components/routes/settings/Team/MemberRow.tsx:144
 msgid "Off"
 msgstr "关"
 
@@ -11131,10 +11168,10 @@ msgid "on"
 msgstr "于"
 
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:142
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:112
+#: src/components/routes/settings/Team/MemberRow.tsx:142
 msgid "On"
 msgstr "开"
 
@@ -11146,6 +11183,10 @@ msgstr "于{dayList}"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:779
 msgid "on {month} {day}"
 msgstr "于{month}{day}日"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:98
+msgid "On a product priced at 50.00, this adds {exampleAmount}."
+msgstr "对于价格为 50.00 的产品，将增加 {exampleAmount}。"
 
 #: src/components/routes/organizer/People/index.tsx:68
 msgid "On live events"
@@ -11274,17 +11315,13 @@ msgstr "只有账户管理员可以删除或归档活动。请联系您的账户
 msgid "Only account administrators can delete or archive organizers. Contact your account admin for assistance."
 msgstr "只有账户管理员可以删除或归档主办方。请联系您的账户管理员寻求帮助。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:42
-msgid "Only account admins can manage account deletion."
-msgstr "只有账户管理员可以管理账户删除。"
+#: src/components/routes/settings/Account/index.tsx:109
+msgid "Only account admins can change these settings."
+msgstr "只有账户管理员可以更改这些设置。"
 
 #: src/components/common/TeamAccessPanel/index.tsx:96
 msgid "Only admins can manage team access."
 msgstr "只有管理员可以管理团队访问权限。"
-
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:68
-msgid "Only admins can manage the team."
-msgstr "只有管理员可以管理团队。"
 
 #: src/components/forms/ProductForm/index.tsx:549
 msgid "Only available as an add-on"
@@ -11294,7 +11331,7 @@ msgstr "仅作为附加产品提供"
 msgid "Only published announcements are shown to users"
 msgstr "只有已发布的公告才会向用户显示"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:580
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:581
 msgid "Only rows to fix"
 msgstr "仅显示需修复的行"
 
@@ -11314,7 +11351,7 @@ msgstr "仅在其所关联的产品下作为附加产品显示"
 msgid "Only shown as an add-on to the products it's attached to."
 msgstr "仅在其所关联的产品下作为附加产品显示。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:144
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:115
 msgid "Only the account owner can request account deletion."
 msgstr "只有账户所有者才能请求删除账户。"
 
@@ -11370,7 +11407,7 @@ msgstr "打开签到页面"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:238
 #: src/components/routes/admin/SpamEvents/index.tsx:365
-#: src/components/routes/event/Lineup/index.tsx:351
+#: src/components/routes/event/Lineup/index.tsx:353
 msgid "Open event page"
 msgstr "打开活动页面"
 
@@ -11382,11 +11419,15 @@ msgstr "打开场次"
 msgid "Open photo {photoNumber}"
 msgstr "打开照片 {photoNumber}"
 
+#: src/components/routes/settings/Organizers/index.tsx:63
+msgid "Open settings"
+msgstr "打开设置"
+
 #: src/components/layouts/AppLayout/index.tsx:31
 msgid "Open sidebar"
 msgstr "打开侧边栏"
 
-#: src/components/routes/event/Lineup/index.tsx:343
+#: src/components/routes/event/Lineup/index.tsx:345
 msgid "Open timetable"
 msgstr "打开时间表"
 
@@ -11430,7 +11471,7 @@ msgstr "从阵容中选择人员时可选"
 msgid "Optional, kept on the deletion record"
 msgstr "可选，将保存在删除记录中"
 
-#: src/components/routes/event/Lineup/index.tsx:336
+#: src/components/routes/event/Lineup/index.tsx:338
 msgid "Optional. Useful when things happen in more than one place at the same time."
 msgstr "可选。适用于同一时间在多个地点进行的活动。"
 
@@ -11446,7 +11487,7 @@ msgstr "选项"
 msgid "or add a single date"
 msgstr "或添加单个日期"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:437
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:438
 msgid "Or copy rows, headers included, from Google Sheets or Excel and paste them here."
 msgstr "或从 Google Sheets 或 Excel 复制行（含表头）并粘贴到此处。"
 
@@ -11454,7 +11495,7 @@ msgstr "或从 Google Sheets 或 Excel 复制行（含表头）并粘贴到此�
 msgid "Or enable offline payments and disable Stripe"
 msgstr "或启用线下付款并停用 Stripe"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:82
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:83
 msgid "Or start from a venue like yours"
 msgstr "或从类似您场地的方案开始"
 
@@ -11481,6 +11522,10 @@ msgstr "订单和门票"
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:265
 msgid "Order #"
 msgstr "订单号"
+
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:177
+msgid "Order and invoice records are kept in anonymized form for tax purposes. Personal information is removed."
+msgstr "订单和发票记录将以匿名形式保留，用于税务目的。个人信息将被删除。"
 
 #: src/components/common/QuestionAndAnswerList/index.tsx:261
 msgid "Order answers"
@@ -11682,7 +11727,7 @@ msgstr "组织地址"
 msgid "Organization Details"
 msgstr "组织详细信息"
 
-#: src/components/forms/OrganizerForm/index.tsx:28
+#: src/components/forms/OrganizerForm/index.tsx:32
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:238
 msgid "Organization Name"
 msgstr "组织名称"
@@ -11717,6 +11762,10 @@ msgstr "主办方已成功删除"
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:127
 msgid "Organizer Homepage Preview"
 msgstr "主办方主页预览"
+
+#: src/components/modals/CreateOrganizerModal/index.tsx:30
+msgid "Organizer name"
+msgstr "主办方名称"
 
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:72
 msgid "Organizer Name"
@@ -11757,8 +11806,10 @@ msgstr "组织者状态已更新"
 msgid "Organizer/default template will be used"
 msgstr "将使用组织者/默认模板"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:137
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
+#: src/components/routes/settings/Organizers/index.tsx:72
+#: src/components/routes/settings/Team/index.tsx:138
 msgid "Organizers"
 msgstr "主办方"
 
@@ -11817,8 +11868,8 @@ msgstr "为此账户覆盖全局默认值。"
 msgid "Overview"
 msgstr "概览"
 
-#: src/components/modals/EditUserModal/index.tsx:64
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:123
+#: src/components/modals/EditUserModal/index.tsx:63
+#: src/components/routes/settings/Team/MemberRow.tsx:123
 msgid "Owner"
 msgstr "所有者"
 
@@ -11917,9 +11968,13 @@ msgstr "转嫁给买家"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:127
 #: src/components/routes/auth/Login/index.tsx:193
 #: src/components/routes/auth/Register/index.tsx:118
-#: src/components/routes/profile/ManageProfile/index.tsx:134
+#: src/components/routes/settings/Security/index.tsx:223
 msgid "Password"
 msgstr "密码"
+
+#: src/components/routes/settings/Security/ChangePasswordModal.tsx:28
+msgid "Password changed"
+msgstr "密码已更改"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:31
 msgid "Password must be a minimum  of 8 characters"
@@ -11953,7 +12008,7 @@ msgstr "已逾期"
 msgid "Past events"
 msgstr "往期活动"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:440
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:441
 msgid "Paste"
 msgstr "粘贴"
 
@@ -12094,11 +12149,11 @@ msgstr "待处理"
 msgid "Pending deletions"
 msgstr "待处理的删除"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:218
+#: src/components/routes/settings/Team/index.tsx:217
 msgid "Pending invitations"
 msgstr "待处理的邀请"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:160
+#: src/components/routes/settings/Team/index.tsx:159
 msgid "Pending invites"
 msgstr "待处理邀请"
 
@@ -12117,7 +12172,7 @@ msgid "PENDING REVIEW"
 msgstr "等待审核"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:120
-#: src/components/routes/organizer/People/index.tsx:77
+#: src/components/routes/organizer/People/index.tsx:78
 msgid "People"
 msgstr "人员"
 
@@ -12126,19 +12181,19 @@ msgctxt "Lineup spreadsheet column"
 msgid "People"
 msgstr "人员"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:575
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:576
 msgid "People ({peopleRowCount})"
 msgstr "人员（{peopleRowCount}）"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:449
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:450
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "人员按姓名匹配，因此现有档案会被更新而不是重复创建。"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:448
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:449
 msgid "People sheet"
 msgstr "人员工作表"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:529
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:530
 msgid "people to add"
 msgstr "位待添加人员"
 
@@ -12186,13 +12241,9 @@ msgid "Percent off"
 msgstr "折扣百分比"
 
 #: src/components/forms/PromoCodeForm/index.tsx:98
-#: src/components/forms/TaxAndFeeForm/index.tsx:27
+#: src/components/forms/TaxAndFeeForm/index.tsx:88
 msgid "Percentage"
 msgstr "百分比"
-
-#: src/components/forms/TaxAndFeeForm/index.tsx:71
-msgid "Percentage Amount"
-msgstr "百分比 金额"
 
 #: src/components/routes/admin/Configurations/index.tsx:99
 #: src/components/routes/admin/Configurations/index.tsx:251
@@ -12215,14 +12266,6 @@ msgstr "交易金额的百分比"
 msgid "Performance"
 msgstr "绩效"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:190
-msgid "Permanently delete this account"
-msgstr "永久删除此账户"
-
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:87
-msgid "Permanently delete this account and its data."
-msgstr "永久删除此账户及其数据。"
-
 #: src/components/routes/event/Settings/Sections/DangerZoneSettings/index.tsx:88
 msgid "Permanently delete this event and all its associated data."
 msgstr "永久删除此活动及其所有相关数据。"
@@ -12231,7 +12274,7 @@ msgstr "永久删除此活动及其所有相关数据。"
 msgid "Permanently delete this organizer and all its events."
 msgstr "永久删除此主办方及其所有活动。"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:604
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:601
 msgid "Permanently remove this date"
 msgstr "永久移除该日期"
 
@@ -12243,15 +12286,15 @@ msgstr "权限"
 msgid "Person"
 msgstr "人员"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:165
-msgid "Personal Information"
-msgstr "个人信息"
+#: src/components/layouts/SettingsLayout/index.tsx:54
+msgid "Personal"
+msgstr "个人"
 
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:97
 msgid "Phone"
 msgstr "电话"
 
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:68
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:70
 msgid "Photo {photoNumber}"
 msgstr "照片 {photoNumber}"
 
@@ -12388,7 +12431,7 @@ msgstr "请检查您的电子邮件和密码并重试"
 msgid "Please check your email is valid"
 msgstr "请检查您的电子邮件是否有效"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:188
+#: src/components/routes/settings/Profile/index.tsx:104
 msgid "Please check your email to confirm your email address"
 msgstr "请检查您的电子邮件以确认您的电子邮件地址"
 
@@ -12472,10 +12515,6 @@ msgstr "请选择至少一个产品"
 msgid "Please try again."
 msgstr "请再试一次。"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:178
-msgid "Please verify your email address to access all features"
-msgstr "请验证您的电子邮件地址，以访问所有功能"
-
 #: src/components/routes/welcome/index.tsx:125
 msgid "Please wait before requesting another code"
 msgstr "请稍候再请求新的验证码"
@@ -12525,6 +12564,10 @@ msgstr "技术支持"
 msgid "Pre Checkout message"
 msgstr "结账前信息"
 
+#: src/components/routes/settings/Account/index.tsx:80
+msgid "Prefilled when you create an organizer."
+msgstr "创建主办方时预先填写。"
+
 #: src/ee/seating/components/lib/templates.ts:28
 msgid "Premium"
 msgstr "高级票"
@@ -12548,8 +12591,8 @@ msgstr "通过在多种门票类型之间共享库存来防止超卖。"
 #: src/components/common/DesignerShell/index.tsx:61
 #: src/components/common/DesignerShell/index.tsx:103
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
-#: src/components/routes/admin/Announcements/index.tsx:495
-#: src/components/routes/event/Lineup/index.tsx:217
+#: src/components/routes/admin/Announcements/index.tsx:496
+#: src/components/routes/event/Lineup/index.tsx:219
 msgid "Preview"
 msgstr "预览"
 
@@ -12668,7 +12711,7 @@ msgstr "打印票"
 msgid "Print to PDF"
 msgstr "打印为PDF"
 
-#: src/components/routes/event/Lineup/index.tsx:150
+#: src/components/routes/event/Lineup/index.tsx:152
 msgid "Printable run sheet"
 msgstr "可打印的流程单"
 
@@ -12738,7 +12781,7 @@ msgstr "产品销售"
 msgid "Product sales, revenue, and tax breakdown"
 msgstr "产品销售、收入和税费明细"
 
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:620
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:617
 msgid "Product settings cannot be edited for cancelled dates."
 msgstr "已取消的日期无法编辑产品设置。"
 
@@ -12758,6 +12801,10 @@ msgstr "产品类型"
 #: src/components/forms/WebhookForm/index.tsx:61
 msgid "Product Updated"
 msgstr "产品已更新"
+
+#: src/components/routes/settings/Profile/index.tsx:203
+msgid "Product updates"
+msgstr "产品动态"
 
 #: src/components/common/PromoCodeTable/index.tsx:158
 msgid "Product(s)"
@@ -12785,8 +12832,9 @@ msgstr "已售产品"
 msgid "Products sorted successfully"
 msgstr "产品排序成功"
 
+#: src/components/layouts/SettingsLayout/index.tsx:55
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
-#: src/components/routes/profile/ManageProfile/index.tsx:131
+#: src/components/routes/settings/Profile/index.tsx:125
 msgid "Profile"
 msgstr "简介"
 
@@ -12798,7 +12846,7 @@ msgstr "简介已创建，现在可以添加照片。"
 msgid "Profile deleted"
 msgstr "档案已删除"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:81
+#: src/components/routes/settings/Profile/index.tsx:70
 msgid "Profile updated successfully"
 msgstr "成功更新个人资料"
 
@@ -12874,7 +12922,7 @@ msgstr "仅促销"
 msgid "Promotional emails may result in account suspension"
 msgstr "促销电子邮件可能导致账户暂停"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:118
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "为您的账户增加登录时的第二道验证。即使有人得知了您的密码,没有手机上的验证码也无法登录。"
 
@@ -13026,6 +13074,7 @@ msgstr "小贴士"
 msgid "Radio Option"
 msgstr "无线电选项"
 
+#: src/components/forms/TaxAndFeeForm/index.tsx:73
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:43
 msgid "Rate"
 msgstr "费率"
@@ -13037,11 +13086,15 @@ msgstr "费率"
 msgid "Rate limit exceeded. Please try again later."
 msgstr "超出速率限制。请稍后再试。"
 
+#: src/components/routes/settings/TaxesAndFees/index.tsx:121
+msgid "Rates you can add to products. They're shared by every organizer and event in this account."
+msgstr "可添加到产品的费率。它们由此账户中的所有主办方和活动共享。"
+
 #: src/components/common/WaitlistTable/index.tsx:72
 msgid "Re-offer Spot"
 msgstr "重新提供名额"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:178
+#: src/components/routes/settings/Team/MemberRow.tsx:178
 msgid "Reactivate"
 msgstr "重新启用"
 
@@ -13091,7 +13144,7 @@ msgstr "后区右侧"
 msgid "Reason"
 msgstr "原因"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:177
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:192
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:204
 msgid "Reason (optional)"
 msgstr "原因（可选）"
@@ -13102,7 +13155,7 @@ msgstr "原因"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:157
 #: src/components/routes/auth/Register/index.tsx:139
-#: src/components/routes/profile/ManageProfile/index.tsx:227
+#: src/components/routes/settings/Profile/index.tsx:204
 msgid "Receive product updates from {0}."
 msgstr "接收 {0} 的产品更新。"
 
@@ -13163,11 +13216,11 @@ msgid "Record Refund"
 msgstr "记录退款"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:105
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:74
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:67
 msgid "Recovery code"
 msgstr "恢复码"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:147
+#: src/components/routes/settings/Security/index.tsx:135
 msgid "Recovery codes"
 msgstr "恢复码"
 
@@ -13305,10 +13358,6 @@ msgstr "已退款:{0}"
 msgid "Refunds"
 msgstr "退款"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:196
-msgid "Regional Settings"
-msgstr "区域设置"
-
 #: src/components/routes/auth/Register/index.tsx:145
 msgid "Register"
 msgstr "注册"
@@ -13356,7 +13405,7 @@ msgstr "去除"
 #: src/components/routes/event/Lineup/LineupPreview.tsx:81
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:148
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:135
-#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:208
+#: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1169
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
@@ -13383,7 +13432,7 @@ msgstr "要将 {profileName} 从此活动阵容中移除吗？其档案仍会保
 msgid "Remove access"
 msgstr "移除访问权限"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:198
+#: src/components/routes/settings/Security/index.tsx:184
 msgid "Remove all"
 msgstr "全部移除"
 
@@ -13391,7 +13440,7 @@ msgstr "全部移除"
 msgid "Remove card reader"
 msgstr "移除刷卡机"
 
-#: src/components/modals/CreateEventModal/index.tsx:365
+#: src/components/modals/CreateEventModal/index.tsx:364
 msgid "Remove description"
 msgstr "移除描述"
 
@@ -13502,7 +13551,7 @@ msgstr "重新开售"
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr "重新开售该日期？此前已取消的门票不会恢复 — 受影响的参与者仍为已取消状态，已完成的退款也不会撤回。"
 
-#: src/components/modals/CreateEventModal/index.tsx:419
+#: src/components/modals/CreateEventModal/index.tsx:418
 msgid "Repeat"
 msgstr "重复"
 
@@ -13542,12 +13591,12 @@ msgstr "请求人"
 msgid "Require Billing Address"
 msgstr "要求账单地址"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:48
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:48
 msgid "Require two-factor"
 msgstr "要求双重验证"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:60
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:78
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:60
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:78
 msgid "Require two-factor authentication"
 msgstr "要求启用双重验证"
 
@@ -13555,9 +13604,9 @@ msgstr "要求启用双重验证"
 msgid "Required"
 msgstr "必填"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:136
-msgid "Required by your organisation"
-msgstr "由您的组织要求"
+#: src/components/routes/settings/Security/index.tsx:120
+msgid "Required by your organization"
+msgstr "您的组织要求启用"
 
 #: src/components/common/CookieConsentBanner/index.tsx:95
 msgid "Required for the site to work, such as keeping you signed in."
@@ -13567,7 +13616,7 @@ msgstr "网站正常运行所必需，例如保持您的登录状态。"
 msgid "Required questions not answered"
 msgstr "必填问题未回答"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:156
+#: src/components/routes/settings/Team/MemberRow.tsx:156
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:130
 msgid "Resend"
 msgstr "重新发送"
@@ -13589,7 +13638,7 @@ msgstr "重新发送确认邮件"
 msgid "Resend email"
 msgstr "重新发送邮件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:180
+#: src/components/routes/settings/Profile/index.tsx:117
 msgid "Resend email confirmation"
 msgstr "重新发送电子邮件确认"
 
@@ -13597,7 +13646,7 @@ msgstr "重新发送电子邮件确认"
 msgid "Resend in {resendCooldown}s"
 msgstr "{resendCooldown}秒后重新发送"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:194
+#: src/components/routes/settings/Team/MemberRow.tsx:194
 msgid "Resend invitation"
 msgstr "重新发送邀请"
 
@@ -13612,10 +13661,6 @@ msgstr "重新发送门票"
 #: src/hooks/useAttendeeActions.tsx:109
 msgid "Resend ticket email"
 msgstr "重新发送门票邮件"
-
-#: src/components/routes/profile/ManageProfile/index.tsx:180
-msgid "Resending..."
-msgstr "重新发送..."
 
 #: src/components/common/OrdersTable/index.tsx:356
 msgid "Reserved"
@@ -13667,12 +13712,12 @@ msgstr "重置 PIN 码？已登录的工作人员将被登出并需要新的 PIN
 msgid "Reset to {0}"
 msgstr "重置为 {0}"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:81
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:188
+#: src/components/routes/settings/Team/index.tsx:82
+#: src/components/routes/settings/Team/MemberRow.tsx:188
 msgid "Reset two-factor"
 msgstr "重置双重验证"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:76
+#: src/components/routes/settings/Team/index.tsx:77
 msgid "Reset two-factor authentication for {0}? Only do this once you've confirmed it's really them. They'll be able to sign in with just their password and will be emailed about the change."
 msgstr "要重置 {0} 的双重验证吗？请在确认确实是本人后再操作。对方之后只需密码即可登录，并会收到相关邮件通知。"
 
@@ -13753,7 +13798,7 @@ msgstr "返回活动"
 msgid "Return to Event Page"
 msgstr "返回活动页面"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:141
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:144
 msgid "Reusable venue layouts. Attach one to an event to sell reserved seats."
 msgstr "可重复使用的场地布局。将其关联到活动即可销售预留座位。"
 
@@ -13802,7 +13847,7 @@ msgstr "审核被自动检查标记为疑似垃圾内容的活动"
 msgid "Review security settings"
 msgstr "查看安全设置"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:197
+#: src/components/routes/settings/Team/MemberRow.tsx:197
 msgid "Revoke invitation"
 msgstr "撤销邀请"
 
@@ -13821,8 +13866,8 @@ msgid "Right wing"
 msgstr "右翼"
 
 #: src/components/common/TeamAccessFields/index.tsx:175
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:196
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:254
+#: src/components/routes/settings/Team/index.tsx:195
 msgid "Role"
 msgstr "角色"
 
@@ -13839,7 +13884,7 @@ msgstr "旋转"
 msgid "Round"
 msgstr "圆形"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:31
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
 msgid "Round tables for dinners."
 msgstr "适合晚宴的圆桌。"
 
@@ -13859,7 +13904,7 @@ msgstr "行间距"
 msgid "Rows"
 msgstr "行"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:535
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:536
 msgid "rows to fix"
 msgstr "行需修复"
 
@@ -14025,7 +14070,7 @@ msgstr "星期六"
 #: src/components/common/PlatformFeesSettings/index.tsx:249
 #: src/components/common/QuestionAndAnswerList/index.tsx:119
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:215
-#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:96
+#: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:98
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:312
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:81
@@ -14049,23 +14094,30 @@ msgstr "星期六"
 msgid "Save"
 msgstr "节省"
 
-#: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:106
-msgid "Save Box Office"
-msgstr "保存售票处"
-
-#: src/components/modals/EditUserModal/index.tsx:102
+#: src/components/common/SettingsPage/index.tsx:96
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:45
+#: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
 msgid "Save changes"
 msgstr "保存更改"
 
 #: src/components/common/DesignerShell/index.tsx:95
-#: src/components/modals/LocationEditModal/index.tsx:162
+#: src/components/modals/EditAffiliateModal/index.tsx:109
+#: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
+#: src/components/modals/EditCheckInListModal/index.tsx:107
+#: src/components/modals/EditOrganizerWebhookModal/index.tsx:87
+#: src/components/modals/EditProductCategoryModal/index.tsx:73
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
+#: src/components/modals/EditQuestionModal/index.tsx:103
+#: src/components/modals/EditWebhookModal/index.tsx:88
+#: src/components/modals/LocationEditModal/index.tsx:164
 #: src/components/modals/ManageAttendeeModal/index.tsx:211
 #: src/components/modals/ManageOrderModal/index.tsx:244
-#: src/components/routes/admin/Announcements/index.tsx:502
-#: src/components/routes/admin/Configurations/index.tsx:273
-#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:567
+#: src/components/routes/admin/Announcements/index.tsx:506
+#: src/components/routes/admin/Configurations/index.tsx:274
+#: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:564
 #: src/components/routes/event/OccurrencesTab/PriceOverrideForm/index.tsx:362
+#: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:106
 msgid "Save Changes"
 msgstr "保存更改"
 
@@ -14081,10 +14133,6 @@ msgstr "保存恢复码"
 msgid "Save fee override"
 msgstr "保存单独费率"
 
-#: src/components/modals/EditOrganizerModal/index.tsx:70
-msgid "Save Organizer"
-msgstr "保存组织器"
-
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:52
 msgid "Save rules"
 msgstr "保存规则"
@@ -14092,10 +14140,6 @@ msgstr "保存规则"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1165
 msgid "Save schedule"
 msgstr "保存日程"
-
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:91
-msgid "Save Settings"
-msgstr "保存设置"
 
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:213
 msgid "Save slot"
@@ -14193,7 +14237,7 @@ msgstr "场景示例"
 msgid "Schedule"
 msgstr "排期"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:574
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:575
 msgid "Schedule ({slotRowCount})"
 msgstr "日程（{slotRowCount}）"
 
@@ -14230,7 +14274,7 @@ msgstr "日程预览"
 msgid "Schedule set up next"
 msgstr "下一步设置日程"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:446
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:447
 msgid "Schedule sheet"
 msgstr "日程工作表"
 
@@ -14298,7 +14342,7 @@ msgstr "按任务名称或异常搜索..."
 msgid "Search by name or address..."
 msgstr "按名称或地址搜索..."
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:178
+#: src/components/routes/settings/Team/index.tsx:177
 msgid "Search by name or email"
 msgstr "按姓名或邮箱搜索"
 
@@ -14310,7 +14354,7 @@ msgstr "按名称或邮箱搜索并选择一个或多个"
 msgid "Search by name or email..."
 msgstr "按姓名或电子邮件搜索..."
 
-#: src/components/routes/organizer/People/index.tsx:106
+#: src/components/routes/organizer/People/index.tsx:107
 msgid "Search by name or tagline"
 msgstr "按名称或标语搜索"
 
@@ -14363,7 +14407,7 @@ msgstr "搜索日期…"
 msgid "Search for an address"
 msgstr "搜索地址"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:181
+#: src/components/routes/settings/Team/index.tsx:180
 msgid "Search members"
 msgstr "搜索成员"
 
@@ -14395,7 +14439,7 @@ msgstr "搜索结果"
 msgid "Search saved locations or find an address..."
 msgstr "搜索已保存的地点或查找地址..."
 
-#: src/components/routes/event/Lineup/index.tsx:330
+#: src/components/routes/event/Lineup/index.tsx:332
 msgid "Search your saved profiles or type a new name in the {lineupLabel} panel. Add a photo, bio and links to each."
 msgstr "搜索已保存的简介，或在{lineupLabel}面板中输入新名字。可为每人添加照片、简介和链接。"
 
@@ -14435,11 +14479,11 @@ msgstr "座位图已关联"
 msgid "Seat map canvas for {0}"
 msgstr "{0} 的座位图画布"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:55
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:56
 msgid "Seat map created"
 msgstr "座位图已创建"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:134
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:137
 msgid "Seat map deleted"
 msgstr "座位图已删除"
 
@@ -14467,7 +14511,7 @@ msgid "Seat map updated"
 msgstr "座位图已更新"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:121
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:142
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:145
 msgid "Seat Maps"
 msgstr "座位图"
 
@@ -14530,7 +14574,7 @@ msgstr "本活动的座位尚未开售"
 msgid "Seats in these bands cannot be bought until a ticket is linked: {0}"
 msgstr "这些价位区的座位在关联票种之前无法购买：{0}"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:35
 msgid "Seats on three sides."
 msgstr "三面设座。"
 
@@ -14583,7 +14627,8 @@ msgstr "安全结账"
 msgid "Secure your account"
 msgstr "保护您的账户"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:137
+#: src/components/layouts/SettingsLayout/index.tsx:56
+#: src/components/routes/settings/Security/index.tsx:218
 msgid "Security"
 msgstr "安全"
 
@@ -14672,7 +14717,8 @@ msgstr "选择摄像头"
 msgid "Select category..."
 msgstr "选择类别..."
 
-#: src/components/forms/OrganizerForm/index.tsx:51
+#: src/components/forms/OrganizerForm/index.tsx:52
+#: src/components/modals/CreateOrganizerModal/index.tsx:51
 msgid "Select currency"
 msgstr "选择货币"
 
@@ -14738,7 +14784,8 @@ msgstr "选择票"
 msgid "Select time period"
 msgstr "选择时间段"
 
-#: src/components/forms/OrganizerForm/index.tsx:60
+#: src/components/forms/OrganizerForm/index.tsx:61
+#: src/components/modals/CreateOrganizerModal/index.tsx:60
 #: src/components/routes/auth/AcceptInvitation/index.tsx:120
 msgid "Select timezone"
 msgstr "选择时区"
@@ -14854,7 +14901,7 @@ msgstr "作为测试发送"
 msgid "Send emails to attendees, ticket holders, or order owners. Messages can be sent immediately or scheduled for later."
 msgstr "向参与者、持票人或订单所有者发送电子邮件。消息可以立即发送或安排稍后发送。"
 
-#: src/components/modals/InviteUserModal/index.tsx:76
+#: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "发送邀请"
 
@@ -14979,8 +15026,8 @@ msgstr "搜索引擎优化标题"
 msgid "September"
 msgstr "9 月"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:62
-msgid "Service Fee"
+#: src/components/forms/TaxAndFeeForm/index.tsx:63
+msgid "Service fee"
 msgstr "服务费"
 
 #: src/components/layouts/CheckIn/index.tsx:116
@@ -15023,7 +15070,7 @@ msgstr "在后端环境中将其设置为 <0>APP_LICENCE_KEY</0>。"
 msgid "Set it in each ticket's Quantity field on <0>Tickets & Products</0>, when you create or edit the ticket."
 msgstr "在<0>票务与产品</0>页面创建或编辑门票时，在每种票的“数量”字段中设置。"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:68
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:68
 msgid "Set it up"
 msgstr "去设置"
 
@@ -15077,9 +15124,13 @@ msgstr "设置排期"
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "设置你要销售的门票及其价格"
 
-#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:21
+#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:13
 msgid "Set up two-factor authentication"
 msgstr "设置双重验证"
+
+#: src/components/routes/settings/TaxesAndFees/index.tsx:94
+msgid "Set up VAT, sales tax or a booking fee once, then add it to any product."
+msgstr "一次性设置增值税、销售税或预订费，然后将其添加到任何产品。"
 
 #: src/components/routes/welcome/index.tsx:43
 msgid "Set up your organization"
@@ -15103,6 +15154,7 @@ msgid "Setting updated"
 msgstr "设置已更新"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:113
+#: src/components/layouts/SettingsLayout/index.tsx:67
 #: src/components/modals/DuplicateEventModal/index.tsx:52
 msgid "Settings"
 msgstr "设置"
@@ -15314,6 +15366,10 @@ msgstr "滚动时显示，并跳转到票务区域"
 msgid "Shown on the orders you sell"
 msgstr "显示在你售出的订单上"
 
+#: src/components/modals/CreateOrganizerModal/index.tsx:32
+msgid "Shown on your public page, tickets and emails."
+msgstr "显示在您的公开页面、门票和邮件中。"
+
 #: src/components/forms/CheckInListForm/index.tsx:145
 msgid "Shown to staff the first time they open the check-in page."
 msgstr "工作人员首次打开签到页面时显示。"
@@ -15411,7 +15467,7 @@ msgstr "跳过 30 天宽限期。此操作无法撤销。"
 msgid "Skip this step"
 msgstr "跳过此步骤"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:563
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:564
 msgid "Skipped sheets without recognisable columns:"
 msgstr "已跳过没有可识别列的工作表："
 
@@ -15516,7 +15572,7 @@ msgstr "纯色"
 msgid "Some details are hidden from public access. Log in to view everything."
 msgstr "部分信息不对外公开。登录后可查看全部内容。"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:522
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:523
 msgid "Some rows were rejected and nothing was imported. Fix the highlighted rows in your spreadsheet, then choose the file again."
 msgstr "部分行被拒绝，未导入任何内容。请在电子表格中修正高亮的行，然后重新选择文件。"
 
@@ -15547,16 +15603,12 @@ msgstr "出了点问题"
 msgid "Something went wrong while deleting the image. Please try again."
 msgstr "删除图片时出错，请重试。"
 
-#: src/components/common/TaxAndFeeList/index.tsx:42
-msgid "Something went wrong while deleting the Tax or Fee"
-msgstr "删除税费时出了问题"
-
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
 msgid "Something went wrong, please try again, or contact support if the problem persists"
 msgstr "出现问题，请重试，或在问题持续时联系客服"
 
 #: src/components/common/TeamAccessPanel/index.tsx:59
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:23
+#: src/components/routes/settings/Team/index.tsx:24
 msgid "Something went wrong! Please try again"
 msgstr "出错了！请重试"
 
@@ -15571,20 +15623,21 @@ msgstr "出了点问题。请稍后再试。"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
 #: src/components/layouts/Event/index.tsx:100
 #: src/components/layouts/OrganizerLayout/index.tsx:139
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:78
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:37
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/Login/index.tsx:114
 #: src/components/routes/auth/Login/index.tsx:167
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:365
-#: src/components/routes/profile/ManageProfile/index.tsx:102
-#: src/components/routes/profile/ManageProfile/index.tsx:116
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:40
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:59
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:96
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:32
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
+#: src/components/routes/settings/Profile/index.tsx:84
+#: src/components/routes/settings/Profile/index.tsx:94
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:41
+#: src/components/routes/settings/Security/index.tsx:50
+#: src/components/routes/settings/Security/index.tsx:97
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
+#: src/components/routes/settings/TaxesAndFees/index.tsx:35
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
 msgid "Something went wrong. Please try again."
 msgstr "出错了。请重试。"
@@ -15613,11 +15666,11 @@ msgstr "西班牙语"
 msgid "Speakers"
 msgstr "演讲者"
 
-#: src/components/routes/event/Lineup/index.tsx:360
+#: src/components/routes/event/Lineup/index.tsx:362
 msgid "Speakers for a conference, artists for a festival, hosts for a workshop. It all works the same way."
 msgstr "会议的演讲者、音乐节的艺人、工作坊的主持人，使用方式都一样。"
 
-#: src/components/routes/organizer/People/index.tsx:76
+#: src/components/routes/organizer/People/index.tsx:77
 msgid "Speakers, artists and hosts you can add to any of this organizer's events. Edit a profile once and every event shows the change."
 msgstr "可添加到此主办方任何活动的演讲者、艺人和主持人。只需编辑一次简介，所有活动都会同步更新。"
 
@@ -15765,7 +15818,7 @@ msgstr "标准票"
 msgid "Standing"
 msgstr "站立区"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:32
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Standing floor and mezzanine."
 msgstr "站立区和夹层。"
 
@@ -15786,7 +15839,7 @@ msgstr "开始"
 msgid "Start check-in"
 msgstr "开始签到"
 
-#: src/components/modals/CreateEventModal/index.tsx:387
+#: src/components/modals/CreateEventModal/index.tsx:386
 msgid "Start date"
 msgstr "开始日期"
 
@@ -15801,7 +15854,7 @@ msgstr "开始日期"
 msgid "Start date & time"
 msgstr "开始日期和时间"
 
-#: src/components/modals/CreateEventModal/index.tsx:392
+#: src/components/modals/CreateEventModal/index.tsx:391
 msgid "Start date and time"
 msgstr "开始日期和时间"
 
@@ -15810,11 +15863,11 @@ msgstr "开始日期和时间"
 msgid "Start date is required"
 msgstr "开始日期为必填项"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:158
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:161
 msgid "Start from a template such as a theatre, banquet or club layout, then attach the map to any event."
 msgstr "从剧院、宴会或夜店等模板开始，然后将座位图关联到任意活动。"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:75
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:76
 msgid "Start from scratch"
 msgstr "从零开始"
 
@@ -15946,12 +15999,12 @@ msgstr "停止模拟"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "不再接收帮助你设置和运营活动的邮件。有关订单和账户的邮件仍会照常发送。"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:52
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:55
+#: src/components/routes/settings/Security/index.tsx:43
+#: src/components/routes/settings/Security/index.tsx:46
 msgid "Stop trusting this device"
 msgstr "停止信任此设备"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
 msgstr "笔直排列，中央过道。"
 
@@ -16054,7 +16107,7 @@ msgstr "小计"
 msgid "Success"
 msgstr "成功"
 
-#: src/components/modals/InviteUserModal/index.tsx:44
+#: src/components/modals/InviteUserModal/index.tsx:43
 msgid "Success! {0} will receive an email shortly."
 msgstr "成功！{0} 将很快收到一封电子邮件。"
 
@@ -16326,26 +16379,23 @@ msgstr "将面向所选 {0} 个场次的参与者。"
 
 #: src/components/common/AdminOrdersTable/index.tsx:84
 #: src/components/common/OrdersTable/index.tsx:290
-#: src/components/forms/TaxAndFeeForm/index.tsx:12
-#: src/components/forms/TaxAndFeeForm/index.tsx:39
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
-#: src/components/modals/CreateTaxOrFeeModal/index.tsx:59
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:42
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:52
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:59
+#: src/components/forms/TaxAndFeeForm/index.tsx:21
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:89
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:92
 msgid "Tax"
 msgstr "税收"
 
-#: src/components/routes/account/ManageAccount/index.tsx:29
-#: src/components/routes/account/ManageAccount/sections/TaxSettings/index.tsx:18
-msgid "Tax & Fees"
-msgstr "税费"
-
 #: src/components/routes/organizer/Reports/index.tsx:32
 msgid "Tax collected grouped by tax type and event"
 msgstr "按税种和活动分组的已收税款"
+
+#: src/components/modals/CreateTaxOrFeeModal/index.tsx:36
+msgid "Tax created"
+msgstr "税项已创建"
+
+#: src/components/routes/settings/TaxesAndFees/index.tsx:34
+msgid "Tax deleted"
+msgstr "税项已删除"
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:253
 msgid "Tax Details"
@@ -16359,18 +16409,19 @@ msgstr "所有发票底部显示的税务信息（例如，增值税号、税务
 msgid "Tax Name"
 msgstr "税种名称"
 
-#: src/components/common/TaxAndFeeList/index.tsx:39
-msgid "Tax or Fee deleted successfully"
-msgstr "成功删除税费"
-
 #: src/components/routes/organizer/Reports/index.tsx:31
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:62
 msgid "Tax Summary"
 msgstr "税务摘要"
 
+#: src/components/modals/EditTaxOrFeeModal/index.tsx:28
+msgid "Tax updated"
+msgstr "税项已更新"
+
 #: src/components/common/InlineOrderSummary/index.tsx:201
 #: src/components/forms/ProductForm/index.tsx:490
 #: src/components/routes/organizer/Reports/RevenueSummaryReport/index.tsx:48
+#: src/components/routes/settings/TaxesAndFees/index.tsx:109
 msgid "Taxes"
 msgstr "税收"
 
@@ -16382,15 +16433,21 @@ msgstr "税费"
 msgid "Taxes & fees applied"
 msgstr "已应用税费"
 
+#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/routes/settings/TaxesAndFees/index.tsx:120
+msgid "Taxes and fees"
+msgstr "税费"
+
 #: src/components/forms/ProductForm/index.tsx:487
 msgid "Taxes and Fees"
 msgstr "税费"
 
 #: src/components/layouts/Event/index.tsx:164
 #: src/components/layouts/OrganizerLayout/index.tsx:126
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:147
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
+#: src/components/routes/settings/Team/index.tsx:147
 msgid "Team"
 msgstr "团队"
 
@@ -16513,7 +16570,7 @@ msgstr "在你续订之前，将再次显示“Powered by Hi.Events”标识。"
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "该账户有已完成的订单，因此将被匿名化。"
 
-#: src/components/modals/EditUserModal/index.tsx:77
+#: src/components/modals/EditUserModal/index.tsx:76
 msgid "The account owner's role and access can't be changed."
 msgstr "无法更改账户所有者的角色和访问权限。"
 
@@ -16566,12 +16623,10 @@ msgstr "顾客在刷卡机上取消了"
 msgid "The default applies to every account. An account override always wins over the default."
 msgstr "默认值适用于所有账户。账户覆盖始终优先于默认值。"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:76
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:118
 msgid "The default currency for your events."
 msgstr "事件的默认货币。"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:85
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:127
 msgid "The default timezone for your events."
 msgstr "事件的默认时区。"
@@ -16618,7 +16673,7 @@ msgstr "与会者接收电子邮件的语言。"
 msgid "The licence key was rejected"
 msgstr "许可证密钥被拒绝"
 
-#: src/components/routes/event/Lineup/index.tsx:348
+#: src/components/routes/event/Lineup/index.tsx:350
 msgid "The lineup and schedule follow your event's colours and fonts automatically."
 msgstr "阵容和日程会自动沿用活动的颜色和字体。"
 
@@ -16691,11 +16746,11 @@ msgstr "定时时间必须是将来的时间"
 msgid "The seat map could not be attached"
 msgstr "无法关联座位图"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:58
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:59
 msgid "The seat map could not be created"
 msgstr "无法创建座位图"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:135
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:138
 msgid "The seat map could not be deleted"
 msgstr "无法删除座位图"
 
@@ -16779,7 +16834,7 @@ msgstr "场地座位图已更改"
 msgid "Theater"
 msgstr "戏剧"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:30
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:31
 msgid "Theatre"
 msgstr "剧院"
 
@@ -16824,11 +16879,11 @@ msgstr "处理您的请求时出现错误。请重试。"
 msgid "There was an error sending your message"
 msgstr "发送信息时出现错误"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:537
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:538
 msgid "These are skipped"
 msgstr "这些将被跳过"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:168
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "这些浏览器在被信任后 30 天内无需输入验证码。"
 
@@ -16864,7 +16919,11 @@ msgstr "这些模板将用作您组织中所有活动的默认模板。单个活
 msgid "These templates will override the organizer defaults for this event only. If no custom template is set here, the organizer template will be used instead."
 msgstr "这些模板将仅覆盖此活动的组织者默认设置。如果这里没有设置自定义模板，将使用组织者模板。"
 
-#: src/components/modals/EditUserModal/index.tsx:71
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:125
+msgid "These upcoming events have completed orders. Cancel and refund them, then come back to delete the account."
+msgstr "以下即将举行的活动有已完成的订单。请先取消活动并退款，然后再回来删除账户。"
+
+#: src/components/modals/EditUserModal/index.tsx:70
 msgid "They haven't accepted their invitation yet. Changes apply once they join."
 msgstr "对方尚未接受邀请。加入后更改才会生效。"
 
@@ -16872,11 +16931,11 @@ msgstr "对方尚未接受邀请。加入后更改才会生效。"
 msgid "Third"
 msgstr "第三个"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:137
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:178
 msgid "This account has no completed orders, so all of its data will be permanently deleted."
 msgstr "此账户没有已完成的订单，因此其所有数据将被永久删除。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:95
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:87
 msgid "This account is scheduled for deletion"
 msgstr "此账户已计划删除"
 
@@ -16990,7 +17049,7 @@ msgstr "该日期已售罄，请选择其他日期。"
 msgid "This date only"
 msgstr "仅此日期"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:45
+#: src/components/routes/settings/Security/index.tsx:36
 msgid "This device"
 msgstr "此设备"
 
@@ -17268,10 +17327,6 @@ msgstr "这将用于通知和与用户沟通。"
 msgid "This will cancel the scheduled deletion and reactivate the account. The account owner will be notified by email."
 msgstr "这将取消计划的删除并重新激活账户。账户所有者将收到电子邮件通知。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:164
-msgid "This will deactivate your account immediately and permanently delete it after 30 days. To confirm, type your account name: <0>{0}</0>"
-msgstr "这将立即停用您的账户，并在 30 天后永久删除。请输入您的账户名称以确认：<0>{0}</0>"
-
 #: src/components/forms/AffiliateForm/index.tsx:82
 msgid "This will not be visible to customers, but helps you identify the affiliate."
 msgstr "这对客户不可见，但有助于您识别推广员。"
@@ -17288,7 +17343,7 @@ msgstr "通过主办方"
 msgid "Throughput"
 msgstr "处理速度"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:35
 msgid "Thrust"
 msgstr "伸出式舞台"
 
@@ -17305,7 +17360,7 @@ msgstr "周四"
 msgid "Thursday"
 msgstr "星期四"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:185
+#: src/components/routes/settings/Security/index.tsx:167
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "登录时勾选\"信任此设备\",即可在该浏览器上 30 天内免输验证码。"
 
@@ -17518,7 +17573,7 @@ msgstr "时段"
 msgid "Time slots move with the new start date"
 msgstr "时段会随新的开始日期一起移动"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:531
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:532
 msgid "time slots to add"
 msgstr "个待添加时段"
 
@@ -17526,7 +17581,7 @@ msgstr "个待添加时段"
 msgid "Times"
 msgstr "时间"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:545
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:546
 msgid "Times are read in the event's time zone ({timezone})."
 msgstr "时间按活动所在时区（{timezone}）读取。"
 
@@ -17546,16 +17601,17 @@ msgstr "使用次数"
 msgid "Timetable"
 msgstr "时间表"
 
-#: src/components/forms/OrganizerForm/index.tsx:59
+#: src/components/forms/OrganizerForm/index.tsx:60
+#: src/components/modals/CreateEventModal/index.tsx:426
 #: src/components/modals/CreateEventModal/index.tsx:427
-#: src/components/modals/CreateEventModal/index.tsx:428
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:83
+#: src/components/modals/CreateOrganizerModal/index.tsx:59
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
 #: src/components/routes/auth/AcceptInvitation/index.tsx:119
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:363
-#: src/components/routes/profile/ManageProfile/index.tsx:205
+#: src/components/routes/settings/Account/index.tsx:92
+#: src/components/routes/settings/Profile/index.tsx:191
 msgid "Timezone"
 msgstr "时区"
 
@@ -17732,7 +17788,7 @@ msgstr "跟踪与分析"
 msgid "Trust this device for 30 days"
 msgstr "信任此设备 30 天"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:182
+#: src/components/routes/settings/Security/index.tsx:165
 msgid "Trusted devices"
 msgstr "受信任设备"
 
@@ -17749,7 +17805,7 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "调整筛选条件即可查看更多日期。"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1077
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:77
+#: src/components/routes/settings/Security/index.tsx:75
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
@@ -17783,13 +17839,13 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "土耳其语"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:202
 msgid "Turn off"
 msgstr "关闭"
 
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:50
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:118
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:216
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:48
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
+#: src/components/routes/settings/Security/index.tsx:190
 msgid "Turn off two-factor authentication"
 msgstr "关闭双重验证"
 
@@ -17797,11 +17853,11 @@ msgstr "关闭双重验证"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "要为 {0} 关闭双重验证吗?请在确认对方身份后再操作。系统会向对方发送邮件,对方之后仅用密码即可登录。"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:129
-msgid "Turn on two-factor authentication"
-msgstr "开启双重验证"
+#: src/components/routes/settings/Security/index.tsx:127
+msgid "Turn on"
+msgstr "开启"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:66
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:66
 msgid "Turn on two-factor authentication for your own profile first."
 msgstr "请先为您自己的个人资料开启双重验证。"
 
@@ -17830,42 +17886,44 @@ msgstr "{0} 中有两个座位都叫 {1}。请为其中一个高亮分区设置�
 msgid "Two settings decide how many people can book a date. Whichever is lower is what you can sell."
 msgstr "两个设置决定一个日期可以预订多少人。较低者即为可售数量。"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:198
+#: src/components/routes/settings/Team/index.tsx:197
 msgid "Two-factor"
 msgstr "双重验证"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:72
+#: src/components/routes/settings/Security/index.tsx:82
+#: src/components/routes/settings/Security/index.tsx:107
 msgid "Two-factor authentication"
 msgstr "双重验证"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:36
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:36
 msgid "Two-factor authentication is now optional"
 msgstr "双重验证现已改为可选"
 
-#: src/components/routes/account/ManageAccount/sections/Users/TwoFactorPolicy.tsx:35
+#: src/components/routes/settings/Team/TwoFactorPolicy.tsx:35
 msgid "Two-factor authentication is now required"
 msgstr "双重验证现已改为必须"
 
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:31
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:32
 msgid "Two-factor authentication is off"
 msgstr "双重验证已关闭"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:236
-#: src/components/routes/profile/ManageProfile/Security/EnableTwoFactorModal.tsx:31
+#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:17
 msgid "Two-factor authentication is on"
 msgstr "双重验证已开启"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:78
 #: src/components/routes/admin/Users/index.tsx:32
+#: src/components/routes/settings/Team/index.tsx:79
 msgid "Two-factor authentication reset"
 msgstr "双重验证已重置"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:162
+#: src/components/routes/settings/Team/index.tsx:161
 msgid "Two-factor on"
 msgstr "已开启双重验证"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:44
+#: src/components/forms/TaxAndFeeForm/index.tsx:39
 #: src/components/routes/admin/Announcements/index.tsx:158
 #: src/components/routes/admin/Attribution/index.tsx:171
 #: src/components/routes/admin/Messages/index.tsx:134
@@ -17879,6 +17937,10 @@ msgstr "类型"
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:106
 msgid "Type \"delete\" to confirm"
 msgstr "输入\"删除\"以确认"
+
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:184
+msgid "Type <0>{0}</0> to confirm."
+msgstr "输入 <0>{0}</0> 以确认。"
 
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:110
 msgid "Type a name to create a profile"
@@ -18054,8 +18116,8 @@ msgstr "未知"
 msgid "Unknown Attendee"
 msgstr "未知参会者"
 
-#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:27
-#: src/components/routes/profile/ManageProfile/Security/describeDevice.ts:34
+#: src/components/routes/settings/Security/describeDevice.ts:27
+#: src/components/routes/settings/Security/describeDevice.ts:34
 msgid "Unknown device"
 msgstr "未知设备"
 
@@ -18112,7 +18174,12 @@ msgstr "未付款订单"
 msgid "Unpublish all events and delete or anonymise this account and its users."
 msgstr "取消发布所有活动，并删除或匿名化此账户及其用户。"
 
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:114
+msgid "Unpublishes your events and disables access straight away. Deletion becomes permanent after 30 days unless you cancel."
+msgstr "立即取消发布您的活动并禁用访问。除非您取消，否则 30 天后删除将永久生效。"
+
 #: src/components/common/DesignerShell/index.tsx:74
+#: src/components/common/SettingsPage/index.tsx:89
 msgid "Unsaved changes"
 msgstr "未保存的更改"
 
@@ -18193,14 +18260,6 @@ msgstr "即将举行的活动（按规模）"
 msgid "Update"
 msgstr "更新"
 
-#: src/components/modals/EditTaxOrFeeModal/index.tsx:59
-msgid "Update {0}"
-msgstr "更新 {0}"
-
-#: src/components/modals/EditAffiliateModal/index.tsx:108
-msgid "Update Affiliate"
-msgstr "更新推广员"
-
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:36
 msgid "Update capacity"
 msgstr "更新容量"
@@ -18221,10 +18280,6 @@ msgstr "更新标签"
 msgid "Update location"
 msgstr "更新地点"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:240
-msgid "Update profile"
-msgstr "更新个人资料"
-
 #: src/components/routes/event/OccurrencesTab/rescheduleMessageTemplate.ts:71
 msgid "Update: {subjectTitle} — schedule changes"
 msgstr "更新：{subjectTitle} — 排期变更"
@@ -18238,7 +18293,7 @@ msgid "Updated"
 msgstr "更新时间"
 
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:81
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:184
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:187
 msgid "Updated {0}"
 msgstr "已更新 {0}"
 
@@ -18347,14 +18402,22 @@ msgstr "使用 <0>Liquid 模板</0> 个性化您的邮件"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "请使用小于 5MB 的 JPG、PNG 或 WebP 图片。"
 
+#: src/components/routes/settings/Security/index.tsx:224
+msgid "Use a long password that you don't use anywhere else."
+msgstr "请使用一个较长且未在其他地方使用过的密码。"
+
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 msgid "Use a recovery code"
 msgstr "使用恢复码"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:101
 msgid "Use a recovery code instead"
 msgstr "改用恢复码"
+
+#: src/components/modals/CreateOrganizerModal/index.tsx:24
+msgid "Use a separate organizer for each brand or venue you sell tickets under."
+msgstr "为您售票的每个品牌或场地使用单独的主办方。"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:449
 msgid "Use areas for separate parts of the venue, such as stalls and balcony. Best available seats are chosen nearest the stage."
@@ -18390,7 +18453,7 @@ msgid "Use ticket price"
 msgstr "使用票种价格"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:147
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:108
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:101
 msgid "Use your authenticator app instead"
 msgstr "改用验证器应用"
 
@@ -18402,6 +18465,14 @@ msgstr "用于边框、高亮和二维码样式"
 msgid "Used for buttons, links and highlights"
 msgstr "用于按钮、链接和高亮元素"
 
+#: src/components/routes/settings/Account/index.tsx:93
+msgid "Used for dates in account emails, like deletion notices."
+msgstr "用于账户邮件中的日期，例如删除通知。"
+
+#: src/components/modals/CreateOrganizerModal/index.tsx:41
+msgid "Used for notifications and when attendees contact you."
+msgstr "用于通知以及参与者联系您时。"
+
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:134
 msgid "Used for the Scan tab and for checking attendees in after a sale"
 msgstr "用于“扫描”标签页和售后签到"
@@ -18410,9 +18481,9 @@ msgstr "用于“扫描”标签页和售后签到"
 msgid "Used to measure and personalise ads."
 msgstr "用于衡量和个性化广告。"
 
-#: src/components/common/GlobalMenu/index.tsx:68
-msgid "User Management"
-msgstr "用户管理"
+#: src/components/routes/settings/Profile/index.tsx:171
+msgid "Used to sign in. Changing it sends a confirmation link to the new address."
+msgstr "用于登录。更改后会向新地址发送确认链接。"
 
 #: src/components/routes/admin/Dashboard/index.tsx:182
 msgid "users"
@@ -18421,7 +18492,6 @@ msgstr "位用户"
 #: src/components/common/AdminAccountsTable/index.tsx:89
 #: src/components/common/AdminAccountsTable/index.tsx:109
 #: src/components/layouts/Admin/index.tsx:19
-#: src/components/routes/account/ManageAccount/index.tsx:34
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:187
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:349
 #: src/components/routes/admin/Users/index.tsx:51
@@ -18436,10 +18506,8 @@ msgstr "用户（{0}）"
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "要在真实活动中使用它们？请获取企业版许可证，并将其密钥填入 <0>APP_LICENCE_KEY</0>。"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:84
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:146
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:126
-#: src/components/routes/profile/ManageProfile/index.tsx:206
 msgid "UTC"
 msgstr "世界协调时"
 
@@ -18459,7 +18527,7 @@ msgstr "正在验证您的增值税号..."
 msgid "Value"
 msgstr "经济票"
 
-#: src/components/forms/TaxAndFeeForm/index.tsx:62
+#: src/components/forms/TaxAndFeeForm/index.tsx:63
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:105
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:447
 msgid "VAT"
@@ -18534,6 +18602,10 @@ msgstr "平台费用的增值税处理:欧盟增值税注册企业可以使用�
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:92
 msgid "VAT validation service temporarily unavailable"
 msgstr "增值税验证服务暂时不可用"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:22
+msgid "VAT, GST or sales tax"
+msgstr "增值税、GST 或销售税"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:289
 msgid "VAT: {0}"
@@ -18701,7 +18773,7 @@ msgstr "查看地图"
 msgid "View Message"
 msgstr "查看消息"
 
-#: src/components/routes/event/Lineup/index.tsx:69
+#: src/components/routes/event/Lineup/index.tsx:70
 msgid "View on event page"
 msgstr "在活动页面查看"
 
@@ -18730,6 +18802,10 @@ msgstr "查看订单详情"
 #: src/components/routes/event/orders.tsx:197
 msgid "View order details, issue refunds, and resend confirmations."
 msgstr "查看订单详情、退款和重新发送确认。"
+
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:137
+msgid "View orders"
+msgstr "查看订单"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:269
 #: src/components/layouts/OrganizerLayout/index.tsx:272
@@ -18763,7 +18839,7 @@ msgstr "查看、编辑和导出您的注册参与者。"
 msgid "Viewer"
 msgstr "查看者"
 
-#: src/components/routes/account/ManageAccount/sections/Users/index.tsx:138
+#: src/components/routes/settings/Team/index.tsx:139
 msgid "Viewers"
 msgstr "查看者"
 
@@ -18783,14 +18859,6 @@ msgstr "VIP签到列表"
 #: src/components/forms/ProductForm/index.tsx:201
 msgid "VIP Ticket"
 msgstr "贵宾票"
-
-#: src/components/routes/event/Lineup/ProfileDrawer.tsx:220
-#~ msgid "Visibility"
-#~ msgstr "可见性"
-
-#: src/components/routes/event/Lineup/ProfileDrawer.tsx:220
-#~ msgid "Visible"
-#~ msgstr "可见"
 
 #: src/components/forms/ProductForm/visibilityStatus.ts:41
 msgid "Visible from {start} — hidden until sales open."
@@ -18883,7 +18951,7 @@ msgstr "无法断开此 Stripe 账户。请重试。"
 msgid "We couldn't find any orders associated with this email address."
 msgstr "我们找不到与此邮箱关联的订单。"
 
-#: src/components/routes/event/Lineup/ImportLineupModal.tsx:505
+#: src/components/routes/event/Lineup/ImportLineupModal.tsx:506
 msgid "We couldn't find any rows to import. Add a header row with column names like Name, Start and End."
 msgstr "未找到可导入的行。请添加包含“姓名”“开始”“结束”等列名的表头行。"
 
@@ -18989,7 +19057,7 @@ msgstr "我们在多次尝试后无法验证您的增值税号。我们将在后
 msgid "We'll create all {totalOccurrences} sessions — you can edit or remove any date afterwards"
 msgstr "我们将创建全部 {totalOccurrences} 场 — 之后您可以编辑或删除任意日期"
 
-#: src/components/modals/InviteUserModal/index.tsx:63
+#: src/components/modals/InviteUserModal/index.tsx:62
 msgid "We'll email them a link to join your account."
 msgstr "我们会通过邮件向对方发送加入你账户的链接。"
 
@@ -19154,7 +19222,7 @@ msgstr "此代码适用于哪些产品？（默认适用于所有产品）"
 msgid "What products should this capacity apply to?"
 msgstr "此容量应适用于哪些产品？"
 
-#: src/components/modals/CreateEventModal/index.tsx:350
+#: src/components/modals/CreateEventModal/index.tsx:349
 msgid "What should people expect?"
 msgstr "参与者可以期待什么？"
 
@@ -19348,7 +19416,7 @@ msgstr "出场人员"
 
 #: src/components/common/TeamAccessFields/index.tsx:112
 #: src/components/common/TeamAccessPanel/index.tsx:87
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:34
+#: src/components/routes/settings/Team/MemberRow.tsx:34
 msgid "Whole account"
 msgstr "整个账户"
 
@@ -19369,18 +19437,18 @@ msgstr "小部件设置"
 msgid "Width"
 msgstr "宽度"
 
-#: src/components/modals/CreateAttendeeModal/index.tsx:335
+#: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Working"
 msgstr "工作"
 
 #: src/components/forms/ProductForm/ProductDrawer.tsx:142
-#: src/components/modals/CreateProductCategoryModal/index.tsx:56
-#: src/components/modals/CreatePromoCodeModal/index.tsx:57
-#: src/components/modals/CreateQuestionModal/index.tsx:75
-#: src/components/modals/DuplicateEventModal/index.tsx:183
-#: src/components/modals/EditProductCategoryModal/index.tsx:70
-#: src/components/modals/EditPromoCodeModal/index.tsx:85
-#: src/components/modals/EditQuestionModal/index.tsx:101
+#: src/components/modals/CreateProductCategoryModal/index.tsx:58
+#: src/components/modals/CreatePromoCodeModal/index.tsx:59
+#: src/components/modals/CreateQuestionModal/index.tsx:77
+#: src/components/modals/DuplicateEventModal/index.tsx:185
+#: src/components/modals/EditProductCategoryModal/index.tsx:73
+#: src/components/modals/EditPromoCodeModal/index.tsx:87
+#: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
 #: src/components/routes/auth/Register/index.tsx:145
 msgid "Working..."
@@ -19444,7 +19512,7 @@ msgstr "是的，移除它们"
 msgid "Yoga class"
 msgstr "瑜伽课"
 
-#: src/components/routes/account/ManageAccount/sections/Users/MemberRow.tsx:110
+#: src/components/routes/settings/Team/MemberRow.tsx:110
 msgid "You"
 msgstr "你"
 
@@ -19469,7 +19537,7 @@ msgstr "您处于离线状态"
 msgid "You can add up to {maxQuantity}"
 msgstr "最多可添加 {maxQuantity} 个"
 
-#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:109
+#: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:107
 msgid "You can change everything in the designer afterwards."
 msgstr "之后可在设计器中修改所有内容。"
 
@@ -19500,6 +19568,10 @@ msgstr "之后你可以为单个日期单独设置。"
 #: src/components/modals/OfferWaitlistModal/index.tsx:110
 msgid "You can still manually offer tickets if needed."
 msgstr "如有需要，您仍然可以手动提供门票。"
+
+#: src/components/forms/TaxAndFeeForm/index.tsx:115
+msgid "You can still remove it from any product."
+msgstr "您仍可以从任何产品中移除它。"
 
 #: src/components/routes/organizer/Settings/Sections/DangerZoneSettings/index.tsx:135
 msgid "You cannot archive the last active organizer on your account."
@@ -19631,7 +19703,7 @@ msgstr "在您创建容量分配之前，您需要一个产品。"
 msgid "You'll need at least one product to get started. Free, paid or let the user decide what to pay."
 msgstr "您需要至少一个产品才能开始。免费、付费或让用户决定支付金额。"
 
-#: src/components/modals/CreateEventModal/index.tsx:374
+#: src/components/modals/CreateEventModal/index.tsx:373
 msgid "You'll set the dates and schedule after the event is created."
 msgstr "创建活动后，您将设置日期和日程。"
 
@@ -19651,7 +19723,7 @@ msgstr "您正在加入{occurrenceDate}的候补名单。"
 msgid "You're on the waitlist!"
 msgstr "您已加入候补名单！"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:172
+#: src/components/routes/settings/Security/index.tsx:149
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "恢复码所剩不多。请生成一组新的,以免被锁在账户之外。"
 
@@ -19679,11 +19751,11 @@ msgstr "在此模式下，您的强调色不够醒目。"
 msgid "your account"
 msgstr "您的账户"
 
-#: src/components/routes/profile/ManageProfile/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:117
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "您的账户在登录时会要求输入验证器应用中的验证码。开启时间:{0}。"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:98
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:89
 msgid "Your account has been deactivated and will be permanently deleted on <0>{0}</0>."
 msgstr "您的账户已停用，将于 <0>{0}</0> 永久删除。"
 
@@ -19691,15 +19763,15 @@ msgstr "您的账户已停用，将于 <0>{0}</0> 永久删除。"
 msgid "Your account has messaging limits. To increase your limits, contact us at"
 msgstr "您的帐户有消息限制。要提高您的限制，请联系我们"
 
-#: src/components/routes/account/ManageAccount/sections/DangerZone/index.tsx:59
+#: src/components/routes/settings/Account/DeleteAccountSection.tsx:63
 msgid "Your account is now scheduled for deletion."
 msgstr "您的账户现已计划删除。"
 
-#: src/components/routes/account/ManageAccount/sections/AccountSettings/index.tsx:65
-msgid "Your account name is used on event pages and in emails."
-msgstr "您的账户名称会在活动页面和电子邮件中使用。"
+#: src/components/routes/settings/Account/index.tsx:67
+msgid "Your account name and its default currency and timezone."
+msgstr "您的账户名称及其默认货币和时区。"
 
-#: src/components/routes/profile/ManageProfile/Security/DisableTwoFactorModal.tsx:58
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:51
 msgid "Your account will only be protected by your password. Your recovery codes and trusted devices will be removed."
 msgstr "您的账户将仅由密码保护。您的恢复码和受信任设备将被移除。"
 
@@ -19727,7 +19799,7 @@ msgstr "您的签到列表已成功创建。与您的签到工作人员共享以
 msgid "Your current order will be lost."
 msgstr "您当前的订单将丢失。"
 
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:63
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:57
 msgid "Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm."
 msgstr "您当前的恢复码将立即失效。请输入验证器应用中的验证码以确认。"
 
@@ -19739,7 +19811,7 @@ msgstr "您的详细信息"
 msgid "Your Email"
 msgstr "您的电子邮件"
 
-#: src/components/routes/profile/ManageProfile/index.tsx:146
+#: src/components/routes/settings/Profile/index.tsx:131
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "您要求将电子邮件更改为<0>{0}</0>的申请正在处理中。请检查您的电子邮件以确认"
 
@@ -19780,11 +19852,15 @@ msgstr "你的姓名"
 msgid "Your Name"
 msgstr "您的姓名"
 
+#: src/components/routes/settings/Profile/index.tsx:126
+msgid "Your name, sign-in email and preferences."
+msgstr "您的姓名、登录邮箱和偏好设置。"
+
 #: src/components/routes/auth/ResetPassword/index.tsx:58
 msgid "Your new password must be at least 8 characters long."
 msgstr "您的新密码长度必须至少为8个字符。"
 
-#: src/components/routes/profile/ManageProfile/Security/RegenerateRecoveryCodesModal.tsx:41
+#: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:39
 msgid "Your new recovery codes"
 msgstr "您的新恢复码"
 
@@ -19832,6 +19908,10 @@ msgstr "您的主办方资料尚未发布。"
 #: src/components/routes/auth/Register/index.tsx:119
 msgid "Your password"
 msgstr "您的密码"
+
+#: src/components/routes/settings/Security/index.tsx:219
+msgid "Your password and two-factor authentication. They protect every account you belong to."
+msgstr "您的密码和双重验证。它们保护您所属的每个账户。"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:99
 msgid "Your payment is processing."

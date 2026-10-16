@@ -15,7 +15,7 @@ import {
     IconX,
 } from "@tabler/icons-react";
 import {isAxiosError} from "axios";
-import {Modal} from "../../../common/Modal";
+import {Modal, ModalFooter} from "../../../common/Modal";
 import {Event} from "../../../../types.ts";
 import {EventLineup, ImportLineupResult} from "../../../../api/lineup.client.ts";
 import {useGetProfiles} from "../../../../queries/useGetProfiles.ts";
@@ -366,23 +366,24 @@ export const ImportLineupModal = ({event, lineup, onClose}: ImportLineupModalPro
                 )}
 
             {source && plan && (plan.people.length > 0 || plan.slots.length > 0) && (
-                <div className={classes.footer}>
-                    <span className={classes.footerSummary} data-testid="lineup-import-footer-summary">
-                        {profilesReady ? footerSummary() : t`Checking your saved profiles…`}
-                    </span>
-                    <div className={classes.footerActions}>
-                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
-                        <Button
-                            onClick={submit}
-                            loading={importMutation.isPending}
-                            disabled={nothingToImport || !profilesReady || serverErrors.size > 0}
-                            leftSection={<IconUpload size={16}/>}
-                            data-testid="lineup-import-submit"
-                        >
-                            {t`Import`}
-                        </Button>
-                    </div>
-                </div>
+                <ModalFooter
+                    start={(
+                        <span className={classes.footerSummary} data-testid="lineup-import-footer-summary">
+                            {profilesReady ? footerSummary() : t`Checking your saved profiles…`}
+                        </span>
+                    )}
+                >
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        onClick={submit}
+                        loading={importMutation.isPending}
+                        disabled={nothingToImport || !profilesReady || serverErrors.size > 0}
+                        leftSection={<IconUpload size={16}/>}
+                        data-testid="lineup-import-submit"
+                    >
+                        {t`Import`}
+                    </Button>
+                </ModalFooter>
             )}
         </Modal>
     );

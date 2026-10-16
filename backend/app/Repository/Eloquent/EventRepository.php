@@ -258,6 +258,7 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
                         ->whereNull('orders.deleted_at')
                         ->where('orders.status', OrderStatus::COMPLETED->name);
                 })
+                ->orderBy('events.id')
                 ->get();
 
             return $this->handleResults($events);

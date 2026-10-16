@@ -157,22 +157,6 @@
   min-width: 0;
 }
 
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--hi-color-border);
-
-  @include mixins.respond-below(sm) {
-    flex-direction: column-reverse;
-
-    > * {
-      width: 100%;
-    }
-  }
-}
-
 .roleGrid .choice {
   @include mixins.respond-below(sm) {
     display: grid;

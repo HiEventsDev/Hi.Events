@@ -6,7 +6,7 @@ export class TeamPage {
   constructor(private readonly page: Page) {}
 
   async goto(): Promise<void> {
-    await this.page.goto('/account/users');
+    await this.page.goto('/settings/team');
     await this.page.waitForLoadState('networkidle');
   }
 
