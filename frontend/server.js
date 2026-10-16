@@ -136,7 +136,7 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return next();
     });
 
-    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|welcome|admin)(\/|$)/;
+    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin)(\/|$)/;
 
     app.use("*", (req, res, next) => {
         if (frameProtectedPathPattern.test(req.originalUrl.replace(base, "/").split("?")[0])) {

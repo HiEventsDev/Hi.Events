@@ -1,5 +1,5 @@
 import {BoxOfficeRequest, EventType, GenericModalProps, IdParam, ProductCategory} from "../../../../../types.ts";
-import {Modal} from "../../../../../components/common/Modal";
+import {Modal, ModalFooter} from "../../../../../components/common/Modal";
 import {t} from "@lingui/macro";
 import {BoxOfficeForm} from "../../forms/BoxOfficeForm";
 import {useForm} from "@mantine/form";
@@ -96,15 +96,16 @@ export const EditBoxOfficeModal = ({onClose, boxOfficeId}: GenericModalProps & E
                         timezone={event.timezone}
                         hideIntro
                     />
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={editMutation.isPending}
-                        mt="md"
-                        data-testid="box-office-submit-button"
-                    >
-                        {t`Save Box Office`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={editMutation.isPending}
+                            data-testid="box-office-submit-button"
+                        >
+                            {t`Save Changes`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

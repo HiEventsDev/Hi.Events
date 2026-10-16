@@ -3,7 +3,7 @@ import {hasLength, useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
 import {PromoCodeForm} from "../../forms/PromoCodeForm";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Button} from "../../common/Button";
 import {useGetPromoCode} from "../../../queries/useGetPromoCode.ts";
 import {useEffect} from "react";
@@ -81,9 +81,12 @@ export const EditPromoCodeModal = ({onClose, promoCodeId}: EditPromoCodeModalPro
         >
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <PromoCodeForm form={form}/>
-                <Button type="submit" fullWidth mt="lg" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working...` : t`Edit Promo Code`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working...` : t`Save Changes`}
+                    </Button>
+                </ModalFooter>
             </form>
             <LoadingMask/>
         </Modal>

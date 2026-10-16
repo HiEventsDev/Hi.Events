@@ -7,7 +7,7 @@ import {useDeleteConfiguration} from "../../../../mutations/useDeleteConfigurati
 import {IconPlus, IconEdit, IconTrash} from "@tabler/icons-react";
 import {Callout} from "../../../common/Callout";
 import {useState} from "react";
-import {Modal} from "../../../common/Modal";
+import {Modal, ModalFooter} from "../../../common/Modal";
 import {useForm} from "@mantine/form";
 import {showSuccess, showError} from "../../../../utilites/notifications";
 import {AccountConfiguration, isDefaultConfiguration} from "../../../../api/admin.client";
@@ -265,13 +265,15 @@ const ConfigurationModal = ({configuration, onClose}: ConfigurationModalProps) =
                         {...form.getInputProps('bypass_application_fees', { type: 'checkbox' })}
                     />
 
-                    <Button
-                        fullWidth
-                        loading={createMutation.isPending || updateMutation.isPending}
-                        type="submit"
-                    >
-                        {isEditing ? t`Save Changes` : t`Create Configuration`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            loading={createMutation.isPending || updateMutation.isPending}
+                            type="submit"
+                        >
+                            {isEditing ? t`Save Changes` : t`Create Configuration`}
+                        </Button>
+                    </ModalFooter>
                 </Stack>
             </form>
         </Modal>

@@ -128,9 +128,9 @@ test.describe('team access', () => {
       event_ids: [event.eventId],
     });
 
-    await member.page.goto('/manage/profile');
-    await member.page.getByTestId('profile-notify-new-orders').check();
-    await member.page.getByRole('button', { name: 'Update profile' }).click();
+    await member.page.goto('/settings/profile');
+    await member.page.getByTestId('profile-notify-new-orders').check({ force: true });
+    await member.page.getByTestId('profile-save-button').click();
     await expect(member.page.getByTestId('profile-notify-new-orders')).toBeChecked();
 
     await createCompletedOrder(publicApi, event);

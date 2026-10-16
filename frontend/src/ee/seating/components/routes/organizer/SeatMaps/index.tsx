@@ -1,6 +1,7 @@
 import {useMemo, useState} from "react";
 import {CreateButton} from "../../../../../../components/common/CreateButton";
-import {ActionIcon, Button, Modal, Stack, TextInput} from "@mantine/core";
+import {ActionIcon, Button, Stack, TextInput} from "@mantine/core";
+import {Modal, ModalFooter} from "../../../../../../components/common/Modal";
 import {useDisclosure} from "@mantine/hooks";
 import {IconPencil, IconPencilPlus, IconPlus, IconTrash} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
@@ -60,7 +61,7 @@ const CreateSeatMapModal = ({organizerId, onClose}: {organizerId: IdParam; onClo
     );
 
     return (
-        <Modal opened onClose={onClose} title={t`Create a seat map`} size="xl">
+        <Modal opened onClose={onClose} heading={t`Create a seat map`} size="xl">
             <Stack>
                 <TextInput label={t`Name`} placeholder={t`Main auditorium`} required value={name}
                            onChange={event => setName(event.currentTarget.value)}/>
@@ -102,12 +103,14 @@ const CreateSeatMapModal = ({organizerId, onClose}: {organizerId: IdParam; onClo
                     </div>
                 </div>
 
+            </Stack>
+            <ModalFooter start={<p className={classes.footNote}>{t`You can change everything in the designer afterwards.`}</p>}>
+                <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                 <Button onClick={create} disabled={name.trim() === ''} loading={createMutation.isPending}
                         data-testid="seat-map-create-submit-button">
                     {t`Create and start designing`}
                 </Button>
-                <p className={classes.footNote}>{t`You can change everything in the designer afterwards.`}</p>
-            </Stack>
+            </ModalFooter>
         </Modal>
     );
 };

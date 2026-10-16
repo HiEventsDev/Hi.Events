@@ -1,5 +1,5 @@
 import {CheckInListRequest, EventType, GenericModalProps, IdParam, ProductCategory} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
 import {useForm} from "@mantine/form";
@@ -98,14 +98,15 @@ export const EditCheckInListModal = ({
                         timezone={event.timezone}
                         hideIntro
                     />
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={editMutation.isPending}
-                        mt="md"
-                    >
-                        {t`Edit Check-In List`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={editMutation.isPending}
+                        >
+                            {t`Save Changes`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

@@ -98,17 +98,19 @@ export const router: RouteObject[] = [
             },
             {
                 path: "account",
-                async lazy() {
-                    const ManageAccount = await import("./components/routes/account/ManageAccount");
-                    return { Component: ManageAccount.default };
-                }
+                element: <Navigate to="/settings/account" replace={true} />
             },
             {
-                path: "profile/:tab?",
-                async lazy() {
-                    const ManageProfile = await import("./components/routes/profile/ManageProfile");
-                    return { Component: ManageProfile.default };
-                }
+                path: "profile",
+                element: <Navigate to="/settings/profile" replace={true} />
+            },
+            {
+                path: "profile/security",
+                element: <Navigate to="/settings/security" replace={true} />
+            },
+            {
+                path: "profile/password",
+                element: <Navigate to="/settings/security" replace={true} />
             },
             {
                 path: "profile/confirm-email-change/:token",
@@ -273,57 +275,69 @@ export const router: RouteObject[] = [
         ]
     },
     {
-        path: "account",
+        path: "settings",
         errorElement: <ErrorPage />,
         async lazy() {
-            const DefaultLayout = await import("./components/layouts/DefaultLayout");
-            return { Component: DefaultLayout.default };
+            const SettingsLayout = await import("./components/layouts/SettingsLayout");
+            return { Component: SettingsLayout.default };
         },
         children: [
             {
-                path: "",
-                async lazy() {
-                    const ManageAccount = await import("./components/routes/account/ManageAccount");
-                    return { Component: ManageAccount.default };
-                },
-                children: [
-                    {
-                        path: "settings",
-                        async lazy() {
-                            const AccountSettings = await import("./components/routes/account/ManageAccount/sections/AccountSettings");
-                            return { Component: AccountSettings.default };
-                        }
-                    },
-                    {
-                        path: "taxes-and-fees",
-                        async lazy() {
-                            const TaxSettings = await import("./components/routes/account/ManageAccount/sections/TaxSettings");
-                            return { Component: TaxSettings.default };
-                        }
-                    },
-                    {
-                        path: "event-defaults",
-                        async lazy() {
-                            const EventDefaultsSettings = await import("./components/routes/account/ManageAccount/sections/EventDefaultsSettings");
-                            return { Component: EventDefaultsSettings.default };
-                        }
-                    },
-                    {
-                        path: "users",
-                        async lazy() {
-                            const Users = await import("./components/routes/account/ManageAccount/sections/Users");
-                            return { Component: Users.default };
-                        }
-                    },
-                    {
-                        path: "danger-zone",
-                        async lazy() {
-                            const DangerZone = await import("./components/routes/account/ManageAccount/sections/DangerZone");
-                            return { Component: DangerZone.default };
-                        }
-                    },
-                ]
+                index: true,
+                element: <Navigate to="/settings/profile" replace={true} />
             },
+            {
+                path: "profile",
+                async lazy() {
+                    const Profile = await import("./components/routes/settings/Profile");
+                    return { Component: Profile.default };
+                }
+            },
+            {
+                path: "security",
+                async lazy() {
+                    const Security = await import("./components/routes/settings/Security");
+                    return { Component: Security.default };
+                }
+            },
+            {
+                path: "account",
+                async lazy() {
+                    const Account = await import("./components/routes/settings/Account");
+                    return { Component: Account.default };
+                }
+            },
+            {
+                path: "organizers",
+                async lazy() {
+                    const Organizers = await import("./components/routes/settings/Organizers");
+                    return { Component: Organizers.default };
+                }
+            },
+            {
+                path: "team",
+                async lazy() {
+                    const Team = await import("./components/routes/settings/Team");
+                    return { Component: Team.default };
+                }
+            },
+            {
+                path: "taxes-and-fees",
+                async lazy() {
+                    const TaxesAndFees = await import("./components/routes/settings/TaxesAndFees");
+                    return { Component: TaxesAndFees.default };
+                }
+            },
+        ]
+    },
+    {
+        path: "account",
+        children: [
+            { path: "users", element: <Navigate to="/settings/team" replace={true} /> },
+            { path: "taxes-and-fees", element: <Navigate to="/settings/taxes-and-fees" replace={true} /> },
+            { path: "danger-zone", element: <Navigate to="/settings/account#delete-account" replace={true} /> },
+            { path: "*", element: <Navigate to="/settings/account" replace={true} /> },
+            { index: true, element: <Navigate to="/settings/account" replace={true} /> },
         ]
     },
     {

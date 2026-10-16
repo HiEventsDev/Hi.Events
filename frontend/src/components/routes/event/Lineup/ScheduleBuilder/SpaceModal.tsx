@@ -1,8 +1,8 @@
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, Group, Select, TextInput} from "@mantine/core";
+import {Button, Select, TextInput} from "@mantine/core";
 import {IconTrash} from "@tabler/icons-react";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {Event} from "../../../../../types.ts";
 import {EventLineup, EventSpace} from "../../../../../api/lineup.client.ts";
 import {useUpsertEventSpace} from "../../../../../mutations/useUpsertEventSpace.ts";
@@ -65,7 +65,7 @@ export const SpaceModal = ({event, lineup, space, onClose}: SpaceModalProps) => 
     );
 
     return (
-        <Modal opened onClose={onClose} heading={space ? t`Edit stage or room` : t`Add a stage or room`} size="md">
+        <Modal opened onClose={onClose} heading={space ? t`Edit stage or room` : t`Add a stage or room`} size={520}>
             <form onSubmit={form.onSubmit(handleSubmit)} className={classes.fieldStack}>
                 <TextInput
                     label={t`Name`}
@@ -88,14 +88,16 @@ export const SpaceModal = ({event, lineup, space, onClose}: SpaceModalProps) => 
                         {...form.getInputProps('event_location_id')}
                     />
                 )}
-                <Group justify="space-between" mt="sm">
-                    {space
-                        ? <Button variant="subtle" color="red" leftSection={<IconTrash size={16}/>} onClick={remove}>{t`Delete`}</Button>
-                        : <span/>}
+                <ModalFooter
+                    start={space && (
+                        <Button variant="subtle" color="red" leftSection={<IconTrash size={16}/>} onClick={remove}>{t`Delete`}</Button>
+                    )}
+                >
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                     <Button type="submit" loading={upsertMutation.isPending} data-testid="lineup-space-save-button">
                         {space ? t`Save` : t`Add`}
                     </Button>
-                </Group>
+                </ModalFooter>
             </form>
         </Modal>
     );

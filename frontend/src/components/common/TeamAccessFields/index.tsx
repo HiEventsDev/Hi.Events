@@ -292,7 +292,3 @@ export const TeamFormSection = ({title, children}: { title: string, children: Re
         {children}
     </section>
 );
-
-export const TeamFormFooter = ({children}: { children: ReactNode }) => (
-    <div className={classes.footer}>{children}</div>
-);

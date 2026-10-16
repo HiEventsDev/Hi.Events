@@ -311,7 +311,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                 {showCreateOrganizer ? (
                     <div className={classes.organizerForm}>
                         <OrganizerCreateForm
-                            onCancel={() => setShowCreateOrganizer(false)}
                             onSuccess={handleOrganizerCreated}
                         />
                     </div>

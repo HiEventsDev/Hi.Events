@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Resources\Account\AccountDeletionRequestResource;
+use HiEvents\Services\Application\Handlers\Account\DeletionRequest\DTO\AccountDeletionBlockingEventDTO;
 use HiEvents\Services\Application\Handlers\Account\DeletionRequest\GetAccountDeletionStatusHandler;
 use Illuminate\Http\JsonResponse;
 
@@ -30,6 +31,10 @@ class GetAccountDeletionStatusAction extends BaseAction
                 'can_request_deletion' => $status->canRequestDeletion,
                 'cannot_delete_reason' => $status->cannotDeleteReason,
                 'expected_outcome' => $status->expectedOutcome,
+                'blocking_events' => array_map(
+                    static fn (AccountDeletionBlockingEventDTO $event) => $event->toArray(),
+                    $status->blockingEvents,
+                ),
             ],
         ]);
     }

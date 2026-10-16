@@ -32,7 +32,7 @@ const PendingDeletionBanner = () => {
                 variant="white"
                 color="red"
                 size="sm"
-                onClick={() => navigate('/account/danger-zone')}
+                onClick={() => navigate('/settings/account#delete-account')}
                 className={classes.button}
                 data-testid="pending-deletion-banner-button"
             >

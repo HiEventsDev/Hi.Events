@@ -11,7 +11,7 @@ export class TwoFactorPage {
   constructor(private readonly page: Page) {}
 
   async gotoSecurity(): Promise<void> {
-    await this.page.goto('/manage/profile/security');
+    await this.page.goto('/settings/security');
     await this.page.waitForLoadState('networkidle');
     await expect(this.page.getByText('Two-factor authentication', { exact: true }).first()).toBeVisible();
   }

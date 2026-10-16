@@ -259,7 +259,7 @@ export const PlatformFeesSettings = ({
                                 {t`You can configure additional service fees and taxes in your account settings.`}
                             </Text>
                         </div>
-                        <Anchor href="/account/taxes-and-fees" size="sm">
+                        <Anchor href="/settings/taxes-and-fees" size="sm">
                             <Group gap="xs">
                                 <span>{t`Configure Taxes & Fees`}</span>
                                 <IconArrowRight size={16} />

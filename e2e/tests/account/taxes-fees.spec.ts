@@ -5,17 +5,12 @@ import { createDraftEvent } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
 
 const gotoTaxesAndFees = async (page: Page): Promise<void> => {
-  await page.goto('/account/taxes-and-fees');
+  await page.goto('/settings/taxes-and-fees');
   await page.waitForLoadState('networkidle');
 };
 
 const taxBlock = (page: Page, name: string): Locator =>
-  page.locator('[class*="taxBlock"]').filter({ hasText: name });
-
-const chooseOption = async (page: Page, targetDescription: string, optionDescription: string): Promise<void> => {
-  await page.getByRole('dialog').getByText(targetDescription, { exact: true }).click();
-  await page.getByRole('option').filter({ hasText: optionDescription }).click();
-};
+  page.getByTestId('tax-or-fee-row').filter({ hasText: name });
 
 test.describe('taxes and fees', () => {
   test('an organizer creates a percentage tax and a fixed fee', async ({ freshAccount }) => {
@@ -25,24 +20,20 @@ test.describe('taxes and fees', () => {
 
     await gotoTaxesAndFees(page);
 
-    await page.getByRole('button', { name: 'Add Tax or Fee' }).click();
+    await page.getByRole('button', { name: 'Add tax or fee' }).click();
     await page.getByRole('dialog').getByLabel(/^Name/).fill(taxName);
-    await page.getByRole('dialog').getByLabel(/^Percentage Amount/).fill('10');
-    await page.getByRole('button', { name: 'Create Tax' }).click();
+    await page.getByRole('dialog').getByLabel(/^Rate/).fill('10');
+    await page.getByTestId('tax-or-fee-submit').click();
 
     await expect(taxBlock(page, taxName)).toBeVisible();
     await expect(taxBlock(page, taxName).getByText(/^10(\.0+)?%$/)).toBeVisible();
 
-    await page.getByRole('button', { name: 'Add Tax or Fee' }).click();
-    await chooseOption(page, 'A standard tax, like VAT or GST', 'A fee, like a booking fee or a service fee');
-    await chooseOption(
-      page,
-      'A percentage of the product price. E.g., 3.5% of the product price',
-      'A fixed amount per product',
-    );
+    await page.getByRole('button', { name: 'Add tax or fee' }).click();
+    await page.getByTestId('tax-or-fee-type-fee').click();
+    await page.getByRole('dialog').getByText('Fixed amount', { exact: true }).click();
     await page.getByRole('dialog').getByLabel(/^Name/).fill(feeName);
-    await page.getByRole('dialog').getByLabel(/^Amount/).fill('2.50');
-    await page.getByRole('button', { name: 'Create Fee' }).click();
+    await page.getByRole('dialog').getByLabel(/^Rate/).fill('2.50');
+    await page.getByRole('button', { name: 'Create fee' }).click();
 
     await expect(taxBlock(page, feeName)).toBeVisible();
     await expect(taxBlock(page, feeName).getByText('$2.50')).toBeVisible();
@@ -66,10 +57,10 @@ test.describe('taxes and fees', () => {
     await taxBlock(page, taxName).getByRole('button').click();
     await page.getByRole('menuitem', { name: 'Edit' }).click();
 
-    const rateInput = page.getByRole('dialog').getByLabel(/^Percentage Amount/);
+    const rateInput = page.getByRole('dialog').getByLabel(/^Rate/);
     await expect(rateInput).toHaveValue(/^10/);
     await rateInput.fill('15');
-    await page.getByRole('button', { name: 'Update Tax' }).click();
+    await page.getByTestId('tax-or-fee-submit').click();
 
     await expect(taxBlock(page, taxName).getByText(/^15(\.0+)?%$/)).toBeVisible();
   });
@@ -129,5 +120,26 @@ test.describe('taxes and fees', () => {
     await products.openEditModal();
     await products.openLedgerRow('taxes');
     await expect(page.getByTestId('product-form-column').getByText(new RegExp(`^${taxName}`))).toBeVisible();
+  });
+
+  test('a tax created from the product form is attached without submitting the product', async ({ freshAccount }) => {
+    const event = await createDraftEvent(freshAccount.api, freshAccount.organizerId);
+    const taxName = uniqueName('Inline Tax');
+
+    const page = await freshAccount.newAuthedPage();
+    const products = new ProductCreatePage(page);
+    await products.goto(event.eventId);
+    await products.openCreateModal();
+    await products.openLedgerRow('taxes');
+
+    await page.getByRole('button', { name: 'Create Tax or Fee' }).click();
+    const taxDialog = page.getByRole('dialog', { name: 'Add tax or fee' });
+    await taxDialog.getByLabel(/^Name/).fill(taxName);
+    await taxDialog.getByLabel(/^Rate/).fill('5');
+    await taxDialog.getByTestId('tax-or-fee-submit').click();
+
+    await expect(taxDialog).toHaveCount(0);
+    await expect(page.getByTestId('product-form-column').getByText(new RegExp(`^${taxName}`))).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Create Ticket or Product' })).toBeVisible();
   });
 });

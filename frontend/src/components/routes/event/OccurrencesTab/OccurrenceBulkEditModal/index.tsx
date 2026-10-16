@@ -5,7 +5,7 @@ import {modals} from "@mantine/modals";
 import {useParams} from "react-router";
 import {useMemo, useState} from "react";
 import {IconClock, IconMapPin, IconRuler, IconTag, IconUsers} from "@tabler/icons-react";
-import {Modal} from "../../../../common/Modal";
+import {Modal, ModalFooter} from "../../../../common/Modal";
 import {Callout} from "../../../../common/Callout";
 import {InputGroup} from "../../../../common/InputGroup";
 import {Editor} from "../../../../common/Editor";
@@ -503,15 +503,16 @@ export const OccurrenceBulkEditModal = ({onClose, occurrences}: OccurrenceBulkEd
                         </Stack>
                     )}
 
-                    <Button
-                        type="submit"
-                        fullWidth
-                        mt="lg"
-                        data-testid="occurrence-bulk-edit-submit-button"
-                        loading={bulkUpdateMutation.isPending || createLocationMutation.isPending}
-                    >
-                        {t`Apply Changes`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type="submit"
+                            data-testid="occurrence-bulk-edit-submit-button"
+                            loading={bulkUpdateMutation.isPending || createLocationMutation.isPending}
+                        >
+                            {t`Apply Changes`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

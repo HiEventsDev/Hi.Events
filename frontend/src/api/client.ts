@@ -55,8 +55,8 @@ api.interceptors.response.use(
         const isAuthError = status === 401 || status === 403;
 
         if (status === 403 && error.response.data?.error_code === 'ACCOUNT_PENDING_DELETION') {
-            if (!currentPath.startsWith('/account')) {
-                window?.location?.replace('/account/danger-zone');
+            if (!currentPath.startsWith('/settings/account')) {
+                window?.location?.replace('/settings/account#delete-account');
             }
             return Promise.reject(error);
         }

@@ -1,6 +1,6 @@
 import {useForm} from "@mantine/form";
 import {GenericModalProps, InviteUserRequest, TeamAccessRequest} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Button, SimpleGrid, TextInput} from "@mantine/core";
 import {IconSend} from "@tabler/icons-react";
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
@@ -10,7 +10,6 @@ import {showSuccess} from "../../../utilites/notifications.tsx";
 import {
     TeamAccessFields,
     teamAccessInitialValues,
-    TeamFormFooter,
     TeamFormSection,
     toTeamAccessPayload
 } from "../../common/TeamAccessFields";
@@ -66,7 +65,7 @@ export const InviteUserModal = ({onClose, initialAccess}: InviteUserModalProps) 
 
                 <TeamAccessFields form={form}/>
 
-                <TeamFormFooter>
+                <ModalFooter>
                     <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
                     <Button
                         leftSection={<IconSend size={16}/>}
@@ -75,7 +74,7 @@ export const InviteUserModal = ({onClose, initialAccess}: InviteUserModalProps) 
                         data-testid="invite-team-member-submit">
                         {t`Send invitation`}
                     </Button>
-                </TeamFormFooter>
+                </ModalFooter>
             </form>
         </Modal>
     )

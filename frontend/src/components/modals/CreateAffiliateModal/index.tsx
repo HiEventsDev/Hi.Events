@@ -1,4 +1,4 @@
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {Button} from "@mantine/core";
 import {useForm} from "@mantine/form";
@@ -75,7 +75,7 @@ export const CreateAffiliateModal = ({onClose}: CreateAffiliateModalProps) => {
             opened={true}
             onClose={onClose}
             heading={t`Create Affiliate`}
-            size="md"
+            size="lg"
         >
             <form onSubmit={handleSubmit}>
                 <AffiliateForm
@@ -84,14 +84,15 @@ export const CreateAffiliateModal = ({onClose}: CreateAffiliateModalProps) => {
                     onGenerateCode={generateRandomCode}
                 />
 
-                <Button
-                    type="submit"
-                    loading={createMutation.isPending}
-                    fullWidth
-                    mt="md"
-                >
-                    {t`Create Affiliate`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        type="submit"
+                        loading={createMutation.isPending}
+                    >
+                        {t`Create Affiliate`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

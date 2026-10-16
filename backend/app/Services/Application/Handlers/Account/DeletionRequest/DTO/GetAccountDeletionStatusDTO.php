@@ -12,5 +12,7 @@ class GetAccountDeletionStatusDTO extends BaseDataObject
         public readonly bool $canRequestDeletion,
         public readonly ?string $cannotDeleteReason,
         public readonly string $expectedOutcome,
+        /** @var AccountDeletionBlockingEventDTO[] */
+        public readonly array $blockingEvents,
     ) {}
 }

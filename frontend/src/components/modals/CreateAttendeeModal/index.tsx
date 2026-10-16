@@ -1,4 +1,4 @@
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {EventOccurrenceStatus, EventType, GenericModalProps, ProductCategory, ProductType, QueryFilters} from "../../../types.ts";
 import {Button} from "../../common/Button";
 import {useNavigate, useParams} from "react-router";
@@ -331,9 +331,12 @@ export const CreateAttendeeModal = ({onClose}: GenericModalProps) => {
                     label={t`Send order confirmation and ticket email`}
                     {...form.getInputProps('send_confirmation_email', {type: 'checkbox'})}
                 />
-                <Button type="submit" fullWidth mt="xl" disabled={mutation.isPending}>
-                    {mutation.isPending ? t`Working` + '...' : t`Create Attendee`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" disabled={mutation.isPending}>
+                        {mutation.isPending ? t`Working` + '...' : t`Create Attendee`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

@@ -68,7 +68,7 @@ export class WebhookPage {
   }
 
   async submitEditForm(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Edit Webhook' }).click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Save Changes' }).click();
   }
 
   async confirmDeletion(): Promise<void> {

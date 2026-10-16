@@ -120,8 +120,9 @@ test.describe('read-only and permission spot checks', () => {
     const event = await createLiveEventWithFreeTicket(freshAccount.api, freshAccount.organizerId);
     const { page } = await invitedMember(freshAccount, mailpit, publicApi, browser, { role: 'ORGANIZER' });
 
-    await page.goto('/account/users');
-    await expect(page.getByText('Only admins can manage the team.')).toBeVisible();
+    await page.goto('/settings/team');
+    await expect(page).toHaveURL(/\/settings\/profile/);
+    await expect(page.getByRole('link', { name: 'Team', exact: true })).toHaveCount(0);
     await expect(page.getByTestId('team-invite-button')).toHaveCount(0);
 
     await page.goto(`/manage/event/${event.eventId}/dashboard`);
@@ -148,7 +149,8 @@ test.describe('read-only and permission spot checks', () => {
     await expect(page).toHaveURL(/\/manage\/events/);
 
     await page.goto('/account/settings');
-    await expect(page).toHaveURL(/\/manage\/events/);
+    await expect(page).toHaveURL(/\/settings\/profile/);
+    await expect(page.getByRole('link', { name: 'General', exact: true })).toHaveCount(0);
     await expect(page).not.toHaveURL(/\/auth\/login/);
   });
 });
