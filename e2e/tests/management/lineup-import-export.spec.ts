@@ -188,11 +188,13 @@ test.describe('lineup import and export', () => {
     await api.importLineup(event.eventId, { people: [{ name: headliner, billing_tier: 'HEADLINER' }], slots: [] });
 
     await page.goto(`/manage/event/${event.eventId}/widget`);
-    await expect(page.getByTestId('widget-lineup-strip')).toHaveCount(0);
+    const preview = page.frameLocator('iframe[title="Widget preview"]');
+    await expect(preview.getByRole('heading', { name: event.productTitle })).toBeVisible();
+    await expect(preview.getByTestId('widget-lineup-strip')).toHaveCount(0);
+    await page.getByTestId('widget-group-sections').click();
     await page.getByTestId('widget-show-lineup-switch').click();
-    await expect(page.getByTestId('widget-lineup-strip')).toContainText(headliner);
-    await expect.poll(() => page.locator('textarea').evaluateAll(fields => fields.map(field => (field as HTMLTextAreaElement).value).join('\n')))
-      .toContain('data-hievents-show-lineup="true"');
+    await expect(preview.getByTestId('widget-lineup-strip')).toContainText(headliner);
+    await expect(page.getByTestId('widget-embed-code')).toContainText('data-hievents-show-lineup="true"');
   });
 });
 

@@ -1,18 +1,9 @@
 import {LoaderFunctionArgs, redirect} from "react-router";
-import {promoCodeClientPublic} from "../api/promo-code.client.ts";
+import {validatePromoCode} from "./validatePromoCode.ts";
 import {getEventPublicQuery} from "../queries/useGetEventPublic.ts";
 import {getEventLineupPublicQuery} from "../queries/useGetEventLineupPublic.ts";
 import {getQueryClient} from "../utilites/ssrQueryClient.ts";
 import {loggableError} from "../ssr/loggableError.js";
-
-const validatePromoCode = async (eventId: string | undefined, promoCode: string): Promise<boolean | undefined> => {
-    try {
-        const {valid} = await promoCodeClientPublic.validateCode(eventId, promoCode);
-        return valid;
-    } catch {
-        return undefined;
-    }
-};
 
 export const publicEventRouteLoader = async ({params, request}: LoaderFunctionArgs) => {
     try {

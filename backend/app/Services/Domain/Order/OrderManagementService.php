@@ -10,6 +10,7 @@ use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\OrderItemDomainObject;
 use HiEvents\DomainObjects\PromoCodeDomainObject;
 use HiEvents\DomainObjects\Status\OrderStatus;
+use HiEvents\DomainObjects\WidgetDomainObject;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Domain\Tax\TaxAndFeeOrderRollupService;
@@ -39,6 +40,7 @@ class OrderManagementService
         ?PromoCodeDomainObject $promoCode,
         ?AffiliateDomainObject $affiliate = null,
         ?string $sessionId = null,
+        ?WidgetDomainObject $widget = null,
     ): OrderDomainObject {
         $reservedUntil = Carbon::now()->addMinutes($timeOutMinutes);
 
@@ -53,6 +55,7 @@ class OrderManagementService
             'promo_code_id' => $promoCode?->getId(),
             'promo_code' => $promoCode?->getCode(),
             'affiliate_id' => $affiliate?->getId(),
+            'widget_id' => $widget?->getId(),
             'locale' => $locale,
         ]);
     }

@@ -2,75 +2,26 @@ import React from 'react';
 import {Link} from "react-router";
 import {Event, LocationType} from "../../../../types.ts";
 import classes from './EventCard.module.scss';
-import {formatDateWithLocale, isSameDayInTimezone} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale} from "../../../../utilites/dates.ts";
 import {t} from "@lingui/macro";
-import {formatCurrency} from "../../../../utilites/currency.ts";
 import {eventHomepagePath, eventHomepageUrl} from "../../../../utilites/urlHelper.ts";
 import {ShareComponent} from "../../../common/ShareIcon";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import {IconCalendar, IconCalendarRepeat, IconMapPin, IconTicket, IconWifi} from '@tabler/icons-react';
 import {summariseEventLocations} from "../../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../../utilites/addressUtilities.ts";
-import {EventPriceSummary, summariseEventPrice, summariseEventSchedule} from "../../../../utilites/eventListing.ts";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import {summariseEventPrice, summariseEventSchedule} from "../../../../utilites/eventListing.ts";
+import {eventPriceLabel, eventScheduleLabel} from "../../../../utilites/eventListingLabels.ts";
 
 interface EventCardProps {
     event: Event;
 }
-
-const formatDay = (date: string, tz: string, withYear: boolean): string =>
-    formatDateWithLocale(date, withYear ? "shortDate" : "weekdayDate", tz);
-
-const priceLabel = (price: EventPriceSummary, currency: string): string => {
-    switch (price.kind) {
-        case 'soldOut':
-            return t`Sold out`;
-        case 'free':
-            return t`Free`;
-        case 'donation':
-            return t`Donation`;
-        case 'exact':
-            return formatCurrency(price.amount, currency);
-        case 'from': {
-            if (price.amount === 0) {
-                return t`From free`;
-            }
-            const amount = formatCurrency(price.amount, currency);
-            return t`From ${amount}`;
-        }
-    }
-};
 
 export const EventCard: React.FC<EventCardProps> = ({event}) => {
     const schedule = summariseEventSchedule(event);
     const price = schedule.hasEnded ? null : summariseEventPrice(event);
     const tz = event.timezone;
 
-    const dateLine = (() => {
-        const {start, end} = schedule;
-        if (!start) {
-            return t`Date TBA`;
-        }
-        if (schedule.isSeriesRange) {
-            const firstDay = formatDay(start, tz, true);
-            return end ? `${firstDay} – ${formatDay(end, tz, true)}` : firstDay;
-        }
-
-        const withYear = schedule.hasEnded || dayjs.utc(start).tz(tz).year() !== dayjs().tz(tz).year();
-        const startLabel = `${formatDay(start, tz, withYear)} · ${formatDateWithLocale(start, "timeOnly", tz)}`;
-        if (!end) {
-            return startLabel;
-        }
-        const endTime = formatDateWithLocale(end, "timeOnly", tz);
-
-        return isSameDayInTimezone(start, end, tz)
-            ? `${startLabel} – ${endTime}`
-            : `${startLabel} – ${formatDay(end, tz, withYear)}, ${endTime}`;
-    })();
+    const dateLine = eventScheduleLabel(schedule, tz);
     const prettyTimezone = schedule.start && !schedule.isSeriesRange
         ? formatDateWithLocale(schedule.start, "timezone", tz)
         : null;
@@ -187,7 +138,7 @@ export const EventCard: React.FC<EventCardProps> = ({event}) => {
                                 data-testid="organizer-event-card-price"
                             >
                                 {price.kind !== 'soldOut' && <IconTicket size={14}/>}
-                                <span>{priceLabel(price, event.currency)}</span>
+                                <span>{eventPriceLabel(price, event.currency)}</span>
                             </div>
                         )}
                     </div>

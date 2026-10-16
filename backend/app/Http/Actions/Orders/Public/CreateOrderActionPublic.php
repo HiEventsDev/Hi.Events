@@ -56,6 +56,7 @@ class CreateOrderActionPublic extends BaseAction
                     'can_order_unpublished_event' => $this->authenticatedAccountOwnsEvent($eventId),
                     'promo_code' => $request->input('promo_code'),
                     'affiliate_code' => $request->input('affiliate_code'),
+                    'widget_id' => $request->input('widget_id'),
                     'products' => ProductOrderDetailsDTO::collectionFromArray($validatedData['products']),
                     'session_identifier' => $sessionId,
                     'order_locale' => $this->localeService->getLocaleOrDefault($request->getPreferredLanguage()),

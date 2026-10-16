@@ -1,4 +1,5 @@
 import {i18n} from "@lingui/core";
+import {resolveClientEmbedLocale} from "./utilites/embedLocale.ts";
 
 export type SupportedLocales =
     "en"
@@ -76,6 +77,11 @@ export const getLocaleName = (locale: SupportedLocales) => {
 
 export const getClientLocale = () => {
     if (typeof window !== "undefined") {
+        const embedLocale = resolveClientEmbedLocale();
+        if (embedLocale) {
+            return embedLocale;
+        }
+
         const storedLocale = document
             .cookie
             .split(";")

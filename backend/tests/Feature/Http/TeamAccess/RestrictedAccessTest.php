@@ -83,6 +83,7 @@ class RestrictedAccessTest extends TestCase
         $this->getJson("/organizers/{$this->organizerA}/stats", $this->headers($user))->assertForbidden();
         $this->getJson("/organizers/{$this->organizerA}/orders", $this->headers($user))->assertForbidden();
         $this->getJson("/organizers/{$this->organizerA}/webhooks", $this->headers($user))->assertForbidden();
+        $this->getJson("/organizers/{$this->organizerA}/widgets", $this->headers($user))->assertForbidden();
         $this->getJson("/organizers/{$this->organizerB}", $this->headers($user))->assertForbidden();
     }
 

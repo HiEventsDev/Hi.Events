@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {t} from "@lingui/macro";
 import {Modal} from "@mantine/core";
+import {embeddedDialogStyles, useEmbeddedDialogPlacement} from "../../../widget/EmbeddedDialogOffset.tsx";
 import {IconArrowLeft, IconX} from "@tabler/icons-react";
 import {Event} from "../../../../types.ts";
 import {EventLineup, LineupEntry} from "../../../../api/lineup.client.ts";
@@ -22,6 +23,7 @@ interface ProfileModalProps {
 }
 
 export const ProfileModal = ({event, entry, lineup, portalTarget, onClose, onBack, onOpenItem}: ProfileModalProps) => {
+    const embeddedPlacement = useEmbeddedDialogPlacement();
     const {profile} = entry;
     const [photoIndex, setPhotoIndex] = useState(0);
     const photo = profile.images[photoIndex];
@@ -34,7 +36,9 @@ export const ProfileModal = ({event, entry, lineup, portalTarget, onClose, onBac
             opened
             onClose={onClose}
             withCloseButton={false}
-            centered
+            centered={!embeddedPlacement}
+            yOffset={embeddedPlacement?.yOffset}
+            styles={embeddedDialogStyles(embeddedPlacement)}
             size={640}
             padding={0}
             radius={24}

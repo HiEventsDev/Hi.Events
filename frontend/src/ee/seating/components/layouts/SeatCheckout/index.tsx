@@ -1,15 +1,18 @@
 import {useEffect} from "react";
-import {useParams, useSearchParams} from "react-router";
+import {useLocation, useParams, useSearchParams} from "react-router";
 import '../../../../../styles/widget/default.scss';
 import {useGetEventPublic} from "../../../../../queries/useGetEventPublic.ts";
 import {useGetPromoCodePublic} from "../../../../../queries/useGetPromoCodePublic.ts";
 import {getParentOrigin} from "../../../../../utilites/iframeResize.ts";
 import SelectProducts from "../../../../../components/routes/product-widget/SelectProducts";
 import {widgetColorsFromSearchParams} from "../../../../../utilites/widgetColors.ts";
+import {forwardedTrackingParams, WIDGET_PARAM} from "../../../../../utilites/widgetConfig.ts";
+import {embedLocaleFromUrl, embedLocaleParam} from "../../../../../utilites/embedLocale.ts";
 
 const SeatCheckout = () => {
     const {eventId} = useParams();
     const [searchParams] = useSearchParams();
+    const location = useLocation();
     const occurrenceId = Number(searchParams.get('occurrence_id')) || null;
     const promoCode = searchParams.get('promo_code');
     const promoCodeQuery = useGetPromoCodePublic(eventId, promoCode);
@@ -43,7 +46,12 @@ const SeatCheckout = () => {
         <SelectProducts event={event} widgetMode="normal" isSeatPickerPage initialOccurrenceId={occurrenceId}
                         colors={widgetColorsFromSearchParams(searchParams)}
                         promoCode={promoCodeValid ? promoCode ?? undefined : undefined}
-                        promoCodeValid={promoCodeValid}/>
+                        promoCodeValid={promoCodeValid}
+                        widgetId={searchParams.get(WIDGET_PARAM.widget)}
+                        checkoutParams={{
+                            ...forwardedTrackingParams(searchParams),
+                            ...embedLocaleParam(embedLocaleFromUrl(location.pathname, location.search)),
+                        }}/>
     );
 };
 

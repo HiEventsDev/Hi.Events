@@ -14,12 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/layouts/Event/index.tsx:249
-#: src/components/layouts/OrganizerLayout/index.tsx:233
+#: src/components/layouts/OrganizerLayout/index.tsx:235
 msgid "- Click to Publish"
 msgstr "- Yayınlamak için Tıklayın"
 
 #: src/components/layouts/Event/index.tsx:251
-#: src/components/layouts/OrganizerLayout/index.tsx:235
+#: src/components/layouts/OrganizerLayout/index.tsx:237
 msgid "- Click to Unpublish"
 msgstr "- Yayından Kaldırmak için Tıklayın"
 
@@ -80,7 +80,7 @@ msgstr "{0} erişilebilir"
 msgid "{0} Active Webhooks"
 msgstr "{0} Aktif Webhook"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:938
+#: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} mevcut"
 
@@ -338,11 +338,11 @@ msgstr "{free} kaldı"
 msgid "{hidden} hidden"
 msgstr "{hidden} gizli"
 
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:37
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:38
 msgid "{hours} h"
 msgstr "{hours} sa"
 
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:37
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:38
 msgid "{hours} h {remainder} min"
 msgstr "{hours} sa {remainder} dk"
 
@@ -378,7 +378,7 @@ msgstr "Etkilenen oturumlara {loadedAffectedAttendees} katılımcı kayıtlı."
 msgid "{min}–{max} per order"
 msgstr "Sipariş başına {min}–{max}"
 
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:34
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:35
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:154
 msgid "{minutes} min"
 msgstr "{minutes} dk"
@@ -434,6 +434,10 @@ msgstr "{productCount} bilet türü yapılandırıldı"
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:209
 msgid "{provider} video found"
 msgstr "{provider} videosu bulundu"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:96
+msgid "{radius}px"
+msgstr "{radius}px"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:59
 msgid "{remaining} left"
@@ -536,7 +540,7 @@ msgstr "+{0} para birimi daha"
 msgid "+{extra} more"
 msgstr "+{extra} daha"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:178
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
 msgid "+{moreDatesCount} more dates"
 msgstr "+{moreDatesCount} tarih daha"
 
@@ -552,7 +556,7 @@ msgstr "+1 234 567 890"
 msgid "+1 day"
 msgstr "+1 gün"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:178
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:129
 msgid "+1 more date"
 msgstr "+1 tarih daha"
 
@@ -575,10 +579,6 @@ msgstr "<0>APP_LICENCE_KEY=development</0>, rezerve koltukları ve gişeyi geli�
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
 msgstr "<0>Giriş listeleri, etkinlik girişini güne, alana veya bilet türüne göre yönetmenize yardımcı olur. Biletleri VIP alanları veya 1. Gün geçişleri gibi belirli listelere bağlayabilir ve personelle güvenli bir giriş bağlantısı paylaşabilirsiniz. Hesap gerekmez. Giriş, cihaz kamerası veya HID USB tarayıcı kullanarak mobil, masaüstü veya tablette çalışır.                                </0>"
-
-#: src/components/common/WidgetEditor/index.tsx:344
-msgid "<0>https://</0>your-website.com"
-msgstr "<0>https://</0>siteniz.com"
 
 #: src/components/forms/ProductForm/index.tsx:318
 msgid "<0>Please enter the price excluding taxes and fees.</0><1>Taxes and fees can be added below.</1>"
@@ -722,10 +722,6 @@ msgstr "135'ten fazla para birimi ve 40'tan fazla ödeme yöntemi"
 msgid "2. Scan this QR code"
 msgstr "2. Bu QR kodunu tarayın"
 
-#: src/components/common/WidgetEditor/index.tsx:234
-msgid "20"
-msgstr "20"
-
 #: src/components/routes/admin/LifecycleEmails/lifecycleEmailLabels.ts:14
 msgid "24 hours after an organizer creates a paid ticket or starts connecting Stripe, if Stripe still isn't connected. Skipped for countries Stripe doesn't support."
 msgstr "Bir organizatör ücretli bilet oluşturduktan veya Stripe bağlamaya başladıktan 24 saat sonra, Stripe hâlâ bağlı değilse. Stripe'ın desteklemediği ülkelerde atlanır."
@@ -758,6 +754,10 @@ msgstr "Gişe, personelin kapıda nakit, davetiye veya kart okuyucu ile bilet sa
 msgid "A button label is required when a URL is set"
 msgstr "URL ayarlandığında düğme etiketi gereklidir"
 
+#: src/components/common/WidgetEditor/TypePicker.tsx:8
+msgid "A button that opens tickets in a pop-up."
+msgstr "Biletleri açılır pencerede açan bir düğme."
+
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:223
 msgid "A cancellation notice has been sent to"
 msgstr "İptal bildirimi gönderildi:"
@@ -786,11 +786,11 @@ msgstr "Birkaç hızlı adım ve satışa başlamaya hazırsınız."
 msgid "A gallery can have up to {MAX_GALLERY_PHOTOS} photos."
 msgstr "Bir galeride en fazla {MAX_GALLERY_PHOTOS} fotoğraf olabilir."
 
-#: src/utilites/homepageSections.ts:51
+#: src/utilites/homepageSections.ts:54
 msgid "A grid of photos that opens full screen."
 msgstr "Tam ekran açılan bir fotoğraf ızgarası."
 
-#: src/utilites/homepageSections.ts:49
+#: src/utilites/homepageSections.ts:52
 msgid "A heading and formatted text. Travel info, house rules, anything."
 msgstr "Bir başlık ve biçimlendirilmiş metin. Ulaşım bilgisi, kurallar, her şey."
 
@@ -863,7 +863,7 @@ msgstr "Düğme etiketi ayarlandığında URL gereklidir"
 msgid "A weekday pattern"
 msgstr "Haftalık düzen"
 
-#: src/utilites/homepageSections.ts:55
+#: src/utilites/homepageSections.ts:58
 msgid "A YouTube or Vimeo video, loaded when someone presses play."
 msgstr "Oynat'a basıldığında yüklenen bir YouTube veya Vimeo videosu."
 
@@ -881,11 +881,12 @@ msgstr "Terk edildi"
 
 #: src/components/layouts/EventHomepage/index.tsx:261
 #: src/components/layouts/OrganizerHomepage/index.tsx:292
-#: src/utilites/homepageSections.ts:18
+#: src/components/widget/WidgetSections/index.tsx:90
+#: src/utilites/homepageSections.ts:21
 msgid "About"
 msgstr "Hakkında"
 
-#: src/components/layouts/EventHomepage/Lineup/LineupGrid.tsx:44
+#: src/components/layouts/EventHomepage/Lineup/LineupGrid.tsx:45
 msgid "About {name}"
 msgstr "{name} hakkında"
 
@@ -1130,7 +1131,7 @@ msgstr "Etkinlik geçmişi"
 msgid "Add"
 msgstr "Ekle"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:504
+#: src/components/routes/product-widget/SelectProducts/index.tsx:519
 msgid "Add {0} first"
 msgstr "Önce {0} ekleyin"
 
@@ -1141,6 +1142,10 @@ msgstr "Kart okuyucu ekle"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:147
 msgid "Add a cover image and theme to match your brand"
 msgstr "Markanıza uygun bir kapak görseli ve tema ekleyin"
+
+#: src/components/common/WidgetEditor/installGuides.ts:81
+msgid "Add a Custom Liquid section where the widget should appear."
+msgstr "Widget'ın görünmesini istediğiniz yere bir \"Custom Liquid\" bölümü ekleyin."
 
 #: src/components/routes/event/OccurrencesTab/CalendarView/index.tsx:144
 msgid "Add a date"
@@ -1184,6 +1189,10 @@ msgstr "Metin etiketi ekle"
 msgid "Add a title or pick someone from the lineup"
 msgstr "Bir başlık ekleyin veya kadrodan birini seçin"
 
+#: src/components/common/WidgetEditor/InstallPanel.tsx:96
+msgid "Add after the embed code"
+msgstr "Yerleştirme kodundan sonra ekleyin"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:337
 msgid "Add an area"
 msgstr "Alan ekle"
@@ -1191,6 +1200,10 @@ msgstr "Alan ekle"
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:75
 msgid "Add an email to send the tickets"
 msgstr "Biletleri göndermek için bir e-posta ekleyin"
+
+#: src/components/common/WidgetEditor/installGuides.ts:90
+msgid "Add an Embed component where the widget should appear and choose HTML."
+msgstr "Widget'ın görünmesini istediğiniz yere bir \"Embed\" bileşeni ekleyin ve \"HTML\"i seçin."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:104
 msgid "Add an end time or a duration"
@@ -1377,6 +1390,10 @@ msgstr "Bu katılımcıyı yine de ekle (kapasiteyi aş)"
 msgid "Add this event to your calendar"
 msgstr "Bu etkinliği takviminize ekleyin"
 
+#: src/components/common/WidgetEditor/InstallPanel.tsx:76
+msgid "Add this to your site's <head>"
+msgstr "Bunu sitenizin <head> bölümüne ekleyin"
+
 #: src/components/modals/PublishEventModal/index.tsx:97
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:91
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:97
@@ -1392,7 +1409,7 @@ msgstr "Kademe ekle"
 msgid "Add time slot"
 msgstr "Zaman dilimi ekle"
 
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:109
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:113
 msgid "Add to calendar"
 msgstr "Takvime ekle"
 
@@ -1410,6 +1427,10 @@ msgstr "Yeni ürünlere otomatik olarak ekle"
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:91
 msgid "Add to order"
 msgstr "Siparişe ekle"
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:38
+msgid "Add to your site"
+msgstr "Sitenize ekleyin"
 
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:173
 msgid "Add tracking pixels to your public event pages and organizer homepage. A cookie consent banner will be shown to visitors when tracking is active."
@@ -1437,7 +1458,7 @@ msgid "Add-on products"
 msgstr "Ek ürünler"
 
 #: src/components/forms/ProductForm/index.tsx:536
-#: src/components/routes/product-widget/SelectProducts/index.tsx:501
+#: src/components/routes/product-widget/SelectProducts/index.tsx:516
 msgid "Add-ons"
 msgstr "Ek ürünler"
 
@@ -1648,7 +1669,11 @@ msgstr "Bu etkinliğin tüm katılımcıları"
 msgid "All attendees of this occurrence"
 msgstr "Bu tarihin tüm katılımcıları"
 
-#: src/components/common/DesignerShell/index.tsx:74
+#: src/components/common/WidgetEditor/ContentFields.tsx:75
+msgid "All categories"
+msgstr "Tüm kategoriler"
+
+#: src/components/common/DesignerShell/index.tsx:149
 msgid "All changes saved"
 msgstr "Tüm değişiklikler kaydedildi"
 
@@ -1660,6 +1685,8 @@ msgstr "Tüm Para Birimleri"
 msgid "all dates"
 msgstr "tüm tarihler"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:55
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:106
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:67
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:48
 #: src/components/layouts/CheckIn/OccurrenceFilterPill.tsx:101
@@ -1685,6 +1712,11 @@ msgstr "Tüm günler"
 #: src/components/routes/events/Dashboard/index.tsx:77
 msgid "All Ended Events"
 msgstr "Tüm Sona Eren Etkinlikler"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:152
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:116
+msgid "All events"
+msgstr "Tüm etkinlikler"
 
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:33
 msgid "All Events"
@@ -1730,6 +1762,11 @@ msgstr "Tüm sahneler"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:109
 msgid "All Statuses"
 msgstr "Tüm Durumlar"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:88
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:85
+msgid "All tickets"
+msgstr "Tüm biletler"
 
 #: src/components/routes/admin/Attribution/index.tsx:81
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:76
@@ -1834,6 +1871,10 @@ msgstr "Her zaman mevcut"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:53
 msgid "Always on sale"
 msgstr "Her zaman satışta"
+
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:66
+msgid "Always shown"
+msgstr "Her zaman gösterilir"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:83
 msgid "Always shown. Move it to change where tickets appear on the page."
@@ -2003,6 +2044,10 @@ msgstr "Ürün sahiplerinden gelen tüm sorular bu e-posta adresine gönderilece
 msgid "Any single date can differ: change its capacity in Edit Date, or a ticket's per-date quantity on that date's Products tab."
 msgstr "Herhangi bir tarih farklı olabilir: kapasitesini Tarihi Düzenle'de veya bir biletin tarih başına miktarını o tarihin Ürünler sekmesinde değiştirin."
 
+#: src/components/common/WidgetEditor/installGuides.ts:31
+msgid "Any website (HTML)"
+msgstr "Herhangi bir web sitesi (HTML)"
+
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:73
 msgid "Anyone with this link and PIN can sell tickets for this event, like a shared document link. The PIN won't be shown again, but you can reset it any time from the box office menu."
 msgstr "Bu bağlantı ve PIN'e sahip herkes, paylaşılan bir belge bağlantısında olduğu gibi bu etkinlik için bilet satabilir. PIN bir daha gösterilmez, ancak gişe menüsünden istediğiniz zaman sıfırlayabilirsiniz."
@@ -2011,7 +2056,7 @@ msgstr "Bu bağlantı ve PIN'e sahip herkes, paylaşılan bir belge bağlantıs�
 msgid "Anything else?"
 msgstr "Başka bir şey?"
 
-#: src/components/common/WidgetEditor/index.tsx:220
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
 msgstr "Görünüm"
 
@@ -2020,13 +2065,17 @@ msgstr "Görünüm"
 msgid "Appears on"
 msgstr "Yer aldığı etkinlikler"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1162
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1190
 msgid "applied"
 msgstr "uygulandı"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1161
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1189
 msgid "applied — {0} off your order"
 msgstr "uygulandı — siparişinizde {0} indirim"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:112
+msgid "Applied automatically when the widget loads."
+msgstr "Widget yüklendiğinde otomatik olarak uygulanır."
 
 #: src/components/common/CapacityAssignmentList/index.tsx:95
 msgid "Applies to {0} products"
@@ -2061,7 +2110,7 @@ msgid "Applies to every tier of this ticket"
 msgstr "Bu biletin her fiyat kademesi için geçerlidir"
 
 #: src/components/common/FilterModal/index.tsx:284
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1193
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1221
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:41
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:91
 msgid "Apply"
@@ -2226,7 +2275,7 @@ msgstr "Bu şablonu silmek istediğinizden emin misiniz? Bu işlem geri alınama
 msgid "Are you sure you want to delete this webhook?"
 msgstr "Bu webhook'u silmek istediğinizden emin misiniz?"
 
-#: src/components/layouts/Checkout/index.tsx:441
+#: src/components/layouts/Checkout/index.tsx:458
 msgid "Are you sure you want to leave?"
 msgstr "Ayrılmak istediğinizden emin misiniz?"
 
@@ -2234,11 +2283,11 @@ msgstr "Ayrılmak istediğinizden emin misiniz?"
 msgid "Are you sure you want to make this event draft? This will make the event invisible to the public"
 msgstr "Bu etkinliği taslak yapmak istediğinizden emin misiniz? Bu işlem etkinliği halka görünmez yapacaktır"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:161
+#: src/components/layouts/OrganizerLayout/index.tsx:163
 msgid "Are you sure you want to make this organizer draft? This will make the organizer page invisible to the public"
 msgstr "Bu organizatörü taslak yapmak istediğinizden emin misiniz? Bu, organizatör sayfasını kamuya görünmez yapacaktır"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:162
+#: src/components/layouts/OrganizerLayout/index.tsx:164
 msgid "Are you sure you want to make this organizer public? This will make the organizer page visible to the public"
 msgstr "Bu organizatörü herkese açık yapmak istediğinizden emin misiniz? Bu, organizatör sayfasını kamuya görünür yapacaktır"
 
@@ -2565,10 +2614,6 @@ msgstr "Ağustos"
 msgid "Authentication code"
 msgstr "Doğrulama kodu"
 
-#: src/components/common/WidgetEditor/index.tsx:246
-msgid "Auto Resize"
-msgstr "Otomatik Boyutlandır"
-
 #: src/components/modals/OfferWaitlistModal/index.tsx:91
 msgid "Auto-offer is enabled"
 msgstr "Otomatik teklif etkinleştirildi"
@@ -2584,10 +2629,6 @@ msgstr "Takılan organizatörlere yardımcı olan otomatik e-postalar. Tarama sa
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:65
 msgid "Automatically offer tickets to the next person when capacity becomes available. If disabled, you can manually process the waitlist from the Waitlist page."
 msgstr "Kapasite müsait olduğunda otomatik olarak sıradaki kişiye bilet teklif edin. Devre dışı bırakılırsa, bekleme listesini Bekleme Listesi sayfasından manuel olarak işleyebilirsiniz."
-
-#: src/components/common/WidgetEditor/index.tsx:248
-msgid "Automatically resize the widget height based on the content. When disabled, the widget will fill the height of the container."
-msgstr "Widget yüksekliğini içeriğe göre otomatik olarak boyutlandırır. Devre dışı bırakıldığında, widget kapsayıcının yüksekliğini dolduracaktır."
 
 #: src/ee/seating/components/SeatPicker/SeatListView.tsx:53
 msgid "available"
@@ -2633,7 +2674,7 @@ msgstr "Ödeme bekleniyor"
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:117
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:225
-#: src/components/layouts/Checkout/index.tsx:322
+#: src/components/layouts/Checkout/index.tsx:339
 #: src/components/modals/ProductPurchasesModal/index.tsx:79
 #: src/components/modals/ProductPurchasesModal/index.tsx:209
 #: src/components/modals/ProductPurchasesModal/index.tsx:247
@@ -2659,8 +2700,8 @@ msgstr "Harika Etkinlikler Ltd."
 msgid "Awesome Organizer Ltd."
 msgstr "Harika Organizatör Ltd."
 
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:48
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:78
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:53
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -2681,8 +2722,8 @@ msgstr "Hesaplara Dön"
 msgid "Back to Event"
 msgstr "Etkinliğe Dön"
 
-#: src/components/layouts/Checkout/index.tsx:308
-#: src/components/layouts/Checkout/index.tsx:309
+#: src/components/layouts/Checkout/index.tsx:325
+#: src/components/layouts/Checkout/index.tsx:326
 msgid "Back to event page"
 msgstr "Etkinlik sayfasına dön"
 
@@ -2723,11 +2764,11 @@ msgid "Back to sign in"
 msgstr "Girişe dön"
 
 #: src/components/common/ThemeColorControls/index.tsx:89
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:75
 msgid "Background"
 msgstr "Arka plan"
 
 #: src/components/common/ThemeColorControls/index.tsx:110
-#: src/components/common/WidgetEditor/index.tsx:185
 msgid "Background Color"
 msgstr "Arkaplan Rengi"
 
@@ -2895,6 +2936,10 @@ msgstr "Siparişinizi istediğiniz zaman yönetmek için bu sayfayı yer imlerin
 msgid "Booths"
 msgstr "Localar"
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:77
+msgid "Borders"
+msgstr "Kenarlıklar"
+
 #: src/components/modals/MessageRecipientsModal/index.tsx:24
 msgid "Bounced"
 msgstr "Geri döndü"
@@ -3007,6 +3052,11 @@ msgstr "İşletme adresi"
 msgid "Business name"
 msgstr "İşletme adı"
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:68
+#: src/components/common/WidgetEditor/TypePicker.tsx:8
+msgid "Button"
+msgstr "Düğme"
+
 #: src/components/routes/admin/Announcements/index.tsx:455
 msgid "Button label"
 msgstr "Düğme etiketi"
@@ -3015,6 +3065,11 @@ msgstr "Düğme etiketi"
 msgid "Button Label"
 msgstr "Düğme Etiketi"
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:74
+#: src/components/common/WidgetEditor/ContentFields.tsx:18
+msgid "Button text"
+msgstr "Düğme metni"
+
 #: src/components/routes/event/HomepageDesigner/index.tsx:201
 msgid "Button Text"
 msgstr "Düğme Metni"
@@ -3022,6 +3077,10 @@ msgstr "Düğme Metni"
 #: src/components/routes/admin/Announcements/index.tsx:461
 msgid "Button URL"
 msgstr "Düğme URL'si"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:73
+msgid "Buttons"
+msgstr "Düğmeler"
 
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:65
 msgid "Buyer details"
@@ -3059,6 +3118,10 @@ msgstr "Devam ederek, <0>{0} Hizmet Koşullarını</0> kabul etmiş olursunuz"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:126
 msgid "By day"
 msgstr "Güne göre"
+
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:41
+msgid "By default the widget follows each visitor's browser language."
+msgstr "Varsayılan olarak widget, her ziyaretçinin tarayıcı dilini kullanır."
 
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:121
 msgid "By operator"
@@ -3142,6 +3205,7 @@ msgstr "Kimlik doğrulama uygulamanızı veya kurtarma kodlarınızı kullanamı
 #: src/components/common/QuestionAndAnswerList/index.tsx:126
 #: src/components/common/WaitlistTable/index.tsx:117
 #: src/components/common/WaitlistTable/index.tsx:138
+#: src/components/common/WidgetEditor/NameModal.tsx:43
 #: src/components/forms/ProductForm/ProductDrawer.tsx:134
 #: src/components/modals/CreateAffiliateModal/index.tsx:88
 #: src/components/modals/CreateAttendeeModal/index.tsx:335
@@ -3400,6 +3464,7 @@ msgstr "Kategoriler ürünlerinizi düzenlemenize yardımcı olur. Bu başlık h
 msgid "Categories reordered successfully."
 msgstr "Kategoriler başarıyla yeniden sıralandı."
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:150
 #: src/components/modals/CreateEventModal/index.tsx:448
 #: src/components/routes/event/products.tsx:146
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:87
@@ -3510,6 +3575,14 @@ msgstr "Tahsilatlar"
 msgid "Charity"
 msgstr "Hayır Kurumu"
 
+#: src/components/layouts/EventContentWidget/index.tsx:60
+msgid "Check back later for updates."
+msgstr "Güncellemeler için daha sonra tekrar bakın."
+
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:148
+msgid "Check back soon for new dates."
+msgstr "Yeni tarihler için yakında tekrar bakın."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:307
 #: src/components/layouts/CheckIn/tabs/SearchTab.tsx:82
 msgid "Check in"
@@ -3545,7 +3618,7 @@ msgstr "Check-in'i geri al"
 msgid "Check out this event: {0}"
 msgstr "Bu etkinliğe göz atın: {0}"
 
-#: src/components/layouts/Checkout/index.tsx:356
+#: src/components/layouts/Checkout/index.tsx:373
 msgid "Check out this event!"
 msgstr "Bu etkinliğe göz atın!"
 
@@ -3711,9 +3784,17 @@ msgstr "Kayıtlı profilleriniz kontrol ediliyor…"
 msgid "Checkout"
 msgstr "Ödeme"
 
-#: src/components/layouts/Checkout/index.tsx:328
+#: src/components/layouts/Checkout/index.tsx:345
 msgid "Checkout · step {stepNumber} of {stepCount}"
 msgstr "Ödeme · adım {stepNumber}/{stepCount}"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:142
+msgid "Checkout & language"
+msgstr "Ödeme ve dil"
+
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:17
+msgid "Checkout opens in"
+msgstr "Ödeme şurada açılır"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:84
 msgid "Checkout Settings"
@@ -3753,7 +3834,7 @@ msgstr "Bir yapılandırma seçin"
 msgid "Choose a date"
 msgstr "Bir tarih seçin"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1106
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1134
 msgid "Choose a date to see the seats"
 msgstr "Koltukları görmek için bir tarih seçin"
 
@@ -3831,6 +3912,10 @@ msgstr "En az {min} {title} bileti seçin"
 #: src/components/common/CalendarOptionsPopover/index.tsx:22
 msgid "Choose calendar"
 msgstr "Takvim seçin"
+
+#: src/components/common/WidgetEditor/installGuides.ts:70
+msgid "Choose Code, paste the code below, and click Update."
+msgstr "\"Code\"u seçin, aşağıdaki kodu yapıştırın ve \"Update\"e tıklayın."
 
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:183
 msgid "Choose dates"
@@ -3910,6 +3995,10 @@ msgstr "Arama Metnini Temizle"
 msgid "Clearing removes any per-date override. Affected dates will fall back to the event's default location."
 msgstr "Temizlemek, tarihe özel tüm ayarları kaldırır. Etkilenen tarihler etkinliğin varsayılan konumuna döner."
 
+#: src/components/common/WidgetEditor/installGuides.ts:69
+msgid "Click Add Elements, then Embed Code, then Embed HTML, and place it on the page."
+msgstr "\"Add Elements\"e, ardından \"Embed Code\"a, ardından \"Embed HTML\"e tıklayın ve öğeyi sayfaya yerleştirin."
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:61
 msgid "Click seats or drag a box around them, then change their band, mark them accessible or remove them."
 msgstr "Koltuklara tıklayın veya etraflarına bir kutu sürükleyin, ardından kategorilerini değiştirin, erişilebilir olarak işaretleyin ya da kaldırın."
@@ -3917,6 +4006,10 @@ msgstr "Koltuklara tıklayın veya etraflarına bir kutu sürükleyin, ardından
 #: src/ee/seating/components/routes/event/SeatingSales/index.tsx:168
 msgid "Click seats to select them, then hold them back or release them."
 msgstr "Koltukları seçmek için üzerlerine tıklayın, ardından beklete veya serbest bırakın."
+
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:177
+msgid "Click the button to preview the pop-up"
+msgstr "Açılır pencerenin önizlemesini görmek için düğmeye tıklayın"
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:68
 msgid "Click to add corners. Click the first corner or press Enter to finish."
@@ -3950,22 +4043,23 @@ msgstr "Notları görüntülemek için tıklayın"
 msgid "Clicked"
 msgstr "Tıklandı"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1199
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1227
 msgid "close"
 msgstr "kapat"
 
 #: src/components/common/SideDrawer/index.tsx:117
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:128
 #: src/components/forms/ProductForm/ProductDrawer.tsx:100
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:208
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
-#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:56
+#: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:86
 #: src/components/layouts/EventHomepage/Sections/GallerySection.tsx:105
 #: src/components/modals/CreateEventModal/index.tsx:287
 #: src/components/modals/JoinWaitlistModal/index.tsx:116
 #: src/components/modals/JoinWaitlistModal/index.tsx:143
 #: src/components/modals/RefundOrderModal/index.tsx:172
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:874
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1200
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1228
 msgid "Close"
 msgstr "Kapat"
 
@@ -3984,6 +4078,10 @@ msgstr "Kulüp"
 #: src/components/forms/PromoCodeForm/index.tsx:63
 msgid "Code"
 msgstr "Kod"
+
+#: src/components/common/WidgetEditor/installGuides.ts:62
+msgid "Code blocks that run scripts need a Squarespace plan with custom code."
+msgstr "Komut dosyası çalıştıran kod blokları, özel kod destekleyen bir Squarespace planı gerektirir."
 
 #: src/components/modals/CreateAffiliateModal/index.tsx:31
 msgid "Code can only contain letters, numbers, hyphens, and underscores"
@@ -4006,7 +4104,11 @@ msgstr "Kod 3 ile 50 karakter arasında olmalıdır"
 msgid "Code must be no more than 20 characters"
 msgstr "Kod en fazla 20 karakter olmalıdır"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:200
+#: src/components/common/WidgetEditor/InstallPanel.tsx:81
+msgid "Code to paste"
+msgstr "Yapıştırılacak kod"
+
+#: src/components/layouts/OrganizerLayout/index.tsx:202
 msgid "Collaborate with your team to create amazing events together."
 msgstr "Birlikte harika etkinlikler oluşturmak için ekibinizle işbirliği yapın."
 
@@ -4039,14 +4141,6 @@ msgstr "Renk"
 msgid "Color Mode"
 msgstr "Renk Modu"
 
-#: src/components/common/WidgetEditor/index.tsx:19
-msgid "Color must be a valid hex color code. Example: #ffffff"
-msgstr "Renk geçerli bir hex renk kodu olmalıdır. Örnek: #ffffff"
-
-#: src/components/common/WidgetEditor/index.tsx:177
-msgid "Colors"
-msgstr "Renkler"
-
 #: src/ee/seating/components/SeatMapDesigner/BandsPanel.tsx:29
 msgid "Colour for {0}"
 msgstr "{0} için renk"
@@ -4058,6 +4152,10 @@ msgstr "Sütunlar"
 #: src/constants/eventCategories.ts:10
 msgid "Comedy"
 msgstr "Komedi"
+
+#: src/components/layouts/EventContentWidget/index.tsx:60
+msgid "Coming soon"
+msgstr "Çok yakında"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:85
 msgid "Coming Soon"
@@ -4080,6 +4178,10 @@ msgstr "Davetiye"
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:123
 msgid "Comp this order?"
 msgstr "Bu sipariş ücretsiz mi olsun?"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:139
+msgid "Compact"
+msgstr "Kompakt"
 
 #: src/ee/seating/components/SeatPicker/SeatListView.tsx:53
 msgid "companion seat"
@@ -4149,10 +4251,6 @@ msgstr "Tamamlanan siparişler"
 #: src/components/common/StatsCharts/index.tsx:54
 msgid "Completed Orders"
 msgstr "Tamamlanan Siparişler"
-
-#: src/components/common/WidgetEditor/index.tsx:303
-msgid "Component Code"
-msgstr "Bileşen Kodu"
 
 #: src/components/routes/event/messages.tsx:241
 #: src/components/routes/event/messages.tsx:288
@@ -4275,7 +4373,7 @@ msgstr "Spam olarak onayla"
 msgid "Confirm your email to access all features."
 msgstr "Tüm özelliklere erişmek için e-postanızı onaylayın."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:329
+#: src/components/layouts/OrganizerLayout/index.tsx:331
 msgid "Confirmation email sent! Please check your inbox."
 msgstr "Onay e-postası gönderildi! Lütfen gelen kutunuzu kontrol edin."
 
@@ -4359,7 +4457,7 @@ msgstr "Ardışık"
 #: src/components/layouts/EventHomepage/index.tsx:434
 #: src/components/layouts/OrganizerHomepage/index.tsx:186
 #: src/components/layouts/OrganizerHomepage/index.tsx:301
-#: src/utilites/homepageSections.ts:30
+#: src/utilites/homepageSections.ts:33
 msgid "Contact"
 msgstr "İletişim"
 
@@ -4390,11 +4488,11 @@ msgid "Content is required"
 msgstr "İçerik gereklidir"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:131
-#: src/components/common/WidgetEditor/index.tsx:29
-#: src/components/common/WidgetEditor/index.tsx:226
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
+#: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1137
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Devam Et"
@@ -4403,9 +4501,9 @@ msgstr "Devam Et"
 msgid "Continue Button"
 msgstr "Devam düğmesi"
 
-#: src/components/common/WidgetEditor/index.tsx:225
-msgid "Continue Button Text"
-msgstr "Devam Butonu Metni"
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:30
+msgid "Continue button text"
+msgstr "Devam düğmesi metni"
 
 #: src/components/forms/OrganizerForm/index.tsx:144
 #: src/components/routes/welcome/index.tsx:472
@@ -4416,7 +4514,7 @@ msgstr "Kuruluma Devam Et"
 msgid "Continue to checkout"
 msgstr "Ödemeye devam et"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1326
 msgid "Continue to Checkout"
 msgstr "Ödemeye Devam Et"
 
@@ -4460,6 +4558,7 @@ msgstr "Bu tarihte kimin gireceğini belirleyin"
 msgid "Control who gets in, and when"
 msgstr "Kimin ne zaman gireceğini belirleyin"
 
+#: src/components/common/WidgetEditor/WidgetStats.tsx:17
 #: src/components/routes/admin/Dashboard/index.tsx:294
 msgid "Conversion"
 msgstr "Dönüşüm"
@@ -4472,6 +4571,8 @@ msgstr "Çerez ayarları"
 #: src/components/common/AttendeeTicket/index.tsx:192
 #: src/components/common/CopyButton/index.tsx:13
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:83
+#: src/components/common/WidgetEditor/index.tsx:212
+#: src/components/common/WidgetEditor/InstallPanel.tsx:52
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:75
 #: src/components/modals/ManageOrderModal/index.tsx:208
@@ -4498,6 +4599,10 @@ msgstr "Panoya kopyalandı"
 #: src/components/modals/ShareModal/index.tsx:248
 msgid "Copied!"
 msgstr "Kopyalandı!"
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:42
+msgid "Copies step-by-step instructions to paste into ChatGPT, Claude, Cursor or your site builder's AI assistant"
+msgstr "ChatGPT, Claude, Cursor veya site oluşturucunuzun yapay zekâ asistanına yapıştırmak için adım adım talimatları kopyalar"
 
 #: src/components/common/CopyButton/index.tsx:13
 #: src/components/modals/CheckInListSuccessModal/index.tsx:42
@@ -4541,6 +4646,10 @@ msgstr "Check-in bağlantısını kopyala"
 msgid "Copy Check-In URL"
 msgstr "Check-In URL'sini Kopyala"
 
+#: src/components/common/WidgetEditor/index.tsx:212
+msgid "Copy code"
+msgstr "Kodu kopyala"
+
 #: src/components/common/AffiliateTable/index.tsx:182
 msgid "Copy Code"
 msgstr "Kodu Kopyala"
@@ -4557,6 +4666,10 @@ msgstr "Bilgileri ilk katılımcıya kopyala"
 #: src/components/common/OrdersTable/index.tsx:177
 msgid "Copy Email"
 msgstr "E-postayı Kopyala"
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:52
+msgid "Copy for AI agent"
+msgstr "Yapay zekâ ajanı için kopyala"
 
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
 msgid "Copy link"
@@ -4587,6 +4700,10 @@ msgstr "Bir e-tablodan başlık satırı dahil birkaç satırı kopyalayın, ard
 msgid "Copy the key again from your licence email, without quotes or spaces."
 msgstr "Anahtarı lisans e-postanızdan tırnak işareti veya boşluk olmadan yeniden kopyalayın."
 
+#: src/components/common/WidgetEditor/index.tsx:175
+msgid "Copy the new code to your site"
+msgstr "Yeni kodu sitenize kopyalayın"
+
 #: src/components/modals/ShareModal/index.tsx:264
 msgid "Copy this link to share it anywhere"
 msgstr "Her yerde paylaşmak için bu bağlantıyı kopyalayın"
@@ -4599,6 +4716,10 @@ msgstr "Panoya kopyala"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "URL'yi Kopyala"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:95
+msgid "Corner radius"
+msgstr "Köşe yuvarlaklığı"
 
 #: src/components/routes/event/Lineup/QuickAddPerson.tsx:78
 msgid "Could not add to the lineup. Please try again."
@@ -4739,10 +4860,6 @@ msgstr "\"{query}\" oluştur"
 msgid "Create {0} Template"
 msgstr "{0} Şablonu Oluştur"
 
-#: src/components/common/WidgetEditor/index.tsx:165
-msgid "Create a custom widget to sell tickets on your site."
-msgstr "Sitenizde bilet satmak için özel bir widget oluşturun."
-
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Bu tarih için liste oluştur"
@@ -4870,7 +4987,7 @@ msgid "Create event"
 msgstr "Etkinlik oluştur"
 
 #: src/components/common/NoEventsBlankSlate/index.tsx:28
-#: src/components/layouts/OrganizerLayout/index.tsx:190
+#: src/components/layouts/OrganizerLayout/index.tsx:192
 #: src/components/routes/organizer/Events/index.tsx:64
 msgid "Create Event"
 msgstr "Etkinlik Oluştur"
@@ -5046,13 +5163,25 @@ msgstr "Eğri"
 msgid "Curved rows and a balcony."
 msgstr "Kavisli sıralar ve bir balkon."
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:58
+msgid "Custom"
+msgstr "Özel"
+
 #: src/components/layouts/AuthLayout/index.tsx:17
 msgid "Custom branding"
 msgstr "Özel marka görünümü"
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:127
+msgid "Custom colours"
+msgstr "Özel renkler"
+
 #: src/components/modals/SendMessageModal/index.tsx:498
 msgid "Custom date and time"
 msgstr "Özel tarih ve saat"
+
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:39
+msgid "Custom homepage sections"
+msgstr "Özel ana sayfa bölümleri"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:186
 msgid "Custom Maps URL"
@@ -5093,6 +5222,10 @@ msgstr "Müşteri iade onayını içeren bir e-posta alacaktır"
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:108
 msgid "Customers"
 msgstr "Müşteriler"
+
+#: src/components/common/WidgetEditor/index.tsx:272
+msgid "Customise"
+msgstr "Özelleştir"
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:150
 msgid "Customize page"
@@ -5198,6 +5331,8 @@ msgstr "Gösterge Paneli"
 #: src/components/common/CheckInListTable/index.tsx:107
 #: src/components/common/OrderDetails/index.tsx:44
 #: src/components/common/WaitlistTable/index.tsx:187
+#: src/components/common/WidgetEditor/ContentFields.tsx:49
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:105
 #: src/components/forms/QuestionForm/index.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:171
 #: src/components/routes/event/Reports/OccurrenceSummaryReport/index.tsx:39
@@ -5266,7 +5401,7 @@ msgstr "Tarih yeniden etkinleştirildi"
 msgid "Date reopened for new sales"
 msgstr "Tarih satışa yeniden açıldı"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:56
+#: src/utilites/eventListingLabels.ts:38
 msgid "Date TBA"
 msgstr "Tarih açıklanacak"
 
@@ -5337,7 +5472,7 @@ msgstr "Aralık"
 msgid "Decrease"
 msgstr "Azalt"
 
-#: src/components/common/NumberSelector/index.tsx:104
+#: src/components/common/NumberSelector/index.tsx:106
 msgid "Decrease quantity"
 msgstr "Adedi azalt"
 
@@ -5394,6 +5529,8 @@ msgstr "sil"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:613
 #: src/components/common/PromoCodeTable/index.tsx:42
 #: src/components/common/QuestionsTable/index.tsx:158
+#: src/components/common/WidgetEditor/index.tsx:141
+#: src/components/common/WidgetEditor/index.tsx:253
 #: src/components/routes/admin/Announcements/index.tsx:226
 #: src/components/routes/admin/FailedJobs/index.tsx:209
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:64
@@ -5408,6 +5545,10 @@ msgstr "Sil"
 #: src/components/common/LocationsTable/index.tsx:36
 msgid "Delete \"{0}\"?"
 msgstr "\"{0}\" silinsin mi?"
+
+#: src/components/common/WidgetEditor/index.tsx:140
+msgid "Delete \"{widgetName}\"? Pages that embed it will fall back to the settings in their embed code."
+msgstr "\"{widgetName}\" silinsin mi? Onu yerleştiren sayfalar, kendi yerleştirme kodlarındaki ayarlara geri döner."
 
 #: src/components/routes/admin/Accounts/AccountDetail/DeleteAccountModal.tsx:39
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:198
@@ -5608,6 +5749,7 @@ msgstr "Teslim edildi"
 msgid "Depth"
 msgstr "Derinlik"
 
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:29
 #: src/components/forms/ProductCategoryForm/index.tsx:29
 #: src/components/forms/ProductForm/index.tsx:398
 #: src/components/forms/ProductForm/index.tsx:404
@@ -5643,8 +5785,8 @@ msgstr "Personel için açıklama"
 msgid "Deselect All"
 msgstr "Tümünün Seçimini Kaldır"
 
-#: src/components/common/HomepageDesigner/index.tsx:86
-#: src/components/common/HomepageDesigner/index.tsx:89
+#: src/components/common/DesignerShell/index.tsx:46
+#: src/components/common/DesignerShell/index.tsx:49
 msgid "Desktop"
 msgstr "Masaüstü"
 
@@ -5657,7 +5799,7 @@ msgstr "Masaüstü"
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:103
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:416
 #: src/components/routes/product-widget/CollectInformation/index.tsx:435
-#: src/components/routes/product-widget/SelectProducts/index.tsx:559
+#: src/components/routes/product-widget/SelectProducts/index.tsx:574
 msgid "Details"
 msgstr "Detaylar"
 
@@ -5703,8 +5845,9 @@ msgstr "Devre dışı"
 msgid "Disabling this capacity will track sales but not stop them when the limit is reached"
 msgstr "Bu kapasiteyi devre dışı bırakmak satışları takip edecek ancak limite ulaşıldığında onları durdurmayacaktır"
 
-#: src/components/common/DesignerShell/index.tsx:85
+#: src/components/common/DesignerShell/index.tsx:160
 #: src/components/common/SettingsPage/index.tsx:92
+#: src/components/common/WidgetEditor/index.tsx:85
 #: src/components/forms/ProductForm/ProductDrawer.tsx:60
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:733
 msgid "Discard"
@@ -5714,6 +5857,10 @@ msgstr "Vazgeç"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:727
 msgid "Discard changes?"
 msgstr "Değişiklikler atılsın mı?"
+
+#: src/components/common/WidgetEditor/index.tsx:85
+msgid "Discard your unsaved changes to this widget?"
+msgstr "Bu widget'taki kaydedilmemiş değişiklikler silinsin mi?"
 
 #: src/components/routes/admin/LifecycleEmails/index.tsx:28
 msgid "Discard your unsaved changes?"
@@ -5766,7 +5913,7 @@ msgstr "Duyuruyu kapat"
 msgid "Dismiss setup checklist"
 msgstr "Kurulum listesini gizle"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1315
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1343
 msgid "Dismiss this message"
 msgstr "Bu mesajı kapat"
 
@@ -5809,7 +5956,7 @@ msgstr "Alıcıların tek bir boş koltuk bırakmasına izin verme"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:469
 #: src/components/forms/ProductForm/index.tsx:294
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:35
+#: src/utilites/eventListingLabels.ts:22
 msgid "Donation"
 msgstr "Bağış"
 
@@ -5859,7 +6006,7 @@ msgstr "CSV İndir"
 msgid "Download invoice"
 msgstr "Faturayı indir"
 
-#: src/components/layouts/Checkout/index.tsx:376
+#: src/components/layouts/Checkout/index.tsx:393
 msgid "Download Invoice"
 msgstr "Faturayı İndir"
 
@@ -5875,14 +6022,14 @@ msgstr "Tamamlanan tüm siparişler için satış, katılımcı ve mali raporlar
 msgid "Download spreadsheet (.xlsx)"
 msgstr "Elektronik tabloyu indir (.xlsx)"
 
-#: src/components/layouts/Checkout/index.tsx:186
+#: src/components/layouts/Checkout/index.tsx:203
 #: src/hooks/useOrderActions.tsx:80
 msgid "Downloading Invoice"
 msgstr "Fatura İndiriliyor"
 
 #: src/components/common/EventCard/index.tsx:99
 #: src/components/layouts/Event/index.tsx:248
-#: src/components/layouts/OrganizerLayout/index.tsx:232
+#: src/components/layouts/OrganizerLayout/index.tsx:234
 #: src/components/routes/admin/Announcements/index.tsx:183
 #: src/components/routes/admin/Announcements/index.tsx:472
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:10
@@ -5894,9 +6041,17 @@ msgstr "Taslak"
 msgid "Draft event not published"
 msgstr "Taslak etkinlik yayınlanmadı"
 
+#: src/components/common/WidgetEditor/installGuides.ts:49
+msgid "Drag a Code Embed element onto the page where the widget should appear."
+msgstr "Sayfada widget'ın görünmesini istediğiniz yere bir \"Code Embed\" öğesi sürükleyin."
+
 #: src/components/routes/event/Lineup/index.tsx:344
 msgid "Drag people onto the timetable or add time slots with a form."
 msgstr "Kişileri zaman çizelgesine sürükleyin veya bir formla zaman dilimi ekleyin."
+
+#: src/components/common/WidgetEditor/installGuides.ts:71
+msgid "Drag the element's edges so it's tall enough for the widget."
+msgstr "Öğenin kenarlarını sürükleyerek widget için yeterince yüksek olmasını sağlayın."
 
 #: src/components/routes/event/Lineup/PeopleRail.tsx:98
 msgid "Drag the handle to reorder. Drag a name onto the timetable to schedule it."
@@ -6099,7 +6254,7 @@ msgstr "Daha erken"
 msgid "Early bird"
 msgstr "Erken kuş"
 
-#: src/components/common/DesignerShell/index.tsx:60
+#: src/components/common/DesignerShell/index.tsx:90
 #: src/components/common/LocationPicker/index.tsx:197
 #: src/components/common/QuestionsTable/index.tsx:150
 #: src/components/routes/admin/Announcements/index.tsx:211
@@ -6186,6 +6341,10 @@ msgstr "Yapılandırmayı Düzenle"
 msgid "Edit Date"
 msgstr "Tarihi düzenle"
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:67
+msgid "Edit design"
+msgstr "Tasarımı düzenle"
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "Edit details"
 msgstr "Ayrıntıları düzenle"
@@ -6258,6 +6417,14 @@ msgstr "Sahne veya salonu düzenle"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:36
 msgid "Edit tax"
 msgstr "Vergiyi düzenle"
+
+#: src/components/common/WidgetEditor/installGuides.ts:59
+msgid "Edit the page and add a Code block where the widget should appear."
+msgstr "Sayfayı düzenleyin ve widget'ın görünmesini istediğiniz yere bir \"Code\" bloğu ekleyin."
+
+#: src/components/common/WidgetEditor/installGuides.ts:39
+msgid "Edit the page and add a Custom HTML block where the widget should appear."
+msgstr "Sayfayı düzenleyin ve widget'ın görünmesini istediğiniz yere bir \"Custom HTML\" bloğu ekleyin."
 
 #: src/ee/seating/components/routes/event/Seating/index.tsx:122
 msgid "Edit this event's seat map"
@@ -6371,7 +6538,7 @@ msgid "Email change pending"
 msgstr "E-posta değişikliği beklemede"
 
 #: src/components/layouts/Event/index.tsx:96
-#: src/components/layouts/OrganizerLayout/index.tsx:135
+#: src/components/layouts/OrganizerLayout/index.tsx:137
 #: src/components/routes/settings/Profile/index.tsx:91
 msgid "Email confirmation resent successfully"
 msgstr "E-posta onayı başarıyla yeniden gönderildi"
@@ -6425,7 +6592,7 @@ msgstr "E-posta Şablonları"
 msgid "Email to send tickets"
 msgstr "Biletleri göndermek için e-posta"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:308
+#: src/components/layouts/OrganizerLayout/index.tsx:310
 msgid "Email Verification Required"
 msgstr "E-posta Doğrulaması Gerekli"
 
@@ -6437,15 +6604,7 @@ msgstr "E-posta doğrulandı"
 msgid "Email verified successfully!"
 msgstr "E-posta başarıyla doğrulandı!"
 
-#: src/components/common/WidgetEditor/index.tsx:256
-#: src/components/common/WidgetEditor/index.tsx:285
-msgid "Embed Code"
-msgstr "Gömme Kodu"
-
-#: src/components/common/WidgetEditor/index.tsx:272
-msgid "Embed Script"
-msgstr "Gömme Scripti"
-
+#: src/components/common/WidgetEditor/index.tsx:180
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:113
 msgid "Embed Widget"
 msgstr "Widget yerleştir"
@@ -6453,6 +6612,10 @@ msgstr "Widget yerleştir"
 #: src/components/layouts/AuthLayout/index.tsx:23
 msgid "Embeddable widget"
 msgstr "Yerleştirilebilir bileşen"
+
+#: src/components/common/WidgetEditor/installGuides.ts:52
+msgid "Embedded code only runs on the published site, not in the Designer."
+msgstr "Yerleştirilen kod yalnızca yayınlanan sitede çalışır, Designer'da çalışmaz."
 
 #: src/components/routes/admin/Announcements/index.tsx:409
 msgid "Emoji"
@@ -6580,6 +6743,10 @@ msgstr "Bir kapasite değeri girin veya sınırsızı seçin."
 msgid "Enter a full link starting with https://"
 msgstr "https:// ile başlayan tam bir bağlantı girin"
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:85
+msgid "Enter a hex colour, like #ffffff"
+msgstr "#ffffff gibi bir hex renk kodu girin"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:142
 msgid "Enter a label or choose to remove it."
 msgstr "Bir etiket girin veya kaldırmayı seçin."
@@ -6706,7 +6873,7 @@ msgid "Entries will appear here when customers join the waitlist for sold out pr
 msgstr "Müşteriler tükenmiş ürünler için bekleme listesine katıldığında kayıtlar burada görünecektir."
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:194
+#: src/components/layouts/Checkout/index.tsx:211
 #: src/hooks/useOrderActions.tsx:88
 msgid "Error"
 msgstr "Hata"
@@ -6916,6 +7083,10 @@ msgstr "Etkinlik durumu güncellendi"
 msgid "Event Title"
 msgstr "Etkinlik Başlığı"
 
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:27
+msgid "Event title, date and image"
+msgstr "Etkinlik başlığı, tarihi ve görseli"
+
 #: src/components/routes/admin/Messages/index.tsx:77
 msgid "Event Too New"
 msgstr "Etkinlik Çok Yeni"
@@ -6935,16 +7106,17 @@ msgid "Event Updated"
 msgstr "Etkinlik güncellendi"
 
 #: src/components/common/AdminAccountsTable/index.tsx:82
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:115
 #: src/components/layouts/Admin/index.tsx:20
 #: src/components/layouts/OrganizerHomepage/index.tsx:218
-#: src/components/layouts/OrganizerLayout/index.tsx:112
+#: src/components/layouts/OrganizerLayout/index.tsx:113
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:180
 #: src/components/routes/admin/Attribution/index.tsx:195
 #: src/components/routes/admin/Dashboard/index.tsx:398
 #: src/components/routes/admin/Events/index.tsx:77
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:236
 #: src/components/routes/organizer/Events/index.tsx:44
-#: src/utilites/homepageSections.ts:28
+#: src/utilites/homepageSections.ts:31
 msgid "Events"
 msgstr "Etkinlikler"
 
@@ -6956,6 +7128,10 @@ msgstr "Etkinlikler her zaman gösterilir"
 #: src/components/routes/organizer/Reports/index.tsx:25
 msgid "Events Performance"
 msgstr "Etkinlik Performansı"
+
+#: src/components/common/WidgetEditor/index.tsx:180
+msgid "Events Widget"
+msgstr "Etkinlik Widget'ı"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:897
 msgid "Every"
@@ -7190,7 +7366,7 @@ msgstr "Başarısız işler"
 msgid "Failed Jobs"
 msgstr "Başarısız işler"
 
-#: src/components/layouts/Checkout/index.tsx:209
+#: src/components/layouts/Checkout/index.tsx:226
 msgid "Failed to abandon order. Please try again."
 msgstr "Sipariş terk edilemedi. Lütfen tekrar deneyin."
 
@@ -7315,7 +7491,7 @@ msgstr "Soru silinemedi"
 msgid "Failed to delete template"
 msgstr "Şablon silinemedi"
 
-#: src/components/layouts/Checkout/index.tsx:195
+#: src/components/layouts/Checkout/index.tsx:212
 #: src/hooks/useOrderActions.tsx:89
 msgid "Failed to download invoice. Please try again."
 msgstr "Fatura indirilemedi. Lütfen tekrar deneyin."
@@ -7521,7 +7697,7 @@ msgstr "E-posta doğrulanamadı"
 msgid "Family"
 msgstr "Aile"
 
-#: src/utilites/homepageSections.ts:38
+#: src/utilites/homepageSections.ts:41
 msgid "FAQ"
 msgstr "SSS"
 
@@ -7755,6 +7931,10 @@ msgstr "İlk koltuk numarası"
 msgid "First Used"
 msgstr "İlk Kullanım"
 
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:51
+msgid "Fit height to content"
+msgstr "Yüksekliği içeriğe sığdır"
+
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:399
 msgid "Fit to screen"
 msgstr "Ekrana sığdır"
@@ -7784,6 +7964,10 @@ msgstr "İşlem başına sabit ücret"
 #: src/components/routes/admin/Configurations/index.tsx:171
 msgid "Fixed fee must be 0 or greater"
 msgstr "Sabit ücret 0 veya daha büyük olmalıdır"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:146
+msgid "Fixed height"
+msgstr "Sabit yükseklik"
 
 #: src/components/routes/admin/SpamEvents/index.tsx:306
 msgid "Flagged Event Details"
@@ -7862,7 +8046,6 @@ msgstr "Fuaye"
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:160
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:170
 #: src/components/forms/ProductForm/index.tsx:293
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:33
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:157
 #: src/components/routes/product-widget/SelectProducts/Prices/Tiered/index.tsx:228
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:37
@@ -7870,6 +8053,7 @@ msgstr "Fuaye"
 #: src/ee/box-office/utilites/boxOfficeTender.ts:15
 #: src/ee/seating/components/routes/event/Reports/SeatingSalesReport/index.tsx:65
 #: src/ee/seating/components/SeatPicker/ticketOptions.ts:105
+#: src/utilites/eventListingLabels.ts:20
 msgid "Free"
 msgstr "Ücretsiz"
 
@@ -7898,11 +8082,11 @@ msgstr "Cuma"
 msgid "From"
 msgstr "Başlangıç"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:977
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1005
 msgid "From {0}"
 msgstr "Başlangıç fiyatı {0}"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:43
+#: src/utilites/eventListingLabels.ts:30
 msgid "From {amount}"
 msgstr "{amount} itibaren"
 
@@ -7922,7 +8106,7 @@ msgstr "{start} – {end} arasında"
 msgid "from {start}, for {count} dates"
 msgstr "{start} itibarıyla {count} tarih"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:40
+#: src/utilites/eventListingLabels.ts:27
 msgid "From free"
 msgstr "Ücretsizden başlayan"
 
@@ -8031,11 +8215,15 @@ msgstr "Lisans alın"
 msgid "Get an Enterprise licence key."
 msgstr "Bir Enterprise lisans anahtarı edinin."
 
+#: src/components/widget/WidgetSections/index.tsx:117
+msgid "Get directions"
+msgstr "Yol tarifi al"
+
 #: src/components/layouts/EventHomepage/index.tsx:295
 msgid "Get Directions"
 msgstr "Yol Tarifi Al"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:89
+#: src/components/layouts/OrganizerLayout/index.tsx:90
 msgid "Get Paid"
 msgstr "Ödeme alın"
 
@@ -8046,6 +8234,14 @@ msgstr "Stripe ile ödeme alın"
 #: src/components/routes/auth/Register/index.tsx:79
 msgid "Get started"
 msgstr "Başlayın"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:21
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:69
+#: src/components/common/WidgetEditor/editorSettings.ts:15
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:175
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:56
+msgid "Get tickets"
+msgstr "Bilet al"
 
 #: src/components/layouts/EventHomepage/index.tsx:213
 #: src/components/routes/event/HomepageDesigner/index.tsx:214
@@ -8068,6 +8264,10 @@ msgstr "Mevcut bir üyeye erişim ver"
 #: src/components/routes/event/Lineup/index.tsx:343
 msgid "Give everyone a time"
 msgstr "Herkese bir zaman verin"
+
+#: src/components/common/WidgetEditor/installGuides.ts:93
+msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
+msgstr "Yerleştirilen öğeye widget için yeterli yükseklik verin veya \"Ödeme şurada açılır\" ayarını \"Yeni sekme\" olarak belirleyin."
 
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
@@ -8097,6 +8297,10 @@ msgstr "Etkinlik Sayfasına Git"
 #: src/components/common/ErrorDisplay/index.tsx:65
 msgid "Go to home page"
 msgstr "Ana sayfaya git"
+
+#: src/components/common/WidgetEditor/installGuides.ts:80
+msgid "Go to Online Store, then Themes, then Customize, and open the page."
+msgstr "\"Online Store\"a, ardından \"Themes\"e, ardından \"Customize\"a gidin ve sayfayı açın."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:201
 msgid "Go to Schedule"
@@ -8131,6 +8335,10 @@ msgstr "Ek süre bitişi"
 #: src/components/common/LanguageSwitcher/index.tsx:48
 msgid "Greek"
 msgstr "Yunanca"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:138
+msgid "Grid"
+msgstr "Izgara"
 
 #: src/components/routes/admin/Dashboard/index.tsx:94
 #: src/components/routes/admin/Dashboard/index.tsx:345
@@ -8178,7 +8386,7 @@ msgstr "Misafir yönetimi"
 msgid "Guests"
 msgstr "Misafirler"
 
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:130
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:81
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:45
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:159
 msgid "Happening now"
@@ -8196,7 +8404,7 @@ msgstr "Kalıcı geri dönmeler"
 msgid "Hard delete"
 msgstr "Kalıcı silme"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1149
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1177
 msgid "Have a promo code?"
 msgstr "Promosyon kodunuz var mı?"
 
@@ -8256,14 +8464,6 @@ msgstr "Sitenin nasıl kullanıldığını anlamamıza yardımcı olur."
 msgid "Here are all the tickets associated with your email address."
 msgstr "E-posta adresinizle ilişkili tüm biletler burada."
 
-#: src/components/common/WidgetEditor/index.tsx:313
-msgid "Here is an example of how you can use the component in your application."
-msgstr "İşte bileşeni uygulamanızda nasıl kullanabileceğinize dair bir örnek."
-
-#: src/components/common/WidgetEditor/index.tsx:300
-msgid "Here is the React component you can use to embed the widget in your application."
-msgstr "İşte widget'ı uygulamanıza yerleştirmek için kullanabileceğiniz React bileşeni."
-
 #: src/components/common/AffiliateTable/index.tsx:235
 msgid "Here is your affiliate link"
 msgstr "Bağlı kuruluş bağlantınız burada"
@@ -8287,6 +8487,7 @@ msgstr "Hi.Events platform ücretleri ve işlem bazında KDV dökümü"
 
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:137
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:474
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:621
 #: src/components/routes/event/Lineup/LineupPreview.tsx:107
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:318
@@ -8340,10 +8541,14 @@ msgid "Hidden questions are only visible to the event organizer and not to the c
 msgstr "Gizli sorular yalnızca etkinlik organizatörü tarafından görülebilir, müşteri tarafından görülemez."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:554
-#: src/components/routes/product-widget/SelectProducts/index.tsx:860
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1092
+#: src/components/routes/product-widget/SelectProducts/index.tsx:888
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1120
 msgid "Hide"
 msgstr "Gizle"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:119
+msgid "Hide \"Have a promo code?\""
+msgstr "\"Promosyon kodunuz var mı?\" ifadesini gizle"
 
 #: src/components/common/AdvancedOptions/index.tsx:28
 msgid "Hide advanced options"
@@ -8360,6 +8565,10 @@ msgstr "Cevapları Gizle"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:296
 msgid "Hide calendar"
 msgstr "Takvimi gizle"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:99
+msgid "Hide category names"
+msgstr "Kategori adlarını gizle"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:310
 msgid "Hide details"
@@ -8466,7 +8675,7 @@ msgid "Homepage Design"
 msgstr "Ana Sayfa Tasarımı"
 
 #: src/components/layouts/Event/index.tsx:134
-#: src/components/layouts/OrganizerLayout/index.tsx:116
+#: src/components/layouts/OrganizerLayout/index.tsx:117
 msgid "Homepage Designer"
 msgstr "Ana Sayfa Tasarımcısı"
 
@@ -8580,7 +8789,7 @@ msgstr "Kurtarma kodlarımı güvenli bir yere kaydettim"
 msgid "I've added it, continue"
 msgstr "Ekledim, devam et"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1270
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
 msgstr "Yeni bir sekme otomatik olarak açılmadıysa, ödemeye devam etmek için lütfen aşağıdaki düğmeyi tıklayın."
 
@@ -8599,6 +8808,10 @@ msgstr "Etkinleştirilirse, check-in personeli katılımcıları check-in yaptı
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:77
 msgid "If enabled, the organizer will receive an email notification when a new order is placed"
 msgstr "Etkinleştirilirse, yeni bir sipariş verildiğinde organizatör e-posta bildirimi alacak"
+
+#: src/components/common/WidgetEditor/installGuides.ts:42
+msgid "If the widget doesn't appear, a security plugin may be removing scripts. Allow scripts from this site in its settings."
+msgstr "Widget görünmüyorsa, bir güvenlik eklentisi komut dosyalarını kaldırıyor olabilir. Eklentinin ayarlarında bu siteden gelen komut dosyalarına izin verin."
 
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:174
 msgid "If you cancel within 30 days, access comes back, but your events stay unpublished until you publish them again."
@@ -8735,6 +8948,10 @@ msgstr "vergi dahil"
 msgid "Include"
 msgstr "Dahil et"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:182
+msgid "Include a Past events tab"
+msgstr "Geçmiş etkinlikler sekmesi ekle"
+
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:167
 msgid "Include connection details for your online event. These details will be shown on the order summary page and attendee ticket page."
 msgstr "Çevrimiçi etkinliğiniz için bağlantı detaylarını ekleyin. Bu detaylar sipariş özeti sayfasında ve katılımcı bilet sayfasında gösterilecektir."
@@ -8761,7 +8978,7 @@ msgstr "Yanlış PIN"
 msgid "Increase"
 msgstr "Artır"
 
-#: src/components/common/NumberSelector/index.tsx:129
+#: src/components/common/NumberSelector/index.tsx:133
 msgid "Increase quantity"
 msgstr "Adedi artır"
 
@@ -8803,7 +9020,7 @@ msgid "Instant Stripe payouts"
 msgstr "Anında Stripe ödemeleri"
 
 #: src/components/layouts/Event/index.tsx:161
-#: src/components/layouts/OrganizerLayout/index.tsx:123
+#: src/components/layouts/OrganizerLayout/index.tsx:125
 msgid "Integrations"
 msgstr "Entegrasyonlar"
 
@@ -8860,11 +9077,11 @@ msgstr "İnsanları davet edin, neleri görüp yapabileceklerini seçin ve oturu
 msgid "Invite someone"
 msgstr "Birini davet et"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:202
+#: src/components/layouts/OrganizerLayout/index.tsx:204
 msgid "Invite Team Members"
 msgstr "Ekip Üyelerini Davet Et"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:199
+#: src/components/layouts/OrganizerLayout/index.tsx:201
 msgid "Invite Your Team"
 msgstr "Ekibinizi Davet Edin"
 
@@ -8877,7 +9094,7 @@ msgstr "Davet edildi"
 msgid "Invoice"
 msgstr "Fatura"
 
-#: src/components/layouts/Checkout/index.tsx:191
+#: src/components/layouts/Checkout/index.tsx:208
 #: src/hooks/useOrderActions.tsx:85
 msgid "Invoice downloaded successfully"
 msgstr "Fatura başarıyla indirildi"
@@ -8902,7 +9119,7 @@ msgstr "Düzenlenme"
 msgid "It happens on more than one date"
 msgstr "Birden fazla tarihte gerçekleşiyor"
 
-#: src/components/layouts/ProductWidget/index.tsx:53
+#: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Yayından kaldırılmış veya silinmiş olabilir. Lütfen bağlantıyı kontrol edip tekrar deneyin."
 
@@ -9052,11 +9269,16 @@ msgstr "etiket güncellemeleri"
 msgid "Landscape"
 msgstr "Yatay"
 
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:40
 #: src/components/modals/CreateAttendeeModal/index.tsx:240
 #: src/components/modals/ManageAttendeeModal/index.tsx:180
 #: src/components/routes/settings/Profile/index.tsx:182
 msgid "Language"
 msgstr "Dil"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:142
+msgid "Language & sizing"
+msgstr "Dil ve boyut"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:63
 msgid "Last"
@@ -9174,6 +9396,7 @@ msgstr "Daha sonra"
 msgid "Latest check-ins"
 msgstr "En son check-in'ler"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:135
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:95
 msgid "Layout"
 msgstr "Düzen"
@@ -9189,6 +9412,10 @@ msgstr "Hemen başlamak için “Başlangıç” alanını bugün olarak bırak�
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:201
 msgid "Leave blank to use the default word \"Invoice\""
 msgstr "Varsayılan \"Fatura\" kelimesini kullanmak için boş bırakın"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:87
+msgid "Leave both empty to show everything that's on sale."
+msgstr "Satışta olan her şeyi göstermek için ikisini de boş bırakın."
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:517
 msgid "Leave empty for unlimited"
@@ -9222,9 +9449,13 @@ msgstr "Etkinlikteki tüm bilet ve ürünleri satmak için açık bırakın. Bel
 msgid "Leave without saving? Your changes to this seat map will be lost."
 msgstr "Kaydetmeden çıkılsın mı? Bu koltuk haritasında yaptığınız değişiklikler kaybolacak."
 
-#: src/components/common/DesignerShell/index.tsx:48
+#: src/components/common/DesignerShell/index.tsx:141
 msgid "Leave without saving? Your design changes will be lost."
 msgstr "Kaydetmeden çıkılsın mı? Tasarım değişiklikleriniz kaybolacak."
+
+#: src/components/common/WidgetEditor/index.tsx:75
+msgid "Leave without saving? Your widget changes will be lost."
+msgstr "Kaydetmeden çıkılsın mı? Widget değişiklikleriniz kaybolacak."
 
 #: src/ee/seating/components/lib/templates.ts:99
 #: src/ee/seating/components/lib/templates.ts:187
@@ -9272,7 +9503,7 @@ msgstr "Harfler"
 msgid "Letters skipping I and O"
 msgstr "I ve O hariç harfler"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:118
+#: src/components/layouts/OrganizerLayout/index.tsx:120
 msgid "Library"
 msgstr "Kitaplık"
 
@@ -9316,8 +9547,10 @@ msgstr "Koltuklarla sınırlı"
 msgid "Limited by ticket allocation"
 msgstr "Bilet tahsisi ile sınırlı"
 
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:35
+#: src/components/common/WidgetEditor/TypePicker.tsx:9
 #: src/components/routes/event/Lineup/LineupPreview.tsx:119
-#: src/utilites/homepageSections.ts:20
+#: src/utilites/homepageSections.ts:23
 #: src/utilites/lineup.ts:24
 #: src/utilites/lineup.ts:36
 msgid "Lineup"
@@ -9373,6 +9606,7 @@ msgstr "Bağlantılara İzin Verildi"
 msgid "Links to: {0}"
 msgstr "Bağlantı: {0}"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:137
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:97
 #: src/components/routes/event/Lineup/index.tsx:221
 #: src/components/routes/event/OccurrencesTab/index.tsx:508
@@ -9383,9 +9617,13 @@ msgstr "Liste"
 msgid "List view"
 msgstr "Liste görünümü"
 
+#: src/components/common/WidgetEditor/index.tsx:222
+msgid "List your upcoming events on your own website. Visitors can buy tickets without leaving your page."
+msgstr "Yaklaşan etkinliklerinizi kendi web sitenizde listeleyin. Ziyaretçiler sayfanızdan ayrılmadan bilet satın alabilir."
+
 #: src/components/common/EventCard/index.tsx:102
 #: src/components/layouts/Event/index.tsx:250
-#: src/components/layouts/OrganizerLayout/index.tsx:234
+#: src/components/layouts/OrganizerLayout/index.tsx:236
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:115
 #: src/components/routes/event/Lineup/EventStatusBadge.tsx:8
 #: src/components/routes/settings/Organizers/index.tsx:19
@@ -9453,6 +9691,10 @@ msgstr "Webhook'lar Yükleniyor"
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:164
+msgid "Loading…"
+msgstr "Yükleniyor…"
+
 #: src/components/layouts/EventHomepage/Lineup/ProfileEmbed.tsx:67
 msgid "Loads content from {service}"
 msgstr "İçerik {service} üzerinden yüklenir"
@@ -9462,13 +9704,15 @@ msgstr "İçerik {service} üzerinden yüklenir"
 #: src/components/common/LocationPicker/index.tsx:173
 #: src/components/common/LocationPicker/index.tsx:221
 #: src/components/common/LocationPicker/index.tsx:294
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:31
 #: src/components/layouts/EventHomepage/index.tsx:273
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:474
 #: src/components/routes/event/Settings/index.tsx:56
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:150
 #: src/components/routes/my-tickets/index.tsx:90
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:349
-#: src/utilites/homepageSections.ts:24
+#: src/components/widget/WidgetSections/index.tsx:109
+#: src/utilites/homepageSections.ts:27
 msgid "Location"
 msgstr "Konum"
 
@@ -9492,7 +9736,7 @@ msgstr "konum güncellemeleri"
 msgid "locations"
 msgstr "konum"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:119
+#: src/components/layouts/OrganizerLayout/index.tsx:121
 #: src/components/routes/organizer/Locations/index.tsx:31
 msgid "Locations"
 msgstr "Konumlar"
@@ -9528,7 +9772,7 @@ msgstr "Logo başlıkta görüntülenecektir"
 msgid "Logo will be displayed on the ticket"
 msgstr "Logo bilette görüntülenecektir"
 
-#: src/utilites/homepageSections.ts:57
+#: src/utilites/homepageSections.ts:60
 msgid "Logos of your sponsors and partners, with links."
 msgstr "Sponsorlarınızın ve ortaklarınızın logoları, bağlantılarıyla."
 
@@ -9539,10 +9783,6 @@ msgstr "Çıkış"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/LinkExpiredMessage/index.tsx:37
 msgid "Look Up My Tickets"
 msgstr "Biletlerimi ara"
-
-#: src/components/common/WidgetEditor/index.tsx:351
-msgid "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
-msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat elementum..."
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:150
 msgid "Lost access?"
@@ -9596,7 +9836,7 @@ msgstr "Bu soruyu zorunlu kıl"
 #: src/components/common/LocationsTable/index.tsx:60
 #: src/components/common/OrganizerWebhookTable/index.tsx:98
 #: src/components/common/PromoCodeTable/index.tsx:177
-#: src/components/layouts/OrganizerLayout/index.tsx:111
+#: src/components/layouts/OrganizerLayout/index.tsx:112
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:304
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:89
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:249
@@ -9622,6 +9862,10 @@ msgstr "Varsayılanları yönet"
 #: src/components/common/EventCard/index.tsx:157
 msgid "Manage event"
 msgstr "Etkinliği yönet"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:218
+msgid "Manage lineup & schedule"
+msgstr "Kadroyu ve programı yönet"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:393
 msgid "Manage on Stripe"
@@ -9701,6 +9945,22 @@ msgstr "Doğrulanmış olarak işaretle (yönetici kararı)"
 #: src/components/modals/MessageRecipientsModal/index.tsx:21
 msgid "Marked as spam"
 msgstr "İstenmeyen olarak işaretlendi"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:57
+msgid "Match event page"
+msgstr "Etkinlik sayfasıyla aynı"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:57
+msgid "Match my page"
+msgstr "Sayfamla aynı"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:126
+msgid "Matches event page"
+msgstr "Etkinlik sayfasıyla aynı"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:126
+msgid "Matches your page"
+msgstr "Sayfanızla aynı"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:241
 msgid "Max Messages / 24h"
@@ -9887,8 +10147,8 @@ msgstr "karışık"
 msgid "Mixed"
 msgstr "Karışık"
 
-#: src/components/common/HomepageDesigner/index.tsx:97
-#: src/components/common/HomepageDesigner/index.tsx:100
+#: src/components/common/DesignerShell/index.tsx:57
+#: src/components/common/DesignerShell/index.tsx:60
 msgid "Mobile"
 msgstr "Mobil"
 
@@ -9961,6 +10221,10 @@ msgstr "Daha fazla seçenek"
 msgid "More dates"
 msgstr "Daha fazla tarih"
 
+#: src/components/widget/WidgetSections/index.tsx:144
+msgid "More events"
+msgstr "Daha fazla etkinlik"
+
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:74
 msgid "More places"
 msgstr "Daha fazla yer"
@@ -10019,7 +10283,9 @@ msgstr "{lastOccurrenceDate} tarihine kadar birden fazla tarih"
 
 #: src/components/common/EventCard/index.tsx:111
 #: src/components/layouts/EventHomepage/index.tsx:185
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:85
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:29
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/widget/WidgetSections/index.tsx:58
 msgid "Multiple locations"
 msgstr "Birden fazla konum"
 
@@ -10049,12 +10315,9 @@ msgstr "Profilim"
 msgid "My Tickets"
 msgstr "Biletlerim"
 
-#: src/components/common/WidgetEditor/index.tsx:375
-msgid "Nam placerat elementum..."
-msgstr "Nam placerat elementum..."
-
 #: src/components/common/LocationsTable/index.tsx:112
 #: src/components/common/OrderDetails/index.tsx:26
+#: src/components/common/WidgetEditor/NameModal.tsx:34
 #: src/components/forms/AffiliateForm/index.tsx:81
 #: src/components/forms/CapaciyAssigmentForm/index.tsx:37
 #: src/components/forms/CheckInListForm/index.tsx:99
@@ -10200,6 +10463,11 @@ msgstr "Yeni satış"
 msgid "new stages or rooms"
 msgstr "yeni sahne veya oda"
 
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:25
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:144
+msgid "New tab"
+msgstr "Yeni sekme"
+
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:139
 msgid "New time slot"
 msgstr "Yeni zaman dilimi"
@@ -10211,6 +10479,10 @@ msgstr "Yeni saat:"
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:86
 msgid "New total"
 msgstr "Yeni toplam"
+
+#: src/components/common/WidgetEditor/index.tsx:236
+msgid "New widget"
+msgstr "Yeni widget"
 
 #: src/ee/seating/components/SeatPicker/index.tsx:124
 msgid "Next"
@@ -10629,6 +10901,7 @@ msgstr "Başka organizatör mevcut değil"
 msgid "No Paid Orders"
 msgstr "Ücretli Sipariş Yok"
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:147
 #: src/components/layouts/OrganizerHomepage/index.tsx:241
 msgid "No past events"
 msgstr "Geçmiş etkinlik yok"
@@ -10805,6 +11078,7 @@ msgstr "Henüz zaman dilimi yok. Buradan ekleyin veya birini zaman çizelgesine 
 msgid "No upcoming dates"
 msgstr "Yaklaşan tarih yok"
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:147
 #: src/components/layouts/OrganizerHomepage/index.tsx:241
 msgid "No upcoming events"
 msgstr "Yaklaşan etkinlik yok"
@@ -10827,7 +11101,7 @@ msgstr "Bu uç nokta için henüz webhook olayı kaydedilmedi. Olaylar tetiklend
 msgid "No Webhooks"
 msgstr "Webhook Yok"
 
-#: src/components/layouts/Checkout/index.tsx:451
+#: src/components/layouts/Checkout/index.tsx:468
 msgid "No, keep me here"
 msgstr "Hayır, beni burada tut"
 
@@ -10861,6 +11135,7 @@ msgid "non-edited"
 msgstr "düzenlenmemiş"
 
 #: src/components/common/PromoCodeTable/index.tsx:84
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:96
 #: src/components/forms/ProductForm/ledgerSummaries.ts:92
 #: src/components/forms/ProductForm/ledgerSummaries.ts:132
 #: src/components/routes/product-widget/CollectInformation/index.tsx:541
@@ -11242,6 +11517,8 @@ msgstr "Bir etkinlik oluşturduğunuzda, burada göreceksiniz."
 msgid "Once you start collecting data, you'll see it here."
 msgstr "Veri toplamaya başladığınızda, burada göreceksiniz."
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:85
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:106
 #: src/components/modals/CreateEventModal/index.tsx:224
 msgid "One date"
 msgstr "Tek tarih"
@@ -11257,7 +11534,8 @@ msgid "Ongoing"
 msgstr "Devam Eden"
 
 #: src/components/common/EventCard/index.tsx:114
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:88
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:32
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:39
 #: src/components/routes/event/OccurrencesTab/index.tsx:341
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:482
 #: src/components/routes/my-tickets/index.tsx:56
@@ -11273,7 +11551,9 @@ msgid "Online — provide connection details"
 msgstr "Çevrimiçi — bağlantı bilgilerini girin"
 
 #: src/components/common/EventCard/index.tsx:111
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:85
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:29
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:36
+#: src/components/widget/WidgetSections/index.tsx:58
 msgid "Online & in-person"
 msgstr "Çevrimiçi ve yüz yüze"
 
@@ -11283,11 +11563,12 @@ msgstr "Çevrimiçi ve yüz yüze — programa bakın"
 
 #: src/components/common/AttendeeTicket/index.tsx:127
 #: src/components/modals/ManageOccurrenceModal/index.tsx:149
+#: src/components/widget/WidgetSections/index.tsx:59
 msgid "Online event"
 msgstr "Çevrimiçi etkinlik"
 
 #: src/components/layouts/EventHomepage/index.tsx:648
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:168
+#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:119
 msgid "Online Event"
 msgstr "Çevrimiçi Etkinlik"
 
@@ -11355,6 +11636,14 @@ msgstr "Yalnızca bağlı olduğu ürünlerin ek ürünü olarak gösterilir."
 msgid "Only the account owner can request account deletion."
 msgstr "Yalnızca hesap sahibi hesap silme talebinde bulunabilir."
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:74
+msgid "Only these categories"
+msgstr "Yalnızca bu kategoriler"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:86
+msgid "Only these tickets"
+msgstr "Yalnızca bu biletler"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:534
 msgid "Only tickets count toward capacity"
 msgstr "Kapasiteye yalnızca biletler sayılır"
@@ -11378,6 +11667,10 @@ msgstr "Yalnızca promosyon koduyla görünür"
 #: src/components/common/TeamAccessFields/index.tsx:119
 msgid "Only what you pick below."
 msgstr "Yalnızca aşağıda seçtikleriniz."
+
+#: src/components/common/WidgetEditor/NameModal.tsx:35
+msgid "Only your team sees this. Use it to tell widgets apart, like \"Homepage\" or \"Newsletter\"."
+msgstr "Bunu yalnızca ekibiniz görür. Widget'ları ayırt etmek için kullanın, örneğin \"Ana sayfa\" veya \"Bülten\"."
 
 #: src/components/routes/admin/EmailDelivery/index.tsx:140
 msgid "Open and click rates are a share of delivered emails and only cover streams with tracking turned on. Hard bounces are highlighted at 2% or more."
@@ -11405,11 +11698,16 @@ msgstr "Check-In'i Aç"
 msgid "Open Check-In Page"
 msgstr "Check-In Sayfasını Aç"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:177
 #: src/components/routes/admin/SpamEvents/index.tsx:238
 #: src/components/routes/admin/SpamEvents/index.tsx:365
 #: src/components/routes/event/Lineup/index.tsx:353
 msgid "Open event page"
 msgstr "Etkinlik sayfasını aç"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:211
+msgid "Open homepage designer"
+msgstr "Ana sayfa tasarımcısını aç"
 
 #: src/components/routes/event/EventDashboard/NextOccurrenceHero/index.tsx:217
 msgid "Open occurrence"
@@ -11438,6 +11736,10 @@ msgstr "Kimlik doğrulama uygulamanızı açın, + düğmesine dokunun ve kodu t
 #: src/components/routes/admin/EmailDelivery/index.tsx:101
 msgid "Opened"
 msgstr "Açıldı"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:116
+msgid "Opens event page"
+msgstr "Etkinlik sayfasını açar"
 
 #: src/components/forms/QuestionForm/index.tsx:45
 msgid "Option {i}"
@@ -11540,7 +11842,7 @@ msgstr "Sipariş iptal edildi"
 msgid "Order Cancelled"
 msgstr "Sipariş İptal Edildi"
 
-#: src/components/layouts/Checkout/index.tsx:322
+#: src/components/layouts/Checkout/index.tsx:339
 #: src/components/routes/product-widget/CollectInformation/index.tsx:378
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:400
 msgid "Order complete"
@@ -11680,6 +11982,7 @@ msgid "orders"
 msgstr "sipariş"
 
 #: src/components/common/OccurrenceAttendeesAndOrders/index.tsx:65
+#: src/components/common/WidgetEditor/WidgetStats.tsx:16
 #: src/components/layouts/Admin/index.tsx:21
 #: src/components/layouts/Event/index.tsx:142
 #: src/components/modals/ManageOccurrenceModal/index.tsx:181
@@ -11735,13 +12038,15 @@ msgstr "Organizasyon Adı"
 #: src/components/common/AdminEventsTable/index.tsx:89
 #: src/components/common/TeamAccessFields/index.tsx:36
 #: src/components/common/TeamAccessFields/index.tsx:96
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:33
 #: src/components/layouts/EventHomepage/index.tsx:344
 #: src/components/modals/CreateEventModal/index.tsx:269
 #: src/components/routes/admin/SpamEvents/index.tsx:166
 #: src/components/routes/admin/SpamEvents/index.tsx:327
 #: src/components/routes/events/Dashboard/index.tsx:198
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:368
-#: src/utilites/homepageSections.ts:26
+#: src/components/widget/WidgetSections/index.tsx:135
+#: src/utilites/homepageSections.ts:29
 msgid "Organizer"
 msgstr "Organizatör"
 
@@ -11750,7 +12055,7 @@ msgid "Organizer archived successfully"
 msgstr "Organizatör başarıyla arşivlendi"
 
 #: src/components/layouts/Event/index.tsx:108
-#: src/components/layouts/OrganizerLayout/index.tsx:100
+#: src/components/layouts/OrganizerLayout/index.tsx:101
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:158
 msgid "Organizer Dashboard"
 msgstr "Organizatör Paneli"
@@ -11793,12 +12098,12 @@ msgid "Organizer Settings"
 msgstr "Organizatör Ayarları"
 
 #: src/components/common/StatusToggle/index.tsx:63
-#: src/components/layouts/OrganizerLayout/index.tsx:173
+#: src/components/layouts/OrganizerLayout/index.tsx:175
 msgid "Organizer status update failed. Please try again later"
 msgstr "Organizatör durum güncellemesi başarısız oldu. Lütfen daha sonra tekrar deneyin"
 
 #: src/components/common/StatusToggle/index.tsx:55
-#: src/components/layouts/OrganizerLayout/index.tsx:170
+#: src/components/layouts/OrganizerLayout/index.tsx:172
 msgid "Organizer status updated"
 msgstr "Organizatör durumu güncellendi"
 
@@ -11873,7 +12178,7 @@ msgstr "Genel Bakış"
 msgid "Owner"
 msgstr "Sahip"
 
-#: src/components/common/WidgetEditor/index.tsx:231
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:111
 msgid "Padding"
 msgstr "İç Boşluk"
 
@@ -11993,6 +12298,7 @@ msgstr "Şifre başarıyla sıfırlandı. Lütfen yeni şifrenizle giriş yapın
 msgid "Passwords are not the same"
 msgstr "Şifreler aynı değil"
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:137
 #: src/components/layouts/OrganizerHomepage/index.tsx:231
 #: src/components/routes/event/OccurrencesTab/index.tsx:522
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:30
@@ -12004,7 +12310,7 @@ msgid "Past due"
 msgstr "Vadesi geçti"
 
 #: src/components/layouts/OrganizerHomepage/OrganizerPastEventsSection.tsx:25
-#: src/utilites/homepageSections.ts:32
+#: src/utilites/homepageSections.ts:35
 msgid "Past events"
 msgstr "Geçmiş etkinlikler"
 
@@ -12020,9 +12326,26 @@ msgstr "YouTube veya Vimeo bağlantısı yapıştırın"
 msgid "Paste a YouTube or Vimeo link below."
 msgstr "Aşağıya bir YouTube veya Vimeo bağlantısı yapıştırın."
 
-#: src/components/common/WidgetEditor/index.tsx:282
-msgid "Paste this where you want the widget to appear."
-msgstr "Widget'ın görünmesini istediğiniz yere bunu yapıştırın."
+#: src/components/common/WidgetEditor/installGuides.ts:91
+msgid "Paste the code below and publish."
+msgstr "Aşağıdaki kodu yapıştırın ve yayınlayın."
+
+#: src/components/common/WidgetEditor/installGuides.ts:60
+#: src/components/common/WidgetEditor/installGuides.ts:82
+msgid "Paste the code below and save."
+msgstr "Aşağıdaki kodu yapıştırın ve kaydedin."
+
+#: src/components/common/WidgetEditor/installGuides.ts:50
+msgid "Paste the code below, save, and publish your site."
+msgstr "Aşağıdaki kodu yapıştırın, kaydedin ve sitenizi yayınlayın."
+
+#: src/components/common/WidgetEditor/installGuides.ts:40
+msgid "Paste the code below, then update the page."
+msgstr "Aşağıdaki kodu yapıştırın, ardından sayfayı güncelleyin."
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:77
+msgid "Paste this where the widget should appear"
+msgstr "Bunu widget'ın görünmesini istediğiniz yere yapıştırın"
 
 #: src/components/common/Editor/Controls/InsertImageControl/index.tsx:111
 msgid "Paste URL"
@@ -12171,7 +12494,7 @@ msgstr "İnceleme Bekliyor"
 msgid "PENDING REVIEW"
 msgstr "İNCELEME BEKLİYOR"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:120
+#: src/components/layouts/OrganizerLayout/index.tsx:122
 #: src/components/routes/organizer/People/index.tsx:78
 msgid "People"
 msgstr "Kişiler"
@@ -12222,6 +12545,10 @@ msgstr "sipariş başına"
 #: src/components/routes/organizer/Settings/Sections/EventDefaults/index.tsx:38
 msgid "Per order"
 msgstr "Sipariş başına"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:159
+msgid "Per page"
+msgstr "Sayfa başına"
 
 #: src/components/common/PromoCodeTable/index.tsx:94
 msgid "per product"
@@ -12294,11 +12621,11 @@ msgstr "Kişisel"
 msgid "Phone"
 msgstr "Telefon"
 
-#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:70
+#: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:74
 msgid "Photo {photoNumber}"
 msgstr "Fotoğraf {photoNumber}"
 
-#: src/utilites/homepageSections.ts:36
+#: src/utilites/homepageSections.ts:39
 msgid "Photo gallery"
 msgstr "Fotoğraf galerisi"
 
@@ -12354,6 +12681,10 @@ msgstr "Sütun"
 msgid "PIN"
 msgstr "PIN"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:50
+msgid "Pin the widget to one date, or let visitors choose."
+msgstr "Widget'ı tek bir tarihe sabitleyin veya ziyaretçilerin seçmesine izin verin."
+
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:82
 #: src/constants/socialMediaConfig.ts:38
 msgid "Pinterest"
@@ -12362,10 +12693,6 @@ msgstr "Pinterest"
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:65
 msgid "Place tables"
 msgstr "Masa yerleştir"
-
-#: src/components/common/WidgetEditor/index.tsx:269
-msgid "Place this in the <head> of your website."
-msgstr "Bunu web sitenizin <head> bölümüne yerleştirin."
 
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:269
 #: src/components/modals/ManageOrderModal/index.tsx:129
@@ -12439,7 +12766,7 @@ msgstr "E-posta adresinizi onaylamak için lütfen e-postanızı kontrol edin"
 msgid "Please check your ticket for the updated time. Your tickets are still valid — no action is needed unless the new times don't work for you. Reply to this email if you have any questions."
 msgstr "Güncellenen saat için biletinize bakın. Biletleriniz geçerliliğini koruyor — yeni saatler size uymuyorsa dışında yapmanız gereken bir şey yok. Sorunuz varsa bu e-postayı yanıtlayın."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1261
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1289
 msgid "Please continue in the new tab"
 msgstr "Lütfen yeni sekmede devam edin"
 
@@ -12489,11 +12816,11 @@ msgstr "Lütfen bir görsel sağlayın."
 msgid "Please restart the checkout process."
 msgstr "Lütfen ödeme işlemini yeniden başlatın."
 
-#: src/components/layouts/Checkout/index.tsx:420
+#: src/components/layouts/Checkout/index.tsx:437
 msgid "Please return to the event page to start over."
 msgstr "Baştan başlamak için lütfen etkinlik sayfasına dönün."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:738
+#: src/components/routes/product-widget/SelectProducts/index.tsx:753
 msgid "Please select a date and time"
 msgstr "Lütfen bir tarih ve saat seçin"
 
@@ -12505,7 +12832,7 @@ msgstr "Lütfen bir tarih aralığı seçin"
 msgid "Please select an image."
 msgstr "Lütfen bir görsel seçin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:766
+#: src/components/routes/product-widget/SelectProducts/index.tsx:781
 msgid "Please select at least one product"
 msgstr "Lütfen en az bir ürün seçin"
 
@@ -12527,7 +12854,7 @@ msgstr "Bağlı kuruluşlarınızı dışa aktarma için hazırlarken lütfen be
 msgid "Please wait while we prepare your attendees for export..."
 msgstr "Katılımcılarınızı dışa aktarma için hazırlarken lütfen bekleyin..."
 
-#: src/components/layouts/Checkout/index.tsx:187
+#: src/components/layouts/Checkout/index.tsx:204
 #: src/hooks/useOrderActions.tsx:81
 msgid "Please wait while we prepare your invoice..."
 msgstr "Faturanızı hazırlarken lütfen bekleyin..."
@@ -12539,6 +12866,18 @@ msgstr "Siparişlerinizi dışa aktarma için hazırlarken lütfen bekleyin..."
 #: src/components/common/LanguageSwitcher/index.tsx:42
 msgid "Polish"
 msgstr "Lehçe"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:144
+msgid "Pop-up"
+msgstr "Açılır pencere"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:78
+msgid "Pop-up content"
+msgstr "Açılır pencere içeriği"
+
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:24
+msgid "Pop-up on your site"
+msgstr "Sitenizde açılır pencere"
 
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:252
 msgid "Portrait"
@@ -12588,8 +12927,8 @@ msgstr "İlk koltuğun geleceği yere basın ve sürükleyin. Koltuklar için ya
 msgid "Prevent overselling by sharing inventory across multiple ticket types."
 msgstr "Birden fazla bilet türünde stok paylaşarak aşırı satışı önleyin."
 
-#: src/components/common/DesignerShell/index.tsx:61
-#: src/components/common/DesignerShell/index.tsx:103
+#: src/components/common/DesignerShell/index.tsx:91
+#: src/components/common/DesignerShell/index.tsx:110
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:143
 #: src/components/routes/admin/Announcements/index.tsx:496
 #: src/components/routes/event/Lineup/index.tsx:219
@@ -12668,14 +13007,6 @@ msgstr "Fiyat Kademeleri"
 msgid "Pricing"
 msgstr "Fiyatlandırma"
 
-#: src/components/common/WidgetEditor/index.tsx:191
-msgid "Primary Color"
-msgstr "Ana Renk"
-
-#: src/components/common/WidgetEditor/index.tsx:197
-msgid "Primary Text Color"
-msgstr "Ana Metin Rengi"
-
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:89
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:86
 #: src/ee/seating/components/routes/event/SeatingPrint/index.tsx:228
@@ -12702,7 +13033,7 @@ msgstr "Baskı önizlemesi son kaydedilen tasarımınızı kullanır"
 msgid "Print Ticket"
 msgstr "Bileti Yazdır"
 
-#: src/components/layouts/Checkout/index.tsx:364
+#: src/components/layouts/Checkout/index.tsx:381
 #: src/components/routes/my-tickets/index.tsx:136
 msgid "Print Tickets"
 msgstr "Biletleri Yazdır"
@@ -12862,11 +13193,13 @@ msgstr "Profiller organizatöre aittir. Bunları düzenlemek için organizatöre
 msgid "Progress"
 msgstr "İlerleme"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:648
+#: src/components/routes/product-widget/SelectProducts/index.tsx:663
 msgid "Promo {promo_code} code applied"
 msgstr "Promosyon {promo_code} kodu uygulandı"
 
 #: src/components/common/OrderDetails/index.tsx:112
+#: src/components/common/WidgetEditor/ContentFields.tsx:111
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:95
 #: src/components/modals/ManageOrderModal/index.tsx:183
 msgid "Promo code"
 msgstr "Promosyon kodu"
@@ -13010,7 +13343,7 @@ msgstr "QR kodla check-in"
 msgid "Qty"
 msgstr "Adet"
 
-#: src/components/common/NumberSelector/index.tsx:120
+#: src/components/common/NumberSelector/index.tsx:123
 msgid "Quantity"
 msgstr "Adet"
 
@@ -13053,7 +13386,7 @@ msgstr "Sorular"
 msgid "Questions & Answers"
 msgstr "Sorular ve Cevaplar"
 
-#: src/utilites/homepageSections.ts:53
+#: src/utilites/homepageSections.ts:56
 msgid "Questions and answers people can expand."
 msgstr "Açılabilen sorular ve yanıtlar."
 
@@ -13104,6 +13437,7 @@ msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Bu tarih yeniden etkinleştirilsin mi? Gelecekteki satışlara yeniden açılacak."
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Devamını oku"
 
@@ -13393,7 +13727,7 @@ msgstr "Kalan"
 msgid "Remaining Uses"
 msgstr "Kalan Kullanım"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1168
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1196
 msgid "remove"
 msgstr "kaldır"
 
@@ -13406,7 +13740,7 @@ msgstr "kaldır"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:148
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:135
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1169
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1197
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
@@ -13530,9 +13864,22 @@ msgstr "Saati kaldır"
 msgid "Removed from the lineup"
 msgstr "Kadrodan kaldırıldı"
 
+#: src/components/common/WidgetEditor/index.tsx:250
+#: src/components/common/WidgetEditor/index.tsx:300
+msgid "Rename"
+msgstr "Yeniden adlandır"
+
 #: src/ee/seating/components/routes/event/SeatMapDesigner/index.tsx:72
 msgid "Rename and save"
 msgstr "Yeniden adlandır ve kaydet"
+
+#: src/components/common/WidgetEditor/index.tsx:299
+msgid "Rename widget"
+msgstr "Widget'ı yeniden adlandır"
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:86
+msgid "Render it where the widget should appear"
+msgstr "Widget'ın görünmesini istediğiniz yerde render edin"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:113
 #: src/ee/licensing/components/LicenceModal/index.tsx:122
@@ -13550,6 +13897,10 @@ msgstr "Satışa yeniden aç"
 #: src/components/routes/event/OccurrencesTab/index.tsx:214
 msgid "Reopen this date for new sales? Previously cancelled tickets will not be restored — affected attendees stay cancelled and any refunds already issued are not reversed."
 msgstr "Bu tarih satışa yeniden açılsın mı? Daha önce iptal edilen biletler geri getirilmez — etkilenen katılımcılar iptal durumunda kalır ve yapılmış iadeler geri alınmaz."
+
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:61
+msgid "Reorder {label}"
+msgstr "{label} öğesini yeniden sırala"
 
 #: src/components/modals/CreateEventModal/index.tsx:418
 msgid "Repeat"
@@ -13569,7 +13920,7 @@ msgid "Report not found"
 msgstr "Rapor bulunamadı"
 
 #: src/components/layouts/Event/index.tsx:118
-#: src/components/layouts/OrganizerLayout/index.tsx:106
+#: src/components/layouts/OrganizerLayout/index.tsx:107
 #: src/components/routes/event/Reports/index.tsx:53
 #: src/components/routes/organizer/Reports/index.tsx:53
 msgid "Reports"
@@ -13629,7 +13980,7 @@ msgstr "Kodu yeniden gönder"
 msgid "Resend Confirmation"
 msgstr "Onayı yeniden gönder"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:325
+#: src/components/layouts/OrganizerLayout/index.tsx:327
 msgid "Resend Confirmation Email"
 msgstr "Onay E-postasını Yeniden Gönder"
 
@@ -13794,7 +14145,7 @@ msgstr "İşi yeniden dene"
 msgid "Return to Event"
 msgstr "Etkinliğe Dön"
 
-#: src/components/layouts/Checkout/index.tsx:427
+#: src/components/layouts/Checkout/index.tsx:444
 msgid "Return to Event Page"
 msgstr "Etkinlik Sayfasına Dön"
 
@@ -13822,6 +14173,7 @@ msgstr "Bu hesaptaki başka bir organizatörün Stripe bağlantısını yeniden 
 #: src/components/common/EventCard/index.tsx:275
 #: src/components/common/EventCard/index.tsx:405
 #: src/components/common/StatsCharts/index.tsx:70
+#: src/components/common/WidgetEditor/WidgetStats.tsx:18
 #: src/components/routes/admin/Attribution/index.tsx:199
 msgid "Revenue"
 msgstr "Gelir"
@@ -14095,13 +14447,14 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: src/components/common/SettingsPage/index.tsx:96
+#: src/components/common/WidgetEditor/index.tsx:195
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
 msgid "Save changes"
 msgstr "Değişiklikleri kaydet"
 
-#: src/components/common/DesignerShell/index.tsx:95
+#: src/components/common/DesignerShell/index.tsx:170
 #: src/components/modals/EditAffiliateModal/index.tsx:109
 #: src/components/modals/EditCapacityAssignmentModal/index.tsx:75
 #: src/components/modals/EditCheckInListModal/index.tsx:107
@@ -14153,6 +14506,10 @@ msgstr "Sosyal Bağlantıları Kaydet"
 msgid "Save Template"
 msgstr "Şablonu Kaydet"
 
+#: src/components/common/WidgetEditor/InstallPanel.tsx:85
+msgid "Save this as HiEventsWidget.jsx"
+msgstr "Bunu HiEventsWidget.jsx olarak kaydedin"
+
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:169
 msgid "Save tickets"
 msgstr "Biletleri kaydet"
@@ -14165,10 +14522,21 @@ msgstr "KDV ayarlarını kaydet"
 msgid "Save VAT Settings"
 msgstr "KDV Ayarlarını Kaydet"
 
+#: src/components/common/WidgetEditor/index.tsx:195
+#: src/components/common/WidgetEditor/index.tsx:299
+#: src/components/common/WidgetEditor/index.tsx:300
+msgid "Save widget"
+msgstr "Widget'ı kaydet"
+
 #: src/components/common/TwoFactor/RecoveryCodesDisplay.tsx:62
 msgid "Save your recovery codes"
 msgstr "Kurtarma kodlarınızı kaydedin"
 
+#: src/components/common/WidgetEditor/index.tsx:173
+msgid "Save, then copy the new code"
+msgstr "Kaydedin, ardından yeni kodu kopyalayın"
+
+#: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
 msgid "Saved"
@@ -14197,6 +14565,10 @@ msgstr "Kayıtlı profiller"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:167
 msgid "Saved to this organizer so you can reuse it at any event"
 msgstr "Bu organizatöre kaydedildi, böylece herhangi bir etkinlikte yeniden kullanabilirsiniz"
+
+#: src/components/common/WidgetEditor/index.tsx:237
+msgid "Saved widgets"
+msgstr "Kayıtlı widget'lar"
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:157
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
@@ -14229,9 +14601,11 @@ msgstr "Tarayıcı modu"
 msgid "Scenarios"
 msgstr "Senaryolar"
 
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:37
+#: src/components/common/WidgetEditor/TypePicker.tsx:10
 #: src/components/routes/event/EventDashboard/UpcomingOccurrences/index.tsx:73
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleCalendar.tsx:59
-#: src/utilites/homepageSections.ts:22
+#: src/utilites/homepageSections.ts:25
 #: src/utilites/lineup.ts:34
 #: src/utilites/lineup.ts:36
 msgid "Schedule"
@@ -14510,7 +14884,7 @@ msgstr "Koltuk haritası kaydedildi"
 msgid "Seat map updated"
 msgstr "Koltuk haritası güncellendi"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:121
+#: src/components/layouts/OrganizerLayout/index.tsx:123
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:145
 msgid "Seat Maps"
 msgstr "Koltuk Haritaları"
@@ -14594,14 +14968,6 @@ msgstr "Koltuklar: {seatList}"
 msgid "Second"
 msgstr "İkinci"
 
-#: src/components/common/WidgetEditor/index.tsx:203
-msgid "Secondary Color"
-msgstr "İkincil Renk"
-
-#: src/components/common/WidgetEditor/index.tsx:209
-msgid "Secondary Text Color"
-msgstr "İkincil Metin Rengi"
-
 #: src/ee/seating/components/SeatMapDesigner/newElements.ts:48
 msgid "Section"
 msgstr "Bölüm"
@@ -14614,6 +14980,7 @@ msgstr "Bölüm adı"
 msgid "Section settings"
 msgstr "Bölüm ayarları"
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:78
 #: src/components/routes/event/HomepageDesigner/index.tsx:147
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:133
 msgid "Sections"
@@ -14815,6 +15182,10 @@ msgstr "Seçildi"
 msgid "Selected item"
 msgstr "Seçili öğe"
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:85
+msgid "Selected tickets"
+msgstr "Seçili biletler"
+
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:37
 msgid "Selection rules"
 msgstr "Seçim kuralları"
@@ -14846,6 +15217,10 @@ msgstr "Etkinliğinizi tüketin."
 #: src/ee/box-office/components/routes/event/BoxOffices/index.tsx:48
 msgid "Sell tickets at the door with cash, comps, or a card reader."
 msgstr "Kapıda nakit, davetiye veya kart okuyucu ile bilet satın."
+
+#: src/components/common/WidgetEditor/index.tsx:223
+msgid "Sell tickets on your own website. Pick a widget, then paste its code into your site."
+msgstr "Biletleri kendi web sitenizde satın. Bir widget seçin, ardından kodunu sitenize yapıştırın."
 
 #: src/components/routes/event/OccurrencesTab/BookingSummary/index.tsx:77
 msgid "Sellable"
@@ -15106,7 +15481,7 @@ msgstr "Sınırsız yap (sınırı kaldır)"
 msgid "Set up a recurring schedule to automatically create dates, or add them one at a time."
 msgstr "Tarihlerin otomatik oluşturulması için yinelenen bir program kurun veya tarihleri tek tek ekleyin."
 
-#: src/components/layouts/OrganizerLayout/index.tsx:92
+#: src/components/layouts/OrganizerLayout/index.tsx:93
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:126
 msgid "Set up payouts"
 msgstr "Ödemeleri kur"
@@ -15153,7 +15528,7 @@ msgstr "Tarihin konumunu veya çevrimiçi bilgilerini ayarlayın, değiştirin y
 msgid "Setting updated"
 msgstr "Ayar güncellendi"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:113
+#: src/components/layouts/OrganizerLayout/index.tsx:114
 #: src/components/layouts/SettingsLayout/index.tsx:67
 #: src/components/modals/DuplicateEventModal/index.tsx:52
 msgid "Settings"
@@ -15189,7 +15564,7 @@ msgstr "Şekil"
 
 #: src/components/common/ShareIcon/index.tsx:30
 #: src/components/layouts/EventHomepage/index.tsx:593
-#: src/components/layouts/OrganizerLayout/index.tsx:254
+#: src/components/layouts/OrganizerLayout/index.tsx:256
 #: src/components/modals/ShareModal/index.tsx:37
 #: src/components/modals/ShareModal/index.tsx:165
 #: src/components/modals/ShareModal/index.tsx:186
@@ -15209,8 +15584,8 @@ msgstr "Bağlı Kuruluş Bağlantısını Paylaş"
 msgid "Share Event"
 msgstr "Etkinliği Paylaş"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:251
-#: src/components/layouts/OrganizerLayout/index.tsx:293
+#: src/components/layouts/OrganizerLayout/index.tsx:253
+#: src/components/layouts/OrganizerLayout/index.tsx:295
 msgid "Share Organizer Page"
 msgstr "Organizatör Sayfasını Paylaş"
 
@@ -15268,12 +15643,13 @@ msgid "Show initials instead"
 msgstr "Bunun yerine baş harfleri göster"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
+#: src/components/widget/WidgetSections/index.tsx:91
 msgid "Show less"
 msgstr "Daha az göster"
 
-#: src/components/common/WidgetEditor/index.tsx:240
-msgid "Show lineup"
-msgstr "Kadroyu göster"
+#: src/components/common/WidgetEditor/ContentFields.tsx:34
+msgid "Show lineup strip above tickets"
+msgstr "Biletlerin üzerinde kadro şeridini göster"
 
 #: src/components/routes/event/Settings/Sections/HomepageAndCheckoutSettings/index.tsx:128
 msgid "Show marketing opt-in checkbox"
@@ -15283,10 +15659,14 @@ msgstr "Pazarlama onay kutusunu göster"
 msgid "Show marketing opt-in checkbox by default"
 msgstr "Varsayılan olarak pazarlama onay kutusunu göster"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:860
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1092
+#: src/components/routes/product-widget/SelectProducts/index.tsx:888
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1120
 msgid "Show more"
 msgstr "Daha fazla göster"
+
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:164
+msgid "Show more events"
+msgstr "Daha fazla etkinlik göster"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:228
 msgid "Show more platforms"
@@ -15325,9 +15705,9 @@ msgstr "Bölümü göster"
 msgid "Show tax and fees separately"
 msgstr "Vergi ve ücretleri ayrı göster"
 
-#: src/components/common/WidgetEditor/index.tsx:242
-msgid "Show the people from your lineup above the tickets."
-msgstr "Kadrodaki kişileri biletlerin üstünde gösterin."
+#: src/components/common/WidgetEditor/ContentFields.tsx:176
+msgid "Show tickets"
+msgstr "Biletleri göster"
 
 #: src/components/common/OrganizerReportTable/index.tsx:355
 msgid "Showing {0} of {totalRows} records"
@@ -15397,6 +15777,10 @@ msgstr "Kalanı gösterir"
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:79
 msgid "Shows the venue and a map. Hidden automatically for online events."
 msgstr "Mekanı ve haritayı gösterir. Çevrimiçi etkinliklerde otomatik olarak gizlenir."
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:116
+msgid "Shows tickets"
+msgstr "Biletleri gösterir"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:62
 msgid "Shows your event description."
@@ -15527,7 +15911,7 @@ msgstr "tükendi"
 #: src/components/common/EventDateRange/index.tsx:65
 #: src/components/common/ProductPriceAvailability/index.tsx:20
 #: src/components/common/ProductPriceAvailability/index.tsx:60
-#: src/components/layouts/OrganizerHomepage/EventCard/index.tsx:31
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:56
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:111
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:330
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:56
@@ -15535,6 +15919,7 @@ msgstr "tükendi"
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:35
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:54
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:85
+#: src/utilites/eventListingLabels.ts:18
 msgid "Sold out"
 msgstr "Tükendi"
 
@@ -15622,13 +16007,13 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
 #: src/components/layouts/Event/index.tsx:100
-#: src/components/layouts/OrganizerLayout/index.tsx:139
+#: src/components/layouts/OrganizerLayout/index.tsx:141
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/Login/index.tsx:114
 #: src/components/routes/auth/Login/index.tsx:167
 #: src/components/routes/my-tickets/index.tsx:162
-#: src/components/routes/product-widget/SelectProducts/index.tsx:365
+#: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
 #: src/components/routes/settings/Profile/index.tsx:84
 #: src/components/routes/settings/Profile/index.tsx:94
@@ -15642,7 +16027,7 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 msgid "Something went wrong. Please try again."
 msgstr "Bir şeyler yanlış gitti. Lütfen tekrar deneyin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:775
+#: src/components/routes/product-widget/SelectProducts/index.tsx:790
 msgid "Sorry, this promo code is not recognized"
 msgstr "Üzgünüz, bu promosyon kodu tanınmıyor"
 
@@ -15703,7 +16088,7 @@ msgid "Sponsor name"
 msgstr "Sponsor adı"
 
 #: src/components/layouts/EventHomepage/Sections/SponsorsSection.tsx:21
-#: src/utilites/homepageSections.ts:42
+#: src/utilites/homepageSections.ts:45
 msgid "Sponsors"
 msgstr "Sponsorlar"
 
@@ -16102,7 +16487,7 @@ msgid "Subtotal"
 msgstr "Ara Toplam"
 
 #: src/components/common/OrganizerWebhookTable/index.tsx:155
-#: src/components/layouts/Checkout/index.tsx:190
+#: src/components/layouts/Checkout/index.tsx:207
 #: src/hooks/useOrderActions.tsx:84
 msgid "Success"
 msgstr "Başarılı"
@@ -16298,7 +16683,7 @@ msgstr "İsveççe"
 msgid "Switch date"
 msgstr "Tarihi değiştir"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:82
+#: src/components/layouts/OrganizerLayout/index.tsx:83
 #: src/components/modals/SwitchOrganizerModal/index.tsx:49
 msgid "Switch Organizer"
 msgstr "Organizatör Değiştir"
@@ -16443,7 +16828,7 @@ msgid "Taxes and Fees"
 msgstr "Vergiler ve Ücretler"
 
 #: src/components/layouts/Event/index.tsx:164
-#: src/components/layouts/OrganizerLayout/index.tsx:126
+#: src/components/layouts/OrganizerLayout/index.tsx:128
 #: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
@@ -16452,7 +16837,7 @@ msgid "Team"
 msgstr "Ekip"
 
 #: src/components/layouts/Event/index.tsx:165
-#: src/components/layouts/OrganizerLayout/index.tsx:127
+#: src/components/layouts/OrganizerLayout/index.tsx:129
 msgid "Team Access"
 msgstr "Ekip erişimi"
 
@@ -16518,9 +16903,10 @@ msgstr "Hizmet Koşulları"
 msgid "Test email sent to your inbox"
 msgstr "Test e-postası gelen kutunuza gönderildi"
 
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:76
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:45
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
-#: src/utilites/homepageSections.ts:34
+#: src/utilites/homepageSections.ts:37
 msgid "Text"
 msgstr "Metin"
 
@@ -16541,8 +16927,8 @@ msgstr "Bu bir YouTube veya Vimeo video bağlantısına benzemiyor"
 msgid "That overlaps \"{conflict}\" on the same stage"
 msgstr "Aynı sahnedeki \"{conflict}\" ile çakışıyor"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:341
-#: src/components/routes/product-widget/SelectProducts/index.tsx:692
+#: src/components/routes/product-widget/SelectProducts/index.tsx:354
+#: src/components/routes/product-widget/SelectProducts/index.tsx:707
 msgid "That promo code is invalid"
 msgstr "Bu promosyon kodu geçersiz"
 
@@ -16685,7 +17071,7 @@ msgstr "Erişmeye çalıştığınız bağlantının süresi doldu veya artık g
 msgid "The link you clicked is invalid."
 msgstr "Tıkladığınız bağlantı geçersiz."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:996
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1024
 msgid "The maximum number of products for {0}is {1}"
 msgstr "{0} için maksimum ürün sayısı {1}"
 
@@ -16705,6 +17091,10 @@ msgstr "Bu karar sipariş denetim kaydına işlenir."
 #: src/components/common/ErrorDisplay/index.tsx:18
 msgid "The page you are looking for does not exist"
 msgstr "Aradığınız sayfa mevcut değil"
+
+#: src/components/common/WidgetEditor/TypePicker.tsx:9
+msgid "The people on your bill, grouped by billing."
+msgstr "Kadronuzdaki kişiler, sıralamaya göre gruplanmış."
 
 #: src/components/common/PlatformFeesSettings/index.tsx:212
 msgid "The platform fee is added to the ticket price. Buyers pay more, but you receive the full ticket price."
@@ -16847,19 +17237,19 @@ msgstr "Bölümlü tiyatro"
 msgid "Theme & Colors"
 msgstr "Tema ve Renkler"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1213
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1241
 msgid "There are no products available for this date. Please choose another date."
 msgstr "Bu tarih için uygun ürün yok. Lütfen başka bir tarih seçin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:797
+#: src/components/routes/product-widget/SelectProducts/index.tsx:812
 msgid "There are no products available for this event"
 msgstr "Bu etkinlik için mevcut ürün yok"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:869
+#: src/components/routes/product-widget/SelectProducts/index.tsx:897
 msgid "There are no products available in this category"
 msgstr "Bu kategoride mevcut ürün yok"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:794
+#: src/components/routes/product-widget/SelectProducts/index.tsx:809
 msgid "There are no upcoming dates for this event"
 msgstr "Bu etkinliğin yaklaşan tarihi yok"
 
@@ -16899,6 +17289,10 @@ msgstr "Bu ayrıntılar yalnızca sipariş başarıyla tamamlandığında göste
 msgid "These details will replace any existing location on the affected dates and show on attendee tickets."
 msgstr "Bu bilgiler, etkilenen tarihlerdeki mevcut konumun yerini alır ve katılımcı biletlerinde görünür."
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:122
+msgid "These events are not available"
+msgstr "Bu etkinlikler kullanılamıyor"
+
 #: src/components/forms/ProductForm/index.tsx:352
 msgid "These prices apply across all dates in your schedule, and each tier's quantity can be per date or a total across all dates. Sale dates on tiers apply globally. You can override prices and per-date quantities for individual dates on the <0>Occurrence Schedule page</0>."
 msgstr "Bu fiyatlar programınızdaki tüm tarihler için geçerlidir ve her kademenin miktarı tarih başına veya tüm tarihler için toplam olabilir. Kademelerin satış tarihleri genel olarak geçerlidir. Tek tek tarihler için fiyatları ve tarih başına miktarları <0>Tarih Programı sayfasında</0> geçersiz kılabilirsiniz."
@@ -16906,10 +17300,6 @@ msgstr "Bu fiyatlar programınızdaki tüm tarihler için geçerlidir ve her kad
 #: src/ee/seating/components/SeatPicker/Basket.tsx:111
 msgid "These seats are sold out"
 msgstr "Bu koltuklar tükendi"
-
-#: src/components/common/WidgetEditor/index.tsx:182
-msgid "These settings apply only to copied embed code and won't be stored."
-msgstr "Bu ayarlar yalnızca kopyalanan yerleştirme kodu için geçerlidir ve saklanmayacaktır."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:340
 msgid "These templates will be used as defaults for all events in your organization. Individual events can override these templates with their own custom versions."
@@ -17037,7 +17427,7 @@ msgstr "Bu tarih geçmişte. Oluşturulacak ancak katılımcılara yaklaşan tar
 msgid "This date is marked sold out."
 msgstr "Bu tarih tükendi olarak işaretli."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:746
+#: src/components/routes/product-widget/SelectProducts/index.tsx:761
 msgid "This date is no longer available. Please select another date."
 msgstr "Bu tarih artık uygun değil. Lütfen başka bir tarih seçin."
 
@@ -17073,7 +17463,8 @@ msgstr "Bu etkinliğin tek bir fiziksel mekanı yok."
 msgid "This event has no tickets or products yet, so attendees won't be able to register."
 msgstr "Bu etkinlikte henüz bilet veya ürün yok, bu yüzden katılımcılar kayıt olamaz."
 
-#: src/components/layouts/ProductWidget/index.tsx:52
+#: src/components/layouts/EventContentWidget/index.tsx:34
+#: src/components/layouts/ProductWidget/index.tsx:65
 msgid "This event is not available"
 msgstr "Bu etkinlik kullanılamıyor"
 
@@ -17101,7 +17492,7 @@ msgstr "Bu etkinlik manuel inceleme bekliyor ve inceleme tamamlanana kadar durum
 msgid "This event is pending manual review. Its status cannot be changed until the review is complete."
 msgstr "Bu etkinlik manuel inceleme bekliyor. İnceleme tamamlanana kadar durumu değiştirilemez."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:793
+#: src/components/routes/product-widget/SelectProducts/index.tsx:808
 msgid "This event is sold out"
 msgstr "Bu etkinliğin biletleri tükendi"
 
@@ -17441,7 +17832,7 @@ msgstr "Bilet fiyatı"
 msgid "Ticket resent successfully"
 msgstr "Bilet başarıyla yeniden gönderildi"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:789
+#: src/components/routes/product-widget/SelectProducts/index.tsx:804
 msgid "Ticket sales have ended for this event"
 msgstr "Bu etkinliğin bilet satışı sona erdi"
 
@@ -17466,11 +17857,14 @@ msgstr "Biletleme ve Satış"
 msgid "tickets"
 msgstr "bilet"
 
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:84
+#: src/components/common/WidgetEditor/SectionsPicker.tsx:25
+#: src/components/common/WidgetEditor/TypePicker.tsx:7
 #: src/components/forms/ProductForm/buildPreviewEvent.ts:139
 #: src/components/routes/admin/Dashboard/index.tsx:263
 #: src/components/routes/my-tickets/index.tsx:101
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:111
-#: src/utilites/homepageSections.ts:16
+#: src/utilites/homepageSections.ts:19
 msgid "Tickets"
 msgstr "Biletler"
 
@@ -17478,6 +17872,10 @@ msgstr "Biletler"
 #: src/components/routes/event/products.tsx:68
 msgid "Tickets & Products"
 msgstr "Biletler ve Ürünler"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:79
+msgid "Tickets and {extraSections} more"
+msgstr "Biletler ve {extraSections} tane daha"
 
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/index.tsx:228
 msgid "Tickets are always shown"
@@ -17499,6 +17897,10 @@ msgstr "Her kategori için biletler"
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:61
 msgid "Tickets linked"
 msgstr "Bağlı biletler"
+
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:79
+msgid "Tickets only"
+msgstr "Yalnızca biletler"
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:127
 msgid "Tickets sent to {0}"
@@ -17540,7 +17942,7 @@ msgstr "TikTok"
 msgid "Time"
 msgstr "Saat"
 
-#: src/components/layouts/Checkout/index.tsx:338
+#: src/components/layouts/Checkout/index.tsx:355
 msgid "Time left"
 msgstr "Kalan süre"
 
@@ -17674,7 +18076,7 @@ msgstr "Çok fazla deneme. Bir dakika bekleyip tekrar deneyin."
 msgid "Too many rows in one import"
 msgstr "Tek seferde çok fazla satır var"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:115
+#: src/components/layouts/OrganizerLayout/index.tsx:116
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:357
 msgid "Tools"
 msgstr "Araçlar"
@@ -17778,6 +18180,10 @@ msgstr "Turlar"
 msgid "Track account growth and performance by attribution source"
 msgstr "Atıf kaynağına göre hesap büyümesini ve performansını takip edin"
 
+#: src/components/common/WidgetEditor/InstallPanel.tsx:92
+msgid "Track sales in your own analytics"
+msgstr "Satışları kendi analiz aracınızda takip edin"
+
 #: src/components/routes/organizer/Settings/index.tsx:75
 #: src/components/routes/organizer/Settings/Sections/TrackingPixelSettings/index.tsx:172
 msgid "Tracking & Analytics"
@@ -17804,7 +18210,7 @@ msgstr "Farklı bir arama terimi veya filtre deneyin"
 msgid "Try adjusting your filters to see more dates."
 msgstr "Daha fazla tarih görmek için filtrelerinizi ayarlayın."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1077
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1105
 #: src/components/routes/settings/Security/index.tsx:75
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
@@ -17843,6 +18249,10 @@ msgstr "Türkçe"
 msgid "Turn off"
 msgstr "Kapat"
 
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:52
+msgid "Turn off to make the widget fill the height of its container."
+msgstr "Widget'ın kapsayıcısının tüm yüksekliğini doldurması için kapatın."
+
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:48
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
 #: src/components/routes/settings/Security/index.tsx:190
@@ -17856,6 +18266,10 @@ msgstr "{0} için iki adımlı doğrulama kapatılsın mı? Bunu yalnızca kimli
 #: src/components/routes/settings/Security/index.tsx:127
 msgid "Turn on"
 msgstr "Aç"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:30
+msgid "Turn on extra sections and drag to reorder."
+msgstr "Ek bölümleri açın ve sıralamak için sürükleyin."
 
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:66
 msgid "Turn on two-factor authentication for your own profile first."
@@ -18002,13 +18416,17 @@ msgstr "Satış tamamlanamadı"
 msgid "Unable to create product. Please check the your details"
 msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:328
+#: src/components/routes/product-widget/SelectProducts/index.tsx:341
 msgid "Unable to create product. Please check your details"
 msgstr "Ürün oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
 
 #: src/components/modals/CreateQuestionModal/index.tsx:61
 msgid "Unable to create question. Please check the your details"
 msgstr "Soru oluşturulamadı. Lütfen bilgilerinizi kontrol edin"
+
+#: src/components/common/WidgetEditor/index.tsx:152
+msgid "Unable to delete the widget"
+msgstr "Widget silinemedi"
 
 #: src/components/modals/DuplicateProductModal/index.tsx:120
 msgid "Unable to duplicate product. Please check the your details"
@@ -18030,13 +18448,21 @@ msgstr "Bekleme listesine katılınamadı"
 msgid "Unable to load attendee details."
 msgstr "Katılımcı ayrıntıları yüklenemedi."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:382
+#: src/components/routes/product-widget/SelectProducts/index.tsx:397
 msgid "Unable to load products for this date. Please try again."
 msgstr "Bu tarihe ait ürünler yüklenemedi. Lütfen tekrar deneyin."
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:59
 msgid "Unable to remove the card reader"
 msgstr "Kart okuyucu kaldırılamadı"
+
+#: src/components/common/WidgetEditor/index.tsx:129
+msgid "Unable to rename the widget"
+msgstr "Widget yeniden adlandırılamadı"
+
+#: src/components/common/WidgetEditor/index.tsx:113
+msgid "Unable to save the widget. Please check your settings and try again."
+msgstr "Widget kaydedilemedi. Lütfen ayarlarınızı kontrol edip tekrar deneyin."
 
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:73
 msgid "Unable to send tickets"
@@ -18140,7 +18566,7 @@ msgstr "Bilinmeyen cihaz"
 msgid "Unlimited"
 msgstr "Sınırsız"
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:931
+#: src/components/routes/product-widget/SelectProducts/index.tsx:959
 msgid "Unlimited available"
 msgstr "Sınırsız mevcut"
 
@@ -18178,8 +18604,9 @@ msgstr "Tüm etkinliklerin yayınını kaldırın ve bu hesabı ve kullanıcıla
 msgid "Unpublishes your events and disables access straight away. Deletion becomes permanent after 30 days unless you cancel."
 msgstr "Etkinliklerinizi hemen yayından kaldırır ve erişimi devre dışı bırakır. İptal etmezseniz silme işlemi 30 gün sonra kalıcı hale gelir."
 
-#: src/components/common/DesignerShell/index.tsx:74
+#: src/components/common/DesignerShell/index.tsx:149
 #: src/components/common/SettingsPage/index.tsx:89
+#: src/components/common/WidgetEditor/index.tsx:173
 msgid "Unsaved changes"
 msgstr "Kaydedilmemiş değişiklikler"
 
@@ -18238,6 +18665,7 @@ msgstr "En fazla 40 fotoğraf, en az 400 × 300px. İlki en büyük gösterilir.
 
 #: src/components/common/EventsDashboardStatusButtons/index.tsx:20
 #: src/components/common/EventStatusBadge/index.tsx:16
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:136
 #: src/components/layouts/OrganizerHomepage/index.tsx:225
 #: src/components/routes/event/OccurrencesTab/index.tsx:521
 #: src/components/routes/organizer/Reports/EventsPerformanceReport/index.tsx:33
@@ -18372,10 +18800,6 @@ msgstr "URL gerekli"
 msgid "URL must start with http:// or https://"
 msgstr "URL http:// veya https:// ile başlamalıdır"
 
-#: src/components/common/WidgetEditor/index.tsx:316
-msgid "Usage Example"
-msgstr "Kullanım Örneği"
-
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:76
 msgid "Usage Limit"
 msgstr "Kullanım Sınırı"
@@ -18501,6 +18925,14 @@ msgstr "Kullanıcılar"
 #: src/components/routes/admin/Announcements/index.tsx:74
 msgid "Users ({0})"
 msgstr "Kullanıcılar ({0})"
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:66
+msgid "Uses the colours and font from your homepage design, and updates when you change them."
+msgstr "Ana sayfa tasarımınızdaki renkleri ve yazı tipini kullanır, siz değiştirdiğinizde güncellenir."
+
+#: src/components/common/WidgetEditor/AppearancePanel.tsx:65
+msgid "Uses the colours and font from your homepage design. If you change the design, copy the code again to update the button."
+msgstr "Ana sayfa tasarımınızın renklerini ve yazı tipini kullanır. Tasarımı değiştirirseniz düğmeyi güncellemek için kodu yeniden kopyalayın."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
@@ -18676,7 +19108,7 @@ msgstr "Katılımcıların bilet alabilmesi için e-postanızı doğrulayın"
 msgid "Verifying..."
 msgstr "Doğrulanıyor..."
 
-#: src/utilites/homepageSections.ts:40
+#: src/utilites/homepageSections.ts:43
 msgid "Video"
 msgstr "Video"
 
@@ -18746,6 +19178,10 @@ msgstr "Detayları Görüntüle"
 msgid "View details for {0} {1}"
 msgstr "{0} {1} ayrıntılarını gör"
 
+#: src/components/layouts/OrganizerEventsWidget/index.tsx:55
+msgid "View event"
+msgstr "Etkinliği görüntüle"
+
 #: src/components/common/AdminEventsTable/index.tsx:159
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:58
 #: src/components/common/EmailTemplateEditor/EmailTemplateEditor.tsx:72
@@ -18782,7 +19218,7 @@ msgid "View on Google Maps"
 msgstr "Google Haritalar'da görüntüle"
 
 #: src/components/layouts/Event/index.tsx:236
-#: src/components/layouts/OrganizerLayout/index.tsx:222
+#: src/components/layouts/OrganizerLayout/index.tsx:224
 msgid "View only"
 msgstr "Yalnızca görüntüleme"
 
@@ -18807,8 +19243,8 @@ msgstr "Sipariş detaylarını görüntüleyin, iade yapın ve onayları yeniden
 msgid "View orders"
 msgstr "Siparişleri görüntüle"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:269
-#: src/components/layouts/OrganizerLayout/index.tsx:272
+#: src/components/layouts/OrganizerLayout/index.tsx:271
+#: src/components/layouts/OrganizerLayout/index.tsx:274
 msgid "View Organizer Homepage"
 msgstr "Organizatör Ana Sayfasını Görüntüle"
 
@@ -18843,6 +19279,7 @@ msgstr "Görüntüleyici"
 msgid "Viewers"
 msgstr "Görüntüleyiciler"
 
+#: src/components/common/WidgetEditor/WidgetStats.tsx:15
 #: src/components/routes/admin/Dashboard/index.tsx:292
 msgid "Views"
 msgstr "Görüntülenme"
@@ -18867,6 +19304,15 @@ msgstr "{start} tarihinden itibaren görünür — satışlar açılana kadar gi
 #: src/components/forms/ProductForm/visibilityStatus.ts:56
 msgid "Visible to everyone on the event page."
 msgstr "Etkinlik sayfasında herkese görünür."
+
+#: src/components/common/WidgetEditor/BehaviourPanel.tsx:43
+#: src/components/common/WidgetEditor/CustomiseGroups.tsx:61
+msgid "Visitor's language"
+msgstr "Ziyaretçinin dili"
+
+#: src/components/common/WidgetEditor/TypePicker.tsx:7
+msgid "Visitors pick tickets right on your page."
+msgstr "Ziyaretçiler biletleri doğrudan sayfanızda seçer."
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:104
 #: src/constants/socialMediaConfig.ts:41
@@ -18991,7 +19437,7 @@ msgstr "Verileri yükleyemedik. Lütfen tekrar deneyin."
 msgid "We couldn't load the products. Please try again."
 msgstr "Ürünler yüklenemedi. Lütfen tekrar deneyin."
 
-#: src/components/routes/product-widget/SelectProducts/index.tsx:1074
+#: src/components/routes/product-widget/SelectProducts/index.tsx:1102
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:457
 msgid "We couldn't load the seating map. Please try again."
 msgstr "Oturma planı yüklenemedi. Lütfen tekrar deneyin."
@@ -19131,7 +19577,7 @@ msgid "Webhook will send notifications"
 msgstr "Webhook bildirim gönderecek"
 
 #: src/components/layouts/Event/index.tsx:163
-#: src/components/layouts/OrganizerLayout/index.tsx:124
+#: src/components/layouts/OrganizerLayout/index.tsx:126
 #: src/components/modals/DuplicateEventModal/index.tsx:58
 #: src/components/routes/event/Webhooks/index.tsx:33
 #: src/components/routes/organizer/Webhooks/index.tsx:31
@@ -19318,6 +19764,10 @@ msgstr "Bir etkinlik arşivlendiğinde"
 msgid "When an event is updated"
 msgstr "Bir etkinlik güncellendiğinde"
 
+#: src/components/common/WidgetEditor/InstallPanel.tsx:94
+msgid "When an order completes, the widget fires an hievents:order-completed event on your page with the order total and currency. This example sends it to Google Analytics and Meta."
+msgstr "Bir sipariş tamamlandığında widget, sayfanızda sipariş toplamı ve para birimiyle birlikte bir hievents:order-completed olayı tetikler. Bu örnek, olayı Google Analytics ve Meta'ya gönderir."
+
 #: src/components/forms/WebhookForm/index.tsx:99
 msgid "When an order is cancelled"
 msgstr "Bir sipariş iptal edildiğinde"
@@ -19378,6 +19828,14 @@ msgstr "Satışlar ne zaman kapanır"
 msgid "When sales open"
 msgstr "Satışlar ne zaman açılır"
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:169
+msgid "When someone picks an event"
+msgstr "Biri bir etkinlik seçtiğinde"
+
+#: src/components/common/WidgetEditor/InstallPanel.tsx:60
+msgid "Where is your website?"
+msgstr "Web siteniz nerede?"
+
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:141
 msgid "Where it was paid, e.g. SumUp or bank transfer"
 msgstr "Ödemenin yapıldığı yer, ör. SumUp veya banka havalesi"
@@ -19420,22 +19878,48 @@ msgstr "Sahnede kim var?"
 msgid "Whole account"
 msgstr "Tüm hesap"
 
+#: src/components/common/WidgetEditor/index.tsx:230
+msgid "Widget"
+msgstr "Widget"
+
+#: src/components/common/WidgetEditor/index.tsx:111
+msgid "Widget created"
+msgstr "Widget oluşturuldu"
+
+#: src/components/common/WidgetEditor/index.tsx:150
+msgid "Widget deleted"
+msgstr "Widget silindi"
+
 #: src/components/layouts/Event/index.tsx:162
+#: src/components/layouts/OrganizerLayout/index.tsx:118
 msgid "Widget Embed"
 msgstr "Widget Yerleştirme"
 
-#: src/components/common/WidgetEditor/index.tsx:334
-msgid "Widget Preview"
-msgstr "Widget Önizleme"
+#: src/components/common/WidgetEditor/index.tsx:244
+msgid "Widget options"
+msgstr "Widget seçenekleri"
 
-#: src/components/common/WidgetEditor/index.tsx:164
-msgid "Widget Settings"
-msgstr "Widget Ayarları"
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:135
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:186
+msgid "Widget preview"
+msgstr "Widget önizlemesi"
+
+#: src/components/common/WidgetEditor/index.tsx:111
+msgid "Widget saved"
+msgstr "Widget kaydedildi"
+
+#: src/components/common/WidgetEditor/TypePicker.tsx:24
+msgid "Widget type"
+msgstr "Widget türü"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:83
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:97
 msgid "Width"
 msgstr "Genişlik"
+
+#: src/components/common/WidgetEditor/installGuides.ts:73
+msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
+msgstr "Wix, yerleştirilen kodu sabit boyutlu bir kutuda gösterir. En iyi deneyim için \"Ödeme şurada açılır\" ayarını \"Yeni sekme\" olarak belirleyin."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Working"
@@ -19500,7 +19984,7 @@ msgstr "Evet"
 msgid "Yes - I have a valid EU VAT registration number"
 msgstr "Evet - Geçerli bir AB KDV kayıt numaram var"
 
-#: src/components/layouts/Checkout/index.tsx:459
+#: src/components/layouts/Checkout/index.tsx:476
 msgid "Yes, cancel my order"
 msgstr "Evet, siparişimi iptal et"
 
@@ -19614,7 +20098,7 @@ msgstr "Ücretli biletleriniz var ancak Stripe henüz bağlı değil, bu yüzden
 msgid "You have reached your messaging limit."
 msgstr "Mesajlaşma limitinize ulaştınız."
 
-#: src/components/layouts/Checkout/index.tsx:417
+#: src/components/layouts/Checkout/index.tsx:434
 msgid "You have run out of time to complete your order."
 msgstr "Siparişinizi tamamlamak için zamanınız doldu."
 
@@ -19651,7 +20135,7 @@ msgstr "Elle katılımcı ekleyebilmek için önce bir bilet oluşturmalısını
 msgid "You must have at least one price tier"
 msgstr "En az bir fiyat seviyeniz olmalı"
 
-#: src/components/layouts/OrganizerLayout/index.tsx:314
+#: src/components/layouts/OrganizerLayout/index.tsx:316
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Organizatör durumunu güncelleyebilmek için e-posta adresinizi doğrulamanız gerekir."
 
@@ -19787,15 +20271,11 @@ msgstr "Katılımcılarınız başarıyla dışa aktarıldı."
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Katılımcılarınız etkinliğinize kaydolduktan sonra burada görünecek. Ayrıca elle katılımcı ekleyebilirsiniz."
 
-#: src/components/common/WidgetEditor/index.tsx:349
-msgid "Your awesome website 🎉"
-msgstr "Harika web siteniz 🎉"
-
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
 msgstr "Giriş listeniz başarıyla oluşturuldu. Aşağıdaki bağlantıyı giriş personelinizle paylaşın."
 
-#: src/components/layouts/Checkout/index.tsx:444
+#: src/components/layouts/Checkout/index.tsx:461
 msgid "Your current order will be lost."
 msgstr "Mevcut siparişiniz kaybolacak."
 
@@ -19831,6 +20311,10 @@ msgstr "Hi.Events Enterprise lisansınızın süresi {expiresAt} tarihinde doldu
 #: src/ee/licensing/components/LicenceModal/index.tsx:119
 msgid "Your licence has expired"
 msgstr "Lisansınızın süresi doldu"
+
+#: src/components/common/WidgetEditor/ContentFields.tsx:207
+msgid "Your lineup is hidden on your event page, so this widget will be empty."
+msgstr "Kadronuz etkinlik sayfanızda gizli, bu yüzden bu widget boş olacak."
 
 #: src/hooks/useOrderActions.tsx:62
 msgid "Your message has been sent"
@@ -19872,7 +20356,7 @@ msgstr "Sipariş bilgileriniz güncellendi. Yeni e-posta adresine bir onay e-pos
 msgid "Your order has been cancelled"
 msgstr "Siparişiniz iptal edildi"
 
-#: src/components/layouts/Checkout/index.tsx:212
+#: src/components/layouts/Checkout/index.tsx:229
 msgid "Your order has been cancelled."
 msgstr "Siparişiniz iptal edildi."
 
@@ -19941,6 +20425,10 @@ msgstr "İadeniz işleniyor."
 msgid "Your saved date filter is no longer available — showing all dates."
 msgstr "Kaydedilmiş tarih filtreniz artık kullanılamıyor — tüm tarihler gösteriliyor."
 
+#: src/components/common/WidgetEditor/ContentFields.tsx:208
+msgid "Your schedule is hidden on your event page, so this widget will be empty."
+msgstr "Programınız etkinlik sayfanızda gizli, bu yüzden bu widget boş olacak."
+
 #: src/ee/seating/components/ChangeSeatButton/ChangeSeatChooser.tsx:31
 msgid "Your seat could not be changed"
 msgstr "Koltuğunuz değiştirilemedi"
@@ -19973,6 +20461,10 @@ msgstr "Biletiniz geçerliliğini koruyor — yeni saat size uymuyorsa dışınd
 msgid "Your tickets have been confirmed."
 msgstr "Biletleriniz onaylandı."
 
+#: src/components/common/WidgetEditor/TypePicker.tsx:10
+msgid "Your timetable by day, with stage filters."
+msgstr "Sahne filtreleriyle günlere göre programınız."
+
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:68
 msgid "Your VAT number is queued for validation"
 msgstr "KDV numaranız doğrulama için sıraya alındı"
@@ -19984,6 +20476,10 @@ msgstr "KDV numaranız kaydettiğinizde doğrulanacak"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:405
 msgid "Your waitlist offer has expired and we were unable to complete your order. Please rejoin the waitlist to be notified when more spots become available."
 msgstr "Bekleme listesi teklifinizin süresi doldu ve siparişinizi tamamlayamadık. Daha fazla yer açıldığında bilgilendirilmek için lütfen bekleme listesine yeniden katılın."
+
+#: src/components/common/WidgetEditor/WidgetPreview.tsx:84
+msgid "your-website.com"
+msgstr "web-siteniz.com"
 
 #: src/components/routes/organizer/Settings/Sections/SocialLinks/index.tsx:67
 #: src/constants/socialMediaConfig.ts:34

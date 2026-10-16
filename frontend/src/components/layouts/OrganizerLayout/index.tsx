@@ -6,6 +6,7 @@ import {
     IconChartPie,
     IconChevronRight,
     IconDashboard,
+    IconDeviceTabletCode,
     IconExternalLink,
     IconEye,
     IconEyeOff,
@@ -114,6 +115,7 @@ const OrganizerLayout = () => {
 
         { label: t`Tools` },
         { link: 'organizer-homepage-designer', label: t`Homepage Designer`, icon: IconPaint, showWhen: () => !isReadOnly },
+        { link: 'widget', label: t`Widget Embed`, icon: IconDeviceTabletCode },
 
         { label: t`Library` },
         { link: 'locations', label: t`Locations`, icon: IconMapPin },

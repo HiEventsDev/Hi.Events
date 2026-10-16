@@ -191,6 +191,24 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
+.lineup[data-density="compact"] {
+  .tier[data-tier="headliner"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+
+    .cardMedia {
+      aspect-ratio: 4 / 5;
+    }
+
+    .cardName {
+      font-size: 1.1rem;
+    }
+  }
+
+  .tier[data-tier="featured"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr));
+  }
+}
+
 .tier[data-tier="standard"] {
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 6px 14px;
@@ -266,8 +284,8 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 .dayTabs {
   display: flex;
   gap: 8px;
-  margin: 0 -32px 16px;
-  padding: 0 32px 4px;
+  margin: 0 calc(var(--section-bleed, 32px) * -1) 16px;
+  padding: 0 var(--section-bleed, 32px) 4px;
   overflow-x: auto;
   scrollbar-width: none;
 
@@ -276,8 +294,8 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @include mixins.respond-below(md) {
-    margin: 0 -20px 16px;
-    padding: 0 20px 4px;
+    margin: 0 calc(var(--section-bleed, 20px) * -1) 16px;
+    padding: 0 var(--section-bleed, 20px) 4px;
   }
 }
 
@@ -399,7 +417,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
   &[data-live]::before {
     content: '';
     position: absolute;
-    left: -32px;
+    left: calc(var(--section-bleed, 32px) * -1);
     top: 16px;
     bottom: 16px;
     width: 3px;
@@ -407,7 +425,7 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
     background: var(--event-primary-color);
 
     @include mixins.respond-below(md) {
-      left: -20px;
+      left: calc(var(--section-bleed, 20px) * -1);
     }
   }
 
@@ -613,8 +631,8 @@ $ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stageGridScroller {
-  margin: 0 -32px;
-  padding: 0 32px 8px;
+  margin: 0 calc(var(--section-bleed, 32px) * -1);
+  padding: 0 var(--section-bleed, 32px) 8px;
   overflow-x: auto;
   @include mixins.scrollbar;
 }

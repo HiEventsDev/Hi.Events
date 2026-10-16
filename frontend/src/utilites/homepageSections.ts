@@ -4,6 +4,9 @@ import {EVENT_DEFAULT_SECTIONS, ORGANIZER_DEFAULT_SECTIONS, withDefaultSections}
 
 export const CUSTOM_SECTION_TYPES: HomepageSectionType[] = ['TEXT', 'GALLERY', 'FAQ', 'VIDEO', 'SPONSORS'];
 
+export const homepageSectionHeading = (sections: HomepageSection[] | null | undefined, type: HomepageSectionType, fallback: string): string =>
+    resolveHomepageSections(sections).find(section => section.type === type)?.heading || fallback;
+
 export const resolveHomepageSections = (saved?: HomepageSection[] | null): HomepageSection[] =>
     withDefaultSections(saved, EVENT_DEFAULT_SECTIONS);
 

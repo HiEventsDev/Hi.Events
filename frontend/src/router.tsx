@@ -5,6 +5,7 @@ import { useGetMe } from "./queries/useGetMe.ts";
 import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts";
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
+import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -377,6 +378,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "widget",
+                async lazy() {
+                    const OrganizerWidget = await import("./components/routes/organizer/OrganizerWidget");
+                    return { Component: OrganizerWidget.default };
+                }
+            },
+            {
                 path: "webhooks",
                 async lazy() {
                     const Webhooks = await import("./components/routes/organizer/Webhooks");
@@ -702,10 +710,38 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage />,
     },
     {
+        path: "/widget/organizer/:organizerId",
+        loader: organizerWidgetRouteLoader,
+        async lazy() {
+            const OrganizerEventsWidget = await import("./components/layouts/OrganizerEventsWidget");
+            return { Component: OrganizerEventsWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/widget/:eventId",
+        loader: ticketWidgetRouteLoader,
         async lazy() {
             const ProductWidget = await import("./components/layouts/ProductWidget");
             return { Component: ProductWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/widget/:eventId/lineup",
+        loader: eventContentWidgetRouteLoader,
+        async lazy() {
+            const {LineupWidget} = await import("./components/layouts/EventContentWidget");
+            return { Component: LineupWidget };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/widget/:eventId/schedule",
+        loader: eventContentWidgetRouteLoader,
+        async lazy() {
+            const {ScheduleWidget} = await import("./components/layouts/EventContentWidget");
+            return { Component: ScheduleWidget };
         },
         errorElement: <ErrorPage />,
     },
