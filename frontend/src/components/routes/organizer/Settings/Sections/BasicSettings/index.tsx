@@ -9,6 +9,8 @@ import {Card} from "../../../../../common/Card";
 import {HeadingWithDescription} from "../../../../../common/Card/CardHeading";
 import {DayOfWeek} from "@mantine/dates";
 import {useGetOrganizer} from "../../../../../../queries/useGetOrganizer.ts";
+import {useGetOrganizerSettings} from "../../../../../../queries/useGetOrganizerSettings.ts";
+import {useUpdateOrganizerSettings} from "../../../../../../mutations/useUpdateOrganizerSettings.ts";
 import {InputGroup} from "../../../../../common/InputGroup";
 import {currencies} from "../../../../../../../data/currencies.ts";
 import {timezones} from "../../../../../../../data/timezones.ts";
@@ -18,7 +20,11 @@ import {useUpdateOrganizer} from "../../../../../../mutations/useUpdateOrganizer
 const Settings = () => {
     const {organizerId} = useParams();
     const {data: organizer} = useGetOrganizer(organizerId);
+    const {data: organizerSettings} = useGetOrganizerSettings(organizerId);
     const organizerMutation = useUpdateOrganizer();
+    const settingsMutation = useUpdateOrganizerSettings();
+    const formErrorHandle = useFormErrorResponseHandler();
+    const isSaving = organizerMutation.isPending || settingsMutation.isPending;
     const form = useForm({
         initialValues: {
             name: '',
@@ -33,30 +39,25 @@ const Settings = () => {
     });
 
     const daysOfWeek = [
-        {value: '0', label: t`Sunday`},
         {value: '1', label: t`Monday`},
         {value: '2', label: t`Tuesday`},
         {value: '3', label: t`Wednesday`},
         {value: '4', label: t`Thursday`},
         {value: '5', label: t`Friday`},
         {value: '6', label: t`Saturday`},
+        {value: '0', label: t`Sunday`},
     ];
 
-    const handleSubmit = (values: typeof form.values) => {
-        organizerMutation.mutate({
-            organizerId: organizerId,
-            organizerData: {
-                ...values,
-                first_day_of_week: Number(values.first_day_of_week) as DayOfWeek,
-            },
-        }, {
-            onSuccess: () => {
-                showSuccess(t`Successfully Updated Organizer`);
-            },
-            onError: (error: any) => {
-                useFormErrorResponseHandler()(form, error);
-            }
-        });
+    const handleSubmit = ({first_day_of_week, ...organizerData}: typeof form.values) => {
+        Promise.all([
+            organizerMutation.mutateAsync({organizerId, organizerData}),
+            settingsMutation.mutateAsync({
+                organizerId,
+                organizerSettings: {first_day_of_week: Number(first_day_of_week) as DayOfWeek},
+            }),
+        ])
+            .then(() => showSuccess(t`Successfully Updated Organizer`))
+            .catch((error) => formErrorHandle(form, error));
     }
 
     useEffect(() => {
@@ -65,12 +66,17 @@ const Settings = () => {
             email: String(organizer?.email),
             currency: String(organizer?.currency),
             timezone: String(organizer?.timezone),
-            first_day_of_week: String(organizer?.first_day_of_week ?? 1),
             phone: String(organizer?.phone || ''),
             website: String(organizer?.website || ''),
             description: String(organizer?.description || ''),
         })
     }, [organizer]);
+
+    useEffect(() => {
+        if (organizerSettings) {
+            form.setFieldValue('first_day_of_week', String(organizerSettings.first_day_of_week ?? 1));
+        }
+    }, [organizerSettings]);
 
     return (
         <Card>
@@ -79,7 +85,7 @@ const Settings = () => {
                 description={t`General information about your organizer`}
             />
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerMutation.isPending}>
+                <fieldset disabled={isSaving}>
                     <InputGroup>
                         <TextInput
                             {...form.getInputProps('name')}
@@ -147,11 +153,11 @@ const Settings = () => {
                             allowDeselect={false}
                             data={daysOfWeek}
                             label={t`First day of the week`}
-                            description={t`The day calendars start on for your events.`}
+                            description={t`The day your calendars and date pickers start on.`}
                         />
                     </InputGroup>
 
-                    <Button loading={organizerMutation.isPending} type={'submit'}>
+                    <Button loading={isSaving} type={'submit'}>
                         {t`Save`}
                     </Button>
                 </fieldset>

@@ -3,12 +3,14 @@ import {t} from "@lingui/macro";
 import {Anchor, Skeleton} from "@mantine/core";
 import {useNavigate} from "react-router";
 import dayjs from "dayjs";
+import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {Card} from "../../../../common/Card";
 import {useGetEventOccurrences} from "../../../../../queries/useGetEventOccurrences.ts";
 import {Event, IdParam, QueryFilterOperator, QueryFilters} from "../../../../../types.ts";
 import {CalendarView} from "../../OccurrencesTab/CalendarView";
+import {getCalendarGridStart} from "../../../../../utilites/dates.ts";
 import classes from "./UpcomingOccurrences.module.scss";
 
 dayjs.extend(utc);
@@ -21,21 +23,20 @@ interface UpcomingOccurrencesProps {
 
 export const UpcomingOccurrences = ({eventId, event}: UpcomingOccurrencesProps) => {
     const navigate = useNavigate();
+    const {firstDayOfWeek} = useDatesContext();
     const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
 
     const calendarRange = useMemo(() => {
         if (!event.timezone) return null;
         const tz = event.timezone;
         const monthStart = dayjs.tz(currentMonth.format('YYYY-MM-01'), tz).startOf('month');
-        const startDay = monthStart.day();
-        const offset = startDay === 0 ? 6 : startDay - 1;
-        const gridStart = monthStart.subtract(offset, 'day').startOf('day');
+        const gridStart = getCalendarGridStart(monthStart, firstDayOfWeek);
         const gridEnd = gridStart.add(42, 'day').endOf('day');
         return {
             start: gridStart.utc().format('YYYY-MM-DD HH:mm:ss'),
             end: gridEnd.utc().format('YYYY-MM-DD HH:mm:ss'),
         };
-    }, [currentMonth, event.timezone]);
+    }, [currentMonth, event.timezone, firstDayOfWeek]);
 
     const queryParams: QueryFilters = useMemo(() => {
         if (!calendarRange) return {pageNumber: 1, perPage: 500, filterFields: {}};

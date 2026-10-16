@@ -22,7 +22,6 @@ class OrganizerResource extends JsonResource
             'website' => $this->getWebsite(),
             'description' => $this->getDescription(),
             'timezone' => $this->getTimezone(),
-            'first_day_of_week' => $this->getFirstDayOfWeek(),
             'currency' => $this->getCurrency(),
             'slug' => $this->getSlug(),
             'status' => $this->getStatus(),
@@ -37,7 +36,7 @@ class OrganizerResource extends JsonResource
             ),
             'settings' => $this->when(
                 condition: ! is_null($this->getOrganizerSettings()),
-                value: fn () => new OrganizerSettingsResource($this->getOrganizerSettings())
+                value: fn () => new OrganizerSettingsPublicResource($this->getOrganizerSettings())
             ),
             $this->mergeWhen(
                 config('app.saas_mode_enabled') && $this->getOrganizerStripePlatforms() !== null,

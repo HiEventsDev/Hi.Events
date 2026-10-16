@@ -1,4 +1,5 @@
 import type { Download, Locator, Page } from '@playwright/test';
+import { pickDate } from '../utils/datePicker';
 
 export class LineupPage {
   constructor(private readonly page: Page) {}
@@ -66,7 +67,7 @@ export class LineupPage {
     const dialog = this.page.getByRole('dialog');
     await this.page.getByTestId('lineup-slot-people').click();
     await this.page.getByRole('option', { name: details.person }).click();
-    await dialog.getByLabel('Date').fill(details.date);
+    await pickDate(this.page, dialog.getByLabel('Date'), details.date);
     await dialog.getByLabel('Starts').fill(details.starts);
     await dialog.getByLabel('Ends').fill(details.ends);
     await this.page.getByTestId('lineup-slot-save-button').click();

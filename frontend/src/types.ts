@@ -823,7 +823,6 @@ export interface Organizer {
     description?: string;
     website?: string;
     timezone?: string;
-    first_day_of_week?: DayOfWeek;
     currency?: string;
     slug?: string;
     phone?: string;
@@ -874,6 +873,7 @@ export interface OrganizerSettings {
     allow_search_engine_indexing?: boolean;
     tracking_pixels?: TrackingPixelConfig[];
     tracking_consent_acknowledged?: boolean;
+    first_day_of_week?: DayOfWeek;
 }
 
 export interface TrackingPixelConfig {

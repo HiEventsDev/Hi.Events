@@ -18,7 +18,6 @@ class UpsertOrganizerRequest extends BaseRequest
             'website' => ['url', 'nullable', 'max:255'],
             'description' => ['string', 'nullable', 'max:1200'],
             'timezone' => ['timezone', 'required'],
-            'first_day_of_week' => ['sometimes', 'integer', 'between:0,6'],
             'currency' => ['required', Rule::in(array_values($currencies))],
         ];
     }

@@ -16,6 +16,14 @@ export class EventSettingsPage {
     return this.section('event-details').getByLabel(/^Name/);
   }
 
+  get detailsStartDate(): Locator {
+    return this.section('event-details').getByLabel(/^Start Date/);
+  }
+
+  get detailsEndDate(): Locator {
+    return this.section('event-details').getByLabel(/^End Date/);
+  }
+
   get detailsDescriptionEditor(): Locator {
     return this.section('event-details').locator('[contenteditable="true"]');
   }

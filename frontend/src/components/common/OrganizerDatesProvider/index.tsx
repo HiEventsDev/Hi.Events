@@ -7,15 +7,15 @@ interface OrganizerDatesProviderProps {
 }
 
 export const OrganizerDatesProvider = ({firstDayOfWeek, children}: OrganizerDatesProviderProps) => {
-    const inherited = useDatesContext();
+    const {locale, weekendDays, labelSeparator, consistentWeeks, firstDayOfWeek: inherited} = useDatesContext();
 
     return (
         <DatesProvider settings={{
-            locale: inherited.locale,
-            weekendDays: inherited.weekendDays,
-            labelSeparator: inherited.labelSeparator,
-            consistentWeeks: inherited.consistentWeeks,
-            firstDayOfWeek: firstDayOfWeek ?? inherited.firstDayOfWeek,
+            locale,
+            weekendDays,
+            labelSeparator,
+            consistentWeeks,
+            firstDayOfWeek: firstDayOfWeek ?? inherited,
         }}>
             {children}
         </DatesProvider>

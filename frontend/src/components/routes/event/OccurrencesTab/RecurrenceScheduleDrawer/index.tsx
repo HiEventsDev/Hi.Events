@@ -33,26 +33,28 @@ import {GET_EVENT_QUERY_KEY, useGetEvent} from "../../../../../queries/useGetEve
 import {GET_EVENT_OCCURRENCES_QUERY_KEY} from "../../../../../queries/useGetEventOccurrences.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {showError, showSuccess} from "../../../../../utilites/notifications.tsx";
+import {daysSinceWeekStart} from "../../../../../utilites/dates.ts";
 import {useFormErrorResponseHandler} from "../../../../../hooks/useFormErrorResponseHandler.tsx";
 import classes from './RecurrenceScheduleDrawer.module.scss';
 import {CapacityHelpLink} from "../../../../common/CapacityHelp";
+import {DateField} from "../../../../common/DateField";
 
 const MAX_PREVIEW = 1200;
 
 const DAYS_OF_WEEK = [
+    {value: 'sunday', label: t`Sun`, full: t`Sunday`},
     {value: 'monday', label: t`Mon`, full: t`Monday`},
     {value: 'tuesday', label: t`Tue`, full: t`Tuesday`},
     {value: 'wednesday', label: t`Wed`, full: t`Wednesday`},
     {value: 'thursday', label: t`Thu`, full: t`Thursday`},
     {value: 'friday', label: t`Fri`, full: t`Friday`},
     {value: 'saturday', label: t`Sat`, full: t`Saturday`},
-    {value: 'sunday', label: t`Sun`, full: t`Sunday`},
 ];
 
 const useDaysOfWeekInDisplayOrder = () => {
     const {firstDayOfWeek} = useDatesContext();
     return useMemo(
-        () => Array.from({length: 7}, (_, i) => DAYS_OF_WEEK[(firstDayOfWeek + i + 6) % 7]),
+        () => Array.from({length: 7}, (_, i) => DAYS_OF_WEEK[(firstDayOfWeek + i) % 7]),
         [firstDayOfWeek]
     );
 };
@@ -421,7 +423,7 @@ const MiniCalendar = ({previewDates, rangeStart}: { previewDates: Date[]; rangeS
     const startDate = parseLocalDate(rangeStart);
     const firstOfMonth = new Date(year, monthOfYear, 1);
     const gridStart = new Date(firstOfMonth);
-    gridStart.setDate(gridStart.getDate() - ((gridStart.getDay() - firstDayOfWeek + 7) % 7));
+    gridStart.setDate(gridStart.getDate() - daysSinceWeekStart(gridStart.getDay(), firstDayOfWeek));
 
     const cells = Array.from({length: 42}, (_, i) => {
         const date = new Date(gridStart);
@@ -1082,8 +1084,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
 
                             <div className={classes.sentenceRow}>
                                 <span className={classes.sentenceWord}>{t`From`}</span>
-                                <TextInput
-                                    type="date"
+                                <DateField
                                     aria-label={t`Schedule starts on`}
                                     className={classes.inlineDateInput}
                                     {...form.getInputProps('range_start')}
@@ -1091,8 +1092,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                 {form.values.range_type === 'until' ? (
                                     <>
                                         <span className={classes.sentenceWord}>{t`until`}</span>
-                                        <TextInput
-                                            type="date"
+                                        <DateField
                                             aria-label={t`Schedule ends on`}
                                             className={classes.inlineDateInput}
                                             {...form.getInputProps('range_until')}

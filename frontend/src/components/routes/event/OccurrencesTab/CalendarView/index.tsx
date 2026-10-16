@@ -14,7 +14,7 @@ import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {EventOccurrence} from "../../../../../types.ts";
-import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getCalendarGridStart} from "../../../../../utilites/dates.ts";
 import {OccurrenceMenuItems, OccurrenceMenuActions} from "../OccurrenceMenu";
 import classes from "./CalendarView.module.scss";
 import {bookedLimit} from "../bookingLimits.ts";
@@ -58,9 +58,7 @@ export const CalendarView = ({
     }, [occurrences, eventTimezone]);
 
     const calendarDays = useMemo(() => {
-        const startOfMonth = currentMonth.startOf('month');
-        const offset = (startOfMonth.day() - firstDayOfWeek + 7) % 7;
-        const gridStart = startOfMonth.subtract(offset, 'day');
+        const gridStart = getCalendarGridStart(currentMonth.startOf('month'), firstDayOfWeek);
 
         const days: { date: dayjs.Dayjs; isCurrentMonth: boolean }[] = [];
         for (let i = 0; i < 42; i++) {
