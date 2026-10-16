@@ -1,3 +1,4 @@
+import {ProductSelection} from "../utilites/widgetConfig.ts";
 import {api} from "./client";
 import {
     CheckInStats,
@@ -131,10 +132,12 @@ export const eventsClientPublic = {
         return response.data;
     },
 
-    findByID: async (eventId: any, promoCode?: null | string, eventOccurrenceId?: number | null) => {
+    findByID: async (eventId: any, promoCode?: null | string, eventOccurrenceId?: number | null, selection?: ProductSelection) => {
         const params = new URLSearchParams();
         if (promoCode) params.set('promo_code', promoCode);
         if (eventOccurrenceId) params.set('event_occurrence_id', String(eventOccurrenceId));
+        if (selection?.productIds?.length) params.set('product_ids', selection.productIds.join(','));
+        if (selection?.categoryIds?.length) params.set('product_category_ids', selection.categoryIds.join(','));
         const queryString = params.toString();
         const response = await publicApi.get<GenericDataResponse<Event>>('events/' + eventId + (queryString ? '?' + queryString : ''));
         return response.data;

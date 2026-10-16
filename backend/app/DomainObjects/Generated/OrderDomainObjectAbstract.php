@@ -15,6 +15,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     final public const PROMO_CODE_ID = 'promo_code_id';
     final public const AFFILIATE_ID = 'affiliate_id';
     final public const BOX_OFFICE_ID = 'box_office_id';
+    final public const WIDGET_ID = 'widget_id';
     final public const SHORT_ID = 'short_id';
     final public const TOTAL_BEFORE_ADDITIONS = 'total_before_additions';
     final public const TOTAL_REFUNDED = 'total_refunded';
@@ -57,6 +58,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     protected ?int $promo_code_id = null;
     protected ?int $affiliate_id = null;
     protected ?int $box_office_id = null;
+    protected ?int $widget_id = null;
     protected string $short_id;
     protected float $total_before_additions = 0.0;
     protected float $total_refunded = 0.0;
@@ -102,6 +104,7 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
                     'promo_code_id' => $this->promo_code_id ?? null,
                     'affiliate_id' => $this->affiliate_id ?? null,
                     'box_office_id' => $this->box_office_id ?? null,
+                    'widget_id' => $this->widget_id ?? null,
                     'short_id' => $this->short_id ?? null,
                     'total_before_additions' => $this->total_before_additions ?? null,
                     'total_refunded' => $this->total_refunded ?? null,
@@ -194,6 +197,17 @@ abstract class OrderDomainObjectAbstract extends \HiEvents\DomainObjects\Abstrac
     public function getBoxOfficeId(): ?int
     {
         return $this->box_office_id;
+    }
+
+    public function setWidgetId(?int $widget_id): self
+    {
+        $this->widget_id = $widget_id;
+        return $this;
+    }
+
+    public function getWidgetId(): ?int
+    {
+        return $this->widget_id;
     }
 
     public function setShortId(string $short_id): self

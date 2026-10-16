@@ -75,6 +75,7 @@ class EventDomainObject extends Generated\EventDomainObjectAbstract implements I
             self::UPDATED_AT,
             self::STATUS,
             self::ORGANIZER_ID,
+            self::CATEGORY,
         ];
     }
 

@@ -1,12 +1,7 @@
 import {ReactNode, useEffect, useRef, useState} from "react";
-import {SegmentedControl, Tooltip, VisuallyHidden} from "@mantine/core";
-import {IconDeviceDesktop, IconDeviceMobile} from "@tabler/icons-react";
-import {t} from "@lingui/macro";
 import {LoadingMask} from "../LoadingMask";
-import {DesignerShell} from "../DesignerShell";
+import {DesignerShell, PreviewDevice, PreviewDeviceToggle} from "../DesignerShell";
 import classes from "./HomepageDesigner.module.scss";
-
-type PreviewDevice = 'desktop' | 'mobile';
 
 interface UseHomepagePreviewOptions {
     path: string;
@@ -75,35 +70,7 @@ export const HomepageDesigner = ({preview, previewTitle, ...shellProps}: Homepag
         <DesignerShell
             {...shellProps}
             previewActions={(
-                <SegmentedControl
-                    size="xs"
-                    value={device}
-                    onChange={(value) => setDevice(value as PreviewDevice)}
-                    data={[
-                        {
-                            value: 'desktop',
-                            label: (
-                                <Tooltip label={t`Desktop`} withArrow>
-                                    <span className={classes.deviceIcon}>
-                                        <IconDeviceDesktop size={16} aria-hidden/>
-                                        <VisuallyHidden>{t`Desktop`}</VisuallyHidden>
-                                    </span>
-                                </Tooltip>
-                            ),
-                        },
-                        {
-                            value: 'mobile',
-                            label: (
-                                <Tooltip label={t`Mobile`} withArrow>
-                                    <span className={classes.deviceIcon}>
-                                        <IconDeviceMobile size={16} aria-hidden/>
-                                        <VisuallyHidden>{t`Mobile`}</VisuallyHidden>
-                                    </span>
-                                </Tooltip>
-                            ),
-                        },
-                    ]}
-                />
+                <PreviewDeviceToggle value={device} onChange={setDevice}/>
             )}
             preview={(
                 <div className={device === 'mobile' ? classes.mobileFrame : classes.desktopFrame}>

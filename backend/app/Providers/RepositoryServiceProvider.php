@@ -89,6 +89,7 @@ use HiEvents\Repository\Eloquent\UserTrustedDeviceRepository;
 use HiEvents\Repository\Eloquent\WaitlistEntryRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
+use HiEvents\Repository\Eloquent\WidgetRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
@@ -162,6 +163,7 @@ use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
+use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -238,6 +240,7 @@ class RepositoryServiceProvider extends ServiceProvider
         AnnouncementRepositoryInterface::class => AnnouncementRepository::class,
         AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        WidgetRepositoryInterface::class => WidgetRepository::class,
         EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,
         EventOccurrenceStatisticRepositoryInterface::class => EventOccurrenceStatisticRepository::class,
         EventOccurrenceDailyStatisticRepositoryInterface::class => EventOccurrenceDailyStatisticRepository::class,

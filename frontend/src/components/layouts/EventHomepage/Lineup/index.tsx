@@ -20,6 +20,7 @@ interface LineupSectionProps {
     occurrence?: EventOccurrence;
     heading?: string | null;
     sectionClasses: HomepageSectionClasses;
+    compact?: boolean;
 }
 
 const usePublicLineup = (event: Event, occurrence?: EventOccurrence) => {
@@ -123,7 +124,7 @@ const LineupDialogHost = ({event, lineup, entriesById, anchor, dialogState}: {
     return null;
 };
 
-export const EventLineupSection = ({event, occurrence, heading, sectionClasses}: LineupSectionProps) => {
+export const EventLineupSection = ({event, occurrence, heading, sectionClasses, compact}: LineupSectionProps) => {
     const {lineup, entriesById} = usePublicLineup(event, occurrence);
     const dialogState = useLineupDialog(lineup, false);
     const anchorRef = useRef<HTMLElement>(null);
@@ -137,7 +138,7 @@ export const EventLineupSection = ({event, occurrence, heading, sectionClasses}:
             <div className={sectionClasses.sectionHeader}>
                 <h2 className={sectionClasses.sectionTitle}>{heading || getLineupTerminology(event.category).lineup}</h2>
             </div>
-            <LineupGrid entries={lineup.entries} onOpen={dialogState.openEntry}/>
+            <LineupGrid entries={lineup.entries} onOpen={dialogState.openEntry} compact={compact}/>
             <LineupDialogHost event={event} lineup={lineup} entriesById={entriesById} anchor={anchorRef.current} dialogState={dialogState}/>
         </section>
     );

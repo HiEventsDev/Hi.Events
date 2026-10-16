@@ -7,35 +7,43 @@
     <title>Hi.Events Widget Playground</title>
     <style>
         * { box-sizing: border-box; }
+        :root {
+            --ink: #18181b;
+            --muted: #71717a;
+            --line: #e4e4e7;
+            --panel: #ffffff;
+            --accent: #7b5db8;
+        }
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
+            display: grid;
+            grid-template-columns: 340px minmax(0, 1fr);
             min-height: 100vh;
             background: #f4f4f5;
-            color: #18181b;
+            color: var(--ink);
         }
         aside {
-            width: 320px;
-            flex-shrink: 0;
-            background: #ffffff;
-            border-right: 1px solid #e4e4e7;
-            padding: 20px;
-            overflow-y: auto;
+            background: var(--panel);
+            border-right: 1px solid var(--line);
             height: 100vh;
             position: sticky;
             top: 0;
+            display: flex;
+            flex-direction: column;
         }
-        aside h1 { font-size: 16px; margin: 0 0 4px; }
-        aside .subtitle { font-size: 12px; color: #71717a; margin: 0 0 16px; }
-        fieldset {
-            border: 1px solid #e4e4e7;
-            border-radius: 8px;
-            padding: 10px 12px 12px;
-            margin: 0 0 14px;
-        }
-        legend { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; padding: 0 4px; }
-        label { display: block; font-size: 12px; font-weight: 600; margin: 8px 0 3px; }
+        .aside-head { padding: 18px 20px 10px; border-bottom: 1px solid var(--line); }
+        .aside-head h1 { font-size: 15px; margin: 0 0 2px; }
+        .aside-head p { font-size: 12px; color: var(--muted); margin: 0; }
+        form { flex: 1; overflow-y: auto; padding: 14px 20px 20px; }
+        .aside-foot { display: flex; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--line); }
+        fieldset { border: 0; border-top: 1px solid var(--line); padding: 14px 0 6px; margin: 0; }
+        fieldset:first-of-type { border-top: 0; padding-top: 0; }
+        fieldset[hidden] { display: none; }
+        legend { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0 0 6px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; }
+        .grid .full { grid-column: 1 / -1; }
+        label { display: block; font-size: 12px; font-weight: 600; margin: 0 0 3px; }
         input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 6px 8px;
@@ -43,167 +51,251 @@
             border: 1px solid #d4d4d8;
             border-radius: 6px;
             font-family: inherit;
+            background: #fff;
         }
-        .checkbox-row { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
-        .checkbox-row label { margin: 0; }
-        button[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            background: #7b5db8;
-            color: #ffffff;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover { filter: brightness(1.08); }
-        main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        #host-area { flex: 1; padding: 40px 24px; transition: background-color 0.2s; }
-        #host-area p { max-width: 640px; margin: 0 auto 16px; line-height: 1.6; opacity: 0.75; }
-        #widget-container { margin: 24px auto; }
-        #widget-hint {
-            max-width: 640px;
-            margin: 24px auto;
-            padding: 24px;
-            border: 2px dashed #d4d4d8;
-            border-radius: 12px;
-            text-align: center;
-            color: #71717a;
-        }
-        #tools {
-            background: #ffffff;
-            border-top: 1px solid #e4e4e7;
-            padding: 14px 24px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            max-height: 250px;
-        }
-        #tools h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; margin: 0 0 8px; }
-        #embed-code, #message-log {
-            background: #18181b;
-            color: #e4e4e7;
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            font-size: 11.5px;
-            line-height: 1.5;
-            border-radius: 8px;
-            padding: 12px;
-            overflow: auto;
-            max-height: 170px;
-            white-space: pre-wrap;
-            word-break: break-all;
-            margin: 0;
-        }
-        #copy-embed {
-            margin-top: 8px;
-            padding: 5px 12px;
-            font-size: 12px;
-            border: 1px solid #d4d4d8;
-            border-radius: 6px;
-            background: #ffffff;
-            cursor: pointer;
-        }
-        @media (max-width: 900px) {
-            body { flex-direction: column; }
-            aside { width: 100%; height: auto; position: static; }
-            #tools { grid-template-columns: 1fr; }
+        .hint { font-size: 11px; color: var(--muted); margin: 3px 0 0; }
+        .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-top: 4px; }
+        .check { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+        .check label { margin: 0; font-weight: 500; }
+        button { font-family: inherit; cursor: pointer; }
+        .primary { flex: 1; padding: 9px; font-size: 13px; font-weight: 700; border: 0; border-radius: 8px; background: var(--accent); color: #fff; }
+        .secondary { padding: 9px 12px; font-size: 13px; font-weight: 600; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+        main { min-width: 0; display: flex; flex-direction: column; }
+        .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 24px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+        .segmented { display: inline-flex; padding: 3px; border-radius: 8px; background: #f4f4f5; gap: 2px; }
+        .segmented button { border: 0; background: transparent; padding: 5px 10px; font-size: 12px; font-weight: 600; border-radius: 6px; color: var(--muted); }
+        .segmented button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+        #host-area { flex: 1; padding: 32px 24px; transition: background-color 0.2s; overflow-x: auto; }
+        #host-frame { margin: 0 auto; transition: max-width 0.25s ease; }
+        #host-frame p { line-height: 1.6; opacity: 0.75; margin: 0 0 16px; }
+        #widget-container { margin: 24px 0; }
+        #widget-hint { padding: 24px; border: 2px dashed #d4d4d8; border-radius: 12px; text-align: center; color: var(--muted); }
+        #tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 14px 24px; background: var(--panel); border-top: 1px solid var(--line); }
+        #tools h2 { display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 0 0 8px; }
+        #tools h2 button { font-size: 11px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; text-transform: none; letter-spacing: 0; }
+        pre { background: #18181b; color: #e4e4e7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; line-height: 1.5; border-radius: 8px; padding: 12px; overflow: auto; height: 180px; white-space: pre-wrap; word-break: break-word; margin: 0; }
+        @media (max-width: 1100px) { #tools { grid-template-columns: 1fr; } }
+        @media (max-width: 860px) {
+            body { grid-template-columns: 1fr; }
+            aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+            form { max-height: 55vh; }
         }
     </style>
 </head>
 <body>
 <aside>
-    <h1>Widget Playground</h1>
-    <p class="subtitle">Test the embeddable widget with different settings. Not available in production.</p>
+    <div class="aside-head">
+        <h1>Widget Playground</h1>
+        <p>Simulates a third-party site embedding the widget. Not available in production.</p>
+    </div>
     <form id="settings-form">
         <fieldset>
-            <legend>Event</legend>
-            <label for="field-id">Event ID</label>
-            <input type="number" id="field-id" name="id" min="1" required>
-            <label for="field-continueButtonText">Continue button text</label>
-            <input type="text" id="field-continueButtonText" name="continueButtonText" placeholder="Continue">
-            <label for="field-locale">Locale</label>
-            <select id="field-locale" name="locale">
-                <option value="">Default (en)</option>
-            </select>
-        </fieldset>
-        <fieldset>
-            <legend>Colors &amp; layout</legend>
-            <label for="field-primaryColor">Primary color</label>
-            <input type="text" id="field-primaryColor" name="primaryColor" placeholder="#7b5db8">
-            <label for="field-primaryTextColor">Primary text color</label>
-            <input type="text" id="field-primaryTextColor" name="primaryTextColor" placeholder="#000000">
-            <label for="field-secondaryColor">Secondary color</label>
-            <input type="text" id="field-secondaryColor" name="secondaryColor" placeholder="#7b5eb9">
-            <label for="field-secondaryTextColor">Secondary text color</label>
-            <input type="text" id="field-secondaryTextColor" name="secondaryTextColor" placeholder="#ffffff">
-            <label for="field-backgroundColor">Widget background</label>
-            <input type="text" id="field-backgroundColor" name="backgroundColor" placeholder="#ffffff">
-            <label for="field-padding">Padding</label>
-            <input type="text" id="field-padding" name="padding" placeholder="10px">
-        </fieldset>
-        <fieldset>
-            <legend>Behaviour</legend>
-            <label for="field-checkout">Checkout mode</label>
-            <select id="field-checkout" name="checkout">
-                <option value="">Modal (default)</option>
-                <option value="new-tab">New tab</option>
-            </select>
-            <div class="checkbox-row">
-                <input type="checkbox" id="field-autoresize" name="autoresize" checked>
-                <label for="field-autoresize">Auto-resize iframe</label>
+            <legend>Embed</legend>
+            <div class="grid">
+                <div class="full">
+                    <label for="field-type">Widget type</label>
+                    <select id="field-type" name="type">
+                        <option value="widget">Tickets</option>
+                        <option value="button">Button (pop-up)</option>
+                        <option value="lineup">Lineup</option>
+                        <option value="schedule">Schedule</option>
+                        <option value="events">Organizer events</option>
+                    </select>
+                </div>
+                <div data-for="widget button lineup schedule">
+                    <label for="field-id">Event ID</label>
+                    <input type="number" id="field-id" name="id" min="1">
+                </div>
+                <div data-for="events">
+                    <label for="field-organizerId">Organizer ID</label>
+                    <input type="number" id="field-organizerId" name="organizerId" min="1">
+                </div>
+                <div>
+                    <label for="field-widget">Saved widget ID</label>
+                    <input type="text" id="field-widget" name="widget" placeholder="wgt_…">
+                </div>
+                <div>
+                    <label for="field-markup">Markup</label>
+                    <select id="field-markup" name="markup">
+                        <option value="div">&lt;div&gt; + script</option>
+                        <option value="element">&lt;hievents-widget&gt;</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="field-locale">Language</label>
+                    <select id="field-locale" name="locale"><option value="">Visitor's language</option></select>
+                </div>
             </div>
         </fieldset>
+
+        <fieldset data-for="widget button">
+            <legend>Tickets</legend>
+            <div class="grid">
+                <div><label for="field-products">Product IDs</label><input type="text" id="field-products" name="products" placeholder="12,15"></div>
+                <div><label for="field-categories">Category IDs</label><input type="text" id="field-categories" name="categories" placeholder="3"></div>
+                <div class="full">
+                    <label for="field-sections">Sections (in order)</label>
+                    <input type="text" id="field-sections" name="sections" placeholder="header,tickets,about">
+                    <p class="hint">tickets, header, about, location, organizer, lineup, schedule, custom</p>
+                </div>
+                <div><label for="field-occurrenceId">Pinned date ID</label><input type="number" id="field-occurrenceId" name="occurrenceId"></div>
+                <div><label for="field-promoCode">Promo code</label><input type="text" id="field-promoCode" name="promoCode"></div>
+                <div><label for="field-continueButtonText">Continue text</label><input type="text" id="field-continueButtonText" name="continueButtonText" placeholder="Continue"></div>
+                <div data-for="button"><label for="field-buttonText">Button text</label><input type="text" id="field-buttonText" name="buttonText" placeholder="Get tickets"></div>
+            </div>
+            <div class="checks">
+                <div class="check"><input type="checkbox" id="field-hidePromoCode" name="hidePromoCode"><label for="field-hidePromoCode">Hide promo link</label></div>
+                <div class="check"><input type="checkbox" id="field-hideCategoryTitles" name="hideCategoryTitles"><label for="field-hideCategoryTitles">Hide category titles</label></div>
+                <div class="check"><input type="checkbox" id="field-showLineup" name="showLineup"><label for="field-showLineup">Lineup strip</label></div>
+            </div>
+        </fieldset>
+
+        <fieldset data-for="events">
+            <legend>Organizer events</legend>
+            <div class="grid">
+                <div>
+                    <label for="field-layout">Layout</label>
+                    <select id="field-layout" name="layout"><option value="list">List</option><option value="grid">Grid</option><option value="compact">Compact</option></select>
+                </div>
+                <div><label for="field-limit">Per page</label><input type="number" id="field-limit" name="limit" min="1" max="50" placeholder="12"></div>
+                <div><label for="field-eventCategory">Event category</label><input type="text" id="field-eventCategory" name="eventCategory" placeholder="MUSIC"></div>
+                <div>
+                    <label for="field-openIn">Open events in</label>
+                    <select id="field-openIn" name="openIn"><option value="">Pop-up</option><option value="page">New tab</option></select>
+                </div>
+            </div>
+            <div class="checks"><div class="check"><input type="checkbox" id="field-showPast" name="showPast"><label for="field-showPast">Past events tab</label></div></div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Appearance</legend>
+            <div class="grid">
+                <div>
+                    <label for="field-theme">Theme</label>
+                    <select id="field-theme" name="theme"><option value="">Custom colours</option><option value="event">Event / organizer theme</option></select>
+                </div>
+                <div><label for="field-font">Font</label><input type="text" id="field-font" name="font" placeholder="Inter"></div>
+                <div><label for="field-secondaryColor">Buttons</label><input type="text" id="field-secondaryColor" name="secondaryColor" placeholder="#7b5eb9"></div>
+                <div><label for="field-secondaryTextColor">Button text</label><input type="text" id="field-secondaryTextColor" name="secondaryTextColor" placeholder="#ffffff"></div>
+                <div><label for="field-backgroundColor">Background</label><input type="text" id="field-backgroundColor" name="backgroundColor" placeholder="#ffffff"></div>
+                <div><label for="field-primaryTextColor">Text</label><input type="text" id="field-primaryTextColor" name="primaryTextColor" placeholder="#000000"></div>
+                <div><label for="field-primaryColor">Borders</label><input type="text" id="field-primaryColor" name="primaryColor" placeholder="#7b5db8"></div>
+                <div><label for="field-radius">Corner radius</label><input type="number" id="field-radius" name="radius" min="0" max="32" placeholder="16"></div>
+                <div><label for="field-padding">Padding</label><input type="text" id="field-padding" name="padding" placeholder="10px"></div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Behaviour</legend>
+            <div class="grid">
+                <div>
+                    <label for="field-checkout">Checkout</label>
+                    <select id="field-checkout" name="checkout"><option value="">Pop-up</option><option value="new-tab">New tab</option></select>
+                </div>
+            </div>
+            <div class="checks">
+                <div class="check"><input type="checkbox" id="field-autoresize" name="autoresize" checked><label for="field-autoresize">Auto-resize</label></div>
+                <div class="check"><input type="checkbox" id="field-lazy" name="lazy" checked><label for="field-lazy">Lazy load</label></div>
+            </div>
+        </fieldset>
+
         <fieldset>
             <legend>Host page</legend>
-            <label for="field-hostBg">Host background</label>
-            <select id="field-hostBg" name="hostBg">
-                <option value="#f4f4f5">Light</option>
-                <option value="#18181b">Dark</option>
-                <option value="#fdf6e3">Warm</option>
-            </select>
-            <label for="field-width">Widget container width</label>
-            <input type="text" id="field-width" name="width" placeholder="600px">
+            <div class="grid">
+                <div>
+                    <label for="field-hostBg">Background</label>
+                    <select id="field-hostBg" name="hostBg">
+                        <option value="#f4f4f5">Light</option>
+                        <option value="#18181b">Dark</option>
+                        <option value="#fdf6e3">Warm</option>
+                    </select>
+                </div>
+                <div><label for="field-aff">?aff=</label><input type="text" id="field-aff" name="aff"></div>
+                <div><label for="field-promo_code">?promo_code=</label><input type="text" id="field-promo_code" name="promo_code"></div>
+                <div><label for="field-utm_source">?utm_source=</label><input type="text" id="field-utm_source" name="utm_source"></div>
+            </div>
+            <p class="hint">Host URL parameters are forwarded to the widget, as they would be on a real site.</p>
         </fieldset>
-        <button type="submit">Apply settings</button>
     </form>
+    <div class="aside-foot">
+        <button type="submit" form="settings-form" class="primary">Apply</button>
+        <button type="button" class="secondary" id="add-dynamic" title="Inserts a second widget after load to test single-page apps">Add later</button>
+    </div>
 </aside>
 <main>
+    <div class="toolbar">
+        <div class="segmented" id="viewport" role="group" aria-label="Host width">
+            <button type="button" data-width="375px">Mobile</button>
+            <button type="button" data-width="768px">Tablet</button>
+            <button type="button" data-width="1040px">Desktop</button>
+            <button type="button" data-width="100%">Full</button>
+        </div>
+        <span class="hint" id="viewport-label"></span>
+    </div>
     <div id="host-area">
-        <p>This page simulates a third-party website embedding the Hi.Events widget. The paragraphs around the widget
-            demonstrate how it sits inside surrounding content and how auto-resizing pushes the page around.</p>
-        <div id="widget-container"></div>
-        <p>Content below the widget. If auto-resize is on, this paragraph moves as the widget grows and shrinks —
-            for example when expanding a product's details or applying a promo code.</p>
+        <div id="host-frame">
+            <p>This page simulates a third-party website embedding the Hi.Events widget. The paragraphs around the widget
+                show how it sits inside surrounding content and how auto-resizing pushes the page around.</p>
+            <div id="widget-container"></div>
+            <p>Content below the widget. With auto-resize on, this paragraph moves as the widget grows and shrinks.</p>
+            <div style="height: 40vh"></div>
+            <p>Far below the fold. A lazy-loaded widget added here only loads when scrolled into view.</p>
+            <div id="dynamic-container"></div>
+        </div>
     </div>
     <div id="tools">
         <div>
-            <h2>Embed code</h2>
+            <h2>Embed code <button type="button" id="copy-embed">Copy</button></h2>
             <pre id="embed-code"></pre>
-            <button type="button" id="copy-embed">Copy</button>
         </div>
         <div>
-            <h2>Widget messages</h2>
-            <pre id="message-log">Waiting for messages from the widget…</pre>
+            <h2>postMessage log <button type="button" data-clear="message-log">Clear</button></h2>
+            <pre id="message-log">Waiting for messages…</pre>
+        </div>
+        <div>
+            <h2>Host events <button type="button" data-clear="event-log">Clear</button></h2>
+            <pre id="event-log">hievents:* DOM events appear here.</pre>
         </div>
     </div>
 </main>
 <script>
-    const LOCALES = ['de', 'el', 'en', 'es', 'fr', 'hu', 'it', 'nl', 'pl', 'pt', 'pt-br', 'ru', 'se', 'sk', 'tr', 'vi', 'zh-cn', 'zh-hk'];
+    const LOCALES = ['de', 'el', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'pt-br', 'se', 'sk', 'tr', 'vi', 'zh-cn', 'zh-hk'];
+    const HOST_PARAMS = ['aff', 'promo_code', 'utm_source'];
     const ATTRIBUTE_FIELDS = {
-        continueButtonText: 'continue-button-text',
+        widget: 'widget',
         locale: 'locale',
+        products: 'products',
+        categories: 'categories',
+        sections: 'sections',
+        occurrenceId: 'occurrence-id',
+        promoCode: 'promo-code',
+        continueButtonText: 'continue-button-text',
+        buttonText: 'button-text',
+        layout: 'layout',
+        limit: 'limit',
+        eventCategory: 'event-category',
+        openIn: 'open-in',
+        theme: 'theme',
+        font: 'font',
         primaryColor: 'primary-color',
         primaryTextColor: 'primary-text-color',
         secondaryColor: 'secondary-color',
         secondaryTextColor: 'secondary-text-color',
         backgroundColor: 'background-color',
+        radius: 'radius',
         padding: 'padding',
         checkout: 'checkout',
+    };
+    const BOOLEAN_FIELDS = {
+        hidePromoCode: 'hide-promo-code',
+        hideCategoryTitles: 'hide-category-titles',
+        showLineup: 'show-lineup',
+        showPast: 'show-past',
     };
 
     const form = document.getElementById('settings-form');
     const params = new URLSearchParams(location.search);
+    const type = params.get('type') || 'widget';
 
     const localeSelect = document.getElementById('field-locale');
     LOCALES.forEach((locale) => {
@@ -223,53 +315,85 @@
         }
     }
 
+    const syncTypeVisibility = () => {
+        const current = form.elements.namedItem('type').value;
+        document.querySelectorAll('[data-for]').forEach((element) => {
+            element.hidden = !element.dataset.for.split(' ').includes(current);
+        });
+    };
+    form.elements.namedItem('type').addEventListener('change', syncTypeVisibility);
+    syncTypeVisibility();
+
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const next = new URLSearchParams();
         for (const field of form.elements) {
             if (!field.name) continue;
             if (field.type === 'checkbox') {
-                if (!field.checked) next.set(field.name, 'false');
+                const defaultOn = field.name === 'autoresize' || field.name === 'lazy';
+                if (defaultOn && !field.checked) next.set(field.name, 'false');
+                if (!defaultOn && field.checked) next.set(field.name, 'true');
             } else if (field.value.trim() !== '') {
                 next.set(field.name, field.value.trim());
             }
         }
+        if (params.get('width')) next.set('width', params.get('width'));
         location.search = next.toString();
     });
 
     const buildAttributes = () => {
-        const attributes = { 'data-hievents-id': params.get('id') };
-        for (const [fieldName, attributeSuffix] of Object.entries(ATTRIBUTE_FIELDS)) {
+        const attributes = {};
+        if (type === 'events') {
+            attributes['data-hievents-organizer-id'] = params.get('organizerId');
+            attributes['data-hievents-widget-type'] = 'events';
+        } else {
+            attributes['data-hievents-id'] = params.get('id');
+            if (type !== 'widget') attributes['data-hievents-widget-type'] = type;
+        }
+        for (const [fieldName, suffix] of Object.entries(ATTRIBUTE_FIELDS)) {
             const value = params.get(fieldName);
-            if (value) attributes[`data-hievents-${attributeSuffix}`] = value;
+            if (value) attributes[`data-hievents-${suffix}`] = value;
+        }
+        for (const [fieldName, suffix] of Object.entries(BOOLEAN_FIELDS)) {
+            if (params.get(fieldName) === 'true') attributes[`data-hievents-${suffix}`] = 'true';
         }
         if (params.get('autoresize') === 'false') attributes['data-hievents-autoresize'] = 'false';
+        if (params.get('lazy') === 'false') attributes['data-hievents-lazy'] = 'false';
         return attributes;
     };
 
-    const renderWidget = () => {
-        const container = document.getElementById('widget-container');
-        container.style.maxWidth = params.get('width') || '600px';
-
+    const createWidget = (attributes) => {
+        if (params.get('markup') === 'element') {
+            const element = document.createElement('hievents-widget');
+            for (const [name, value] of Object.entries(attributes)) {
+                const plain = name.replace('data-hievents-', '');
+                element.setAttribute(plain === 'id' ? 'event-id' : plain, value);
+            }
+            return element;
+        }
         const widget = document.createElement('div');
         widget.className = 'hievents-widget';
-        for (const [name, value] of Object.entries(buildAttributes())) {
-            widget.setAttribute(name, value);
-        }
-        container.appendChild(widget);
+        for (const [name, value] of Object.entries(attributes)) widget.setAttribute(name, value);
+        return widget;
+    };
 
+    const loadScript = () => {
         const script = document.createElement('script');
         script.async = true;
         script.src = `${location.origin}/widget.js`;
         document.head.appendChild(script);
     };
 
-    const renderEmbedCode = () => {
-        const attributeLines = Object.entries(buildAttributes())
-            .map(([name, value]) => `     ${name}="${value.replace(/"/g, '&quot;')}"`)
-            .join('\n');
+    const renderEmbedCode = (attributes) => {
+        const markup = params.get('markup') === 'element';
+        const lines = Object.entries(attributes).map(([name, value]) => {
+            const attributeName = markup ? name.replace('data-hievents-', '').replace(/^id$/, 'event-id') : name;
+            return `  ${attributeName}="${String(value).replace(/"/g, '&quot;')}"`;
+        }).join('\n');
+        const tag = markup ? 'hievents-widget' : 'div';
+        const classAttribute = markup ? '' : ' class="hievents-widget"';
         document.getElementById('embed-code').textContent =
-            `<script async src="${location.origin}/widget.js"><\/script>\n<div class="hievents-widget"\n${attributeLines}></div>`;
+            `<script async src="${location.origin}/widget.js"><\/script>\n\n<${tag}${classAttribute}\n${lines}\n></${tag}>`;
     };
 
     const hostBg = params.get('hostBg') || '#f4f4f5';
@@ -277,35 +401,81 @@
     hostArea.style.backgroundColor = hostBg;
     hostArea.style.color = hostBg === '#18181b' ? '#e4e4e7' : '#18181b';
 
-    if (params.get('id')) {
-        renderWidget();
-        renderEmbedCode();
+    const hostFrame = document.getElementById('host-frame');
+    const viewportLabel = document.getElementById('viewport-label');
+    const setWidth = (width) => {
+        hostFrame.style.maxWidth = width;
+        viewportLabel.textContent = width === '100%' ? 'Full width' : `Container ${width}`;
+        document.querySelectorAll('#viewport button').forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.width === width));
+        });
+        const url = new URL(location.href);
+        url.searchParams.set('width', width);
+        history.replaceState(null, '', url);
+    };
+    document.querySelectorAll('#viewport button').forEach((button) => {
+        button.addEventListener('click', () => setWidth(button.dataset.width));
+    });
+    setWidth(params.get('width') || '768px');
+
+    const hasTarget = type === 'events' ? !!params.get('organizerId') : !!params.get('id');
+    const attributes = buildAttributes();
+
+    if (hasTarget) {
+        document.getElementById('widget-container').appendChild(createWidget(attributes));
+        renderEmbedCode(attributes);
+        loadScript();
     } else {
         const hint = document.createElement('div');
         hint.id = 'widget-hint';
-        hint.textContent = 'Enter an event ID and apply settings to render the widget here.';
+        hint.textContent = type === 'events'
+            ? 'Enter an organizer ID and apply to render the widget here.'
+            : 'Enter an event ID and apply to render the widget here.';
         document.getElementById('widget-container').appendChild(hint);
-        document.getElementById('embed-code').textContent = 'Enter an event ID to generate the embed code.';
+        document.getElementById('embed-code').textContent = 'Enter an ID to generate the embed code.';
     }
+
+    document.getElementById('add-dynamic').addEventListener('click', () => {
+        if (!hasTarget) return;
+        document.getElementById('dynamic-container').appendChild(createWidget(attributes));
+    });
 
     document.getElementById('copy-embed').addEventListener('click', async () => {
         await navigator.clipboard.writeText(document.getElementById('embed-code').textContent);
     });
 
-    const logElement = document.getElementById('message-log');
-    let logStarted = false;
+    const logTo = (id) => {
+        const element = document.getElementById(id);
+        let started = false;
+        return (line) => {
+            if (!started) {
+                started = true;
+                element.textContent = '';
+            }
+            element.textContent += `${new Date().toLocaleTimeString()}  ${line}\n`;
+            element.scrollTop = element.scrollHeight;
+        };
+    };
+    document.querySelectorAll('[data-clear]').forEach((button) => {
+        button.addEventListener('click', () => { document.getElementById(button.dataset.clear).textContent = ''; });
+    });
+
+    const logMessage = logTo('message-log');
     window.addEventListener('message', (event) => {
         if (!event.data || typeof event.data.type !== 'string') return;
-        if (!logStarted) {
-            logStarted = true;
-            logElement.textContent = '';
-        }
         const detail = Object.entries(event.data)
             .filter(([key]) => key !== 'type')
             .map(([key, value]) => `${key}=${value}`)
             .join(' ');
-        logElement.textContent += `${new Date().toLocaleTimeString()}  ${event.data.type}  ${detail}\n`;
-        logElement.scrollTop = logElement.scrollHeight;
+        logMessage(`${event.data.type}  ${detail}`);
+    });
+
+    const logEvent = logTo('event-log');
+    ['hievents:checkout-opened', 'hievents:checkout-step', 'hievents:checkout-closed', 'hievents:order-completed'].forEach((name) => {
+        window.addEventListener(name, (event) => {
+            const where = event.target === window ? 'window' : 'widget element';
+            logEvent(`${name} [${where}]  ${JSON.stringify(event.detail)}`);
+        });
     });
 </script>
 </body>

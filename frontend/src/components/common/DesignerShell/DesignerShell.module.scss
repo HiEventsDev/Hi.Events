@@ -94,11 +94,20 @@ $narrow-gutter: max(var(--hi-spacing-lg), calc((100% - 560px) / 2));
   }
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hi-spacing-xs);
+  min-height: 22px;
+  margin-bottom: var(--hi-spacing-md);
+}
+
 .sectionTitle {
   display: flex;
   align-items: center;
   gap: var(--hi-spacing-xs);
-  margin: 0 0 var(--hi-spacing-md);
+  margin: 0;
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -156,4 +165,10 @@ $narrow-gutter: max(var(--hi-spacing-lg), calc((100% - 560px) / 2));
   flex: 1;
   min-height: 0;
   overflow: hidden;
+}
+
+.deviceIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

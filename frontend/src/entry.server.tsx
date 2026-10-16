@@ -7,7 +7,8 @@ import {dehydrate, QueryClient} from "@tanstack/react-query";
 import {router} from "./router";
 import {App} from "./App";
 import {createStaticHandler, createStaticRouter, StaticRouterProvider} from "react-router";
-import {dynamicActivateLocale} from "./locales.ts";
+import {dynamicActivateLocale, getSupportedLocale} from "./locales.ts";
+import {embedLocaleForPath} from "./utilites/embedLocale.ts";
 import {SsrRequestContext, setSsrRequestContextProvider} from "./utilites/ssrRequestContext.ts";
 import {generateThemeColors} from "./utilites/themeColors.ts";
 import {prefetchInstanceInfo} from "./ee/licensing/queries/prefetchInstanceInfo.ts";
@@ -19,12 +20,18 @@ const requestContext = new AsyncLocalStorage<SsrRequestContext>();
 setSsrRequestContextProvider(() => requestContext.getStore());
 
 const getLocale = (req: express.Request): string => {
+    const url = new URL(req.originalUrl || req.url, 'http://localhost');
+    const embedLocale = embedLocaleForPath(url.pathname, url.search, requestContext.getStore()?.widgetLocale);
+    if (embedLocale) {
+        return embedLocale;
+    }
+
     if (req.cookies.locale) {
-        return req.cookies.locale;
+        return getSupportedLocale(req.cookies.locale);
     }
 
     const acceptLanguage = req.headers['accept-language'];
-    return acceptLanguage ? acceptLanguage.split(',')[0].split('-')[0] : 'en';
+    return acceptLanguage ? getSupportedLocale(acceptLanguage.split(',')[0].split(';')[0].trim()) : 'en';
 }
 
 interface RenderParams {

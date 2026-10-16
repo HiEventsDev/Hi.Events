@@ -3,6 +3,7 @@ import {installGlobals} from "@remix-run/node";
 import process from "process";
 import compression from "compression";
 import fs from "node:fs/promises";
+import {createHash} from "node:crypto";
 import sirv from "sirv";
 import cookieParser from "cookie-parser";
 import path from "node:path";
@@ -41,15 +42,32 @@ async function main() {
 
     app.use('/.well-known', express.static(path.join(__dirname, 'public/.well-known')));
 
-    app.get('/widget.js', async (req, res) => {
+    const widgetPath = isProduction
+        ? path.join(__dirname, './dist/client/widget.js')
+        : path.join(__dirname, './public/widget.js');
+    const loadWidgetScript = async () => {
+        const body = await fs.readFile(widgetPath, 'utf-8');
+        return {body, etag: `"${createHash('sha1').update(body).digest('base64url')}"`};
+    };
+    const productionWidgetScript = isProduction ? loadWidgetScript().catch(() => null) : null;
+
+    app.get('/widget.js', compression(), async (req, res) => {
         try {
-            const widgetPath = isProduction
-                ? path.join(__dirname, './dist/client/widget.js')
-                : path.join(__dirname, './public/widget.js');
-            const widgetJs = await fs.readFile(widgetPath, 'utf-8');
+            const script = isProduction ? await productionWidgetScript : await loadWidgetScript();
+            if (!script) {
+                return res.status(404).send('');
+            }
             res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-            res.setHeader('Cache-Control', 'no-cache');
-            return res.status(200).send(widgetJs);
+            res.setHeader('Cache-Control', isProduction
+                ? 'public, max-age=300, stale-while-revalidate=86400'
+                : 'no-cache');
+            res.setHeader('ETag', script.etag);
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+            if (req.fresh) {
+                return res.status(304).end();
+            }
+            return res.status(200).send(script.body);
         } catch (error) {
             return res.status(404).send('');
         }

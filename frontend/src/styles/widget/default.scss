@@ -1,8 +1,4 @@
-.full-height {
-  height: 100vh;
-}
-
-.hi-product-widget-container {
+@mixin widget-tokens {
   --hi-bg: var(--widget-background-color, #ffffff);
   --hi-text: var(--widget-primary-text-color, #1a1a1a);
   --hi-accent: var(--widget-secondary-color, var(--hi-primary, #7b5db8));
@@ -28,6 +24,17 @@
   --hi-warn-soft: color-mix(in srgb, var(--hi-warn) 14%, var(--hi-card-bg));
   --hi-warn-text: color-mix(in srgb, var(--hi-warn) 80%, var(--hi-text));
   --hi-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --hi-radius-lg: var(--widget-radius, 16px);
+  --hi-radius-md: calc(var(--hi-radius-lg) * 0.8125);
+  --hi-radius-sm: calc(var(--hi-radius-lg) * 0.625);
+}
+
+.hi-widget-tokens {
+  @include widget-tokens;
+}
+
+.hi-product-widget-container {
+  @include widget-tokens;
 
   background-color: var(--widget-background-color, #ffffff);
   color: var(--hi-text);
@@ -78,7 +85,7 @@
   .hi-product-row {
     background: var(--hi-card-bg);
     border: 1.5px solid var(--hi-border);
-    border-radius: 16px;
+    border-radius: var(--hi-radius-lg, 16px);
     padding: 15px 16px;
     position: relative;
     overflow: hidden;
@@ -379,7 +386,7 @@
   .hi-fee-breakdown {
     margin-top: 8px;
     background: var(--hi-inset-bg);
-    border-radius: 10px;
+    border-radius: var(--hi-radius-sm, 10px);
     padding: 10px 12px;
     display: flex;
     flex-direction: column;
@@ -425,7 +432,7 @@
     margin-top: 10px;
     background: var(--hi-danger-soft);
     color: var(--hi-danger-text);
-    border-radius: 10px;
+    border-radius: var(--hi-radius-sm, 10px);
     padding: 10px 12px;
     font-size: 12.5px;
     font-weight: 600;
@@ -513,7 +520,7 @@
         margin-left: -10px;
         margin-right: -10px;
         padding: 8px 10px;
-        border-radius: 10px;
+        border-radius: var(--hi-radius-sm, 10px);
         border: 1px solid color-mix(in srgb, var(--hi-accent) 35%, transparent);
         background-color: var(--hi-soft-accent);
         overflow: hidden;
@@ -612,7 +619,7 @@
     .hi-promo-code-input {
       background: var(--hi-card-bg);
       border: 1.5px solid var(--hi-border);
-      border-radius: 10px;
+      border-radius: var(--hi-radius-sm, 10px);
       color: var(--hi-text);
       text-transform: uppercase;
       font-weight: 600;
@@ -629,7 +636,7 @@
       background: transparent;
       border: 1.5px solid var(--hi-accent);
       color: var(--hi-accent);
-      border-radius: 10px;
+      border-radius: var(--hi-radius-sm, 10px);
       font-weight: 600;
       transition: background-color 150ms var(--hi-ease);
 
@@ -656,7 +663,7 @@
       gap: 8px;
       background: var(--hi-success-soft);
       color: var(--hi-success-text);
-      border-radius: 10px;
+      border-radius: var(--hi-radius-sm, 10px);
       padding: 8px 12px;
       font-size: 13px;
 
@@ -679,7 +686,7 @@
 
     .hi-product-page-message {
       background: var(--hi-inset-bg);
-      border-radius: 10px;
+      border-radius: var(--hi-radius-sm, 10px);
       padding: 12px 14px;
       font-size: 13px;
       line-height: 1.55;
@@ -689,7 +696,7 @@
       background: var(--hi-accent);
       color: var(--hi-accent-contrast);
       border: none;
-      border-radius: 13px;
+      border-radius: var(--hi-radius-md, 13px);
       font-size: 15px;
       font-weight: 700;
       height: auto;
@@ -767,7 +774,7 @@
   margin-bottom: 16px;
   padding: 12px 14px;
   border: 1px solid var(--hi-hairline);
-  border-radius: 12px;
+  border-radius: var(--hi-radius-md, 12px);
   background: var(--hi-card-bg);
 }
 
@@ -857,4 +864,11 @@
   color: var(--hi-text);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.hi-widget-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
 }

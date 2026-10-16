@@ -6,15 +6,16 @@ import classes from "./Lineup.module.scss";
 interface LineupGridProps {
     entries: LineupEntry[];
     onOpen: (entryId: number) => void;
+    compact?: boolean;
 }
 
-export const LineupGrid = ({entries, onOpen}: LineupGridProps) => {
+export const LineupGrid = ({entries, onOpen, compact}: LineupGridProps) => {
     const tiers = BILLING_TIERS
         .map(tier => ({tier, entries: entries.filter(entry => entry.billing_tier === tier)}))
         .filter(group => group.entries.length > 0);
 
     return (
-        <div className={classes.lineup}>
+        <div className={classes.lineup} data-density={compact ? 'compact' : undefined}>
             {tiers.map(({tier, entries: tierEntries}) => (
                 <div
                     key={tier}

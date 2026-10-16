@@ -361,6 +361,15 @@ use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookLogsAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhooksAction;
+use HiEvents\Http\Actions\Widgets\CreateEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\CreateOrganizerWidgetAction;
+use HiEvents\Http\Actions\Widgets\DeleteEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\DeleteOrganizerWidgetAction;
+use HiEvents\Http\Actions\Widgets\GetEventWidgetsAction;
+use HiEvents\Http\Actions\Widgets\GetOrganizerWidgetsAction;
+use HiEvents\Http\Actions\Widgets\GetWidgetPublicAction;
+use HiEvents\Http\Actions\Widgets\UpdateEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\UpdateOrganizerWidgetAction;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Router;
 
@@ -472,6 +481,11 @@ $router->middleware(['auth:api'])->group(
         $router->put('/organizers/{organizer_id}/profiles/{profile_id}', UpdateProfileAction::class);
         $router->delete('/organizers/{organizer_id}/profiles/{profile_id}', DeleteProfileAction::class);
         $router->post('/organizers/{organizer_id}/profiles/{profile_id}/images/sort', SortProfileImagesAction::class);
+
+        $router->get('/organizers/{organizer_id}/widgets', GetOrganizerWidgetsAction::class);
+        $router->post('/organizers/{organizer_id}/widgets', CreateOrganizerWidgetAction::class);
+        $router->put('/organizers/{organizer_id}/widgets/{widget_id}', UpdateOrganizerWidgetAction::class);
+        $router->delete('/organizers/{organizer_id}/widgets/{widget_id}', DeleteOrganizerWidgetAction::class);
 
         $router->get('/organizers/{organizer_id}/seat-maps', GetSeatMapsAction::class);
         $router->post('/organizers/{organizer_id}/seat-maps', CreateSeatMapAction::class)
@@ -621,6 +635,11 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/affiliates/{affiliate_id}', GetAffiliateAction::class);
         $router->delete('/events/{event_id}/affiliates/{affiliate_id}', DeleteAffiliateAction::class);
         $router->post('/events/{event_id}/affiliates/export', ExportAffiliatesAction::class);
+
+        $router->get('/events/{event_id}/widgets', GetEventWidgetsAction::class);
+        $router->post('/events/{event_id}/widgets', CreateEventWidgetAction::class);
+        $router->put('/events/{event_id}/widgets/{widget_id}', UpdateEventWidgetAction::class);
+        $router->delete('/events/{event_id}/widgets/{widget_id}', DeleteEventWidgetAction::class);
 
         $router->get('/events/{event_id}/lineup', GetEventLineupAction::class);
         $router->get('/events/{event_id}/lineup/export', ExportEventLineupAction::class);
@@ -831,6 +850,10 @@ $router->prefix('/public')->group(
             ->middleware('cache.guest:10,page,per_page,sort_by,sort_direction,query,filter_fields,eventsStatus');
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
             ->middleware('throttle:5,1,organizer-contact');
+
+        // Widgets
+        $router->get('/widgets/{widget_short_id}', GetWidgetPublicAction::class)
+            ->middleware('throttle:300,1,public-widgets');
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);

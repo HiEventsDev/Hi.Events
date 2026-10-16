@@ -12,5 +12,7 @@ class GetPublicEventDTO extends BaseDTO
         public ?string $ipAddress = null,
         public ?string $promoCode = null,
         public ?int $eventOccurrenceId = null,
+        public array $productIds = [],
+        public array $productCategoryIds = [],
     ) {}
 }

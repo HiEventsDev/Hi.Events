@@ -321,6 +321,18 @@ export class ApiClient {
     );
   }
 
+  createEventWidget(eventId: number, payload: { name: string; type: string; settings: Record<string, unknown> }): Promise<{ id: number; short_id: string }> {
+    return unwrap<{ id: number; short_id: string }>(
+      this.request.post(`events/${eventId}/widgets`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  listAffiliates(eventId: number): Promise<(Affiliate & { total_sales: number })[]> {
+    return unwrap<(Affiliate & { total_sales: number })[]>(
+      this.request.get(`events/${eventId}/affiliates`, { headers: jsonHeaders }),
+    );
+  }
+
   createWebhook(eventId: number, payload: CreateWebhookPayload): Promise<Webhook> {
     return unwrap<Webhook>(
       this.request.post(`events/${eventId}/webhooks`, { headers: jsonHeaders, data: payload }),

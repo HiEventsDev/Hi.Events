@@ -36,6 +36,7 @@ test.describe('read-only and permission spot checks', () => {
     await freshAccount.api.createQuestion(event.eventId, { title: 'Dietary needs', type: 'SINGLE_LINE_TEXT', belongs_to: 'ORDER', product_ids: [], required: false, is_hidden: false });
     const speaker = await freshAccount.api.createLineupProfile(freshAccount.organizerId, { name: 'Ada Speaker' });
     await freshAccount.api.addLineupEntry(event.eventId, { profile_id: speaker.id, billing_tier: 'HEADLINER' });
+    await freshAccount.api.createEventWidget(event.eventId, { name: 'Homepage', type: 'TICKETS', settings: {} });
 
     const { page } = await invitedMember(freshAccount, mailpit, publicApi, browser, { role: 'VIEWER' });
     const base = `/manage/event/${event.eventId}`;
@@ -58,6 +59,16 @@ test.describe('read-only and permission spot checks', () => {
     await expectReadOnlyPage(page, `${base}/affiliates`, /Affiliates/);
     await expect(page.getByText(affiliateCode).first()).toBeVisible();
     await expectReadOnlyPage(page, `${base}/messages`, /Messages/);
+    await expectReadOnlyPage(page, `${base}/widget`, /Embed Widget/);
+    await expect(page.getByTestId('widget-copy-code-button')).toBeVisible();
+    await expect(page.getByTestId('widget-save-button')).toHaveCount(0);
+    await page.getByTestId('widget-switcher').click();
+    await page.getByRole('option', { name: 'Homepage' }).click();
+    await expect(page.getByTestId('widget-stats')).toBeVisible();
+    await expect(page.getByTestId('widget-options-button')).toHaveCount(0);
+    await page.getByTestId('widget-group-promo').click();
+    await expect(page.getByTestId('widget-hide-promo-code-switch')).toBeDisabled();
+    await expect(page.getByTestId('widget-copy-code-button')).toBeVisible();
     await expectReadOnlyPage(page, `${base}/lineup`, /Lineup & Schedule/);
     await expect(page.getByTestId('lineup-people-list')).toContainText('Ada Speaker');
     await expect(page.getByTestId('lineup-quick-add-input')).toHaveCount(0);

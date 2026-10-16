@@ -1,5 +1,6 @@
 import {t} from "@lingui/macro";
 import {Modal} from "@mantine/core";
+import {embeddedDialogStyles, useEmbeddedDialogPlacement} from "../../../widget/EmbeddedDialogOffset.tsx";
 import {IconArrowLeft, IconCalendarPlus, IconChevronRight, IconClock, IconMapPin, IconX} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import {Event} from "../../../../types.ts";
@@ -38,6 +39,7 @@ const durationLabel = (item: ScheduleItem) => {
 };
 
 export const SessionModal = ({event, lineup, item, entriesById, portalTarget, onClose, onBack, onOpenEntry}: SessionModalProps) => {
+    const embeddedPlacement = useEmbeddedDialogPlacement();
     const title = scheduleItemTitle(item, entriesById);
     const spaceIndex = lineup.spaces.findIndex(space => space.id === item.event_space_id);
     const space = spaceIndex >= 0 ? lineup.spaces[spaceIndex] : undefined;
@@ -64,7 +66,9 @@ export const SessionModal = ({event, lineup, item, entriesById, portalTarget, on
             opened
             onClose={onClose}
             withCloseButton={false}
-            centered
+            centered={!embeddedPlacement}
+            yOffset={embeddedPlacement?.yOffset}
+            styles={embeddedDialogStyles(embeddedPlacement)}
             size={560}
             padding={0}
             radius={24}

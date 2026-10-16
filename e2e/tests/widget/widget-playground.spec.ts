@@ -25,4 +25,15 @@ test.describe('widget playground', () => {
     await expect(page.locator('#message-log')).toContainText('resize');
     await expect(page.locator('#message-log')).toContainText('hievents:open-checkout');
   });
+
+  test('the playground embeds an organizer events list as a custom element', async ({ page, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+
+    await page.goto(`/widget-test?type=events&organizerId=${account.organizerId}&markup=element&layout=compact`);
+    const list = page.frameLocator('iframe[title="Hi.Events Events"]');
+    await expect(list.getByText(event.title)).toBeVisible();
+    await expect(page.locator('#embed-code')).toContainText(`<hievents-widget`);
+    await expect(page.locator('#embed-code')).toContainText(`organizer-id="${account.organizerId}"`);
+  });
 });
+
