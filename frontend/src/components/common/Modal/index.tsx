@@ -1,4 +1,5 @@
 import {Modal as MantineModal, ModalProps as MantineModalProps} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
 import React from "react";
 import classes from "./Modal.module.scss";
 import classNames from "classnames";
@@ -9,35 +10,48 @@ interface ModalProps {
 }
 
 export const Modal = (props: MantineModalProps & ModalProps) => {
-    const { modalHeader = 'default', ...restProps } = props;
+    const {modalHeader = 'default', heading, children, classNames: customClassNames, ...restProps} = props;
+    const isSmallScreen = useMediaQuery('(max-width: 575px)', false, {getInitialValueInEffect: false});
+    const isBranded = modalHeader === 'branded';
+    const extraClassNames = typeof customClassNames === 'object' ? customClassNames : {};
+
     return (
         <MantineModal
+            fullScreen={!isBranded && isSmallScreen}
+            radius="lg"
+            padding="lg"
             {...restProps}
             overlayProps={{
                 opacity: 0.55,
                 blur: 3,
             }}
-            size={'xl'}
+            size={props.size ?? 'xl'}
             withCloseButton={true}
-            title={props.heading}
+            title={heading}
             closeOnClickOutside={false}
             classNames={{
-                title: classNames(
-                    classes.modalTitle,
-                    modalHeader === 'branded' && classes.brandedTitle
-                ),
-                header: classNames(
-                    modalHeader === 'branded' && classes.brandedHeader
-                ),
-                close: classNames(
-                    modalHeader === 'branded' && classes.brandedClose
-                ),
-                ...props.classNames
+                title: classNames(classes.modalTitle, isBranded && classes.brandedTitle),
+                header: classNames(isBranded && classes.brandedHeader),
+                close: classNames(isBranded && classes.brandedClose),
+                ...extraClassNames,
+                content: classNames(classes.content, extraClassNames.content),
+                body: classNames(classes.body, extraClassNames.body),
             }}
         >
-            <div style={{padding: '15px', paddingTop: 0}}>
-                {props.children}
-            </div>
+            {children}
         </MantineModal>
     )
 }
+
+interface ModalFooterProps {
+    children: React.ReactNode;
+    start?: React.ReactNode;
+    inline?: boolean;
+}
+
+export const ModalFooter = ({children, start, inline = false}: ModalFooterProps) => (
+    <div className={classNames(classes.footer, inline && classes.footerInline)}>
+        {start && <div className={classes.footerStart}>{start}</div>}
+        {children}
+    </div>
+);

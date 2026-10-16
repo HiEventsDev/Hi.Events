@@ -26,6 +26,8 @@ class IdHelper
 
     public const EVENT_LOCATION_PREFIX = 'el';
 
+    public const WIDGET_PREFIX = 'wgt';
+
     public static function shortId(string $prefix, int $length = 13): string
     {
         return sprintf('%s_%s', $prefix, Str::random($length));

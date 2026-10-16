@@ -77,6 +77,7 @@ class UpdateEventSettingsDTO extends BaseDTO
 
         // Homepage theme settings
         public readonly ?array $homepage_theme_settings = null,
+        public readonly ?array $homepage_sections = null,
 
         // Self-service settings
         public readonly bool $allow_attendee_self_edit = false,

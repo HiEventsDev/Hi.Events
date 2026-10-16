@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\Generated\ProductPriceDomainObjectAbstract;
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapBandProductRepositoryInterface;
 use HiEvents\Exceptions\CannotDeleteEntityException;
+use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
@@ -31,11 +32,19 @@ class DeleteProductService
 
     /**
      * @throws CannotDeleteEntityException
+     * @throws ResourceNotFoundException
      * @throws Throwable
      */
     public function deleteProduct(int $productId, int $eventId): void
     {
         $this->databaseManager->transaction(function () use ($productId, $eventId) {
+            if ($this->productRepository->findFirstWhere([
+                ProductDomainObjectAbstract::ID => $productId,
+                ProductDomainObjectAbstract::EVENT_ID => $eventId,
+            ]) === null) {
+                throw new ResourceNotFoundException(__('Product not found'));
+            }
+
             if ($this->productRepository->hasAssociatedOrders($productId)) {
                 throw new CannotDeleteEntityException(
                     __('You cannot delete this product because it has orders associated with it or is reserved by a checkout in progress. You can hide it instead.')

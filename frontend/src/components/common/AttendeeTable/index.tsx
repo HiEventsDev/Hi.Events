@@ -1,4 +1,5 @@
 import {ActionIcon, Anchor, Avatar, Button, Group, Popover, Text, Tooltip} from '@mantine/core';
+import {CreateButton} from "../CreateButton";
 import {Attendee, IdParam} from "../../../types.ts";
 import {
     IconCalendarEvent,
@@ -32,6 +33,7 @@ import {TanStackTable, TanStackTableColumn} from "../TanStackTable";
 import {ColumnVisibilityToggle} from "../ColumnVisibilityToggle";
 import {CellContext} from "@tanstack/react-table";
 import classes from './AttendeeTable.module.scss';
+import {WriteAccess} from "../WriteAccess";
 
 interface AttendeeTableProps {
     attendees: Attendee[];
@@ -152,14 +154,16 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                                         </Popover.Target>
                                         <Popover.Dropdown>
                                             <Group gap="xs" style={{flexDirection: 'column', width: '100%'}}>
-                                                <Button
-                                                    fullWidth
-                                                    variant="light"
-                                                    leftSection={<IconSend size={16}/>}
-                                                    onClick={() => handleMessageFromEmail(info.row.original)}
-                                                >
-                                                    {t`Message`}
-                                                </Button>
+                                                <WriteAccess>
+                                                    <Button
+                                                        fullWidth
+                                                        variant="light"
+                                                        leftSection={<IconSend size={16}/>}
+                                                        onClick={() => handleMessageFromEmail(info.row.original)}
+                                                    >
+                                                        {t`Message`}
+                                                    </Button>
+                                                </WriteAccess>
                                                 <Button
                                                     fullWidth
                                                     variant="light"
@@ -361,12 +365,12 @@ export const AttendeeTable = ({attendees, openCreateModal, compact, occurrenceId
                         {t`Your attendees will appear here once they have registered for your event. You can also manually add attendees.`}
                     </p>
                     {openCreateModal && (
-                        <Button
+                        <CreateButton
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Manually add an Attendee`}
-                        </Button>
+                        </CreateButton>
                     )}
                 </>
             )}

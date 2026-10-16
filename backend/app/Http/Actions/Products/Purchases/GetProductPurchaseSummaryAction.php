@@ -2,15 +2,18 @@
 
 namespace HiEvents\Http\Actions\Products\Purchases;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\ResourceNotFoundException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Product\GetProductPurchaseSummaryRequest;
 use HiEvents\Resources\Product\ProductPurchaseSummaryResource;
 use HiEvents\Services\Application\Handlers\Product\Purchases\GetProductPurchaseSummaryHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetProductPurchaseSummaryAction extends BaseAction
 {
     public function __construct(

@@ -5,6 +5,7 @@ import { useGetMe } from "./queries/useGetMe.ts";
 import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts";
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
+import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
 
 const Root = () => {
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
@@ -98,17 +99,19 @@ export const router: RouteObject[] = [
             },
             {
                 path: "account",
-                async lazy() {
-                    const ManageAccount = await import("./components/routes/account/ManageAccount");
-                    return { Component: ManageAccount.default };
-                }
+                element: <Navigate to="/settings/account" replace={true} />
             },
             {
-                path: "profile/:tab?",
-                async lazy() {
-                    const ManageProfile = await import("./components/routes/profile/ManageProfile");
-                    return { Component: ManageProfile.default };
-                }
+                path: "profile",
+                element: <Navigate to="/settings/profile" replace={true} />
+            },
+            {
+                path: "profile/security",
+                element: <Navigate to="/settings/security" replace={true} />
+            },
+            {
+                path: "profile/password",
+                element: <Navigate to="/settings/security" replace={true} />
             },
             {
                 path: "profile/confirm-email-change/:token",
@@ -273,57 +276,69 @@ export const router: RouteObject[] = [
         ]
     },
     {
-        path: "account",
+        path: "settings",
         errorElement: <ErrorPage />,
         async lazy() {
-            const DefaultLayout = await import("./components/layouts/DefaultLayout");
-            return { Component: DefaultLayout.default };
+            const SettingsLayout = await import("./components/layouts/SettingsLayout");
+            return { Component: SettingsLayout.default };
         },
         children: [
             {
-                path: "",
-                async lazy() {
-                    const ManageAccount = await import("./components/routes/account/ManageAccount");
-                    return { Component: ManageAccount.default };
-                },
-                children: [
-                    {
-                        path: "settings",
-                        async lazy() {
-                            const AccountSettings = await import("./components/routes/account/ManageAccount/sections/AccountSettings");
-                            return { Component: AccountSettings.default };
-                        }
-                    },
-                    {
-                        path: "taxes-and-fees",
-                        async lazy() {
-                            const TaxSettings = await import("./components/routes/account/ManageAccount/sections/TaxSettings");
-                            return { Component: TaxSettings.default };
-                        }
-                    },
-                    {
-                        path: "event-defaults",
-                        async lazy() {
-                            const EventDefaultsSettings = await import("./components/routes/account/ManageAccount/sections/EventDefaultsSettings");
-                            return { Component: EventDefaultsSettings.default };
-                        }
-                    },
-                    {
-                        path: "users",
-                        async lazy() {
-                            const Users = await import("./components/routes/account/ManageAccount/sections/Users");
-                            return { Component: Users.default };
-                        }
-                    },
-                    {
-                        path: "danger-zone",
-                        async lazy() {
-                            const DangerZone = await import("./components/routes/account/ManageAccount/sections/DangerZone");
-                            return { Component: DangerZone.default };
-                        }
-                    },
-                ]
+                index: true,
+                element: <Navigate to="/settings/profile" replace={true} />
             },
+            {
+                path: "profile",
+                async lazy() {
+                    const Profile = await import("./components/routes/settings/Profile");
+                    return { Component: Profile.default };
+                }
+            },
+            {
+                path: "security",
+                async lazy() {
+                    const Security = await import("./components/routes/settings/Security");
+                    return { Component: Security.default };
+                }
+            },
+            {
+                path: "account",
+                async lazy() {
+                    const Account = await import("./components/routes/settings/Account");
+                    return { Component: Account.default };
+                }
+            },
+            {
+                path: "organizers",
+                async lazy() {
+                    const Organizers = await import("./components/routes/settings/Organizers");
+                    return { Component: Organizers.default };
+                }
+            },
+            {
+                path: "team",
+                async lazy() {
+                    const Team = await import("./components/routes/settings/Team");
+                    return { Component: Team.default };
+                }
+            },
+            {
+                path: "taxes-and-fees",
+                async lazy() {
+                    const TaxesAndFees = await import("./components/routes/settings/TaxesAndFees");
+                    return { Component: TaxesAndFees.default };
+                }
+            },
+        ]
+    },
+    {
+        path: "account",
+        children: [
+            { path: "users", element: <Navigate to="/settings/team" replace={true} /> },
+            { path: "taxes-and-fees", element: <Navigate to="/settings/taxes-and-fees" replace={true} /> },
+            { path: "danger-zone", element: <Navigate to="/settings/account#delete-account" replace={true} /> },
+            { path: "*", element: <Navigate to="/settings/account" replace={true} /> },
+            { index: true, element: <Navigate to="/settings/account" replace={true} /> },
         ]
     },
     {
@@ -363,6 +378,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "widget",
+                async lazy() {
+                    const OrganizerWidget = await import("./components/routes/organizer/OrganizerWidget");
+                    return { Component: OrganizerWidget.default };
+                }
+            },
+            {
                 path: "webhooks",
                 async lazy() {
                     const Webhooks = await import("./components/routes/organizer/Webhooks");
@@ -370,10 +392,24 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "team",
+                async lazy() {
+                    const OrganizerTeam = await import("./components/routes/organizer/Team");
+                    return { Component: OrganizerTeam.default };
+                }
+            },
+            {
                 path: "locations",
                 async lazy() {
                     const Locations = await import("./components/routes/organizer/Locations");
                     return { Component: Locations.default };
+                }
+            },
+            {
+                path: "people",
+                async lazy() {
+                    const People = await import("./components/routes/organizer/People");
+                    return { Component: People.default };
                 }
             },
             {
@@ -496,6 +532,13 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "lineup",
+                async lazy() {
+                    const Lineup = await import("./components/routes/event/Lineup");
+                    return { Component: Lineup.default };
+                }
+            },
+            {
                 path: "check-in",
                 async lazy() {
                     const CheckIn = await import("./components/routes/event/CheckInLists");
@@ -606,6 +649,13 @@ export const router: RouteObject[] = [
                     const Webhooks = await import("./components/routes/event/Webhooks");
                     return { Component: Webhooks.default };
                 }
+            },
+            {
+                path: "team",
+                async lazy() {
+                    const EventTeam = await import("./components/routes/event/Team");
+                    return { Component: EventTeam.default };
+                }
             }
         ]
     },
@@ -660,10 +710,38 @@ export const router: RouteObject[] = [
         errorElement: <ErrorPage />,
     },
     {
+        path: "/widget/organizer/:organizerId",
+        loader: organizerWidgetRouteLoader,
+        async lazy() {
+            const OrganizerEventsWidget = await import("./components/layouts/OrganizerEventsWidget");
+            return { Component: OrganizerEventsWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/widget/:eventId",
+        loader: ticketWidgetRouteLoader,
         async lazy() {
             const ProductWidget = await import("./components/layouts/ProductWidget");
             return { Component: ProductWidget.default };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/widget/:eventId/lineup",
+        loader: eventContentWidgetRouteLoader,
+        async lazy() {
+            const {LineupWidget} = await import("./components/layouts/EventContentWidget");
+            return { Component: LineupWidget };
+        },
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/widget/:eventId/schedule",
+        loader: eventContentWidgetRouteLoader,
+        async lazy() {
+            const {ScheduleWidget} = await import("./components/layouts/EventContentWidget");
+            return { Component: ScheduleWidget };
         },
         errorElement: <ErrorPage />,
     },
@@ -734,6 +812,14 @@ export const router: RouteObject[] = [
         async lazy() {
             const TicketDesignerPrint = await import("./components/routes/event/TicketDesigner/TicketDesignerPrint");
             return { Component: TicketDesignerPrint.default };
+        },
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/manage/event/:eventId/lineup/print",
+        async lazy() {
+            const RunSheetPrint = await import("./components/routes/event/Lineup/RunSheetPrint");
+            return { Component: RunSheetPrint.default };
         },
         errorElement: <ErrorPage />
     },

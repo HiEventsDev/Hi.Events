@@ -19,7 +19,7 @@ class GetSeatMapsAction extends BaseSeatMapAction
 
     public function __invoke(int $organizerId, Request $request): JsonResponse
     {
-        $this->authorizeSeatMapAccess($organizerId);
+        $this->isOrganizerReadAuthorized($organizerId);
 
         $seatMaps = $this->handler->handle(
             organizerId: $organizerId,

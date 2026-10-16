@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Configurations;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Services\Application\Handlers\Admin\DeleteConfigurationHandler;
@@ -19,7 +18,7 @@ class DeleteConfigurationAction extends BaseAction
 
     public function __invoke(int $configurationId): Response
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         try {
             $this->handler->handle($configurationId);

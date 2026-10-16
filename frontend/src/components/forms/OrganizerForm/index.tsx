@@ -14,9 +14,13 @@ import {IconBuilding} from "@tabler/icons-react";
 import classes from "../../routes/welcome/Welcome.module.scss";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
 
+export const organizerCurrencyOptions = Object.entries(currencies).map(([key, value]) => ({
+    value: value,
+    label: `${key} (${value})`,
+}));
+
 interface OrganizerFormProps {
     onSuccess?: (organizer: Organizer) => void;
-    onCancel?: () => void;
 }
 
 export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organizer>> }) => {
@@ -43,10 +47,7 @@ export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organize
                     {...form.getInputProps('currency')}
                     searchable
                     required
-                    data={Object.entries(currencies).map(([key, value]) => ({
-                        value: value,
-                        label: `${key} (${value})`,
-                    }))}
+                    data={organizerCurrencyOptions}
                     label={t`Currency`}
                     placeholder={t`Select currency`}
                     size="lg"
@@ -65,8 +66,12 @@ export const OrganizerForm = ({form}: { form: UseFormReturnType<Partial<Organize
     )
 }
 
-export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) => {
+export const useCreateOrganizerForm = ({onSuccess, prefillName}: {
+    onSuccess?: (organizer: Organizer) => void,
+    prefillName: boolean,
+}) => {
     const organizerMutation = useCreateOrganizer();
+    const formErrorHandler = useFormErrorResponseHandler();
     const {data: account, isFetched: accountFetched} = useGetAccount();
     const {data: me, isFetched: meFetched} = useGetMe();
     const form = useForm({
@@ -84,13 +89,9 @@ export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) =
         }, {
             onSuccess: ({data: organizer}) => {
                 trackEvent(AnalyticsEvents.ORGANIZER_CREATED);
-                if (onSuccess) {
-                    onSuccess(organizer);
-                }
+                onSuccess?.(organizer);
             },
-            onError: (error: any) => {
-                useFormErrorResponseHandler()(form, error);
-            }
+            onError: (error: any) => formErrorHandler(form, error),
         });
     }
 
@@ -99,7 +100,9 @@ export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) =
             return;
         }
         form.setFieldValue('currency', account?.currency_code ?? '');
-        form.setFieldValue('name', account?.name ?? '');
+        if (prefillName) {
+            form.setFieldValue('name', account?.name ?? '');
+        }
     }, [accountFetched]);
 
     useEffect(() => {
@@ -110,24 +113,35 @@ export const OrganizerCreateForm = ({onSuccess, onCancel}: OrganizerFormProps) =
         form.setFieldValue('timezone', me?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone);
     }, [meFetched]);
 
+    return {
+        form,
+        handleSubmit,
+        isPending: organizerMutation.isPending,
+        isReady: accountFetched && meFetched,
+    };
+}
+
+export const OrganizerCreateForm = ({onSuccess}: OrganizerFormProps) => {
+    const {form, handleSubmit, isPending, isReady} = useCreateOrganizerForm({onSuccess, prefillName: true});
+
     return (
         <LoadingContainer>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-                <fieldset disabled={organizerMutation.isPending || !accountFetched || !meFetched}>
+                <fieldset disabled={isPending || !isReady}>
                     <OrganizerForm form={form as any}/>
 
                     <Button
                         type={'submit'}
                         fullWidth
                         size="lg"
-                        loading={organizerMutation.isPending}
-                        leftSection={organizerMutation.isPending ? null : <IconBuilding size={20}/>}
+                        loading={isPending}
+                        leftSection={isPending ? null : <IconBuilding size={20}/>}
                         className={classes.primaryButton}
-                        disabled={organizerMutation.isPending}
+                        disabled={isPending}
                         style={{marginTop: '1.5rem'}}
-                        aria-label={organizerMutation.isPending ? t`Creating your organizer profile, please wait` : t`Continue to event creation`}
+                        aria-label={isPending ? t`Creating your organizer profile, please wait` : t`Continue to event creation`}
                     >
-                        {organizerMutation.isPending ? t`Creating Organizer...` : t`Continue Setup`}
+                        {isPending ? t`Creating Organizer...` : t`Continue Setup`}
                     </Button>
                 </fieldset>
             </form>

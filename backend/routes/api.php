@@ -207,6 +207,25 @@ use HiEvents\Http\Actions\EventSettings\PartialEditEventSettingsAction;
 use HiEvents\Http\Actions\Images\CreateImageAction;
 use HiEvents\Http\Actions\Images\DeleteImageAction;
 use HiEvents\Http\Actions\LifecycleEmails\UnsubscribeFromLifecycleEmailsAction;
+use HiEvents\Http\Actions\Lineup\CreateEventSpaceAction;
+use HiEvents\Http\Actions\Lineup\CreateLineupEntryAction;
+use HiEvents\Http\Actions\Lineup\CreateProfileAction;
+use HiEvents\Http\Actions\Lineup\CreateScheduleItemAction;
+use HiEvents\Http\Actions\Lineup\DeleteEventSpaceAction;
+use HiEvents\Http\Actions\Lineup\DeleteLineupEntryAction;
+use HiEvents\Http\Actions\Lineup\DeleteProfileAction;
+use HiEvents\Http\Actions\Lineup\DeleteScheduleItemAction;
+use HiEvents\Http\Actions\Lineup\ExportEventLineupAction;
+use HiEvents\Http\Actions\Lineup\GetEventLineupAction;
+use HiEvents\Http\Actions\Lineup\GetEventLineupPublicAction;
+use HiEvents\Http\Actions\Lineup\GetProfilesAction;
+use HiEvents\Http\Actions\Lineup\ImportLineupAction;
+use HiEvents\Http\Actions\Lineup\SortLineupEntriesAction;
+use HiEvents\Http\Actions\Lineup\SortProfileImagesAction;
+use HiEvents\Http\Actions\Lineup\UpdateEventSpaceAction;
+use HiEvents\Http\Actions\Lineup\UpdateLineupEntryAction;
+use HiEvents\Http\Actions\Lineup\UpdateProfileAction;
+use HiEvents\Http\Actions\Lineup\UpdateScheduleItemAction;
 use HiEvents\Http\Actions\Locations\CreateLocationAction;
 use HiEvents\Http\Actions\Locations\DeleteLocationAction;
 use HiEvents\Http\Actions\Locations\GeoAutocompleteAction;
@@ -305,6 +324,8 @@ use HiEvents\Http\Actions\TaxesAndFees\CreateTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\DeleteTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\EditTaxOrFeeAction;
 use HiEvents\Http\Actions\TaxesAndFees\GetTaxOrFeeAction;
+use HiEvents\Http\Actions\Team\GetEventTeamAction;
+use HiEvents\Http\Actions\Team\GetOrganizerTeamAction;
 use HiEvents\Http\Actions\TicketLookup\GetOrdersByLookupTokenAction;
 use HiEvents\Http\Actions\TicketLookup\SendTicketLookupEmailAction;
 use HiEvents\Http\Actions\Users\CancelEmailChangeAction;
@@ -340,6 +361,15 @@ use HiEvents\Http\Actions\Webhooks\EditWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhookLogsAction;
 use HiEvents\Http\Actions\Webhooks\GetWebhooksAction;
+use HiEvents\Http\Actions\Widgets\CreateEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\CreateOrganizerWidgetAction;
+use HiEvents\Http\Actions\Widgets\DeleteEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\DeleteOrganizerWidgetAction;
+use HiEvents\Http\Actions\Widgets\GetEventWidgetsAction;
+use HiEvents\Http\Actions\Widgets\GetOrganizerWidgetsAction;
+use HiEvents\Http\Actions\Widgets\GetWidgetPublicAction;
+use HiEvents\Http\Actions\Widgets\UpdateEventWidgetAction;
+use HiEvents\Http\Actions\Widgets\UpdateOrganizerWidgetAction;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Router;
 
@@ -420,6 +450,7 @@ $router->middleware(['auth:api'])->group(
         $router->get('/organizers/{organizer_id}', GetOrganizerAction::class);
         $router->get('/organizers/{organizer_id}/events', GetOrganizerEventsAction::class);
         $router->get('/organizers/{organizer_id}/stats', GetOrganizerStatsAction::class);
+        $router->get('/organizers/{organizer_id}/team', GetOrganizerTeamAction::class);
         $router->get('/organizers/{organizer_id}/orders', GetOrganizerOrdersAction::class);
         $router->get('/organizers/{organizer_id}/settings', GetOrganizerSettingsAction::class);
         $router->patch('/organizers/{organizer_id}/settings', PartialUpdateOrganizerSettingsAction::class);
@@ -444,6 +475,17 @@ $router->middleware(['auth:api'])->group(
             ->middleware('throttle:60,1,geo-place-details');
         $router->put('/organizers/{organizer_id}/locations/{location_id}', UpdateLocationAction::class);
         $router->delete('/organizers/{organizer_id}/locations/{location_id}', DeleteLocationAction::class);
+
+        $router->get('/organizers/{organizer_id}/profiles', GetProfilesAction::class);
+        $router->post('/organizers/{organizer_id}/profiles', CreateProfileAction::class);
+        $router->put('/organizers/{organizer_id}/profiles/{profile_id}', UpdateProfileAction::class);
+        $router->delete('/organizers/{organizer_id}/profiles/{profile_id}', DeleteProfileAction::class);
+        $router->post('/organizers/{organizer_id}/profiles/{profile_id}/images/sort', SortProfileImagesAction::class);
+
+        $router->get('/organizers/{organizer_id}/widgets', GetOrganizerWidgetsAction::class);
+        $router->post('/organizers/{organizer_id}/widgets', CreateOrganizerWidgetAction::class);
+        $router->put('/organizers/{organizer_id}/widgets/{widget_id}', UpdateOrganizerWidgetAction::class);
+        $router->delete('/organizers/{organizer_id}/widgets/{widget_id}', DeleteOrganizerWidgetAction::class);
 
         $router->get('/organizers/{organizer_id}/seat-maps', GetSeatMapsAction::class);
         $router->post('/organizers/{organizer_id}/seat-maps', CreateSeatMapAction::class)
@@ -533,6 +575,7 @@ $router->middleware(['auth:api'])->group(
 
         // Stats
         $router->get('/events/{event_id}/stats', GetEventStatsAction::class);
+        $router->get('/events/{event_id}/team', GetEventTeamAction::class);
         $router->get('/events/{event_id}/counts', GetEventCountsAction::class);
 
         // Email Templates - Event level
@@ -592,6 +635,25 @@ $router->middleware(['auth:api'])->group(
         $router->get('/events/{event_id}/affiliates/{affiliate_id}', GetAffiliateAction::class);
         $router->delete('/events/{event_id}/affiliates/{affiliate_id}', DeleteAffiliateAction::class);
         $router->post('/events/{event_id}/affiliates/export', ExportAffiliatesAction::class);
+
+        $router->get('/events/{event_id}/widgets', GetEventWidgetsAction::class);
+        $router->post('/events/{event_id}/widgets', CreateEventWidgetAction::class);
+        $router->put('/events/{event_id}/widgets/{widget_id}', UpdateEventWidgetAction::class);
+        $router->delete('/events/{event_id}/widgets/{widget_id}', DeleteEventWidgetAction::class);
+
+        $router->get('/events/{event_id}/lineup', GetEventLineupAction::class);
+        $router->get('/events/{event_id}/lineup/export', ExportEventLineupAction::class);
+        $router->post('/events/{event_id}/lineup/import', ImportLineupAction::class);
+        $router->post('/events/{event_id}/lineup/entries', CreateLineupEntryAction::class);
+        $router->post('/events/{event_id}/lineup/entries/sort', SortLineupEntriesAction::class);
+        $router->put('/events/{event_id}/lineup/entries/{lineup_entry_id}', UpdateLineupEntryAction::class);
+        $router->delete('/events/{event_id}/lineup/entries/{lineup_entry_id}', DeleteLineupEntryAction::class);
+        $router->post('/events/{event_id}/lineup/spaces', CreateEventSpaceAction::class);
+        $router->put('/events/{event_id}/lineup/spaces/{space_id}', UpdateEventSpaceAction::class);
+        $router->delete('/events/{event_id}/lineup/spaces/{space_id}', DeleteEventSpaceAction::class);
+        $router->post('/events/{event_id}/lineup/schedule-items', CreateScheduleItemAction::class);
+        $router->put('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', UpdateScheduleItemAction::class);
+        $router->delete('/events/{event_id}/lineup/schedule-items/{schedule_item_id}', DeleteScheduleItemAction::class);
 
         // Messages
         $router->post('/events/{event_id}/messages', SendMessageAction::class);
@@ -773,6 +835,7 @@ $router->prefix('/public')->group(
         $router->get('/events/{event_id}', GetEventPublicAction::class);
         $router->get('/events/{event_id}/occurrences', GetEventOccurrencesPublicAction::class)
             ->middleware('throttle:60,1,public-occurrences');
+        $router->get('/events/{event_id}/lineup', GetEventLineupPublicAction::class);
         $router->get('/events/{event_id}/seat-map', GetEventSeatMapPublicAction::class)
             ->middleware('cache.headers:no_cache;private;etag');
         $router->get('/events/{event_id}/occurrences/{occurrence_id}/seat-availability', GetSeatAvailabilityPublicAction::class)
@@ -787,6 +850,10 @@ $router->prefix('/public')->group(
             ->middleware('cache.guest:10,page,per_page,sort_by,sort_direction,query,filter_fields,eventsStatus');
         $router->post('/organizers/{organizer_id}/contact', SendOrganizerContactMessagePublicAction::class)
             ->middleware('throttle:5,1,organizer-contact');
+
+        // Widgets
+        $router->get('/widgets/{widget_short_id}', GetWidgetPublicAction::class)
+            ->middleware('throttle:300,1,public-widgets');
 
         // Products
         $router->get('/events/{event_id}/products', GetEventPublicAction::class);

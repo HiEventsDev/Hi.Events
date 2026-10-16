@@ -10,6 +10,12 @@
     }
 }
 
+:global(body):has(.root) {
+    @media print {
+        background: #fff !important;
+    }
+}
+
 .empty {
     display: flex;
     align-items: center;

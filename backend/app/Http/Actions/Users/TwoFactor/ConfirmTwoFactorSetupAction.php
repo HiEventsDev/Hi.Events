@@ -6,12 +6,14 @@ use HiEvents\Exceptions\InvalidTwoFactorCodeException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\TwoFactorLockedOutException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Http\Request\User\TwoFactor\TwoFactorCodeRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\ConfirmTwoFactorSetupHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
+#[AllowedForReadOnlyUsers]
 class ConfirmTwoFactorSetupAction extends BaseAction
 {
     public function __construct(

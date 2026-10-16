@@ -2,9 +2,11 @@
 
 namespace HiEvents\Http\Actions\Reports;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Enums\ReportTypes;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Report\GetReportRequest;
 use HiEvents\Services\Application\Handlers\Reports\DTO\GetReportDTO;
 use HiEvents\Services\Application\Handlers\Reports\GetReportHandler;
@@ -13,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+#[RequiresPermission(Permission::VIEW_FINANCIALS)]
 class GetReportAction extends BaseAction
 {
     public function __construct(private readonly GetReportHandler $reportHandler) {}

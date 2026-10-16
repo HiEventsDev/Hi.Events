@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Enums\EmailTemplateType;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
 use HiEvents\Services\Infrastructure\Email\LiquidTemplateRenderer;
+use HiEvents\Services\Infrastructure\HtmlPurifier\HtmlPurifierService;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class EmailTemplateService
@@ -16,6 +17,7 @@ class EmailTemplateService
         private readonly LiquidTemplateRenderer $liquidRenderer,
         private readonly EmailTokenContextBuilder $tokenBuilder,
         private readonly EmailContextHtmlEscaper $contextHtmlEscaper,
+        private readonly HtmlPurifierService $purifier,
     ) {}
 
     public function getTemplateByType(
@@ -35,7 +37,7 @@ class EmailTemplateService
     public function renderTemplate(EmailTemplateDomainObject $template, array $context): RenderedEmailTemplateDTO
     {
         $renderedSubject = $this->liquidRenderer->render($template->getSubject(), $context);
-        $renderedBody = $this->liquidRenderer->render($template->getBody(), $this->contextHtmlEscaper->escape($context));
+        $renderedBody = $this->renderBody($template->getBody(), $context);
 
         $cta = null;
 
@@ -73,7 +75,7 @@ class EmailTemplateService
     {
         $context = $this->tokenBuilder->buildPreviewContext($type->value);
 
-        $renderedBody = $this->liquidRenderer->render($body, $this->contextHtmlEscaper->escape($context));
+        $renderedBody = $this->renderBody($body, $context);
 
         if ($cta && isset($cta['label'])) {
             $ctaUrl = $this->getValueFromDotNotation($context, $cta['url_token'] ?? '') ?? '#';
@@ -92,6 +94,13 @@ class EmailTemplateService
             'body' => $renderedBody,
             'context' => $context,
         ];
+    }
+
+    private function renderBody(string $body, array $context): string
+    {
+        return (string) $this->purifier->purify(
+            $this->liquidRenderer->render($body, $this->contextHtmlEscaper->escape($context)),
+        );
     }
 
     public function validateTemplate(string $subject, string $body): array
@@ -173,6 +182,14 @@ Congratulations! Your order for <strong>{{ event.title }}</strong> on <strong>{{
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
 
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
+
 {% if settings.post_checkout_message %}
 <strong>Additional Information</strong><br>
 {{ settings.post_checkout_message }}<br>
@@ -225,6 +242,14 @@ Please find your ticket details below.<br>
 <strong>Time:</strong> {{ event.time }}<br>
 {% if event.full_address %}<strong>Location:</strong> {{ event.full_address }}<br>{% endif %}
 <br>
+
+{% if lineup.names.size > 0 or lineup.slots.size > 0 %}
+<strong>{{ lineup.heading }}</strong><br>
+{% if lineup.names.size > 0 %}{{ lineup.names | join: ", " }}<br>{% endif %}
+{% for slot in lineup.slots %}{{ slot.time }} · {{ slot.title }}{% if slot.stage %} · {{ slot.stage }}{% endif %}<br>{% endfor %}
+<a href="{{ lineup.url }}">{% if lineup.slots.size > 0 %}See the full schedule{% else %}See the full lineup{% endif %}</a><br>
+<br>
+{% endif %}
 
 <strong>Your Ticket</strong><br>
 <strong>Ticket Type:</strong> {{ ticket.name }}<br>

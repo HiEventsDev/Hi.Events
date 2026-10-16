@@ -21,7 +21,7 @@ export const ConfirmEmailChange = () => {
     if (!token) {
         return <MessageCard message={t`The link you clicked is invalid.`}
                             linkText={t`Go back to profile`}
-                            linkHref="/manage/profile"
+                            linkHref="/settings/profile"
         />;
     }
 
@@ -29,7 +29,7 @@ export const ConfirmEmailChange = () => {
         mutate({token: token, userId: userData?.id}, {
             onSuccess: () => {
                 showSuccess(t`Successfully confirmed email change`);
-                navigate('/manage/profile');
+                navigate('/settings/profile');
             },
             onError: () => {
                 showError(t`Error confirming email change`);
@@ -40,7 +40,7 @@ export const ConfirmEmailChange = () => {
     if (isFetched && !userData?.pending_email) {
         return <MessageCard message={t`You have no pending email change.`}
                             linkText={t`Go back to profile`}
-                            linkHref="/manage/profile"
+                            linkHref="/settings/profile"
         />;
     }
 

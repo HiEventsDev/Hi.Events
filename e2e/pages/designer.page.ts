@@ -8,6 +8,11 @@ export class DesignerPage {
     await this.page.waitForLoadState('networkidle');
   }
 
+  async gotoOrganizerHomepageDesigner(organizerId: number): Promise<void> {
+    await this.page.goto(`/manage/organizer/${organizerId}/organizer-homepage-designer`);
+    await this.page.waitForLoadState('networkidle');
+  }
+
   async gotoTicketDesigner(eventId: number): Promise<void> {
     await this.page.goto(`/manage/event/${eventId}/ticket-designer`);
     await this.page.waitForLoadState('networkidle');
@@ -39,5 +44,28 @@ export class DesignerPage {
 
   get eventPreview(): FrameLocator {
     return this.page.frameLocator('iframe[title="Event Preview"]');
+  }
+
+  sectionRow(type: string): Locator {
+    return this.page.getByTestId(`homepage-section-row-${type}`);
+  }
+
+  async toggleSection(type: string): Promise<void> {
+    await this.page.getByTestId(`homepage-section-toggle-${type}`).click();
+  }
+
+  async addSection(type: 'text' | 'gallery' | 'faq' | 'video' | 'sponsors'): Promise<Locator> {
+    await this.page.getByTestId('homepage-add-section-button').click();
+    await this.page.getByTestId(`homepage-add-section-${type}`).click();
+    return this.sectionRow(type).last();
+  }
+
+  async moveSectionUp(type: string): Promise<void> {
+    const grip = this.sectionRow(type).last().getByRole('button', { name: 'Drag to reorder' });
+    await grip.focus();
+    for (const key of ['Space', 'ArrowUp', 'Space']) {
+      await this.page.keyboard.press(key);
+      await this.page.waitForTimeout(250);
+    }
   }
 }

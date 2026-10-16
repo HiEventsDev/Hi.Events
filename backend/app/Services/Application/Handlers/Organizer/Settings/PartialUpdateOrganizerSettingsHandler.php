@@ -8,6 +8,7 @@ use HiEvents\Repository\Interfaces\OrganizerRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Organizer\DTO\PartialUpdateOrganizerSettingsDTO;
 use HiEvents\Services\Domain\Event\EventSpamCheckDispatchService;
+use HiEvents\Services\Domain\Event\HomepageSectionsSanitizer;
 
 class PartialUpdateOrganizerSettingsHandler
 {
@@ -15,6 +16,7 @@ class PartialUpdateOrganizerSettingsHandler
         private readonly OrganizerSettingsRepositoryInterface $organizerSettingsRepository,
         private readonly OrganizerRepositoryInterface $organizerRepository,
         private readonly EventSpamCheckDispatchService $eventSpamCheckDispatchService,
+        private readonly HomepageSectionsSanitizer $homepageSectionsSanitizer,
     ) {}
 
     public function handle(PartialUpdateOrganizerSettingsDTO $dto): OrganizerSettingDomainObject
@@ -77,6 +79,8 @@ class PartialUpdateOrganizerSettingsHandler
 
             'homepage_theme_settings' => $dto->getProvided('homepageThemeSettings', $organizerSettings->getHomepageThemeSettings()),
 
+            'homepage_sections' => $this->homepageSections($dto, $organizerSettings),
+
             'seo_keywords' => $dto->getProvided('seoKeywords', $organizerSettings->getSeoKeywords()),
             'seo_title' => $dto->getProvided('seoTitle', $organizerSettings->getSeoTitle()),
             'seo_description' => $dto->getProvided('seoDescription', $organizerSettings->getSeoDescription()),
@@ -94,5 +98,16 @@ class PartialUpdateOrganizerSettingsHandler
         $this->eventSpamCheckDispatchService->dispatchForOrganizer($organizer->getId());
 
         return $this->organizerSettingsRepository->findFirst($organizerSettings->getId());
+    }
+
+    private function homepageSections(PartialUpdateOrganizerSettingsDTO $dto, OrganizerSettingDomainObject $organizerSettings): array|string|null
+    {
+        if (! $dto->wasProvided('homepageSections')) {
+            return $organizerSettings->getHomepageSections();
+        }
+
+        return $dto->homepageSections === null
+            ? null
+            : $this->homepageSectionsSanitizer->sanitizeForOrganizer($dto->homepageSections, $dto->organizerId);
     }
 }

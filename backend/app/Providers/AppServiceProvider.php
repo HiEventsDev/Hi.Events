@@ -7,12 +7,15 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\OrganizerDomainObject;
+use HiEvents\DomainObjects\ProfileDomainObject;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeSessionService;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Seating\Services\Domain\EventSeatMapLookupService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
 use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
+use HiEvents\Models\Profile;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
@@ -43,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped(SeatedProductLookupService::class);
         $this->app->scoped(LicenceService::class);
         $this->app->scoped(BoxOfficeSessionService::class);
+        $this->app->scoped(AccountUserAccessService::class);
     }
 
     /**
@@ -127,6 +131,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             EventDomainObject::class => Event::class,
             OrganizerDomainObject::class => Organizer::class,
+            ProfileDomainObject::class => Profile::class,
         ]);
     }
 

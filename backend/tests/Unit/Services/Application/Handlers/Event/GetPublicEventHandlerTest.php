@@ -23,6 +23,7 @@ use HiEvents\Services\Application\Handlers\Event\GetPublicEventHandler;
 use HiEvents\Services\Domain\Event\EventPageViewIncrementService;
 use HiEvents\Services\Domain\EventOccurrence\PublicOccurrenceVisibilityService;
 use HiEvents\Services\Domain\Product\ProductFilterService;
+use HiEvents\Services\Domain\Product\PublicProductSelectionFilter;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -59,6 +60,7 @@ class GetPublicEventHandlerTest extends TestCase
             $this->eventPageViewIncrementService,
             new PublicOccurrenceVisibilityService,
             m::mock(EventSeatMapLookupService::class, ['existsForEvent' => false]),
+            new PublicProductSelectionFilter,
         );
     }
 

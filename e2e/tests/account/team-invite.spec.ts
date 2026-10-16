@@ -14,7 +14,7 @@ test.describe('team invites', () => {
     await team.inviteUser({ firstName: 'Robin', lastName: 'Member', email: inviteeEmail, role: 'Organizer' });
 
     await expect(team.userRow(inviteeEmail)).toBeVisible();
-    await expect(team.userRow(inviteeEmail).getByRole('cell', { name: /^Invited$/i })).toBeVisible();
+    await expect(team.userRow(inviteeEmail).getByText(/^Invited$/)).toBeVisible();
 
     const inviteUrl = await mailpit.waitForLink(inviteeEmail, /accept-invitation/, { subjectContains: 'invited to join' });
     await page.goto(inviteUrl.pathname);
@@ -55,15 +55,16 @@ test.describe('team invites', () => {
     const ownerPage = await freshAccount.newAuthedPage();
     const team = new TeamPage(ownerPage);
     await team.goto();
-    await expect(team.userRow(memberEmail).getByRole('cell', { name: /^Active$/i })).toBeVisible();
+    await expect(team.userRow(memberEmail)).toBeVisible();
+    await expect(team.userRow(memberEmail).getByText(/^(Invited|Inactive)$/)).toHaveCount(0);
 
     await team.openEditUserModal(memberEmail);
-    await team.selectRole('Organizer', 'Admin');
-    await team.selectStatus('Inactive');
+    await team.selectRole('Admin');
     await team.submitEditUser();
+    await expect(team.userRow(memberEmail).getByText(/^Admin$/)).toBeVisible();
 
-    await expect(team.userRow(memberEmail).getByRole('cell', { name: /^Admin$/i })).toBeVisible();
-    await expect(team.userRow(memberEmail).getByRole('cell', { name: /^Inactive$/i })).toBeVisible();
+    await team.deactivate(memberEmail);
+    await expect(team.userRow(memberEmail).getByText(/^Inactive$/)).toBeVisible();
 
     await page.goto('/auth/login');
     await page.waitForLoadState('networkidle');

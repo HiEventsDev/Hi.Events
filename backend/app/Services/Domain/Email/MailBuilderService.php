@@ -17,15 +17,21 @@ use HiEvents\Mail\Attendee\AttendeeTicketMail;
 use HiEvents\Mail\Occurrence\OccurrenceCancellationMail;
 use HiEvents\Mail\Order\OrderSummary;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO;
+use HiEvents\Services\Domain\Lineup\EmailLineupHighlightsService;
 use HiEvents\Services\Domain\Order\OfflinePaymentInstructionsRenderService;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Localizable;
 
 class MailBuilderService
 {
+    use Localizable;
+
     public function __construct(
         private readonly EmailTemplateService $emailTemplateService,
         private readonly EmailTokenContextBuilder $tokenContextBuilder,
         private readonly OfflinePaymentInstructionsRenderService $offlinePaymentInstructionsRenderService,
+        private readonly EmailLineupHighlightsService $lineupHighlightsService,
     ) {}
 
     public function buildAttendeeTicketMail(
@@ -90,6 +96,12 @@ class MailBuilderService
                 organizer: $organizer,
                 occurrence: $attendees->first()->getEventOccurrence(),
                 attendees: $attendees,
+                lineup: $this->lineupHighlights(
+                    $event,
+                    $eventSettings,
+                    $this->sharedOccurrence($attendees),
+                    $attendees->first()->getLocale(),
+                ),
             ),
         ];
     }
@@ -119,7 +131,27 @@ class MailBuilderService
             eventSettings: $eventSettings,
             invoice: $invoice,
             renderedTemplate: $renderedTemplate,
+            lineup: $renderedTemplate ? null : $this->lineupHighlights($event, $eventSettings, $order->getSingleEventOccurrence(), $order->getLocale()),
         );
+    }
+
+    private function lineupHighlights(
+        EventDomainObject $event,
+        EventSettingDomainObject $eventSettings,
+        ?EventOccurrenceDomainObject $occurrence,
+        ?string $locale,
+    ): ?EmailLineupHighlightsDTO {
+        return $this->withLocale($locale, fn () => $this->lineupHighlightsService->build($event, $eventSettings, $occurrence));
+    }
+
+    /**
+     * @param  Collection<int, AttendeeDomainObject>  $attendees
+     */
+    private function sharedOccurrence(Collection $attendees): ?EventOccurrenceDomainObject
+    {
+        $occurrenceIds = $attendees->map(fn (AttendeeDomainObject $attendee) => $attendee->getEventOccurrenceId())->unique();
+
+        return $occurrenceIds->count() === 1 ? $attendees->first()->getEventOccurrence() : null;
     }
 
     private function makeAttendeeTicketMail(
@@ -147,6 +179,7 @@ class MailBuilderService
                 $occurrence,
             ),
             occurrence: $occurrence,
+            lineup: $template === null ? $this->lineupHighlights($event, $eventSettings, $occurrence, $attendee->getLocale()) : null,
         );
     }
 
@@ -179,6 +212,9 @@ class MailBuilderService
             $eventSettings,
             $occurrence,
         );
+        $context['lineup'] = $this->lineupHighlightsService->toTemplateContext(
+            $this->lineupHighlights($event, $eventSettings, $occurrence, $attendee->getLocale()),
+        );
 
         return $this->emailTemplateService->renderTemplate($template, $context);
     }
@@ -205,6 +241,9 @@ class MailBuilderService
             $event,
             $organizer,
             $eventSettings,
+        );
+        $context['lineup'] = $this->lineupHighlightsService->toTemplateContext(
+            $this->lineupHighlights($event, $eventSettings, $order->getSingleEventOccurrence(), $order->getLocale()),
         );
 
         return $this->emailTemplateService->renderTemplate($template, $context);

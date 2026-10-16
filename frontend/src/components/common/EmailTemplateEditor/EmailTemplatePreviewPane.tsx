@@ -1,7 +1,9 @@
-import {Alert, Divider, LoadingOverlay, Stack, Text, Typography} from '@mantine/core';
+import {Alert, Divider, LoadingOverlay, Stack, Text} from '@mantine/core';
 import {IconAlertCircle, IconEye} from '@tabler/icons-react';
-import {Trans} from '@lingui/macro';
+import {t, Trans} from '@lingui/macro';
 import classes from './EmailTemplateEditor.module.scss';
+
+const PREVIEW_STYLES = 'body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.6;color:#1a1a1a}h1,h2,h3{margin:1.5rem 0 .5rem}h1:first-child,h2:first-child,h3:first-child,p:first-child{margin-top:0}a{color:#213850}img{max-width:100%}';
 
 interface EmailTemplatePreviewPaneProps {
     subject: string;
@@ -42,13 +44,12 @@ export const EmailTemplatePreviewPane = ({
                     )}
 
                     {!error && hasContent && (
-                        <Typography>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: previewData.body
-                                }}
-                            />
-                        </Typography>
+                        <iframe
+                            className={classes.previewFrame}
+                            title={t`Email preview`}
+                            sandbox=""
+                            srcDoc={`<!doctype html><html><head><meta charset="utf-8"><style>${PREVIEW_STYLES}</style></head><body>${previewData.body}</body></html>`}
+                        />
                     )}
 
                     {!error && !hasContent && !isLoading && (

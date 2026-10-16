@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HiEvents\Resources\Affiliate;
 
 use HiEvents\DomainObjects\AffiliateDomainObject;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\Resources\BaseResource;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class AffiliateResource extends BaseResource
             'code' => $this->getCode(),
             'email' => $this->getEmail(),
             'total_sales' => $this->getTotalSales(),
-            'total_sales_gross' => $this->getTotalSalesGross(),
+            'total_sales_gross' => $this->when($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => $this->getTotalSalesGross()),
             'status' => $this->getStatus(),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),

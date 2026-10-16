@@ -5,6 +5,7 @@ namespace HiEvents\Http\Actions\Users\TwoFactor;
 use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Http\Request\User\TwoFactor\BeginTwoFactorSetupRequest;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\User\TwoFactor\TwoFactorSetupResource;
@@ -12,6 +13,7 @@ use HiEvents\Services\Application\Handlers\User\TwoFactor\BeginTwoFactorSetupHan
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
+#[AllowedForReadOnlyUsers]
 class BeginTwoFactorSetupAction extends BaseAction
 {
     public function __construct(

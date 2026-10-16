@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
 
 class GetEventPublicAction extends BasePublicEventAction
 {
+    private const MAX_FILTER_IDS = 100;
+
     public function __construct(
         private readonly GetPublicEventHandler $getPublicEventHandler,
         private readonly LoggerInterface $logger,
@@ -25,6 +27,8 @@ class GetEventPublicAction extends BasePublicEventAction
             'promoCode' => strtolower($request->string('promo_code')),
             'isAuthenticated' => $this->isUserAuthenticated(),
             'eventOccurrenceId' => $request->integer('event_occurrence_id') ?: null,
+            'productIds' => $this->parseIdList($request->query('product_ids')),
+            'productCategoryIds' => $this->parseIdList($request->query('product_category_ids')),
         ]));
 
         if (! $this->canUserViewEvent($event)) {
@@ -36,5 +40,22 @@ class GetEventPublicAction extends BasePublicEventAction
         }
 
         return $this->resourceResponse(EventResourcePublic::class, $event);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function parseIdList(mixed $value): array
+    {
+        $values = is_array($value) ? $value : explode(',', (string) $value);
+
+        return collect($values)
+            ->filter(static fn ($id) => is_scalar($id) && preg_match('/^\s*\d+\s*$/', (string) $id) === 1)
+            ->map(static fn ($id) => (int) $id)
+            ->filter(static fn (int $id) => $id > 0)
+            ->unique()
+            ->take(self::MAX_FILTER_IDS)
+            ->values()
+            ->all();
     }
 }

@@ -1,5 +1,5 @@
 import {GenericModalProps, IdParam} from "../../../../../types.ts";
-import {Modal} from "../../../../../components/common/Modal";
+import {Modal, ModalFooter} from "../../../../../components/common/Modal";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
 import {Button, TextInput} from "@mantine/core";
@@ -56,15 +56,16 @@ export const AddTerminalReaderModal = ({onClose, organizerId}: AddTerminalReader
                     required
                     autoComplete="off"
                 />
-                <Button
-                    type="submit"
-                    fullWidth
-                    mt="md"
-                    loading={registerMutation.isPending}
-                    data-testid="terminal-reader-submit-button"
-                >
-                    {t`Add reader`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        type="submit"
+                        loading={registerMutation.isPending}
+                        data-testid="terminal-reader-submit-button"
+                    >
+                        {t`Add reader`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

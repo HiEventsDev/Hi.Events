@@ -13,6 +13,7 @@ use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
+use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Order\CreateOrderHandler;
 use HiEvents\Services\Application\Handlers\Order\DTO\CreateOrderPublicDTO;
 use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
@@ -122,6 +123,7 @@ class CreateOrderHandlerPromoCodeTest extends TestCase
                 Mockery::mock(EventSeatMapLookupService::class)->shouldIgnoreMissing(),
                 Mockery::mock(SeatedProductLookupService::class)->shouldIgnoreMissing(),
             ),
+            Mockery::mock(WidgetRepositoryInterface::class),
         );
 
         $dto = new CreateOrderPublicDTO(

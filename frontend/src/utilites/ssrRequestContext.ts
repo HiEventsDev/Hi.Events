@@ -5,6 +5,7 @@ export interface SsrRequestContext {
     authToken?: string;
     backendHeaders: Record<string, string>;
     licenceSimulation?: string;
+    widgetLocale?: string;
 }
 
 let contextProvider: (() => SsrRequestContext | undefined) | null = null;

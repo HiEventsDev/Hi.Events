@@ -6,7 +6,7 @@ namespace HiEvents\Http\Actions;
 
 use HiEvents\DataTransferObjects\BaseDataObject;
 use HiEvents\DataTransferObjects\BaseDTO;
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Interfaces\DomainObjectInterface;
 use HiEvents\DomainObjects\Interfaces\IsFilterable;
 use HiEvents\DomainObjects\Interfaces\IsSortable;
@@ -15,6 +15,8 @@ use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\DTO\QueryParamsDTO;
 use HiEvents\Http\ResponseCodes;
 use HiEvents\Resources\BaseResource;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -31,6 +33,15 @@ use Illuminate\Support\Facades\Response;
 abstract class BaseAction extends Controller
 {
     use ValidatesRequests;
+
+    private const FINANCIAL_QUERY_FIELDS = [
+        'total_gross',
+        'total_before_additions',
+        'total_tax',
+        'total_fee',
+        'total_refunded',
+        'total_sales_gross',
+    ];
 
     /**
      * @param  class-string<BaseResource>  $resource
@@ -143,11 +154,8 @@ abstract class BaseAction extends Controller
         return Response::make($xmlContent, $statusCode, $allHeaders);
     }
 
-    protected function isActionAuthorized(
-        int $entityId,
-        string $entityType,
-        Role $minimumRole = Role::ORGANIZER
-    ): void {
+    protected function isActionAuthorized(int $entityId, string $entityType): void
+    {
         /** @var IsAuthorizedService $authService */
         $authService = app()->make(IsAuthorizedService::class);
 
@@ -156,8 +164,55 @@ abstract class BaseAction extends Controller
             $entityType,
             $this->getAuthenticatedUser(),
             $this->getAuthenticatedAccountId(),
-            $minimumRole
         );
+    }
+
+    protected function isOrganizerReadAuthorized(int $organizerId): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->isOrganizerReadAuthorized(
+            $organizerId,
+            $this->getAuthenticatedUser(),
+            $this->getAuthenticatedAccountId(),
+        );
+    }
+
+    protected function isAccountReadAuthorized(int $accountId): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->isAccountReadAuthorized(
+            $accountId,
+            $this->getAuthenticatedUser(),
+            $this->getAuthenticatedAccountId(),
+        );
+    }
+
+    protected function getAuthenticatedAccess(): AccountUserAccess
+    {
+        $access = app(AccountUserAccessService::class)->forCurrentUser();
+
+        if ($access === null) {
+            throw new UnauthorizedException;
+        }
+
+        return $access;
+    }
+
+    protected function isWithheldFromCurrentUser(Permission $permission): bool
+    {
+        return app(AccountUserAccessService::class)->isWithheldFromCurrentUser($permission);
+    }
+
+    protected function requirePermission(Permission $permission): void
+    {
+        /** @var IsAuthorizedService $authService */
+        $authService = app()->make(IsAuthorizedService::class);
+
+        $authService->validatePermission($permission, $this->getAuthenticatedUser());
     }
 
     protected function getAuthenticatedAccountId(): int
@@ -172,23 +227,6 @@ abstract class BaseAction extends Controller
             }
 
             return $accountId;
-        }
-
-        throw new UnauthorizedException;
-    }
-
-    protected function getAuthenticatedUserRole(): Role
-    {
-        if (Auth::check()) {
-            /** @var AuthUserService $service */
-            $service = app(AuthUserService::class);
-            $role = $service->getAuthenticatedUserRole();
-
-            if ($role === null) {
-                throw new UnauthorizedException(__('No user role found in token'));
-            }
-
-            return $role;
         }
 
         throw new UnauthorizedException;
@@ -211,12 +249,12 @@ abstract class BaseAction extends Controller
         return Auth::check();
     }
 
-    protected function minimumAllowedRole(Role $minimumRole): void
+    protected function requireSuperAdmin(): void
     {
         /** @var IsAuthorizedService $authService */
         $authService = app()->make(IsAuthorizedService::class);
 
-        $authService->validateUserRole($minimumRole, $this->getAuthenticatedUser());
+        $authService->validateSuperAdmin($this->getAuthenticatedUser());
     }
 
     public function getClientIp(Request $request): ?string
@@ -231,7 +269,17 @@ abstract class BaseAction extends Controller
 
     public function getPaginationQueryParams(Request $request): QueryParamsDTO
     {
-        return QueryParamsDTO::fromArray($request->query->all());
+        $params = $request->query->all();
+
+        if ($this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS)) {
+            $params['filter_fields'] = array_diff_key((array) ($params['filter_fields'] ?? []), array_flip(self::FINANCIAL_QUERY_FIELDS));
+
+            if (in_array($params['sort_by'] ?? null, self::FINANCIAL_QUERY_FIELDS, true)) {
+                unset($params['sort_by'], $params['sort_direction']);
+            }
+        }
+
+        return QueryParamsDTO::fromArray($params);
     }
 
     public function isIncludeRequested(Request $request, string $include): bool

@@ -1,4 +1,5 @@
 import React, {useEffect, useId, useMemo, useState} from "react";
+import {CreateButton} from "../../../../common/CreateButton";
 import {t} from "@lingui/macro";
 import {
     ActionIcon,
@@ -1000,14 +1001,14 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                         <div className={classes.block}>
                             <div className={classes.blockHeader}>
                                 <span className={classes.blockLabel}>{t`Times`}</span>
-                                <Button
+                                <CreateButton
                                     variant="subtle"
                                     size="compact-sm"
                                     leftSection={<IconPlus size={14}/>}
                                     onClick={handleAddTime}
                                 >
                                     {t`Add another time`}
-                                </Button>
+                                </CreateButton>
                             </div>
 
                             <Stack gap="sm">

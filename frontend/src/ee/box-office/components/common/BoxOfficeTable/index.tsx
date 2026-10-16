@@ -1,4 +1,6 @@
 import {Anchor, Badge, Button, Tooltip} from '@mantine/core';
+import {CreateButton} from "../../../../../components/common/CreateButton";
+import {useAccess} from "../../../../../hooks/useAccess.ts";
 import {BoxOffice, Event, EventType, IdParam} from "../../../../../types.ts";
 import {
     IconCalendarEvent,
@@ -50,6 +52,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
     const [editModalOpen, {open: openEditModal, close: closeEditModal}] = useDisclosure(false);
     const [selectedBoxOfficeId, setSelectedBoxOfficeId] = useState<IdParam>();
     const [statsBoxOffice, setStatsBoxOffice] = useState<BoxOffice | null>(null);
+    const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
     const deleteMutation = useDeleteBoxOffice();
     const {generatePin, openBoxOffice, pinModalElement} = useBoxOfficePin();
     const {eventId} = useParams();
@@ -152,9 +155,11 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                         const boxOffice = info.row.original;
                         return (
                             <div className={classes.salesContainer}>
-                                <div className={classes.salesGross}>
-                                    {formatCurrency(boxOffice.gross_sales, boxOffice.currency ?? event?.currency)}
-                                </div>
+                                {boxOffice.gross_sales !== undefined && (
+                                    <div className={classes.salesGross}>
+                                        {formatCurrency(boxOffice.gross_sales, boxOffice.currency ?? event?.currency)}
+                                    </div>
+                                )}
                                 <div className={classes.salesCount}>
                                     {boxOffice.sales_count === 1
                                         ? t`1 order`
@@ -203,6 +208,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                         const setupItems = [
                             {
                                 label: t`Edit Box Office`,
+                                requiresEdit: true,
                                 icon: <IconPencil size={14}/>,
                                 onClick: () => {
                                     setSelectedBoxOfficeId(boxOffice.id as IdParam);
@@ -212,12 +218,14 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                             },
                             {
                                 label: boxOffice.has_pin ? t`Reset PIN` : t`Set PIN`,
+                                requiresEdit: true,
                                 icon: <IconKey size={14}/>,
                                 onClick: () => generatePin(boxOffice),
                                 dataTestId: 'box-office-reset-pin-menu-item',
                             },
                             {
                                 label: t`Open Box Office`,
+                                requiresEdit: true,
                                 icon: <IconCashRegister size={14}/>,
                                 onClick: () => openBoxOffice(boxOffice),
                                 visible: isMobile,
@@ -225,12 +233,12 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                         ];
                         const manageItems = [
                             ...(isLocked ? [] : setupItems),
-                            {
+                            ...(canViewFinancials ? [{
                                 label: t`Sales summary`,
                                 icon: <IconChartBar size={14}/>,
                                 onClick: () => setStatsBoxOffice(boxOffice),
                                 dataTestId: 'box-office-stats-menu-item',
-                            },
+                            }] : []),
                             {
                                 label: t`Copy Box Office Link`,
                                 icon: <IconCopy size={14}/>,
@@ -246,6 +254,7 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                                 items: [
                                     {
                                         label: t`Delete Box Office`,
+                                        requiresEdit: true,
                                         icon: <IconTrash size={14}/>,
                                         onClick: () => {
                                             confirmationDialog(
@@ -299,12 +308,12 @@ export const BoxOfficeTable = ({boxOffices, openCreateModal, event, isLocked = f
                             </Trans>
                         </p>
                         {!isLocked && (
-                            <Button
+                            <CreateButton
                                 size={'xs'}
                                 leftSection={<IconPlus/>}
                                 color={'green'}
                                 onClick={() => openCreateModal()}>{t`Create Box Office`}
-                            </Button>
+                            </CreateButton>
                         )}
                     </>
                 )}

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Admin\Organizers;
 
 use HiEvents\DataTransferObjects\UpdateAdminOrganizerVatSettingDTO;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Organizer\Vat\OrganizerVatSettingResource;
 use HiEvents\Services\Application\Handlers\Admin\Organizer\UpdateAdminOrganizerVatSettingHandler;
@@ -20,7 +19,7 @@ class UpdateOrganizerVatSettingAction extends BaseAction
 
     public function __invoke(Request $request, int $organizerId): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $validated = $request->validate([
             'vat_registered' => 'required|boolean',

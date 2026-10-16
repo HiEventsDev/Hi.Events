@@ -1,4 +1,5 @@
 import {Avatar, Menu, Text, UnstyledButton} from "@mantine/core";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {ReactNode} from "react";
 import {getInitials} from "../../../utilites/helpers.ts";
 import {
@@ -9,10 +10,9 @@ import {
     IconSettingsCog,
     IconShield,
     IconUser,
-    IconUsers,
 } from "@tabler/icons-react";
 import {useGetMe} from "../../../queries/useGetMe.ts";
-import {NavLink} from "react-router";
+import {NavLink, useLocation} from "react-router";
 import {t} from "@lingui/macro";
 import {authClient} from "../../../api/auth.client.ts";
 import {useDisclosure} from "@mantine/hooks";
@@ -36,6 +36,11 @@ interface Link {
 
 export const GlobalMenu = () => {
     const {data: me} = useGetMe();
+    const {isRestricted, canCreateOrganizers} = useAccess();
+    const location = useLocation();
+    const settingsLinkState = location.pathname.startsWith('/settings')
+        ? undefined
+        : {returnTo: location.pathname + location.search};
     const licenceNotice = useLicenceNotice();
     const [licenceModalOpen, {open: openLicenceModal, close: closeLicenceModal}] = useDisclosure(false);
     const [aboutModalOpen, {open: openAboutModal, close: closeAboutModal}] = useDisclosure(false);
@@ -49,21 +54,16 @@ export const GlobalMenu = () => {
         {
             label: t`My Profile`,
             icon: IconUser,
-            link: "/manage/profile",
-        },
-        {
-            label: t`Account Settings`,
-            icon: IconSettingsCog,
-            link: `/account/settings`,
+            link: "/settings/profile",
         },
     ];
 
-    if (me?.role === 'ADMIN' || me?.role === 'SUPERADMIN') {
+    if (!isRestricted) {
         links.push({
-            label: t`User Management`,
-            icon: IconUsers,
-            link: `/account/users`
-        })
+            label: t`Account Settings`,
+            icon: IconSettingsCog,
+            link: "/settings/account",
+        });
     }
 
     if (me?.role === 'SUPERADMIN') {
@@ -99,14 +99,16 @@ export const GlobalMenu = () => {
         });
     }
 
-    links.push({
-        label: t`Create Organizer`,
-        icon: IconPlus,
-        onClick: (event: any) => {
-            event.preventDefault();
-            openCreateOrganizerModal();
-        }
-    });
+    if (canCreateOrganizers) {
+        links.push({
+            label: t`Create Organizer`,
+            icon: IconPlus,
+            onClick: (event: any) => {
+                event.preventDefault();
+                openCreateOrganizerModal();
+            }
+        });
+    }
 
     links.push({
         label: t`Logout`,
@@ -137,6 +139,7 @@ export const GlobalMenu = () => {
                         <NavLink
                             onClick={link.onClick}
                             to={link.link ?? "#"}
+                            state={link.link?.startsWith('/settings') ? settingsLinkState : undefined}
                             key={link.label}
                             target={link.target ?? ""}
                         >

@@ -217,7 +217,7 @@ backend/
 
 ## External Resources
 
-- [CLAUDE.md](../../CLAUDE.md) - Project guidelines for AI assistants
+- [AGENTS.md](../../AGENTS.md) - Project guidelines for AI assistants
 - [Laravel Documentation](https://laravel.com/docs)
 - [Spatie Laravel Data](https://spatie.be/docs/laravel-data)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
@@ -235,7 +235,7 @@ When adding new features or making significant changes:
 
 1. **Start with**: [Architecture Overview](architecture-overview.md)
 2. **Look at examples**: `/prompts` directory contains feature documentation
-3. **Check CLAUDE.md**: Project-specific guidelines and patterns
+3. **Check AGENTS.md**: Project-specific guidelines and patterns
 4. **Reference specific guides**: Use the documentation index above
 
 ---

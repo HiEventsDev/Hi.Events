@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Domain\BoxOffice;
 
 use HiEvents\DomainObjects\AccountUserDomainObject;
+use HiEvents\DomainObjects\Enums\AccountUserAccessScope;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\UserStatus;
@@ -10,6 +11,8 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\BoxOffice\Services\Domain\BoxOfficeOperatorAuthorizer;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
+use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Foundation\Application;
@@ -41,9 +44,18 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
             ->with(EventRepositoryInterface::class)
             ->andReturn($this->eventRepository);
 
+        $accessService = Mockery::mock(AccountUserAccessService::class);
+        $accessService->shouldReceive('forAccountUser')->andReturnUsing(
+            static fn (AccountUserDomainObject $accountUser) => new AccountUserAccess(
+                scope: AccountUserAccessScope::ACCOUNT,
+                permissions: Role::from($accountUser->getRole())->defaultPermissions(),
+            ),
+        );
+
         $this->authorizer = new BoxOfficeOperatorAuthorizer(new IsAuthorizedService(
             $container,
             Mockery::mock(AccountUserRepositoryInterface::class),
+            $accessService,
             $this->authManager,
         ));
     }
@@ -81,6 +93,17 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
 
         $this->assertFalse(
             $this->authorizer->canOperateWithoutPin($this->event(), $this->user(), 99)
+        );
+    }
+
+    public function test_a_viewer_cannot_operate_without_a_pin(): void
+    {
+        $this->eventRepository->shouldReceive('findById')
+            ->with(self::EVENT_ID)
+            ->andReturn($this->event());
+
+        $this->assertFalse(
+            $this->authorizer->canOperateWithoutPin($this->event(), $this->user(role: Role::VIEWER->name), self::ACCOUNT_ID)
         );
     }
 

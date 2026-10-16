@@ -11,6 +11,8 @@ import {
     Text,
     Tooltip
 } from '@mantine/core';
+import {WriteAccess} from "../WriteAccess";
+import {CreateButton} from "../CreateButton";
 import {
     IconBolt,
     IconClipboardList,
@@ -94,15 +96,17 @@ export const WebhookTable = ({webhooks, openCreateModal}: WebhookTableProps) => 
 
                 <Menu.Dropdown>
                     <Menu.Label>Manage</Menu.Label>
-                    <Menu.Item
-                        leftSection={<IconPencil size={14}/>}
-                        onClick={() => {
-                            setSelectedWebhookId(webhook.id as IdParam);
-                            openEditModal();
-                        }}
-                    >
-                        {t`Edit webhook`}
-                    </Menu.Item>
+                    <WriteAccess>
+                        <Menu.Item
+                            leftSection={<IconPencil size={14}/>}
+                            onClick={() => {
+                                setSelectedWebhookId(webhook.id as IdParam);
+                                openEditModal();
+                            }}
+                        >
+                            {t`Edit webhook`}
+                        </Menu.Item>
+                    </WriteAccess>
                     <Menu.Item
                         leftSection={<IconClipboardList size={14}/>}
                         onClick={() => {
@@ -112,20 +116,22 @@ export const WebhookTable = ({webhooks, openCreateModal}: WebhookTableProps) => 
                     >
                         {t`View logs`}
                     </Menu.Item>
-                    <Menu.Divider/>
-                    <Menu.Label>{t`Danger zone`}</Menu.Label>
-                    <Menu.Item
-                        color="red"
-                        leftSection={<IconTrash size={14}/>}
-                        onClick={() => {
-                            confirmationDialog(
-                                t`Are you sure you want to delete this webhook?`,
-                                () => handleDelete(webhook.id as IdParam)
-                            );
-                        }}
-                    >
-                        {t`Delete webhook`}
-                    </Menu.Item>
+                    <WriteAccess>
+                        <Menu.Divider/>
+                        <Menu.Label>{t`Danger zone`}</Menu.Label>
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash size={14}/>}
+                            onClick={() => {
+                                confirmationDialog(
+                                    t`Are you sure you want to delete this webhook?`,
+                                    () => handleDelete(webhook.id as IdParam)
+                                );
+                            }}
+                        >
+                            {t`Delete webhook`}
+                        </Menu.Item>
+                    </WriteAccess>
                 </Menu.Dropdown>
             </Menu>
         </Group>
@@ -215,13 +221,13 @@ export const WebhookTable = ({webhooks, openCreateModal}: WebhookTableProps) => 
                                 create custom workflows and automate tasks.
                             </p>
                         </Trans>
-                        <Button
+                        <CreateButton
                             loading={deleteMutation.isPending}
                             size={'xs'}
                             leftSection={<IconPlus/>}
                             color={'green'}
                             onClick={() => openCreateModal()}>{t`Add Webhook`}
-                        </Button>
+                        </CreateButton>
                     </>
                 )}
             />

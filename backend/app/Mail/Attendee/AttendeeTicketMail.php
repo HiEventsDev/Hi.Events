@@ -19,6 +19,7 @@ use HiEvents\Mail\BaseMail;
 use HiEvents\Mail\Concerns\ContainsEventContent;
 use HiEvents\Mail\Concerns\ProvidesEventContent;
 use HiEvents\Services\Domain\Email\DTO\RenderedEmailTemplateDTO;
+use HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -36,6 +37,8 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
 
     private readonly ?RenderedEmailTemplateDTO $renderedTemplate;
 
+    private ?EmailLineupHighlightsDTO $lineup = null;
+
     public function __construct(
         private readonly OrderDomainObject $order,
         private readonly AttendeeDomainObject $attendee,
@@ -45,9 +48,11 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
         ?RenderedEmailTemplateDTO $renderedTemplate = null,
         private readonly ?EventOccurrenceDomainObject $occurrence = null,
         private readonly ?Collection $attendees = null,
+        ?EmailLineupHighlightsDTO $lineup = null,
     ) {
         parent::__construct();
         $this->renderedTemplate = $renderedTemplate;
+        $this->lineup = $lineup;
     }
 
     public function envelope(): Envelope
@@ -83,6 +88,7 @@ class AttendeeTicketMail extends BaseMail implements ContainsEventContent
                 'eventSettings' => $this->eventSettings,
                 'organizer' => $this->organizer,
                 'order' => $this->order,
+                'lineup' => $this->lineup,
                 'tickets' => $this->tickets()
                     ->map(fn (AttendeeDomainObject $attendee) => $this->ticketViewData($attendee))
                     ->all(),

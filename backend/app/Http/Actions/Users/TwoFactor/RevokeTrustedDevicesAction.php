@@ -3,9 +3,11 @@
 namespace HiEvents\Http\Actions\Users\TwoFactor;
 
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\RevokeTrustedDevicesHandler;
 use Illuminate\Http\Response;
 
+#[AllowedForReadOnlyUsers]
 class RevokeTrustedDevicesAction extends BaseAction
 {
     public function __construct(

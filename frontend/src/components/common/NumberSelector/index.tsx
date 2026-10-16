@@ -4,6 +4,7 @@ import {UseFormReturnType} from "@mantine/form";
 import {IconMinus, IconPlus} from "@tabler/icons-react";
 import {t} from "@lingui/macro";
 import classes from './NumberSelector.module.scss';
+import {useIsHydrated} from "../../../hooks/useIsHydrated.ts";
 import classNames from "classnames";
 
 interface NumberSelectorProps extends TextInputProps {
@@ -20,6 +21,7 @@ const getFormValue = (values: Record<string, any>, fieldName: string) =>
     Number(fieldName.split('.').reduce<any>((acc, key) => acc?.[key], values) ?? 0);
 
 export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues, selectorSize = 'default', onLimitReached}: NumberSelectorProps) => {
+    const isHydrated = useIsHydrated();
     const handlers = useRef<NumberInputHandlers>(null);
     const [value, setValue] = useState<number>(() => getFormValue(formInstance.values, fieldName));
 
@@ -100,7 +102,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues,
                 radius={999}
                 variant={'transparent'}
                 onClick={decrement}
-                disabled={value === 0}
+                disabled={value === 0 || !isHydrated}
                 aria-label={t`Decrease quantity`}
                 onMouseDown={(event) => event.preventDefault()}
                 className={classNames(classes.control, classes.decrement)}
@@ -116,6 +118,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues,
                 handlersRef={handlers}
                 value={value}
                 hideControls
+                disabled={!isHydrated}
                 onChange={(newValue) => changeValue(Number(newValue) || 0)}
                 aria-label={t`Quantity`}
                 classNames={{input: classes.input}}
@@ -126,6 +129,7 @@ export const NumberSelector = ({formInstance, fieldName, min, max, sharedValues,
                 radius={999}
                 variant={'transparent'}
                 onClick={handleIncrement}
+                disabled={!isHydrated}
                 aria-label={t`Increase quantity`}
                 aria-disabled={atMax}
                 data-limit={atMax || undefined}

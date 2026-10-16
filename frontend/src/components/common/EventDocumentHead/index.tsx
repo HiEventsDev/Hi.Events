@@ -6,12 +6,15 @@ import {utcToTz} from "../../../utilites/dates.ts";
 import {summariseEventLocations} from "../../../utilites/effectiveLocation.ts";
 import {formatAddress} from "../../../utilites/addressUtilities.ts";
 import {htmlSafeJsonStringify} from "../../../utilites/safeScriptJson.js";
+import {useGetEventLineupPublic} from "../../../queries/useGetEventLineupPublic.ts";
+import {lineupStructuredData} from "../../../utilites/lineupStructuredData.ts";
 
 interface EventDocumentHeadProps {
     event: Event;
 }
 
 export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
+    const {data: lineup} = useGetEventLineupPublic(event.id);
     const eventSettings = event.settings;
     const products = event.product_categories?.flatMap(category => category.products) ?? [];
     const title = (eventSettings?.seo_title ?? event.title) + ' | ' + event.organizer?.name;
@@ -105,6 +108,7 @@ export const EventDocumentHead = ({event}: EventDocumentHeadProps) => {
             validFrom: startDate,
             availability: product?.is_available ? "http://schema.org/InStock" : "http://schema.org/SoldOut",
         })),
+        ...lineupStructuredData(event, lineup, url, includePlace ? {name: placeName, address, geo} : undefined),
     };
 
     return (

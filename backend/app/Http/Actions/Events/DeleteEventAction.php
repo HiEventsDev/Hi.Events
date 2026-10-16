@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Events;
 
-use HiEvents\DomainObjects\Enums\Role;
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Exceptions\CannotDeleteEntityException;
 use HiEvents\Http\Actions\BaseAction;
+use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Services\Application\Handlers\Event\DeleteEventHandler;
 use HiEvents\Services\Application\Handlers\Event\DTO\DeleteEventDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
+#[RequiresPermission(Permission::DELETE_EVENTS)]
 class DeleteEventAction extends BaseAction
 {
     public function __construct(
@@ -22,7 +24,7 @@ class DeleteEventAction extends BaseAction
 
     public function __invoke(int $eventId): Response|JsonResponse
     {
-        $this->isActionAuthorized($eventId, EventDomainObject::class, Role::ADMIN);
+        $this->isActionAuthorized($eventId, EventDomainObject::class);
 
         try {
             $this->deleteEventHandler->handle(DeleteEventDTO::fromArray([

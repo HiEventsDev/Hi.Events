@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace HiEvents\Http\Actions\Admin\Stats;
 
 use HiEvents\DomainObjects\Enums\AdminDashboardPeriod;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Request\Admin\GetAdminDashboardDataRequest;
 use HiEvents\Services\Application\Handlers\Admin\DTO\GetAdminDashboardDataDTO;
@@ -20,7 +19,7 @@ class GetAdminDashboardDataAction extends BaseAction
 
     public function __invoke(GetAdminDashboardDataRequest $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         $data = $this->handler->handle(new GetAdminDashboardDataDTO(
             period: AdminDashboardPeriod::tryFrom((string) $request->validated('period')) ?? AdminDashboardPeriod::LAST_7_DAYS,

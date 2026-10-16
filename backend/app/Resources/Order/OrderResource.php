@@ -2,6 +2,7 @@
 
 namespace HiEvents\Resources\Order;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\Resources\Attendee\AttendeeResource;
 use HiEvents\Resources\BaseResource;
@@ -18,12 +19,17 @@ class OrderResource extends BaseResource
     {
         return [
             'id' => $this->getId(),
-            'short_id' => $this->getShortId(),
-            'total_before_additions' => $this->getTotalBeforeAdditions(),
-            'total_gross' => $this->getTotalGross(),
-            'total_tax' => $this->getTotalTax(),
-            'total_fee' => $this->getTotalFee(),
-            'total_refunded' => $this->getTotalRefunded(),
+            $this->mergeWhen($this->isPermitted(Permission::EDIT) && $this->isPermitted(Permission::VIEW_FINANCIALS), fn () => [
+                'short_id' => $this->getShortId(),
+            ]),
+            $this->mergeWhen($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => [
+                'total_before_additions' => $this->getTotalBeforeAdditions(),
+                'total_gross' => $this->getTotalGross(),
+                'total_tax' => $this->getTotalTax(),
+                'total_fee' => $this->getTotalFee(),
+                'total_refunded' => $this->getTotalRefunded(),
+                'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
+            ]),
             /** @var 'RESERVED'|'CANCELLED'|'COMPLETED'|'AWAITING_OFFLINE_PAYMENT'|'ABANDONED' */
             'status' => $this->getStatus(),
             /** @var 'REFUND_PENDING'|'REFUND_FAILED'|'REFUNDED'|'PARTIALLY_REFUNDED'|null */
@@ -45,11 +51,10 @@ class OrderResource extends BaseResource
                 'box_office_operator_name' => $this->getBoxOfficeOperatorName(),
                 /** @var 'CASH'|'CARD'|'COMP'|'OTHER'|'FREE'|null */
                 'box_office_tender' => $this->getBoxOfficeTender(),
-                'box_office_amount_tendered' => $this->getBoxOfficeAmountTendered(),
-                'box_office_change_due' => $this->getBoxOfficeChangeDue(),
+                'box_office_amount_tendered' => $this->when($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => $this->getBoxOfficeAmountTendered()),
+                'box_office_change_due' => $this->when($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => $this->getBoxOfficeChangeDue()),
                 'box_office_reference' => $this->getBoxOfficeReference(),
             ]),
-            'taxes_and_fees_rollup' => $this->getTaxesAndFeesRollup(),
             'address' => $this->getAddress(),
             'notes' => $this->getNotes(),
             'payment_provider' => $this->getPaymentProvider(),

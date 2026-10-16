@@ -48,12 +48,15 @@ test.describe('embedded widget', () => {
     await expect(widget.getByTestId('checkout-continue-button')).toContainText('Grab tickets');
 
     const iframe = widgetIframe(page);
-    await expect.poll(async () => (await iframe.boundingBox())?.height ?? 0).toBeGreaterThan(100);
+    await expect.poll(async () => (await iframe.boundingBox())?.height ?? 150).not.toBe(150);
     const collapsedHeight = (await iframe.boundingBox())!.height;
 
     await widget.getByRole('button', { name: 'Details' }).click();
     await expect(widget.getByText('Doors open one hour before the show starts.')).toBeVisible();
     await expect.poll(async () => (await iframe.boundingBox())!.height).toBeGreaterThan(collapsedHeight);
+
+    await widget.getByRole('button', { name: 'Details' }).click();
+    await expect.poll(async () => Math.round((await iframe.boundingBox())!.height)).toBe(Math.round(collapsedHeight));
   });
 
   test('a buyer completes checkout in the popup modal without leaving the host page', async ({ page, api, account, baseURL }) => {

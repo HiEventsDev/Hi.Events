@@ -31,6 +31,7 @@ class CreateOrderRequest extends BaseRequest
             'products.*.quantities.*.band_key' => ['nullable', 'string', 'max:24'],
             'promo_code' => ['nullable', 'string'],
             'affiliate_code' => ['nullable', 'string'],
+            'widget_id' => ['nullable', 'string', 'max:50'],
         ];
     }
 }

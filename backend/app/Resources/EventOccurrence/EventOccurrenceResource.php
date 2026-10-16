@@ -2,6 +2,7 @@
 
 namespace HiEvents\Resources\EventOccurrence;
 
+use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\EventOccurrenceDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Resources\EventLocation\EventLocationResource;
@@ -51,13 +52,15 @@ class EventOccurrenceResource extends BaseResource
                 ], $this->getBookingLimits()->allocations),
             ]),
             'statistics' => $this->when($stats !== null, fn () => [
-                'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
-                'total_tax' => $stats->getTotalTax() ?? 0,
-                'total_fee' => $stats->getTotalFee() ?? 0,
                 'orders_created' => $stats->getOrdersCreated() ?? 0,
-                'total_refunded' => $stats->getTotalRefunded() ?? 0,
                 'attendees_registered' => $stats->getAttendeesRegistered() ?? 0,
                 'products_sold' => $stats->getProductsSold() ?? 0,
+                ...($this->isPermitted(Permission::VIEW_FINANCIALS) ? [
+                    'total_gross_sales' => $stats->getSalesTotalGross() ?? 0,
+                    'total_tax' => $stats->getTotalTax() ?? 0,
+                    'total_fee' => $stats->getTotalFee() ?? 0,
+                    'total_refunded' => $stats->getTotalRefunded() ?? 0,
+                ] : []),
             ]),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),

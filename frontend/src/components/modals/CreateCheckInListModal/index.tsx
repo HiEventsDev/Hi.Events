@@ -1,5 +1,5 @@
 import {CheckInList, CheckInListRequest, EventType, GenericModalProps, Product, ProductCategory} from "../../../types.ts";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {t} from "@lingui/macro";
 import {CheckInListForm} from "../../forms/CheckInListForm";
 import {useForm} from "@mantine/form";
@@ -88,7 +88,7 @@ export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateChe
     }
 
     return (
-        <Modal opened onClose={onClose} heading={null}>
+        <Modal opened onClose={onClose} heading={t`Create Check-In List`}>
             {!eventHasTickets && <NoProducts/>}
             {eventHasTickets && (
                 <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -102,15 +102,16 @@ export const CreateCheckInListModal = ({onClose, initialOccurrenceId}: CreateChe
                             isNewForOccurrence={!!initialOccurrenceId}
                         />
                     )}
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={createMutation.isPending}
-                        mt="md"
-                        data-testid="checkin-list-submit-button"
-                    >
-                        {t`Create Check-In List`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={createMutation.isPending}
+                            data-testid="checkin-list-submit-button"
+                        >
+                            {t`Create Check-In List`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

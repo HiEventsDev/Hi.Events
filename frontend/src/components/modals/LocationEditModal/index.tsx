@@ -2,7 +2,7 @@ import {t} from "@lingui/macro";
 import {Select, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useState} from "react";
-import {Modal} from "../../common/Modal";
+import {Modal, ModalFooter} from "../../common/Modal";
 import {Button} from "../../common/Button";
 import {InputGroup} from "../../common/InputGroup";
 import {AddressAutocomplete} from "../../common/AddressAutocomplete";
@@ -158,9 +158,12 @@ export const LocationEditModal = ({onClose, organizerId, location}: LocationEdit
                         placeholder={t`United States`}
                     />
                 </InputGroup>
-                <Button type="submit" fullWidth mt="xl" loading={isPending}>
-                    {isEditing ? t`Save Changes` : t`Add Location`}
-                </Button>
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button type="submit" loading={isPending}>
+                        {isEditing ? t`Save Changes` : t`Add Location`}
+                    </Button>
+                </ModalFooter>
             </form>
         </Modal>
     );

@@ -23,6 +23,8 @@ use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
+use HiEvents\Repository\Eloquent\AccountUserAccessGrantRepository;
+use HiEvents\Repository\Eloquent\AccountUserPermissionRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
 use HiEvents\Repository\Eloquent\AffiliateRepository;
 use HiEvents\Repository\Eloquent\AnnouncementRepository;
@@ -34,12 +36,16 @@ use HiEvents\Repository\Eloquent\CheckInListRepository;
 use HiEvents\Repository\Eloquent\EmailDeliveryRepository;
 use HiEvents\Repository\Eloquent\EmailTemplateRepository;
 use HiEvents\Repository\Eloquent\EventDailyStatisticRepository;
+use HiEvents\Repository\Eloquent\EventLineupEntryRepository;
 use HiEvents\Repository\Eloquent\EventLocationRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceDailyStatisticRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceRepository;
 use HiEvents\Repository\Eloquent\EventOccurrenceStatisticRepository;
 use HiEvents\Repository\Eloquent\EventRepository;
+use HiEvents\Repository\Eloquent\EventScheduleItemPerformerRepository;
+use HiEvents\Repository\Eloquent\EventScheduleItemRepository;
 use HiEvents\Repository\Eloquent\EventSettingsRepository;
+use HiEvents\Repository\Eloquent\EventSpaceRepository;
 use HiEvents\Repository\Eloquent\EventSpamCheckRepository;
 use HiEvents\Repository\Eloquent\EventStatisticRepository;
 use HiEvents\Repository\Eloquent\FeatureFlagRepository;
@@ -67,6 +73,7 @@ use HiEvents\Repository\Eloquent\ProductOccurrenceVisibilityRepository;
 use HiEvents\Repository\Eloquent\ProductPriceOccurrenceOverrideRepository;
 use HiEvents\Repository\Eloquent\ProductPriceRepository;
 use HiEvents\Repository\Eloquent\ProductRepository;
+use HiEvents\Repository\Eloquent\ProfileRepository;
 use HiEvents\Repository\Eloquent\PromoCodeRepository;
 use HiEvents\Repository\Eloquent\QuestionAndAnswerViewRepository;
 use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
@@ -82,6 +89,7 @@ use HiEvents\Repository\Eloquent\UserTrustedDeviceRepository;
 use HiEvents\Repository\Eloquent\WaitlistEntryRepository;
 use HiEvents\Repository\Eloquent\WebhookLogRepository;
 use HiEvents\Repository\Eloquent\WebhookRepository;
+use HiEvents\Repository\Eloquent\WidgetRepository;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountConfigurationRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountDeletionRequestRepositoryInterface;
@@ -89,6 +97,8 @@ use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserAccessGrantRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountUserPermissionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\AffiliateRepositoryInterface;
 use HiEvents\Repository\Interfaces\AnnouncementRepositoryInterface;
@@ -100,12 +110,16 @@ use HiEvents\Repository\Interfaces\CheckInListRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailDeliveryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EmailTemplateRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventDailyStatisticRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventLineupEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceDailyStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventOccurrenceStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventScheduleItemPerformerRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventScheduleItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventSpaceRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpamCheckRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventStatisticRepositoryInterface;
 use HiEvents\Repository\Interfaces\FeatureFlagRepositoryInterface;
@@ -133,6 +147,7 @@ use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterfac
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductRepositoryInterface;
+use HiEvents\Repository\Interfaces\ProfileRepositoryInterface;
 use HiEvents\Repository\Interfaces\PromoCodeRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAndAnswerViewRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
@@ -148,6 +163,7 @@ use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookLogRepositoryInterface;
 use HiEvents\Repository\Interfaces\WebhookRepositoryInterface;
+use HiEvents\Repository\Interfaces\WidgetRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -170,6 +186,11 @@ class RepositoryServiceProvider extends ServiceProvider
         OrderRepositoryInterface::class => OrderRepository::class,
         AttendeeRepositoryInterface::class => AttendeeRepository::class,
         AffiliateRepositoryInterface::class => AffiliateRepository::class,
+        ProfileRepositoryInterface::class => ProfileRepository::class,
+        EventLineupEntryRepositoryInterface::class => EventLineupEntryRepository::class,
+        EventSpaceRepositoryInterface::class => EventSpaceRepository::class,
+        EventScheduleItemRepositoryInterface::class => EventScheduleItemRepository::class,
+        EventScheduleItemPerformerRepositoryInterface::class => EventScheduleItemPerformerRepository::class,
         OrderItemRepositoryInterface::class => OrderItemRepository::class,
         QuestionRepositoryInterface::class => QuestionRepository::class,
         QuestionAnswerRepositoryInterface::class => QuestionAnswerRepository::class,
@@ -187,6 +208,8 @@ class RepositoryServiceProvider extends ServiceProvider
         EventSettingsRepositoryInterface::class => EventSettingsRepository::class,
         OrganizerRepositoryInterface::class => OrganizerRepository::class,
         AccountUserRepositoryInterface::class => AccountUserRepository::class,
+        AccountUserAccessGrantRepositoryInterface::class => AccountUserAccessGrantRepository::class,
+        AccountUserPermissionRepositoryInterface::class => AccountUserPermissionRepository::class,
         CapacityAssignmentRepositoryInterface::class => CapacityAssignmentRepository::class,
         StripeCustomerRepositoryInterface::class => StripeCustomerRepository::class,
         CheckInListRepositoryInterface::class => CheckInListRepository::class,
@@ -217,6 +240,7 @@ class RepositoryServiceProvider extends ServiceProvider
         AnnouncementRepositoryInterface::class => AnnouncementRepository::class,
         AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
+        WidgetRepositoryInterface::class => WidgetRepository::class,
         EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,
         EventOccurrenceStatisticRepositoryInterface::class => EventOccurrenceStatisticRepository::class,
         EventOccurrenceDailyStatisticRepositoryInterface::class => EventOccurrenceDailyStatisticRepository::class,

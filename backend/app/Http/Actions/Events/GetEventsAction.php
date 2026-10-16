@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Events;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Resources\Event\EventResource;
@@ -21,12 +20,11 @@ class GetEventsAction extends BaseAction
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->minimumAllowedRole(Role::ORGANIZER);
-
         $events = $this->getEventsHandler->handle(
             GetEventsDTO::fromArray([
                 'accountId' => $this->getAuthenticatedAccountId(),
                 'queryParams' => $this->getPaginationQueryParams($request),
+                'access' => $this->getAuthenticatedAccess(),
             ]),
         );
 

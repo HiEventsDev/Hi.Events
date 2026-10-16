@@ -1,7 +1,7 @@
 import {BoxOfficeRequest, BoxOfficeWithPin, EventType, GenericModalProps, ProductCategory} from "../../../../../types.ts";
 import {useState} from "react";
 import {BoxOfficePinModal} from "../BoxOfficePinModal";
-import {Modal} from "../../../../../components/common/Modal";
+import {Modal, ModalFooter} from "../../../../../components/common/Modal";
 import {t} from "@lingui/macro";
 import {BoxOfficeForm} from "../../forms/BoxOfficeForm";
 import {useForm} from "@mantine/form";
@@ -60,7 +60,7 @@ export const CreateBoxOfficeModal = ({onClose}: GenericModalProps) => {
     }
 
     return (
-        <Modal opened onClose={onClose} heading={null}>
+        <Modal opened onClose={onClose} heading={t`Create Box Office`}>
             {!eventHasProducts && (
                 <NoResultsSplash
                     imageHref={'/blank-slate/tickets.svg'}
@@ -92,15 +92,16 @@ export const CreateBoxOfficeModal = ({onClose}: GenericModalProps) => {
                         occurrences={event.occurrences}
                         timezone={event.timezone}
                     />
-                    <Button
-                        type={'submit'}
-                        fullWidth
-                        loading={createMutation.isPending}
-                        mt="md"
-                        data-testid="box-office-submit-button"
-                    >
-                        {t`Create Box Office`}
-                    </Button>
+                    <ModalFooter>
+                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                        <Button
+                            type={'submit'}
+                            loading={createMutation.isPending}
+                            data-testid="box-office-submit-button"
+                        >
+                            {t`Create Box Office`}
+                        </Button>
+                    </ModalFooter>
                 </form>
             )}
         </Modal>

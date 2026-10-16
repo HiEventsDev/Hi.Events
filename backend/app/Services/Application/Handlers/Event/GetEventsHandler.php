@@ -53,7 +53,9 @@ class GetEventsHandler
                 where: [
                     'account_id' => $dto->accountId,
                 ],
-                params: $dto->queryParams
+                params: $dto->queryParams,
+                restrictToOrganizerIds: $dto->access?->isRestricted() ? $dto->access->organizerIds : null,
+                restrictToEventIds: $dto->access?->isRestricted() ? $dto->access->eventIds : null,
             );
 
         $seatedEventIds = $this->eventSeatMapRepository->findEventIdsWithSeatMaps(

@@ -135,7 +135,7 @@ const Login = () => {
             <RecoveryCodeNotice
                 remaining={recoveryCodesRemaining}
                 onManageCodes={() => {
-                    setPreviousUrl('/manage/profile/security');
+                    setPreviousUrl('/settings/security');
                     redirectToPreviousUrl();
                 }}
                 onContinue={redirectToPreviousUrl}

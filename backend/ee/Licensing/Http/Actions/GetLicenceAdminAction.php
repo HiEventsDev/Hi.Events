@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HiEvents\Enterprise\Licensing\Http\Actions;
 
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Enterprise\Licensing\LicenceService;
 use HiEvents\Enterprise\Licensing\Resources\LicenceResource;
 use HiEvents\Http\Actions\BaseAction;
@@ -18,7 +17,7 @@ class GetLicenceAdminAction extends BaseAction
 
     public function __invoke(): JsonResponse
     {
-        $this->minimumAllowedRole(Role::SUPERADMIN);
+        $this->requireSuperAdmin();
 
         return $this->resourceResponse(
             resource: LicenceResource::class,

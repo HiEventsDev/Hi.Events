@@ -26,6 +26,10 @@ test.describe('printable seat map', () => {
     await expect(firstPage(page).getByTestId('seating-print-counts')).toContainText('1 held back');
     await expect(page.getByTestId('seating-print-held-back')).toContainText('Sound desk');
     await expect(page.getByTestId('seating-print-page-count')).toContainText('3');
+
+    await page.emulateMedia({media: 'print'});
+    await expect(page.getByTestId('seating-print-page-count')).toBeHidden();
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe('rgb(255, 255, 255)');
   });
 
   test('the house map leaves sales data off the page', async ({authedPage: page, api, account, publicApi}) => {

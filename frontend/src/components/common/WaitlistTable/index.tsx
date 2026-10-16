@@ -1,4 +1,5 @@
 import {t} from "@lingui/macro";
+import {WriteAccess} from "../WriteAccess";
 import {Button, Group, Menu, Text} from "@mantine/core";
 import {IconDotsVertical, IconEye, IconSend, IconTrash} from "@tabler/icons-react";
 import {useMemo, useState} from "react";
@@ -62,23 +63,25 @@ const ActionMenu = ({entry, onOffer, onRemove, onViewOrder}: {
                             {t`View Order`}
                         </Menu.Item>
                     )}
-                    {canOffer && (
-                        <Menu.Item
-                            leftSection={<IconSend size={14}/>}
-                            onClick={() => onOffer(entry.id)}
-                        >
-                            {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
-                        </Menu.Item>
-                    )}
-                    {canCancel && (
-                        <Menu.Item
-                            color="red"
-                            leftSection={<IconTrash size={14}/>}
-                            onClick={() => onRemove(entry.id as number)}
-                        >
-                            {isOffered ? t`Revoke Offer` : t`Remove`}
-                        </Menu.Item>
-                    )}
+                    <WriteAccess>
+                        {canOffer && (
+                            <Menu.Item
+                                leftSection={<IconSend size={14}/>}
+                                onClick={() => onOffer(entry.id)}
+                            >
+                                {isExpired ? t`Re-offer Spot` : t`Offer Spot`}
+                            </Menu.Item>
+                        )}
+                        {canCancel && (
+                            <Menu.Item
+                                color="red"
+                                leftSection={<IconTrash size={14}/>}
+                                onClick={() => onRemove(entry.id as number)}
+                            >
+                                {isOffered ? t`Revoke Offer` : t`Remove`}
+                            </Menu.Item>
+                        )}
+                    </WriteAccess>
                 </Menu.Dropdown>
             </Menu>
         </Group>

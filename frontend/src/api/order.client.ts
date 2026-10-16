@@ -49,6 +49,7 @@ export interface ProductFormPayload {
     products?: ProductFormValue[],
     promo_code: string | null,
     affiliate_code?: string | null,
+    widget_id?: string | null,
     session_identifier?: string,
 }
 

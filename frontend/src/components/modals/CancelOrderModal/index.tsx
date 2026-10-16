@@ -1,4 +1,5 @@
 import {GenericModalProps, IdParam,} from "../../../types.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useParams} from "react-router";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetOrder} from "../../../queries/useGetOrder.ts";
@@ -25,7 +26,8 @@ export const CancelOrderModal = ({onClose, orderId}: RefundOrderModalProps) => {
     const cancelOrderMutation = useCancelOrder();
     const [shouldRefund, setShouldRefund] = useState(true);
 
-    const isRefundable = order && isOrderRefundable(order);
+    const canIssueRefunds = useAccess().can('ISSUE_REFUNDS');
+    const isRefundable = order && canIssueRefunds && isOrderRefundable(order);
 
     const handleCancelOrder = () => {
         cancelOrderMutation.mutate({

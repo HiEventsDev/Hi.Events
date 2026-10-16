@@ -1,4 +1,5 @@
 import {useFormErrorResponseHandler} from "../../../hooks/useFormErrorResponseHandler.tsx";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useNavigate} from "react-router";
 import {useGetAccount} from "../../../queries/useGetAccount.ts";
 import {EventType, GenericModalProps, IdParam, Organizer} from "../../../types.ts";
@@ -66,6 +67,8 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     const isMobile = useMediaQuery('(max-width: 600px)');
     const {data: account, isFetched: isAccountFetched} = useGetAccount();
     const organizersQuery = useGetOrganizers();
+    const {canManageOrganizer, canCreateOrganizers, isLoaded: isAccessLoaded} = useAccess();
+    const manageableOrganizers = (organizersQuery.data?.data ?? []).filter((organizer) => canManageOrganizer(organizer.id));
     const eventMutation = useCreateEvent();
     const [createdOrganizers, setCreatedOrganizers] = useState<Organizer[]>([]);
     const [showCreateOrganizer, setShowCreateOrganizer] = useState(false);
@@ -88,10 +91,9 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     }, {capture: true});
 
     const organizers = useMemo(() => {
-        const fetched = organizersQuery.data?.data ?? [];
-        const extra = createdOrganizers.filter((created) => !fetched.some((organizer) => organizer.id === created.id));
-        return [...fetched, ...extra];
-    }, [organizersQuery.data, createdOrganizers]);
+        const extra = createdOrganizers.filter((created) => !manageableOrganizers.some((organizer) => organizer.id === created.id));
+        return [...manageableOrganizers, ...extra];
+    }, [organizersQuery.data, createdOrganizers, manageableOrganizers.length]);
 
     const form = useForm<CreateEventFormValues>({
         initialValues: {
@@ -172,19 +174,19 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
     }, [isAccountFetched]);
 
     useEffect(() => {
-        if (!organizersQuery.isFetched || !isAccountFetched) {
+        if (!organizersQuery.isFetched || !isAccountFetched || !isAccessLoaded) {
             return;
         }
-        const fetched = organizersQuery.data?.data ?? [];
+        const fetched = manageableOrganizers;
         if (fetched.length === 0) {
-            setShowCreateOrganizer(true);
+            setShowCreateOrganizer(canCreateOrganizers);
             return;
         }
         const preselected = organizerId
             ? fetched.find((organizer) => String(organizer.id) === String(organizerId))
             : fetched.length === 1 ? fetched[0] : undefined;
         applyOrganizer(preselected);
-    }, [organizersQuery.isFetched, isAccountFetched]);
+    }, [organizersQuery.isFetched, isAccountFetched, isAccessLoaded]);
 
     const handleCreate = (values: CreateEventFormValues) => {
         const isRecurring = values.type === EventType.RECURRING;
@@ -267,11 +269,11 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                             ariaLabel={t`Organizer`}
                             dataTestId="create-event-organizer-select"
                             invalid={!!form.errors.organizer_id}
-                            action={{
+                            action={canCreateOrganizers ? {
                                 label: t`New organizer`,
                                 onSelect: () => setShowCreateOrganizer(true),
                                 dataTestId: 'create-event-new-organizer',
-                            }}
+                            } : undefined}
                         />
                     )}
                     <span className={classes.headerSeparator}>/</span>
@@ -309,7 +311,6 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                 {showCreateOrganizer ? (
                     <div className={classes.organizerForm}>
                         <OrganizerCreateForm
-                            onCancel={() => setShowCreateOrganizer(false)}
                             onSuccess={handleOrganizerCreated}
                         />
                     </div>
