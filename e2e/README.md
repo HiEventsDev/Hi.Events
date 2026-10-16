@@ -228,7 +228,7 @@ widgets with no accessible label (e.g. `CustomSelect`, whose `dataTestId` prop l
 on its target and auto-derives `<id>-option-<value>` on each option). Convention:
 kebab-case `<feature>-<element>`. Don't add IDs to text inputs with a unique label —
 use `getByLabel(/^Label/)` (anchored regex dodges Mantine's required `*`). See the
-"Test IDs (E2E)" note in the repo `CLAUDE.md`.
+test ID rules in `.claude/rules/frontend/ui.md`.
 
 Watch for two things when asserting on list content: Mantine's `Truncate` hides the
 full text in a tooltip past its length limit (assert a short value, or target the
