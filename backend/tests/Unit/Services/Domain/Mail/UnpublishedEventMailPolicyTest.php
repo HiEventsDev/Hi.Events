@@ -7,8 +7,8 @@ use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\EventStatus;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
-use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Mail\UnpublishedEventMailPolicy;
 use Mockery;
 use Mockery\MockInterface;
@@ -19,7 +19,7 @@ class UnpublishedEventMailPolicyTest extends TestCase
 {
     private EventRepositoryInterface|MockInterface $eventRepository;
 
-    private UserRepositoryInterface|MockInterface $userRepository;
+    private AccountUserRepositoryInterface|MockInterface $accountUserRepository;
 
     private UnpublishedEventMailPolicy $policy;
 
@@ -28,16 +28,16 @@ class UnpublishedEventMailPolicyTest extends TestCase
         parent::setUp();
 
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
-        $this->userRepository = Mockery::mock(UserRepositoryInterface::class);
-        $this->policy = new UnpublishedEventMailPolicy($this->eventRepository, $this->userRepository);
+        $this->accountUserRepository = Mockery::mock(AccountUserRepositoryInterface::class);
+        $this->policy = new UnpublishedEventMailPolicy($this->eventRepository, $this->accountUserRepository);
 
-        $this->userRepository->shouldReceive('loadRelation')->andReturnSelf();
-        $this->userRepository->shouldReceive('findUsersByAccountId')->with(9)->andReturn(collect([
-            $this->member('Owner@Example.com', '2026-01-01 00:00:00', UserStatus::ACTIVE),
-            $this->member('unverified@example.com', null, UserStatus::ACTIVE),
-            $this->member('invited@example.com', '2026-01-01 00:00:00', UserStatus::INVITED),
-            $this->member('inactive@example.com', '2026-01-01 00:00:00', UserStatus::INACTIVE),
-        ]));
+        $this->accountUserRepository->shouldReceive('loadRelation')->andReturnSelf();
+        $this->accountUserRepository->shouldReceive('findWhere')
+            ->with(['account_id' => 9, 'status' => UserStatus::ACTIVE->name])
+            ->andReturn(collect([
+                $this->member('Owner@Example.com', '2026-01-01 00:00:00'),
+                $this->member('unverified@example.com', null),
+            ]));
     }
 
     protected function tearDown(): void
@@ -133,11 +133,10 @@ class UnpublishedEventMailPolicyTest extends TestCase
         return (new EventDomainObject)->setId(5)->setAccountId(9)->setStatus(EventStatus::DRAFT->name);
     }
 
-    private function member(string $email, ?string $verifiedAt, UserStatus $status): UserDomainObject
+    private function member(string $email, ?string $verifiedAt): AccountUserDomainObject
     {
-        return (new UserDomainObject)
-            ->setEmail($email)
-            ->setEmailVerifiedAt($verifiedAt)
-            ->setCurrentAccountUser((new AccountUserDomainObject)->setStatus($status->name));
+        return (new AccountUserDomainObject)
+            ->setStatus(UserStatus::ACTIVE->name)
+            ->setUser((new UserDomainObject)->setEmail($email)->setEmailVerifiedAt($verifiedAt));
     }
 }
