@@ -72,79 +72,81 @@ const People = () => {
 
     return (
         <PageBody>
-            <div className={lineupClasses.pageHeader}>
-                <PageTitle subheading={t`Speakers, artists and hosts you can add to any of this organizer's events. Edit a profile once and every event shows the change.`}>
-                    {t`People`}
-                </PageTitle>
-                {canCreate && (
-                    <CreateButton leftSection={<IconPlus size={16}/>} onClick={() => setDrawer('new')} data-testid="people-create-button">
-                        {t`New profile`}
-                    </CreateButton>
-                )}
-            </div>
-
-            <div className={lineupClasses.stats}>
-                {stats.map(stat => (
-                    <button
-                        key={stat.key}
-                        type="button"
-                        className={`${lineupClasses.stat} ${classes.statButton}`}
-                        data-active={filter === stat.key || undefined}
-                        onClick={() => setFilter(stat.key)}
-                    >
-                        <span className={lineupClasses.statLabel}>{stat.label}</span>
-                        <span className={lineupClasses.statValue}>{isLoading ? '–' : stat.value}</span>
-                        <span className={lineupClasses.statHint} data-warn={stat.warn || undefined}>{stat.hint}</span>
-                    </button>
-                ))}
-            </div>
-
-            <div className={classes.toolbar}>
-                <TextInput
-                    className={classes.search}
-                    leftSection={<IconSearch size={16}/>}
-                    placeholder={t`Search by name or tagline`}
-                    value={search}
-                    onChange={event => setSearch(event.currentTarget.value)}
-                />
-            </div>
-
-            <div className={classes.table}>
-                <div className={classes.tableHead}>
-                    <span>{t`Name`}</span>
-                    <span>{t`Appears on`}</span>
-                    <span>{t`Links`}</span>
-                    <span/>
+            <div className={lineupClasses.page}>
+                <div className={lineupClasses.pageHeader}>
+                    <PageTitle subheading={t`Speakers, artists and hosts you can add to any of this organizer's events. Edit a profile once and every event shows the change.`}>
+                        {t`People`}
+                    </PageTitle>
+                    {canCreate && (
+                        <CreateButton leftSection={<IconPlus size={16}/>} onClick={() => setDrawer('new')} data-testid="people-create-button">
+                            {t`New profile`}
+                        </CreateButton>
+                    )}
                 </div>
 
-                {isLoading && Array.from({length: 5}).map((_, index) => (
-                    <div key={index} className={classes.row}><Skeleton height={36} radius="md"/></div>
-                ))}
+                <div className={lineupClasses.stats}>
+                    {stats.map(stat => (
+                        <button
+                            key={stat.key}
+                            type="button"
+                            className={`${lineupClasses.stat} ${classes.statButton}`}
+                            data-active={filter === stat.key || undefined}
+                            onClick={() => setFilter(stat.key)}
+                        >
+                            <span className={lineupClasses.statLabel}>{stat.label}</span>
+                            <span className={lineupClasses.statValue}>{isLoading ? '–' : stat.value}</span>
+                            <span className={lineupClasses.statHint} data-warn={stat.warn || undefined}>{stat.hint}</span>
+                        </button>
+                    ))}
+                </div>
 
-                {!isLoading && filtered.map(profile => (
-                    <PersonRow key={profile.id} profile={profile} onOpen={() => setDrawer({profileId: profile.id})}/>
-                ))}
+                <div className={classes.toolbar}>
+                    <TextInput
+                        className={classes.search}
+                        leftSection={<IconSearch size={16}/>}
+                        placeholder={t`Search by name or tagline`}
+                        value={search}
+                        onChange={event => setSearch(event.currentTarget.value)}
+                    />
+                </div>
 
-                {!isLoading && filtered.length === 0 && (
-                    <div className={lineupClasses.panelEmpty}>
-                        <IconMicrophone2 size={22} stroke={1.5}/>
-                        <p>
-                            {counts.all === 0
-                                ? t`No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page.`
-                                : t`Nobody matches these filters.`}
-                        </p>
+                <div className={classes.table}>
+                    <div className={classes.tableHead}>
+                        <span>{t`Name`}</span>
+                        <span>{t`Appears on`}</span>
+                        <span>{t`Links`}</span>
+                        <span/>
                     </div>
+
+                    {isLoading && Array.from({length: 5}).map((_, index) => (
+                        <div key={index} className={classes.row}><Skeleton height={36} radius="md"/></div>
+                    ))}
+
+                    {!isLoading && filtered.map(profile => (
+                        <PersonRow key={profile.id} profile={profile} onOpen={() => setDrawer({profileId: profile.id})}/>
+                    ))}
+
+                    {!isLoading && filtered.length === 0 && (
+                        <div className={lineupClasses.panelEmpty}>
+                            <IconMicrophone2 size={22} stroke={1.5}/>
+                            <p>
+                                {counts.all === 0
+                                    ? t`No profiles yet. Create one here, or add people straight from an event's Lineup & Schedule page.`
+                                    : t`Nobody matches these filters.`}
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {drawer && (drawer === 'new' || drawerProfile) && (
+                    <ProfileDrawer
+                        organizerId={organizerId!}
+                        profile={drawerProfile}
+                        onCreated={profile => setDrawer({profileId: profile.id})}
+                        onClose={() => setDrawer(null)}
+                    />
                 )}
             </div>
-
-            {drawer && (drawer === 'new' || drawerProfile) && (
-                <ProfileDrawer
-                    organizerId={organizerId!}
-                    profile={drawerProfile}
-                    onCreated={profile => setDrawer({profileId: profile.id})}
-                    onClose={() => setDrawer(null)}
-                />
-            )}
         </PageBody>
     );
 };

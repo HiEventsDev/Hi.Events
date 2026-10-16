@@ -50,36 +50,38 @@ const Lineup = () => {
 
     return (
         <PageBody>
-            <div className={classes.pageHeader}>
-                <PageTitle subheading={t`Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them.`}>
-                    {t`Lineup & Schedule`}
-                </PageTitle>
-                {event && (
-                    <div className={classes.pageActions}>
-                        {lineup && <ImportButton event={event} lineup={lineup}/>}
-                        <ExportMenu event={event}/>
-                        <Button
-                            component="a"
-                            href={eventHomepagePath(event)}
-                            target="_blank"
-                            variant="default"
-                            size="sm"
-                            leftSection={<IconExternalLink size={16}/>}
-                        >
-                            {t`View on event page`}
-                        </Button>
-                    </div>
-                )}
-            </div>
+            <div className={classes.page}>
+                <div className={classes.pageHeader}>
+                    <PageTitle subheading={t`Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them.`}>
+                        {t`Lineup & Schedule`}
+                    </PageTitle>
+                    {event && (
+                        <div className={classes.pageActions}>
+                            {lineup && <ImportButton event={event} lineup={lineup}/>}
+                            <ExportMenu event={event}/>
+                            <Button
+                                component="a"
+                                href={eventHomepagePath(event)}
+                                target="_blank"
+                                variant="default"
+                                size="sm"
+                                leftSection={<IconExternalLink size={16}/>}
+                            >
+                                {t`View on event page`}
+                            </Button>
+                        </div>
+                    )}
+                </div>
 
-            {event && lineup
-                ? <LineupWorkspace key={event.id} event={event} lineup={lineup}/>
-                : (
-                    <div className={classes.loading}>
-                        <Skeleton height={84} radius="md"/>
-                        <Skeleton height={420} radius="md"/>
-                    </div>
-                )}
+                {event && lineup
+                    ? <LineupWorkspace key={event.id} event={event} lineup={lineup}/>
+                    : (
+                        <div className={classes.loading}>
+                            <Skeleton height={84} radius="md"/>
+                            <Skeleton height={420} radius="md"/>
+                        </div>
+                    )}
+            </div>
         </PageBody>
     );
 };

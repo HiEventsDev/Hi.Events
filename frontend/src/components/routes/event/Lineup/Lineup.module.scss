@@ -3,26 +3,27 @@
 $border: var(--mantine-color-gray-2);
 $muted: var(--mantine-color-gray-6);
 
+.page {
+  container: lineup-page / inline-size;
+}
+
 .pageActions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--mantine-spacing-xs);
+  margin-bottom: var(--mantine-spacing-md);
 }
 
 .pageHeader {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--mantine-spacing-md);
+  column-gap: var(--mantine-spacing-md);
 
   > :first-child {
-    flex: 1;
+    flex: 1 1 320px;
     min-width: 0;
-  }
-
-  @include mixins.respond-below(sm) {
-    flex-direction: column;
-    margin-bottom: var(--mantine-spacing-md);
   }
 }
 
@@ -47,7 +48,7 @@ $muted: var(--mantine-color-gray-6);
   background: var(--mantine-color-body);
   overflow: hidden;
 
-  @include mixins.respond-below(md) {
+  @container lineup-page (max-width: 719px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -64,7 +65,7 @@ $muted: var(--mantine-color-gray-6);
     border-left: 0;
   }
 
-  @include mixins.respond-below(md) {
+  @container lineup-page (max-width: 719px) {
     &:nth-child(3) {
       border-left: 0;
     }
@@ -107,12 +108,12 @@ $muted: var(--mantine-color-gray-6);
   gap: var(--mantine-spacing-md);
   align-items: start;
 
-  @include mixins.respond-below(lg) {
+  @container lineup-page (max-width: 999px) {
     grid-template-columns: 260px minmax(0, 1fr);
   }
 
-  @include mixins.respond-below(md) {
-    grid-template-columns: 1fr;
+  @container lineup-page (max-width: 859px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -128,7 +129,7 @@ $muted: var(--mantine-color-gray-6);
   border-radius: var(--mantine-radius-lg);
   background: var(--mantine-color-body);
 
-  @include mixins.respond-below(md) {
+  @container lineup-page (max-width: 859px) {
     position: static;
     max-height: none;
 
@@ -340,6 +341,7 @@ $muted: var(--mantine-color-gray-6);
 }
 
 .panel {
+  container: lineup-panel / inline-size;
   min-width: 0;
   border: 1px solid $border;
   border-radius: var(--mantine-radius-lg);
@@ -370,7 +372,7 @@ $muted: var(--mantine-color-gray-6);
 .panelBody {
   padding: 16px;
 
-  @include mixins.respond-below(sm) {
+  @container lineup-panel (max-width: 575px) {
     padding: 12px;
   }
 }
@@ -415,9 +417,11 @@ $muted: var(--mantine-color-gray-6);
   border-radius: var(--mantine-radius-lg);
 
   li {
-    display: flex;
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 14px;
+    column-gap: 14px;
+    row-gap: 10px;
     padding: 14px 16px;
     border-top: 1px solid $border;
 
@@ -425,8 +429,14 @@ $muted: var(--mantine-color-gray-6);
       border-top: 0;
     }
 
-    @include mixins.respond-below(sm) {
-      flex-wrap: wrap;
+    @container lineup-panel (max-width: 519px) {
+      grid-template-columns: 26px minmax(0, 1fr);
+      align-items: start;
+
+      > :nth-child(3) {
+        grid-column: 2;
+        justify-self: start;
+      }
     }
   }
 
@@ -454,8 +464,7 @@ $muted: var(--mantine-color-gray-6);
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
-  min-width: 200px;
+  min-width: 0;
   font-size: var(--mantine-font-size-sm);
 
   span {
@@ -508,7 +517,7 @@ $muted: var(--mantine-color-gray-6);
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 
-  @include mixins.respond-below(sm) {
+  @container lineup-panel (max-width: 479px) {
     &, &[data-tier="headliner"], &[data-tier="standard"] {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
@@ -844,7 +853,7 @@ $muted: var(--mantine-color-gray-6);
     background: var(--mantine-color-gray-0);
   }
 
-  @include mixins.respond-below(sm) {
+  @container lineup-panel (max-width: 575px) {
     grid-template-columns: 64px minmax(0, 1fr);
 
     .agendaAdminSpace {

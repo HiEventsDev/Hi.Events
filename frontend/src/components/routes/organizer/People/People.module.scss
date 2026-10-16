@@ -41,6 +41,7 @@ $border: var(--mantine-color-gray-2);
 }
 
 .table {
+  container: people-table / inline-size;
   border: 1px solid $border;
   border-radius: var(--mantine-radius-lg);
   background: var(--mantine-color-body);
@@ -64,7 +65,7 @@ $border: var(--mantine-color-gray-2);
   text-transform: uppercase;
   color: var(--mantine-color-gray-6);
 
-  @include mixins.respond-below(sm) {
+  @container people-table (max-width: 639px) {
     display: none;
   }
 }
@@ -91,7 +92,7 @@ $border: var(--mantine-color-gray-2);
     }
   }
 
-  @include mixins.respond-below(sm) {
+  @container people-table (max-width: 639px) {
     grid-template-columns: minmax(0, 1fr) 20px;
 
     .appearances {
