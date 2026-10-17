@@ -2,17 +2,19 @@
 
 namespace Tests\Unit\Services\Application\Handlers\Auth;
 
+use HiEvents\DomainObjects\Enums\AuthMethod;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
 use HiEvents\Exceptions\TwoFactorChallengeExpiredException;
 use HiEvents\Exceptions\TwoFactorLockedOutException;
 use HiEvents\Mail\User\TwoFactorRecoveryCodeUsedMail;
-use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Auth\DTO\TwoFactorLoginDTO;
 use HiEvents\Services\Application\Handlers\Auth\TwoFactorLoginHandler;
 use HiEvents\Services\Domain\Auth\DTO\LoginResponse;
 use HiEvents\Services\Domain\Auth\LoginService;
+use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
+use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\DTO\TwoFactorChallengeDTO;
 use HiEvents\Services\Domain\Auth\TwoFactor\RecoveryCodeService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
@@ -39,8 +41,6 @@ class TwoFactorLoginHandlerTest extends TestCase
 
     private UserRepositoryInterface $userRepository;
 
-    private AccountUserRepositoryInterface $accountUserRepository;
-
     private Mailer $mailer;
 
     private TwoFactorLoginHandler $handler;
@@ -58,7 +58,6 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->trustedDeviceService = m::mock(TrustedDeviceService::class);
         $this->loginService = m::mock(LoginService::class);
         $this->userRepository = m::mock(UserRepositoryInterface::class);
-        $this->accountUserRepository = m::mock(AccountUserRepositoryInterface::class);
         $this->mailer = m::mock(Mailer::class);
 
         $this->handler = new TwoFactorLoginHandler(
@@ -69,7 +68,6 @@ class TwoFactorLoginHandlerTest extends TestCase
             $this->trustedDeviceService,
             $this->loginService,
             $this->userRepository,
-            $this->accountUserRepository,
             $this->mailer,
         );
 
@@ -95,10 +93,9 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->challengeService->shouldReceive('markVerified')->once()->with('token', $challenge, null)
             ->andReturn(new TwoFactorChallengeDTO(userId: 9, verified: true));
         $this->trustedDeviceService->shouldReceive('trust')->once()->with(9, 'Firefox', '10.0.0.1')->andReturn('device-token');
-        $this->loginService->shouldReceive('completeLogin')->once()->with($this->user, null)
+        $this->loginService->shouldReceive('completeLogin')->once()->with($this->user, null, m::type(AuthContext::class))
             ->andReturn(new LoginResponse(accounts: collect(), token: 'jwt', user: $this->user, accountId: 3));
         $this->challengeService->shouldReceive('forget')->once()->with('token');
-        $this->accountUserRepository->shouldReceive('updateWhere')->once();
 
         $response = $this->handler->handle($this->dto(code: '123456', rememberDevice: true));
 
@@ -143,7 +140,6 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->loginService->shouldReceive('completeLogin')
             ->andReturn(new LoginResponse(accounts: collect(), token: 'jwt', user: $this->user, accountId: 3));
         $this->challengeService->shouldReceive('forget');
-        $this->accountUserRepository->shouldReceive('updateWhere');
 
         $response = $this->handler->handle($this->dto(recoveryCode: 'abcde-fghjk'));
 
@@ -156,10 +152,9 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->challengeService->shouldReceive('find')->andReturn(new TwoFactorChallengeDTO(userId: 9, verified: true));
         $this->twoFactorVerifier->shouldNotReceive('verify');
         $this->trustedDeviceService->shouldNotReceive('trust');
-        $this->loginService->shouldReceive('completeLogin')->once()->with($this->user, 5)
+        $this->loginService->shouldReceive('completeLogin')->once()->with($this->user, 5, m::type(AuthContext::class))
             ->andReturn(new LoginResponse(accounts: collect(), token: 'jwt', user: $this->user, accountId: 5));
         $this->challengeService->shouldReceive('forget')->once();
-        $this->accountUserRepository->shouldReceive('updateWhere')->once();
 
         $response = $this->handler->handle($this->dto(accountId: 5, rememberDevice: true));
 
@@ -175,7 +170,6 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->loginService->shouldReceive('completeLogin')
             ->andReturn(new LoginResponse(accounts: collect([1, 2]), token: null, user: $this->user));
         $this->challengeService->shouldNotReceive('forget');
-        $this->accountUserRepository->shouldNotReceive('updateWhere');
 
         $response = $this->handler->handle($this->dto(code: '123456'));
 
@@ -183,11 +177,39 @@ class TwoFactorLoginHandlerTest extends TestCase
         $this->assertCount(2, $response->accounts);
     }
 
+    public function test_a_single_sign_on_challenge_requires_the_browser_binding(): void
+    {
+        $context = new AuthContext(method: AuthMethod::SSO, bindingHash: SsoTicketService::hashBinding('browser-binding'));
+        $this->challengeService->shouldReceive('find')->andReturn(new TwoFactorChallengeDTO(userId: 9, verified: false, authContext: $context));
+        $this->twoFactorVerifier->shouldNotReceive('verify');
+        $this->loginService->shouldNotReceive('completeLogin');
+
+        $this->expectException(TwoFactorChallengeExpiredException::class);
+
+        $this->handler->handle($this->dto(code: '123456', ssoBinding: 'another-browser'));
+    }
+
+    public function test_a_single_sign_on_challenge_completes_with_its_context(): void
+    {
+        $context = new AuthContext(method: AuthMethod::SSO, bindingHash: SsoTicketService::hashBinding('browser-binding'));
+        $this->challengeService->shouldReceive('find')->andReturn(new TwoFactorChallengeDTO(userId: 9, verified: true, authContext: $context));
+        $this->loginService->shouldReceive('completeLogin')->once()->with($this->user, null, m::on(
+            fn (AuthContext $completed) => $completed->bindingHash === $context->bindingHash && $completed->secondFactorVerified,
+        ))
+            ->andReturn(new LoginResponse(accounts: collect(), token: 'jwt', user: $this->user, accountId: 3));
+        $this->challengeService->shouldReceive('forget')->once();
+
+        $response = $this->handler->handle($this->dto(ssoBinding: 'browser-binding'));
+
+        $this->assertSame('jwt', $response->token);
+    }
+
     private function dto(
         ?string $code = null,
         ?string $recoveryCode = null,
         ?int $accountId = null,
         bool $rememberDevice = false,
+        ?string $ssoBinding = null,
     ): TwoFactorLoginDTO {
         return new TwoFactorLoginDTO(
             challengeToken: 'token',
@@ -197,6 +219,7 @@ class TwoFactorLoginHandlerTest extends TestCase
             rememberDevice: $rememberDevice,
             userAgent: 'Firefox',
             ipAddress: '10.0.0.1',
+            ssoBinding: $ssoBinding,
         );
     }
 }

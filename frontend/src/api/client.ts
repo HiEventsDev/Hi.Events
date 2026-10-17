@@ -2,14 +2,16 @@ import axios from "axios";
 import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 import {applySsrRequestHeaders} from "./ssrRequestHeaders.ts";
+import {queueSilentReauthAfterExpiry, setAuthNotice} from "../utilites/ssoFlow.ts";
 
 const BASE_URL = isSsr()
     ? getConfig('VITE_API_URL_SERVER')
     : getConfig('VITE_API_URL_CLIENT');
 const LOGIN_PATH = "/auth/login";
 export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
+export const SECURITY_SETTINGS_PATH = "/settings/security";
 const PREVIOUS_URL_KEY = 'previous_url';
-const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE'];
+const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE', 'IMPERSONATION_NOT_ALLOWED'];
 
 // todo - This isn't scalable, we need to better way to manage this
 const ALLOWED_UNAUTHENTICATED_PATHS = [
@@ -30,6 +32,7 @@ const ALLOWED_UNAUTHENTICATED_PATHS = [
     '/events/',
     'my-tickets',
     'emails/unsubscribe',
+    'sso/callback',
 ];
 
 export const api = axios.create({
@@ -73,6 +76,11 @@ api.interceptors.response.use(
         }
 
         if (isAuthError && (!isAllowedUnauthenticatedPath || isManageEventPath)) {
+            if (error.response.data?.error_code === 'SSO_REQUIRED') {
+                setAuthNotice('SSO_REQUIRED');
+            } else if (status === 401) {
+                queueSilentReauthAfterExpiry();
+            }
             window?.localStorage?.setItem(PREVIOUS_URL_KEY, window?.location.href);
             const searchParams = window?.location?.search || '';
             window?.location?.replace(LOGIN_PATH + searchParams);
@@ -88,10 +96,16 @@ export const setPreviousUrl = (url: string) => {
     window?.localStorage?.setItem(PREVIOUS_URL_KEY, url);
 };
 
-export const redirectToPreviousUrl = () => {
+export const redirectToPreviousUrl = (replaceHistory = false) => {
     const previousUrl = window?.localStorage?.getItem(PREVIOUS_URL_KEY) || '/manage/events';
     window?.localStorage?.removeItem(PREVIOUS_URL_KEY);
-    if (typeof window !== "undefined") {
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    if (replaceHistory) {
+        window.location.replace(previousUrl);
+    } else {
         window.location.href = previousUrl;
     }
 };

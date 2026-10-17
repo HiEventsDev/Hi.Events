@@ -154,12 +154,22 @@ Sitemap: ${frontendUrl}/sitemap.xml
         return next();
     });
 
-    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin)(\/|$)/;
+    const frameProtectedPathPattern = /^\/(auth|manage|account|profile|settings|welcome|admin|sso)(\/|$)/;
+    const credentialInUrlPathPattern = /^\/(sso\/callback|auth\/accept-invitation\/)/;
+    const ssoCallbackPathPattern = /^\/sso\/callback\/?$/;
+    const requestPathOf = (req) => req.originalUrl.replace(base, "/").split("?")[0];
 
     app.use("*", (req, res, next) => {
-        if (frameProtectedPathPattern.test(req.originalUrl.replace(base, "/").split("?")[0])) {
+        const requestPath = requestPathOf(req);
+
+        if (frameProtectedPathPattern.test(requestPath)) {
             res.setHeader("Content-Security-Policy", "frame-ancestors 'self'");
             res.setHeader("X-Frame-Options", "SAMEORIGIN");
+        }
+
+        if (credentialInUrlPathPattern.test(requestPath)) {
+            res.setHeader("Referrer-Policy", "no-referrer");
+            res.setHeader("Cache-Control", "no-store");
         }
 
         return next();
@@ -209,17 +219,18 @@ Sitemap: ${frontendUrl}/sitemap.xml
             const envVariablesHtml = `<script>window.hievents = ${getViteEnvironmentVariables()};</script>`;
 
             const headSnippets = [];
-            if (process.env.VITE_COOKIE_CONSENT_ENABLED === 'true') {
+            const isSsoCallback = ssoCallbackPathPattern.test(requestPathOf(req));
+            if (process.env.VITE_COOKIE_CONSENT_ENABLED === 'true' && !isSsoCallback) {
                 headSnippets.push(`<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{${googleConsentDefaults(req.cookies?.hi_cookie_consent)}});</script>`);
             }
-            if (process.env.VITE_GOOGLE_ADS_CONVERSION_ID) {
+            if (process.env.VITE_GOOGLE_ADS_CONVERSION_ID && !isSsoCallback) {
                 const conversionId = encodeURIComponent(process.env.VITE_GOOGLE_ADS_CONVERSION_ID);
                 headSnippets.push(`
                 <script async src="https://www.googletagmanager.com/gtag/js?id=${conversionId}"></script>
                 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${conversionId}');</script>
             `);
             }
-            if (process.env.VITE_FATHOM_SITE_ID) {
+            if (process.env.VITE_FATHOM_SITE_ID && !isSsoCallback) {
                 headSnippets.push(`
                 <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="${encodeURIComponent(process.env.VITE_FATHOM_SITE_ID)}" defer></script>
             `);

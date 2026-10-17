@@ -5,6 +5,7 @@ import { useGetMe } from "./queries/useGetMe.ts";
 import { publicEventRouteLoader } from "./routeLoaders/publicEventRouteLoader.ts";
 import { publicOrganizerRouteLoader } from "./routeLoaders/publicOrganizerRouteLoader.ts";
 import { organizerPreviewRouteLoader } from "./routeLoaders/organizerPreviewRouteLoader.ts";
+import { authRouteLoader } from "./routeLoaders/authRouteLoader.ts";
 import { eventContentWidgetRouteLoader, organizerWidgetRouteLoader, ticketWidgetRouteLoader } from "./routeLoaders/widgetRouteLoader.ts";
 
 const Root = () => {
@@ -32,6 +33,7 @@ export const router: RouteObject[] = [
     },
     {
         path: "auth",
+        loader: authRouteLoader,
         async lazy() {
             const AuthLayout = await import("./components/layouts/AuthLayout");
             return { Component: AuthLayout.default };
@@ -81,6 +83,13 @@ export const router: RouteObject[] = [
                 }
             }
         ]
+    },
+    {
+        path: "sso/callback",
+        async lazy() {
+            const SsoCallback = await import("./components/routes/sso/Callback");
+            return { Component: SsoCallback.default };
+        }
     },
     {
         path: "manage",

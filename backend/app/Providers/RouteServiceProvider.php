@@ -58,6 +58,38 @@ class RouteServiceProvider extends ServiceProvider
             ];
         });
 
+        RateLimiter::for('auth-sso-start', function (Request $request) {
+            return Limit::perMinute(20)->by('auth-sso-start|'.$request->ip());
+        });
+
+        RateLimiter::for('auth-sso-exchange', function (Request $request) {
+            return Limit::perMinute(20)->by('auth-sso-exchange|'.$request->ip());
+        });
+
+        RateLimiter::for('auth-sso-discover', function (Request $request) {
+            return [
+                Limit::perMinute(10)->by('auth-sso-discover|'.$request->ip()),
+                Limit::perHour(60)->by('auth-sso-discover-hour|'.$request->ip()),
+            ];
+        });
+
+        RateLimiter::for('auth-sso-signup-code', function (Request $request) {
+            return [
+                Limit::perHour(5)->by('auth-sso-signup-code|'.hash('sha256', (string) $request->input('signup_ticket'))),
+                Limit::perHour(20)->by('auth-sso-signup-code-ip|'.$request->ip()),
+            ];
+        });
+
+        RateLimiter::for('auth-sso-signup', function (Request $request) {
+            $perHour = (int) config('app.register_rate_limit_per_hour');
+
+            return [
+                Limit::perHour($perHour)->by('auth-sso-signup|'.$request->ip()),
+                Limit::perDay($perHour * 3)->by('auth-sso-signup-day|'.$request->ip()),
+                Limit::perMinute(10)->by('auth-sso-signup-ticket|'.hash('sha256', (string) $request->input('signup_ticket'))),
+            ];
+        });
+
         RateLimiter::for('user-invite', function (Request $request) {
             return [
                 Limit::perMinute(10)->by('user-invite|'.$request->user()?->id),

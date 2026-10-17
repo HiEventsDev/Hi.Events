@@ -1,9 +1,9 @@
-import {Button, Collapse, PasswordInput, UnstyledButton} from "@mantine/core";
+import {Button, Collapse, Loader, UnstyledButton} from "@mantine/core";
 import {useClipboard} from "@mantine/hooks";
 import {t, Trans} from "@lingui/macro";
 import {IconArrowLeft, IconCheck, IconChevronDown, IconCopy, IconDeviceMobile} from "@tabler/icons-react";
 import QRCode from "react-qr-code";
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {OneTimeCodeInput} from "../OneTimeCodeInput";
 import {RecoveryCodesDisplay} from "./RecoveryCodesDisplay.tsx";
@@ -11,12 +11,15 @@ import {AuthenticatorApps} from "./AuthenticatorApps.tsx";
 import {useBeginTwoFactorSetup, useConfirmTwoFactorSetup} from "../../../mutations/useTwoFactorMutations.ts";
 import {showError} from "../../../utilites/notifications.tsx";
 import {TwoFactorSetup} from "../../../types.ts";
+import {IdentityConfirmation} from "../../../types.ts";
+import {ConfirmIdentityField, useIdentityConfirmation} from "../ConfirmIdentity";
 import classes from "./TwoFactor.module.scss";
 
 type SetupStep = 'scan' | 'verify' | 'recovery';
 
 interface TwoFactorSetupFlowProps {
     email?: string;
+    resumeUrl: string;
     onComplete: () => void;
 }
 
@@ -26,7 +29,7 @@ const extractError = (error: any): string => error?.response?.data?.errors?.code
     ?? error?.response?.data?.message
     ?? t`Something went wrong. Please try again.`;
 
-export const TwoFactorSetupFlow = ({email, onComplete}: TwoFactorSetupFlowProps) => {
+export const TwoFactorSetupFlow = ({email, resumeUrl, onComplete}: TwoFactorSetupFlowProps) => {
     const [step, setStep] = useState<SetupStep>('scan');
     const [setup, setSetup] = useState<TwoFactorSetup | null>(null);
     const [code, setCode] = useState('');
@@ -38,26 +41,39 @@ export const TwoFactorSetupFlow = ({email, onComplete}: TwoFactorSetupFlowProps)
     const confirmSetup = useConfirmTwoFactorSetup();
     const clipboard = useClipboard({timeout: 2000});
 
-    const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState<string | null>(null);
+    const identity = useIdentityConfirmation();
+    const autoStarted = useRef(false);
 
-    const startSetup = (event: FormEvent) => {
-        event.preventDefault();
-        beginSetup.mutate(password, {
+    const beginWith = (confirmation: IdentityConfirmation) => {
+        beginSetup.mutate(confirmation, {
             onSuccess: (data) => {
-                setPassword('');
+                identity.setPassword('');
                 setSetup(data);
             },
             onError: (error: any) => {
                 const passwordMessage = error?.response?.data?.errors?.password?.[0];
-                if (passwordMessage) {
-                    setPasswordError(passwordMessage);
+                if (passwordMessage || !identity.hasPassword) {
+                    identity.setError(passwordMessage ?? extractError(error));
                     return;
                 }
                 showError(extractError(error));
             },
         });
     };
+
+    const startSetup = (event: FormEvent) => {
+        event.preventDefault();
+        if (identity.confirmation) {
+            beginWith(identity.confirmation);
+        }
+    };
+
+    useEffect(() => {
+        if (!identity.hasPassword && identity.confirmation && !autoStarted.current) {
+            autoStarted.current = true;
+            beginWith(identity.confirmation);
+        }
+    }, [identity.hasPassword, identity.confirmation?.reauth_proof]);
 
     const verify = (value: string = code) => {
         if (value.length !== 6 || confirmSetup.isPending) {
@@ -106,30 +122,33 @@ export const TwoFactorSetupFlow = ({email, onComplete}: TwoFactorSetupFlowProps)
                 <form className={classes.stepBody} onSubmit={startSetup}>
                     <div>
                         <h3 className={classes.sectionTitle}>{t`Confirm it's you`}</h3>
-                        <p className={classes.sectionHint}>{t`Enter your password to start setting up two-factor authentication.`}</p>
+                        <p className={classes.sectionHint}>
+                            {identity.hasPassword
+                                ? t`Enter your password to start setting up two-factor authentication.`
+                                : t`Sign in again to start setting up two-factor authentication.`}
+                        </p>
                     </div>
-                    <PasswordInput
-                        label={t`Current password`}
-                        value={password}
-                        onChange={(event) => {
-                            setPassword(event.currentTarget.value);
-                            setPasswordError(null);
-                        }}
-                        error={passwordError}
-                        autoComplete="current-password"
+                    <ConfirmIdentityField
+                        identity={identity}
+                        resumeUrl={resumeUrl}
+                        passwordTestId="two-factor-setup-password"
+                        showHint={false}
                         autoFocus
-                        required
-                        data-testid="two-factor-setup-password"
                     />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        loading={beginSetup.isPending}
-                        disabled={password.length === 0}
-                        data-testid="two-factor-setup-password-submit"
-                    >
-                        {t`Continue`}
-                    </Button>
+                    {identity.hasPassword && (
+                        <Button
+                            type="submit"
+                            fullWidth
+                            loading={beginSetup.isPending}
+                            disabled={!identity.confirmation}
+                            data-testid="two-factor-setup-password-submit"
+                        >
+                            {t`Continue`}
+                        </Button>
+                    )}
+                    {!identity.hasPassword && beginSetup.isPending && (
+                        <div className={classes.centered}><Loader size="sm"/></div>
+                    )}
                 </form>
             )}
 

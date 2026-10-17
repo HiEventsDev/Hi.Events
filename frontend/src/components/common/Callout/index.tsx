@@ -1,6 +1,7 @@
 import {CSSProperties, ReactNode} from "react";
 import {t} from "@lingui/macro";
 import {
+    IconAlertCircle,
     IconAlertTriangle,
     IconBulb,
     IconCheck,
@@ -9,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import classes from "./Callout.module.scss";
 
-export type CalloutVariant = "info" | "tip" | "warning" | "success";
+export type CalloutVariant = "info" | "tip" | "warning" | "success" | "danger";
 
 interface CalloutProps {
     variant?: CalloutVariant;
@@ -26,6 +27,7 @@ const defaultIcon: Record<CalloutVariant, ReactNode> = {
     tip: <IconBulb size={18} stroke={2}/>,
     warning: <IconAlertTriangle size={18} stroke={2}/>,
     success: <IconCheck size={18} stroke={2.4}/>,
+    danger: <IconAlertCircle size={18} stroke={2}/>,
 };
 
 export const Callout = ({
@@ -37,8 +39,14 @@ export const Callout = ({
                             className,
                             style,
                         }: CalloutProps) => {
+    const Element = variant === "danger" ? "div" : "aside";
+
     return (
-        <aside className={`${classes.callout} ${classes[variant]} ${className ?? ""}`} style={style}>
+        <Element
+            className={`${classes.callout} ${classes[variant]} ${onDismiss ? classes.dismissible : ""} ${className ?? ""}`}
+            style={style}
+            role={variant === "danger" ? "alert" : undefined}
+        >
             <div className={`${classes.iconWrap} ${classes[`iconWrap_${variant}`]}`} aria-hidden="true">
                 {icon ?? defaultIcon[variant]}
             </div>
@@ -56,6 +64,6 @@ export const Callout = ({
                     <IconX size={14}/>
                 </button>
             )}
-        </aside>
+        </Element>
     );
 };

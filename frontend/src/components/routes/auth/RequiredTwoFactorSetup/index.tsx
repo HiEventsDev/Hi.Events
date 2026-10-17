@@ -6,7 +6,7 @@ import {useRef} from "react";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {useGetAccount} from "../../../../queries/useGetAccount.ts";
 import {authClient} from "../../../../api/auth.client.ts";
-import {redirectToPreviousUrl} from "../../../../api/client.ts";
+import {redirectToPreviousUrl, TWO_FACTOR_SETUP_PATH} from "../../../../api/client.ts";
 import {TwoFactorSetupFlow} from "../../../common/TwoFactor/TwoFactorSetupFlow.tsx";
 import classes from "./RequiredTwoFactorSetup.module.scss";
 
@@ -49,7 +49,7 @@ const RequiredTwoFactorSetup = () => {
                 </p>
             </header>
 
-            <TwoFactorSetupFlow email={me.data.email} onComplete={redirectToPreviousUrl}/>
+            <TwoFactorSetupFlow email={me.data.email} resumeUrl={TWO_FACTOR_SETUP_PATH} onComplete={redirectToPreviousUrl}/>
 
             <UnstyledButton className={classes.logout} onClick={logout}>
                 <IconLogout size={14}/>

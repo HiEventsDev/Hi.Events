@@ -73,10 +73,12 @@ return [
         'ticket_lookup' => '/my-tickets/%s',
         'account_danger_zone' => '/settings/account#delete-account',
         'account_users' => '/settings/team',
+        'account_settings' => '/settings/account',
         'profile_security' => '/settings/security',
         'event_dashboard' => '/manage/event/%d/dashboard',
         'welcome' => '/welcome',
         'lifecycle_email_unsubscribe' => '/emails/unsubscribe/%s',
+        'sso_callback' => '/sso/callback',
     ],
 
     /**

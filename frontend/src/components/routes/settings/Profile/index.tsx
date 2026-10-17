@@ -13,6 +13,10 @@ import {timezones} from "../../../../../data/timezones.ts";
 import {localeToFlagEmojiMap, localeToNameMap, SupportedLocales} from "../../../../locales.ts";
 import {getConfig} from "../../../../utilites/config.ts";
 import {Callout} from "../../../common/Callout";
+import {ConfirmIdentityModal} from "../../../common/ConfirmIdentity/ConfirmIdentityModal.tsx";
+import {IdentityConfirmation} from "../../../../types.ts";
+import {resumeUrl, useResumeAction} from "../../../../hooks/useResumeAction.ts";
+import {readSessionValue, writeSessionValue} from "../../../../utilites/ssoFlow.ts";
 import {StatusDot} from "../../../common/StatusDot";
 import {SettingsPage, SettingsRow, SettingsSaveFooter, SettingsSection} from "../../../common/SettingsPage";
 import classes from "./Profile.module.scss";
@@ -22,6 +26,13 @@ const localeOptions = Object.keys(localeToNameMap).map(locale => ({
     label: `${localeToFlagEmojiMap[locale as SupportedLocales]} ${localeToNameMap[locale as SupportedLocales]}`,
 }));
 
+const EMAIL_CHANGE_ACTION = 'email-change';
+const PENDING_EMAIL_KEY = 'hi_pending_email_change';
+
+const readPendingEmailChange = () => readSessionValue(PENDING_EMAIL_KEY);
+
+const writePendingEmailChange = (email: string | null) => writeSessionValue(PENDING_EMAIL_KEY, email);
+
 const Profile = () => {
     const {data: me} = useGetMe();
     const updateMutation = useUpdateMe();
@@ -30,6 +41,8 @@ const Profile = () => {
     const errorHandler = useFormErrorResponseHandler();
     const [confirmationResent, setConfirmationResent] = useState(false);
     const canViewFinancials = useAccess().can('VIEW_FINANCIALS');
+    const resumeAction = useResumeAction();
+    const [confirmingEmailChange, setConfirmingEmailChange] = useState(false);
 
     const form = useForm({
         mode: 'controlled',
@@ -61,11 +74,28 @@ const Profile = () => {
         form.setValues(values);
     }, [me]);
 
-    const handleSubmit = (values: typeof form.values) => {
+    useEffect(() => {
+        const pendingEmail = readPendingEmailChange();
+
+        if (resumeAction === EMAIL_CHANGE_ACTION && pendingEmail && me) {
+            form.setFieldValue('email', pendingEmail);
+            setConfirmingEmailChange(true);
+        }
+    }, [resumeAction, me?.id]);
+
+    const save = (values: typeof form.values, confirmation?: IdentityConfirmation, setConfirmationError?: (message: string | null) => void) => {
         const localeChanged = form.isDirty('locale');
 
-        updateMutation.mutate({userData: values}, {
+        updateMutation.mutate({
+            userData: {
+                ...values,
+                confirmation_password: confirmation?.password,
+                reauth_proof: confirmation?.reauth_proof,
+            },
+        }, {
             onSuccess: () => {
+                writePendingEmailChange(null);
+                setConfirmingEmailChange(false);
                 form.resetDirty();
                 showSuccess(t`Profile updated successfully`);
 
@@ -74,8 +104,28 @@ const Profile = () => {
                     window.location.reload();
                 }
             },
-            onError: (error: any) => errorHandler(form, error),
+            onError: (error: any) => {
+                const confirmationError = error?.response?.data?.errors?.confirmation_password?.[0];
+
+                if (confirmationError && setConfirmationError) {
+                    setConfirmationError(confirmationError);
+                    return;
+                }
+
+                setConfirmingEmailChange(false);
+                errorHandler(form, error);
+            },
         });
+    };
+
+    const handleSubmit = (values: typeof form.values) => {
+        if (values.email.trim().toLowerCase() !== (me?.email ?? '').toLowerCase()) {
+            writePendingEmailChange(values.email);
+            setConfirmingEmailChange(true);
+            return;
+        }
+
+        save(values);
     };
 
     const handleCancelEmailChange = () => {
@@ -233,6 +283,20 @@ const Profile = () => {
                     />
                 </form>
             </SettingsSection>
+            {confirmingEmailChange && (
+                <ConfirmIdentityModal
+                    heading={t`Confirm it's you`}
+                    description={t`To change the email you sign in with, confirm it's you. We'll send a confirmation link to ${form.values.email}.`}
+                    confirmLabel={t`Change email`}
+                    resumeUrl={resumeUrl('/settings/profile', EMAIL_CHANGE_ACTION)}
+                    isSubmitting={updateMutation.isPending}
+                    onConfirm={(confirmation, setError) => save(form.values, confirmation, setError)}
+                    onClose={() => {
+                        writePendingEmailChange(null);
+                        setConfirmingEmailChange(false);
+                    }}
+                />
+            )}
         </SettingsPage>
     );
 };

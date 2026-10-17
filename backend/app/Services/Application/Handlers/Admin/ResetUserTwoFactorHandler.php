@@ -6,6 +6,8 @@ namespace HiEvents\Services\Application\Handlers\Admin;
 
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
+use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorResetService;
 
 class ResetUserTwoFactorHandler
@@ -13,6 +15,7 @@ class ResetUserTwoFactorHandler
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly TwoFactorResetService $twoFactorResetService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
     ) {}
 
     /**
@@ -20,6 +23,10 @@ class ResetUserTwoFactorHandler
      */
     public function handle(int $userId, ?int $resetByUserId): void
     {
+        if ($this->ssoEnforcementService->requiresFreshSecondFactor($userId, AuthContext::password())) {
+            throw new ResourceConflictException(__('This user owns an account that requires single sign-on. Two-factor authentication is their backup sign-in, so ask them to stop requiring single sign-on first.'));
+        }
+
         $this->twoFactorResetService->reset($this->userRepository->findById($userId), $resetByUserId);
     }
 }

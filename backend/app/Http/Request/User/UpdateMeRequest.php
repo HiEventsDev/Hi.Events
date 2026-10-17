@@ -31,6 +31,8 @@ class UpdateMeRequest extends BaseRequest
                 'confirmed',
                 Password::min(8),
             ],
+            'confirmation_password' => ['nullable', 'string', 'max:255'],
+            'reauth_proof' => ['nullable', 'string', 'max:128'],
             'marketing_opt_in' => 'boolean|nullable',
             'notify_new_orders' => 'boolean|nullable',
         ];

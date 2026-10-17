@@ -12,6 +12,8 @@ export interface UserMeRequest {
     locale: string;
     marketing_opt_in?: boolean;
     notify_new_orders?: boolean;
+    confirmation_password?: string;
+    reauth_proof?: string;
 }
 
 export interface UpdateUserRequest extends Partial<TeamAccessRequest> {

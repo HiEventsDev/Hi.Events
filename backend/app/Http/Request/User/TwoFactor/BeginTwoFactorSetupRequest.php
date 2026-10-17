@@ -9,7 +9,8 @@ class BeginTwoFactorSetupRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', 'string', 'max:255'],
+            'password' => ['required_without:reauth_proof', 'nullable', 'string', 'max:255'],
+            'reauth_proof' => ['nullable', 'string', 'max:128'],
         ];
     }
 }

@@ -91,6 +91,13 @@
   color: var(--hi-text);
 }
 
+.identityEmail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .currentDevice {
   padding: 1px 7px;
   border-radius: 999px;
@@ -158,4 +165,10 @@
   &:hover {
     color: var(--mantine-color-secondary-7);
   }
+}
+
+.providerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }

@@ -8,7 +8,7 @@ final class CreateAccountDTO extends BaseDTO
 {
     public function __construct(
         public readonly string $email,
-        public readonly string $password,
+        public readonly ?string $password,
         public readonly string $first_name,
         public readonly string $locale,
         public readonly ?string $last_name = null,
@@ -26,5 +26,7 @@ final class CreateAccountDTO extends BaseDTO
         public readonly ?string $gclid = null,
         public readonly ?string $fbclid = null,
         public readonly ?array $utm_raw = null,
+        public readonly bool $allow_existing_user = true,
+        public readonly bool $email_verified = false,
     ) {}
 }

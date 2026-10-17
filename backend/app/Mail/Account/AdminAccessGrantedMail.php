@@ -14,7 +14,7 @@ class AdminAccessGrantedMail extends BaseMail
 {
     public function __construct(
         private readonly string $newAdminEmail,
-        private readonly string $grantedByEmail,
+        private readonly ?string $grantedByEmail = null,
     ) {
         parent::__construct();
     }

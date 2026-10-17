@@ -14,5 +14,6 @@ class TwoFactorLoginDTO extends BaseDataObject
         public readonly bool $rememberDevice,
         public readonly ?string $userAgent,
         public readonly ?string $ipAddress,
+        public readonly ?string $ssoBinding = null,
     ) {}
 }

@@ -267,7 +267,7 @@ class TeamInviteTest extends TestCase
         DB::disableQueryLog();
 
         $this->assertCount(11, $members);
-        $this->assertLessThanOrEqual(10, count(DB::getQueryLog()));
+        $this->assertLessThanOrEqual(11, count(DB::getQueryLog()));
     }
 
     public function test_inviting_an_existing_user_in_a_different_case_reuses_their_account_and_hides_their_private_details(): void

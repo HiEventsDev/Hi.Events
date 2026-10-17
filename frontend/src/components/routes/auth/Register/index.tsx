@@ -12,6 +12,9 @@ import {getUserCurrency} from "../../../../utilites/currency.ts";
 import {getConfig} from "../../../../utilites/config.ts";
 import {getStoredUtmData, clearStoredUtmData} from "../../../../utilites/utm.ts";
 import {Turnstile} from "../../../common/Turnstile";
+import {Callout} from "../../../common/Callout";
+import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
+
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -42,6 +45,8 @@ export const Register = () => {
     const errorHandler = useFormErrorResponseHandler();
     const mutate = useRegisterAccount();
     const [turnstileToken, setTurnstileToken] = useState('');
+    const [formError, setFormError] = useState<string | null>(null);
+    const {passwordLoginEnabled, registrationEnabled} = useSsoOptions();
     const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
     const registerUser = (data: RegisterAccountRequest) => {
@@ -59,7 +64,15 @@ export const Register = () => {
             },
             onError: (error: any) => {
                 setTurnstileResetKey((key) => key + 1);
-                errorHandler(form, error, error.response?.data?.message);
+
+                if (error?.response?.data?.errors) {
+                    errorHandler(form, error);
+                    return;
+                }
+
+                setFormError(error?.response?.status === 429
+                    ? t`Too many attempts. Please wait a minute and try again.`
+                    : error?.response?.data?.message ?? t`Something went wrong. Please try again.`);
             },
         });
     }
@@ -81,16 +94,29 @@ export const Register = () => {
                     <Trans>
                         Already have an account?{' '}
                         <NavLink to={`/auth/login${location.search}`}>
-                            {t`Log in`}
+                            {t`Sign in`}
                         </NavLink>
                     </Trans>
                 </p>
             </header>
 
+            {formError && (
+                <Callout variant="danger" onDismiss={() => setFormError(null)}>{formError}</Callout>
+            )}
+            <SsoSection
+                request={{intent: 'SIGNUP'}}
+                variant="signUp"
+                onError={setFormError}
+                partnerInviteToken={new URLSearchParams(location.search).get('invite_token') ?? undefined}
+                disabled={mutate.isPending}
+                hidden={!registrationEnabled}
+            />
+
             <div className={classes.registerCard}>
+                {passwordLoginEnabled && (
                 <form onSubmit={form.onSubmit((values) => registerUser(values as RegisterAccountRequest))}>
 
-                    <SimpleGrid verticalSpacing={{base: "md", sm: 0}} cols={{base: 1, sm: 2}} mb="md">
+                    <SimpleGrid verticalSpacing={{base: "md", lg: 0}} cols={{base: 1, lg: 2}} mb="md">
                         <TextInput
                             {...form.getInputProps('first_name')}
                             label={t`First Name`}
@@ -112,7 +138,7 @@ export const Register = () => {
                         required
                     />
 
-                    <SimpleGrid verticalSpacing={{base: "md", sm: 0}} cols={{base: 1, sm: 2}} mt="md" mb="md">
+                    <SimpleGrid verticalSpacing={{base: "md", lg: 0}} cols={{base: 1, lg: 2}} mt="md" mb="md">
                         <PasswordInput
                             {...form.getInputProps('password')}
                             label={t`Password`}
@@ -145,9 +171,10 @@ export const Register = () => {
                         {mutate.isPending ? t`Working...` : t`Register`}
                     </Button>
                 </form>
+                )}
                 <footer>
                     <Trans>
-                        By registering you agree to our <NavLink target={'_blank'}
+                        By continuing you agree to our <NavLink target={'_blank'}
                                                                  to={getConfig("VITE_TOS_URL", "https://hi.events/terms-of-service?utm_source=app-register-footer") as string}>Terms
                         of Service</NavLink> and <NavLink
                         target={'_blank'}

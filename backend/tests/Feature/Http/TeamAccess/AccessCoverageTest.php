@@ -13,8 +13,14 @@ use HiEvents\Http\Actions\Affiliates\ExportAffiliatesAction;
 use HiEvents\Http\Actions\Announcements\DismissAnnouncementAction;
 use HiEvents\Http\Actions\Announcements\GetActiveAnnouncementsAction;
 use HiEvents\Http\Actions\Attendees\ExportAttendeesAction;
+use HiEvents\Http\Actions\Auth\JoinInvitationAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
+use HiEvents\Http\Actions\Auth\Sso\DeleteSsoIdentityAction;
+use HiEvents\Http\Actions\Auth\Sso\ExchangeAuthenticatedSsoCodeAction;
+use HiEvents\Http\Actions\Auth\Sso\GetSsoIdentitiesAction;
+use HiEvents\Http\Actions\Auth\Sso\StartSsoLinkAction;
+use HiEvents\Http\Actions\Auth\Sso\StartSsoReauthAction;
 use HiEvents\Http\Actions\EmailTemplates\GetAvailableTokensAction;
 use HiEvents\Http\Actions\EmailTemplates\GetDefaultEmailTemplateAction;
 use HiEvents\Http\Actions\EmailTemplates\PreviewEventEmailTemplateAction;
@@ -98,6 +104,12 @@ class AccessCoverageTest extends TestCase
         GetAvailableTokensAction::class,
         GetGeoStatusAction::class,
         GetAccountAction::class,
+        GetSsoIdentitiesAction::class,
+        StartSsoLinkAction::class,
+        StartSsoReauthAction::class,
+        ExchangeAuthenticatedSsoCodeAction::class,
+        DeleteSsoIdentityAction::class,
+        JoinInvitationAction::class,
     ];
 
     private const SCOPE_FILTERED_OR_CHECKED_INLINE = [
@@ -123,6 +135,12 @@ class AccessCoverageTest extends TestCase
 
     private const ALLOWED_FOR_READ_ONLY_USERS = [
         BeginTwoFactorSetupAction::class,
+        DeleteSsoIdentityAction::class,
+        ExchangeAuthenticatedSsoCodeAction::class,
+        GetSsoIdentitiesAction::class,
+        JoinInvitationAction::class,
+        StartSsoLinkAction::class,
+        StartSsoReauthAction::class,
         CancelEmailChangeAction::class,
         ConfirmEmailAddressAction::class,
         ConfirmEmailChangeAction::class,

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace HiEvents\Http\Actions\Admin\Users;
 
+use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Http\Actions\Auth\BaseAuthAction;
+use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\Admin\DTO\StopImpersonationDTO;
 use HiEvents\Services\Application\Handlers\Admin\StopImpersonationHandler;
 use Illuminate\Auth\AuthManager;
@@ -27,9 +29,13 @@ class StopImpersonationAction extends BaseAuthAction
 
         $impersonatorId = $this->authManager->payload()->get('impersonator_id');
 
-        $token = $this->handler->handle(new StopImpersonationDTO(
-            impersonatorId: $impersonatorId,
-        ));
+        try {
+            $token = $this->handler->handle(new StopImpersonationDTO(
+                impersonatorId: $impersonatorId,
+            ));
+        } catch (UnauthorizedException $exception) {
+            return $this->errorResponse($exception->getMessage(), ResponseCodes::HTTP_FORBIDDEN);
+        }
 
         $response = $this->jsonResponse([
             'message' => __('Impersonation ended'),

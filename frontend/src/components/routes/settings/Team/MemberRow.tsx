@@ -29,6 +29,17 @@ const statusLabel = (status: User['status']) => {
     }
 };
 
+const SignInBadge = ({method}: { method: NonNullable<User['sso_sign_in']> }) => {
+    switch (method) {
+        case 'SSO':
+            return <Badge size="xs" variant="light" color="blue">{t`SSO`}</Badge>;
+        case 'EXEMPT':
+            return <Badge size="xs" variant="outline" color="gray">{t`Exempt`}</Badge>;
+        default:
+            return <Badge size="xs" variant="light" color="gray">{t`Password`}</Badge>;
+    }
+};
+
 const accessSummary = (user: User) => {
     if (user.access?.scope !== 'RESTRICTED') {
         return t`Whole account`;
@@ -113,6 +124,7 @@ export const MemberRow = ({
                                 {statusLabel(user.status)}
                             </Badge>
                         )}
+                        {user.sso_sign_in && <SignInBadge method={user.sso_sign_in}/>}
                     </div>
                     <span className={classes.email}>{user.email}</span>
                 </div>

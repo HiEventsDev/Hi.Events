@@ -56,6 +56,19 @@ use HiEvents\Http\Actions\Accounts\DeletionRequest\CancelAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\GetAccountDeletionStatusAction;
 use HiEvents\Http\Actions\Accounts\DeletionRequest\RequestAccountDeletionAction;
 use HiEvents\Http\Actions\Accounts\GetAccountAction;
+use HiEvents\Http\Actions\Accounts\Sso\AddAccountSsoDomainAction;
+use HiEvents\Http\Actions\Accounts\Sso\CheckAccountSsoIdentityProviderAction;
+use HiEvents\Http\Actions\Accounts\Sso\CreateAccountSsoConnectionAction;
+use HiEvents\Http\Actions\Accounts\Sso\DeleteAccountSsoConnectionAction;
+use HiEvents\Http\Actions\Accounts\Sso\DeleteAccountSsoDomainAction;
+use HiEvents\Http\Actions\Accounts\Sso\GetAccountSsoAction;
+use HiEvents\Http\Actions\Accounts\Sso\GetSsoEnforcementPreviewAction;
+use HiEvents\Http\Actions\Accounts\Sso\StartAccountSsoTestAction;
+use HiEvents\Http\Actions\Accounts\Sso\UpdateAccountSsoConnectionAction;
+use HiEvents\Http\Actions\Accounts\Sso\UpdateAccountSsoConnectionStatusAction;
+use HiEvents\Http\Actions\Accounts\Sso\UpdateSsoEnforcementAction;
+use HiEvents\Http\Actions\Accounts\Sso\UpdateSsoMemberEnforcementAction;
+use HiEvents\Http\Actions\Accounts\Sso\VerifyAccountSsoDomainAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountAction;
 use HiEvents\Http\Actions\Accounts\UpdateAccountTwoFactorRequirementAction;
 use HiEvents\Http\Actions\Admin\Accounts\GetAccountAction as GetAdminAccountAction;
@@ -129,10 +142,23 @@ use HiEvents\Http\Actions\Attendees\ResendAttendeeTicketAction;
 use HiEvents\Http\Actions\Auth\AcceptInvitationAction;
 use HiEvents\Http\Actions\Auth\ForgotPasswordAction;
 use HiEvents\Http\Actions\Auth\GetUserInvitationAction;
+use HiEvents\Http\Actions\Auth\JoinInvitationAction;
 use HiEvents\Http\Actions\Auth\LoginAction;
 use HiEvents\Http\Actions\Auth\LogoutAction;
 use HiEvents\Http\Actions\Auth\RefreshTokenAction;
 use HiEvents\Http\Actions\Auth\ResetPasswordAction;
+use HiEvents\Http\Actions\Auth\Sso\CompleteSsoLoginAction;
+use HiEvents\Http\Actions\Auth\Sso\CompleteSsoSignupAction;
+use HiEvents\Http\Actions\Auth\Sso\DeleteSsoIdentityAction;
+use HiEvents\Http\Actions\Auth\Sso\DiscoverSsoConnectionAction;
+use HiEvents\Http\Actions\Auth\Sso\ExchangeAuthenticatedSsoCodeAction;
+use HiEvents\Http\Actions\Auth\Sso\ExchangeSsoCodeAction;
+use HiEvents\Http\Actions\Auth\Sso\GetSsoIdentitiesAction;
+use HiEvents\Http\Actions\Auth\Sso\GetSsoProvidersAction;
+use HiEvents\Http\Actions\Auth\Sso\SendSsoSignupCodeAction;
+use HiEvents\Http\Actions\Auth\Sso\StartSsoAction;
+use HiEvents\Http\Actions\Auth\Sso\StartSsoLinkAction;
+use HiEvents\Http\Actions\Auth\Sso\StartSsoReauthAction;
 use HiEvents\Http\Actions\Auth\TwoFactorLoginAction;
 use HiEvents\Http\Actions\Auth\ValidateResetPasswordTokenAction;
 use HiEvents\Http\Actions\CapacityAssignments\CreateCapacityAssignmentAction;
@@ -392,6 +418,15 @@ $router->prefix('/auth')->group(
         // Reset Passwords
         $router->get('/reset-password/{reset_token}', ValidateResetPasswordTokenAction::class)->name('auth.validate-reset-password-token');
         $router->post('/reset-password/{reset_token}', ResetPasswordAction::class)->name('auth.reset-password');
+
+        // Single sign-on
+        $router->get('/sso/providers', GetSsoProvidersAction::class)->name('auth.sso.providers');
+        $router->post('/sso/exchange', ExchangeSsoCodeAction::class)->name('auth.sso.exchange')->middleware('throttle:auth-sso-exchange');
+        $router->post('/sso/complete', CompleteSsoLoginAction::class)->name('auth.sso.complete')->middleware('throttle:auth-sso-exchange');
+        $router->post('/sso/signup/code', SendSsoSignupCodeAction::class)->name('auth.sso.signup.code')->middleware('throttle:auth-sso-signup-code');
+        $router->post('/sso/signup', CompleteSsoSignupAction::class)->name('auth.sso.signup')->middleware('throttle:auth-sso-signup');
+        $router->post('/sso/discover', DiscoverSsoConnectionAction::class)->name('auth.sso.discover')->middleware('throttle:auth-sso-discover');
+        $router->post('/sso/{provider}/start', StartSsoAction::class)->name('auth.sso.start')->middleware('throttle:auth-sso-start');
     }
 );
 
@@ -403,6 +438,7 @@ $router->middleware(['auth:api'])->group(
         // Auth
         $router->get('/auth/logout', LogoutAction::class);
         $router->post('/auth/refresh', RefreshTokenAction::class);
+        $router->post('/auth/invitation/{invite_token}/join', JoinInvitationAction::class);
 
         // Users
         $router->get('/users/me', GetMeAction::class);
@@ -414,6 +450,11 @@ $router->middleware(['auth:api'])->group(
         $router->post('/users/me/two-factor/disable', DisableTwoFactorAction::class)->middleware('throttle:10,1,two-factor-disable');
         $router->delete('/users/me/two-factor/trusted-devices', RevokeTrustedDevicesAction::class);
         $router->delete('/users/me/two-factor/trusted-devices/{device_id}', RevokeTrustedDeviceAction::class)->whereNumber('device_id');
+        $router->get('/users/me/sso-identities', GetSsoIdentitiesAction::class);
+        $router->post('/users/me/sso-identities/exchange', ExchangeAuthenticatedSsoCodeAction::class)->middleware('throttle:auth-sso-exchange');
+        $router->post('/users/me/sso-identities/{provider}/start', StartSsoLinkAction::class)->middleware('throttle:auth-sso-start');
+        $router->post('/users/me/sso-identities/{provider}/reauth', StartSsoReauthAction::class)->middleware('throttle:auth-sso-start');
+        $router->delete('/users/me/sso-identities/{identity_id}', DeleteSsoIdentityAction::class)->whereNumber('identity_id')->middleware('throttle:auth-sso-start');
         $router->post('/users', CreateUserAction::class)->middleware('throttle:user-invite');
         $router->get('/users', GetUsersAction::class);
         $router->get('/users/{user_id}', GetUserAction::class);
@@ -436,6 +477,19 @@ $router->middleware(['auth:api'])->group(
         $router->delete('/accounts/deletion-request', CancelAccountDeletionAction::class);
         $router->get('/accounts/deletion-request', GetAccountDeletionStatusAction::class);
         $router->put('/accounts/{account_id}/two-factor-requirement', UpdateAccountTwoFactorRequirementAction::class)->whereNumber('account_id');
+        $router->get('/accounts/{account_id}/sso', GetAccountSsoAction::class)->whereNumber('account_id');
+        $router->post('/accounts/{account_id}/sso/connection', CreateAccountSsoConnectionAction::class)->whereNumber('account_id')->middleware('throttle:20,1,account-sso-connection');
+        $router->put('/accounts/{account_id}/sso/connection', UpdateAccountSsoConnectionAction::class)->whereNumber('account_id')->middleware('throttle:20,1,account-sso-connection');
+        $router->post('/accounts/{account_id}/sso/connection/check', CheckAccountSsoIdentityProviderAction::class)->whereNumber('account_id')->middleware('throttle:30,1,account-sso-connection-check');
+        $router->put('/accounts/{account_id}/sso/connection/status', UpdateAccountSsoConnectionStatusAction::class)->whereNumber('account_id');
+        $router->post('/accounts/{account_id}/sso/connection/test', StartAccountSsoTestAction::class)->whereNumber('account_id')->middleware('throttle:auth-sso-start');
+        $router->delete('/accounts/{account_id}/sso/connection', DeleteAccountSsoConnectionAction::class)->whereNumber('account_id');
+        $router->post('/accounts/{account_id}/sso/domains', AddAccountSsoDomainAction::class)->whereNumber('account_id')->middleware('throttle:30,1,account-sso-domain');
+        $router->post('/accounts/{account_id}/sso/domains/{domain_id}/verify', VerifyAccountSsoDomainAction::class)->whereNumber(['account_id', 'domain_id'])->middleware('throttle:20,1,account-sso-domain-verify');
+        $router->delete('/accounts/{account_id}/sso/domains/{domain_id}', DeleteAccountSsoDomainAction::class)->whereNumber(['account_id', 'domain_id']);
+        $router->get('/accounts/{account_id}/sso/enforcement', GetSsoEnforcementPreviewAction::class)->whereNumber('account_id');
+        $router->put('/accounts/{account_id}/sso/enforcement', UpdateSsoEnforcementAction::class)->whereNumber('account_id');
+        $router->put('/accounts/{account_id}/sso/members/{account_user_id}', UpdateSsoMemberEnforcementAction::class)->whereNumber(['account_id', 'account_user_id']);
         $router->get('/accounts/{account_id?}', GetAccountAction::class);
         $router->put('/accounts/{account_id?}', UpdateAccountAction::class);
 

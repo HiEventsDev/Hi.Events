@@ -23,6 +23,7 @@ import {getEventCategories} from "../../../constants/eventCategories.ts";
 import {Callout} from "../../common/Callout";
 import {getConfig} from "../../../utilites/config.ts";
 import {trackEvent, AnalyticsEvents} from "../../../utilites/analytics.ts";
+import {takeSsoSignupConversion} from "../../../utilites/ssoFlow.ts";
 import {getDateTimePickerFormat} from "../../../utilites/dates.ts";
 
 export const CreateOrganizer = ({progressInfo}: {
@@ -516,9 +517,7 @@ const Welcome = () => {
         if (!userData || hasTrackedSignup.current) {
             return;
         }
-        // Only track if email verification was NEVER required for this account
-        // Users who needed verification are tracked in ConfirmVerificationPin's onSuccess
-        if (!userData.enforce_email_confirmation_during_registration) {
+        if (takeSsoSignupConversion() || !userData.enforce_email_confirmation_during_registration) {
             hasTrackedSignup.current = true;
             trackEvent(AnalyticsEvents.SIGNUP_COMPLETED);
         }
