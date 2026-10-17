@@ -2,6 +2,7 @@
  * @todo - This file needs to be organized better. Split into multiple files.
  */
 import {SupportedLocales} from "./locales.ts";
+import type {DayOfWeek} from "@mantine/dates";
 
 export type ConfigKeys = 
     | 'VITE_TURNSTILE_SITE_KEY'
@@ -872,6 +873,7 @@ export interface OrganizerSettings {
     allow_search_engine_indexing?: boolean;
     tracking_pixels?: TrackingPixelConfig[];
     tracking_consent_acknowledged?: boolean;
+    first_day_of_week?: DayOfWeek;
 }
 
 export interface TrackingPixelConfig {

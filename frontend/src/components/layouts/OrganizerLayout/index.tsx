@@ -26,6 +26,8 @@ import AppLayout from "../AppLayout";
 import { Navigate, NavLink, useLocation, useParams } from "react-router";
 import { Badge, Button, Modal, Stack, Text } from "@mantine/core";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
+import { useGetOrganizerSettings } from "../../../queries/useGetOrganizerSettings.ts";
+import { OrganizerDatesProvider } from "../../common/OrganizerDatesProvider";
 import { useGeoStatus } from "../../../queries/useGeoStatus.ts";
 import { useState } from "react";
 import { CreateEventModal } from "../../modals/CreateEventModal";
@@ -52,6 +54,7 @@ const OrganizerLayout = () => {
     const { organizerId } = useParams();
     const location = useLocation();
     const { data: organizer } = useGetOrganizer(organizerId);
+    const { data: organizerSettings } = useGetOrganizerSettings(organizerId);
     useGeoStatus();
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [showCreateOrganizerModal, setShowCreateOrganizerModal] = useState(false);
@@ -214,7 +217,7 @@ const OrganizerLayout = () => {
     }
 
     return (
-        <>
+        <OrganizerDatesProvider firstDayOfWeek={organizerSettings?.first_day_of_week}>
             <AppLayout
                 navItems={navItemsWithLoading}
                 breadcrumbItems={breadcrumbItems}
@@ -333,7 +336,7 @@ const OrganizerLayout = () => {
                     )}
                 </Stack>
             </Modal>
-        </>
+        </OrganizerDatesProvider>
     );
 };
 

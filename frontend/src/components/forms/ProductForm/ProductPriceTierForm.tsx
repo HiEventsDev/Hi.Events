@@ -14,6 +14,7 @@ import {closestCenter, DndContext, DragEndEvent, PointerSensor, TouchSensor, use
 import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {ReactNode} from "react";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface ProductPriceTierFormProps {
     form: UseFormReturnType<Product>,
@@ -185,13 +186,11 @@ export const ProductPriceTierForm = ({form, product, event, isSeated}: ProductPr
                                 testId={`product-tier-${index}-quantity-applies-to`}
                             />
                             <InputGroup>
-                                <TextInput
-                                    type={'datetime-local'}
+                                <DateTimeField
                                     {...form.getInputProps(`prices.${index}.sale_start_date`)}
                                     label={t`Sale Start Date`}
                                 />
-                                <TextInput
-                                    type={'datetime-local'}
+                                <DateTimeField
                                     {...form.getInputProps(`prices.${index}.sale_end_date`)}
                                     label={t`Sale End Date`}
                                 />

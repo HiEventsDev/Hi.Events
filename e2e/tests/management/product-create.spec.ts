@@ -2,6 +2,7 @@ import { test, expect } from '../../fixtures';
 import { ProductCreatePage } from '../../pages/product-create.page';
 import { createDraftEvent, createDraftEventWithTicket } from '../../api/factory';
 import { uniqueName } from '../../utils/unique';
+import { expectDateTime, pickDateTime } from '../../utils/datePicker';
 
 test.describe('product creation', () => {
   test('an organizer creates a paid ticket and sees it listed with its price', { tag: '@smoke' }, async ({ authedPage, api, account }) => {
@@ -147,7 +148,7 @@ test.describe('product creation', () => {
     await authedPage.getByLabel('Minimum Per Order').fill('1');
     await authedPage.getByLabel('Maximum Per Order').fill('2');
     await products.openLedgerRow('sale-window');
-    await authedPage.getByRole('textbox', { name: 'Sale Start Date' }).fill(saleStart);
+    await pickDateTime(authedPage, authedPage.getByLabel('Sale Start Date', { exact: true }), saleStart);
     await products.openLedgerRow('access');
     await products.hideFromCustomers();
     await products.submitCreate();
@@ -161,7 +162,7 @@ test.describe('product creation', () => {
     await expect(authedPage.getByLabel('Minimum Per Order')).toHaveValue('1');
     await expect(authedPage.getByLabel('Maximum Per Order')).toHaveValue('2');
     await products.openLedgerRow('sale-window');
-    await expect(authedPage.getByRole('textbox', { name: 'Sale Start Date' })).toHaveValue(saleStart);
+    await expectDateTime(authedPage, authedPage.getByLabel('Sale Start Date', { exact: true }), saleStart);
     await products.openLedgerRow('access');
     await expect(products.hiddenSwitch()).toBeChecked();
   });
