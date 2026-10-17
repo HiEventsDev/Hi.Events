@@ -1,6 +1,6 @@
 import {useGetMe} from "../../../queries/useGetMe.ts";
 import {useIsFeatureEnabled} from "../../../hooks/useIsFeatureEnabled.ts";
-import {FeatureFlagKey} from "../../../constants/featureFlags.ts";
+import {LicensedFeatureFlagKey} from "../../../constants/featureFlags.ts";
 
 export interface LicensedFeatureAccess {
     isEnabled: boolean;
@@ -10,7 +10,7 @@ export interface LicensedFeatureAccess {
     isVisible: boolean;
 }
 
-export const useLicensedFeature = (feature: FeatureFlagKey): LicensedFeatureAccess => {
+export const useLicensedFeature = (feature: LicensedFeatureFlagKey): LicensedFeatureAccess => {
     const {data: me} = useGetMe();
     const isEnabled = useIsFeatureEnabled(feature);
     const licence = me?.licence;

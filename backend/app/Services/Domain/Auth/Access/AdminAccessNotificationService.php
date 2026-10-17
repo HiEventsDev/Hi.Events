@@ -16,7 +16,7 @@ class AdminAccessNotificationService
         private readonly Mailer $mailer,
     ) {}
 
-    public function notifyOwner(int $accountId, int $newAdminUserId, int $grantedByUserId): void
+    public function notifyOwner(int $accountId, int $newAdminUserId, ?int $grantedByUserId): void
     {
         /** @var AccountUserDomainObject|null $owner */
         $owner = $this->accountUserRepository->findFirstWhere([
@@ -32,7 +32,7 @@ class AdminAccessNotificationService
             ->to($this->userRepository->findById($owner->getUserId())->getEmail())
             ->send(new AdminAccessGrantedMail(
                 newAdminEmail: $this->userRepository->findById($newAdminUserId)->getEmail(),
-                grantedByEmail: $this->userRepository->findById($grantedByUserId)->getEmail(),
+                grantedByEmail: $grantedByUserId === null ? null : $this->userRepository->findById($grantedByUserId)->getEmail(),
             ));
     }
 }

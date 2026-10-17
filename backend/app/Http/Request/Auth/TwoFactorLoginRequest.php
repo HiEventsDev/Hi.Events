@@ -14,6 +14,7 @@ class TwoFactorLoginRequest extends BaseRequest
             'recovery_code' => ['nullable', 'string', 'max:32'],
             'account_id' => ['nullable', 'integer'],
             'remember_device' => ['nullable', 'boolean'],
+            'sso_binding' => ['nullable', 'string', 'max:128'],
         ];
     }
 }

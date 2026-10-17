@@ -55,6 +55,28 @@ abstract class BaseAuthAction extends BaseAction
         ));
     }
 
+    protected function issueFreshTokenForCurrentSession(): string
+    {
+        $payload = auth()->payload();
+        $guard = auth();
+        $defaultTtl = $guard->factory()->getTTL();
+
+        if ($payload->get('sso_connection_id') !== null) {
+            $guard->setTTL(max(1, (int) ceil(((int) $payload->get('exp') - now()->getTimestamp()) / 60)));
+        }
+
+        try {
+            return $guard->claims(array_filter([
+                'account_id' => $payload->get('account_id'),
+                'role' => $payload->get('role'),
+                'auth_method' => $payload->get('auth_method'),
+                'sso_connection_id' => $payload->get('sso_connection_id'),
+            ], static fn ($value) => $value !== null))->tokenById(auth()->id());
+        } finally {
+            $guard->setTTL($defaultTtl);
+        }
+    }
+
     protected function respondWithToken(
         ?string $token,
         Collection $accounts,

@@ -10,6 +10,7 @@ use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\ImageAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\OrderAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\OrganizerAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\PartnerAnonymizer;
+use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\SsoConnectionAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\Anonymizers\UserAnonymizer;
 use HiEvents\Services\Domain\Account\Anonymization\EntityAnonymizationResult;
 use Illuminate\Database\DatabaseManager;
@@ -25,6 +26,7 @@ class AccountAnonymizationService
         private readonly EventContentAnonymizer $eventContentAnonymizer,
         private readonly ActivityLogAnonymizer $activityLogAnonymizer,
         private readonly PartnerAnonymizer $partnerAnonymizer,
+        private readonly SsoConnectionAnonymizer $ssoConnectionAnonymizer,
         private readonly UserAnonymizer $userAnonymizer,
         private readonly OrganizerAnonymizer $organizerAnonymizer,
         private readonly ImageAnonymizer $imageAnonymizer,
@@ -51,6 +53,7 @@ class AccountAnonymizationService
                 $this->eventContentAnonymizer,
                 $this->activityLogAnonymizer,
                 $this->partnerAnonymizer,
+                $this->ssoConnectionAnonymizer,
                 $this->userAnonymizer,
                 $this->organizerAnonymizer,
                 $this->imageAnonymizer,

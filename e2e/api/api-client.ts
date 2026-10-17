@@ -112,6 +112,15 @@ export async function confirmEmailWithCode(
   }
 }
 
+export interface SsoConnectionPayload {
+  type: 'OKTA' | 'ENTRA' | 'GOOGLE_WORKSPACE' | 'OIDC';
+  issuer: string;
+  client_id: string;
+  client_secret: string;
+  jit_provisioning_enabled?: boolean;
+  jit_default_role?: 'ADMIN' | 'ORGANIZER' | 'VIEWER';
+}
+
 interface CurrentUser {
   id: number;
   feature_flags: Record<string, boolean>;
@@ -355,6 +364,24 @@ export class ApiClient {
     return unwrap<{ recovery_codes: string[] }>(
       this.request.post('users/me/two-factor/confirm', { headers: jsonHeaders, data: { code } }),
     );
+  }
+
+  createSsoConnection(accountId: number, payload: SsoConnectionPayload): Promise<{ id: number; provider_key: string }> {
+    return unwrap<{ id: number; provider_key: string }>(
+      this.request.post(`accounts/${accountId}/sso/connection`, { headers: jsonHeaders, data: payload }),
+    );
+  }
+
+  setSsoConnectionStatus(accountId: number, status: 'ACTIVE' | 'INACTIVE'): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/connection/status`, { headers: jsonHeaders, data: { status } }));
+  }
+
+  updateSsoEnforcement(accountId: number, enabled: boolean): Promise<void> {
+    return check(this.request.put(`accounts/${accountId}/sso/enforcement`, { headers: jsonHeaders, data: { enabled } }));
+  }
+
+  addSsoDomain(accountId: number, domain: string): Promise<void> {
+    return check(this.request.post(`accounts/${accountId}/sso/domains`, { headers: jsonHeaders, data: { domain } }));
   }
 
   setTwoFactorRequirement(accountId: number, required: boolean): Promise<void> {

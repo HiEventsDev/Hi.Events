@@ -2,7 +2,7 @@
 
 namespace HiEvents\Http\Actions\Users\TwoFactor;
 
-use HiEvents\Exceptions\PasswordInvalidException;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Attributes\AllowedForReadOnlyUsers;
@@ -29,8 +29,10 @@ class BeginTwoFactorSetupAction extends BaseAction
             $setup = $this->handler->handle(
                 userId: $this->getAuthenticatedUser()->getId(),
                 password: $request->validated('password'),
+                reauthProof: $request->validated('reauth_proof'),
+                tokenId: $this->getAuthTokenId(),
             );
-        } catch (PasswordInvalidException $exception) {
+        } catch (IdentityConfirmationFailedException $exception) {
             throw ValidationException::withMessages(['password' => $exception->getMessage()]);
         } catch (ResourceConflictException $exception) {
             return $this->errorResponse($exception->getMessage(), ResponseCodes::HTTP_CONFLICT);

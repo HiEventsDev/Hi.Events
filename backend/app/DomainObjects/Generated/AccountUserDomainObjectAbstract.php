@@ -23,6 +23,7 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     final public const STATUS = 'status';
     final public const ACCESS_SCOPE = 'access_scope';
     final public const NOTIFY_NEW_ORDERS = 'notify_new_orders';
+    final public const SSO_ENFORCED = 'sso_enforced';
 
     protected int $id;
     protected int $account_id;
@@ -37,6 +38,7 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     protected string $status = 'INVITED';
     protected string $access_scope = 'ACCOUNT';
     protected bool $notify_new_orders = false;
+    protected bool $sso_enforced = false;
 
     public function toArray(): array
     {
@@ -54,6 +56,7 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
                     'status' => $this->status ?? null,
                     'access_scope' => $this->access_scope ?? null,
                     'notify_new_orders' => $this->notify_new_orders ?? null,
+                    'sso_enforced' => $this->sso_enforced ?? null,
                 ];
     }
 
@@ -198,5 +201,16 @@ abstract class AccountUserDomainObjectAbstract extends \HiEvents\DomainObjects\A
     public function getNotifyNewOrders(): bool
     {
         return $this->notify_new_orders;
+    }
+
+    public function setSsoEnforced(bool $sso_enforced): self
+    {
+        $this->sso_enforced = $sso_enforced;
+        return $this;
+    }
+
+    public function getSsoEnforced(): bool
+    {
+        return $this->sso_enforced;
     }
 }

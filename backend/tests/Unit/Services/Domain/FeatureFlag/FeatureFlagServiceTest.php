@@ -25,21 +25,29 @@ class FeatureFlagServiceTest extends TestCase
 
     public function test_licensed_flags_follow_the_licence_alone_off_hi_events_cloud(): void
     {
-        foreach ([true, false] as $saasMode) {
-            config(['app.saas_mode_enabled' => $saasMode]);
-            $service = $this->serviceReturning(null, cloud: false);
+        config(['app.saas_mode_enabled' => false]);
+        $service = $this->serviceReturning(null, cloud: false);
 
-            $this->assertSame(['seating' => true, 'box_office' => true], $service->getEnabledFlagsForAccount(1));
-            $this->assertSame([], $service->configurableFlags());
-            $this->assertTrue($service->getFlagsForAccount(1)->isEmpty());
-            $service->assertEnabled(FeatureFlag::SEATING, 1);
-        }
+        $this->assertSame(['seating' => true, 'box_office' => true, 'enterprise_sso' => true], $service->getEnabledFlagsForAccount(1));
+        $this->assertSame([], $service->configurableFlags());
+        $this->assertTrue($service->getFlagsForAccount(1)->isEmpty());
+        $service->assertEnabled(FeatureFlag::SEATING, 1);
+    }
+
+    public function test_core_flags_are_configurable_only_in_saas_mode(): void
+    {
+        $service = $this->serviceReturning([], cloud: false);
+
+        $this->assertSame([FeatureFlag::ENTERPRISE_SSO], $service->configurableFlags());
+        $this->assertSame(['seating' => true, 'box_office' => true, 'enterprise_sso' => false], $service->getEnabledFlagsForAccount(1));
     }
 
     public function test_an_unlicensed_flag_is_off_off_hi_events_cloud(): void
     {
+        config(['app.saas_mode_enabled' => false]);
+
         $this->assertSame(
-            ['seating' => false, 'box_office' => true],
+            ['seating' => false, 'box_office' => true, 'enterprise_sso' => true],
             $this->serviceReturning(null, licensed: [LicensedFeature::BOX_OFFICE], cloud: false)->getEnabledFlagsForAccount(1),
         );
     }
@@ -60,7 +68,7 @@ class FeatureFlagServiceTest extends TestCase
             new AccountFeatureFlagDTO('box_office', true, null),
         ], licensed: []);
 
-        $this->assertSame(['seating' => false, 'box_office' => false], $service->getEnabledFlagsForAccount(1));
+        $this->assertSame(['seating' => false, 'box_office' => false, 'enterprise_sso' => false], $service->getEnabledFlagsForAccount(1));
         $this->expectException(FeatureNotEnabledException::class);
         $service->assertEnabled(FeatureFlag::SEATING, 1);
     }
@@ -90,7 +98,7 @@ class FeatureFlagServiceTest extends TestCase
     {
         $service = $this->serviceReturning([]);
 
-        $this->assertSame(['seating' => false, 'box_office' => false], $service->getEnabledFlagsForAccount(1));
+        $this->assertSame(['seating' => false, 'box_office' => false, 'enterprise_sso' => false], $service->getEnabledFlagsForAccount(1));
     }
 
     public function test_unknown_stored_keys_are_ignored(): void
@@ -100,8 +108,8 @@ class FeatureFlagServiceTest extends TestCase
             new AccountFeatureFlagDTO('retired_flag', true, null),
         ]);
 
-        $this->assertSame(['seating' => true, 'box_office' => false], $service->getEnabledFlagsForAccount(1));
-        $this->assertSame(['seating', 'box_office'], $service->getFlagsForAccount(1)->keys()->all());
+        $this->assertSame(['seating' => true, 'box_office' => false, 'enterprise_sso' => false], $service->getEnabledFlagsForAccount(1));
+        $this->assertSame(['seating', 'box_office', 'enterprise_sso'], $service->getFlagsForAccount(1)->keys()->all());
     }
 
     public function test_assert_enabled_throws_when_disabled(): void

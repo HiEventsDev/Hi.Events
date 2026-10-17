@@ -3,6 +3,8 @@
 namespace HiEvents\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
@@ -10,6 +12,8 @@ use HiEvents\Mail\User\EmailChangeRequestedMail;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
+use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -24,11 +28,14 @@ readonly class UpdateMeHandler
         private EncryptedPayloadService $encryptedPayloadService,
         private TrustedDeviceService $trustedDeviceService,
         private AccountUserRepositoryInterface $accountUserRepository,
+        private IdentityConfirmationService $identityConfirmationService,
+        private SsoEnforcementService $ssoEnforcementService,
     ) {}
 
     /**
      * @throws PasswordInvalidException
      * @throws ResourceConflictException
+     * @throws IdentityConfirmationFailedException
      */
     public function handle(UpdateMeDTO $updateUserData): UserDomainObject
     {
@@ -50,7 +57,9 @@ readonly class UpdateMeHandler
             ];
 
             if ($this->isChangingEmail($updateUserData, $existingUser)) {
+                $this->confirmIdentity($updateUserData, $existingUser);
                 $this->assertEmailIsAvailable($updateUserData->email, $existingUser->getId());
+                $this->assertEmailKeepsSsoDomain($existingUser->getId(), $updateUserData->email);
                 $updateArray['pending_email'] = $updateUserData->email;
                 $this->sendEmailChangeConfirmation($existingUser, $updateUserData->email);
                 $this->notifyCurrentAddressOfEmailChange($existingUser);
@@ -93,9 +102,23 @@ readonly class UpdateMeHandler
      */
     private function validateCurrentPassword(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): void
     {
-        if (! $this->hasher->check($updateUserData->current_password, $existingUser->getPassword())) {
+        if ($existingUser->getPassword() === null
+            || ! $this->hasher->check($updateUserData->current_password, $existingUser->getPassword())) {
             throw new PasswordInvalidException('Current password is invalid');
         }
+    }
+
+    /**
+     * @throws IdentityConfirmationFailedException
+     */
+    private function confirmIdentity(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): void
+    {
+        $this->identityConfirmationService->confirm(
+            user: $existingUser,
+            password: $updateUserData->confirmation_password,
+            reauthProof: $updateUserData->reauth_proof,
+            tokenId: $updateUserData->token_id,
+        );
     }
 
     private function isChangingEmail(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): bool
@@ -123,6 +146,18 @@ readonly class UpdateMeHandler
 
         if ($userWithEmail !== null) {
             throw new ResourceConflictException(__('This email address is already in use.'));
+        }
+    }
+
+    /**
+     * @throws ResourceConflictException
+     */
+    private function assertEmailKeepsSsoDomain(int $userId, string $email): void
+    {
+        try {
+            $this->ssoEnforcementService->assertEmailChangeAllowed($userId, $email);
+        } catch (AccountSsoConfigurationException $exception) {
+            throw new ResourceConflictException($exception->getMessage());
         }
     }
 

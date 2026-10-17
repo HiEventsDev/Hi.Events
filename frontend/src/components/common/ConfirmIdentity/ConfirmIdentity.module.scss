@@ -1,0 +1,51 @@
+.reauth {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--hi-color-text-muted);
+}
+
+.confirmed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--hi-radius-lg, 10px);
+  background: color-mix(in srgb, var(--hi-color-money-green, #2f9e44) 10%, #fff);
+  color: #087f5b;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.error {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--mantine-color-red-7);
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+
+  :global(.mantine-InputWrapper-root) {
+    margin-bottom: 0;
+  }
+}
+
+.modalText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--hi-color-text-muted);
+}

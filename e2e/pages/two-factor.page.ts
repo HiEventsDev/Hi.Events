@@ -52,7 +52,7 @@ export class TwoFactorPage {
     await this.page.waitForLoadState('networkidle');
     await this.page.getByLabel(/^Email/).fill(email);
     await this.page.getByLabel(/^Password/).fill(password);
-    await this.page.getByRole('button', { name: 'Log in' }).click();
+    await this.page.getByRole('button', { name: 'Sign in', exact: true }).click();
   }
 
   async expectChallenge(): Promise<void> {

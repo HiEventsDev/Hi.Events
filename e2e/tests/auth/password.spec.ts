@@ -24,7 +24,7 @@ test.describe('password management', () => {
 
     await page.getByLabel(/^Email/).fill(freshAccount.email);
     await page.getByLabel(/^Password/).fill(newPassword);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/manage\/organizer\/\d+/);
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('password management', () => {
 
     await page.getByLabel(/^Email/).fill(freshAccount.email);
     await page.getByLabel(/^Password/).fill(newPassword);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/manage\/organizer\/\d+/);
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();

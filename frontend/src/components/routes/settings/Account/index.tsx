@@ -17,6 +17,9 @@ import {
     SettingsSection,
 } from "../../../common/SettingsPage";
 import {DeleteAccountSection} from "./DeleteAccountSection.tsx";
+import {SingleSignOnSection} from "./SingleSignOn";
+import {useIsFeatureEnabled} from "../../../../hooks/useIsFeatureEnabled.ts";
+import {FeatureFlag} from "../../../../constants/featureFlags.ts";
 
 const currencyOptions = Object.entries(currencies).map(([label, value]) => ({value, label}));
 
@@ -25,6 +28,7 @@ const AccountSettings = () => {
     const updateMutation = useUpdateAccount();
     const formErrorHandler = useFormErrorResponseHandler();
     const canManageAccount = useAccess().can('MANAGE_ACCOUNT');
+    const enterpriseSsoEnabled = useIsFeatureEnabled(FeatureFlag.ENTERPRISE_SSO);
 
     const form = useForm({
         mode: 'controlled',
@@ -118,6 +122,8 @@ const AccountSettings = () => {
                     )}
                 </form>
             </SettingsSection>
+
+            {canManageAccount && enterpriseSsoEnabled && account?.id && !isPendingDeletion && <SingleSignOnSection accountId={account.id}/>}
 
             {canManageAccount && <DeleteAccountSection/>}
         </SettingsPage>

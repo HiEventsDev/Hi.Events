@@ -1,3 +1,4 @@
+import {IdentityConfirmation} from "../types.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {twoFactorClient} from "../api/twoFactor.client.ts";
 import {GET_TWO_FACTOR_STATUS_QUERY_KEY} from "../queries/useGetTwoFactorStatus.ts";
@@ -15,7 +16,7 @@ const useInvalidateTwoFactor = () => {
 
 export const useBeginTwoFactorSetup = () => {
     return useMutation({
-        mutationFn: (password: string) => twoFactorClient.beginSetup(password).then(response => response.data),
+        mutationFn: (confirmation: IdentityConfirmation) => twoFactorClient.beginSetup(confirmation).then(response => response.data),
     });
 };
 

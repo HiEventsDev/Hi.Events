@@ -29,7 +29,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: { args: ['--host-resolver-rules=MAP mock-oidc 127.0.0.1'] },
+      },
     },
   ],
 });

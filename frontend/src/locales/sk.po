@@ -84,6 +84,10 @@ msgstr "{0} aktívnych webhookov"
 msgid "{0} available"
 msgstr "{0} dostupných"
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:77
+msgid "{0} can sign in with their password"
+msgstr "{0} sa môže prihlásiť heslom"
+
 #: src/components/modals/ProductPurchasesModal/index.tsx:97
 msgid "{0} cancelled"
 msgstr "{0} zrušené"
@@ -120,6 +124,10 @@ msgstr "{0} v košíku"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} je obmedzený na {1} na objednávku"
 
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:58
+msgid "{0} is verified"
+msgstr "{0} je overená"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:185
 msgid "{0} items selected"
 msgstr "Vybrané položky: {0}"
@@ -129,11 +137,19 @@ msgid "{0} left"
 msgstr "{0} zostáva"
 
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:97
-#: src/components/layouts/AuthLayout/index.tsx:162
+#: src/components/layouts/AuthLayout/AuthShell.tsx:152
 msgid "{0} logo"
 msgstr "logo {0}"
 
-#: src/components/routes/settings/Security/index.tsx:139
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:125
+msgid "{0} members outside your verified domains keep their current sign-in."
+msgstr "{0} členov mimo vašich overených domén si ponecháva súčasné prihlásenie."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:76
+msgid "{0} must now sign in with {providerName}"
+msgstr "{0} sa teraz musí prihlasovať cez {providerName}"
+
+#: src/components/routes/settings/Security/index.tsx:141
 msgid "{0} of {1} remaining"
 msgstr "Zostáva {0} z {1}"
 
@@ -166,11 +182,11 @@ msgstr "{0} miest"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} refundovaných objednávok obsahuje tento produkt, ale neboli zrušené, takže sa stále počítajú ako predané. Zrušte ich, ak sa položky nemajú započítať."
 
-#: src/components/routes/settings/Security/index.tsx:121
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0} vyžaduje dvojfaktorové overenie pre všetkých členov tímu."
 
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:194
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} vyžaduje dvojfaktorové overenie, preto ho nemožno vypnúť."
 
@@ -235,6 +251,10 @@ msgstr "{0} na státie"
 msgid "{0} tickets"
 msgstr "{0} lístkov"
 
+#: src/components/routes/settings/Security/SignInMethods.tsx:128
+msgid "{0} was disconnected."
+msgstr "Účet {0} bol odpojený."
+
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:417
 msgid "{activeCount} enabled"
 msgstr "Aktívne: {activeCount}"
@@ -291,6 +311,10 @@ msgstr "{checkedIn} / {total} prihlásených"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "Dokončených {completedCount} z {totalCount} krokov"
 
+#: src/components/routes/settings/Security/SignInMethods.tsx:57
+msgid "{connected} is connected. You can now use it to sign in."
+msgstr "Účet {connected} je pripojený. Teraz ho môžete použiť na prihlásenie."
+
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:59
 #: src/components/forms/ProductForm/ledgerSummaries.ts:127
 msgid "{count} add-ons"
@@ -299,6 +323,10 @@ msgstr "Doplnky: {count}"
 #: src/components/routes/product-widget/OccurrenceSelector/index.tsx:117
 msgid "{count} times"
 msgstr "Počet časov: {count}"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+msgid "{days} days"
+msgstr "{days} dní"
 
 #: src/components/common/Countdown/index.tsx:68
 msgid "{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
@@ -316,9 +344,13 @@ msgstr "pred {diffMin} min"
 msgid "{diffSec}s ago"
 msgstr "pred {diffSec} s"
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:121
+msgid "{enforcedCount} members will need to sign in with {providerName}."
+msgstr "{enforcedCount} členov sa bude musieť prihlasovať cez {providerName}."
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:81
 #: src/components/common/WebhookTable/index.tsx:81
-#: src/components/routes/settings/Team/MemberRow.tsx:41
+#: src/components/routes/settings/Team/MemberRow.tsx:52
 msgid "{eventCount} events"
 msgstr "{eventCount} udalostí"
 
@@ -345,6 +377,10 @@ msgstr "{hours} h"
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:38
 msgid "{hours} h {remainder} min"
 msgstr "{hours} h {remainder} min"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+msgid "{hours} hours"
+msgstr "{hours} hodín"
 
 #: src/components/common/Countdown/index.tsx:70
 msgid "{hours} hours, {minutes} minutes, and {seconds} seconds"
@@ -407,11 +443,11 @@ msgstr "Sedadlá na výber: {open}"
 msgid "{open} to seat"
 msgstr "Bez sedadla: {open}"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:40
+#: src/components/routes/settings/Team/MemberRow.tsx:51
 msgid "{organizerCount} organizers"
 msgstr "Organizátori: {organizerCount}"
 
-#: src/components/routes/welcome/index.tsx:292
+#: src/components/routes/welcome/index.tsx:293
 msgid "{organizerName}'s first event"
 msgstr "Prvá udalosť organizátora {organizerName}"
 
@@ -434,6 +470,14 @@ msgstr "Nastavené typy lístkov: {productCount}"
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:209
 msgid "{provider} video found"
 msgstr "Nájdené video z {provider}"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+msgid "{providerName} didn't share your email"
+msgstr "{providerName} nezdieľal váš e-mail"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+msgid "{providerName} isn't responding"
+msgstr "{providerName} neodpovedá"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:96
 msgid "{radius}px"
@@ -623,6 +667,10 @@ msgstr "Na dotknuté termíny je prihlásený 1 účastník."
 msgid "1 attendee is registered for this session."
 msgstr "Na tento termín je prihlásený 1 účastník."
 
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+msgid "1 day"
+msgstr "1 deň"
+
 #: src/components/modals/SendMessageModal/index.tsx:130
 msgid "1 day after end date"
 msgstr "1 deň po dátume konca"
@@ -635,9 +683,13 @@ msgstr "1 deň po dátume začiatku"
 msgid "1 day before event"
 msgstr "1 deň pred udalosťou"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:41
+#: src/components/routes/settings/Team/MemberRow.tsx:52
 msgid "1 event"
 msgstr "1 podujatie"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+msgid "1 hour"
+msgstr "1 hodina"
 
 #: src/components/modals/SendMessageModal/index.tsx:123
 msgid "1 hour before event"
@@ -651,11 +703,19 @@ msgstr "1 položka"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1 člen ešte nezapol dvojfaktorové overenie. Pred pokračovaním ho bude musieť nastaviť. Vyžadovať ho teraz?"
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:124
+msgid "1 member outside your verified domains keeps their current sign-in."
+msgstr "1 člen mimo vašich overených domén si ponecháva súčasné prihlásenie."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:121
+msgid "1 member will need to sign in with {providerName}."
+msgstr "1 člen sa bude musieť prihlasovať cez {providerName}."
+
 #: src/ee/box-office/components/common/BoxOfficeTable/index.tsx:165
 msgid "1 order"
 msgstr "1 objednávka"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:40
+#: src/components/routes/settings/Team/MemberRow.tsx:51
 msgid "1 organizer"
 msgstr "1 organizátor"
 
@@ -701,7 +761,7 @@ msgstr "1 bez sedadla"
 msgid "1 week before event"
 msgstr "1 týždeň pred udalosťou"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:139
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
 msgstr "1. Získajte overovaciu aplikáciu"
 
@@ -718,7 +778,7 @@ msgstr "123 Vzorová ulica"
 msgid "135+ currencies & 40+ payment methods"
 msgstr "Viac než 135 mien a viac než 40 platobných metód"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:147
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:166
 msgid "2. Scan this QR code"
 msgstr "2. Naskenujte tento QR kód"
 
@@ -802,7 +862,7 @@ msgstr "Správa, ktorá sa zobrazí, keď v tejto kategórii nie sú žiadne pro
 msgid "A multi line text input"
 msgstr "Viacriadkový textový vstup"
 
-#: src/components/routes/welcome/index.tsx:118
+#: src/components/routes/welcome/index.tsx:119
 msgid "A new verification code has been sent to your email"
 msgstr "Na váš e-mail bol odoslaný nový overovací kód"
 
@@ -919,18 +979,10 @@ msgstr "Prijímajte bankové prevody, šeky alebo iné offline platobné metódy
 msgid "Accept credit card payments with Stripe"
 msgstr "Prijímajte platby kreditnou kartou cez Stripe"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:87
-msgid "Accept invitation"
-msgstr "Prijať pozvánku"
-
-#: src/components/routes/auth/AcceptInvitation/index.tsx:166
-msgid "Accept Invitation"
-msgstr "Prijať pozvánku"
-
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:599
-#: src/components/routes/settings/Team/index.tsx:196
+#: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Prístup"
 
@@ -1000,7 +1052,7 @@ msgid "Account marked as verified"
 msgstr "Účet označený ako overený"
 
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:183
-#: src/components/routes/settings/Account/index.tsx:73
+#: src/components/routes/settings/Account/index.tsx:77
 msgid "Account name"
 msgstr "Názov účtu"
 
@@ -1024,7 +1076,7 @@ msgstr "Účet je naplánovaný na odstránenie o 30 dní"
 msgid "Account Settings"
 msgstr "Nastavenia účtu"
 
-#: src/components/routes/settings/Account/index.tsx:55
+#: src/components/routes/settings/Account/index.tsx:59
 msgid "Account updated successfully"
 msgstr "Účet bol úspešne aktualizovaný"
 
@@ -1108,7 +1160,7 @@ msgstr "Dátum aktivácie"
 msgid "Active"
 msgstr "Aktívne"
 
-#: src/components/routes/settings/Team/index.tsx:158
+#: src/components/routes/settings/Team/index.tsx:162
 msgid "Active members"
 msgstr "Aktívni členovia"
 
@@ -1285,6 +1337,10 @@ msgstr "Pridať podrobnosti"
 msgid "Add discount"
 msgstr "Pridať zľavu"
 
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:121
+msgid "Add domain"
+msgstr "Pridať doménu"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:136
 msgid "Add event details"
 msgstr "Pridať podrobnosti o podujatí"
@@ -1307,6 +1363,11 @@ msgstr "Pridať miesto"
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:1049
 msgid "Add multiple times if you run several sessions per day."
 msgstr "Pridajte viac časov, ak máte za deň viac termínov."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+msgid "Add new people automatically"
+msgstr "Pridávať nových ľudí automaticky"
 
 #: src/ee/box-office/components/layouts/BoxOffice/ProductTile.tsx:86
 msgid "Add one"
@@ -1382,6 +1443,14 @@ msgstr "Pridať stojace lístky"
 msgid "Add tax or fee"
 msgstr "Pridať daň alebo poplatok"
 
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+msgid "Add the redirect URI below and allow the openid, email and profile scopes."
+msgstr "Pridajte nižšie uvedený redirect URI a povoľte rozsahy openid, email a profile."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
+msgstr "Pridajte nižšie uvedený redirect URI na prihlásenie a priraďte ľudí alebo skupiny, ktoré majú mať prístup."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:291
 msgid "Add this attendee anyway (override capacity)"
 msgstr "Napriek tomu pridať tohto účastníka (obísť kapacitu)"
@@ -1393,6 +1462,10 @@ msgstr "Pridajte túto udalosť do kalendára"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:76
 msgid "Add this to your site's <head>"
 msgstr "Pridajte toto do sekcie <head> vášho webu"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:92
+msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
+msgstr "Pridajte tento záznam TXT u svojho poskytovateľa DNS a potom overte. Subdomény potrebujú vlastný záznam."
 
 #: src/components/modals/PublishEventModal/index.tsx:97
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:91
@@ -1538,8 +1611,8 @@ msgstr "Vyžaduje sa prístup správcu"
 msgid "Admin Dashboard"
 msgstr "Panel správcu"
 
-#: src/components/routes/settings/Team/index.tsx:137
-#: src/components/routes/settings/Team/index.tsx:160
+#: src/components/routes/settings/Team/index.tsx:141
+#: src/components/routes/settings/Team/index.tsx:164
 msgid "Admins"
 msgstr "Správcovia"
 
@@ -1567,7 +1640,7 @@ msgstr "Partner bol úspešne vytvorený"
 msgid "Affiliate deleted successfully"
 msgstr "Partner bol úspešne vymazaný"
 
-#: src/components/layouts/AuthLayout/index.tsx:24
+#: src/components/layouts/AuthLayout/AuthShell.tsx:21
 msgid "Affiliate program"
 msgstr "Partnerský program"
 
@@ -1597,7 +1670,7 @@ msgstr "Partneri exportovaní"
 msgid "Affiliates help you track sales generated by partners and influencers. Create affiliate codes and share them to monitor performance."
 msgstr "Partneri vám pomáhajú sledovať predaje generované partnermi a influencermi. Vytvorte partnerské kódy a zdieľajte ich na sledovanie výkonu."
 
-#: src/components/routes/welcome/index.tsx:418
+#: src/components/routes/welcome/index.tsx:419
 msgid "After your event is created, you can choose how often it repeats from the dashboard."
 msgstr "Po vytvorení podujatia si v nástenke zvolíte, ako často sa má opakovať."
 
@@ -1751,9 +1824,13 @@ msgstr "Všetky produkty"
 msgid "All purchases, including cancelled"
 msgstr "Všetky nákupy vrátane zrušených"
 
-#: src/components/routes/settings/Team/index.tsx:184
+#: src/components/routes/settings/Team/index.tsx:188
 msgid "All roles"
 msgstr "Všetky roly"
+
+#: src/components/routes/settings/Team/index.tsx:198
+msgid "All sign-in methods"
+msgstr "Všetky spôsoby prihlásenia"
 
 #: src/components/layouts/EventHomepage/Lineup/ScheduleTimeline.tsx:131
 msgid "All stages"
@@ -1773,7 +1850,7 @@ msgstr "Všetky lístky"
 msgid "All time"
 msgstr "Celé obdobie"
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:98
 msgid "All trusted devices removed"
 msgstr "Všetky dôveryhodné zariadenia boli odstránené"
 
@@ -1793,6 +1870,14 @@ msgstr "Všetci používatelia"
 #: src/components/routes/event/Lineup/LineupStats.tsx:28
 msgid "All visible"
 msgstr "Všetko viditeľné"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+msgid "Allow access to your email address when you sign in, then try again."
+msgstr "Pri prihlásení povoľte prístup k svojej e-mailovej adrese a skúste to znova."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
+msgstr "Povoľte iba účty z tohto organizačného adresára a nižšie uvedený redirect URI pridajte ako Web redirect URI."
 
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:167
 msgid "Allow attendees associated with unpaid orders to check in"
@@ -1832,11 +1917,16 @@ msgstr "Povoliť indexovanie vyhľadávačmi"
 msgid "Allow search engines to index this event"
 msgstr "Umožniť vyhľadávačom indexovať túto udalosť"
 
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+msgid "Allow sign-in with {providerName}"
+msgstr "Povoliť prihlásenie cez {providerName}"
+
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:90
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Takmer hotovo! Čakáme na spracovanie vašej platby. Malo by to trvať len niekoľko sekúnd."
 
-#: src/components/routes/auth/Register/index.tsx:81
+#: src/components/routes/auth/Register/index.tsx:94
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Už máte účet? <0>{0}</0>"
 
@@ -1914,6 +2004,10 @@ msgstr "Zaplatená suma ({0})"
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:78
 msgid "Amount tendered"
 msgstr "Prijatá suma"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+msgid "An account with this email already exists. Sign in instead."
+msgstr "Účet s týmto e-mailom už existuje. Prihláste sa."
 
 #: src/components/forms/AffiliateForm/index.tsx:90
 msgid "An email to associate with this affiliate. The affiliate will not be notified."
@@ -2020,7 +2114,7 @@ msgstr "Odpovede"
 msgid "Answers provided at checkout (e.g. meal choice)"
 msgstr "Odpovede zadané pri objednávke (napr. výber jedla)"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:141
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:160
 msgid "Any app that supports time-based codes (TOTP) will work. Already have one? Skip ahead."
 msgstr "Funguje akákoľvek aplikácia podporujúca časovo založené kódy (TOTP). Už ju máte? Preskočte."
 
@@ -2048,6 +2142,10 @@ msgstr "Každý dátum sa môže líšiť: zmeňte jeho kapacitu v Upraviť dát
 msgid "Any website (HTML)"
 msgstr "Akýkoľvek web (HTML)"
 
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
+msgstr "Každý, koho {providerName} pustí s e-mailom z overenej domény, sa pri prvom prihlásení pripojí k tomuto účtu. Odstránení alebo deaktivovaní členovia sa nikdy nepridajú späť."
+
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:73
 msgid "Anyone with this link and PIN can sell tickets for this event, like a shared document link. The PIN won't be shown again, but you can reset it any time from the box office menu."
 msgstr "Ktokoľvek s týmto odkazom a PIN môže predávať lístky na toto podujatie, podobne ako pri zdieľanom odkaze na dokument. PIN sa už nezobrazí, ale kedykoľvek ho môžete obnoviť z ponuky pokladne."
@@ -2064,6 +2162,10 @@ msgstr "Vzhľad"
 #: src/components/routes/organizer/People/index.tsx:116
 msgid "Appears on"
 msgstr "Vystupuje na"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:162
+msgid "Application (client) ID"
+msgstr "Application (client) ID"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1190
 msgid "applied"
@@ -2108,6 +2210,10 @@ msgstr "Platí pre každý {0}, nezrušený termín tohto podujatia — vrátane
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:135
 msgid "Applies to every tier of this ticket"
 msgstr "Platí pre každú cenovú úroveň tohto lístka"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+msgid "Applies to sessions started through {providerName}. People then sign in again."
+msgstr "Platí pre relácie začaté cez {providerName}. Ľudia sa potom prihlásia znova."
 
 #: src/components/common/FilterModal/index.tsx:284
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1221
@@ -2331,7 +2437,7 @@ msgstr "Naozaj chcete obnoviť túto udalosť? Bude obnovená ako koncept."
 msgid "Are you sure you want to restore this organizer?"
 msgstr "Naozaj chcete obnoviť tohto organizátora?"
 
-#: src/components/routes/settings/Team/index.tsx:114
+#: src/components/routes/settings/Team/index.tsx:118
 msgid "Are you sure you want to revoke this invitation?"
 msgstr "Naozaj chcete zrušiť túto pozvánku?"
 
@@ -2404,6 +2510,18 @@ msgstr "Opýtať sa raz na produkt"
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:159
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Pýtať sa otázky k objednávke a účastníkovi pri vchode. Každý lístok má vlastný krok, čo môže predaj výrazne spomaliť. Pri rušných vchodoch nechajte vypnuté."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+msgid "Ask the account owner to invite you again."
+msgstr "Požiadajte vlastníka účtu, aby vás znova pozval."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+msgid "Ask the person who invited you to send a new invitation."
+msgstr "Požiadajte osobu, ktorá vás pozvala, aby poslala novú pozvánku."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+msgid "Ask your administrator to invite you."
+msgstr "Požiadajte svojho správcu, aby vás pozval."
 
 #: src/components/routes/admin/Accounts/AccountDetail/OrganizerAdminModal.tsx:123
 msgid "Assign a different plan"
@@ -2606,7 +2724,7 @@ msgstr "Publikum"
 msgid "August"
 msgstr "August"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:204
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:223
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:71
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:80
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:82
@@ -2704,6 +2822,7 @@ msgstr "Awesome Organizer Ltd."
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
 #: src/components/layouts/SettingsLayout/index.tsx:53
 #: src/components/modals/CreateEventModal/index.tsx:250
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
 #: src/ee/box-office/components/layouts/BoxOffice/TenderStage.tsx:55
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:287
@@ -2727,17 +2846,11 @@ msgstr "Späť na udalosť"
 msgid "Back to event page"
 msgstr "Späť na stránku udalosti"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:50
-#: src/components/routes/auth/ForgotPassword/index.tsx:76
-#: src/components/routes/auth/ResetPassword/index.tsx:79
-msgid "Back to login"
-msgstr "Späť na prihlásenie"
-
 #: src/components/routes/event/messages.tsx:55
 msgid "Back to messages"
 msgstr "Späť na správy"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:227
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:246
 msgid "Back to QR code"
 msgstr "Späť na QR kód"
 
@@ -2759,7 +2872,17 @@ msgstr "Späť na vyhľadávanie"
 msgid "Back to seats"
 msgstr "Späť na miesta"
 
+#: src/components/routes/sso/Callback/index.tsx:223
+msgid "Back to security settings"
+msgstr "Späť na nastavenia zabezpečenia"
+
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
+#: src/components/routes/auth/ForgotPassword/index.tsx:51
+#: src/components/routes/auth/ForgotPassword/index.tsx:78
+#: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
+#: src/components/routes/auth/ResetPassword/index.tsx:79
+#: src/components/routes/sso/Callback/index.tsx:223
 msgid "Back to sign in"
 msgstr "Späť na prihlásenie"
 
@@ -3110,6 +3233,15 @@ msgstr "Kupujúci vidia čistú cenu. Poplatok platformy sa odpočíta z vašej 
 msgid "By adding tracking pixels, you acknowledge that you and this platform are joint controllers of the data collected. You are responsible for ensuring you have a lawful basis for this processing under applicable privacy laws (GDPR, CCPA, etc.)."
 msgstr "Pridaním sledovacích pixelov potvrdzujete, že vy a táto platforma ste spoločnými správcami zhromaždených údajov. Ste zodpovední za zabezpečenie zákonného základu pre toto spracovanie podľa platných zákonov o ochrane súkromia (GDPR, CCPA atď.)."
 
+#: src/components/routes/auth/AcceptInvitation/index.tsx:192
+#: src/components/routes/auth/Register/index.tsx:176
+msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
+msgstr "Pokračovaním súhlasíte s našimi <0>Podmienkami služby</0> a <1>Zásadami ochrany osobných údajov</1>."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:204
+msgid "By continuing you agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>."
+msgstr "Pokračovaním súhlasíte s <0>Podmienkami služby</0> a <1>Zásadami ochrany osobných údajov</1>."
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:758
 #: src/components/routes/product-widget/Payment/index.tsx:157
 msgid "By continuing, you agree to the <0>{0} Terms of Service</0>"
@@ -3130,10 +3262,6 @@ msgstr "Podľa operátora"
 #: src/ee/box-office/components/modals/BoxOfficeStatsModal/index.tsx:112
 msgid "By payment type"
 msgstr "Podľa spôsobu platby"
-
-#: src/components/routes/auth/Register/index.tsx:149
-msgid "By registering you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
-msgstr "Registráciou súhlasíte s našimi <0>Podmienkami služby</0> a <1>Zásadami ochrany osobných údajov</1>."
 
 #: src/components/layouts/CheckIn/tabs/StatsTab.tsx:123
 msgid "By ticket type"
@@ -3177,7 +3305,7 @@ msgid "Can see events, orders and attendees but can't change anything."
 msgstr "Môže zobraziť podujatia, objednávky a účastníkov, ale nemôže nič meniť."
 
 #: src/components/common/TeamAccessFields/index.tsx:244
-#: src/components/routes/settings/Team/MemberRow.tsx:59
+#: src/components/routes/settings/Team/MemberRow.tsx:70
 msgid "Can see financials"
 msgstr "Môže vidieť finančné údaje"
 
@@ -3189,7 +3317,7 @@ msgstr "Check-in nie je možný"
 msgid "Can't import"
 msgstr "Nedá sa importovať"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:166
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:185
 msgid "Can't scan it? Enter a setup key instead"
 msgstr "Nedá sa naskenovať? Zadajte namiesto toho kľúč na nastavenie"
 
@@ -3198,6 +3326,7 @@ msgid "Can't use your authenticator app or recovery codes?"
 msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 
 #: src/components/common/CheckIn/CheckInOptionsModal.tsx:57
+#: src/components/common/ConfirmIdentity/ConfirmIdentityModal.tsx:46
 #: src/components/common/ContactOrganizerModal/index.tsx:104
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:132
 #: src/components/common/LocationPicker/index.tsx:352
@@ -3256,6 +3385,8 @@ msgstr "Nemôžete použiť overovaciu aplikáciu ani záložné kódy?"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3305,7 +3436,7 @@ msgstr "Zrušiť vymazanie"
 msgid "Cancel deletion request"
 msgstr "Zrušiť žiadosť o vymazanie"
 
-#: src/components/routes/settings/Profile/index.tsx:142
+#: src/components/routes/settings/Profile/index.tsx:192
 msgid "Cancel email change"
 msgstr "Zrušiť zmenu e-mailu"
 
@@ -3321,7 +3452,7 @@ msgstr "Zrušiť objednávku"
 msgid "Cancel Order {0}"
 msgstr "Zrušiť objednávku {0}"
 
-#: src/components/routes/settings/Account/index.tsx:108
+#: src/components/routes/settings/Account/index.tsx:112
 msgid "Cancel the account deletion to make changes."
 msgstr "Ak chcete vykonať zmeny, zrušte vymazanie účtu."
 
@@ -3383,7 +3514,7 @@ msgstr "Priradenie kapacity bolo úspešne odstránené"
 msgid "Capacity Assignments"
 msgstr "Priradenia kapacity"
 
-#: src/components/layouts/AuthLayout/index.tsx:30
+#: src/components/layouts/AuthLayout/AuthShell.tsx:27
 msgid "Capacity management"
 msgstr "Správa kapacity"
 
@@ -3507,9 +3638,13 @@ msgstr "Výdavok"
 msgid "Change duration"
 msgstr "Zmeniť dĺžku"
 
+#: src/components/routes/settings/Profile/index.tsx:290
+msgid "Change email"
+msgstr "Zmeniť e-mail"
+
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/index.tsx:227
+#: src/components/routes/settings/Security/SignInMethods.tsx:91
 msgid "Change password"
 msgstr "Zmeniť heslo"
 
@@ -3626,8 +3761,8 @@ msgstr "Pozrite si túto udalosť!"
 msgid "Check your connection and try again."
 msgstr "Skontrolujte pripojenie a skúste to znova."
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:44
-#: src/components/routes/welcome/index.tsx:144
+#: src/components/routes/auth/ForgotPassword/index.tsx:45
+#: src/components/routes/welcome/index.tsx:145
 msgid "Check your email"
 msgstr "Skontrolujte svoj e-mail"
 
@@ -3635,10 +3770,14 @@ msgstr "Skontrolujte svoj e-mail"
 msgid "Check your event page"
 msgstr "Skontrolujte stránku udalosti"
 
-#: src/components/routes/auth/Login/index.tsx:228
+#: src/components/routes/auth/Login/index.tsx:205
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Skontrolujte doručenú poštu! Ak sú s týmto e-mailom spojené lístky, dostanete odkaz na ich zobrazenie."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:163
+msgid "Check your name and we'll create your account."
+msgstr "Skontrolujte svoje meno a vytvoríme vám účet."
 
 #: src/components/layouts/CheckIn/index.tsx:167
 msgid "Check-in"
@@ -3780,6 +3919,10 @@ msgstr "Odbavené ({checkedInCount}/{attendeeCount})"
 msgid "Checking your saved profiles…"
 msgstr "Kontrolujú sa vaše uložené profily…"
 
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:99
+msgid "Checking…"
+msgstr "Overuje sa…"
+
 #: src/components/routes/event/Settings/index.tsx:62
 msgid "Checkout"
 msgstr "Pokladňa"
@@ -3879,7 +4022,7 @@ msgstr "Vyberte súbor .xlsx alebo .csv do 10 MB."
 msgid "Choose an .xlsx or .csv file."
 msgstr "Vyberte súbor .xlsx alebo .csv."
 
-#: src/components/modals/ChooseAccountModal/index.tsx:13
+#: src/components/routes/auth/Login/AccountChooser.tsx:28
 msgid "Choose an account"
 msgstr "Vyberte účet"
 
@@ -3904,6 +4047,10 @@ msgstr "Vybrať iný súbor"
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:212
 msgid "Choose another reader"
 msgstr "Vybrať inú čítačku"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+msgid "Choose another way to sign in."
+msgstr "Vyberte iný spôsob prihlásenia."
 
 #: src/ee/seating/components/SeatPicker/useSeatSelection.ts:165
 msgid "Choose at least {min} {title} tickets"
@@ -3945,9 +4092,17 @@ msgstr "Vyberte lístky"
 msgid "Choose when your event starts"
 msgstr "Vyberte, kedy sa vaše podujatie začína"
 
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+msgid "Choose who must use it"
+msgstr "Vyberte, kto ho musí používať"
+
 #: src/components/routes/event/Settings/Sections/PlatformFeesSettings/index.tsx:51
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Vyberte, kto platí poplatok platformy. Toto neovplyvňuje ďalšie poplatky nakonfigurované v nastaveniach vášho účtu."
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+msgid "Choose your identity provider"
+msgstr "Vyberte svojho poskytovateľa identity"
 
 #: src/ee/seating/components/SeatedProductsSection/index.tsx:61
 #: src/ee/seating/components/SeatPicker/index.tsx:55
@@ -4042,6 +4197,16 @@ msgstr "Kliknite na zobrazenie poznámok"
 #: src/components/routes/admin/EmailDelivery/index.tsx:102
 msgid "Clicked"
 msgstr "Kliknuté"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:162
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+msgid "Client ID"
+msgstr "Client ID"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:168
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+msgid "Client secret"
+msgstr "Client secret"
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1227
 msgid "close"
@@ -4231,10 +4396,6 @@ msgstr "Dokončite objednávku a zabezpečte si lístky. Táto ponuka je časovo
 msgid "Complete your payment to secure your tickets."
 msgstr "Dokončite platbu a zabezpečte si lístky."
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:88
-msgid "Complete your profile to join the team."
-msgstr "Dokončite svoj profil a pridajte sa k tímu."
-
 #: src/components/common/OrdersTable/index.tsx:350
 #: src/components/common/OrderStatusBadge/index.tsx:8
 #: src/components/modals/SendMessageModal/index.tsx:426
@@ -4345,22 +4506,27 @@ msgstr "Potvrdiť e-mailovú adresu"
 msgid "Confirm Email Change"
 msgstr "Potvrdiť zmenu e-mailu"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:108
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:124
+#: src/components/routes/settings/Profile/index.tsx:288
 msgid "Confirm it's you"
 msgstr "Potvrďte, že ste to vy"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
+msgid "Confirm it's you, then sign in with {0} to connect it."
+msgstr "Potvrďte, že ste to vy, a potom sa prihláste cez {0}, aby ste ho pripojili."
 
 #: src/components/routes/auth/ResetPassword/index.tsx:71
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:54
 msgid "Confirm new password"
 msgstr "Potvrdiť nové heslo"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:134
-#: src/components/routes/auth/Register/index.tsx:125
+#: src/components/routes/auth/AcceptInvitation/index.tsx:237
+#: src/components/routes/auth/Register/index.tsx:151
 msgid "Confirm password"
 msgstr "Potvrdiť heslo"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:133
-#: src/components/routes/auth/Register/index.tsx:124
+#: src/components/routes/auth/AcceptInvitation/index.tsx:236
+#: src/components/routes/auth/Register/index.tsx:150
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Potvrdiť heslo"
@@ -4369,9 +4535,17 @@ msgstr "Potvrdiť heslo"
 msgid "Confirm Spam"
 msgstr "Potvrdiť spam"
 
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:127
+msgid "Confirm your email"
+msgstr "Potvrďte svoj e-mail"
+
 #: src/components/layouts/Event/index.tsx:326
 msgid "Confirm your email to access all features."
 msgstr "Potvrďte svoj e-mail pre prístup ku všetkým funkciám."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:131
+msgid "Confirmation code"
+msgstr "Potvrdzovací kód"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:331
 msgid "Confirmation email sent! Please check your inbox."
@@ -4388,6 +4562,14 @@ msgstr "Potvrdzovanie e-mailovej adresy..."
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:52
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Gratulujeme! Vaša udalosť je teraz viditeľná pre verejnosť."
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:188
+msgid "Connect"
+msgstr "Pripojiť"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:203
+msgid "Connect {0}"
+msgstr "Pripojiť {0}"
 
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:81
 msgid "Connect a Stripe account under Payouts before adding card readers."
@@ -4423,9 +4605,17 @@ msgstr "Prepojte Stripe, aby vám platby za lístky chodili priamo na bankový �
 msgid "Connect with Stripe"
 msgstr "Pripojiť sa cez Stripe"
 
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+msgid "Connect your app"
+msgstr "Pripojte svoju aplikáciu"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:127
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "Prepojte svoju banku, aby vám tržby z lístkov chodili priamo na účet"
+
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
+msgstr "Pripojte svojho poskytovateľa identity, overte svoje e-mailové domény a potom vyberte, či ho musia používať všetci."
 
 #: src/components/routes/admin/Dashboard/index.tsx:410
 msgid "Connected"
@@ -4434,6 +4624,10 @@ msgstr "Pripojené"
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:298
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "Pripojili ste nesprávny účet Stripe? Odpojte ho a začnite odznova."
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+msgid "Connection deleted"
+msgstr "Pripojenie bolo odstránené"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:492
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:501
@@ -4448,6 +4642,14 @@ msgstr "Pri online termínoch sú údaje na pripojenie povinné"
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:41
 msgid "Connection details are required for online events"
 msgstr "Pre online podujatia sú povinné údaje o pripojení"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:89
+msgid "Connection saved. Run a test sign-in next."
+msgstr "Pripojenie bolo uložené. Ďalej spustite testovacie prihlásenie."
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:89
+msgid "Connection updated"
+msgstr "Pripojenie bolo aktualizované"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:64
 msgid "Consecutive"
@@ -4487,12 +4689,14 @@ msgstr "Obsah"
 msgid "Content is required"
 msgstr "Obsah je povinný"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:131
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
+#: src/components/routes/settings/Security/SignInMethods.tsx:208
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Pokračovať"
@@ -4506,7 +4710,7 @@ msgid "Continue button text"
 msgstr "Text tlačidla Pokračovať"
 
 #: src/components/forms/OrganizerForm/index.tsx:144
-#: src/components/routes/welcome/index.tsx:472
+#: src/components/routes/welcome/index.tsx:473
 msgid "Continue Setup"
 msgstr "Pokračovať v nastavení"
 
@@ -4526,7 +4730,7 @@ msgstr "Pokračovať na nástenku"
 msgid "Continue to event creation"
 msgstr "Pokračovať k vytvoreniu udalosti"
 
-#: src/components/routes/welcome/index.tsx:470
+#: src/components/routes/welcome/index.tsx:471
 msgid "Continue to next step"
 msgstr "Pokračovať na ďalší krok"
 
@@ -4537,6 +4741,14 @@ msgstr "Pokračovať k platbe"
 #: src/components/routes/product-widget/CollectInformation/index.tsx:754
 msgid "Continue to Payment"
 msgstr "Pokračovať k platbe"
+
+#: src/components/common/SsoButtons/index.tsx:30
+msgid "Continue with {0}"
+msgstr "Pokračovať cez {0}"
+
+#: src/components/common/SsoButtons/index.tsx:27
+msgid "Continue with Google"
+msgstr "Pokračovať cez Google"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:77
 msgid "Continuous across rows"
@@ -4671,6 +4883,7 @@ msgstr "Kopírovať e-mail"
 msgid "Copy for AI agent"
 msgstr "Kopírovať pre AI agenta"
 
+#: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
 msgid "Copy link"
 msgstr "Kopírovať odkaz"
@@ -4688,13 +4901,25 @@ msgstr "Kopírovať moje údaje do:"
 msgid "Copy PIN"
 msgstr "Kopírovať PIN"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:175
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:194
 msgid "Copy setup key"
 msgstr "Kopírovať kľúč na nastavenie"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:237
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "Skopírujte niekoľko riadkov z tabuľky vrátane riadka hlavičky a vložte ich sem."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
+msgstr "Skopírujte client ID a client secret do polí nižšie spolu s doménou vášho Workspace."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
+msgstr "Skopírujte directory (tenant) ID, application (client) ID a hodnotu secretu do polí nižšie."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
+msgstr "Skopírujte URL vydavateľa, client ID a client secret do polí nižšie."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:67
 msgid "Copy the key again from your licence email, without quotes or spaces."
@@ -4716,6 +4941,10 @@ msgstr "Kopírovať do schránky"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "Kopírovať URL"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
+msgstr "Skopírujte svoju doménu Okta, client ID a client secret do polí nižšie."
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:95
 msgid "Corner radius"
@@ -4798,7 +5027,7 @@ msgstr "{name} sa nepodarilo aktualizovať"
 msgid "Could not upload {fileName}"
 msgstr "{fileName} sa nepodarilo nahrať"
 
-#: src/components/routes/settings/Security/index.tsx:73
+#: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Nastavenia zabezpečenia sa nepodarilo načítať"
 
@@ -4868,7 +5097,7 @@ msgstr "Vytvoriť zoznam pre tento termín"
 msgid "Create a new check-in list for an active session, or contact the organizer if you think this is a mistake."
 msgstr "Vytvorte nový check-in zoznam pre aktívny termín alebo kontaktujte organizátora, ak si myslíte, že ide o omyl."
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:128
+#: src/components/routes/auth/AcceptInvitation/index.tsx:230
 msgid "Create a password"
 msgstr "Vytvoriť heslo"
 
@@ -4897,6 +5126,10 @@ msgstr "Vytvoriť lístok"
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:72
 msgid "Create a ticket, then link it to a band so buyers can pick a seat. Donation tickets and other product types can't be seated."
 msgstr "Vytvorte lístok a prepojte ho s kategóriou, aby si kupujúci mohli vybrať miesto. Darovacie lístky a iné typy produktov nemôžu mať miesto."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:200
+msgid "Create account"
+msgstr "Vytvoriť účet"
 
 #: src/components/common/AffiliateTable/index.tsx:69
 #: src/components/modals/CreateAffiliateModal/index.tsx:77
@@ -5073,7 +5306,7 @@ msgstr "Vytvorte sledovateľné odkazy na odmeňovanie partnerov, ktorí propagu
 msgid "Create Webhook"
 msgstr "Vytvoriť webhook"
 
-#: src/components/routes/welcome/index.tsx:325
+#: src/components/routes/welcome/index.tsx:326
 msgid "Create your first event"
 msgstr "Vytvorte svoju prvú udalosť"
 
@@ -5101,7 +5334,7 @@ msgstr "Vytvorí nové profily pre: {newNames}"
 msgid "Creating {0} dates. This may take a moment."
 msgstr "Vytvára sa {0} termínov. Môže to chvíľu trvať."
 
-#: src/components/routes/welcome/index.tsx:472
+#: src/components/routes/welcome/index.tsx:473
 msgid "Creating Event..."
 msgstr "Vytváranie udalosti..."
 
@@ -5109,7 +5342,7 @@ msgstr "Vytváranie udalosti..."
 msgid "Creating Organizer..."
 msgstr "Vytváranie organizátora..."
 
-#: src/components/routes/welcome/index.tsx:470
+#: src/components/routes/welcome/index.tsx:471
 msgid "Creating your event, please wait"
 msgstr "Vytváranie vašej udalosti, čakajte prosím"
 
@@ -5137,13 +5370,12 @@ msgstr "Popis CTA je povinný"
 #: src/components/routes/organizer/Reports/PlatformFeesReport/index.tsx:99
 #: src/components/routes/organizer/Reports/TaxSummaryReport/index.tsx:33
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:116
-#: src/components/routes/settings/Account/index.tsx:79
+#: src/components/routes/settings/Account/index.tsx:83
 msgid "Currency"
 msgstr "Mena"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:112
+#: src/components/common/ConfirmIdentity/index.tsx:70
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:40
-#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:54
 msgid "Current password"
 msgstr "Aktuálne heslo"
 
@@ -5167,7 +5399,7 @@ msgstr "Zakrivené rady a balkón."
 msgid "Custom"
 msgstr "Vlastné"
 
-#: src/components/layouts/AuthLayout/index.tsx:17
+#: src/components/layouts/AuthLayout/AuthShell.tsx:14
 msgid "Custom branding"
 msgstr "Vlastný branding"
 
@@ -5187,7 +5419,7 @@ msgstr "Vlastné sekcie domovskej stránky"
 msgid "Custom Maps URL"
 msgstr "Vlastná URL mapy"
 
-#: src/components/layouts/AuthLayout/index.tsx:26
+#: src/components/layouts/AuthLayout/AuthShell.tsx:23
 msgid "Custom questions"
 msgstr "Vlastné otázky"
 
@@ -5455,12 +5687,12 @@ msgstr "Dni"
 msgid "Days of the month"
 msgstr "Dni v mesiaci"
 
-#: src/components/routes/settings/Team/index.tsx:101
-#: src/components/routes/settings/Team/MemberRow.tsx:178
+#: src/components/routes/settings/Team/index.tsx:105
+#: src/components/routes/settings/Team/MemberRow.tsx:190
 msgid "Deactivate"
 msgstr "Deaktivovať"
 
-#: src/components/routes/settings/Team/index.tsx:101
+#: src/components/routes/settings/Team/index.tsx:105
 msgid "Deactivate {0}? They won't be able to sign in until you reactivate them."
 msgstr "Deaktivovať {0}? Nebude sa môcť prihlásiť, kým ho znova neaktivujete."
 
@@ -5613,6 +5845,11 @@ msgstr "Odstrániť zoznam odbavení"
 msgid "Delete code"
 msgstr "Odstrániť kód"
 
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+msgid "Delete connection"
+msgstr "Odstrániť pripojenie"
+
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:366
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:600
 msgid "Delete Date"
@@ -5685,6 +5922,10 @@ msgstr "Odstrániť tento účet hneď namiesto čakania na ochrannú lehotu? T�
 #: src/components/common/ProductsTable/SortableCategory/index.tsx:55
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Odstrániť túto kategóriu? Odstránia sa aj všetky produkty v nej. Túto akciu nie je možné vrátiť späť."
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+msgid "Delete this connection? Members who only sign in with it will need to reset their password."
+msgstr "Odstrániť toto pripojenie? Členovia, ktorí sa prihlasujú iba cez ňu, si budú musieť obnoviť heslo."
 
 #: src/components/routes/admin/SpamEvents/index.tsx:106
 msgid "Delete this event and immediately delete the account {accountLabel}? This cannot be undone."
@@ -5816,7 +6057,7 @@ msgstr "Vývojová licencia"
 msgid "Development licence, not for production use"
 msgstr "Vývojová licencia, nie na produkčné použitie"
 
-#: src/components/routes/settings/Security/index.tsx:49
+#: src/components/routes/settings/Security/index.tsx:51
 msgid "Device removed"
 msgstr "Zariadenie bolo odstránené"
 
@@ -5824,7 +6065,11 @@ msgstr "Zariadenie bolo odstránené"
 msgid "Diameter"
 msgstr "Priemer"
 
-#: src/components/routes/welcome/index.tsx:195
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:144
+msgid "Didn't get it?"
+msgstr "Nedostali ste kód?"
+
+#: src/components/routes/welcome/index.tsx:196
 msgid "Didn't receive the code?"
 msgstr "Nedostali ste kód?"
 
@@ -5835,6 +6080,10 @@ msgstr "Iné miesto"
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:74
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Priamo pod Udalosťami je to karta Minulé v zozname udalostí. Inde zobrazuje vaše najnovšie minulé udalosti."
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:135
+msgid "Directory (tenant) ID"
+msgstr "Directory (tenant) ID"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:403
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:411
@@ -5871,8 +6120,14 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Upozornenia, kontaktné údaje alebo poďakovanie, v jednom riadku"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
+#: src/components/routes/settings/Security/SignInMethods.tsx:174
+#: src/components/routes/settings/Security/SignInMethods.tsx:208
 msgid "Disconnect"
 msgstr "Odpojiť"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:204
+msgid "Disconnect {0}"
+msgstr "Odpojiť {0}"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:109
 msgid "Disconnect Stripe account"
@@ -5901,7 +6156,7 @@ msgstr "Zľava v {0}"
 msgid "Discount Type"
 msgstr "Typ zľavy"
 
-#: src/components/common/Callout/index.tsx:54
+#: src/components/common/Callout/index.tsx:62
 msgid "Dismiss"
 msgstr "Zavrieť"
 
@@ -5942,11 +6197,19 @@ msgstr "Popis dokumentu"
 msgid "Doesn't repeat"
 msgstr "Neopakuje sa"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:118
+msgid "Domain not verified yet"
+msgstr "Doména ešte nie je overená"
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:117
+msgid "Domain verified"
+msgstr "Doména je overená"
+
 #: src/components/common/AddToCalendarCTA/index.tsx:20
 msgid "Don't forget!"
 msgstr "Nezabudnite!"
 
-#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Login/index.tsx:117
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Nemáte účet? <0>Zaregistrujte sa</0>"
 
@@ -5960,7 +6223,7 @@ msgstr "Nedovoliť kupujúcim nechať jedno osamotené voľné sedadlo"
 msgid "Donation"
 msgstr "Dar"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:245
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:264
 #: src/components/modals/CheckInListSuccessModal/index.tsx:59
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
@@ -6261,7 +6524,7 @@ msgstr "Skorý vtáčik"
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:57
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:252
 #: src/components/routes/settings/TaxesAndFees/index.tsx:68
-#: src/components/routes/settings/Team/MemberRow.tsx:160
+#: src/components/routes/settings/Team/MemberRow.tsx:172
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:147
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:195
 #: src/hooks/useAttendeeActions.tsx:94
@@ -6346,6 +6609,7 @@ msgid "Edit design"
 msgstr "Upraviť dizajn"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Edit details"
 msgstr "Upraviť podrobnosti"
 
@@ -6434,7 +6698,7 @@ msgstr "Upraviť mapu sedadiel tejto udalosti"
 msgid "Edit time slot"
 msgstr "Upraviť časový slot"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:171
+#: src/components/routes/settings/Team/MemberRow.tsx:183
 msgid "Edit user"
 msgstr "Upraviť používateľa"
 
@@ -6477,15 +6741,15 @@ msgstr "Oprávnené zoznamy odbavení"
 #: src/components/modals/ManageOrderModal/index.tsx:141
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
-#: src/components/routes/auth/AcceptInvitation/index.tsx:112
-#: src/components/routes/auth/ForgotPassword/index.tsx:67
-#: src/components/routes/auth/Login/index.tsx:188
-#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/auth/ForgotPassword/index.tsx:69
+#: src/components/routes/auth/Login/index.tsx:161
+#: src/components/routes/auth/Register/index.tsx:136
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:78
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Profile/index.tsx:170
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
 msgid "Email"
 msgstr "E-mail"
@@ -6494,7 +6758,7 @@ msgstr "E-mail"
 msgid "Email & Notification Settings"
 msgstr "Nastavenia e-mailu a notifikácií"
 
-#: src/components/layouts/AuthLayout/index.tsx:22
+#: src/components/layouts/AuthLayout/AuthShell.tsx:19
 msgid "Email & scheduled messages"
 msgstr "E-maily a naplánované správy"
 
@@ -6529,17 +6793,17 @@ msgstr "E-mailové adresy sa nezhodujú"
 msgid "Email Body"
 msgstr "Telo e-mailu"
 
-#: src/components/routes/settings/Profile/index.tsx:83
+#: src/components/routes/settings/Profile/index.tsx:133
 msgid "Email change cancelled successfully"
 msgstr "Zmena e-mailu bola úspešne zrušená"
 
-#: src/components/routes/settings/Profile/index.tsx:129
+#: src/components/routes/settings/Profile/index.tsx:179
 msgid "Email change pending"
 msgstr "Zmena e-mailu čaká na potvrdenie"
 
 #: src/components/layouts/Event/index.tsx:96
 #: src/components/layouts/OrganizerLayout/index.tsx:137
-#: src/components/routes/settings/Profile/index.tsx:91
+#: src/components/routes/settings/Profile/index.tsx:141
 msgid "Email confirmation resent successfully"
 msgstr "Potvrdenie e-mailu bolo úspešne znovu odoslané"
 
@@ -6547,6 +6811,10 @@ msgstr "Potvrdenie e-mailu bolo úspešne znovu odoslané"
 #: src/components/routes/admin/EmailDelivery/index.tsx:56
 msgid "Email Delivery"
 msgstr "Doručovanie e-mailov"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:115
+msgid "Email domain"
+msgstr "E-mailová doména"
 
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:67
 msgid "Email footer message"
@@ -6558,11 +6826,15 @@ msgstr "Správa v päte e-mailu"
 msgid "Email is required"
 msgstr "E-mail je povinný"
 
-#: src/components/routes/settings/Profile/index.tsx:216
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
+msgid "Email me a link to set a password"
+msgstr "Poslať mi e-mailom odkaz na nastavenie hesla"
+
+#: src/components/routes/settings/Profile/index.tsx:266
 msgid "Email me about new orders on the events I can access"
 msgstr "Posielať mi e-maily o nových objednávkach na podujatia, ku ktorým mám prístup"
 
-#: src/components/routes/settings/Profile/index.tsx:109
+#: src/components/routes/settings/Profile/index.tsx:159
 msgid "Email not verified"
 msgstr "E-mail nie je overený"
 
@@ -6600,7 +6872,7 @@ msgstr "Vyžaduje sa overenie e-mailu"
 msgid "Email verified"
 msgstr "E-mail overený"
 
-#: src/components/routes/welcome/index.tsx:99
+#: src/components/routes/welcome/index.tsx:100
 msgid "Email verified successfully!"
 msgstr "E-mail bol úspešne overený!"
 
@@ -6609,7 +6881,7 @@ msgstr "E-mail bol úspešne overený!"
 msgid "Embed Widget"
 msgstr "Vložiť widget"
 
-#: src/components/layouts/AuthLayout/index.tsx:23
+#: src/components/layouts/AuthLayout/AuthShell.tsx:20
 msgid "Embeddable widget"
 msgstr "Vložiteľný widget"
 
@@ -6689,7 +6961,7 @@ msgstr "Dátum a čas ukončenia"
 
 #: src/components/modals/CreateEventModal/index.tsx:129
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:111
-#: src/components/routes/welcome/index.tsx:252
+#: src/components/routes/welcome/index.tsx:253
 msgid "End date must be after start date"
 msgstr "Dátum ukončenia musí byť po dátume začiatku"
 
@@ -6697,7 +6969,7 @@ msgstr "Dátum ukončenia musí byť po dátume začiatku"
 msgid "End time"
 msgstr "Čas konca"
 
-#: src/components/routes/welcome/index.tsx:445
+#: src/components/routes/welcome/index.tsx:446
 msgid "End time (optional)"
 msgstr "Čas ukončenia (voliteľné)"
 
@@ -6818,7 +7090,7 @@ msgstr "Zadajte nové heslo"
 msgid "Enter one of the recovery codes you saved when you turned on two-factor authentication. Each code works once."
 msgstr "Zadajte jeden zo záložných kódov, ktoré ste uložili pri zapnutí dvojfaktorového overenia. Každý kód funguje iba raz."
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:198
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:217
 msgid "Enter the 6-digit code"
 msgstr "Zadajte 6-miestny kód"
 
@@ -6826,31 +7098,43 @@ msgstr "Zadajte 6-miestny kód"
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Zadajte 6-miestny kód z overovacej aplikácie."
 
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:128
+msgid "Enter the 6-digit code we sent to <0>{0}</0>"
+msgstr "Zadajte 6-miestny kód, ktorý sme poslali na <0>{0}</0>"
+
 #: src/components/forms/AffiliateForm/index.tsx:39
 msgid "Enter unique affiliate code"
 msgstr "Zadajte jedinečný partnerský kód"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:245
+#: src/components/routes/auth/Login/index.tsx:222
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Zadajte svoj e-mail"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:60
+#: src/components/routes/auth/ForgotPassword/index.tsx:61
 msgid "Enter your email and we'll send you instructions to reset your password."
 msgstr "Zadajte svoj e-mail a pošleme vám pokyny na obnovenie hesla."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:48
+msgid "Enter your first name"
+msgstr "Zadajte svoje krstné meno"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:74
 msgid "Enter your name"
 msgstr "Zadajte svoje meno"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:109
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:127
 msgid "Enter your password to start setting up two-factor authentication."
 msgstr "Zadajte heslo a začnite nastavovať dvojfaktorové overenie."
 
 #: src/components/routes/organizer/Payments/Vat/VatSettingsForm.tsx:213
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Zadajte číslo DPH vrátane kódu krajiny, bez medzier (napr. IE1234567A, DE123456789)"
+
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+msgid "Enter your work email and we'll take you to your organization's sign-in page."
+msgstr "Zadajte svoj pracovný e-mail a presmerujeme vás na prihlasovaciu stránku vašej organizácie."
 
 #: src/components/forms/PromoCodeForm/index.tsx:129
 msgid "Entire order"
@@ -7024,11 +7308,11 @@ msgstr "Miesto udalosti a podrobnosti o mieste konania"
 
 #: src/components/modals/CreateEventModal/index.tsx:328
 #: src/components/modals/CreateEventModal/index.tsx:329
-#: src/components/routes/welcome/index.tsx:375
+#: src/components/routes/welcome/index.tsx:376
 msgid "Event name"
 msgstr "Názov udalosti"
 
-#: src/components/routes/welcome/index.tsx:244
+#: src/components/routes/welcome/index.tsx:245
 msgid "Event name is required"
 msgstr "Názov udalosti je povinný"
 
@@ -7195,7 +7479,7 @@ msgstr "Každá udalosť má check-in zoznam"
 msgid "Every organizer and event, including new ones."
 msgstr "Všetci organizátori a podujatia vrátane nových."
 
-#: src/components/routes/settings/Security/index.tsx:94
+#: src/components/routes/settings/Security/index.tsx:96
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Každé dôveryhodné zariadenie bude pri ďalšom prihlásení vyžadovať kód. Pokračovať?"
 
@@ -7267,6 +7551,17 @@ msgstr "Vykonať vymazanie teraz"
 #: src/components/routes/admin/DeletionRequests/index.tsx:187
 msgid "Execute now"
 msgstr "Vykonať teraz"
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:141
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:183
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:190
+#: src/components/routes/settings/Team/MemberRow.tsx:37
+msgid "Exempt"
+msgstr "Vyňatý"
+
+#: src/components/routes/settings/Team/index.tsx:202
+msgid "Exempt from SSO"
+msgstr "Vyňatý z SSO"
 
 #: src/components/forms/CheckInListForm/index.tsx:160
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:183
@@ -7576,7 +7871,7 @@ msgstr "Nepodarilo sa znovu odoslať lístok"
 msgid "Failed to resend ticket email"
 msgstr "Nepodarilo sa znovu odoslať e-mail s lístkom"
 
-#: src/components/routes/welcome/index.tsx:127
+#: src/components/routes/welcome/index.tsx:128
 msgid "Failed to resend verification code"
 msgstr "Nepodarilo sa znovu odoslať overovací kód"
 
@@ -7689,9 +7984,13 @@ msgstr "Nepodarilo sa aktualizovať nastavenia DPH"
 msgid "Failed to upload image. Please try again."
 msgstr "Nepodarilo sa nahrať obrázok. Skúste to znovu."
 
-#: src/components/routes/welcome/index.tsx:104
+#: src/components/routes/welcome/index.tsx:105
 msgid "Failed to verify email"
 msgstr "Nepodarilo sa overiť e-mail"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+msgid "Failing since {0}"
+msgstr "Zlyháva od {0}"
 
 #: src/constants/eventCategories.ts:17
 msgid "Family"
@@ -7816,9 +8115,13 @@ msgstr "Filtrovať podľa termínu"
 msgid "Filter by Event"
 msgstr "Filtrovať podľa udalosti"
 
-#: src/components/routes/settings/Team/index.tsx:189
+#: src/components/routes/settings/Team/index.tsx:193
 msgid "Filter by role"
 msgstr "Filtrovať podľa roly"
+
+#: src/components/routes/settings/Team/index.tsx:207
+msgid "Filter by sign-in method"
+msgstr "Filtrovať podľa spôsobu prihlásenia"
 
 #: src/components/routes/event/orders.tsx:236
 msgid "Filter Orders"
@@ -7857,6 +8160,10 @@ msgstr "Dokončiť nastavenie Stripe"
 msgid "Finish setup"
 msgstr "Dokončiť nastavenie"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:92
+msgid "Finish signing in to {providerName} in the window that opened."
+msgstr "Dokončite prihlásenie do {providerName} v okne, ktoré sa otvorilo."
+
 #: src/components/common/LanguageSwitcher/index.tsx:20
 msgid "Finnish"
 msgstr "Fínčina"
@@ -7890,8 +8197,9 @@ msgstr "Číslo prvej faktúry"
 #: src/components/modals/ManageOrderModal/index.tsx:261
 #: src/components/routes/product-widget/CollectInformation/index.tsx:473
 #: src/components/routes/product-widget/CollectInformation/index.tsx:685
-#: src/components/routes/settings/Profile/index.tsx:154
-#: src/components/routes/settings/Profile/index.tsx:155
+#: src/components/routes/settings/Profile/index.tsx:204
+#: src/components/routes/settings/Profile/index.tsx:205
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:182
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:70
 msgid "First name"
 msgstr "Meno"
@@ -7900,8 +8208,8 @@ msgstr "Meno"
 #: src/components/modals/EditUserModal/index.tsx:84
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
-#: src/components/routes/auth/AcceptInvitation/index.tsx:97
-#: src/components/routes/auth/Register/index.tsx:96
+#: src/components/routes/auth/AcceptInvitation/index.tsx:205
+#: src/components/routes/auth/Register/index.tsx:122
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -7915,7 +8223,7 @@ msgstr "Meno"
 msgid "First name is required"
 msgstr "Meno je povinné"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:30
+#: src/components/routes/auth/AcceptInvitation/index.tsx:41
 msgid "First name must be between 1 and 50 characters"
 msgstr "Meno musí mať 1 až 50 znakov"
 
@@ -8026,9 +8334,21 @@ msgstr "Na počet termínov"
 msgid "For events across more than one venue"
 msgstr "Pre podujatia na viacerých miestach"
 
-#: src/components/routes/auth/Login/index.tsx:195
+#: src/components/common/ConfirmIdentity/index.tsx:108
+msgid "For your security, sign in again to confirm it's you."
+msgstr "Z bezpečnostných dôvodov sa znova prihláste a potvrďte, že ste to vy."
+
+#: src/components/routes/auth/Login/index.tsx:170
 msgid "Forgot password?"
 msgstr "Zabudli ste heslo?"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+msgid "Formerly Azure Active Directory"
+msgstr "Predtým Azure Active Directory"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:101
+msgid "Found your sign-in settings"
+msgstr "Našli sme vaše nastavenia prihlásenia"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:62
 msgid "Fourth"
@@ -8134,7 +8454,7 @@ msgstr "Vpredu vpravo"
 msgid "Full access to every event, the team, payments and account settings."
 msgstr "Úplný prístup ku všetkým podujatiam, tímu, platbám a nastaveniam účtu."
 
-#: src/components/layouts/AuthLayout/index.tsx:28
+#: src/components/layouts/AuthLayout/AuthShell.tsx:25
 msgid "Full data ownership"
 msgstr "Plné vlastníctvo údajov"
 
@@ -8159,7 +8479,7 @@ msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Budúce termíny sa skopírujú s vynulovanou kapacitou"
 
 #: src/components/layouts/SettingsLayout/index.tsx:58
-#: src/components/routes/settings/Account/index.tsx:66
+#: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Všeobecné"
 
@@ -8188,7 +8508,7 @@ msgstr "Generovať"
 msgid "Generate code"
 msgstr "Generovať kód"
 
-#: src/components/routes/settings/Security/index.tsx:160
+#: src/components/routes/settings/Security/index.tsx:162
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Vygenerovať nové kódy"
@@ -8231,7 +8551,7 @@ msgstr "Nechajte si platiť"
 msgid "Get paid with Stripe"
 msgstr "Prijímajte platby cez Stripe"
 
-#: src/components/routes/auth/Register/index.tsx:79
+#: src/components/routes/auth/Register/index.tsx:92
 msgid "Get started"
 msgstr "Začať"
 
@@ -8314,6 +8634,10 @@ msgstr "Prejsť na nastavenia miest"
 msgid "Good to know"
 msgstr "Dobré vedieť"
 
+#: src/components/common/SsoButtons/index.tsx:47
+msgid "Google and Microsoft don't allow signing in from inside other apps. Open this page in Safari or Chrome to continue."
+msgstr "Google a Microsoft nepovoľujú prihlásenie z iných aplikácií. Ak chcete pokračovať, otvorte túto stránku v Safari alebo Chrome."
+
 #: src/components/common/CalendarOptionsPopover/index.tsx:33
 msgid "Google Calendar"
 msgstr "Google Kalendár"
@@ -8373,6 +8697,10 @@ msgstr "Hrubý predaj"
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:83
 msgid "Group by stage or room"
 msgstr "Zoskupiť podľa pódia alebo miestnosti"
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:120
+msgid "Groups"
+msgstr "Skupiny"
 
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:341
 msgid "Guest"
@@ -8745,6 +9073,10 @@ msgstr "Ako sa DPH uplatňuje na poplatky platformy, ktoré vám účtujeme."
 msgid "How would you like to start?"
 msgstr "Ako by ste chceli začať?"
 
+#: src/components/routes/settings/Security/index.tsx:232
+msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
+msgstr "Spôsob prihlásenia a dvojfaktorové overenie. Chránia všetky účty, do ktorých patríte."
+
 #: src/components/common/Editor/Editor.tsx:109
 msgid "HTML character limit exceeded: {htmlLength}/{maxLength}"
 msgstr "Prekročený limit HTML znakov: {htmlLength}/{maxLength}"
@@ -8773,7 +9105,7 @@ msgstr "Beriem na vedomie svoje povinnosti ako správca údajov"
 msgid "I agree to receive email notifications related to this event"
 msgstr "Súhlasím s prijímaním e-mailových notifikácií súvisiacich s touto udalosťou"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:142
+#: src/components/routes/auth/AcceptInvitation/index.tsx:246
 msgid "I agree to the <0>terms and conditions</0>"
 msgstr "Súhlasím s <0>podmienkami a ustanoveniami</0>"
 
@@ -8785,7 +9117,7 @@ msgstr "Potvrdzujem, že toto je transakčná správa súvisiaca s touto udalos�
 msgid "I have saved my recovery codes somewhere safe"
 msgstr "Záložné kódy som si uložil(a) na bezpečné miesto"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:190
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Pridal(a) som ho, pokračovať"
 
@@ -8817,11 +9149,11 @@ msgstr "Ak sa widget nezobrazí, bezpečnostný plugin možno odstraňuje skript
 msgid "If you cancel within 30 days, access comes back, but your events stay unpublished until you publish them again."
 msgstr "Ak to zrušíte do 30 dní, prístup sa obnoví, ale vaše udalosti zostanú nezverejnené, kým ich znova nezverejníte."
 
-#: src/components/routes/settings/Profile/index.tsx:134
+#: src/components/routes/settings/Profile/index.tsx:184
 msgid "If you did not request this change, please immediately change your password."
 msgstr "Ak ste túto zmenu nepožadovali, okamžite zmeňte heslo."
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:46
+#: src/components/routes/auth/ForgotPassword/index.tsx:47
 msgid "If you have an account with us, you will receive an email with instructions on how to reset your password."
 msgstr "Ak máte u nás účet, dostanete e-mail s pokynmi na obnovenie hesla."
 
@@ -8914,9 +9246,25 @@ msgstr "V kontrole"
 msgid "In someone's basket"
 msgstr "V košíku niekoho iného"
 
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
+msgstr "V konzole Google Cloud otvorte projekt, ktorý patrí vašej organizácii Workspace."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
+msgstr "V Microsoft Entra admin center prejdite na \"App registrations\" a vyberte \"New registration\"."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
+msgstr "V Okta Admin Console prejdite na \"Applications\" a vyberte \"Create App Integration\"."
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:155
 msgid "In use"
 msgstr "Používa sa"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
+msgstr "U svojho poskytovateľa identity vytvorte dôverného klienta OpenID Connect, ktorý používa tok autorizačného kódu."
 
 #: src/components/common/AffiliateTable/index.tsx:132
 #: src/components/common/CheckInListList/index.tsx:115
@@ -9015,7 +9363,7 @@ msgstr "Personalizované tokeny vložíte tlačidlom so zloženými zátvorkami 
 msgid "Instagram"
 msgstr "Instagram"
 
-#: src/components/layouts/AuthLayout/index.tsx:16
+#: src/components/layouts/AuthLayout/AuthShell.tsx:13
 msgid "Instant Stripe payouts"
 msgstr "Okamžité výplaty cez Stripe"
 
@@ -9053,11 +9401,11 @@ msgstr "Neplatná Liquid syntax. Opravte ju a skúste znovu."
 msgid "Invalid VAT number format"
 msgstr "Neplatný formát čísla DPH"
 
-#: src/components/routes/settings/Team/index.tsx:109
+#: src/components/routes/settings/Team/index.tsx:113
 msgid "Invitation resent!"
 msgstr "Pozvánka znovu odoslaná!"
 
-#: src/components/routes/settings/Team/index.tsx:116
+#: src/components/routes/settings/Team/index.tsx:120
 msgid "Invitation revoked!"
 msgstr "Pozvánka odvolaná!"
 
@@ -9065,11 +9413,11 @@ msgstr "Pozvánka odvolaná!"
 msgid "Invite a team member"
 msgstr "Pozvať člena tímu"
 
-#: src/components/routes/settings/Team/index.tsx:151
+#: src/components/routes/settings/Team/index.tsx:155
 msgid "Invite member"
 msgstr "Pozvať člena"
 
-#: src/components/routes/settings/Team/index.tsx:148
+#: src/components/routes/settings/Team/index.tsx:152
 msgid "Invite people, choose what they can see and do, and keep sign-in secure."
 msgstr "Pozývajte ľudí, určte, čo môžu vidieť a robiť, a udržte prihlasovanie bezpečné."
 
@@ -9115,13 +9463,25 @@ msgstr "Nastavenia faktúry"
 msgid "Issued"
 msgstr "Vydaná"
 
-#: src/components/routes/welcome/index.tsx:404
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+msgid "Issuer"
+msgstr "Vydavateľ"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:153
+msgid "Issuer URL"
+msgstr "URL vydavateľa"
+
+#: src/components/routes/welcome/index.tsx:405
 msgid "It happens on more than one date"
 msgstr "Koná sa vo viacerých termínoch"
 
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Mohlo byť stiahnuté z publikovania alebo odstránené. Skontrolujte odkaz a skúste to znova."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+msgid "It's connected to another user. Use a different {providerName} account."
+msgstr "Je pripojený k inému používateľovi. Použite iný účet {providerName}."
 
 #: src/components/common/LanguageSwitcher/index.tsx:26
 msgid "Italian"
@@ -9168,14 +9528,20 @@ msgstr "Názov úlohy"
 msgid "Job queued for retry"
 msgstr "Úloha zaradená do frontu na opakovanie"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:98
-#: src/components/routes/auth/Register/index.tsx:97
+#: src/components/routes/auth/AcceptInvitation/index.tsx:206
+#: src/components/routes/auth/Register/index.tsx:123
 msgid "John"
 msgstr "Ján"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:222
 msgid "Johnson"
 msgstr "Novák"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:122
+#: src/components/routes/auth/AcceptInvitation/index.tsx:146
+#: src/components/routes/auth/AcceptInvitation/index.tsx:271
+msgid "Join {0}"
+msgstr "Pripojiť sa k {0}"
 
 #: src/components/layouts/EventHomepage/index.tsx:650
 msgid "Join from anywhere"
@@ -9202,7 +9568,7 @@ msgstr "Júl"
 msgid "June"
 msgstr "Jún"
 
-#: src/components/routes/auth/Login/index.tsx:216
+#: src/components/routes/auth/Login/index.tsx:193
 msgid "Just looking for your tickets?"
 msgstr "Hľadáte len svoje lístky?"
 
@@ -9235,13 +9601,17 @@ msgstr "Buďte struční — bannery zobrazujú jeden riadok. {0}/200"
 msgid "Keep me updated on news and events from {0}"
 msgstr "Informujte ma o novinkách a udalostiach od {0}"
 
-#: src/components/layouts/AuthLayout/index.tsx:44
+#: src/components/layouts/AuthLayout/AuthShell.tsx:41
 msgid "Keep the profit."
 msgstr "Zisk zostáva vám."
 
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:262
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Nezobrazujte ich vo verejnom line-upe a harmonograme, kým nebudete pripravení ich ohlásiť"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
+msgstr "Keycloak, Authentik, Zitadel, OneLogin a ďalšie"
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9272,7 +9642,7 @@ msgstr "Na šírku"
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:40
 #: src/components/modals/CreateAttendeeModal/index.tsx:240
 #: src/components/modals/ManageAttendeeModal/index.tsx:180
-#: src/components/routes/settings/Profile/index.tsx:182
+#: src/components/routes/settings/Profile/index.tsx:232
 msgid "Language"
 msgstr "Jazyk"
 
@@ -9337,15 +9707,16 @@ msgstr "Posledných 7 dní"
 msgid "Last 90 days"
 msgstr "Posledných 90 dní"
 
-#: src/components/routes/settings/Team/index.tsx:198
+#: src/components/routes/settings/Team/index.tsx:217
 msgid "Last active"
 msgstr "Naposledy aktívny"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:221
 #: src/components/modals/ManageAttendeeModal/index.tsx:228
 #: src/components/modals/ManageOrderModal/index.tsx:267
-#: src/components/routes/settings/Profile/index.tsx:161
-#: src/components/routes/settings/Profile/index.tsx:162
+#: src/components/routes/settings/Profile/index.tsx:211
+#: src/components/routes/settings/Profile/index.tsx:212
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:189
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:71
 msgid "Last name"
 msgstr "Priezvisko"
@@ -9354,8 +9725,8 @@ msgstr "Priezvisko"
 #: src/components/modals/EditUserModal/index.tsx:85
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
-#: src/components/routes/auth/AcceptInvitation/index.tsx:102
-#: src/components/routes/auth/Register/index.tsx:102
+#: src/components/routes/auth/AcceptInvitation/index.tsx:211
+#: src/components/routes/auth/Register/index.tsx:128
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9375,16 +9746,25 @@ msgstr "Priezvisko je povinné"
 msgid "Last Response"
 msgstr "Posledná odpoveď"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:93
+msgid "Last test passed {0}"
+msgstr "Posledný test prešiel {0}"
+
 #: src/components/common/OrganizerWebhookTable/index.tsx:246
 #: src/components/common/WebhookTable/index.tsx:246
 msgid "Last Triggered"
 msgstr "Naposledy spustené"
 
+#: src/components/common/SsoButtons/index.tsx:126
+msgid "Last used"
+msgstr "Naposledy použité"
+
 #: src/components/routes/event/Reports/PromoCodesReport/index.tsx:70
 msgid "Last Used"
 msgstr "Naposledy použité"
 
-#: src/components/routes/settings/Security/index.tsx:39
+#: src/components/routes/settings/Security/index.tsx:41
+#: src/components/routes/settings/Security/SignInMethods.tsx:162
 msgid "Last used {0}"
 msgstr "Naposledy použité {0}"
 
@@ -9483,6 +9863,14 @@ msgstr "Dajte im vedieť o zmene"
 msgid "Let them know about the changes"
 msgstr "Dajte im vedieť o zmenách"
 
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
+msgstr "Umožnite svojmu tímu prihlasovať sa cez Okta, Microsoft Entra ID alebo Google Workspace"
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+msgid "Let your team sign in with your identity provider"
+msgstr "Umožnite svojmu tímu prihlasovať sa cez vášho poskytovateľa identity"
+
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
 msgstr "Umožňuje účtom navrhovať mapy sedadiel a predávať vstupenky na konkrétne miesta."
@@ -9569,6 +9957,10 @@ msgstr "stránke Line-up a harmonogram"
 #: src/components/routes/event/Lineup/ProfileLinksField.tsx:39
 msgid "Link {linkNumber}"
 msgstr "Odkaz {linkNumber}"
+
+#: src/components/common/SsoButtons/index.tsx:54
+msgid "Link copied"
+msgstr "Odkaz skopírovaný"
 
 #: src/components/routes/my-tickets/index.tsx:177
 msgid "Link Expired or Invalid"
@@ -9741,15 +10133,6 @@ msgstr "miest"
 msgid "Locations"
 msgstr "Miesta"
 
-#: src/components/routes/auth/Login/index.tsx:204
-#: src/components/routes/auth/Register/index.tsx:84
-msgid "Log in"
-msgstr "Prihlásiť sa"
-
-#: src/components/routes/auth/Login/index.tsx:204
-msgid "Logging in"
-msgstr "Prihlasovanie"
-
 #: src/components/routes/event/TicketDesigner/index.tsx:133
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:171
 #: src/components/routes/organizer/Settings/Sections/ImageAssetSettings/index.tsx:26
@@ -9788,7 +10171,7 @@ msgstr "Vyhľadať moje lístky"
 msgid "Lost access?"
 msgstr "Stratili ste prístup?"
 
-#: src/components/routes/settings/Security/index.tsx:193
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Stratili ste telefón alebo meníte aplikáciu? Vypnite overenie a znova ho zapnite, aby ste pripojili novú overovaciu aplikáciu."
 
@@ -9824,6 +10207,10 @@ msgstr "Urobiť fakturačnú adresu povinnou počas pokladne"
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:114
 msgid "Make it visible so people can buy tickets"
 msgstr "Zverejnite ho, aby si ľudia mohli kúpiť lístky"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+msgid "Make sure ID tokens include the email and email_verified claims."
+msgstr "Uistite sa, že ID tokeny obsahujú claimy email a email_verified."
 
 #: src/components/forms/QuestionForm/index.tsx:212
 msgid "Make this question mandatory"
@@ -9895,6 +10282,10 @@ msgstr "Spravovať rozvrh"
 #: src/ee/seating/components/routes/event/Seating/AttachSeatMap.tsx:94
 msgid "Manage seat maps"
 msgstr "Spravovať mapy sedadiel"
+
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+msgid "Manage single sign-on"
+msgstr "Spravovať jednotné prihlásenie"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:176
 msgid "Manage tickets"
@@ -9990,21 +10381,29 @@ msgstr "Máj"
 msgid "Medium"
 msgstr "Stredné"
 
-#: src/components/routes/settings/Team/index.tsx:194
+#: src/components/routes/settings/Team/index.tsx:213
 msgid "Member"
 msgstr "Člen"
 
-#: src/components/routes/settings/Team/index.tsx:96
+#: src/components/routes/settings/Team/index.tsx:100
 msgid "Member deactivated"
 msgstr "Člen deaktivovaný"
 
-#: src/components/routes/settings/Team/index.tsx:96
+#: src/components/routes/settings/Team/index.tsx:100
 msgid "Member reactivated"
 msgstr "Člen znova aktivovaný"
 
 #: src/components/modals/EditUserModal/index.tsx:88
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "Členovia si e-mail menia sami v <0>nastaveniach profilu</0>."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:174
+msgid "Members on verified domains"
+msgstr "Členovia na overených doménach"
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:99
+msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
+msgstr "Členovia s e-mailom na overenej doméne sa musia prihlasovať cez {providerName}. Ich ostatné relácie sa ukončia."
 
 #: src/components/common/AttendeeTable/index.tsx:164
 #: src/components/common/ContactOrganizerModal/index.tsx:88
@@ -10209,7 +10608,7 @@ msgstr "Viac"
 #: src/components/routes/admin/SpamEvents/index.tsx:256
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:207
 #: src/components/routes/event/OccurrencesTab/OccurrenceMenu.tsx:180
-#: src/components/routes/settings/Team/MemberRow.tsx:165
+#: src/components/routes/settings/Team/MemberRow.tsx:177
 msgid "More actions"
 msgstr "Ďalšie akcie"
 
@@ -10289,7 +10688,7 @@ msgstr "Viac termínov do {lastOccurrenceDate}"
 msgid "Multiple locations"
 msgstr "Viacero miest"
 
-#: src/components/layouts/AuthLayout/index.tsx:29
+#: src/components/layouts/AuthLayout/AuthShell.tsx:26
 msgid "Multiple ticket types"
 msgstr "Viacero typov lístkov"
 
@@ -10332,7 +10731,9 @@ msgstr "Moje lístky"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:80
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Profile/index.tsx:150
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:95
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:108
+#: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:90
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
@@ -10383,7 +10784,7 @@ msgstr "Čistý príjem"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
-#: src/components/routes/settings/Team/MemberRow.tsx:149
+#: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Nikdy"
 
@@ -10425,7 +10826,7 @@ msgstr "Nové označenie"
 msgid "New location"
 msgstr "Nové miesto"
 
-#: src/components/routes/settings/Profile/index.tsx:215
+#: src/components/routes/settings/Profile/index.tsx:265
 msgid "New order emails"
 msgstr "E-maily o nových objednávkach"
 
@@ -10531,6 +10932,7 @@ msgstr "Nočný život"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
 msgid "No"
 msgstr "Nie"
 
@@ -10538,9 +10940,13 @@ msgstr "Nie"
 msgid "No - I'm an individual or non-VAT registered business"
 msgstr "Nie – som fyzická osoba alebo firma neregistrovaná pre DPH"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:44
+#: src/components/routes/settings/Team/MemberRow.tsx:55
 msgid "No access yet"
 msgstr "Zatiaľ bez prístupu"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+msgid "No account found"
+msgstr "Účet sa nenašiel"
 
 #: src/components/routes/admin/FeatureFlags/index.tsx:36
 msgid "No account overrides. Add one from an account's admin page."
@@ -10784,7 +11190,7 @@ msgstr "Žiadne neúspešné úlohy"
 msgid "No filters available"
 msgstr "Žiadne dostupné filtre"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:51
+#: src/components/routes/settings/Team/MemberRow.tsx:62
 msgid "No financials"
 msgstr "Bez financií"
 
@@ -10833,11 +11239,11 @@ msgstr "Žiadne výsledky"
 msgid "No matching fonts"
 msgstr "Žiadne zodpovedajúce písma"
 
-#: src/components/routes/settings/Team/index.tsx:210
+#: src/components/routes/settings/Team/index.tsx:229
 msgid "No members match your search."
 msgstr "Vyhľadávaniu nezodpovedajú žiadni členovia."
 
-#: src/components/routes/settings/Team/index.tsx:210
+#: src/components/routes/settings/Team/index.tsx:229
 msgid "No members yet."
 msgstr "Zatiaľ žiadni členovia."
 
@@ -10980,7 +11386,7 @@ msgstr "Žiadne nedávne registrácie účtov"
 msgid "No recipients found"
 msgstr "Nenašli sa žiadni príjemcovia"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:55
+#: src/components/routes/settings/Team/MemberRow.tsx:66
 msgid "No refunds"
 msgstr "Bez vrátenia peňazí"
 
@@ -11121,6 +11527,10 @@ msgstr "Týmto filtrom nikto nevyhovuje."
 msgid "Nobody on the lineup yet."
 msgstr "V zostave zatiaľ nikto nie je."
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:120
+msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
+msgstr "Nikto z vášho tímu zatiaľ nepoužíva overenú doménu. Ľudia, ktorí sa pripoja z takejto domény, sa budú musieť prihlasovať cez {providerName}."
+
 #: src/components/routes/event/Lineup/LineupStats.tsx:28
 #: src/components/routes/event/Lineup/LineupStats.tsx:34
 msgid "Nobody yet"
@@ -11148,6 +11558,10 @@ msgstr "Žiadne"
 msgid "None (cash only)"
 msgstr "Žiadna (len hotovosť)"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:121
+msgid "None shared"
+msgstr "Nič sa nezdieľa"
+
 #: src/components/forms/ProductForm/ledgerSummaries.ts:29
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "None yet"
@@ -11172,6 +11586,10 @@ msgstr "Neprihlásený"
 msgid "Not Checked In"
 msgstr "Neodbavený"
 
+#: src/components/routes/settings/Security/SignInMethods.tsx:149
+msgid "Not connected"
+msgstr "Nepripojené"
+
 #: src/components/common/CapacityHelp/index.tsx:65
 msgid "Not counted"
 msgstr "Nepočíta sa"
@@ -11184,9 +11602,13 @@ msgstr "Neoprávnený"
 msgid "Not enough free seats for {0}"
 msgstr "Nedostatok voľných sedadiel pre {0}"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:149
+#: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Not joined yet"
 msgstr "Zatiaľ sa nepripojil"
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:114
+msgid "Not marked as verified"
+msgstr "Nie je označené ako overené"
 
 #: src/components/routes/auth/RequiredTwoFactorSetup/index.tsx:56
 msgid "Not now, log out"
@@ -11209,6 +11631,10 @@ msgstr "Nenaplánované"
 msgid "Not selling as {signedInName}?"
 msgstr "Nepredávate ako {signedInName}?"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+msgid "Not shared"
+msgstr "Nezdieľa sa"
+
 #: src/components/forms/TaxAndFeeForm/index.tsx:107
 msgid "Not shown to buyers."
 msgstr "Nezobrazuje sa kupujúcim."
@@ -11221,6 +11647,14 @@ msgstr "Zatiaľ sa nezobrazuje."
 msgid "Not sure where to sit?"
 msgstr "Neviete, kde sedieť?"
 
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+msgid "Not tested"
+msgstr "Netestované"
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:93
+msgid "Not tested yet"
+msgstr "Zatiaľ netestované"
+
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
 msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
 msgstr "Nepoužívate rezervované miesta ani pokladňu? Odstráňte <0>APP_LICENCE_KEY</0> a znova nasaďte."
@@ -11230,6 +11664,10 @@ msgstr "Nepoužívate rezervované miesta ani pokladňu? Odstráňte <0>APP_LICE
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:53
 msgid "Not yet on sale"
 msgstr "Zatiaľ nie je v predaji"
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:172
+msgid "Not you?"
+msgstr "Nie ste to vy?"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:299
 msgid "Note shown to buyers"
@@ -11366,8 +11804,10 @@ msgstr "každého mesiaca"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Security/index.tsx:112
-#: src/components/routes/settings/Team/MemberRow.tsx:144
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
+#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Vyp."
 
@@ -11436,6 +11876,14 @@ msgstr "Informácie o offline platbách"
 msgid "Offline Payments Settings"
 msgstr "Nastavenia offline platieb"
 
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:153
+msgid "Okta domain"
+msgstr "Doména Okta"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+msgid "Okta Workforce Identity"
+msgstr "Okta Workforce Identity"
+
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:906
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:916
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:931
@@ -11445,8 +11893,10 @@ msgstr "v"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Security/index.tsx:112
-#: src/components/routes/settings/Team/MemberRow.tsx:142
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
+#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Zap."
 
@@ -11505,7 +11955,7 @@ msgstr "Na stránke Lístky a produkty nastavte Early bird na 5 a Štandard na 1
 msgid "On the waitlist"
 msgstr "Na čakacej listine"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:177
 msgid "On your phone? Open in authenticator app"
 msgstr "Na telefóne? Otvoriť v overovacej aplikácii"
 
@@ -11522,6 +11972,10 @@ msgstr "Po začatí zberu dát ich uvidíte tu."
 #: src/components/modals/CreateEventModal/index.tsx:224
 msgid "One date"
 msgstr "Jeden dátum"
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:162
+msgid "One last step"
+msgstr "Posledný krok"
 
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:56
 #: src/components/forms/ProductForm/ProductPriceTierForm.tsx:68
@@ -11596,7 +12050,7 @@ msgstr "Iba správcovia účtu môžu odstrániť alebo archivovať udalosti. Ko
 msgid "Only account administrators can delete or archive organizers. Contact your account admin for assistance."
 msgstr "Iba správcovia účtu môžu odstrániť alebo archivovať organizátorov. Kontaktujte správcu účtu."
 
-#: src/components/routes/settings/Account/index.tsx:109
+#: src/components/routes/settings/Account/index.tsx:113
 msgid "Only account admins can change these settings."
 msgstr "Tieto nastavenia môžu meniť iba správcovia účtu."
 
@@ -11607,6 +12061,10 @@ msgstr "Prístup tímu môžu spravovať iba správcovia."
 #: src/components/forms/ProductForm/index.tsx:549
 msgid "Only available as an add-on"
 msgstr "Dostupné len ako doplnok"
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
+msgstr "Automaticky pridať alebo zaviazať na jednotné prihlásenie je možné iba ľudí s e-mailom na overenej doméne."
 
 #: src/components/routes/admin/Announcements/index.tsx:470
 msgid "Only published announcements are shown to users"
@@ -11725,11 +12183,19 @@ msgstr "Otvoriť nastavenia"
 msgid "Open sidebar"
 msgstr "Otvoriť bočný panel"
 
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+msgid "Open the invitation email we sent you to finish joining the team."
+msgstr "Otvorte e-mail s pozvánkou, ktorý sme vám poslali, a dokončite pripojenie k tímu."
+
+#: src/components/common/SsoButtons/index.tsx:46
+msgid "Open this page in your browser"
+msgstr "Otvorte túto stránku v prehliadači"
+
 #: src/components/routes/event/Lineup/index.tsx:345
 msgid "Open timetable"
 msgstr "Otvoriť časový rozpis"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:154
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:173
 msgid "Open your authenticator app, tap the + button and scan the code."
 msgstr "Otvorte overovaciu aplikáciu, ťuknite na tlačidlo + a naskenujte kód."
 
@@ -11784,6 +12250,10 @@ msgstr "možnosti"
 #: src/components/forms/QuestionForm/index.tsx:28
 msgid "Options"
 msgstr "Možnosti"
+
+#: src/components/common/SsoButtons/index.tsx:135
+msgid "or"
+msgstr "alebo"
 
 #: src/components/routes/event/OccurrencesTab/index.tsx:658
 msgid "or add a single date"
@@ -12114,7 +12584,7 @@ msgstr "Bude použitá šablóna organizátora/predvolená šablóna"
 #: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
-#: src/components/routes/settings/Team/index.tsx:138
+#: src/components/routes/settings/Team/index.tsx:142
 msgid "Organizers"
 msgstr "Organizátori"
 
@@ -12139,6 +12609,10 @@ msgstr "Ďalšie podujatia"
 #: src/components/common/CheckInStatusModal/index.tsx:177
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Iné zoznamy (lístok nie je zahrnutý)"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+msgid "Other OIDC provider"
+msgstr "Iný poskytovateľ OIDC"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:121
 msgid "Outcome"
@@ -12174,7 +12648,7 @@ msgid "Overview"
 msgstr "Prehľad"
 
 #: src/components/modals/EditUserModal/index.tsx:63
-#: src/components/routes/settings/Team/MemberRow.tsx:123
+#: src/components/routes/settings/Team/MemberRow.tsx:135
 msgid "Owner"
 msgstr "Vlastník"
 
@@ -12185,6 +12659,10 @@ msgstr "Odsadenie"
 #: src/components/common/OrganizerReportTable/index.tsx:356
 msgid "Page"
 msgstr "Stránka"
+
+#: src/components/common/SsoButtons/index.tsx:50
+msgid "Page address"
+msgstr "Adresa stránky"
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:142
 msgid "Page no longer available"
@@ -12270,10 +12748,12 @@ msgstr "Preniesť poplatok na kupujúceho"
 msgid "Pass to Buyer"
 msgstr "Preniesť na kupujúceho"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:127
-#: src/components/routes/auth/Login/index.tsx:193
-#: src/components/routes/auth/Register/index.tsx:118
-#: src/components/routes/settings/Security/index.tsx:223
+#: src/components/routes/auth/AcceptInvitation/index.tsx:229
+#: src/components/routes/auth/Login/index.tsx:168
+#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Team/index.tsx:201
+#: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
 msgstr "Heslo"
 
@@ -12281,20 +12761,16 @@ msgstr "Heslo"
 msgid "Password changed"
 msgstr "Heslo bolo zmenené"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:31
+#: src/components/routes/auth/AcceptInvitation/index.tsx:42
 msgid "Password must be a minimum  of 8 characters"
 msgstr "Heslo musí mať minimálne 8 znakov"
 
-#: src/components/routes/auth/Register/index.tsx:37
+#: src/components/routes/auth/Register/index.tsx:40
 msgid "Password must be at least 8 characters"
 msgstr "Heslo musí mať aspoň 8 znakov"
 
-#: src/components/routes/auth/ResetPassword/index.tsx:49
-msgid "Password reset successfully. Please login with your new password."
-msgstr "Heslo bolo úspešne obnovené. Prihláste sa novým heslom."
-
-#: src/components/routes/auth/AcceptInvitation/index.tsx:32
-#: src/components/routes/auth/Register/index.tsx:38
+#: src/components/routes/auth/AcceptInvitation/index.tsx:43
+#: src/components/routes/auth/Register/index.tsx:41
 msgid "Passwords are not the same"
 msgstr "Heslá sa nezhodujú"
 
@@ -12465,6 +12941,7 @@ msgstr "Výplaty"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "Čakajúce"
 
@@ -12472,11 +12949,11 @@ msgstr "Čakajúce"
 msgid "Pending deletions"
 msgstr "Čakajúce odstránenia"
 
-#: src/components/routes/settings/Team/index.tsx:217
+#: src/components/routes/settings/Team/index.tsx:236
 msgid "Pending invitations"
 msgstr "Čakajúce pozvánky"
 
-#: src/components/routes/settings/Team/index.tsx:159
+#: src/components/routes/settings/Team/index.tsx:163
 msgid "Pending invites"
 msgstr "Čakajúce pozvánky"
 
@@ -12511,6 +12988,14 @@ msgstr "Osoby ({peopleRowCount})"
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:450
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "Osoby sa párujú podľa mena, takže existujúce profily sa aktualizujú a nevytvárajú sa duplicity."
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
+msgstr "Ľudia sa môžu pripojiť alebo byť priradení k existujúcim účtom, iba ak {providerName} označí ich e-mail ako overený."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
+msgstr "Ľudia z vašich overených domén sú presmerovaní na {providerName}, keď zvolia Prihlásiť sa cez SSO."
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:449
 msgid "People sheet"
@@ -12667,6 +13152,10 @@ msgstr "Vyberte dátumy"
 msgid "Pick days to see your dates."
 msgstr "Vyberte dni a uvidíte svoje termíny."
 
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+msgid "Pick OIDC - OpenID Connect, then Web Application."
+msgstr "Vyberte \"OIDC - OpenID Connect\" a potom \"Web Application\"."
+
 #: src/ee/box-office/components/layouts/BoxOffice/ReaderSwitchSheet.tsx:56
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:181
 msgid "Pick the reader next to you, or sell cash only"
@@ -12749,16 +13238,15 @@ msgstr "Pridajte aspoň jednu možnosť"
 msgid "Please check the provided information is correct"
 msgstr "Skontrolujte, či sú zadané informácie správne"
 
-#: src/components/routes/auth/Login/index.tsx:89
+#: src/components/routes/auth/Login/index.tsx:86
 msgid "Please check your email and password and try again"
 msgstr "Skontrolujte e-mail a heslo a skúste znovu"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:33
-#: src/components/routes/auth/Register/index.tsx:39
+#: src/components/routes/auth/Register/index.tsx:42
 msgid "Please check your email is valid"
 msgstr "Skontrolujte, či je váš e-mail platný"
 
-#: src/components/routes/settings/Profile/index.tsx:104
+#: src/components/routes/settings/Profile/index.tsx:154
 msgid "Please check your email to confirm your email address"
 msgstr "Skontrolujte e-mail na potvrdenie e-mailovej adresy"
 
@@ -12796,7 +13284,7 @@ msgstr "Zadajte platnú URL adresu obrázka."
 msgid "Please enter a valid URL"
 msgstr "Zadajte platnú URL adresu"
 
-#: src/components/routes/welcome/index.tsx:71
+#: src/components/routes/welcome/index.tsx:72
 msgid "Please enter the 5-digit code"
 msgstr "Zadajte 5-ciferný kód"
 
@@ -12842,7 +13330,7 @@ msgstr "Vyberte aspoň jeden produkt"
 msgid "Please try again."
 msgstr "Skúste to znovu."
 
-#: src/components/routes/welcome/index.tsx:125
+#: src/components/routes/welcome/index.tsx:126
 msgid "Please wait before requesting another code"
 msgstr "Počkajte pred požiadaním o ďalší kód"
 
@@ -12903,7 +13391,7 @@ msgstr "Poháňané"
 msgid "Pre Checkout message"
 msgstr "Správa pred pokladňou"
 
-#: src/components/routes/settings/Account/index.tsx:80
+#: src/components/routes/settings/Account/index.tsx:84
 msgid "Prefilled when you create an organizer."
 msgstr "Predvyplní sa pri vytvorení organizátora."
 
@@ -13133,7 +13621,7 @@ msgstr "Typ produktu"
 msgid "Product Updated"
 msgstr "Produkt aktualizovaný"
 
-#: src/components/routes/settings/Profile/index.tsx:203
+#: src/components/routes/settings/Profile/index.tsx:253
 msgid "Product updates"
 msgstr "Novinky o produkte"
 
@@ -13165,7 +13653,7 @@ msgstr "Produkty boli úspešne zoradené"
 
 #: src/components/layouts/SettingsLayout/index.tsx:55
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
-#: src/components/routes/settings/Profile/index.tsx:125
+#: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
 msgstr "Profil"
 
@@ -13177,7 +13665,7 @@ msgstr "Profil bol vytvorený. Teraz môžete pridať fotky."
 msgid "Profile deleted"
 msgstr "Profil bol vymazaný"
 
-#: src/components/routes/settings/Profile/index.tsx:70
+#: src/components/routes/settings/Profile/index.tsx:100
 msgid "Profile updated successfully"
 msgstr "Profil bol úspešne aktualizovaný"
 
@@ -13228,7 +13716,7 @@ msgstr "Použitie promo kódu a rozklad zliav"
 msgid "promo codes"
 msgstr "promo kódy"
 
-#: src/components/layouts/AuthLayout/index.tsx:20
+#: src/components/layouts/AuthLayout/AuthShell.tsx:17
 msgid "Promo codes"
 msgstr "Promo kódy"
 
@@ -13255,7 +13743,7 @@ msgstr "Iba promo"
 msgid "Promotional emails may result in account suspension"
 msgstr "Propagačné e-maily môžu viesť k pozastaveniu účtu"
 
-#: src/components/routes/settings/Security/index.tsx:118
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Chráňte svoj účet druhým krokom pri prihlásení. Aj keď niekto zistí vaše heslo, bez kódu z vášho telefónu sa nedostane dnu."
 
@@ -13334,7 +13822,7 @@ msgstr "Vložte nový kľúč do <0>APP_LICENCE_KEY</0> a backend znova nasaďte
 msgid "QR Code"
 msgstr "QR kód"
 
-#: src/components/layouts/AuthLayout/index.tsx:18
+#: src/components/layouts/AuthLayout/AuthShell.tsx:15
 msgid "QR code check-in"
 msgstr "Check-in cez QR kód"
 
@@ -13427,7 +13915,7 @@ msgstr "Sadzby, ktoré môžete pridať k produktom. Zdieľajú ich všetci orga
 msgid "Re-offer Spot"
 msgstr "Znovu ponúknuť miesto"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:178
+#: src/components/routes/settings/Team/MemberRow.tsx:190
 msgid "Reactivate"
 msgstr "Znova aktivovať"
 
@@ -13453,7 +13941,7 @@ msgstr "Pripravené na pridanie do line-upu"
 msgid "Ready to go live?"
 msgstr "Pripravení zverejniť?"
 
-#: src/components/layouts/AuthLayout/index.tsx:21
+#: src/components/layouts/AuthLayout/AuthShell.tsx:18
 msgid "Real-time analytics"
 msgstr "Analytika v reálnom čase"
 
@@ -13487,9 +13975,10 @@ msgstr "Dôvod (voliteľné)"
 msgid "Reasons"
 msgstr "Dôvody"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:157
-#: src/components/routes/auth/Register/index.tsx:139
-#: src/components/routes/settings/Profile/index.tsx:204
+#: src/components/routes/auth/AcceptInvitation/index.tsx:261
+#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/settings/Profile/index.tsx:254
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
 msgstr "Dostávajte aktualizácie produktov od {0}."
 
@@ -13554,7 +14043,7 @@ msgstr "Zaznamenať vrátenie platby"
 msgid "Recovery code"
 msgstr "Záložný kód"
 
-#: src/components/routes/settings/Security/index.tsx:135
+#: src/components/routes/settings/Security/index.tsx:137
 msgid "Recovery codes"
 msgstr "Záložné kódy"
 
@@ -13576,7 +14065,7 @@ msgstr "Opakujúce sa podujatie"
 msgid "Recurring Event Settings"
 msgstr "Nastavenia opakujúceho sa podujatia"
 
-#: src/components/layouts/AuthLayout/index.tsx:15
+#: src/components/layouts/AuthLayout/AuthShell.tsx:12
 msgid "Recurring events"
 msgstr "Opakujúce sa podujatia"
 
@@ -13588,6 +14077,10 @@ msgstr "Reddit"
 #: src/ee/licensing/components/LicenceModal/index.tsx:37
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Backend znova nasaďte. Pri Docker Compose spustite <0>docker compose up -d</0>."
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:126
+msgid "Redirect URI"
+msgstr "Redirect URI"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:88
 msgid "Redirecting to Stripe..."
@@ -13692,7 +14185,7 @@ msgstr "Vrátené: {0}"
 msgid "Refunds"
 msgstr "Vrátenia"
 
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Register/index.tsx:171
 msgid "Register"
 msgstr "Registrovať"
 
@@ -13746,9 +14239,14 @@ msgstr "odstrániť"
 msgid "Remove"
 msgstr "Odstrániť"
 
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:83
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Odstrániť {0}"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:65
+msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
+msgstr "Odstrániť {0}? Ľudia s touto e-mailovou doménou už nebudú presmerovaní k vášmu poskytovateľovi identity ani nebudú musieť používať jednotné prihlásenie."
 
 #: src/components/common/TeamAccessPanel/index.tsx:78
 msgid "Remove {0}'s access here?"
@@ -13766,7 +14264,7 @@ msgstr "Odstrániť {profileName} z line-upu tohto podujatia? Profil zostane ulo
 msgid "Remove access"
 msgstr "Odobrať prístup"
 
-#: src/components/routes/settings/Security/index.tsx:184
+#: src/components/routes/settings/Security/index.tsx:186
 msgid "Remove all"
 msgstr "Odstrániť všetky"
 
@@ -13781,6 +14279,10 @@ msgstr "Odstrániť popis"
 #: src/ee/box-office/components/layouts/BoxOffice/CartPanel.tsx:124
 msgid "Remove discount"
 msgstr "Odstrániť zľavu"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:67
+msgid "Remove domain"
+msgstr "Odstrániť doménu"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:135
 msgid "Remove from lineup"
@@ -13942,6 +14444,16 @@ msgstr "Požiadal"
 msgid "Require Billing Address"
 msgstr "Vyžadovať fakturačnú adresu"
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:96
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:108
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:167
+msgid "Require single sign-on"
+msgstr "Vyžadovať jednotné prihlásenie"
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:190
+msgid "Require SSO"
+msgstr "Vyžadovať SSO"
+
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:48
 msgid "Require two-factor"
 msgstr "Vyžadovať dvojfaktorové overenie"
@@ -13952,10 +14464,11 @@ msgid "Require two-factor authentication"
 msgstr "Vyžadovať dvojfaktorové overenie"
 
 #: src/components/common/QuestionsTable/index.tsx:125
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
 msgid "Required"
 msgstr "Povinné"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:122
 msgid "Required by your organization"
 msgstr "Vyžaduje vaša organizácia"
 
@@ -13967,12 +14480,13 @@ msgstr "Potrebné na fungovanie stránky, napríklad na udržanie prihlásenia."
 msgid "Required questions not answered"
 msgstr "Povinné otázky nezodpovedané"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/components/routes/settings/Team/MemberRow.tsx:168
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:130
 msgid "Resend"
 msgstr "Odoslať znova"
 
-#: src/components/routes/welcome/index.tsx:207
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:146
+#: src/components/routes/welcome/index.tsx:208
 msgid "Resend code"
 msgstr "Znovu odoslať kód"
 
@@ -13989,15 +14503,19 @@ msgstr "Znovu odoslať potvrdzovací e-mail"
 msgid "Resend email"
 msgstr "Znovu odoslať e-mail"
 
-#: src/components/routes/settings/Profile/index.tsx:117
+#: src/components/routes/settings/Profile/index.tsx:167
 msgid "Resend email confirmation"
 msgstr "Znovu odoslať potvrdenie e-mailu"
 
-#: src/components/routes/welcome/index.tsx:206
+#: src/components/routes/welcome/index.tsx:207
 msgid "Resend in {resendCooldown}s"
 msgstr "Znovu odoslať za {resendCooldown} s"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:194
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:146
+msgid "Resend in {resendIn}s"
+msgstr "Znova odoslať o {resendIn} s"
+
+#: src/components/routes/settings/Team/MemberRow.tsx:206
 msgid "Resend invitation"
 msgstr "Znovu odoslať pozvánku"
 
@@ -14046,7 +14564,7 @@ msgstr "Obnoviť"
 msgid "Reset 2FA"
 msgstr "Resetovať 2FA"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:59
+#: src/components/routes/auth/ForgotPassword/index.tsx:60
 #: src/components/routes/auth/ResetPassword/index.tsx:75
 msgid "Reset password"
 msgstr "Obnoviť heslo"
@@ -14063,12 +14581,12 @@ msgstr "Obnoviť PIN? Prihlásený personál bude odhlásený a bude potrebovať
 msgid "Reset to {0}"
 msgstr "Obnoviť na {0}"
 
-#: src/components/routes/settings/Team/index.tsx:82
-#: src/components/routes/settings/Team/MemberRow.tsx:188
+#: src/components/routes/settings/Team/index.tsx:86
+#: src/components/routes/settings/Team/MemberRow.tsx:200
 msgid "Reset two-factor"
 msgstr "Obnoviť dvojfaktorové overenie"
 
-#: src/components/routes/settings/Team/index.tsx:77
+#: src/components/routes/settings/Team/index.tsx:81
 msgid "Reset two-factor authentication for {0}? Only do this once you've confirmed it's really them. They'll be able to sign in with just their password and will be emailed about the change."
 msgstr "Obnoviť dvojfaktorové overenie pre {0}? Urobte to len po overení, že ide naozaj o túto osobu. Bude sa môcť prihlásiť iba heslom a o zmene dostane e-mail."
 
@@ -14199,7 +14717,7 @@ msgstr "Skontrolujte podujatia označené automatickou kontrolou ako možný spa
 msgid "Review security settings"
 msgstr "Skontrolovať nastavenia zabezpečenia"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:197
+#: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Odvolať pozvánku"
 
@@ -14219,7 +14737,7 @@ msgstr "Pravé krídlo"
 
 #: src/components/common/TeamAccessFields/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:254
-#: src/components/routes/settings/Team/index.tsx:195
+#: src/components/routes/settings/Team/index.tsx:214
 msgid "Role"
 msgstr "Rola"
 
@@ -14227,6 +14745,10 @@ msgstr "Rola"
 msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "Rola"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+msgid "Role for new people"
+msgstr "Rola pre nových ľudí"
 
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:62
 msgid "Rotation"
@@ -14263,6 +14785,10 @@ msgstr "riadky na opravu"
 #: src/ee/seating/components/routes/event/Seating/SeatingRulesCard.tsx:32
 msgid "Rules saved"
 msgstr "Pravidlá uložené"
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+msgid "Run a successful test sign-in before turning this on."
+msgstr "Pred zapnutím úspešne vykonajte testovacie prihlásenie."
 
 #: src/components/routes/event/Lineup/RunSheetPrint.tsx:92
 msgid "Run sheet"
@@ -14446,11 +14972,16 @@ msgstr "Sobota"
 msgid "Save"
 msgstr "Uložiť"
 
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:177
+msgid "Save {0} connection"
+msgstr "Uložiť pripojenie {0}"
+
 #: src/components/common/SettingsPage/index.tsx:96
 #: src/components/common/WidgetEditor/index.tsx:195
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:177
 msgid "Save changes"
 msgstr "Uložiť zmeny"
 
@@ -14478,7 +15009,7 @@ msgstr "Uložiť zmeny"
 msgid "Save choices"
 msgstr "Uložiť výber"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:82
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:98
 msgid "Save codes"
 msgstr "Uložiť kódy"
 
@@ -14539,8 +15070,13 @@ msgstr "Uložte a potom skopírujte nový kód"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
 msgid "Saved"
 msgstr "Uložené"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+msgid "Saved and hidden. Leave blank to keep the current secret."
+msgstr "Uložené a skryté. Ak chcete ponechať súčasný secret, nechajte pole prázdne."
 
 #: src/components/routes/organizer/People/index.tsx:67
 msgid "Saved for this organizer"
@@ -14574,7 +15110,7 @@ msgstr "Uložené widgety"
 msgid "Saving an override creates a dedicated configuration for this organizer if it's currently on the system default."
 msgstr "Uložením vlastného nastavenia sa pre tohto organizátora vytvorí samostatná konfigurácia, ak práve používa systémovú predvolenú."
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:80
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:96
 #: src/components/layouts/CheckIn/index.tsx:76
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:66
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/ScanTab.tsx:42
@@ -14716,7 +15252,7 @@ msgstr "Vyhľadávať podľa názvu úlohy alebo výnimky..."
 msgid "Search by name or address..."
 msgstr "Hľadať podľa názvu alebo adresy..."
 
-#: src/components/routes/settings/Team/index.tsx:177
+#: src/components/routes/settings/Team/index.tsx:181
 msgid "Search by name or email"
 msgstr "Hľadať podľa mena alebo e-mailu"
 
@@ -14781,7 +15317,7 @@ msgstr "Hľadať termíny…"
 msgid "Search for an address"
 msgstr "Vyhľadať adresu"
 
-#: src/components/routes/settings/Team/index.tsx:180
+#: src/components/routes/settings/Team/index.tsx:184
 msgid "Search members"
 msgstr "Hľadať členov"
 
@@ -14995,7 +15531,7 @@ msgid "Secure your account"
 msgstr "Zabezpečte svoj účet"
 
 #: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:218
+#: src/components/routes/settings/Security/index.tsx:231
 msgid "Security"
 msgstr "Zabezpečenie"
 
@@ -15093,11 +15629,11 @@ msgstr "Vybrať menu"
 msgid "Select date"
 msgstr "Vybrať dátum"
 
-#: src/components/routes/welcome/index.tsx:446
+#: src/components/routes/welcome/index.tsx:447
 msgid "Select end time"
 msgstr "Vybrať čas ukončenia"
 
-#: src/components/routes/welcome/index.tsx:363
+#: src/components/routes/welcome/index.tsx:364
 msgid "Select event category"
 msgstr "Vybrať kategóriu udalosti"
 
@@ -15129,7 +15665,7 @@ msgstr "Vybrať produkty"
 msgid "Select products..."
 msgstr "Vybrať produkty..."
 
-#: src/components/routes/welcome/index.tsx:425
+#: src/components/routes/welcome/index.tsx:426
 msgid "Select start time"
 msgstr "Vybrať čas začiatku"
 
@@ -15153,7 +15689,7 @@ msgstr "Vybrať časové obdobie"
 
 #: src/components/forms/OrganizerForm/index.tsx:61
 #: src/components/modals/CreateOrganizerModal/index.tsx:60
-#: src/components/routes/auth/AcceptInvitation/index.tsx:120
+#: src/components/routes/auth/AcceptInvitation/index.tsx:223
 msgid "Select timezone"
 msgstr "Vybrať časové pásmo"
 
@@ -15210,7 +15746,7 @@ msgstr "Predaj pri vstupe"
 msgid "Sell cash only"
 msgstr "Predávať len za hotovosť"
 
-#: src/components/layouts/AuthLayout/index.tsx:43
+#: src/components/layouts/AuthLayout/AuthShell.tsx:40
 msgid "Sell out your event."
 msgstr "Vypredajte svoje podujatie."
 
@@ -15258,7 +15794,7 @@ msgstr "Predáva 1 produkt"
 msgid "Sells every product"
 msgstr "Predáva všetky produkty"
 
-#: src/components/routes/auth/Login/index.tsx:255
+#: src/components/routes/auth/Login/index.tsx:232
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15305,7 +15841,7 @@ msgstr "Odosielať dáta o objednávkach a účastníkoch v reálnom čase do ex
 msgid "Send refund notification email"
 msgstr "Odoslať notifikačný e-mail o vrátení"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:72
+#: src/components/routes/auth/ForgotPassword/index.tsx:74
 msgid "Send reset link"
 msgstr "Odoslať odkaz na obnovenie"
 
@@ -15337,7 +15873,7 @@ msgstr "Odosielanie je vypnuté, pretože nie je nakonfigurovaný odosielateľ e
 msgid "Sending to reader…"
 msgstr "Odosielanie do čítačky…"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:72
+#: src/components/routes/auth/ForgotPassword/index.tsx:74
 msgid "Sending..."
 msgstr "Odosielanie..."
 
@@ -15469,6 +16005,10 @@ msgstr "Nastavte čas konca každého termínu s týmto odstupom od času začia
 msgid "Set the location"
 msgstr "Nastaviť miesto"
 
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+msgid "Set the OAuth consent screen's user type to Internal."
+msgstr "Nastavte typ používateľa na obrazovke \"OAuth consent screen\" na \"Internal\"."
+
 #: src/components/routes/event/Settings/Sections/PaymentSettings/index.tsx:217
 msgid "Set the starting number for invoice numbering. This cannot be changed once invoices have been generated."
 msgstr "Nastavte počiatočné číslo pre číslovanie faktúr. Toto nie je možné zmeniť po vygenerovaní faktúr."
@@ -15495,11 +16035,15 @@ msgstr "Nastaviť rozvrh"
 msgid "Set Up Schedule"
 msgstr "Nastaviť rozvrh"
 
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+msgid "Set up SSO"
+msgstr "Nastaviť SSO"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:92
 msgid "Set up the tickets you'll sell and their prices"
 msgstr "Nastavte lístky, ktoré budete predávať, a ich ceny"
 
-#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:13
+#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:15
 msgid "Set up two-factor authentication"
 msgstr "Nastaviť dvojfaktorové overenie"
 
@@ -15507,7 +16051,7 @@ msgstr "Nastaviť dvojfaktorové overenie"
 msgid "Set up VAT, sales tax or a booking fee once, then add it to any product."
 msgstr "Nastavte DPH, daň z predaja alebo rezervačný poplatok raz a potom ho pridajte k ľubovoľnému produktu."
 
-#: src/components/routes/welcome/index.tsx:43
+#: src/components/routes/welcome/index.tsx:44
 msgid "Set up your organization"
 msgstr "Nastavte svoju organizáciu"
 
@@ -15516,7 +16060,7 @@ msgstr "Nastavte svoju organizáciu"
 msgid "Set up your schedule"
 msgstr "Nastavte si harmonogram"
 
-#: src/components/routes/welcome/index.tsx:415
+#: src/components/routes/welcome/index.tsx:416
 msgid "Set up your schedule in the next steps"
 msgstr "Rozvrh nastavíte v ďalších krokoch"
 
@@ -15798,25 +16342,148 @@ msgstr "Zobrazuje váš profil organizátora s tlačidlom kontaktu."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Zobrazuje vaše sociálne odkazy a tlačidlo kontaktu. Ak je nad všetkými ostatnými sekciami, zobrazia sa na vašej profilovej karte."
 
+#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Register/index.tsx:97
+#: src/components/routes/sso/Callback/index.tsx:298
+msgid "Sign in"
+msgstr "Prihlásiť sa"
+
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:302
 msgid "Sign in again to keep selling"
 msgstr "Prihláste sa znova a pokračujte v predaji"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:128
+msgid "Sign in again to start setting up two-factor authentication."
+msgstr "Znova sa prihláste a začnite nastavovať dvojfaktorové overenie."
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
+msgstr "Prihláste sa raz a skontrolujte pripojenie. Zobrazí, čo váš poskytovateľ identity zdieľa, a neprihlási vás tu."
+
+#: src/components/routes/auth/Login/index.tsx:136
+msgid "Sign in through your organization's identity provider instead of using a password."
+msgstr "Prihláste sa cez poskytovateľa identity vašej organizácie namiesto hesla."
+
+#: src/components/routes/auth/Login/index.tsx:114
+msgid "Sign in to {0}"
+msgstr "Prihlásiť sa do {0}"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+msgid "Sign in to accept the invitation"
+msgstr "Prihláste sa a prijmite pozvánku"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:163
+msgid "Sign in to join"
+msgstr "Prihláste sa a pripojte sa"
 
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:211
 msgid "Sign in with a PIN"
 msgstr "Prihlásiť sa PIN-om"
 
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
+msgstr "Prihláste sa účtom, ktorý ste už pripojili, a uistite sa, že ide o nové prihlásenie."
+
+#: src/components/common/SsoButtons/index.tsx:23
+msgid "Sign in with Microsoft"
+msgstr "Prihlásiť sa cez Microsoft"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:177
+#: src/components/routes/sso/Callback/index.tsx:269
+msgid "Sign in with password"
+msgstr "Prihlásiť sa heslom"
+
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
+#: src/components/routes/auth/Login/index.tsx:139
+msgid "Sign in with SSO"
+msgstr "Prihlásiť sa cez SSO"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:41
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:49
+msgid "Sign in with the account you usually use, or ask your administrator for help."
+msgstr "Prihláste sa účtom, ktorý zvyčajne používate, alebo požiadajte o pomoc svojho správcu."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+msgid "Sign in with your company Google accounts"
+msgstr "Prihláste sa firemnými účtami Google"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:48
+msgid "Sign in with your email and password instead."
+msgstr "Namiesto toho sa prihláste e-mailom a heslom."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:40
+msgid "Sign in with your password, then connect {providerName} in your security settings."
+msgstr "Prihláste sa heslom a potom pripojte {providerName} v nastaveniach zabezpečenia."
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:150
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:291
 msgid "Sign out"
 msgstr "Odhlásiť sa"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:140
+msgid "Sign out, then sign in as {0} to accept this invitation."
+msgstr "Odhláste sa a potom sa prihláste ako {0}, aby ste prijali túto pozvánku."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+msgid "Sign people out after"
+msgstr "Odhlasovať ľudí po"
+
+#: src/components/common/SsoButtons/index.tsx:30
+msgid "Sign up with {0}"
+msgstr "Zaregistrovať sa cez {0}"
+
+#: src/components/common/SsoButtons/index.tsx:27
+msgid "Sign up with Google"
+msgstr "Zaregistrovať sa cez Google"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
+msgstr "Prihlasovacie odkazy fungujú iba raz a po 10 minútach vyprší ich platnosť. Začnite znova na prihlasovacej stránke."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
+msgstr "Prihlasovacie odkazy fungujú iba raz a ich platnosť vyprší po 10 minútach. Ak chcete pokračovať, začnite znova."
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+msgid "Sign-in settings"
+msgstr "Nastavenia prihlásenia"
+
+#: src/components/routes/auth/Login/index.tsx:131
+msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
+msgstr "Prihlásenie bolo zrušené. Vyberte iný spôsob prihlásenia alebo to skúste znova."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+msgid "Sign-in with {providerName} is turned off"
+msgstr "Prihlásenie cez {providerName} je vypnuté"
 
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:194
 msgid "Signed in as"
 msgstr "Prihlásený ako"
 
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+msgid "Signed in as {0}"
+msgstr "Prihlásený ako {0}"
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+msgid "Signed in, but no email was shared"
+msgstr "Prihlásený, ale e-mail sa nezdieľal"
+
 #: src/components/routes/admin/Dashboard/index.tsx:395
 msgid "Signed up"
 msgstr "Registrácia"
+
+#: src/components/routes/auth/Login/index.tsx:180
+msgid "Signing in"
+msgstr "Prihlasovanie"
+
+#: src/components/routes/sso/Callback/index.tsx:360
+msgid "Signing you in with {0}…"
+msgstr "Prihlasujeme vás cez {0}…"
+
+#: src/components/routes/sso/Callback/index.tsx:360
+msgid "Signing you in…"
+msgstr "Prihlasujeme vás…"
 
 #: src/components/common/TwoFactor/AuthenticatorApps.tsx:15
 msgid "Simple and widely used, with optional cloud sync"
@@ -15835,6 +16502,28 @@ msgstr "Od {0} (UTC)"
 msgid "Single line text box"
 msgstr "Jednoriadkové textové pole"
 
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
+#: src/components/routes/settings/Team/index.tsx:200
+msgid "Single sign-on"
+msgstr "Jednotné prihlásenie"
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+msgid "Single sign-on is no longer required"
+msgstr "Jednotné prihlásenie už nie je povinné"
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:53
+msgid "Single sign-on is now required"
+msgstr "Jednotné prihlásenie je teraz povinné"
+
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
+msgstr "Jednotné prihlásenie nie je pre tento e-mail nastavené. Skontrolujte adresu alebo sa prihláste iným spôsobom."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+msgid "Single sign-on settings updated"
+msgstr "Nastavenia jednotného prihlásenia boli aktualizované"
+
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:99
 msgid "Size"
 msgstr "Veľkosť"
@@ -15847,7 +16536,7 @@ msgstr "Preskočiť ručne upravené termíny"
 msgid "Skip the 30-day grace period. This cannot be undone."
 msgstr "Preskočiť 30-dňovú ochrannú lehotu. Túto akciu nie je možné vrátiť späť."
 
-#: src/components/routes/welcome/index.tsx:559
+#: src/components/routes/welcome/index.tsx:558
 msgid "Skip this step"
 msgstr "Preskočiť tento krok"
 
@@ -15859,8 +16548,8 @@ msgstr "Preskočené listy bez rozpoznateľných stĺpcov:"
 msgid "Slovak"
 msgstr "Slovenčina"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:103
-#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/auth/AcceptInvitation/index.tsx:212
+#: src/components/routes/auth/Register/index.tsx:129
 msgid "Smith"
 msgstr "Kováč"
 
@@ -15978,7 +16667,7 @@ msgid "Someone just took {0}. Pick another seat, or let us find similar seats fo
 msgstr "Niekto si práve vzal {0}. Vyberte iné sedadlo, alebo nám dovoľte nájsť podobné sedadlá."
 
 #: src/components/common/ErrorDisplay/index.tsx:15
-#: src/components/routes/auth/AcceptInvitation/index.tsx:48
+#: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
 #: src/components/routes/product-widget/Payment/PaymentMethods/Stripe/index.tsx:64
 msgid "Something went wrong"
@@ -15988,7 +16677,7 @@ msgstr "Niečo sa pokazilo"
 msgid "Something went wrong while deleting the image. Please try again."
 msgstr "Pri odstraňovaní obrázka sa niečo pokazilo. Skúste to znova."
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:34
+#: src/components/routes/auth/ForgotPassword/index.tsx:35
 msgid "Something went wrong, please try again, or contact support if the problem persists"
 msgstr "Niečo sa pokazilo, skúste to znovu alebo kontaktujte podporu, ak problém pretrváva"
 
@@ -16005,25 +16694,34 @@ msgstr "Niečo sa pokazilo."
 msgid "Something went wrong. Please try again later."
 msgstr "Niečo sa pokazilo. Skúste to neskôr."
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:27
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:30
 #: src/components/layouts/Event/index.tsx:100
 #: src/components/layouts/OrganizerLayout/index.tsx:141
 #: src/components/routes/admin/DeletionRequests/index.tsx:64
 #: src/components/routes/admin/Users/index.tsx:33
-#: src/components/routes/auth/Login/index.tsx:114
-#: src/components/routes/auth/Login/index.tsx:167
+#: src/components/routes/auth/AcceptInvitation/index.tsx:98
+#: src/components/routes/auth/AcceptInvitation/index.tsx:107
+#: src/components/routes/auth/Login/index.tsx:106
+#: src/components/routes/auth/Register/index.tsx:75
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Profile/index.tsx:84
-#: src/components/routes/settings/Profile/index.tsx:94
-#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:41
-#: src/components/routes/settings/Security/index.tsx:50
-#: src/components/routes/settings/Security/index.tsx:97
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/Profile/index.tsx:134
+#: src/components/routes/settings/Profile/index.tsx:144
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
+#: src/components/routes/settings/Security/index.tsx:52
+#: src/components/routes/settings/Security/index.tsx:99
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
+#: src/components/routes/settings/Security/SignInMethods.tsx:100
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/hooks/useLoginSteps.ts:60
+#: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
 msgstr "Niečo sa pokazilo. Skúste to znovu."
 
@@ -16103,6 +16801,16 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, webová stránka a ď
 #: src/components/routes/event/TicketDesigner/index.tsx:135
 msgid "Square, at least 200 × 200px"
 msgstr "Štvorec, aspoň 200 × 200 px"
+
+#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:182
+#: src/components/routes/settings/Team/MemberRow.tsx:35
+msgid "SSO"
+msgstr "SSO"
+
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+msgid "SSO sign-ins (30 days)"
+msgstr "Prihlásenia cez SSO (30 dní)"
 
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:145
 msgid "Staff can apply a manual discount to a sale"
@@ -16235,7 +16943,7 @@ msgstr "Dátum začiatku"
 msgid "Start Date"
 msgstr "Dátum začiatku"
 
-#: src/components/routes/welcome/index.tsx:424
+#: src/components/routes/welcome/index.tsx:425
 msgid "Start date & time"
 msgstr "Dátum a čas začiatku"
 
@@ -16244,7 +16952,7 @@ msgid "Start date and time"
 msgstr "Dátum a čas začiatku"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceEditModal/index.tsx:108
-#: src/components/routes/welcome/index.tsx:247
+#: src/components/routes/welcome/index.tsx:248
 msgid "Start date is required"
 msgstr "Dátum začiatku je povinný"
 
@@ -16255,6 +16963,10 @@ msgstr "Začnite so šablónou, napríklad divadlo, banket alebo klub, a mapu pr
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:76
 msgid "Start from scratch"
 msgstr "Začať od nuly"
+
+#: src/components/routes/sso/Callback/index.tsx:365
+msgid "Start over"
+msgstr "Začať odznova"
 
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:197
 msgid "Start selling"
@@ -16376,6 +17088,10 @@ msgstr "Ešte dlžné"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Stále čakáte? Skontrolujte obrazovku čítačky. Ak nič nezobrazuje, zrušte a skúste znova."
 
+#: src/components/routes/sso/Callback/index.tsx:363
+msgid "Still working. This can take a few seconds."
+msgstr "Stále pracujeme. Môže to trvať niekoľko sekúnd."
+
 #: src/components/common/ImpersonationBanner/index.tsx:53
 msgid "Stop Impersonating"
 msgstr "Zastaviť zosobnenie"
@@ -16384,8 +17100,20 @@ msgstr "Zastaviť zosobnenie"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "Prestaňte dostávať e-maily, ktoré vám pomáhajú nastaviť a viesť vaše podujatia. E-maily o vašich objednávkach a účte sa budú naďalej odosielať."
 
-#: src/components/routes/settings/Security/index.tsx:43
-#: src/components/routes/settings/Security/index.tsx:46
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:69
+msgid "Stop requiring"
+msgstr "Prestať vyžadovať"
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+msgid "Stop requiring single sign-on before deleting the connection."
+msgstr "Pred odstránením pripojenia prestaňte vyžadovať jednotné prihlásenie."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:64
+msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
+msgstr "Prestať vyžadovať jednotné prihlásenie? Členovia sa budú môcť znova prihlasovať heslom alebo si ho obnovia, ak ho nikdy nemali."
+
+#: src/components/routes/settings/Security/index.tsx:45
+#: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Prestať dôverovať tomuto zariadeniu"
 
@@ -16658,7 +17386,7 @@ msgstr "Súhrn"
 msgid "Summer Music Festival {0}"
 msgstr "Letný hudobný festival {0}"
 
-#: src/components/routes/welcome/index.tsx:376
+#: src/components/routes/welcome/index.tsx:377
 msgid "Summer Music Festival 2025"
 msgstr "Letný hudobný festival 2025"
 
@@ -16674,6 +17402,10 @@ msgstr "Nedeľa"
 #: src/components/routes/event/Settings/Sections/EmailSettings/GeneralEmailSettings.tsx:63
 msgid "Support Email"
 msgstr "E-mail podpory"
+
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+msgid "Suspended"
+msgstr "Pozastavený"
 
 #: src/components/common/LanguageSwitcher/index.tsx:44
 msgid "Swedish"
@@ -16832,7 +17564,7 @@ msgstr "Dane a poplatky"
 #: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
-#: src/components/routes/settings/Team/index.tsx:147
+#: src/components/routes/settings/Team/index.tsx:151
 msgid "Team"
 msgstr "Tím"
 
@@ -16841,7 +17573,7 @@ msgstr "Tím"
 msgid "Team Access"
 msgstr "Prístup tímu"
 
-#: src/components/layouts/AuthLayout/index.tsx:25
+#: src/components/layouts/AuthLayout/AuthShell.tsx:22
 msgid "Team collaboration"
 msgstr "Tímová spolupráca"
 
@@ -16854,7 +17586,7 @@ msgstr "Technológie"
 msgid "Telegram"
 msgstr "Telegram"
 
-#: src/components/routes/welcome/index.tsx:46
+#: src/components/routes/welcome/index.tsx:47
 msgid "Tell us about your organization. This information will be displayed on your event pages."
 msgstr "Povedzte nám o svojej organizácii. Tieto informácie sa zobrazia na stránkach vašich udalostí."
 
@@ -16886,6 +17618,10 @@ msgstr "Šablóna bola úspešne odstránená"
 msgid "Template saved successfully"
 msgstr "Šablóna bola úspešne uložená"
 
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+msgid "Tenant ID"
+msgstr "Tenant ID"
+
 #: src/components/modals/ManageOrderModal/index.tsx:161
 msgid "Tender"
 msgstr "Spôsob platby"
@@ -16902,6 +17638,11 @@ msgstr "Podmienky služby"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:110
 msgid "Test email sent to your inbox"
 msgstr "Testovací e-mail bol odoslaný do vašej schránky"
+
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:88
+msgid "Test sign-in"
+msgstr "Testovacie prihlásenie"
 
 #: src/components/common/WidgetEditor/AppearancePanel.tsx:76
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:45
@@ -16956,6 +17697,14 @@ msgstr "Oznam „Powered by Hi.Events“ sa znova zobrazuje, kým licenciu neobn
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Účet má dokončené objednávky, preto bude anonymizovaný."
 
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:154
+msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
+msgstr "Vlastník účtu ({0}) sa môže stále prihlásiť heslom a dvojfaktorovým overením, takže môžete obnoviť prístup, ak bude {providerName} nedostupný. Keď sa to stane, e-mail dostane každý správca."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+msgid "The account owner is emailed whenever someone joins as an admin."
+msgstr "Vlastník účtu dostane e-mail vždy, keď sa niekto pripojí ako správca."
+
 #: src/components/modals/EditUserModal/index.tsx:76
 msgid "The account owner's role and access can't be changed."
 msgstr "Rolu a prístup vlastníka účtu nie je možné zmeniť."
@@ -16989,7 +17738,7 @@ msgstr "Karta bola zamietnutá"
 msgid "The check-in list you are looking for does not exist."
 msgstr "Zoznam odbavení, ktorý hľadáte, neexistuje."
 
-#: src/components/routes/welcome/index.tsx:213
+#: src/components/routes/welcome/index.tsx:214
 msgid "The code will expire in 10 minutes. Check your spam folder if you don't see the email."
 msgstr "Kód vyprší za 10 minút. Skontrolujte priečinok so spamom, ak e-mail nevidíte."
 
@@ -17170,6 +17919,14 @@ msgstr "Bezpečnostnú kontrolu sa nepodarilo načítať. Vypnite blokovanie obs
 msgid "The session for \"{title}\" originally scheduled for {0} has been rescheduled."
 msgstr "Termín podujatia „{title}“, pôvodne naplánovaný na {0}, bol presunutý."
 
+#: src/components/routes/sso/Callback/index.tsx:162
+msgid "The sign-in couldn't be completed. Please try again."
+msgstr "Prihlásenie sa nepodarilo dokončiť. Skúste to znova."
+
+#: src/utilites/ssoErrors.ts:9
+msgid "The sign-in service isn't responding."
+msgstr "Prihlasovacia služba neodpovedá."
+
 #: src/components/common/CapacityHelp/index.tsx:126
 msgid "The size of the room. The total number of people who can attend a date across every ticket. Leave it empty for no limit."
 msgstr "Veľkosť miestnosti. Celkový počet ľudí, ktorí sa môžu zúčastniť v daný dátum naprieč všetkými lístkami. Nechajte prázdne pre žiadny limit."
@@ -17182,6 +17939,18 @@ msgstr "Slot musí mať nejakú dĺžku"
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:187
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "Telo šablóny obsahuje neplatnú Liquid syntax. Opravte ju a skúste znovu."
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:40
+msgid "The test sign-in didn't finish."
+msgstr "Testovacie prihlásenie sa nedokončilo."
+
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:98
+msgid "The test sign-in failed"
+msgstr "Testovacie prihlásenie zlyhalo"
+
+#: src/components/routes/sso/Callback/index.tsx:150
+msgid "The test sign-in was cancelled."
+msgstr "Testovacie prihlásenie bolo zrušené."
 
 #: src/ee/seating/components/routes/event/Seating/BandProductsCard.tsx:62
 msgid "The tickets could not be linked"
@@ -17273,7 +18042,7 @@ msgstr "Nastala chyba pri odosielaní vašej správy"
 msgid "These are skipped"
 msgstr "Tieto sa preskočia"
 
-#: src/components/routes/settings/Security/index.tsx:168
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Tieto prehliadače preskočia zadanie kódu 30 dní po tom, čo im začnete dôverovať."
 
@@ -17320,6 +18089,10 @@ msgstr "Pozvánku ešte neprijal. Zmeny sa uplatnia po pripojení."
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:61
 msgid "Third"
 msgstr "Tretí"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+msgid "This {providerName} account is already in use"
+msgstr "Tento účet {providerName} sa už používa"
 
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:178
 msgid "This account has no completed orders, so all of its data will be permanently deleted."
@@ -17439,7 +18212,7 @@ msgstr "Tento dátum je vypredaný. Vyberte si iný dátum."
 msgid "This date only"
 msgstr "Len tento termín"
 
-#: src/components/routes/settings/Security/index.tsx:36
+#: src/components/routes/settings/Security/index.tsx:38
 msgid "This device"
 msgstr "Toto zariadenie"
 
@@ -17521,6 +18294,18 @@ msgstr "Toto pole je povinné"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Tieto informácie sa zobrazia na platobnej stránke, stránke súhrnu objednávky a v potvrdzovacom e-maile objednávky."
 
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+msgid "This invitation is for {0}"
+msgstr "Táto pozvánka je pre {0}"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+msgid "This invitation is no longer valid"
+msgstr "Táto pozvánka už nie je platná"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:123
+msgid "This invitation was sent to <0>{0}</0>."
+msgstr "Táto pozvánka bola odoslaná na <0>{0}</0>."
+
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:54
 msgid "This is a companion seat for someone accompanying a wheelchair user."
 msgstr "Toto je sedadlo pre sprievod používateľa invalidného vozíka."
@@ -17529,13 +18314,17 @@ msgstr "Toto je sedadlo pre sprievod používateľa invalidného vozíka."
 msgid "This is a companion seat for someone accompanying a wheelchair user. Choose a wheelchair space first, then add this seat."
 msgstr "Toto je sedadlo pre sprievod používateľa invalidného vozíka. Najprv vyberte miesto pre invalidný vozík a potom pridajte toto sedadlo."
 
-#: src/components/routes/welcome/index.tsx:401
+#: src/components/routes/welcome/index.tsx:402
 msgid "This is a recurring event"
 msgstr "Toto je opakujúce sa podujatie"
 
 #: src/components/routes/event/Settings/Sections/LocationSettings/index.tsx:157
 msgid "This is an online event"
 msgstr "Toto je online udalosť"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:150
+msgid "This is how you sign in. Add a password or another option before removing it."
+msgstr "Takto sa prihlasujete. Pred odstránením pridajte heslo alebo inú možnosť."
 
 #: src/components/forms/ProductCategoryForm/index.tsx:17
 msgid "This is the name of the category that will be displayed on the event page."
@@ -17549,6 +18338,10 @@ msgstr "Toto je meno vášho organizátora, ktoré sa zobrazí vašim používat
 #: src/components/modals/CreateWebhookModal/index.tsx:64
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "Toto je jediný čas, kedy sa zobrazí podpisový tajný kľúč. Skopírujte ho teraz a bezpečne uložte."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+msgid "This is usually temporary. Try again in a moment."
+msgstr "Zvyčajne ide o dočasný problém. Skúste to znova o chvíľu."
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:68
 msgid "This licence expires on {0}. Renew before then to avoid interruption."
@@ -17690,6 +18483,15 @@ msgstr "Toto sedadlo je pozdržané"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Táto mapa miest bola zmenená inde. Načítať najnovšiu verziu? Neuložené zmeny sa stratia."
 
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+msgid "This sign-in link has expired"
+msgstr "Platnosť tohto prihlasovacieho odkazu vypršala"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+msgid "This sign-in option isn't available"
+msgstr "Táto možnosť prihlásenia nie je dostupná"
+
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:46
 msgid "This space is reserved for wheelchair users and guests with access needs."
 msgstr "Toto miesto je vyhradené pre používateľov invalidných vozíkov a hostí so špecifickými potrebami."
@@ -17751,7 +18553,7 @@ msgstr "Št"
 msgid "Thursday"
 msgstr "Štvrtok"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:169
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Pri prihlásení zaškrtnite \"Dôverovať tomuto zariadeniu\" a v tomto prehliadači sa kód nebude vyžadovať 30 dní."
 
@@ -18008,12 +18810,12 @@ msgstr "Časový rozpis"
 #: src/components/modals/CreateEventModal/index.tsx:427
 #: src/components/modals/CreateOrganizerModal/index.tsx:59
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:161
-#: src/components/routes/auth/AcceptInvitation/index.tsx:119
+#: src/components/routes/auth/AcceptInvitation/index.tsx:222
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:145
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:125
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:363
-#: src/components/routes/settings/Account/index.tsx:92
-#: src/components/routes/settings/Profile/index.tsx:191
+#: src/components/routes/settings/Account/index.tsx:96
+#: src/components/routes/settings/Profile/index.tsx:241
 msgid "Timezone"
 msgstr "Časové pásmo"
 
@@ -18044,6 +18846,10 @@ msgstr "do"
 msgid "To"
 msgstr "Do"
 
+#: src/components/routes/settings/Profile/index.tsx:289
+msgid "To change the email you sign in with, confirm it's you. We'll send a confirmation link to {0}."
+msgstr "Ak chcete zmeniť e-mail, ktorým sa prihlasujete, potvrďte, že ste to vy. Pošleme potvrdzovací odkaz na {0}."
+
 #: src/components/modals/SendMessageModal/index.tsx:317
 msgid "To increase your limits, contact us at"
 msgstr "Na zvýšenie limitov nás kontaktujte na"
@@ -18065,10 +18871,12 @@ msgstr "Prepnúť stĺpce"
 msgid "Tomorrow"
 msgstr "Zajtra"
 
-#: src/components/routes/auth/ForgotPassword/index.tsx:33
-#: src/components/routes/auth/Login/index.tsx:88
-#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/ForgotPassword/index.tsx:34
+#: src/components/routes/auth/Login/index.tsx:85
+#: src/components/routes/auth/Register/index.tsx:74
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
+#: src/hooks/useLoginSteps.ts:54
+#: src/utilites/ssoErrors.ts:13
 msgid "Too many attempts. Please wait a minute and try again."
 msgstr "Príliš veľa pokusov. Počkajte minútu a skúste znova."
 
@@ -18194,7 +19002,7 @@ msgstr "Sledovanie a analytika"
 msgid "Trust this device for 30 days"
 msgstr "Dôverovať tomuto zariadeniu 30 dní"
 
-#: src/components/routes/settings/Security/index.tsx:165
+#: src/components/routes/settings/Security/index.tsx:167
 msgid "Trusted devices"
 msgstr "Dôveryhodné zariadenia"
 
@@ -18211,7 +19019,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Upravte filtre, aby ste videli viac termínov."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
-#: src/components/routes/settings/Security/index.tsx:75
+#: src/components/routes/settings/Security/index.tsx:77
+#: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:88
 #: src/ee/box-office/components/layouts/BoxOffice/tabs/SellTab.tsx:449
@@ -18219,7 +19028,7 @@ msgstr "Upravte filtre, aby ste videli viac termínov."
 msgid "Try again"
 msgstr "Skúsiť znova"
 
-#: src/components/routes/auth/Login/index.tsx:236
+#: src/components/routes/auth/Login/index.tsx:213
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Skúste iný e-mail"
@@ -18245,7 +19054,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Turečtina"
 
-#: src/components/routes/settings/Security/index.tsx:202
+#: src/components/routes/settings/Security/index.tsx:204
 msgid "Turn off"
 msgstr "Vypnúť"
 
@@ -18253,9 +19062,9 @@ msgstr "Vypnúť"
 msgid "Turn off to make the widget fill the height of its container."
 msgstr "Vypnite, ak chcete, aby widget vyplnil celú výšku svojho kontajnera."
 
-#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:48
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:190
+#: src/components/routes/settings/Security/index.tsx:192
 msgid "Turn off two-factor authentication"
 msgstr "Vypnúť dvojfaktorové overenie"
 
@@ -18263,13 +19072,17 @@ msgstr "Vypnúť dvojfaktorové overenie"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Vypnúť dvojfaktorové overenie pre používateľa {0}? Urobte to až po overení jeho totožnosti. Dostane e-mail a bude sa môcť prihlásiť iba heslom."
 
-#: src/components/routes/settings/Security/index.tsx:127
+#: src/components/routes/settings/Security/index.tsx:129
 msgid "Turn on"
 msgstr "Zapnúť"
 
 #: src/components/common/WidgetEditor/ContentFields.tsx:30
 msgid "Turn on extra sections and drag to reorder."
 msgstr "Zapnite ďalšie sekcie a presunutím zmeňte ich poradie."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:100
+msgid "Turn on sign-in with {providerName} and verify a domain first."
+msgstr "Najprv zapnite prihlásenie cez {providerName} a overte doménu."
 
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:66
 msgid "Turn on two-factor authentication for your own profile first."
@@ -18300,14 +19113,14 @@ msgstr "Dve sedadlá v {0} sa volajú rovnako – {1}. Dajte jednej zo zvýrazne
 msgid "Two settings decide how many people can book a date. Whichever is lower is what you can sell."
 msgstr "Dve nastavenia určujú, koľko ľudí si môže rezervovať dátum. Nižšie z nich je to, čo môžete predať."
 
-#: src/components/routes/settings/Team/index.tsx:197
+#: src/components/routes/settings/Team/index.tsx:216
 msgid "Two-factor"
 msgstr "Dvojfaktorové"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
-#: src/components/routes/settings/Security/index.tsx:72
-#: src/components/routes/settings/Security/index.tsx:82
-#: src/components/routes/settings/Security/index.tsx:107
+#: src/components/routes/settings/Security/index.tsx:74
+#: src/components/routes/settings/Security/index.tsx:84
+#: src/components/routes/settings/Security/index.tsx:109
 msgid "Two-factor authentication"
 msgstr "Dvojfaktorové overenie"
 
@@ -18319,21 +19132,21 @@ msgstr "Dvojfaktorové overenie je teraz voliteľné"
 msgid "Two-factor authentication is now required"
 msgstr "Dvojfaktorové overenie je teraz povinné"
 
-#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:32
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:37
 msgid "Two-factor authentication is off"
 msgstr "Dvojfaktorové overenie je vypnuté"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:236
-#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:17
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:255
+#: src/components/routes/settings/Security/EnableTwoFactorModal.tsx:20
 msgid "Two-factor authentication is on"
 msgstr "Dvojfaktorové overenie je zapnuté"
 
 #: src/components/routes/admin/Users/index.tsx:32
-#: src/components/routes/settings/Team/index.tsx:79
+#: src/components/routes/settings/Team/index.tsx:83
 msgid "Two-factor authentication reset"
 msgstr "Dvojfaktorové overenie bolo resetované"
 
-#: src/components/routes/settings/Team/index.tsx:161
+#: src/components/routes/settings/Team/index.tsx:165
 msgid "Two-factor on"
 msgstr "Dvojfaktorové overenie zapnuté"
 
@@ -18364,7 +19177,7 @@ msgstr "Zadajte meno na vytvorenie profilu"
 msgid "Type the account name to confirm"
 msgstr "Na potvrdenie zadajte názov účtu"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:219
 msgid "Type the code your authenticator app shows for {0}."
 msgstr "Zadajte kód, ktorý overovacia aplikácia zobrazuje pre {0}."
 
@@ -18509,6 +19322,18 @@ msgstr "nedostupné"
 #: src/ee/box-office/components/routes/organizer/Payments/TerminalReaders/index.tsx:41
 msgid "Unavailable, re-register"
 msgstr "Nedostupné, zaregistrujte znova"
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+msgid "Under Certificates & secrets, create a client secret."
+msgstr "V časti \"Certificates & secrets\" vytvorte client secret."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
+msgstr "V časti \"Credentials\" vytvorte OAuth client ID pre webovú aplikáciu a pridajte nižšie uvedený redirect URI."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
+msgstr "V časti \"Token configuration\" pridajte do ID tokenu voliteľné claimy email a xms_edov."
 
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:299
 #: src/ee/seating/components/SeatMapDesigner/index.tsx:300
@@ -18820,15 +19645,24 @@ msgstr "USB skener pozastavený"
 msgid "Use <0>Liquid templating</0> to personalize your emails"
 msgstr "Použite <0>Liquid šablonovanie</0> na personalizáciu e-mailov"
 
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:153
+#: src/components/routes/sso/Callback/index.tsx:263
+msgid "Use a different account"
+msgstr "Použiť iný účet"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:263
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/SectionContentEditor.tsx:318
 #: src/components/routes/event/Lineup/ProfileImagesField.tsx:123
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Použite obrázok JPG, PNG alebo WebP menší ako 5MB."
 
-#: src/components/routes/settings/Security/index.tsx:224
+#: src/components/routes/settings/Security/SignInMethods.tsx:86
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Použite dlhé heslo, ktoré nepoužívate nikde inde."
+
+#: src/components/routes/sso/Callback/index.tsx:291
+msgid "Use a password instead"
+msgstr "Použiť heslo"
 
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 msgid "Use a recovery code"
@@ -18889,7 +19723,7 @@ msgstr "Používa sa pre okraje, zvýraznenia a štýlovanie QR kódu"
 msgid "Used for buttons, links and highlights"
 msgstr "Používa sa pre tlačidlá, odkazy a zvýraznenia"
 
-#: src/components/routes/settings/Account/index.tsx:93
+#: src/components/routes/settings/Account/index.tsx:97
 msgid "Used for dates in account emails, like deletion notices."
 msgstr "Používa sa pre dátumy v e-mailoch o účte, napríklad v oznámeniach o vymazaní."
 
@@ -18905,7 +19739,7 @@ msgstr "Používa sa v karte Skenovať a na odbavenie účastníkov po predaji"
 msgid "Used to measure and personalise ads."
 msgstr "Používajú sa na meranie a personalizáciu reklám."
 
-#: src/components/routes/settings/Profile/index.tsx:171
+#: src/components/routes/settings/Profile/index.tsx:221
 msgid "Used to sign in. Changing it sends a confirmation link to the new address."
 msgstr "Používa sa na prihlásenie. Pri zmene sa na novú adresu odošle potvrdzovací odkaz."
 
@@ -18955,6 +19789,7 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "Overovanie čísla DPH..."
 
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:96
 #: src/ee/seating/components/lib/templates.ts:30
 msgid "Value"
 msgstr "Úsporné"
@@ -19060,7 +19895,7 @@ msgstr "Názov miesta konania"
 msgid "Verification"
 msgstr "Overenie"
 
-#: src/components/routes/welcome/index.tsx:161
+#: src/components/routes/welcome/index.tsx:162
 msgid "Verification code"
 msgstr "Overovací kód"
 
@@ -19071,6 +19906,7 @@ msgstr "Overovací e-mail odoslaný. Skontrolujte si doručenú poštu."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Overené"
 
@@ -19078,16 +19914,25 @@ msgstr "Overené"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Overené účty môžu posielať správy účastníkom a spravovať e-mailové šablóny. Pripojenie služby Stripe overí účet automaticky."
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:81
+#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:113
+msgid "Verified by {providerName}"
+msgstr "Overené cez {providerName}"
+
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+msgid "Verified domains"
+msgstr "Overené domény"
+
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:104
 msgid "Verify"
 msgstr "Overiť"
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:223
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:242
 msgid "Verify and turn on"
 msgstr "Overiť a zapnúť"
 
-#: src/components/routes/welcome/index.tsx:189
+#: src/components/routes/welcome/index.tsx:190
 msgid "Verify Email"
 msgstr "Overiť e-mail"
 
@@ -19100,13 +19945,21 @@ msgstr "Overiť záložný kód"
 msgid "Verify your email"
 msgstr "Overte svoj e-mail"
 
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+msgid "Verify your email domains"
+msgstr "Overte svoje e-mailové domény"
+
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:159
 msgid "Verify your email so attendees can receive tickets"
 msgstr "Overte si e-mail, aby účastníci mohli dostávať lístky"
 
-#: src/components/routes/welcome/index.tsx:189
+#: src/components/routes/welcome/index.tsx:190
 msgid "Verifying..."
 msgstr "Overovanie..."
+
+#: src/components/routes/sso/Callback/CompleteSignup.tsx:170
+msgid "via {providerName}"
+msgstr "cez {providerName}"
 
 #: src/utilites/homepageSections.ts:43
 msgid "Video"
@@ -19275,7 +20128,7 @@ msgstr "Zobraziť, upraviť a exportovať registrovaných účastníkov."
 msgid "Viewer"
 msgstr "Pozorovateľ"
 
-#: src/components/routes/settings/Team/index.tsx:139
+#: src/components/routes/settings/Team/index.tsx:143
 msgid "Viewers"
 msgstr "Pozorovatelia"
 
@@ -19347,7 +20200,7 @@ msgid "Waiting for scan…"
 msgstr "Čaká sa na sken…"
 
 #: src/components/forms/ProductForm/index.tsx:462
-#: src/components/layouts/AuthLayout/index.tsx:19
+#: src/components/layouts/AuthLayout/AuthShell.tsx:16
 #: src/components/layouts/Event/index.tsx:152
 #: src/components/routes/event/Settings/index.tsx:92
 #: src/components/routes/event/Settings/Sections/WaitlistSettings/index.tsx:55
@@ -19380,6 +20233,10 @@ msgstr "Upozornenie: Toto je predvolená konfigurácia systému. Zmeny ovplyvnia
 #: src/components/routes/product-widget/PaymentReturn/index.tsx:89
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Nepodarilo sa spracovať vašu platbu. Skúste to znovu alebo kontaktujte podporu."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+msgid "We couldn't confirm it's you"
+msgstr "Nepodarilo sa overiť, že ste to vy"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:167
 msgid "We couldn't copy that Stripe connection. Please try again."
@@ -19425,6 +20282,10 @@ msgstr "Nenašiel sa lístok, ktorý hľadáte. Odkaz mohol vypršať alebo sa p
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Nenašla sa táto objednávka. Mohla byť odstránená."
 
+#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:93
+msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
+msgstr "Tento záznam TXT sme pri dennej kontrole nenašli. Obnovte ho, aby jednotné prihlásenie pre túto doménu naďalej fungovalo."
+
 #: src/hooks/useOccurrenceCheckIn.tsx:43
 msgid "We couldn't load the check-in lists. Please try again."
 msgstr "Check-in zoznamy sa nepodarilo načítať. Skúste to znova."
@@ -19466,6 +20327,14 @@ msgstr "Schránku sa nepodarilo prečítať. Na vloženie stlačte Ctrl+V alebo 
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Nepodarilo sa preusporiadať kategórie. Skúste to znovu."
 
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+msgid "We couldn't sign you in"
+msgstr "Nepodarilo sa vás prihlásiť"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:46
+msgid "We couldn't sign you in with {providerName}"
+msgstr "Nepodarilo sa vás prihlásiť cez {providerName}"
+
 #: src/components/routes/product-widget/CollectInformation/index.tsx:418
 msgid "We hit a snag loading this page. Please try again."
 msgstr "Nastala chyba pri načítaní tejto stránky. Skúste to znovu."
@@ -19482,6 +20351,10 @@ msgstr "Odporúčame rozmery 1950px x 650px, pomer 3:1 a maximálnu veľkosť s�
 #: src/components/routes/organizer/OrganizerHomepageDesigner/index.tsx:172
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Odporúčame rozmery 400px x 400px a maximálnu veľkosť súboru 5 MB"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:99
+msgid "We sent a link to {0}. Open it to set your password."
+msgstr "Poslali sme odkaz na {0}. Otvorte ho a nastavte si heslo."
 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:158
 msgid "We sent a verification link to {0}"
@@ -19536,7 +20409,7 @@ msgstr "Spracovávame vašu objednávku. Čakajte prosím..."
 msgid "We've made changes to the schedule for \"{title}\" — {description} affecting {affectedCount} session(s)."
 msgstr "Zmenili sme rozvrh podujatia „{title}“ — {description} sa týka {affectedCount} termínov."
 
-#: src/components/routes/welcome/index.tsx:147
+#: src/components/routes/welcome/index.tsx:148
 msgid "We've sent a 5-digit verification code to:"
 msgstr "Poslali sme 5-ciferný overovací kód na:"
 
@@ -19550,7 +20423,7 @@ msgstr "Webhook bol úspešne vytvorený"
 msgid "Webhook deleted successfully"
 msgstr "Webhook bol úspešne odstránený"
 
-#: src/components/layouts/AuthLayout/index.tsx:27
+#: src/components/layouts/AuthLayout/AuthShell.tsx:24
 msgid "Webhook integrations"
 msgstr "Integrácie webhookov"
 
@@ -19620,11 +20493,11 @@ msgstr "týždne"
 msgid "Weibo"
 msgstr "Weibo"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:77
-msgid "Welcome aboard! Please login to continue."
-msgstr "Vitajte na palube! Prihláste sa pre pokračovanie."
+#: src/components/routes/auth/AcceptInvitation/index.tsx:84
+msgid "Welcome aboard! Sign in to continue."
+msgstr "Vitajte! Prihláste sa a pokračujte."
 
-#: src/components/routes/auth/Login/index.tsx:175
+#: src/components/routes/auth/Login/index.tsx:114
 msgid "Welcome back"
 msgstr "Vitajte späť"
 
@@ -19632,7 +20505,7 @@ msgstr "Vitajte späť"
 msgid "Welcome back{0} 👋"
 msgstr "Vitajte späť{0} 👋"
 
-#: src/components/routes/welcome/index.tsx:535
+#: src/components/routes/welcome/index.tsx:534
 msgid "Welcome to {0}, {1} 👋"
 msgstr "Vitajte v {0}, {1} 👋"
 
@@ -19682,7 +20555,7 @@ msgstr "O koľkej prídete?"
 msgid "What to do"
 msgstr "Čo robiť"
 
-#: src/components/routes/welcome/index.tsx:334
+#: src/components/routes/welcome/index.tsx:335
 msgid "What type of event?"
 msgstr "Aký typ udalosti?"
 
@@ -19874,7 +20747,7 @@ msgstr "Kto vystupuje?"
 
 #: src/components/common/TeamAccessFields/index.tsx:112
 #: src/components/common/TeamAccessPanel/index.tsx:87
-#: src/components/routes/settings/Team/MemberRow.tsx:34
+#: src/components/routes/settings/Team/MemberRow.tsx:45
 msgid "Whole account"
 msgstr "Celý účet"
 
@@ -19921,6 +20794,10 @@ msgstr "Šírka"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wix zobrazuje vložený kód v rámčeku pevnej veľkosti. Pre najlepší zážitok nastavte „Pokladňa sa otvorí v“ na „Nová karta“."
 
+#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+msgid "Work email"
+msgstr "Pracovný e-mail"
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Working"
 msgstr "Pracuje"
@@ -19934,7 +20811,7 @@ msgstr "Pracuje"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Register/index.tsx:171
 msgid "Working..."
 msgstr "Pracuje..."
 
@@ -19945,6 +20822,11 @@ msgstr "Workshop"
 #: src/components/common/CapacityHelp/index.tsx:37
 msgid "Workshop with early bird"
 msgstr "Workshop s early bird"
+
+#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:144
+#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+msgid "Workspace domain"
+msgstr "Doména Workspace"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:89
 msgid "Write your message here..."
@@ -19977,6 +20859,7 @@ msgstr "roky"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
+#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
 msgid "Yes"
 msgstr "Áno"
 
@@ -19996,9 +20879,25 @@ msgstr "Áno, odstrániť ich"
 msgid "Yoga class"
 msgstr "Hodina jogy"
 
-#: src/components/routes/settings/Team/MemberRow.tsx:110
+#: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Vy"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+msgid "You already have an account"
+msgstr "Už máte účet"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:38
+msgid "You already have an account with {email}"
+msgstr "Už máte účet s e-mailom {email}"
+
+#: src/components/routes/auth/AcceptInvitation/index.tsx:164
+msgid "You already have an account. Sign in and we'll bring you back here to join the team."
+msgstr "Už máte účet. Prihláste sa a vrátime vás sem, aby ste sa mohli pripojiť k tímu."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
+msgstr "Už máte účet. Prihláste sa a vrátime vás k pozvánke."
 
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:53
 msgid "You are changing your email to <0>{0}</0>."
@@ -20016,6 +20915,10 @@ msgstr "Vydávate čiastočné vrátenie. Zákazníkovi bude vrátené {0} {1}."
 #: src/hooks/useCheckInController.tsx:238
 msgid "You are offline"
 msgstr "Ste offline"
+
+#: src/components/routes/auth/Login/AccountChooser.tsx:29
+msgid "You belong to more than one account. Choose where you'd like to go."
+msgstr "Patríte do viacerých účtov. Vyberte, kam chcete prejsť."
 
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:79
 msgid "You can add up to {maxQuantity}"
@@ -20078,13 +20981,9 @@ msgstr "Nemôžete odstrániť poslednú kategóriu."
 msgid "You cannot delete this price tier because there are already products sold for this tier. You can hide it instead."
 msgstr "Nemôžete odstrániť túto cenovú úroveň, pretože pre ňu už boli predané produkty. Namiesto toho ju môžete skryť."
 
-#: src/components/modals/ChooseAccountModal/index.tsx:14
-msgid "You have access to multiple accounts. Please choose one to continue."
-msgstr "Máte prístup k viacerým účtom. Vyberte jeden pre pokračovanie."
-
-#: src/components/routes/auth/AcceptInvitation/index.tsx:58
-msgid "You have already accepted this invitation. Please login to continue."
-msgstr "Túto pozvánku ste už prijali. Prihláste sa pre pokračovanie."
+#: src/components/common/ConfirmIdentity/index.tsx:86
+msgid "You confirmed it's you. Continue within a few minutes."
+msgstr "Potvrdili ste svoju totožnosť. Pokračujte do niekoľkých minút."
 
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
@@ -20123,7 +21022,7 @@ msgstr "Pred uložením musíte potvrdiť svoje povinnosti"
 msgid "You must agree to receive messages"
 msgstr "Musíte súhlasiť s prijímaním správ"
 
-#: src/components/routes/auth/AcceptInvitation/index.tsx:34
+#: src/components/routes/auth/AcceptInvitation/index.tsx:44
 msgid "You must agree to the terms and conditions"
 msgstr "Musíte súhlasiť s podmienkami a ustanoveniami"
 
@@ -20155,6 +21054,14 @@ msgstr "Pred odosielaním správ musíte overiť e-mail účtu."
 msgid "You receive"
 msgstr "Dostanete"
 
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
+msgid "You sign in without a password. Add one as a backup way to sign in."
+msgstr "Prihlasujete sa bez hesla. Pridajte si ho ako záložný spôsob prihlásenia."
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+msgid "You signed in as {0}. Use the account the invitation was sent to."
+msgstr "Prihlásili ste sa ako {0}. Použite účet, na ktorý bola pozvánka odoslaná."
+
 #: src/components/routes/auth/Login/RecoveryCodeNotice.tsx:28
 msgid "You used a recovery code. You have {remaining} recovery codes left."
 msgstr "Použili ste záložný kód. Zostáva vám {remaining} záložných kódov."
@@ -20167,9 +21074,17 @@ msgstr "Použili ste záložný kód. Zostáva vám 1 záložný kód."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Objednávku budete musieť označiť ako zaplatenú manuálne. Môžete to urobiť na stránke správy objednávky."
 
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
+msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
+msgstr "Už sa nebudete môcť prihlásiť cez {0}. Ostatné zariadenia prihlásené do vášho účtu budú odhlásené."
+
 #: src/components/routes/emails/Unsubscribe/index.tsx:21
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "Tieto e-maily už nebudete dostávať. E-maily o vašich objednávkach a účte sa budú naďalej odosielať."
+
+#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:160
+msgid "You'll be signed out and will need to sign in again with {providerName}."
+msgstr "Budete odhlásený(á) a budete sa musieť znova prihlásiť cez {providerName}."
 
 #: src/components/modals/CreateCheckInListModal/index.tsx:64
 msgid "You'll need a ticket before you can create a check-in list."
@@ -20207,7 +21122,7 @@ msgstr "Prihlasujete sa na čakaciu listinu na {occurrenceDate}."
 msgid "You're on the waitlist!"
 msgstr "Ste v zozname čakateľov!"
 
-#: src/components/routes/settings/Security/index.tsx:149
+#: src/components/routes/settings/Security/index.tsx:151
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Dochádzajú vám kódy. Vygenerujte si novú sadu, aby ste sa nezamkli."
 
@@ -20215,9 +21130,17 @@ msgstr "Dochádzajú vám kódy. Vygenerujte si novú sadu, aby ste sa nezamkli.
 msgid "You're signed in"
 msgstr "Ste prihlásený(á)"
 
+#: src/components/routes/auth/AcceptInvitation/index.tsx:139
+msgid "You're signed in as {0}"
+msgstr "Ste prihlásení ako {0}"
+
 #: src/components/routes/emails/Unsubscribe/index.tsx:19
 msgid "You're unsubscribed"
 msgstr "Boli ste odhlásený"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "You've been invited"
+msgstr "Dostali ste pozvánku"
 
 #: src/components/routes/product-widget/CollectInformation/index.tsx:448
 msgid "You've been offered a spot!"
@@ -20231,11 +21154,11 @@ msgstr "Zmenili ste čas termínu"
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Vaša farba zvýraznenia v tomto režime dostatočne nevynikne."
 
-#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:200
+#: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:219
 msgid "your account"
 msgstr "váš účet"
 
-#: src/components/routes/settings/Security/index.tsx:117
+#: src/components/routes/settings/Security/index.tsx:119
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Váš účet pri prihlásení vyžaduje kód z overovacej aplikácie. Zapnuté {0}."
 
@@ -20251,11 +21174,19 @@ msgstr "Váš účet má limity správ. Na zvýšenie limitov nás kontaktujte n
 msgid "Your account is now scheduled for deletion."
 msgstr "Váš účet je teraz naplánovaný na vymazanie."
 
-#: src/components/routes/settings/Account/index.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+msgid "Your account isn't active"
+msgstr "Váš účet nie je aktívny"
+
+#: src/hooks/useLoginSteps.ts:101
+msgid "Your account isn't active. Ask the account owner to invite you again."
+msgstr "Váš účet nie je aktívny. Požiadajte vlastníka účtu, aby vás znova pozval."
+
+#: src/components/routes/settings/Account/index.tsx:71
 msgid "Your account name and its default currency and timezone."
 msgstr "Názov vášho účtu a jeho predvolená mena a časové pásmo."
 
-#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:51
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:57
 msgid "Your account will only be protected by your password. Your recovery codes and trusted devices will be removed."
 msgstr "Váš účet bude chránený iba heslom. Záložné kódy a dôveryhodné zariadenia budú odstránené."
 
@@ -20291,7 +21222,7 @@ msgstr "Vaše údaje"
 msgid "Your Email"
 msgstr "Váš e-mail"
 
-#: src/components/routes/settings/Profile/index.tsx:131
+#: src/components/routes/settings/Profile/index.tsx:181
 msgid "Your email request change to <0>{0}</0> is pending. Please check your email to confirm"
 msgstr "Vaša žiadosť o zmenu e-mailu na <0>{0}</0> čaká. Skontrolujte e-mail na potvrdenie"
 
@@ -20306,6 +21237,14 @@ msgstr "Vaša udalosť je živá!"
 #: src/ee/licensing/components/LicenceModal/index.tsx:111
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Vaša licencia Hi.Events Enterprise vypršala {expiresAt}. Všetko zostáva zapnuté do {graceEndsAt}. Obnovte ju skôr, aby ste sa vyhli prerušeniu."
+
+#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+msgid "your identity provider"
+msgstr "váš poskytovateľ identity"
+
+#: src/components/routes/sso/Callback/index.tsx:151
+msgid "Your identity provider returned an error: {providerError}"
+msgstr "Váš poskytovateľ identity vrátil chybu: {providerError}"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:110
 #: src/ee/licensing/components/LicenceModal/index.tsx:119
@@ -20336,7 +21275,7 @@ msgstr "Vaše meno"
 msgid "Your Name"
 msgstr "Vaše meno"
 
-#: src/components/routes/settings/Profile/index.tsx:126
+#: src/components/routes/settings/Profile/index.tsx:176
 msgid "Your name, sign-in email and preferences."
 msgstr "Vaše meno, prihlasovací e-mail a predvoľby."
 
@@ -20376,6 +21315,10 @@ msgstr "Vaše objednávky sa zobrazia tu, keď začnú prichádzať."
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Vaša organizácia vyžaduje dvojfaktorové overenie. Nastavte ho teraz a pokračujte. Zaberie to asi minútu."
 
+#: src/components/routes/auth/Login/index.tsx:135
+msgid "Your organization requires single sign-on"
+msgstr "Vaša organizácia vyžaduje jednotné prihlásenie"
+
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
 msgstr "Adresa vášho organizátora"
@@ -20388,14 +21331,14 @@ msgstr "Váš organizátor zatiaľ nemá popis."
 msgid "Your organizer profile isn't published."
 msgstr "Váš profil organizátora nie je zverejnený."
 
-#: src/components/routes/auth/Login/index.tsx:200
-#: src/components/routes/auth/Register/index.tsx:119
+#: src/components/routes/auth/Login/index.tsx:175
+#: src/components/routes/auth/Register/index.tsx:145
 msgid "Your password"
 msgstr "Vaše heslo"
 
-#: src/components/routes/settings/Security/index.tsx:219
-msgid "Your password and two-factor authentication. They protect every account you belong to."
-msgstr "Vaše heslo a dvojfaktorové overenie. Chránia každý účet, ktorého ste členom."
+#: src/components/routes/auth/ResetPassword/index.tsx:49
+msgid "Your password was reset. Sign in with your new password."
+msgstr "Vaše heslo bolo obnovené. Prihláste sa novým heslom."
 
 #: src/components/forms/StripeCheckoutForm/index.tsx:99
 msgid "Your payment is processing."
@@ -20416,6 +21359,10 @@ msgstr "Vaša platba bola neúspešná. Skúste to znovu."
 #: src/components/common/PlatformFeesSettings/index.tsx:149
 msgid "Your Plan"
 msgstr "Váš plán"
+
+#: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:58
+msgid "Your recovery codes and trusted devices will be removed."
+msgstr "Vaše záložné kódy a dôveryhodné zariadenia budú odstránené."
 
 #: src/components/modals/RefundOrderModal/index.tsx:60
 msgid "Your refund is processing."
@@ -20441,13 +21388,17 @@ msgstr "Vaše sedadlo bolo zmenené"
 msgid "Your session expired. Sign in again to keep selling."
 msgstr "Vaša relácia vypršala. Prihláste sa znova a pokračujte v predaji."
 
-#: src/components/routes/auth/Login/index.tsx:103
+#: src/hooks/useLoginSteps.ts:49
 msgid "Your sign-in session has expired. Please sign in again."
 msgstr "Platnosť vášho prihlásenia vypršala. Prihláste sa znova."
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:116
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "Váš účet Stripe nie je ovplyvnený a žiadne dáta sa nestratia — kedykoľvek sa môžete znova pripojiť."
+
+#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+msgid "Your team can now sign in with {providerName}"
+msgstr "Váš tím sa teraz môže prihlasovať cez {providerName}"
 
 #: src/components/routes/product-widget/AttendeeProductAndInformation/index.tsx:56
 msgid "Your ticket for"

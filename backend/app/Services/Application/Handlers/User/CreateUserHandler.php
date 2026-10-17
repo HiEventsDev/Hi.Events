@@ -17,6 +17,7 @@ use HiEvents\Services\Domain\Auth\Access\AccountUserAccessUpdateService;
 use HiEvents\Services\Domain\Auth\Access\AdminAccessNotificationService;
 use HiEvents\Services\Domain\Auth\Access\DTO\AccountUserAccessData;
 use HiEvents\Services\Domain\Auth\Access\Exception\InvalidAccessGrantException;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\User\SendUserInvitationService;
 use Illuminate\Database\DatabaseManager;
 use Throwable;
@@ -31,6 +32,7 @@ readonly class CreateUserHandler
         private AccountUserAssociationService $accountUserAssociationService,
         private AccountUserAccessUpdateService $accessUpdateService,
         private AdminAccessNotificationService $adminAccessNotificationService,
+        private SsoEnforcementService $ssoEnforcementService,
         private DatabaseManager $databaseManager,
     ) {}
 
@@ -69,6 +71,10 @@ readonly class CreateUserHandler
                 access: $userData->access ?? new AccountUserAccessData,
             );
 
+            if ($this->ssoEnforcementService->shouldEnforceNewMember($authenticatedAccount->getId(), $invitedUser->getEmail(), isAccountOwner: false)) {
+                $this->accountUserRepository->updateWhere(['sso_enforced' => true], ['id' => $accountUser->getId()]);
+            }
+
             $invitedUser->setCurrentAccountUser($this->accountUserRepository->findById($accountUser->getId()));
 
             $this->sendUserInvitationService->sendInvitation($invitedUser, $authenticatedAccount->getId());
@@ -93,7 +99,7 @@ readonly class CreateUserHandler
                 'first_name' => $userData->first_name,
                 'last_name' => $userData->last_name,
                 'email' => strtolower($userData->email),
-                'password' => 'invited', // initially, a user is in an invited state, so they don't have a password
+                'password' => null,
                 'timezone' => $authenticatedAccount->getTimezone(),
             ]);
     }

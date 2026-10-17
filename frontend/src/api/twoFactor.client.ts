@@ -1,4 +1,5 @@
 import {api} from "./client.ts";
+import {IdentityConfirmation} from "../types.ts";
 import {
     DisableTwoFactorRequest,
     GenericDataResponse,
@@ -13,8 +14,8 @@ export const twoFactorClient = {
         const response = await api.get<GenericDataResponse<TwoFactorStatus>>('users/me/two-factor');
         return response.data;
     },
-    beginSetup: async (password: string) => {
-        const response = await api.post<GenericDataResponse<TwoFactorSetup>>('users/me/two-factor/setup', {password});
+    beginSetup: async (confirmation: IdentityConfirmation) => {
+        const response = await api.post<GenericDataResponse<TwoFactorSetup>>('users/me/two-factor/setup', confirmation);
         return response.data;
     },
     confirmSetup: async (code: string) => {

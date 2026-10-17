@@ -314,3 +314,67 @@
     animation: none;
   }
 }
+
+.accountList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.accountOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--hi-color-gray-2);
+  border-radius: var(--hi-radius-lg);
+  background: var(--hi-color-white);
+  color: var(--hi-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+
+  @include mixins.respond-below(sm) {
+    min-height: 56px;
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: var(--hi-color-text-muted);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--mantine-color-secondary-5);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mantine-color-secondary-5) 10%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-secondary-5);
+    outline-offset: 2px;
+  }
+
+  &:disabled:not([aria-busy="true"]) {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+.accountName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.formError {
+  margin-bottom: 1.25rem;
+}

@@ -68,11 +68,16 @@ class EnsureTwoFactorEnrolled
             return true;
         }
 
+        if ($path === 'users/me/sso-identities/exchange' || preg_match('#^users/me/sso-identities/[\w-]+/reauth$#', $path) === 1) {
+            return true;
+        }
+
         if (! $request->isMethod('GET')) {
             return false;
         }
 
         return $path === 'users/me'
+            || $path === 'users/me/sso-identities'
             || $path === 'accounts'
             || preg_match('#^accounts/\d+$#', $path) === 1;
     }

@@ -18,18 +18,18 @@ test.describe('team invites', () => {
 
     const inviteUrl = await mailpit.waitForLink(inviteeEmail, /accept-invitation/, { subjectContains: 'invited to join' });
     await page.goto(inviteUrl.pathname);
-    await expect(page.getByRole('heading', { name: 'Accept invitation' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /^Join / })).toBeVisible();
     await expect(page.getByLabel(/^First Name/)).toHaveValue('Robin');
 
     await page.getByLabel(/^Password/).fill(INVITEE_PASSWORD);
     await page.getByLabel(/^Confirm Password/).fill(INVITEE_PASSWORD);
     await page.getByRole('checkbox', { name: /I agree/ }).check();
-    await page.getByRole('button', { name: 'Accept Invitation' }).click();
+    await page.getByTestId('invitation-accept-button').click();
 
     await expect(page).toHaveURL(/\/auth\/login/);
     await page.getByLabel(/^Email/).fill(inviteeEmail);
     await page.getByLabel(/^Password/).fill(INVITEE_PASSWORD);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
     await expect(page).toHaveURL(/\/manage\/organizer\/\d+/);
     await expect(page.getByRole('heading', { level: 1, name: /Dashboard/ })).toBeVisible();
@@ -70,7 +70,7 @@ test.describe('team invites', () => {
     await page.waitForLoadState('networkidle');
     await page.getByLabel(/^Email/).fill(memberEmail);
     await page.getByLabel(/^Password/).fill(INVITEE_PASSWORD);
-    await page.getByRole('button', { name: 'Log in' }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await expect(page.getByText('Please check your email and password and try again')).toBeVisible();
   });
 });

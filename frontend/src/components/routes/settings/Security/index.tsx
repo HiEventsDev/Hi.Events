@@ -1,7 +1,7 @@
 import {Button, Loader, Tooltip, UnstyledButton} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {IconDeviceDesktop, IconDeviceMobile, IconX} from "@tabler/icons-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import classNames from "classnames";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {useGetTwoFactorStatus} from "../../../../queries/useGetTwoFactorStatus.ts";
@@ -17,6 +17,8 @@ import {DisableTwoFactorModal} from "./DisableTwoFactorModal.tsx";
 import {RegenerateRecoveryCodesModal} from "./RegenerateRecoveryCodesModal.tsx";
 import {ChangePasswordModal} from "./ChangePasswordModal.tsx";
 import {describeDevice} from "./describeDevice.ts";
+import {SignInMethods} from "./SignInMethods.tsx";
+import {useResumeAction} from "../../../../hooks/useResumeAction.ts";
 import classes from "./Security.module.scss";
 
 type OpenModal = 'password' | 'enable' | 'disable' | 'regenerate' | null;
@@ -212,21 +214,25 @@ const SecuritySettings = () => {
     const {data: me} = useGetMe();
     const [openModal, setOpenModal] = useState<OpenModal>(null);
     const closeModal = () => setOpenModal(null);
+    const resumeAction = useResumeAction();
+
+    useEffect(() => {
+        if (resumeAction === 'enable-2fa') {
+            setOpenModal('enable');
+        }
+
+        if (resumeAction === 'disable-2fa') {
+            setOpenModal('disable');
+        }
+    }, [resumeAction]);
 
     return (
         <SettingsPage
             title={t`Security`}
-            description={t`Your password and two-factor authentication. They protect every account you belong to.`}
+            description={t`How you sign in, and two-factor authentication. They protect every account you belong to.`}
         >
             <SettingsSection>
-                <SettingsRow
-                    label={t`Password`}
-                    description={t`Use a long password that you don't use anywhere else.`}
-                >
-                    <Button variant="default" onClick={() => setOpenModal('password')} data-testid="change-password-button">
-                        {t`Change password`}
-                    </Button>
-                </SettingsRow>
+                {me && <SignInMethods me={me} resumeAction={resumeAction} onChangePassword={() => setOpenModal('password')}/>}
             </SettingsSection>
 
             <SettingsSection>

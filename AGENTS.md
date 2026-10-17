@@ -97,6 +97,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Mail, email delivery tracking | `.claude/rules/backend/mail.md` |
 | Lifecycle emails | `.claude/rules/backend/lifecycle-emails.md` |
 | Two-factor authentication | `.claude/rules/backend/two-factor.md` |
+| Single sign-on (OIDC) | `.claude/rules/backend/sso.md` |
 | Abuse & spam | `.claude/rules/backend/abuse-and-spam.md` |
 | Account deletion | `.claude/rules/backend/account-deletion.md` |
 | OpenAPI docs | `.claude/rules/backend/openapi.md` |

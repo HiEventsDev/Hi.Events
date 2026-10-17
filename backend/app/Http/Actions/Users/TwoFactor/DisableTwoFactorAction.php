@@ -2,8 +2,8 @@
 
 namespace HiEvents\Http\Actions\Users\TwoFactor;
 
+use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
-use HiEvents\Exceptions\PasswordInvalidException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\TwoFactorLockedOutException;
 use HiEvents\Exceptions\TwoFactorRequiredByAccountException;
@@ -37,8 +37,10 @@ class DisableTwoFactorAction extends BaseAction
                 password: $request->validated('password'),
                 code: $usingRecoveryCode ? null : $request->validated('code'),
                 recoveryCode: $usingRecoveryCode ? $request->validated('recovery_code') : null,
+                reauthProof: $request->validated('reauth_proof'),
+                tokenId: $this->getAuthTokenId(),
             ));
-        } catch (PasswordInvalidException $exception) {
+        } catch (IdentityConfirmationFailedException $exception) {
             throw ValidationException::withMessages(['password' => $exception->getMessage()]);
         } catch (TwoFactorLockedOutException $exception) {
             return $this->errorResponse($exception->getMessage(), ResponseCodes::HTTP_TOO_MANY_REQUESTS);

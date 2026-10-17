@@ -25,6 +25,8 @@ class Handler extends ExceptionHandler
         ResourceNotFoundException::class,
         ResourceConflictException::class,
         SymfonyResourceNotFoundException::class,
+        SsoException::class,
+        SsoRequiredException::class,
     ];
 
     /**

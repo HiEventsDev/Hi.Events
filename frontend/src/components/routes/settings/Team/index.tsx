@@ -37,6 +37,7 @@ const Team = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [search, setSearch] = useState('');
     const [roleFilter, setRoleFilter] = useState<string | null>(null);
+    const [signInFilter, setSignInFilter] = useState<string | null>(null);
 
     const users = usersQuery.data?.data;
     const organizers = organizersQuery.data?.data ?? [];
@@ -46,7 +47,8 @@ const Team = () => {
         const query = search.trim().toLowerCase();
         const matches = (user: User) =>
             (!query || `${user.first_name} ${user.last_name ?? ''} ${user.email}`.toLowerCase().includes(query))
-            && (!roleFilter || user.role === roleFilter || (roleFilter === 'ADMIN' && user.role === 'SUPERADMIN'));
+            && (!roleFilter || user.role === roleFilter || (roleFilter === 'ADMIN' && user.role === 'SUPERADMIN'))
+            && (!signInFilter || user.sso_sign_in === signInFilter);
         const joined = all.filter(user => user.status !== 'INVITED');
         const active = joined.filter(user => user.status === 'ACTIVE');
 
@@ -63,7 +65,9 @@ const Team = () => {
                 twoFactor: active.filter(user => user.two_factor_enabled).length,
             },
         };
-    }, [users, search, roleFilter, me?.id]);
+    }, [users, search, roleFilter, signInFilter, me?.id]);
+
+    const ssoRequired = (users ?? []).some(user => !!user.sso_sign_in);
 
     if (!canManageTeam) {
         return null;
@@ -139,7 +143,7 @@ const Team = () => {
         {value: 'VIEWER', label: t`Viewers`},
     ];
 
-    const isFiltering = !!search.trim() || !!roleFilter;
+    const isFiltering = !!search.trim() || !!roleFilter || !!signInFilter;
 
     return (
         <SettingsPage
@@ -188,6 +192,21 @@ const Team = () => {
                             clearable
                             aria-label={t`Filter by role`}
                         />
+                        {ssoRequired && (
+                            <Select
+                                className={classes.roleFilter}
+                                placeholder={t`All sign-in methods`}
+                                data={[
+                                    {value: 'SSO', label: t`Single sign-on`},
+                                    {value: 'PASSWORD', label: t`Password`},
+                                    {value: 'EXEMPT', label: t`Exempt from SSO`},
+                                ]}
+                                value={signInFilter}
+                                onChange={setSignInFilter}
+                                clearable
+                                aria-label={t`Filter by sign-in method`}
+                            />
+                        )}
                     </div>
 
                     <div className={classes.columns} aria-hidden>

@@ -37,6 +37,7 @@ class UserResource extends BaseResource
             'two_factor_enabled' => $this->getTwoFactorConfirmedAt() !== null,
             $this->mergeWhen($this->isCurrentUser(), fn () => [
                 'has_pending_email_change' => $this->getPendingEmail() !== null,
+                'has_password' => $this->getPassword() !== null,
                 'marketing_opted_in_at' => $this->getMarketingOptedInAt(),
             ]),
             $this->mergeWhen($isImpersonating, [
@@ -53,6 +54,8 @@ class UserResource extends BaseResource
                 'status' => $this->getCurrentAccountUser()?->getStatus(),
                 'account_id' => $this->getCurrentAccountUser()?->getAccountId(),
                 'notify_new_orders' => $this->getCurrentAccountUser()?->getNotifyNewOrders(),
+                /** @var 'SSO'|'EXEMPT'|'PASSWORD'|null */
+                'sso_sign_in' => $this->getCurrentAccountUser()?->getSsoSignInRequirement()?->value,
                 'access' => $this->accessSummary(),
             ]),
             $this->mergeWhen($this->isCurrentUser() && $this->getPendingEmail() !== null, fn () => [

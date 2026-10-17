@@ -14,6 +14,7 @@ class AcceptInvitationRequest extends BaseRequest
             'last_name' => PersonNameRule::rules(required: false),
             'password' => 'required|string|min:8|confirmed',
             'timezone' => ['required', 'timezone:all'],
+            'marketing_opt_in' => ['nullable', 'boolean'],
         ];
     }
 }

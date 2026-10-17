@@ -23,6 +23,8 @@ use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
+use HiEvents\Repository\Eloquent\AccountSsoConnectionRepository;
+use HiEvents\Repository\Eloquent\AccountSsoDomainRepository;
 use HiEvents\Repository\Eloquent\AccountUserAccessGrantRepository;
 use HiEvents\Repository\Eloquent\AccountUserPermissionRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -84,6 +86,7 @@ use HiEvents\Repository\Eloquent\StripePayoutsRepository;
 use HiEvents\Repository\Eloquent\SuspiciousActivityRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketLookupTokenRepository;
+use HiEvents\Repository\Eloquent\UserIdentityRepository;
 use HiEvents\Repository\Eloquent\UserRepository;
 use HiEvents\Repository\Eloquent\UserTrustedDeviceRepository;
 use HiEvents\Repository\Eloquent\WaitlistEntryRepository;
@@ -97,6 +100,8 @@ use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
+use HiEvents\Repository\Interfaces\AccountSsoDomainRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserAccessGrantRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserPermissionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
@@ -158,6 +163,7 @@ use HiEvents\Repository\Interfaces\StripePayoutsRepositoryInterface;
 use HiEvents\Repository\Interfaces\SuspiciousActivityRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketLookupTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserIdentityRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Repository\Interfaces\WaitlistEntryRepositoryInterface;
@@ -241,6 +247,9 @@ class RepositoryServiceProvider extends ServiceProvider
         AnnouncementUserRepositoryInterface::class => AnnouncementUserRepository::class,
         WaitlistEntryRepositoryInterface::class => WaitlistEntryRepository::class,
         WidgetRepositoryInterface::class => WidgetRepository::class,
+        UserIdentityRepositoryInterface::class => UserIdentityRepository::class,
+        AccountSsoConnectionRepositoryInterface::class => AccountSsoConnectionRepository::class,
+        AccountSsoDomainRepositoryInterface::class => AccountSsoDomainRepository::class,
         EventOccurrenceRepositoryInterface::class => EventOccurrenceRepository::class,
         EventOccurrenceStatisticRepositoryInterface::class => EventOccurrenceStatisticRepository::class,
         EventOccurrenceDailyStatisticRepositoryInterface::class => EventOccurrenceDailyStatisticRepository::class,

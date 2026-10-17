@@ -63,6 +63,19 @@ docker compose up -d
 
 Visit [http://localhost:8123/auth/register](http://localhost:8123/auth/register) to create an account.
 
+## Optional: Single Sign-On
+
+Let people sign in with Google, Microsoft or any OpenID Connect provider (Okta, Microsoft Entra ID, Keycloak, Authentik, Zitadel…).
+
+1. Register an app with your provider and add this redirect URI: `<APP_FRONTEND_URL>/sso/callback`, for example `https://tickets.example.com/sso/callback`.
+2. Add the client ID and secret to your `.env`:
+   - Google: `SSO_GOOGLE_CLIENT_ID`, `SSO_GOOGLE_CLIENT_SECRET`
+   - Microsoft: `SSO_MICROSOFT_CLIENT_ID`, `SSO_MICROSOFT_CLIENT_SECRET`. In the app registration, allow work and personal accounts and add the optional `email` and `xms_edov` ID token claims.
+   - Any other OpenID Connect provider: `SSO_OIDC_ISSUER`, `SSO_OIDC_CLIENT_ID`, `SSO_OIDC_CLIENT_SECRET` and a button label in `SSO_OIDC_NAME`. Set `SSO_OIDC_TRUST_EMAIL=true` only if the provider verifies every email address it issues.
+3. Restart the containers, then check the setup with `docker compose exec all-in-one php /app/backend/artisan sso:status`.
+
+To make everyone except super admins sign in through single sign-on, set `SSO_PASSWORD_LOGIN_DISABLED=true`. If your provider is ever unavailable, unset it and restart to get password sign-in back.
+
 ---
 
 **Production Note:**  
