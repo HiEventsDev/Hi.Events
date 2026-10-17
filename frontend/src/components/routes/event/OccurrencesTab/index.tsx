@@ -16,6 +16,7 @@ import {
 import {useDisclosure} from "@mantine/hooks";
 import {useCallback, useMemo, useRef, useState} from "react";
 import dayjs from "dayjs";
+import {useDatesContext} from "@mantine/dates";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {modals} from "@mantine/modals";
@@ -27,7 +28,7 @@ import {useGetEventOccurrences} from "../../../../queries/useGetEventOccurrences
 import {useFilterQueryParamSync} from "../../../../hooks/useFilterQueryParamSync.ts";
 import {EventOccurrence, EventOccurrenceStatus, MessageType, QueryFilterFields, QueryFilterOperator, QueryFilters} from "../../../../types.ts";
 import {useGetEvent} from "../../../../queries/useGetEvent.ts";
-import {formatDateWithLocale, formatOccurrenceEnd} from "../../../../utilites/dates.ts";
+import {formatDateWithLocale, formatOccurrenceEnd, getCalendarGridStart} from "../../../../utilites/dates.ts";
 import {getEventLocationDisplay} from "../../../../utilites/effectiveLocation.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {OccurrenceEditModal, OccurrenceEditTab} from "./OccurrenceEditModal";
@@ -71,6 +72,7 @@ const OccurrencesTab = () => {
         navigate(target);
     };
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+    const {firstDayOfWeek} = useDatesContext();
     const [calendarMonth, setCalendarMonth] = useState<dayjs.Dayjs>(() => dayjs().startOf('month'));
 
     const timePeriod = useMemo(() => {
@@ -86,15 +88,13 @@ const OccurrencesTab = () => {
         if (!event?.timezone) return null;
         const tz = event.timezone;
         const monthStart = dayjs.tz(calendarMonth.format('YYYY-MM-01'), tz).startOf('month');
-        const startDay = monthStart.day();
-        const offset = startDay === 0 ? 6 : startDay - 1;
-        const gridStart = monthStart.subtract(offset, 'day').startOf('day');
+        const gridStart = getCalendarGridStart(monthStart, firstDayOfWeek);
         const gridEnd = gridStart.add(42, 'day').endOf('day');
         return {
             start: gridStart.utc().format('YYYY-MM-DD HH:mm:ss'),
             end: gridEnd.utc().format('YYYY-MM-DD HH:mm:ss'),
         };
-    }, [calendarMonth, event?.timezone]);
+    }, [calendarMonth, event?.timezone, firstDayOfWeek]);
 
     const queryParams: QueryFilters = useMemo(() => {
         if (viewMode === 'calendar') {

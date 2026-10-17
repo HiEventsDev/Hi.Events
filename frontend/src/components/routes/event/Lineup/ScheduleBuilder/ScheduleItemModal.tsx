@@ -20,6 +20,7 @@ import {getLineupTerminology, toEventLocal} from "../../../../../utilites/lineup
 import {DATE_INPUT_FORMAT, LOCAL_DATETIME_FORMAT, TIME_INPUT_FORMAT} from "../../../../../utilites/lineupSchedule.ts";
 import {UNASSIGNED_SPACE} from "./scheduleConstants.ts";
 import classes from "../Lineup.module.scss";
+import {DateField} from "../../../../common/DateField";
 
 export interface ScheduleItemDraft {
     start: string;
@@ -166,8 +167,7 @@ export const ScheduleItemModal = ({event, lineup, item, draft, onSaved, onClose}
                     {...form.getInputProps('space')}
                 />
                 <div className={classes.timeRow}>
-                    <TextInput
-                        type="date"
+                    <DateField
                         label={t`Date`}
                         disabled={isReadOnly}
                         {...form.getInputProps('date')}

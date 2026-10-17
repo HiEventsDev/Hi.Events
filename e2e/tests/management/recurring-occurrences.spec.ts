@@ -104,7 +104,7 @@ test.describe('recurring occurrences', () => {
     await occurrences.addSingleDate();
     await expect(occurrences.dialog().getByRole('heading', { name: 'Add Date' })).toBeVisible();
     await expect(occurrences.dialog().getByRole('tab', { name: 'Products' })).toHaveCount(0);
-    await expect(occurrences.dialog().getByLabel('Start Date')).toHaveValue('');
+    await expect(occurrences.dialog().getByLabel('Start Date')).toHaveText('Select a date');
     await expect(occurrences.dialog().getByLabel('Label')).toBeVisible();
   });
 

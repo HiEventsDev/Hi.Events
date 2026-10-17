@@ -158,6 +158,10 @@ export class ApiClient {
     );
   }
 
+  updateOrganizerSettings(organizerId: number, settings: { first_day_of_week?: number }): Promise<void> {
+    return check(this.request.patch(`organizers/${organizerId}/settings`, { headers: jsonHeaders, data: settings }));
+  }
+
   updateOrganizerStatus(organizerId: number, status: 'LIVE' | 'DRAFT'): Promise<void> {
     return check(this.request.put(`organizers/${organizerId}/status`, { headers: jsonHeaders, data: { status } }));
   }

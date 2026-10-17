@@ -50,6 +50,7 @@ import {SendMessageModal} from "../../../../modals/SendMessageModal";
 import {MessageType} from "../../../../../types.ts";
 import {buildSingleRescheduleTemplate} from "../rescheduleMessageTemplate";
 import classes from './OccurrenceEditModal.module.scss';
+import {DateTimeField} from "../../../../common/DateTimeField";
 
 export type OccurrenceEditTab = 'details' | 'products';
 
@@ -442,14 +443,12 @@ export const OccurrenceEditModal = ({onClose, occurrenceId, duplicateFrom, defau
                                     <span className={classes.sectionTitle}>{t`Date & Time`}</span>
                                 </div>
                                 <InputGroup>
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('start_date')}
                                         label={t`Start Date`}
                                         required
                                     />
-                                    <TextInput
-                                        type="datetime-local"
+                                    <DateTimeField
                                         {...form.getInputProps('end_date')}
                                         label={t`End Date`}
                                     />

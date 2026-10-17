@@ -57,6 +57,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     final public const HOMEPAGE_SECTIONS = 'homepage_sections';
 
+    final public const FIRST_DAY_OF_WEEK = 'first_day_of_week';
+
     protected int $id;
 
     protected int $organizer_id;
@@ -101,6 +103,8 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
 
     protected array|string|null $homepage_sections = null;
 
+    protected int $first_day_of_week = 1;
+
     public function toArray(): array
     {
         return [
@@ -126,6 +130,7 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
             'tracking_pixels' => $this->tracking_pixels ?? null,
             'tracking_consent_acknowledged' => $this->tracking_consent_acknowledged ?? null,
             'homepage_sections' => $this->homepage_sections ?? null,
+            'first_day_of_week' => $this->first_day_of_week ?? null,
         ];
     }
 
@@ -392,5 +397,17 @@ abstract class OrganizerSettingDomainObjectAbstract extends AbstractDomainObject
     public function getHomepageSections(): array|string|null
     {
         return $this->homepage_sections;
+    }
+
+    public function setFirstDayOfWeek(int $first_day_of_week): self
+    {
+        $this->first_day_of_week = $first_day_of_week;
+
+        return $this;
+    }
+
+    public function getFirstDayOfWeek(): int
+    {
+        return $this->first_day_of_week;
     }
 }

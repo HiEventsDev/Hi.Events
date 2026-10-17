@@ -90,6 +90,8 @@ class PartialUpdateOrganizerSettingsHandler
 
             'tracking_pixels' => $dto->getProvided('trackingPixels', $organizerSettings->getTrackingPixels()),
             'tracking_consent_acknowledged' => $dto->getProvided('trackingConsentAcknowledged', $organizerSettings->getTrackingConsentAcknowledged()),
+
+            'first_day_of_week' => $dto->getProvided('firstDayOfWeek', $organizerSettings->getFirstDayOfWeek()),
         ], [
             'organizer_id' => $dto->organizerId,
             'id' => $organizerSettings->getId(),

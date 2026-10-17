@@ -15,6 +15,7 @@ import {Callout} from "../../../../../components/common/Callout";
 import {AdvancedOptions} from "../../../../../components/common/AdvancedOptions";
 import {useEffect, useMemo, useState} from "react";
 import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
+import {DateTimeField} from "../../../../../components/common/DateTimeField";
 
 interface BoxOfficeFormProps {
     form: UseFormReturnType<BoxOfficeRequest>;
@@ -171,15 +172,13 @@ export const BoxOfficeForm = ({
                 />
 
                 <InputGroup>
-                    <TextInput
+                    <DateTimeField
                         {...form.getInputProps('activates_at')}
-                        type="datetime-local"
                         label={t`Activation date`}
                         description={t`When sales open`}
                     />
-                    <TextInput
+                    <DateTimeField
                         {...form.getInputProps('expires_at')}
-                        type="datetime-local"
                         label={t`Expiration date`}
                         description={t`When sales close`}
                     />

@@ -138,6 +138,8 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
             'tracking_pixels.*.pixel_id' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-_]+$/'],
             'tracking_pixels.*.enabled' => ['required', 'boolean'],
             'tracking_consent_acknowledged' => ['sometimes', 'nullable', 'boolean'],
+
+            'first_day_of_week' => ['sometimes', 'integer', 'between:0,6'],
         ];
     }
 

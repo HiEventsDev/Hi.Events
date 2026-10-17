@@ -11,6 +11,7 @@ import {t} from "@lingui/macro";
 import {useCreateProduct} from "../../../mutations/useCreateProduct.ts";
 import {useGetProduct} from "../../../queries/useGetProduct.ts";
 import {showError, showSuccess} from "../../../utilites/notifications.tsx";
+import {utcToTz} from "../../../utilites/dates.ts";
 
 interface DuplicateProductModalProps extends GenericModalProps {
     originalProductId: IdParam;
@@ -58,7 +59,7 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
     });
 
     useEffect(() => {
-        if (!originalProduct) {
+        if (!originalProduct || !event) {
             return;
         }
 
@@ -67,8 +68,8 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             description: originalProduct.description,
             max_per_order: originalProduct.max_per_order,
             min_per_order: originalProduct.min_per_order,
-            sale_start_date: originalProduct.sale_start_date,
-            sale_end_date: originalProduct.sale_end_date,
+            sale_start_date: utcToTz(originalProduct.sale_start_date, event.timezone),
+            sale_end_date: utcToTz(originalProduct.sale_end_date, event.timezone),
             start_collapsed: originalProduct.start_collapsed,
             hide_before_sale_start_date: originalProduct.hide_before_sale_start_date,
             hide_after_sale_end_date: originalProduct.hide_after_sale_end_date,
@@ -89,15 +90,15 @@ export const DuplicateProductModal = ({onClose, originalProductId}: DuplicatePro
             prices: originalProduct.prices?.map(price => ({
                 price: price.price,
                 label: price.label,
-                sale_start_date: price.sale_start_date,
-                sale_end_date: price.sale_end_date,
+                sale_start_date: utcToTz(price.sale_start_date, event.timezone),
+                sale_end_date: utcToTz(price.sale_end_date, event.timezone),
                 initial_quantity_available: price.initial_quantity_available,
                 quantity_applies_to: price.quantity_applies_to,
                 is_hidden: price.is_hidden,
             })),
         });
         form.resetDirty();
-    }, [originalProduct]);
+    }, [originalProduct, event]);
 
     useEffect(() => {
         if (taxesAndFeesLoaded) {

@@ -31,6 +31,7 @@ class OrganizerSettingsResource extends BaseResource
             'allow_search_engine_indexing' => $this->getAllowSearchEngineIndexing(),
             'tracking_pixels' => $this->getTrackingPixels(),
             'tracking_consent_acknowledged' => $this->getTrackingConsentAcknowledged(),
+            'first_day_of_week' => $this->getFirstDayOfWeek(),
         ];
     }
 }

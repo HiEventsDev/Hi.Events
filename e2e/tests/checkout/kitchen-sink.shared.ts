@@ -2,7 +2,7 @@ import { expect, type APIRequestContext, type Frame, type Page } from '@playwrig
 import { CheckoutPage, setWidgetQuantity, type BuyerDetails, type CheckoutSurface } from '../../pages/checkout.page';
 import type { ApiClient } from '../../api/api-client';
 import type { Occurrence } from '../../api/types';
-import { createDraftEvent, OFFLINE_PAYMENT_INSTRUCTIONS } from '../../api/factory';
+import { createDraftEvent, OFFLINE_PAYMENT_INSTRUCTIONS, tomorrowUtcDate } from '../../api/factory';
 import { deliverPaymentIntentSucceededWebhook, parsePaymentReturnUrl } from '../../api/stripe';
 import type { MailpitClient } from '../../utils/mailpit';
 import { uniqueCode, uniqueEmail, uniqueName, uniqueShort } from '../../utils/unique';
@@ -49,7 +49,7 @@ async function createRecurringKitchenSinkEvent(
   });
   await api.generateOccurrences(event.id, {
     frequency: 'weekly',
-    range: { type: 'count', count: 3 },
+    range: { type: 'count', count: 3, start: tomorrowUtcDate() },
     days_of_week: ['friday'],
     times_of_day: ['19:00'],
     duration_minutes: 120,

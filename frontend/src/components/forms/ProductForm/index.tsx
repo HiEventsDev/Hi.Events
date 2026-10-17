@@ -64,6 +64,7 @@ import {
     taxesSummary,
     waitlistSummary,
 } from "./ledgerSummaries.ts";
+import {DateTimeField} from "../../common/DateTimeField";
 
 interface ProductFormProps {
     form: UseFormReturnType<Product>,
@@ -424,9 +425,9 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         </Callout>
                     )}
                     <InputGroup>
-                        <TextInput type={'datetime-local'} {...form.getInputProps('sale_start_date')}
+                        <DateTimeField {...form.getInputProps('sale_start_date')}
                                    label={t`Sale Start Date`}/>
-                        <TextInput type={'datetime-local'} {...form.getInputProps('sale_end_date')}
+                        <DateTimeField {...form.getInputProps('sale_end_date')}
                                    label={t`Sale End Date`}/>
                     </InputGroup>
                     <Switch {...form.getInputProps('hide_before_sale_start_date', {type: 'checkbox'})}
