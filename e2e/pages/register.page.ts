@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { waitForHydration } from '../utils/hydration';
 
 export class RegisterPage {
   constructor(private readonly page: Page) {}
@@ -6,6 +7,7 @@ export class RegisterPage {
   async goto(): Promise<void> {
     await this.page.goto('/auth/register');
     await this.page.getByLabel(/^First Name/).waitFor();
+    await waitForHydration(this.page, 'form');
   }
 
   async register(details: { firstName: string; lastName?: string; email: string; password: string }): Promise<void> {

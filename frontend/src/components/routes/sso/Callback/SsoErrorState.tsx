@@ -1,6 +1,6 @@
 import {Button} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {IconAlertTriangle, IconClockHour4, IconMailForward, IconUserCheck} from "@tabler/icons-react";
+import {IconAlertTriangle, IconBuilding, IconClockHour4, IconMailForward, IconUserCheck} from "@tabler/icons-react";
 import {ReactNode, useEffect, useRef} from "react";
 import {SsoErrorResponse} from "../../../../types.ts";
 import loginClasses from "../../auth/Login/Login.module.scss";
@@ -49,6 +49,15 @@ const errorCopy = (error: SsoErrorResponse, providerName: string, passwordLoginE
                         : t`Sign in with the account you usually use, or ask your administrator for help.`,
                     icon: warning,
                 };
+        case 'SSO_REQUIRED':
+            return {
+                title: t`Your organization uses single sign-on`,
+                body: email
+                    ? t`Accounts for ${email} are managed by your organization. Sign in through its identity provider instead.`
+                    : t`Sign in through your organization's identity provider instead.`,
+                icon: <IconBuilding size={26} stroke={1.75}/>,
+                neutral: true,
+            };
         case 'SSO_INVITATION_PENDING':
             return {
                 title: t`You've been invited`,

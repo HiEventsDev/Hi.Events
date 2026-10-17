@@ -15,6 +15,7 @@ Backend commands run in the `backend` container from `docker/development` (start
 ```bash
 docker compose -f docker-compose.dev.yml exec backend php artisan migrate
 docker compose -f docker-compose.dev.yml exec backend php artisan generate-domain-objects
+docker compose -f docker-compose.dev.yml exec backend php artisan api-reference:export
 docker compose -f docker-compose.dev.yml exec -T backend php -d memory_limit=1G vendor/bin/phpunit --no-coverage --testsuite=Unit
 docker compose -f docker-compose.dev.yml exec -T backend php -d memory_limit=1G vendor/bin/phpunit --no-coverage --filter=TestName
 docker compose -f docker-compose.dev.yml exec backend ./vendor/bin/pint --test
@@ -31,7 +32,7 @@ yarn messages:extract   # then add translations for every language (translations
 
 Schema changes: `php artisan make:migration`, `php artisan migrate`, then `php artisan generate-domain-objects`. Domain objects are generated; never edit them by hand.
 
-Before finishing: `npx tsc --noEmit` (no new errors in files you changed), `pint --test`, the Unit suite, and the Feature suite before opening a PR (CI runs both). For a changed endpoint, also smoke-test it against the dev stack (api-smoke-test skill).
+Before finishing: `npx tsc --noEmit` (no new errors in files you changed), `pint --test`, the Unit suite, and the Feature suite before opening a PR (CI runs both). For a changed endpoint, also run `php artisan api-reference:export` (the committed in-app reference must match the code; a Feature test enforces it) and smoke-test it against the dev stack (api-smoke-test skill).
 
 ## Code standards
 
@@ -51,6 +52,10 @@ Before finishing: `npx tsc --noEmit` (no new errors in files you changed), `pint
 - Licensed code lives in `backend/ee/` and `frontend/src/ee/` (covered by `ee/LICENCE`, not the AGPL); its migrations, models, domain objects, routes and tests stay in core. Availability comes from the signed `APP_LICENCE_KEY` alone, never `APP_ENV`. Only routes that configure an ee feature take `ee.licensed:<feature>`; reads, checkout and payments stay ungated (`EnterpriseRouteGatingTest`).
 - Feature flags gate only in SaaS mode: `FeatureFlag` enum + a migration inserting its row (`enabled_by_default = true` for a live feature) + frontend label/constant; check with `FeatureFlagService::assertEnabled` / `useIsFeatureEnabled`.
 - Laravel event auto-discovery is load-bearing: most listeners are registered only by it, so never turn off `shouldDiscoverEvents()`.
+
+## Public API compatibility
+
+Integrations call the API with API keys, so endpoints in the `auth:api,sanctum` route group, everything under `/public/*`, webhook payloads and `error_code` values are a public contract. Adding endpoints, optional request fields and response fields is fine. Removing or renaming a route, field or error code, changing a field's type, format or meaning, making an optional field required, tightening validation, or moving a route into the session-only group is a breaking change: avoid it, and when it's unavoidable, tell the user before making it and call it out in the PR description and release notes. Keep the resources' OpenAPI annotations accurate (`.claude/rules/backend/openapi.md`); review the diff of `backend/resources/api-reference/openapi.json` for anything removed or changed.
 
 ## Data rules
 
@@ -98,6 +103,7 @@ Feature rules live in `.claude/rules/`; Claude Code loads each file automaticall
 | Lifecycle emails | `.claude/rules/backend/lifecycle-emails.md` |
 | Two-factor authentication | `.claude/rules/backend/two-factor.md` |
 | Single sign-on (OIDC) | `.claude/rules/backend/sso.md` |
+| API keys | `.claude/rules/backend/api-keys.md` |
 | Abuse & spam | `.claude/rules/backend/abuse-and-spam.md` |
 | Account deletion | `.claude/rules/backend/account-deletion.md` |
 | OpenAPI docs | `.claude/rules/backend/openapi.md` |

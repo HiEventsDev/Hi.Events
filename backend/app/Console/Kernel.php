@@ -6,6 +6,7 @@ use HiEvents\Enterprise\Licensing\Console\GenerateLicenceKeypairCommand;
 use HiEvents\Enterprise\Licensing\Console\IssueLicenceKeyCommand;
 use HiEvents\Jobs\Abuse\ReportSuspiciousActivityJob;
 use HiEvents\Jobs\Account\ProcessScheduledAccountDeletionsJob;
+use HiEvents\Jobs\ApiKey\SendApiKeyExpiryRemindersJob;
 use HiEvents\Jobs\Auth\RecheckSsoDomainsJob;
 use HiEvents\Jobs\Lifecycle\SendLifecycleNudgesJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
@@ -29,6 +30,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessExpiredWaitlistOffersJob)->everyMinute()->withoutOverlapping();
         $schedule->job(new ProcessScheduledAccountDeletionsJob)->hourly()->withoutOverlapping();
         $schedule->job(new RecheckSsoDomainsJob)->daily()->withoutOverlapping();
+        $schedule->job(new SendApiKeyExpiryRemindersJob)->dailyAt('09:00')->withoutOverlapping();
+        $schedule->command('sanctum:prune-expired', ['--hours' => 24 * 30])->daily();
         $schedule->job(new ReportSuspiciousActivityJob)->everyFiveMinutes()->withoutOverlapping()->when(fn () => (bool) config('app.saas_mode_enabled'));
         $schedule->job(new SendLifecycleNudgesJob)->hourly()->withoutOverlapping()
             ->when(static fn (): bool => app(LifecycleEmailSender::class)->isConfigured());

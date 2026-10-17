@@ -103,3 +103,15 @@ export function markSsoConnectionTested(accountId: number): void {
   }
   runSql(`UPDATE account_sso_connections SET last_tested_at = NOW() WHERE account_id = ${accountId}`);
 }
+
+export function expireApiKey(apiKeyId: number): void {
+  if (!Number.isInteger(apiKeyId)) {
+    throw new Error(`Refusing to expire an unexpected API key ${apiKeyId}`);
+  }
+  const updated = runSql(
+    `UPDATE personal_access_tokens SET expires_at = NOW() - INTERVAL '2 days' WHERE id = ${apiKeyId} RETURNING id`,
+  ).trim();
+  if (updated === '') {
+    throw new Error(`No API key found with id ${apiKeyId}`);
+  }
+}

@@ -5,6 +5,7 @@ namespace HiEvents\Http\Middleware;
 use Closure;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
 use HiEvents\Models\User;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\UserSessionRevocationService;
 use Illuminate\Http\Request;
@@ -20,11 +21,14 @@ class EnsureTokenNotRevoked
     public function __construct(
         private readonly UserSessionRevocationService $revocationService,
         private readonly SsoEnforcementService $ssoEnforcementService,
+        private readonly AuthUserService $authUserService,
     ) {}
 
     public function handle(Request $request, Closure $next)
     {
-        $errorCode = $this->carriesToken($request) && Auth::check() ? $this->rejectionCode() : null;
+        $errorCode = $this->carriesToken($request) && Auth::check() && ! $this->authUserService->isApiKeyRequest()
+            ? $this->rejectionCode()
+            : null;
 
         if ($errorCode === null) {
             return $next($request);

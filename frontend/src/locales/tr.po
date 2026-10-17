@@ -80,6 +80,10 @@ msgstr "{0} erişilebilir"
 msgid "{0} Active Webhooks"
 msgstr "{0} Aktif Webhook"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} mevcut"
@@ -149,7 +153,7 @@ msgstr "Doğrulanmış alan adlarınız dışındaki {0} üye mevcut giriş yön
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} artık {providerName} ile giriş yapmalı"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "{0}/{1} kaldı"
 
@@ -186,11 +190,19 @@ msgstr "Bu ürünü içeren {0} iade edilmiş sipariş iptal edilmedi, bu yüzde
 msgid "{0} removed"
 msgstr "{0} kaldırıldı"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0} çoklu oturum açma gerektiriyor. Sahip olarak parolanızla oturum açtığınız için iki faktörlü kimlik doğrulama bu oturum açmayı korur ve kapatılamaz."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0} çoklu oturum açma gerektiriyor. Sahip olarak parolanızla oturum açtığınız için iki faktörlü kimlik doğrulama bu oturum açmayı korur."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0}, ekipteki herkes için iki adımlı doğrulamayı zorunlu kılıyor."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} iki adımlı doğrulamayı zorunlu kıldığı için kapatılamaz."
 
@@ -255,7 +267,7 @@ msgstr "{0} ayakta"
 msgid "{0} tickets"
 msgstr "{0} bilet"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "{0} bağlantısı kesildi."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} check-in yapıldı"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{totalCount} adımdan {completedCount} tanesi tamamlandı"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected} bağlandı. Artık giriş yapmak için kullanabilirsiniz."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} saat seçeneği"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} gün"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} organizatör"
 msgid "{organizerName}'s first event"
 msgstr "{organizerName}'ın ilk etkinliği"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount}/{0} etkin anahtar"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "{productCount} bilet türü yapılandırıldı"
 msgid "{provider} video found"
 msgstr "{provider} videosu bulundu"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "{providerName} e-posta adresinizi paylaşmadı"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "{providerName} yanıt vermiyor"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "Bu oturuma 1 katılımcı kayıtlı."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 gün"
 
@@ -764,6 +782,10 @@ msgstr "Koltuksuz 1"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "Etkinlikten 1 hafta önce"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 yıl"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Stripe ile kredi kartı ödemelerini kabul et"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Erişim"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Erişilebilir"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Hesaplar"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Hesaplar ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "{email} hesapları kuruluşunuz tarafından yönetiliyor. Bunun yerine kuruluşunuzun kimlik sağlayıcısı üzerinden oturum açın."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Bu e-posta adresine ait hesaplar kuruluşunuz tarafından yönetiliyor. Yeni bir hesap oluşturmak yerine kuruluşunuzun kimlik sağlayıcısı üzerinden oturum açın."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Tüm biletler"
 msgid "All time"
 msgstr "Tüm zamanlar"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Tüm güvenilen cihazlar kaldırıldı"
 
@@ -1875,7 +1906,7 @@ msgstr "Tüm kullanıcılar"
 msgid "All visible"
 msgstr "Tümü görünür"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Giriş yaparken e-posta adresinize erişime izin verin, ardından tekrar deneyin."
 
@@ -1930,7 +1961,7 @@ msgstr "{providerName} ile girişe izin ver"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Neredeyse bitti! Ödemenizin işlenmesini bekliyoruz. Bu sadece birkaç saniye sürmelidir."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Zaten hesabınız var mı? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Ödenen miktar ({0})"
 msgid "Amount tendered"
 msgstr "Alınan tutar"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Bu e-posta adresiyle bir hesap zaten var. Bunun yerine giriş yapın."
 
@@ -2158,6 +2189,20 @@ msgstr "Bu bağlantı ve PIN'e sahip herkes, paylaşılan bir belge bağlantıs�
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Başka bir şey?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "API anahtarları"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "Başka birinin kimliğine bürünmüşken API anahtarı oluşturamazsınız."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "API referansı"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Ürün başına bir kez sor"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Kapıda sipariş ve katılımcı sorularını sorun. Her bilet ayrı bir adım alır, bu da satışları ciddi ölçüde yavaşlatabilir. Yoğun kapılarda kapalı bırakın."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Hesap sahibinden sizi yeniden davet etmesini isteyin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Sizi davet eden kişiden yeni bir davet göndermesini isteyin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Yöneticinizden sizi davet etmesini isteyin."
 
@@ -2825,7 +2870,7 @@ msgstr "Harika Organizatör Ltd."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Gişe güncellendi"
 msgid "Brazilian Portuguese"
 msgstr "Brezilya Portekizcesi"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "API referansındaki tüm uç noktalara göz atın"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Programı oluştur"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "İzleme pikselleri ekleyerek, siz ve bu platformun toplanan verilerin ortak veri sorumluları olduğunuzu kabul edersiniz. Geçerli gizlilik yasaları (KVKK, GDPR, CCPA vb.) kapsamında bu işleme için yasal bir dayanağınız olduğundan emin olmak sizin sorumluluğunuzdadır."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Devam ederek <0>Hizmet Koşullarımızı</0> ve <1>Gizlilik Politikamızı</1> kabul etmiş olursunuz."
 
@@ -3392,6 +3441,7 @@ msgstr "Kimlik doğrulama uygulamanızı veya kurtarma kodlarınızı kullanamı
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "E-postayı değiştir"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Şifre değiştir"
 
@@ -3775,7 +3825,7 @@ msgstr "E-postanızı kontrol edin"
 msgid "Check your event page"
 msgstr "Etkinlik sayfanızı kontrol edin"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Gelen kutunuzu kontrol edin! Bu e-postayla ilişkili biletler varsa, bunları görüntülemek için bir bağlantı alacaksınız."
@@ -4053,7 +4103,7 @@ msgstr "Başka bir dosya seç"
 msgid "Choose another reader"
 msgstr "Başka bir okuyucu seç"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Başka bir giriş yöntemi seçin."
 
@@ -4236,6 +4286,10 @@ msgstr "Kapat"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Kenar çubuğunu kapat"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Kopyalamadan kapat"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "E-posta Değişikliğini Onayla"
 msgid "Confirm it's you"
 msgstr "Siz olduğunuzu doğrulayın"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Kimliğinizi doğrulayın, ardından bağlamak için {0} ile giriş yapın."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Yeni şifreyi onayla"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Şifreyi onayla"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Şifreyi Onayla"
@@ -4543,6 +4597,10 @@ msgstr "Spam olarak onayla"
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
 msgstr "E-postanızı onaylayın"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
+msgstr "E-posta adresinizi onaylayın"
 
 #: src/components/layouts/Event/index.tsx:328
 msgid "Confirm your email to access all features."
@@ -4568,11 +4626,11 @@ msgstr "E-posta adresi onaylanıyor..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Tebrikler! Etkinliğiniz artık herkese açık."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Bağla"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "{0} hesabını bağla"
 
@@ -4583,6 +4641,10 @@ msgstr "Kart okuyucu eklemeden önce Ödemeler altında bir Stripe hesabı bağl
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Banka bağla"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Diğer araçları ve kendi kodunuzu bu hesaba bağlayın. Bir anahtar sizin yapabildiğiniz her şeyi yapabilir, bu yüzden onu bir parola gibi koruyun."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "İçerik gereklidir"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Devam Et"
@@ -4795,6 +4857,8 @@ msgstr "Çerez ayarları"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "ChatGPT, Claude, Cursor veya site oluşturucunuzun yapay zekâ asistanı
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Kopyala"
@@ -4871,6 +4936,10 @@ msgstr "Kodu kopyala"
 msgid "Copy Code"
 msgstr "Kodu Kopyala"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Komutu kopyala"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Müşteri bağlantısını kopyala"
@@ -4887,6 +4956,10 @@ msgstr "E-postayı Kopyala"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Yapay zekâ ajanı için kopyala"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Anahtarı kopyala"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Panoya kopyala"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "URL'yi Kopyala"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "API anahtarınızı kopyalayın"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "{name} güncellenemedi"
 msgid "Could not upload {fileName}"
 msgstr "{fileName} yüklenemedi"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "API referansı yüklenemedi."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "API anahtarlarınız yüklenemedi"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Güvenlik ayarlarınız yüklenemedi"
@@ -5094,6 +5179,10 @@ msgstr "\"{query}\" oluştur"
 msgid "Create {0} Template"
 msgstr "{0} Şablonu Oluştur"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Zapier, CRM'iniz veya kendi betikleriniz gibi araçları etkinliklerinize, siparişlerinize ve katılımcılarınıza bağlamak için bir anahtar oluşturun."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Bu tarih için liste oluştur"
@@ -5147,6 +5236,10 @@ msgstr "Bağlı Kuruluş Oluştur"
 msgid "Create an announcement to show a message to your users."
 msgstr "Kullanıcılarınıza bir mesaj göstermek için duyuru oluşturun."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Etkinlikleri, siparişleri, katılımcıları ve daha fazlasını oluşturun ve değiştirin."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Satış için bilet ve ürünler oluşturup yapılandırın."
@@ -5160,6 +5253,11 @@ msgstr "Oluştur ve tasarlamaya başla"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Duyuru oluştur"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "API anahtarı oluştur"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Etkinlik Oluştur"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Ücret oluştur"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Anahtar oluştur"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Kendi etkinliğinizi oluşturun"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Oluşturuldu"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Yasal uyarılar, iletişim bilgileri veya bir teşekkür notu, tek satırda"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Bağlantıyı kes"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "{0} bağlantısını kes"
 
@@ -6214,7 +6318,7 @@ msgstr "Alan adı doğrulandı"
 msgid "Don't forget!"
 msgstr "Unutmayın!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Hesabınız yok mu? <0>Kaydolun</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Bağış"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "örn. Bu cumartesi 02:00-04:00 UTC arası planlı bakım"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "örn. sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "ör. Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Uygun Giriş Listeleri"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "E-posta alt bilgi mesajı"
 msgid "Email is required"
 msgstr "E-posta gerekli"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "Şifre belirlemem için bana bir bağlantı gönder"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Benzersiz bağlı kuruluş kodunu girin"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "E-postanızı girin"
@@ -7484,9 +7593,13 @@ msgstr "Her etkinliğin bir check-in listesi vardır"
 msgid "Every organizer and event, including new ones."
 msgstr "Yeniler dahil tüm organizatörler ve etkinlikler."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Her güvenilen cihazın bir sonraki girişte kod girmesi gerekecek. Devam edilsin mi?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Herkes ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Muaf"
 msgid "Exempt from SSO"
 msgstr "SSO'dan muaf"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Geçerlilik süresi"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Son kullanım tarihi"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Süresi dolmuş"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "{0} sona erdi"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Süresi Doluyor"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "{0} sona eriyor"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Ad"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Birden fazla mekânda düzenlenen etkinlikler için"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Güvenliğiniz için kimliğinizi doğrulamak üzere tekrar giriş yapın."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Şifrenizi mi unuttunuz?"
 
@@ -8488,7 +8617,7 @@ msgstr "Yalnızca gelecekteki tarihler"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Gelecekteki tarihler, kapasite sıfırlanarak kopyalanır"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Genel"
@@ -8518,7 +8647,7 @@ msgstr "Oluştur"
 msgid "Generate code"
 msgstr "Kod oluştur"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Yeni kodlar oluştur"
@@ -8561,7 +8690,7 @@ msgstr "Ödeme alın"
 msgid "Get paid with Stripe"
 msgstr "Stripe ile ödeme alın"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Başlayın"
 
@@ -8599,11 +8728,16 @@ msgstr "Herkese bir zaman verin"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Yerleştirilen öğeye widget için yeterli yükseklik verin veya \"Ödeme şurada açılır\" ayarını \"Yeni sekme\" olarak belirleyin."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Bu anahtara bir ad verin"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Etkinliğine bir ad ver"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Geri dön"
 
@@ -9084,7 +9218,7 @@ msgstr "Sizden aldığımız platform ücretlerine KDV'nin nasıl uygulandığı
 msgid "How would you like to start?"
 msgstr "Nasıl başlamak istersiniz?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "Giriş yönteminiz ve iki adımlı doğrulama. Üyesi olduğunuz tüm hesapları korurlar."
 
@@ -9131,6 +9265,10 @@ msgstr "Kurtarma kodlarımı güvenli bir yere kaydettim"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Ekledim, devam et"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Bir anahtar sızarsa hemen iptal edin ve yeni bir tane oluşturun."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "Veren (issuer) URL'si"
 msgid "It happens on more than one date"
 msgstr "Birden fazla tarihte gerçekleşiyor"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Sizin rolünüze ve etkinlik erişiminize sahiptir. Salt okunur anahtarlar görüntüleyebilir ve dışa aktarabilir, ancak hiçbir şeyi değiştiremez."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Yayından kaldırılmış veya silinmiş olabilir. Lütfen bağlantıyı kontrol edip tekrar deneyin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Başka bir kullanıcıya bağlı. Farklı bir {providerName} hesabı kullanın."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "İş yeniden deneme için sıraya alındı"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "John"
 
@@ -9579,7 +9721,7 @@ msgstr "Temmuz"
 msgid "June"
 msgstr "Haziran"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Sadece biletlerinizi mi arıyorsunuz?"
 
@@ -9620,9 +9762,33 @@ msgstr "Kazanç sizde kalsın."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Duyurmaya hazır olana kadar onları herkese açık kadrodan ve programdan uzak tutun"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Anahtar"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "{0} ile biten anahtar"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Anahtar kaldırıldı"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Anahtar iptal edildi"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ve diğerleri"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "Anahtarlar oturum açamaz; ekibinizi, ödemelerinizi, profilinizi veya güvenlik ayarlarınızı yönetemez."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "Süresi hiç dolmayan anahtarlar siz iptal edene kadar geçerli kalır. Bunu yalnızca kontrolünüzdeki sunucular için kullanın."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Soyad"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Son Tetiklenme"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Son kullanılan"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Son Kullanım"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Son kullanım: {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Yüklenen tarihler"
 msgid "Loading preview..."
 msgstr "Önizleme yükleniyor..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "API referansı yükleniyor…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Biletlerimi ara"
 msgid "Lost access?"
 msgstr "Erişimi mi kaybettiniz?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Telefonunuzu mu kaybettiniz veya uygulama mı değiştiriyorsunuz? Yeni bir kimlik doğrulayıcı bağlamak için kapatıp tekrar açın."
 
@@ -10719,6 +10891,10 @@ msgstr "Harika etkinlik açıklamam..."
 msgid "My amazing event title..."
 msgstr "Harika etkinlik başlığım..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Anahtarlarım"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Profilim"
@@ -10746,6 +10922,7 @@ msgstr "Biletlerim"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Net Gelir"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Asla"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Hiç kullanılmadı"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Hayır - Bireyim veya KDV kayıtlı olmayan bir işletmeyim"
 msgid "No access yet"
 msgstr "Henüz erişim yok"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Hesap bulunamadı"
 
@@ -11194,6 +11376,10 @@ msgstr "Gösterilecek etkinlik yok"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Henüz etkinlik yok"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Süresiz"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Hayır, beni burada tut"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Bu etkinliğin kadrosuna henüz kimse eklenmedi."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Henüz kimse API anahtarı oluşturmadı"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Kadroda henüz kimse yok veya herkes gizli."
@@ -11589,6 +11779,10 @@ msgstr "Normalde {0}"
 msgid "Not available"
 msgstr "Mevcut değil"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Kullanılamaz: yalnızca görüntüleme erişiminiz var."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Check-in yapılmadı"
 msgid "Not Checked In"
 msgstr "Giriş Yapılmadı"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Bağlı değil"
 
@@ -11819,7 +12013,7 @@ msgstr "her ay"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Kapalı"
@@ -11908,7 +12102,7 @@ msgstr "şu günlerde:"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Açık"
@@ -12196,7 +12390,7 @@ msgstr "Ayarları aç"
 msgid "Open sidebar"
 msgstr "Kenar çubuğunu aç"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Ekibe katılmayı tamamlamak için size gönderdiğimiz davet e-postasını açın."
 
@@ -12594,7 +12788,7 @@ msgstr "Organizatör durumu güncellendi"
 msgid "Organizer/default template will be used"
 msgstr "Organizatör/varsayılan şablon kullanılacak"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Alıcıya aktar"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "İzinler"
 msgid "Person"
 msgstr "Kişi"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Kişisel"
 
@@ -13256,7 +13450,7 @@ msgstr "Lütfen en az bir seçenek ekleyin"
 msgid "Please check the provided information is correct"
 msgstr "Lütfen verilen bilgilerin doğru olduğunu kontrol edin"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Lütfen e-posta ve şifrenizi kontrol edin ve tekrar deneyin"
 
@@ -13669,7 +13863,7 @@ msgstr "Satılan Ürünler"
 msgid "Products sorted successfully"
 msgstr "Ürünler başarıyla sıralandı"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Yalnızca Promosyon"
 msgid "Promotional emails may result in account suspension"
 msgstr "Promosyon e-postaları hesap askıya alınmasına neden olabilir"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Hesabınızı girişte ikinci bir adımla koruyun. Biri şifrenizi öğrense bile telefonunuzdaki kod olmadan giriş yapamaz."
 
@@ -13942,10 +14136,20 @@ msgstr "Yeniden etkinleştir"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Bu tarih yeniden etkinleştirilsin mi? Gelecekteki satışlara yeniden açılacak."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Okuma ve yazma"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Devamını oku"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Salt okunur"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Nedenler"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "İadeyi Kaydet"
 msgid "Recovery code"
 msgstr "Kurtarma kodu"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Kurtarma kodları"
 
@@ -14203,7 +14407,7 @@ msgstr "İade edildi: {0}"
 msgid "Refunds"
 msgstr "İadeler"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "Kayıt Ol"
 
@@ -14252,12 +14456,18 @@ msgstr "kaldır"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Kaldır"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "\"{0}\" kaldırılsın mı? Süresi zaten doldu."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "{0} öğesini kaldır"
@@ -14282,7 +14492,7 @@ msgstr "{profileName} bu etkinliğin kadrosundan kaldırılsın mı? Profili di�
 msgid "Remove access"
 msgstr "Erişimi kaldır"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Tümünü kaldır"
 
@@ -14313,6 +14523,10 @@ msgstr "Haritadan kaldır"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Bu kadrodan kaldır"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Anahtarı kaldır"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "İki adımlı doğrulamayı zorunlu kıl"
 msgid "Required"
 msgstr "Gerekli"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "Kuruluşunuz tarafından zorunlu tutuluyor"
 
@@ -14735,9 +14949,29 @@ msgstr "Otomatik kontrol tarafından olası spam olarak işaretlenen etkinlikler
 msgid "Review security settings"
 msgstr "Güvenlik ayarlarını gözden geçir"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "İptal et"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "\"{0}\" iptal edilsin mi? Onu kullanan her şey hemen çalışmayı durdurur ve {ownerName} bu konuda bir e-posta alır."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "\"{0}\" iptal edilsin mi? Onu kullanan her şey hemen çalışmayı durdurur. Bu işlem geri alınamaz."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "İptal et: {0}"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Daveti iptal et"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Anahtarı iptal et"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Güvenli Ödeme"
 msgid "Secure your account"
 msgstr "Hesabınızı güvenceye alın"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Güvenlik"
 
@@ -15817,7 +16051,7 @@ msgstr "1 ürün satıyor"
 msgid "Sells every product"
 msgstr "Tüm ürünleri satıyor"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "Katılımcılara, bilet sahiplerine veya sipariş sahiplerine e-posta g�
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Davet gönder"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Her istekte Authorization başlığında gönderin."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Ayar güncellendi"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Ayarlar"
@@ -16208,6 +16446,10 @@ msgstr "Daha az platform göster"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Bunun yerine baş harfleri göster"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Anahtarları göster"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Organizatör profilinizi bir iletişim düğmesiyle gösterir."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Sosyal bağlantılarınızı ve bir iletişim düğmesini gösterir. Diğer tüm bölümlerin üstüne yerleştirildiğinde profil kartınızda görünür."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Giriş yap"
 
@@ -16383,15 +16625,19 @@ msgstr "İki adımlı doğrulamayı kurmaya başlamak için tekrar giriş yapın
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Bağlantıyı kontrol etmek için bir kez giriş yapın. Kimlik sağlayıcınızın neleri paylaştığını gösterir ve sizi burada oturum açtırmaz."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Parola kullanmak yerine kuruluşunuzun kimlik sağlayıcısı üzerinden giriş yapın."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Bunun yerine kuruluşunuzun kimlik sağlayıcısı üzerinden oturum açın."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "{0} hesabınıza giriş yapın"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Daveti kabul etmek için giriş yapın"
 
@@ -16403,7 +16649,7 @@ msgstr "Katılmak için giriş yapın"
 msgid "Sign in with a PIN"
 msgstr "PIN ile giriş yap"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Daha önce bağladığınız bir hesapla giriş yapın ve bunun yeni bir giriş olduğundan emin olun."
 
@@ -16418,7 +16664,9 @@ msgstr "Şifreyle giriş yap"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "SSO ile giriş yap"
 
@@ -16460,11 +16708,11 @@ msgstr "{0} ile kaydol"
 msgid "Sign up with Google"
 msgstr "Google ile kaydol"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "Giriş bağlantıları yalnızca bir kez çalışır ve 10 dakika sonra geçerliliğini yitirir. Giriş sayfasından yeniden başlayın."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Giriş bağlantıları yalnızca bir kez çalışır ve 10 dakika sonra geçerliliğini yitirir. Devam etmek için yeniden başlayın."
 
@@ -16472,7 +16720,7 @@ msgstr "Giriş bağlantıları yalnızca bir kez çalışır ve 10 dakika sonra 
 msgid "Sign-in settings"
 msgstr "Giriş ayarları"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Giriş iptal edildi. Başka bir giriş yöntemi seçin veya tekrar deneyin."
 
@@ -16496,15 +16744,15 @@ msgstr "Giriş yapıldı ancak e-posta paylaşılmadı"
 msgid "Signed up"
 msgstr "Kayıt tarihi"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Giriş yapılıyor"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "{0} ile giriş yapılıyor…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Giriş yapılıyor…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Slovakça"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Smith"
 
@@ -16689,6 +16937,10 @@ msgstr "Bazı metinler zor okunabilir"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "{0} az önce başkası tarafından alındı. Başka bir koltuk seçin ya da sizin için benzer koltuklar bulalım."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Nerede kullanıldığını anlatan bir ad, örneğin \"Zapier\" veya \"Web sitesi senkronizasyonu\"."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, web sitesi ve daha fa
 msgid "Square, at least 200 × 200px"
 msgstr "Kare, en az 200 × 200 piksel"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Tiyatro, ziyafet veya kulüp gibi bir şablonla başlayın ve haritayı 
 msgid "Start from scratch"
 msgstr "Sıfırdan başla"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Baştan başla"
 
@@ -17112,7 +17366,7 @@ msgstr "Kalan borç"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Hâlâ bekliyor musunuz? Okuyucunun ekranını kontrol edin. Hiçbir şey göstermiyorsa iptal edip tekrar deneyin."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Hâlâ çalışıyor. Bu birkaç saniye sürebilir."
 
@@ -17144,6 +17398,14 @@ msgstr "Tek oturum açmayı zorunlu kılma durdurulsun mu? Üyeler yeniden parol
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Bu cihaza güvenmeyi bırak"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "{0} tarihinde çalışmayı durdurur. Bir hafta önce size e-posta göndereceğiz."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Parola yöneticisi veya entegrasyonunuzun gizli ayarları gibi güvenli bir yerde saklayın. Bu anahtara sahip olan herkes API'yi sizin adınıza kullanabilir."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Vergiler ve ücretler"
 msgid "Taxes & fees applied"
 msgstr "Uygulanan vergiler ve ücretler"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Vergiler ve ücretler"
@@ -17590,7 +17852,7 @@ msgstr "Vergiler ve Ücretler"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "Tam sipariş tutarı müşterinin orijinal ödeme yöntemine iade edilec
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "İçe aktarma başarısız oldu. Hiçbir şey değiştirilmedi. Lütfen tekrar deneyin."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "Anahtar, {accountName} içinde sizin yapabildiğiniz her şeyi yapabilir, bu yüzden gizli tutun."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Mesajınız gönderilirken bir hata oluştu"
 msgid "These are skipped"
 msgstr "Bunlar atlanacak"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Bu tarayıcılar güvenilir yapıldıktan sonra 30 gün boyunca kodu atlar."
 
@@ -18123,7 +18389,7 @@ msgstr "Daveti henüz kabul etmedi. Değişiklikler katıldığında geçerli ol
 msgid "Third"
 msgstr "Üçüncü"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Bu {providerName} hesabı zaten kullanımda"
 
@@ -18327,11 +18593,11 @@ msgstr "Bu alan zorunludur"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Bu bilgiler ödeme sayfasında, sipariş özeti sayfasında ve sipariş onayı e-postasında gösterilecektir."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Bu davet {0} için"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Bu davet artık geçerli değil"
 
@@ -18355,7 +18621,7 @@ msgstr "Bu, yinelenen bir etkinlik"
 msgid "This is an online event"
 msgstr "Bu çevrimiçi bir etkinlik"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "Bu sizin giriş yönteminiz. Kaldırmadan önce bir şifre veya başka bir seçenek ekleyin."
 
@@ -18372,7 +18638,11 @@ msgstr "Bu, kullanıcılarınıza görüntülenecek organizatörünüzün adıd�
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "İmzalama anahtarı yalnızca bu kez gösterilecektir. Lütfen şimdi kopyalayın ve güvenli bir şekilde saklayın."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "Bu anahtarı yalnızca bu kez göreceksiniz"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Bu genellikle geçicidir. Birazdan tekrar deneyin."
 
@@ -18516,12 +18786,12 @@ msgstr "Bu koltuk beklemede"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Bu oturma planı başka bir yerde değiştirildi. En son sürüm yüklensin mi? Kaydedilmemiş değişiklikleriniz kaybolacak."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Bu giriş bağlantısının süresi doldu"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Bu giriş seçeneği kullanılamıyor"
 
@@ -18587,7 +18857,7 @@ msgstr "Per"
 msgid "Thursday"
 msgstr "Perşembe"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Giriş yaparken \"Bu cihaza güven\" seçeneğini işaretleyerek o tarayıcıda 30 gün boyunca kodu atlayın."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Yarın"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "İzleme ve Analitik"
 msgid "Trust this device for 30 days"
 msgstr "Bu cihaza 30 gün güven"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Güvenilen cihazlar"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Daha fazla tarih görmek için filtrelerinizi ayarlayın."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Daha fazla tarih görmek için filtrelerinizi ayarlayın."
 msgid "Try again"
 msgstr "Tekrar dene"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Başka bir e-posta deneyin"
@@ -19070,6 +19342,10 @@ msgstr "Başka bir e-posta deneyin"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Hi.Events'i Ücretsiz Deneyin"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Deneyin"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Kapat"
 
@@ -19099,7 +19375,7 @@ msgstr "Widget'ın kapsayıcısının tüm yüksekliğini doldurması için kapa
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "İki adımlı doğrulamayı kapat"
 
@@ -19107,7 +19383,7 @@ msgstr "İki adımlı doğrulamayı kapat"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "{0} için iki adımlı doğrulama kapatılsın mı? Bunu yalnızca kimliğini doğruladıktan sonra yapın. Kendisine e-posta gönderilir ve yalnızca şifresiyle giriş yapabilir."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Aç"
 
@@ -19155,7 +19431,7 @@ msgstr "İki adımlı"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "İki adımlı doğrulama"
 
@@ -19691,11 +19967,11 @@ msgstr "Farklı bir hesap kullan"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "5 MB'den küçük bir JPG, PNG veya WebP görseli kullanın."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Başka hiçbir yerde kullanmadığınız uzun bir şifre kullanın."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Bunun yerine şifre kullan"
 
@@ -19806,6 +20082,10 @@ msgstr "Ana sayfa tasarımınızın renklerini ve yazı tipini kullanır. Tasar�
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Bunları gerçek etkinliklerde mi kullanıyorsunuz? Bir Enterprise lisansı edinin ve anahtarını <0>APP_LICENCE_KEY</0> içine koyun."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "Anahtarınızı kullanma"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Katılımcıyı görüntüle"
 msgid "View Attendee Details"
 msgstr "Katılımcı Detaylarını Görüntüle"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Verileri görüntüleyin ve dışa aktarın. Hiçbir şeyi değiştiremez."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Ayrıntıları görüntüle"
@@ -20269,7 +20553,7 @@ msgstr "Uyarı: Bu sistem varsayılan yapılandırmasıdır. Değişiklikler, be
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Ödemenizi işleyemedik. Lütfen tekrar deneyin veya destek ile iletişime geçin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Kimliğinizi doğrulayamadık"
 
@@ -20362,7 +20646,7 @@ msgstr "Panonuzu okuyamadık. Bunun yerine yapıştırmak için Ctrl+V veya ⌘+
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Kategorileri yeniden sıralayamadık. Lütfen tekrar deneyin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Giriş yapmanızı sağlayamadık"
 
@@ -20387,7 +20671,7 @@ msgstr "1950px x 650px boyutlarında, 3:1 oranında ve maksimum 5MB dosya boyutu
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "400px x 400px boyutlarını ve maksimum 5MB dosya boyutunu öneriyoruz"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "{0} adresine bir bağlantı gönderdik. Şifrenizi belirlemek için bağlantıyı açın."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Aramıza hoş geldiniz! Devam etmek için giriş yapın."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Tekrar hoş geldiniz"
 
@@ -20847,7 +21131,7 @@ msgstr "Çalışıyor"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Çalışıyor..."
 
@@ -20915,11 +21199,12 @@ msgstr "Evet, kaldır"
 msgid "Yoga class"
 msgstr "Yoga dersi"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Siz"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Zaten bir hesabınız var"
 
@@ -20931,7 +21216,7 @@ msgstr "{email} ile zaten bir hesabınız var"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Zaten bir hesabınız var. Giriş yapın, ekibe katılmanız için sizi buraya geri getirelim."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Zaten bir hesabınız var. Giriş yapın, sizi davete geri getirelim."
 
@@ -21021,6 +21306,10 @@ msgstr "Bu fiyat seviyesini silemezsiniz çünkü bu seviye için zaten satılm�
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Kimliğinizi doğruladınız. Birkaç dakika içinde devam edin."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Hiç API anahtarınız yok"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Bekleyen e-posta değişikliğiniz yok."
@@ -21045,6 +21334,10 @@ msgstr "Ücretsiz Bir Ürüne eklenen vergiler ve ücretleriniz var. Bunları ka
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Kaydedilmemiş değişiklikleriniz var. Bunları atmak istediğinize emin misiniz?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Bu anahtarı kopyalamadınız. Bu pencereyi kapattıktan sonra tekrar gösterilemez."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "En az bir fiyat seviyeniz olmalı"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Organizatör durumunu güncelleyebilmek için e-posta adresinizi doğrulamanız gerekir."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "API anahtarı oluşturmak için onaylanmış bir e-posta adresine ihtiyacınız var. Gelen kutunuzu kontrol edin veya onay e-postasını <0>profilinizden</0> yeniden gönderin."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Bu yinelenen etkinliğe katılımcı ekleyebilmek için en az bir tarih oluşturmanız gerekir."
@@ -21090,11 +21387,11 @@ msgstr "Mesaj göndermeden önce hesap e-postanızı doğrulamanız gerekir."
 msgid "You receive"
 msgstr "Aldığınız"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Şifre olmadan giriş yapıyorsunuz. Yedek bir giriş yolu olarak şifre ekleyin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "{0} olarak giriş yaptınız. Davetin gönderildiği hesabı kullanın."
 
@@ -21110,7 +21407,7 @@ msgstr "Bir kurtarma kodu kullandınız. 1 kurtarma kodunuz kaldı."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Bir siparişi elle ödenmiş olarak işaretlemeniz gerekecek. Bu, sipariş yönetimi sayfasından yapılabilir."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Artık {0} ile giriş yapamayacaksınız. Hesabınızda oturum açmış diğer cihazlardan çıkış yapılacak."
 
@@ -21158,7 +21455,7 @@ msgstr "{occurrenceDate} için bekleme listesine katılıyorsunuz."
 msgid "You're on the waitlist!"
 msgstr "Bekleme listesine eklendi!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Kodlarınız azalıyor. Hesabınızın dışında kalmamak için yeni bir set oluşturun."
 
@@ -21174,7 +21471,7 @@ msgstr "{0} olarak giriş yaptınız"
 msgid "You're unsubscribed"
 msgstr "Abonelikten çıktınız"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Davet edildiniz"
 
@@ -21186,6 +21483,10 @@ msgstr "Size bir yer teklif edildi!"
 msgid "You've changed the session time"
 msgstr "Oturum saatini değiştirdiniz"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "{0} etkin anahtar sınırına ulaştınız. Yeni bir tane oluşturmak için birini iptal edin."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Vurgu renginiz bu modda yeterince öne çıkmıyor."
@@ -21194,7 +21495,7 @@ msgstr "Vurgu renginiz bu modda yeterince öne çıkmıyor."
 msgid "your account"
 msgstr "hesabınız"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Hesabınız girişte kimlik doğrulama uygulamanızdan bir kod ister. Açılış: {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Hesabınızın mesajlaşma limitleri var. Limitinizi artırmak için biz
 msgid "Your account is now scheduled for deletion."
 msgstr "Hesabınız artık silinmek üzere planlandı."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "Hesabınız etkin değil"
 
@@ -21237,6 +21538,10 @@ msgstr "Katılımcılarınız başarıyla dışa aktarıldı."
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Katılımcılarınız etkinliğinize kaydolduktan sonra burada görünecek. Ayrıca elle katılımcı ekleyebilirsiniz."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "Tarayıcınız kopyalamayı engelledi. Anahtarı seçip kendiniz kopyalayın."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Siparişleriniz gelmeye başladığında burada görünecek."
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Kuruluşunuz iki adımlı doğrulamayı zorunlu kılıyor. Devam etmek için şimdi kurun. Yaklaşık bir dakika sürer."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "Kuruluşunuz tek oturum açmayı zorunlu kılıyor"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "Kuruluşunuz çoklu oturum açma gerektiriyor, bu yüzden parolaya ihtiyacınız yok."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "Kuruluşunuz çoklu oturum açma kullanıyor"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "Organizatörünüzün henüz bir açıklaması yok."
 msgid "Your organizer profile isn't published."
 msgstr "Organizatör profiliniz yayınlanmadı."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Şifreniz"
 

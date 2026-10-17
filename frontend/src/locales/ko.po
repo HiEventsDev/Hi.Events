@@ -80,6 +80,10 @@ msgstr "{0}석 장애인석"
 msgid "{0} Active Webhooks"
 msgstr "활성 웹훅 {0}개"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0}개 남음"
@@ -149,7 +153,7 @@ msgstr "인증된 도메인 외부의 구성원 {0}명은 현재 로그인 방�
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0}님은 이제 {providerName}(으)로 로그인해야 합니다"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "{0}/{1} 남음"
 
@@ -186,11 +190,19 @@ msgstr "환불된 주문 {0}건에 이 상품이 포함되어 있지만 취소�
 msgid "{0} removed"
 msgstr "{0} 삭제됨"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0}에서 싱글 사인온을 요구합니다. 소유자는 비밀번호로 로그인하므로 2단계 인증이 이 로그인을 보호하며 끌 수 없습니다."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0}에서 싱글 사인온을 요구합니다. 소유자는 비밀번호로 로그인하므로 2단계 인증이 이 로그인을 보호합니다."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0}에서는 팀의 모든 구성원에게 2단계 인증을 요구합니다."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0}에서 2단계 인증을 요구하므로 끌 수 없습니다."
 
@@ -255,7 +267,7 @@ msgstr "{0}석 입석"
 msgid "{0} tickets"
 msgstr "티켓 {0}장"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "{0} 연결이 해제되었습니다."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} 체크인됨"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{totalCount}단계 중 {completedCount}단계 완료"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected}이(가) 연결되었습니다. 이제 이 계정으로 로그인할 수 있습니다."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count}개 시간대"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days}일"
 
@@ -455,6 +468,10 @@ msgstr "주최자 {organizerCount}개"
 msgid "{organizerName}'s first event"
 msgstr "{organizerName}의 첫 번째 이벤트"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "활성 키 {ownActiveCount}/{0}개"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "티켓 유형 {productCount}개 설정됨"
 msgid "{provider} video found"
 msgstr "{provider} 동영상을 찾았습니다"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "{providerName}에서 이메일을 공유하지 않았습니다"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "{providerName}이(가) 응답하지 않습니다"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "이 세션에 1명의 참가자가 등록되어 있습니다."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1일"
 
@@ -764,6 +782,10 @@ msgstr "좌석 미배정 1개"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "이벤트 1주 전"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1년"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Stripe로 신용카드 결제를 받습니다"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "접근"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "장애인석"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "계정"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "계정 ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "{email}의 계정은 조직에서 관리합니다. 대신 조직의 ID 공급자를 통해 로그인하세요."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "이 이메일 주소의 계정은 조직에서 관리합니다. 새 계정을 만드는 대신 조직의 ID 공급자를 통해 로그인하세요."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "모든 티켓"
 msgid "All time"
 msgstr "전체 기간"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "신뢰하는 기기를 모두 삭제했습니다"
 
@@ -1875,7 +1906,7 @@ msgstr "모든 사용자"
 msgid "All visible"
 msgstr "모두 표시됨"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "로그인할 때 이메일 주소에 대한 액세스를 허용한 후 다시 시도해 주세요."
 
@@ -1930,7 +1961,7 @@ msgstr "{providerName} 로그인 허용"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "거의 다 되었습니다! 결제 처리를 기다리고 있습니다. 몇 초 정도만 소요됩니다."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "이미 계정이 있으신가요? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "결제 금액 ({0})"
 msgid "Amount tendered"
 msgstr "받은 금액"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "이 이메일로 등록된 계정이 이미 있습니다. 대신 로그인해 주세요."
 
@@ -2158,6 +2189,20 @@ msgstr "공유 문서 링크처럼, 이 링크와 PIN을 가진 사람은 누구
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "더 필요하신 것이 있나요?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "API 키"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "다른 사용자로 가장하는 동안에는 API 키를 만들 수 없습니다."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "API 레퍼런스"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "상품당 한 번 질문"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "현장에서 주문 및 참가자 질문을 받습니다. 티켓마다 별도의 단계가 추가되어 판매 속도가 크게 느려질 수 있습니다. 붐비는 입구에서는 꺼 두세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "계정 소유자에게 다시 초대해 달라고 요청하세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "초대한 사람에게 새 초대를 보내 달라고 요청하세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "관리자에게 초대를 요청하세요."
 
@@ -2825,7 +2870,7 @@ msgstr "Awesome Organizer Ltd."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "매표소가 수정되었습니다"
 msgid "Brazilian Portuguese"
 msgstr "브라질 포르투갈어"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "API 레퍼런스에서 모든 엔드포인트 보기"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "일정 만들기"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "추적 픽셀을 추가하면 귀하와 본 플랫폼이 수집된 데이터의 공동 관리자임에 동의하는 것입니다. 관련 개인정보 보호법(GDPR, CCPA 등)에 따라 이 처리에 대한 적법한 근거가 있는지 확인할 책임은 귀하에게 있습니다."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "계속하면 당사의 <0>서비스 약관</0> 및 <1>개인정보 처리방침</1>에 동의하는 것으로 간주됩니다."
 
@@ -3392,6 +3441,7 @@ msgstr "인증 앱이나 복구 코드를 사용할 수 없나요?"
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "이메일 변경"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "비밀번호 변경"
 
@@ -3775,7 +3825,7 @@ msgstr "이메일을 확인하세요"
 msgid "Check your event page"
 msgstr "이벤트 페이지 확인"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "받은 편지함을 확인하세요! 이 이메일과 연결된 티켓이 있다면 확인 링크를 받으실 수 있습니다."
@@ -4053,7 +4103,7 @@ msgstr "다른 파일 선택"
 msgid "Choose another reader"
 msgstr "다른 리더기 선택"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "다른 로그인 방법을 선택하세요."
 
@@ -4236,6 +4286,10 @@ msgstr "닫기"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "사이드바 닫기"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "복사하지 않고 닫기"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "이메일 변경 확인"
 msgid "Confirm it's you"
 msgstr "본인 확인"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "본인 확인 후 {0}(으)로 로그인하여 연결하세요."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "새 비밀번호 확인"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "비밀번호 확인"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "비밀번호 확인"
@@ -4543,6 +4597,10 @@ msgstr "스팸 확정"
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
 msgstr "이메일 확인"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
+msgstr "이메일 주소를 인증하세요"
 
 #: src/components/layouts/Event/index.tsx:328
 msgid "Confirm your email to access all features."
@@ -4568,11 +4626,11 @@ msgstr "이메일 주소 확인 중..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "축하합니다! 이제 이벤트가 공개적으로 표시됩니다."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "연결"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "{0} 연결"
 
@@ -4583,6 +4641,10 @@ msgstr "카드 리더기를 추가하기 전에 정산에서 Stripe 계정을 �
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "은행 연결"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "다른 도구와 직접 작성한 코드를 이 계정에 연결하세요. 키는 회원님이 할 수 있는 모든 작업을 할 수 있으므로 비밀번호처럼 다루세요."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "내용을 입력해 주세요"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "계속"
@@ -4795,6 +4857,8 @@ msgstr "쿠키 설정"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "ChatGPT, Claude, Cursor 또는 사이트 빌더의 AI 어시스턴트에
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "복사"
@@ -4871,6 +4936,10 @@ msgstr "코드 복사"
 msgid "Copy Code"
 msgstr "코드 복사"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "명령어 복사"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "고객 링크 복사"
@@ -4887,6 +4956,10 @@ msgstr "이메일 복사"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "AI 에이전트용으로 복사"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "키 복사"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "클립보드에 복사"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "URL 복사"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "API 키를 복사하세요"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "{name}을(를) 업데이트할 수 없습니다"
 msgid "Could not upload {fileName}"
 msgstr "{fileName}을(를) 업로드할 수 없습니다"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "API 레퍼런스를 불러오지 못했습니다."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "API 키를 불러오지 못했습니다"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "보안 설정을 불러오지 못했습니다"
@@ -5094,6 +5179,10 @@ msgstr "\"{query}\" 만들기"
 msgid "Create {0} Template"
 msgstr "{0} 템플릿 생성"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "키를 만들어 Zapier, CRM 또는 직접 작성한 스크립트 같은 도구를 이벤트, 주문, 참가자와 연결하세요."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "이 날짜의 목록 생성"
@@ -5147,6 +5236,10 @@ msgstr "제휴사 생성"
 msgid "Create an announcement to show a message to your users."
 msgstr "사용자에게 메시지를 표시할 공지를 생성하세요."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "이벤트, 주문, 참가자 등을 만들고 변경합니다."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "판매할 티켓과 상품을 생성하고 설정하세요."
@@ -5160,6 +5253,11 @@ msgstr "만들고 디자인 시작하기"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "공지 생성"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "API 키 만들기"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "이벤트 생성"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "수수료 생성"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "키 만들기"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "나만의 이벤트 만들기"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "생성됨"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "면책 조항, 연락처 또는 감사 메시지를 한 줄로 입력하세요"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "연결 해제"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "{0} 연결 해제"
 
@@ -6214,7 +6318,7 @@ msgstr "도메인이 인증되었습니다"
 msgid "Don't forget!"
 msgstr "잊지 마세요!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "계정이 없으신가요? <0>회원가입</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "기부"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "예: 이번 주 토요일 UTC 오전 2-4시 정기 점검"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "예: sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "예: Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "해당하는 체크인 목록"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "이메일 푸터 메시지"
 msgid "Email is required"
 msgstr "이메일을 입력해 주세요"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "비밀번호 설정 링크를 이메일로 받기"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "고유한 제휴 코드 입력"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "이메일 입력"
@@ -7484,9 +7593,13 @@ msgstr "모든 이벤트에는 체크인 목록이 있습니다"
 msgid "Every organizer and event, including new ones."
 msgstr "새로 추가되는 항목을 포함한 모든 주최자와 이벤트."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "신뢰하는 모든 기기는 다음 로그인 때 코드가 필요합니다. 계속할까요?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "전체 ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "제외"
 msgid "Exempt from SSO"
 msgstr "SSO 제외"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "만료"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "만료일"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "만료됨"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "{0} 만료됨"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "만료"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "{0} 만료"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "이름"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "여러 장소에서 열리는 이벤트용"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "보안을 위해 다시 로그인하여 본인임을 확인해 주세요."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "비밀번호를 잊으셨나요?"
 
@@ -8488,7 +8617,7 @@ msgstr "예정된 날짜만"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "예정된 날짜는 정원이 0으로 초기화되어 복사됩니다"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "일반"
@@ -8518,7 +8647,7 @@ msgstr "생성"
 msgid "Generate code"
 msgstr "코드 생성"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "새 코드 생성"
@@ -8561,7 +8690,7 @@ msgstr "결제 받기"
 msgid "Get paid with Stripe"
 msgstr "Stripe로 결제 받기"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "시작하기"
 
@@ -8599,11 +8728,16 @@ msgstr "모두에게 시간 지정"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "임베드에 위젯이 들어갈 만큼 충분한 높이를 지정하거나 \"결제 열기 방식\"을 \"새 탭\"으로 설정하세요."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "이 키의 이름을 입력하세요"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "이벤트 이름을 입력하세요"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "뒤로 가기"
 
@@ -9084,7 +9218,7 @@ msgstr "저희가 청구하는 플랫폼 수수료에 VAT가 적용되는 방식
 msgid "How would you like to start?"
 msgstr "어떻게 시작하시겠어요?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "로그인 방법과 2단계 인증입니다. 소속된 모든 계정을 보호합니다."
 
@@ -9131,6 +9265,10 @@ msgstr "복구 코드를 안전한 곳에 저장했습니다"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "추가했습니다. 계속"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "키가 유출되면 즉시 폐기하고 새 키를 만드세요."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "발급자 URL"
 msgid "It happens on more than one date"
 msgstr "여러 날짜에 진행됩니다"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "회원님의 역할과 이벤트 접근 권한을 가집니다. 읽기 전용 키는 조회와 내보내기만 할 수 있으며 아무것도 변경할 수 없습니다."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "게시가 취소되었거나 삭제되었을 수 있습니다. 링크를 확인하고 다시 시도해 주세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "다른 사용자에게 연결되어 있습니다. 다른 {providerName} 계정을 사용하세요."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "작업이 재시도 대기열에 추가되었습니다"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "John"
 
@@ -9579,7 +9721,7 @@ msgstr "7월"
 msgid "June"
 msgstr "6월"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "티켓만 찾고 계신가요?"
 
@@ -9620,9 +9762,33 @@ msgstr "수익을 온전히 가져가세요."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "발표할 준비가 될 때까지 공개 라인업과 일정에 표시하지 않습니다"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "키"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "{0}(으)로 끝나는 키"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "키가 삭제되었습니다"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "키가 폐기되었습니다"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin 등"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "키로는 로그인하거나 팀, 정산, 프로필, 보안 설정을 관리할 수 없습니다."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "만료되지 않는 키는 폐기할 때까지 유효합니다. 직접 관리하는 서버에서만 사용하세요."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "성"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "마지막 실행"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "최근 사용"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "마지막 사용"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "마지막 사용 {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "불러온 날짜"
 msgid "Loading preview..."
 msgstr "미리보기 불러오는 중..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "API 레퍼런스를 불러오는 중…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "내 티켓 조회"
 msgid "Lost access?"
 msgstr "접근할 수 없나요?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "휴대폰을 잃어버렸거나 앱을 바꾸시나요? 껐다가 다시 켜서 새 인증 앱을 연결하세요."
 
@@ -10719,6 +10891,10 @@ msgstr "멋진 이벤트 설명..."
 msgid "My amazing event title..."
 msgstr "멋진 이벤트 제목..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "내 키"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "내 프로필"
@@ -10746,6 +10922,7 @@ msgstr "내 티켓"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "순매출"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "없음"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "사용한 적 없음"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "아니요 - 개인이거나 부가가치세 미등록 사업자입니다
 msgid "No access yet"
 msgstr "아직 접근 권한 없음"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "계정을 찾을 수 없습니다"
 
@@ -11194,6 +11376,10 @@ msgstr "표시할 이벤트가 없습니다"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "아직 이벤트가 없습니다"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "만료 없음"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "아니요, 여기 머무르겠습니다"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "이 이벤트 라인업에 아직 아무도 추가되지 않았습니다."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "아직 아무도 API 키를 만들지 않았습니다"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "아직 라인업에 아무도 없거나 모두 숨김 상태입니다."
@@ -11589,6 +11779,10 @@ msgstr "일반 가격 {0}"
 msgid "Not available"
 msgstr "이용 불가"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "사용할 수 없음: 보기 전용 권한이 있습니다."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "체크인 안 됨"
 msgid "Not Checked In"
 msgstr "체크인 안 됨"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "연결되지 않음"
 
@@ -11819,7 +12013,7 @@ msgstr "매월"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "끄기"
@@ -11908,7 +12102,7 @@ msgstr "켜기"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "켜기"
@@ -12196,7 +12390,7 @@ msgstr "설정 열기"
 msgid "Open sidebar"
 msgstr "사이드바 열기"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "보내 드린 초대 이메일을 열어 팀 참여를 완료하세요."
 
@@ -12594,7 +12788,7 @@ msgstr "주최자 상태가 업데이트되었습니다"
 msgid "Organizer/default template will be used"
 msgstr "주최자/기본 템플릿이 사용됩니다"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "구매자에게 전가"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "권한"
 msgid "Person"
 msgstr "사람"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "개인"
 
@@ -13256,7 +13450,7 @@ msgstr "하나 이상의 옵션을 추가해 주세요"
 msgid "Please check the provided information is correct"
 msgstr "입력한 정보가 올바른지 확인해 주세요"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "이메일과 비밀번호를 확인하고 다시 시도해 주세요"
 
@@ -13669,7 +13863,7 @@ msgstr "판매된 상품"
 msgid "Products sorted successfully"
 msgstr "상품이 성공적으로 정렬되었습니다"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "프로모션 전용"
 msgid "Promotional emails may result in account suspension"
 msgstr "홍보성 이메일은 계정 정지로 이어질 수 있습니다"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "로그인 시 두 번째 단계로 계정을 보호하세요. 누군가 비밀번호를 알아내더라도 휴대폰의 코드 없이는 로그인할 수 없습니다."
 
@@ -13942,10 +14136,20 @@ msgstr "다시 활성화"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "이 날짜를 재활성화하시겠습니까? 향후 판매를 위해 다시 열립니다."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "읽기 및 쓰기"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "더 보기"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "읽기 전용"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "사유"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "환불 기록"
 msgid "Recovery code"
 msgstr "복구 코드"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "복구 코드"
 
@@ -14203,7 +14407,7 @@ msgstr "환불됨: {0}"
 msgid "Refunds"
 msgstr "환불"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "등록"
 
@@ -14252,12 +14456,18 @@ msgstr "제거"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "제거"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "\"{0}\"을(를) 삭제하시겠습니까? 이미 만료되었습니다."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "{0} 제거"
@@ -14282,7 +14492,7 @@ msgstr "{profileName}을(를) 이 이벤트 라인업에서 제거하시겠습�
 msgid "Remove access"
 msgstr "접근 권한 제거"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "모두 삭제"
 
@@ -14313,6 +14523,10 @@ msgstr "배치도에서 제거"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "이 라인업에서 제거"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "키 삭제"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "2단계 인증 필수로 지정"
 msgid "Required"
 msgstr "필수"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "조직에서 필수로 요구함"
 
@@ -14735,9 +14949,29 @@ msgstr "자동 검사에서 스팸 가능성이 있는 것으로 표시된 이�
 msgid "Review security settings"
 msgstr "보안 설정 검토"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "폐기"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "\"{0}\"을(를) 폐기하시겠습니까? 이 키를 사용하는 모든 항목이 즉시 작동을 멈추며, {ownerName} 님에게 이메일이 발송됩니다."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "\"{0}\"을(를) 폐기하시겠습니까? 이 키를 사용하는 모든 항목이 즉시 작동을 멈춥니다. 이 작업은 되돌릴 수 없습니다."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "{0} 폐기"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "초대 취소"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "키 폐기"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "안전한 결제"
 msgid "Secure your account"
 msgstr "계정 보호하기"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "보안"
 
@@ -15817,7 +16051,7 @@ msgstr "상품 1개 판매"
 msgid "Sells every product"
 msgstr "모든 상품 판매"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "참가자, 티켓 소지자, 주문자에게 이메일을 보내세요. 
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "초대 보내기"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "모든 요청의 Authorization 헤더에 담아 보내세요."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "설정이 수정되었습니다"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "설정"
@@ -16208,6 +16446,10 @@ msgstr "플랫폼 적게 표시"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "대신 이니셜 표시"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "키 표시"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "문의 버튼과 함께 주최자 프로필을 표시합니다."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "소셜 링크와 문의 버튼을 표시합니다. 다른 모든 섹션 위에 배치하면 프로필 카드에 표시됩니다."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "로그인"
 
@@ -16383,15 +16625,19 @@ msgstr "2단계 인증 설정을 시작하려면 다시 로그인하세요."
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "한 번 로그인하여 연결을 확인하세요. ID 공급자가 공유하는 정보가 표시되며, 여기에 로그인되지는 않습니다."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "비밀번호 대신 조직의 ID 공급자를 통해 로그인합니다."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "대신 조직의 ID 공급자를 통해 로그인하세요."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "{0}에 로그인"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "로그인하여 초대 수락"
 
@@ -16403,7 +16649,7 @@ msgstr "로그인하여 참여"
 msgid "Sign in with a PIN"
 msgstr "PIN으로 로그인"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "이미 연결한 계정으로 새로 로그인해 주세요."
 
@@ -16418,7 +16664,9 @@ msgstr "비밀번호로 로그인"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "SSO로 로그인"
 
@@ -16460,11 +16708,11 @@ msgstr "{0}(으)로 가입하기"
 msgid "Sign up with Google"
 msgstr "Google로 가입하기"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "로그인 링크는 한 번만 사용할 수 있으며 10분 후에 만료됩니다. 로그인 페이지에서 다시 시작하세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "로그인 링크는 한 번만 사용할 수 있으며 10분 후 만료됩니다. 계속하려면 처음부터 다시 시작하세요."
 
@@ -16472,7 +16720,7 @@ msgstr "로그인 링크는 한 번만 사용할 수 있으며 10분 후 만료�
 msgid "Sign-in settings"
 msgstr "로그인 설정"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "로그인이 취소되었습니다. 다른 로그인 방법을 선택하거나 다시 시도하세요."
 
@@ -16496,15 +16744,15 @@ msgstr "로그인했지만 이메일이 공유되지 않았습니다"
 msgid "Signed up"
 msgstr "가입일"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "로그인 중"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "{0}(으)로 로그인하는 중…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "로그인하는 중…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "슬로바키아어"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Smith"
 
@@ -16689,6 +16937,10 @@ msgstr "일부 텍스트가 읽기 어려울 수 있습니다"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "방금 다른 사람이 {0}을(를) 선택했습니다. 다른 좌석을 선택하거나, 비슷한 좌석을 대신 찾아드리도록 해보세요."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "\"Zapier\"나 \"웹사이트 동기화\"처럼 어디에서 사용되는지 알 수 있는 이름."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "문제가 발생했습니다. 나중에 다시 시도해 주세요."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "문제가 발생했습니다. 나중에 다시 시도해 주세요."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, 웹사이트 등을 �
 msgid "Square, at least 200 × 200px"
 msgstr "정사각형, 최소 200 × 200px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "극장, 연회, 클럽 같은 템플릿으로 시작한 뒤 배치도를
 msgid "Start from scratch"
 msgstr "처음부터 시작하기"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "처음부터 다시 시작"
 
@@ -17112,7 +17366,7 @@ msgstr "남은 금액"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "아직 기다리는 중인가요? 리더기 화면을 확인하세요. 아무것도 표시되지 않으면 취소하고 다시 시도하세요."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "아직 처리 중입니다. 몇 초 정도 걸릴 수 있습니다."
 
@@ -17144,6 +17398,14 @@ msgstr "싱글 사인온 필수 지정을 해제할까요? 구성원이 다시 �
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "이 기기 신뢰 해제"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "{0}에 작동이 중지됩니다. 일주일 전에 이메일로 알려 드립니다."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "비밀번호 관리자나 통합의 비밀 설정처럼 안전한 곳에 보관하세요. 이 키를 가진 사람은 누구나 회원님으로서 API를 사용할 수 있습니다."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "세금 및 수수료"
 msgid "Taxes & fees applied"
 msgstr "세금 및 수수료 적용됨"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "세금 및 수수료"
@@ -17590,7 +17852,7 @@ msgstr "세금 및 수수료"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "전체 주문 금액이 고객의 원래 결제 수단으로 환불됩�
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "가져오기에 실패했습니다. 변경된 내용은 없습니다. 다시 시도해 주세요."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "이 키는 {accountName}에서 회원님이 할 수 있는 모든 작업을 할 수 있으므로 비밀로 유지하세요."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "메시지를 보내는 중 오류가 발생했습니다"
 msgid "These are skipped"
 msgstr "건너뛰는 항목"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "이 브라우저는 신뢰한 후 30일 동안 코드 입력을 건너뜁니다."
 
@@ -18123,7 +18389,7 @@ msgstr "아직 초대를 수락하지 않았습니다. 참여하면 변경 사�
 msgid "Third"
 msgstr "세 번째"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "이 {providerName} 계정은 이미 사용 중입니다"
 
@@ -18327,11 +18593,11 @@ msgstr "필수 입력 항목입니다"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "이 정보는 결제 페이지, 주문 요약 페이지, 주문 확인 이메일에 표시됩니다."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "이 초대는 {0}을(를) 위한 것입니다"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "이 초대는 더 이상 유효하지 않습니다"
 
@@ -18355,7 +18621,7 @@ msgstr "반복 이벤트입니다"
 msgid "This is an online event"
 msgstr "이것은 온라인 이벤트입니다"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "현재 사용 중인 로그인 방법입니다. 제거하기 전에 비밀번호 또는 다른 방법을 추가하세요."
 
@@ -18372,7 +18638,11 @@ msgstr "사용자에게 표시될 주최자 이름입니다."
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "서명 비밀 키는 이번에만 표시됩니다. 지금 복사하여 안전하게 보관해 주세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "이 키는 지금 한 번만 표시됩니다"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "일반적으로 일시적인 문제입니다. 잠시 후 다시 시도하세요."
 
@@ -18516,12 +18786,12 @@ msgstr "이 좌석은 보류되었습니다"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "이 좌석 배치도가 다른 곳에서 변경되었습니다. 최신 버전을 불러올까요? 저장하지 않은 변경 사항은 사라집니다."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "이 로그인 링크가 만료되었습니다"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "이 로그인 방법은 사용할 수 없습니다"
 
@@ -18587,7 +18857,7 @@ msgstr "목"
 msgid "Thursday"
 msgstr "목요일"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "로그인할 때 \"이 기기를 신뢰\"를 선택하면 해당 브라우저에서 30일 동안 코드 입력을 건너뜁니다."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "내일"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "추적 및 분석"
 msgid "Trust this device for 30 days"
 msgstr "이 기기를 30일 동안 신뢰"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "신뢰하는 기기"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "필터를 조정하여 더 많은 날짜를 확인하세요."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "필터를 조정하여 더 많은 날짜를 확인하세요."
 msgid "Try again"
 msgstr "다시 시도"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "다른 이메일 시도"
@@ -19070,6 +19342,10 @@ msgstr "다른 이메일 시도"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Hi.Events 무료로 체험하기"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "사용해 보기"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "터키어"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "끄기"
 
@@ -19099,7 +19375,7 @@ msgstr "끄면 위젯이 컨테이너의 높이를 가득 채웁니다."
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "2단계 인증 끄기"
 
@@ -19107,7 +19383,7 @@ msgstr "2단계 인증 끄기"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "{0}의 2단계 인증을 끌까요? 본인 확인을 마친 후에만 진행하세요. 해당 사용자에게 이메일로 알림이 가며, 이후 비밀번호만으로 로그인할 수 있습니다."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "켜기"
 
@@ -19155,7 +19431,7 @@ msgstr "2단계"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "2단계 인증"
 
@@ -19691,11 +19967,11 @@ msgstr "다른 계정 사용"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "5MB 미만의 JPG, PNG 또는 WebP 이미지를 사용하세요."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "다른 곳에서 사용하지 않는 긴 비밀번호를 사용하세요."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "대신 비밀번호 사용"
 
@@ -19806,6 +20082,10 @@ msgstr "홈페이지 디자인의 색상과 글꼴을 사용합니다. 디자인
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "실제 이벤트에 사용하나요? Enterprise 라이선스를 받아 그 키를 <0>APP_LICENCE_KEY</0>에 넣으세요."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "키 사용 방법"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "참석자 보기"
 msgid "View Attendee Details"
 msgstr "참가자 상세 정보 보기"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "데이터를 조회하고 내보내기를 실행합니다. 아무것도 변경할 수 없습니다."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "세부 정보 보기"
@@ -20269,7 +20553,7 @@ msgstr "경고: 이것은 시스템 기본 설정입니다. 변경 사항은 특
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "결제를 처리할 수 없습니다. 다시 시도하시거나 지원팀에 문의해 주세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "본인 확인을 할 수 없습니다"
 
@@ -20362,7 +20646,7 @@ msgstr "클립보드를 읽을 수 없습니다. 대신 Ctrl+V 또는 ⌘+V를 �
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "카테고리 순서를 변경할 수 없습니다. 다시 시도해 주세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "로그인할 수 없습니다"
 
@@ -20387,7 +20671,7 @@ msgstr "1950px x 650px 크기, 3:1 비율, 최대 5MB 파일 크기를 권장합
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "400px x 400px 크기와 최대 5MB 파일 크기를 권장합니다"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "{0}(으)로 링크를 보냈습니다. 링크를 열어 비밀번호를 설정하세요."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "환영합니다! 계속하려면 로그인하세요."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "다시 오신 것을 환영합니다"
 
@@ -20847,7 +21131,7 @@ msgstr "작동 중"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "작동 중..."
 
@@ -20915,11 +21199,12 @@ msgstr "예, 제거합니다"
 msgid "Yoga class"
 msgstr "요가 수업"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "나"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "이미 계정이 있습니다"
 
@@ -20931,7 +21216,7 @@ msgstr "{email}(으)로 등록된 계정이 이미 있습니다"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "이미 계정이 있습니다. 로그인하면 팀에 참여할 수 있도록 이 페이지로 다시 안내해 드립니다."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "이미 계정이 있습니다. 로그인하면 초대 페이지로 다시 안내해 드립니다."
 
@@ -21021,6 +21306,10 @@ msgstr "이 가격 등급으로 판매된 상품이 있어 삭제할 수 없습�
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "본인 확인이 완료되었습니다. 몇 분 안에 계속 진행하세요."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "API 키가 없습니다"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "대기 중인 이메일 변경이 없습니다."
@@ -21045,6 +21334,10 @@ msgstr "무료 상품에 세금과 수수료가 추가되어 있습니다. 제�
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "저장하지 않은 변경 사항이 있습니다. 정말 변경 사항을 버리시겠습니까?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "이 키를 복사하지 않았습니다. 이 창을 닫으면 다시 표시할 수 없습니다."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "최소 하나의 가격 등급이 있어야 합니다"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "주최자 상태를 변경하려면 먼저 이메일 주소를 인증해야 합니다."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "API 키를 만들려면 인증된 이메일 주소가 필요합니다. 받은편지함을 확인하거나 <0>프로필</0>에서 인증 이메일을 다시 보내세요."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "이 반복 이벤트에 참가자를 추가하려면 먼저 회차를 하나 이상 생성해야 합니다."
@@ -21090,11 +21387,11 @@ msgstr "메시지를 보내려면 먼저 계정 이메일을 인증해야 합니
 msgid "You receive"
 msgstr "받는 금액"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "현재 비밀번호 없이 로그인하고 있습니다. 백업 로그인 방법으로 비밀번호를 추가하세요."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "{0}(으)로 로그인했습니다. 초대를 받은 계정을 사용하세요."
 
@@ -21110,7 +21407,7 @@ msgstr "복구 코드를 사용했습니다. 남은 복구 코드는 1개입니�
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "주문을 수동으로 결제 완료 처리해야 합니다. 주문 관리 페이지에서 가능합니다."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "더 이상 {0}(으)로 로그인할 수 없습니다. 계정에 로그인된 다른 기기는 로그아웃됩니다."
 
@@ -21158,7 +21455,7 @@ msgstr "{occurrenceDate}의 대기자 명단에 등록합니다."
 msgid "You're on the waitlist!"
 msgstr "대기자 명단에 등록되었습니다!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "남은 코드가 얼마 없습니다. 계정이 잠기지 않도록 새 코드를 생성하세요."
 
@@ -21174,7 +21471,7 @@ msgstr "{0}(으)로 로그인되어 있습니다"
 msgid "You're unsubscribed"
 msgstr "수신 거부되었습니다"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "초대를 받았습니다"
 
@@ -21186,6 +21483,10 @@ msgstr "자리가 제안되었습니다!"
 msgid "You've changed the session time"
 msgstr "세션 시간을 변경했습니다"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "활성 키 한도({0}개)에 도달했습니다. 새 키를 만들려면 하나를 폐기하세요."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "이 모드에서는 강조 색상이 충분히 눈에 띄지 않습니다."
@@ -21194,7 +21495,7 @@ msgstr "이 모드에서는 강조 색상이 충분히 눈에 띄지 않습니�
 msgid "your account"
 msgstr "내 계정"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "계정에서 로그인할 때 인증 앱의 코드를 요구합니다. {0}에 켰습니다."
 
@@ -21210,7 +21511,7 @@ msgstr "계정에는 메시지 한도가 있습니다. 한도를 늘리려면 �
 msgid "Your account is now scheduled for deletion."
 msgstr "계정 삭제가 예약되었습니다."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "계정이 활성 상태가 아닙니다"
 
@@ -21237,6 +21538,10 @@ msgstr "참가자가 성공적으로 내보내기되었습니다."
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "참가자가 이벤트에 등록하면 여기에 표시됩니다. 참가자를 수동으로 추가할 수도 있습니다."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "브라우저가 복사를 차단했습니다. 키를 선택해 직접 복사하세요."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "주문이 들어오기 시작하면 여기에 표시됩니다."
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "조직에서 2단계 인증을 요구합니다. 계속하려면 지금 설정하세요. 약 1분이면 됩니다."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "조직에서 싱글 사인온을 필수로 요구합니다"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "조직에서 싱글 사인온을 요구하므로 비밀번호가 필요하지 않습니다."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "조직에서 싱글 사인온을 사용합니다"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "주최자 설명이 아직 없습니다."
 msgid "Your organizer profile isn't published."
 msgstr "주최자 프로필이 게시되지 않았습니다."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "비밀번호"
 

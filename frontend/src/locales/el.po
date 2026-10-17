@@ -80,6 +80,10 @@ msgstr "{0} προσβάσιμες"
 msgid "{0} Active Webhooks"
 msgstr "{0} Ενεργά Webhooks"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} διαθέσιμα"
@@ -149,7 +153,7 @@ msgstr "{0} μέλη εκτός των επαληθευμένων τομέων �
 msgid "{0} must now sign in with {providerName}"
 msgstr "Το μέλος {0} πρέπει πλέον να συνδέεται μέσω {providerName}"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "Απομένουν {0} από {1}"
 
@@ -186,11 +190,19 @@ msgstr "{0} επιστραμμένες παραγγελίες περιλαμβά
 msgid "{0} removed"
 msgstr "Το {0} αφαιρέθηκε"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "Το {0} απαιτεί ενιαία σύνδεση (SSO). Ως κάτοχος συνδέεστε με τον κωδικό σας, οπότε ο έλεγχος ταυτότητας δύο παραγόντων προστατεύει αυτή τη σύνδεση και δεν μπορεί να απενεργοποιηθεί."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "Το {0} απαιτεί ενιαία σύνδεση (SSO). Ως κάτοχος συνδέεστε με τον κωδικό σας, οπότε ο έλεγχος ταυτότητας δύο παραγόντων προστατεύει αυτή τη σύνδεση."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "Ο οργανισμός {0} απαιτεί έλεγχο ταυτότητας δύο παραγόντων από όλα τα μέλη της ομάδας."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "Ο οργανισμός {0} απαιτεί έλεγχο ταυτότητας δύο παραγόντων, γι' αυτό δεν μπορεί να απενεργοποιηθεί."
 
@@ -255,7 +267,7 @@ msgstr "{0} όρθιες θέσεις"
 msgid "{0} tickets"
 msgstr "{0} εισιτήρια"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "Το {0} αποσυνδέθηκε."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} με check-in"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{completedCount} από {totalCount} βήματα ολοκληρώθηκαν"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "Το {connected} συνδέθηκε. Μπορείτε πλέον να το χρησιμοποιείτε για σύνδεση."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} ώρες"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} ημέρες"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} διοργανωτές"
 msgid "{organizerName}'s first event"
 msgstr "Πρώτη εκδήλωση του {organizerName}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount} από {0} ενεργά κλειδιά"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "{productCount} τύποι εισιτηρίων έχουν ρυθμιστ
 msgid "{provider} video found"
 msgstr "Βρέθηκε βίντεο {provider}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "Το {providerName} δεν κοινοποίησε το email σας"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "Το {providerName} δεν ανταποκρίνεται"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "1 συμμετέχων είναι εγγεγραμμένος σε αυτή τη συνεδρία."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 ημέρα"
 
@@ -764,6 +782,10 @@ msgstr "1 χωρίς θέση"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "1 εβδομάδα πριν την εκδήλωση"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 έτος"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Αποδοχή πληρωμών με πιστωτική κάρτα μέ�
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Πρόσβαση"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Προσβάσιμες"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Λογαριασμοί"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Λογαριασμοί ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "Οι λογαριασμοί για το {email} διαχειρίζονται από τον οργανισμό σας. Συνδεθείτε μέσω του παρόχου ταυτότητάς του."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Οι λογαριασμοί για αυτή τη διεύθυνση email διαχειρίζονται από τον οργανισμό σας. Συνδεθείτε μέσω του παρόχου ταυτότητάς του αντί να δημιουργήσετε νέο λογαριασμό."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Όλα τα εισιτήρια"
 msgid "All time"
 msgstr "Όλο το διάστημα"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Όλες οι αξιόπιστες συσκευές αφαιρέθηκαν"
 
@@ -1875,7 +1906,7 @@ msgstr "Όλοι οι χρήστες"
 msgid "All visible"
 msgstr "Όλα ορατά"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Επιτρέψτε την πρόσβαση στη διεύθυνση email σας κατά τη σύνδεση και δοκιμάστε ξανά."
 
@@ -1930,7 +1961,7 @@ msgstr "Να επιτρέπεται η σύνδεση με {providerName}"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Σχεδόν έτοιμο! Αναμένουμε την επεξεργασία της πληρωμής σας. Αυτό θα διαρκέσει μόνο λίγα δευτερόλεπτα."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Έχετε ήδη λογαριασμό; <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Ποσό που καταβλήθηκε ({0})"
 msgid "Amount tendered"
 msgstr "Ποσό που δόθηκε"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Υπάρχει ήδη λογαριασμός με αυτό το email. Συνδεθείτε αντί γι' αυτό."
 
@@ -2158,6 +2189,20 @@ msgstr "Όποιος έχει αυτόν τον σύνδεσμο και το PIN
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Κάτι άλλο;"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "Κλειδιά API"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "Δεν μπορείτε να δημιουργήσετε κλειδιά API ενώ υποδύεστε άλλον χρήστη."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "Τεκμηρίωση API"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Μία φορά ανά προϊόν"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Κάντε ερωτήσεις παραγγελίας και συμμετέχοντα στην είσοδο. Κάθε εισιτήριο έχει το δικό του βήμα, κάτι που μπορεί να επιβραδύνει πολύ τις πωλήσεις. Αφήστε το απενεργοποιημένο σε εισόδους με κίνηση."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Ζητήστε από τον κάτοχο του λογαριασμού να σας προσκαλέσει ξανά."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Ζητήστε από το άτομο που σας προσκάλεσε να στείλει νέα πρόσκληση."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Ζητήστε από τον διαχειριστή σας να σας προσκαλέσει."
 
@@ -2825,7 +2870,7 @@ msgstr "Διοργανωτής Α.Ε."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Το ταμείο ενημερώθηκε"
 msgid "Brazilian Portuguese"
 msgstr "Πορτογαλικά Βραζιλίας"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "Δείτε όλα τα endpoints στην τεκμηρίωση του API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Δημιουργία προγράμματος"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "Με την προσθήκη pixels παρακολούθησης, αναγνωρίζετε ότι εσείς και αυτή η πλατφόρμα είστε από κοινού υπεύθυνοι επεξεργασίας των δεδομένων που συλλέγονται. Είστε υπεύθυνοι για τη διασφάλιση ότι έχετε νόμιμη βάση για αυτή την επεξεργασία βάσει των ισχυόντων νόμων περί απορρήτου (ΓΚΠΔ, CCPA κ.λπ.)."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Συνεχίζοντας, αποδέχεστε τους <0>Όρους Χρήσης</0> και την <1>Πολιτική Απορρήτου</1> μας."
 
@@ -3392,6 +3441,7 @@ msgstr "Δεν μπορείτε να χρησιμοποιήσετε την εφ�
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "Αλλαγή email"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Αλλαγή κωδικού"
 
@@ -3775,7 +3825,7 @@ msgstr "Ελέγξτε το email σας"
 msgid "Check your event page"
 msgstr "Ελέγξτε τη σελίδα της εκδήλωσης"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Ελέγξτε τα εισερχόμενά σας! Εάν υπάρχουν εισιτήρια συνδεδεμένα με αυτό το email, θα λάβετε σύνδεσμο για προβολή."
@@ -4053,7 +4103,7 @@ msgstr "Επιλέξτε άλλο αρχείο"
 msgid "Choose another reader"
 msgstr "Επιλογή άλλου αναγνώστη"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Επιλέξτε άλλον τρόπο σύνδεσης."
 
@@ -4236,6 +4286,10 @@ msgstr "Κλείσιμο"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Κλείσιμο πλαϊνής μπάρας"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Κλείσιμο χωρίς αντιγραφή"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "Επιβεβαίωση Αλλαγής Email"
 msgid "Confirm it's you"
 msgstr "Επιβεβαιώστε ότι είστε εσείς"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Επιβεβαιώστε ότι είστε εσείς και, στη συνέχεια, συνδεθείτε με {0} για να το συνδέσετε."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Επιβεβαίωση νέου κωδικού"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Επιβεβαίωση κωδικού"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Επιβεβαίωση Κωδικού"
@@ -4543,6 +4597,10 @@ msgstr "Επιβεβαίωση spam"
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
 msgstr "Επιβεβαιώστε το email σας"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
+msgstr "Επιβεβαιώστε τη διεύθυνση email σας"
 
 #: src/components/layouts/Event/index.tsx:328
 msgid "Confirm your email to access all features."
@@ -4568,11 +4626,11 @@ msgstr "Επιβεβαίωση διεύθυνσης email..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Συγχαρητήρια! Η εκδήλωσή σας είναι τώρα ορατή στο κοινό."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Σύνδεση"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "Σύνδεση {0}"
 
@@ -4583,6 +4641,10 @@ msgstr "Συνδέστε λογαριασμό Stripe στις Πληρωμές �
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Σύνδεση τράπεζας"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Συνδέστε άλλα εργαλεία και τον δικό σας κώδικα με αυτόν τον λογαριασμό. Ένα κλειδί μπορεί να κάνει ό,τι μπορείτε κι εσείς, γι' αυτό χειριστείτε το σαν κωδικό πρόσβασης."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "Το περιεχόμενο είναι υποχρεωτικό"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Συνέχεια"
@@ -4795,6 +4857,8 @@ msgstr "Ρυθμίσεις cookies"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "Αντιγράφει οδηγίες βήμα προς βήμα για ε
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Αντιγραφή"
@@ -4871,6 +4936,10 @@ msgstr "Αντιγραφή κώδικα"
 msgid "Copy Code"
 msgstr "Αντιγραφή Κωδικού"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Αντιγραφή εντολής"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Αντιγραφή συνδέσμου πελάτη"
@@ -4887,6 +4956,10 @@ msgstr "Αντιγραφή Email"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Αντιγραφή για πράκτορα AI"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Αντιγραφή κλειδιού"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Αντιγραφή στο πρόχειρο"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "Αντιγραφή URL"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "Αντιγράψτε το κλειδί API σας"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "Δεν ήταν δυνατή η ενημέρωση του {name}"
 msgid "Could not upload {fileName}"
 msgstr "Δεν ήταν δυνατή η μεταφόρτωση του {fileName}"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "Δεν ήταν δυνατή η φόρτωση της τεκμηρίωσης του API."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "Δεν ήταν δυνατή η φόρτωση των κλειδιών API σας"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Δεν ήταν δυνατή η φόρτωση των ρυθμίσεων ασφαλείας"
@@ -5094,6 +5179,10 @@ msgstr "Δημιουργία «{query}»"
 msgid "Create {0} Template"
 msgstr "Δημιουργία Προτύπου {0}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Δημιουργήστε ένα κλειδί για να συνδέσετε εργαλεία όπως το Zapier, το CRM σας ή τα δικά σας scripts με τις εκδηλώσεις, τις παραγγελίες και τους συμμετέχοντές σας."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Δημιουργία λίστας για αυτή την ημερομηνία"
@@ -5147,6 +5236,10 @@ msgstr "Δημιουργία Συνεργάτη"
 msgid "Create an announcement to show a message to your users."
 msgstr "Δημιουργήστε μια ανακοίνωση για να εμφανίσετε ένα μήνυμα στους χρήστες σας."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Δημιουργία και αλλαγή εκδηλώσεων, παραγγελιών, συμμετεχόντων και άλλων."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Δημιουργία και ρύθμιση εισιτηρίων και εμπορευμάτων προς πώληση."
@@ -5160,6 +5253,11 @@ msgstr "Δημιουργία και έναρξη σχεδιασμού"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Δημιουργία ανακοίνωσης"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "Δημιουργία κλειδιού API"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Δημιουργία Εκδήλωσης"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Δημιουργία τέλους"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Δημιουργία κλειδιού"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Δημιουργήστε τη δική σας εκδήλωση"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Δημιουργήθηκε"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Αποποιήσεις, στοιχεία επικοινωνίας ή ένα ευχαριστώ, σε μία γραμμή"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Αποσύνδεση"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "Αποσύνδεση {0}"
 
@@ -6214,7 +6318,7 @@ msgstr "Ο τομέας επαληθεύτηκε"
 msgid "Don't forget!"
 msgstr "Μην ξεχάσετε!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Δεν έχετε λογαριασμό; <0>Εγγραφείτε</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Δωρεά"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "π.χ. Προγραμματισμένη συντήρηση αυτό το
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "π.χ. sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "π.χ. Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Επιλέξιμες Λίστες Check-In"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "Μήνυμα υποσέλιδου email"
 msgid "Email is required"
 msgstr "Το email είναι υποχρεωτικό"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "Στείλτε μου σύνδεσμο για ορισμό κωδικού"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Εισάγετε μοναδικό κωδικό συνεργάτη"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Εισάγετε το email σας"
@@ -7484,9 +7593,13 @@ msgstr "Κάθε εκδήλωση έχει λίστα check-in"
 msgid "Every organizer and event, including new ones."
 msgstr "Όλοι οι διοργανωτές και οι εκδηλώσεις, μαζί με τις νέες."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Κάθε αξιόπιστη συσκευή θα χρειαστεί κωδικό στην επόμενη σύνδεση. Συνέχεια;"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Όλοι ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Εξαιρείται"
 msgid "Exempt from SSO"
 msgstr "Εξαίρεση από SSO"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Λήξη"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Ημερομηνία λήξης"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Ληγμένο"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "Έληξε {0}"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Λήγει"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "Λήγει {0}"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Όνομα"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Για εκδηλώσεις σε περισσότερους από έν�
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Για την ασφάλειά σας, συνδεθείτε ξανά για να επιβεβαιώσετε ότι είστε εσείς."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Ξεχάσατε τον κωδικό;"
 
@@ -8488,7 +8617,7 @@ msgstr "Μόνο μελλοντικές ημερομηνίες"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Οι μελλοντικές ημερομηνίες θα αντιγραφούν με μηδενισμένη χωρητικότητα"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Γενικά"
@@ -8518,7 +8647,7 @@ msgstr "Δημιουργία"
 msgid "Generate code"
 msgstr "Δημιουργία κωδικού"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Δημιουργία νέων κωδικών"
@@ -8561,7 +8690,7 @@ msgstr "Πληρωθείτε"
 msgid "Get paid with Stripe"
 msgstr "Πληρωθείτε με το Stripe"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Ξεκινήστε"
 
@@ -8599,11 +8728,16 @@ msgstr "Ορίστε ώρα για όλους"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Δώστε στο ενσωματωμένο στοιχείο αρκετό ύψος για το widget ή ορίστε το «Η ολοκλήρωση αγοράς ανοίγει σε» σε «Νέα καρτέλα»."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Δώστε ένα όνομα σε αυτό το κλειδί"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Δώστε όνομα στην εκδήλωσή σας"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Επιστροφή"
 
@@ -9084,7 +9218,7 @@ msgstr "Πώς εφαρμόζεται ο ΦΠΑ στις χρεώσεις πλα
 msgid "How would you like to start?"
 msgstr "Πώς θα θέλατε να ξεκινήσετε;"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "Ο τρόπος σύνδεσής σας και ο έλεγχος ταυτότητας δύο παραγόντων. Προστατεύουν κάθε λογαριασμό στον οποίο ανήκετε."
 
@@ -9131,6 +9265,10 @@ msgstr "Έχω αποθηκεύσει τους κωδικούς ανάκτηση
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Την πρόσθεσα, συνέχεια"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Αν ένα κλειδί διαρρεύσει, ανακαλέστε το αμέσως και δημιουργήστε ένα νέο."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "URL εκδότη"
 msgid "It happens on more than one date"
 msgstr "Πραγματοποιείται σε περισσότερες από μία ημερομηνίες"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Έχει τον ρόλο σας και την πρόσβασή σας στις εκδηλώσεις. Τα κλειδιά μόνο ανάγνωσης μπορούν να προβάλλουν και να εξάγουν δεδομένα, αλλά δεν μπορούν να αλλάξουν τίποτα."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Ενδέχεται να αποσύρθηκε ή να καταργήθηκε. Ελέγξτε τον σύνδεσμο και δοκιμάστε ξανά."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Είναι συνδεδεμένο με άλλον χρήστη. Χρησιμοποιήστε διαφορετικό λογαριασμό {providerName}."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "Η εργασία τέθηκε σε ουρά για επανάληψη"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "Γιώργης"
 
@@ -9579,7 +9721,7 @@ msgstr "Ιούλιος"
 msgid "June"
 msgstr "Ιούνιος"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Αναζητάτε μόνο τα εισιτήριά σας;"
 
@@ -9620,9 +9762,33 @@ msgstr "Κρατήστε το κέρδος."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Κρατήστε τους εκτός του δημόσιου line-up και προγράμματος μέχρι να είστε έτοιμοι να τους ανακοινώσετε"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Κλειδί"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "Κλειδί που τελειώνει σε {0}"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Το κλειδί αφαιρέθηκε"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Το κλειδί ανακλήθηκε"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin και άλλοι"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "Τα κλειδιά δεν μπορούν να συνδεθούν ούτε να διαχειριστούν την ομάδα, τις πληρωμές, το προφίλ ή τις ρυθμίσεις ασφαλείας σας."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "Τα κλειδιά που δεν λήγουν ποτέ παραμένουν έγκυρα μέχρι να τα ανακαλέσετε. Χρησιμοποιήστε αυτή την επιλογή μόνο για διακομιστές που ελέγχετε."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Επώνυμο"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Τελευταία Ενεργοποίηση"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Χρησιμοποιήθηκε τελευταία"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Τελευταία Χρήση"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Τελευταία χρήση {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Φορτωμένες ημερομηνίες"
 msgid "Loading preview..."
 msgstr "Φόρτωση προεπισκόπησης..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "Φόρτωση της τεκμηρίωσης του API…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Αναζήτηση Εισιτηρίων μου"
 msgid "Lost access?"
 msgstr "Χάσατε την πρόσβαση;"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Χάσατε το τηλέφωνό σας ή αλλάζετε εφαρμογή; Απενεργοποιήστε και ενεργοποιήστε ξανά για να συνδέσετε νέα εφαρμογή ελέγχου ταυτότητας."
 
@@ -10719,6 +10891,10 @@ msgstr "Η περιγραφή της εκδήλωσής μου..."
 msgid "My amazing event title..."
 msgstr "Ο τίτλος της εκδήλωσής μου..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Τα κλειδιά μου"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Το Προφίλ μου"
@@ -10746,6 +10922,7 @@ msgstr "Τα Εισιτήριά μου"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Καθαρά Έσοδα"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Ποτέ"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Δεν έχει χρησιμοποιηθεί ποτέ"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Όχι - Είμαι ιδιώτης ή επιχείρηση μη εγγε
 msgid "No access yet"
 msgstr "Χωρίς πρόσβαση ακόμα"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Δεν βρέθηκε λογαριασμός"
 
@@ -11194,6 +11376,10 @@ msgstr "Δεν υπάρχουν εκδηλώσεις για εμφάνιση"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Δεν υπάρχουν εκδηλώσεις ακόμα"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Χωρίς λήξη"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Όχι, μείνετε εδώ"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Δεν έχει προστεθεί ακόμη κανείς στο line-up αυτής της εκδήλωσης."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Κανείς δεν έχει δημιουργήσει ακόμη κλειδί API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Δεν υπάρχει ακόμη κανείς στο line-up ή όλοι είναι κρυφοί."
@@ -11589,6 +11779,10 @@ msgstr "Κανονικά {0}"
 msgid "Not available"
 msgstr "Δεν είναι διαθέσιμο"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Μη διαθέσιμο: έχετε πρόσβαση μόνο προβολής."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Χωρίς check-in"
 msgid "Not Checked In"
 msgstr "Δεν Εισήλθε"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Μη συνδεδεμένο"
 
@@ -11819,7 +12013,7 @@ msgstr "κάθε μήνα"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Ανενεργό"
@@ -11908,7 +12102,7 @@ msgstr "στις"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Ενεργό"
@@ -12196,7 +12390,7 @@ msgstr "Άνοιγμα ρυθμίσεων"
 msgid "Open sidebar"
 msgstr "Άνοιγμα πλαϊνής μπάρας"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Ανοίξτε το email πρόσκλησης που σας στείλαμε για να ολοκληρώσετε την ένταξή σας στην ομάδα."
 
@@ -12594,7 +12788,7 @@ msgstr "Η κατάσταση διοργανωτή ενημερώθηκε"
 msgid "Organizer/default template will be used"
 msgstr "Θα χρησιμοποιηθεί το πρότυπο διοργανωτή/προεπιλογής"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Μεταβίβαση στον Αγοραστή"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "Δικαιώματα"
 msgid "Person"
 msgstr "Άτομο"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Προσωπικά"
 
@@ -13256,7 +13450,7 @@ msgstr "Παρακαλώ προσθέστε τουλάχιστον μία επι
 msgid "Please check the provided information is correct"
 msgstr "Παρακαλώ ελέγξτε ότι οι παρεχόμενες πληροφορίες είναι σωστές"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Παρακαλώ ελέγξτε το email και τον κωδικό σας και δοκιμάστε ξανά"
 
@@ -13669,7 +13863,7 @@ msgstr "Προϊόντα που Πωλήθηκαν"
 msgid "Products sorted successfully"
 msgstr "Τα προϊόντα ταξινομήθηκαν επιτυχώς"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Μόνο με Κωδικό"
 msgid "Promotional emails may result in account suspension"
 msgstr "Τα προωθητικά email ενδέχεται να οδηγήσουν σε αναστολή λογαριασμού"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Προστατέψτε τον λογαριασμό σας με δεύτερο βήμα κατά τη σύνδεση. Ακόμη κι αν κάποιος μάθει τον κωδικό σας, δεν μπορεί να μπει χωρίς τον κωδικό από το τηλέφωνό σας."
 
@@ -13942,10 +14136,20 @@ msgstr "Επανενεργοποίηση"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Επανενεργοποίηση αυτής της ημερομηνίας; Θα ανοίξει ξανά για μελλοντικές πωλήσεις."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Ανάγνωση και εγγραφή"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Διαβάστε περισσότερα"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Μόνο ανάγνωση"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Λόγοι"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "Καταγραφή επιστροφής χρημάτων"
 msgid "Recovery code"
 msgstr "Κωδικός ανάκτησης"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Κωδικοί ανάκτησης"
 
@@ -14203,7 +14407,7 @@ msgstr "Επιστράφηκε: {0}"
 msgid "Refunds"
 msgstr "Επιστροφές"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "Εγγραφή"
 
@@ -14252,12 +14456,18 @@ msgstr "αφαίρεση"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Αφαίρεση"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "Αφαίρεση του «{0}»; Έχει ήδη λήξει."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Αφαίρεση {0}"
@@ -14282,7 +14492,7 @@ msgstr "Αφαίρεση του {profileName} από το line-up αυτής τ�
 msgid "Remove access"
 msgstr "Αφαίρεση πρόσβασης"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Αφαίρεση όλων"
 
@@ -14313,6 +14523,10 @@ msgstr "Αφαίρεση από τον χάρτη"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Αφαίρεση από αυτό το line-up"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Αφαίρεση κλειδιού"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "Απαίτηση ελέγχου ταυτότητας δύο παραγό
 msgid "Required"
 msgstr "Υποχρεωτικό"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "Απαιτείται από τον οργανισμό σας"
 
@@ -14735,9 +14949,29 @@ msgstr "Ελέγξτε τις εκδηλώσεις που επισημάνθηκ
 msgid "Review security settings"
 msgstr "Έλεγχος ρυθμίσεων ασφαλείας"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "Ανάκληση"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "Ανάκληση του «{0}»; Ό,τι το χρησιμοποιεί θα σταματήσει να λειτουργεί αμέσως και θα σταλεί σχετικό email σε: {ownerName}."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "Ανάκληση του «{0}»; Ό,τι το χρησιμοποιεί θα σταματήσει να λειτουργεί αμέσως. Αυτό δεν μπορεί να αναιρεθεί."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "Ανάκληση {0}"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Ανάκληση πρόσκλησης"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Ανάκληση κλειδιού"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Ασφαλής Ολοκλήρωση Αγοράς"
 msgid "Secure your account"
 msgstr "Ασφαλίστε τον λογαριασμό σας"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Ασφάλεια"
 
@@ -15817,7 +16051,7 @@ msgstr "Πωλεί 1 προϊόν"
 msgid "Sells every product"
 msgstr "Πωλεί όλα τα προϊόντα"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "Αποστολή email σε συμμετέχοντες, κατόχους
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Αποστολή πρόσκλησης"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Στείλτε το στην κεφαλίδα Authorization κάθε αιτήματος."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Η ρύθμιση ενημερώθηκε"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Ρυθμίσεις"
@@ -16208,6 +16446,10 @@ msgstr "Εμφάνιση λιγότερων πλατφορμών"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Εμφάνιση αρχικών αντί αυτού"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Εμφάνιση κλειδιών"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Εμφανίζει το προφίλ διοργανωτή με κουμ�
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Δείχνει τους συνδέσμους κοινωνικών δικτύων και ένα κουμπί επικοινωνίας. Όταν βρίσκεται πάνω από όλες τις άλλες ενότητες, εμφανίζεται στην κάρτα προφίλ σας."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Σύνδεση"
 
@@ -16383,15 +16625,19 @@ msgstr "Συνδεθείτε ξανά για να ξεκινήσετε τη ρύ
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Συνδεθείτε μία φορά για να ελέγξετε τη σύνδεση. Εμφανίζει τι κοινοποιεί ο πάροχος ταυτότητάς σας και δεν σας συνδέει εδώ."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Συνδεθείτε μέσω του παρόχου ταυτότητας του οργανισμού σας αντί να χρησιμοποιείτε κωδικό πρόσβασης."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Συνδεθείτε μέσω του παρόχου ταυτότητας του οργανισμού σας."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "Σύνδεση στο {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Συνδεθείτε για να αποδεχτείτε την πρόσκληση"
 
@@ -16403,7 +16649,7 @@ msgstr "Συνδεθείτε για να συμμετάσχετε"
 msgid "Sign in with a PIN"
 msgstr "Σύνδεση με PIN"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Συνδεθείτε με έναν λογαριασμό που έχετε ήδη συνδέσει και βεβαιωθείτε ότι πρόκειται για νέα σύνδεση."
 
@@ -16418,7 +16664,9 @@ msgstr "Σύνδεση με κωδικό"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "Σύνδεση με SSO"
 
@@ -16460,11 +16708,11 @@ msgstr "Εγγραφή με {0}"
 msgid "Sign up with Google"
 msgstr "Εγγραφή με Google"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "Οι σύνδεσμοι σύνδεσης λειτουργούν μία φορά και λήγουν μετά από 10 λεπτά. Ξεκινήστε ξανά από τη σελίδα σύνδεσης."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Οι σύνδεσμοι σύνδεσης λειτουργούν μία φορά και λήγουν μετά από 10 λεπτά. Ξεκινήστε ξανά για να συνεχίσετε."
 
@@ -16472,7 +16720,7 @@ msgstr "Οι σύνδεσμοι σύνδεσης λειτουργούν μία �
 msgid "Sign-in settings"
 msgstr "Ρυθμίσεις σύνδεσης"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Η σύνδεση ακυρώθηκε. Επιλέξτε άλλον τρόπο σύνδεσης ή δοκιμάστε ξανά."
 
@@ -16496,15 +16744,15 @@ msgstr "Η σύνδεση έγινε, αλλά δεν κοινοποιήθηκε
 msgid "Signed up"
 msgstr "Εγγράφηκε"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Σύνδεση"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "Γίνεται σύνδεση με {0}…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Γίνεται σύνδεση…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Σλοβακικά"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Παπαδόπουλος"
 
@@ -16689,6 +16937,10 @@ msgstr "Μέρος του κειμένου μπορεί να είναι δυσα
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "Κάποιος μόλις πήρε {0}. Επιλέξτε άλλη θέση ή αφήστε μας να βρούμε παρόμοιες θέσεις για εσάς."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Κάτι που σας δείχνει πού χρησιμοποιείται, όπως «Zapier» ή «Συγχρονισμός ιστότοπου»."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξα
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξα
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, ιστότοπος κ
 msgid "Square, at least 200 × 200px"
 msgstr "Τετράγωνο, τουλάχιστον 200 × 200 px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Ξεκινήστε από ένα πρότυπο όπως θέατρο, �
 msgid "Start from scratch"
 msgstr "Ξεκινήστε από το μηδέν"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Από την αρχή"
 
@@ -17112,7 +17366,7 @@ msgstr "Οφείλεται ακόμα"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Ακόμα περιμένετε; Ελέγξτε την οθόνη του αναγνώστη. Αν δεν δείχνει τίποτα, ακυρώστε και δοκιμάστε ξανά."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Ακόμη σε εξέλιξη. Αυτό μπορεί να διαρκέσει λίγα δευτερόλεπτα."
 
@@ -17144,6 +17398,14 @@ msgstr "Διακοπή απαίτησης ενιαίας σύνδεσης; Τα 
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Να μην εμπιστεύομαι πλέον αυτή τη συσκευή"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "Σταματά να λειτουργεί στις {0}. Θα σας στείλουμε email μία εβδομάδα πριν."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Φυλάξτε το κάπου ασφαλές, όπως σε έναν διαχειριστή κωδικών πρόσβασης ή στις μυστικές ρυθμίσεις της ενσωμάτωσής σας. Όποιος έχει αυτό το κλειδί μπορεί να χρησιμοποιήσει το API ως εσείς."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Φόροι και χρεώσεις"
 msgid "Taxes & fees applied"
 msgstr "Εφαρμόστηκαν φόροι & τέλη"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Φόροι και τέλη"
@@ -17590,7 +17852,7 @@ msgstr "Φόροι και Τέλη"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "Το πλήρες ποσό παραγγελίας θα επιστραφ�
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "Η εισαγωγή απέτυχε. Δεν έγινε καμία αλλαγή. Δοκιμάστε ξανά."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "Το κλειδί μπορεί να κάνει ό,τι μπορείτε κι εσείς στο {accountName}, γι' αυτό κρατήστε το μυστικό."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Παρουσιάστηκε σφάλμα κατά την αποστολή
 msgid "These are skipped"
 msgstr "Αυτά παραλείπονται"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Αυτά τα προγράμματα περιήγησης παραλείπουν τον κωδικό για 30 ημέρες αφού τα εμπιστευτείτε."
 
@@ -18123,7 +18389,7 @@ msgstr "Δεν έχει αποδεχτεί ακόμα την πρόσκληση.
 msgid "Third"
 msgstr "3η"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Αυτός ο λογαριασμός {providerName} χρησιμοποιείται ήδη"
 
@@ -18327,11 +18593,11 @@ msgstr "Αυτό το πεδίο είναι υποχρεωτικό"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Αυτές οι πληροφορίες θα εμφανίζονται στη σελίδα πληρωμής, στη σύνοψη παραγγελίας και στο email επιβεβαίωσης."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Αυτή η πρόσκληση είναι για το {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Αυτή η πρόσκληση δεν είναι πλέον έγκυρη"
 
@@ -18355,7 +18621,7 @@ msgstr "Πρόκειται για επαναλαμβανόμενη εκδήλω�
 msgid "This is an online event"
 msgstr "Πρόκειται για διαδικτυακή εκδήλωση"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "Με αυτόν τον τρόπο συνδέεστε. Προσθέστε κωδικό ή άλλη επιλογή πριν τον αφαιρέσετε."
 
@@ -18372,7 +18638,11 @@ msgstr "Αυτό είναι το όνομα διοργανωτή που θα ε�
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "Αυτή είναι η μοναδική φορά που θα εμφανιστεί το signing secret. Αντιγράψτε το τώρα και φυλάξτε το ασφαλώς."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "Αυτή είναι η μόνη φορά που θα δείτε αυτό το κλειδί"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Συνήθως είναι προσωρινό. Δοκιμάστε ξανά σε λίγο."
 
@@ -18516,12 +18786,12 @@ msgstr "Αυτή η θέση είναι σε απόσυρση"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Αυτός ο χάρτης θέσεων άλλαξε αλλού. Φόρτωση της πιο πρόσφατης έκδοσης; Οι μη αποθηκευμένες αλλαγές σας θα χαθούν."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Αυτός ο σύνδεσμος σύνδεσης έχει λήξει"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Αυτή η επιλογή σύνδεσης δεν είναι διαθέσιμη"
 
@@ -18587,7 +18857,7 @@ msgstr "Πέμ"
 msgid "Thursday"
 msgstr "Πέμπτη"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Επιλέξτε \"Εμπιστεύομαι αυτή τη συσκευή\" κατά τη σύνδεση για να παραλείπεται ο κωδικός σε εκείνο το πρόγραμμα περιήγησης για 30 ημέρες."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Αύριο"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "Παρακολούθηση & Αναλυτικά"
 msgid "Trust this device for 30 days"
 msgstr "Εμπιστοσύνη σε αυτή τη συσκευή για 30 ημέρες"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Αξιόπιστες συσκευές"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Προσαρμόστε τα φίλτρα για να δείτε περισσότερες ημερομηνίες."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Προσαρμόστε τα φίλτρα για να δείτε περι
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Δοκιμάστε άλλο email"
@@ -19070,6 +19342,10 @@ msgstr "Δοκιμάστε άλλο email"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Δοκιμάστε το Hi.Events Δωρεάν"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Δοκιμάστε το"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Τουρκικά"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Απενεργοποίηση"
 
@@ -19099,7 +19375,7 @@ msgstr "Απενεργοποιήστε το για να γεμίζει το widg
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "Απενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων"
 
@@ -19107,7 +19383,7 @@ msgstr "Απενεργοποίηση ελέγχου ταυτότητας δύο 
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Απενεργοποίηση ελέγχου ταυτότητας δύο παραγόντων για τον χρήστη {0}; Κάντε το μόνο αφού επιβεβαιώσετε την ταυτότητά του. Θα λάβει email και θα μπορεί να συνδεθεί μόνο με τον κωδικό του."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Ενεργοποίηση"
 
@@ -19155,7 +19431,7 @@ msgstr "Δύο παράγοντες"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "Έλεγχος ταυτότητας δύο παραγόντων"
 
@@ -19691,11 +19967,11 @@ msgstr "Χρήση άλλου λογαριασμού"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Χρησιμοποιήστε εικόνα JPG, PNG ή WebP κάτω από 5MB."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Χρησιμοποιήστε έναν μεγάλο κωδικό που δεν χρησιμοποιείτε πουθενά αλλού."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Χρήση κωδικού"
 
@@ -19806,6 +20082,10 @@ msgstr "Χρησιμοποιεί τα χρώματα και τη γραμματ�
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Τα χρησιμοποιείτε σε πραγματικές εκδηλώσεις; Αποκτήστε άδεια Enterprise και βάλτε το κλειδί της στο <0>APP_LICENCE_KEY</0>."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "Χρήση του κλειδιού σας"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Προβολή συμμετέχοντα"
 msgid "View Attendee Details"
 msgstr "Προβολή Στοιχείων Συμμετέχοντα"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Προβολή δεδομένων και εκτέλεση εξαγωγών. Δεν μπορεί να αλλάξει τίποτα."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Προβολή λεπτομερειών"
@@ -20269,7 +20553,7 @@ msgstr "Προειδοποίηση: Αυτή είναι η προεπιλεγμ�
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Δεν μπορέσαμε να επεξεργαστούμε την πληρωμή σας. Δοκιμάστε ξανά ή επικοινωνήστε με την υποστήριξη."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Δεν μπορέσαμε να επιβεβαιώσουμε ότι είστε εσείς"
 
@@ -20362,7 +20646,7 @@ msgstr "Δεν ήταν δυνατή η ανάγνωση του πρόχειρο
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Δεν μπορέσαμε να αναδιατάξουμε τις κατηγορίες. Παρακαλώ δοκιμάστε ξανά."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Δεν μπορέσαμε να σας συνδέσουμε"
 
@@ -20387,7 +20671,7 @@ msgstr "Προτείνουμε διαστάσεις 1950px x 650px, αναλογ
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Προτείνουμε διαστάσεις 400px x 400px, μέγιστο μέγεθος 5MB"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "Στείλαμε σύνδεσμο στο {0}. Ανοίξτε τον για να ορίσετε τον κωδικό σας."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Καλώς ήρθατε! Συνδεθείτε για να συνεχίσετε."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Καλώς ήρθατε ξανά"
 
@@ -20847,7 +21131,7 @@ msgstr "Εργασία"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Επεξεργασία..."
 
@@ -20915,11 +21199,12 @@ msgstr "Ναι, αφαίρεσέ τα"
 msgid "Yoga class"
 msgstr "Μάθημα γιόγκα"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Εσείς"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Έχετε ήδη λογαριασμό"
 
@@ -20931,7 +21216,7 @@ msgstr "Έχετε ήδη λογαριασμό με το {email}"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Έχετε ήδη λογαριασμό. Συνδεθείτε και θα σας επαναφέρουμε εδώ για να γίνετε μέλος της ομάδας."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Έχετε ήδη λογαριασμό. Συνδεθείτε και θα σας επαναφέρουμε στην πρόσκληση."
 
@@ -21021,6 +21306,10 @@ msgstr "Δεν μπορείτε να διαγράψετε αυτή τη βαθμ
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Επιβεβαιώσατε ότι είστε εσείς. Συνεχίστε μέσα σε λίγα λεπτά."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Δεν έχετε κλειδιά API"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Δεν έχετε εκκρεμή αλλαγή email."
@@ -21045,6 +21334,10 @@ msgstr "Έχετε φόρους και τέλη σε Δωρεάν Προϊόν. 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Έχετε μη αποθηκευμένες αλλαγές. Σίγουρα θέλετε να τις απορρίψετε;"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Δεν έχετε αντιγράψει αυτό το κλειδί. Μόλις κλείσετε αυτό το παράθυρο, δεν θα μπορεί να εμφανιστεί ξανά."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "Πρέπει να έχετε τουλάχιστον μία βαθμίδ�
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Πρέπει να επαληθεύσετε τη διεύθυνση email πριν ενημερώσετε την κατάσταση διοργανωτή."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "Χρειάζεστε επιβεβαιωμένη διεύθυνση email για να δημιουργήσετε κλειδιά API. Ελέγξτε τα εισερχόμενά σας ή στείλτε ξανά το email επιβεβαίωσης από το <0>προφίλ</0> σας."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Πρέπει να δημιουργήσετε τουλάχιστον μία ημερομηνία πριν προσθέσετε συμμετέχοντες σε αυτή την επαναλαμβανόμενη εκδήλωση."
@@ -21090,11 +21387,11 @@ msgstr "Πρέπει να επαληθεύσετε το email λογαριασμ
 msgid "You receive"
 msgstr "Λαμβάνετε"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Συνδέεστε χωρίς κωδικό. Προσθέστε έναν ως εναλλακτικό τρόπο σύνδεσης."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "Συνδεθήκατε ως {0}. Χρησιμοποιήστε τον λογαριασμό στον οποίο στάλθηκε η πρόσκληση."
 
@@ -21110,7 +21407,7 @@ msgstr "Χρησιμοποιήσατε έναν κωδικό ανάκτησης.
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Θα πρέπει να σημάνετε χειροκίνητα παραγγελία ως πληρωμένη. Αυτό μπορεί να γίνει στη σελίδα διαχείρισης παραγγελίας."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Δεν θα μπορείτε πλέον να συνδέεστε με {0}. Οι άλλες συσκευές που είναι συνδεδεμένες στον λογαριασμό σας θα αποσυνδεθούν."
 
@@ -21158,7 +21455,7 @@ msgstr "Εγγράφεστε στη λίστα αναμονής για τις {o
 msgid "You're on the waitlist!"
 msgstr "Είστε στη λίστα αναμονής!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Σας απομένουν λίγοι κωδικοί. Δημιουργήστε νέο σετ για να μη χάσετε την πρόσβαση."
 
@@ -21174,7 +21471,7 @@ msgstr "Έχετε συνδεθεί ως {0}"
 msgid "You're unsubscribed"
 msgstr "Έχετε απεγγραφεί"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Έχετε προσκληθεί"
 
@@ -21186,6 +21483,10 @@ msgstr "Σας προσφέρθηκε μια θέση!"
 msgid "You've changed the session time"
 msgstr "Αλλάξατε την ώρα της συνεδρίας"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "Φτάσατε το όριο των {0} ενεργών κλειδιών. Ανακαλέστε ένα για να δημιουργήσετε άλλο."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Το χρώμα έμφασης δεν ξεχωρίζει αρκετά σε αυτή τη λειτουργία."
@@ -21194,7 +21495,7 @@ msgstr "Το χρώμα έμφασης δεν ξεχωρίζει αρκετά σ
 msgid "your account"
 msgstr "ο λογαριασμός σας"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Ο λογαριασμός σας ζητά κωδικό από την εφαρμογή ελέγχου ταυτότητας κατά τη σύνδεση. Ενεργοποιήθηκε {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Ο λογαριασμός σας έχει όρια μηνυμάτων. �
 msgid "Your account is now scheduled for deletion."
 msgstr "Ο λογαριασμός σας έχει πλέον προγραμματιστεί για διαγραφή."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "Ο λογαριασμός σας δεν είναι ενεργός"
 
@@ -21237,6 +21538,10 @@ msgstr "Οι συμμετέχοντές σας εξήχθησαν επιτυχώ
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Οι συμμετέχοντές σας θα εμφανίζονται εδώ μόλις εγγραφούν. Μπορείτε επίσης να τους προσθέσετε χειροκίνητα."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "Το πρόγραμμα περιήγησής σας απέκλεισε την αντιγραφή. Επιλέξτε το κλειδί και αντιγράψτε το μόνοι σας."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Οι παραγγελίες σας θα εμφανίζονται εδώ 
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Ο οργανισμός σας απαιτεί έλεγχο ταυτότητας δύο παραγόντων. Ρυθμίστε τον τώρα για να συνεχίσετε. Χρειάζεται περίπου ένα λεπτό."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "Ο οργανισμός σας απαιτεί ενιαία σύνδεση"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "Ο οργανισμός σας απαιτεί ενιαία σύνδεση (SSO), οπότε δεν χρειάζεστε κωδικό πρόσβασης."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "Ο οργανισμός σας χρησιμοποιεί ενιαία σύνδεση (SSO)"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "Ο διοργανωτής σας δεν έχει ακόμη περιγρ
 msgid "Your organizer profile isn't published."
 msgstr "Το προφίλ διοργανωτή σας δεν έχει δημοσιευτεί."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Ο κωδικός σας"
 

@@ -138,6 +138,15 @@ export class ApiClient {
     return unwrap<CurrentUser>(this.request.get('users/me', { headers: jsonHeaders }));
   }
 
+  createApiKey(payload: {
+    name: string;
+    access: 'READ_ONLY' | 'READ_WRITE';
+    expires_in_days: number | null;
+    password: string;
+  }): Promise<{ id: number; key: string }> {
+    return unwrap<{ id: number; key: string }>(this.request.post('api-keys', { headers: jsonHeaders, data: payload }));
+  }
+
   requestAccountDeletion(confirmation: string): Promise<{ id: number; status: string }> {
     return unwrap<{ id: number; status: string }>(
       this.request.post('accounts/deletion-request', { headers: jsonHeaders, data: { confirmation } }),

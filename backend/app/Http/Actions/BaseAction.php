@@ -29,7 +29,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 
 abstract class BaseAction extends Controller
 {
@@ -252,22 +251,12 @@ abstract class BaseAction extends Controller
 
     protected function getAuthTokenId(): ?string
     {
-        try {
-            $tokenId = Auth::payload()->get('jti');
-        } catch (JWTException) {
-            return null;
-        }
-
-        return is_string($tokenId) ? $tokenId : null;
+        return app(AuthUserService::class)->getSessionTokenId();
     }
 
     protected function isImpersonating(): bool
     {
-        try {
-            return (bool) Auth::payload()->get('is_impersonating', false);
-        } catch (JWTException) {
-            return false;
-        }
+        return app(AuthUserService::class)->isImpersonating();
     }
 
     protected function impersonationForbiddenResponse(string $message): JsonResponse

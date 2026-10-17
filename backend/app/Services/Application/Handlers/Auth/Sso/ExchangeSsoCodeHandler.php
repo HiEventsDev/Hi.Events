@@ -9,6 +9,7 @@ use HiEvents\DomainObjects\Enums\SsoIntent;
 use HiEvents\DomainObjects\Enums\SsoTicketType;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\SsoException;
+use HiEvents\Exceptions\SsoRequiredException;
 use HiEvents\Exceptions\UnauthorizedException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Auth\Sso\DTO\ExchangeSsoCodeDTO;
@@ -24,6 +25,7 @@ use HiEvents\Services\Domain\Auth\Sso\DTO\SsoStateDTO;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\AccountSsoConnectionService;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\AccountSsoDomainService;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\EnterpriseSsoResolver;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\OidcClient;
 use HiEvents\Services\Domain\Auth\Sso\SsoIdentityResolver;
 use HiEvents\Services\Domain\Auth\Sso\SsoProviderRegistry;
@@ -54,6 +56,7 @@ class ExchangeSsoCodeHandler
         private readonly EnterpriseSsoResolver $enterpriseResolver,
         private readonly AccountSsoConnectionService $connectionService,
         private readonly AccountSsoDomainService $domainService,
+        private readonly SsoEnforcementService $enforcementService,
     ) {}
 
     /**
@@ -162,6 +165,7 @@ class ExchangeSsoCodeHandler
 
     /**
      * @throws SsoException
+     * @throws SsoRequiredException
      */
     private function signupRequired(SsoProviderConfig $provider, SsoStateDTO $state, SsoIdentityClaims $claims, string $bindingHash): SsoExchangeResult
     {
@@ -175,6 +179,8 @@ class ExchangeSsoCodeHandler
                 __(':provider did not share your email address. Allow access to your email and try again.', ['provider' => $provider->name]),
             );
         }
+
+        $this->enforcementService->assertSignupAllowed($claims->email);
 
         return new SsoExchangeResult(
             status: SsoExchangeStatus::SIGNUP_REQUIRED,

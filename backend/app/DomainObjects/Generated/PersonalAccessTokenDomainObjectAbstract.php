@@ -11,6 +11,7 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     final public const SINGULAR_NAME = 'personal_access_token';
     final public const PLURAL_NAME = 'personal_access_tokens';
     final public const ID = 'id';
+    final public const ACCOUNT_ID = 'account_id';
     final public const TOKENABLE_TYPE = 'tokenable_type';
     final public const TOKENABLE_ID = 'tokenable_id';
     final public const NAME = 'name';
@@ -20,8 +21,11 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     final public const EXPIRES_AT = 'expires_at';
     final public const CREATED_AT = 'created_at';
     final public const UPDATED_AT = 'updated_at';
+    final public const TOKEN_HINT = 'token_hint';
+    final public const EXPIRY_REMINDER_SENT_AT = 'expiry_reminder_sent_at';
 
     protected int $id;
+    protected int $account_id;
     protected string $tokenable_type;
     protected int $tokenable_id;
     protected string $name;
@@ -31,11 +35,14 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     protected ?string $expires_at = null;
     protected ?string $created_at = null;
     protected ?string $updated_at = null;
+    protected string $token_hint;
+    protected ?string $expiry_reminder_sent_at = null;
 
     public function toArray(): array
     {
         return [
                     'id' => $this->id ?? null,
+                    'account_id' => $this->account_id ?? null,
                     'tokenable_type' => $this->tokenable_type ?? null,
                     'tokenable_id' => $this->tokenable_id ?? null,
                     'name' => $this->name ?? null,
@@ -45,6 +52,8 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
                     'expires_at' => $this->expires_at ?? null,
                     'created_at' => $this->created_at ?? null,
                     'updated_at' => $this->updated_at ?? null,
+                    'token_hint' => $this->token_hint ?? null,
+                    'expiry_reminder_sent_at' => $this->expiry_reminder_sent_at ?? null,
                 ];
     }
 
@@ -57,6 +66,17 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setAccountId(int $account_id): self
+    {
+        $this->account_id = $account_id;
+        return $this;
+    }
+
+    public function getAccountId(): int
+    {
+        return $this->account_id;
     }
 
     public function setTokenableType(string $tokenable_type): self
@@ -156,5 +176,27 @@ abstract class PersonalAccessTokenDomainObjectAbstract extends \HiEvents\DomainO
     public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
+    }
+
+    public function setTokenHint(string $token_hint): self
+    {
+        $this->token_hint = $token_hint;
+        return $this;
+    }
+
+    public function getTokenHint(): string
+    {
+        return $this->token_hint;
+    }
+
+    public function setExpiryReminderSentAt(?string $expiry_reminder_sent_at): self
+    {
+        $this->expiry_reminder_sent_at = $expiry_reminder_sent_at;
+        return $this;
+    }
+
+    public function getExpiryReminderSentAt(): ?string
+    {
+        return $this->expiry_reminder_sent_at;
     }
 }

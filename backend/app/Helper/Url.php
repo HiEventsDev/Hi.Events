@@ -32,6 +32,8 @@ class Url
 
     public const PROFILE_SECURITY = 'app.frontend_urls.profile_security';
 
+    public const API_KEYS = 'app.frontend_urls.api_keys';
+
     public const ACCOUNT_USERS = 'app.frontend_urls.account_users';
 
     public const ACCOUNT_SETTINGS = 'app.frontend_urls.account_settings';

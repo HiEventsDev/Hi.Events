@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\Concerns\CreatesSsoConnections;
+use Tests\Concerns\UsesApiKeys;
 use Tests\TestCase;
 
 class SsoEnforcementTest extends TestCase
@@ -23,6 +24,7 @@ class SsoEnforcementTest extends TestCase
     use ActsAsAccountUsers;
     use CreatesSsoConnections;
     use DatabaseTransactions;
+    use UsesApiKeys;
 
     private const PASSWORD = 'CorrectHorse123!';
 
@@ -105,6 +107,25 @@ class SsoEnforcementTest extends TestCase
         $this->getJson('/users/me', $this->bearer($memberToken))
             ->assertUnauthorized()
             ->assertJsonPath('error_code', 'SSO_REQUIRED');
+    }
+
+    public function test_enabling_removes_a_members_api_keys_in_this_account_only(): void
+    {
+        [$owner, $accountId] = $this->enforcingAccount(enabled: false);
+        $member = $this->member($accountId, 'grace@acme.test');
+        $otherAccountId = User::factory()->withAccount()->create()->accounts()->first()->id;
+        $member->accounts()->attach($otherAccountId, [
+            'role' => Role::ADMIN->value,
+            'status' => UserStatus::ACTIVE->name,
+            'is_account_owner' => false,
+        ]);
+        $this->createApiKey($member, $accountId, name: 'Here');
+        $this->createApiKey($member, $otherAccountId, name: 'Elsewhere');
+
+        $this->putJson("/accounts/$accountId/sso/enforcement", ['enabled' => true], $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk();
+
+        $this->assertSame(['Elsewhere'], DB::table('personal_access_tokens')->where('tokenable_id', $member->id)->pluck('name')->all());
     }
 
     public function test_an_enforced_member_cannot_sign_in_with_a_password_but_can_through_the_connection(): void
@@ -241,7 +262,8 @@ class SsoEnforcementTest extends TestCase
 
         $this->getJson('/users/me/two-factor', $this->bearer($this->tokenFor($owner, $accountId)))
             ->assertOk()
-            ->assertJsonPath('data.required_by_accounts', [$accountName]);
+            ->assertJsonPath('data.required_by_accounts', [])
+            ->assertJsonPath('data.required_by_sso_accounts', [$accountName]);
     }
 
     public function test_support_cannot_reset_two_factor_for_the_owner_of_an_account_that_requires_sso(): void
@@ -280,6 +302,26 @@ class SsoEnforcementTest extends TestCase
         $this->assertSame($exempt->status(), $enforced->status());
         Mail::assertQueued(ForgotPassword::class, 1);
         Mail::assertQueued(ForgotPassword::class, fn (ForgotPassword $mail) => $mail->hasTo('contractor@acme.test'));
+    }
+
+    public function test_me_says_whether_a_password_can_be_set_so_enforced_members_are_not_offered_one(): void
+    {
+        [, $accountId, $connection] = $this->enforcingAccount();
+        $this->member($accountId, 'grace@acme.test', enforced: true);
+        $exempt = $this->member($accountId, 'contractor@acme.test', enforced: false);
+
+        $this->getJson('/users/me', $this->headersFor($exempt, $accountId))
+            ->assertOk()
+            ->assertJsonPath('data.password_reset_allowed', true);
+
+        $token = $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-grace', 'grace@acme.test'))
+            ->json('data.token');
+        $this->app['auth']->forgetGuards();
+        $this->app['tymon.jwt']->unsetToken();
+
+        $this->getJson('/users/me', $this->bearer($token))
+            ->assertOk()
+            ->assertJsonPath('data.password_reset_allowed', false);
     }
 
     public function test_an_enforced_member_cannot_move_their_email_off_the_verified_domains(): void

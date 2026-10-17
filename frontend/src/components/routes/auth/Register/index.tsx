@@ -46,6 +46,7 @@ export const Register = () => {
     const mutate = useRegisterAccount();
     const [turnstileToken, setTurnstileToken] = useState('');
     const [formError, setFormError] = useState<string | null>(null);
+    const [ssoRequiredEmail, setSsoRequiredEmail] = useState<string | null>(null);
     const {passwordLoginEnabled, registrationEnabled} = useSsoOptions();
     const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
@@ -64,6 +65,11 @@ export const Register = () => {
             },
             onError: (error: any) => {
                 setTurnstileResetKey((key) => key + 1);
+
+                if (error?.response?.data?.error_code === 'SSO_REQUIRED') {
+                    setSsoRequiredEmail(data.email);
+                    return;
+                }
 
                 if (error?.response?.data?.errors) {
                     errorHandler(form, error);
@@ -100,6 +106,17 @@ export const Register = () => {
                 </p>
             </header>
 
+            {ssoRequiredEmail !== null && (
+                <Callout variant="info" title={t`Your organization uses single sign-on`}>
+                    {t`Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account.`}
+                    <div>
+                        <Button size="compact-sm" variant="light" mt="xs" data-testid="register-sso-required-button"
+                                onClick={() => navigate('/auth/login', {state: {ssoStep: true, email: ssoRequiredEmail}})}>
+                            {t`Sign in with SSO`}
+                        </Button>
+                    </div>
+                </Callout>
+            )}
             {formError && (
                 <Callout variant="danger" onDismiss={() => setFormError(null)}>{formError}</Callout>
             )}

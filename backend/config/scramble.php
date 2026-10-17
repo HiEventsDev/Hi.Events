@@ -24,7 +24,7 @@ return [
      * Multiple includes or wildcards → server defaults to / and paths stay full (/api/users).
      * Override with `servers`, or use Scramble::registerApi() for separate bases.
      */
-    'api_path' => 'api',
+    'api_path' => '',
 
     /*
      * Your API domain. By default, app domain is used. This is also a part of the default API routes
@@ -61,7 +61,27 @@ The Hi.Events API powers event management, ticketing, and checkout.
 
 ## Authentication
 
-Management endpoints require a bearer token (JWT) obtained from `POST /auth/login`. Endpoints under `/public/*` — event pages, checkout, ticket lookup, check-in — require no authentication and are marked *(public)*.
+Management endpoints require a bearer token in the `Authorization` header. Endpoints under `/public/*` — event pages, checkout, ticket lookup, check-in — require no authentication and are marked *(public)*.
+
+### API keys
+
+For integrations, create an API key under **Settings → API keys** and send it with every request:
+
+```bash
+curl https://your-hi-events-host/api/events \
+  -H "Authorization: Bearer hie_…" \
+  -H "Accept: application/json"
+```
+
+- A key acts as the person who created it, in the one account it was created in, with that person's role, permissions and event access. It never has more access than its owner, and changes to the owner's role apply straight away.
+- **Read and write** keys can call every endpoint the owner can. **Read-only** keys can call `GET` endpoints and exports; other requests return `403` with `error_code: API_KEY_READ_ONLY`.
+- Keys can't sign in, or manage the user's profile, sign-in security, team, API keys, payouts or account settings. Those endpoints return `403` with `error_code: API_KEY_NOT_ALLOWED`.
+- An expired, revoked or unknown key returns `401`. A key is revoked when its owner revokes it, when an admin revokes it, when the owner is deactivated or leaves the account, and when the owner's password is reset or their single sign-on changes.
+- The full key is shown once, when it's created. Hi.Events stores only a hash of it.
+
+### Session tokens
+
+The Hi.Events web app uses a JWT obtained from `POST /auth/login`. It works on every management endpoint, including the ones API keys can't use.
 
 ### Two-factor authentication
 
@@ -71,9 +91,33 @@ Tokens work the same once issued: two-factor authentication is only checked at l
 
 If an account requires two-factor authentication and the user has not set it up, authenticated endpoints return `403` with `error_code: TWO_FACTOR_SETUP_REQUIRED` until they do. `GET /users/me`, `GET /accounts`, the `/auth/*` endpoints and the `/users/me/two-factor/*` setup endpoints stay available.
 
+## Errors
+
+Errors return JSON with a `message`. Validation errors (`422`) also include an `errors` object keyed by field. Access errors include an `error_code`:
+
+| Status | `error_code` | Meaning |
+| --- | --- | --- |
+| `401` | — | Missing, invalid or expired token, or an invalid, expired or revoked API key |
+| `401` | `SESSION_REVOKED` | The session token was signed out everywhere, for example after a password reset |
+| `401` | `SSO_REQUIRED` | The user's organization requires single sign-on; sign in again through it |
+| `401` | `SSO_SESSION_EXPIRED` | A session started through single sign-on can't be refreshed; sign in again |
+| `403` | `API_KEY_READ_ONLY` | A read-only API key tried to make a change |
+| `403` | `API_KEY_NOT_ALLOWED` | The endpoint can't be used with an API key |
+| `403` | `READ_ONLY_ROLE` | The user has view-only access to the account |
+| `403` | `PERMISSION_REQUIRED` | The user's role lacks a permission the endpoint needs (for example refunds or financial data) |
+| `403` | `ACCESS_RESTRICTED` | The user only has access to some organizers or events, and this isn't one of them |
+| `403` | `TWO_FACTOR_SETUP_REQUIRED` | The account requires two-factor authentication and the user hasn't set it up |
+| `403` | `ACCOUNT_PENDING_DELETION` | The account is scheduled for deletion |
+| `403` | `FEATURE_UNAVAILABLE` | The feature isn't available on this installation or plan |
+| `429` | — | Too many requests; wait for the number of seconds in the `Retry-After` header |
+
+## Rate limits
+
+Management endpoints are rate limited per user, shared between the web app and all of that user's API keys. The default is 180 requests a minute; self-hosted installations can change it with `APP_API_RATE_LIMIT_PER_MINUTE`.
+
 ## Stability
 
-This API is currently **unversioned and likely to change**. Endpoints, request fields, and response schemas may change between releases without notice, so pin your integration to a specific Hi.Events release and review the changelog when upgrading.
+The API isn't versioned yet. Endpoints that accept API keys are the integration surface, and we keep them backward compatible: new endpoints, optional request fields and response fields can be added at any time, so ignore fields you don't recognise. Removing or renaming an endpoint or field, or changing its type or meaning, is a breaking change; it's avoided where possible and always called out in the release notes. Endpoints marked *Not available to API keys* serve the Hi.Events web app and may change without notice.
 
 ## Outgoing webhooks
 

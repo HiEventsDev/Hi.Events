@@ -76,6 +76,18 @@ class SsoEnforcementService
         }
     }
 
+    /**
+     * @throws SsoRequiredException
+     */
+    public function assertSignupAllowed(string $email): void
+    {
+        $domain = $this->domainService->findUsableDomainForEmail($email);
+
+        if ($domain !== null && $this->findConnection($domain->getAccountId())?->isEnforcing() === true) {
+            throw new SsoRequiredException($email);
+        }
+    }
+
     public function isConnectionSessionUsable(int $accountId, ?int $ssoConnectionId): bool
     {
         if ($ssoConnectionId === null) {
@@ -239,7 +251,7 @@ class SsoEnforcementService
             }
         }
 
-        $this->sessionRevocationService->revokeAllForUsers($newlyEnforcedUserIds);
+        $this->sessionRevocationService->revokeAllForUsers($newlyEnforcedUserIds, $connection->getAccountId());
 
         return $this->connectionRepository->updateFromArray($connection->getId(), ['enforce_sso' => true]);
     }
@@ -269,7 +281,7 @@ class SsoEnforcementService
         $this->accountUserRepository->updateWhere(['sso_enforced' => $enforced], ['id' => $accountUserId]);
 
         if ($enforced && ! $accountUser->getSsoEnforced() && $this->findConnection($accountId)?->isEnforcing()) {
-            $this->sessionRevocationService->revokeAll($accountUser->getUserId());
+            $this->sessionRevocationService->revokeAll($accountUser->getUserId(), $accountId);
         }
     }
 
