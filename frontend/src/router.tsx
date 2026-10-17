@@ -332,6 +332,20 @@ export const router: RouteObject[] = [
                 }
             },
             {
+                path: "api-keys",
+                async lazy() {
+                    const ApiKeys = await import("./components/routes/settings/ApiKeys");
+                    return { Component: ApiKeys.default };
+                }
+            },
+            {
+                path: "api-keys/reference",
+                async lazy() {
+                    const ApiReference = await import("./components/routes/settings/ApiReference");
+                    return { Component: ApiReference.default };
+                }
+            },
+            {
                 path: "taxes-and-fees",
                 async lazy() {
                     const TaxesAndFees = await import("./components/routes/settings/TaxesAndFees");

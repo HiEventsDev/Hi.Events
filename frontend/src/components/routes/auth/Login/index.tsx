@@ -31,7 +31,9 @@ const Login = () => {
     const [notice, setNotice] = useState<string | null>((location.state as { notice?: string } | null)?.notice ?? null);
     const steps = useLoginSteps();
     const {passwordLoginEnabled, registrationEnabled, enterpriseSsoEnabled} = useSsoOptions();
-    const [ssoDiscoveryEmail, setSsoDiscoveryEmail] = useState<string | null>((location.state as { ssoStep?: boolean } | null)?.ssoStep ? '' : null);
+    const [ssoDiscoveryEmail, setSsoDiscoveryEmail] = useState<string | null>((location.state as { ssoStep?: boolean } | null)?.ssoStep
+        ? (location.state as { email?: string }).email ?? ''
+        : null);
     const [ssoRequiredEmail, setSsoRequiredEmail] = useState<string | null>(null);
     const startSso = useStartSso();
 

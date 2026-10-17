@@ -23,6 +23,8 @@ class TwoFactorStatusResource extends JsonResource
             'trusted_devices' => TrustedDeviceResource::collection($this->trustedDevices),
             /** @var array<int, string> */
             'required_by_accounts' => $this->requiredByAccounts->all(),
+            /** @var array<int, string> */
+            'required_by_sso_accounts' => $this->requiredBySsoAccounts->all(),
         ];
     }
 }

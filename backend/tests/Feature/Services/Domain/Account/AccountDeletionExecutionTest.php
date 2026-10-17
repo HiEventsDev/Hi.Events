@@ -166,6 +166,36 @@ class AccountDeletionExecutionTest extends TestCase
         }
     }
 
+    public function test_both_deletion_paths_remove_the_accounts_api_keys_and_keep_other_accounts_keys(): void
+    {
+        foreach ([AccountAnonymizationService::class => 'anonymizeAccount', AccountHardDeletionService::class => 'deleteAccount'] as $service => $method) {
+            $doomedKeyId = $this->seedApiKey($this->sharedUser, $this->account->id);
+            $survivingKeyId = $this->seedApiKey($this->sharedUser, $this->otherAccount->id);
+
+            $this->app->make($service)->{$method}($this->account->id);
+
+            $this->assertDatabaseMissing('personal_access_tokens', ['id' => $doomedKeyId]);
+            $this->assertDatabaseHas('personal_access_tokens', ['id' => $survivingKeyId]);
+
+            DB::table('personal_access_tokens')->delete();
+        }
+    }
+
+    private function seedApiKey(User $user, int $accountId): int
+    {
+        return DB::table('personal_access_tokens')->insertGetId([
+            'tokenable_type' => User::class,
+            'tokenable_id' => $user->id,
+            'account_id' => $accountId,
+            'name' => 'Integration',
+            'token' => hash('sha256', uniqid('', true)),
+            'token_hint' => 'abcd',
+            'abilities' => '["read"]',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
     private function seedSsoConnection(): int
     {
         $connectionId = DB::table('account_sso_connections')->insertGetId([

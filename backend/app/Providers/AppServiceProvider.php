@@ -17,6 +17,7 @@ use HiEvents\Models\Event;
 use HiEvents\Models\Organizer;
 use HiEvents\Models\Profile;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\ApiKey\ApiKeyService;
 use HiEvents\Services\Infrastructure\CurrencyConversion\CurrencyConversionClientInterface;
 use HiEvents\Services\Infrastructure\CurrencyConversion\NoOpCurrencyConversionClient;
 use HiEvents\Services\Infrastructure\CurrencyConversion\OpenExchangeRatesCurrencyConversionClient;
@@ -33,6 +34,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 use PHPOpenSourceSaver\JWTAuth\Http\Parser\AuthHeaders;
 use PHPOpenSourceSaver\JWTAuth\Http\Parser\Cookies;
 use Psr\Clock\ClockInterface;
@@ -67,6 +70,16 @@ class AppServiceProvider extends ServiceProvider
         $this->disableLazyLoading();
 
         $this->registerMorphMaps();
+
+        $this->restrictApiKeysToActiveMembers();
+    }
+
+    private function restrictApiKeysToActiveMembers(): void
+    {
+        Sanctum::authenticateAccessTokensUsing(
+            static fn (PersonalAccessToken $apiKey, bool $isValid): bool => $isValid
+                && app(ApiKeyService::class)->isUsableBy((int) $apiKey->getAttribute('tokenable_id'), (int) $apiKey->getAttribute('account_id')),
+        );
     }
 
     private function restrictJwtSourcesToHeaderAndCookie(): void

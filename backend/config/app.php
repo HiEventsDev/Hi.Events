@@ -75,6 +75,7 @@ return [
         'account_users' => '/settings/team',
         'account_settings' => '/settings/account',
         'profile_security' => '/settings/security',
+        'api_keys' => '/settings/api-keys',
         'event_dashboard' => '/manage/event/%d/dashboard',
         'welcome' => '/welcome',
         'lifecycle_email_unsubscribe' => '/emails/unsubscribe/%s',

@@ -13,8 +13,8 @@ use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Infrastructure\Authorization\IsAuthorizedService;
-use Illuminate\Auth\AuthManager;
 use Illuminate\Foundation\Application;
 use Mockery;
 use Mockery\MockInterface;
@@ -28,7 +28,7 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
 
     private EventRepositoryInterface|MockInterface $eventRepository;
 
-    private AuthManager|MockInterface $authManager;
+    private AuthUserService|MockInterface $authUserService;
 
     private BoxOfficeOperatorAuthorizer $authorizer;
 
@@ -37,7 +37,7 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
         parent::setUp();
 
         $this->eventRepository = Mockery::mock(EventRepositoryInterface::class);
-        $this->authManager = Mockery::mock(AuthManager::class);
+        $this->authUserService = Mockery::mock(AuthUserService::class);
 
         $container = Mockery::mock(Application::class);
         $container->shouldReceive('make')
@@ -56,7 +56,7 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
             $container,
             Mockery::mock(AccountUserRepositoryInterface::class),
             $accessService,
-            $this->authManager,
+            $this->authUserService,
         ));
     }
 
@@ -109,7 +109,7 @@ class BoxOfficeOperatorAuthorizerTest extends TestCase
 
     public function test_a_deactivated_user_cannot_operate_without_a_pin(): void
     {
-        $this->authManager->shouldReceive('logout');
+        $this->authUserService->shouldReceive('logout');
 
         $this->assertFalse(
             $this->authorizer->canOperateWithoutPin(

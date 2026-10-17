@@ -26,7 +26,7 @@ use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccess;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
-use Illuminate\Auth\AuthManager;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use Illuminate\Foundation\Application;
 
 readonly class IsAuthorizedService
@@ -35,7 +35,7 @@ readonly class IsAuthorizedService
         private Application $app,
         private AccountUserRepositoryInterface $accountUserRepository,
         private AccountUserAccessService $accessService,
-        private AuthManager $auth,
+        private AuthUserService $authUserService,
     ) {}
 
     public function validateSuperAdmin(UserDomainObject $authUser): void
@@ -216,7 +216,7 @@ readonly class IsAuthorizedService
     private function validateUserStatus(UserDomainObject $authUser): void
     {
         if ($authUser->getCurrentAccountUser()?->getStatus() !== UserStatus::ACTIVE->name) {
-            $this->auth->logout();
+            $this->authUserService->logout();
             throw new UnauthorizedException(__('Your account is not active.'));
         }
     }

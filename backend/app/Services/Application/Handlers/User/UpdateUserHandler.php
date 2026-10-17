@@ -14,6 +14,7 @@ use HiEvents\Services\Domain\Auth\Access\AccountUserAccessUpdateService;
 use HiEvents\Services\Domain\Auth\Access\AdminAccessNotificationService;
 use HiEvents\Services\Domain\Auth\Access\DTO\AccountUserAccessData;
 use HiEvents\Services\Domain\Auth\Access\Exception\InvalidAccessGrantException;
+use HiEvents\Services\Domain\Auth\ApiKey\ApiKeyService;
 use Illuminate\Database\DatabaseManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -27,6 +28,7 @@ class UpdateUserHandler
         private readonly AccountUserAccessUpdateService $accessUpdateService,
         private readonly AdminAccessNotificationService $adminAccessNotificationService,
         private readonly DatabaseManager $databaseManager,
+        private readonly ApiKeyService $apiKeyService,
     ) {}
 
     /**
@@ -98,6 +100,10 @@ class UpdateUserHandler
                 'account_id' => $updateUserData->account_id,
             ]
         );
+
+        if ($updateUserData->status === UserStatus::INACTIVE) {
+            $this->apiKeyService->revokeAllForMember($updateUserData->id, $updateUserData->account_id);
+        }
 
         if ($updateUserData->access !== null || ! $updateUserData->role->canBeRestricted()) {
             $this->accessUpdateService->update(

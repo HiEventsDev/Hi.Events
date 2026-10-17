@@ -5,6 +5,7 @@ namespace HiEvents\Http\Middleware;
 use Closure;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\Exceptions\ApiKeyReadOnlyException;
 use HiEvents\Exceptions\PermissionRequiredException;
 use HiEvents\Exceptions\ReadOnlyAccessException;
 use HiEvents\Exceptions\UnauthorizedException;
@@ -34,12 +35,16 @@ class EnforceAccountUserAccess
         $controller = $request->route()?->getControllerClass();
         $accountUser = $this->authUserService->getUser()?->getCurrentAccountUser();
 
+        if ($accountUser === null && $this->authUserService->isApiKeyRequest()) {
+            throw new UnauthorizedException;
+        }
+
         if ($accountUser === null || $controller === StopImpersonationAction::class) {
             return $next($request);
         }
 
         if ($accountUser->getStatus() !== UserStatus::ACTIVE->name) {
-            Auth::logout();
+            $this->authUserService->logout();
 
             throw new UnauthorizedException(__('Your account is not active.'));
         }
@@ -54,6 +59,10 @@ class EnforceAccountUserAccess
 
         if ($this->isBlockedForReadOnlyUser($request, $access, $controller)) {
             throw new ReadOnlyAccessException;
+        }
+
+        if ($this->isBlockedForReadOnlyApiKey($request, $controller)) {
+            throw new ApiKeyReadOnlyException;
         }
 
         return $next($request);
@@ -75,13 +84,23 @@ class EnforceAccountUserAccess
 
     private function isBlockedForReadOnlyUser(Request $request, AccountUserAccess $access, ?string $controller): bool
     {
-        if ($access->can(Permission::EDIT) || $request->isMethodSafe()) {
-            return false;
-        }
+        return ! $access->can(Permission::EDIT)
+            && ! $request->isMethodSafe()
+            && ! $this->isAllowedForReadOnlyUsers($controller);
+    }
 
-        return $controller === null
-            || ! class_exists($controller)
-            || (new ReflectionClass($controller))->getAttributes(AllowedForReadOnlyUsers::class) === [];
+    private function isBlockedForReadOnlyApiKey(Request $request, ?string $controller): bool
+    {
+        return ! $this->authUserService->apiKeyCanWrite()
+            && ! $request->isMethodSafe()
+            && ! $this->isAllowedForReadOnlyUsers($controller);
+    }
+
+    private function isAllowedForReadOnlyUsers(?string $controller): bool
+    {
+        return $controller !== null
+            && class_exists($controller)
+            && (new ReflectionClass($controller))->getAttributes(AllowedForReadOnlyUsers::class) !== [];
     }
 
     private function routeRequiresAuthentication(Request $request): bool

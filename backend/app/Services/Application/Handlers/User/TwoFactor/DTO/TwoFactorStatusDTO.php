@@ -13,5 +13,6 @@ class TwoFactorStatusDTO extends BaseDataObject
         public readonly int $recoveryCodesRemaining,
         public readonly Collection $trustedDevices,
         public readonly Collection $requiredByAccounts,
+        public readonly Collection $requiredBySsoAccounts,
     ) {}
 }
