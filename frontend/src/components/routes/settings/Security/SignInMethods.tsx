@@ -46,6 +46,7 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
     const providers = [...(sso?.providers ?? []), ...organizationProviders];
     const passwordLoginEnabled = sso?.password_login_enabled ?? true;
     const hasPassword = me.has_password !== false;
+    const ssoRequired = !hasPassword && me.password_reset_allowed === false;
     const usableIdentities = identities.filter(identity => providers.some(provider => provider.key === identity.provider_key));
     const signInMethodCount = usableIdentities.length + (hasPassword && passwordLoginEnabled ? 1 : 0);
 
@@ -84,9 +85,11 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
             label={t`Password`}
             description={hasPassword
                 ? t`Use a long password that you don't use anywhere else.`
-                : t`You sign in without a password. Add one as a backup way to sign in.`}
+                : ssoRequired
+                    ? t`Your organization requires single sign-on, so you don't need a password.`
+                    : t`You sign in without a password. Add one as a backup way to sign in.`}
         >
-            {hasPassword ? (
+            {ssoRequired ? null : hasPassword ? (
                 <Button variant="default" onClick={onChangePassword} data-testid="change-password-button">
                     {t`Change password`}
                 </Button>

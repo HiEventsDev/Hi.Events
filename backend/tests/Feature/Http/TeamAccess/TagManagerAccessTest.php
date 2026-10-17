@@ -6,12 +6,14 @@ use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Concerns\ActsAsAccountUsers;
+use Tests\Concerns\UsesApiKeys;
 use Tests\TestCase;
 
 class TagManagerAccessTest extends TestCase
 {
     use ActsAsAccountUsers;
     use DatabaseTransactions;
+    use UsesApiKeys;
 
     private User $owner;
 
@@ -45,6 +47,21 @@ class TagManagerAccessTest extends TestCase
             ->assertOk();
 
         $this->patchJson("/organizers/{$this->organizerId}/settings", $this->tagManager('GTM-OWNER1'), $this->headersFor($organizer, $this->accountId))
+            ->assertOk();
+    }
+
+    public function test_an_api_key_cannot_add_a_tag_manager_container_even_for_an_admin(): void
+    {
+        $apiKey = $this->createApiKey($this->owner, $this->accountId);
+
+        $this->patchJson("/organizers/{$this->organizerId}/settings", $this->tagManager('GTM-VIAKEY1'), $this->apiKeyHeaders($apiKey))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('tracking_pixels.0.provider');
+
+        $this->patchJson("/organizers/{$this->organizerId}/settings", $this->tagManager('GTM-OWNER1'), $this->headersFor($this->owner, $this->accountId))
+            ->assertOk();
+
+        $this->patchJson("/organizers/{$this->organizerId}/settings", $this->tagManager('GTM-OWNER1'), $this->apiKeyHeaders($apiKey))
             ->assertOk();
     }
 

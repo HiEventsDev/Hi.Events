@@ -80,6 +80,10 @@ msgstr "{0} akadálymentes"
 msgid "{0} Active Webhooks"
 msgstr "{0} aktív webhook"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} elérhető"
@@ -149,7 +153,7 @@ msgstr "{0} tag a megerősített tartományain kívül megtartja a jelenlegi bej
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} mostantól a következővel köteles bejelentkezni: {providerName}"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "{0}/{1} maradt"
 
@@ -186,11 +190,19 @@ msgstr "{0} visszatérített rendelés tartalmazza ezt a terméket, de nem lett 
 msgid "{0} removed"
 msgstr "{0} eltávolítva"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0} egyszeri bejelentkezést ír elő. Tulajdonosként jelszóval jelentkezik be, ezért a kétlépcsős hitelesítés védi ezt a bejelentkezést, és nem kapcsolható ki."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0} egyszeri bejelentkezést ír elő. Tulajdonosként jelszóval jelentkezik be, ezért a kétlépcsős hitelesítés védi ezt a bejelentkezést."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "A(z) {0} kétlépcsős hitelesítést ír elő a csapat minden tagjának."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "A(z) {0} kétlépcsős hitelesítést ír elő, ezért nem kapcsolható ki."
 
@@ -255,7 +267,7 @@ msgstr "{0} állóhely"
 msgid "{0} tickets"
 msgstr "{0} jegy"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "{0} leválasztva."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} beléptetve"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{totalCount} lépésből {completedCount} kész"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected} csatlakoztatva. Mostantól használhatja bejelentkezéshez."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} időpont"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} nap"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} szervező"
 msgid "{organizerName}'s first event"
 msgstr "{organizerName} első eseménye"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount} / {0} aktív kulcs"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "{productCount} jegytípus beállítva"
 msgid "{provider} video found"
 msgstr "{provider} videó található"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "A(z) {providerName} nem osztotta meg az e-mail-címét"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "A(z) {providerName} nem válaszol"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "1 résztvevő regisztrált erre az alkalomra."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 nap"
 
@@ -764,6 +782,10 @@ msgstr "1 szék nélkül"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "1 héttel az esemény előtt"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 év"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Hitelkártyás fizetések elfogadása a Stripe-pal"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Hozzáférés"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Akadálymentes"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Fiókok"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Fiókok ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "A(z) {email} fiókjait a szervezete kezeli. Jelentkezzen be inkább a szervezet identitásszolgáltatóján keresztül."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Az ehhez az e-mail-címhez tartozó fiókokat a szervezete kezeli. Új fiók létrehozása helyett jelentkezzen be a szervezet identitásszolgáltatóján keresztül."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Minden jegy"
 msgid "All time"
 msgstr "Teljes időszak"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Minden megbízható eszköz eltávolítva"
 
@@ -1875,7 +1906,7 @@ msgstr "Minden felhasználó"
 msgid "All visible"
 msgstr "Mind látható"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Bejelentkezéskor engedélyezze a hozzáférést az e-mail-címéhez, majd próbálja újra."
 
@@ -1930,7 +1961,7 @@ msgstr "Bejelentkezés engedélyezése: {providerName}"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Majdnem kész! Csak a fizetés feldolgozására várunk. Ez csak néhány másodpercet vesz igénybe."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Már van fiókja? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Fizetett összeg ({0})"
 msgid "Amount tendered"
 msgstr "Átvett összeg"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Ezzel az e-mail-címmel már létezik fiók. Jelentkezzen be helyette."
 
@@ -2158,6 +2189,20 @@ msgstr "Bárki, akinek megvan ez a link és a PIN, jegyet adhat el erre az esem�
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Még valami?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "API-kulcsok"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "Nem hozhatsz létre API-kulcsot, amíg más felhasználó nevében vagy bejelentkezve."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "API-referencia"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Kérdezze meg egyszer termékenként"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Rendelési és résztvevői kérdések feltevése a bejáratnál. Minden jegy külön lépést kap, ami jelentősen lassíthatja az eladást. Forgalmas bejáratoknál hagyd kikapcsolva."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Kérje meg a fiók tulajdonosát, hogy hívja meg újra."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Kérje meg azt, aki meghívta, hogy küldjön új meghívót."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Kérje meg az adminisztrátort, hogy hívja meg."
 
@@ -2825,7 +2870,7 @@ msgstr "Awesome Organizer Kft."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Pénztár frissítve"
 msgid "Brazilian Portuguese"
 msgstr "Brazíliai portugál"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "Az összes végpont megtekintése az API-referenciában"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Ütemterv összeállítása"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "A követőpixelek hozzáadásával elismeri, hogy Ön és ez a platform közös adatkezelők a gyűjtött adatok tekintetében. Ön felelős azért, hogy jogszerű alappal rendelkezzen ehhez az adatkezeléshez az alkalmazandó adatvédelmi jogszabályok (GDPR, CCPA stb.) szerint."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "A folytatással elfogadja <0>Szolgáltatási feltételeinket</0> és <1>Adatvédelmi irányelveinket</1>."
 
@@ -3392,6 +3441,7 @@ msgstr "Nem tudja használni a hitelesítő alkalmazást vagy a helyreállítás
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "E-mail-cím módosítása"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Jelszó módosítása"
 
@@ -3775,7 +3825,7 @@ msgstr "Ellenőrizze e-mail címét"
 msgid "Check your event page"
 msgstr "Ellenőrizze az eseményoldalt"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Nézze meg a postafiókját! Ha ehhez az e-mail címhez jegyek tartoznak, kap egy linket a megtekintésükhöz."
@@ -4053,7 +4103,7 @@ msgstr "Másik fájl választása"
 msgid "Choose another reader"
 msgstr "Másik olvasó választása"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Válasszon másik bejelentkezési módot."
 
@@ -4236,6 +4286,10 @@ msgstr "Bezárás"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Oldalsáv bezárása"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Bezárás másolás nélkül"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "E-mail cím módosításának megerősítése"
 msgid "Confirm it's you"
 msgstr "Erősítsd meg, hogy te vagy az"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Erősítse meg, hogy Ön az, majd jelentkezzen be ezzel: {0}, hogy csatlakoztassa."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Új jelszó megerősítése"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Jelszó megerősítése"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Jelszó megerősítése"
@@ -4542,6 +4596,10 @@ msgstr "Spam megerősítése"
 
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
+msgstr "Erősítse meg e-mail-címét"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
 msgstr "Erősítse meg e-mail-címét"
 
 #: src/components/layouts/Event/index.tsx:328
@@ -4568,11 +4626,11 @@ msgstr "E-mail cím megerősítése..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Gratulálunk! Az eseményed mostantól látható a nyilvánosság számára."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Csatlakoztatás"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "{0} csatlakoztatása"
 
@@ -4583,6 +4641,10 @@ msgstr "Csatlakoztass egy Stripe-fiókot a Kifizetések alatt, mielőtt kártyao
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Bank összekapcsolása"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Csatlakoztasson más eszközöket és saját kódját ehhez a fiókhoz. Egy kulcs mindenre képes, amire Ön, ezért kezelje úgy, mint egy jelszót."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "A tartalom megadása kötelező"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Folytatás"
@@ -4795,6 +4857,8 @@ msgstr "Cookie-beállítások"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "Lépésről lépésre szóló útmutatót másol, amelyet beilleszthet a
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Másolás"
@@ -4871,6 +4936,10 @@ msgstr "Kód másolása"
 msgid "Copy Code"
 msgstr "Kód másolása"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Parancs másolása"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Ügyféllink másolása"
@@ -4887,6 +4956,10 @@ msgstr "E-mail másolása"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Másolás AI-ügynöknek"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Kulcs másolása"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Vágólapra másolás"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "URL másolása"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "Másolja ki API-kulcsát"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "Nem sikerült frissíteni: {name}"
 msgid "Could not upload {fileName}"
 msgstr "Nem sikerült feltölteni: {fileName}"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "Nem sikerült betölteni az API-referenciát."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "Nem sikerült betölteni az API-kulcsait"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Nem sikerült betölteni a biztonsági beállításokat"
@@ -5094,6 +5179,10 @@ msgstr "„{query}” létrehozása"
 msgid "Create {0} Template"
 msgstr "{0} sablon létrehozása"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Hozzon létre egy kulcsot, hogy olyan eszközöket csatlakoztathasson eseményeihez, megrendeléseihez és résztvevőihez, mint a Zapier, a CRM-rendszere vagy saját szkriptjei."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Lista létrehozása ehhez az időponthoz"
@@ -5147,6 +5236,10 @@ msgstr "Partner létrehozása"
 msgid "Create an announcement to show a message to your users."
 msgstr "Hozzon létre egy közleményt, hogy üzenetet jelenítsen meg felhasználóinak."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Események, megrendelések, résztvevők és egyebek létrehozása és módosítása."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Jegyek és árucikkek létrehozása és konfigurálása értékesítéshez."
@@ -5160,6 +5253,11 @@ msgstr "Létrehozás és tervezés megkezdése"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Közlemény létrehozása"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "API-kulcs létrehozása"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Esemény létrehozása"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Díj létrehozása"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Kulcs létrehozása"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Hozza létre saját eseményét"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Létrehozva"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Jogi nyilatkozat, elérhetőség vagy köszönetnyilvánítás, egy sorban"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Leválasztás"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "{0} leválasztása"
 
@@ -6214,7 +6318,7 @@ msgstr "Tartomány megerősítve"
 msgid "Don't forget!"
 msgstr "Ne felejtse el!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Nincs fiókja? <0>Regisztráljon</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Adomány"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "pl. Tervezett karbantartás szombaton 2 és 4 óra között (UTC)"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "pl. sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "pl. Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Jogosult bejelentkezési listák"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "E-mail lábléc üzenet"
 msgid "Email is required"
 msgstr "E-mail cím kötelező"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "Jelszóbeállító link küldése e-mailben"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Adjon meg egyedi partnerkódot"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Adja meg e-mail címét"
@@ -7484,9 +7593,13 @@ msgstr "Minden eseménynek van beléptetési listája"
 msgid "Every organizer and event, including new ones."
 msgstr "Minden szervező és esemény, az újakat is beleértve."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Minden megbízható eszköznek kódra lesz szüksége a következő bejelentkezéskor. Folytatja?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Mindenki ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Kivétel"
 msgid "Exempt from SSO"
 msgstr "Kivétel az SSO alól"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Lejárat"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Lejárati dátum"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Lejárt"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "Lejárt {0}"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Lejár"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "Lejár {0}"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Keresztnév"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Több helyszínes eseményekhez"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Biztonsága érdekében jelentkezzen be újra, hogy megerősítse, Ön az."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Elfelejtette jelszavát?"
 
@@ -8488,7 +8617,7 @@ msgstr "Csak jövőbeli időpontok"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "A jövőbeli időpontok nulla kapacitással másolódnak"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Általános"
@@ -8518,7 +8647,7 @@ msgstr "Generálás"
 msgid "Generate code"
 msgstr "Kód generálása"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Új kódok létrehozása"
@@ -8561,7 +8690,7 @@ msgstr "Fizetés fogadása"
 msgid "Get paid with Stripe"
 msgstr "Fizetés fogadása Stripe-pal"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Kezdés"
 
@@ -8599,11 +8728,16 @@ msgstr "Adjon mindenkinek időpontot"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Adjon elég magasságot a beágyazott elemnek a widgethez, vagy állítsa a „Fizetés megnyitása” beállítást „Új lap” értékre."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Adjon nevet ennek a kulcsnak"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Adj nevet az eseményednek"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Vissza"
 
@@ -9084,7 +9218,7 @@ msgstr "Hogyan számítjuk fel az áfát az általunk kiszámlázott platformdí
 msgid "How would you like to start?"
 msgstr "Hogyan szeretné elkezdeni?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "A bejelentkezés módja és a kétlépcsős hitelesítés. Ezek védik az összes fiókot, amelyhez tartozik."
 
@@ -9131,6 +9265,10 @@ msgstr "A helyreállítási kódjaimat biztonságos helyre mentettem"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Hozzáadtam, tovább"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Ha egy kulcs kiszivárog, azonnal vonja vissza, és hozzon létre egy újat."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "Kibocsátó URL-je"
 msgid "It happens on more than one date"
 msgstr "Több időpontban is megrendezésre kerül"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Az Ön szerepkörével és eseményhozzáférésével rendelkezik. A csak olvasható kulcsok megtekinthetnek és exportálhatnak, de semmit sem módosíthatnak."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Elképzelhető, hogy visszavonták a közzétételét vagy törölték. Ellenőrizze a hivatkozást, és próbálja újra."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Egy másik felhasználóhoz van csatlakoztatva. Használjon másik {providerName} fiókot."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "Feladat újrapróbálásra sorba állítva"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "János"
 
@@ -9579,7 +9721,7 @@ msgstr "Július"
 msgid "June"
 msgstr "Június"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Csak a jegyeit keresi?"
 
@@ -9620,9 +9762,33 @@ msgstr "A haszon az Öné marad."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Ne jelenjenek meg a nyilvános line-upon és programban, amíg készen nem áll a bejelentésre"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Kulcs"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "{0} végű kulcs"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Kulcs eltávolítva"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Kulcs visszavonva"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin és mások"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "A kulcsokkal nem lehet bejelentkezni, és nem kezelhető velük a csapata, a kifizetések, a profilja vagy a biztonsági beállításai."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "A soha le nem járó kulcsok addig érvényesek, amíg vissza nem vonja őket. Csak saját felügyelete alatt álló szerverekhez használja."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Vezetéknév"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Utoljára aktiválva"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Legutóbb használt"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Utoljára használva"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Utoljára használva: {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Betöltött időpontok"
 msgid "Loading preview..."
 msgstr "Előnézet betöltése..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "Az API-referencia betöltése…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Jegyeim keresése"
 msgid "Lost access?"
 msgstr "Elvesztette a hozzáférést?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Elvesztette a telefonját, vagy másik alkalmazásra vált? Kapcsolja ki, majd újra be, hogy új hitelesítőt csatlakoztasson."
 
@@ -10719,6 +10891,10 @@ msgstr "Az én csodálatos eseményem leírása..."
 msgid "My amazing event title..."
 msgstr "Az én csodálatos eseményem címe..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Saját kulcsaim"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Profilom"
@@ -10746,6 +10922,7 @@ msgstr "Jegyeim"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Nettó bevétel"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Soha"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Soha nem használt"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Nem - Magánszemély vagyok vagy nem ÁFA-s vállalkozás"
 msgid "No access yet"
 msgstr "Még nincs hozzáférés"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Nem található fiók"
 
@@ -11194,6 +11376,10 @@ msgstr "Nincs megjeleníthető esemény"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Még nincsenek események"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Nincs lejárat"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Nem, maradok itt"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Még senkit sem adtak hozzá az esemény fellépőihez."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Még senki nem hozott létre API-kulcsot"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Még senki sincs a line-upban, vagy mindenki rejtett."
@@ -11589,6 +11779,10 @@ msgstr "Általában {0}"
 msgid "Not available"
 msgstr "Nem elérhető"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Nem elérhető: csak megtekintési jogosultsága van."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Nincs beléptetve"
 msgid "Not Checked In"
 msgstr "Nincs bejelentkezve"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Nincs csatlakoztatva"
 
@@ -11819,7 +12013,7 @@ msgstr "minden hónapban"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Ki"
@@ -11908,7 +12102,7 @@ msgstr "ekkor:"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Be"
@@ -12196,7 +12390,7 @@ msgstr "Beállítások megnyitása"
 msgid "Open sidebar"
 msgstr "Oldalsáv megnyitása"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Nyissa meg az elküldött meghívó e-mailt, hogy befejezze a csatlakozást a csapathoz."
 
@@ -12594,7 +12788,7 @@ msgstr "Szervező állapota frissítve"
 msgid "Organizer/default template will be used"
 msgstr "Szervező/alapértelmezett sablon lesz használva"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Áthárítás a vevőre"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "Jogosultságok"
 msgid "Person"
 msgstr "Személy"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Személyes"
 
@@ -13256,7 +13450,7 @@ msgstr "Kérjük, adjon hozzá legalább egy opciót."
 msgid "Please check the provided information is correct"
 msgstr "Kérjük, ellenőrizze, hogy a megadott információk helyesek-e."
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Kérjük, ellenőrizze e-mail címét és jelszavát, majd próbálja újra."
 
@@ -13669,7 +13863,7 @@ msgstr "Eladott termékek"
 msgid "Products sorted successfully"
 msgstr "Termékek sikeresen rendezve"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Csak promócióval"
 msgid "Promotional emails may result in account suspension"
 msgstr "A promóciós e-mailek fiók felfüggesztéshez vezethetnek"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Védje fiókját egy második bejelentkezési lépéssel. Még ha valaki megtudja is a jelszavát, a telefonjáról származó kód nélkül nem tud belépni."
 
@@ -13942,10 +14136,20 @@ msgstr "Újraaktiválás"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Újraaktiválja ezt az időpontot? Újra megnyílik a jövőbeli értékesítés előtt."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Olvasás és írás"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Tovább olvasom"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Csak olvasás"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Indokok"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "Visszatérítés rögzítése"
 msgid "Recovery code"
 msgstr "Helyreállítási kód"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Helyreállítási kódok"
 
@@ -14203,7 +14407,7 @@ msgstr "Visszatérítve: {0}"
 msgid "Refunds"
 msgstr "Visszatérítések"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "Regisztráció"
 
@@ -14252,12 +14456,18 @@ msgstr "eltávolítás"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Eltávolítás"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "Eltávolítja a(z) „{0}” kulcsot? Már lejárt."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "{0} eltávolítása"
@@ -14282,7 +14492,7 @@ msgstr "{profileName} eltávolítása az esemény line-upjából? A profil megma
 msgid "Remove access"
 msgstr "Hozzáférés eltávolítása"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Összes eltávolítása"
 
@@ -14313,6 +14523,10 @@ msgstr "Eltávolítás a térképről"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Eltávolítás ebből a line-upból"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Kulcs eltávolítása"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "Kétlépcsős hitelesítés előírása"
 msgid "Required"
 msgstr "Kötelező"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "A szervezete előírja"
 
@@ -14735,9 +14949,29 @@ msgstr "Az automatikus ellenőrzés által lehetséges spamként megjelölt esem
 msgid "Review security settings"
 msgstr "Biztonsági beállítások áttekintése"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "Visszavonás"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "Visszavonja a(z) „{0}” kulcsot? Minden, ami használja, azonnal leáll, és {ownerName} e-mailt kap erről."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "Visszavonja a(z) „{0}” kulcsot? Minden, ami használja, azonnal leáll. Ez nem vonható vissza."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "{0} visszavonása"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Meghívó visszavonása"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Kulcs visszavonása"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Biztonságos pénztár"
 msgid "Secure your account"
 msgstr "Védje fiókját"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Biztonság"
 
@@ -15817,7 +16051,7 @@ msgstr "1 terméket árul"
 msgid "Sells every product"
 msgstr "Minden terméket árul"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "E-mailek küldése résztvevőknek, jegytulajdonosoknak vagy rendelés t
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Meghívó küldése"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Küldje el minden kérés Authorization fejlécében."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Beállítás frissítve"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Beállítások"
@@ -16208,6 +16446,10 @@ msgstr "Kevesebb platform megjelenítése"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Monogram megjelenítése helyette"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Kulcsok megjelenítése"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Megjeleníti a szervezői profilját egy kapcsolatfelvételi gombbal."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "A közösségi linkjeidet és egy kapcsolat gombot mutat. Minden más szakasz fölé helyezve a profilkártyádon jelenik meg."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
@@ -16383,15 +16625,19 @@ msgstr "Jelentkezzen be újra a kétlépcsős hitelesítés beállításának me
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Jelentkezzen be egyszer a kapcsolat ellenőrzéséhez. Megmutatja, mit oszt meg az identitásszolgáltatója, és nem jelentkeztet be itt."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Jelentkezzen be a szervezete identitásszolgáltatóján keresztül jelszó helyett."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Jelentkezzen be inkább a szervezete identitásszolgáltatóján keresztül."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "Bejelentkezés: {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Jelentkezzen be a meghívó elfogadásához"
 
@@ -16403,7 +16649,7 @@ msgstr "Jelentkezzen be a csatlakozáshoz"
 msgid "Sign in with a PIN"
 msgstr "Bejelentkezés PIN-kóddal"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Jelentkezzen be egy már csatlakoztatott fiókkal, és győződjön meg róla, hogy friss bejelentkezésről van szó."
 
@@ -16418,7 +16664,9 @@ msgstr "Bejelentkezés jelszóval"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "Bejelentkezés SSO-val"
 
@@ -16460,11 +16708,11 @@ msgstr "Regisztráció ezzel: {0}"
 msgid "Sign up with Google"
 msgstr "Regisztráció Google-fiókkal"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "A bejelentkezési linkek csak egyszer működnek, és 10 perc után lejárnak. Kezdje újra a bejelentkezési oldalról."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "A bejelentkezési linkek csak egyszer használhatók, és 10 perc után lejárnak. A folytatáshoz kezdje újra."
 
@@ -16472,7 +16720,7 @@ msgstr "A bejelentkezési linkek csak egyszer használhatók, és 10 perc után 
 msgid "Sign-in settings"
 msgstr "Bejelentkezési beállítások"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "A bejelentkezés megszakadt. Válasszon másik bejelentkezési módot, vagy próbálja újra."
 
@@ -16496,15 +16744,15 @@ msgstr "Bejelentkezett, de nem lett megosztva e-mail-cím"
 msgid "Signed up"
 msgstr "Regisztrált"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Bejelentkezés folyamatban"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "Bejelentkeztetés ezzel: {0}…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Bejelentkeztetés…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Szlovák"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Smith"
 
@@ -16689,6 +16937,10 @@ msgstr "Egyes szövegek nehezen olvashatók lehetnek"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "Valaki most foglalta le ezt: {0}. Válasszon másik széket, vagy hagyja, hogy hasonlót keressünk Önnek."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Valami, amiből látja, hol használja, például „Zapier” vagy „Weboldal-szinkronizálás”."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, weboldal és még sok
 msgid "Square, at least 200 × 200px"
 msgstr "Négyzet alakú, legalább 200 × 200 px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Indulj sablonból, például színház, bankett vagy klub elrendezésbő
 msgid "Start from scratch"
 msgstr "Kezdés a semmiből"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Újrakezdés"
 
@@ -17112,7 +17366,7 @@ msgstr "Még fizetendő"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Még mindig vársz? Nézd meg az olvasó kijelzőjét. Ha nem mutat semmit, szakítsd meg és próbáld újra."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Még dolgozunk rajta. Ez néhány másodpercig tarthat."
 
@@ -17144,6 +17398,14 @@ msgstr "Megszünteti az egyszeri bejelentkezés kötelezővé tételét? A tagok
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Az eszköz megbízhatóságának visszavonása"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "Leáll ekkor: {0}. Egy héttel előtte e-mailt küldünk Önnek."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Tárolja biztonságos helyen, például jelszókezelőben vagy az integráció titkos beállításai között. Bárki, akinél ez a kulcs van, az Ön nevében használhatja az API-t."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Adók és díjak"
 msgid "Taxes & fees applied"
 msgstr "Adók és díjak alkalmazva"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Adók és díjak"
@@ -17590,7 +17852,7 @@ msgstr "Adók és díjak"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "A teljes rendelési összeg visszatérítésre kerül a vásárló erede
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "Az importálás nem sikerült. Nem történt változás. Kérjük, próbálja újra."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "A kulcs mindenre képes, amire Ön a(z) {accountName} fiókban, ezért tartsa titokban."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Hiba történt az üzenet küldésekor."
 msgid "These are skipped"
 msgstr "Ezeket kihagyjuk"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Ezek a böngészők a megbízhatóvá tételük után 30 napig kihagyják a kódot."
 
@@ -18123,7 +18389,7 @@ msgstr "Még nem fogadta el a meghívást. A módosítások a csatlakozáskor l�
 msgid "Third"
 msgstr "Harmadik"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Ez a(z) {providerName} fiók már használatban van"
 
@@ -18327,11 +18593,11 @@ msgstr "Ez a mező kötelező"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Ez az információ megjelenik a fizetési oldalon, a megrendelés összefoglaló oldalán és a megrendelés visszaigazoló e-mailben."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Ez a meghívó a következő címre szól: {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Ez a meghívó már nem érvényes"
 
@@ -18355,7 +18621,7 @@ msgstr "Ez egy ismétlődő esemény"
 msgid "This is an online event"
 msgstr "Ez egy online esemény."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "Így jelentkezik be. Eltávolítás előtt adjon hozzá jelszót vagy más lehetőséget."
 
@@ -18372,7 +18638,11 @@ msgstr "Ez a szervezőjének neve, amely megjelenik a felhasználók számára."
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "Az aláírási titok csak most jelenik meg. Kérjük, másolja ki most, és tárolja biztonságosan."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "Ezt a kulcsot csak most láthatja"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Ez általában átmeneti. Próbálja újra egy kis idő múlva."
 
@@ -18516,12 +18786,12 @@ msgstr "Ez a szék vissza van tartva"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Ezt az ültetési rendet máshol módosították. Betöltöd a legújabb verziót? A nem mentett módosításaid elvesznek."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Ez a bejelentkezési link lejárt"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Ez a bejelentkezési lehetőség nem érhető el"
 
@@ -18587,7 +18857,7 @@ msgstr "Csü"
 msgid "Thursday"
 msgstr "Csütörtök"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Jelölje be a \"Megbízom ebben az eszközben\" lehetőséget bejelentkezéskor, hogy azon a böngészőn 30 napig ne kelljen kódot megadni."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Holnap"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "Követés és elemzés"
 msgid "Trust this device for 30 days"
 msgstr "Megbízom ebben az eszközben 30 napig"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Megbízható eszközök"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Módosítsa a szűrőket, hogy több időpontot lásson."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Módosítsa a szűrőket, hogy több időpontot lásson."
 msgid "Try again"
 msgstr "Újra"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Próbáljon másik e-mailt"
@@ -19070,6 +19342,10 @@ msgstr "Próbáljon másik e-mailt"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Próbálja ki a Hi.Events-et ingyen"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Próbálja ki"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Török"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Kikapcsolás"
 
@@ -19099,7 +19375,7 @@ msgstr "Kapcsolja ki, ha azt szeretné, hogy a widget kitöltse a tárolója tel
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "Kétlépcsős hitelesítés kikapcsolása"
 
@@ -19107,7 +19383,7 @@ msgstr "Kétlépcsős hitelesítés kikapcsolása"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Kikapcsolja a kétlépcsős hitelesítést {0} számára? Csak a személyazonosság megerősítése után tegye. E-mailt kapnak, és ezután csak jelszóval tudnak bejelentkezni."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Bekapcsolás"
 
@@ -19155,7 +19431,7 @@ msgstr "Kétlépcsős"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "Kétlépcsős hitelesítés"
 
@@ -19691,11 +19967,11 @@ msgstr "Másik fiók használata"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "5MB-nál kisebb JPG, PNG vagy WebP képet használjon."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Használjon hosszú jelszót, amelyet sehol máshol nem használ."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Jelszó használata"
 
@@ -19806,6 +20082,10 @@ msgstr "A kezdőlapod dizájnjának színeit és betűtípusát használja. Ha m
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Valódi eseményekhez használod őket? Szerezz be egy Enterprise licencet, és add meg a kulcsát az <0>APP_LICENCE_KEY</0> értékeként."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "A kulcs használata"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Résztvevő megtekintése"
 msgid "View Attendee Details"
 msgstr "Résztvevő adatainak megtekintése"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Adatok megtekintése és exportálás. Semmit sem módosíthat."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Részletek megtekintése"
@@ -20269,7 +20553,7 @@ msgstr "Figyelmeztetés: Ez a rendszer alapértelmezett konfigurációja. A mód
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Nem sikerült feldolgozni a fizetését. Kérjük, próbálja újra, vagy lépjen kapcsolatba a támogatással."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Nem sikerült megerősíteni, hogy Ön az"
 
@@ -20362,7 +20646,7 @@ msgstr "Nem tudtuk olvasni a vágólapot. Beillesztéshez nyomja meg a Ctrl+V va
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Nem sikerült átrendezni a kategóriákat. Kérjük, próbálja újra."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Nem sikerült bejelentkeztetni"
 
@@ -20387,7 +20671,7 @@ msgstr "Javasolt méretek: 1950px x 650px, 3:1 arány, maximális fájlméret: 5
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Javasolt méretek: 400px x 400px, maximális fájlméret: 5MB."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "Linket küldtünk a(z) {0} címre. Nyissa meg a jelszó beállításához."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Üdvözöljük! A folytatáshoz jelentkezzen be."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Üdvözöljük újra"
 
@@ -20847,7 +21131,7 @@ msgstr "Dolgozik"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Dolgozik..."
 
@@ -20915,11 +21199,12 @@ msgstr "Igen, távolítsa el őket."
 msgid "Yoga class"
 msgstr "Jógaóra"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Te"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Már van fiókja"
 
@@ -20931,7 +21216,7 @@ msgstr "Már van fiókja ezzel a címmel: {email}"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Már van fiókja. Jelentkezzen be, és visszahozzuk ide, hogy csatlakozhasson a csapathoz."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Már van fiókja. Jelentkezzen be, és visszavisszük a meghívóhoz."
 
@@ -21021,6 +21306,10 @@ msgstr "Nem törölheti ezt az árszintet, mert már eladtak termékeket ehhez a
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Megerősítette, hogy Ön az. Néhány percen belül folytassa."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Nincsenek API-kulcsai"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Nincs függőben lévő e-mail cím módosítás."
@@ -21045,6 +21334,10 @@ msgstr "Adók és díjak vannak hozzáadva egy ingyenes termékhez. Szeretné el
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Nem mentett módosításai vannak. Biztosan elveti őket?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Nem másolta ki ezt a kulcsot. Az ablak bezárása után már nem jeleníthető meg újra."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "Legalább egy árszintre szüksége van."
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Megerősítenie kell e-mail címét, mielőtt frissítheti a szervezői státuszt."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "API-kulcsok létrehozásához megerősített e-mail-cím szükséges. Nézze meg a beérkező leveleit, vagy küldje el újra a megerősítő e-mailt a <0>profiljából</0>."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Legalább egy időpontot létre kell hoznia, mielőtt résztvevőket adhat ehhez az ismétlődő eseményhez."
@@ -21090,11 +21387,11 @@ msgstr "Ellenőriznie kell fiókja e-mail címét, mielőtt üzeneteket küldhet
 msgid "You receive"
 msgstr "Ön kap"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Jelszó nélkül jelentkezik be. Adjon hozzá egyet tartalék bejelentkezési módként."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "{0} felhasználóként jelentkezett be. Azt a fiókot használja, amelyre a meghívót küldték."
 
@@ -21110,7 +21407,7 @@ msgstr "Helyreállítási kódot használt. Még 1 helyreállítási kódja mara
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Manuálisan kell fizetettként megjelölnie egy megrendelést. Ez a megrendelés kezelése oldalon tehető meg."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Többé nem tud bejelentkezni ezzel: {0}. A fiókjába bejelentkezett többi eszközt kijelentkeztetjük."
 
@@ -21158,7 +21455,7 @@ msgstr "Ön a következő dátumra iratkozik fel a várólistára: {occurrenceDa
 msgid "You're on the waitlist!"
 msgstr "Felkerült a várólistára!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Fogyóban vannak a kódok. Hozzon létre új készletet, hogy ne zárják ki a fiókjából."
 
@@ -21174,7 +21471,7 @@ msgstr "{0} felhasználóként van bejelentkezve"
 msgid "You're unsubscribed"
 msgstr "Leiratkoztál"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Meghívást kapott"
 
@@ -21186,6 +21483,10 @@ msgstr "Helyet ajánlottak neked!"
 msgid "You've changed the session time"
 msgstr "Módosította az alkalom időpontját"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "Elérte az aktív kulcsok korlátját ({0}). Vonjon vissza egyet, hogy újat hozhasson létre."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "A kiemelőszíned ebben a módban nem elég feltűnő."
@@ -21194,7 +21495,7 @@ msgstr "A kiemelőszíned ebben a módban nem elég feltűnő."
 msgid "your account"
 msgstr "a fiókja"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "A fiókja bejelentkezéskor kódot kér a hitelesítő alkalmazásból. Bekapcsolva: {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Fiókjának üzenetküldési korlátai vannak. A korlátozások emelés�
 msgid "Your account is now scheduled for deletion."
 msgstr "Fiókja mostantól törlésre van ütemezve."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "A fiókja nem aktív"
 
@@ -21237,6 +21538,10 @@ msgstr "Résztvevői sikeresen exportálva."
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Résztvevői itt jelennek meg, miután regisztráltak az eseményére. Manuálisan is hozzáadhat résztvevőket."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "A böngészője letiltotta a másolást. Jelölje ki a kulcsot, és másolja ki saját maga."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Megrendelései itt fognak megjelenni, amint beérkeznek."
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "A szervezete kétlépcsős hitelesítést ír elő. A folytatáshoz állítsa be most. Nagyjából egy percet vesz igénybe."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "A szervezete egyszeri bejelentkezést ír elő"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "A szervezete egyszeri bejelentkezést ír elő, ezért nincs szüksége jelszóra."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "A szervezete egyszeri bejelentkezést használ"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "A szervezőnek még nincs leírása."
 msgid "Your organizer profile isn't published."
 msgstr "A szervezői profilod nincs közzétéve."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Az Ön jelszava"
 

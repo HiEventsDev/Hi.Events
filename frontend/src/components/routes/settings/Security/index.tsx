@@ -88,7 +88,8 @@ const TwoFactorRows = ({me, onOpen}: TwoFactorRowsProps) => {
     }
 
     const requiredBy = status.required_by_accounts;
-    const isRequired = requiredBy.length > 0;
+    const requiredBySso = status.required_by_sso_accounts;
+    const isRequired = requiredBy.length > 0 || requiredBySso.length > 0;
     const lowOnCodes = status.enabled && status.recovery_codes_remaining <= 3;
     const codePercentage = Math.round((status.recovery_codes_remaining / status.recovery_codes_total) * 100);
 
@@ -120,7 +121,9 @@ const TwoFactorRows = ({me, onOpen}: TwoFactorRowsProps) => {
                     : t`Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone.`}
                 below={!status.enabled && isRequired && (
                     <Callout variant="warning" title={t`Required by your organization`}>
-                        <Trans>{requiredBy.join(', ')} requires two-factor authentication for everyone on the team.</Trans>
+                        {requiredBy.length > 0
+                            ? <Trans>{requiredBy.join(', ')} requires two-factor authentication for everyone on the team.</Trans>
+                            : <Trans>{requiredBySso.join(', ')} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in.</Trans>}
                     </Callout>
                 )}
             >
@@ -190,9 +193,11 @@ const TwoFactorRows = ({me, onOpen}: TwoFactorRowsProps) => {
 
                     <SettingsRow
                         label={t`Turn off two-factor authentication`}
-                        description={isRequired
+                        description={requiredBy.length > 0
                             ? <Trans>{requiredBy.join(', ')} requires two-factor authentication, so it can't be turned off.</Trans>
-                            : t`Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator.`}
+                            : requiredBySso.length > 0
+                                ? <Trans>{requiredBySso.join(', ')} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off.</Trans>
+                                : t`Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator.`}
                     >
                         <Button
                             variant="outline"

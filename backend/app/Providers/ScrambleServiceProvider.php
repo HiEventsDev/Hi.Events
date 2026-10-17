@@ -9,6 +9,7 @@ use Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\RouteInfo;
+use HiEvents\OpenApi\IntegrationApiReference;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Gate;
@@ -17,6 +18,8 @@ use Illuminate\Support\Str;
 
 class ScrambleServiceProvider extends ServiceProvider
 {
+    private const LICENSING_NAMESPACE = 'HiEvents\\Enterprise\\Licensing\\';
+
     private const ACTION_NAMESPACE_PATTERN = '/^HiEvents\\\\(Enterprise\\\\(\w+)\\\\)?Http\\\\Actions\\\\/';
 
     public function register(): void
@@ -24,7 +27,7 @@ class ScrambleServiceProvider extends ServiceProvider
         $this->app->bind(
             MiddlewareAuthSecurityStrategy::class,
             static fn () => new MiddlewareAuthSecurityStrategy(
-                scheme: SecurityScheme::http('bearer', 'JWT'),
+                scheme: SecurityScheme::http('bearer')->setDescription('An API key (`hie_…`) or a session token from `POST /auth/login`.'),
             ),
         );
     }
@@ -42,6 +45,10 @@ class ScrambleServiceProvider extends ServiceProvider
                     return false;
                 }
 
+                if (str_starts_with($route->getActionName(), self::LICENSING_NAMESPACE)) {
+                    return false;
+                }
+
                 return preg_match(self::ACTION_NAMESPACE_PATTERN, $route->getActionName()) === 1;
             })
             ->withOperationTransformers(static function (Operation $operation, RouteInfo $routeInfo): void {
@@ -49,10 +56,13 @@ class ScrambleServiceProvider extends ServiceProvider
                     ->replaceMatches(self::ACTION_NAMESPACE_PATTERN, '${2}\\\\')
                     ->ltrim('\\')
                     ->beforeLast('\\')
-                    ->replace('\\', ' / ');
+                    ->explode('\\')
+                    ->filter()
+                    ->map(static fn (string $segment) => Str::headline($segment))
+                    ->implode(' / ');
 
-                if ($tag->isNotEmpty()) {
-                    $operation->tags = [$tag->toString()];
+                if ($tag !== '') {
+                    $operation->tags = [$tag];
                 }
 
                 if ($operation->summary === '') {
@@ -61,6 +71,11 @@ class ScrambleServiceProvider extends ServiceProvider
 
                 if (str_starts_with($routeInfo->route->uri(), 'public/') && ! str_contains($operation->summary, '(public)')) {
                     $operation->summary($operation->summary.' (public)');
+                }
+
+                if (in_array('auth:api', $routeInfo->route->gatherMiddleware(), true)) {
+                    $operation->description(trim($operation->description."\n\n".'Not available to API keys: sign in to call this endpoint.'));
+                    $operation->setExtensionProperty(IntegrationApiReference::SESSION_ONLY_EXTENSION, true);
                 }
             });
     }

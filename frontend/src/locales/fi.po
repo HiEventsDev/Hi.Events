@@ -80,6 +80,10 @@ msgstr "{0} esteetöntä"
 msgid "{0} Active Webhooks"
 msgstr "{0} aktiivista webhookia"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} saatavilla"
@@ -149,7 +153,7 @@ msgstr "{0} jäsentä vahvistettujen verkkotunnustesi ulkopuolella säilyttää 
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} on nyt kirjauduttava sisään palvelun {providerName} kautta"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "{0}/{1} jäljellä"
 
@@ -186,11 +190,19 @@ msgstr "{0} hyvitettyä tilausta sisältää tämän tuotteen, mutta niitä ei o
 msgid "{0} removed"
 msgstr "{0} poistettu"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0} edellyttää kertakirjautumista. Omistajana kirjaudut salasanalla, joten kaksivaiheinen tunnistautuminen suojaa tätä kirjautumista eikä sitä voi poistaa käytöstä."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0} edellyttää kertakirjautumista. Omistajana kirjaudut salasanalla, joten kaksivaiheinen tunnistautuminen suojaa tätä kirjautumista."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0} edellyttää kaksivaiheista tunnistautumista kaikilta tiimin jäseniltä."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} edellyttää kaksivaiheista tunnistautumista, joten sitä ei voi poistaa käytöstä."
 
@@ -255,7 +267,7 @@ msgstr "{0} seisomapaikkaa"
 msgid "{0} tickets"
 msgstr "{0} lippua"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "Palvelun {0} yhteys katkaistiin."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} kirjautunut sisään"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{completedCount}/{totalCount} vaihetta suoritettu"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected} on yhdistetty. Voit nyt käyttää sitä kirjautumiseen."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} aikaa"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} päivää"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} järjestäjää"
 msgid "{organizerName}'s first event"
 msgstr "{organizerName}:n ensimmäinen tapahtuma"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount} / {0} aktiivista avainta"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "{productCount} lipputyyppiä määritetty"
 msgid "{provider} video found"
 msgstr "{provider}-video löytyi"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "{providerName} ei jakanut sähköpostiosoitettasi"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "{providerName} ei vastaa"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "1 osallistuja on rekisteröitynyt tähän istuntoon."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 päivä"
 
@@ -764,6 +782,10 @@ msgstr "1 ilman paikkaa"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "1 viikko ennen tapahtumaa"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 vuosi"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Hyväksy luottokorttimaksut Stripellä"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Pääsy"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Esteetön"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Tilit"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Tilit ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "Osoitteen {email} tilejä hallinnoi organisaatiosi. Kirjaudu sisään sen identiteetintarjoajan kautta."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Tämän sähköpostiosoitteen tilejä hallinnoi organisaatiosi. Kirjaudu sisään sen identiteetintarjoajan kautta uuden tilin luomisen sijaan."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Kaikki liput"
 msgid "All time"
 msgstr "Koko ajalta"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Kaikki luotetut laitteet poistettu"
 
@@ -1875,7 +1906,7 @@ msgstr "Kaikki käyttäjät"
 msgid "All visible"
 msgstr "Kaikki näkyvissä"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Salli pääsy sähköpostiosoitteeseesi kirjautuessasi ja yritä sitten uudelleen."
 
@@ -1930,7 +1961,7 @@ msgstr "Salli kirjautuminen palvelulla {providerName}"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Melkein valmis! Odotamme vain maksusi käsittelyä. Tämän pitäisi kestää vain muutaman sekunnin."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Onko sinulla jo tili? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Maksettu summa ({0})"
 msgid "Amount tendered"
 msgstr "Vastaanotettu summa"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Tällä sähköpostiosoitteella on jo tili. Kirjaudu sen sijaan sisään."
 
@@ -2158,6 +2189,20 @@ msgstr "Kuka tahansa, jolla on tämä linkki ja PIN-koodi, voi myydä lippuja t�
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Jotain muuta?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "API-avaimet"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "API-avaimia ei voi luoda, kun toimit toisena käyttäjänä."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "API-dokumentaatio"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Kysy kerran tuotetta kohti"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Kysy tilaus- ja osallistujakysymykset ovella. Jokainen lippu saa oman vaiheensa, mikä voi hidastaa myyntiä huomattavasti. Pidä pois päältä ruuhkaisilla ovilla."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Pyydä tilin omistajaa kutsumaan sinut uudelleen."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Pyydä sinut kutsunutta henkilöä lähettämään uusi kutsu."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Pyydä ylläpitäjää kutsumaan sinut."
 
@@ -2825,7 +2870,7 @@ msgstr "Awesome Organizer Ltd."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Lippukassa päivitetty"
 msgid "Brazilian Portuguese"
 msgstr "Brasilianportugali"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "Selaa kaikkia päätepisteitä API-viitteessä"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Laadi aikataulu"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "Lisäämällä seurantapikseleitä vahvistat, että sinä ja tämä alusta olette yhteisiä kerättyjen tietojen rekisterinpitäjiä. Olet vastuussa siitä, että sinulla on laillinen käsittelyperuste sovellettavien tietosuojalakien (GDPR, CCPA jne.) mukaisesti."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Jatkamalla hyväksyt <0>käyttöehtomme</0> ja <1>tietosuojaselosteemme</1>."
 
@@ -3392,6 +3441,7 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "Vaihda sähköpostiosoite"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Vaihda salasana"
 
@@ -3775,7 +3825,7 @@ msgstr "Tarkista sähköpostisi"
 msgid "Check your event page"
 msgstr "Tarkista tapahtumasivu"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Tarkista postilaatikkosi! Jos tähän sähköpostiin liittyy lippuja, saat linkin niiden tarkastelemiseen."
@@ -4053,7 +4103,7 @@ msgstr "Valitse toinen tiedosto"
 msgid "Choose another reader"
 msgstr "Valitse toinen lukija"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Valitse toinen kirjautumistapa."
 
@@ -4236,6 +4286,10 @@ msgstr "Sulje"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Sulje sivupalkki"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Sulje kopioimatta"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "Vahvista sähköpostin muutos"
 msgid "Confirm it's you"
 msgstr "Vahvista henkilöllisyytesi"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Vahvista henkilöllisyytesi ja kirjaudu sitten palvelulla {0} yhdistääksesi sen."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Vahvista uusi salasana"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Vahvista salasana"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Vahvista salasana"
@@ -4542,6 +4596,10 @@ msgstr "Vahvista roskapostiksi"
 
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
+msgstr "Vahvista sähköpostiosoitteesi"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
 msgstr "Vahvista sähköpostiosoitteesi"
 
 #: src/components/layouts/Event/index.tsx:328
@@ -4568,11 +4626,11 @@ msgstr "Sähköpostiosoitetta vahvistetaan..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Onnittelut! Tapahtumasi on nyt julkisesti nähtävillä."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Yhdistä"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "Yhdistä {0}"
 
@@ -4583,6 +4641,10 @@ msgstr "Yhdistä Stripe-tili Tilitykset-kohdassa ennen kortinlukijoiden lisääm
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Yhdistä pankki"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Yhdistä muita työkaluja ja omaa koodiasi tähän tiliin. Avaimella voi tehdä kaiken, mitä sinäkin voit, joten käsittele sitä kuin salasanaa."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "Sisältö on pakollinen"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Jatka"
@@ -4795,6 +4857,8 @@ msgstr "Evästeasetukset"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "Kopioi vaiheittaiset ohjeet liitettäväksi ChatGPT:hen, Claudeen, Curso
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Kopioi"
@@ -4871,6 +4936,10 @@ msgstr "Kopioi koodi"
 msgid "Copy Code"
 msgstr "Kopioi koodi"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Kopioi komento"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Kopioi asiakkaan linkki"
@@ -4887,6 +4956,10 @@ msgstr "Kopioi sähköpostiosoite"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Kopioi tekoälyagentille"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Kopioi avain"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Kopioi leikepöydälle"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "Kopioi URL"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "Kopioi API-avaimesi"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "Kohteen {name} päivittäminen epäonnistui"
 msgid "Could not upload {fileName}"
 msgstr "Tiedoston {fileName} lataaminen epäonnistui"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "API-viitettä ei voitu ladata."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "API-avaimiasi ei voitu ladata"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Tietoturva-asetuksia ei voitu ladata"
@@ -5094,6 +5179,10 @@ msgstr "Luo \"{query}\""
 msgid "Create {0} Template"
 msgstr "Luo {0}-pohja"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Luo avain, jolla voit yhdistää työkaluja, kuten Zapierin, CRM-järjestelmäsi tai omia skriptejäsi, tapahtumiisi, tilauksiisi ja osallistujiisi."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Luo lista tälle päivälle"
@@ -5147,6 +5236,10 @@ msgstr "Luo kumppani"
 msgid "Create an announcement to show a message to your users."
 msgstr "Luo ilmoitus näyttämään viesti käyttäjillesi."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Luo ja muokkaa tapahtumia, tilauksia, osallistujia ja muuta."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Luo ja määritä myytäviä lippuja ja tuotteita."
@@ -5160,6 +5253,11 @@ msgstr "Luo ja aloita suunnittelu"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Luo ilmoitus"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "Luo API-avain"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Luo tapahtuma"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Luo maksu"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Luo avain"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Luo oma tapahtumasi"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Luotu"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Vastuuvapauslausekkeet, yhteystiedot tai kiitos, yhdellä rivillä"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Katkaise yhteys"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "Katkaise yhteys: {0}"
 
@@ -6214,7 +6318,7 @@ msgstr "Verkkotunnus vahvistettu"
 msgid "Don't forget!"
 msgstr "Älä unohda!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Eikö sinulla ole tiliä? <0>Rekisteröidy</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Lahjoitus"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "esim. Ajoitettu huolto lauantaina klo 2–4 UTC"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "esim. sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "esim. Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Kelpoiset sisäänkirjautumislistat"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "Sähköpostin alatunnisteviesti"
 msgid "Email is required"
 msgstr "Sähköpostiosoite on pakollinen"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "Lähetä minulle linkki salasanan asettamiseen"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Anna uniikki kumppanikoodi"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Anna sähköpostiosoitteesi"
@@ -7484,9 +7593,13 @@ msgstr "Jokaisella tapahtumalla on sisäänkirjauslista"
 msgid "Every organizer and event, including new ones."
 msgstr "Kaikki järjestäjät ja tapahtumat, myös uudet."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Jokainen luotettu laite tarvitsee koodin seuraavassa kirjautumisessa. Jatketaanko?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Kaikki ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Vapautettu"
 msgid "Exempt from SSO"
 msgstr "Vapautettu SSO:sta"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Vanheneminen"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Vanhentumispäivä"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Vanhentunut"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "Vanheni {0}"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Vanhenee"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "Vanhenee {0}"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Etunimi"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Tapahtumille, joilla on useampi tapahtumapaikka"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Kirjaudu turvallisuussyistä uudelleen sisään vahvistaaksesi henkilöllisyytesi."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Unohtuiko salasana?"
 
@@ -8488,7 +8617,7 @@ msgstr "Vain tulevat päivät"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Tulevat päivät kopioidaan ja kapasiteetti nollataan"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Yleiset"
@@ -8518,7 +8647,7 @@ msgstr "Luo"
 msgid "Generate code"
 msgstr "Luo koodi"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Luo uudet koodit"
@@ -8561,7 +8690,7 @@ msgstr "Saat maksun"
 msgid "Get paid with Stripe"
 msgstr "Saat maksun Stripella"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Aloita"
 
@@ -8599,11 +8728,16 @@ msgstr "Anna kaikille aika"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Anna upotukselle tarpeeksi korkeutta widgetille tai aseta ”Kassa avautuu” -asetukseksi ”Uusi välilehti”."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Anna avaimelle nimi"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Anna tapahtumallesi nimi"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Palaa takaisin"
 
@@ -9084,7 +9218,7 @@ msgstr "Miten ALV lasketaan perimäämme palvelumaksuun."
 msgid "How would you like to start?"
 msgstr "Miten haluat aloittaa?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "Kirjautumistavat ja kaksivaiheinen tunnistautuminen. Ne suojaavat kaikkia tilejä, joihin kuulut."
 
@@ -9131,6 +9265,10 @@ msgstr "Olen tallentanut palautuskoodini turvalliseen paikkaan"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Olen lisännyt sen, jatka"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Jos avain vuotaa, mitätöi se heti ja luo uusi."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "Myöntäjän URL"
 msgid "It happens on more than one date"
 msgstr "Se tapahtuu useampana päivänä"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Sillä on sinun roolisi ja pääsysi tapahtumiin. Vain luku -avaimet voivat tarkastella ja viedä tietoja, mutta eivät voi muuttaa mitään."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Se on saattanut poistua julkaisusta tai tulla poistetuksi. Tarkista linkki ja yritä uudelleen."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Se on yhdistetty toiseen käyttäjään. Käytä toista {providerName}-tiliä."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "Tehtävä lisätty uudelleenkäsittelyjonoon"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "John"
 
@@ -9579,7 +9721,7 @@ msgstr "Heinäkuu"
 msgid "June"
 msgstr "Kesäkuu"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Etsitkö vain lippujasi?"
 
@@ -9620,9 +9762,33 @@ msgstr "Säilytä voitto."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Pidä heidät pois julkiselta esiintyjälistalta ja aikataulusta, kunnes olet valmis julkistamaan"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Avain"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "Avaimen loppuosa {0}"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Avain poistettu"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Avain mitätöity"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ja muut"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "Avaimilla ei voi kirjautua sisään eikä hallita tiimiäsi, tilityksiä, profiilia tai suojausasetuksia."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "Avaimet, jotka eivät vanhene, ovat voimassa, kunnes mitätöit ne. Käytä tätä vain palvelimille, joita hallitset itse."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Sukunimi"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Viimeisin käynnistys"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Viimeksi käytetty"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Viimeksi käytetty"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Viimeksi käytetty {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Ladatut päivät"
 msgid "Loading preview..."
 msgstr "Esikatselua ladataan..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "Ladataan API-viitettä…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Etsi lippuni"
 msgid "Lost access?"
 msgstr "Pääsy menetetty?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Kadotitko puhelimesi tai vaihdatko sovellusta? Poista se käytöstä ja ota se uudelleen käyttöön yhdistääksesi uuden todennussovelluksen."
 
@@ -10719,6 +10891,10 @@ msgstr "Upean tapahtumani kuvaus..."
 msgid "My amazing event title..."
 msgstr "Upean tapahtumani otsikko..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Omat avaimet"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Profiilini"
@@ -10746,6 +10922,7 @@ msgstr "Lippuni"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Nettotuotot"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Ei koskaan"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Ei koskaan käytetty"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Ei - olen yksityishenkilö tai ei-arvonlisäverovelvollinen yritys"
 msgid "No access yet"
 msgstr "Ei vielä pääsyä"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Tiliä ei löytynyt"
 
@@ -11194,6 +11376,10 @@ msgstr "Ei näytettäviä tapahtumia"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Ei tapahtumia vielä"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Ei vanhenemista"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Ei, pidä minut täällä"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Tämän tapahtuman esiintyjiin ei ole vielä lisätty ketään."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Kukaan ei ole vielä luonut API-avainta"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Esiintyjälistalla ei ole vielä ketään, tai kaikki on piilotettu."
@@ -11589,6 +11779,10 @@ msgstr "Yleensä {0}"
 msgid "Not available"
 msgstr "Ei saatavilla"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Ei käytettävissä: sinulla on vain lukuoikeus."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Ei kirjattu sisään"
 msgid "Not Checked In"
 msgstr "Ei kirjattu sisään"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Ei yhdistetty"
 
@@ -11819,7 +12013,7 @@ msgstr "joka kuukausi"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Pois päältä"
@@ -11908,7 +12102,7 @@ msgstr "päällä"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Päällä"
@@ -12196,7 +12390,7 @@ msgstr "Avaa asetukset"
 msgid "Open sidebar"
 msgstr "Avaa sivupalkki"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Avaa lähettämämme kutsusähköposti viimeistelläksesi tiimiin liittymisen."
 
@@ -12594,7 +12788,7 @@ msgstr "Järjestäjän tila päivitettiin."
 msgid "Organizer/default template will be used"
 msgstr "Järjestäjän/oletuspohja käytetään."
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Peri ostajalta"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "Käyttöoikeudet"
 msgid "Person"
 msgstr "Henkilö"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Henkilökohtaiset"
 
@@ -13256,7 +13450,7 @@ msgstr "Lisää vähintään yksi vaihtoehto"
 msgid "Please check the provided information is correct"
 msgstr "Tarkista, että annetut tiedot ovat oikein"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Tarkista sähköpostiosoitteesi ja salasanasi ja yritä uudelleen"
 
@@ -13669,7 +13863,7 @@ msgstr "Myydyt tuotteet"
 msgid "Products sorted successfully"
 msgstr "Tuotteet lajiteltu onnistuneesti"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Vain kampanja"
 msgid "Promotional emails may result in account suspension"
 msgstr "Mainossähköpostit voivat johtaa tilin jäädyttämiseen"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Suojaa tilisi kirjautumisen lisävaiheella. Vaikka joku saisi selville salasanasi, hän ei pääse sisään ilman puhelimesi koodia."
 
@@ -13942,10 +14136,20 @@ msgstr "Aktivoi uudelleen"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Aktivoi tämä päivä uudelleen? Se avataan uudelleen tulevia myyntejä varten."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Luku ja kirjoitus"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Lue lisää"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Vain luku"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Syyt"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "Tallenna hyvitys"
 msgid "Recovery code"
 msgstr "Palautuskoodi"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Palautuskoodit"
 
@@ -14203,7 +14407,7 @@ msgstr "Hyvitetty: {0}"
 msgid "Refunds"
 msgstr "Hyvitykset"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "Rekisteröidy"
 
@@ -14252,12 +14456,18 @@ msgstr "poista"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Poista"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "Poistetaanko ”{0}”? Se on jo vanhentunut."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Poista {0}"
@@ -14282,7 +14492,7 @@ msgstr "Poistetaanko {profileName} tämän tapahtuman esiintyjälistalta? Profii
 msgid "Remove access"
 msgstr "Poista pääsy"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Poista kaikki"
 
@@ -14313,6 +14523,10 @@ msgstr "Poista kartalta"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Poista tältä esiintyjälistalta"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Poista avain"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "Vaadi kaksivaiheinen tunnistautuminen"
 msgid "Required"
 msgstr "Pakollinen"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "Organisaatiosi edellyttää"
 
@@ -14735,9 +14949,29 @@ msgstr "Tarkista tapahtumat, jotka automaattinen tarkistus on merkinnyt mahdolli
 msgid "Review security settings"
 msgstr "Tarkista suojausasetukset"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "Mitätöi"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "Mitätöidäänkö ”{0}”? Kaikki sitä käyttävä lakkaa toimimasta heti, ja {ownerName} saa siitä sähköpostin."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "Mitätöidäänkö ”{0}”? Kaikki sitä käyttävä lakkaa toimimasta heti. Tätä ei voi perua."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "Mitätöi {0}"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Peruuta kutsu"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Mitätöi avain"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Turvallinen kassa"
 msgid "Secure your account"
 msgstr "Suojaa tilisi"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Suojaus"
 
@@ -15817,7 +16051,7 @@ msgstr "Myy 1 tuotteen"
 msgid "Sells every product"
 msgstr "Myy kaikkia tuotteita"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "Lähetä sähköposteja osallistujille, lipun haltijoille tai tilauksen 
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Lähetä kutsu"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Lähetä se jokaisen pyynnön Authorization-otsakkeessa."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Asetus päivitetty"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Asetukset"
@@ -16208,6 +16446,10 @@ msgstr "Näytä vähemmän alustoja"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Näytä nimikirjaimet"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Näytä avaimet"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Näyttää järjestäjäprofiilisi ja yhteydenottopainikkeen."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Näyttää some-linkkisi ja yhteydenottopainikkeen. Kaikkien muiden osioiden yläpuolella ne näkyvät profiilikortissasi."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Kirjaudu sisään"
 
@@ -16383,15 +16625,19 @@ msgstr "Kirjaudu uudelleen sisään aloittaaksesi kaksivaiheisen tunnistautumise
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Kirjaudu kerran sisään yhteyden tarkistamiseksi. Se näyttää, mitä identiteetintarjoajasi jakaa, eikä kirjaa sinua sisään tässä."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Kirjaudu sisään organisaatiosi identiteetintarjoajan kautta salasanan sijaan."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Kirjaudu sisään organisaatiosi identiteetintarjoajan kautta."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "Kirjaudu palveluun {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Kirjaudu sisään hyväksyäksesi kutsun"
 
@@ -16403,7 +16649,7 @@ msgstr "Kirjaudu sisään liittyäksesi"
 msgid "Sign in with a PIN"
 msgstr "Kirjaudu sisään PIN-koodilla"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Kirjaudu tilillä, jonka olet jo yhdistänyt, ja varmista, että kirjautuminen on uusi."
 
@@ -16418,7 +16664,9 @@ msgstr "Kirjaudu salasanalla"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "Kirjaudu SSO:lla"
 
@@ -16460,11 +16708,11 @@ msgstr "Rekisteröidy palvelulla {0}"
 msgid "Sign up with Google"
 msgstr "Rekisteröidy Google-tilillä"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "Kirjautumislinkit toimivat kerran ja vanhenevat 10 minuutin kuluttua. Aloita uudelleen kirjautumissivulta."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Kirjautumislinkit toimivat kerran ja vanhenevat 10 minuutissa. Aloita alusta jatkaaksesi."
 
@@ -16472,7 +16720,7 @@ msgstr "Kirjautumislinkit toimivat kerran ja vanhenevat 10 minuutissa. Aloita al
 msgid "Sign-in settings"
 msgstr "Kirjautumisasetukset"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Kirjautuminen peruttiin. Valitse toinen kirjautumistapa tai yritä uudelleen."
 
@@ -16496,15 +16744,15 @@ msgstr "Kirjauduttu sisään, mutta sähköpostiosoitetta ei jaettu"
 msgid "Signed up"
 msgstr "Rekisteröitynyt"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Kirjaudutaan sisään"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "Kirjaudutaan palvelulla {0}…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Kirjaudutaan sisään…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Slovakki"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Smith"
 
@@ -16689,6 +16937,10 @@ msgstr "Osaa tekstistä voi olla vaikea lukea"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "Joku juuri varasi paikan {0}. Valitse toinen paikka, tai anna meidän etsiä sinulle vastaavia paikkoja."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Jotain, mistä näet, missä sitä käytetään, kuten ”Zapier” tai ”Verkkosivuston synkronointi”."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, verkkosivusto ja palj
 msgid "Square, at least 200 × 200px"
 msgstr "Neliö, vähintään 200 × 200 px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Aloita mallista, kuten teatteri, juhlasali tai klubi, ja liitä kartta m
 msgid "Start from scratch"
 msgstr "Aloita tyhjästä"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Aloita alusta"
 
@@ -17112,7 +17366,7 @@ msgstr "Vielä maksamatta"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Odotatko yhä? Tarkista lukijan näyttö. Jos siinä ei näy mitään, peruuta ja yritä uudelleen."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Työ on yhä käynnissä. Tämä voi kestää muutaman sekunnin."
 
@@ -17144,6 +17398,14 @@ msgstr "Lopetetaanko kertakirjautumisen vaatiminen? Jäsenet voivat taas kirjaut
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Lopeta tämän laitteen luottaminen"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "Lakkaa toimimasta {0}. Lähetämme sinulle sähköpostia viikkoa aiemmin."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Säilytä se turvallisessa paikassa, kuten salasanojen hallintaohjelmassa tai integraatiosi salaisissa asetuksissa. Kuka tahansa, jolla on tämä avain, voi käyttää API:a sinun nimissäsi."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Verot ja maksut"
 msgid "Taxes & fees applied"
 msgstr "Verot ja maksut sovellettu"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Verot ja maksut"
@@ -17590,7 +17852,7 @@ msgstr "Verot ja maksut"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "Koko tilauksen summa hyvitetään asiakkaan alkuperäiselle maksutavalle
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "Tuonti epäonnistui. Mitään ei muutettu. Yritä uudelleen."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "Avaimella voi tehdä kaiken, mitä sinä voit tehdä tilillä {accountName}, joten pidä se salassa."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Viestisi lähettämisessä tapahtui virhe"
 msgid "These are skipped"
 msgstr "Nämä ohitetaan"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Nämä selaimet ohittavat koodin 30 päivän ajan luotetuksi merkitsemisen jälkeen."
 
@@ -18123,7 +18389,7 @@ msgstr "Kutsua ei ole vielä hyväksytty. Muutokset tulevat voimaan, kun hän li
 msgid "Third"
 msgstr "Kolmas"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Tämä {providerName}-tili on jo käytössä"
 
@@ -18327,11 +18593,11 @@ msgstr "Tämä kenttä on pakollinen"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Nämä tiedot näytetään maksusivulla, tilauksen yhteenvetosivulla ja tilausvahvistussähköpostissa."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Tämä kutsu on osoitteelle {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Tämä kutsu ei ole enää voimassa"
 
@@ -18355,7 +18621,7 @@ msgstr "Tämä on toistuva tapahtuma"
 msgid "This is an online event"
 msgstr "Tämä on verkkotapahtuma"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "Kirjaudut tällä tavalla. Lisää salasana tai toinen vaihtoehto ennen kuin poistat sen."
 
@@ -18372,7 +18638,11 @@ msgstr "Tämä on järjestäjäsi nimi, joka näytetään käyttäjillesi."
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "Allekirjoitussalaisuus näytetään vain tämän kerran. Kopioi se nyt ja säilytä sitä turvallisesti."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "Näet tämän avaimen vain tämän kerran"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Tämä on yleensä tilapäistä. Yritä hetken kuluttua uudelleen."
 
@@ -18516,12 +18786,12 @@ msgstr "Tämä paikka on pidätetty"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Tätä paikkakarttaa on muutettu muualla. Ladataanko uusin versio? Tallentamattomat muutoksesi menetetään."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Tämä kirjautumislinkki on vanhentunut"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Tämä kirjautumisvaihtoehto ei ole käytettävissä"
 
@@ -18587,7 +18857,7 @@ msgstr "to"
 msgid "Thursday"
 msgstr "torstai"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Valitse kirjautuessasi \"Luota tähän laitteeseen\" ohittaaksesi koodin kyseisellä selaimella 30 päivän ajan."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Huomenna"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "Seuranta ja analytiikka"
 msgid "Trust this device for 30 days"
 msgstr "Luota tähän laitteeseen 30 päivän ajan"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Luotetut laitteet"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Kokeile muuttaa suodattimia nähdäksesi lisää ajankohtia."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Kokeile muuttaa suodattimia nähdäksesi lisää ajankohtia."
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Kokeile toista sähköpostiosoitetta"
@@ -19070,6 +19342,10 @@ msgstr "Kokeile toista sähköpostiosoitetta"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Kokeile Hi.Events-palvelua ilmaiseksi"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Kokeile"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Turkki"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Poista käytöstä"
 
@@ -19099,7 +19375,7 @@ msgstr "Poista käytöstä, jos haluat widgetin täyttävän säiliönsä koko k
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "Poista kaksivaiheinen tunnistautuminen käytöstä"
 
@@ -19107,7 +19383,7 @@ msgstr "Poista kaksivaiheinen tunnistautuminen käytöstä"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Poistetaanko kaksivaiheinen tunnistautuminen käytöstä käyttäjältä {0}? Tee tämä vasta varmistettuasi hänen henkilöllisyytensä. Hänelle lähetetään sähköposti, ja hän voi kirjautua pelkällä salasanalla."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Ota käyttöön"
 
@@ -19155,7 +19431,7 @@ msgstr "Kaksivaiheinen"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "Kaksivaiheinen tunnistautuminen"
 
@@ -19691,11 +19967,11 @@ msgstr "Käytä toista tiliä"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Käytä alle 5 Mt:n JPG-, PNG- tai WebP-kuvaa."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Käytä pitkää salasanaa, jota et käytä missään muualla."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Käytä salasanaa"
 
@@ -19806,6 +20082,10 @@ msgstr "Käyttää kotisivusi suunnittelun värejä ja fonttia. Jos muutat suunn
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Käytätkö niitä oikeissa tapahtumissa? Hanki Enterprise-lisenssi ja aseta sen avain muuttujaan <0>APP_LICENCE_KEY</0>."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "Avaimen käyttö"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Näytä osallistuja"
 msgid "View Attendee Details"
 msgstr "Näytä osallistujan tiedot"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Tarkastele tietoja ja suorita vientejä. Ei voi muuttaa mitään."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Näytä tiedot"
@@ -20269,7 +20553,7 @@ msgstr "Varoitus: Tämä on järjestelmän oletusmääritys. Muutokset vaikuttav
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Maksuasi ei voitu käsitellä. Yritä uudelleen tai ota yhteyttä tukeen."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Emme voineet vahvistaa henkilöllisyyttäsi"
 
@@ -20362,7 +20646,7 @@ msgstr "Leikepöytää ei voitu lukea. Liitä painamalla Ctrl+V tai ⌘+V."
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Kategorioiden järjestyksen muuttaminen ei onnistunut. Yritä uudelleen."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Emme voineet kirjata sinua sisään"
 
@@ -20387,7 +20671,7 @@ msgstr "Suosittelemme mittoja 1 950 × 650 pikseliä, kuvasuhdetta 3:1 ja enint�
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Suosittelemme mittoja 400 × 400 pikseliä ja enintään 5 Mt:n tiedostokokoa"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "Lähetimme linkin osoitteeseen {0}. Avaa se asettaaksesi salasanasi."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Tervetuloa mukaan! Kirjaudu sisään jatkaaksesi."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Tervetuloa takaisin"
 
@@ -20847,7 +21131,7 @@ msgstr "Käsitellään"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Käsitellään..."
 
@@ -20915,11 +21199,12 @@ msgstr "Kyllä, poista ne"
 msgid "Yoga class"
 msgstr "Joogatunti"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Sinä"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Sinulla on jo tili"
 
@@ -20931,7 +21216,7 @@ msgstr "Sinulla on jo tili osoitteella {email}"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Sinulla on jo tili. Kirjaudu sisään, niin palautamme sinut tänne liittymään tiimiin."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Sinulla on jo tili. Kirjaudu sisään, niin palautamme sinut kutsuun."
 
@@ -21021,6 +21306,10 @@ msgstr "Et voi poistaa tätä hintaporrasta, koska siihen liittyviä tuotteita o
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Vahvistit henkilöllisyytesi. Jatka muutaman minuutin kuluessa."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Sinulla ei ole API-avaimia"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Sinulla ei ole odottavaa sähköpostiosoitteen muutosta."
@@ -21045,6 +21334,10 @@ msgstr "Maksuttomaan tuotteeseen on lisätty veroja ja maksuja. Haluatko poistaa
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Sinulla on tallentamattomia muutoksia. Haluatko varmasti hylätä ne?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Et ole kopioinut tätä avainta. Kun suljet tämän ikkunan, sitä ei voi enää näyttää."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "Sinulla on oltava vähintään yksi hintaporras"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Sinun on vahvistettava sähköpostiosoitteesi ennen kuin voit päivittää järjestäjän tilaa."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "Tarvitset vahvistetun sähköpostiosoitteen API-avainten luomiseen. Tarkista saapuneet viestisi tai lähetä vahvistusviesti uudelleen <0>profiilistasi</0>."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Sinun on luotava vähintään yksi tapahtumakerta ennen kuin voit lisätä osallistujia tähän toistuvaan tapahtumaan."
@@ -21090,11 +21387,11 @@ msgstr "Sinun on vahvistettava tilisi sähköpostiosoite ennen kuin voit lähett
 msgid "You receive"
 msgstr "Saat"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Kirjaudut ilman salasanaa. Lisää salasana varakirjautumistavaksi."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "Kirjauduit käyttäjänä {0}. Käytä tiliä, johon kutsu lähetettiin."
 
@@ -21110,7 +21407,7 @@ msgstr "Käytit palautuskoodin. Palautuskoodeja on jäljellä 1."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Sinun on merkittävä tilaus maksetuksi manuaalisesti. Voit tehdä tämän tilauksen hallintasivulla."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Et voi enää kirjautua palvelulla {0}. Tiliisi kirjautuneet muut laitteet kirjataan ulos."
 
@@ -21158,7 +21455,7 @@ msgstr "Liityt päivämäärän {occurrenceDate} jonotuslistalle."
 msgid "You're on the waitlist!"
 msgstr "Olet jonotuslistalla!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Koodit alkavat loppua. Luo uusi sarja, jotta et jää ulos tilistäsi."
 
@@ -21174,7 +21471,7 @@ msgstr "Olet kirjautunut käyttäjänä {0}"
 msgid "You're unsubscribed"
 msgstr "Tilaus on peruutettu"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Sinut on kutsuttu"
 
@@ -21186,6 +21483,10 @@ msgstr "Sinulle on tarjottu paikkaa!"
 msgid "You've changed the session time"
 msgstr "Olet muuttanut istunnon aikaa"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "Olet saavuttanut {0} aktiivisen avaimen rajan. Mitätöi yksi luodaksesi uuden."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Korostusvärisi ei erotu tarpeeksi tässä tilassa."
@@ -21194,7 +21495,7 @@ msgstr "Korostusvärisi ei erotu tarpeeksi tässä tilassa."
 msgid "your account"
 msgstr "tilisi"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Tilisi pyytää todennussovelluksen koodia kirjautumisen yhteydessä. Otettu käyttöön {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Tililläsi on viestintärajoituksia. Jos haluat nostaa rajojasi, ota mei
 msgid "Your account is now scheduled for deletion."
 msgstr "Tilisi poistaminen on nyt ajastettu."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "Tilisi ei ole aktiivinen"
 
@@ -21237,6 +21538,10 @@ msgstr "Osallistujasi vietiin onnistuneesti."
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Osallistujasi näkyvät täällä, kun he ovat ilmoittautuneet tapahtumaasi. Voit myös lisätä osallistujia manuaalisesti."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "Selaimesi esti kopioinnin. Valitse avain ja kopioi se itse."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Tilauksesi näkyvät täällä, kun niitä alkaa saapua."
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Organisaatiosi edellyttää kaksivaiheista tunnistautumista. Ota se käyttöön nyt jatkaaksesi. Siihen menee noin minuutti."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "Organisaatiosi vaatii kertakirjautumisen"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "Organisaatiosi edellyttää kertakirjautumista, joten et tarvitse salasanaa."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "Organisaatiosi käyttää kertakirjautumista"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "Järjestäjälläsi ei ole vielä kuvausta."
 msgid "Your organizer profile isn't published."
 msgstr "Järjestäjäprofiiliasi ei ole julkaistu."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Salasanasi"
 

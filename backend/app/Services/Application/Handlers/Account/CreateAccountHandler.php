@@ -20,6 +20,7 @@ use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountConfigurati
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
 use HiEvents\Services\Domain\Account\AccountUserAssociationService;
 use HiEvents\Services\Domain\Account\AttributionSourceClassifier;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\User\EmailConfirmationService;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;
@@ -42,6 +43,7 @@ class CreateAccountHandler
         private readonly AccountConfigurationRepositoryInterface $accountConfigurationRepository,
         private readonly AccountAttributionRepositoryInterface $accountAttributionRepository,
         private readonly AttributionSourceClassifier $attributionSourceClassifier,
+        private readonly SsoEnforcementService $ssoEnforcementService,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -53,6 +55,8 @@ class CreateAccountHandler
         if ($this->config->get('app.disable_registration')) {
             throw new AccountRegistrationDisabledException;
         }
+
+        $this->ssoEnforcementService->assertSignupAllowed($accountData->email);
 
         $requiresVerification = $this->config->get('app.saas_mode_enabled') && ! $accountData->email_verified;
         $passwordHash = $accountData->password !== null ? $this->hashManager->make($accountData->password) : null;

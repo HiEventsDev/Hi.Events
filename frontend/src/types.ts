@@ -294,6 +294,41 @@ export interface TrustedDevice {
     is_current_device: boolean;
 }
 
+export type ApiKeyAccess = 'READ_ONLY' | 'READ_WRITE';
+
+export interface ApiKey {
+    id: IdParam;
+    name: string;
+    token_hint: string;
+    access: ApiKeyAccess;
+    last_used_at: string | null;
+    expires_at: string | null;
+    created_at: string;
+    is_expired: boolean;
+    is_own: boolean;
+    owner: { id: IdParam; full_name: string; email: string } | null;
+}
+
+export interface CreatedApiKey extends ApiKey {
+    key: string;
+}
+
+export interface ApiKeysMeta {
+    expiry_options_in_days: number[];
+    max_active_keys: number;
+}
+
+export interface ApiKeysResponse {
+    data: ApiKey[];
+    meta: ApiKeysMeta;
+}
+
+export interface CreateApiKeyRequest extends IdentityConfirmation {
+    name: string;
+    access: ApiKeyAccess;
+    expires_in_days: number | null;
+}
+
 export interface TwoFactorStatus {
     enabled: boolean;
     confirmed_at: string | null;
@@ -301,6 +336,7 @@ export interface TwoFactorStatus {
     recovery_codes_total: number;
     trusted_devices: TrustedDevice[];
     required_by_accounts: string[];
+    required_by_sso_accounts: string[];
 }
 
 export interface TwoFactorSetup {
@@ -335,6 +371,7 @@ export interface User {
     impersonator_id?: IdParam;
     two_factor_enabled?: boolean;
     two_factor_setup_required?: boolean;
+    password_reset_allowed?: boolean;
     enforce_email_confirmation_during_registration?: boolean;
     pending_email?: string;
     last_login_at?: string;

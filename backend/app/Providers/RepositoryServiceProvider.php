@@ -70,6 +70,7 @@ use HiEvents\Repository\Eloquent\OrganizerVatSettingRepository;
 use HiEvents\Repository\Eloquent\OutgoingMessageRepository;
 use HiEvents\Repository\Eloquent\PasswordResetRepository;
 use HiEvents\Repository\Eloquent\PasswordResetTokenRepository;
+use HiEvents\Repository\Eloquent\PersonalAccessTokenRepository;
 use HiEvents\Repository\Eloquent\ProductCategoryRepository;
 use HiEvents\Repository\Eloquent\ProductOccurrenceVisibilityRepository;
 use HiEvents\Repository\Eloquent\ProductPriceOccurrenceOverrideRepository;
@@ -147,6 +148,7 @@ use HiEvents\Repository\Interfaces\OrganizerVatSettingRepositoryInterface;
 use HiEvents\Repository\Interfaces\OutgoingMessageRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetRepositoryInterface;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
+use HiEvents\Repository\Interfaces\PersonalAccessTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductCategoryRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductOccurrenceVisibilityRepositoryInterface;
 use HiEvents\Repository\Interfaces\ProductPriceOccurrenceOverrideRepositoryInterface;
@@ -204,6 +206,7 @@ class RepositoryServiceProvider extends ServiceProvider
         PromoCodeRepositoryInterface::class => PromoCodeRepository::class,
         MessageRepositoryInterface::class => MessageRepository::class,
         PasswordResetTokenRepositoryInterface::class => PasswordResetTokenRepository::class,
+        PersonalAccessTokenRepositoryInterface::class => PersonalAccessTokenRepository::class,
         PasswordResetRepositoryInterface::class => PasswordResetRepository::class,
         TaxAndFeeRepositoryInterface::class => TaxAndFeeRepository::class,
         ImageRepositoryInterface::class => ImageRepository::class,

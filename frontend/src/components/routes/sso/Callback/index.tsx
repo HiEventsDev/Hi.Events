@@ -271,6 +271,18 @@ const SsoCallback = () => {
         };
 
         switch (error.error_code) {
+            case 'SSO_REQUIRED':
+                return {
+                    primary: {
+                        label: t`Sign in with SSO`,
+                        testId: 'sso-required-continue',
+                        onClick: () => {
+                            clearSsoFlow(stateRef.current);
+                            navigate('/auth/login', {state: {ssoStep: true, email: error.context?.email}});
+                        },
+                    },
+                    secondary: backToSignIn,
+                };
             case 'SSO_LINK_REQUIRES_LOGIN':
             case 'SSO_EMAIL_TAKEN':
                 return passwordLoginEnabled ? {primary: signInWithPassword} : {primary: useAnotherAccount, secondary: backToSignIn};

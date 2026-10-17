@@ -83,7 +83,7 @@ class AccountSsoConnectionService
                 'last_tested_at' => null,
             ];
 
-            $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection));
+            $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection), $connection->getAccountId());
         }
 
         if ($secret !== null) {
@@ -121,7 +121,7 @@ class AccountSsoConnectionService
             'status' => AccountSsoConnectionStatus::INACTIVE->value,
         ]);
 
-        $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection));
+        $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection), $connection->getAccountId());
 
         $this->logger->info('SSO connection deactivated', [
             'account_id' => $connection->getAccountId(),
@@ -140,7 +140,7 @@ class AccountSsoConnectionService
             throw new AccountSsoConfigurationException(__('Stop requiring single sign-on before deleting the connection.'));
         }
 
-        $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection));
+        $this->sessionRevocationService->revokeAllForUsers($this->identityUserIds($connection), $connection->getAccountId());
         $this->userIdentityRepository->deleteWhere(['account_sso_connection_id' => $connection->getId()]);
         $this->connectionRepository->deleteById($connection->getId());
 

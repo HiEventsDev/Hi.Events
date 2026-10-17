@@ -12,6 +12,7 @@ use HiEvents\DomainObjects\Enums\TrackingPixelProvider;
 use HiEvents\Http\Request\BaseRequest;
 use HiEvents\Repository\Interfaces\OrganizerSettingsRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Validators\Rules\HomepageSectionRules;
 use HiEvents\Validators\Rules\RulesHelper;
 use Illuminate\Validation\Rule;
@@ -38,6 +39,18 @@ class PartialUpdateOrganizerSettingsRequest extends BaseRequest
                         $validator->errors()->add(
                             "tracking_pixels.{$index}.provider",
                             __('Google Tag Manager is not available on hosted plans for security reasons.')
+                        );
+
+                        continue;
+                    }
+
+                    if ($provider === TrackingPixelProvider::GOOGLE_TAG_MANAGER
+                        && app(AuthUserService::class)->isApiKeyRequest()
+                        && ! in_array($pixelId, $this->existingTagManagerIds(), true)
+                    ) {
+                        $validator->errors()->add(
+                            "tracking_pixels.{$index}.provider",
+                            __('Google Tag Manager containers can only be added from the dashboard, not with an API key.')
                         );
 
                         continue;

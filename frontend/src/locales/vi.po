@@ -80,6 +80,10 @@ msgstr "{0} chỗ tiếp cận"
 msgid "{0} Active Webhooks"
 msgstr "{0} Webhook đang hoạt động"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} Có sẵn"
@@ -149,7 +153,7 @@ msgstr "{0} thành viên ngoài các miền đã xác minh vẫn giữ cách đ�
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} giờ phải đăng nhập bằng {providerName}"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "Còn lại {0}/{1}"
 
@@ -186,11 +190,19 @@ msgstr "{0} đơn hàng đã hoàn tiền có sản phẩm này nhưng chưa b�
 msgid "{0} removed"
 msgstr "Đã xóa {0}"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0} yêu cầu đăng nhập một lần. Là chủ sở hữu, bạn đăng nhập bằng mật khẩu, nên xác thực hai yếu tố bảo vệ lần đăng nhập đó và không thể tắt."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0} yêu cầu đăng nhập một lần. Là chủ sở hữu, bạn đăng nhập bằng mật khẩu, nên xác thực hai yếu tố bảo vệ lần đăng nhập đó."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0} yêu cầu mọi người trong nhóm phải bật xác thực hai yếu tố."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} yêu cầu xác thực hai yếu tố nên không thể tắt."
 
@@ -255,7 +267,7 @@ msgstr "{0} chỗ đứng"
 msgid "{0} tickets"
 msgstr "{0} vé"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "Đã ngắt kết nối {0}."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} đã check-in"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "Hoàn tất {completedCount} trong số {totalCount} bước"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected} đã được kết nối. Giờ đây bạn có thể dùng nó để đăng nhập."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} khung giờ"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} ngày"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} nhà tổ chức"
 msgid "{organizerName}'s first event"
 msgstr "Sự kiện đầu tiên của {organizerName}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount}/{0} khóa đang hoạt động"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "Đã thiết lập {productCount} loại vé"
 msgid "{provider} video found"
 msgstr "Đã tìm thấy video {provider}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "{providerName} không chia sẻ email của bạn"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "{providerName} không phản hồi"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "Có 1 người tham dự đã đăng ký cho buổi này."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 ngày"
 
@@ -764,6 +782,10 @@ msgstr "1 chưa có ghế"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "1 tuần trước sự kiện"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 năm"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Chấp nhận thanh toán thẻ tín dụng với Stripe"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Quyền truy cập"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Dành cho người khuyết tật"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Tài Khoản"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Tài khoản ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "Tài khoản cho {email} do tổ chức của bạn quản lý. Hãy đăng nhập qua nhà cung cấp danh tính của tổ chức."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Tài khoản cho địa chỉ email này do tổ chức của bạn quản lý. Hãy đăng nhập qua nhà cung cấp danh tính của tổ chức thay vì tạo tài khoản mới."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Tất cả vé"
 msgid "All time"
 msgstr "Toàn bộ thời gian"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Đã xóa tất cả thiết bị tin cậy"
 
@@ -1875,7 +1906,7 @@ msgstr "Tất cả người dùng"
 msgid "All visible"
 msgstr "Tất cả đều hiển thị"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Hãy cho phép truy cập địa chỉ email của bạn khi đăng nhập, sau đó thử lại."
 
@@ -1930,7 +1961,7 @@ msgstr "Cho phép đăng nhập bằng {providerName}"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Sắp xong rồi! Chúng tôi đang chờ thanh toán của bạn được xử lý. Quá trình này chỉ mất vài giây."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Đã có tài khoản? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Số tiền đã trả ({0})"
 msgid "Amount tendered"
 msgstr "Số tiền nhận"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Đã có tài khoản sử dụng email này. Vui lòng đăng nhập."
 
@@ -2158,6 +2189,20 @@ msgstr "Bất kỳ ai có liên kết và mã PIN này đều có thể bán vé
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Bạn cần thêm gì nữa không?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "Khóa API"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "Không thể tạo khóa API khi bạn đang đóng vai người khác."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "Tài liệu tham khảo API"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Hỏi một lần cho mỗi sản phẩm"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Hỏi câu hỏi đơn hàng và người tham dự tại cửa. Mỗi vé có một bước riêng nên có thể làm chậm việc bán vé đáng kể. Nên tắt ở những cổng đông."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Hãy yêu cầu chủ sở hữu tài khoản mời bạn lại."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Hãy yêu cầu người đã mời bạn gửi lời mời mới."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Hãy yêu cầu quản trị viên mời bạn."
 
@@ -2825,7 +2870,7 @@ msgstr "Nhà tổ chức tuyệt vời Ltd."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Đã cập nhật quầy vé"
 msgid "Brazilian Portuguese"
 msgstr "Tiếng Bồ Đào Nha Brazil"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "Xem mọi endpoint trong tài liệu tham chiếu API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Xây dựng lịch"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "Bằng việc thêm pixel theo dõi, bạn thừa nhận rằng bạn và nền tảng này là đồng kiểm soát viên dữ liệu thu thập được. Bạn chịu trách nhiệm đảm bảo có cơ sở pháp lý cho việc xử lý này theo luật bảo mật hiện hành (GDPR, CCPA, v.v.)."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "Bằng việc tiếp tục, bạn đồng ý với <0>Điều khoản dịch vụ</0> và <1>Chính sách quyền riêng tư</1> của chúng tôi."
 
@@ -3392,6 +3441,7 @@ msgstr "Không dùng được ứng dụng xác thực hoặc mã khôi phục?"
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "Đổi email"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Thay đổi mật khẩu"
 
@@ -3775,7 +3825,7 @@ msgstr "Kiểm tra email của bạn"
 msgid "Check your event page"
 msgstr "Kiểm tra trang sự kiện"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Kiểm tra hộp thư của bạn! Nếu có vé liên kết với email này, bạn sẽ nhận được liên kết để xem."
@@ -4053,7 +4103,7 @@ msgstr "Chọn tệp khác"
 msgid "Choose another reader"
 msgstr "Chọn máy đọc khác"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Chọn cách đăng nhập khác."
 
@@ -4236,6 +4286,10 @@ msgstr "Đóng"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Đóng thanh bên"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Đóng mà không sao chép"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "Xác nhận thay đổi email"
 msgid "Confirm it's you"
 msgstr "Xác nhận đó là bạn"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Xác nhận đó là bạn, sau đó đăng nhập bằng {0} để kết nối."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Xác nhận mật khẩu mới"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Xác nhận mật khẩu"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Xác nhận mật khẩu"
@@ -4543,6 +4597,10 @@ msgstr "Xác nhận spam"
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
 msgstr "Xác nhận email của bạn"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
+msgstr "Xác nhận địa chỉ email của bạn"
 
 #: src/components/layouts/Event/index.tsx:328
 msgid "Confirm your email to access all features."
@@ -4568,11 +4626,11 @@ msgstr "Đang xác nhận địa chỉ email..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Chúc mừng! Sự kiện của bạn hiện đã hiển thị công khai."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Kết nối"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "Kết nối {0}"
 
@@ -4583,6 +4641,10 @@ msgstr "Kết nối tài khoản Stripe trong mục Thanh toán trước khi th�
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Kết nối ngân hàng"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Kết nối các công cụ khác và mã của riêng bạn với tài khoản này. Khóa có thể làm mọi việc bạn làm được, vì vậy hãy bảo vệ nó như mật khẩu."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "Nội dung là bắt buộc"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Tiếp tục"
@@ -4795,6 +4857,8 @@ msgstr "Cài đặt cookie"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "Sao chép hướng dẫn từng bước để dán vào ChatGPT, Claude,
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Sao chép"
@@ -4871,6 +4936,10 @@ msgstr "Sao chép mã"
 msgid "Copy Code"
 msgstr "Sao chép mã"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Sao chép lệnh"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Sao chép liên kết khách hàng"
@@ -4887,6 +4956,10 @@ msgstr "Sao chép Email"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Sao chép cho trợ lý AI"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Sao chép khóa"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Sao chép vào bộ nhớ tạm"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "Sao chép URL"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "Sao chép khóa API của bạn"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "Không thể cập nhật {name}"
 msgid "Could not upload {fileName}"
 msgstr "Không thể tải lên {fileName}"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "Không thể tải tài liệu tham chiếu API."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "Không thể tải khóa API của bạn"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Không thể tải cài đặt bảo mật của bạn"
@@ -5094,6 +5179,10 @@ msgstr "Tạo \"{query}\""
 msgid "Create {0} Template"
 msgstr "Tạo mẫu {0}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Tạo khóa để kết nối các công cụ như Zapier, CRM của bạn hoặc script của riêng bạn với sự kiện, đơn hàng và người tham dự."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Tạo danh sách cho ngày này"
@@ -5147,6 +5236,10 @@ msgstr "Tạo đối tác"
 msgid "Create an announcement to show a message to your users."
 msgstr "Tạo thông báo để hiển thị tin nhắn cho người dùng của bạn."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Tạo và thay đổi sự kiện, đơn hàng, người tham dự và nhiều hơn nữa."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Tạo và cấu hình vé và hàng hóa để bán."
@@ -5160,6 +5253,11 @@ msgstr "Tạo và bắt đầu thiết kế"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Tạo thông báo"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "Tạo khóa API"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Tạo sự kiện"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Tạo phí"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Tạo khóa"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Tạo sự kiện của riêng bạn"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Đã tạo"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Tuyên bố miễn trừ, thông tin liên hệ hoặc lời cảm ơn, trên một dòng"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Ngắt kết nối"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "Ngắt kết nối {0}"
 
@@ -6214,7 +6318,7 @@ msgstr "Đã xác minh miền"
 msgid "Don't forget!"
 msgstr "Đừng quên!"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Chưa có tài khoản? <0>Đăng ký</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Quyên góp"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "VD: Bảo trì định kỳ thứ Bảy này từ 2-4 giờ sáng UTC"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "vd: sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "VD: Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Danh Sách Đăng Ký Đủ Điều Kiện"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "Thông điệp chân trang email"
 msgid "Email is required"
 msgstr "Email là bắt buộc"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "Gửi cho tôi liên kết đặt mật khẩu qua email"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Nhập mã đối tác duy nhất"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Nhập email của bạn"
@@ -7484,9 +7593,13 @@ msgstr "Mỗi sự kiện đều có danh sách check-in"
 msgid "Every organizer and event, including new ones."
 msgstr "Mọi nhà tổ chức và sự kiện, kể cả mục mới."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Mỗi thiết bị tin cậy sẽ cần nhập mã ở lần đăng nhập tiếp theo. Tiếp tục?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Mọi người ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Được miễn"
 msgid "Exempt from SSO"
 msgstr "Miễn SSO"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Thời hạn"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Ngày hết hạn"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Đã hết hạn"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "Đã hết hạn {0}"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Hết hạn"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "Hết hạn {0}"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Tên"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Dành cho sự kiện diễn ra ở nhiều địa điểm"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Để bảo mật, hãy đăng nhập lại để xác nhận đó là bạn."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Quên mật khẩu?"
 
@@ -8488,7 +8617,7 @@ msgstr "Chỉ những ngày trong tương lai"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Các ngày trong tương lai sẽ được sao chép với sức chứa đặt về 0"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Chung"
@@ -8518,7 +8647,7 @@ msgstr "Tạo"
 msgid "Generate code"
 msgstr "Tạo mã"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Tạo mã mới"
@@ -8561,7 +8690,7 @@ msgstr "Nhận tiền"
 msgid "Get paid with Stripe"
 msgstr "Nhận tiền qua Stripe"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Bắt đầu"
 
@@ -8599,11 +8728,16 @@ msgstr "Xếp giờ cho mọi người"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Đặt chiều cao đủ cho phần nhúng để chứa widget, hoặc đặt \"Mở thanh toán trong\" thành \"Tab mới\"."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Đặt tên cho khóa này"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Đặt tên cho sự kiện của bạn"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Quay lại"
 
@@ -9084,7 +9218,7 @@ msgstr "Cách áp dụng VAT cho phí nền tảng mà chúng tôi thu của b�
 msgid "How would you like to start?"
 msgstr "Bạn muốn bắt đầu như thế nào?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "Cách bạn đăng nhập và xác thực hai yếu tố. Chúng bảo vệ mọi tài khoản bạn tham gia."
 
@@ -9131,6 +9265,10 @@ msgstr "Tôi đã lưu mã khôi phục ở nơi an toàn"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Tôi đã thêm xong, tiếp tục"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Nếu khóa bị lộ, hãy thu hồi ngay và tạo khóa mới."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "URL nhà phát hành"
 msgid "It happens on more than one date"
 msgstr "Diễn ra vào nhiều ngày"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Khóa có vai trò và quyền truy cập sự kiện giống bạn. Khóa chỉ đọc có thể xem và xuất dữ liệu nhưng không thể thay đổi gì."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Có thể sự kiện đã bị gỡ đăng hoặc xóa. Vui lòng kiểm tra liên kết và thử lại."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Tài khoản này đã được kết nối với người dùng khác. Hãy dùng tài khoản {providerName} khác."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "Công việc đã được xếp hàng để thử lại"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "John"
 
@@ -9579,7 +9721,7 @@ msgstr "Tháng 7"
 msgid "June"
 msgstr "Tháng 6"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Chỉ đang tìm vé của bạn?"
 
@@ -9620,9 +9762,33 @@ msgstr "Giữ trọn lợi nhuận."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Không hiển thị họ trên đội hình và lịch trình công khai cho đến khi bạn sẵn sàng công bố"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Khóa"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "Khóa kết thúc bằng {0}"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Đã xóa khóa"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Đã thu hồi khóa"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin và các dịch vụ khác"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "Khóa không thể đăng nhập hoặc quản lý nhóm, khoản chi trả, hồ sơ hay cài đặt bảo mật của bạn."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "Khóa không bao giờ hết hạn sẽ còn hiệu lực cho đến khi bạn thu hồi. Chỉ dùng tùy chọn này cho máy chủ do bạn kiểm soát."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Họ"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Trình kích hoạt cuối cùng"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Dùng lần trước"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Được sử dụng lần cuối"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Dùng lần cuối {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Ngày đã tải"
 msgid "Loading preview..."
 msgstr "Đang tải xem trước..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "Đang tải tài liệu tham chiếu API…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Tra cứu vé của tôi"
 msgid "Lost access?"
 msgstr "Mất quyền truy cập?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Mất điện thoại hoặc đổi ứng dụng? Hãy tắt rồi bật lại để kết nối ứng dụng xác thực mới."
 
@@ -10719,6 +10891,10 @@ msgstr "Mô tả sự kiện tuyệt vời của tôi ..."
 msgid "My amazing event title..."
 msgstr "Tiêu đề sự kiện tuyệt vời của tôi ..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Khóa của tôi"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Hồ sơ của tôi"
@@ -10746,6 +10922,7 @@ msgstr "Vé Của Tôi"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Doanh thu ròng"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Không bao giờ"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Chưa từng sử dụng"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Không - Tôi là cá nhân hoặc doanh nghiệp không đăng ký VAT"
 msgid "No access yet"
 msgstr "Chưa có quyền truy cập"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Không tìm thấy tài khoản"
 
@@ -11194,6 +11376,10 @@ msgstr "Không có sự kiện nào hiển thị"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Chưa có sự kiện nào"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Không hết hạn"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Không, giữ tôi ở đây"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Chưa có ai được thêm vào danh sách biểu diễn của sự kiện này."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Chưa có ai tạo khóa API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Chưa có ai trong đội hình, hoặc tất cả đều bị ẩn."
@@ -11589,6 +11779,10 @@ msgstr "Thông thường {0}"
 msgid "Not available"
 msgstr "Không có sẵn"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Không khả dụng: bạn chỉ có quyền xem."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Chưa check-in"
 msgid "Not Checked In"
 msgstr "Chưa Đăng Ký"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Chưa kết nối"
 
@@ -11819,7 +12013,7 @@ msgstr "của mỗi tháng"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Tắt"
@@ -11908,7 +12102,7 @@ msgstr "vào"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Bật"
@@ -12196,7 +12390,7 @@ msgstr "Mở cài đặt"
 msgid "Open sidebar"
 msgstr "Mở thanh bên"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Mở email lời mời chúng tôi đã gửi để hoàn tất việc tham gia nhóm."
 
@@ -12594,7 +12788,7 @@ msgstr "Trạng thái nhà tổ chức đã được cập nhật"
 msgid "Organizer/default template will be used"
 msgstr "Mẫu của tổ chức/mặc định sẽ được sử dụng"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Chuyển cho người mua"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "Quyền"
 msgid "Person"
 msgstr "Người"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Cá nhân"
 
@@ -13256,7 +13450,7 @@ msgstr "Vui lòng thêm ít nhất một tùy chọn"
 msgid "Please check the provided information is correct"
 msgstr "Vui lòng kiểm tra thông tin được cung cấp là chính xác"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Vui lòng kiểm tra email và mật khẩu của bạn và thử lại"
 
@@ -13669,7 +13863,7 @@ msgstr "Sản phẩm đã bán"
 msgid "Products sorted successfully"
 msgstr "Sản phẩm được sắp xếp thành công"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Chỉ khuyến mãi"
 msgid "Promotional emails may result in account suspension"
 msgstr "Email quảng cáo có thể dẫn đến đình chỉ tài khoản"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Bảo vệ tài khoản bằng bước xác minh thứ hai khi đăng nhập. Ngay cả khi ai đó biết mật khẩu của bạn, họ cũng không thể vào nếu thiếu mã từ điện thoại của bạn."
 
@@ -13942,10 +14136,20 @@ msgstr "Kích hoạt lại"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Kích hoạt lại ngày này? Ngày này sẽ được mở bán lại."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Đọc và ghi"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Xem thêm"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Chỉ đọc"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Lý do"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "Ghi nhận hoàn tiền"
 msgid "Recovery code"
 msgstr "Mã khôi phục"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Mã khôi phục"
 
@@ -14203,7 +14407,7 @@ msgstr "Đã hoàn tiền: {0}"
 msgid "Refunds"
 msgstr "Hoàn tiền"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "Đăng ký"
 
@@ -14252,12 +14456,18 @@ msgstr "Loại bỏ"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Hủy bỏ"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "Xóa \"{0}\"? Khóa này đã hết hạn."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Xóa {0}"
@@ -14282,7 +14492,7 @@ msgstr "Gỡ {profileName} khỏi đội hình của sự kiện này? Hồ sơ 
 msgid "Remove access"
 msgstr "Gỡ quyền truy cập"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Xóa tất cả"
 
@@ -14313,6 +14523,10 @@ msgstr "Xóa khỏi sơ đồ"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Gỡ khỏi đội hình này"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Xóa khóa"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "Bắt buộc xác thực hai yếu tố"
 msgid "Required"
 msgstr "Bắt buộc"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "Bắt buộc bởi tổ chức của bạn"
 
@@ -14735,9 +14949,29 @@ msgstr "Xem xét các sự kiện bị kiểm tra tự động gắn cờ là sp
 msgid "Review security settings"
 msgstr "Xem lại cài đặt bảo mật"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "Thu hồi"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "Thu hồi \"{0}\"? Mọi thứ đang dùng khóa này sẽ ngừng hoạt động ngay lập tức và {ownerName} sẽ nhận được email thông báo."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "Thu hồi \"{0}\"? Mọi thứ đang dùng khóa này sẽ ngừng hoạt động ngay lập tức. Không thể hoàn tác thao tác này."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "Thu hồi {0}"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Thu hồi lời mời"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Thu hồi khóa"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Thanh toán an toàn"
 msgid "Secure your account"
 msgstr "Bảo mật tài khoản của bạn"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Bảo mật"
 
@@ -15817,7 +16051,7 @@ msgstr "Bán 1 sản phẩm"
 msgid "Sells every product"
 msgstr "Bán mọi sản phẩm"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "Gửi email cho người tham dự, chủ vé hoặc chủ đơn hàng. 
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Gửi lời mời"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Gửi khóa trong header Authorization của mọi yêu cầu."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Đã cập nhật cài đặt"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Cài đặt"
@@ -16208,6 +16446,10 @@ msgstr "Hiển thị ít nền tảng hơn"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Hiển thị chữ viết tắt thay thế"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Hiển thị khóa"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Hiển thị hồ sơ người tổ chức kèm nút liên hệ."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Hiển thị liên kết mạng xã hội và nút liên hệ. Khi đặt trên tất cả các mục khác, nó xuất hiện trong thẻ hồ sơ của bạn."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Đăng nhập"
 
@@ -16383,15 +16625,19 @@ msgstr "Đăng nhập lại để bắt đầu thiết lập xác thực hai y�
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Đăng nhập một lần để kiểm tra kết nối. Thao tác này hiển thị thông tin nhà cung cấp danh tính của bạn chia sẻ và sẽ không đăng nhập bạn vào đây."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Đăng nhập qua nhà cung cấp danh tính của tổ chức thay vì dùng mật khẩu."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Hãy đăng nhập qua nhà cung cấp danh tính của tổ chức bạn."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "Đăng nhập vào {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Đăng nhập để chấp nhận lời mời"
 
@@ -16403,7 +16649,7 @@ msgstr "Đăng nhập để tham gia"
 msgid "Sign in with a PIN"
 msgstr "Đăng nhập bằng mã PIN"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Hãy đăng nhập lại bằng tài khoản bạn đã kết nối."
 
@@ -16418,7 +16664,9 @@ msgstr "Đăng nhập bằng mật khẩu"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "Đăng nhập bằng SSO"
 
@@ -16460,11 +16708,11 @@ msgstr "Đăng ký bằng {0}"
 msgid "Sign up with Google"
 msgstr "Đăng ký bằng Google"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "Liên kết đăng nhập chỉ dùng được một lần và hết hạn sau 10 phút. Hãy bắt đầu lại từ trang đăng nhập."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Liên kết đăng nhập chỉ dùng được một lần và hết hạn sau 10 phút. Hãy bắt đầu lại để tiếp tục."
 
@@ -16472,7 +16720,7 @@ msgstr "Liên kết đăng nhập chỉ dùng được một lần và hết h�
 msgid "Sign-in settings"
 msgstr "Cài đặt đăng nhập"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Đăng nhập đã bị hủy. Hãy chọn cách đăng nhập khác hoặc thử lại."
 
@@ -16496,15 +16744,15 @@ msgstr "Đã đăng nhập, nhưng không có email nào được chia sẻ"
 msgid "Signed up"
 msgstr "Ngày đăng ký"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Đang đăng nhập"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "Đang đăng nhập bằng {0}…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Đang đăng nhập…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Tiếng Slovak"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Smith"
 
@@ -16689,6 +16937,10 @@ msgstr "Một số văn bản có thể khó đọc"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "Ai đó vừa chọn {0}. Hãy chọn ghế khác, hoặc để chúng tôi tìm ghế tương tự cho bạn."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Tên giúp bạn biết khóa được dùng ở đâu, như \"Zapier\" hoặc \"Đồng bộ website\"."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Đã xảy ra lỗi. Vui lòng thử lại sau."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, trang web và nhiều
 msgid "Square, at least 200 × 200px"
 msgstr "Hình vuông, tối thiểu 200 × 200px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Bắt đầu từ mẫu như nhà hát, tiệc bàn tròn hoặc hộp �
 msgid "Start from scratch"
 msgstr "Bắt đầu từ đầu"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Bắt đầu lại"
 
@@ -17112,7 +17366,7 @@ msgstr "Còn thiếu"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Vẫn đang chờ? Kiểm tra màn hình máy đọc. Nếu không hiển thị gì, hãy hủy và thử lại."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Vẫn đang xử lý. Việc này có thể mất vài giây."
 
@@ -17144,6 +17398,14 @@ msgstr "Ngừng bắt buộc đăng nhập một lần? Thành viên có thể �
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Ngừng tin cậy thiết bị này"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "Ngừng hoạt động vào {0}. Chúng tôi sẽ gửi email cho bạn trước một tuần."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Hãy lưu khóa ở nơi an toàn, như trình quản lý mật khẩu hoặc phần cài đặt bí mật của tích hợp. Bất kỳ ai có khóa này đều có thể dùng API với tư cách là bạn."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Thuế và phí"
 msgid "Taxes & fees applied"
 msgstr "Đã áp dụng thuế & phí"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Thuế và phí"
@@ -17590,7 +17852,7 @@ msgstr "Thuế và phí"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "Toàn bộ số tiền đơn hàng sẽ được hoàn lại phương th
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "Nhập thất bại. Chưa có gì được thay đổi. Vui lòng thử lại."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "Khóa có thể làm mọi việc bạn làm được trong {accountName}, vì vậy hãy giữ bí mật."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Có một lỗi khi gửi tin nhắn của bạn"
 msgid "These are skipped"
 msgstr "Những mục này sẽ bị bỏ qua"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Các trình duyệt này bỏ qua bước nhập mã trong 30 ngày sau khi được tin cậy."
 
@@ -18123,7 +18389,7 @@ msgstr "Họ chưa chấp nhận lời mời. Thay đổi sẽ áp dụng khi h�
 msgid "Third"
 msgstr "Lần 3"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Tài khoản {providerName} này đã được sử dụng"
 
@@ -18327,11 +18593,11 @@ msgstr "Trường này là bắt buộc"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Thông tin này sẽ được hiển thị trên trang thanh toán, trang tóm tắt đơn hàng và email xác nhận đơn hàng."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Lời mời này dành cho {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Lời mời này không còn hiệu lực"
 
@@ -18355,7 +18621,7 @@ msgstr "Đây là một sự kiện định kỳ"
 msgid "This is an online event"
 msgstr "Đây là một sự kiện trực tuyến"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "Đây là cách bạn đăng nhập. Hãy thêm mật khẩu hoặc tùy chọn khác trước khi xóa."
 
@@ -18372,7 +18638,11 @@ msgstr "Đây là tên nhà tổ chức sẽ hiển thị cho người dùng c�
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "Đây là lần duy nhất khóa bí mật ký được hiển thị. Vui lòng sao chép ngay và lưu trữ an toàn."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "Đây là lần duy nhất bạn thấy khóa này"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "Đây thường chỉ là sự cố tạm thời. Hãy thử lại sau giây lát."
 
@@ -18516,12 +18786,12 @@ msgstr "Ghế này đã được giữ lại"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Sơ đồ ghế này đã được thay đổi ở nơi khác. Tải phiên bản mới nhất? Các thay đổi chưa lưu của bạn sẽ bị mất."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Liên kết đăng nhập này đã hết hạn"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Tùy chọn đăng nhập này không khả dụng"
 
@@ -18587,7 +18857,7 @@ msgstr "T5"
 msgid "Thursday"
 msgstr "Thứ Năm"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Chọn \"Tin cậy thiết bị này\" khi đăng nhập để bỏ qua bước nhập mã trên trình duyệt đó trong 30 ngày."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Ngày mai"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "Theo dõi & Phân tích"
 msgid "Trust this device for 30 days"
 msgstr "Tin cậy thiết bị này trong 30 ngày"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Thiết bị tin cậy"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Hãy điều chỉnh bộ lọc để thấy thêm ngày."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Hãy điều chỉnh bộ lọc để thấy thêm ngày."
 msgid "Try again"
 msgstr "Thử lại"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Thử email khác"
@@ -19070,6 +19342,10 @@ msgstr "Thử email khác"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Dùng thử Hi.Events miễn phí"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Dùng thử"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Tiếng Thổ Nhĩ Kỳ"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Tắt"
 
@@ -19099,7 +19375,7 @@ msgstr "Tắt để widget lấp đầy chiều cao của vùng chứa."
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "Tắt xác thực hai yếu tố"
 
@@ -19107,7 +19383,7 @@ msgstr "Tắt xác thực hai yếu tố"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Tắt xác thực hai yếu tố cho {0}? Chỉ thực hiện sau khi đã xác nhận danh tính của họ. Họ sẽ nhận được email và có thể đăng nhập chỉ bằng mật khẩu."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Bật"
 
@@ -19155,7 +19431,7 @@ msgstr "Hai yếu tố"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "Xác thực hai yếu tố"
 
@@ -19691,11 +19967,11 @@ msgstr "Dùng tài khoản khác"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Hãy dùng ảnh JPG, PNG hoặc WebP dưới 5MB."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Hãy dùng một mật khẩu dài mà bạn không dùng ở bất kỳ nơi nào khác."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Dùng mật khẩu thay thế"
 
@@ -19806,6 +20082,10 @@ msgstr "Dùng màu và phông chữ từ thiết kế trang chủ của bạn. N
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Dùng chúng cho sự kiện thật? Hãy lấy giấy phép Enterprise và đặt khóa của nó vào <0>APP_LICENCE_KEY</0>."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "Sử dụng khóa của bạn"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Xem người tham dự"
 msgid "View Attendee Details"
 msgstr "Xem chi tiết người tham dự"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Xem dữ liệu và xuất dữ liệu. Không thể thay đổi gì."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Xem chi tiết"
@@ -20269,7 +20553,7 @@ msgstr "Cảnh báo: Đây là cấu hình mặc định của hệ thống. Tha
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Chúng tôi không thể xử lý thanh toán của bạn. Vui lòng thử lại hoặc liên hệ với ban tổ chức."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Chúng tôi không thể xác nhận đó là bạn"
 
@@ -20362,7 +20646,7 @@ msgstr "Chúng tôi không thể đọc bộ nhớ tạm của bạn. Hãy nhấ
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Chúng tôi không thể sắp xếp lại các danh mục. Vui lòng thử lại."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Chúng tôi không thể đăng nhập cho bạn"
 
@@ -20387,7 +20671,7 @@ msgstr "Chúng tôi đề xuất kích thước 2160px bằng 1080px và kích t
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Chúng tôi khuyến nghị kích thước 400px x 400px và dung lượng tối đa 5MB"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "Chúng tôi đã gửi liên kết đến {0}. Hãy mở liên kết để đặt mật khẩu."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Chào mừng bạn! Hãy đăng nhập để tiếp tục."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Chào mừng trở lại"
 
@@ -20847,7 +21131,7 @@ msgstr "Làm việc"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Làm việc ..."
 
@@ -20915,11 +21199,12 @@ msgstr "Có, loại bỏ chúng"
 msgid "Yoga class"
 msgstr "Lớp yoga"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Bạn"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Bạn đã có tài khoản"
 
@@ -20931,7 +21216,7 @@ msgstr "Bạn đã có tài khoản với {email}"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Bạn đã có tài khoản. Hãy đăng nhập và chúng tôi sẽ đưa bạn quay lại đây để tham gia nhóm."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Bạn đã có tài khoản. Hãy đăng nhập và chúng tôi sẽ đưa bạn quay lại lời mời."
 
@@ -21021,6 +21306,10 @@ msgstr "Bạn không thể xóa cấp giá này vì đã có sản phẩm đư�
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Bạn đã xác nhận danh tính. Hãy tiếp tục trong vòng vài phút."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Bạn chưa có khóa API nào"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Bạn không có thay đổi email đang chờ xử lý."
@@ -21045,6 +21334,10 @@ msgstr "Bạn có thuế và phí được thêm vào một sản phẩm miễn 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Bạn có thay đổi chưa lưu. Bạn có chắc muốn bỏ chúng không?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Bạn chưa sao chép khóa này. Sau khi đóng cửa sổ này, khóa sẽ không thể hiển thị lại."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "Bạn phải có ít nhất một cấp giá"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Bạn phải xác minh địa chỉ email trước khi cập nhật trạng thái nhà tổ chức."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "Bạn cần địa chỉ email đã xác nhận để tạo khóa API. Hãy kiểm tra hộp thư đến hoặc gửi lại email xác nhận từ <0>hồ sơ</0> của bạn."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Bạn cần tạo ít nhất một ngày trước khi thêm người tham dự vào sự kiện định kỳ này."
@@ -21090,11 +21387,11 @@ msgstr "Bạn cần xác minh email tài khoản trước khi có thể gửi ti
 msgid "You receive"
 msgstr "Bạn nhận được"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Bạn đang đăng nhập mà không cần mật khẩu. Hãy thêm mật khẩu làm cách đăng nhập dự phòng."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "Bạn đã đăng nhập bằng {0}. Hãy dùng tài khoản đã nhận lời mời."
 
@@ -21110,7 +21407,7 @@ msgstr "Bạn đã dùng một mã khôi phục. Bạn còn 1 mã khôi phục."
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Bạn sẽ phải đánh dấu một đơn hàng theo cách thủ công. Được thực hiện trong trang quản lý đơn hàng."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Bạn sẽ không thể đăng nhập bằng {0} nữa. Các thiết bị khác đang đăng nhập vào tài khoản của bạn sẽ bị đăng xuất."
 
@@ -21158,7 +21455,7 @@ msgstr "Bạn đang tham gia danh sách chờ cho {occurrenceDate}."
 msgid "You're on the waitlist!"
 msgstr "Bạn đã được thêm vào danh sách chờ!"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Bạn sắp hết mã. Hãy tạo bộ mới để không bị khóa tài khoản."
 
@@ -21174,7 +21471,7 @@ msgstr "Bạn đang đăng nhập bằng {0}"
 msgid "You're unsubscribed"
 msgstr "Bạn đã hủy đăng ký"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Bạn đã được mời"
 
@@ -21186,6 +21483,10 @@ msgstr "Bạn đã được mời một suất!"
 msgid "You've changed the session time"
 msgstr "Bạn đã thay đổi giờ của buổi"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "Bạn đã đạt giới hạn {0} khóa đang hoạt động. Hãy thu hồi một khóa để tạo khóa khác."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Màu nhấn của bạn chưa đủ nổi bật trong chế độ này."
@@ -21194,7 +21495,7 @@ msgstr "Màu nhấn của bạn chưa đủ nổi bật trong chế độ này."
 msgid "your account"
 msgstr "tài khoản của bạn"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Tài khoản của bạn yêu cầu mã từ ứng dụng xác thực khi đăng nhập. Đã bật {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Tài khoản của bạn có giới hạn nhắn tin. Để tăng giới
 msgid "Your account is now scheduled for deletion."
 msgstr "Tài khoản của bạn hiện đã được lên lịch xóa."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "Tài khoản của bạn chưa được kích hoạt"
 
@@ -21237,6 +21538,10 @@ msgstr "Những người tham dự của bạn đã được xuất thành công
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Người tham dự của bạn sẽ xuất hiện ở đây sau khi họ đăng ký tham gia sự kiện. Bạn cũng có thể thêm người tham dự theo cách thủ công."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "Trình duyệt của bạn đã chặn sao chép. Hãy chọn khóa và tự sao chép."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Đơn hàng của bạn sẽ xuất hiện ở đây sau khi chúng bắ
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Tổ chức của bạn yêu cầu xác thực hai yếu tố. Hãy thiết lập ngay để tiếp tục. Chỉ mất khoảng một phút."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "Tổ chức của bạn yêu cầu đăng nhập một lần"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "Tổ chức của bạn yêu cầu đăng nhập một lần, nên bạn không cần mật khẩu."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "Tổ chức của bạn sử dụng đăng nhập một lần"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "Nhà tổ chức của bạn chưa có mô tả."
 msgid "Your organizer profile isn't published."
 msgstr "Hồ sơ người tổ chức của bạn chưa được xuất bản."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Mật khẩu của bạn"
 

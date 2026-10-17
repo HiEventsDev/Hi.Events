@@ -155,6 +155,10 @@ class AccountHardDeletionService
             ->where('account_id', $context->accountId)
             ->delete();
 
+        $manifest['api_keys'] = $connection->table('personal_access_tokens')
+            ->where('account_id', $context->accountId)
+            ->delete();
+
         $manifest['roles'] = $connection->table('roles')
             ->where('account_id', $context->accountId)
             ->delete();

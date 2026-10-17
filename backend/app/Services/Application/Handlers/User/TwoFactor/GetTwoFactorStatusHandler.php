@@ -43,10 +43,8 @@ class GetTwoFactorStatusHandler
                     ],
                 )
                 : collect(),
-            requiredByAccounts: $this->twoFactorRequirementService->namesOfAccountsRequiringTwoFactor($userId)
-                ->merge($this->ssoEnforcementService->namesOfOwnedEnforcingAccounts($userId))
-                ->unique()
-                ->values(),
+            requiredByAccounts: $this->twoFactorRequirementService->namesOfAccountsRequiringTwoFactor($userId),
+            requiredBySsoAccounts: $this->ssoEnforcementService->namesOfOwnedEnforcingAccounts($userId),
         );
     }
 }

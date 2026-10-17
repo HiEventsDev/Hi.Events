@@ -22,7 +22,8 @@ class OpenApiGenerationTest extends TestCase
             trim(file_get_contents(base_path('VERSION'))),
             $document['info']['version'],
         );
-        $this->assertStringContainsString('unversioned', $document['info']['description']);
+        $this->assertStringContainsString('backward compatible', $document['info']['description']);
+        $this->assertStringContainsString('API_KEY_NOT_ALLOWED', $document['info']['description']);
 
         $this->assertArrayHasKey('/auth/login', $document['paths']);
         $this->assertArrayHasKey('/events', $document['paths']);
@@ -48,9 +49,16 @@ class OpenApiGenerationTest extends TestCase
 
         $this->assertSame([], $document['paths']['/auth/login']['post']['security']);
         $this->assertSame(
-            ['type' => 'http', 'scheme' => 'bearer', 'bearerFormat' => 'JWT'],
+            ['type' => 'http', 'description' => 'An API key (`hie_…`) or a session token from `POST /auth/login`.', 'scheme' => 'bearer'],
             $document['components']['securitySchemes']['http'],
         );
+
+        $this->assertArrayHasKey('/api-keys', $document['paths']);
+        $this->assertArrayNotHasKey('/public/instance', $document['paths']);
+        $this->assertArrayNotHasKey('/public/compliance', $document['paths']);
+        $this->assertStringContainsString('Not available to API keys', $document['paths']['/api-keys']['post']['description']);
+        $this->assertStringContainsString('Not available to API keys', $document['paths']['/users']['get']['description']);
+        $this->assertStringNotContainsString('Not available to API keys', $document['paths']['/events']['get']['description'] ?? '');
 
         $eventsListSchema = $document['paths']['/events']['get']['responses']['200']['content']['application/json']['schema'];
         $this->assertSame(

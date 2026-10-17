@@ -80,6 +80,10 @@ msgstr "{0} accessibles"
 msgid "{0} Active Webhooks"
 msgstr "{0} webhooks actifs"
 
+#: src/components/routes/settings/ApiReference/index.tsx:38
+msgid "{0} API"
+msgstr "{0} API"
+
 #: src/components/routes/product-widget/SelectProducts/index.tsx:966
 msgid "{0} available"
 msgstr "{0} disponible"
@@ -149,7 +153,7 @@ msgstr "{0} membres en dehors de vos domaines vérifiés conservent leur connexi
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} doit désormais se connecter avec {providerName}"
 
-#: src/components/routes/settings/Security/index.tsx:141
+#: src/components/routes/settings/Security/index.tsx:144
 msgid "{0} of {1} remaining"
 msgstr "{0} sur {1} restants"
 
@@ -186,11 +190,19 @@ msgstr "{0} commande(s) remboursée(s) incluent ce produit mais n'ont pas été 
 msgid "{0} removed"
 msgstr "{0} supprimé"
 
-#: src/components/routes/settings/Security/index.tsx:123
+#: src/components/routes/settings/Security/index.tsx:199
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in and can't be turned off."
+msgstr "{0} exige l'authentification unique. En tant que propriétaire, vous vous connectez avec votre mot de passe : l'authentification à deux facteurs protège donc cette connexion et ne peut pas être désactivée."
+
+#: src/components/routes/settings/Security/index.tsx:126
+msgid "{0} requires single sign-on. As the owner you sign in with your password, so two-factor authentication protects that sign-in."
+msgstr "{0} exige l'authentification unique. En tant que propriétaire, vous vous connectez avec votre mot de passe : l'authentification à deux facteurs protège donc cette connexion."
+
+#: src/components/routes/settings/Security/index.tsx:125
 msgid "{0} requires two-factor authentication for everyone on the team."
 msgstr "{0} exige l'authentification à deux facteurs pour tous les membres de l'équipe."
 
-#: src/components/routes/settings/Security/index.tsx:194
+#: src/components/routes/settings/Security/index.tsx:197
 msgid "{0} requires two-factor authentication, so it can't be turned off."
 msgstr "{0} exige l'authentification à deux facteurs, elle ne peut donc pas être désactivée."
 
@@ -255,7 +267,7 @@ msgstr "{0} places debout"
 msgid "{0} tickets"
 msgstr "{0} billets"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:128
+#: src/components/routes/settings/Security/SignInMethods.tsx:131
 msgid "{0} was disconnected."
 msgstr "{0} a été déconnecté."
 
@@ -315,7 +327,7 @@ msgstr "{checkedIn} / {total} enregistrés"
 msgid "{completedCount} of {totalCount} steps complete"
 msgstr "{completedCount} étapes sur {totalCount} terminées"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:57
+#: src/components/routes/settings/Security/SignInMethods.tsx:58
 msgid "{connected} is connected. You can now use it to sign in."
 msgstr "{connected} est connecté. Vous pouvez désormais l'utiliser pour vous connecter."
 
@@ -329,6 +341,7 @@ msgid "{count} times"
 msgstr "{count} horaires"
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "{days} days"
 msgstr "{days} jours"
 
@@ -455,6 +468,10 @@ msgstr "{organizerCount} organisateurs"
 msgid "{organizerName}'s first event"
 msgstr "Premier événement de {organizerName}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:165
+msgid "{ownActiveCount} of {0} active keys"
+msgstr "{ownActiveCount} clés actives sur {0}"
+
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:156
 msgid "{people}, {slots}"
 msgstr "{people}, {slots}"
@@ -475,11 +492,11 @@ msgstr "{productCount} types de billets configurés"
 msgid "{provider} video found"
 msgstr "Vidéo {provider} trouvée"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:73
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:82
 msgid "{providerName} didn't share your email"
 msgstr "{providerName} n'a pas partagé votre adresse e-mail"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:79
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:88
 msgid "{providerName} isn't responding"
 msgstr "{providerName} ne répond pas"
 
@@ -672,6 +689,7 @@ msgid "1 attendee is registered for this session."
 msgstr "1 participant est inscrit à cette séance."
 
 #: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
 msgid "1 day"
 msgstr "1 jour"
 
@@ -764,6 +782,10 @@ msgstr "1 sans place"
 #: src/components/modals/SendMessageModal/index.tsx:122
 msgid "1 week before event"
 msgstr "1 semaine avant l'événement"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:43
+msgid "1 year"
+msgstr "1 an"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:158
 msgid "1. Get an authenticator app"
@@ -986,6 +1008,7 @@ msgstr "Accepter les paiements par carte bancaire avec Stripe"
 #: src/components/common/TeamAccessFields/index.tsx:199
 #: src/components/common/TeamAccessPanel/index.tsx:137
 #: src/components/forms/ProductForm/index.tsx:600
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:234
 #: src/components/routes/settings/Team/index.tsx:215
 msgid "Access"
 msgstr "Accès"
@@ -1011,7 +1034,7 @@ msgid "Accessible"
 msgstr "Accessible"
 
 #: src/components/common/AdminOrdersTable/index.tsx:70
-#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/layouts/SettingsLayout/index.tsx:58
 #: src/components/routes/admin/Dashboard/index.tsx:330
 #: src/components/routes/admin/Dashboard/index.tsx:394
 #: src/components/routes/admin/DeletionRequests/index.tsx:117
@@ -1102,6 +1125,14 @@ msgstr "Comptes"
 #: src/components/routes/admin/Announcements/index.tsx:71
 msgid "Accounts ({0})"
 msgstr "Comptes ({0})"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:56
+msgid "Accounts for {email} are managed by your organization. Sign in through its identity provider instead."
+msgstr "Les comptes pour {email} sont gérés par votre organisation. Connectez-vous plutôt via son fournisseur d'identité."
+
+#: src/components/routes/auth/Register/index.tsx:111
+msgid "Accounts for this email address are managed by your organization. Sign in through its identity provider instead of creating a new account."
+msgstr "Les comptes pour cette adresse e-mail sont gérés par votre organisation. Connectez-vous via son fournisseur d'identité au lieu de créer un nouveau compte."
 
 #: src/components/routes/event/Lineup/LineupStats.tsx:40
 msgid "Across {days} days"
@@ -1854,7 +1885,7 @@ msgstr "Tous les billets"
 msgid "All time"
 msgstr "Depuis le début"
 
-#: src/components/routes/settings/Security/index.tsx:98
+#: src/components/routes/settings/Security/index.tsx:99
 msgid "All trusted devices removed"
 msgstr "Tous les appareils de confiance ont été supprimés"
 
@@ -1875,7 +1906,7 @@ msgstr "Tous les utilisateurs"
 msgid "All visible"
 msgstr "Tous visibles"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:74
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:83
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Autorisez l'accès à votre adresse e-mail lors de la connexion, puis réessayez."
 
@@ -1930,7 +1961,7 @@ msgstr "Autoriser la connexion avec {providerName}"
 msgid "Almost there! We're just waiting for your payment to be processed. This should only take a few seconds."
 msgstr "Presque terminé ! Nous attendons juste que votre paiement soit traité. Cela ne devrait prendre que quelques secondes."
 
-#: src/components/routes/auth/Register/index.tsx:94
+#: src/components/routes/auth/Register/index.tsx:100
 msgid "Already have an account? <0>{0}</0>"
 msgstr "Vous avez déjà un compte ? <0>{0}</0>"
 
@@ -2010,7 +2041,7 @@ msgstr "Montant payé ({0})"
 msgid "Amount tendered"
 msgstr "Montant reçu"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:133
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:142
 msgid "An account with this email already exists. Sign in instead."
 msgstr "Un compte existe déjà avec cette adresse e-mail. Connectez-vous plutôt."
 
@@ -2158,6 +2189,20 @@ msgstr "Toute personne disposant de ce lien et du code PIN peut vendre des bille
 #: src/ee/seating/components/SeatPicker/index.tsx:55
 msgid "Anything else?"
 msgstr "Autre chose ?"
+
+#: src/components/layouts/SettingsLayout/index.tsx:62
+#: src/components/routes/settings/ApiKeys/index.tsx:111
+msgid "API keys"
+msgstr "Clés API"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:139
+msgid "API keys can't be created while you're impersonating someone."
+msgstr "Impossible de créer des clés API pendant que vous usurpez l'identité de quelqu'un."
+
+#: src/components/layouts/SettingsLayout/index.tsx:71
+#: src/components/routes/settings/ApiKeys/index.tsx:122
+msgid "API reference"
+msgstr "Référence de l'API"
 
 #: src/components/common/WidgetEditor/CustomiseGroups.tsx:124
 msgid "Appearance"
@@ -2516,15 +2561,15 @@ msgstr "Demander une fois par produit"
 msgid "Ask order and attendee questions at the door. Every ticket gets its own step, which can greatly slow down sales. Leave off for busy doors."
 msgstr "Posez les questions de commande et de participant à l'entrée. Chaque billet a sa propre étape, ce qui peut fortement ralentir les ventes. Laissez désactivé pour les entrées très fréquentées."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:62
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:71
 msgid "Ask the account owner to invite you again."
 msgstr "Demandez au propriétaire du compte de vous inviter à nouveau."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:121
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:130
 msgid "Ask the person who invited you to send a new invitation."
 msgstr "Demandez à la personne qui vous a invité d'envoyer une nouvelle invitation."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:68
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:77
 msgid "Ask your administrator to invite you."
 msgstr "Demandez à votre administrateur de vous inviter."
 
@@ -2825,7 +2870,7 @@ msgstr "Organisateur génial Ltd."
 
 #: src/components/layouts/EventHomepage/Lineup/ProfileModal.tsx:52
 #: src/components/layouts/EventHomepage/Lineup/SessionModal.tsx:82
-#: src/components/layouts/SettingsLayout/index.tsx:53
+#: src/components/layouts/SettingsLayout/index.tsx:54
 #: src/components/modals/CreateEventModal/index.tsx:250
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:151
 #: src/ee/box-office/components/layouts/BoxOffice/AttendeeQuestionsStage.tsx:87
@@ -3144,6 +3189,10 @@ msgstr "Billetterie mise à jour"
 msgid "Brazilian Portuguese"
 msgstr "Portugais brésilien"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:227
+msgid "Browse every endpoint in the API reference"
+msgstr "Parcourez tous les endpoints dans la référence de l'API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:42
 msgid "Build the schedule"
 msgstr "Créer le planning"
@@ -3239,7 +3288,7 @@ msgid "By adding tracking pixels, you acknowledge that you and this platform are
 msgstr "En ajoutant des pixels de suivi, vous reconnaissez que vous et cette plateforme êtes responsables conjoints des données collectées. Vous êtes responsable de vous assurer que vous disposez d'une base légale pour ce traitement en vertu des lois applicables sur la protection des données (RGPD, CCPA, etc.)."
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:192
-#: src/components/routes/auth/Register/index.tsx:176
+#: src/components/routes/auth/Register/index.tsx:193
 msgid "By continuing you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>."
 msgstr "En continuant, vous acceptez nos <0>Conditions d'utilisation</0> et notre <1>Politique de confidentialité</1>."
 
@@ -3392,6 +3441,7 @@ msgstr "Vous ne pouvez pas utiliser votre application d'authentification ni vos 
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
 #: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:73
@@ -3649,7 +3699,7 @@ msgstr "Modifier l'e-mail"
 
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:36
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:61
-#: src/components/routes/settings/Security/SignInMethods.tsx:91
+#: src/components/routes/settings/Security/SignInMethods.tsx:94
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
@@ -3775,7 +3825,7 @@ msgstr "Vérifiez votre e-mail"
 msgid "Check your event page"
 msgstr "Vérifiez votre page d'événement"
 
-#: src/components/routes/auth/Login/index.tsx:205
+#: src/components/routes/auth/Login/index.tsx:207
 #: src/components/routes/my-tickets/index.tsx:191
 msgid "Check your inbox! If tickets are associated with this email, you'll receive a link to view them."
 msgstr "Vérifiez votre boîte de réception ! Si des billets sont associés à cet e-mail, vous recevrez un lien pour les consulter."
@@ -4053,7 +4103,7 @@ msgstr "Choisir un autre fichier"
 msgid "Choose another reader"
 msgstr "Choisir un autre lecteur"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:140
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:149
 msgid "Choose another way to sign in."
 msgstr "Choisissez un autre moyen de connexion."
 
@@ -4236,6 +4286,10 @@ msgstr "Fermer"
 #: src/components/layouts/AppLayout/Sidebar/index.tsx:114
 msgid "Close sidebar"
 msgstr "Fermer la barre latérale"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
+msgid "Close without copying"
+msgstr "Fermer sans copier"
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:33
 msgid "Club"
@@ -4516,7 +4570,7 @@ msgstr "Confirmer le changement d'e-mail"
 msgid "Confirm it's you"
 msgstr "Confirmez votre identité"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:206
+#: src/components/routes/settings/Security/SignInMethods.tsx:209
 msgid "Confirm it's you, then sign in with {0} to connect it."
 msgstr "Confirmez votre identité, puis connectez-vous avec {0} pour l'associer."
 
@@ -4526,12 +4580,12 @@ msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:237
-#: src/components/routes/auth/Register/index.tsx:151
+#: src/components/routes/auth/Register/index.tsx:168
 msgid "Confirm password"
 msgstr "Confirmez le mot de passe"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:236
-#: src/components/routes/auth/Register/index.tsx:150
+#: src/components/routes/auth/Register/index.tsx:167
 #: src/components/routes/auth/ResetPassword/index.tsx:70
 msgid "Confirm Password"
 msgstr "Confirmez le mot de passe"
@@ -4542,6 +4596,10 @@ msgstr "Confirmer le spam"
 
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:127
 msgid "Confirm your email"
+msgstr "Confirmez votre adresse e-mail"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:130
+msgid "Confirm your email address"
 msgstr "Confirmez votre adresse e-mail"
 
 #: src/components/layouts/Event/index.tsx:328
@@ -4568,11 +4626,11 @@ msgstr "Confirmation de l'adresse e-mail..."
 msgid "Congratulations! Your event is now visible to the public."
 msgstr "Félicitations ! Votre événement est maintenant visible par le public."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:188
+#: src/components/routes/settings/Security/SignInMethods.tsx:191
 msgid "Connect"
 msgstr "Connecter"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:203
+#: src/components/routes/settings/Security/SignInMethods.tsx:206
 msgid "Connect {0}"
 msgstr "Connecter {0}"
 
@@ -4583,6 +4641,10 @@ msgstr "Connectez un compte Stripe sous Versements avant d'ajouter des lecteurs 
 #: src/components/routes/event/EventDashboard/SetupChecklist.tsx:71
 msgid "Connect bank"
 msgstr "Connecter la banque"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:112
+msgid "Connect other tools and your own code to this account. A key can do what you can do, so treat it like a password."
+msgstr "Connectez d'autres outils et votre propre code à ce compte. Une clé peut faire tout ce que vous pouvez faire : traitez-la comme un mot de passe."
 
 #: src/components/common/EmailTemplateSettings/EmailTemplateSettingsBase.tsx:371
 #: src/components/modals/PublishEventModal/index.tsx:83
@@ -4701,7 +4763,7 @@ msgstr "Le contenu est requis"
 #: src/components/layouts/ProductWidget/index.tsx:93
 #: src/components/routes/event/HomepageDesigner/index.tsx:206
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
 msgid "Continue"
 msgstr "Continuer"
@@ -4795,6 +4857,8 @@ msgstr "Paramètres des cookies"
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ShareModal/index.tsx:255
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:364
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:66
 msgid "Copied"
@@ -4827,6 +4891,7 @@ msgstr "Copie des instructions pas à pas à coller dans ChatGPT, Claude, Cursor
 #: src/components/modals/ManageOrderModal/index.tsx:208
 #: src/components/modals/ManageOrderModal/index.tsx:214
 #: src/components/modals/ShareModal/index.tsx:255
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:20
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:51
 msgid "Copy"
 msgstr "Copie"
@@ -4871,6 +4936,10 @@ msgstr "Copier le code"
 msgid "Copy Code"
 msgstr "Copier le code"
 
+#: src/components/routes/settings/ApiKeys/CodeSnippet.tsx:25
+msgid "Copy command"
+msgstr "Copier la commande"
+
 #: src/hooks/useOrderActions.tsx:144
 msgid "Copy customer link"
 msgstr "Copier le lien client"
@@ -4887,6 +4956,10 @@ msgstr "Copier l'Email"
 #: src/components/common/WidgetEditor/InstallPanel.tsx:52
 msgid "Copy for AI agent"
 msgstr "Copier pour un agent IA"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:185
+msgid "Copy key"
+msgstr "Copier la clé"
 
 #: src/components/common/SsoButtons/index.tsx:54
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:67
@@ -4946,6 +5019,10 @@ msgstr "Copier dans le presse-papiers"
 #: src/components/common/PromoCodeTable/index.tsx:189
 msgid "Copy URL"
 msgstr "Copier le lien"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:161
+msgid "Copy your API key"
+msgstr "Copiez votre clé API"
 
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
@@ -5032,6 +5109,14 @@ msgstr "Impossible de mettre à jour {name}"
 msgid "Could not upload {fileName}"
 msgstr "Impossible de téléverser {fileName}"
 
+#: src/components/routes/settings/ApiReference/index.tsx:60
+msgid "Couldn't load the API reference."
+msgstr "Impossible de charger la référence de l'API."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:187
+msgid "Couldn't load your API keys"
+msgstr "Impossible de charger vos clés API"
+
 #: src/components/routes/settings/Security/index.tsx:75
 msgid "Couldn't load your security settings"
 msgstr "Impossible de charger vos paramètres de sécurité"
@@ -5094,6 +5179,10 @@ msgstr "Créer « {query} »"
 msgid "Create {0} Template"
 msgstr "Créer le modèle {0}"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:199
+msgid "Create a key to connect tools like Zapier, your CRM or your own scripts to your events, orders and attendees."
+msgstr "Créez une clé pour connecter des outils comme Zapier, votre CRM ou vos propres scripts à vos événements, commandes et participants."
+
 #: src/components/modals/SelectCheckInListModal/index.tsx:82
 msgid "Create a list for this date"
 msgstr "Créer une liste pour cette date"
@@ -5147,6 +5236,10 @@ msgstr "Créer un affilié"
 msgid "Create an announcement to show a message to your users."
 msgstr "Créez une annonce pour afficher un message à vos utilisateurs."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:252
+msgid "Create and change events, orders, attendees and more."
+msgstr "Créer et modifier des événements, commandes, participants et plus encore."
+
 #: src/components/routes/event/products.tsx:67
 msgid "Create and configure tickets and merchandise for sale."
 msgstr "Créez et configurez des billets et des marchandises à vendre."
@@ -5160,6 +5253,11 @@ msgstr "Créer et commencer à concevoir"
 #: src/components/routes/admin/Announcements/index.tsx:506
 msgid "Create Announcement"
 msgstr "Créer une annonce"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:212
+#: src/components/routes/settings/ApiKeys/index.tsx:91
+msgid "Create API key"
+msgstr "Créer une clé API"
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:337
 msgid "Create Attendee"
@@ -5233,6 +5331,10 @@ msgstr "Créer un évènement"
 #: src/components/modals/CreateTaxOrFeeModal/index.tsx:54
 msgid "Create fee"
 msgstr "Créer des frais"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:302
+msgid "Create key"
+msgstr "Créer la clé"
 
 #: src/components/forms/ProductForm/index.tsx:563
 msgid "Create more tickets or products to offer them as add-ons"
@@ -5328,6 +5430,8 @@ msgstr "Créez votre propre événement"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:153
 #: src/components/routes/admin/Messages/index.tsx:169
 #: src/components/routes/admin/Messages/index.tsx:310
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:69
+#: src/components/routes/settings/ApiKeys/index.tsx:174
 msgid "Created"
 msgstr "Créé"
 
@@ -6125,12 +6229,12 @@ msgid "Disclaimers, contact info or a thank-you note, on a single line"
 msgstr "Mentions légales, coordonnées ou un mot de remerciement, sur une seule ligne"
 
 #: src/components/routes/organizer/Settings/Sections/PayoutsSettings/index.tsx:120
-#: src/components/routes/settings/Security/SignInMethods.tsx:174
-#: src/components/routes/settings/Security/SignInMethods.tsx:208
+#: src/components/routes/settings/Security/SignInMethods.tsx:177
+#: src/components/routes/settings/Security/SignInMethods.tsx:211
 msgid "Disconnect"
 msgstr "Déconnecter"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:204
+#: src/components/routes/settings/Security/SignInMethods.tsx:207
 msgid "Disconnect {0}"
 msgstr "Déconnecter {0}"
 
@@ -6214,7 +6318,7 @@ msgstr "Domaine vérifié"
 msgid "Don't forget!"
 msgstr "N'oubliez pas !"
 
-#: src/components/routes/auth/Login/index.tsx:117
+#: src/components/routes/auth/Login/index.tsx:119
 msgid "Don't have an account? <0>Sign up</0>"
 msgstr "Vous n'avez pas de compte ? <0>Inscrivez-vous</0>"
 
@@ -6233,6 +6337,7 @@ msgstr "Don"
 #: src/components/modals/CreateOrganizerWebhookModal/index.tsx:73
 #: src/components/modals/CreateWebhookModal/index.tsx:73
 #: src/components/modals/EventLiveCelebrationModal/index.tsx:123
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:204
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:50
 #: src/ee/box-office/components/modals/BoxOfficePinModal/index.tsx:81
 msgid "Done"
@@ -6476,6 +6581,10 @@ msgstr "p. ex. Maintenance planifiée ce samedi de 2 h à 4 h UTC"
 #: src/ee/box-office/components/modals/AddTerminalReaderModal/index.tsx:55
 msgid "e.g. sepia-cerulean-orynx"
 msgstr "ex. sepia-cerulean-orynx"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:225
+msgid "e.g. Zapier"
+msgstr "par ex. Zapier"
 
 #: src/components/modals/SendMessageModal/index.tsx:442
 msgid "e.g., Important update about your tickets"
@@ -6747,8 +6856,8 @@ msgstr "Listes d'Enregistrement Éligibles"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:149
 #: src/components/routes/admin/EmailDelivery/index.tsx:95
 #: src/components/routes/auth/ForgotPassword/index.tsx:69
-#: src/components/routes/auth/Login/index.tsx:161
-#: src/components/routes/auth/Register/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:163
+#: src/components/routes/auth/Register/index.tsx:153
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:99
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
@@ -6831,7 +6940,7 @@ msgstr "Message de pied de page de l'e-mail"
 msgid "Email is required"
 msgstr "L'e-mail est obligatoire"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:103
+#: src/components/routes/settings/Security/SignInMethods.tsx:106
 msgid "Email me a link to set a password"
 msgstr "M'envoyer un lien pour définir un mot de passe"
 
@@ -7112,7 +7221,7 @@ msgid "Enter unique affiliate code"
 msgstr "Saisir un code d'affiliation unique"
 
 #: src/components/common/ContactOrganizerModal/index.tsx:80
-#: src/components/routes/auth/Login/index.tsx:222
+#: src/components/routes/auth/Login/index.tsx:224
 #: src/components/routes/my-tickets/index.tsx:209
 msgid "Enter your email"
 msgstr "Entrez votre e-mail"
@@ -7484,9 +7593,13 @@ msgstr "Chaque événement a une liste de pointage"
 msgid "Every organizer and event, including new ones."
 msgstr "Tous les organisateurs et événements, y compris les nouveaux."
 
-#: src/components/routes/settings/Security/index.tsx:96
+#: src/components/routes/settings/Security/index.tsx:97
 msgid "Every trusted device will need a code at its next sign-in. Continue?"
 msgstr "Chaque appareil de confiance devra saisir un code à sa prochaine connexion. Continuer ?"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:158
+msgid "Everyone ({0})"
+msgstr "Tout le monde ({0})"
 
 #: src/components/routes/event/Lineup/index.tsx:55
 msgid "Everyone appearing at this event, where they are and when. Shown on your event page as soon as you add them."
@@ -7568,6 +7681,10 @@ msgstr "Exempté"
 msgid "Exempt from SSO"
 msgstr "Exempté du SSO"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:270
+msgid "Expiration"
+msgstr "Expiration"
+
 #: src/components/forms/CheckInListForm/index.tsx:159
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:182
 msgid "Expiration date"
@@ -7575,15 +7692,27 @@ msgstr "Date d'expiration"
 
 #: src/components/common/WaitlistTable/index.tsx:30
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
+#: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
 #: src/ee/licensing/licenceNotice.ts:60
 msgid "Expired"
 msgstr "Expiré"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:26
+msgid "Expired {0}"
+msgstr "Expirée {0}"
+
 #: src/components/common/PromoCodeTable/index.tsx:75
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:33
+#: src/components/routes/settings/ApiKeys/index.tsx:176
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:88
 msgid "Expires"
 msgstr "Expire"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:30
+msgid "Expires {0}"
+msgstr "Expire {0}"
 
 #: src/components/forms/PromoCodeForm/index.tsx:169
 msgid "Expiry Date"
@@ -8218,7 +8347,7 @@ msgstr "Prénom"
 #: src/components/modals/InviteUserModal/index.tsx:54
 #: src/components/modals/JoinWaitlistModal/index.tsx:179
 #: src/components/routes/auth/AcceptInvitation/index.tsx:205
-#: src/components/routes/auth/Register/index.tsx:122
+#: src/components/routes/auth/Register/index.tsx:139
 #: src/components/routes/product-widget/CollectInformation/index.tsx:472
 #: src/components/routes/product-widget/CollectInformation/index.tsx:684
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:55
@@ -8347,7 +8476,7 @@ msgstr "Pour les événements sur plusieurs lieux"
 msgid "For your security, sign in again to confirm it's you."
 msgstr "Pour votre sécurité, reconnectez-vous afin de confirmer votre identité."
 
-#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Login/index.tsx:172
 msgid "Forgot password?"
 msgstr "Mot de passe oublié?"
 
@@ -8488,7 +8617,7 @@ msgstr "Dates futures uniquement"
 msgid "Future dates will be copied with capacity reset to zero"
 msgstr "Les dates futures seront copiées avec une capacité remise à zéro"
 
-#: src/components/layouts/SettingsLayout/index.tsx:58
+#: src/components/layouts/SettingsLayout/index.tsx:59
 #: src/components/routes/settings/Account/index.tsx:70
 msgid "General"
 msgstr "Général"
@@ -8518,7 +8647,7 @@ msgstr "Générer"
 msgid "Generate code"
 msgstr "Générer un code"
 
-#: src/components/routes/settings/Security/index.tsx:162
+#: src/components/routes/settings/Security/index.tsx:165
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:80
 msgid "Generate new codes"
 msgstr "Générer de nouveaux codes"
@@ -8561,7 +8690,7 @@ msgstr "Être payé"
 msgid "Get paid with Stripe"
 msgstr "Être payé avec Stripe"
 
-#: src/components/routes/auth/Register/index.tsx:92
+#: src/components/routes/auth/Register/index.tsx:98
 msgid "Get started"
 msgstr "Commencer"
 
@@ -8599,11 +8728,16 @@ msgstr "Attribuez un horaire à chacun"
 msgid "Give the embed enough height for the widget, or set Checkout opens in to New tab."
 msgstr "Donnez à l'intégration une hauteur suffisante pour le widget, ou réglez « Le paiement s'ouvre dans » sur « Nouvel onglet »."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:77
+msgid "Give this key a name"
+msgstr "Donnez un nom à cette clé"
+
 #: src/components/modals/CreateEventModal/index.tsx:113
 msgid "Give your event a name"
 msgstr "Donnez un nom à votre événement"
 
 #: src/components/routes/admin/DeletionRequests/index.tsx:224
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:155
 msgid "Go back"
 msgstr "Retour"
 
@@ -9084,7 +9218,7 @@ msgstr "Comment la TVA s'applique aux frais de plateforme que nous vous facturon
 msgid "How would you like to start?"
 msgstr "Comment souhaitez-vous commencer ?"
 
-#: src/components/routes/settings/Security/index.tsx:232
+#: src/components/routes/settings/Security/index.tsx:237
 msgid "How you sign in, and two-factor authentication. They protect every account you belong to."
 msgstr "Votre mode de connexion et l'authentification à deux facteurs. Ils protègent chaque compte dont vous faites partie."
 
@@ -9131,6 +9265,10 @@ msgstr "J'ai enregistré mes codes de récupération en lieu sûr"
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:209
 msgid "I've added it, continue"
 msgstr "Je l'ai ajouté, continuer"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:224
+msgid "If a key leaks, revoke it straight away and create a new one."
+msgstr "Si une clé est divulguée, révoquez-la immédiatement et créez-en une nouvelle."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1298
 msgid "If a new tab did not open automatically, please click the button below to continue to checkout."
@@ -9486,11 +9624,15 @@ msgstr "URL de l'émetteur"
 msgid "It happens on more than one date"
 msgstr "Il a lieu à plusieurs dates"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:222
+msgid "It has your role and event access. Read-only keys can view and export, but can't change anything."
+msgstr "Elle dispose de votre rôle et de vos accès aux événements. Les clés en lecture seule peuvent consulter et exporter, mais ne peuvent rien modifier."
+
 #: src/components/layouts/ProductWidget/index.tsx:66
 msgid "It may have been unpublished or removed. Please check the link and try again."
 msgstr "Il a peut-être été dépublié ou supprimé. Veuillez vérifier le lien et réessayer."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:101
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:110
 msgid "It's connected to another user. Use a different {providerName} account."
 msgstr "Il est associé à un autre utilisateur. Utilisez un autre compte {providerName}."
 
@@ -9540,7 +9682,7 @@ msgid "Job queued for retry"
 msgstr "Travail en file d'attente pour réessai"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:123
+#: src/components/routes/auth/Register/index.tsx:140
 msgid "John"
 msgstr "John"
 
@@ -9579,7 +9721,7 @@ msgstr "Juillet"
 msgid "June"
 msgstr "Juin"
 
-#: src/components/routes/auth/Login/index.tsx:193
+#: src/components/routes/auth/Login/index.tsx:195
 msgid "Just looking for your tickets?"
 msgstr "Vous cherchez vos billets ?"
 
@@ -9620,9 +9762,33 @@ msgstr "Gardez vos bénéfices."
 msgid "Keep them off the public lineup and schedule until you're ready to announce"
 msgstr "Les garder hors de la programmation et du planning publics jusqu'à ce que vous soyez prêt à les annoncer"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:173
+msgid "Key"
+msgstr "Clé"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:57
+msgid "Key ending in {0}"
+msgstr "Clé se terminant par {0}"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key removed"
+msgstr "Clé supprimée"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:79
+msgid "Key revoked"
+msgstr "Clé révoquée"
+
 #: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin et autres"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:223
+msgid "Keys can't sign in or manage your team, payouts, profile or security settings."
+msgstr "Les clés ne peuvent pas se connecter ni gérer votre équipe, vos versements, votre profil ou vos paramètres de sécurité."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:284
+msgid "Keys that never expire stay valid until you revoke them. Only use this for servers you control."
+msgstr "Les clés sans expiration restent valides jusqu'à ce que vous les révoquiez. N'utilisez cette option que pour des serveurs que vous contrôlez."
 
 #: src/components/common/LanguageSwitcher/index.tsx:50
 msgid "Korean"
@@ -9737,7 +9903,7 @@ msgstr "Nom de famille"
 #: src/components/modals/InviteUserModal/index.tsx:55
 #: src/components/modals/JoinWaitlistModal/index.tsx:184
 #: src/components/routes/auth/AcceptInvitation/index.tsx:211
-#: src/components/routes/auth/Register/index.tsx:128
+#: src/components/routes/auth/Register/index.tsx:145
 #: src/components/routes/product-widget/CollectInformation/index.tsx:479
 #: src/components/routes/product-widget/CollectInformation/index.tsx:480
 #: src/components/routes/product-widget/CollectInformation/index.tsx:691
@@ -9767,6 +9933,8 @@ msgid "Last Triggered"
 msgstr "Dernier déclenchement"
 
 #: src/components/common/SsoButtons/index.tsx:126
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:73
+#: src/components/routes/settings/ApiKeys/index.tsx:175
 msgid "Last used"
 msgstr "Dernière utilisation"
 
@@ -9775,7 +9943,7 @@ msgid "Last Used"
 msgstr "Dernière utilisation"
 
 #: src/components/routes/settings/Security/index.tsx:41
-#: src/components/routes/settings/Security/SignInMethods.tsx:162
+#: src/components/routes/settings/Security/SignInMethods.tsx:165
 msgid "Last used {0}"
 msgstr "Dernière utilisation {0}"
 
@@ -10073,6 +10241,10 @@ msgstr "Dates chargées"
 msgid "Loading preview..."
 msgstr "Chargement de l'aperçu..."
 
+#: src/components/routes/settings/ApiReference/index.tsx:76
+msgid "Loading the API reference…"
+msgstr "Chargement de la référence de l'API…"
+
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:39
 #: src/components/common/Editor/Controls/LiquidTokenControl/LiquidTokenControl.tsx:40
 msgid "Loading tokens..."
@@ -10182,7 +10354,7 @@ msgstr "Rechercher mes billets"
 msgid "Lost access?"
 msgstr "Accès perdu ?"
 
-#: src/components/routes/settings/Security/index.tsx:195
+#: src/components/routes/settings/Security/index.tsx:200
 msgid "Lost your phone or switching apps? Turn it off, then on again to connect a new authenticator."
 msgstr "Téléphone perdu ou changement d'application ? Désactivez-la puis réactivez-la pour connecter un nouvel authentificateur."
 
@@ -10719,6 +10891,10 @@ msgstr "Mon incroyable description d'événement..."
 msgid "My amazing event title..."
 msgstr "Mon incroyable titre d'événement..."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:157
+msgid "My keys"
+msgstr "Mes clés"
+
 #: src/components/common/GlobalMenu/index.tsx:55
 msgid "My Profile"
 msgstr "Mon profil"
@@ -10746,6 +10922,7 @@ msgstr "Mes Billets"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
 #: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:66
@@ -10797,9 +10974,14 @@ msgstr "Revenu net"
 #: src/components/common/OrganizerWebhookTable/index.tsx:272
 #: src/components/common/PromoCodeTable/index.tsx:168
 #: src/components/common/WebhookTable/index.tsx:272
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:22
 #: src/components/routes/settings/Team/MemberRow.tsx:161
 msgid "Never"
 msgstr "Jamais"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:74
+msgid "Never used"
+msgstr "Jamais utilisée"
 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:121
 msgid "New"
@@ -10957,7 +11139,7 @@ msgstr "Non - Je suis un particulier ou une entreprise non assujettie à la TVA"
 msgid "No access yet"
 msgstr "Aucun accès pour l'instant"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:67
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:76
 msgid "No account found"
 msgstr "Aucun compte trouvé"
 
@@ -11194,6 +11376,10 @@ msgstr "Aucun événement à afficher"
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:400
 msgid "No events yet"
 msgstr "Aucun événement pour le moment"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:273
+msgid "No expiration"
+msgstr "Aucune expiration"
 
 #: src/components/routes/admin/FailedJobs/index.tsx:155
 msgid "No failed jobs"
@@ -11528,6 +11714,10 @@ msgstr "Non, rester ici"
 msgid "Nobody has been added to this event's lineup yet."
 msgstr "Personne n'a encore été ajouté à la programmation de cet événement."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "Nobody has created an API key yet"
+msgstr "Personne n'a encore créé de clé API"
+
 #: src/components/routes/event/HomepageDesigner/SectionsEditor/sectionEmptyState.ts:38
 msgid "Nobody is on the lineup yet, or everyone is hidden."
 msgstr "Personne n'est encore dans la programmation, ou tout le monde est masqué."
@@ -11589,6 +11779,10 @@ msgstr "Normalement {0}"
 msgid "Not available"
 msgstr "Pas disponible"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:253
+msgid "Not available: you have view-only access."
+msgstr "Non disponible : vous avez un accès en lecture seule."
+
 #: src/components/layouts/CheckIn/AttendeeDetailSheet.tsx:122
 #: src/components/modals/ManageAttendeeModal/index.tsx:156
 msgid "Not checked in"
@@ -11599,7 +11793,7 @@ msgstr "Non enregistré"
 msgid "Not Checked In"
 msgstr "Non Enregistré"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:149
+#: src/components/routes/settings/Security/SignInMethods.tsx:152
 msgid "Not connected"
 msgstr "Non connecté"
 
@@ -11819,7 +12013,7 @@ msgstr "de chaque mois"
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
 msgid "Off"
 msgstr "Désactivé"
@@ -11908,7 +12102,7 @@ msgstr "le"
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
-#: src/components/routes/settings/Security/index.tsx:114
+#: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
 msgid "On"
 msgstr "Activé"
@@ -12196,7 +12390,7 @@ msgstr "Ouvrir les paramètres"
 msgid "Open sidebar"
 msgstr "Ouvrir la barre latérale"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:55
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:64
 msgid "Open the invitation email we sent you to finish joining the team."
 msgstr "Ouvrez l'e-mail d'invitation que nous vous avons envoyé pour finaliser votre adhésion à l'équipe."
 
@@ -12594,7 +12788,7 @@ msgstr "Statut de l'organisateur mis à jour"
 msgid "Organizer/default template will be used"
 msgstr "Le modèle de l'organisateur/par défaut sera utilisé"
 
-#: src/components/layouts/SettingsLayout/index.tsx:59
+#: src/components/layouts/SettingsLayout/index.tsx:60
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:266
 #: src/components/routes/settings/Organizers/index.tsx:72
 #: src/components/routes/settings/Team/index.tsx:142
@@ -12766,10 +12960,10 @@ msgid "Pass to Buyer"
 msgstr "Répercuter sur l'acheteur"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
-#: src/components/routes/auth/Login/index.tsx:168
-#: src/components/routes/auth/Register/index.tsx:144
+#: src/components/routes/auth/Login/index.tsx:170
+#: src/components/routes/auth/Register/index.tsx:161
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Security/SignInMethods.tsx:84
+#: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
 msgid "Password"
@@ -13116,7 +13310,7 @@ msgstr "Autorisations"
 msgid "Person"
 msgstr "Personne"
 
-#: src/components/layouts/SettingsLayout/index.tsx:54
+#: src/components/layouts/SettingsLayout/index.tsx:55
 msgid "Personal"
 msgstr "Personnel"
 
@@ -13256,7 +13450,7 @@ msgstr "Veuillez ajouter au moins une option"
 msgid "Please check the provided information is correct"
 msgstr "Veuillez vérifier que les informations fournies sont correctes"
 
-#: src/components/routes/auth/Login/index.tsx:86
+#: src/components/routes/auth/Login/index.tsx:88
 msgid "Please check your email and password and try again"
 msgstr "Veuillez vérifier votre e-mail et votre mot de passe et réessayer"
 
@@ -13669,7 +13863,7 @@ msgstr "Produits vendus"
 msgid "Products sorted successfully"
 msgstr "Produits triés avec succès"
 
-#: src/components/layouts/SettingsLayout/index.tsx:55
+#: src/components/layouts/SettingsLayout/index.tsx:56
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:270
 #: src/components/routes/settings/Profile/index.tsx:175
 msgid "Profile"
@@ -13761,7 +13955,7 @@ msgstr "Promo seulement"
 msgid "Promotional emails may result in account suspension"
 msgstr "Les e-mails promotionnels peuvent entraîner la suspension du compte"
 
-#: src/components/routes/settings/Security/index.tsx:120
+#: src/components/routes/settings/Security/index.tsx:121
 msgid "Protect your account with a second step at sign-in. Even if someone learns your password, they can't get in without the code from your phone."
 msgstr "Protégez votre compte avec une seconde étape à la connexion. Même si quelqu'un découvre votre mot de passe, il ne pourra pas entrer sans le code de votre téléphone."
 
@@ -13942,10 +14136,20 @@ msgstr "Réactiver"
 msgid "Reactivate this date? It will be reopened for future sales."
 msgstr "Réactiver cette date ? Elle sera de nouveau ouverte à la vente."
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:247
+msgid "Read and write"
+msgstr "Lecture et écriture"
+
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
 msgid "Read more"
 msgstr "Lire la suite"
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:52
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:258
+msgid "Read-only"
+msgstr "Lecture seule"
 
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:184
 msgid "Reader unavailable"
@@ -13994,7 +14198,7 @@ msgid "Reasons"
 msgstr "Raisons"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:261
-#: src/components/routes/auth/Register/index.tsx:165
+#: src/components/routes/auth/Register/index.tsx:182
 #: src/components/routes/settings/Profile/index.tsx:254
 #: src/components/routes/sso/Callback/CompleteSignup.tsx:197
 msgid "Receive product updates from {0}."
@@ -14061,7 +14265,7 @@ msgstr "Enregistrer le remboursement"
 msgid "Recovery code"
 msgstr "Code de récupération"
 
-#: src/components/routes/settings/Security/index.tsx:137
+#: src/components/routes/settings/Security/index.tsx:140
 msgid "Recovery codes"
 msgstr "Codes de récupération"
 
@@ -14203,7 +14407,7 @@ msgstr "Remboursé : {0}"
 msgid "Refunds"
 msgstr "Remboursements"
 
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Register"
 msgstr "S'inscrire"
 
@@ -14252,12 +14456,18 @@ msgstr "retirer"
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:136
 #: src/components/routes/event/Lineup/ScheduleBuilder/ScheduleItemModal.tsx:207
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1197
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
 #: src/ee/box-office/components/layouts/BoxOffice/AmountSheet.tsx:89
 #: src/ee/seating/components/SeatPicker/Basket.tsx:124
 msgid "Remove"
 msgstr "Retirer"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:73
+msgid "Remove \"{0}\"? It has already expired."
+msgstr "Supprimer « {0} » ? Elle a déjà expiré."
+
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
 msgid "Remove {0}"
 msgstr "Retirer {0}"
@@ -14282,7 +14492,7 @@ msgstr "Retirer {profileName} de la programmation de cet événement ? Son profi
 msgid "Remove access"
 msgstr "Retirer l'accès"
 
-#: src/components/routes/settings/Security/index.tsx:186
+#: src/components/routes/settings/Security/index.tsx:189
 msgid "Remove all"
 msgstr "Tout supprimer"
 
@@ -14313,6 +14523,10 @@ msgstr "Retirer du plan"
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:190
 msgid "Remove from this lineup"
 msgstr "Retirer de cette programmation"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Remove key"
+msgstr "Supprimer la clé"
 
 #: src/components/routes/event/OccurrencesTab/OccurrenceBulkEditModal/index.tsx:461
 msgid "Remove label from all dates"
@@ -14486,7 +14700,7 @@ msgstr "Exiger l'authentification à deux facteurs"
 msgid "Required"
 msgstr "Requis"
 
-#: src/components/routes/settings/Security/index.tsx:122
+#: src/components/routes/settings/Security/index.tsx:123
 msgid "Required by your organization"
 msgstr "Exigé par votre organisation"
 
@@ -14735,9 +14949,29 @@ msgstr "Examinez les événements signalés comme spam potentiel par la vérific
 msgid "Review security settings"
 msgstr "Vérifier les paramètres de sécurité"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:82
+msgid "Revoke"
+msgstr "Révoquer"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:75
+msgid "Revoke \"{0}\"? Anything using it stops working straight away, and {ownerName} will get an email about it."
+msgstr "Révoquer « {0} » ? Tout ce qui l'utilise cessera immédiatement de fonctionner, et {ownerName} recevra un e-mail à ce sujet."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:76
+msgid "Revoke \"{0}\"? Anything using it stops working straight away. This can't be undone."
+msgstr "Révoquer « {0} » ? Tout ce qui l'utilise cessera immédiatement de fonctionner. Cette action est irréversible."
+
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
+msgid "Revoke {0}"
+msgstr "Révoquer {0}"
+
 #: src/components/routes/settings/Team/MemberRow.tsx:209
 msgid "Revoke invitation"
 msgstr "Révoquer l'invitation"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:81
+msgid "Revoke key"
+msgstr "Révoquer la clé"
 
 #: src/components/common/WaitlistTable/index.tsx:81
 msgid "Revoke Offer"
@@ -15549,8 +15783,8 @@ msgstr "Paiement sécurisé"
 msgid "Secure your account"
 msgstr "Sécurisez votre compte"
 
-#: src/components/layouts/SettingsLayout/index.tsx:56
-#: src/components/routes/settings/Security/index.tsx:231
+#: src/components/layouts/SettingsLayout/index.tsx:57
+#: src/components/routes/settings/Security/index.tsx:236
 msgid "Security"
 msgstr "Sécurité"
 
@@ -15817,7 +16051,7 @@ msgstr "Vend 1 produit"
 msgid "Sells every product"
 msgstr "Vend tous les produits"
 
-#: src/components/routes/auth/Login/index.tsx:232
+#: src/components/routes/auth/Login/index.tsx:234
 #: src/components/routes/my-tickets/index.tsx:219
 #: src/ee/box-office/components/layouts/BoxOffice/SaleComplete.tsx:152
 msgid "Send"
@@ -15838,6 +16072,10 @@ msgstr "Envoyer des e-mails aux participants, détenteurs de billets ou proprié
 #: src/components/modals/InviteUserModal/index.tsx:75
 msgid "Send invitation"
 msgstr "Envoyer l'invitation"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:221
+msgid "Send it in the Authorization header of every request."
+msgstr "Envoyez-la dans l'en-tête Authorization de chaque requête."
 
 #: src/components/modals/SendMessageModal/index.tsx:570
 msgid "Send me a copy"
@@ -16096,7 +16334,7 @@ msgid "Setting updated"
 msgstr "Paramètre mis à jour"
 
 #: src/components/layouts/OrganizerLayout/index.tsx:117
-#: src/components/layouts/SettingsLayout/index.tsx:67
+#: src/components/layouts/SettingsLayout/index.tsx:69
 #: src/components/modals/DuplicateEventModal/index.tsx:53
 msgid "Settings"
 msgstr "Paramètres"
@@ -16208,6 +16446,10 @@ msgstr "Afficher moins de plateformes"
 #: src/components/routes/organizer/People/index.tsx:69
 msgid "Show initials instead"
 msgstr "Afficher les initiales à la place"
+
+#: src/components/routes/settings/ApiKeys/index.tsx:160
+msgid "Show keys"
+msgstr "Afficher les clés"
 
 #: src/components/layouts/OrganizerHomepage/index.tsx:460
 #: src/components/widget/WidgetSections/index.tsx:91
@@ -16365,9 +16607,9 @@ msgstr "Affiche votre profil d'organisateur avec un bouton de contact."
 msgid "Shows your social links and a contact button. Placed above every other section, it appears in your profile card."
 msgstr "Affiche vos réseaux sociaux et un bouton de contact. Placée au-dessus des autres sections, elle apparaît dans votre carte de profil."
 
-#: src/components/routes/auth/Login/index.tsx:180
-#: src/components/routes/auth/Register/index.tsx:97
-#: src/components/routes/sso/Callback/index.tsx:298
+#: src/components/routes/auth/Login/index.tsx:182
+#: src/components/routes/auth/Register/index.tsx:103
+#: src/components/routes/sso/Callback/index.tsx:310
 msgid "Sign in"
 msgstr "Se connecter"
 
@@ -16383,15 +16625,19 @@ msgstr "Reconnectez-vous pour commencer à configurer l'authentification à deux
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Connectez-vous une fois pour vérifier la connexion. Cela montre ce que votre fournisseur d'identité partage et ne vous connecte pas ici."
 
-#: src/components/routes/auth/Login/index.tsx:136
+#: src/components/routes/auth/Login/index.tsx:138
 msgid "Sign in through your organization's identity provider instead of using a password."
 msgstr "Connectez-vous via le fournisseur d'identité de votre organisation au lieu d'utiliser un mot de passe."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:57
+msgid "Sign in through your organization's identity provider instead."
+msgstr "Connectez-vous plutôt via le fournisseur d'identité de votre organisation."
+
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Sign in to {0}"
 msgstr "Se connecter à {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:113
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:122
 msgid "Sign in to accept the invitation"
 msgstr "Connectez-vous pour accepter l'invitation"
 
@@ -16403,7 +16649,7 @@ msgstr "Se connecter pour rejoindre"
 msgid "Sign in with a PIN"
 msgstr "Se connecter avec un code PIN"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:127
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:136
 msgid "Sign in with an account you've already connected, and make sure it's a fresh sign-in."
 msgstr "Connectez-vous avec un compte que vous avez déjà associé, et assurez-vous qu'il s'agit d'une nouvelle connexion."
 
@@ -16418,7 +16664,9 @@ msgstr "Se connecter avec un mot de passe"
 
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:59
 #: src/components/common/SsoButtons/SsoDiscovery.tsx:83
-#: src/components/routes/auth/Login/index.tsx:139
+#: src/components/routes/auth/Login/index.tsx:141
+#: src/components/routes/auth/Register/index.tsx:115
+#: src/components/routes/sso/Callback/index.tsx:277
 msgid "Sign in with SSO"
 msgstr "Se connecter avec le SSO"
 
@@ -16460,11 +16708,11 @@ msgstr "S'inscrire avec {0}"
 msgid "Sign up with Google"
 msgstr "S'inscrire avec Google"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:94
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:103
 msgid "Sign-in links work once and expire after 10 minutes. Start again from the sign-in page."
 msgstr "Les liens de connexion ne fonctionnent qu'une fois et expirent après 10 minutes. Recommencez depuis la page de connexion."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:87
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:96
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Les liens de connexion ne fonctionnent qu'une fois et expirent après 10 minutes. Recommencez pour continuer."
 
@@ -16472,7 +16720,7 @@ msgstr "Les liens de connexion ne fonctionnent qu'une fois et expirent après 10
 msgid "Sign-in settings"
 msgstr "Paramètres de connexion"
 
-#: src/components/routes/auth/Login/index.tsx:131
+#: src/components/routes/auth/Login/index.tsx:133
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "La connexion a été annulée. Choisissez un autre moyen de connexion ou réessayez."
 
@@ -16496,15 +16744,15 @@ msgstr "Connecté, mais aucun e-mail n'a été partagé"
 msgid "Signed up"
 msgstr "Inscrit le"
 
-#: src/components/routes/auth/Login/index.tsx:180
+#: src/components/routes/auth/Login/index.tsx:182
 msgid "Signing in"
 msgstr "Connexion en cours"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in with {0}…"
 msgstr "Connexion avec {0} en cours…"
 
-#: src/components/routes/sso/Callback/index.tsx:362
+#: src/components/routes/sso/Callback/index.tsx:374
 msgid "Signing you in…"
 msgstr "Connexion en cours…"
 
@@ -16572,7 +16820,7 @@ msgid "Slovak"
 msgstr "Slovaque"
 
 #: src/components/routes/auth/AcceptInvitation/index.tsx:212
-#: src/components/routes/auth/Register/index.tsx:129
+#: src/components/routes/auth/Register/index.tsx:146
 msgid "Smith"
 msgstr "Forgeron"
 
@@ -16689,6 +16937,10 @@ msgstr "Certains textes peuvent être difficiles à lire"
 msgid "Someone just took {0}. Pick another seat, or let us find similar seats for you."
 msgstr "Quelqu'un vient de prendre {0}. Choisissez une autre place, ou laissez-nous trouver des places similaires pour vous."
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:224
+msgid "Something that tells you where it's used, like \"Zapier\" or \"Website sync\"."
+msgstr "Un nom qui vous indique où elle est utilisée, comme « Zapier » ou « Synchro du site web »."
+
 #: src/components/common/ErrorDisplay/index.tsx:15
 #: src/components/routes/auth/AcceptInvitation/index.tsx:61
 #: src/components/routes/product-widget/CollectInformation/index.tsx:417
@@ -16724,8 +16976,8 @@ msgstr "Une erreur s'est produite. Veuillez réessayer plus tard."
 #: src/components/routes/admin/Users/index.tsx:33
 #: src/components/routes/auth/AcceptInvitation/index.tsx:98
 #: src/components/routes/auth/AcceptInvitation/index.tsx:107
-#: src/components/routes/auth/Login/index.tsx:106
-#: src/components/routes/auth/Register/index.tsx:75
+#: src/components/routes/auth/Login/index.tsx:108
+#: src/components/routes/auth/Register/index.tsx:81
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
@@ -16734,13 +16986,15 @@ msgstr "Une erreur s'est produite. Veuillez réessayer plus tard."
 #: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
 #: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
+#: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
 #: src/components/routes/settings/Profile/index.tsx:144
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:46
 #: src/components/routes/settings/Security/index.tsx:52
-#: src/components/routes/settings/Security/index.tsx:99
+#: src/components/routes/settings/Security/index.tsx:100
 #: src/components/routes/settings/Security/RegenerateRecoveryCodesModal.tsx:33
-#: src/components/routes/settings/Security/SignInMethods.tsx:100
+#: src/components/routes/settings/Security/SignInMethods.tsx:103
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
@@ -16826,7 +17080,7 @@ msgstr "Spotify, YouTube, SoundCloud, Instagram, LinkedIn, un site web et plus e
 msgid "Square, at least 200 × 200px"
 msgstr "Carré, au moins 200 × 200 px"
 
-#: src/components/routes/auth/Login/index.tsx:50
+#: src/components/routes/auth/Login/index.tsx:52
 #: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
 msgid "SSO"
@@ -16988,7 +17242,7 @@ msgstr "Partez d'un modèle de théâtre, de banquet ou de club, puis associez l
 msgid "Start from scratch"
 msgstr "Partir de zéro"
 
-#: src/components/routes/sso/Callback/index.tsx:367
+#: src/components/routes/sso/Callback/index.tsx:379
 msgid "Start over"
 msgstr "Recommencer"
 
@@ -17112,7 +17366,7 @@ msgstr "Reste à payer"
 msgid "Still waiting? Check the reader screen. If it shows nothing, cancel and try again."
 msgstr "Toujours en attente ? Vérifiez l'écran du lecteur. S'il n'affiche rien, annulez et réessayez."
 
-#: src/components/routes/sso/Callback/index.tsx:365
+#: src/components/routes/sso/Callback/index.tsx:377
 msgid "Still working. This can take a few seconds."
 msgstr "Traitement en cours. Cela peut prendre quelques secondes."
 
@@ -17144,6 +17398,14 @@ msgstr "Ne plus exiger l'authentification unique ? Les membres pourront se recon
 #: src/components/routes/settings/Security/index.tsx:48
 msgid "Stop trusting this device"
 msgstr "Ne plus faire confiance à cet appareil"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:283
+msgid "Stops working on {0}. We'll email you a week before."
+msgstr "Cessera de fonctionner le {0}. Nous vous enverrons un e-mail une semaine avant."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:164
+msgid "Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you."
+msgstr "Conservez-la en lieu sûr, par exemple dans un gestionnaire de mots de passe ou dans les paramètres secrets de votre intégration. Toute personne disposant de cette clé peut utiliser l'API en votre nom."
 
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:34
 msgid "Straight rows, central aisle."
@@ -17579,7 +17841,7 @@ msgstr "Taxes et frais"
 msgid "Taxes & fees applied"
 msgstr "Taxes et frais appliqués"
 
-#: src/components/layouts/SettingsLayout/index.tsx:61
+#: src/components/layouts/SettingsLayout/index.tsx:63
 #: src/components/routes/settings/TaxesAndFees/index.tsx:120
 msgid "Taxes and fees"
 msgstr "Taxes et frais"
@@ -17590,7 +17852,7 @@ msgstr "Taxes et frais"
 
 #: src/components/layouts/Event/index.tsx:165
 #: src/components/layouts/OrganizerLayout/index.tsx:131
-#: src/components/layouts/SettingsLayout/index.tsx:60
+#: src/components/layouts/SettingsLayout/index.tsx:61
 #: src/components/routes/event/Team/index.tsx:13
 #: src/components/routes/organizer/Team/index.tsx:13
 #: src/components/routes/settings/Team/index.tsx:151
@@ -17832,6 +18094,10 @@ msgstr "Le montant total de la commande sera remboursé sur le mode de paiement 
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:314
 msgid "The import failed. Nothing was changed. Please try again."
 msgstr "L'importation a échoué. Rien n'a été modifié. Veuillez réessayer."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:216
+msgid "The key can do what you can do in {accountName}, so keep it secret."
+msgstr "La clé peut faire tout ce que vous pouvez faire dans {accountName} : gardez-la secrète."
 
 #: src/components/modals/CreateAttendeeModal/index.tsx:242
 msgid "The language the attendee will receive emails in."
@@ -18075,7 +18341,7 @@ msgstr "Une erreur est survenue lors de l'envoi de votre message"
 msgid "These are skipped"
 msgstr "Ceux-ci sont ignorés"
 
-#: src/components/routes/settings/Security/index.tsx:170
+#: src/components/routes/settings/Security/index.tsx:173
 msgid "These browsers skip the code for 30 days after you trust them."
 msgstr "Ces navigateurs ne demandent pas de code pendant 30 jours après que vous leur avez accordé votre confiance."
 
@@ -18123,7 +18389,7 @@ msgstr "L'invitation n'a pas encore été acceptée. Les modifications s'appliqu
 msgid "Third"
 msgstr "Troisième"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:100
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:109
 msgid "This {providerName} account is already in use"
 msgstr "Ce compte {providerName} est déjà utilisé"
 
@@ -18327,11 +18593,11 @@ msgstr "Ce champ est obligatoire"
 msgid "This information will be shown on the payment page, order summary page, and order confirmation email."
 msgstr "Ces informations seront affichées sur la page de paiement, la page de résumé de commande et l'e-mail de confirmation de commande."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:106
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:115
 msgid "This invitation is for {0}"
 msgstr "Cette invitation est destinée à {0}"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:120
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:129
 msgid "This invitation is no longer valid"
 msgstr "Cette invitation n'est plus valide"
 
@@ -18355,7 +18621,7 @@ msgstr "Il s'agit d'un événement récurrent"
 msgid "This is an online event"
 msgstr "Ceci est un événement en ligne"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:150
+#: src/components/routes/settings/Security/SignInMethods.tsx:153
 msgid "This is how you sign in. Add a password or another option before removing it."
 msgstr "C'est ainsi que vous vous connectez. Ajoutez un mot de passe ou une autre option avant de la supprimer."
 
@@ -18372,7 +18638,11 @@ msgstr "Ceci est le nom de votre organisateur qui sera affiché à vos utilisate
 msgid "This is the only time the signing secret will be shown. Please copy it now and store it securely."
 msgstr "C'est la seule fois que le secret de signature sera affiché. Veuillez le copier maintenant et le stocker en lieu sûr."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:80
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:163
+msgid "This is the only time you'll see this key"
+msgstr "C'est la seule fois que vous verrez cette clé"
+
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:89
 msgid "This is usually temporary. Try again in a moment."
 msgstr "C'est généralement temporaire. Réessayez dans un instant."
 
@@ -18516,12 +18786,12 @@ msgstr "Cette place est retenue"
 msgid "This seat map was changed somewhere else. Load the latest version? Your unsaved edits will be lost."
 msgstr "Ce plan de salle a été modifié ailleurs. Charger la dernière version ? Vos modifications non enregistrées seront perdues."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:86
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:93
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:95
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:102
 msgid "This sign-in link has expired"
 msgstr "Ce lien de connexion a expiré"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:139
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:148
 msgid "This sign-in option isn't available"
 msgstr "Cette option de connexion n'est pas disponible"
 
@@ -18587,7 +18857,7 @@ msgstr "Jeu"
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: src/components/routes/settings/Security/index.tsx:169
+#: src/components/routes/settings/Security/index.tsx:172
 msgid "Tick \"Trust this device\" when you sign in to skip the code on that browser for 30 days."
 msgstr "Cochez \"Faire confiance à cet appareil\" lors de la connexion pour ne pas saisir de code sur ce navigateur pendant 30 jours."
 
@@ -18906,8 +19176,8 @@ msgid "Tomorrow"
 msgstr "Demain"
 
 #: src/components/routes/auth/ForgotPassword/index.tsx:34
-#: src/components/routes/auth/Login/index.tsx:85
-#: src/components/routes/auth/Register/index.tsx:74
+#: src/components/routes/auth/Login/index.tsx:87
+#: src/components/routes/auth/Register/index.tsx:80
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:86
 #: src/hooks/useLoginSteps.ts:54
 #: src/utilites/ssoErrors.ts:13
@@ -19036,7 +19306,7 @@ msgstr "Suivi et analytique"
 msgid "Trust this device for 30 days"
 msgstr "Faire confiance à cet appareil pendant 30 jours"
 
-#: src/components/routes/settings/Security/index.tsx:167
+#: src/components/routes/settings/Security/index.tsx:170
 msgid "Trusted devices"
 msgstr "Appareils de confiance"
 
@@ -19053,6 +19323,8 @@ msgid "Try adjusting your filters to see more dates."
 msgstr "Ajustez vos filtres pour voir plus de dates."
 
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1105
+#: src/components/routes/settings/ApiKeys/index.tsx:188
+#: src/components/routes/settings/ApiReference/index.tsx:66
 #: src/components/routes/settings/Security/index.tsx:77
 #: src/components/routes/sso/Callback/index.tsx:257
 #: src/ee/box-office/components/layouts/BoxOffice/CardTender.tsx:206
@@ -19062,7 +19334,7 @@ msgstr "Ajustez vos filtres pour voir plus de dates."
 msgid "Try again"
 msgstr "Réessayer"
 
-#: src/components/routes/auth/Login/index.tsx:213
+#: src/components/routes/auth/Login/index.tsx:215
 #: src/components/routes/my-tickets/index.tsx:200
 msgid "Try another email"
 msgstr "Essayer un autre e-mail"
@@ -19070,6 +19342,10 @@ msgstr "Essayer un autre e-mail"
 #: src/components/common/PoweredByFooter/index.tsx:74
 msgid "Try Hi.Events Free"
 msgstr "Essayer Hi.Events gratuitement"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:196
+msgid "Try it"
+msgstr "Essayer"
 
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:47
 msgid "Tue"
@@ -19089,7 +19365,7 @@ msgstr "Tumblr"
 msgid "Turkish"
 msgstr "Turc"
 
-#: src/components/routes/settings/Security/index.tsx:204
+#: src/components/routes/settings/Security/index.tsx:209
 msgid "Turn off"
 msgstr "Désactiver"
 
@@ -19099,7 +19375,7 @@ msgstr "Désactivez cette option pour que le widget remplisse la hauteur de son 
 
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:53
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:112
-#: src/components/routes/settings/Security/index.tsx:192
+#: src/components/routes/settings/Security/index.tsx:195
 msgid "Turn off two-factor authentication"
 msgstr "Désactiver l'authentification à deux facteurs"
 
@@ -19107,7 +19383,7 @@ msgstr "Désactiver l'authentification à deux facteurs"
 msgid "Turn off two-factor authentication for {0}? Only do this after confirming their identity. They will be emailed and can sign in with just their password."
 msgstr "Désactiver l'authentification à deux facteurs pour {0} ? Ne le faites qu'après avoir confirmé son identité. Cette personne recevra un e-mail et pourra se connecter avec son seul mot de passe."
 
-#: src/components/routes/settings/Security/index.tsx:129
+#: src/components/routes/settings/Security/index.tsx:132
 msgid "Turn on"
 msgstr "Activer"
 
@@ -19155,7 +19431,7 @@ msgstr "Deux facteurs"
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:56
 #: src/components/routes/settings/Security/index.tsx:74
 #: src/components/routes/settings/Security/index.tsx:84
-#: src/components/routes/settings/Security/index.tsx:109
+#: src/components/routes/settings/Security/index.tsx:110
 msgid "Two-factor authentication"
 msgstr "Authentification à deux facteurs"
 
@@ -19691,11 +19967,11 @@ msgstr "Utiliser un autre compte"
 msgid "Use a JPG, PNG or WebP image under 5MB."
 msgstr "Utilisez une image JPG, PNG ou WebP de moins de 5 Mo."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:86
+#: src/components/routes/settings/Security/SignInMethods.tsx:87
 msgid "Use a long password that you don't use anywhere else."
 msgstr "Utilisez un mot de passe long que vous n'utilisez nulle part ailleurs."
 
-#: src/components/routes/sso/Callback/index.tsx:291
+#: src/components/routes/sso/Callback/index.tsx:303
 msgid "Use a password instead"
 msgstr "Utiliser plutôt un mot de passe"
 
@@ -19806,6 +20082,10 @@ msgstr "Utilise les couleurs et la police de votre page d'accueil. Si vous modif
 #: src/ee/licensing/components/LicenceModal/index.tsx:101
 msgid "Using them for real events? Get an Enterprise licence and put its key in <0>APP_LICENCE_KEY</0>."
 msgstr "Vous les utilisez pour de vrais événements ? Obtenez une licence Enterprise et mettez sa clé dans <0>APP_LICENCE_KEY</0>."
+
+#: src/components/routes/settings/ApiKeys/index.tsx:219
+msgid "Using your key"
+msgstr "Utiliser votre clé"
 
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:147
 #: src/components/routes/organizer/Settings/Sections/BasicSettings/index.tsx:147
@@ -20052,6 +20332,10 @@ msgstr "Voir le participant"
 msgid "View Attendee Details"
 msgstr "Voir les détails de l'invité"
 
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:262
+msgid "View data and run exports. Can't change anything."
+msgstr "Consulter les données et lancer des exports. Ne peut rien modifier."
+
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
 msgid "View details"
 msgstr "Voir les détails"
@@ -20269,7 +20553,7 @@ msgstr "Attention : Il s'agit de la configuration par défaut du système. Les m
 msgid "We could not process your payment. Please try again or contact support."
 msgstr "Nous n'avons pas pu traiter votre paiement. Veuillez réessayer ou contacter l'assistance."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:126
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:135
 msgid "We couldn't confirm it's you"
 msgstr "Nous n'avons pas pu confirmer votre identité"
 
@@ -20362,7 +20646,7 @@ msgstr "Impossible de lire votre presse-papiers. Appuyez plutôt sur Ctrl+V ou �
 msgid "We couldn't reorder the categories. Please try again."
 msgstr "Nous n'avons pas pu réorganiser les catégories. Veuillez réessayer."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:145
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:154
 msgid "We couldn't sign you in"
 msgstr "Nous n'avons pas pu vous connecter"
 
@@ -20387,7 +20671,7 @@ msgstr "Nous recommandons des dimensions de 2 160 px sur 1 080 px et une tai
 msgid "We recommend dimensions of 400px by 400px, and a maximum file size of 5MB"
 msgstr "Nous recommandons des dimensions de 400px par 400px et une taille maximale de 5 Mo"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:99
+#: src/components/routes/settings/Security/SignInMethods.tsx:102
 msgid "We sent a link to {0}. Open it to set your password."
 msgstr "Nous avons envoyé un lien à {0}. Ouvrez-le pour définir votre mot de passe."
 
@@ -20533,7 +20817,7 @@ msgstr "Weibo"
 msgid "Welcome aboard! Sign in to continue."
 msgstr "Bienvenue à bord ! Connectez-vous pour continuer."
 
-#: src/components/routes/auth/Login/index.tsx:114
+#: src/components/routes/auth/Login/index.tsx:116
 msgid "Welcome back"
 msgstr "Bon retour"
 
@@ -20847,7 +21131,7 @@ msgstr "Fonctionnement"
 #: src/components/modals/EditPromoCodeModal/index.tsx:87
 #: src/components/modals/EditQuestionModal/index.tsx:103
 #: src/components/modals/JoinWaitlistModal/index.tsx:206
-#: src/components/routes/auth/Register/index.tsx:171
+#: src/components/routes/auth/Register/index.tsx:188
 msgid "Working..."
 msgstr "Fonctionnement..."
 
@@ -20915,11 +21199,12 @@ msgstr "Oui, supprime-les"
 msgid "Yoga class"
 msgstr "Cours de yoga"
 
+#: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:60
 #: src/components/routes/settings/Team/MemberRow.tsx:121
 msgid "You"
 msgstr "Vous"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:132
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:141
 msgid "You already have an account"
 msgstr "Vous avez déjà un compte"
 
@@ -20931,7 +21216,7 @@ msgstr "Vous avez déjà un compte avec {email}"
 msgid "You already have an account. Sign in and we'll bring you back here to join the team."
 msgstr "Vous avez déjà un compte. Connectez-vous et nous vous ramènerons ici pour rejoindre l'équipe."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:114
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:123
 msgid "You already have an account. Sign in, and we'll bring you back to the invitation."
 msgstr "Vous avez déjà un compte. Connectez-vous et nous vous ramènerons à l'invitation."
 
@@ -21021,6 +21306,10 @@ msgstr "Vous ne pouvez pas supprimer ce niveau de prix car des produits ont déj
 msgid "You confirmed it's you. Continue within a few minutes."
 msgstr "Vous avez confirmé votre identité. Continuez dans les prochaines minutes."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:196
+msgid "You don't have any API keys"
+msgstr "Vous n'avez aucune clé API"
+
 #: src/components/routes/profile/ConfirmEmailChange/index.tsx:41
 msgid "You have no pending email change."
 msgstr "Vous n’avez aucun changement d’e-mail en attente."
@@ -21045,6 +21334,10 @@ msgstr "Vous avez ajouté des taxes et des frais à un produit gratuit. Voulez-v
 #: src/components/routes/event/OccurrencesTab/RecurrenceScheduleDrawer/index.tsx:748
 msgid "You have unsaved changes. Are you sure you want to discard them?"
 msgstr "Vous avez des modifications non enregistrées. Voulez-vous vraiment les abandonner ?"
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:153
+msgid "You haven't copied this key. Once you close this window it can't be shown again."
+msgstr "Vous n'avez pas copié cette clé. Une fois cette fenêtre fermée, elle ne pourra plus être affichée."
 
 #: src/components/modals/SendMessageModal/index.tsx:207
 msgid "You must acknowledge that this email is not promotional"
@@ -21074,6 +21367,10 @@ msgstr "Vous devez avoir au moins un niveau de prix"
 msgid "You must verify your email address before you can update the organizer status."
 msgstr "Vous devez vérifier votre adresse e-mail avant de pouvoir mettre à jour le statut de l'organisateur."
 
+#: src/components/routes/settings/ApiKeys/index.tsx:131
+msgid "You need a confirmed email address to create API keys. Check your inbox, or resend the confirmation email from your <0>profile</0>."
+msgstr "Vous devez avoir une adresse e-mail confirmée pour créer des clés API. Consultez votre boîte de réception ou renvoyez l'e-mail de confirmation depuis votre <0>profil</0>."
+
 #: src/components/modals/CreateAttendeeModal/index.tsx:191
 msgid "You need to create at least one occurrence before you can add attendees to this recurring event."
 msgstr "Vous devez créer au moins une date avant de pouvoir ajouter des participants à cet événement récurrent."
@@ -21090,11 +21387,11 @@ msgstr "Vous devez vérifier l'adresse e-mail de votre compte avant de pouvoir e
 msgid "You receive"
 msgstr "Vous recevez"
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:87
+#: src/components/routes/settings/Security/SignInMethods.tsx:90
 msgid "You sign in without a password. Add one as a backup way to sign in."
 msgstr "Vous vous connectez sans mot de passe. Ajoutez-en un comme moyen de connexion de secours."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:107
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:116
 msgid "You signed in as {0}. Use the account the invitation was sent to."
 msgstr "Vous vous êtes connecté en tant que {0}. Utilisez le compte auquel l'invitation a été envoyée."
 
@@ -21110,7 +21407,7 @@ msgstr "Vous avez utilisé un code de récupération. Il vous reste 1 code de r�
 msgid "You will have to mark an order as paid manually. This can be done on the manage order page."
 msgstr "Vous devrez marquer une commande comme payée manuellement. Cela peut être fait sur la page de gestion des commandes."
 
-#: src/components/routes/settings/Security/SignInMethods.tsx:207
+#: src/components/routes/settings/Security/SignInMethods.tsx:210
 msgid "You won't be able to sign in with {0} any more. Other devices signed in to your account will be signed out."
 msgstr "Vous ne pourrez plus vous connecter avec {0}. Les autres appareils connectés à votre compte seront déconnectés."
 
@@ -21158,7 +21455,7 @@ msgstr "Vous rejoignez la liste d'attente pour le {occurrenceDate}."
 msgid "You're on the waitlist!"
 msgstr "Vous êtes sur la liste d'attente !"
 
-#: src/components/routes/settings/Security/index.tsx:151
+#: src/components/routes/settings/Security/index.tsx:154
 msgid "You're running low. Generate a new set so you don't get locked out."
 msgstr "Il vous en reste peu. Générez un nouveau jeu pour ne pas être bloqué."
 
@@ -21174,7 +21471,7 @@ msgstr "Vous êtes connecté en tant que {0}"
 msgid "You're unsubscribed"
 msgstr "Vous êtes désinscrit"
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:63
 msgid "You've been invited"
 msgstr "Vous avez été invité"
 
@@ -21186,6 +21483,10 @@ msgstr "Une place vous a été proposée !"
 msgid "You've changed the session time"
 msgstr "Vous avez modifié l'horaire de la séance"
 
+#: src/components/routes/settings/ApiKeys/index.tsx:145
+msgid "You've reached the limit of {0} active keys. Revoke one to create another."
+msgstr "Vous avez atteint la limite de {0} clés actives. Révoquez-en une pour en créer une autre."
+
 #: src/components/common/ThemeColorControls/index.tsx:173
 msgid "Your accent color doesn't stand out enough in this mode."
 msgstr "Votre couleur d'accent ne ressort pas assez dans ce mode."
@@ -21194,7 +21495,7 @@ msgstr "Votre couleur d'accent ne ressort pas assez dans ce mode."
 msgid "your account"
 msgstr "votre compte"
 
-#: src/components/routes/settings/Security/index.tsx:119
+#: src/components/routes/settings/Security/index.tsx:120
 msgid "Your account asks for a code from your authenticator app at sign-in. Turned on {0}."
 msgstr "Votre compte demande un code de votre application d'authentification à la connexion. Activée {0}."
 
@@ -21210,7 +21511,7 @@ msgstr "Votre compte a des limites de messagerie. Pour augmenter vos limites, co
 msgid "Your account is now scheduled for deletion."
 msgstr "Votre compte est désormais programmé pour suppression."
 
-#: src/components/routes/sso/Callback/SsoErrorState.tsx:61
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:70
 msgid "Your account isn't active"
 msgstr "Votre compte n'est pas actif"
 
@@ -21237,6 +21538,10 @@ msgstr "Vos participants ont été exportés avec succès."
 #: src/components/common/AttendeeTable/index.tsx:365
 msgid "Your attendees will appear here once they have registered for your event. You can also manually add attendees."
 msgstr "Vos participants apparaîtront ici une fois qu’ils se seront inscrits à votre événement. Vous pouvez également ajouter manuellement des participants."
+
+#: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:190
+msgid "Your browser blocked copying. Select the key and copy it yourself."
+msgstr "Votre navigateur a bloqué la copie. Sélectionnez la clé et copiez-la vous-même."
 
 #: src/components/modals/CheckInListSuccessModal/index.tsx:23
 msgid "Your check-in list has been created successfully. Share the link below with your check-in staff."
@@ -21351,9 +21656,18 @@ msgstr "Vos commandes apparaîtront ici une fois qu’elles commenceront à arri
 msgid "Your organisation requires two-factor authentication. Set it up now to continue. It takes about a minute."
 msgstr "Votre organisation exige l'authentification à deux facteurs. Configurez-la maintenant pour continuer. Cela prend environ une minute."
 
-#: src/components/routes/auth/Login/index.tsx:135
+#: src/components/routes/auth/Login/index.tsx:137
 msgid "Your organization requires single sign-on"
 msgstr "Votre organisation exige l'authentification unique"
+
+#: src/components/routes/settings/Security/SignInMethods.tsx:89
+msgid "Your organization requires single sign-on, so you don't need a password."
+msgstr "Votre organisation exige l'authentification unique, vous n'avez donc pas besoin de mot de passe."
+
+#: src/components/routes/auth/Register/index.tsx:110
+#: src/components/routes/sso/Callback/SsoErrorState.tsx:54
+msgid "Your organization uses single sign-on"
+msgstr "Votre organisation utilise l'authentification unique"
 
 #: src/components/routes/organizer/Settings/Sections/AddressSettings/index.tsx:104
 msgid "Your organizer address"
@@ -21367,8 +21681,8 @@ msgstr "Votre organisateur n'a pas encore de description."
 msgid "Your organizer profile isn't published."
 msgstr "Votre profil d'organisateur n'est pas publié."
 
-#: src/components/routes/auth/Login/index.tsx:175
-#: src/components/routes/auth/Register/index.tsx:145
+#: src/components/routes/auth/Login/index.tsx:177
+#: src/components/routes/auth/Register/index.tsx:162
 msgid "Your password"
 msgstr "Votre mot de passe"
 

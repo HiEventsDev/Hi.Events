@@ -58,6 +58,11 @@
   display: flex;
   flex-shrink: 0;
   gap: 8px;
+
+  @include mixins.respond-below(sm) {
+    flex-shrink: 1;
+    min-width: 0;
+  }
 }
 
 .body {

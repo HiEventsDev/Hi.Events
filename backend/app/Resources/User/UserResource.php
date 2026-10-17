@@ -2,11 +2,11 @@
 
 namespace HiEvents\Resources\User;
 
-use Exception;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Resources\BaseResource;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
+use HiEvents\Services\Domain\Auth\AuthUserService;
 use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
 use Illuminate\Http\Request;
 
@@ -17,14 +17,9 @@ class UserResource extends BaseResource
 {
     public function toArray(Request $request): array
     {
-        $isImpersonating = false;
-        $impersonatorId = null;
-        try {
-            $isImpersonating = (bool) auth()->payload()->get('is_impersonating', false);
-            $impersonatorId = $isImpersonating ? auth()->payload()->get('impersonator_id') : null;
-        } catch (Exception) {
-            // Not authenticated or no JWT token
-        }
+        $authUserService = app(AuthUserService::class);
+        $isImpersonating = $authUserService->isImpersonating();
+        $impersonatorId = $authUserService->getImpersonatorId();
 
         return [
             'id' => $this->getId(),
