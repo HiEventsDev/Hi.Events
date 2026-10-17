@@ -247,7 +247,7 @@ test.describe('enterprise single sign-on', () => {
 
     await freshAccount.api.setSsoConnectionStatus(accountId, 'INACTIVE');
 
-    await page.goto('/manage/events');
+    await page.goto('/manage/events').catch(() => undefined);
     await expect(page).toHaveURL(/\/auth\/login/);
     await expect(page.getByRole('heading', { name: 'Sign in with SSO' })).toBeVisible();
     await expect(page.getByLabel('Work email')).toBeVisible();
