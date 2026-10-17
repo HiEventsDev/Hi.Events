@@ -71,10 +71,17 @@ export const ConnectionForm = ({accountId, type, connection, redirectUri, onSave
             return;
         }
 
+        const checkedValue = form.values[locationField];
+        const isCurrent = () => form.getValues()[locationField] === checkedValue;
+
         setCheck({status: 'checking'});
         checkMutation.mutate({accountId, request: {...request(), client_id: request().client_id || 'pending'}}, {
-            onSuccess: () => setCheck({status: 'valid'}),
+            onSuccess: () => isCurrent() && setCheck({status: 'valid'}),
             onError: (error: any) => {
+                if (!isCurrent()) {
+                    return;
+                }
+
                 const errors = error?.response?.data?.errors ?? {};
                 const message = errors[locationField]?.[0] ?? errors[locationField];
 

@@ -143,6 +143,25 @@ class PasswordLoginDisabledTest extends TestCase
             ->assertJsonPath('error_code', 'SSO_LAST_SIGN_IN_METHOD');
     }
 
+    public function test_a_password_that_can_no_longer_sign_in_cannot_confirm_identity(): void
+    {
+        $user = User::factory()->password(self::PASSWORD)->withAccount()->create();
+        $token = JWTAuth::claims(['account_id' => $user->accounts()->first()->id])->fromUser($user);
+
+        $this->withToken($token)->getJson('/users/me')->assertJsonPath('data.has_password', false);
+
+        $this->withToken($token)->putJson('/users/me', [
+            'email' => 'moved-'.$user->email,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'timezone' => 'UTC',
+            'locale' => 'en',
+            'confirmation_password' => self::PASSWORD,
+        ])->assertUnprocessable()->assertJsonValidationErrors('confirmation_password');
+
+        $this->assertNull($user->fresh()->pending_email);
+    }
+
     private function resetAuth(): void
     {
         $this->app['auth']->forgetGuards();

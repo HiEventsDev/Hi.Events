@@ -123,7 +123,8 @@ readonly class UpdateMeHandler
 
     private function isChangingEmail(UpdateMeDTO $updateUserData, UserDomainObject $existingUser): bool
     {
-        return $updateUserData->email !== $existingUser->getEmail();
+        return $updateUserData->email !== null
+            && strtolower(trim($updateUserData->email)) !== strtolower($existingUser->getEmail());
     }
 
     private function getExistingUser(UpdateMeDTO $updateUserData): UserDomainObject

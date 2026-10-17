@@ -46,6 +46,38 @@ class OidcDiscoveryClientTest extends TestCase
         $this->http->assertSentCount(1);
     }
 
+    public function test_an_issuer_published_with_a_trailing_slash_is_accepted(): void
+    {
+        $this->http->fake(['*' => $this->http->response($this->document(['issuer' => self::ISSUER.'/']))]);
+
+        $this->assertSame(self::ISSUER.'/', $this->client->discover($this->provider())['issuer']);
+    }
+
+    public function test_a_used_or_expired_code_reads_as_an_expired_link(): void
+    {
+        $this->http->fake(['*' => $this->http->response(['error' => 'invalid_grant'], 400)]);
+
+        try {
+            $this->client->post($this->provider(), self::ISSUER.'/token', ['code' => 'old'], null);
+            $this->fail('Expected the token request to be rejected');
+        } catch (SsoException $exception) {
+            $this->assertSame(SsoErrorCode::STATE_INVALID, $exception->errorCode);
+        }
+    }
+
+    public function test_a_rejected_client_is_not_reported_as_an_expired_link(): void
+    {
+        $this->http->fake(['*' => $this->http->response(['error' => 'invalid_client'], 401)]);
+
+        try {
+            $this->client->post($this->provider(), self::ISSUER.'/token', ['code' => 'fresh'], null);
+            $this->fail('Expected the token request to be rejected');
+        } catch (SsoException $exception) {
+            $this->assertSame(SsoErrorCode::TOKEN_INVALID, $exception->errorCode);
+            $this->assertStringContainsString('invalid_client', $exception->getMessage());
+        }
+    }
+
     public function test_a_document_for_another_issuer_is_rejected(): void
     {
         $this->http->fake(['*' => $this->http->response($this->document(['issuer' => 'https://attacker.example.test']))]);

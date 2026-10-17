@@ -7,13 +7,23 @@ const isDevStack = (): boolean => new URL(BASE_URL).port === '8443';
 export const MOCK_OIDC_URL = process.env.E2E_MOCK_OIDC_URL
   ?? (isDevStack() ? 'http://hievents-mock-oidc.orb.local:8080' : 'http://mock-oidc:8124');
 
+const probeUrl = (): string => {
+  const url = new URL(MOCK_OIDC_URL);
+  if (url.hostname === 'mock-oidc') url.hostname = 'localhost';
+  return `${url.origin}/default/.well-known/openid-configuration`;
+};
+
 export const mockOidcIsReachable = async (page: Page): Promise<boolean> => {
+  let reachable = false;
   try {
-    const response = await page.request.get(`${MOCK_OIDC_URL}/default/.well-known/openid-configuration`, { timeout: 3000 });
-    return response.ok();
+    reachable = (await page.request.get(probeUrl(), { timeout: 3000 })).ok();
   } catch {
-    return false;
+    reachable = false;
   }
+  if (!reachable && process.env.CI) {
+    throw new Error(`The mock identity provider at ${probeUrl()} is not reachable`);
+  }
+  return reachable;
 };
 
 export const signInAtMockProvider = async (page: Page, issuerId: string, subject: string, claims: IdentityClaims): Promise<void> => {

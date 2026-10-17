@@ -122,6 +122,22 @@ class SsoSignupTest extends TestCase
             ->assertJsonPath('error_code', 'SSO_TICKET_INVALID');
     }
 
+    public function test_asking_for_a_new_code_does_not_reset_the_wrong_code_limit(): void
+    {
+        $this->fakeOidcProvider(trustEmail: false);
+        [$flow, $ticket] = $this->signupTicket('linus@example.com', emailVerified: false);
+
+        for ($attempt = 1; $attempt < 5; $attempt++) {
+            $this->postJson('/auth/sso/signup/code', ['signup_ticket' => $ticket, 'binding' => $flow['binding']])->assertNoContent();
+            $this->postJson('/auth/sso/signup', $this->signupPayload($flow, $ticket, ['email_code' => '000000']))
+                ->assertJsonPath('error_code', 'SSO_EMAIL_CODE_INVALID');
+        }
+
+        $this->postJson('/auth/sso/signup/code', ['signup_ticket' => $ticket, 'binding' => $flow['binding']])->assertNoContent();
+        $this->postJson('/auth/sso/signup', $this->signupPayload($flow, $ticket, ['email_code' => '000000']))
+            ->assertJsonPath('error_code', 'SSO_TICKET_INVALID');
+    }
+
     public function test_a_trusted_email_never_needs_a_code(): void
     {
         [$flow, $ticket] = $this->signupTicket('grace@example.com');

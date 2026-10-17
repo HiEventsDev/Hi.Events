@@ -4,9 +4,11 @@ namespace HiEvents\Console\Commands;
 
 use HiEvents\DomainObjects\AccountSsoDomainDomainObject;
 use HiEvents\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountSsoDomainRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\AccountSsoDomainService;
 use Illuminate\Console\Command;
+use Illuminate\Database\DatabaseManager;
 
 class SsoVerifyDomainCommand extends Command
 {
@@ -14,8 +16,12 @@ class SsoVerifyDomainCommand extends Command
 
     protected $description = 'Mark a single sign-on domain as verified without a DNS check, after reviewing ownership manually.';
 
-    public function handle(AccountSsoDomainRepositoryInterface $domainRepository, AccountSsoDomainService $domainService): int
-    {
+    public function handle(
+        AccountSsoDomainRepositoryInterface $domainRepository,
+        AccountSsoDomainService $domainService,
+        AccountSsoConnectionRepositoryInterface $connectionRepository,
+        DatabaseManager $databaseManager,
+    ): int {
         $where = ['domain' => strtolower((string) $this->argument('domain'))];
 
         if ($this->option('account') !== null) {
@@ -35,14 +41,29 @@ class SsoVerifyDomainCommand extends Command
         /** @var AccountSsoDomainDomainObject $domain */
         $domain = $domains->first();
 
-        if (! $this->confirm("Mark {$domain->getDomain()} as verified for account {$domain->getAccountId()}?", false)) {
+        $holder = $domainService->findVerifiedElsewhere($domain);
+        $question = $holder === null
+            ? "Mark {$domain->getDomain()} as verified for account {$domain->getAccountId()}?"
+            : "{$domain->getDomain()} is verified by account {$holder->getAccountId()}. Remove it from that account and verify it for account {$domain->getAccountId()}?";
+
+        if ($holder !== null && $connectionRepository->findFirstWhere(['account_id' => $holder->getAccountId()])?->getEnforceSso() === true) {
+            $this->warn("Account {$holder->getAccountId()} requires single sign-on. Its members on {$domain->getDomain()} will be able to sign in with a password again.");
+        }
+
+        if (! $this->confirm($question, false)) {
             $this->info('Operation cancelled.');
 
             return self::FAILURE;
         }
 
         try {
-            $domainService->markVerified($domain);
+            $databaseManager->transaction(function () use ($domainService, $domain, $holder) {
+                if ($holder !== null) {
+                    $domainService->releaseVerificationElsewhere($domain);
+                }
+
+                $domainService->markVerified($domain);
+            });
         } catch (AccountSsoConfigurationException $exception) {
             $this->error($exception->getMessage());
 
@@ -50,6 +71,8 @@ class SsoVerifyDomainCommand extends Command
         }
 
         $this->info("{$domain->getDomain()} is now verified for account {$domain->getAccountId()}.");
+        $record = AccountSsoDomainDomainObject::TXT_RECORD_PREFIX.$domain->getDomain();
+        $this->warn("The daily check suspends the domain after 7 days without the {$record} TXT record, so ask the account to keep it in place.");
 
         return self::SUCCESS;
     }

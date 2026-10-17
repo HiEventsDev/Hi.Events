@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import {Badge, Button} from "@mantine/core";
 import {t} from "@lingui/macro";
@@ -28,6 +28,7 @@ export const TestSignIn = ({accountId, connection, initialOutcome = null}: TestS
     const startTest = useStartSsoTest();
     const [outcome, setOutcome] = useState<SsoTestOutcome | null>(initialOutcome);
     const [waiting, setWaiting] = useState(false);
+    const popupRef = useRef<Window | null>(null);
     const providerName = connectionProviderName(connection.type);
 
     useEffect(() => {
@@ -45,6 +46,21 @@ export const TestSignIn = ({accountId, connection, initialOutcome = null}: TestS
 
         return () => window.removeEventListener('message', receive);
     }, []);
+
+    useEffect(() => {
+        if (!waiting) {
+            return;
+        }
+
+        const timer = window.setInterval(() => {
+            if (popupRef.current?.closed) {
+                setWaiting(false);
+                queryClient.invalidateQueries({queryKey: [GET_ACCOUNT_SSO_QUERY_KEY]});
+            }
+        }, 1000);
+
+        return () => window.clearInterval(timer);
+    }, [waiting]);
 
     const start = async () => {
         const usePopup = window.matchMedia('(min-width: 576px)').matches;
@@ -68,6 +84,7 @@ export const TestSignIn = ({accountId, connection, initialOutcome = null}: TestS
 
             storeSsoFlow(response, flow, true);
             popup.location.href = response.authorization_url;
+            popupRef.current = popup;
             setWaiting(true);
         } catch (error) {
             popup?.close();

@@ -52,10 +52,11 @@ class SsoJitProvisioningService
      */
     public function ensureMembership(AccountSsoConnectionDomainObject $connection, UserDomainObject $user, bool $userEmailOnVerifiedDomain): void
     {
+        $membership = ['user_id' => $user->getId(), 'account_id' => $connection->getAccountId()];
+
         /** @var AccountUserDomainObject|null $accountUser */
-        $accountUser = $this->accountUserRepository
-            ->includeDeleted()
-            ->findFirstWhere(['user_id' => $user->getId(), 'account_id' => $connection->getAccountId()]);
+        $accountUser = $this->accountUserRepository->findFirstWhere($membership)
+            ?? $this->accountUserRepository->includeDeleted()->findFirstWhere($membership);
 
         if ($accountUser !== null) {
             $this->assertMembershipUsable($connection, $accountUser, $userEmailOnVerifiedDomain);

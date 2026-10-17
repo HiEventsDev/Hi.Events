@@ -154,7 +154,7 @@ class IdTokenValidator
             SsoProviderType::MICROSOFT => is_string($claims['tid'] ?? null)
                 && $claims['tid'] !== ''
                 && $issuer === str_replace('{tenantid}', $claims['tid'], OidcDiscoveryClient::MICROSOFT_ISSUER_TEMPLATE),
-            SsoProviderType::OIDC => $issuer === $provider->issuer,
+            SsoProviderType::OIDC => is_string($issuer) && rtrim($issuer, '/') === $provider->issuer,
         };
 
         if (! $valid) {

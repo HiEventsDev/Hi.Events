@@ -23,7 +23,7 @@ class DeleteSsoIdentityAction extends BaseSsoAction
     public function __invoke(ConfirmIdentityRequest $request, int $identityId): JsonResponse
     {
         if ($this->isImpersonating()) {
-            return $this->impersonationForbiddenResponse();
+            return $this->signInMethodsImpersonationResponse();
         }
 
         $user = $this->getAuthenticatedUser();

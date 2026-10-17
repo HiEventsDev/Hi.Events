@@ -233,6 +233,7 @@ export interface SsoEnforcementMember {
     is_account_owner: boolean;
     on_verified_domain: boolean;
     sso_enforced: boolean;
+    sso_available: boolean;
 }
 
 export interface SsoEnforcementPreview {

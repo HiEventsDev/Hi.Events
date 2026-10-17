@@ -11,6 +11,7 @@ use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DisableTwoFactorHandler;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\DisableTwoFactorDTO;
 use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
@@ -68,7 +69,7 @@ class DisableTwoFactorHandlerTest extends TestCase
             $this->twoFactorVerifier,
             $this->trustedDeviceService,
             $this->requirementService,
-            new IdentityConfirmationService($this->hasher, new SsoTicketService(new Repository(new ArrayStore))),
+            new IdentityConfirmationService($this->hasher, new SsoTicketService(new Repository(new ArrayStore)), $this->passwordLoginPolicy()),
             $this->ssoEnforcementService,
             $databaseManager,
             $this->mailer,
@@ -136,5 +137,13 @@ class DisableTwoFactorHandlerTest extends TestCase
     private function dto(): DisableTwoFactorDTO
     {
         return new DisableTwoFactorDTO(userId: 2, password: 'secret', code: '123456', recoveryCode: null);
+    }
+
+    private function passwordLoginPolicy(): PasswordLoginPolicy
+    {
+        $policy = m::mock(PasswordLoginPolicy::class);
+        $policy->shouldReceive('canConfirmWithPassword')->andReturnUsing(fn (UserDomainObject $user) => $user->getPassword() !== null);
+
+        return $policy;
     }
 }

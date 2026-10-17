@@ -26,7 +26,7 @@ class ExchangeAuthenticatedSsoCodeAction extends BaseSsoAction
     public function __invoke(ExchangeSsoCodeRequest $request): JsonResponse
     {
         if ($this->isImpersonating()) {
-            return $this->impersonationForbiddenResponse();
+            return $this->signInMethodsImpersonationResponse();
         }
 
         try {

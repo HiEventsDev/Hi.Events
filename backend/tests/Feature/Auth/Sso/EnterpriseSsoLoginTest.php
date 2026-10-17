@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth\Sso;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\Mail\Account\AdminAccessGrantedMail;
+use HiEvents\Mail\User\SignInMethodChangedMail;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\User;
 use HiEvents\Models\UserIdentity;
@@ -121,6 +122,7 @@ class EnterpriseSsoLoginTest extends TestCase
             'access_scope' => 'ACCOUNT',
         ]);
         Mail::assertNotQueued(AdminAccessGrantedMail::class);
+        Mail::assertNotQueued(SignInMethodChangedMail::class);
     }
 
     public function test_a_person_provisioned_as_an_admin_is_reported_to_the_owner(): void
@@ -205,6 +207,25 @@ class EnterpriseSsoLoginTest extends TestCase
 
         $this->assertSame('INACTIVE', DB::table('account_users')->where(['account_id' => $accountId, 'user_id' => $inactive->id])->value('status'));
         $this->assertNotNull(DB::table('account_users')->where(['account_id' => $accountId, 'user_id' => $removed->id])->value('deleted_at'));
+    }
+
+    public function test_a_member_who_was_removed_and_invited_again_can_sign_in(): void
+    {
+        [, $accountId] = $this->createAccountOwner();
+        $connection = $this->createConnection($accountId);
+        $this->addDomain($accountId, 'acme.test');
+        $member = $this->addAccountUser($accountId);
+        $member->update(['email' => 'back@acme.test']);
+        DB::table('account_users')->where(['account_id' => $accountId, 'user_id' => $member->id])->update(['deleted_at' => now()]);
+        $member->accounts()->attach($accountId, [
+            'role' => Role::ADMIN->value,
+            'status' => UserStatus::ACTIVE->name,
+            'is_account_owner' => false,
+        ]);
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-back', 'back@acme.test'))
+            ->assertOk()
+            ->assertJsonPath('data.status', 'AUTHENTICATED');
     }
 
     public function test_a_pending_invitation_on_a_verified_domain_is_accepted_by_signing_in(): void

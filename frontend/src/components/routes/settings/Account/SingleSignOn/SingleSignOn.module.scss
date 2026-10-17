@@ -373,15 +373,17 @@
 
 .domainHeader {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 6px 10px;
   min-width: 0;
 }
 
 .domainName {
-  font-weight: 600;
+  flex: 0 1 auto;
   min-width: 0;
-  @include mixins.ellipsis;
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .domainHeader > :global(.mantine-Badge-root) {

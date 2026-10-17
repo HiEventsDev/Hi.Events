@@ -16,5 +16,6 @@ class SsoEnforcementMember extends BaseDataObject
         public readonly bool $isAccountOwner,
         public readonly bool $onVerifiedDomain,
         public readonly bool $ssoEnforced,
+        public readonly bool $ssoAvailable,
     ) {}
 }

@@ -56,7 +56,7 @@ class AccountSsoConnectionHandler
     {
         $connection = $this->connectionService->create($accountId, $data);
 
-        $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Connected the identity provider :issuer', ['issuer' => $connection->getIssuer()]));
+        $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Connected the identity provider :issuer', ['issuer' => $connection->getIssuer()]);
 
         return $connection;
     }
@@ -70,7 +70,7 @@ class AccountSsoConnectionHandler
         $after = $this->connectionService->update($before, $data);
 
         if ($before->getIssuer() !== $after->getIssuer() || $before->getClientId() !== $after->getClientId()) {
-            $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Changed the identity provider to :issuer', ['issuer' => $after->getIssuer()]));
+            $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Changed the identity provider to :issuer', ['issuer' => $after->getIssuer()]);
         }
 
         return $after;
@@ -93,7 +93,7 @@ class AccountSsoConnectionHandler
 
         if ($status === AccountSsoConnectionStatus::ACTIVE) {
             $activated = $this->connectionService->activate($connection);
-            $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Turned on sign-in with :issuer', ['issuer' => $connection->getIssuer()]));
+            $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Turned on sign-in with :issuer', ['issuer' => $connection->getIssuer()]);
 
             return $activated;
         }
@@ -114,7 +114,7 @@ class AccountSsoConnectionHandler
         $connection = $this->findOrFail($accountId);
 
         $this->databaseManager->transaction(fn () => $this->connectionService->delete($connection));
-        $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Deleted the single sign-on connection'));
+        $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Deleted the single sign-on connection');
     }
 
     /**

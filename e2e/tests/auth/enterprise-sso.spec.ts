@@ -7,6 +7,7 @@ import {
   signInAtMockProvider,
   SsoLoginPage,
 } from '../../pages/enterprise-sso.page';
+import { TwoFactorPage } from '../../pages/two-factor.page';
 import { enableFeatureFlag, markSsoConnectionTested, markSsoDomainVerified } from '../../utils/db';
 import { nextTotpCode } from '../../utils/totp';
 import { uniqueEmail } from '../../utils/unique';
@@ -178,10 +179,7 @@ test.describe('enterprise single sign-on', () => {
 
     const context = await browser.newContext({ ignoreHTTPSErrors: true });
     const page = await context.newPage();
-    await page.goto('/auth/login');
-    await page.getByLabel('Email').fill(memberEmail);
-    await page.getByLabel('Password', { exact: true }).fill(MEMBER_PASSWORD);
-    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await new TwoFactorPage(page).signInWithPassword(memberEmail, MEMBER_PASSWORD);
     const required = page.getByRole('alert').filter({ hasText: 'Your organization requires single sign-on' });
     await expect(required).toBeVisible();
     await required.getByRole('button', { name: 'Sign in with SSO' }).click();
@@ -232,6 +230,47 @@ test.describe('enterprise single sign-on', () => {
 
     await page.waitForURL(/prompt=none/);
     expect(new URL(page.url()).searchParams.get('login_hint')).toBeNull();
+    await context.close();
+  });
+
+  test('turning the connection off signs members out without bouncing them between the app and the provider', async ({ freshAccount, browser }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `off-${uniqueSuffix()}`;
+    const domain = `${issuerId}.test`;
+    await activeConnection(freshAccount, accountId, issuerId, domain);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const page = await context.newPage();
+    await new SsoLoginPage(page).signInWithSso(`ada@${domain}`);
+    await signInAtMockProvider(page, issuerId, 'ada', { email: `ada@${domain}`, email_verified: true });
+    await expect(page).toHaveURL(/\/manage\//);
+
+    await freshAccount.api.setSsoConnectionStatus(accountId, 'INACTIVE');
+
+    await page.goto('/manage/events');
+    await expect(page).toHaveURL(/\/auth\/login/);
+    await expect(page.getByRole('heading', { name: 'Sign in with SSO' })).toBeVisible();
+    await expect(page.getByLabel('Work email')).toBeVisible();
+    await context.close();
+  });
+
+  test('the owner can still sign in with a password and a code while SSO is required, and admins are told', async ({ freshAccount, browser, mailpit }) => {
+    const accountId = await prepareAccount(freshAccount);
+    const issuerId = `owner-${uniqueSuffix()}`;
+    await activeConnection(freshAccount, accountId, issuerId, `${issuerId}.test`);
+    const { secret } = await freshAccount.api.beginTwoFactorSetup(freshAccount.password);
+    await freshAccount.api.confirmTwoFactorSetup(await nextTotpCode(secret));
+    await freshAccount.api.updateSsoEnforcement(accountId, true);
+
+    const context = await browser.newContext({ ignoreHTTPSErrors: true });
+    const page = await context.newPage();
+    const twoFactor = new TwoFactorPage(page);
+    await twoFactor.signInWithPassword(freshAccount.email, freshAccount.password);
+    await twoFactor.expectChallenge();
+    await twoFactor.enterLoginCode(await nextTotpCode(secret));
+    await expect(page).toHaveURL(/\/manage\//);
+
+    await mailpit.waitForMessage(freshAccount.email, { subjectContains: 'signed in without single sign-on' });
     await context.close();
   });
 });

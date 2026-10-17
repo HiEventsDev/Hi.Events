@@ -55,20 +55,22 @@ class EnsureTokenNotRevoked
             return null;
         }
 
-        if ($this->isRevoked($user, $payload)) {
-            return self::ERROR_CODE;
-        }
-
         $accountId = $payload->get('account_id');
+        $ssoConnectionId = $payload->get('sso_connection_id') === null ? null : (int) $payload->get('sso_connection_id');
 
         if ($accountId !== null && ! $this->ssoEnforcementService->isTokenAllowed(
             userId: $user->id,
             email: $user->email,
             accountId: (int) $accountId,
             authMethod: $payload->get('auth_method'),
-            ssoConnectionId: $payload->get('sso_connection_id') === null ? null : (int) $payload->get('sso_connection_id'),
+            ssoConnectionId: $ssoConnectionId,
         )) {
             return SsoErrorCode::SSO_REQUIRED->value;
+        }
+
+        if ($this->isRevoked($user, $payload)
+            || ($accountId !== null && ! $this->ssoEnforcementService->isConnectionSessionUsable((int) $accountId, $ssoConnectionId))) {
+            return self::ERROR_CODE;
         }
 
         return null;

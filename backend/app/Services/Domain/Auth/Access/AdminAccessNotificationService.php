@@ -28,8 +28,11 @@ class AdminAccessNotificationService
             return;
         }
 
+        $ownerUser = $this->userRepository->findById($owner->getUserId());
+
         $this->mailer
-            ->to($this->userRepository->findById($owner->getUserId())->getEmail())
+            ->to($ownerUser->getEmail())
+            ->locale($ownerUser->getLocale())
             ->send(new AdminAccessGrantedMail(
                 newAdminEmail: $this->userRepository->findById($newAdminUserId)->getEmail(),
                 grantedByEmail: $grantedByUserId === null ? null : $this->userRepository->findById($grantedByUserId)->getEmail(),

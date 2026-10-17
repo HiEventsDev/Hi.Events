@@ -92,6 +92,21 @@ class SsoEnforcementTest extends TestCase
         $this->assertNull($exempt->fresh()->tokens_valid_after);
     }
 
+    public function test_a_session_ended_by_requiring_sso_says_why(): void
+    {
+        [$owner, $accountId] = $this->enforcingAccount(enabled: false);
+        $member = $this->member($accountId, 'grace@acme.test');
+        $memberToken = $this->tokenFor($member, $accountId);
+
+        $this->travel(5)->seconds();
+        $this->putJson("/accounts/$accountId/sso/enforcement", ['enabled' => true], $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk();
+
+        $this->getJson('/users/me', $this->bearer($memberToken))
+            ->assertUnauthorized()
+            ->assertJsonPath('error_code', 'SSO_REQUIRED');
+    }
+
     public function test_an_enforced_member_cannot_sign_in_with_a_password_but_can_through_the_connection(): void
     {
         [, $accountId, $connection] = $this->enforcingAccount();
@@ -105,6 +120,33 @@ class SsoEnforcementTest extends TestCase
         $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-grace', 'grace@acme.test'))
             ->assertOk()
             ->assertJsonPath('data.status', 'AUTHENTICATED');
+    }
+
+    public function test_a_member_who_owns_another_account_keeps_password_sign_in_because_the_connection_cannot_link_them(): void
+    {
+        [$owner, $accountId, $connection] = $this->enforcingAccount();
+        $alice = $this->member($accountId, 'alice@acme.test', enforced: true);
+        $ownAccountId = User::factory()->withAccount()->create()->accounts()->first()->id;
+        $alice->accounts()->attach($ownAccountId, [
+            'role' => Role::ADMIN->value,
+            'status' => UserStatus::ACTIVE->name,
+            'is_account_owner' => true,
+        ]);
+        $this->member($accountId, 'grace@acme.test', enforced: true);
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-alice', 'alice@acme.test'))
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN');
+
+        $this->postJson('/auth/login', ['email' => 'alice@acme.test', 'password' => self::PASSWORD, 'account_id' => $accountId])
+            ->assertOk();
+        $this->postJson('/auth/login', ['email' => 'grace@acme.test', 'password' => self::PASSWORD])
+            ->assertJsonPath('error_code', 'SSO_REQUIRED');
+
+        $members = collect($this->getJson("/accounts/$accountId/sso/enforcement", $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk()
+            ->json('data.members'))->keyBy('email');
+        $this->assertFalse($members['alice@acme.test']['sso_available']);
+        $this->assertTrue($members['grace@acme.test']['sso_available']);
     }
 
     public function test_an_exempt_member_and_a_member_outside_the_domains_keep_password_sign_in(): void
@@ -130,6 +172,29 @@ class SsoEnforcementTest extends TestCase
             ->json('data.token');
 
         $this->getJson('/users/me', $this->bearer($token))->assertOk();
+    }
+
+    public function test_a_connection_session_ends_when_the_connection_is_turned_off_or_deleted(): void
+    {
+        [, $accountId, $connection] = $this->enforcingAccount(enabled: false);
+        $this->member($accountId, 'grace@acme.test');
+
+        $token = $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-grace', 'grace@acme.test'))
+            ->json('data.token');
+        $this->getJson('/users/me', $this->bearer($token))->assertOk();
+
+        DB::table('account_sso_connections')->where('id', $connection->id)->update(['status' => 'INACTIVE']);
+        $this->getJson('/users/me', $this->bearer($token))
+            ->assertUnauthorized()
+            ->assertJsonPath('error_code', 'SESSION_REVOKED');
+
+        DB::table('account_sso_connections')->where('id', $connection->id)->update(['status' => 'ACTIVE']);
+        $this->getJson('/users/me', $this->bearer($token))->assertOk();
+
+        DB::table('account_sso_connections')->where('id', $connection->id)->delete();
+        $this->getJson('/users/me', $this->bearer($token))
+            ->assertUnauthorized()
+            ->assertJsonPath('error_code', 'SESSION_REVOKED');
     }
 
     public function test_enforcement_stops_when_the_connection_is_off_or_the_domain_is_suspended(): void
@@ -163,8 +228,33 @@ class SsoEnforcementTest extends TestCase
             'code' => (new Google2FA)->getCurrentOtp($this->ownerSecret),
         ])->assertOk()->assertJsonStructure(['token']);
 
-        Mail::assertQueued(SsoBreakGlassSignInMail::class, fn (SsoBreakGlassSignInMail $mail) => $mail->hasTo($admin->email));
-        Mail::assertQueued(SsoBreakGlassSignInMail::class, fn (SsoBreakGlassSignInMail $mail) => $mail->hasTo($owner->email));
+        Mail::assertQueued(SsoBreakGlassSignInMail::class, fn (SsoBreakGlassSignInMail $mail) => $mail->hasTo($admin->email)
+            && $mail->envelope()->subject === 'The account owner signed in without single sign-on');
+        Mail::assertQueued(SsoBreakGlassSignInMail::class, fn (SsoBreakGlassSignInMail $mail) => $mail->hasTo($owner->email)
+            && $mail->envelope()->subject === 'You signed in without single sign-on');
+    }
+
+    public function test_the_owner_is_told_two_factor_must_stay_on_while_the_account_requires_sso(): void
+    {
+        [$owner, $accountId] = $this->enforcingAccount();
+        $accountName = DB::table('accounts')->where('id', $accountId)->value('name');
+
+        $this->getJson('/users/me/two-factor', $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk()
+            ->assertJsonPath('data.required_by_accounts', [$accountName]);
+    }
+
+    public function test_support_cannot_reset_two_factor_for_the_owner_of_an_account_that_requires_sso(): void
+    {
+        [$owner] = $this->enforcingAccount();
+        $superadmin = User::factory()->password(self::PASSWORD)->withAccount()->create();
+        $superadminAccountId = $superadmin->accounts()->first()->id;
+        $superadmin->accounts()->updateExistingPivot($superadminAccountId, ['role' => Role::SUPERADMIN->name]);
+
+        $this->postJson("/admin/users/{$owner->id}/two-factor/reset", [], $this->bearer($this->tokenFor($superadmin, $superadminAccountId)))
+            ->assertConflict();
+
+        $this->assertNotNull($owner->fresh()->two_factor_secret);
     }
 
     public function test_the_owner_cannot_use_the_backup_sign_in_without_two_factor(): void
@@ -253,6 +343,15 @@ class SsoEnforcementTest extends TestCase
             ->assertUnprocessable();
         $this->deleteJson("/accounts/$accountId/sso/connection", [], $this->bearer($this->tokenFor($owner, $accountId)))
             ->assertUnprocessable();
+
+        $verifiedDomainId = DB::table('account_sso_domains')->where('account_id', $accountId)->value('id');
+        $this->deleteJson("/accounts/$accountId/sso/domains/$verifiedDomainId", [], $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('domain');
+
+        $pendingDomainId = $this->addDomain($accountId, 'pending.test', verified: false);
+        $this->deleteJson("/accounts/$accountId/sso/domains/$pendingDomainId", [], $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertNoContent();
     }
 
     public function test_the_team_list_shows_how_each_member_signs_in(): void

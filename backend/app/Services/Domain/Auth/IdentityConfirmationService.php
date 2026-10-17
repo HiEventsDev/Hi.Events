@@ -14,6 +14,7 @@ class IdentityConfirmationService
     public function __construct(
         private readonly Hasher $hasher,
         private readonly SsoTicketService $ticketService,
+        private readonly PasswordLoginPolicy $passwordLoginPolicy,
     ) {}
 
     /**
@@ -21,7 +22,7 @@ class IdentityConfirmationService
      */
     public function confirm(UserDomainObject $user, ?string $password, ?string $reauthProof, ?string $tokenId): void
     {
-        if ($user->getPassword() !== null) {
+        if ($this->passwordLoginPolicy->canConfirmWithPassword($user)) {
             if ($password === null || ! $this->hasher->check($password, $user->getPassword())) {
                 throw new IdentityConfirmationFailedException(__('The password is incorrect.'));
             }

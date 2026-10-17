@@ -64,16 +64,37 @@ class AccountSsoDomainService
         return $this->markVerified($domain);
     }
 
+    public function findVerifiedElsewhere(AccountSsoDomainDomainObject $domain): ?AccountSsoDomainDomainObject
+    {
+        return $this->domainRepository->findFirstWhere([
+            'domain' => $domain->getDomain(),
+            ['verified_at', 'not null', null],
+            ['account_id', '!=', $domain->getAccountId()],
+        ]);
+    }
+
+    public function releaseVerificationElsewhere(AccountSsoDomainDomainObject $domain): void
+    {
+        $this->domainRepository->updateWhere(
+            attributes: ['verified_at' => null, 'failing_since' => null],
+            where: [
+                'domain' => $domain->getDomain(),
+                ['account_id', '!=', $domain->getAccountId()],
+            ],
+        );
+
+        $this->logger->info('SSO domain verification released for another account', [
+            'domain' => $domain->getDomain(),
+            'account_id' => $domain->getAccountId(),
+        ]);
+    }
+
     /**
      * @throws AccountSsoConfigurationException
      */
     public function markVerified(AccountSsoDomainDomainObject $domain): AccountSsoDomainDomainObject
     {
-        $claimedElsewhere = $this->domainRepository->findFirstWhere([
-            'domain' => $domain->getDomain(),
-            ['verified_at', 'not null', null],
-            ['account_id', '!=', $domain->getAccountId()],
-        ]);
+        $claimedElsewhere = $this->findVerifiedElsewhere($domain);
 
         if ($claimedElsewhere !== null) {
             $this->logger->warning('SSO domain verification conflict', [

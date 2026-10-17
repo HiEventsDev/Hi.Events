@@ -2,18 +2,22 @@
 
 namespace HiEvents\Services\Domain\Auth\Sso\Enterprise;
 
+use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
 use HiEvents\DomainObjects\AccountSsoDomainDomainObject;
 use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\AuthMethod;
+use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Enums\SsoSignInRequirement;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\DomainObjects\UserIdentityDomainObject;
 use HiEvents\Exceptions\AccountSsoConfigurationException;
 use HiEvents\Exceptions\SsoRequiredException;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
+use HiEvents\Repository\Interfaces\UserIdentityRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\DTO\SsoEnforcementMember;
@@ -32,6 +36,7 @@ class SsoEnforcementService
         private readonly TwoFactorAuthenticationService $twoFactorAuthenticationService,
         private readonly UserSessionRevocationService $sessionRevocationService,
         private readonly SsoBreakGlassService $breakGlassService,
+        private readonly UserIdentityRepositoryInterface $userIdentityRepository,
     ) {}
 
     public function findConnection(int $accountId): ?AccountSsoConnectionDomainObject
@@ -71,6 +76,17 @@ class SsoEnforcementService
         }
     }
 
+    public function isConnectionSessionUsable(int $accountId, ?int $ssoConnectionId): bool
+    {
+        if ($ssoConnectionId === null) {
+            return true;
+        }
+
+        $connection = $this->findConnection($accountId);
+
+        return $connection !== null && $connection->getId() === $ssoConnectionId && $connection->isActive();
+    }
+
     public function isTokenAllowed(int $userId, string $email, int $accountId, ?string $authMethod, ?int $ssoConnectionId): bool
     {
         if ($authMethod === AuthMethod::IMPERSONATION->value) {
@@ -102,9 +118,30 @@ class SsoEnforcementService
             return false;
         }
 
+        return $this->ownedEnforcingAccountUsers($userId)->isNotEmpty();
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function namesOfOwnedEnforcingAccounts(int $userId): Collection
+    {
+        return $this->ownedEnforcingAccountUsers($userId)
+            ->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getAccount()?->getName())
+            ->filter()
+            ->values();
+    }
+
+    /**
+     * @return Collection<int, AccountUserDomainObject>
+     */
+    private function ownedEnforcingAccountUsers(int $userId): Collection
+    {
         return $this->accountUserRepository
+            ->loadRelation(new Relationship(AccountDomainObject::class, name: 'account'))
             ->findWhere(['user_id' => $userId, 'is_account_owner' => true, 'status' => UserStatus::ACTIVE->name])
-            ->contains(fn (AccountUserDomainObject $accountUser) => $this->findConnection($accountUser->getAccountId())?->isEnforcing() === true);
+            ->filter(fn (AccountUserDomainObject $accountUser) => $this->findConnection($accountUser->getAccountId())?->isEnforcing() === true)
+            ->values();
     }
 
     public function shouldEnforceNewMember(int $accountId, string $email, bool $isAccountOwner): bool
@@ -129,13 +166,18 @@ class SsoEnforcementService
         $usableDomains = $this->domainService->usableDomains($accountId)
             ->map(fn (AccountSsoDomainDomainObject $domain) => $domain->getDomain())
             ->all();
+        $withoutConnection = $this->usersWhoCannotUseConnection(
+            $this->findConnection($accountId),
+            $users->map(fn (UserDomainObject $user) => $user->getId())->all(),
+        );
 
-        $users->each(function (UserDomainObject $user) use ($usableDomains) {
+        $users->each(function (UserDomainObject $user) use ($usableDomains, $withoutConnection) {
             $accountUser = $user->getCurrentAccountUser();
             $onVerifiedDomain = in_array($this->domainService->domainOf($user->getEmail()), $usableDomains, true);
+            $canUseConnection = ! in_array($user->getId(), $withoutConnection, true);
 
             $accountUser?->setSsoSignInRequirement(match (true) {
-                $onVerifiedDomain && $accountUser->getSsoEnforced() && ! $accountUser->getIsAccountOwner() => SsoSignInRequirement::SSO,
+                $onVerifiedDomain && $accountUser->getSsoEnforced() && $canUseConnection && ! $accountUser->getIsAccountOwner() => SsoSignInRequirement::SSO,
                 $onVerifiedDomain && ! $accountUser->getIsAccountOwner() => SsoSignInRequirement::EXEMPT,
                 default => SsoSignInRequirement::PASSWORD,
             });
@@ -144,7 +186,13 @@ class SsoEnforcementService
 
     public function preview(int $accountId): SsoEnforcementPreview
     {
-        $members = $this->members($accountId)
+        $accountUsers = $this->members($accountId);
+        $withoutConnection = $this->usersWhoCannotUseConnection(
+            $this->findConnection($accountId),
+            $accountUsers->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())->all(),
+        );
+
+        $members = $accountUsers
             ->map(fn (AccountUserDomainObject $accountUser) => new SsoEnforcementMember(
                 accountUserId: $accountUser->getId(),
                 userId: $accountUser->getUserId(),
@@ -155,12 +203,13 @@ class SsoEnforcementService
                 isAccountOwner: $accountUser->getIsAccountOwner(),
                 onVerifiedDomain: $this->domainService->isEmailOnUsableDomain($accountId, $accountUser->getUser()?->getEmail()),
                 ssoEnforced: $accountUser->getSsoEnforced(),
+                ssoAvailable: ! in_array($accountUser->getUserId(), $withoutConnection, true),
             ))
             ->values();
 
         return new SsoEnforcementPreview(
             members: $members,
-            affectedCount: $members->filter(fn (SsoEnforcementMember $member) => $member->onVerifiedDomain && ! $member->isAccountOwner)->count(),
+            affectedCount: $members->filter(fn (SsoEnforcementMember $member) => $member->onVerifiedDomain && $member->ssoAvailable && ! $member->isAccountOwner)->count(),
             outsideDomainCount: $members->filter(fn (SsoEnforcementMember $member) => ! $member->onVerifiedDomain && ! $member->isAccountOwner)->count(),
         );
     }
@@ -259,8 +308,40 @@ class SsoEnforcementService
             return false;
         }
 
-        return $this->findConnection($accountUser->getAccountId())?->isEnforcing() === true
-            && $this->domainService->isEmailOnUsableDomain($accountUser->getAccountId(), $email);
+        $connection = $this->findConnection($accountUser->getAccountId());
+
+        return $connection?->isEnforcing() === true
+            && $this->domainService->isEmailOnUsableDomain($accountUser->getAccountId(), $email)
+            && $this->usersWhoCannotUseConnection($connection, [$accountUser->getUserId()]) === [];
+    }
+
+    /**
+     * @param  int[]  $userIds
+     * @return int[]
+     */
+    private function usersWhoCannotUseConnection(?AccountSsoConnectionDomainObject $connection, array $userIds): array
+    {
+        if ($connection === null || $userIds === []) {
+            return [];
+        }
+
+        $protectedUserIds = $this->accountUserRepository
+            ->findWhere([['user_id', 'in', $userIds]])
+            ->filter(fn (AccountUserDomainObject $accountUser) => $accountUser->getIsAccountOwner() || $accountUser->getRole() === Role::SUPERADMIN->name)
+            ->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())
+            ->unique();
+
+        if ($protectedUserIds->isEmpty()) {
+            return [];
+        }
+
+        $linkedUserIds = $this->userIdentityRepository
+            ->findWhere([['user_id', 'in', $protectedUserIds->all()]])
+            ->filter(fn (UserIdentityDomainObject $identity) => $identity->getAccountSsoConnectionId() === $connection->getId()
+                || $identity->getIssuer() === $connection->getIssuer())
+            ->map(fn (UserIdentityDomainObject $identity) => $identity->getUserId());
+
+        return $protectedUserIds->diff($linkedUserIds)->values()->all();
     }
 
     /**

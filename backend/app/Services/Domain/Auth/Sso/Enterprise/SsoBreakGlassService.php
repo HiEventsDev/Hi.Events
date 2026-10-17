@@ -56,6 +56,7 @@ class SsoBreakGlassService
                         ownerEmail: $owner->getEmail(),
                         accountName: $accountName,
                         signedInAt: $signedInAt->format('Y-m-d H:i'),
+                        recipientIsOwner: $recipient->getId() === $owner->getId(),
                     ));
             });
     }

@@ -14,6 +14,7 @@ use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Application\Handlers\User\UpdateMeHandler;
 use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
+use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
@@ -63,7 +64,7 @@ class UpdateMeHandlerTest extends TestCase
             $this->encryptedPayloadService,
             Mockery::mock(TrustedDeviceService::class),
             Mockery::mock(AccountUserRepositoryInterface::class),
-            new IdentityConfirmationService($hasher, $this->ticketService),
+            new IdentityConfirmationService($hasher, $this->ticketService, $this->passwordLoginPolicy()),
             $this->ssoEnforcementService,
         );
     }
@@ -158,6 +159,19 @@ class UpdateMeHandlerTest extends TestCase
         }
     }
 
+    public function test_changing_only_the_case_of_the_email_is_not_an_email_change(): void
+    {
+        $this->arrangeUser(emailVerifiedAt: null);
+        $this->userRepository->shouldReceive('updateWhere')->once()->with(
+            Mockery::on(fn (array $attributes) => ! array_key_exists('pending_email', $attributes)),
+            ['id' => 1],
+        );
+
+        $this->handler->handle($this->dto(' Old@Example.com', confirmationPassword: null));
+
+        Mail::assertNothingQueued();
+    }
+
     public function test_refuses_an_email_change_without_confirming_the_password(): void
     {
         $this->arrangeUser(emailVerifiedAt: null);
@@ -228,5 +242,13 @@ class UpdateMeHandlerTest extends TestCase
             reauth_proof: $reauthProof,
             token_id: $tokenId,
         );
+    }
+
+    private function passwordLoginPolicy(): PasswordLoginPolicy
+    {
+        $policy = Mockery::mock(PasswordLoginPolicy::class);
+        $policy->shouldReceive('canConfirmWithPassword')->andReturnUsing(fn (UserDomainObject $user) => $user->getPassword() !== null);
+
+        return $policy;
     }
 }

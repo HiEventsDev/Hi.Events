@@ -96,7 +96,11 @@ class OidcDiscoveryClient
         }
 
         if ($response->failed()) {
-            throw new SsoException(SsoErrorCode::STATE_INVALID, 'Token endpoint rejected the code: '.$response->status());
+            $error = $response->json('error');
+
+            throw $error === 'invalid_grant'
+                ? new SsoException(SsoErrorCode::STATE_INVALID, __('This sign-in link has expired. Please try again.'))
+                : new SsoException(SsoErrorCode::TOKEN_INVALID, 'Token endpoint rejected the request: '.$response->status().' '.(is_string($error) ? $error : 'unknown'));
         }
 
         return $this->decode($response);
@@ -175,7 +179,12 @@ class OidcDiscoveryClient
             $document['jwks_uri'] ?? null,
         ];
 
-        if (($document['issuer'] ?? null) !== $expectedIssuer) {
+        $documentIssuer = $document['issuer'] ?? null;
+        $issuerMatches = $provider->type === SsoProviderType::OIDC
+            ? is_string($documentIssuer) && rtrim($documentIssuer, '/') === $expectedIssuer
+            : $documentIssuer === $expectedIssuer;
+
+        if (! $issuerMatches) {
             throw new SsoException(SsoErrorCode::PROVIDER_UNAVAILABLE, 'Discovery issuer does not match the configured issuer');
         }
 

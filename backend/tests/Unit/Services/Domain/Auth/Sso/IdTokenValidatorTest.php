@@ -47,6 +47,13 @@ class IdTokenValidatorTest extends TestCase
         $this->assertIsInt($claims['exp']);
     }
 
+    public function test_accepts_an_issuer_published_with_a_trailing_slash(): void
+    {
+        $claims = $this->validator->validate($this->provider(), $this->signOidcToken([...$this->claims(), 'iss' => self::OIDC_ISSUER.'/']), 'nonce-1', null);
+
+        $this->assertSame(self::OIDC_ISSUER.'/', $claims['iss']);
+    }
+
     #[DataProvider('invalidClaims')]
     public function test_rejects_tampered_claims(array $overrides): void
     {

@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Exceptions\SsoException;
 use HiEvents\Mail\User\SignInMethodChangedMail;
 use HiEvents\Models\AccountConfiguration;
+use HiEvents\Models\AccountSsoConnection;
 use HiEvents\Models\User;
 use HiEvents\Models\UserIdentity;
 use HiEvents\Services\Domain\Auth\Sso\DTO\SsoIdentityClaims;
@@ -244,8 +245,79 @@ class SsoSelfServiceTest extends TestCase
             'impersonator_id' => User::factory()->create()->id,
         ])->fromUser($user);
 
-        $this->authed($token)->postJson('/users/me/sso-identities/oidc/reauth')->assertForbidden();
-        $this->authed($token)->postJson('/users/me/sso-identities/oidc/start', ['password' => self::PASSWORD])->assertForbidden();
+        $this->authed($token)->postJson('/users/me/sso-identities/oidc/reauth')
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'IMPERSONATION_NOT_ALLOWED');
+        $this->authed($token)->postJson('/users/me/sso-identities/oidc/start', ['password' => self::PASSWORD])
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'IMPERSONATION_NOT_ALLOWED');
+    }
+
+    public function test_an_identity_on_the_accounts_connection_counts_as_a_sign_in_method(): void
+    {
+        [$user, $token] = $this->signedInUser(password: null);
+        $identity = $this->linkIdentity($user, 'social');
+        $connection = AccountSsoConnection::create([
+            'account_id' => $user->accounts()->first()->id,
+            'type' => 'OKTA',
+            'issuer' => 'https://acme.okta.test',
+            'client_id' => 'acme-client',
+            'client_secret' => 'connection-secret',
+            'status' => 'ACTIVE',
+            'session_ttl_minutes' => 720,
+            'jit_provisioning_enabled' => false,
+            'jit_default_role' => 'ORGANIZER',
+        ]);
+        UserIdentity::create([
+            'user_id' => $user->id,
+            'provider_key' => 'connection-'.$connection->id,
+            'account_sso_connection_id' => $connection->id,
+            'issuer' => 'https://acme.okta.test',
+            'subject' => 'okta-user',
+        ]);
+
+        $this->authed($token)->deleteJson('/users/me/sso-identities/'.$identity->id)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('password');
+
+        $connection->update(['status' => 'INACTIVE']);
+
+        $this->authed($token)->deleteJson('/users/me/sso-identities/'.$identity->id)
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LAST_SIGN_IN_METHOD');
+    }
+
+    public function test_an_identity_on_a_connection_of_an_account_the_user_left_does_not_count(): void
+    {
+        [$user, $token] = $this->signedInUser(password: null);
+        $identity = $this->linkIdentity($user, 'social');
+        $otherAccountId = User::factory()->withAccount()->create()->accounts()->first()->id;
+        $connection = AccountSsoConnection::create([
+            'account_id' => $otherAccountId,
+            'type' => 'OKTA',
+            'issuer' => 'https://acme.okta.test',
+            'client_id' => 'acme-client',
+            'client_secret' => 'connection-secret',
+            'status' => 'ACTIVE',
+            'session_ttl_minutes' => 720,
+            'jit_provisioning_enabled' => false,
+            'jit_default_role' => 'ORGANIZER',
+        ]);
+        UserIdentity::create([
+            'user_id' => $user->id,
+            'provider_key' => 'connection-'.$connection->id,
+            'account_sso_connection_id' => $connection->id,
+            'issuer' => 'https://acme.okta.test',
+            'subject' => 'okta-user',
+        ]);
+
+        $this->authed($token)->getJson('/users/me/sso-identities')
+            ->assertOk()
+            ->assertJsonPath('data.1.organization_provider', null);
+
+        $this->authed($token)->deleteJson('/users/me/sso-identities/'.$identity->id)
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LAST_SIGN_IN_METHOD');
     }
 
     public function test_a_login_on_a_removed_provider_does_not_count_as_a_sign_in_method(): void

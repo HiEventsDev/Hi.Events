@@ -4,6 +4,7 @@ namespace HiEvents\Services\Application\Handlers\Account\Sso;
 
 use HiEvents\DomainObjects\AccountSsoDomainDomainObject;
 use HiEvents\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountSsoDomainRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\Enterprise\AccountSsoDomainService;
 
@@ -11,6 +12,7 @@ class AccountSsoDomainHandler
 {
     public function __construct(
         private readonly AccountSsoDomainRepositoryInterface $domainRepository,
+        private readonly AccountSsoConnectionRepositoryInterface $connectionRepository,
         private readonly AccountSsoDomainService $domainService,
     ) {}
 
@@ -35,7 +37,13 @@ class AccountSsoDomainHandler
      */
     public function delete(int $accountId, int $domainId): void
     {
-        $this->domainRepository->deleteById($this->findOrFail($accountId, $domainId)->getId());
+        $domain = $this->findOrFail($accountId, $domainId);
+
+        if ($domain->getVerifiedAt() !== null && $this->connectionRepository->findFirstWhere(['account_id' => $accountId])?->getEnforceSso() === true) {
+            throw new AccountSsoConfigurationException(__('Stop requiring single sign-on before removing a verified domain.'), 'domain');
+        }
+
+        $this->domainRepository->deleteById($domain->getId());
     }
 
     /**

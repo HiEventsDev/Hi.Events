@@ -2,14 +2,18 @@
 
 namespace HiEvents\Services\Domain\Auth\Sso;
 
+use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
+use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\DomainObjects\UserIdentityDomainObject;
 use HiEvents\Exceptions\SsoException;
 use HiEvents\Mail\User\SignInMethodChangedMail;
+use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserIdentityRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\DTO\SsoIdentityClaims;
+use HiEvents\Services\Domain\Auth\Sso\DTO\SsoProviderConfig;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\UserSessionRevocationService;
 use Illuminate\Contracts\Mail\Mailer;
@@ -23,7 +27,29 @@ class UserIdentityService
         private readonly UserRepositoryInterface $userRepository,
         private readonly TrustedDeviceService $trustedDeviceService,
         private readonly UserSessionRevocationService $sessionRevocationService,
+        private readonly AccountUserRepositoryInterface $accountUserRepository,
     ) {}
+
+    public function usableConnectionProvider(UserIdentityDomainObject $identity): ?SsoProviderConfig
+    {
+        if (! str_starts_with($identity->getProviderKey(), AccountSsoConnectionDomainObject::PROVIDER_KEY_PREFIX)) {
+            return null;
+        }
+
+        try {
+            $provider = $this->providerRegistry->get($identity->getProviderKey());
+        } catch (SsoException) {
+            return null;
+        }
+
+        $isActiveMember = $this->accountUserRepository->findFirstWhere([
+            'user_id' => $identity->getUserId(),
+            'account_id' => $provider->accountId,
+            'status' => UserStatus::ACTIVE->name,
+        ]) !== null;
+
+        return $isActiveMember ? $provider : null;
+    }
 
     public function find(SsoIdentityClaims $claims): ?UserIdentityDomainObject
     {
@@ -82,11 +108,13 @@ class UserIdentityService
             return;
         }
 
+        $hadOtherSignIn = $user->getPassword() !== null || $this->hasIdentity($user->getId());
+
         if ($this->providerRegistry->isPasswordLoginDisabled() && ! $this->hasIdentity($user->getId())) {
             $this->replaceEarlierCredentials($user->getId());
         }
 
-        $this->attach($user, $claims);
+        $this->attach($user, $claims, notify: $hadOtherSignIn);
     }
 
     public function touch(UserIdentityDomainObject $identity, SsoIdentityClaims $claims): UserIdentityDomainObject

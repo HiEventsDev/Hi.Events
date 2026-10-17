@@ -270,6 +270,14 @@ abstract class BaseAction extends Controller
         }
     }
 
+    protected function impersonationForbiddenResponse(string $message): JsonResponse
+    {
+        return $this->jsonResponse([
+            'message' => $message,
+            'error_code' => 'IMPERSONATION_NOT_ALLOWED',
+        ], ResponseCodes::HTTP_FORBIDDEN);
+    }
+
     protected function requireSuperAdmin(): void
     {
         /** @var IsAuthorizedService $authService */

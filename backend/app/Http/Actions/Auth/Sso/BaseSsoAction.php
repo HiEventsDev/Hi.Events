@@ -47,16 +47,15 @@ abstract class BaseSsoAction extends BaseAuthAction
         ], wrapInData: true);
     }
 
-    protected function impersonationForbiddenResponse(): JsonResponse
+    protected function signInMethodsImpersonationResponse(): JsonResponse
     {
-        return $this->errorResponse(__('Sign-in methods cannot be changed while impersonating a user.'), ResponseCodes::HTTP_FORBIDDEN);
+        return $this->impersonationForbiddenResponse(__('Sign-in methods cannot be changed while impersonating a user.'));
     }
 
     private function statusFor(SsoErrorCode $code): int
     {
         return match ($code) {
             SsoErrorCode::PROVIDER_NOT_CONFIGURED, SsoErrorCode::NOT_SET_UP => ResponseCodes::HTTP_NOT_FOUND,
-            SsoErrorCode::SSO_REQUIRED => ResponseCodes::HTTP_FORBIDDEN,
             SsoErrorCode::ISSUER_NOT_ALLOWED => ResponseCodes::HTTP_UNPROCESSABLE_ENTITY,
             SsoErrorCode::PROVIDER_UNAVAILABLE => ResponseCodes::HTTP_SERVICE_UNAVAILABLE,
             SsoErrorCode::STATE_INVALID, SsoErrorCode::TICKET_INVALID, SsoErrorCode::TOKEN_INVALID => ResponseCodes::HTTP_UNAUTHORIZED,

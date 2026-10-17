@@ -6,6 +6,8 @@ const REAUTH_PROOF_KEY = 'hi_sso_reauth_proof';
 const SIGNUP_CONVERSION_KEY = 'hi_sso_signup_conversion';
 const CONNECTION_SESSION_KEY = 'hi_sso_connection_session';
 const SILENT_REAUTH_KEY = 'hi_sso_silent_reauth';
+const LAST_SILENT_REAUTH_KEY = 'hi_sso_last_silent_reauth';
+const SILENT_REAUTH_COOLDOWN_MS = 5 * 60 * 1000;
 const AUTH_NOTICE_KEY = 'hi_auth_notice';
 const CONNECTION_KEY_PREFIX = 'connection-';
 export const SSO_TEST_MESSAGE = 'hi-sso-test';
@@ -99,6 +101,13 @@ export const queueSilentReauthAfterExpiry = (): boolean => {
     }
 
     writeStorage(local, CONNECTION_SESSION_KEY, null);
+
+    const lastAttempt = Number(readStorage(session, LAST_SILENT_REAUTH_KEY) ?? 0);
+    if (Date.now() - lastAttempt < SILENT_REAUTH_COOLDOWN_MS) {
+        return false;
+    }
+
+    writeStorage(session, LAST_SILENT_REAUTH_KEY, String(Date.now()));
     writeStorage(session, SILENT_REAUTH_KEY, provider);
 
     return true;

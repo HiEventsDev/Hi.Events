@@ -341,7 +341,9 @@ const SsoCallback = () => {
             if (steps.step === 'start') {
                 return (
                     <SsoErrorState
-                        error={{error_code: 'SSO_TICKET_INVALID', message: steps.error ?? ''}}
+                        error={steps.error
+                            ? {error_code: 'SSO_SIGN_IN_FAILED', message: steps.error}
+                            : {error_code: 'SSO_TICKET_INVALID', message: ''}}
                         providerName={flow?.providerName ?? ''}
                         passwordLoginEnabled={passwordLoginEnabled}
                         primary={tryAgain}

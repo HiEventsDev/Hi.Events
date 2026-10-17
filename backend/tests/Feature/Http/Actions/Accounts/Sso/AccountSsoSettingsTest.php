@@ -298,6 +298,20 @@ class AccountSsoSettingsTest extends TestCase
         Mail::assertQueued(SsoSettingsChangedMail::class, fn (SsoSettingsChangedMail $mail) => $mail->hasTo($this->owner->email));
     }
 
+    public function test_the_owner_reads_the_change_in_their_own_language(): void
+    {
+        $this->createConnection($this->accountId);
+        $this->owner->update(['locale' => 'de']);
+        $admin = $this->addAccountUser($this->accountId, Role::ADMIN);
+        $expected = __('Changed the identity provider to :issuer', ['issuer' => 'https://acme.okta.test'], 'de');
+
+        $this->putJson($this->url('/connection'), [...$this->oktaPayload(), 'client_id' => 'rogue-client'], $this->bearer($this->tokenFor($admin, $this->accountId)))
+            ->assertOk();
+
+        $this->assertNotSame('Changed the identity provider to https://acme.okta.test', $expected);
+        Mail::assertQueued(SsoSettingsChangedMail::class, fn (SsoSettingsChangedMail $mail) => $mail->content()->with['change'] === $expected);
+    }
+
     private function url(string $suffix = ''): string
     {
         return "/accounts/$this->accountId/sso$suffix";

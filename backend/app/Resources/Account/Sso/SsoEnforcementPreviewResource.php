@@ -27,6 +27,7 @@ class SsoEnforcementPreviewResource extends JsonResource
                 'is_account_owner' => $member->isAccountOwner,
                 'on_verified_domain' => $member->onVerifiedDomain,
                 'sso_enforced' => $member->ssoEnforced,
+                'sso_available' => $member->ssoAvailable,
             ])->all(),
         ];
     }

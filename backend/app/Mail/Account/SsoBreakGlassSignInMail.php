@@ -16,6 +16,7 @@ class SsoBreakGlassSignInMail extends BaseMail
         private readonly string $ownerEmail,
         private readonly string $accountName,
         private readonly string $signedInAt,
+        private readonly bool $recipientIsOwner,
     ) {
         parent::__construct();
     }
@@ -23,7 +24,9 @@ class SsoBreakGlassSignInMail extends BaseMail
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('The account owner signed in without single sign-on'),
+            subject: $this->recipientIsOwner
+                ? __('You signed in without single sign-on')
+                : __('The account owner signed in without single sign-on'),
         );
     }
 
@@ -35,6 +38,7 @@ class SsoBreakGlassSignInMail extends BaseMail
                 'ownerEmail' => $this->ownerEmail,
                 'accountName' => $this->accountName,
                 'signedInAt' => $this->signedInAt,
+                'recipientIsOwner' => $this->recipientIsOwner,
                 'settingsUrl' => Url::getFrontEndUrlFromConfig(Url::ACCOUNT_SETTINGS),
             ]
         );

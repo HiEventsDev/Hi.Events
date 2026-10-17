@@ -37,8 +37,10 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain}: Enf
 
     const onDomainMembers = (preview?.members ?? []).filter(member => member.on_verified_domain && !member.is_account_owner);
     const owner = preview?.members.find(member => member.is_account_owner);
-    const enforcedCount = onDomainMembers.length - exempt.length;
-    const meAffected = onDomainMembers.some(member => String(member.user_id) === String(me?.id) && !exempt.includes(member.account_user_id));
+    const willBeEnforced = (member: SsoEnforcementMember) => member.sso_available && !exempt.includes(member.account_user_id);
+    const enforcedCount = onDomainMembers.filter(willBeEnforced).length;
+    const meAffected = onDomainMembers.some(member => String(member.user_id) === String(me?.id) && willBeEnforced(member));
+    const unavailableNote = t`Owns another Hi.Events account, so keeps signing in with a password.`;
 
     const toggleExempt = (member: SsoEnforcementMember, isExempt: boolean) => {
         setExempt(current => isExempt
@@ -135,14 +137,17 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain}: Enf
                                         <div className={classes.memberText}>
                                             <span className={classes.memberName}>{memberName(member)}</span>
                                             <span className={classes.muted}>{member.email}</span>
+                                            {!member.sso_available && <span className={classes.muted}>{unavailableNote}</span>}
                                         </div>
-                                        <Switch
-                                            size="sm"
-                                            label={t`Exempt`}
-                                            labelPosition="left"
-                                            checked={isExempt}
-                                            onChange={(event) => toggleExempt(member, event.currentTarget.checked)}
-                                        />
+                                        {member.sso_available && (
+                                            <Switch
+                                                size="sm"
+                                                label={t`Exempt`}
+                                                labelPosition="left"
+                                                checked={isExempt}
+                                                onChange={(event) => toggleExempt(member, event.currentTarget.checked)}
+                                            />
+                                        )}
                                     </li>
                                 );
                             })}
@@ -177,18 +182,19 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain}: Enf
                             <div className={classes.memberText}>
                                 <span className={classes.memberName}>{memberName(member)}</span>
                                 <span className={classes.muted}>{member.email}</span>
+                                {!member.sso_available && <span className={classes.muted}>{unavailableNote}</span>}
                             </div>
-                            {member.sso_enforced
+                            {member.sso_enforced && member.sso_available
                                 ? <Badge size="sm" variant="light" color="blue">{t`SSO`}</Badge>
-                                : <Badge size="sm" variant="light" color="gray">{t`Exempt`}</Badge>}
-                            <Button
+                                : <Badge size="sm" variant="light" color="gray">{member.sso_available ? t`Exempt` : t`Password`}</Badge>}
+                            {member.sso_available && <Button
                                 size="compact-xs"
                                 variant="subtle"
                                 onClick={() => setMemberEnforced(member, !member.sso_enforced)}
                                 loading={memberMutation.isPending && memberMutation.variables?.accountUserId === member.account_user_id}
                             >
                                 {member.sso_enforced ? t`Exempt` : t`Require SSO`}
-                            </Button>
+                            </Button>}
                         </li>
                     ))}
                 </ul>

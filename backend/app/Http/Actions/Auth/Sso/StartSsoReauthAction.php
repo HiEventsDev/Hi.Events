@@ -20,7 +20,7 @@ class StartSsoReauthAction extends BaseSsoAction
     public function __invoke(StartSsoReauthRequest $request, string $provider): JsonResponse
     {
         if ($this->isImpersonating()) {
-            return $this->impersonationForbiddenResponse();
+            return $this->signInMethodsImpersonationResponse();
         }
 
         try {

@@ -155,7 +155,7 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
                                 <div className={classes.deviceIcon}><ProviderMark provider={provider} size={16}/></div>
                                 <div className={classes.deviceText}>
                                     <div className={classes.deviceName} title={identity.email ?? undefined}>
-                                        {identity.email ?? provider.name}
+                                        <span className={classes.identityEmail}>{identity.email ?? provider.name}</span>
                                     </div>
                                     {identity.last_used_at && (
                                         <div className={classes.deviceMeta}>

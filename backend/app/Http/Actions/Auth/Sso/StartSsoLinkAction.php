@@ -23,7 +23,7 @@ class StartSsoLinkAction extends BaseSsoAction
     public function __invoke(StartSsoLinkRequest $request, string $provider): JsonResponse
     {
         if ($this->isImpersonating()) {
-            return $this->impersonationForbiddenResponse();
+            return $this->signInMethodsImpersonationResponse();
         }
 
         try {

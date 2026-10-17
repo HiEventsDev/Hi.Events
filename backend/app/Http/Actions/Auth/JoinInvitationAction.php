@@ -30,7 +30,7 @@ class JoinInvitationAction extends BaseAuthAction
     public function __invoke(string $inviteToken): JsonResponse
     {
         if ($this->isImpersonating()) {
-            return $this->errorResponse(__('You cannot accept invitations while impersonating a user.'), ResponseCodes::HTTP_FORBIDDEN);
+            return $this->impersonationForbiddenResponse(__('You cannot accept invitations while impersonating a user.'));
         }
 
         try {

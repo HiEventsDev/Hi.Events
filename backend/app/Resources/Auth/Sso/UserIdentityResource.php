@@ -2,11 +2,9 @@
 
 namespace HiEvents\Resources\Auth\Sso;
 
-use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
 use HiEvents\DomainObjects\UserIdentityDomainObject;
-use HiEvents\Exceptions\SsoException;
 use HiEvents\Resources\BaseResource;
-use HiEvents\Services\Domain\Auth\Sso\SsoProviderRegistry;
+use HiEvents\Services\Domain\Auth\Sso\UserIdentityService;
 use Illuminate\Http\Request;
 
 /**
@@ -29,13 +27,9 @@ class UserIdentityResource extends BaseResource
 
     private function organizationProvider(): ?array
     {
-        if (! str_starts_with($this->getProviderKey(), AccountSsoConnectionDomainObject::PROVIDER_KEY_PREFIX)) {
-            return null;
-        }
+        $provider = app(UserIdentityService::class)->usableConnectionProvider($this->resource);
 
-        try {
-            $provider = app(SsoProviderRegistry::class)->get($this->getProviderKey());
-        } catch (SsoException) {
+        if ($provider === null) {
             return null;
         }
 

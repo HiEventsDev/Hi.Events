@@ -144,7 +144,7 @@ export const SsoSetupDrawer = ({opened, onClose, accountId, sso, testOutcome}: S
                     done={hasVerifiedDomain}
                     locked={!connection}
                 >
-                    <DomainList accountId={accountId} domains={sso.domains}/>
+                    <DomainList accountId={accountId} domains={sso.domains} enforcing={connection?.enforce_sso === true}/>
                 </SsoStep>
 
                 <SsoStep number={5} title={t`Sign-in settings`} done={connection?.status === 'ACTIVE'} locked={!connection || editing}>

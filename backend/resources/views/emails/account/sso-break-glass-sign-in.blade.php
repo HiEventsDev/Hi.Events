@@ -2,6 +2,7 @@
 @php /** @var string $accountName */ @endphp
 @php /** @var string $signedInAt */ @endphp
 @php /** @var string $settingsUrl */ @endphp
+@php /** @var bool $recipientIsOwner */ @endphp
 
 <x-mail::message>
 {{ __('Hi') }},
@@ -14,7 +15,11 @@
 {{ __('Review single sign-on settings') }}
 </x-mail::button>
 
+@if($recipientIsOwner)
+{{ __('If this wasn\'t you, change your password and set up two-factor authentication again with a new authenticator straight away.') }}
+@else
 {{ __('If you did not expect this, contact the account owner and support.') }}
+@endif
 
 {{ __('Thanks,') }}
 </x-mail::message>

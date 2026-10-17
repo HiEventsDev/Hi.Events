@@ -7,6 +7,7 @@ use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\TwoFactorStatusDTO;
+use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\RecoveryCodeService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
@@ -19,6 +20,7 @@ class GetTwoFactorStatusHandler
         private readonly TwoFactorAuthenticationService $twoFactorAuthenticationService,
         private readonly RecoveryCodeService $recoveryCodeService,
         private readonly TwoFactorRequirementService $twoFactorRequirementService,
+        private readonly SsoEnforcementService $ssoEnforcementService,
     ) {}
 
     public function handle(int $userId): TwoFactorStatusDTO
@@ -41,7 +43,10 @@ class GetTwoFactorStatusHandler
                     ],
                 )
                 : collect(),
-            requiredByAccounts: $this->twoFactorRequirementService->namesOfAccountsRequiringTwoFactor($userId),
+            requiredByAccounts: $this->twoFactorRequirementService->namesOfAccountsRequiringTwoFactor($userId)
+                ->merge($this->ssoEnforcementService->namesOfOwnedEnforcingAccounts($userId))
+                ->unique()
+                ->values(),
         );
     }
 }

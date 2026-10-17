@@ -1,4 +1,4 @@
-import {ActionIcon, Badge, Button, TextInput} from "@mantine/core";
+import {ActionIcon, Badge, Button, TextInput, Tooltip} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {t} from "@lingui/macro";
 import {IconTrash} from "@tabler/icons-react";
@@ -37,9 +37,10 @@ const RecordField = ({label, value}: { label: string, value: string }) => (
 interface DomainListProps {
     accountId: IdParam;
     domains: AccountSsoDomain[];
+    enforcing: boolean;
 }
 
-export const DomainList = ({accountId, domains}: DomainListProps) => {
+export const DomainList = ({accountId, domains, enforcing}: DomainListProps) => {
     const addMutation = useAddSsoDomain();
     const verifyMutation = useVerifySsoDomain();
     const deleteMutation = useDeleteSsoDomain();
@@ -60,10 +61,15 @@ export const DomainList = ({accountId, domains}: DomainListProps) => {
         });
     };
 
+    const isLocked = (domain: AccountSsoDomain) => enforcing && domain.verified_at !== null;
+
     const remove = (domain: AccountSsoDomain) => {
         confirmationDialog(
             t`Remove ${domain.domain}? People with this email domain will no longer be sent to your identity provider or required to use it.`,
-            () => deleteMutation.mutate({accountId, domainId: domain.id}),
+            () => deleteMutation.mutate({accountId, domainId: domain.id}, {
+                onSuccess: () => showSuccess(t`${domain.domain} removed`),
+                onError: (error: any) => showError(error?.response?.data?.message ?? t`Something went wrong. Please try again.`),
+            }),
             {confirm: t`Remove domain`, destructive: true},
         );
     };
@@ -75,15 +81,25 @@ export const DomainList = ({accountId, domains}: DomainListProps) => {
                     <div className={classes.domainHeader}>
                         <span className={classes.domainName}>{domain.domain}</span>
                         <DomainStatus domain={domain}/>
-                        <ActionIcon
-                            variant="subtle"
-                            color="gray"
-                            className={classes.domainRemove}
-                            onClick={() => remove(domain)}
-                            aria-label={t`Remove ${domain.domain}`}
+                        <Tooltip
+                            label={t`Stop requiring single sign-on before removing a verified domain.`}
+                            disabled={!isLocked(domain)}
+                            withArrow
+                            multiline
+                            w={240}
                         >
-                            <IconTrash size={16}/>
-                        </ActionIcon>
+                            <ActionIcon
+                                variant="subtle"
+                                color="gray"
+                                className={classes.domainRemove}
+                                onClick={() => !isLocked(domain) && remove(domain)}
+                                data-disabled={isLocked(domain) || undefined}
+                                aria-disabled={isLocked(domain)}
+                                aria-label={t`Remove ${domain.domain}`}
+                            >
+                                <IconTrash size={16}/>
+                            </ActionIcon>
+                        </Tooltip>
                     </div>
                     {domain.status !== 'VERIFIED' && (
                         <>

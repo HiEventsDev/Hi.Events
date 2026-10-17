@@ -19,6 +19,7 @@ export const authClient = {
 
     login: async (user: LoginData) => {
         const response = await api.post<LoginResponse>('auth/login', user);
+        forgetConnectionSession();
         return response.data;
     },
 

@@ -45,12 +45,10 @@ class DeleteSsoIdentityHandler
         $remaining = $this->userIdentityRepository
             ->findWhere(['user_id' => $user->getId()])
             ->filter(fn (UserIdentityDomainObject $other) => $other->getId() !== $identity->getId()
-                && in_array($other->getProviderKey(), $usableProviders, true))
+                && $this->canSignInWith($other, $usableProviders))
             ->count();
 
-        $passwordUsable = $user->getPassword() !== null && $this->passwordLoginPolicy->isAllowedFor($user->getId());
-
-        if (! $passwordUsable && $remaining === 0) {
+        if (! $this->passwordLoginPolicy->canConfirmWithPassword($user) && $remaining === 0) {
             throw new SsoException(
                 SsoErrorCode::LAST_SIGN_IN_METHOD,
                 __('Add a password or another sign-in method before removing this one.'),
@@ -62,5 +60,14 @@ class DeleteSsoIdentityHandler
         $this->userIdentityRepository->deleteWhere(['id' => $identity->getId()]);
         $this->sessionRevocationService->revokeAll($user->getId());
         $this->userIdentityService->notify($user, $identity->getProviderKey(), connected: false);
+    }
+
+    /**
+     * @param  string[]  $usableProviders
+     */
+    private function canSignInWith(UserIdentityDomainObject $identity, array $usableProviders): bool
+    {
+        return in_array($identity->getProviderKey(), $usableProviders, true)
+            || $this->userIdentityService->usableConnectionProvider($identity) !== null;
     }
 }

@@ -11,7 +11,7 @@ const LOGIN_PATH = "/auth/login";
 export const TWO_FACTOR_SETUP_PATH = "/auth/two-factor-setup";
 export const SECURITY_SETTINGS_PATH = "/settings/security";
 const PREVIOUS_URL_KEY = 'previous_url';
-const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE'];
+const ACCESS_ERROR_CODES = ['FEATURE_UNAVAILABLE', 'ACCESS_RESTRICTED', 'PERMISSION_REQUIRED', 'READ_ONLY_ROLE', 'IMPERSONATION_NOT_ALLOWED'];
 
 // todo - This isn't scalable, we need to better way to manage this
 const ALLOWED_UNAUTHENTICATED_PATHS = [

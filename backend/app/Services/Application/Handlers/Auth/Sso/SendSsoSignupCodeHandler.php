@@ -34,7 +34,6 @@ class SendSsoSignupCodeHandler
         $this->ticketService->update(SsoTicketType::SIGNUP, $signupTicket, [
             ...$payload,
             'email_code_hash' => hash('sha256', $code),
-            'email_code_attempts' => 0,
         ]);
 
         $this->mailer

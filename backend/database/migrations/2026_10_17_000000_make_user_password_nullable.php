@@ -9,6 +9,8 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::statement("SET LOCAL lock_timeout = '10s'");
+
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable()->change();
             $table->timestamp('tokens_valid_after')->nullable();

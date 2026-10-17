@@ -36,7 +36,7 @@ class SsoEnforcementHandler
 
         if (! $enabled) {
             $updated = $this->enforcementService->disable($connection);
-            $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Stopped requiring single sign-on'));
+            $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Stopped requiring single sign-on');
 
             return $updated;
         }
@@ -44,7 +44,7 @@ class SsoEnforcementHandler
         $updated = $this->databaseManager->transaction(
             fn () => $this->enforcementService->enable($connection, $exemptAccountUserIds),
         );
-        $this->changeNotifier->notifyOwner($accountId, $actorUserId, __('Required single sign-on for members on verified domains'));
+        $this->changeNotifier->notifyOwner($accountId, $actorUserId, 'Required single sign-on for members on verified domains');
 
         return $updated;
     }

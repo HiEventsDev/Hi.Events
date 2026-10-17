@@ -9,6 +9,8 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::statement("SET LOCAL lock_timeout = '10s'");
+
         Schema::create('account_sso_connections', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_id')->unique()->constrained('accounts')->cascadeOnDelete();

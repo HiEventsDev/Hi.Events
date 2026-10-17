@@ -8,7 +8,6 @@ use HiEvents\Exceptions\AccountSsoConfigurationException;
 use HiEvents\Exceptions\SsoException;
 use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Http\Request\Account\Sso\StartAccountSsoTestRequest;
-use HiEvents\Http\ResponseCodes;
 use HiEvents\Services\Application\Handlers\Account\Sso\AccountSsoConnectionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +28,7 @@ class StartAccountSsoTestAction extends BaseAccountSsoAction
         $this->assertEnterpriseSsoEnabled($accountId);
 
         if ($this->isImpersonating()) {
-            return $this->errorResponse(__('Single sign-on can\'t be tested while impersonating a user.'), ResponseCodes::HTTP_FORBIDDEN);
+            return $this->impersonationForbiddenResponse(__('Single sign-on can\'t be tested while impersonating a user.'));
         }
 
         try {

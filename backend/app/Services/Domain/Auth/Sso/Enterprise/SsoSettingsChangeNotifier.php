@@ -17,12 +17,15 @@ class SsoSettingsChangeNotifier
         private readonly LoggerInterface $logger,
     ) {}
 
-    public function notifyOwner(int $accountId, int $actorUserId, string $change): void
+    /**
+     * @param  array<string, string>  $replace
+     */
+    public function notifyOwner(int $accountId, int $actorUserId, string $change, array $replace = []): void
     {
         $this->logger->info('SSO settings changed', [
             'account_id' => $accountId,
             'actor_user_id' => $actorUserId,
-            'change' => $change,
+            'change' => __($change, $replace, 'en'),
         ]);
 
         $owner = $this->accountUserRepository->findFirstWhere([
@@ -41,7 +44,7 @@ class SsoSettingsChangeNotifier
             ->locale($ownerUser->getLocale())
             ->send(new SsoSettingsChangedMail(
                 actorEmail: $this->userRepository->findById($actorUserId)->getEmail(),
-                change: $change,
+                change: __($change, $replace, $ownerUser->getLocale()),
             ));
     }
 }
