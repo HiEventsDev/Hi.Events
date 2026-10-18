@@ -26,7 +26,7 @@ import {useGetEventOccurrences} from "../../../queries/useGetEventOccurrences.ts
 import {SortSelector} from "../../common/SortSelector";
 import {OccurrenceSelect} from "../../common/OccurrenceSelect";
 
-const attendeeStatuses = [
+const getAttendeeStatuses = () => [
     {label: t`Active`, value: 'ACTIVE'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Payment`, value: 'AWAITING_PAYMENT'},
@@ -81,7 +81,7 @@ const Attendees = () => {
             field: 'status',
             label: t`Attendee Status`,
             type: 'multi-select',
-            options: attendeeStatuses
+            options: getAttendeeStatuses()
         }
     ];
 

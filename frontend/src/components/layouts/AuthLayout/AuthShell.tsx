@@ -8,7 +8,7 @@ import {getConfig} from "../../../utilites/config.ts";
 import {isHiEvents} from "../../../utilites/helpers.ts";
 import {showInfo} from "../../../utilites/notifications.tsx";
 
-const tickerFeatures = [
+const getTickerFeatures = () => [
     t`Recurring events`,
     t`Instant Stripe payouts`,
     t`Custom branding`,
@@ -28,6 +28,7 @@ const tickerFeatures = [
 ];
 
 const FeaturePanel = () => {
+    const tickerFeatures = getTickerFeatures();
     const tickerLoop = [...tickerFeatures, ...tickerFeatures];
 
     return (

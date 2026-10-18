@@ -43,7 +43,7 @@ interface ReportProps<T> {
     showCustomDatePicker?: boolean;
 }
 
-const TIME_PERIODS = [
+const getTimePeriods = () => [
     {value: '24h', label: t`Last 24 hours`},
     {value: '48h', label: t`Last 48 hours`},
     {value: '7d', label: t`Last 7 days`},
@@ -278,7 +278,7 @@ const ReportTable = <T extends Record<string, any>>({
                         <Select
                             style={{minWidth: '200px'}}
                             placeholder={t`Select time period`}
-                            data={TIME_PERIODS}
+                            data={getTimePeriods()}
                             value={selectedPeriod}
                             onChange={handlePeriodChange}
                             leftSection={<IconCalendar stroke={1.5} size={20}/>}

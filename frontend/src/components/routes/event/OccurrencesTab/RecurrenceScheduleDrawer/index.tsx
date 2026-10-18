@@ -41,7 +41,7 @@ import {DateField} from "../../../../common/DateField";
 
 const MAX_PREVIEW = 1200;
 
-const DAYS_OF_WEEK = [
+const getDaysOfWeek = () => [
     {value: 'sunday', label: t`Sun`, full: t`Sunday`},
     {value: 'monday', label: t`Mon`, full: t`Monday`},
     {value: 'tuesday', label: t`Tue`, full: t`Tuesday`},
@@ -53,20 +53,20 @@ const DAYS_OF_WEEK = [
 
 const useDaysOfWeekInDisplayOrder = () => {
     const {firstDayOfWeek} = useDatesContext();
-    return useMemo(
-        () => Array.from({length: 7}, (_, i) => DAYS_OF_WEEK[(firstDayOfWeek + i) % 7]),
-        [firstDayOfWeek]
-    );
+    return useMemo(() => {
+        const daysOfWeek = getDaysOfWeek();
+        return Array.from({length: 7}, (_, i) => daysOfWeek[(firstDayOfWeek + i) % 7]);
+    }, [firstDayOfWeek]);
 };
 
-const FREQUENCIES = [
+const getFrequencies = () => [
     {value: 'daily', label: t`Daily`},
     {value: 'weekly', label: t`Weekly`},
     {value: 'monthly', label: t`Monthly`},
     {value: 'yearly', label: t`Yearly`},
 ];
 
-const WEEK_POSITIONS = [
+const getWeekPositions = () => [
     {value: '1', label: t`First`},
     {value: '2', label: t`Second`},
     {value: '3', label: t`Third`},
@@ -74,7 +74,7 @@ const WEEK_POSITIONS = [
     {value: '-1', label: t`Last`},
 ];
 
-const MONTHS = [
+const getMonths = () => [
     {value: '1', label: t`January`},
     {value: '2', label: t`February`},
     {value: '3', label: t`March`},
@@ -787,12 +787,12 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                     .join(', ');
                 if (dayList) onPart = t`on ${dayList}`;
             } else {
-                const position = WEEK_POSITIONS.find(p => p.value === values.week_position)?.label ?? '';
-                const day = DAYS_OF_WEEK.find(d => d.value === values.day_of_week)?.full ?? '';
+                const position = getWeekPositions().find(p => p.value === values.week_position)?.label ?? '';
+                const day = getDaysOfWeek().find(d => d.value === values.day_of_week)?.full ?? '';
                 onPart = t`on the ${position} ${day}`;
             }
         } else if (values.frequency === 'yearly') {
-            const month = MONTHS.find(m => m.value === values.yearly_month)?.label ?? '';
+            const month = getMonths().find(m => m.value === values.yearly_month)?.label ?? '';
             const day = values.yearly_day;
             onPart = t`on ${month} ${day}`;
         }
@@ -907,7 +907,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                     size="xs"
                                     value={form.values.frequency}
                                     onChange={(value) => form.setFieldValue('frequency', value)}
-                                    data={FREQUENCIES}
+                                    data={getFrequencies()}
                                 />
                             </div>
 
@@ -949,7 +949,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                         <span className={classes.sentenceWord}>{t`on`}</span>
                                         <Select
                                             aria-label={t`Month`}
-                                            data={MONTHS}
+                                            data={getMonths()}
                                             className={classes.inlineSelect}
                                             {...form.getInputProps('yearly_month')}
                                         />
@@ -985,7 +985,7 @@ export const RecurrenceScheduleDrawer = ({onClose, onGenerationStarted}: Recurre
                                 <div className={classNames(classes.patternContent, classes.sentenceRow)}>
                                     <Select
                                         aria-label={t`Position`}
-                                        data={WEEK_POSITIONS}
+                                        data={getWeekPositions()}
                                         className={classes.inlineSelect}
                                         {...form.getInputProps('week_position')}
                                     />
