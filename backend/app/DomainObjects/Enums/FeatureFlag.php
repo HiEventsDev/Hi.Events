@@ -12,12 +12,12 @@ enum FeatureFlag: string
     case BOX_OFFICE = 'box_office';
     case ENTERPRISE_SSO = 'enterprise_sso';
 
-    public function licensedFeature(): ?LicensedFeature
+    public function licensedFeature(): LicensedFeature
     {
         return match ($this) {
             self::SEATING => LicensedFeature::SEATING,
             self::BOX_OFFICE => LicensedFeature::BOX_OFFICE,
-            self::ENTERPRISE_SSO => null,
+            self::ENTERPRISE_SSO => LicensedFeature::ENTERPRISE_SSO,
         };
     }
 }

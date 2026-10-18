@@ -2,9 +2,10 @@
 
 namespace Tests\Feature\Http\Actions\Accounts\Sso;
 
+use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Enums\Role;
-use HiEvents\Jobs\Auth\RecheckSsoDomainsJob;
-use HiEvents\Mail\Account\SsoSettingsChangedMail;
+use HiEvents\Enterprise\Sso\Jobs\RecheckSsoDomainsJob;
+use HiEvents\Enterprise\Sso\Mail\SsoSettingsChangedMail;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\AccountSsoConnection;
 use HiEvents\Models\User;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\Concerns\CreatesSsoConnections;
+use Tests\Concerns\ManagesFeatureFlags;
+use Tests\Concerns\ManagesLicence;
 use Tests\TestCase;
 
 class AccountSsoSettingsTest extends TestCase
@@ -21,6 +24,8 @@ class AccountSsoSettingsTest extends TestCase
     use ActsAsAccountUsers;
     use CreatesSsoConnections;
     use DatabaseTransactions;
+    use ManagesFeatureFlags;
+    use ManagesLicence;
 
     private User $owner;
 
@@ -30,8 +35,9 @@ class AccountSsoSettingsTest extends TestCase
     {
         parent::setUp();
 
+        $this->setFeatureFlagDefault(FeatureFlag::ENTERPRISE_SSO, true);
+
         Mail::fake();
-        config()->set('app.saas_mode_enabled', false);
         AccountConfiguration::firstOrCreate(['id' => 1], [
             'id' => 1,
             'name' => 'Default',
@@ -42,17 +48,44 @@ class AccountSsoSettingsTest extends TestCase
         [$this->owner, $this->accountId] = $this->createAccountOwner();
     }
 
-    public function test_the_feature_flag_gates_configuration_in_saas_mode_only(): void
+    public function test_setting_up_a_connection_needs_a_licence(): void
     {
-        $this->getJson($this->url(), $this->ownerHeaders())->assertOk()->assertJsonPath('data.connection', null);
+        $this->useLicenceKey(null);
 
-        config()->set('app.saas_mode_enabled', true);
-        $this->getJson($this->url(), $this->ownerHeaders())
+        $this->getJson($this->url(), $this->ownerHeaders())->assertOk()->assertJsonPath('data.connection', null);
+        $this->postJson($this->url('/connection'), $this->oktaPayload(), $this->ownerHeaders())->assertForbidden();
+        $this->postJson($this->url('/domains'), ['domain' => 'acme.test'], $this->ownerHeaders())->assertForbidden();
+        $this->assertDatabaseMissing('account_sso_connections', ['account_id' => $this->accountId]);
+    }
+
+    public function test_an_unlicensed_account_can_still_switch_single_sign_on_off(): void
+    {
+        $this->createConnection($this->accountId, ['enforce_sso' => true]);
+        $this->useLicenceKey(null);
+
+        $this->putJson($this->url('/enforcement'), ['enabled' => true], $this->ownerHeaders())
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'FEATURE_UNAVAILABLE');
+        $this->putJson($this->url('/enforcement'), ['enabled' => false], $this->ownerHeaders())->assertOk();
+        $this->putJson($this->url('/connection/status'), ['status' => 'INACTIVE'], $this->ownerHeaders())->assertOk();
+        $this->putJson($this->url('/connection/status'), ['status' => 'ACTIVE'], $this->ownerHeaders())
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'FEATURE_UNAVAILABLE');
+        $this->deleteJson($this->url('/connection'), [], $this->ownerHeaders())->assertNoContent();
+    }
+
+    public function test_hi_events_cloud_rolls_configuration_out_by_feature_flag(): void
+    {
+        $this->useCloudLicence();
+        $this->setFeatureFlagDefault(FeatureFlag::ENTERPRISE_SSO, false);
+
+        $this->getJson($this->url(), $this->ownerHeaders())->assertOk();
+        $this->postJson($this->url('/connection'), $this->oktaPayload(), $this->ownerHeaders())
             ->assertForbidden()
             ->assertJsonPath('error_code', 'FEATURE_UNAVAILABLE');
 
-        DB::table('feature_flags')->where('key', 'enterprise_sso')->update(['enabled_by_default' => true]);
-        $this->getJson($this->url(), $this->ownerHeaders())->assertOk();
+        $this->setFeatureFlagDefault(FeatureFlag::ENTERPRISE_SSO, true);
+        $this->postJson($this->url('/connection'), $this->oktaPayload(), $this->ownerHeaders())->assertCreated();
     }
 
     public function test_only_members_who_can_manage_the_account_see_or_change_it(): void

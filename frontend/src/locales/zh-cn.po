@@ -88,7 +88,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0}可用"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0} 可以使用密码登录"
 
@@ -128,7 +128,7 @@ msgstr "{0} 个在购物车"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} 每单限购 {1} 张"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0} 已验证"
 
@@ -145,11 +145,11 @@ msgstr "剩余 {0}"
 msgid "{0} logo"
 msgstr "{0} 标志"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "已验证域名之外的 {0} 位成员将保持当前的登录方式。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} 现在必须使用 {providerName} 登录"
 
@@ -186,7 +186,7 @@ msgstr "{0} 个位置"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} 个已退款订单包含此产品但尚未取消，因此仍计为已售出。如果这些商品不应计入，请取消这些订单。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "已移除 {0}"
 
@@ -340,8 +340,8 @@ msgstr "{count} 个附加产品"
 msgid "{count} times"
 msgstr "{count} 个时段"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days} 天"
 
@@ -361,7 +361,7 @@ msgstr "{diffMin} 分钟前"
 msgid "{diffSec}s ago"
 msgstr "{diffSec} 秒前"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount} 位成员需要使用 {providerName} 登录。"
 
@@ -395,7 +395,7 @@ msgstr "{hours} 小时"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} 小时 {remainder} 分钟"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours} 小时"
 
@@ -634,12 +634,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "<0>{accountName}</0> 要求团队中的所有人启用双重验证。请立即设置以继续,大约只需一分钟。"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "已设置 <0>APP_LICENCE_KEY</0>，但无法验证该密钥，因此预留座位和售票处仍处于锁定状态。"
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "已设置 <0>APP_LICENCE_KEY</0>，但无法验证该密钥，因此预留座位、售票处和企业单点登录仍处于锁定状态。"
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "<0>APP_LICENCE_KEY=development</0> 会为开发和测试解锁预留座位和售票处。Hi.Events 的其他功能可免费用于真实活动，无论是否有许可证。"
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "<0>APP_LICENCE_KEY=development</0> 会为开发和测试解锁预留座位、售票处和企业单点登录。Hi.Events 的其他功能可免费用于真实活动，无论是否有许可证。"
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -688,8 +688,8 @@ msgstr "受影响的场次共有 1 位参与者已登记。"
 msgid "1 attendee is registered for this session."
 msgstr "本场次有 1 位参与者已登记。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1 天"
 
@@ -709,7 +709,7 @@ msgstr "活动前1天"
 msgid "1 event"
 msgstr "1 个活动"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1 小时"
 
@@ -725,11 +725,11 @@ msgstr "1 件"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "有 1 位成员尚未开启双重验证。他需要先完成设置才能继续。立即强制要求?"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "已验证域名之外的 1 位成员将保持当前的登录方式。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1 位成员需要使用 {providerName} 登录。"
 
@@ -1372,7 +1372,7 @@ msgstr "添加详情"
 msgid "Add discount"
 msgstr "添加折扣"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "添加域名"
 
@@ -1399,8 +1399,8 @@ msgstr "添加地点"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "如果一天举办多个场次，可添加多个时间。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "自动添加新成员"
 
@@ -1478,11 +1478,11 @@ msgstr "添加站票"
 msgid "Add tax or fee"
 msgstr "添加税费"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "添加下方的重定向 URI，并允许 openid、email 和 profile 范围。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "添加下方的登录重定向 URI，并分配需要访问权限的人员或组。"
 
@@ -1498,7 +1498,7 @@ msgstr "将此活动添加到您的日历"
 msgid "Add this to your site's <head>"
 msgstr "将此代码添加到网站的 <head> 中"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "在您的 DNS 提供商处添加此 TXT 记录，然后进行验证。每个子域名都需要单独的记录。"
 
@@ -1910,7 +1910,7 @@ msgstr "全部可见"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "请在登录时允许访问您的电子邮件地址，然后重试。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "仅允许此组织目录中的账户，并将下方的重定向 URI 添加为 Web 重定向 URI。"
 
@@ -1952,8 +1952,8 @@ msgstr "允许搜索引擎索引"
 msgid "Allow search engines to index this event"
 msgstr "允许搜索引擎索引此事件"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "允许使用 {providerName} 登录"
 
@@ -2178,7 +2178,7 @@ msgstr "任何单个日期都可以不同：在“编辑日期”中更改其容
 msgid "Any website (HTML)"
 msgstr "任意网站（HTML）"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "凡是使用已验证域名的邮箱、并被 {providerName} 放行的人员，首次登录时将加入此账户。已移除或已停用的成员不会被重新添加。"
 
@@ -2213,7 +2213,7 @@ msgstr "外观"
 msgid "Appears on"
 msgstr "出现在"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2261,7 +2261,7 @@ msgstr "适用于本活动中每个{0}且未取消的日期，包括当前未加
 msgid "Applies to every tier of this ticket"
 msgstr "适用于此票种的每个价格档位"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "适用于通过 {providerName} 开始的会话。之后用户需要重新登录。"
 
@@ -2926,13 +2926,13 @@ msgstr "返回选座"
 msgid "Back to security settings"
 msgstr "返回安全设置"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "返回登录"
 
@@ -3117,7 +3117,7 @@ msgstr "边框"
 msgid "Bounced"
 msgstr "已退回"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "售票处"
 
@@ -3126,7 +3126,7 @@ msgstr "售票处"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "售票处"
 
@@ -3439,8 +3439,6 @@ msgstr "无法使用验证器应用或恢复码?"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3451,6 +3449,8 @@ msgstr "无法使用验证器应用或恢复码?"
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3794,7 +3794,7 @@ msgstr "立即签到"
 msgid "Check in only"
 msgstr "仅签到"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "检查密钥"
 
@@ -3974,7 +3974,7 @@ msgstr "已签到（{checkedInCount}/{attendeeCount}）"
 msgid "Checking your saved profiles…"
 msgstr "正在检查您已保存的资料…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "正在检查…"
 
@@ -4147,7 +4147,7 @@ msgstr "选择门票"
 msgid "Choose when your event starts"
 msgstr "选择活动开始时间"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "选择谁必须使用"
 
@@ -4155,7 +4155,7 @@ msgstr "选择谁必须使用"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "选择谁支付平台费用。这不会影响您在账户设置中配置的额外费用。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "选择您的身份提供商"
 
@@ -4253,13 +4253,13 @@ msgstr "点击查看备注"
 msgid "Clicked"
 msgstr "已点击"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "客户端 ID"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "客户端密钥"
 
@@ -4672,7 +4672,7 @@ msgstr "连接 Stripe，门票款项将直接进入你的银行账户。"
 msgid "Connect with Stripe"
 msgstr "与 Stripe 连接"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "连接您的应用"
 
@@ -4680,7 +4680,7 @@ msgstr "连接您的应用"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "连接银行，售票收入直接进入你的账户"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "连接您的身份提供商，验证您的邮箱域名，然后选择是否要求所有人使用。"
 
@@ -4692,7 +4692,7 @@ msgstr "已连接"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "连接了错误的 Stripe 账户？断开连接并重新开始。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "连接已删除"
 
@@ -4710,11 +4710,11 @@ msgstr "线上日期必须填写连接信息"
 msgid "Connection details are required for online events"
 msgstr "线上活动必须填写连接详情"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "连接已保存。接下来请进行测试登录。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "连接已更新"
 
@@ -4756,7 +4756,6 @@ msgstr "内容"
 msgid "Content is required"
 msgstr "内容为必填项"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4765,6 +4764,7 @@ msgstr "内容为必填项"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "继续"
 
@@ -4987,15 +4987,15 @@ msgstr "复制设置密钥"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "从电子表格中复制若干行（包含表头行），然后粘贴到此处。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "将客户端 ID 和客户端密钥连同您的 Workspace 域名复制到下方字段中。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "将目录（租户）ID、应用程序（客户端）ID 和密钥值复制到下方字段中。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "将颁发者 URL、客户端 ID 和客户端密钥复制到下方字段中。"
 
@@ -5024,7 +5024,7 @@ msgstr "复制 URL"
 msgid "Copy your API key"
 msgstr "复制您的 API 密钥"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "将您的 Okta 域名、客户端 ID 和客户端密钥复制到下方字段中。"
 
@@ -5954,8 +5954,8 @@ msgstr "删除签到列表"
 msgid "Delete code"
 msgstr "删除代码"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "删除连接"
 
@@ -6032,7 +6032,7 @@ msgstr "是否立即删除此账户，而不等待宽限期结束？此操作无
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "删除这个分类？其中的所有产品也会被删除。此操作无法撤销。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "删除此连接？仅通过此连接登录的成员需要重置密码。"
 
@@ -6154,7 +6154,7 @@ msgid "Details"
 msgstr "详细信息"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "开发"
 
@@ -6190,7 +6190,7 @@ msgstr "不同地点"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "紧接在“活动”下方时，它是活动列表中的“往期”标签。放在其他位置时，显示您最近的往期活动。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "目录（租户）ID"
 
@@ -6306,11 +6306,11 @@ msgstr "文档标签"
 msgid "Doesn't repeat"
 msgstr "不重复"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "域名尚未验证"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "域名已验证"
 
@@ -6723,7 +6723,7 @@ msgid "Edit design"
 msgstr "编辑设计"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "编辑详情"
 
@@ -6862,9 +6862,9 @@ msgstr "符合条件的签到列表"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "电子邮件"
 
@@ -6926,7 +6926,7 @@ msgstr "成功重新发送电子邮件确认"
 msgid "Email Delivery"
 msgstr "邮件送达"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "邮箱域名"
 
@@ -7246,9 +7246,18 @@ msgstr "请输入密码以开始设置双重验证。"
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "输入您的增值税号，包括国家代码，不带空格（例如，IE1234567A，DE123456789）"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "输入您的工作邮箱，我们会带您前往所在组织的登录页面。"
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "企业单点登录"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "企业单点登录"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7670,10 +7679,10 @@ msgstr "立即执行删除"
 msgid "Execute now"
 msgstr "立即执行"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "豁免"
 
@@ -7694,7 +7703,7 @@ msgstr "过期日期"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "已过期"
 
@@ -8122,7 +8131,7 @@ msgstr "上传图片失败。请重试。"
 msgid "Failed to verify email"
 msgstr "验证邮箱失败"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "自 {0} 起失败"
 
@@ -8294,7 +8303,7 @@ msgstr "完成 Stripe 设置"
 msgid "Finish setup"
 msgstr "完成设置"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "请在打开的窗口中完成 {providerName} 的登录。"
 
@@ -8480,11 +8489,11 @@ msgstr "为了您的安全，请重新登录以确认是您本人。"
 msgid "Forgot password?"
 msgstr "忘记密码？"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "原 Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "已找到您的登录设置"
 
@@ -8792,7 +8801,7 @@ msgid "Got it"
 msgstr "知道了"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "宽限期"
 
@@ -8842,7 +8851,7 @@ msgstr "总销售额"
 msgid "Group by stage or room"
 msgstr "按舞台或房间分组"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "组"
 
@@ -9395,15 +9404,15 @@ msgstr "审核中"
 msgid "In someone's basket"
 msgstr "已在他人购物车中"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "在 Google Cloud 控制台中，打开属于您的 Workspace 组织的项目。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "在 Microsoft Entra admin center 中，前往 \"App registrations\"，然后选择 \"New registration\"。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "在 Okta Admin Console 中，前往 \"Applications\"，然后选择 \"Create App Integration\"。"
 
@@ -9411,7 +9420,7 @@ msgstr "在 Okta Admin Console 中，前往 \"Applications\"，然后选择 \"Cr
 msgid "In use"
 msgstr "使用中"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "在您的身份提供商中，创建一个使用授权码流程的机密 OpenID Connect 客户端。"
 
@@ -9612,11 +9621,11 @@ msgstr "发票设置"
 msgid "Issued"
 msgstr "签发日期"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "颁发者"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "颁发者 URL"
 
@@ -9778,7 +9787,7 @@ msgstr "密钥已移除"
 msgid "Key revoked"
 msgstr "密钥已撤销"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak、Authentik、Zitadel、OneLogin 等"
 
@@ -9923,7 +9932,7 @@ msgstr "姓氏为必填项"
 msgid "Last Response"
 msgstr "最新响应"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "上次测试通过：{0}"
 
@@ -10042,13 +10051,17 @@ msgstr "告知他们此项变更"
 msgid "Let them know about the changes"
 msgstr "告知他们这些变更"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "让您的团队使用 Okta、Microsoft Entra ID 或 Google Workspace 登录"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "让您的团队使用身份提供商登录"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "允许账户连接其身份提供商、验证电子邮件域名并要求使用单点登录。"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10391,7 +10404,7 @@ msgstr "在结账时强制要求填写账单地址"
 msgid "Make it visible so people can buy tickets"
 msgstr "将它设为可见，大家才能购票"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "请确保 ID token 包含 email 和 email_verified 声明。"
 
@@ -10466,7 +10479,7 @@ msgstr "管理排期"
 msgid "Manage seat maps"
 msgstr "管理座位图"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "管理单点登录"
 
@@ -10580,11 +10593,11 @@ msgstr "成员已重新启用"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "成员可在<0>个人资料设置</0>中自行更改邮箱。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "已验证域名的成员"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "使用已验证域名邮箱的成员必须使用 {providerName} 登录，其他会话将结束。"
 
@@ -10920,8 +10933,6 @@ msgstr "我的票"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10929,6 +10940,8 @@ msgstr "我的票"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "名称"
 
@@ -11127,7 +11140,7 @@ msgstr "夜生活"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "否"
 
@@ -11406,8 +11419,8 @@ msgid "No licence"
 msgstr "无许可证"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "未设置许可证密钥，因此预留座位和售票处已关闭。要解锁这些功能，请在后端环境中设置 APP_LICENCE_KEY 并重新部署后端。使用 Docker Compose 时，请运行 docker compose up -d，因为 docker compose restart 不会重新加载环境变量。"
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "未设置许可证密钥，因此预留座位、售票处和企业单点登录已关闭。要解锁这些功能，请在后端环境中设置 APP_LICENCE_KEY 并重新部署后端。使用 Docker Compose 时，请运行 docker compose up -d，因为 docker compose restart 不会重新加载环境变量。"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11730,7 +11743,7 @@ msgstr "没有符合筛选条件的人员。"
 msgid "Nobody on the lineup yet."
 msgstr "阵容中还没有人。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "您的团队中还没有人使用已验证的域名。通过该域名加入的人员需要使用 {providerName} 登录。"
 
@@ -11761,7 +11774,7 @@ msgstr "无"
 msgid "None (cash only)"
 msgstr "无（仅现金）"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "未共享任何信息"
 
@@ -11813,7 +11826,7 @@ msgstr "{0} 的空闲座位不足"
 msgid "Not joined yet"
 msgstr "尚未加入"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "未标记为已验证"
 
@@ -11838,7 +11851,7 @@ msgstr "未安排"
 msgid "Not selling as {signedInName}?"
 msgstr "不是以 {signedInName} 的身份售票？"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "未共享"
 
@@ -11854,17 +11867,17 @@ msgstr "尚未显示。"
 msgid "Not sure where to sit?"
 msgstr "不确定坐哪里？"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "未测试"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "尚未测试"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "不使用预留座位或售票处？删除 <0>APP_LICENCE_KEY</0> 并重新部署。"
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "不使用预留座位、售票处或企业单点登录？删除 <0>APP_LICENCE_KEY</0> 并重新部署。"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12011,10 +12024,10 @@ msgstr "每月"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "关"
 
@@ -12083,11 +12096,11 @@ msgstr "线下支付信息"
 msgid "Offline Payments Settings"
 msgstr "线下支付设置"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Okta 域名"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12100,10 +12113,10 @@ msgstr "于"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "开"
 
@@ -12269,7 +12282,7 @@ msgstr "只有管理员可以管理团队访问权限。"
 msgid "Only available as an add-on"
 msgstr "仅作为附加产品提供"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "只有使用已验证域名邮箱的人员才能被自动添加，或被要求使用单点登录。"
 
@@ -12817,7 +12830,7 @@ msgstr "其他活动"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "其他列表（不包含此票）"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "其他 OIDC 提供商"
 
@@ -12859,7 +12872,7 @@ msgstr "概览"
 msgid "Owner"
 msgstr "所有者"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "拥有另一个 Hi.Events 账户，因此继续使用密码登录。"
 
@@ -12962,10 +12975,10 @@ msgstr "转嫁给买家"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "密码"
 
@@ -13153,7 +13166,7 @@ msgstr "收款"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "待处理"
 
@@ -13201,11 +13214,11 @@ msgstr "人员（{peopleRowCount}）"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "人员按姓名匹配，因此现有档案会被更新而不是重复创建。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "只有当 {providerName} 将人员的邮箱标记为已验证时，才能让其加入或与现有账户匹配。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "已验证域名下的人员选择 \"使用 SSO 登录\" 后，将被转到 {providerName}。"
 
@@ -13364,7 +13377,7 @@ msgstr "选择日期"
 msgid "Pick days to see your dates."
 msgstr "选择日期后即可在此查看。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "选择 \"OIDC - OpenID Connect\"，然后选择 \"Web Application\"。"
 
@@ -14300,7 +14313,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "重新部署后端。使用 Docker Compose 时，请运行 <0>docker compose up -d</0>。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "重定向 URI"
 
@@ -14466,13 +14479,13 @@ msgstr "移除"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "移除“{0}”？它已过期。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "移除 {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "删除 {0}？使用此邮箱域名的人员将不再被转到您的身份提供商，也不再被要求使用它。"
 
@@ -14508,7 +14521,7 @@ msgstr "移除描述"
 msgid "Remove discount"
 msgstr "移除折扣"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "删除域名"
 
@@ -14676,13 +14689,13 @@ msgstr "请求人"
 msgid "Require Billing Address"
 msgstr "要求账单地址"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "要求使用单点登录"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "要求使用 SSO"
 
@@ -14696,7 +14709,7 @@ msgid "Require two-factor authentication"
 msgstr "要求启用双重验证"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "必填"
 
@@ -14767,7 +14780,7 @@ msgstr "重新发送门票邮件"
 msgid "Reserved"
 msgstr "已预订"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "预留座位"
 
@@ -14775,13 +14788,9 @@ msgstr "预留座位"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "预留座位"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "预留座位和售票处"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14998,7 +15007,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "角色"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "新成员的角色"
 
@@ -15038,7 +15047,7 @@ msgstr "行需修复"
 msgid "Rules saved"
 msgstr "规则已保存"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "开启前，请先成功完成一次测试登录。"
 
@@ -15225,7 +15234,7 @@ msgstr "星期六"
 msgid "Save"
 msgstr "节省"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "保存 {0} 连接"
 
@@ -15234,7 +15243,7 @@ msgstr "保存 {0} 连接"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "保存更改"
 
@@ -15323,11 +15332,11 @@ msgstr "保存，然后复制新代码"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "已保存"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "已保存并隐藏。留空则保留当前密钥。"
 
@@ -16266,7 +16275,7 @@ msgstr "将每个日期的结束时间设为其开始时间之后的这个间隔
 msgid "Set the location"
 msgstr "设置地点"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "将 OAuth consent screen 的用户类型设置为 \"Internal\"。"
 
@@ -16296,7 +16305,7 @@ msgstr "设置排期"
 msgid "Set Up Schedule"
 msgstr "设置排期"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "设置 SSO"
 
@@ -16355,7 +16364,7 @@ msgstr "{featureList}的设置已被锁定。现有销售和已安排的日期�
 msgid "Setup is locked"
 msgstr "设置已锁定"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "设置已锁定"
 
@@ -16621,7 +16630,7 @@ msgstr "请重新登录以继续销售"
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "请重新登录以开始设置双重验证。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "登录一次以检查连接。此操作会显示您的身份提供商共享的信息，不会让您登录此处。"
 
@@ -16662,11 +16671,11 @@ msgstr "使用 Microsoft 登录"
 msgid "Sign in with password"
 msgstr "使用密码登录"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "使用 SSO 登录"
 
@@ -16675,7 +16684,7 @@ msgstr "使用 SSO 登录"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "请使用您平时使用的账户登录，或向管理员寻求帮助。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "使用公司的 Google 账户登录"
 
@@ -16696,7 +16705,7 @@ msgstr "退出"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "请先退出登录，然后以 {0} 身份登录以接受此邀请。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "在此时间后让用户退出登录"
 
@@ -16716,7 +16725,7 @@ msgstr "登录链接只能使用一次，10 分钟后失效。请从登录页面
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "登录链接仅可使用一次，并将在 10 分钟后过期。请重新开始以继续。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "登录设置"
 
@@ -16724,7 +16733,7 @@ msgstr "登录设置"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "登录已取消。请选择其他登录方式或重试。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "已关闭使用 {providerName} 登录"
 
@@ -16732,11 +16741,11 @@ msgstr "已关闭使用 {providerName} 登录"
 msgid "Signed in as"
 msgstr "当前登录"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "已登录为 {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "已登录，但未共享邮箱"
 
@@ -16773,25 +16782,25 @@ msgstr "自 {0} 起（UTC）"
 msgid "Single line text box"
 msgstr "单行文本框"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "单点登录"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "不再要求使用单点登录"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "现已要求使用单点登录"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "此邮箱尚未设置单点登录。请检查地址，或使用其他方式登录。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "单点登录设置已更新"
 
@@ -16981,11 +16990,6 @@ msgstr "出了点问题。请稍后再试。"
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16998,6 +17002,11 @@ msgstr "出了点问题。请稍后再试。"
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17081,12 +17090,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "正方形，至少 200 × 200 像素"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO 登录次数（30 天）"
 
@@ -17378,19 +17387,19 @@ msgstr "停止模拟"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "不再接收帮助你设置和运营活动的邮件。有关订单和账户的邮件仍会照常发送。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "取消要求"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "请先取消要求使用单点登录，再删除连接。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "请先停止强制使用单点登录，再移除已验证的域名。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "取消要求使用单点登录？成员可以再次使用密码登录；从未设置过密码的成员可通过重置密码来设置。"
 
@@ -17694,7 +17703,7 @@ msgstr "星期日"
 msgid "Support Email"
 msgstr "支持电子邮件"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "已停用"
 
@@ -17909,7 +17918,7 @@ msgstr "模板删除成功"
 msgid "Template saved successfully"
 msgstr "模板保存成功"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "租户 ID"
 
@@ -17930,8 +17939,8 @@ msgstr "服务条款"
 msgid "Test email sent to your inbox"
 msgstr "测试邮件已发送到您的收件箱"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "测试登录"
 
@@ -17988,11 +17997,11 @@ msgstr "在你续订之前，将再次显示“Powered by Hi.Events”标识。"
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "该账户有已完成的订单，因此将被匿名化。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "账户所有者（{0}）仍可使用密码和双重验证登录，这样在 {providerName} 不可用时您仍能恢复访问。发生这种情况时，系统会向所有管理员发送邮件。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "每当有人以管理员身份加入时，系统会向账户所有者发送邮件。"
 
@@ -18239,11 +18248,11 @@ msgstr "时段需要有一定时长"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "模板正文包含无效的Liquid语法。请更正后再试。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "测试登录未完成。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "测试登录失败"
 
@@ -19391,7 +19400,7 @@ msgstr "开启"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "开启更多版块并拖动以重新排序。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "请先开启使用 {providerName} 登录，并验证一个域名。"
 
@@ -19634,15 +19643,15 @@ msgstr "不可用"
 msgid "Unavailable, re-register"
 msgstr "不可用，请重新注册"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "在 \"Certificates & secrets\" 下创建客户端密钥。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "在 \"Credentials\" 下，为 Web 应用程序创建 OAuth 客户端 ID，并添加下方的重定向 URI。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "在 \"Token configuration\" 下，将可选声明 email 和 xms_edov 添加到 ID token。"
 
@@ -20104,8 +20113,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "正在验证您的增值税号..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "经济票"
 
@@ -20221,7 +20230,7 @@ msgstr "验证邮件已发送，请查收收件箱。"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "已验证"
 
@@ -20229,17 +20238,17 @@ msgstr "已验证"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "已验证的账户可以向参与者发送消息并管理电子邮件模板。连接 Stripe 会自动验证账户。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "由 {providerName} 验证"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "已验证的域名"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "验证"
 
@@ -20260,7 +20269,7 @@ msgstr "验证恢复码"
 msgid "Verify your email"
 msgstr "验证您的邮箱"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "验证您的邮箱域名"
 
@@ -20601,7 +20610,7 @@ msgstr "我们找不到您要查找的门票。链接可能已过期或门票详
 msgid "We couldn't find this order. It may have been removed."
 msgstr "我们找不到此订单。它可能已被删除。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "我们在每日检查中未能找到此 TXT 记录。请恢复该记录，以便此域名继续使用单点登录。"
 
@@ -21053,7 +21062,7 @@ msgstr "{0} 使用哪种门票？"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "哪些票应与此签到列表关联？"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "白标"
 
@@ -21114,7 +21123,7 @@ msgstr "宽度"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wix 会在固定大小的框中显示嵌入代码。为获得最佳体验，请将“结账打开方式”设为“新标签页”。"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "工作邮箱"
 
@@ -21143,8 +21152,8 @@ msgstr "研讨会"
 msgid "Workshop with early bird"
 msgstr "含早鸟票的工作坊"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspace 域名"
 
@@ -21179,7 +21188,7 @@ msgstr "年"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "是"
 
@@ -21415,7 +21424,7 @@ msgstr "您将无法再使用 {0} 登录。已登录您账户的其他设备将�
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "你将不会再收到此类邮件。有关订单和账户的邮件仍会照常发送。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "您将被退出登录，需要使用 {providerName} 重新登录。"
 
@@ -21579,7 +21588,7 @@ msgstr "您的活动已上线！"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "你的 Hi.Events Enterprise 许可证已于 {expiresAt} 到期。所有功能将保持开启至 {graceEndsAt}。请在此之前续订，以免中断。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "你的身份提供商"
 
@@ -21746,7 +21755,7 @@ msgstr "您的登录会话已过期,请重新登录。"
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "您的 Stripe 账户本身不受影响，也不会丢失任何数据 — 您可以随时重新连接。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "您的团队现在可以使用 {providerName} 登录了"
 

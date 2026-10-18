@@ -23,12 +23,7 @@ class FeatureFlagService
      */
     public function configurableFlags(): array
     {
-        return array_values(array_filter(
-            FeatureFlag::cases(),
-            fn (FeatureFlag $flag) => $flag->licensedFeature() === null
-                ? (bool) config('app.saas_mode_enabled')
-                : $this->licenceService->isCloud(),
-        ));
+        return $this->licenceService->isCloud() ? FeatureFlag::cases() : [];
     }
 
     /**
@@ -84,8 +79,6 @@ class FeatureFlagService
 
     private function isLicensed(FeatureFlag $flag): bool
     {
-        $licensedFeature = $flag->licensedFeature();
-
-        return $licensedFeature === null || $this->licenceService->allows($licensedFeature);
+        return $this->licenceService->allows($flag->licensedFeature());
     }
 }

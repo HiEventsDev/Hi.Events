@@ -88,7 +88,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0}件利用可能"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0}はパスワードでサインインできます"
 
@@ -128,7 +128,7 @@ msgstr "{0}件がカート内"
 msgid "{0} is limited to {1} per order"
 msgstr "{0}は1注文につき{1}までです"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0}を確認しました"
 
@@ -145,11 +145,11 @@ msgstr "残り{0}"
 msgid "{0} logo"
 msgstr "{0}のロゴ"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "確認済みドメイン以外の{0}人のメンバーは、現在のサインイン方法のままです。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0}は今後{providerName}でサインインする必要があります"
 
@@ -186,7 +186,7 @@ msgstr "{0}席"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0}件の返金済み注文にこの商品が含まれていますが、キャンセルされていないため、販売済みとしてカウントされます。カウントしない場合は、キャンセルしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "{0} を削除しました"
 
@@ -340,8 +340,8 @@ msgstr "{count}件のアドオン"
 msgid "{count} times"
 msgstr "{count}回"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days}日"
 
@@ -361,7 +361,7 @@ msgstr "{diffMin}分前"
 msgid "{diffSec}s ago"
 msgstr "{diffSec}秒前"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount}人のメンバーは{providerName}でサインインする必要があります。"
 
@@ -395,7 +395,7 @@ msgstr "{hours} 時間"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} 時間 {remainder} 分"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours}時間"
 
@@ -634,12 +634,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "<0>{accountName}</0>では、チーム全員に二要素認証が必須です。続行するには今すぐ設定してください。所要時間は約1分です。"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "<0>APP_LICENCE_KEY</0>が設定されていますが、キーを検証できなかったため、指定席とボックスオフィスはロックされたままです。"
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "<0>APP_LICENCE_KEY</0>が設定されていますが、キーを検証できなかったため、指定席、ボックスオフィス、エンタープライズシングルサインオンはロックされたままです。"
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "<0>APP_LICENCE_KEY=development</0>を設定すると、開発およびテスト用に指定席とボックスオフィスが利用可能になります。Hi.Eventsのその他の機能は、ライセンスの有無にかかわらず、実際のイベントで無料で利用できます。"
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "<0>APP_LICENCE_KEY=development</0>を設定すると、開発およびテスト用に指定席、ボックスオフィス、エンタープライズシングルサインオンが利用可能になります。Hi.Eventsのその他の機能は、ライセンスの有無にかかわらず、実際のイベントで無料で利用できます。"
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -688,8 +688,8 @@ msgstr "影響を受けるセッション全体で1名の参加者が登録さ�
 msgid "1 attendee is registered for this session."
 msgstr "このセッションには1名の参加者が登録されています。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1日"
 
@@ -709,7 +709,7 @@ msgstr "イベントの1日前"
 msgid "1 event"
 msgstr "1 件のイベント"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1時間"
 
@@ -725,11 +725,11 @@ msgstr "1件"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1人のメンバーがまだ二要素認証を有効にしていません。続行する前に設定するよう求められます。今すぐ必須にしますか？"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "確認済みドメイン以外の1人のメンバーは、現在のサインイン方法のままです。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1人のメンバーは{providerName}でサインインする必要があります。"
 
@@ -1372,7 +1372,7 @@ msgstr "詳細を追加"
 msgid "Add discount"
 msgstr "割引を追加"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "ドメインを追加"
 
@@ -1399,8 +1399,8 @@ msgstr "場所を追加"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "1日に複数のセッションを開催する場合は、複数の時間を追加してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "新しいメンバーを自動的に追加"
 
@@ -1478,11 +1478,11 @@ msgstr "立ち見チケットを追加"
 msgid "Add tax or fee"
 msgstr "税金または手数料を追加"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "以下のリダイレクトURIを追加し、openid、email、profileスコープを許可してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "以下のサインイン用リダイレクトURIを追加し、アクセスを許可するユーザーまたはグループを割り当ててください。"
 
@@ -1498,7 +1498,7 @@ msgstr "このイベントをカレンダーに追加"
 msgid "Add this to your site's <head>"
 msgstr "これをサイトの<head>に追加"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "このTXTレコードをDNSプロバイダーに追加してから、確認してください。サブドメインにはそれぞれ別のレコードが必要です。"
 
@@ -1910,7 +1910,7 @@ msgstr "すべて表示中"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "サインイン時にメールアドレスへのアクセスを許可してから、もう一度お試しください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "この組織ディレクトリ内のアカウントのみを許可し、以下のリダイレクトURIをWebリダイレクトURIとして追加してください。"
 
@@ -1952,8 +1952,8 @@ msgstr "検索エンジンによるインデックスを許可"
 msgid "Allow search engines to index this event"
 msgstr "検索エンジンにこのイベントのインデックス登録を許可する"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "{providerName}でのサインインを許可"
 
@@ -2178,7 +2178,7 @@ msgstr "個別の日付ごとに内容を変更できます。定員は「日付
 msgid "Any website (HTML)"
 msgstr "任意のウェブサイト（HTML）"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "確認済みドメインのメールアドレスで{providerName}にサインインできた人は、初回サインイン時にこのアカウントに参加します。削除または無効化されたメンバーが再び追加されることはありません。"
 
@@ -2213,7 +2213,7 @@ msgstr "外観"
 msgid "Appears on"
 msgstr "出演イベント"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2261,7 +2261,7 @@ msgstr "このイベント内のすべての{0}件の（キャンセルされて
 msgid "Applies to every tier of this ticket"
 msgstr "このチケットのすべてのティアに適用されます"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "{providerName}経由で開始したセッションに適用されます。期限後は再度サインインが必要です。"
 
@@ -2926,13 +2926,13 @@ msgstr "座席に戻る"
 msgid "Back to security settings"
 msgstr "セキュリティ設定に戻る"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "サインインに戻る"
 
@@ -3117,7 +3117,7 @@ msgstr "枠線"
 msgid "Bounced"
 msgstr "バウンス"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "ボックスオフィス"
 
@@ -3126,7 +3126,7 @@ msgstr "ボックスオフィス"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "ボックスオフィス"
 
@@ -3439,8 +3439,6 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3451,6 +3449,8 @@ msgstr "認証アプリまたはリカバリーコードを使用できません
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3794,7 +3794,7 @@ msgstr "今すぐチェックイン"
 msgid "Check in only"
 msgstr "チェックインのみ"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "キーを確認"
 
@@ -3974,7 +3974,7 @@ msgstr "チェックイン済み（{checkedInCount}/{attendeeCount}）"
 msgid "Checking your saved profiles…"
 msgstr "保存済みのプロフィールを確認しています…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "確認中…"
 
@@ -4147,7 +4147,7 @@ msgstr "チケットを選択"
 msgid "Choose when your event starts"
 msgstr "イベントの開始日時を選択"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "利用を必須にする対象を選択"
 
@@ -4155,7 +4155,7 @@ msgstr "利用を必須にする対象を選択"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "プラットフォーム手数料を誰が負担するかを選択します。アカウント設定で設定した追加手数料には影響しません。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "IDプロバイダーを選択"
 
@@ -4253,13 +4253,13 @@ msgstr "クリックしてメモを表示"
 msgid "Clicked"
 msgstr "クリック"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "クライアントID"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "クライアントシークレット"
 
@@ -4672,7 +4672,7 @@ msgstr "チケット代金を銀行口座に直接受け取るには、Stripeを
 msgid "Connect with Stripe"
 msgstr "Stripeと接続"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "アプリを接続"
 
@@ -4680,7 +4680,7 @@ msgstr "アプリを接続"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "銀行口座を接続して、チケット売上を直接受け取りましょう"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "IDプロバイダーを接続し、メールドメインを確認してから、全員に利用を必須にするかどうかを選択します。"
 
@@ -4692,7 +4692,7 @@ msgstr "接続済み"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "間違ったStripeアカウントを接続しましたか？接続を解除して、最初からやり直してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "接続を削除しました"
 
@@ -4710,11 +4710,11 @@ msgstr "オンライン日程には接続情報が必要です"
 msgid "Connection details are required for online events"
 msgstr "オンラインイベントには接続情報が必要です"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "接続を保存しました。次にテストサインインを実行してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "接続を更新しました"
 
@@ -4756,7 +4756,6 @@ msgstr "コンテンツ"
 msgid "Content is required"
 msgstr "コンテンツは必須です"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4765,6 +4764,7 @@ msgstr "コンテンツは必須です"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "続行"
 
@@ -4987,15 +4987,15 @@ msgstr "セットアップキーをコピー"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "スプレッドシートから見出し行を含む数行をコピーし、ここに貼り付けてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "クライアントIDとクライアントシークレットを、Workspaceドメインとともに以下の欄にコピーしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "ディレクトリ（テナント）ID、アプリケーション（クライアント）ID、シークレットの値を以下の欄にコピーしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "発行者URL、クライアントID、クライアントシークレットを以下の欄にコピーしてください。"
 
@@ -5024,7 +5024,7 @@ msgstr "URLをコピー"
 msgid "Copy your API key"
 msgstr "APIキーをコピーしてください"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "Oktaドメイン、クライアントID、クライアントシークレットを以下の欄にコピーしてください。"
 
@@ -5954,8 +5954,8 @@ msgstr "チェックインリストを削除"
 msgid "Delete code"
 msgstr "コードを削除"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "接続を削除"
 
@@ -6032,7 +6032,7 @@ msgstr "猶予期間を待たずに、このアカウントを今すぐ削除し
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "このカテゴリーを削除しますか？カテゴリー内のすべての商品も削除されます。この操作は元に戻せません。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "この接続を削除しますか？この接続でのみサインインしているメンバーは、パスワードをリセットする必要があります。"
 
@@ -6154,7 +6154,7 @@ msgid "Details"
 msgstr "詳細"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "開発"
 
@@ -6190,7 +6190,7 @@ msgstr "別の場所"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "「イベント」の直下にある場合、イベント一覧の「過去」タブになります。それ以外の場所では、最近の過去のイベントを表示します。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "ディレクトリ（テナント）ID"
 
@@ -6306,11 +6306,11 @@ msgstr "ドキュメントラベル"
 msgid "Doesn't repeat"
 msgstr "繰り返しなし"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "ドメインはまだ確認されていません"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "ドメインを確認しました"
 
@@ -6723,7 +6723,7 @@ msgid "Edit design"
 msgstr "デザインを編集"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "詳細を編集"
 
@@ -6862,9 +6862,9 @@ msgstr "対象のチェックインリスト"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "メール"
 
@@ -6926,7 +6926,7 @@ msgstr "確認メールを再送信しました"
 msgid "Email Delivery"
 msgstr "メール配信"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "メールドメイン"
 
@@ -7246,9 +7246,18 @@ msgstr "二要素認証の設定を開始するには、パスワードを入力
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "国コードを含め、スペースなしでVAT番号を入力してください（例：IE1234567A、DE123456789）"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "勤務先のメールアドレスを入力すると、組織のサインインページに移動します。"
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "エンタープライズシングルサインオン"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "エンタープライズシングルサインオン"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7670,10 +7679,10 @@ msgstr "今すぐ削除を実行"
 msgid "Execute now"
 msgstr "今すぐ実行"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "対象外"
 
@@ -7694,7 +7703,7 @@ msgstr "有効期限"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -8122,7 +8131,7 @@ msgstr "画像のアップロードに失敗しました。もう一度お試し
 msgid "Failed to verify email"
 msgstr "メールアドレスの確認に失敗しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "{0}から失敗中"
 
@@ -8294,7 +8303,7 @@ msgstr "Stripeのセットアップを完了"
 msgid "Finish setup"
 msgstr "セットアップを完了"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "開いたウィンドウで{providerName}へのサインインを完了してください。"
 
@@ -8480,11 +8489,11 @@ msgstr "セキュリティのため、もう一度サインインして本人確
 msgid "Forgot password?"
 msgstr "パスワードをお忘れですか？"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "旧 Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "サインイン設定が見つかりました"
 
@@ -8792,7 +8801,7 @@ msgid "Got it"
 msgstr "わかりました"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "猶予期間"
 
@@ -8842,7 +8851,7 @@ msgstr "総売上"
 msgid "Group by stage or room"
 msgstr "ステージまたは部屋ごとにグループ化"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "グループ"
 
@@ -9395,15 +9404,15 @@ msgstr "審査中"
 msgid "In someone's basket"
 msgstr "他の人のカート内"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "Google Cloudコンソールで、Workspace組織に属するプロジェクトを開きます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "Microsoft Entra admin centerで「App registrations」に移動し、「New registration」を選択します。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Okta Admin Consoleで「Applications」に移動し、「Create App Integration」を選択します。"
 
@@ -9411,7 +9420,7 @@ msgstr "Okta Admin Consoleで「Applications」に移動し、「Create App Inte
 msgid "In use"
 msgstr "使用中"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "IDプロバイダーで、認可コードフローを使用するコンフィデンシャルなOpenID Connectクライアントを作成します。"
 
@@ -9612,11 +9621,11 @@ msgstr "請求書設定"
 msgid "Issued"
 msgstr "発行済み"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "発行者"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "発行者URL"
 
@@ -9778,7 +9787,7 @@ msgstr "キーを削除しました"
 msgid "Key revoked"
 msgstr "キーを無効化しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak、Authentik、Zitadel、OneLoginなど"
 
@@ -9923,7 +9932,7 @@ msgstr "姓は必須です"
 msgid "Last Response"
 msgstr "最終応答"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "最後のテストの成功: {0}"
 
@@ -10042,13 +10051,17 @@ msgstr "変更をお知らせする"
 msgid "Let them know about the changes"
 msgstr "変更をお知らせする"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "チームがOkta、Microsoft Entra ID、Google Workspaceでサインインできるようにします"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "チームがIDプロバイダーでサインインできるようにします"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "アカウントがIDプロバイダーを接続し、メールドメインを検証して、シングルサインオンを必須にできるようにします。"
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10391,7 +10404,7 @@ msgstr "チェックアウト時に請求先住所を必須にする"
 msgid "Make it visible so people can buy tickets"
 msgstr "チケットを購入できるように公開する"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "ID tokenにemailとemail_verifiedのクレームが含まれていることを確認してください。"
 
@@ -10466,7 +10479,7 @@ msgstr "スケジュールを管理"
 msgid "Manage seat maps"
 msgstr "座席マップを管理"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "シングルサインオンを管理"
 
@@ -10580,11 +10593,11 @@ msgstr "メンバーを再度有効にしました"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "メンバーは<0>プロフィール設定</0>で自分のメールアドレスを変更できます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "確認済みドメインのメンバー"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "確認済みドメインのメールアドレスを持つメンバーは、{providerName}でサインインする必要があります。他のセッションは終了します。"
 
@@ -10920,8 +10933,6 @@ msgstr "マイチケット"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10929,6 +10940,8 @@ msgstr "マイチケット"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "名前"
 
@@ -11127,7 +11140,7 @@ msgstr "ナイトライフ"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "いいえ"
 
@@ -11406,8 +11419,8 @@ msgid "No licence"
 msgstr "ライセンスなし"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "ライセンスキーが設定されていないため、指定席とボックスオフィスはオフになっています。有効にするには、バックエンド環境でAPP_LICENCE_KEYを設定し、バックエンドを再デプロイしてください。Docker Composeの場合は、docker compose restartでは環境が再読み込みされないため、docker compose up -dを使用してください。"
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "ライセンスキーが設定されていないため、指定席、ボックスオフィス、エンタープライズシングルサインオンはオフになっています。有効にするには、バックエンド環境でAPP_LICENCE_KEYを設定し、バックエンドを再デプロイしてください。Docker Composeの場合は、docker compose restartでは環境が再読み込みされないため、docker compose up -dを使用してください。"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11730,7 +11743,7 @@ msgstr "条件に一致する人はいません。"
 msgid "Nobody on the lineup yet."
 msgstr "ラインナップにはまだ誰もいません。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "確認済みドメインを使用しているメンバーはまだいません。そのドメインで参加した人は、{providerName}でサインインする必要があります。"
 
@@ -11761,7 +11774,7 @@ msgstr "なし"
 msgid "None (cash only)"
 msgstr "なし（現金のみ）"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "共有なし"
 
@@ -11813,7 +11826,7 @@ msgstr "{0}に必要な空席が足りません"
 msgid "Not joined yet"
 msgstr "未参加"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "確認済みとして表示されていません"
 
@@ -11838,7 +11851,7 @@ msgstr "未スケジュール"
 msgid "Not selling as {signedInName}?"
 msgstr "{signedInName}として販売していませんか？"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "共有されていません"
 
@@ -11854,17 +11867,17 @@ msgstr "まだ表示されていません。"
 msgid "Not sure where to sit?"
 msgstr "どこに座ればよいかわかりませんか？"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "未テスト"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "まだテストされていません"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "指定席やボックスオフィスを使用しない場合は、<0>APP_LICENCE_KEY</0>を削除して再デプロイしてください。"
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "指定席、ボックスオフィス、エンタープライズシングルサインオンを使用しない場合は、<0>APP_LICENCE_KEY</0>を削除して再デプロイしてください。"
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12011,10 +12024,10 @@ msgstr "毎月"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "オフ"
 
@@ -12083,11 +12096,11 @@ msgstr "オフライン決済の情報"
 msgid "Offline Payments Settings"
 msgstr "オフライン決済の設定"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Oktaドメイン"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12100,10 +12113,10 @@ msgstr "オン"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "オン"
 
@@ -12269,7 +12282,7 @@ msgstr "チームのアクセス権を管理できるのは管理者のみです
 msgid "Only available as an add-on"
 msgstr "アドオンとしてのみ利用可能"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "確認済みドメインのメールアドレスを持つ人のみ、自動追加やシングルサインオンの必須化の対象にできます。"
 
@@ -12817,7 +12830,7 @@ msgstr "その他のイベント"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "その他のリスト（チケットは含まれません）"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "その他のOIDCプロバイダー"
 
@@ -12859,7 +12872,7 @@ msgstr "概要"
 msgid "Owner"
 msgstr "オーナー"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "別の Hi.Events アカウントの所有者のため、引き続きパスワードでサインインします。"
 
@@ -12962,10 +12975,10 @@ msgstr "購入者に転嫁"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "パスワード"
 
@@ -13153,7 +13166,7 @@ msgstr "入金"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "保留中"
 
@@ -13201,11 +13214,11 @@ msgstr "人物（{peopleRowCount}）"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "人物は名前で照合されるため、既存のプロフィールは重複せずに更新されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "{providerName}がメールアドレスを確認済みとしている場合にのみ、参加や既存アカウントとの照合が行われます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "確認済みドメインのメンバーは、「SSOでサインイン」を選択すると{providerName}に移動します。"
 
@@ -13364,7 +13377,7 @@ msgstr "日付を選択"
 msgid "Pick days to see your dates."
 msgstr "日付を表示するには、曜日を選択してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "「OIDC - OpenID Connect」を選び、続けて「Web Application」を選びます。"
 
@@ -14300,7 +14313,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "バックエンドを再デプロイしてください。Docker Composeの場合は、<0>docker compose up -d</0>を実行してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "リダイレクトURI"
 
@@ -14466,13 +14479,13 @@ msgstr "削除"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "「{0}」を削除しますか？すでに期限切れです。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "{0}を削除"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "{0}を削除しますか？このメールドメインのメンバーは、IDプロバイダーに移動されなくなり、利用も必須ではなくなります。"
 
@@ -14508,7 +14521,7 @@ msgstr "説明を削除"
 msgid "Remove discount"
 msgstr "割引を削除"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "ドメインを削除"
 
@@ -14676,13 +14689,13 @@ msgstr "リクエスト者"
 msgid "Require Billing Address"
 msgstr "請求先住所を必須にする"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "シングルサインオンを必須にする"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "SSOを必須にする"
 
@@ -14696,7 +14709,7 @@ msgid "Require two-factor authentication"
 msgstr "二要素認証を必須にする"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "必須"
 
@@ -14767,7 +14780,7 @@ msgstr "チケットメールを再送信"
 msgid "Reserved"
 msgstr "予約済み"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "指定席"
 
@@ -14775,13 +14788,9 @@ msgstr "指定席"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "指定席"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "指定席とボックスオフィス"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14998,7 +15007,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "役割"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "新しいメンバーのロール"
 
@@ -15038,7 +15047,7 @@ msgstr "行を修正"
 msgid "Rules saved"
 msgstr "ルールを保存しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "オンにする前に、テストサインインを成功させてください。"
 
@@ -15225,7 +15234,7 @@ msgstr "土曜日"
 msgid "Save"
 msgstr "保存"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "{0}の接続を保存"
 
@@ -15234,7 +15243,7 @@ msgstr "{0}の接続を保存"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "変更を保存"
 
@@ -15323,11 +15332,11 @@ msgstr "保存してから新しいコードをコピー"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "保存しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "保存済みで非表示です。現在のシークレットを維持するには空欄のままにしてください。"
 
@@ -16266,7 +16275,7 @@ msgstr "各日付の終了時刻を、開始時刻からこの長さ後に設定
 msgid "Set the location"
 msgstr "場所を設定"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "OAuth consent screenのユーザーの種類を「Internal」に設定します。"
 
@@ -16296,7 +16305,7 @@ msgstr "スケジュールを設定"
 msgid "Set Up Schedule"
 msgstr "スケジュールを設定"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "SSOを設定"
 
@@ -16355,7 +16364,7 @@ msgstr "{featureList}の設定はロックされています。既存の販売�
 msgid "Setup is locked"
 msgstr "設定はロックされています"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "設定ロック中"
 
@@ -16621,7 +16630,7 @@ msgstr "販売を続けるには、もう一度サインインしてください
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "二要素認証の設定を始めるには、もう一度サインインしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "一度サインインして接続を確認します。IDプロバイダーが共有する情報が表示されますが、ここにサインインするわけではありません。"
 
@@ -16662,11 +16671,11 @@ msgstr "Microsoft でサインイン"
 msgid "Sign in with password"
 msgstr "パスワードでサインイン"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "SSOでサインイン"
 
@@ -16675,7 +16684,7 @@ msgstr "SSOでサインイン"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "普段使っているアカウントでサインインするか、管理者にお問い合わせください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "会社のGoogleアカウントでサインイン"
 
@@ -16696,7 +16705,7 @@ msgstr "サインアウト"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "この招待を承諾するには、サインアウトしてから {0} としてサインインしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "サインアウトするまでの時間"
 
@@ -16716,7 +16725,7 @@ msgstr "サインインリンクは1回のみ有効で、10分で期限切れに
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "サインインリンクは1回のみ有効で、10分後に期限切れになります。続行するには最初からやり直してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "サインイン設定"
 
@@ -16724,7 +16733,7 @@ msgstr "サインイン設定"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "サインインがキャンセルされました。別のサインイン方法を選択するか、もう一度お試しください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "{providerName}でのサインインはオフです"
 
@@ -16732,11 +16741,11 @@ msgstr "{providerName}でのサインインはオフです"
 msgid "Signed in as"
 msgstr "サインイン中のアカウント"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "{0}としてサインイン済み"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "サインインしましたが、メールアドレスが共有されませんでした"
 
@@ -16773,25 +16782,25 @@ msgstr "{0}以降（UTC）"
 msgid "Single line text box"
 msgstr "1行テキストボックス"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "シングルサインオン"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "シングルサインオンは必須ではなくなりました"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "シングルサインオンが必須になりました"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "このメールアドレスにはシングルサインオンが設定されていません。アドレスを確認するか、別の方法でサインインしてください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "シングルサインオンの設定を更新しました"
 
@@ -16981,11 +16990,6 @@ msgstr "問題が発生しました。しばらくしてからもう一度お試
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16998,6 +17002,11 @@ msgstr "問題が発生しました。しばらくしてからもう一度お試
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17081,12 +17090,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "正方形、200 × 200px以上"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO サインイン（30日間）"
 
@@ -17378,19 +17387,19 @@ msgstr "なりすましを停止"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "イベントの設定や運営に役立つメールの受信を停止します。注文やアカウントに関するメールは引き続き送信されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "必須を解除"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "接続を削除する前に、シングルサインオンの必須化を解除してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "確認済みドメインを削除する前に、シングルサインオンの必須設定を解除してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "シングルサインオンの必須化を解除しますか？メンバーはパスワードで再びサインインできます。パスワード未設定の場合はリセットしてください。"
 
@@ -17694,7 +17703,7 @@ msgstr "日曜日"
 msgid "Support Email"
 msgstr "サポートメール"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "停止中"
 
@@ -17909,7 +17918,7 @@ msgstr "テンプレートを削除しました"
 msgid "Template saved successfully"
 msgstr "テンプレートを保存しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "テナントID"
 
@@ -17930,8 +17939,8 @@ msgstr "利用規約"
 msgid "Test email sent to your inbox"
 msgstr "テストメールを受信トレイに送信しました"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "テストサインイン"
 
@@ -17988,11 +17997,11 @@ msgstr "\"Powered by Hi.Events\"の表示は、更新するまで再び表示さ
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "このアカウントには完了済みの注文があるため、匿名化されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "アカウントオーナー（{0}）は、パスワードと二要素認証でサインインできるため、{providerName}が利用できない場合でもアクセスを復旧できます。その際は、すべての管理者にメールで通知されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "管理者として参加した人がいる場合は、そのたびにアカウントオーナーにメールで通知されます。"
 
@@ -18239,11 +18248,11 @@ msgstr "枠にはある程度の長さが必要です"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "テンプレート本文に無効なLiquid構文が含まれています。修正してもう一度お試しください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "テストサインインが完了しませんでした。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "テストサインインに失敗しました"
 
@@ -19391,7 +19400,7 @@ msgstr "オンにする"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "追加のセクションをオンにし、ドラッグして並べ替えます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "先に{providerName}でのサインインをオンにして、ドメインを確認してください。"
 
@@ -19634,15 +19643,15 @@ msgstr "利用不可"
 msgid "Unavailable, re-register"
 msgstr "利用不可、再登録してください"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "「Certificates & secrets」でクライアントシークレットを作成します。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "「Credentials」でWebアプリケーション用のOAuthクライアントIDを作成し、以下のリダイレクトURIを追加します。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "「Token configuration」で、オプションのクレームemailとxms_edovをID tokenに追加します。"
 
@@ -20104,8 +20113,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "VAT番号を検証中..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "値"
 
@@ -20221,7 +20230,7 @@ msgstr "確認メールを送信しました。受信トレイをご確認くだ
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "認証済み"
 
@@ -20229,17 +20238,17 @@ msgstr "認証済み"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "認証済みアカウントは、参加者へのメッセージ送信とメールテンプレートの管理ができます。Stripeを接続すると、アカウントが自動的に認証されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "{providerName}により確認済み"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "確認済みドメイン"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "確認"
 
@@ -20260,7 +20269,7 @@ msgstr "リカバリーコードを確認"
 msgid "Verify your email"
 msgstr "メールアドレスを確認してください"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "メールドメインを確認"
 
@@ -20601,7 +20610,7 @@ msgstr "お探しのチケットが見つかりませんでした。リンクの
 msgid "We couldn't find this order. It may have been removed."
 msgstr "この注文が見つかりませんでした。削除された可能性があります。"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "毎日のチェックでこのTXTレコードが見つかりませんでした。このドメインでシングルサインオンを引き続き使うには、レコードを復元してください。"
 
@@ -21053,7 +21062,7 @@ msgstr "{0}のどのチケットですか？"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "このチェックインリストに紐付けるチケットはどれですか？"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "ホワイトラベル"
 
@@ -21114,7 +21123,7 @@ msgstr "幅"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wixでは、埋め込みコードが固定サイズのボックス内に表示されます。最適な表示にするには、「チェックアウトの開き方」を「新しいタブ」に設定してください。"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "勤務先メールアドレス"
 
@@ -21143,8 +21152,8 @@ msgstr "ワークショップ"
 msgid "Workshop with early bird"
 msgstr "早割付きワークショップ"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspaceドメイン"
 
@@ -21179,7 +21188,7 @@ msgstr "年"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "はい"
 
@@ -21415,7 +21424,7 @@ msgstr "今後 {0} でサインインできなくなります。あなたのア�
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "今後これらのメールは届きません。注文やアカウントに関するメールは引き続き送信されます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "サインアウトされるため、{providerName}で再度サインインする必要があります。"
 
@@ -21579,7 +21588,7 @@ msgstr "イベントが公開されました！"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Hi.Eventsエンタープライズライセンスは{expiresAt}に期限切れになりました。{graceEndsAt}まではすべて継続して利用できます。中断を避けるため、それまでに更新してください。"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "ご利用の ID プロバイダー"
 
@@ -21746,7 +21755,7 @@ msgstr "サインインセッションの有効期限が切れました。もう
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "Stripeアカウント自体には影響せず、データも失われません。いつでも再接続できます。"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "チームは{providerName}でサインインできるようになりました"
 

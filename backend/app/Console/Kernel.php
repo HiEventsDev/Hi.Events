@@ -4,10 +4,11 @@ namespace HiEvents\Console;
 
 use HiEvents\Enterprise\Licensing\Console\GenerateLicenceKeypairCommand;
 use HiEvents\Enterprise\Licensing\Console\IssueLicenceKeyCommand;
+use HiEvents\Enterprise\Sso\Console\SsoVerifyDomainCommand;
+use HiEvents\Enterprise\Sso\Jobs\RecheckSsoDomainsJob;
 use HiEvents\Jobs\Abuse\ReportSuspiciousActivityJob;
 use HiEvents\Jobs\Account\ProcessScheduledAccountDeletionsJob;
 use HiEvents\Jobs\ApiKey\SendApiKeyExpiryRemindersJob;
-use HiEvents\Jobs\Auth\RecheckSsoDomainsJob;
 use HiEvents\Jobs\Lifecycle\SendLifecycleNudgesJob;
 use HiEvents\Jobs\Message\SendScheduledMessagesJob;
 use HiEvents\Jobs\Waitlist\ProcessExpiredWaitlistOffersJob;
@@ -22,6 +23,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         GenerateLicenceKeypairCommand::class,
         IssueLicenceKeyCommand::class,
+        SsoVerifyDomainCommand::class,
     ];
 
     protected function schedule(Schedule $schedule): void

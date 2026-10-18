@@ -88,7 +88,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0} saatavilla"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0} voi kirjautua sisään salasanallaan"
 
@@ -128,7 +128,7 @@ msgstr "{0} ostoskorissa"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} on rajoitettu {1} kappaleeseen tilausta kohti"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0} on vahvistettu"
 
@@ -145,11 +145,11 @@ msgstr "{0} jäljellä"
 msgid "{0} logo"
 msgstr "{0}-logo"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "{0} jäsentä vahvistettujen verkkotunnustesi ulkopuolella säilyttää nykyisen kirjautumistapansa."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} on nyt kirjauduttava sisään palvelun {providerName} kautta"
 
@@ -186,7 +186,7 @@ msgstr "{0} paikkaa"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} hyvitettyä tilausta sisältää tämän tuotteen, mutta niitä ei ole peruttu, joten ne lasketaan edelleen myydyiksi. Peru ne, jos tuotteita ei pidä laskea."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "{0} poistettu"
 
@@ -340,8 +340,8 @@ msgstr "{count} lisätuotetta"
 msgid "{count} times"
 msgstr "{count} aikaa"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days} päivää"
 
@@ -361,7 +361,7 @@ msgstr "{diffMin}min sitten"
 msgid "{diffSec}s ago"
 msgstr "{diffSec}s sitten"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount} jäsenen on kirjauduttava sisään palvelun {providerName} kautta."
 
@@ -395,7 +395,7 @@ msgstr "{hours} h"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} h {remainder} min"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours} tuntia"
 
@@ -634,12 +634,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "<0>{accountName}</0> edellyttää kaksivaiheista tunnistautumista kaikilta tiimin jäseniltä. Ota se käyttöön nyt jatkaaksesi. Siihen menee noin minuutti."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "<0>APP_LICENCE_KEY</0> on asetettu, mutta avainta ei voitu vahvistaa, joten varatut istumapaikat ja lipunmyynti ovella pysyvät lukittuina."
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "<0>APP_LICENCE_KEY</0> on asetettu, mutta avainta ei voitu vahvistaa, joten varatut istumapaikat, lipunmyynti ovella ja yritysten kertakirjautuminen pysyvät lukittuina."
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "<0>APP_LICENCE_KEY=development</0> avaa varatut istumapaikat ja lipunmyynnin ovella kehitys- ja testikäyttöön. Muu Hi.Events on ilmainen oikeisiin tapahtumiin, lisenssillä tai ilman."
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "<0>APP_LICENCE_KEY=development</0> avaa varatut istumapaikat, lipunmyynnin ovella ja yritysten kertakirjautumisen kehitys- ja testikäyttöön. Muu Hi.Events on ilmainen oikeisiin tapahtumiin, lisenssillä tai ilman."
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -688,8 +688,8 @@ msgstr "1 osallistuja on rekisteröitynyt kyseisiin tapahtumakertiin."
 msgid "1 attendee is registered for this session."
 msgstr "1 osallistuja on rekisteröitynyt tähän istuntoon."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1 päivä"
 
@@ -709,7 +709,7 @@ msgstr "1 päivä ennen tapahtumaa"
 msgid "1 event"
 msgstr "1 tapahtuma"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1 tunti"
 
@@ -725,11 +725,11 @@ msgstr "1 tuote"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1 jäsen ei ole vielä ottanut kaksivaiheista tunnistautumista käyttöön. Häntä pyydetään ottamaan se käyttöön ennen jatkamista. Vaaditaanko se nyt?"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "1 jäsen vahvistettujen verkkotunnustesi ulkopuolella säilyttää nykyisen kirjautumistapansa."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1 jäsenen on kirjauduttava sisään palvelun {providerName} kautta."
 
@@ -1372,7 +1372,7 @@ msgstr "Lisää tiedot"
 msgid "Add discount"
 msgstr "Lisää alennus"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "Lisää verkkotunnus"
 
@@ -1399,8 +1399,8 @@ msgstr "Lisää sijainti"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "Lisää useita aikoja, jos järjestät useita istuntoja päivässä."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "Lisää uudet henkilöt automaattisesti"
 
@@ -1478,11 +1478,11 @@ msgstr "Lisää seisomapaikkaliput"
 msgid "Add tax or fee"
 msgstr "Lisää vero tai maksu"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "Lisää alla oleva uudelleenohjaus-URI ja salli oikeudet (scopes) openid, email ja profile."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "Lisää alla oleva kirjautumisen uudelleenohjaus-URI ja määritä henkilöt tai ryhmät, joiden pitää päästä käyttämään palvelua."
 
@@ -1498,7 +1498,7 @@ msgstr "Lisää tämä tapahtuma kalenteriisi"
 msgid "Add this to your site's <head>"
 msgstr "Lisää tämä sivustosi <head>-osioon"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "Lisää tämä TXT-tietue DNS-palveluntarjoajallasi ja vahvista sitten. Aliverkkotunnukset tarvitsevat oman tietueensa."
 
@@ -1910,7 +1910,7 @@ msgstr "Kaikki näkyvissä"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Salli pääsy sähköpostiosoitteeseesi kirjautuessasi ja yritä sitten uudelleen."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "Salli vain tämän organisaation hakemiston tilit ja lisää alla oleva uudelleenohjaus-URI Web-uudelleenohjaus-URI:ksi."
 
@@ -1952,8 +1952,8 @@ msgstr "Salli hakukoneindeksointi"
 msgid "Allow search engines to index this event"
 msgstr "Salli hakukoneiden indeksoida tämä tapahtuma"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "Salli kirjautuminen palvelulla {providerName}"
 
@@ -2178,7 +2178,7 @@ msgstr "Yksittäinen päivämäärä voi poiketa: muuta sen kapasiteettia kohdas
 msgid "Any website (HTML)"
 msgstr "Mikä tahansa sivusto (HTML)"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "Jokainen, jonka {providerName} päästää sisään vahvistetun verkkotunnuksen sähköpostiosoitteella, liittyy tähän tiliin ensimmäisellä kirjautumiskerralla. Poistettuja tai käytöstä poistettuja jäseniä ei koskaan lisätä takaisin."
 
@@ -2213,7 +2213,7 @@ msgstr "Ulkoasu"
 msgid "Appears on"
 msgstr "Esiintyy tapahtumissa"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2261,7 +2261,7 @@ msgstr "Koskee jokaista {0} peruuttamatonta päivämäärää tässä tapahtumas
 msgid "Applies to every tier of this ticket"
 msgstr "Koskee tämän lipun jokaista hintaporrasta"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "Koskee palvelun {providerName} kautta aloitettuja istuntoja. Käyttäjät kirjautuvat sen jälkeen uudelleen."
 
@@ -2926,13 +2926,13 @@ msgstr "Takaisin paikkoihin"
 msgid "Back to security settings"
 msgstr "Takaisin suojausasetuksiin"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "Takaisin kirjautumiseen"
 
@@ -3117,7 +3117,7 @@ msgstr "Reunat"
 msgid "Bounced"
 msgstr "Palautui"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "lipunmyynti ovella"
 
@@ -3126,7 +3126,7 @@ msgstr "lipunmyynti ovella"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "Lippukassa"
 
@@ -3439,8 +3439,6 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3451,6 +3449,8 @@ msgstr "Etkö voi käyttää todennussovellusta tai palautuskoodeja?"
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3794,7 +3794,7 @@ msgstr "Kirjaa sisään nyt"
 msgid "Check in only"
 msgstr "Vain sisäänkirjaus"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "Tarkista avain"
 
@@ -3974,7 +3974,7 @@ msgstr "Kirjattu sisään ({checkedInCount}/{attendeeCount})"
 msgid "Checking your saved profiles…"
 msgstr "Tarkistetaan tallennettuja profiilejasi…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "Tarkistetaan…"
 
@@ -4147,7 +4147,7 @@ msgstr "Valitse liput"
 msgid "Choose when your event starts"
 msgstr "Valitse, milloin tapahtumasi alkaa"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "Valitse, keiden on pakko käyttää sitä"
 
@@ -4155,7 +4155,7 @@ msgstr "Valitse, keiden on pakko käyttää sitä"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Valitse, kuka maksaa palvelumaksun. Tämä ei vaikuta tileilläsi määriteltyihin lisämaksuihin."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "Valitse identiteetintarjoajasi"
 
@@ -4253,13 +4253,13 @@ msgstr "Napsauta nähdäksesi muistiinpanot"
 msgid "Clicked"
 msgstr "Klikattu"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "Asiakastunnus"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "Asiakassalaisuus"
 
@@ -4672,7 +4672,7 @@ msgstr "Yhdistä Stripe vastaanottaaksesi lipputulot suoraan pankkitilillesi."
 msgid "Connect with Stripe"
 msgstr "Yhdistä Stripe"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "Yhdistä sovelluksesi"
 
@@ -4680,7 +4680,7 @@ msgstr "Yhdistä sovelluksesi"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "Yhdistä pankki saadaksesi lipputulot suoraan tilillesi"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "Yhdistä identiteetintarjoajasi, vahvista sähköpostin verkkotunnuksesi ja valitse sitten, onko sen käyttö pakollista kaikille."
 
@@ -4692,7 +4692,7 @@ msgstr "Yhdistetty"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "Yhdistitkö väärän Stripe-tilin? Katkaise yhteys ja aloita alusta."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "Yhteys poistettu"
 
@@ -4710,11 +4710,11 @@ msgstr "Yhteystiedot vaaditaan verkkotapahtumille"
 msgid "Connection details are required for online events"
 msgstr "Yhteystiedot vaaditaan verkkotapahtumille"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "Yhteys tallennettu. Tee seuraavaksi testikirjautuminen."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "Yhteys päivitetty"
 
@@ -4756,7 +4756,6 @@ msgstr "Sisältö"
 msgid "Content is required"
 msgstr "Sisältö on pakollinen"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4765,6 +4764,7 @@ msgstr "Sisältö on pakollinen"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "Jatka"
 
@@ -4987,15 +4987,15 @@ msgstr "Kopioi asetusavain"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "Kopioi muutama rivi taulukkolaskennasta otsikkorivi mukaan lukien ja liitä ne tähän."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "Kopioi asiakastunnus ja asiakassalaisuus alla oleviin kenttiin sekä Workspace-verkkotunnuksesi."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "Kopioi hakemiston (tenant) tunnus, sovelluksen (client) tunnus ja salaisuuden arvo alla oleviin kenttiin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Kopioi myöntäjän URL, asiakastunnus ja asiakassalaisuus alla oleviin kenttiin."
 
@@ -5024,7 +5024,7 @@ msgstr "Kopioi URL"
 msgid "Copy your API key"
 msgstr "Kopioi API-avaimesi"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "Kopioi Okta-verkkotunnuksesi, asiakastunnus ja asiakassalaisuus alla oleviin kenttiin."
 
@@ -5954,8 +5954,8 @@ msgstr "Poista sisäänkirjauslista"
 msgid "Delete code"
 msgstr "Poista koodi"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "Poista yhteys"
 
@@ -6032,7 +6032,7 @@ msgstr "Poistetaanko tämä tili nyt odottamatta harkinta-aikaa? Tätä ei voi p
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Poistetaanko tämä kategoria? Kaikki tuotteet siinä poistetaan myös. Tätä ei voi peruuttaa."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "Poistetaanko tämä yhteys? Jäsenten, jotka kirjautuvat vain sen kautta, on nollattava salasanansa."
 
@@ -6154,7 +6154,7 @@ msgid "Details"
 msgstr "Yksityiskohdat"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "Kehitys"
 
@@ -6190,7 +6190,7 @@ msgstr "Eri sijainti"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Suoraan Tapahtumien alla se on Menneet-välilehti tapahtumaluettelossa. Muualla se näyttää viimeisimmät menneet tapahtumasi."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "Directory (tenant) ID"
 
@@ -6306,11 +6306,11 @@ msgstr "Asiakirjan huomautus"
 msgid "Doesn't repeat"
 msgstr "Ei toistu"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "Verkkotunnusta ei ole vielä vahvistettu"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "Verkkotunnus vahvistettu"
 
@@ -6723,7 +6723,7 @@ msgid "Edit design"
 msgstr "Muokkaa ulkoasua"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "Muokkaa tietoja"
 
@@ -6862,9 +6862,9 @@ msgstr "Kelpoiset sisäänkirjautumislistat"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "Sähköposti"
 
@@ -6926,7 +6926,7 @@ msgstr "Sähköpostivarmistus lähetettiin uudelleen onnistuneesti"
 msgid "Email Delivery"
 msgstr "Sähköpostien toimitus"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "Sähköpostin verkkotunnus"
 
@@ -7246,9 +7246,18 @@ msgstr "Anna salasanasi aloittaaksesi kaksivaiheisen tunnistautumisen käyttöö
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Anna ALV-numero kansainvälisellä maatunnuksella ilman välilyöntejä (esim. IE1234567A, DE123456789)"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "Anna työsähköpostisi, niin ohjaamme sinut organisaatiosi kirjautumissivulle."
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "yritysten kertakirjautuminen"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "Yritysten kertakirjautuminen"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7670,10 +7679,10 @@ msgstr "Suorita poisto nyt"
 msgid "Execute now"
 msgstr "Suorita nyt"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "Vapautettu"
 
@@ -7694,7 +7703,7 @@ msgstr "Vanhentumispäivä"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "Vanhentunut"
 
@@ -8122,7 +8131,7 @@ msgstr "Kuvan lataus epäonnistui. Yritä uudelleen."
 msgid "Failed to verify email"
 msgstr "Sähköpostin vahvistus epäonnistui"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "Epäonnistunut {0} lähtien"
 
@@ -8294,7 +8303,7 @@ msgstr "Viimeistele Stripe-asetukset"
 msgid "Finish setup"
 msgstr "Viimeistele asetukset"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "Viimeistele kirjautuminen palveluun {providerName} avautuneessa ikkunassa."
 
@@ -8480,11 +8489,11 @@ msgstr "Kirjaudu turvallisuussyistä uudelleen sisään vahvistaaksesi henkilöl
 msgid "Forgot password?"
 msgstr "Unohtuiko salasana?"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "Aiemmin Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "Kirjautumisasetuksesi löytyivät"
 
@@ -8792,7 +8801,7 @@ msgid "Got it"
 msgstr "Ymmärretty"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "Lisäaika"
 
@@ -8842,7 +8851,7 @@ msgstr "Bruttomyynti"
 msgid "Group by stage or room"
 msgstr "Ryhmittele lavan tai huoneen mukaan"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "Ryhmät"
 
@@ -9395,15 +9404,15 @@ msgstr "Tarkistettavana"
 msgid "In someone's basket"
 msgstr "Jonkun toisen ostoskorissa"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "Avaa Google Cloud -konsolissa projekti, joka kuuluu Workspace-organisaatioosi."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "Siirry Microsoft Entra admin centerissä kohtaan App registrations ja valitse New registration."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Siirry Okta Admin Consolessa kohtaan Applications ja valitse Create App Integration."
 
@@ -9411,7 +9420,7 @@ msgstr "Siirry Okta Admin Consolessa kohtaan Applications ja valitse Create App 
 msgid "In use"
 msgstr "Käytössä"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "Luo identiteetintarjoajassasi luottamuksellinen OpenID Connect -asiakas, joka käyttää authorization code flow -kulkua."
 
@@ -9612,11 +9621,11 @@ msgstr "Laskuasetukset"
 msgid "Issued"
 msgstr "Myönnetty"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "Myöntäjä"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "Myöntäjän URL"
 
@@ -9778,7 +9787,7 @@ msgstr "Avain poistettu"
 msgid "Key revoked"
 msgstr "Avain mitätöity"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ja muut"
 
@@ -9923,7 +9932,7 @@ msgstr "Sukunimi on pakollinen"
 msgid "Last Response"
 msgstr "Viimeisin vastaus"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "Viimeisin testi läpäisty {0}"
 
@@ -10042,13 +10051,17 @@ msgstr "Ilmoita heille muutoksesta"
 msgid "Let them know about the changes"
 msgstr "Ilmoita heille muutoksista"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "Anna tiimisi kirjautua Okta-, Microsoft Entra ID- tai Google Workspace -tunnuksilla"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "Anna tiimisi kirjautua identiteetintarjoajasi kautta"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "Antaa tilien yhdistää identiteetintarjoajansa, vahvistaa sähköpostiverkkotunnukset ja vaatia kertakirjautumisen."
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10391,7 +10404,7 @@ msgstr "Tee laskutusosoitteesta pakollinen kassalla"
 msgid "Make it visible so people can buy tickets"
 msgstr "Tee se näkyväksi, jotta ihmiset voivat ostaa lippuja"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "Varmista, että ID token sisältää email- ja email_verified-väitteet (claims)."
 
@@ -10466,7 +10479,7 @@ msgstr "Hallinnoi aikataulua"
 msgid "Manage seat maps"
 msgstr "Hallitse istumakarttoja"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "Hallitse kertakirjautumista"
 
@@ -10580,11 +10593,11 @@ msgstr "Jäsen aktivoitu uudelleen"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "Jäsenet vaihtavat sähköpostinsa itse <0>profiiliasetuksissa</0>."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "Vahvistettujen verkkotunnusten jäsenet"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "Jäsenten, joilla on vahvistetun verkkotunnuksen sähköpostiosoite, on kirjauduttava sisään palvelun {providerName} kautta. Heidän muut istuntonsa päättyvät."
 
@@ -10920,8 +10933,6 @@ msgstr "Lippuni"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10929,6 +10940,8 @@ msgstr "Lippuni"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "Nimi"
 
@@ -11127,7 +11140,7 @@ msgstr "Yöelämä"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Ei"
 
@@ -11406,8 +11419,8 @@ msgid "No licence"
 msgstr "Ei lisenssiä"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "Lisenssiavainta ei ole asetettu, joten varatut istumapaikat ja lipunmyynti ovella ovat pois päältä. Avaa ne asettamalla APP_LICENCE_KEY taustajärjestelmän ympäristöön ja ottamalla taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä aja docker compose up -d, koska docker compose restart ei lataa ympäristöä uudelleen."
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "Lisenssiavainta ei ole asetettu, joten varatut istumapaikat, lipunmyynti ovella ja yritysten kertakirjautuminen ovat pois päältä. Avaa ne asettamalla APP_LICENCE_KEY taustajärjestelmän ympäristöön ja ottamalla taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä aja docker compose up -d, koska docker compose restart ei lataa ympäristöä uudelleen."
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11730,7 +11743,7 @@ msgstr "Kukaan ei vastaa suodattimia."
 msgid "Nobody on the lineup yet."
 msgstr "Esiintyjälistalla ei ole vielä ketään."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "Kukaan tiimissäsi ei käytä vielä vahvistettua verkkotunnusta. Sellaisesta liittyvien on kirjauduttava sisään palvelun {providerName} kautta."
 
@@ -11761,7 +11774,7 @@ msgstr "Ei mitään"
 msgid "None (cash only)"
 msgstr "Ei mitään (vain käteinen)"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "Mitään ei jaettu"
 
@@ -11813,7 +11826,7 @@ msgstr "Ei tarpeeksi vapaita paikkoja kohteelle {0}"
 msgid "Not joined yet"
 msgstr "Ei vielä liittynyt"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "Ei merkitty vahvistetuksi"
 
@@ -11838,7 +11851,7 @@ msgstr "Ei aikataulutettu"
 msgid "Not selling as {signedInName}?"
 msgstr "Etkö myy nimellä {signedInName}?"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "Ei jaettu"
 
@@ -11854,17 +11867,17 @@ msgstr "Ei vielä näytetä."
 msgid "Not sure where to sit?"
 msgstr "Et tiedä, mihin istua?"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "Ei testattu"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "Ei vielä testattu"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "Etkö käytä varattuja istumapaikkoja tai lipunmyyntiä ovella? Poista <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "Etkö käytä varattuja istumapaikkoja, lipunmyyntiä ovella tai yritysten kertakirjautumista? Poista <0>APP_LICENCE_KEY</0> ja ota taustajärjestelmä uudelleen käyttöön."
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12011,10 +12024,10 @@ msgstr "joka kuukausi"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "Pois päältä"
 
@@ -12083,11 +12096,11 @@ msgstr "Offline-maksujen tiedot"
 msgid "Offline Payments Settings"
 msgstr "Offline-maksuasetukset"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Okta-verkkotunnus"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12100,10 +12113,10 @@ msgstr "päällä"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "Päällä"
 
@@ -12269,7 +12282,7 @@ msgstr "Vain järjestelmänvalvojat voivat hallita tiimin pääsyä."
 msgid "Only available as an add-on"
 msgstr "Saatavilla vain lisäosana"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "Vain henkilöt, joilla on vahvistetun verkkotunnuksen sähköpostiosoite, voidaan lisätä automaattisesti tai velvoittaa käyttämään kertakirjautumista."
 
@@ -12817,7 +12830,7 @@ msgstr "Muut tapahtumat"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Muut listat (lippu ei sisälly)"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "Muu OIDC-palveluntarjoaja"
 
@@ -12859,7 +12872,7 @@ msgstr "Yleiskatsaus"
 msgid "Owner"
 msgstr "Omistaja"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "Omistaa toisen Hi.Events-tilin, joten kirjautuu edelleen salasanalla."
 
@@ -12962,10 +12975,10 @@ msgstr "Peri ostajalta"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "Salasana"
 
@@ -13153,7 +13166,7 @@ msgstr "Tilitykset"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "Odottaa"
 
@@ -13201,11 +13214,11 @@ msgstr "Henkilöt ({peopleRowCount})"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "Henkilöt yhdistetään nimen perusteella, joten olemassa olevat profiilit päivitetään eikä niitä kahdenneta."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "Henkilöt voivat liittyä olemassa oleviin tileihin tai yhdistyä niihin vain, kun {providerName} merkitsee heidän sähköpostiosoitteensa vahvistetuksi."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "Vahvistettujen verkkotunnustesi henkilöt ohjataan palveluun {providerName}, kun he valitsevat Kirjaudu SSO:lla."
 
@@ -13364,7 +13377,7 @@ msgstr "Valitse päivämäärät"
 msgid "Pick days to see your dates."
 msgstr "Valitse päivät nähdäksesi aikataulusi päivämäärät."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "Valitse OIDC - OpenID Connect ja sitten Web Application."
 
@@ -14300,7 +14313,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Ota taustajärjestelmä uudelleen käyttöön. Docker Composea käytettäessä aja <0>docker compose up -d</0>."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "Uudelleenohjaus-URI"
 
@@ -14466,13 +14479,13 @@ msgstr "Poista"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Poistetaanko ”{0}”? Se on jo vanhentunut."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "Poista {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "Poistetaanko {0}? Tämän sähköpostin verkkotunnuksen henkilöitä ei enää ohjata identiteetintarjoajaasi eikä heidän tarvitse käyttää sitä."
 
@@ -14508,7 +14521,7 @@ msgstr "Poista kuvaus"
 msgid "Remove discount"
 msgstr "Poista alennus"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "Poista verkkotunnus"
 
@@ -14676,13 +14689,13 @@ msgstr "Pyydetty käyttäjän toimesta"
 msgid "Require Billing Address"
 msgstr "Vaadi laskutusosoite"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "Vaadi kertakirjautuminen"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "Vaadi SSO"
 
@@ -14696,7 +14709,7 @@ msgid "Require two-factor authentication"
 msgstr "Vaadi kaksivaiheinen tunnistautuminen"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Pakollinen"
 
@@ -14767,7 +14780,7 @@ msgstr "Lähetä lippusähköposti uudelleen"
 msgid "Reserved"
 msgstr "Varattu"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "varatut istumapaikat"
 
@@ -14775,13 +14788,9 @@ msgstr "varatut istumapaikat"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "Varatut paikat"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "varatut istumapaikat ja lipunmyynti ovella"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14998,7 +15007,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "Rooli"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "Uusien henkilöiden rooli"
 
@@ -15038,7 +15047,7 @@ msgstr "korjattavaa riviä"
 msgid "Rules saved"
 msgstr "Säännöt tallennettu"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "Tee onnistunut testikirjautuminen ennen tämän ottamista käyttöön."
 
@@ -15225,7 +15234,7 @@ msgstr "Lauantai"
 msgid "Save"
 msgstr "Tallenna"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "Tallenna {0}-yhteys"
 
@@ -15234,7 +15243,7 @@ msgstr "Tallenna {0}-yhteys"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "Tallenna muutokset"
 
@@ -15323,11 +15332,11 @@ msgstr "Tallenna ja kopioi sitten uusi koodi"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "Tallennettu"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "Tallennettu ja piilotettu. Jätä tyhjäksi, jos haluat säilyttää nykyisen salaisuuden."
 
@@ -16266,7 +16275,7 @@ msgstr "Aseta kunkin päivämäärän lopetusaika alkuaikaan nähden näin pitk�
 msgid "Set the location"
 msgstr "Aseta sijainti"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "Aseta OAuth consent screen -näkymän käyttäjätyypiksi Internal."
 
@@ -16296,7 +16305,7 @@ msgstr "Aseta aikataulu"
 msgid "Set Up Schedule"
 msgstr "Aseta aikataulu"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "Määritä SSO"
 
@@ -16355,7 +16364,7 @@ msgstr "Kohteen {featureList} asetukset on lukittu. Olemassa oleva myynti ja aik
 msgid "Setup is locked"
 msgstr "Asetukset on lukittu"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "Asetukset lukittu"
 
@@ -16621,7 +16630,7 @@ msgstr "Kirjaudu uudelleen jatkaaksesi myyntiä"
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "Kirjaudu uudelleen sisään aloittaaksesi kaksivaiheisen tunnistautumisen käyttöönoton."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Kirjaudu kerran sisään yhteyden tarkistamiseksi. Se näyttää, mitä identiteetintarjoajasi jakaa, eikä kirjaa sinua sisään tässä."
 
@@ -16662,11 +16671,11 @@ msgstr "Kirjaudu Microsoft-tilillä"
 msgid "Sign in with password"
 msgstr "Kirjaudu salasanalla"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "Kirjaudu SSO:lla"
 
@@ -16675,7 +16684,7 @@ msgstr "Kirjaudu SSO:lla"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "Kirjaudu tilillä, jota käytät yleensä, tai pyydä apua ylläpitäjältäsi."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "Kirjaudu yrityksesi Google-tileillä"
 
@@ -16696,7 +16705,7 @@ msgstr "Kirjaudu ulos"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "Kirjaudu ulos ja kirjaudu sitten sisään käyttäjänä {0} hyväksyäksesi tämän kutsun."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "Kirjaa käyttäjät ulos, kun on kulunut"
 
@@ -16716,7 +16725,7 @@ msgstr "Kirjautumislinkit toimivat kerran ja vanhenevat 10 minuutin kuluttua. Al
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Kirjautumislinkit toimivat kerran ja vanhenevat 10 minuutissa. Aloita alusta jatkaaksesi."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "Kirjautumisasetukset"
 
@@ -16724,7 +16733,7 @@ msgstr "Kirjautumisasetukset"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Kirjautuminen peruttiin. Valitse toinen kirjautumistapa tai yritä uudelleen."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "Kirjautuminen palvelulla {providerName} on poistettu käytöstä"
 
@@ -16732,11 +16741,11 @@ msgstr "Kirjautuminen palvelulla {providerName} on poistettu käytöstä"
 msgid "Signed in as"
 msgstr "Kirjautuneena"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "Kirjautunut käyttäjänä {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "Kirjauduttu sisään, mutta sähköpostiosoitetta ei jaettu"
 
@@ -16773,25 +16782,25 @@ msgstr "{0} alkaen (UTC)"
 msgid "Single line text box"
 msgstr "Yksirivinen tekstikenttä"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "Kertakirjautuminen"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "Kertakirjautumista ei enää vaadita"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "Kertakirjautuminen on nyt pakollinen"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "Kertakirjautumista ei ole määritetty tälle sähköpostiosoitteelle. Tarkista osoite tai kirjaudu toisella tavalla."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "Kertakirjautumisen asetukset päivitetty"
 
@@ -16981,11 +16990,6 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16998,6 +17002,11 @@ msgstr "Jotain meni pieleen. Yritä myöhemmin uudelleen."
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17081,12 +17090,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "Neliö, vähintään 200 × 200 px"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO-kirjautumiset (30 päivää)"
 
@@ -17378,19 +17387,19 @@ msgstr "Lopeta käyttäjänä toimiminen"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "Lopeta tapahtumiesi määrittämisessä ja järjestämisessä auttavien sähköpostien vastaanottaminen. Tilauksiisi ja tiliisi liittyviä sähköposteja lähetetään edelleen."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "Lopeta vaatiminen"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "Lopeta kertakirjautumisen vaatiminen ennen yhteyden poistamista."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "Lopeta kertakirjautumisen vaatiminen ennen kuin poistat vahvistetun verkkotunnuksen."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "Lopetetaanko kertakirjautumisen vaatiminen? Jäsenet voivat taas kirjautua salasanallaan tai nollata sen, jos heillä ei ollut sellaista."
 
@@ -17694,7 +17703,7 @@ msgstr "Sunnuntai"
 msgid "Support Email"
 msgstr "Tukisähköposti"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "Jäädytetty"
 
@@ -17909,7 +17918,7 @@ msgstr "Malli poistettu onnistuneesti"
 msgid "Template saved successfully"
 msgstr "Malli tallennettu onnistuneesti"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "Tenant ID"
 
@@ -17930,8 +17939,8 @@ msgstr "Käyttöehdot"
 msgid "Test email sent to your inbox"
 msgstr "Testisähköposti lähetetty postilaatikkoosi"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "Testikirjautuminen"
 
@@ -17988,11 +17997,11 @@ msgstr "”Powered by Hi.Events” -ilmoitus näytetään taas, kunnes jatkat li
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Tilillä on valmiita tilauksia, joten se anonymisoidaan."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "Tilin omistaja ({0}) voi edelleen kirjautua salasanalla ja kaksivaiheisella tunnistautumisella, joten pääset takaisin tilille, jos {providerName} ei ole käytettävissä. Kaikille ylläpitäjille lähetetään tällöin sähköposti."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "Tilin omistajalle lähetetään sähköposti aina, kun joku liittyy ylläpitäjänä."
 
@@ -18239,11 +18248,11 @@ msgstr "Aikavälillä täytyy olla kestoa"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "Mallipohja sisältää Liquid-syntaksia. Korjaa se ja yritä uudelleen."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "Testikirjautuminen ei valmistunut."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "Testikirjautuminen epäonnistui"
 
@@ -19391,7 +19400,7 @@ msgstr "Ota käyttöön"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "Ota lisäosioita käyttöön ja vedä ne haluamaasi järjestykseen."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "Ota käyttöön kirjautuminen palvelulla {providerName} ja vahvista ensin verkkotunnus."
 
@@ -19634,15 +19643,15 @@ msgstr "ei saatavilla"
 msgid "Unavailable, re-register"
 msgstr "Ei käytettävissä, rekisteröi uudelleen"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "Luo asiakassalaisuus kohdassa Certificates & secrets."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "Luo kohdassa Credentials OAuth-asiakastunnus verkkosovellukselle ja lisää alla oleva uudelleenohjaus-URI."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "Lisää kohdassa Token configuration valinnaiset väitteet email ja xms_edov ID tokeniin."
 
@@ -20104,8 +20113,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "Vahvistetaan ALV-tunnistettasi..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "Edullinen"
 
@@ -20221,7 +20230,7 @@ msgstr "Vahvistussähköposti lähetetty. Tarkista saapuneet viestisi."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Vahvistettu"
 
@@ -20229,17 +20238,17 @@ msgstr "Vahvistettu"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Vahvistetut käyttäjät voivat lähtettää osallistujille sähköpostiviestejä ja hallita viestipohjia. Stripen yhdistäminen vahvistaa tilin automaattisesti."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "Vahvistanut {providerName}"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "Vahvistetut verkkotunnukset"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "Vahvista"
 
@@ -20260,7 +20269,7 @@ msgstr "Vahvista palautuskoodi"
 msgid "Verify your email"
 msgstr "Vahvista sähköpostiosoitteesi"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "Vahvista sähköpostin verkkotunnuksesi"
 
@@ -20601,7 +20610,7 @@ msgstr "Etsimääsi lippua ei löytynyt. Linkki on ehkä vanhentunut tai lipun t
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Tätä tilausta ei löytynyt. Se on ehkä poistettu."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "Emme löytäneet tätä TXT-tietuetta päivittäisessä tarkistuksessamme. Palauta se, jotta kertakirjautuminen toimii edelleen tälle verkkotunnukselle."
 
@@ -21053,7 +21062,7 @@ msgstr "Mikä lippu paikoille {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mitkä liput yhdistetään tähän sisäänkirjautumislistaan?"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "White label"
 
@@ -21114,7 +21123,7 @@ msgstr "Leveys"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wix näyttää upotetun koodin kiinteän kokoisessa ruudussa. Parhaan kokemuksen saat asettamalla ”Kassa avautuu” -asetukseksi ”Uusi välilehti”."
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "Työsähköposti"
 
@@ -21143,8 +21152,8 @@ msgstr "Työpaja"
 msgid "Workshop with early bird"
 msgstr "Työpaja early bird -lipulla"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspace-verkkotunnus"
 
@@ -21179,7 +21188,7 @@ msgstr "vuotta"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Kyllä"
 
@@ -21415,7 +21424,7 @@ msgstr "Et voi enää kirjautua palvelulla {0}. Tiliisi kirjautuneet muut laitte
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "Et saa enää näitä sähköposteja. Tilauksiisi ja tiliisi liittyviä sähköposteja lähetetään edelleen."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Sinut kirjataan ulos ja sinun on kirjauduttava uudelleen sisään palvelun {providerName} kautta."
 
@@ -21579,7 +21588,7 @@ msgstr "Tapahtumasi on julkaistu!"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Hi.Events Enterprise -lisenssisi vanheni {expiresAt}. Kaikki pysyy käytössä {graceEndsAt} asti. Jatka lisenssiä ennen sitä välttääksesi katkokset."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "identiteetintarjoajasi"
 
@@ -21746,7 +21755,7 @@ msgstr "Kirjautumisistuntosi on vanhentunut. Kirjaudu sisään uudelleen."
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "Stripe-tiliisi ei itsessään vaikuteta eikä tietoja menetetä — voit yhdistää tilin uudelleen milloin tahansa."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "Tiimisi voi nyt kirjautua sisään palvelun {providerName} kautta"
 

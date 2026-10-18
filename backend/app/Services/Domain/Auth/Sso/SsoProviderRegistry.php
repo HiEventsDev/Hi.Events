@@ -5,10 +5,10 @@ namespace HiEvents\Services\Domain\Auth\Sso;
 use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
 use HiEvents\DomainObjects\Enums\SsoProviderType;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
+use HiEvents\Enterprise\Sso\Services\Domain\AccountSsoProviderFactory;
 use HiEvents\Exceptions\SsoException;
-use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\DTO\SsoProviderConfig;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\AccountSsoProviderFactory;
 use Illuminate\Contracts\Config\Repository as Config;
 
 class SsoProviderRegistry

@@ -6,4 +6,3 @@ export const FeatureFlag = {
 
 export type FeatureFlagKey = typeof FeatureFlag[keyof typeof FeatureFlag];
 
-export type LicensedFeatureFlagKey = Exclude<FeatureFlagKey, typeof FeatureFlag.ENTERPRISE_SSO>;

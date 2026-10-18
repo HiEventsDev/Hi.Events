@@ -12,11 +12,15 @@ use Tests\TestCase;
 class EnterpriseRouteGatingTest extends TestCase
 {
     private const UNGATED_ENTERPRISE_ROUTES = [
+        'DELETE accounts/{account_id}/sso/connection',
+        'DELETE accounts/{account_id}/sso/domains/{domain_id}',
         'DELETE events/{event_id}/box-offices/{box_office_id}',
         'DELETE events/{event_id}/seat-map',
         'DELETE organizers/{organizerId}/stripe/terminal/readers/{readerId}',
         'DELETE organizers/{organizer_id}/seat-maps/{seat_map_id}',
         'DELETE public/box-offices/{box_office_short_id}/sessions/current',
+        'GET accounts/{account_id}/sso',
+        'GET accounts/{account_id}/sso/enforcement',
         'GET admin/licence',
         'GET events/{event_id}/box-offices',
         'GET events/{event_id}/box-offices/{box_office_id}',
@@ -37,6 +41,7 @@ class EnterpriseRouteGatingTest extends TestCase
         'GET public/events/{event_id}/occurrences/{occurrence_id}/seat-availability',
         'GET public/events/{event_id}/seat-map',
         'GET public/instance',
+        'POST auth/sso/discover',
         'POST events/{event_id}/seat-blocks/release',
         'POST public/box-offices/{box_office_short_id}/best-available-seats',
         'POST public/box-offices/{box_office_short_id}/orders',
@@ -46,6 +51,9 @@ class EnterpriseRouteGatingTest extends TestCase
         'POST public/box-offices/{box_office_short_id}/orders/{order_short_id}/card/cancel-action',
         'POST public/box-offices/{box_office_short_id}/orders/{order_short_id}/resend-confirmation',
         'POST public/box-offices/{box_office_short_id}/orders/{order_short_id}/tender',
+        'PUT accounts/{account_id}/sso/connection/status',
+        'PUT accounts/{account_id}/sso/enforcement',
+        'PUT accounts/{account_id}/sso/members/{account_user_id}',
         'PUT events/{event_id}/attendees/{attendee_id}/seat',
         'PUT public/box-offices/{box_office_short_id}/sessions/current',
         'PUT public/events/{event_id}/order/{order_short_id}/attendees/{attendee_short_id}/seat',

@@ -88,7 +88,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0} mevcut"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0}, parolasıyla giriş yapabilir"
 
@@ -128,7 +128,7 @@ msgstr "{0} sepette"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} sipariş başına {1} ile sınırlıdır"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0} doğrulandı"
 
@@ -145,11 +145,11 @@ msgstr "{0} kaldı"
 msgid "{0} logo"
 msgstr "{0} logosu"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "Doğrulanmış alan adlarınız dışındaki {0} üye mevcut giriş yöntemini korur."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} artık {providerName} ile giriş yapmalı"
 
@@ -186,7 +186,7 @@ msgstr "{0} yer"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "Bu ürünü içeren {0} iade edilmiş sipariş iptal edilmedi, bu yüzden hâlâ satılmış sayılıyor. Ürünlerin sayılmaması gerekiyorsa bunları iptal edin."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "{0} kaldırıldı"
 
@@ -340,8 +340,8 @@ msgstr "{count} ek ürün"
 msgid "{count} times"
 msgstr "{count} saat seçeneği"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days} gün"
 
@@ -361,7 +361,7 @@ msgstr "{diffMin} dk önce"
 msgid "{diffSec}s ago"
 msgstr "{diffSec} sn önce"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount} üyenin {providerName} ile giriş yapması gerekecek."
 
@@ -395,7 +395,7 @@ msgstr "{hours} sa"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} sa {remainder} dk"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours} saat"
 
@@ -634,12 +634,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "<0>{accountName}</0> ekipteki herkes için iki adımlı doğrulamayı zorunlu kılıyor. Devam etmek için şimdi kurun. Yaklaşık bir dakika sürer."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "<0>APP_LICENCE_KEY</0> ayarlı ancak anahtar doğrulanamadı, bu yüzden rezerve koltuklar ve gişe kilitli kalıyor."
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "<0>APP_LICENCE_KEY</0> ayarlı ancak anahtar doğrulanamadı, bu yüzden rezerve koltuklar, gişe ve kurumsal tek oturum açma kilitli kalıyor."
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "<0>APP_LICENCE_KEY=development</0>, rezerve koltukları ve gişeyi geliştirme ve test için açar. Hi.Events'in geri kalanı, lisanslı ya da lisanssız, gerçek etkinlikler için ücretsizdir."
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "<0>APP_LICENCE_KEY=development</0>, rezerve koltukları, gişeyi ve kurumsal tek oturum açmayı geliştirme ve test için açar. Hi.Events'in geri kalanı, lisanslı ya da lisanssız, gerçek etkinlikler için ücretsizdir."
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -688,8 +688,8 @@ msgstr "Etkilenen oturumlara 1 katılımcı kayıtlı."
 msgid "1 attendee is registered for this session."
 msgstr "Bu oturuma 1 katılımcı kayıtlı."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1 gün"
 
@@ -709,7 +709,7 @@ msgstr "Etkinlikten 1 gün önce"
 msgid "1 event"
 msgstr "1 etkinlik"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1 saat"
 
@@ -725,11 +725,11 @@ msgstr "1 ürün"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1 üye henüz iki adımlı doğrulamayı açmadı. Devam etmeden önce kurması istenecek. Şimdi zorunlu yapılsın mı?"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "Doğrulanmış alan adlarınız dışındaki 1 üye mevcut giriş yöntemini korur."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1 üyenin {providerName} ile giriş yapması gerekecek."
 
@@ -1372,7 +1372,7 @@ msgstr "Ayrıntı ekle"
 msgid "Add discount"
 msgstr "İndirim ekle"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "Alan adı ekle"
 
@@ -1399,8 +1399,8 @@ msgstr "Konum Ekle"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "Günde birden fazla oturum düzenliyorsanız birden fazla saat ekleyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "Yeni kişileri otomatik olarak ekle"
 
@@ -1478,11 +1478,11 @@ msgstr "Ayakta bileti ekle"
 msgid "Add tax or fee"
 msgstr "Vergi veya ücret ekle"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "Aşağıdaki yönlendirme URI'sini ekleyin ve openid, email ve profile kapsamlarına izin verin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "Aşağıdaki giriş yönlendirme URI'sini ekleyin ve erişim verilecek kişileri veya grupları atayın."
 
@@ -1498,7 +1498,7 @@ msgstr "Bu etkinliği takviminize ekleyin"
 msgid "Add this to your site's <head>"
 msgstr "Bunu sitenizin <head> bölümüne ekleyin"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "Bu TXT kaydını DNS sağlayıcınızda ekleyin, ardından doğrulayın. Alt alan adlarının kendi kaydı gerekir."
 
@@ -1910,7 +1910,7 @@ msgstr "Tümü görünür"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Giriş yaparken e-posta adresinize erişime izin verin, ardından tekrar deneyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "Yalnızca bu kuruluş dizinindeki hesaplara izin verin ve aşağıdaki yönlendirme URI'sini Web yönlendirme URI'si olarak ekleyin."
 
@@ -1952,8 +1952,8 @@ msgstr "Arama motoru indekslemesine izin ver"
 msgid "Allow search engines to index this event"
 msgstr "Arama motorlarının bu etkinliği indekslemesine izin ver"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "{providerName} ile girişe izin ver"
 
@@ -2178,7 +2178,7 @@ msgstr "Herhangi bir tarih farklı olabilir: kapasitesini Tarihi Düzenle'de vey
 msgid "Any website (HTML)"
 msgstr "Herhangi bir web sitesi (HTML)"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "{providerName} tarafından doğrulanmış bir alan adındaki e-postayla içeri alınan herkes, ilk girişinde bu hesaba katılır. Kaldırılan veya devre dışı bırakılan üyeler asla yeniden eklenmez."
 
@@ -2213,7 +2213,7 @@ msgstr "Görünüm"
 msgid "Appears on"
 msgstr "Yer aldığı etkinlikler"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2261,7 +2261,7 @@ msgstr "Bu etkinlikteki her {0}, iptal edilmemiş tarih için geçerlidir — ş
 msgid "Applies to every tier of this ticket"
 msgstr "Bu biletin her fiyat kademesi için geçerlidir"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "{providerName} üzerinden başlatılan oturumlar için geçerlidir. Kişiler daha sonra yeniden giriş yapar."
 
@@ -2926,13 +2926,13 @@ msgstr "Koltuklara dön"
 msgid "Back to security settings"
 msgstr "Güvenlik ayarlarına dön"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "Girişe dön"
 
@@ -3117,7 +3117,7 @@ msgstr "Kenarlıklar"
 msgid "Bounced"
 msgstr "Geri döndü"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "gişe"
 
@@ -3126,7 +3126,7 @@ msgstr "gişe"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "Gişe"
 
@@ -3439,8 +3439,6 @@ msgstr "Kimlik doğrulama uygulamanızı veya kurtarma kodlarınızı kullanamı
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3451,6 +3449,8 @@ msgstr "Kimlik doğrulama uygulamanızı veya kurtarma kodlarınızı kullanamı
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3794,7 +3794,7 @@ msgstr "Şimdi giriş yap"
 msgid "Check in only"
 msgstr "Sadece check-in yap"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "Anahtarı kontrol et"
 
@@ -3974,7 +3974,7 @@ msgstr "Giriş yapıldı ({checkedInCount}/{attendeeCount})"
 msgid "Checking your saved profiles…"
 msgstr "Kayıtlı profilleriniz kontrol ediliyor…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "Kontrol ediliyor…"
 
@@ -4147,7 +4147,7 @@ msgstr "Biletleri seçin"
 msgid "Choose when your event starts"
 msgstr "Etkinliğinin ne zaman başlayacağını seç"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "Kimlerin kullanması gerektiğini seçin"
 
@@ -4155,7 +4155,7 @@ msgstr "Kimlerin kullanması gerektiğini seçin"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Platform ücretini kimin ödeyeceğini seçin. Bu, hesap ayarlarınızda yapılandırdığınız ek ücretleri etkilemez."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "Kimlik sağlayıcınızı seçin"
 
@@ -4253,13 +4253,13 @@ msgstr "Notları görüntülemek için tıklayın"
 msgid "Clicked"
 msgstr "Tıklandı"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "İstemci kimliği"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "İstemci sırrı"
 
@@ -4672,7 +4672,7 @@ msgstr "Bilet ödemelerini doğrudan banka hesabınıza almak için Stripe'ı ba
 msgid "Connect with Stripe"
 msgstr "Stripe ile Bağlan"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "Uygulamanızı bağlayın"
 
@@ -4680,7 +4680,7 @@ msgstr "Uygulamanızı bağlayın"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "Bilet gelirlerini doğrudan hesabınıza almak için bankanızı bağlayın"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "Kimlik sağlayıcınızı bağlayın, e-posta alan adlarınızı doğrulayın, ardından herkesin kullanıp kullanmayacağını seçin."
 
@@ -4692,7 +4692,7 @@ msgstr "Bağlı"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "Yanlış Stripe hesabını mı bağladınız? Bağlantıyı kesin ve baştan başlayın."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "Bağlantı silindi"
 
@@ -4710,11 +4710,11 @@ msgstr "Çevrimiçi tarihler için bağlantı bilgileri zorunludur"
 msgid "Connection details are required for online events"
 msgstr "Çevrimiçi etkinlikler için bağlantı ayrıntıları gereklidir"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "Bağlantı kaydedildi. Sıradaki adım test girişi yapmak."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "Bağlantı güncellendi"
 
@@ -4756,7 +4756,6 @@ msgstr "İçerik"
 msgid "Content is required"
 msgstr "İçerik gereklidir"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4765,6 +4764,7 @@ msgstr "İçerik gereklidir"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "Devam Et"
 
@@ -4987,15 +4987,15 @@ msgstr "Kurulum anahtarını kopyala"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "Bir e-tablodan başlık satırı dahil birkaç satırı kopyalayın, ardından buraya yapıştırın."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "İstemci kimliğini ve istemci sırrını, Workspace alan adınızla birlikte aşağıdaki alanlara kopyalayın."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "Dizin (tenant) kimliğini, uygulama (client) kimliğini ve sır değerini aşağıdaki alanlara kopyalayın."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Veren (issuer) URL'sini, istemci kimliğini ve istemci sırrını aşağıdaki alanlara kopyalayın."
 
@@ -5024,7 +5024,7 @@ msgstr "URL'yi Kopyala"
 msgid "Copy your API key"
 msgstr "API anahtarınızı kopyalayın"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "Okta alan adınızı, istemci kimliğini ve istemci sırrını aşağıdaki alanlara kopyalayın."
 
@@ -5954,8 +5954,8 @@ msgstr "Check-In Listesini Sil"
 msgid "Delete code"
 msgstr "Kodu sil"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "Bağlantıyı sil"
 
@@ -6032,7 +6032,7 @@ msgstr "Bekleme süresini beklemek yerine bu hesap şimdi silinsin mi? Bu işlem
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Bu kategori silinsin mi? İçindeki tüm ürünler de silinir. Bu işlem geri alınamaz."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "Bu bağlantı silinsin mi? Yalnızca bu bağlantıyla giriş yapan üyelerin parolasını sıfırlaması gerekir."
 
@@ -6154,7 +6154,7 @@ msgid "Details"
 msgstr "Detaylar"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "Geliştirme"
 
@@ -6190,7 +6190,7 @@ msgstr "Farklı konum"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Doğrudan Etkinlikler'in altında, etkinlik listesinde bir Geçmiş sekmesidir. Başka bir yerde en son geçmiş etkinliklerinizi gösterir."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "Directory (tenant) ID"
 
@@ -6306,11 +6306,11 @@ msgstr "Belge Etiketi"
 msgid "Doesn't repeat"
 msgstr "Tekrarlanmaz"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "Alan adı henüz doğrulanmadı"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "Alan adı doğrulandı"
 
@@ -6723,7 +6723,7 @@ msgid "Edit design"
 msgstr "Tasarımı düzenle"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "Ayrıntıları düzenle"
 
@@ -6862,9 +6862,9 @@ msgstr "Uygun Giriş Listeleri"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "E-posta"
 
@@ -6926,7 +6926,7 @@ msgstr "E-posta onayı başarıyla yeniden gönderildi"
 msgid "Email Delivery"
 msgstr "E-posta teslimatı"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "E-posta alan adı"
 
@@ -7246,9 +7246,18 @@ msgstr "İki adımlı doğrulamayı kurmaya başlamak için şifrenizi girin."
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Ülke kodu dahil KDV numaranızı boşluksuz girin (örn., TR1234567890, DE123456789)"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "İş e-postanızı girin, sizi kuruluşunuzun giriş sayfasına yönlendirelim."
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "kurumsal tek oturum açma"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "Kurumsal tek oturum açma"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7670,10 +7679,10 @@ msgstr "Silmeyi şimdi yürüt"
 msgid "Execute now"
 msgstr "Şimdi yürüt"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "Muaf"
 
@@ -7694,7 +7703,7 @@ msgstr "Son kullanım tarihi"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "Süresi dolmuş"
 
@@ -8122,7 +8131,7 @@ msgstr "Görsel yüklenemedi. Lütfen tekrar deneyin."
 msgid "Failed to verify email"
 msgstr "E-posta doğrulanamadı"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "{0} tarihinden beri başarısız"
 
@@ -8294,7 +8303,7 @@ msgstr "Stripe kurulumunu bitir"
 msgid "Finish setup"
 msgstr "Kurulumu bitir"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "Açılan pencerede {providerName} girişini tamamlayın."
 
@@ -8480,11 +8489,11 @@ msgstr "Güvenliğiniz için kimliğinizi doğrulamak üzere tekrar giriş yapı
 msgid "Forgot password?"
 msgstr "Şifrenizi mi unuttunuz?"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "Eski adı Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "Giriş ayarlarınız bulundu"
 
@@ -8792,7 +8801,7 @@ msgid "Got it"
 msgstr "Anladım"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "Ek süre"
 
@@ -8842,7 +8851,7 @@ msgstr "Brüt Satışlar"
 msgid "Group by stage or room"
 msgstr "Sahneye veya odaya göre grupla"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "Gruplar"
 
@@ -9395,15 +9404,15 @@ msgstr "İncelemede"
 msgid "In someone's basket"
 msgstr "Birinin sepetinde"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "Google Cloud konsolunda, Workspace kuruluşunuza ait bir proje açın."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "Microsoft Entra admin center'da App registrations bölümüne gidin ve New registration'ı seçin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Okta Admin Console'da Applications bölümüne gidin ve Create App Integration'ı seçin."
 
@@ -9411,7 +9420,7 @@ msgstr "Okta Admin Console'da Applications bölümüne gidin ve Create App Integ
 msgid "In use"
 msgstr "Kullanımda"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "Kimlik sağlayıcınızda, authorization code flow kullanan gizli (confidential) bir OpenID Connect istemcisi oluşturun."
 
@@ -9612,11 +9621,11 @@ msgstr "Fatura Ayarları"
 msgid "Issued"
 msgstr "Düzenlenme"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "Veren (issuer)"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "Veren (issuer) URL'si"
 
@@ -9778,7 +9787,7 @@ msgstr "Anahtar kaldırıldı"
 msgid "Key revoked"
 msgstr "Anahtar iptal edildi"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin ve diğerleri"
 
@@ -9923,7 +9932,7 @@ msgstr "Soyad gereklidir"
 msgid "Last Response"
 msgstr "Son Yanıt"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "Son test {0} tarihinde geçti"
 
@@ -10042,13 +10051,17 @@ msgstr "Onlara değişikliği bildirin"
 msgid "Let them know about the changes"
 msgstr "Onlara değişiklikleri bildirin"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "Ekibinizin Okta, Microsoft Entra ID veya Google Workspace ile giriş yapmasına izin verin"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "Ekibinizin kimlik sağlayıcınızla giriş yapmasına izin verin"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "Hesapların kimlik sağlayıcılarını bağlamasına, e-posta alan adlarını doğrulamasına ve tek oturum açmayı zorunlu kılmasına olanak tanır."
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10391,7 +10404,7 @@ msgstr "Ödeme sırasında fatura adresini zorunlu kıl"
 msgid "Make it visible so people can buy tickets"
 msgstr "İnsanların bilet alabilmesi için görünür yapın"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "ID token'ların email ve email_verified claim'lerini içerdiğinden emin olun."
 
@@ -10466,7 +10479,7 @@ msgstr "Programı yönet"
 msgid "Manage seat maps"
 msgstr "Koltuk haritalarını yönet"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "Tek oturum açmayı yönet"
 
@@ -10580,11 +10593,11 @@ msgstr "Üye yeniden etkinleştirildi"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "Üyeler e-postalarını <0>profil ayarlarından</0> kendileri değiştirir."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "Doğrulanmış alan adlarındaki üyeler"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "Doğrulanmış bir alan adında e-postası olan üyelerin {providerName} ile giriş yapması gerekir. Diğer oturumları sonlandırılır."
 
@@ -10920,8 +10933,6 @@ msgstr "Biletlerim"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10929,6 +10940,8 @@ msgstr "Biletlerim"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "Ad"
 
@@ -11127,7 +11140,7 @@ msgstr "Gece Hayatı"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Hayır"
 
@@ -11406,8 +11419,8 @@ msgid "No licence"
 msgstr "Lisans yok"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "Lisans anahtarı ayarlanmadığı için rezerve koltuklar ve gişe kapalı. Bunları açmak için backend ortamında APP_LICENCE_KEY değerini ayarlayın ve backend'i yeniden dağıtın. Docker Compose kullanıyorsanız docker compose up -d komutunu kullanın, çünkü docker compose restart ortamı yeniden yüklemez."
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "Lisans anahtarı ayarlanmadığı için rezerve koltuklar, gişe ve kurumsal tek oturum açma kapalı. Bunları açmak için backend ortamında APP_LICENCE_KEY değerini ayarlayın ve backend'i yeniden dağıtın. Docker Compose kullanıyorsanız docker compose up -d komutunu kullanın, çünkü docker compose restart ortamı yeniden yüklemez."
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11730,7 +11743,7 @@ msgstr "Bu filtrelerle eşleşen kimse yok."
 msgid "Nobody on the lineup yet."
 msgstr "Kadroda henüz kimse yok."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "Ekibinizde henüz doğrulanmış bir alan adı kullanan kimse yok. Böyle bir alan adıyla katılan kişilerin {providerName} ile giriş yapması gerekecek."
 
@@ -11761,7 +11774,7 @@ msgstr "Hiçbiri"
 msgid "None (cash only)"
 msgstr "Yok (yalnızca nakit)"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "Hiçbiri paylaşılmadı"
 
@@ -11813,7 +11826,7 @@ msgstr "{0} için yeterli boş koltuk yok"
 msgid "Not joined yet"
 msgstr "Henüz katılmadı"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "Doğrulanmış olarak işaretlenmedi"
 
@@ -11838,7 +11851,7 @@ msgstr "Planlanmadı"
 msgid "Not selling as {signedInName}?"
 msgstr "{signedInName} olarak satış yapmıyor musunuz?"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "Paylaşılmadı"
 
@@ -11854,17 +11867,17 @@ msgstr "Henüz gösterilmiyor."
 msgid "Not sure where to sit?"
 msgstr "Nerede oturacağınızdan emin değil misiniz?"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "Test edilmedi"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "Henüz test edilmedi"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "Rezerve koltuk veya gişe kullanmıyor musunuz? <0>APP_LICENCE_KEY</0> değerini kaldırın ve yeniden dağıtın."
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "Rezerve koltuk, gişe veya kurumsal tek oturum açma kullanmıyor musunuz? <0>APP_LICENCE_KEY</0> değerini kaldırın ve yeniden dağıtın."
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12011,10 +12024,10 @@ msgstr "her ay"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "Kapalı"
 
@@ -12083,11 +12096,11 @@ msgstr "Çevrimdışı Ödemeler Bilgisi"
 msgid "Offline Payments Settings"
 msgstr "Çevrimdışı Ödemeler Ayarları"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Okta alan adı"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12100,10 +12113,10 @@ msgstr "şu günlerde:"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "Açık"
 
@@ -12269,7 +12282,7 @@ msgstr "Ekip erişimini yalnızca yöneticiler yönetebilir."
 msgid "Only available as an add-on"
 msgstr "Yalnızca ek ürün olarak sunulur"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "Yalnızca doğrulanmış bir alan adında e-postası olan kişiler otomatik olarak eklenebilir veya tek oturum açmayı kullanmaya zorunlu tutulabilir."
 
@@ -12817,7 +12830,7 @@ msgstr "Diğer etkinlikler"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Diğer Listeler (Bilet Dahil Değil)"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "Diğer OIDC sağlayıcısı"
 
@@ -12859,7 +12872,7 @@ msgstr "Genel Bakış"
 msgid "Owner"
 msgstr "Sahip"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "Başka bir Hi.Events hesabının sahibi olduğu için parolayla giriş yapmaya devam eder."
 
@@ -12962,10 +12975,10 @@ msgstr "Alıcıya aktar"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "Şifre"
 
@@ -13153,7 +13166,7 @@ msgstr "Ödemeler"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "Beklemede"
 
@@ -13201,11 +13214,11 @@ msgstr "Kişiler ({peopleRowCount})"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "Kişiler ada göre eşleştirilir, bu yüzden mevcut profiller kopyalanmak yerine güncellenir."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "Kişiler, mevcut hesaplara yalnızca {providerName} e-postalarını doğrulanmış olarak işaretlediğinde katılabilir veya eşleştirilebilir."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "Doğrulanmış alan adlarınızdaki kişiler SSO ile giriş yap'ı seçtiklerinde {providerName} sayfasına yönlendirilir."
 
@@ -13364,7 +13377,7 @@ msgstr "Tarih seçin"
 msgid "Pick days to see your dates."
 msgstr "Tarihlerinizi görmek için gün seçin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "OIDC - OpenID Connect'i, ardından Web Application'ı seçin."
 
@@ -14300,7 +14313,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Backend'i yeniden dağıtın. Docker Compose ile <0>docker compose up -d</0> komutunu çalıştırın."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "Yönlendirme URI'si"
 
@@ -14466,13 +14479,13 @@ msgstr "Kaldır"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "\"{0}\" kaldırılsın mı? Süresi zaten doldu."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "{0} öğesini kaldır"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "{0} kaldırılsın mı? Bu e-posta alan adındaki kişiler artık kimlik sağlayıcınıza yönlendirilmez ve onu kullanmak zorunda olmaz."
 
@@ -14508,7 +14521,7 @@ msgstr "Açıklamayı kaldır"
 msgid "Remove discount"
 msgstr "İndirimi kaldır"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "Alan adını kaldır"
 
@@ -14676,13 +14689,13 @@ msgstr "Talep eden"
 msgid "Require Billing Address"
 msgstr "Fatura Adresi Gerekli"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "Tek oturum açmayı zorunlu kıl"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "SSO'yu zorunlu kıl"
 
@@ -14696,7 +14709,7 @@ msgid "Require two-factor authentication"
 msgstr "İki adımlı doğrulamayı zorunlu kıl"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Gerekli"
 
@@ -14767,7 +14780,7 @@ msgstr "Bilet e-postasını tekrar gönder"
 msgid "Reserved"
 msgstr "Rezerve edildi"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "rezerve koltuklar"
 
@@ -14775,13 +14788,9 @@ msgstr "rezerve koltuklar"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "Numaralı koltuk"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "rezerve koltuklar ve gişe"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14998,7 +15007,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "Rol"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "Yeni kişiler için rol"
 
@@ -15038,7 +15047,7 @@ msgstr "düzeltilecek satır"
 msgid "Rules saved"
 msgstr "Kurallar kaydedildi"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "Bunu açmadan önce başarılı bir test girişi yapın."
 
@@ -15225,7 +15234,7 @@ msgstr "Cumartesi"
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "{0} bağlantısını kaydet"
 
@@ -15234,7 +15243,7 @@ msgstr "{0} bağlantısını kaydet"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "Değişiklikleri kaydet"
 
@@ -15323,11 +15332,11 @@ msgstr "Kaydedin, ardından yeni kodu kopyalayın"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "Kaydedildi"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "Kaydedildi ve gizlendi. Mevcut sırrı korumak için boş bırakın."
 
@@ -16266,7 +16275,7 @@ msgstr "Her tarihin bitiş saatini, başlangıç saatinden bu kadar sonraya ayar
 msgid "Set the location"
 msgstr "Konumu ayarla"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "OAuth consent screen'in kullanıcı türünü Internal olarak ayarlayın."
 
@@ -16296,7 +16305,7 @@ msgstr "Programı kur"
 msgid "Set Up Schedule"
 msgstr "Programı kur"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "SSO'yu kur"
 
@@ -16355,7 +16364,7 @@ msgstr "{featureList} kurulumu kilitli. Mevcut satışlar ve planlanmış tarihl
 msgid "Setup is locked"
 msgstr "Kurulum kilitli"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "Kurulum kilitli"
 
@@ -16621,7 +16630,7 @@ msgstr "Satışa devam etmek için yeniden giriş yapın"
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "İki adımlı doğrulamayı kurmaya başlamak için tekrar giriş yapın."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Bağlantıyı kontrol etmek için bir kez giriş yapın. Kimlik sağlayıcınızın neleri paylaştığını gösterir ve sizi burada oturum açtırmaz."
 
@@ -16662,11 +16671,11 @@ msgstr "Microsoft ile giriş yap"
 msgid "Sign in with password"
 msgstr "Şifreyle giriş yap"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "SSO ile giriş yap"
 
@@ -16675,7 +16684,7 @@ msgstr "SSO ile giriş yap"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "Genellikle kullandığınız hesapla giriş yapın veya yöneticinizden yardım isteyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "Şirket Google hesaplarınızla giriş yapın"
 
@@ -16696,7 +16705,7 @@ msgstr "Çıkış yap"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "Bu daveti kabul etmek için çıkış yapın, ardından {0} olarak giriş yapın."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "Şu süre sonra kişilerin oturumunu kapat"
 
@@ -16716,7 +16725,7 @@ msgstr "Giriş bağlantıları yalnızca bir kez çalışır ve 10 dakika sonra 
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Giriş bağlantıları yalnızca bir kez çalışır ve 10 dakika sonra geçerliliğini yitirir. Devam etmek için yeniden başlayın."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "Giriş ayarları"
 
@@ -16724,7 +16733,7 @@ msgstr "Giriş ayarları"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Giriş iptal edildi. Başka bir giriş yöntemi seçin veya tekrar deneyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "{providerName} ile giriş kapalı"
 
@@ -16732,11 +16741,11 @@ msgstr "{providerName} ile giriş kapalı"
 msgid "Signed in as"
 msgstr "Şu olarak giriş yapıldı"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "{0} olarak giriş yapıldı"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "Giriş yapıldı ancak e-posta paylaşılmadı"
 
@@ -16773,25 +16782,25 @@ msgstr "{0} tarihinden beri (UTC)"
 msgid "Single line text box"
 msgstr "Tek satır metin kutusu"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "Tek oturum açma"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "Tek oturum açma artık zorunlu değil"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "Tek oturum açma artık zorunlu"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "Bu e-posta için tek oturum açma kurulmamış. Adresi kontrol edin veya başka bir yöntemle giriş yapın."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "Tek oturum açma ayarları güncellendi"
 
@@ -16981,11 +16990,6 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16998,6 +17002,11 @@ msgstr "Bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin."
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17081,12 +17090,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "Kare, en az 200 × 200 piksel"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO oturum açmaları (30 gün)"
 
@@ -17378,19 +17387,19 @@ msgstr "Taklidi Durdur"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "Etkinliklerinizi kurmanıza ve yönetmenize yardımcı olan e-postaları almayı bırakın. Siparişleriniz ve hesabınızla ilgili e-postalar gönderilmeye devam edecek."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "Zorunlu kılmayı durdur"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "Bağlantıyı silmeden önce tek oturum açmayı zorunlu kılmayı durdurun."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "Doğrulanmış bir alan adını kaldırmadan önce çoklu oturum açma zorunluluğunu kapatın."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "Tek oturum açmayı zorunlu kılma durdurulsun mu? Üyeler yeniden parolalarıyla giriş yapabilir veya hiç parolaları yoksa sıfırlayabilir."
 
@@ -17694,7 +17703,7 @@ msgstr "Pazar"
 msgid "Support Email"
 msgstr "Destek E-postası"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "Askıya alındı"
 
@@ -17909,7 +17918,7 @@ msgstr "Şablon başarıyla silindi"
 msgid "Template saved successfully"
 msgstr "Şablon başarıyla kaydedildi"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "Tenant ID"
 
@@ -17930,8 +17939,8 @@ msgstr "Hizmet Koşulları"
 msgid "Test email sent to your inbox"
 msgstr "Test e-postası gelen kutunuza gönderildi"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "Test girişi"
 
@@ -17988,11 +17997,11 @@ msgstr "Lisansınızı yenileyene kadar “Powered by Hi.Events” notu yeniden 
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Hesabın tamamlanmış siparişleri olduğundan anonimleştirilecek."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "Hesap sahibi ({0}) parolası ve iki adımlı doğrulamayla yine giriş yapabilir; böylece {providerName} kullanılamadığında erişimi geri alabilirsiniz. Bu durumda tüm yöneticilere e-posta gönderilir."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "Biri yönetici olarak katıldığında hesap sahibine e-posta gönderilir."
 
@@ -18239,11 +18248,11 @@ msgstr "Oturumun bir süresi olmalı"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "Şablon gövdesi geçersiz Liquid sözdizimi içeriyor. Lütfen düzeltin ve tekrar deneyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "Test girişi tamamlanmadı."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "Test girişi başarısız oldu"
 
@@ -19391,7 +19400,7 @@ msgstr "Aç"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "Ek bölümleri açın ve sıralamak için sürükleyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "Önce {providerName} ile girişi açın ve bir alan adı doğrulayın."
 
@@ -19634,15 +19643,15 @@ msgstr "müsait değil"
 msgid "Unavailable, re-register"
 msgstr "Kullanılamıyor, yeniden kaydedin"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "Certificates & secrets altında bir istemci sırrı oluşturun."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "Credentials altında bir web uygulaması için OAuth istemci kimliği oluşturun ve aşağıdaki yönlendirme URI'sini ekleyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "Token configuration altında ID token'a isteğe bağlı email ve xms_edov claim'lerini ekleyin."
 
@@ -20104,8 +20113,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "KDV numaranız doğrulanıyor..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "Ekonomik"
 
@@ -20221,7 +20230,7 @@ msgstr "Doğrulama e-postası gönderildi. Gelen kutunuzu kontrol edin."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Doğrulandı"
 
@@ -20229,17 +20238,17 @@ msgstr "Doğrulandı"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Doğrulanmış hesaplar katılımcılara mesaj gönderebilir ve e-posta şablonlarını yönetebilir. Stripe'ı bağlamak hesabı otomatik olarak doğrular."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "{providerName} tarafından doğrulandı"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "Doğrulanmış alan adları"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "Doğrula"
 
@@ -20260,7 +20269,7 @@ msgstr "Kurtarma kodunu doğrula"
 msgid "Verify your email"
 msgstr "E-postanızı doğrulayın"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "E-posta alan adlarınızı doğrulayın"
 
@@ -20601,7 +20610,7 @@ msgstr "Aradığınız bileti bulamadık. Bağlantının süresi dolmuş veya bi
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Bu siparişi bulamadık. Kaldırılmış olabilir."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "Günlük kontrolümüzde bu TXT kaydını bulamadık. Bu alan adı için tek oturum açmanın çalışmaya devam etmesi adına kaydı geri yükleyin."
 
@@ -21053,7 +21062,7 @@ msgstr "{0} için hangi bilet?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Bu check-in listesiyle hangi biletler ilişkilendirilmeli?"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "Beyaz etiket"
 
@@ -21114,7 +21123,7 @@ msgstr "Genişlik"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wix, yerleştirilen kodu sabit boyutlu bir kutuda gösterir. En iyi deneyim için \"Ödeme şurada açılır\" ayarını \"Yeni sekme\" olarak belirleyin."
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "İş e-postası"
 
@@ -21143,8 +21152,8 @@ msgstr "Atölye"
 msgid "Workshop with early bird"
 msgstr "Erken kayıtlı atölye"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspace alan adı"
 
@@ -21179,7 +21188,7 @@ msgstr "yıl"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Evet"
 
@@ -21415,7 +21424,7 @@ msgstr "Artık {0} ile giriş yapamayacaksınız. Hesabınızda oturum açmış 
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "Artık bu e-postaları almayacaksınız. Siparişleriniz ve hesabınızla ilgili e-postalar gönderilmeye devam edecek."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Oturumunuz kapatılacak ve {providerName} ile yeniden giriş yapmanız gerekecek."
 
@@ -21579,7 +21588,7 @@ msgstr "Etkinliğiniz yayında!"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Hi.Events Enterprise lisansınızın süresi {expiresAt} tarihinde doldu. {graceEndsAt} tarihine kadar her şey açık kalır. Kesinti yaşamamak için bu tarihten önce yenileyin."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "kimlik sağlayıcınız"
 
@@ -21746,7 +21755,7 @@ msgstr "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın."
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "Stripe hesabınız etkilenmez ve hiçbir veri kaybolmaz — istediğiniz zaman yeniden bağlayabilirsiniz."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "Ekibiniz artık {providerName} ile giriş yapabilir"
 

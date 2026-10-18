@@ -436,7 +436,7 @@ export interface LicenceSummary {
     features_in_use: LicensedFeature[];
 }
 
-export type LicensedFeature = 'seating' | 'box_office' | 'white_label';
+export type LicensedFeature = 'seating' | 'box_office' | 'enterprise_sso' | 'white_label';
 
 export interface Account {
     id?: IdParam;

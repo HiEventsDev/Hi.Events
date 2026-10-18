@@ -7,13 +7,13 @@ namespace HiEvents\Http\Actions\Users;
 use HiEvents\DomainObjects\AccountUserDomainObject;
 use HiEvents\DomainObjects\Enums\Permission;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Http\Actions\BaseAction;
 use HiEvents\Http\Attributes\RequiresPermission;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Resources\User\UserResource;
 use HiEvents\Services\Domain\Auth\Access\AccountUserAccessService;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use Illuminate\Http\JsonResponse;
 
 #[RequiresPermission(Permission::MANAGE_TEAM)]

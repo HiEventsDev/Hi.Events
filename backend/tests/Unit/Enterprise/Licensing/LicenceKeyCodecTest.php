@@ -30,7 +30,7 @@ class LicenceKeyCodecTest extends TestCase
         $this->assertSame('lic_test', $licence->lid);
         $this->assertSame('Riverside Theatre', $licence->customer);
         $this->assertSame(Plan::ENTERPRISE, $licence->plan);
-        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE], $licence->features);
+        $this->assertSame([LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO], $licence->features);
         $this->assertSame('2026-10-01', $licence->issued_at->toDateString());
         $this->assertSame('2027-10-01', $licence->expires_at->toDateString());
     }
@@ -40,7 +40,7 @@ class LicenceKeyCodecTest extends TestCase
         $licence = $this->codec->decode($this->issue(['add' => ['white_label', 'seating', 'hologram_ushers', 42]]));
 
         $this->assertSame(
-            [LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::WHITE_LABEL],
+            [LicensedFeature::SEATING, LicensedFeature::BOX_OFFICE, LicensedFeature::ENTERPRISE_SSO, LicensedFeature::WHITE_LABEL],
             $licence->features,
         );
     }

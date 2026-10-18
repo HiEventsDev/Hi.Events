@@ -8,6 +8,7 @@ use HiEvents\DomainObjects\AccountDomainObject;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\EmailAlreadyExists;
 use HiEvents\Helper\IdHelper;
 use HiEvents\Repository\Interfaces\AccountAttributionRepositoryInterface;
@@ -20,7 +21,6 @@ use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountConfigurati
 use HiEvents\Services\Application\Handlers\Account\Exceptions\AccountRegistrationDisabledException;
 use HiEvents\Services\Domain\Account\AccountUserAssociationService;
 use HiEvents\Services\Domain\Account\AttributionSourceClassifier;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\User\EmailConfirmationService;
 use Illuminate\Config\Repository;
 use Illuminate\Database\DatabaseManager;

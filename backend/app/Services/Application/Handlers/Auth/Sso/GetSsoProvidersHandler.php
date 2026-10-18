@@ -3,7 +3,7 @@
 namespace HiEvents\Services\Application\Handlers\Auth\Sso;
 
 use HiEvents\DomainObjects\Status\AccountSsoConnectionStatus;
-use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\DTO\SsoProviderConfig;
 use HiEvents\Services\Domain\Auth\Sso\SsoProviderRegistry;
 use Illuminate\Contracts\Config\Repository as Config;

@@ -3,11 +3,11 @@
 namespace HiEvents\Services\Application\Handlers\Auth;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Repository\Interfaces\PasswordResetTokenRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\UserIdentityService;
 use HiEvents\Services\Infrastructure\TokenGenerator\TokenGeneratorService;
 use Illuminate\Contracts\Mail\Mailer;

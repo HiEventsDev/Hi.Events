@@ -59,7 +59,7 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
             return {
                 icon: IconKey,
                 title: t`Licence key not recognised`,
-                body: <Trans><Code>APP_LICENCE_KEY</Code> is set, but the key couldn't be verified, so reserved seating and the box office stay locked.</Trans>,
+                body: <Trans><Code>APP_LICENCE_KEY</Code> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked.</Trans>,
                 nextSteps: {
                     title: t`What to do`,
                     ordered: true,
@@ -97,7 +97,7 @@ const contentFor = (kind: LicenceNoticeKind, licence: LicenceSummary): LicenceMo
                     title: t`Before you go live`,
                     ordered: false,
                     items: [
-                        <Trans>Not using reserved seating or the box office? Remove <Code>APP_LICENCE_KEY</Code> and redeploy.</Trans>,
+                        <Trans>Not using reserved seating, the box office or enterprise single sign-on? Remove <Code>APP_LICENCE_KEY</Code> and redeploy.</Trans>,
                         <Trans>Using them for real events? Get an Enterprise licence and put its key in <Code>APP_LICENCE_KEY</Code>.</Trans>,
                     ],
                 },

@@ -17,8 +17,8 @@ import {
     SettingsSection,
 } from "../../../common/SettingsPage";
 import {DeleteAccountSection} from "./DeleteAccountSection.tsx";
-import {SingleSignOnSection} from "./SingleSignOn";
-import {useIsFeatureEnabled} from "../../../../hooks/useIsFeatureEnabled.ts";
+import {SingleSignOnSection} from "../../../../ee/sso/components/SingleSignOn";
+import {useLicensedFeature} from "../../../../ee/licensing/hooks/useLicensedFeature.ts";
 import {FeatureFlag} from "../../../../constants/featureFlags.ts";
 
 const currencyOptions = Object.entries(currencies).map(([label, value]) => ({value, label}));
@@ -28,7 +28,7 @@ const AccountSettings = () => {
     const updateMutation = useUpdateAccount();
     const formErrorHandler = useFormErrorResponseHandler();
     const canManageAccount = useAccess().can('MANAGE_ACCOUNT');
-    const enterpriseSsoEnabled = useIsFeatureEnabled(FeatureFlag.ENTERPRISE_SSO);
+    const enterpriseSso = useLicensedFeature(FeatureFlag.ENTERPRISE_SSO);
 
     const form = useForm({
         mode: 'controlled',
@@ -123,7 +123,9 @@ const AccountSettings = () => {
                 </form>
             </SettingsSection>
 
-            {canManageAccount && enterpriseSsoEnabled && account?.id && !isPendingDeletion && <SingleSignOnSection accountId={account.id}/>}
+            {canManageAccount && enterpriseSso.isVisible && account?.id && !isPendingDeletion && (
+                <SingleSignOnSection accountId={account.id} setupLocked={enterpriseSso.isSetupLocked}/>
+            )}
 
             {canManageAccount && <DeleteAccountSection/>}
         </SettingsPage>

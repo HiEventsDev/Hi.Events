@@ -3,11 +3,11 @@
 namespace HiEvents\Services\Application\Handlers\User\TwoFactor;
 
 use HiEvents\DomainObjects\UserTrustedDeviceDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Repository\Interfaces\UserTrustedDeviceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\TwoFactorStatusDTO;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\RecoveryCodeService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;

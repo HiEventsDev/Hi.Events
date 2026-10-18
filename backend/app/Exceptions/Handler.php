@@ -3,6 +3,7 @@
 namespace HiEvents\Exceptions;
 
 use HiEvents\Enterprise\Licensing\Exceptions\FeatureNotLicensedException;
+use HiEvents\Enterprise\Sso\Exceptions\SsoRequiredException;
 use HiEvents\Services\Domain\Auth\AuthUserService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;

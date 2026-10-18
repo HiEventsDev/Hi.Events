@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Application\Handlers\User\TwoFactor;
 
 use HiEvents\DomainObjects\UserDomainObject;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
 use HiEvents\Exceptions\TwoFactorRequiredByAccountException;
@@ -12,7 +13,6 @@ use HiEvents\Services\Application\Handlers\User\TwoFactor\DisableTwoFactorHandle
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\DisableTwoFactorDTO;
 use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
 use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;

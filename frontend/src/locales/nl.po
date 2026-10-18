@@ -89,7 +89,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0} beschikbaar"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0} kan inloggen met een wachtwoord"
 
@@ -129,7 +129,7 @@ msgstr "{0} in een winkelwagen"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} is beperkt tot {1} per bestelling"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0} is geverifieerd"
 
@@ -146,11 +146,11 @@ msgstr "nog {0}"
 msgid "{0} logo"
 msgstr "{0} logo"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "{0} leden buiten je geverifieerde domeinen behouden hun huidige inlogmethode."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} moet nu inloggen met {providerName}"
 
@@ -187,7 +187,7 @@ msgstr "{0} plaatsen"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} terugbetaalde bestelling(en) bevatten dit product maar zijn niet geannuleerd, dus ze tellen nog steeds als verkocht. Annuleer ze als de artikelen niet mogen meetellen."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "{0} verwijderd"
 
@@ -341,8 +341,8 @@ msgstr "{count} add-ons"
 msgid "{count} times"
 msgstr "{count} tijden"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days} dagen"
 
@@ -362,7 +362,7 @@ msgstr "{diffMin} min geleden"
 msgid "{diffSec}s ago"
 msgstr "{diffSec} s geleden"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount} leden moeten inloggen met {providerName}."
 
@@ -396,7 +396,7 @@ msgstr "{hours} u"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} u {remainder} min"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours} uur"
 
@@ -635,12 +635,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "<0>{accountName}</0> vereist tweestapsverificatie voor iedereen in het team. Stel het nu in om verder te gaan. Het duurt ongeveer een minuut."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "<0>APP_LICENCE_KEY</0> is ingesteld, maar de sleutel kon niet worden geverifieerd, dus gereserveerde plaatsen en de kassa blijven vergrendeld."
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "<0>APP_LICENCE_KEY</0> is ingesteld, maar de sleutel kon niet worden geverifieerd, dus gereserveerde plaatsen, de kassa en enterprise single sign-on blijven vergrendeld."
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "<0>APP_LICENCE_KEY=development</0> ontgrendelt gereserveerde plaatsen en de kassa voor ontwikkeling en testen. De rest van Hi.Events is gratis voor echte evenementen, met of zonder licentie."
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "<0>APP_LICENCE_KEY=development</0> ontgrendelt gereserveerde plaatsen, de kassa en enterprise single sign-on voor ontwikkeling en testen. De rest van Hi.Events is gratis voor echte evenementen, met of zonder licentie."
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -689,8 +689,8 @@ msgstr "1 deelnemer is aangemeld voor de betrokken sessies."
 msgid "1 attendee is registered for this session."
 msgstr "1 deelnemer is aangemeld voor deze sessie."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1 dag"
 
@@ -710,7 +710,7 @@ msgstr "1 dag voor het evenement"
 msgid "1 event"
 msgstr "1 evenement"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1 uur"
 
@@ -726,11 +726,11 @@ msgstr "1 item"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1 lid heeft tweestapsverificatie nog niet ingeschakeld. Dit lid moet het instellen voordat hij of zij verder kan. Nu verplichten?"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "1 lid buiten je geverifieerde domeinen behoudt de huidige inlogmethode."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1 lid moet inloggen met {providerName}."
 
@@ -1373,7 +1373,7 @@ msgstr "Details toevoegen"
 msgid "Add discount"
 msgstr "Korting toevoegen"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "Domein toevoegen"
 
@@ -1400,8 +1400,8 @@ msgstr "Locatie toevoegen"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "Voeg meerdere tijdstippen toe als je meerdere sessies per dag houdt."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "Nieuwe mensen automatisch toevoegen"
 
@@ -1479,11 +1479,11 @@ msgstr "Staanplaatstickets toevoegen"
 msgid "Add tax or fee"
 msgstr "Belasting of heffing toevoegen"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "Voeg de onderstaande redirect-URI toe en sta de scopes openid, email en profile toe."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "Voeg de onderstaande redirect-URI voor inloggen toe en wijs de mensen of groepen toe die toegang moeten krijgen."
 
@@ -1499,7 +1499,7 @@ msgstr "Voeg dit evenement toe aan je agenda"
 msgid "Add this to your site's <head>"
 msgstr "Voeg dit toe aan de <head> van je website"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "Voeg dit TXT-record toe bij je DNS-provider en verifieer het daarna. Subdomeinen hebben elk een eigen record nodig."
 
@@ -1911,7 +1911,7 @@ msgstr "Alles zichtbaar"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Geef toegang tot je e-mailadres wanneer je inlogt en probeer het opnieuw."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "Sta alleen accounts uit deze organisatiedirectory toe en voeg de onderstaande redirect-URI toe als webredirect-URI."
 
@@ -1953,8 +1953,8 @@ msgstr "Indexering door zoekmachines toestaan"
 msgid "Allow search engines to index this event"
 msgstr "Laat zoekmachines dit evenement indexeren"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "Inloggen met {providerName} toestaan"
 
@@ -2179,7 +2179,7 @@ msgstr "Elke datum kan afwijken: wijzig de capaciteit via Datum bewerken, of het
 msgid "Any website (HTML)"
 msgstr "Elke website (HTML)"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "Iedereen die {providerName} binnenlaat met een e-mailadres van een geverifieerd domein, wordt bij de eerste keer inloggen lid van dit account. Verwijderde of gedeactiveerde leden worden nooit opnieuw toegevoegd."
 
@@ -2214,7 +2214,7 @@ msgstr "Uiterlijk"
 msgid "Appears on"
 msgstr "Komt voor bij"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2262,7 +2262,7 @@ msgstr "Geldt voor elke {0}, niet-geannuleerde datum van dit evenement — ook v
 msgid "Applies to every tier of this ticket"
 msgstr "Geldt voor elke prijstrap van dit ticket"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "Geldt voor sessies die via {providerName} zijn gestart. Mensen moeten daarna opnieuw inloggen."
 
@@ -2927,13 +2927,13 @@ msgstr "Terug naar stoelen"
 msgid "Back to security settings"
 msgstr "Terug naar beveiligingsinstellingen"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "Terug naar inloggen"
 
@@ -3118,7 +3118,7 @@ msgstr "Randen"
 msgid "Bounced"
 msgstr "Gebounced"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "kassa"
 
@@ -3127,7 +3127,7 @@ msgstr "kassa"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "Kassa"
 
@@ -3440,8 +3440,6 @@ msgstr "Kun je je authenticator-app of herstelcodes niet gebruiken?"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3452,6 +3450,8 @@ msgstr "Kun je je authenticator-app of herstelcodes niet gebruiken?"
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3795,7 +3795,7 @@ msgstr "Nu inchecken"
 msgid "Check in only"
 msgstr "Alleen inchecken"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "Sleutel controleren"
 
@@ -3975,7 +3975,7 @@ msgstr "Ingecheckt ({checkedInCount}/{attendeeCount})"
 msgid "Checking your saved profiles…"
 msgstr "Je opgeslagen profielen controleren…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "Controleren…"
 
@@ -4148,7 +4148,7 @@ msgstr "Tickets kiezen"
 msgid "Choose when your event starts"
 msgstr "Kies wanneer je evenement begint"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "Kies wie het moet gebruiken"
 
@@ -4156,7 +4156,7 @@ msgstr "Kies wie het moet gebruiken"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Kies wie de platformkosten betaalt. Dit heeft geen invloed op extra kosten die u in uw accountinstellingen hebt geconfigureerd."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "Kies je identity provider"
 
@@ -4254,13 +4254,13 @@ msgstr "Klik om notities te bekijken"
 msgid "Clicked"
 msgstr "Geklikt"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "Client ID"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "Client secret"
 
@@ -4673,7 +4673,7 @@ msgstr "Koppel Stripe om ticketbetalingen rechtstreeks op je bankrekening te ont
 msgid "Connect with Stripe"
 msgstr "Maak verbinding met Stripe"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "Koppel je app"
 
@@ -4681,7 +4681,7 @@ msgstr "Koppel je app"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "Koppel je bank om ticketverkopen rechtstreeks op je rekening te ontvangen"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "Koppel je identity provider, verifieer je e-maildomeinen en kies dan of iedereen hem moet gebruiken."
 
@@ -4693,7 +4693,7 @@ msgstr "Verbonden"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "Verkeerd Stripe-account gekoppeld? Ontkoppel het en begin opnieuw."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "Koppeling verwijderd"
 
@@ -4711,11 +4711,11 @@ msgstr "Verbindingsgegevens zijn verplicht voor online datums"
 msgid "Connection details are required for online events"
 msgstr "Verbindingsgegevens zijn verplicht voor online evenementen"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "Koppeling opgeslagen. Voer daarna een testlogin uit."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "Koppeling bijgewerkt"
 
@@ -4757,7 +4757,6 @@ msgstr "Inhoud"
 msgid "Content is required"
 msgstr "Inhoud is verplicht"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4766,6 +4765,7 @@ msgstr "Inhoud is verplicht"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "Ga verder"
 
@@ -4988,15 +4988,15 @@ msgstr "Installatiesleutel kopiëren"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "Kopieer een paar rijen uit een spreadsheet, inclusief de koprij, en plak ze hier."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "Kopieer de client ID en het client secret naar de velden hieronder, samen met je Workspace-domein."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "Kopieer de directory (tenant) ID, de application (client) ID en de secretwaarde naar de velden hieronder."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Kopieer de issuer-URL, de client ID en het client secret naar de velden hieronder."
 
@@ -5025,7 +5025,7 @@ msgstr "URL kopiëren"
 msgid "Copy your API key"
 msgstr "Kopieer je API-sleutel"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "Kopieer je Okta-domein, de client ID en het client secret naar de velden hieronder."
 
@@ -5955,8 +5955,8 @@ msgstr "Check-in lijst verwijderen"
 msgid "Delete code"
 msgstr "Code verwijderen"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "Koppeling verwijderen"
 
@@ -6033,7 +6033,7 @@ msgstr "Dit account nu verwijderen in plaats van de bedenktijd af te wachten? Di
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Deze categorie verwijderen? Alle producten erin worden ook verwijderd. Dit kan niet ongedaan worden gemaakt."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "Deze koppeling verwijderen? Leden die alleen hiermee inloggen, moeten hun wachtwoord opnieuw instellen."
 
@@ -6155,7 +6155,7 @@ msgid "Details"
 msgstr "Details"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "Ontwikkeling"
 
@@ -6191,7 +6191,7 @@ msgstr "Andere locatie"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Direct onder Evenementen is het een tabblad Afgelopen in de evenementenlijst. Elders toont het je meest recente afgelopen evenementen."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "Directory (tenant) ID"
 
@@ -6307,11 +6307,11 @@ msgstr "Documentlabel"
 msgid "Doesn't repeat"
 msgstr "Herhaalt niet"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "Domein nog niet geverifieerd"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "Domein geverifieerd"
 
@@ -6724,7 +6724,7 @@ msgid "Edit design"
 msgstr "Ontwerp bewerken"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "Details bewerken"
 
@@ -6863,9 +6863,9 @@ msgstr "In Aanmerking Komende Incheck Lijsten"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "E-mail"
 
@@ -6927,7 +6927,7 @@ msgstr "Bericht voettekst e-mail"
 msgid "Email Delivery"
 msgstr "E-mailbezorging"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "E-maildomein"
 
@@ -7247,9 +7247,18 @@ msgstr "Voer je wachtwoord in om tweestapsverificatie in te stellen."
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Voer uw BTW-nummer in inclusief de landcode, zonder spaties (bijv. NL123456789B01, DE123456789)"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "Voer je werk-e-mailadres in en we sturen je door naar de inlogpagina van je organisatie."
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "enterprise single sign-on"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "Enterprise single sign-on"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7671,10 +7680,10 @@ msgstr "Verwijdering nu uitvoeren"
 msgid "Execute now"
 msgstr "Nu uitvoeren"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "Vrijgesteld"
 
@@ -7695,7 +7704,7 @@ msgstr "Vervaldatum"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "Verlopen"
 
@@ -8123,7 +8132,7 @@ msgstr "Uploaden van afbeelding mislukt. Probeer het opnieuw."
 msgid "Failed to verify email"
 msgstr "Verifiëren e-mail mislukt"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "Mislukt sinds {0}"
 
@@ -8295,7 +8304,7 @@ msgstr "Stripe-installatie afmaken"
 msgid "Finish setup"
 msgstr "Installatie afronden"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "Rond het inloggen bij {providerName} af in het venster dat is geopend."
 
@@ -8481,11 +8490,11 @@ msgstr "Log voor je veiligheid opnieuw in om te bevestigen dat jij het bent."
 msgid "Forgot password?"
 msgstr "Wachtwoord vergeten?"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "Voorheen Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "We hebben je inloginstellingen gevonden"
 
@@ -8793,7 +8802,7 @@ msgid "Got it"
 msgstr "Begrepen"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "Respijtperiode"
 
@@ -8843,7 +8852,7 @@ msgstr "Bruto verkoop"
 msgid "Group by stage or room"
 msgstr "Groeperen per podium of zaal"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "Groepen"
 
@@ -9396,15 +9405,15 @@ msgstr "In beoordeling"
 msgid "In someone's basket"
 msgstr "In andermans winkelmandje"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "Open in de Google Cloud-console een project dat bij je Workspace-organisatie hoort."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "Ga in het Microsoft Entra-beheercentrum naar \"App registrations\" en kies \"New registration\"."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Ga in de Okta Admin Console naar \"Applications\" en kies \"Create App Integration\"."
 
@@ -9412,7 +9421,7 @@ msgstr "Ga in de Okta Admin Console naar \"Applications\" en kies \"Create App I
 msgid "In use"
 msgstr "In gebruik"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "Maak in je identity provider een vertrouwelijke OpenID Connect-client aan die de authorization code flow gebruikt."
 
@@ -9613,11 +9622,11 @@ msgstr "Factuur Instellingen"
 msgid "Issued"
 msgstr "Uitgegeven"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "Issuer"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "Issuer-URL"
 
@@ -9779,7 +9788,7 @@ msgstr "Sleutel verwijderd"
 msgid "Key revoked"
 msgstr "Sleutel ingetrokken"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin en andere"
 
@@ -9924,7 +9933,7 @@ msgstr "Achternaam is verplicht"
 msgid "Last Response"
 msgstr "Laatste reactie"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "Laatste test geslaagd {0}"
 
@@ -10043,13 +10052,17 @@ msgstr "Laat het ze weten"
 msgid "Let them know about the changes"
 msgstr "Laat ze de wijzigingen weten"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "Laat je team inloggen met Okta, Microsoft Entra ID of Google Workspace"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "Laat je team inloggen met je identity provider"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "Laat accounts hun identiteitsprovider koppelen, e-maildomeinen verifiëren en single sign-on verplichten."
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10392,7 +10405,7 @@ msgstr "Maak factuuradres verplicht tijdens het afrekenen"
 msgid "Make it visible so people can buy tickets"
 msgstr "Maak het zichtbaar zodat mensen tickets kunnen kopen"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "Zorg dat ID tokens de claims email en email_verified bevatten."
 
@@ -10467,7 +10480,7 @@ msgstr "Planning beheren"
 msgid "Manage seat maps"
 msgstr "Zaalplannen beheren"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "Single sign-on beheren"
 
@@ -10581,11 +10594,11 @@ msgstr "Lid opnieuw geactiveerd"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "Leden wijzigen hun eigen e-mailadres in de <0>profielinstellingen</0>."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "Leden met geverifieerde domeinen"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "Leden met een e-mailadres van een geverifieerd domein moeten inloggen met {providerName}. Hun andere sessies worden beëindigd."
 
@@ -10921,8 +10934,6 @@ msgstr "Mijn Tickets"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10930,6 +10941,8 @@ msgstr "Mijn Tickets"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "Naam"
 
@@ -11128,7 +11141,7 @@ msgstr "Nachtleven"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Nee"
 
@@ -11407,8 +11420,8 @@ msgid "No licence"
 msgstr "Geen licentie"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "Er is geen licentiesleutel ingesteld, dus gereserveerde plaatsen en de kassa zijn uitgeschakeld. Om ze te ontgrendelen, stel je APP_LICENCE_KEY in de backendomgeving in en deploy je de backend opnieuw. Gebruik met Docker Compose docker compose up -d, want docker compose restart laadt de omgeving niet opnieuw."
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "Er is geen licentiesleutel ingesteld, dus gereserveerde plaatsen, de kassa en enterprise single sign-on zijn uitgeschakeld. Om ze te ontgrendelen, stel je APP_LICENCE_KEY in de backendomgeving in en deploy je de backend opnieuw. Gebruik met Docker Compose docker compose up -d, want docker compose restart laadt de omgeving niet opnieuw."
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11731,7 +11744,7 @@ msgstr "Niemand voldoet aan deze filters."
 msgid "Nobody on the lineup yet."
 msgstr "Nog niemand in de line-up."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "Niemand in je team gebruikt nog een geverifieerd domein. Mensen die met zo'n domein lid worden, moeten inloggen met {providerName}."
 
@@ -11762,7 +11775,7 @@ msgstr "Geen"
 msgid "None (cash only)"
 msgstr "Geen (alleen contant)"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "Niets gedeeld"
 
@@ -11814,7 +11827,7 @@ msgstr "Niet genoeg vrije stoelen voor {0}"
 msgid "Not joined yet"
 msgstr "Nog niet aangemeld"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "Niet als geverifieerd gemarkeerd"
 
@@ -11839,7 +11852,7 @@ msgstr "Niet ingepland"
 msgid "Not selling as {signedInName}?"
 msgstr "Verkoop je niet als {signedInName}?"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "Niet gedeeld"
 
@@ -11855,17 +11868,17 @@ msgstr "Nog niet zichtbaar."
 msgid "Not sure where to sit?"
 msgstr "Weet je niet waar je wilt zitten?"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "Niet getest"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "Nog niet getest"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "Gebruik je geen gereserveerde plaatsen of kassa? Verwijder <0>APP_LICENCE_KEY</0> en deploy opnieuw."
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "Gebruik je geen gereserveerde plaatsen, kassa of enterprise single sign-on? Verwijder <0>APP_LICENCE_KEY</0> en deploy opnieuw."
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12012,10 +12025,10 @@ msgstr "van elke maand"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "Uit"
 
@@ -12084,11 +12097,11 @@ msgstr "Informatie over offline betalingen"
 msgid "Offline Payments Settings"
 msgstr "Instellingen voor offline betalingen"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Okta-domein"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12101,10 +12114,10 @@ msgstr "op"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "Aan"
 
@@ -12270,7 +12283,7 @@ msgstr "Alleen beheerders kunnen teamtoegang beheren."
 msgid "Only available as an add-on"
 msgstr "Alleen beschikbaar als add-on"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "Alleen mensen met een e-mailadres van een geverifieerd domein kunnen automatisch worden toegevoegd of verplicht worden om single sign-on te gebruiken."
 
@@ -12818,7 +12831,7 @@ msgstr "Andere evenementen"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Andere Lijsten (Ticket Niet Inbegrepen)"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "Andere OIDC-provider"
 
@@ -12860,7 +12873,7 @@ msgstr "Overzicht"
 msgid "Owner"
 msgstr "Eigenaar"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "Is eigenaar van een ander Hi.Events-account en blijft daarom inloggen met een wachtwoord."
 
@@ -12963,10 +12976,10 @@ msgstr "Doorberekenen aan koper"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -13154,7 +13167,7 @@ msgstr "Uitbetalingen"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "In afwachting"
 
@@ -13202,11 +13215,11 @@ msgstr "Personen ({peopleRowCount})"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "Personen worden op naam gekoppeld, dus bestaande profielen worden bijgewerkt in plaats van gedupliceerd."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "Mensen kunnen alleen lid worden of aan bestaande accounts worden gekoppeld als {providerName} hun e-mailadres als geverifieerd markeert."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "Mensen met een geverifieerd domein worden doorgestuurd naar {providerName} als ze Inloggen met SSO kiezen."
 
@@ -13365,7 +13378,7 @@ msgstr "Kies datums"
 msgid "Pick days to see your dates."
 msgstr "Kies dagen om je datums te zien."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "Kies \"OIDC - OpenID Connect\" en daarna \"Web Application\"."
 
@@ -14301,7 +14314,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Deploy de backend opnieuw. Voer met Docker Compose <0>docker compose up -d</0> uit."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "Redirect-URI"
 
@@ -14467,13 +14480,13 @@ msgstr "Verwijder"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "“{0}” verwijderen? Deze is al verlopen."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "{0} verwijderen"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "{0} verwijderen? Mensen met dit e-maildomein worden niet meer doorgestuurd naar je identity provider en hoeven die niet meer te gebruiken."
 
@@ -14509,7 +14522,7 @@ msgstr "Beschrijving verwijderen"
 msgid "Remove discount"
 msgstr "Korting verwijderen"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "Domein verwijderen"
 
@@ -14677,13 +14690,13 @@ msgstr "Aangevraagd door"
 msgid "Require Billing Address"
 msgstr "Factuuradres vereisen"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "Single sign-on verplichten"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "SSO verplichten"
 
@@ -14697,7 +14710,7 @@ msgid "Require two-factor authentication"
 msgstr "Tweestapsverificatie verplichten"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Verplicht"
 
@@ -14768,7 +14781,7 @@ msgstr "Ticket e-mail opnieuw verzenden"
 msgid "Reserved"
 msgstr "Gereserveerd"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "gereserveerde plaatsen"
 
@@ -14776,13 +14789,9 @@ msgstr "gereserveerde plaatsen"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "Gereserveerde zitplaatsen"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "gereserveerde plaatsen en kassa"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14999,7 +15008,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "Rol"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "Rol voor nieuwe mensen"
 
@@ -15039,7 +15048,7 @@ msgstr "te corrigeren rijen"
 msgid "Rules saved"
 msgstr "Regels opgeslagen"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "Voer eerst een geslaagde testlogin uit voordat je dit inschakelt."
 
@@ -15226,7 +15235,7 @@ msgstr "Zaterdag"
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "{0}-koppeling opslaan"
 
@@ -15235,7 +15244,7 @@ msgstr "{0}-koppeling opslaan"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
 
@@ -15324,11 +15333,11 @@ msgstr "Sla op en kopieer daarna de nieuwe code"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "Opgeslagen"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "Opgeslagen en verborgen. Laat leeg om het huidige secret te behouden."
 
@@ -16267,7 +16276,7 @@ msgstr "Stel de eindtijd van elke datum zo lang na de starttijd in."
 msgid "Set the location"
 msgstr "Stel de locatie in"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "Stel het gebruikerstype van het \"OAuth consent screen\" in op \"Internal\"."
 
@@ -16297,7 +16306,7 @@ msgstr "Planning instellen"
 msgid "Set Up Schedule"
 msgstr "Planning instellen"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "SSO instellen"
 
@@ -16356,7 +16365,7 @@ msgstr "De instellingen voor {featureList} zijn vergrendeld. Bestaande verkopen 
 msgid "Setup is locked"
 msgstr "Instellingen vergrendeld"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "Instellingen vergrendeld"
 
@@ -16622,7 +16631,7 @@ msgstr "Log opnieuw in om verder te verkopen"
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "Log opnieuw in om tweestapsverificatie in te stellen."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Log één keer in om de koppeling te controleren. Je ziet wat je identity provider deelt; je wordt hier niet mee ingelogd."
 
@@ -16663,11 +16672,11 @@ msgstr "Inloggen met Microsoft"
 msgid "Sign in with password"
 msgstr "Inloggen met wachtwoord"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "Inloggen met SSO"
 
@@ -16676,7 +16685,7 @@ msgstr "Inloggen met SSO"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "Log in met het account dat je normaal gebruikt, of vraag je beheerder om hulp."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "Log in met je Google-bedrijfsaccounts"
 
@@ -16697,7 +16706,7 @@ msgstr "Uitloggen"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "Log uit en log daarna in als {0} om deze uitnodiging te accepteren."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "Mensen uitloggen na"
 
@@ -16717,7 +16726,7 @@ msgstr "Inloglinks werken één keer en verlopen na 10 minuten. Begin opnieuw op
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "Inloglinks werken één keer en verlopen na 10 minuten. Begin opnieuw om verder te gaan."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "Inloginstellingen"
 
@@ -16725,7 +16734,7 @@ msgstr "Inloginstellingen"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "Inloggen is geannuleerd. Kies een andere manier om in te loggen of probeer het opnieuw."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "Inloggen met {providerName} is uitgeschakeld"
 
@@ -16733,11 +16742,11 @@ msgstr "Inloggen met {providerName} is uitgeschakeld"
 msgid "Signed in as"
 msgstr "Ingelogd als"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "Ingelogd als {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "Ingelogd, maar er is geen e-mailadres gedeeld"
 
@@ -16774,25 +16783,25 @@ msgstr "Sinds {0} (UTC)"
 msgid "Single line text box"
 msgstr "Enkelregelig tekstvak"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "Single sign-on"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "Single sign-on is niet langer verplicht"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "Single sign-on is nu verplicht"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "Single sign-on is niet ingesteld voor dit e-mailadres. Controleer het adres of log op een andere manier in."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "Single sign-on-instellingen bijgewerkt"
 
@@ -16982,11 +16991,6 @@ msgstr "Er is iets misgegaan. Probeer het later opnieuw."
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16999,6 +17003,11 @@ msgstr "Er is iets misgegaan. Probeer het later opnieuw."
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17082,12 +17091,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "Vierkant, minimaal 200 × 200 px"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO-aanmeldingen (30 dagen)"
 
@@ -17379,19 +17388,19 @@ msgstr "Stop Imiteren"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "Ontvang geen e-mails meer die je helpen je evenementen op te zetten en te beheren. E-mails over je bestellingen en account worden nog steeds verstuurd."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "Niet meer verplichten"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "Stop met het verplichten van single sign-on voordat je de koppeling verwijdert."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "Stop met het verplichten van single sign-on voordat je een geverifieerd domein verwijdert."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "Single sign-on niet meer verplichten? Leden kunnen weer inloggen met hun wachtwoord, of het opnieuw instellen als ze er nooit een hadden."
 
@@ -17695,7 +17704,7 @@ msgstr "Zondag"
 msgid "Support Email"
 msgstr "Ondersteuning per e-mail"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "Geschorst"
 
@@ -17910,7 +17919,7 @@ msgstr "Sjabloon succesvol verwijderd"
 msgid "Template saved successfully"
 msgstr "Sjabloon succesvol opgeslagen"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "Tenant ID"
 
@@ -17931,8 +17940,8 @@ msgstr "Servicevoorwaarden"
 msgid "Test email sent to your inbox"
 msgstr "Testmail verzonden naar je inbox"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "Testlogin"
 
@@ -17989,11 +17998,11 @@ msgstr "De melding ‘Powered by Hi.Events’ wordt weer getoond tot je verlengt
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "Het account heeft voltooide bestellingen en wordt daarom geanonimiseerd."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "De accounteigenaar ({0}) kan nog steeds inloggen met een wachtwoord en tweestapsverificatie, zodat je toegang kunt herstellen als {providerName} niet beschikbaar is. Alle beheerders krijgen dan een e-mail."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "De accounteigenaar krijgt een e-mail zodra iemand als beheerder lid wordt."
 
@@ -18240,11 +18249,11 @@ msgstr "Het slot heeft een duur nodig"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "Het template body bevat ongeldige Liquid syntax. Corrigeer het en probeer opnieuw."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "De testlogin is niet voltooid."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "De testlogin is mislukt"
 
@@ -19392,7 +19401,7 @@ msgstr "Inschakelen"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "Zet extra secties aan en sleep om de volgorde te wijzigen."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "Schakel eerst inloggen met {providerName} in en verifieer een domein."
 
@@ -19635,15 +19644,15 @@ msgstr "niet beschikbaar"
 msgid "Unavailable, re-register"
 msgstr "Niet beschikbaar, opnieuw registreren"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "Maak onder \"Certificates & secrets\" een client secret aan."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "Maak onder \"Credentials\" een OAuth client ID aan voor een webapplicatie en voeg de onderstaande redirect-URI toe."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "Voeg onder \"Token configuration\" de optionele claims email en xms_edov toe aan het ID token."
 
@@ -20105,8 +20114,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "Uw BTW-nummer valideren..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "Voordelig"
 
@@ -20222,7 +20231,7 @@ msgstr "Verificatie-e-mail verzonden. Controleer je inbox."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Geverifieerd"
 
@@ -20230,17 +20239,17 @@ msgstr "Geverifieerd"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Geverifieerde accounts kunnen berichten naar deelnemers sturen en e-mailsjablonen beheren. Door Stripe te koppelen wordt een account automatisch geverifieerd."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "Geverifieerd door {providerName}"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "Geverifieerde domeinen"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "Verifiëren"
 
@@ -20261,7 +20270,7 @@ msgstr "Herstelcode verifiëren"
 msgid "Verify your email"
 msgstr "Verifieer je e-mailadres"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "Verifieer je e-maildomeinen"
 
@@ -20602,7 +20611,7 @@ msgstr "We konden het ticket dat u zoekt niet vinden. De link is mogelijk verlop
 msgid "We couldn't find this order. It may have been removed."
 msgstr "We konden deze bestelling niet vinden. Mogelijk is deze verwijderd."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "We konden dit TXT-record niet vinden bij onze dagelijkse controle. Herstel het zodat single sign-on voor dit domein blijft werken."
 
@@ -21054,7 +21063,7 @@ msgstr "Welk ticket voor {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Welke tickets moeten aan deze inchecklijst worden gekoppeld?"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "White-label"
 
@@ -21115,7 +21124,7 @@ msgstr "Breedte"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "Wix toont ingesloten code in een vak met een vaste grootte. Zet 'Afrekenen opent in' op 'Nieuw tabblad' voor de beste ervaring."
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "Werk-e-mailadres"
 
@@ -21144,8 +21153,8 @@ msgstr "Workshop"
 msgid "Workshop with early bird"
 msgstr "Workshop met early bird"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspace-domein"
 
@@ -21180,7 +21189,7 @@ msgstr "jaar"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Ja"
 
@@ -21416,7 +21425,7 @@ msgstr "Je kunt niet meer inloggen met {0}. Andere apparaten die zijn ingelogd o
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "Je ontvangt deze e-mails niet meer. E-mails over je bestellingen en account worden nog steeds verstuurd."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Je wordt uitgelogd en moet opnieuw inloggen met {providerName}."
 
@@ -21580,7 +21589,7 @@ msgstr "Je evenement is live!"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "Je Hi.Events Enterprise-licentie is verlopen op {expiresAt}. Alles blijft aan tot {graceEndsAt}. Verleng daarvoor om onderbrekingen te voorkomen."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "je identiteitsprovider"
 
@@ -21747,7 +21756,7 @@ msgstr "Je inlogsessie is verlopen. Log opnieuw in."
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "Je Stripe-account zelf blijft ongewijzigd en er gaan geen gegevens verloren — je kunt op elk moment opnieuw koppelen."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "Je team kan nu inloggen met {providerName}"
 

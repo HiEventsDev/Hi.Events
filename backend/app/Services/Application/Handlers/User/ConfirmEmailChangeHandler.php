@@ -3,11 +3,11 @@
 namespace HiEvents\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\DTO\ConfirmEmailChangeDTO;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;
 use HiEvents\Services\Infrastructure\Encryption\Exception\DecryptionFailedException;
 use Illuminate\Database\DatabaseManager;

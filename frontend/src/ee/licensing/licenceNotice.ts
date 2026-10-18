@@ -1,4 +1,5 @@
 import {t} from "@lingui/macro";
+import {i18n} from "@lingui/core";
 import {LicensedFeature, LicenceSummary} from "../../types.ts";
 
 export type LicenceNoticeKind = 'invalid' | 'locked' | 'dev' | 'grace' | 'lapsed';
@@ -16,21 +17,29 @@ export const LICENCE_TONE_COLORS: Record<LicenceTone, string> = {
     info: 'blue',
 };
 
+const lockableFeatureName = (feature: LicensedFeature): string | null => {
+    switch (feature) {
+        case 'seating':
+            return t`reserved seating`;
+        case 'box_office':
+            return t`box office`;
+        case 'enterprise_sso':
+            return t`enterprise single sign-on`;
+        default:
+            return null;
+    }
+};
+
 export const licensedFeatureList = (features: LicensedFeature[]): string | null => {
-    const seating = features.includes('seating');
-    const boxOffice = features.includes('box_office');
+    const names = features
+        .map(lockableFeatureName)
+        .filter((name): name is string => name !== null);
 
-    if (seating && boxOffice) {
-        return t`reserved seating and box office`;
-    }
-    if (seating) {
-        return t`reserved seating`;
-    }
-    if (boxOffice) {
-        return t`box office`;
+    if (names.length === 0) {
+        return null;
     }
 
-    return null;
+    return new Intl.ListFormat(i18n.locale, {type: 'conjunction'}).format(names);
 };
 
 export const licensedFeatureLabel = (feature: string): string => {
@@ -39,6 +48,8 @@ export const licensedFeatureLabel = (feature: string): string => {
             return t`Reserved seating`;
         case 'box_office':
             return t`Box office`;
+        case 'enterprise_sso':
+            return t`Enterprise single sign-on`;
         case 'white_label':
             return t`White-label`;
         default:

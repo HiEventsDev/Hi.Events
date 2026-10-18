@@ -6,7 +6,6 @@ import {
     LoginResponse,
     SsoExchangeResponse,
     SsoIntent,
-    SsoProvider,
     SsoProvidersResponse,
     SsoSignupRequest,
     SsoStartResponse,
@@ -33,11 +32,6 @@ export interface SsoCodeExchange {
 }
 
 export const ssoClient = {
-    discover: async (email: string) => {
-        const response = await api.post<GenericDataResponse<SsoProvider>>('auth/sso/discover', {email});
-        return response.data.data;
-    },
-
     providers: async () => {
         const response = await api.get<GenericDataResponse<SsoProvidersResponse>>('auth/sso/providers');
         return response.data.data;

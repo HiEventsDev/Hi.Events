@@ -16,6 +16,10 @@ use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapBandProductRep
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatClaimRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
+use HiEvents\Enterprise\Sso\Repository\Eloquent\AccountSsoConnectionRepository;
+use HiEvents\Enterprise\Sso\Repository\Eloquent\AccountSsoDomainRepository;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoDomainRepositoryInterface;
 use HiEvents\Repository\Eloquent\AccountAttributionRepository;
 use HiEvents\Repository\Eloquent\AccountConfigurationRepository;
 use HiEvents\Repository\Eloquent\AccountDeletionRequestRepository;
@@ -23,8 +27,6 @@ use HiEvents\Repository\Eloquent\AccountFeatureFlagOverrideRepository;
 use HiEvents\Repository\Eloquent\AccountLifecycleNudgeRepository;
 use HiEvents\Repository\Eloquent\AccountMessagingTierRepository;
 use HiEvents\Repository\Eloquent\AccountRepository;
-use HiEvents\Repository\Eloquent\AccountSsoConnectionRepository;
-use HiEvents\Repository\Eloquent\AccountSsoDomainRepository;
 use HiEvents\Repository\Eloquent\AccountUserAccessGrantRepository;
 use HiEvents\Repository\Eloquent\AccountUserPermissionRepository;
 use HiEvents\Repository\Eloquent\AccountUserRepository;
@@ -101,8 +103,6 @@ use HiEvents\Repository\Interfaces\AccountFeatureFlagOverrideRepositoryInterface
 use HiEvents\Repository\Interfaces\AccountLifecycleNudgeRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountMessagingTierRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
-use HiEvents\Repository\Interfaces\AccountSsoDomainRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserAccessGrantRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserPermissionRepositoryInterface;
 use HiEvents\Repository\Interfaces\AccountUserRepositoryInterface;

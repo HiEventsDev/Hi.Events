@@ -43,19 +43,17 @@ class FeatureFlagAdminTest extends TestCase
         [$this->adminToken, $this->targetAccountId] = $this->makeUser('ADMIN');
     }
 
-    public function test_only_core_flags_are_shown_to_the_admin_off_hi_events_cloud(): void
+    public function test_no_flags_are_shown_to_the_admin_off_hi_events_cloud(): void
     {
         config(['app.saas_mode_enabled' => true]);
         $this->useLicence(expiresAt: '2099-12-31', env: 'testing');
 
         $this->getJson('/admin/feature-flags', $this->headers($this->superAdminToken))
             ->assertStatus(ResponseCodes::HTTP_OK)
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.key', 'enterprise_sso');
+            ->assertJsonCount(0, 'data');
         $this->getJson("/admin/accounts/{$this->targetAccountId}/feature-flags", $this->headers($this->superAdminToken))
             ->assertStatus(ResponseCodes::HTTP_OK)
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.key', 'enterprise_sso');
+            ->assertJsonCount(0, 'data');
     }
 
     public function test_setting_and_clearing_an_account_override(): void

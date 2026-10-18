@@ -4,9 +4,9 @@ namespace HiEvents\Http\Middleware;
 
 use Closure;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Models\User;
 use HiEvents\Services\Domain\Auth\AuthUserService;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\UserSessionRevocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

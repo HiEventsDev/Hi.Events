@@ -18,6 +18,7 @@ enum Plan: string
             self::ENTERPRISE, self::CLOUD => [
                 LicensedFeature::SEATING,
                 LicensedFeature::BOX_OFFICE,
+                LicensedFeature::ENTERPRISE_SSO,
             ],
         };
     }

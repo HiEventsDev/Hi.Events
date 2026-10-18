@@ -4,7 +4,8 @@ namespace Tests\Unit\Services\Application\Handlers\User;
 
 use HiEvents\DomainObjects\Enums\SsoTicketType;
 use HiEvents\DomainObjects\UserDomainObject;
-use HiEvents\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Exceptions\AccountSsoConfigurationException;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Mail\User\ConfirmEmailChangeMail;
@@ -15,7 +16,6 @@ use HiEvents\Services\Application\Handlers\User\DTO\UpdateMeDTO;
 use HiEvents\Services\Application\Handlers\User\UpdateMeHandler;
 use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
 use HiEvents\Services\Domain\Auth\PasswordLoginPolicy;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\Sso\SsoTicketService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Infrastructure\Encryption\EncryptedPayloadService;

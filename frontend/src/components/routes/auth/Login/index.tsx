@@ -12,7 +12,7 @@ import {IconTicket, IconChevronDown} from "@tabler/icons-react";
 import {LoginStepView} from "./LoginStepView.tsx";
 import {useLoginSteps} from "../../../../hooks/useLoginSteps.ts";
 import {SsoSection, useSsoOptions} from "../../../common/SsoButtons/SsoSection.tsx";
-import {EnterpriseSsoButton, SsoDiscovery} from "../../../common/SsoButtons/SsoDiscovery.tsx";
+import {EnterpriseSsoButton, SsoDiscovery} from "../../../../ee/sso/components/SsoDiscovery/index.tsx";
 import {useStartSso} from "../../../../mutations/useSsoMutations.ts";
 import {takeAuthNotice, takeSilentReauthProvider} from "../../../../utilites/ssoFlow.ts";
 import {Callout} from "../../../common/Callout";

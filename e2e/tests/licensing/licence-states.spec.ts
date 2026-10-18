@@ -5,6 +5,8 @@ import type { AdminApiClient, ApiClient } from '../../api/api-client';
 import { nonSaasOnly, saasOnly } from '../../utils/mode';
 import { simulateLicence, withLicence } from '../../utils/licence';
 import { BoxOfficeManagePage } from '../../pages/box-office-manage.page';
+import { EnterpriseSsoSettings, MOCK_OIDC_URL, mockOidcIsReachable } from '../../pages/enterprise-sso.page';
+import { markSsoConnectionTested } from '../../utils/db';
 
 const licenceBadge = (page: Page) => page.getByTestId('licence-badge');
 
@@ -98,6 +100,37 @@ test.describe('licence gating', () => {
     });
   });
 
+  test('an SSO connection set up without a licence stays visible, its setup is locked and it can still be turned off', async ({ freshAccount, playwright }) => {
+    const page = await freshAccount.newAuthedPage();
+    test.skip(!(await mockOidcIsReachable(page)), `No mock identity provider at ${MOCK_OIDC_URL}`);
+    const { id: accountId } = await freshAccount.api.getAccount();
+    await freshAccount.api.createSsoConnection(accountId, {
+      type: 'OIDC',
+      issuer: `${MOCK_OIDC_URL}/licence-${Date.now().toString(36)}`,
+      client_id: 'hievents-e2e',
+      client_secret: 'e2e-secret',
+    });
+    markSsoConnectionTested(accountId);
+    await freshAccount.api.setSsoConnectionStatus(accountId, 'ACTIVE');
+    await simulateLicence(page, 'NONE');
+
+    const settings = new EnterpriseSsoSettings(page);
+    await settings.open();
+    await expect(page.getByTestId('licence-locked-callout').first()).toBeVisible();
+    await expect(settings.drawer().getByRole('button', { name: 'Edit details' })).toHaveCount(0);
+    await expect(settings.drawer().getByTestId('sso-test-sign-in')).toHaveCount(0);
+    await expect(settings.drawer().getByRole('button', { name: 'Add domain' })).toHaveCount(0);
+
+    await settings.toggle('sso-connection-active-switch');
+    await expect(page.getByText('Sign-in with your identity provider is turned off')).toBeVisible();
+    await expect(page.getByTestId('sso-connection-active-switch')).toBeDisabled();
+
+    await withLicence(playwright, freshAccount.token, 'NONE', async api => {
+      await expect(api.addSsoDomain(accountId, 'locked.test')).rejects.toThrow(/→ 403/);
+      await expect(api.setSsoConnectionStatus(accountId, 'ACTIVE')).rejects.toThrow(/→ 403/);
+    });
+  });
+
   test('direct links to enterprise setup stay locked without a licence', async ({ freshAccount, adminApi }) => {
     await enableEnterpriseFlags(adminApi, freshAccount.email);
     const { eventId } = await createDraftEvent(freshAccount.api, freshAccount.organizerId);
@@ -181,7 +214,7 @@ test.describe('licence gating', () => {
 
     await simulateLicence(page, 'ACTIVE:white_label');
     await page.goto('/auth/login');
-    await expect(page.getByRole('button', { name: /log in/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toBeVisible();
     await expect(page.getByText('Powered by')).toHaveCount(0);
   });
 
@@ -279,7 +312,7 @@ test.describe('licence notices', () => {
     await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'info');
 
     const modal = await openLicenceModal(page);
-    await expect(modal).toContainText('APP_LICENCE_KEY=development unlocks reserved seating and the box office for development and testing');
+    await expect(modal).toContainText('APP_LICENCE_KEY=development unlocks reserved seating, the box office and enterprise single sign-on for development and testing');
     await expect(modal).toContainText('The rest of Hi.Events is free for real events');
     await expect(modal).toContainText('Remove APP_LICENCE_KEY and redeploy');
     await expect(modal.getByRole('link', { name: 'Get a licence' })).toHaveAttribute('href', /hi\.events\/licensing/);

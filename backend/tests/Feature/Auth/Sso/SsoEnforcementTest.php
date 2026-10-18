@@ -2,9 +2,10 @@
 
 namespace Tests\Feature\Auth\Sso;
 
+use HiEvents\DomainObjects\Enums\FeatureFlag;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Status\UserStatus;
-use HiEvents\Mail\Account\SsoBreakGlassSignInMail;
+use HiEvents\Enterprise\Sso\Mail\SsoBreakGlassSignInMail;
 use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\AccountSsoConnection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Concerns\ActsAsAccountUsers;
 use Tests\Concerns\CreatesSsoConnections;
+use Tests\Concerns\ManagesFeatureFlags;
 use Tests\Concerns\UsesApiKeys;
 use Tests\TestCase;
 
@@ -24,6 +26,7 @@ class SsoEnforcementTest extends TestCase
     use ActsAsAccountUsers;
     use CreatesSsoConnections;
     use DatabaseTransactions;
+    use ManagesFeatureFlags;
     use UsesApiKeys;
 
     private const PASSWORD = 'CorrectHorse123!';
@@ -33,6 +36,8 @@ class SsoEnforcementTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->setFeatureFlagDefault(FeatureFlag::ENTERPRISE_SSO, true);
 
         Mail::fake();
         AccountConfiguration::firstOrCreate(['id' => 1], [

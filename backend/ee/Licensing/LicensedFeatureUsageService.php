@@ -8,6 +8,7 @@ use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\BoxOfficeRepositoryInter
 use HiEvents\Enterprise\BoxOffice\Repository\Interfaces\StripeTerminalReaderRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\EventSeatMapRepositoryInterface;
 use HiEvents\Enterprise\Seating\Repository\Interfaces\SeatMapRepositoryInterface;
+use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 class LicensedFeatureUsageService
@@ -23,6 +24,7 @@ class LicensedFeatureUsageService
         private readonly EventSeatMapRepositoryInterface $eventSeatMapRepository,
         private readonly BoxOfficeRepositoryInterface $boxOfficeRepository,
         private readonly StripeTerminalReaderRepositoryInterface $stripeTerminalReaderRepository,
+        private readonly AccountSsoConnectionRepositoryInterface $ssoConnectionRepository,
         private readonly LicenceService $licenceService,
         private readonly CacheRepository $cache,
     ) {}
@@ -73,6 +75,10 @@ class LicensedFeatureUsageService
         if ($this->boxOfficeRepository->existsInUseForUpcomingEvent($accountId)
             || $this->stripeTerminalReaderRepository->existsForLiveOrganizer($accountId)) {
             $features[] = LicensedFeature::BOX_OFFICE;
+        }
+
+        if ($this->ssoConnectionRepository->countWhere($accountId === null ? [] : ['account_id' => $accountId]) > 0) {
+            $features[] = LicensedFeature::ENTERPRISE_SSO;
         }
 
         return $features;

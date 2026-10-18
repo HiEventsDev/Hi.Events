@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace HiEvents\Services\Application\Handlers\Admin;
 
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorResetService;
 
 class ResetUserTwoFactorHandler

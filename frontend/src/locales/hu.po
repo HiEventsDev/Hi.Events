@@ -88,7 +88,7 @@ msgstr "{0} API"
 msgid "{0} available"
 msgstr "{0} elérhető"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:79
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:80
 msgid "{0} can sign in with their password"
 msgstr "{0} jelszóval is be tud jelentkezni"
 
@@ -128,7 +128,7 @@ msgstr "{0} kosárban"
 msgid "{0} is limited to {1} per order"
 msgstr "{0} rendelésenként legfeljebb {1} lehet"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:59
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:60
 msgid "{0} is verified"
 msgstr "{0} ellenőrizve van"
 
@@ -145,11 +145,11 @@ msgstr "{0} maradt"
 msgid "{0} logo"
 msgstr "{0} logó"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:127
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:128
 msgid "{0} members outside your verified domains keep their current sign-in."
 msgstr "{0} tag a megerősített tartományain kívül megtartja a jelenlegi bejelentkezését."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:78
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:79
 msgid "{0} must now sign in with {providerName}"
 msgstr "{0} mostantól a következővel köteles bejelentkezni: {providerName}"
 
@@ -186,7 +186,7 @@ msgstr "{0} hely"
 msgid "{0} refunded order(s) include this product but haven't been cancelled, so they still count as sold. Cancel them if the items shouldn't count."
 msgstr "{0} visszatérített rendelés tartalmazza ezt a terméket, de nem lett lemondva, ezért továbbra is eladottnak számít. Mondja le őket, ha a tételek nem számíthatnak bele."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:70
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:71
 msgid "{0} removed"
 msgstr "{0} eltávolítva"
 
@@ -340,8 +340,8 @@ msgstr "{count} kiegészítő"
 msgid "{count} times"
 msgstr "{count} időpont"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "{days} days"
 msgstr "{days} nap"
 
@@ -361,7 +361,7 @@ msgstr "{diffMin} perce"
 msgid "{diffSec}s ago"
 msgstr "{diffSec} másodperce"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "{enforcedCount} members will need to sign in with {providerName}."
 msgstr "{enforcedCount} tagnak a következővel kell majd bejelentkeznie: {providerName}."
 
@@ -395,7 +395,7 @@ msgstr "{hours} óra"
 msgid "{hours} h {remainder} min"
 msgstr "{hours} óra {remainder} perc"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "{hours} hours"
 msgstr "{hours} óra"
 
@@ -634,12 +634,12 @@ msgid "<0>{accountName}</0> requires two-factor authentication for everyone on t
 msgstr "A(z) <0>{accountName}</0> kétlépcsős hitelesítést ír elő a csapat minden tagjának. A folytatáshoz állítsa be most. Nagyjából egy percet vesz igénybe."
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:62
-msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating and the box office stay locked."
-msgstr "Az <0>APP_LICENCE_KEY</0> be van állítva, de a kulcsot nem sikerült ellenőrizni, ezért a foglalt ülőhelyek és a helyszíni jegypénztár zárolva maradnak."
+msgid "<0>APP_LICENCE_KEY</0> is set, but the key couldn't be verified, so reserved seating, the box office and enterprise single sign-on stay locked."
+msgstr "Az <0>APP_LICENCE_KEY</0> be van állítva, de a kulcsot nem sikerült ellenőrizni, ezért a foglalt ülőhelyek, a helyszíni jegypénztár és a vállalati egyszeri bejelentkezés zárolva maradnak."
 
 #: src/ee/licensing/components/DevelopmentLicenceSummary/index.tsx:5
-msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating and the box office for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
-msgstr "Az <0>APP_LICENCE_KEY=development</0> fejlesztéshez és teszteléshez feloldja a foglalt ülőhelyeket és a helyszíni jegypénztárat. A Hi.Events többi része valódi eseményekhez is ingyenes, licenccel vagy anélkül."
+msgid "<0>APP_LICENCE_KEY=development</0> unlocks reserved seating, the box office and enterprise single sign-on for development and testing. The rest of Hi.Events is free for real events, with or without a licence."
+msgstr "Az <0>APP_LICENCE_KEY=development</0> fejlesztéshez és teszteléshez feloldja a foglalt ülőhelyeket, a helyszíni jegypénztárat és a vállalati egyszeri bejelentkezést. A Hi.Events többi része valódi eseményekhez is ingyenes, licenccel vagy anélkül."
 
 #: src/components/common/CheckInListList/index.tsx:50
 msgid "<0>Check-in lists help you manage event entry by day, area, or ticket type. You can link tickets to specific lists such as VIP zones or Day 1 passes and share a secure check-in link with staff. No account is required. Check-in works on mobile, desktop, or tablet, using a device camera or HID USB scanner.                                </0>"
@@ -688,8 +688,8 @@ msgstr "1 résztvevő regisztrált az érintett alkalmakra."
 msgid "1 attendee is registered for this session."
 msgstr "1 résztvevő regisztrált erre az alkalomra."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:16
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:16
 msgid "1 day"
 msgstr "1 nap"
 
@@ -709,7 +709,7 @@ msgstr "1 nappal az esemény előtt"
 msgid "1 event"
 msgstr "1 esemény"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:20
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:20
 msgid "1 hour"
 msgstr "1 óra"
 
@@ -725,11 +725,11 @@ msgstr "1 tétel"
 msgid "1 member hasn't turned on two-factor authentication yet. They'll be asked to set it up before they can continue. Require it now?"
 msgstr "1 tag még nem kapcsolta be a kétlépcsős hitelesítést. A folytatás előtt be kell állítania. Előírja most?"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:126
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:127
 msgid "1 member outside your verified domains keeps their current sign-in."
 msgstr "1 tag a megerősített tartományain kívül megtartja a jelenlegi bejelentkezését."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:123
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:124
 msgid "1 member will need to sign in with {providerName}."
 msgstr "1 tagnak a következővel kell majd bejelentkeznie: {providerName}."
 
@@ -1372,7 +1372,7 @@ msgstr "Részletek hozzáadása"
 msgid "Add discount"
 msgstr "Kedvezmény hozzáadása"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:137
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:138
 msgid "Add domain"
 msgstr "Tartomány hozzáadása"
 
@@ -1399,8 +1399,8 @@ msgstr "Helyszín hozzáadása"
 msgid "Add multiple times if you run several sessions per day."
 msgstr "Adjon meg több időpontot, ha naponta több alkalmat tart."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:83
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:93
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:84
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:94
 msgid "Add new people automatically"
 msgstr "Új személyek automatikus hozzáadása"
 
@@ -1478,11 +1478,11 @@ msgstr "Állóhelyes jegyek hozzáadása"
 msgid "Add tax or fee"
 msgstr "Adó vagy díj hozzáadása"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:65
+#: src/ee/sso/components/SingleSignOn/providers.tsx:65
 msgid "Add the redirect URI below and allow the openid, email and profile scopes."
 msgstr "Adja hozzá az alábbi átirányítási URI-t, és engedélyezze az openid, email és profile hatóköröket."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:44
+#: src/ee/sso/components/SingleSignOn/providers.tsx:44
 msgid "Add the sign-in redirect URI below, and assign the people or groups who should have access."
 msgstr "Adja hozzá az alábbi bejelentkezési átirányítási URI-t, és rendelje hozzá azokat a személyeket vagy csoportokat, akiknek hozzáférést szeretne adni."
 
@@ -1498,7 +1498,7 @@ msgstr "Adja hozzá ezt az eseményt a naptárához"
 msgid "Add this to your site's <head>"
 msgstr "Adja hozzá ezt a webhelye <head> részéhez"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:108
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:109
 msgid "Add this TXT record at your DNS provider, then verify. Subdomains need their own record."
 msgstr "Adja hozzá ezt a TXT rekordot a DNS-szolgáltatójánál, majd ellenőrizze. Az aldomainekhez külön rekord kell."
 
@@ -1910,7 +1910,7 @@ msgstr "Mind látható"
 msgid "Allow access to your email address when you sign in, then try again."
 msgstr "Bejelentkezéskor engedélyezze a hozzáférést az e-mail-címéhez, majd próbálja újra."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:50
+#: src/ee/sso/components/SingleSignOn/providers.tsx:50
 msgid "Allow accounts in this organizational directory only, and add the redirect URI below as a Web redirect URI."
 msgstr "Csak ennek a szervezeti könyvtárnak a fiókjait engedélyezze, és adja hozzá az alábbi átirányítási URI-t Web redirect URI-ként."
 
@@ -1952,8 +1952,8 @@ msgstr "Keresőmotor indexelésének engedélyezése"
 msgid "Allow search engines to index this event"
 msgstr "Engedélyezze a keresőmotoroknak az esemény indexelését"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:64
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:76
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:65
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:77
 msgid "Allow sign-in with {providerName}"
 msgstr "Bejelentkezés engedélyezése: {providerName}"
 
@@ -2178,7 +2178,7 @@ msgstr "Bármelyik dátum eltérhet: módosítsa a kapacitását a Dátum szerke
 msgid "Any website (HTML)"
 msgstr "Bármely webhely (HTML)"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:85
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:86
 msgid "Anyone {providerName} lets in with an email on a verified domain joins this account the first time they sign in. Removed or deactivated members are never added back."
 msgstr "Bárki, akit a(z) {providerName} beenged egy megerősített tartományhoz tartozó e-mail-címmel, az első bejelentkezéskor csatlakozik ehhez a fiókhoz. Az eltávolított vagy inaktivált tagokat a rendszer soha nem adja vissza."
 
@@ -2213,7 +2213,7 @@ msgstr "Megjelenés"
 msgid "Appears on"
 msgstr "Szerepel itt"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
 msgid "Application (client) ID"
 msgstr "Application (client) ID"
 
@@ -2261,7 +2261,7 @@ msgstr "Az esemény minden {0}, nem lemondott időpontjára vonatkozik – azokr
 msgid "Applies to every tier of this ticket"
 msgstr "A jegy minden árszintjére vonatkozik"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:115
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:116
 msgid "Applies to sessions started through {providerName}. People then sign in again."
 msgstr "A(z) {providerName} szolgáltatáson keresztül indított munkamenetekre vonatkozik. Ezután a személyek újra bejelentkeznek."
 
@@ -2926,13 +2926,13 @@ msgstr "Vissza az ülőhelyekhez"
 msgid "Back to security settings"
 msgstr "Vissza a biztonsági beállításokhoz"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:76
 #: src/components/routes/auth/ForgotPassword/index.tsx:51
 #: src/components/routes/auth/ForgotPassword/index.tsx:78
 #: src/components/routes/auth/Login/AccountChooser.tsx:56
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:169
 #: src/components/routes/auth/ResetPassword/index.tsx:79
 #: src/components/routes/sso/Callback/index.tsx:223
+#: src/ee/sso/components/SsoDiscovery/index.tsx:76
 msgid "Back to sign in"
 msgstr "Vissza a bejelentkezéshez"
 
@@ -3117,7 +3117,7 @@ msgstr "Szegélyek"
 msgid "Bounced"
 msgstr "Visszapattant"
 
-#: src/ee/licensing/licenceNotice.ts:30
+#: src/ee/licensing/licenceNotice.ts:25
 msgid "box office"
 msgstr "helyszíni jegypénztár"
 
@@ -3126,7 +3126,7 @@ msgstr "helyszíni jegypénztár"
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:13
 #: src/ee/box-office/components/layouts/BoxOffice/index.tsx:157
 #: src/ee/box-office/components/layouts/BoxOffice/StartSession.tsx:106
-#: src/ee/licensing/licenceNotice.ts:41
+#: src/ee/licensing/licenceNotice.ts:50
 msgid "Box office"
 msgstr "Pénztár"
 
@@ -3439,8 +3439,6 @@ msgstr "Nem tudja használni a hitelesítő alkalmazást vagy a helyreállítás
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:85
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:85
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:198
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:182
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:170
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:295
 #: src/components/routes/settings/Security/ChangePasswordModal.tsx:59
 #: src/components/routes/settings/Security/DisableTwoFactorModal.tsx:104
@@ -3451,6 +3449,8 @@ msgstr "Nem tudja használni a hitelesítő alkalmazást vagy a helyreállítás
 #: src/ee/box-office/components/modals/EditBoxOfficeModal/index.tsx:100
 #: src/ee/seating/components/routes/organizer/SeatMaps/index.tsx:108
 #: src/ee/seating/components/SeatPicker/SeatSheet.tsx:88
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:182
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:171
 #: src/hooks/useAttendeeActions.tsx:116
 #: src/utilites/confirmationDialog.tsx:18
 #: src/utilites/confirmationDialog.tsx:53
@@ -3794,7 +3794,7 @@ msgstr "Bejelentkeztetés most"
 msgid "Check in only"
 msgstr "Csak bejelentkezés"
 
-#: src/ee/licensing/licenceNotice.ts:52
+#: src/ee/licensing/licenceNotice.ts:63
 msgid "Check key"
 msgstr "Kulcs ellenőrzése"
 
@@ -3974,7 +3974,7 @@ msgstr "Bejelentkeztetve ({checkedInCount}/{attendeeCount})"
 msgid "Checking your saved profiles…"
 msgstr "Mentett profilok ellenőrzése…"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:106
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:106
 msgid "Checking…"
 msgstr "Ellenőrzés…"
 
@@ -4147,7 +4147,7 @@ msgstr "Válasszon jegyeket"
 msgid "Choose when your event starts"
 msgstr "Válaszd ki, mikor kezdődik az eseményed"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:154
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:160
 msgid "Choose who must use it"
 msgstr "Válassza ki, kinek kötelező használnia"
 
@@ -4155,7 +4155,7 @@ msgstr "Válassza ki, kinek kötelező használnia"
 msgid "Choose who pays the platform fee. This does not affect additional fees you've configured in your account settings."
 msgstr "Válassza ki, ki fizeti a platformdíjat. Ez nem érinti a fiókbeállításokban konfigurált további díjakat."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:72
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:76
 msgid "Choose your identity provider"
 msgstr "Válassza ki az identitásszolgáltatóját"
 
@@ -4253,13 +4253,13 @@ msgstr "Kattintson a jegyzet megtekintéséhez"
 msgid "Clicked"
 msgstr "Kattintva"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:169
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:120
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:169
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:124
 msgid "Client ID"
 msgstr "Client ID"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:175
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:175
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Client secret"
 msgstr "Client secret"
 
@@ -4672,7 +4672,7 @@ msgstr "Kapcsolja össze a Stripe-ot, hogy a jegybevétel közvetlenül a banksz
 msgid "Connect with Stripe"
 msgstr "Csatlakozás a Stripe-hoz"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:98
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:102
 msgid "Connect your app"
 msgstr "Kapcsolja össze az alkalmazását"
 
@@ -4680,7 +4680,7 @@ msgstr "Kapcsolja össze az alkalmazását"
 msgid "Connect your bank to receive ticket sales straight to your account"
 msgstr "Kapcsolja össze a bankját, hogy a jegybevétel közvetlenül a számlájára érkezzen"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:81
+#: src/ee/sso/components/SingleSignOn/index.tsx:84
 msgid "Connect your identity provider, verify your email domains, then choose whether everyone must use it."
 msgstr "Kapcsolja össze az identitásszolgáltatóját, erősítse meg az e-mail-tartományait, majd válassza ki, hogy mindenkinek kötelező-e használnia."
 
@@ -4692,7 +4692,7 @@ msgstr "Csatlakoztatva"
 msgid "Connected the wrong Stripe account? Disconnect and start over."
 msgstr "Rossz Stripe-fiókot kapcsolt össze? Válassza le, és kezdje elölről."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:49
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:51
 msgid "Connection deleted"
 msgstr "Kapcsolat törölve"
 
@@ -4710,11 +4710,11 @@ msgstr "Online időpontoknál a csatlakozási adatok megadása kötelező"
 msgid "Connection details are required for online events"
 msgstr "Online eseményekhez kötelező megadni a csatlakozási adatokat"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection saved. Run a test sign-in next."
 msgstr "Kapcsolat mentve. Következő lépésként próbálja ki a bejelentkezést."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:96
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:96
 msgid "Connection updated"
 msgstr "Kapcsolat frissítve"
 
@@ -4756,7 +4756,6 @@ msgstr "Tartalom"
 msgid "Content is required"
 msgstr "A tartalom megadása kötelező"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:73
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:146
 #: src/components/common/WidgetEditor/BehaviourPanel.tsx:32
 #: src/components/layouts/EventHomepage/index.tsx:214
@@ -4765,6 +4764,7 @@ msgstr "A tartalom megadása kötelező"
 #: src/components/routes/product-widget/SelectProducts/index.tsx:1165
 #: src/components/routes/settings/Security/SignInMethods.tsx:211
 #: src/ee/seating/components/SeatPicker/Basket.tsx:200
+#: src/ee/sso/components/SsoDiscovery/index.tsx:73
 msgid "Continue"
 msgstr "Folytatás"
 
@@ -4987,15 +4987,15 @@ msgstr "Beállítási kulcs másolása"
 msgid "Copy some rows from a spreadsheet, including the header row, then paste them here."
 msgstr "Másoljon ki néhány sort egy táblázatból a fejlécsorral együtt, majd illessze be ide."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:60
+#: src/ee/sso/components/SingleSignOn/providers.tsx:60
 msgid "Copy the client ID and client secret into the fields below, with your Workspace domain."
 msgstr "Másolja a client ID-t és a client secretet az alábbi mezőkbe, a Workspace-tartományával együtt."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:53
+#: src/ee/sso/components/SingleSignOn/providers.tsx:53
 msgid "Copy the directory (tenant) ID, the application (client) ID and the secret value into the fields below."
 msgstr "Másolja a directory (tenant) ID-t, az application (client) ID-t és a titkos érték értékét az alábbi mezőkbe."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:67
+#: src/ee/sso/components/SingleSignOn/providers.tsx:67
 msgid "Copy the issuer URL, the client ID and the client secret into the fields below."
 msgstr "Másolja a kibocsátó URL-jét, a client ID-t és a client secretet az alábbi mezőkbe."
 
@@ -5024,7 +5024,7 @@ msgstr "URL másolása"
 msgid "Copy your API key"
 msgstr "Másolja ki API-kulcsát"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:45
+#: src/ee/sso/components/SingleSignOn/providers.tsx:45
 msgid "Copy your Okta domain, the client ID and the client secret into the fields below."
 msgstr "Másolja az Okta-tartományát, a client ID-t és a client secretet az alábbi mezőkbe."
 
@@ -5954,8 +5954,8 @@ msgstr "Bejelentkezési lista törlése"
 msgid "Delete code"
 msgstr "Kód törlése"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:53
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:168
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:55
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:174
 msgid "Delete connection"
 msgstr "Kapcsolat törlése"
 
@@ -6032,7 +6032,7 @@ msgstr "Törli most ezt a fiókot a türelmi idő lejártának megvárása helye
 msgid "Delete this category? Any products in it will also be deleted. This cannot be undone."
 msgstr "Törli ezt a kategóriát? A benne lévő termékek is törlődnek. A művelet nem vonható vissza."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:44
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:46
 msgid "Delete this connection? Members who only sign in with it will need to reset their password."
 msgstr "Törli ezt a kapcsolatot? Azoknak a tagoknak, akik csak ezzel jelentkeznek be, új jelszót kell majd beállítaniuk."
 
@@ -6154,7 +6154,7 @@ msgid "Details"
 msgstr "Részletek"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:32
-#: src/ee/licensing/licenceNotice.ts:56
+#: src/ee/licensing/licenceNotice.ts:67
 msgid "Development"
 msgstr "Fejlesztés"
 
@@ -6190,7 +6190,7 @@ msgstr "Eltérő helyszín"
 msgid "Directly below Events, it's a Past tab on the events list. Anywhere else, it shows your most recent past events."
 msgstr "Közvetlenül az Események alatt ez a Korábbi fül az eseménylistában. Máshol a legutóbbi korábbi eseményeidet mutatja."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:142
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:142
 msgid "Directory (tenant) ID"
 msgstr "Directory (tenant) ID"
 
@@ -6306,11 +6306,11 @@ msgstr "Dokumentum címke"
 msgid "Doesn't repeat"
 msgstr "Nem ismétlődik"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:135
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:135
 msgid "Domain not verified yet"
 msgstr "A tartomány még nincs megerősítve"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:134
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:134
 msgid "Domain verified"
 msgstr "Tartomány megerősítve"
 
@@ -6723,7 +6723,7 @@ msgid "Edit design"
 msgstr "Dizájn szerkesztése"
 
 #: src/components/routes/event/Lineup/LineupPreview.tsx:121
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:124
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:129
 msgid "Edit details"
 msgstr "Részletek szerkesztése"
 
@@ -6862,9 +6862,9 @@ msgstr "Jogosult bejelentkezési listák"
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditAttendeeModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/EditOrderModal/index.tsx:70
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:269
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:127
 #: src/components/routes/settings/Profile/index.tsx:220
 #: src/ee/box-office/components/layouts/BoxOffice/BuyerSheet.tsx:74
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:127
 msgid "Email"
 msgstr "E-mail"
 
@@ -6926,7 +6926,7 @@ msgstr "E-mail megerősítés sikeresen újraküldve"
 msgid "Email Delivery"
 msgstr "E-mail kézbesítés"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:131
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:132
 msgid "Email domain"
 msgstr "E-mail-tartomány"
 
@@ -7246,9 +7246,18 @@ msgstr "Add meg a jelszavad a kétlépcsős azonosítás beállításának megke
 msgid "Enter your VAT number including the country code, without spaces (e.g., IE1234567A, DE123456789)"
 msgstr "Írja be az ÁFA számát az országkóddal együtt, szóközök nélkül (pl. IE1234567A, DE123456789)"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:60
+#: src/ee/sso/components/SsoDiscovery/index.tsx:60
 msgid "Enter your work email and we'll take you to your organization's sign-in page."
 msgstr "Adja meg a munkahelyi e-mail-címét, és átirányítjuk a szervezete bejelentkezési oldalára."
+
+#: src/ee/licensing/licenceNotice.ts:27
+msgid "enterprise single sign-on"
+msgstr "vállalati egyszeri bejelentkezés"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:18
+#: src/ee/licensing/licenceNotice.ts:52
+msgid "Enterprise single sign-on"
+msgstr "Vállalati egyszeri bejelentkezés"
 
 #: src/components/forms/PromoCodeForm/index.tsx:130
 msgid "Entire order"
@@ -7670,10 +7679,10 @@ msgstr "Törlés végrehajtása most"
 msgid "Execute now"
 msgstr "Végrehajtás most"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:145
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
 #: src/components/routes/settings/Team/MemberRow.tsx:37
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:146
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Exempt"
 msgstr "Kivétel"
 
@@ -7694,7 +7703,7 @@ msgstr "Lejárati dátum"
 #: src/components/routes/event/SoldOutWaitlist/index.tsx:119
 #: src/components/routes/settings/ApiKeys/index.tsx:210
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:30
-#: src/ee/licensing/licenceNotice.ts:60
+#: src/ee/licensing/licenceNotice.ts:71
 msgid "Expired"
 msgstr "Lejárt"
 
@@ -8122,7 +8131,7 @@ msgstr "Kép feltöltése sikertelen. Kérjük, próbálja újra."
 msgid "Failed to verify email"
 msgstr "E-mail ellenőrzése sikertelen"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:19
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:19
 msgid "Failing since {0}"
 msgstr "Hibás ettől: {0}"
 
@@ -8294,7 +8303,7 @@ msgstr "Stripe-beállítás befejezése"
 msgid "Finish setup"
 msgstr "Beállítás befejezése"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:109
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:109
 msgid "Finish signing in to {providerName} in the window that opened."
 msgstr "Fejezze be a bejelentkezést a(z) {providerName} szolgáltatásba a megnyílt ablakban."
 
@@ -8480,11 +8489,11 @@ msgstr "Biztonsága érdekében jelentkezzen be újra, hogy megerősítse, Ön a
 msgid "Forgot password?"
 msgstr "Elfelejtette jelszavát?"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:30
+#: src/ee/sso/components/SingleSignOn/providers.tsx:30
 msgid "Formerly Azure Active Directory"
 msgstr "Korábban Azure Active Directory"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:108
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:108
 msgid "Found your sign-in settings"
 msgstr "Megtaláltuk a bejelentkezési beállításait"
 
@@ -8792,7 +8801,7 @@ msgid "Got it"
 msgstr "Értem"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:28
-#: src/ee/licensing/licenceNotice.ts:58
+#: src/ee/licensing/licenceNotice.ts:69
 msgid "Grace period"
 msgstr "Türelmi időszak"
 
@@ -8842,7 +8851,7 @@ msgstr "Bruttó értékesítés"
 msgid "Group by stage or room"
 msgstr "Csoportosítás színpad vagy terem szerint"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:137
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:137
 msgid "Groups"
 msgstr "Csoportok"
 
@@ -9395,15 +9404,15 @@ msgstr "Ellenőrzés alatt"
 msgid "In someone's basket"
 msgstr "Valaki más kosarában"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:57
+#: src/ee/sso/components/SingleSignOn/providers.tsx:57
 msgid "In the Google Cloud console, open a project that belongs to your Workspace organization."
 msgstr "A Google Cloud konzolon nyisson meg egy projektet, amely a Workspace-szervezetéhez tartozik."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:49
+#: src/ee/sso/components/SingleSignOn/providers.tsx:49
 msgid "In the Microsoft Entra admin center, go to App registrations and choose New registration."
 msgstr "A Microsoft Entra admin centerben lépjen az \"App registrations\" részre, és válassza a \"New registration\" lehetőséget."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:42
+#: src/ee/sso/components/SingleSignOn/providers.tsx:42
 msgid "In the Okta Admin Console, go to Applications and choose Create App Integration."
 msgstr "Az Okta Admin Consoleban lépjen az \"Applications\" részre, és válassza a \"Create App Integration\" lehetőséget."
 
@@ -9411,7 +9420,7 @@ msgstr "Az Okta Admin Consoleban lépjen az \"Applications\" részre, és válas
 msgid "In use"
 msgstr "Használatban"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:64
+#: src/ee/sso/components/SingleSignOn/providers.tsx:64
 msgid "In your identity provider, create a confidential OpenID Connect client that uses the authorization code flow."
 msgstr "Az identitásszolgáltatójánál hozzon létre egy bizalmas OpenID Connect klienst, amely az authorization code flow-t használja."
 
@@ -9612,11 +9621,11 @@ msgstr "Számla beállítások"
 msgid "Issued"
 msgstr "Kiállítva"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:119
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:123
 msgid "Issuer"
 msgstr "Kibocsátó"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Issuer URL"
 msgstr "Kibocsátó URL-je"
 
@@ -9778,7 +9787,7 @@ msgstr "Kulcs eltávolítva"
 msgid "Key revoked"
 msgstr "Kulcs visszavonva"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:34
+#: src/ee/sso/components/SingleSignOn/providers.tsx:34
 msgid "Keycloak, Authentik, Zitadel, OneLogin and others"
 msgstr "Keycloak, Authentik, Zitadel, OneLogin és mások"
 
@@ -9923,7 +9932,7 @@ msgstr "A vezetéknév kötelező"
 msgid "Last Response"
 msgstr "Utolsó válasz"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Last test passed {0}"
 msgstr "Utolsó sikeres teszt: {0}"
 
@@ -10042,13 +10051,17 @@ msgstr "Tudassa velük a változást"
 msgid "Let them know about the changes"
 msgstr "Tudassa velük a változásokat"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:80
+#: src/ee/sso/components/SingleSignOn/index.tsx:83
 msgid "Let your team sign in with Okta, Microsoft Entra ID or Google Workspace"
 msgstr "Engedje, hogy a csapata Okta, Microsoft Entra ID vagy Google Workspace használatával jelentkezzen be"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:67
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:69
 msgid "Let your team sign in with your identity provider"
 msgstr "Engedje, hogy a csapata az identitásszolgáltatóján keresztül jelentkezzen be"
+
+#: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:19
+msgid "Lets accounts connect their identity provider, verify email domains and require single sign-on."
+msgstr "Lehetővé teszi a fiókoknak, hogy összekapcsolják az identitásszolgáltatójukat, ellenőrizzék az e-mail-domainjeiket, és kötelezővé tegyék az egyszeri bejelentkezést."
 
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:9
 msgid "Lets accounts design seat maps and sell tickets by seat."
@@ -10391,7 +10404,7 @@ msgstr "Tegye kötelezővé a számlázási címet a fizetés során"
 msgid "Make it visible so people can buy tickets"
 msgstr "Tegye láthatóvá, hogy az emberek jegyet vásárolhassanak"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:66
+#: src/ee/sso/components/SingleSignOn/providers.tsx:66
 msgid "Make sure ID tokens include the email and email_verified claims."
 msgstr "Győződjön meg róla, hogy az ID tokenek tartalmazzák az email és az email_verified claimeket."
 
@@ -10466,7 +10479,7 @@ msgstr "Ütemterv kezelése"
 msgid "Manage seat maps"
 msgstr "Üléstervek kezelése"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:72
+#: src/ee/sso/components/SingleSignOn/index.tsx:75
 msgid "Manage single sign-on"
 msgstr "Egyszeri bejelentkezés kezelése"
 
@@ -10580,11 +10593,11 @@ msgstr "Tag újraaktiválva"
 msgid "Members change their own email in <0>profile settings</0>."
 msgstr "A tagok maguk módosítják e-mail-címüket a <0>profilbeállításokban</0>."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:179
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:180
 msgid "Members on verified domains"
 msgstr "Tagok a megerősített tartományokon"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:101
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:102
 msgid "Members with an email on a verified domain must sign in with {providerName}. Their other sessions end."
 msgstr "A megerősített tartományhoz tartozó e-mail-címmel rendelkező tagoknak a(z) {providerName} szolgáltatással kell bejelentkezniük. A többi munkamenetük véget ér."
 
@@ -10920,8 +10933,6 @@ msgstr "Jegyeim"
 #: src/components/routes/event/Settings/Sections/EventDetailsForm/index.tsx:81
 #: src/components/routes/organizer/People/index.tsx:115
 #: src/components/routes/product-widget/OrderSummaryAndProducts/index.tsx:247
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:111
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:125
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:223
 #: src/components/routes/settings/Profile/index.tsx:200
 #: src/ee/box-office/components/forms/BoxOfficeForm/index.tsx:91
@@ -10929,6 +10940,8 @@ msgstr "Jegyeim"
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:72
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:75
 #: src/ee/seating/components/SeatMapDesigner/Inspector.tsx:86
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:112
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:125
 msgid "Name"
 msgstr "Név"
 
@@ -11127,7 +11140,7 @@ msgstr "Éjszakai élet"
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "No"
 msgstr "Nem"
 
@@ -11406,8 +11419,8 @@ msgid "No licence"
 msgstr "Nincs licenc"
 
 #: src/ee/licensing/components/routes/admin/Licence/index.tsx:62
-msgid "No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
-msgstr "Nincs beállítva licenckulcs, ezért a foglalt ülőhelyek és a helyszíni jegypénztár ki vannak kapcsolva. A feloldásukhoz állítsd be az APP_LICENCE_KEY értéket a backend környezetében, és telepítsd újra a backendet. Docker Compose esetén a docker compose up -d parancsot használd, mert a docker compose restart nem tölti be újra a környezetet."
+msgid "No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment."
+msgstr "Nincs beállítva licenckulcs, ezért a foglalt ülőhelyek, a helyszíni jegypénztár és a vállalati egyszeri bejelentkezés ki vannak kapcsolva. A feloldásukhoz állítsd be az APP_LICENCE_KEY értéket a backend környezetében, és telepítsd újra a backendet. Docker Compose esetén a docker compose up -d parancsot használd, mert a docker compose restart nem tölti be újra a környezetet."
 
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:319
 msgid "No lifecycle emails have been sent to this account."
@@ -11730,7 +11743,7 @@ msgstr "Senki sem felel meg ezeknek a szűrőknek."
 msgid "Nobody on the lineup yet."
 msgstr "Még nincs senki a fellépők között."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:122
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:123
 msgid "Nobody on your team uses a verified domain yet. People who join from one will need to sign in with {providerName}."
 msgstr "A csapatában még senki nem használ megerősített tartományt. Azoknak, akik ilyenről csatlakoznak, a(z) {providerName} szolgáltatással kell majd bejelentkezniük."
 
@@ -11761,7 +11774,7 @@ msgstr "Egyik sem"
 msgid "None (cash only)"
 msgstr "Nincs (csak készpénz)"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:138
 msgid "None shared"
 msgstr "Nincs megosztva semmi"
 
@@ -11813,7 +11826,7 @@ msgstr "Nincs elég szabad szék ehhez: {0}"
 msgid "Not joined yet"
 msgstr "Még nem csatlakozott"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:131
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:131
 msgid "Not marked as verified"
 msgstr "Nincs ellenőrzöttként megjelölve"
 
@@ -11838,7 +11851,7 @@ msgstr "Nincs beütemezve"
 msgid "Not selling as {signedInName}?"
 msgstr "Nem {signedInName} néven értékesít?"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:126
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:126
 msgid "Not shared"
 msgstr "Nincs megosztva"
 
@@ -11854,17 +11867,17 @@ msgstr "Még nem látható."
 msgid "Not sure where to sit?"
 msgstr "Nem tudja, hová üljön?"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
 msgid "Not tested"
 msgstr "Nincs tesztelve"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:110
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:110
 msgid "Not tested yet"
 msgstr "Még nincs tesztelve"
 
 #: src/ee/licensing/components/LicenceModal/index.tsx:100
-msgid "Not using reserved seating or the box office? Remove <0>APP_LICENCE_KEY</0> and redeploy."
-msgstr "Nem használsz foglalt ülőhelyeket vagy helyszíni jegypénztárat? Töröld az <0>APP_LICENCE_KEY</0> értéket, és telepítsd újra."
+msgid "Not using reserved seating, the box office or enterprise single sign-on? Remove <0>APP_LICENCE_KEY</0> and redeploy."
+msgstr "Nem használsz foglalt ülőhelyeket, helyszíni jegypénztárat vagy vállalati egyszeri bejelentkezést? Töröld az <0>APP_LICENCE_KEY</0> értéket, és telepítsd újra."
 
 #: src/components/common/ProductPriceAvailability/index.tsx:43
 #: src/ee/seating/components/SeatPicker/SeatPrices.tsx:31
@@ -12011,10 +12024,10 @@ msgstr "minden hónapban"
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:79
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
 #: src/components/routes/admin/LifecycleEmails/LifecycleEmailEditor.tsx:124
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:156
+#: src/ee/sso/components/SingleSignOn/index.tsx:47
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "Off"
 msgstr "Ki"
 
@@ -12083,11 +12096,11 @@ msgstr "Offline fizetési információk"
 msgid "Offline Payments Settings"
 msgstr "Offline fizetési beállítások"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:160
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:160
 msgid "Okta domain"
 msgstr "Okta-tartomány"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:28
+#: src/ee/sso/components/SingleSignOn/providers.tsx:28
 msgid "Okta Workforce Identity"
 msgstr "Okta Workforce Identity"
 
@@ -12100,10 +12113,10 @@ msgstr "ekkor:"
 #: src/components/forms/ProductForm/ledgerSummaries.ts:74
 #: src/components/routes/admin/Accounts/AccountDetail/AccountFeatureFlags.tsx:78
 #: src/components/routes/admin/FeatureFlags/index.tsx:46
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:45
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:66
 #: src/components/routes/settings/Security/index.tsx:115
 #: src/components/routes/settings/Team/MemberRow.tsx:154
+#: src/ee/sso/components/SingleSignOn/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:68
 msgid "On"
 msgstr "Be"
 
@@ -12269,7 +12282,7 @@ msgstr "Csak adminisztrátorok kezelhetik a csapat hozzáférését."
 msgid "Only available as an add-on"
 msgstr "Csak kiegészítőként érhető el"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:143
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:149
 msgid "Only people with an email on a verified domain can be added automatically or required to use single sign-on."
 msgstr "Csak a megerősített tartományhoz tartozó e-mail-címmel rendelkező személyek adhatók hozzá automatikusan, vagy kötelezhetők az egyszeri bejelentkezés használatára."
 
@@ -12817,7 +12830,7 @@ msgstr "Egyéb események"
 msgid "Other Lists (Ticket Not Included)"
 msgstr "Egyéb listák (Jegy nem szerepel)"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:17
+#: src/ee/sso/components/SingleSignOn/providers.tsx:17
 msgid "Other OIDC provider"
 msgstr "Más OIDC-szolgáltató"
 
@@ -12859,7 +12872,7 @@ msgstr "Áttekintés"
 msgid "Owner"
 msgstr "Tulajdonos"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:43
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:44
 msgid "Owns another Hi.Events account, so keeps signing in with a password."
 msgstr "Egy másik Hi.Events-fiók tulajdonosa, ezért továbbra is jelszóval jelentkezik be."
 
@@ -12962,10 +12975,10 @@ msgstr "Áthárítás a vevőre"
 #: src/components/routes/auth/AcceptInvitation/index.tsx:229
 #: src/components/routes/auth/Login/index.tsx:170
 #: src/components/routes/auth/Register/index.tsx:161
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:189
 #: src/components/routes/settings/Security/SignInMethods.tsx:85
 #: src/components/routes/settings/Team/index.tsx:201
 #: src/components/routes/settings/Team/MemberRow.tsx:39
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:190
 msgid "Password"
 msgstr "Jelszó"
 
@@ -13153,7 +13166,7 @@ msgstr "Kifizetések"
 #: src/components/routes/admin/DeletionRequests/index.tsx:85
 #: src/components/routes/organizer/OrganizerDashboard/index.tsx:445
 #: src/components/routes/organizer/Payments/CapabilityList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:23
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:23
 msgid "Pending"
 msgstr "Függőben"
 
@@ -13201,11 +13214,11 @@ msgstr "Személyek ({peopleRowCount})"
 msgid "People are matched by name, so existing profiles are updated rather than duplicated."
 msgstr "A személyeket név alapján párosítjuk, így a meglévő profilok frissülnek, nem duplázódnak."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:142
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:142
 msgid "People can only join or be matched to existing accounts when {providerName} marks their email as verified."
 msgstr "A személyek csak akkor csatlakozhatnak, illetve rendelhetők hozzá meglévő fiókokhoz, ha a(z) {providerName} ellenőrzöttként jelöli meg az e-mail-címüket."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:67
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:68
 msgid "People on your verified domains are sent to {providerName} when they choose Sign in with SSO."
 msgstr "A megerősített tartományaihoz tartozó személyeket a rendszer a(z) {providerName} szolgáltatáshoz irányítja, amikor a Bejelentkezés SSO-val lehetőséget választják."
 
@@ -13364,7 +13377,7 @@ msgstr "Időpontok kiválasztása"
 msgid "Pick days to see your dates."
 msgstr "Válasszon napokat a dátumok megtekintéséhez."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:43
+#: src/ee/sso/components/SingleSignOn/providers.tsx:43
 msgid "Pick OIDC - OpenID Connect, then Web Application."
 msgstr "Válassza az \"OIDC - OpenID Connect\", majd a \"Web Application\" lehetőséget."
 
@@ -14300,7 +14313,7 @@ msgstr "Reddit"
 msgid "Redeploy the backend. With Docker Compose, run <0>docker compose up -d</0>."
 msgstr "Telepítsd újra a backendet. Docker Compose esetén futtasd: <0>docker compose up -d</0>."
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:133
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:133
 msgid "Redirect URI"
 msgstr "Átirányítási URI"
 
@@ -14466,13 +14479,13 @@ msgstr "Eltávolítás"
 msgid "Remove \"{0}\"? It has already expired."
 msgstr "Eltávolítja a(z) „{0}” kulcsot? Már lejárt."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:98
 #: src/components/routes/settings/ApiKeys/ApiKeyRow.tsx:37
 #: src/ee/seating/components/SeatPicker/Basket.tsx:123
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:99
 msgid "Remove {0}"
 msgstr "{0} eltávolítása"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:68
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:69
 msgid "Remove {0}? People with this email domain will no longer be sent to your identity provider or required to use it."
 msgstr "Eltávolítja ezt: {0}? Az ezzel az e-mail-tartománnyal rendelkező személyeket a rendszer többé nem irányítja az identitásszolgáltatójához, és nem kötelezi annak használatára."
 
@@ -14508,7 +14521,7 @@ msgstr "Leírás eltávolítása"
 msgid "Remove discount"
 msgstr "Kedvezmény eltávolítása"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:73
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:74
 msgid "Remove domain"
 msgstr "Tartomány eltávolítása"
 
@@ -14676,13 +14689,13 @@ msgstr "Kérelmező"
 msgid "Require Billing Address"
 msgstr "Számlázási cím kötelező"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:98
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:110
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:172
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:99
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:111
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:173
 msgid "Require single sign-on"
 msgstr "Egyszeri bejelentkezés kötelezővé tétele"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:196
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:197
 msgid "Require SSO"
 msgstr "SSO kötelezővé tétele"
 
@@ -14696,7 +14709,7 @@ msgid "Require two-factor authentication"
 msgstr "Kétlépcsős hitelesítés előírása"
 
 #: src/components/common/QuestionsTable/index.tsx:125
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:66
+#: src/ee/sso/components/SingleSignOn/index.tsx:69
 msgid "Required"
 msgstr "Kötelező"
 
@@ -14767,7 +14780,7 @@ msgstr "Jegy e-mail újraküldése"
 msgid "Reserved"
 msgstr "Lefoglalva"
 
-#: src/ee/licensing/licenceNotice.ts:27
+#: src/ee/licensing/licenceNotice.ts:23
 msgid "reserved seating"
 msgstr "foglalt ülőhelyek"
 
@@ -14775,13 +14788,9 @@ msgstr "foglalt ülőhelyek"
 #: src/components/common/EventCard/index.tsx:329
 #: src/components/common/ProductsTable/SortableProduct/index.tsx:365
 #: src/components/routes/admin/FeatureFlags/featureFlagLabels.ts:8
-#: src/ee/licensing/licenceNotice.ts:39
+#: src/ee/licensing/licenceNotice.ts:48
 msgid "Reserved seating"
 msgstr "Helyfoglalás"
-
-#: src/ee/licensing/licenceNotice.ts:24
-msgid "reserved seating and box office"
-msgstr "foglalt ülőhelyek és helyszíni jegypénztár"
 
 #: src/components/common/OrdersTable/index.tsx:244
 msgid "Reserved until"
@@ -14998,7 +15007,7 @@ msgctxt "Lineup spreadsheet column"
 msgid "Role"
 msgstr "Szerep"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:100
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:101
 msgid "Role for new people"
 msgstr "Az új személyek szerepköre"
 
@@ -15038,7 +15047,7 @@ msgstr "javítandó sor"
 msgid "Rules saved"
 msgstr "Szabályok mentve"
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:68
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:69
 msgid "Run a successful test sign-in before turning this on."
 msgstr "A bekapcsolás előtt végezzen egy sikeres próbabejelentkezést."
 
@@ -15225,7 +15234,7 @@ msgstr "Szombat"
 msgid "Save"
 msgstr "Mentés"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save {0} connection"
 msgstr "{0} kapcsolat mentése"
 
@@ -15234,7 +15243,7 @@ msgstr "{0} kapcsolat mentése"
 #: src/components/modals/EditTaxOrFeeModal/index.tsx:45
 #: src/components/modals/EditUserModal/index.tsx:101
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:222
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:184
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:184
 msgid "Save changes"
 msgstr "Módosítások mentése"
 
@@ -15323,11 +15332,11 @@ msgstr "Mentsd, majd másold az új kódot"
 #: src/components/common/WidgetEditor/index.tsx:175
 #: src/components/routes/event/Lineup/ProfileDrawer.tsx:127
 #: src/components/routes/event/Lineup/ScheduleBuilder/SpaceModal.tsx:47
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:121
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:125
 msgid "Saved"
 msgstr "Mentve"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:176
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:176
 msgid "Saved and hidden. Leave blank to keep the current secret."
 msgstr "Mentve és elrejtve. Hagyja üresen a jelenlegi titkos érték megtartásához."
 
@@ -16266,7 +16275,7 @@ msgstr "Állítsa be minden időpont záró idejét ennyivel a kezdés utánra."
 msgid "Set the location"
 msgstr "Helyszín megadása"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:58
+#: src/ee/sso/components/SingleSignOn/providers.tsx:58
 msgid "Set the OAuth consent screen's user type to Internal."
 msgstr "Állítsa az \"OAuth consent screen\" felhasználótípusát \"Internal\" értékre."
 
@@ -16296,7 +16305,7 @@ msgstr "Ütemterv beállítása"
 msgid "Set Up Schedule"
 msgstr "Ütemterv beállítása"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:83
+#: src/ee/sso/components/SingleSignOn/index.tsx:86
 msgid "Set up SSO"
 msgstr "SSO beállítása"
 
@@ -16355,7 +16364,7 @@ msgstr "A(z) {featureList} beállítása zárolva van. A meglévő eladások és
 msgid "Setup is locked"
 msgstr "A beállítás zárolva van"
 
-#: src/ee/licensing/licenceNotice.ts:54
+#: src/ee/licensing/licenceNotice.ts:65
 msgid "Setup locked"
 msgstr "Beállítás zárolva"
 
@@ -16621,7 +16630,7 @@ msgstr "Jelentkezz be újra az eladás folytatásához"
 msgid "Sign in again to start setting up two-factor authentication."
 msgstr "Jelentkezzen be újra a kétlépcsős hitelesítés beállításának megkezdéséhez."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:133
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:139
 msgid "Sign in once to check the connection. It shows what your identity provider shares and doesn't sign you in here."
 msgstr "Jelentkezzen be egyszer a kapcsolat ellenőrzéséhez. Megmutatja, mit oszt meg az identitásszolgáltatója, és nem jelentkeztet be itt."
 
@@ -16662,11 +16671,11 @@ msgstr "Bejelentkezés Microsoft-fiókkal"
 msgid "Sign in with password"
 msgstr "Bejelentkezés jelszóval"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:59
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:83
 #: src/components/routes/auth/Login/index.tsx:141
 #: src/components/routes/auth/Register/index.tsx:115
 #: src/components/routes/sso/Callback/index.tsx:277
+#: src/ee/sso/components/SsoDiscovery/index.tsx:59
+#: src/ee/sso/components/SsoDiscovery/index.tsx:83
 msgid "Sign in with SSO"
 msgstr "Bejelentkezés SSO-val"
 
@@ -16675,7 +16684,7 @@ msgstr "Bejelentkezés SSO-val"
 msgid "Sign in with the account you usually use, or ask your administrator for help."
 msgstr "Jelentkezzen be azzal a fiókkal, amelyet általában használ, vagy kérjen segítséget a rendszergazdától."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:32
+#: src/ee/sso/components/SingleSignOn/providers.tsx:32
 msgid "Sign in with your company Google accounts"
 msgstr "Bejelentkezés a cég Google-fiókjaival"
 
@@ -16696,7 +16705,7 @@ msgstr "Kijelentkezés"
 msgid "Sign out, then sign in as {0} to accept this invitation."
 msgstr "Jelentkezzen ki, majd jelentkezzen be {0} felhasználóként a meghívó elfogadásához."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:109
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:110
 msgid "Sign people out after"
 msgstr "Személyek kijelentkeztetése ennyi idő után:"
 
@@ -16716,7 +16725,7 @@ msgstr "A bejelentkezési linkek csak egyszer működnek, és 10 perc után lej�
 msgid "Sign-in links work once and expire after 10 minutes. Start again to continue."
 msgstr "A bejelentkezési linkek csak egyszer használhatók, és 10 perc után lejárnak. A folytatáshoz kezdje újra."
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:150
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:156
 msgid "Sign-in settings"
 msgstr "Bejelentkezési beállítások"
 
@@ -16724,7 +16733,7 @@ msgstr "Bejelentkezési beállítások"
 msgid "Sign-in was cancelled. Choose another way to sign in, or try again."
 msgstr "A bejelentkezés megszakadt. Válasszon másik bejelentkezési módot, vagy próbálja újra."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:55
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:56
 msgid "Sign-in with {providerName} is turned off"
 msgstr "A(z) {providerName} szolgáltatással való bejelentkezés ki van kapcsolva"
 
@@ -16732,11 +16741,11 @@ msgstr "A(z) {providerName} szolgáltatással való bejelentkezés ki van kapcso
 msgid "Signed in as"
 msgstr "Bejelentkezve mint"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in as {0}"
 msgstr "Bejelentkezve mint {0}"
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:122
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:122
 msgid "Signed in, but no email was shared"
 msgstr "Bejelentkezett, de nem lett megosztva e-mail-cím"
 
@@ -16773,25 +16782,25 @@ msgstr "{0} óta (UTC)"
 msgid "Single line text box"
 msgstr "Egysoros szövegmező"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:49
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:64
 #: src/components/routes/settings/Team/index.tsx:200
+#: src/ee/sso/components/SingleSignOn/index.tsx:50
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:66
 msgid "Single sign-on"
 msgstr "Egyszeri bejelentkezés"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:68
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:69
 msgid "Single sign-on is no longer required"
 msgstr "Az egyszeri bejelentkezés már nem kötelező"
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:55
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:56
 msgid "Single sign-on is now required"
 msgstr "Az egyszeri bejelentkezés mostantól kötelező"
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:50
+#: src/ee/sso/components/SsoDiscovery/index.tsx:50
 msgid "Single sign-on isn't set up for this email. Check the address, or sign in another way."
 msgstr "Az egyszeri bejelentkezés nincs beállítva ehhez az e-mail-címhez. Ellenőrizze a címet, vagy jelentkezzen be más módon."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:47
 msgid "Single sign-on settings updated"
 msgstr "Az egyszeri bejelentkezés beállításai frissítve"
 
@@ -16981,11 +16990,6 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 #: src/components/routes/my-tickets/index.tsx:162
 #: src/components/routes/product-widget/SelectProducts/index.tsx:379
 #: src/components/routes/settings/Account/DeleteAccountSection.tsx:79
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:27
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:60
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:71
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:19
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:51
 #: src/components/routes/settings/ApiKeys/CreateApiKeyModal.tsx:121
 #: src/components/routes/settings/ApiKeys/index.tsx:80
 #: src/components/routes/settings/Profile/index.tsx:134
@@ -16998,6 +17002,11 @@ msgstr "Valami hiba történt. Kérjük, próbálja újra később."
 #: src/components/routes/settings/TaxesAndFees/index.tsx:35
 #: src/components/routes/settings/Team/TwoFactorPolicy.tsx:37
 #: src/ee/seating/components/ChangeSeatButton/index.tsx:46
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:27
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:61
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:72
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:19
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:53
 #: src/hooks/useLoginSteps.ts:60
 #: src/utilites/ssoErrors.ts:17
 msgid "Something went wrong. Please try again."
@@ -17081,12 +17090,12 @@ msgid "Square, at least 200 × 200px"
 msgstr "Négyzet alakú, legalább 200 × 200 px"
 
 #: src/components/routes/auth/Login/index.tsx:52
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:188
 #: src/components/routes/settings/Team/MemberRow.tsx:35
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:189
 msgid "SSO"
 msgstr "SSO"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:62
+#: src/ee/sso/components/SingleSignOn/index.tsx:65
 msgid "SSO sign-ins (30 days)"
 msgstr "SSO-bejelentkezések (30 nap)"
 
@@ -17378,19 +17387,19 @@ msgstr "Megszemélyesítés leállítása"
 msgid "Stop receiving emails that help you set up and run your events. Emails about your orders and account will still be sent."
 msgstr "Ne kapj több olyan e-mailt, amely az események beállításában és lebonyolításában segít. A rendelésekkel és a fiókoddal kapcsolatos e-maileket továbbra is megkapod."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:71
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:72
 msgid "Stop requiring"
 msgstr "Kötelezés megszüntetése"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:170
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:176
 msgid "Stop requiring single sign-on before deleting the connection."
 msgstr "A kapcsolat törlése előtt szüntesse meg az egyszeri bejelentkezés kötelezővé tételét."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:85
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:86
 msgid "Stop requiring single sign-on before removing a verified domain."
 msgstr "Ellenőrzött domain eltávolítása előtt kapcsold ki az egyszeri bejelentkezés kötelezővé tételét."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:66
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:67
 msgid "Stop requiring single sign-on? Members can sign in with their password again, or reset it if they never had one."
 msgstr "Megszünteti az egyszeri bejelentkezés kötelezővé tételét? A tagok újra bejelentkezhetnek jelszóval, vagy új jelszót állíthatnak be, ha korábban nem volt nekik."
 
@@ -17694,7 +17703,7 @@ msgstr "Vasárnap"
 msgid "Support Email"
 msgstr "Támogatási e-mail"
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:21
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:21
 msgid "Suspended"
 msgstr "Felfüggesztve"
 
@@ -17909,7 +17918,7 @@ msgstr "Sablon sikeresen törölve"
 msgid "Template saved successfully"
 msgstr "Sablon sikeresen mentve"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:116
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:120
 msgid "Tenant ID"
 msgstr "Tenant ID"
 
@@ -17930,8 +17939,8 @@ msgstr "Szolgáltatási feltételek"
 msgid "Test email sent to your inbox"
 msgstr "A teszt e-mail megérkezett a postafiókjába"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:132
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:105
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:138
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:105
 msgid "Test sign-in"
 msgstr "Próbabejelentkezés"
 
@@ -17988,11 +17997,11 @@ msgstr "A „Powered by Hi.Events” felirat újra megjelenik, amíg meg nem új
 msgid "The account has completed orders, so it will be anonymised."
 msgstr "A fióknak teljesített megrendelései vannak, ezért anonimizálásra kerül."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:159
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:160
 msgid "The account owner ({0}) can still sign in with their password and two-factor authentication, so you can recover access if {providerName} is unavailable. Every admin is emailed when that happens."
 msgstr "A fiók tulajdonosa ({0}) továbbra is bejelentkezhet jelszóval és kétlépcsős hitelesítéssel, így visszaszerezheti a hozzáférést, ha a(z) {providerName} nem érhető el. Ilyenkor minden adminisztrátor e-mailt kap."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:106
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:107
 msgid "The account owner is emailed whenever someone joins as an admin."
 msgstr "A fiók tulajdonosa e-mailt kap, valahányszor valaki adminisztrátorként csatlakozik."
 
@@ -18239,11 +18248,11 @@ msgstr "Az idősávnak legyen hossza"
 msgid "The template body contains invalid Liquid syntax. Please correct it and try again."
 msgstr "A sablon törzse érvénytelen Liquid szintaxist tartalmaz. Kérjük, javítsa ki és próbálja újra."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:41
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:41
 msgid "The test sign-in didn't finish."
 msgstr "A próbabejelentkezés nem fejeződött be."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:115
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:115
 msgid "The test sign-in failed"
 msgstr "A próbabejelentkezés sikertelen volt"
 
@@ -19391,7 +19400,7 @@ msgstr "Bekapcsolás"
 msgid "Turn on extra sections and drag to reorder."
 msgstr "Kapcsoljon be további szakaszokat, és húzással rendezze át őket."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:102
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:103
 msgid "Turn on sign-in with {providerName} and verify a domain first."
 msgstr "Először kapcsolja be a bejelentkezést a(z) {providerName} szolgáltatással, és erősítsen meg egy tartományt."
 
@@ -19634,15 +19643,15 @@ msgstr "nem elérhető"
 msgid "Unavailable, re-register"
 msgstr "Nem elérhető, regisztráld újra"
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:51
+#: src/ee/sso/components/SingleSignOn/providers.tsx:51
 msgid "Under Certificates & secrets, create a client secret."
 msgstr "A \"Certificates & secrets\" alatt hozzon létre egy client secretet."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:59
+#: src/ee/sso/components/SingleSignOn/providers.tsx:59
 msgid "Under Credentials, create an OAuth client ID for a web application and add the redirect URI below."
 msgstr "A \"Credentials\" alatt hozzon létre egy OAuth client ID-t webalkalmazáshoz, és adja hozzá az alábbi átirányítási URI-t."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:52
+#: src/ee/sso/components/SingleSignOn/providers.tsx:52
 msgid "Under Token configuration, add the optional claims email and xms_edov to the ID token."
 msgstr "A \"Token configuration\" alatt adja hozzá az opcionális email és xms_edov claimeket az ID tokenhez."
 
@@ -20104,8 +20113,8 @@ msgstr "UUID"
 msgid "Validating your VAT number..."
 msgstr "ÁFA szám érvényesítése..."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:112
 #: src/ee/seating/components/lib/templates.ts:30
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:113
 msgid "Value"
 msgstr "Kedvezményes"
 
@@ -20221,7 +20230,7 @@ msgstr "Ellenőrző e-mail elküldve. Nézze meg a postaládáját."
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:200
 #: src/components/routes/admin/Attribution/index.tsx:198
 #: src/components/routes/admin/Dashboard/index.tsx:396
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:17
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:17
 msgid "Verified"
 msgstr "Ellenőrzött"
 
@@ -20229,17 +20238,17 @@ msgstr "Ellenőrzött"
 msgid "Verified accounts can send messages to attendees and manage email templates. Connecting Stripe verifies an account automatically."
 msgstr "Az ellenőrzött fiókok üzeneteket küldhetnek a résztvevőknek és kezelhetik az e-mail sablonokat. A Stripe csatlakoztatása automatikusan ellenőrzi a fiókot."
 
-#: src/components/routes/settings/Account/SingleSignOn/TestSignIn.tsx:130
+#: src/ee/sso/components/SingleSignOn/TestSignIn.tsx:130
 msgid "Verified by {providerName}"
 msgstr "Megerősítette: {providerName}"
 
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:58
+#: src/ee/sso/components/SingleSignOn/index.tsx:61
 msgid "Verified domains"
 msgstr "Megerősített tartományok"
 
 #: src/components/common/TwoFactor/TwoFactorSetupFlow.tsx:97
 #: src/components/routes/auth/Login/TwoFactorChallenge.tsx:99
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:120
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:121
 msgid "Verify"
 msgstr "Ellenőrzés"
 
@@ -20260,7 +20269,7 @@ msgstr "Helyreállítási kód ellenőrzése"
 msgid "Verify your email"
 msgstr "Ellenőrizze e-mail címét"
 
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:142
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:148
 msgid "Verify your email domains"
 msgstr "Erősítse meg az e-mail-tartományait"
 
@@ -20601,7 +20610,7 @@ msgstr "Nem találtuk a keresett jegyet. A link lejárhatott, vagy a jegy adatai
 msgid "We couldn't find this order. It may have been removed."
 msgstr "Nem találtuk ezt a rendelést. Lehet, hogy el lett távolítva."
 
-#: src/components/routes/settings/Account/SingleSignOn/DomainList.tsx:109
+#: src/ee/sso/components/SingleSignOn/DomainList.tsx:110
 msgid "We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain."
 msgstr "Ezt a TXT rekordot nem találtuk meg a napi ellenőrzésünk során. Állítsa vissza, hogy az egyszeri bejelentkezés továbbra is működjön ennél a tartománynál."
 
@@ -21053,7 +21062,7 @@ msgstr "Melyik jegy ehhez: {0}?"
 msgid "Which tickets should be associated with this check-in list?"
 msgstr "Mely jegyeket kell ehhez a bejelentkezési listához társítani?"
 
-#: src/ee/licensing/licenceNotice.ts:43
+#: src/ee/licensing/licenceNotice.ts:54
 msgid "White-label"
 msgstr "White-label"
 
@@ -21114,7 +21123,7 @@ msgstr "Szélesség"
 msgid "Wix shows embedded code inside a fixed-size box. Set Checkout opens in to New tab for the best experience."
 msgstr "A Wix a beágyazott kódot rögzített méretű dobozban jeleníti meg. A legjobb élményért állítsa a „Fizetés megnyitása” beállítást „Új lap” értékre."
 
-#: src/components/common/SsoButtons/SsoDiscovery.tsx:65
+#: src/ee/sso/components/SsoDiscovery/index.tsx:65
 msgid "Work email"
 msgstr "Munkahelyi e-mail-cím"
 
@@ -21143,8 +21152,8 @@ msgstr "Műhely"
 msgid "Workshop with early bird"
 msgstr "Workshop korai jeggyel"
 
-#: src/components/routes/settings/Account/SingleSignOn/ConnectionForm.tsx:151
-#: src/components/routes/settings/Account/SingleSignOn/SsoSetupDrawer.tsx:118
+#: src/ee/sso/components/SingleSignOn/ConnectionForm.tsx:151
+#: src/ee/sso/components/SingleSignOn/SsoSetupDrawer.tsx:122
 msgid "Workspace domain"
 msgstr "Workspace-tartomány"
 
@@ -21179,7 +21188,7 @@ msgstr "év"
 #: src/components/routes/admin/Accounts/AccountDetail/index.tsx:255
 #: src/components/routes/admin/Dashboard/index.tsx:409
 #: src/components/routes/event/Lineup/ImportLineupModal.tsx:218
-#: src/components/routes/settings/Account/SingleSignOn/index.tsx:67
+#: src/ee/sso/components/SingleSignOn/index.tsx:70
 msgid "Yes"
 msgstr "Igen"
 
@@ -21415,7 +21424,7 @@ msgstr "Többé nem tud bejelentkezni ezzel: {0}. A fiókjába bejelentkezett t�
 msgid "You won't receive any more of these emails. Emails about your orders and account will still be sent."
 msgstr "Nem kapsz több ilyen e-mailt. A rendelésekkel és a fiókoddal kapcsolatos e-maileket továbbra is megkapod."
 
-#: src/components/routes/settings/Account/SingleSignOn/EnforcementPanel.tsx:165
+#: src/ee/sso/components/SingleSignOn/EnforcementPanel.tsx:166
 msgid "You'll be signed out and will need to sign in again with {providerName}."
 msgstr "Kijelentkeztetjük, és újra be kell jelentkeznie a(z) {providerName} szolgáltatással."
 
@@ -21579,7 +21588,7 @@ msgstr "Az eseményed élőben van!"
 msgid "Your Hi.Events Enterprise licence expired on {expiresAt}. Everything stays on until {graceEndsAt}. Renew before then to avoid interruption."
 msgstr "A Hi.Events Enterprise licenced lejárt ekkor: {expiresAt}. Minden bekapcsolva marad eddig: {graceEndsAt}. Újítsd meg előtte, hogy elkerüld a fennakadást."
 
-#: src/components/routes/settings/Account/SingleSignOn/providers.tsx:22
+#: src/ee/sso/components/SingleSignOn/providers.tsx:22
 msgid "your identity provider"
 msgstr "az identitásszolgáltatód"
 
@@ -21746,7 +21755,7 @@ msgstr "A bejelentkezési munkamenet lejárt. Jelentkezzen be újra."
 msgid "Your Stripe account itself isn't affected, and no data is lost — you can reconnect at any time."
 msgstr "A Stripe-fiókja nem érintett, és nem vesznek el adatok — bármikor újra összekapcsolhatja."
 
-#: src/components/routes/settings/Account/SingleSignOn/AccessSettings.tsx:54
+#: src/ee/sso/components/SingleSignOn/AccessSettings.tsx:55
 msgid "Your team can now sign in with {providerName}"
 msgstr "A csapata mostantól bejelentkezhet a(z) {providerName} szolgáltatással"
 

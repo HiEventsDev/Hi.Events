@@ -59,7 +59,7 @@ const Licence = () => {
                         )}
                         {licence.status === 'NONE' && !licence.invalid_reason && (
                             <Callout variant="info">
-                                {t`No licence key is set, so reserved seating and the box office are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment.`}{' '}
+                                {t`No licence key is set, so reserved seating, the box office and enterprise single sign-on are switched off. To unlock them, set APP_LICENCE_KEY in the backend environment and redeploy the backend. With Docker Compose, use docker compose up -d, because docker compose restart doesn't reload the environment.`}{' '}
                                 <GetLicenceLink source="app-licence-page"/>
                             </Callout>
                         )}

@@ -2,6 +2,7 @@
 
 namespace HiEvents\Services\Application\Handlers\User\TwoFactor;
 
+use HiEvents\Enterprise\Sso\Services\Domain\SsoEnforcementService;
 use HiEvents\Exceptions\IdentityConfirmationFailedException;
 use HiEvents\Exceptions\InvalidTwoFactorCodeException;
 use HiEvents\Exceptions\ResourceConflictException;
@@ -12,7 +13,6 @@ use HiEvents\Repository\Interfaces\UserRepositoryInterface;
 use HiEvents\Services\Application\Handlers\User\TwoFactor\DTO\DisableTwoFactorDTO;
 use HiEvents\Services\Domain\Auth\IdentityConfirmationService;
 use HiEvents\Services\Domain\Auth\Sso\DTO\AuthContext;
-use HiEvents\Services\Domain\Auth\Sso\Enterprise\SsoEnforcementService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorAuthenticationService;
 use HiEvents\Services\Domain\Auth\TwoFactor\TwoFactorRequirementService;
