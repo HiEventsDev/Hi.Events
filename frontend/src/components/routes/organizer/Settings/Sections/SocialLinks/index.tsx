@@ -41,7 +41,7 @@ interface SocialPlatform {
     priority?: 'primary' | 'secondary';
 }
 
-const socialPlatforms: SocialPlatform[] = [
+const getSocialPlatforms = (): SocialPlatform[] => [
     {
         name: t`Facebook`,
         field: 'facebook_handle',
@@ -110,6 +110,7 @@ export const SocialLinks = () => {
     const organizerSettingsQuery = useGetOrganizerSettings(organizerId);
     const updateMutation = useUpdateOrganizerSettings();
     const [showMore, setShowMore] = useState(false);
+    const socialPlatforms = getSocialPlatforms();
 
     const initialValues = socialPlatforms.reduce((acc, platform) => {
         acc[platform.field] = '';

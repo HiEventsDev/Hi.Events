@@ -27,13 +27,13 @@ import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature
 import {FeatureFlag} from "../../../constants/featureFlags.ts";
 import {getProductsFromEvent} from "../../../utilites/helpers.ts";
 
-const orderStatuses = [
+const getOrderStatuses = () => [
     {label: t`Completed`, value: 'COMPLETED'},
     {label: t`Cancelled`, value: 'CANCELLED'},
     {label: t`Awaiting Offline Payment`, value: 'AWAITING_OFFLINE_PAYMENT'},
 ];
 
-const refundStatuses = [
+const getRefundStatuses = () => [
     {label: t`Refunded`, value: 'REFUNDED'},
     {label: t`Partially Refunded`, value: 'PARTIALLY_REFUNDED'},
 ];
@@ -73,13 +73,13 @@ export const Orders: React.FC = () => {
             field: 'status',
             label: t`Order Status`,
             type: 'multi-select',
-            options: orderStatuses
+            options: getOrderStatuses()
         },
         {
             field: 'refund_status',
             label: t`Refund Status`,
             type: 'multi-select',
-            options: refundStatuses
+            options: getRefundStatuses()
         },
         ...(boxOffices.length > 0 ? [{
             field: 'box_office_id',
