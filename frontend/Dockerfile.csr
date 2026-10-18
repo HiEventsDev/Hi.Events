@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apk add --no-cache yarn
 
 COPY package.json yarn.lock ./
+COPY patches ./patches
 
 RUN yarn install
 
