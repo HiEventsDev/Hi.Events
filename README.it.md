@@ -1,19 +1,19 @@
 <div align="center">
 
-<img src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-banner.png?v=1" alt="Hi.Events - Piattaforma Open Source per Biglietteria Eventi" width="100%">
+<img src=".github/assets/readme-banner.png" alt="Hi.Events - Open-source event ticketing and management platform" width="100%">
 
 # Hi.Events
 
-### Piattaforma open-source per biglietteria e gestione eventi
+### Piattaforma open source per biglietteria e gestione eventi
 
-Vendi biglietti online per conferenze, eventi notturni, concerti, serate in club, workshop e festival.  
-Self-hosted o cloud. I tuoi eventi, il tuo brand, i tuoi dati.
+Vendi biglietti online per conferenze, eventi nightlife, concerti, serate in discoteca, workshop e festival.<br>
+Self-hosted o in cloud. I tuoi eventi, il tuo brand, i tuoi dati.
 
-[Prova Cloud →](https://app.hi.events/auth/register?utm_source=gh-readme) · [Demo Live](https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme) · [Documentazione](https://hi.events/docs?utm_source=gh-readme) · [Sito Web](https://hi.events?utm_source=gh-readme)
+[Prova Cloud →](https://app.hi.events/auth/register?utm_source=gh-readme) · [Demo dal vivo](https://app.hi.events/event/2/hievents-conference-2030?utm_source=gh-readme) · [Documentazione](https://hi.events/docs?utm_source=gh-readme) · [Enterprise e licenze](https://hi.events/licensing?utm_source=gh-readme) · [Sito web](https://hi.events?utm_source=gh-readme)
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/Hi.Events/blob/develop/LICENCE)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://github.com/HiEventsDev/hi.events/blob/develop/LICENCE)
 [![GitHub Release](https://img.shields.io/github/v/release/HiEventsDev/hi.events?include_prereleases)](https://github.com/HiEventsDev/hi.events/releases)
-[![GitHub Stars](https://img.shields.io/github/stars/HiEventsDev/hi.events?style=flat)](https://github.com/HiEventsDev/hi.events/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/HiEventsDev/hi.events?style=flat)](https://github.com/HiEventsDev/hi.events)
 [![Docker Pulls](https://img.shields.io/docker/pulls/daveearley/hi.events-all-in-one)](https://hub.docker.com/r/daveearley/hi.events-all-in-one)
 [![E2E Tests](https://github.com/HiEventsDev/hi.events/actions/workflows/e2e.yml/badge.svg?event=push)](https://github.com/HiEventsDev/hi.events/actions/workflows/e2e.yml)
 
@@ -22,71 +22,117 @@ Self-hosted o cloud. I tuoi eventi, il tuo brand, i tuoi dati.
 </a>
 
 <p>
-<a href="README.de.md">Deutsch</a> · <a href="README.pt.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.zh-cn.md">中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.hu.md">Magyar</a> · <a href="README.pl.md">Polski</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.fi.md">Suomi</a>
+<a href="README.md">English</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.it.md">Italiano</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.es.md">Español</a> · <a href="README.pt.md">Português</a> · <a href="README.pt-br.md">Português (Brasil)</a> · <a href="README.pl.md">Polski</a> · <a href="README.sk.md">Slovenčina</a> · <a href="README.hu.md">Magyar</a> · <a href="README.sv.md">Svenska</a> · <a href="README.fi.md">Suomi</a> · <a href="README.el.md">Ελληνικά</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.zh-cn.md">简体中文</a> · <a href="README.zh-hk.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
 </div>
 
 <br>
 
-## Perché Hi.Events?
-
-La maggior parte delle piattaforme di biglietteria applica commissioni per biglietto e blocca i tuoi dati nel proprio
-ecosistema. **Hi.Events è un'alternativa moderna e open-source a Eventbrite, Tickettailor, Dice.fm e alle altre
-piattaforme di ticketing** per gli organizzatori che vogliono il pieno controllo su brand, checkout, dati e
-infrastruttura.
-
-Usato da migliaia di organizzatori in tutto il mondo — da promoter della vita notturna e festival fino a venue, gruppi
-di comunità e organizzatori di conferenze. Ospitalo tu, oppure lascia che ce ne occupiamo noi su Hi.Events Cloud.
+> [!NOTE]
+> **È arrivato Hi.Events 2.0** con eventi ricorrenti, posti riservati, biglietteria, line-up e programmi, single
+> sign-on, permessi del team e chiavi API. [Scopri le novità →](https://github.com/HiEventsDev/hi.events/releases)
 
 <br>
 
-<img alt="Hi.Events Dashboard" src="https://hievents-public.s3.us-west-1.amazonaws.com/website/github-screenshot.png"/>
+<img alt="Hi.Events event dashboard on desktop and an event page on mobile" src=".github/assets/readme-showcase.png" width="100%"/>
+
+<br>
+
+## Perché Hi.Events?
+
+La maggior parte delle piattaforme di biglietteria applica una commissione su ogni biglietto e trattiene i dati dei tuoi clienti. **Hi.Events è un'alternativa
+open source a Eventbrite, Tickettailor, Dice.fm e alle altre piattaforme di biglietteria** che ti dà il pieno controllo su
+branding, checkout e dati.
+
+Scelto da migliaia di organizzatori in tutto il mondo: promoter di nightlife, festival, location, associazioni
+e organizzatori di conferenze. Gestiscilo in autonomia, oppure lascia che lo gestiamo noi per te su Hi.Events Cloud.
 
 <br>
 
 ## Funzionalità
 
-**🎟️ Biglietteria e vendite** — biglietti gratuiti, a pagamento, a donazione e a fasce · eventi ricorrenti e con più
-date · liste d'attesa per i sold out · codici promo, inclusi biglietti nascosti e sbloccabili con codice · add-on e
-categorie di prodotto · gestione di tasse, commissioni e capienza
+**📅 Eventi**
+- Eventi singoli e ricorrenti, con prezzi, capienza e orari per data
+- Duplica un evento con un clic
+- Luoghi salvati ed eventi online
+- Editor della homepage dell'evento e pagine organizzatore personalizzate
+- Pagine di line-up e programma
 
-**🎨 Branding e personalizzazione** — designer della pagina evento per immagine di copertina, colori e tipografia ·
-pagina organizzatore personalizzata · biglietti PDF personalizzabili · widget di biglietteria integrabile · controllo
-dei metadati SEO
+**🎟️ Biglietti e prodotti**
+- Biglietti a pagamento, gratuiti, a offerta libera e a fasce
+- Posti riservati <sup>Enterprise</sup>
+- Prodotti aggiuntivi e merchandising
+- Biglietti nascosti sbloccabili con codici promo
+- Limiti per ordine e finestre di vendita programmate
+- Capienza condivisa e liste d'attesa automatiche
 
-**👥 Gestione partecipanti** — domande personalizzate al checkout · ricerca, filtri ed esportazione CSV/XLSX avanzati ·
-rimborsi totali e parziali · messaggistica di massa · check-in con QR code, log delle scansioni e liste di check-in ad
-accesso controllato
+**🛒 Vendita**
+- Embed personalizzabili per il tuo sito: widget biglietti, pulsanti, elenchi eventi, line-up e programmi
+- Codici promo e sconti
+- Link di tracciamento per promoter e affiliati
+- Domande di registrazione personalizzate
+- Consenso marketing al checkout
+- Tracciamento con Meta, TikTok, Google Analytics e Tag Manager
 
-**📊 Analisi e crescita** — dashboard delle vendite · tracciamento affiliati · report su vendite giornaliere, vendite per
-prodotto, codici promo, ricavi e tasse · webhook in uscita
+**💳 Pagamenti**
+- Pagamenti sul tuo account Stripe
+- Tasse e commissioni, incluse o aggiunte al checkout
+- Fatturazione e pagamenti offline
+- Rimborsi totali e parziali
 
-**⚙️ Operazioni** — ruoli multi-utente · pagamenti Stripe Connect · metodi di pagamento offline · fatturazione
-automatica · eventi online e in presenza · supporto multilingua · API REST completa con
-[documentazione OpenAPI interattiva](#rest-api)
+**🚪 Partecipanti e ingresso**
+- Biglietteria per la vendita all'ingresso <sup>Enterprise</sup>
+- Check-in con la fotocamera del telefono o uno scanner USB
+- Liste di check-in condivisibili con conteggi in tempo reale
+- Messaggi ai partecipanti e modelli email personalizzati
+- Biglietti PDF con il tuo brand
+- Partecipanti aggiunti manualmente
+- Report su vendite, tasse e codici promo
 
 <br>
 
-## Avvio Rapido
+## Pensato per le organizzazioni
 
-Costruito con **Laravel 13** (PHP >=8.3) · **React 19** con SSR · **TypeScript** · **PostgreSQL** · **Redis** ·
-**Docker**.
+**🔐 Sicurezza e accessi**
+- Single sign-on
+- Autenticazione a due fattori
+- Ruoli e permessi del team
+- Più organizzatori in un unico account
 
-### Deploy con un Clic
+**🔌 Integrazioni**
+- REST API e chiavi API
+- Webhooks
+- Esportazioni CSV e XLSX
+
+**🗄️ I tuoi dati**
+- Self-hosting con Docker
+- Eliminazione e anonimizzazione dell'account
+- Disponibile in 20 lingue
+
+**✅ Testato**
+- Una suite di test completa viene eseguita a ogni modifica
+
+<br>
+
+## Avvio rapido
+
+Realizzato con **Laravel 13** (PHP >=8.3) · **React 19** con SSR · **TypeScript** · **PostgreSQL** · **Redis** · **Docker**.
+
+### Deploy con un clic
 
 [![Deploy on DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://github.com/HiEventsDev/hi.events-digitalocean)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://github.com/HiEventsDev/hi.events-render.com)
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8CGKmu?referralCode=KvSr11)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/8CGKmu?referralCode=KvSr11)
 [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/8DIRY6)
 
 ### Docker
 
 ```bash
-git clone git@github.com:HiEventsDev/hi.events.git
+git clone https://github.com/HiEventsDev/hi.events.git
 cd hi.events/docker/all-in-one
 
-# Genera le chiavi (Linux/macOS)
+# Generate keys (Linux/macOS)
 echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
 echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
 
@@ -98,46 +144,54 @@ docker compose up -d
 
 Apri `http://localhost:8123` e crea il tuo account.
 
-📖 [Guida completa all'installazione](https://hi.events/docs/getting-started?utm_source=gh-readme)
+📖 [Guida all'installazione completa](https://hi.events/docs/getting-started?utm_source=gh-readme)
+
+> [!IMPORTANT]
+> **Aggiorni dalla 1.x?** Leggi le [note di rilascio](https://github.com/HiEventsDev/hi.events/releases) prima di aggiornare.
 
 ### REST API
 
-Hi.Events include un'API REST documentata. Imposta `API_DOCS_ENABLED=true` nel tuo `.env` per pubblicare la
-documentazione OpenAPI interattiva su `/docs/api` della tua istanza, oppure esporta la specifica con:
+Crea le chiavi API in **Impostazioni → Chiavi API**, dove trovi anche il riferimento API.
 
-```bash
-php artisan scramble:export
-```
+<br>
+
+## Lingue
+
+Inglese, Deutsch, Français, Italiano, Nederlands, Español, Português, Português (Brasil),
+Polski, Slovenčina, Magyar, Svenska, Suomi, Ελληνικά, Türkçe, Tiếng Việt, 简体中文, 繁體中文, 日本語 e 한국어.
+
+Correzioni e nuove lingue sono benvenute: consulta la [guida per i contributori](CONTRIBUTING.md).
 
 <br>
 
 ## Hi.Events Cloud
 
-Preferisci non fare self-hosting? **[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** è la
-versione completamente gestita di questo repository — zero configurazione, aggiornamenti automatici e infrastruttura
-gestita dal team che sviluppa Hi.Events.
+Preferisci non gestire l'hosting? **[Hi.Events Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** è la versione completamente
+gestita, curata dal team che sviluppa Hi.Events.
 
 [Inizia ora →](https://app.hi.events/auth/register?utm_source=gh-readme)
 
 <br>
 
-## Licenza
+## Licenze
 
-Hi.Events è rilasciato sotto **AGPL-3.0 con termini aggiuntivi**. I termini aggiuntivi richiedono di mantenere
-l'attribuzione "Powered by Hi.Events" sulle pagine e nelle email generate dal software — vedi [LICENCE](LICENCE) per il
-testo esatto.
+Hi.Events è distribuito con licenza **AGPL-3.0 con termini aggiuntivi**. I termini aggiuntivi richiedono di mantenere la dicitura "Powered by Hi.Events"
+nelle pagine e nelle email generate dal software. Il testo esatto è disponibile in [LICENCE](LICENCE).
 
-**Sono disponibili licenze commerciali** se vuoi rimuovere l'attribuzione o hai bisogno di condizioni adatte a un
-deployment white-label. [Opzioni di licenza](https://hi.events/licensing?utm_source=gh-readme) ·
+I posti riservati e la biglietteria sono coperti dalla [Hi.Events Enterprise Licence](backend/ee/LICENCE) e richiedono una
+licenza per l'uso in produzione.
+
+**Sono disponibili licenze commerciali** se vuoi rimuovere la dicitura o ti servono condizioni adatte a un
+deployment white label. [Opzioni di licenza](https://hi.events/licensing?utm_source=gh-readme) ·
 [hello@hi.events](mailto:hello@hi.events)
 
 <br>
 
 ## Contribuire
 
-I contributi sono benvenuti — consulta la [guida ai contributi](CONTRIBUTING.md) per iniziare. Apri una issue o una
-discussione prima di avviare lavori significativi, così da allinearci sull'approccio. Chi contribuisce firma un
-[CLA](CLA.md).
+I contributi sono benvenuti: consulta la [guida per i contributori](CONTRIBUTING.md) per iniziare. Apri una issue o una
+discussione prima di avviare lavori importanti, così possiamo concordare l'approccio. I contributori firmano
+un [CLA](CLA.md).
 
 <a href="https://github.com/HiEventsDev/hi.events/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=HiEventsDev/hi.events" alt="Hi.Events contributors" />
@@ -147,7 +201,7 @@ discussione prima di avviare lavori significativi, così da allinearci sull'appr
 
 ## Sicurezza
 
-Hai trovato una vulnerabilità? Segnalala privatamente a [security@hi.events](mailto:security@hi.events) invece di aprire
+Hai trovato una vulnerabilità? Segnalala in privato a [security@hi.events](mailto:security@hi.events) invece di aprire
 una issue pubblica. Consulta la nostra [policy di sicurezza](SECURITY.md).
 
 <br>
@@ -166,8 +220,8 @@ Le nuove funzionalità e i miglioramenti sono elencati nella
 
 <div align="center">
 
-**[Sito Web](https://hi.events)** · **[Documentazione](https://hi.events/docs)** · **[Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** · **[Licenze](https://hi.events/licensing)**
+**[Sito web](https://hi.events)** · **[Documentazione](https://hi.events/docs)** · **[Cloud](https://app.hi.events/auth/register?utm_source=gh-readme)** · **[Licenze](https://hi.events/licensing)**
 
-Made with ☘️ in Ireland
+Fatto con ☘️ in Irlanda
 
 </div>
