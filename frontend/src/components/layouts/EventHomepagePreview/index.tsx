@@ -20,7 +20,10 @@ const EventHomepagePreview = () => {
 
     useEffect(() => {
         const handleMessage = (messageEvent: MessageEvent) => {
-            if (messageEvent.data.type === "UPDATE_SETTINGS") {
+            if (messageEvent.origin !== window.location.origin || messageEvent.source !== window.parent) {
+                return;
+            }
+            if (messageEvent.data?.type === "UPDATE_SETTINGS") {
                 setPreviewSettings(messageEvent.data.settings);
             }
         };
@@ -37,7 +40,6 @@ const EventHomepagePreview = () => {
         return <EventNotAvailable />;
     }
 
-    // Create a modified event with preview settings merged in
     let previewEvent: Event | undefined = event;
 
     if (previewSettings && event.settings) {

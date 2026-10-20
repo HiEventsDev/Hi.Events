@@ -1,5 +1,5 @@
 import {t} from "@lingui/macro";
-import {Button, Card as MantineCard, Checkbox, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
+import {Button, Card as MantineCard, Checkbox, Input, NumberInput, Paper, Stack, Switch, Text, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useParams} from "react-router";
 import {useEffect} from "react";
@@ -14,11 +14,14 @@ import {Editor} from "../../../../../common/Editor";
 import {LiquidTokenControl} from "../../../../../common/Editor/Controls/LiquidTokenControl";
 import {InputLabelWithHelp} from "../../../../../common/InputLabelWithHelp";
 import {isEmptyHtml} from "../../../../../../utilites/helpers.ts";
+import {useAccess} from "../../../../../../hooks/useAccess.ts";
+import {UserGeneratedContent} from "../../../../../common/UserGeneratedContent";
 
 export const PaymentAndInvoicingSettings = () => {
     const {eventId} = useParams();
     const eventSettingsQuery = useGetEventSettings(eventId);
     const updateMutation = useUpdateEventSettings();
+    const canEditOfflineInstructions = useAccess().can('MANAGE_PAYMENTS');
     const form = useForm({
         initialValues: {
             require_billing_address: true,
@@ -38,7 +41,9 @@ export const PaymentAndInvoicingSettings = () => {
         transformValues: (values) => ({
             ...values,
             payment_providers: Array.isArray(values.payment_providers) ? values.payment_providers : [],
-            offline_payment_instructions: isEmptyHtml(values.offline_payment_instructions) ? null : values.offline_payment_instructions,
+            offline_payment_instructions: canEditOfflineInstructions
+                ? (isEmptyHtml(values.offline_payment_instructions) ? null : values.offline_payment_instructions)
+                : (eventSettingsQuery.data?.offline_payment_instructions ?? null),
             invoice_notes: isEmptyHtml(values.invoice_notes) ? null : values.invoice_notes,
             invoice_tax_details: isEmptyHtml(values.invoice_tax_details) ? null : values.invoice_tax_details,
         }),
@@ -79,6 +84,11 @@ export const PaymentAndInvoicingSettings = () => {
             },
         });
     };
+
+    const offlineInstructionsLabel = (
+        <InputLabelWithHelp label={t`Offline Payment Instructions`}
+                            helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>
+    );
 
     const paymentOptions = [
         {
@@ -145,24 +155,37 @@ export const PaymentAndInvoicingSettings = () => {
                                         <Text size="sm"
                                               mt="xs">{t`Offline orders are not reflected in event statistics until the order is marked as paid.`}</Text>
                                     </MantineCard>
-                                    <Editor
-                                        editorType={'simple'}
-                                        value={form.values.offline_payment_instructions}
-                                        error={form.errors.offline_payment_instructions as string}
-                                        label={<InputLabelWithHelp label={t`Offline Payment Instructions`}
-                                                                   helpText={t`This information will be shown on the payment page, order summary page, and order confirmation email.`}/>}
-                                        description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
-                                        onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
-                                        additionalToolbarControls={
-                                            <LiquidTokenControl
-                                                templateType={'order_confirmation'}
-                                                excludeTokens={[
-                                                    '{{ settings.offline_payment_instructions }}',
-                                                    '{{ settings.post_checkout_message }}',
-                                                ]}
-                                            />
-                                        }
-                                    />
+                                    {canEditOfflineInstructions ? (
+                                        <Editor
+                                            editorType={'simple'}
+                                            value={form.values.offline_payment_instructions}
+                                            error={form.errors.offline_payment_instructions as string}
+                                            label={offlineInstructionsLabel}
+                                            description={t`Add instructions for offline payments (e.g., bank transfer details, where to send checks, payment deadlines)`}
+                                            onChange={(value) => form.setFieldValue('offline_payment_instructions', value)}
+                                            additionalToolbarControls={
+                                                <LiquidTokenControl
+                                                    templateType={'order_confirmation'}
+                                                    excludeTokens={[
+                                                        '{{ settings.offline_payment_instructions }}',
+                                                        '{{ settings.post_checkout_message }}',
+                                                    ]}
+                                                />
+                                            }
+                                        />
+                                    ) : (
+                                        <Input.Wrapper
+                                            label={offlineInstructionsLabel}
+                                            description={t`Only members who can manage payments can change these instructions.`}
+                                            error={form.errors.offline_payment_instructions as string}
+                                        >
+                                            <Paper withBorder p="sm" radius="sm">
+                                                {isEmptyHtml(form.values.offline_payment_instructions)
+                                                    ? <Text size="sm" c="dimmed">{t`No instructions have been added yet.`}</Text>
+                                                    : <UserGeneratedContent html={form.values.offline_payment_instructions}/>}
+                                            </Paper>
+                                        </Input.Wrapper>
+                                    )}
                                     <Switch
                                         label={t`Allow attendees associated with unpaid orders to check in`}
                                         description={t`If enabled, check-in staff can either mark attendees as checked in or mark the order as paid and check in the attendees. If disabled, attendees associated with unpaid orders cannot be checked in.`}

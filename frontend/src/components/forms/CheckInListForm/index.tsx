@@ -158,6 +158,7 @@ export const CheckInListForm = ({
                         {...form.getInputProps('expires_at')}
                         label={t`Expiration date`}
                         description={t`When check-in closes`}
+                        defaultTime="23:59"
                     />
                 </InputGroup>
 

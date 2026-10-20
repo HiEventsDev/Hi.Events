@@ -1,7 +1,7 @@
 import {useMemo} from "react";
-import {t} from "@lingui/macro";
-import {ActionIcon, Loader} from "@mantine/core";
-import {IconChevronLeft, IconChevronRight, IconMapPin, IconPencil} from "@tabler/icons-react";
+import {plural, t} from "@lingui/macro";
+import {ActionIcon, Alert, Loader, VisuallyHidden} from "@mantine/core";
+import {IconAlertTriangle, IconChevronLeft, IconChevronRight, IconMapPin, IconPencil} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import {Event} from "../../../../../types.ts";
 import {EventLineup, EventSpace, ScheduleItem} from "../../../../../api/lineup.client.ts";
@@ -12,6 +12,7 @@ import {formatDateWithLocale} from "../../../../../utilites/dates.ts";
 import {DATE_INPUT_FORMAT, scheduleDayKey} from "../../../../../utilites/lineupSchedule.ts";
 import {ScheduleItemDraft} from "./ScheduleItemModal.tsx";
 import {SPACE_COLORS} from "./scheduleConstants.ts";
+import {adjacentOccurrenceDay} from "./scheduleDays.ts";
 import classes from "../Lineup.module.scss";
 
 const calendarModule = createLazyModule(() => import("./ScheduleCalendar.tsx"));
@@ -34,13 +35,14 @@ interface TimetablePanelProps {
     event: Event;
     lineup: EventLineup;
     date: string;
+    occurrenceDays?: ReadonlySet<string>;
     onDateChange: (date: string) => void;
     onCreate: (draft: Partial<ScheduleItemDraft>) => void;
     onEdit: (item: ScheduleItem) => void;
     onEditSpace: (space: EventSpace) => void;
 }
 
-export const TimetablePanel = ({event, lineup, date, onDateChange, onCreate, onEdit, onEditSpace}: TimetablePanelProps) => {
+export const TimetablePanel = ({event, lineup, date, occurrenceDays, onDateChange, onCreate, onEdit, onEditSpace}: TimetablePanelProps) => {
     const {isReadOnly} = useAccess();
     const calendar = calendarModule.useModule();
 
@@ -55,6 +57,10 @@ export const TimetablePanel = ({event, lineup, date, onDateChange, onCreate, onE
         }
         return [...counts.entries()].sort(([a], [b]) => a.localeCompare(b));
     }, [lineup.schedule_items, event.timezone, date]);
+
+    const isOffDate = (day: string) => !!occurrenceDays && !occurrenceDays.has(day);
+    const previousDay = occurrenceDays ? adjacentOccurrenceDay(occurrenceDays, date, -1) : shiftDay(date, -1);
+    const nextDay = occurrenceDays ? adjacentOccurrenceDay(occurrenceDays, date, 1) : shiftDay(date, 1);
 
     return (
         <div className={classes.timetable}>
@@ -86,24 +92,33 @@ export const TimetablePanel = ({event, lineup, date, onDateChange, onCreate, onE
                     size="lg"
                     radius="xl"
                     aria-label={t`Previous day`}
-                    onClick={() => onDateChange(shiftDay(date, -1))}
+                    disabled={!previousDay}
+                    onClick={() => previousDay && onDateChange(previousDay)}
                 >
                     <IconChevronLeft size={16}/>
                 </ActionIcon>
-                <div className={classes.dayChips} role="tablist" aria-label={t`Days`}>
+                <div className={classes.dayChips} role="group" aria-label={t`Days`}>
                     {days.map(([key, count]) => {
                         const noonUtc = dayjs.tz(`${key}T12:00`, event.timezone).utc().format();
+                        const offDate = isOffDate(key);
                         return (
                             <button
                                 key={key}
                                 type="button"
-                                role="tab"
-                                aria-selected={key === date}
+                                aria-pressed={key === date}
                                 className={classes.dayChip}
+                                data-off-date={offDate || undefined}
                                 onClick={() => onDateChange(key)}
                             >
+                                {offDate && <IconAlertTriangle size={12} aria-hidden/>}
                                 <span>{formatDateWithLocale(noonUtc, 'weekdayDate', event.timezone)}</span>
-                                {count > 0 && <span className={classes.dayChipCount}>{count}</span>}
+                                {count > 0 && (
+                                    <>
+                                        <span className={classes.dayChipCount} aria-hidden>{count}</span>
+                                        <VisuallyHidden>{plural(count, {one: '# slot', other: '# slots'})}</VisuallyHidden>
+                                    </>
+                                )}
+                                {offDate && <VisuallyHidden>{t`No event date on this day`}</VisuallyHidden>}
                             </button>
                         );
                     })}
@@ -113,11 +128,18 @@ export const TimetablePanel = ({event, lineup, date, onDateChange, onCreate, onE
                     size="lg"
                     radius="xl"
                     aria-label={t`Next day`}
-                    onClick={() => onDateChange(shiftDay(date, 1))}
+                    disabled={!nextDay}
+                    onClick={() => nextDay && onDateChange(nextDay)}
                 >
                     <IconChevronRight size={16}/>
                 </ActionIcon>
             </div>
+
+            {isOffDate(date) && (
+                <Alert variant="light" color="orange" icon={<IconAlertTriangle size={16}/>}>
+                    {t`Your event has no date on this day, so slots here won't show on your event page.`}
+                </Alert>
+            )}
 
             <div className={classes.calendarWrap}>
                 {calendar

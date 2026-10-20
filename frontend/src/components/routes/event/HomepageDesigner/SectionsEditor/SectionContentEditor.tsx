@@ -13,6 +13,9 @@ import classes from "./SectionsEditor.module.scss";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_GALLERY_PHOTOS = 40;
+const MAX_SPONSORS = 60;
+const MAX_FAQ_ANSWER_LENGTH = 5000;
+const MAX_TEXT_LENGTH = 50000;
 
 export type SectionsEditorVariant = 'event' | 'organizer';
 
@@ -31,6 +34,12 @@ interface SectionContentEditorProps {
 
 const BUILT_IN_WITH_NOTICE = ['ABOUT', 'LINEUP', 'SCHEDULE', 'LOCATION', 'ORGANIZER'];
 
+const isFaqAnswerTooLong = (answer?: string | null): boolean => (answer ?? '').length > MAX_FAQ_ANSWER_LENGTH;
+
+export const sectionExceedsLimits = (section: HomepageSection): boolean =>
+    (section.type === 'TEXT' && (section.body ?? '').length > MAX_TEXT_LENGTH)
+    || (section.type === 'FAQ' && (section.faqs ?? []).some(faq => isFaqAnswerTooLong(faq.answer)));
+
 export const SectionContentEditor = (props: SectionContentEditorProps) => {
     const {variant, entityId, section, disabled, isEmpty, onChange} = props;
 
@@ -46,7 +55,7 @@ export const SectionContentEditor = (props: SectionContentEditorProps) => {
                     editorType="simple"
                     value={section.body ?? ''}
                     onChange={value => onChange({body: value})}
-                    maxLength={50000}
+                    maxLength={MAX_TEXT_LENGTH}
                 />
             );
         case 'FAQ':
@@ -186,6 +195,7 @@ const FaqAnswerInput = ({answer, number, disabled, onChange}: { answer?: string 
             value={text}
             disabled={disabled}
             aria-label={t`Answer ${number}`}
+            error={isFaqAnswerTooLong(textToParagraphs(text)) ? t`This answer is too long. Shorten it before saving.` : undefined}
             onChange={event => {
                 const value = event.currentTarget.value;
                 setText(value);
@@ -208,7 +218,7 @@ const VideoEditor = ({url, disabled, onChange}: { url: string, disabled?: boolea
             disabled={disabled}
             description={url && (provider ? t`${provider} video found` : t`Paste a YouTube or Vimeo link`)}
             error={url && !embed ? t`That doesn't look like a YouTube or Vimeo video link` : undefined}
-            onChange={event => onChange(event.currentTarget.value || null)}
+            onChange={event => onChange(event.currentTarget.value.replace(/^\s*http:\/\//i, 'https://') || null)}
             data-testid="homepage-video-url"
         />
     );
@@ -244,11 +254,11 @@ const GalleryEditor = ({variant, entityId, section, images, disabled, onChange, 
                     <div key={image.id} className={classes.thumb}>
                         <img src={image.url} alt=""/>
                         <div className={classes.thumbActions}>
-                            <ActionIcon size="xs" variant="filled" color="dark" disabled={disabled || index === 0} onClick={() => move(index, -1)} aria-label={t`Move left`}>
-                                <IconArrowUp size={11} style={{transform: 'rotate(-90deg)'}}/>
+                            <ActionIcon size={24} variant="filled" color="dark" disabled={disabled || index === 0} onClick={() => move(index, -1)} aria-label={t`Move left`}>
+                                <IconArrowUp size={14} style={{transform: 'rotate(-90deg)'}}/>
                             </ActionIcon>
-                            <ActionIcon size="xs" variant="filled" color="dark" disabled={disabled} onClick={() => onChange({image_ids: ids.filter(id => id !== Number(image.id))})} aria-label={t`Remove photo`}>
-                                <IconX size={11}/>
+                            <ActionIcon size={24} variant="filled" color="dark" disabled={disabled} onClick={() => onChange({image_ids: ids.filter(id => id !== Number(image.id))})} aria-label={t`Remove photo`}>
+                                <IconX size={14}/>
                             </ActionIcon>
                         </div>
                     </div>
@@ -280,7 +290,8 @@ const SponsorsEditor = ({variant, entityId, section, images, disabled, onChange,
     const {uploading, upload} = useImageUploads({
         entityId,
         type: variant === 'event' ? 'EVENT_SPONSOR_LOGO' : 'ORGANIZER_SPONSOR_LOGO',
-        room: Infinity,
+        room: MAX_SPONSORS - sponsors.length,
+        onLimitReached: () => showError(t`You can add up to ${MAX_SPONSORS} sponsors.`),
         onUploaded: newIds => {
             onChange(current => ({sponsors: [...(current.sponsors ?? []), ...newIds.map(image_id => ({image_id, name: '', url: ''}))]}));
             onImagesChanged();
@@ -311,7 +322,10 @@ const SponsorsEditor = ({variant, entityId, section, images, disabled, onChange,
                 );
             })}
             {uploading > 0 && <Loader size="xs"/>}
-            {!disabled && (
+            {sponsors.length >= MAX_SPONSORS && (
+                <p className={classes.help} data-testid="homepage-sponsors-limit">{t`You've added the maximum of ${MAX_SPONSORS} sponsors.`}</p>
+            )}
+            {!disabled && sponsors.length + uploading < MAX_SPONSORS && (
                 <Dropzone
                     className={classes.logoDropzone}
                     onDrop={upload}

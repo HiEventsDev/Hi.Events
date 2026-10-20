@@ -10,7 +10,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {getConfig} from "../../../../utilites/config.ts";
 
 interface SidebarProps {
-    sidebarOpen: boolean;
+    sidebarOpen: boolean | null;
     setSidebarOpen: (open: boolean) => void;
     navItems: NavItem[];
     sidebarFooter?: React.ReactNode;
@@ -22,7 +22,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                     navItems,
                                                     sidebarFooter,
                                                 }) => {
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery('(max-width: 767px)');
 
     const isHeading = (item: NavItem) => !item.link && item.link !== "" && item.onClick === undefined;
 
@@ -89,7 +89,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     };
 
     return (
-        <div className={classNames(`${classes.sidebar} ${sidebarOpen ? classes.open : classes.closed}`)}>
+        <div
+            id="app-manage-sidebar"
+            className={classNames(classes.sidebar, {[classes.open]: sidebarOpen === true, [classes.closed]: sidebarOpen === false})}
+        >
             <div className={classes.logo}>
                 <NavLink to={`/manage/events`}>
                     <img
@@ -98,18 +101,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     />
                 </NavLink>
             </div>
-            <div className={classes.nav}>
+            <nav className={classes.nav} aria-label={t`Main navigation`}>
                 {renderLinks()}
-            </div>
+            </nav>
             {sidebarFooter && (
                 <div className={classes.sidebarFooter}>
                     {sidebarFooter}
                 </div>
             )}
-            {sidebarOpen && (
+            {sidebarOpen !== false && (
                 <UnstyledButton
                     className={classes.sidebarClose}
-                    onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    onClick={() => setSidebarOpen(false)}>
                     <IconChevronLeft size={20}/>
                     <VisuallyHidden>{t`Close sidebar`}</VisuallyHidden>
                 </UnstyledButton>

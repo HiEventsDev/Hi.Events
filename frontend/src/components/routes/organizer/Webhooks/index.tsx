@@ -12,8 +12,9 @@ import { TableSkeleton } from "../../../common/TableSkeleton";
 import { IdParam } from "../../../../types";
 import { PageBody } from "../../../common/PageBody";
 import { PageTitle } from "../../../common/PageTitle";
+import { RequirePermission } from "../../../common/WriteAccess";
 
-export default function Webhooks() {
+const WebhookList = () => {
     const { organizerId } = useParams();
     const [createModalOpen, { open: openCreateModal, close: closeCreateModal }] = useDisclosure(false);
     const webhooksQuery = useGetOrganizerWebhooks(organizerId as IdParam);
@@ -27,37 +28,45 @@ export default function Webhooks() {
     };
 
     return (
+        <Box>
+            <Card>
+                <Group justify="space-between">
+                    <CreateButton color={'green'} rightSection={<IconPlus />} onClick={openCreateModal} data-testid="webhook-add-button">
+                        {t`Add Webhook`}
+                    </CreateButton>
+                    <Badge
+                        variant="transparent"
+                        size="lg"
+                    >
+                        {getWebhookCountText()}
+                    </Badge>
+                </Group>
+            </Card>
+            <div>
+                <TableSkeleton isVisible={!webhooks} />
+
+                {webhooks && (<OrganizerWebhookTable
+                    webhooks={webhooks}
+                    openCreateModal={openCreateModal}
+                />)}
+            </div>
+
+            {createModalOpen && (
+                <CreateOrganizerWebhookModal
+                    onClose={closeCreateModal}
+                />
+            )}
+        </Box>
+    );
+};
+
+export default function Webhooks() {
+    return (
         <PageBody>
             <PageTitle>{t`Webhooks`}</PageTitle>
-            <Box>
-                <Card>
-                    <Group justify="space-between">
-                        <CreateButton color={'green'} rightSection={<IconPlus />} onClick={openCreateModal} data-testid="webhook-add-button">
-                            {t`Add Webhook`}
-                        </CreateButton>
-                        <Badge
-                            variant="transparent"
-                            size="lg"
-                        >
-                            {getWebhookCountText()}
-                        </Badge>
-                    </Group>
-                </Card>
-                <div>
-                    <TableSkeleton isVisible={!webhooks} />
-
-                    {webhooks && (<OrganizerWebhookTable
-                        webhooks={webhooks}
-                        openCreateModal={openCreateModal}
-                    />)}
-                </div>
-
-                {createModalOpen && (
-                    <CreateOrganizerWebhookModal
-                        onClose={closeCreateModal}
-                    />
-                )}
-            </Box>
+            <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/webhooks.svg">
+                <WebhookList />
+            </RequirePermission>
         </PageBody>
     );
 }

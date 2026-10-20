@@ -174,9 +174,11 @@ export const productSelectionFromConfig = (config: WidgetSettings): ProductSelec
     return productIds || categoryIds ? {productIds, categoryIds} : undefined;
 };
 
-export const forwardedTrackingParams = (search: URLSearchParams): Record<string, string> => {
+const TRACKING_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+
+const presentParams = (search: URLSearchParams, keys: string[]): Record<string, string> => {
     const params: Record<string, string> = {};
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((key) => {
+    keys.forEach((key) => {
         const value = search.get(key);
         if (value) {
             params[key] = value;
@@ -184,3 +186,9 @@ export const forwardedTrackingParams = (search: URLSearchParams): Record<string,
     });
     return params;
 };
+
+export const forwardedTrackingParams = (search: URLSearchParams): Record<string, string> =>
+    presentParams(search, TRACKING_PARAMS);
+
+export const forwardedHostParams = (search: URLSearchParams): Record<string, string> =>
+    presentParams(search, ['aff', 'promo_code', ...TRACKING_PARAMS]);

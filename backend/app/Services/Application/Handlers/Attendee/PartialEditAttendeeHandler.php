@@ -4,18 +4,22 @@ namespace HiEvents\Services\Application\Handlers\Attendee;
 
 use HiEvents\DomainObjects\AttendeeDomainObject;
 use HiEvents\DomainObjects\Enums\CapacityChangeDirection;
+use HiEvents\DomainObjects\OrderDomainObject;
 use HiEvents\DomainObjects\Status\AttendeeStatus;
 use HiEvents\Enterprise\Seating\Exceptions\SeatSelectionInvalidException;
 use HiEvents\Enterprise\Seating\Exceptions\SeatsUnavailableException;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimLiveness;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatClaimService;
 use HiEvents\Enterprise\Seating\Services\Domain\SeatedProductLookupService;
+use HiEvents\Enterprise\Seating\Services\Domain\SeatingEventLockService;
 use HiEvents\Events\CapacityChangedEvent;
 use HiEvents\Repository\Interfaces\AttendeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Attendee\DTO\PartialEditAttendeeDTO;
+use HiEvents\Services\Domain\EventOccurrence\OccurrencePurchaseEligibilityService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsCancellationService;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsReactivationService;
+use HiEvents\Services\Domain\Product\AvailableProductQuantitiesFetchService;
 use HiEvents\Services\Domain\Product\ProductQuantityUpdateService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
@@ -39,6 +43,9 @@ class PartialEditAttendeeHandler
         private readonly LoggerInterface $logger,
         private readonly SeatClaimService $seatClaimService,
         private readonly SeatedProductLookupService $seatedProductLookupService,
+        private readonly SeatingEventLockService $seatingEventLock,
+        private readonly OccurrencePurchaseEligibilityService $occurrenceEligibilityService,
+        private readonly AvailableProductQuantitiesFetchService $availableProductQuantitiesFetchService,
     ) {}
 
     /**
@@ -47,11 +54,17 @@ class PartialEditAttendeeHandler
     public function handle(PartialEditAttendeeDTO $data): AttendeeDomainObject
     {
         return $this->databaseManager->transaction(function () use ($data) {
-            return $this->updateAttendee($data);
+            $status = $data->status ? strtoupper($data->status) : null;
+
+            if ($status !== null) {
+                $this->seatingEventLock->lock($data->event_id);
+            }
+
+            return $this->updateAttendee($data, $status);
         });
     }
 
-    private function updateAttendee(PartialEditAttendeeDTO $data): AttendeeDomainObject
+    private function updateAttendee(PartialEditAttendeeDTO $data, ?string $status): AttendeeDomainObject
     {
         $attendee = $this->attendeeRepository->findFirstWhere([
             'id' => $data->attendee_id,
@@ -62,23 +75,14 @@ class PartialEditAttendeeHandler
             throw new ResourceNotFoundException;
         }
 
-        $status = $data->status ? strtoupper($data->status) : null;
+        $wasCancelled = $attendee->getStatus() === AttendeeStatus::CANCELLED->name;
 
-        $statusIsUpdated = $status && $status !== $attendee->getStatus();
-
-        if ($statusIsUpdated) {
-            $this->adjustSeatClaim($status, $attendee);
-            $this->adjustProductQuantity($status, $attendee);
-            $this->adjustEventStatistics($status, $attendee);
+        if ($status !== null && $wasCancelled && $status !== AttendeeStatus::CANCELLED->name) {
+            $this->reactivate($status, $attendee);
         }
 
-        if ($statusIsUpdated && $status === AttendeeStatus::CANCELLED->name) {
-            $this->domainEventDispatcherService->dispatch(
-                new AttendeeEvent(
-                    type: DomainEventType::ATTENDEE_CANCELLED,
-                    attendeeId: $attendee->getId(),
-                )
-            );
+        if ($status === AttendeeStatus::CANCELLED->name && ! $wasCancelled) {
+            $this->cancel($attendee);
         }
 
         return $this->attendeeRepository->updateByIdWhere(
@@ -96,33 +100,91 @@ class PartialEditAttendeeHandler
 
     /**
      * @throws ValidationException
+     * @throws Throwable
      */
-    private function adjustSeatClaim(string $status, AttendeeDomainObject $attendee): void
+    private function reactivate(string $status, AttendeeDomainObject $attendee): void
     {
-        if ($status === AttendeeStatus::CANCELLED->name) {
-            $this->seatClaimService->releaseForAttendee($attendee->getId());
+        $seatedOrder = $this->assertSeatAllowsReactivation($status, $attendee);
 
-            return;
+        $this->assertRoomToReactivate($attendee);
+
+        if ($seatedOrder !== null) {
+            $this->reclaimSeat($attendee, $seatedOrder);
         }
 
+        $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
+
+        event(new CapacityChangedEvent(
+            eventId: $attendee->getEventId(),
+            direction: CapacityChangeDirection::DECREASED,
+            productId: $attendee->getProductId(),
+            productPriceId: $attendee->getProductPriceId(),
+            eventOccurrenceId: $attendee->getEventOccurrenceId(),
+        ));
+
+        $order = $this->findOrderForStatistics($attendee);
+        if ($order !== null) {
+            $this->eventStatisticsReactivationService->incrementForReactivatedAttendee(
+                eventId: $attendee->getEventId(),
+                orderDate: $order->getCreatedAt(),
+                occurrenceId: $attendee->getEventOccurrenceId(),
+            );
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function cancel(AttendeeDomainObject $attendee): void
+    {
+        $this->seatClaimService->releaseForAttendee($attendee->getId());
+
+        $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
+
+        event(new CapacityChangedEvent(
+            eventId: $attendee->getEventId(),
+            direction: CapacityChangeDirection::INCREASED,
+            productId: $attendee->getProductId(),
+            productPriceId: $attendee->getProductPriceId(),
+            eventOccurrenceId: $attendee->getEventOccurrenceId(),
+        ));
+
+        $order = $this->findOrderForStatistics($attendee);
+        if ($order !== null) {
+            $this->eventStatisticsCancellationService->decrementForCancelledAttendee(
+                eventId: $attendee->getEventId(),
+                orderDate: $order->getCreatedAt(),
+                occurrenceId: $attendee->getEventOccurrenceId(),
+            );
+        }
+
+        $this->domainEventDispatcherService->dispatch(
+            new AttendeeEvent(
+                type: DomainEventType::ATTENDEE_CANCELLED,
+                attendeeId: $attendee->getId(),
+            )
+        );
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertSeatAllowsReactivation(string $status, AttendeeDomainObject $attendee): ?OrderDomainObject
+    {
         if ($attendee->getSeatUid() === null) {
-            if ($status === AttendeeStatus::ACTIVE->name && $this->seatedProductLookupService->isSeated($attendee->getProductId())) {
+            if ($this->seatedProductLookupService->isSeated($attendee->getProductId())) {
                 throw ValidationException::withMessages([
                     'status' => __('This ticket now needs a seat, so this attendee cannot be reactivated. Add them again and choose a seat.'),
                 ]);
             }
 
-            return;
+            return null;
         }
 
         if ($status !== AttendeeStatus::ACTIVE->name) {
-            if ($attendee->getStatus() === AttendeeStatus::CANCELLED->name) {
-                throw ValidationException::withMessages([
-                    'status' => __('A cancelled seated attendee can only be reactivated as active'),
-                ]);
-            }
-
-            return;
+            throw ValidationException::withMessages([
+                'status' => __('A cancelled seated attendee can only be reactivated as active'),
+            ]);
         }
 
         $order = $this->orderRepository->findById($attendee->getOrderId());
@@ -132,6 +194,66 @@ class PartialEditAttendeeHandler
             ]);
         }
 
+        return $order;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertRoomToReactivate(AttendeeDomainObject $attendee): void
+    {
+        if ($attendee->getEventOccurrenceId() !== null) {
+            $this->assertDateHasRoom($attendee);
+        }
+
+        $availability = $this->availableProductQuantitiesFetchService->getAvailableProductQuantities(
+            $attendee->getEventId(),
+            ignoreCache: true,
+            eventOccurrenceId: $attendee->getEventOccurrenceId(),
+            applyOccurrenceLimits: false,
+        );
+
+        if ($availability->firstOverflowingPool([$attendee->getProductId() => 1]) !== null) {
+            throw ValidationException::withMessages([
+                'status' => __('The capacity shared by this ticket is full.'),
+            ]);
+        }
+
+        $price = $availability->productQuantities->firstWhere('price_id', $attendee->getProductPriceId());
+        $available = $attendee->getSeatUid() === null
+            ? $price?->quantity_available
+            : ($price?->quantity_available_before_seats ?? $price?->quantity_available);
+
+        if (($available ?? 0) <= 0) {
+            throw ValidationException::withMessages([
+                'status' => __('This ticket is sold out, so this attendee cannot be reactivated. Increase its quantity and try again.'),
+            ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function assertDateHasRoom(AttendeeDomainObject $attendee): void
+    {
+        try {
+            $this->occurrenceEligibilityService->assertOccurrencePurchasable(
+                eventId: $attendee->getEventId(),
+                occurrenceId: $attendee->getEventOccurrenceId(),
+                allowPastOccurrence: true,
+            );
+        } catch (ValidationException $exception) {
+            throw ValidationException::withMessages([
+                'status' => collect($exception->errors())->flatten()->first(),
+            ]);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function reclaimSeat(AttendeeDomainObject $attendee, OrderDomainObject $order): void
+    {
         try {
             $this->seatClaimService->reclaimForAttendee($attendee, $order);
         } catch (SeatsUnavailableException) {
@@ -143,40 +265,7 @@ class PartialEditAttendeeHandler
         }
     }
 
-    /**
-     * @todo - we should check product availability before updating the product quantity
-     */
-    private function adjustProductQuantity(string $status, AttendeeDomainObject $attendee): void
-    {
-        if ($status === AttendeeStatus::ACTIVE->name) {
-            $this->productQuantityService->increaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
-
-            event(new CapacityChangedEvent(
-                eventId: $attendee->getEventId(),
-                direction: CapacityChangeDirection::DECREASED,
-                productId: $attendee->getProductId(),
-                productPriceId: $attendee->getProductPriceId(),
-                eventOccurrenceId: $attendee->getEventOccurrenceId(),
-            ));
-        } elseif ($status === AttendeeStatus::CANCELLED->name) {
-            $this->productQuantityService->decreaseQuantitySold($attendee->getProductPriceId(), 1, $attendee->getEventOccurrenceId());
-
-            event(new CapacityChangedEvent(
-                eventId: $attendee->getEventId(),
-                direction: CapacityChangeDirection::INCREASED,
-                productId: $attendee->getProductId(),
-                productPriceId: $attendee->getProductPriceId(),
-                eventOccurrenceId: $attendee->getEventOccurrenceId(),
-            ));
-        }
-    }
-
-    /**
-     * Adjust event statistics when attendee status changes
-     *
-     * @throws Throwable
-     */
-    private function adjustEventStatistics(string $status, AttendeeDomainObject $attendee): void
+    private function findOrderForStatistics(AttendeeDomainObject $attendee): ?OrderDomainObject
     {
         $order = $this->orderRepository->findFirstWhere([
             'id' => $attendee->getOrderId(),
@@ -189,22 +278,8 @@ class PartialEditAttendeeHandler
                 'order_id' => $attendee->getOrderId(),
                 'event_id' => $attendee->getEventId(),
             ]);
-
-            return;
         }
 
-        if ($status === AttendeeStatus::CANCELLED->name) {
-            $this->eventStatisticsCancellationService->decrementForCancelledAttendee(
-                eventId: $attendee->getEventId(),
-                orderDate: $order->getCreatedAt(),
-                occurrenceId: $attendee->getEventOccurrenceId(),
-            );
-        } elseif ($status === AttendeeStatus::ACTIVE->name) {
-            $this->eventStatisticsReactivationService->incrementForReactivatedAttendee(
-                eventId: $attendee->getEventId(),
-                orderDate: $order->getCreatedAt(),
-                occurrenceId: $attendee->getEventOccurrenceId(),
-            );
-        }
+        return $order;
     }
 }

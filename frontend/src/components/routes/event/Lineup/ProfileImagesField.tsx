@@ -2,7 +2,7 @@ import {useState} from "react";
 import {t} from "@lingui/macro";
 import {ActionIcon, Loader} from "@mantine/core";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
-import {IconPhotoPlus, IconX} from "@tabler/icons-react";
+import {IconGripVertical, IconPhotoPlus, IconX} from "@tabler/icons-react";
 import {useQueryClient} from "@tanstack/react-query";
 import {
     closestCenter,
@@ -23,7 +23,9 @@ import {GET_EVENT_LINEUP_PUBLIC_QUERY_KEY} from "../../../../queries/useGetEvent
 import {GET_PROFILES_QUERY_KEY} from "../../../../queries/useGetProfiles.ts";
 import {useSortProfileImages} from "../../../../mutations/useSortProfileImages.ts";
 import {useImageUploads} from "../../../../hooks/useImageUploads.ts";
+import {useSortableAccessibility} from "../../../../hooks/useSortableAccessibility.ts";
 import {showError} from "../../../../utilites/notifications.tsx";
+import {confirmationDialog} from "../../../../utilites/confirmationDialog.tsx";
 import {IdParam, Image} from "../../../../types.ts";
 import classes from "./Lineup.module.scss";
 
@@ -52,6 +54,11 @@ export const ProfileImagesField = ({profile, organizerId, disabled}: ProfileImag
             .map(id => profile.images.find(image => Number(image.id) === id))
             .filter((image): image is Image => !!image)
         : profile.images;
+    const imageIds = images.map(image => Number(image.id));
+    const {id: dndId, accessibility} = useSortableAccessibility(imageIds, id => {
+        const position = imageIds.indexOf(Number(id)) + 1;
+        return t`Photo ${position}`;
+    });
 
     const refresh = () => Promise.all([
         queryClient.invalidateQueries({queryKey: [GET_EVENT_LINEUP_QUERY_KEY]}),
@@ -79,13 +86,18 @@ export const ProfileImagesField = ({profile, organizerId, disabled}: ProfileImag
         }
     };
 
+    const confirmRemove = (imageId: IdParam) => confirmationDialog(
+        t`Remove this photo? It's deleted straight away.`,
+        () => remove(imageId),
+        {confirm: t`Remove`, destructive: true},
+    );
+
     const handleDragEnd = ({active, over}: DragEndEvent) => {
         if (!over || active.id === over.id) {
             return;
         }
 
-        const ids = images.map(image => Number(image.id));
-        const sortedIds = arrayMove(ids, ids.indexOf(Number(active.id)), ids.indexOf(Number(over.id)));
+        const sortedIds = arrayMove(imageIds, imageIds.indexOf(Number(active.id)), imageIds.indexOf(Number(over.id)));
         setPendingOrder(sortedIds);
 
         sortMutation.mutate({organizerId, profileId: profile.id, sortedIds}, {
@@ -96,17 +108,18 @@ export const ProfileImagesField = ({profile, organizerId, disabled}: ProfileImag
 
     return (
         <div className={classes.fieldStack}>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={images.map(image => Number(image.id))} strategy={rectSortingStrategy} disabled={disabled}>
+            <DndContext id={dndId} accessibility={accessibility} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={imageIds} strategy={rectSortingStrategy} disabled={disabled}>
                     <div className={classes.photoGrid} data-testid="lineup-profile-photos">
                         {images.map((image, index) => (
                             <SortablePhoto
                                 key={image.id}
                                 image={image}
-                                isMain={index === 0}
+                                position={index + 1}
+                                total={images.length}
                                 disabled={disabled}
                                 removing={removingId === image.id}
-                                onRemove={() => remove(image.id)}
+                                onRemove={() => confirmRemove(image.id)}
                             />
                         ))}
 
@@ -144,20 +157,22 @@ export const ProfileImagesField = ({profile, organizerId, disabled}: ProfileImag
 
 interface SortablePhotoProps {
     image: Image;
-    isMain: boolean;
+    position: number;
+    total: number;
     disabled?: boolean;
     removing: boolean;
     onRemove: () => void;
 }
 
-const SortablePhoto = ({image, isMain, disabled, removing, onRemove}: SortablePhotoProps) => {
-    const {attributes, listeners, setNodeRef, transform, transition, isDragging} = useSortable({id: Number(image.id), disabled});
+const SortablePhoto = ({image, position, total, disabled, removing, onRemove}: SortablePhotoProps) => {
+    const sortable = !disabled && total > 1;
+    const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging} = useSortable({id: Number(image.id), disabled: !sortable});
 
     return (
         <div
             ref={setNodeRef}
             className={classes.photoTile}
-            data-sortable={!disabled || undefined}
+            data-sortable={sortable || undefined}
             data-dragging={isDragging || undefined}
             data-testid={`lineup-profile-photo-${image.id}`}
             style={{
@@ -165,24 +180,37 @@ const SortablePhoto = ({image, isMain, disabled, removing, onRemove}: SortablePh
                 transform: CSS.Transform.toString(transform),
                 transition,
             }}
-            {...attributes}
             {...listeners}
         >
             <img src={image.url} alt="" draggable={false}/>
-            {isMain && <span className={classes.photoBadge}>{t`Main photo`}</span>}
+            {position === 1 && <span className={classes.photoBadge}>{t`Main photo`}</span>}
+            {sortable && (
+                <ActionIcon
+                    ref={setActivatorNodeRef}
+                    className={classes.photoMove}
+                    size="md"
+                    radius="xl"
+                    variant="filled"
+                    color="dark"
+                    {...attributes}
+                    aria-label={t`Move photo ${position} of ${total}`}
+                >
+                    <IconGripVertical size={14}/>
+                </ActionIcon>
+            )}
             {!disabled && (
                 <ActionIcon
                     className={classes.photoRemove}
-                    size="sm"
+                    size="md"
                     radius="xl"
                     variant="filled"
                     color="dark"
                     loading={removing}
-                    aria-label={t`Remove photo`}
+                    aria-label={t`Remove photo ${position}`}
                     onPointerDown={event => event.stopPropagation()}
                     onClick={onRemove}
                 >
-                    <IconX size={12}/>
+                    <IconX size={14}/>
                 </ActionIcon>
             )}
         </div>

@@ -9,7 +9,7 @@ import {CreateButton} from "../../../common/CreateButton";
 import {ProfileLinkIcon, profileLinkLabel} from "../../../common/ProfileLinkIcon";
 import {useGetProfiles} from "../../../../queries/useGetProfiles.ts";
 import {useAccess} from "../../../../hooks/useAccess.ts";
-import {Profile} from "../../../../api/lineup.client.ts";
+import {Profile, ProfileAppearance} from "../../../../api/lineup.client.ts";
 import {initialsFor, profilePhoto} from "../../../../utilites/lineup.ts";
 import {ProfileDrawer} from "../../event/Lineup/ProfileDrawer.tsx";
 import lineupClasses from "../../event/Lineup/Lineup.module.scss";
@@ -18,16 +18,18 @@ import classes from "./People.module.scss";
 type DrawerTarget = { profileId: number } | 'new';
 type Filter = 'all' | 'missing_photo' | 'unused' | 'live';
 
-const isOnLiveEvent = (profile: Profile) => (profile.appearances ?? []).some(appearance => appearance.event_status === 'LIVE');
+const isPublicAppearance = (appearance: ProfileAppearance) => appearance.event_status === 'LIVE' && !appearance.is_hidden;
+
+const isOnLiveEvent = (profile: Profile) => (profile.appearances ?? []).some(isPublicAppearance);
 
 const People = () => {
     const {organizerId} = useParams();
-    const {canManageOrganizer} = useAccess();
+    const {canManageOrganizer, isReadOnly} = useAccess();
     const {data: profiles, isLoading} = useGetProfiles(organizerId);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState<Filter>('all');
     const [drawer, setDrawer] = useState<DrawerTarget | null>(null);
-    const canCreate = canManageOrganizer(organizerId);
+    const canCreate = canManageOrganizer(organizerId) && !isReadOnly;
 
     const counts = useMemo(() => {
         const all = profiles ?? [];
@@ -78,9 +80,11 @@ const People = () => {
                         {t`People`}
                     </PageTitle>
                     {canCreate && (
-                        <CreateButton leftSection={<IconPlus size={16}/>} onClick={() => setDrawer('new')} data-testid="people-create-button">
-                            {t`New profile`}
-                        </CreateButton>
+                        <div className={lineupClasses.pageActions}>
+                            <CreateButton leftSection={<IconPlus size={16}/>} onClick={() => setDrawer('new')} data-testid="people-create-button">
+                                {t`New profile`}
+                            </CreateButton>
+                        </div>
                     )}
                 </div>
 
@@ -159,7 +163,7 @@ const PersonRow = ({profile, onOpen}: { profile: Profile, onOpen: () => void }) 
     return (
         <button type="button" className={classes.row} onClick={onOpen} data-testid={`people-row-${profile.id}`}>
             <span className={classes.identity}>
-                <Avatar src={photo?.url} size={40} radius="md" color="primary">
+                <Avatar src={photo?.url} alt="" size={40} radius="md" color="primary">
                     {initialsFor(profile.name)}
                 </Avatar>
                 <span className={lineupClasses.entryText}>
@@ -173,7 +177,7 @@ const PersonRow = ({profile, onOpen}: { profile: Profile, onOpen: () => void }) 
             <span className={classes.appearances}>
                 {appearances.length === 0 && <span className={classes.muted}>{t`Not on any event`}</span>}
                 {appearances.slice(0, 2).map(appearance => (
-                    <span key={appearance.event_id} className={classes.eventChip} data-live={appearance.event_status === 'LIVE' || undefined}>
+                    <span key={appearance.event_id} className={classes.eventChip} data-live={isPublicAppearance(appearance) || undefined}>
                         <span className={classes.eventDot}/>
                         <span className={classes.eventChipText}>{appearance.event_title}</span>
                     </span>

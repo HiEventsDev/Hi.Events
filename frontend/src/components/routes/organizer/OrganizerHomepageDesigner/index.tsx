@@ -21,7 +21,7 @@ import {GET_ORGANIZER_PUBLIC_QUERY_KEY} from "../../../../queries/useGetOrganize
 import {ThemeColorControls} from "../../../common/ThemeColorControls";
 import {ThemeFontControl} from "../../../common/ThemeFontControl";
 import {getDefaultThemeSettings, validateThemeSettings} from "../../../../utilites/themeUtils.ts";
-import {HomepageDesigner, useHomepagePreview} from "../../../common/HomepageDesigner";
+import {firstHomepageSectionsError, HomepageDesigner, useHomepagePreview} from "../../../common/HomepageDesigner";
 import {DesignerSection} from "../../../common/DesignerShell";
 
 interface FormValues {
@@ -93,7 +93,7 @@ const OrganizerHomepageDesigner = () => {
                     showSuccess(t`Successfully Updated Homepage Design`);
                 },
                 onError: (error) => {
-                    formErrorHandle(form, error);
+                    formErrorHandle(form, error, firstHomepageSectionsError(error));
                 },
             }
         );

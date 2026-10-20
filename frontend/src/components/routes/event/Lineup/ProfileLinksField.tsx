@@ -43,7 +43,7 @@ export const ProfileLinksField = ({value, savedLinks, onChange, errors, disabled
                             <ActionIcon
                                 variant="subtle"
                                 color="gray"
-                                aria-label={t`Remove link`}
+                                aria-label={t`Remove link ${linkNumber}`}
                                 onClick={() => onChange(value.length === 1 ? [''] : value.filter((_, i) => i !== index))}
                             >
                                 <IconX size={16}/>

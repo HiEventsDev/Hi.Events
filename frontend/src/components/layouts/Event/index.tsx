@@ -38,7 +38,7 @@ import {useGeoStatus} from "../../../queries/useGeoStatus.ts";
 import Truncate from "../../common/Truncate";
 import {BreadcrumbItem, NavItem} from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import {Navigate, NavLink, useLocation, useParams} from "react-router";
+import {NavLink, useLocation, useParams} from "react-router";
 import classes from './Event.module.scss';
 import {Badge, Button} from "@mantine/core";
 import {confirmationDialog} from "../../../utilites/confirmationDialog.tsx";
@@ -60,6 +60,7 @@ import {EventType} from "../../../types.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
 import {useLicensedFeature} from "../../../ee/licensing/hooks/useLicensedFeature.ts";
 import {prettyDate} from "../../../utilites/dates.ts";
+import {GenericErrorPage} from "../../common/GenericErrorPage";
 
 const EventLayout = () => {
     const location = useLocation();
@@ -224,7 +225,15 @@ const EventLayout = () => {
     };
 
     if ((eventError as any)?.response?.data?.error_code === 'ACCESS_RESTRICTED') {
-        return <Navigate to={'/manage/events'} replace/>;
+        return (
+            <GenericErrorPage
+                title={t`You don't have access to this event`}
+                description={t`Ask an account admin to give you access, or open one of your own events.`}
+                buttonText={t`Go to your events`}
+                buttonUrl="/manage/events"
+                buttonIcon={<IconArrowLeft size={18}/>}
+            />
+        );
     }
 
     return (

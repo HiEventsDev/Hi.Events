@@ -20,7 +20,7 @@ class TeamOrderNotificationRecipientService
     ) {}
 
     /**
-     * @return string[]
+     * @return UserDomainObject[]
      */
     public function recipientsFor(EventDomainObject $event, ?string $excludeEmail): array
     {
@@ -52,9 +52,8 @@ class TeamOrderNotificationRecipientService
                 values: $subscribers->map(fn (AccountUserDomainObject $accountUser) => $accountUser->getUserId())->all(),
                 additionalWhere: [['email_verified_at', 'not null', null]],
             )
-            ->map(fn (UserDomainObject $user) => strtolower($user->getEmail()))
-            ->reject(fn (string $email) => $email === $excluded)
-            ->unique()
+            ->reject(fn (UserDomainObject $user) => strtolower($user->getEmail()) === $excluded)
+            ->unique(fn (UserDomainObject $user) => strtolower($user->getEmail()))
             ->values()
             ->all();
     }

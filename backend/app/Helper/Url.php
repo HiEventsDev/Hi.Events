@@ -66,10 +66,10 @@ class Url
      */
     public static function getCdnUrl(string $path): string
     {
-        $envCDNUrl = env('APP_CDN_URL');
+        $cdnUrl = config('app.cdn_url');
 
-        if ($envCDNUrl) {
-            return $envCDNUrl.'/'.$path;
+        if ($cdnUrl) {
+            return $cdnUrl.'/'.$path;
         }
 
         $disk = config('filesystems.public', 'public');

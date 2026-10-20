@@ -84,7 +84,11 @@ class LoginService
         if ($this->twoFactorAuthenticationService->isEnabled($user)
             && ($this->ssoEnforcementService->requiresFreshSecondFactor($user->getId(), $context)
                 || ! $this->trustedDeviceService->isTrusted($user->getId(), $trustedDeviceToken))) {
-            $this->assertCanSignInTo($user, $requestedAccountId);
+            $accountId = $this->resolveAccountToSignInTo($user, $requestedAccountId);
+
+            if ($accountId !== null) {
+                $this->ssoEnforcementService->assertMemberSignInAllowed($user, $accountId, $context);
+            }
 
             return new LoginResponse(
                 accounts: collect(),
@@ -161,9 +165,9 @@ class LoginService
     /**
      * @throws UnauthorizedException
      */
-    private function assertCanSignInTo(UserDomainObject $user, ?int $requestedAccountId): void
+    private function resolveAccountToSignInTo(UserDomainObject $user, ?int $requestedAccountId): ?int
     {
-        $this->getAccountId(
+        return $this->getAccountId(
             $this->findActiveUserAccounts($user)->map(fn ($accountUser) => $accountUser->getAccount()),
             $requestedAccountId,
         );

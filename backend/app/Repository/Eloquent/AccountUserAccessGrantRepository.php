@@ -31,13 +31,22 @@ class AccountUserAccessGrantRepository extends BaseRepository implements Account
         return $this->runQuery(fn () => $this->handleResults(
             $this->model
                 ->whereIn('account_user_id', $accountUserIds)
-                ->where(fn (Builder $query) => $query
-                    ->whereNull('event_id')
-                    ->orWhereIn('event_id', fn (QueryBuilder $events) => $events->select('id')->from('events')->whereNull('deleted_at')))
-                ->where(fn (Builder $query) => $query
-                    ->whereNull('organizer_id')
-                    ->orWhereIn('organizer_id', fn (QueryBuilder $organizers) => $organizers->select('id')->from('organizers')->whereNull('deleted_at')))
+                ->where(fn (Builder $query) => $this->targetIsLive($query, 'event_id', 'events'))
+                ->where(fn (Builder $query) => $this->targetIsLive($query, 'organizer_id', 'organizers'))
                 ->get()
         ));
+    }
+
+    private function targetIsLive(Builder $query, string $column, string $targetTable): Builder
+    {
+        $grantColumn = $query->qualifyColumn($column);
+
+        return $query
+            ->whereNull($grantColumn)
+            ->orWhereExists(fn (QueryBuilder $target) => $target
+                ->selectRaw('1')
+                ->from($targetTable)
+                ->whereColumn("$targetTable.id", $grantColumn)
+                ->whereNull("$targetTable.deleted_at"));
     }
 }

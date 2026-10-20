@@ -18,6 +18,11 @@ interface HeavySectionProps {
 
 export const HeavySection = ({section, event, occurrence}: HeavySectionProps) => {
     if (section === 'lineup') {
+        const lineupEnabled = resolveHomepageSections(event.settings?.homepage_sections)
+            .some(candidate => candidate.type === 'LINEUP' && candidate.enabled);
+        if (!lineupEnabled) {
+            return null;
+        }
         return <EventLineupSection event={event} occurrence={occurrence} heading={homepageSectionHeading(event.settings?.homepage_sections, 'LINEUP', '') || null} sectionClasses={widgetSectionClasses} compact/>;
     }
     if (section === 'schedule') {

@@ -24,14 +24,14 @@ class EditTaxOrFeeAction extends BaseAction
     /**
      * @throws ValidationException
      */
-    public function __invoke(CreateTaxOrFeeRequest $request, int $accountId, int $taxId): JsonResponse
+    public function __invoke(CreateTaxOrFeeRequest $request, int $accountId, int $taxOrFeeId): JsonResponse
     {
-        $this->isActionAuthorized($taxId, TaxAndFeesDomainObject::class);
+        $this->isActionAuthorized($taxOrFeeId, TaxAndFeesDomainObject::class);
 
         try {
             $payload = array_merge($request->validated(), [
                 'account_id' => $this->getAuthenticatedAccountId(),
-                'id' => $taxId,
+                'id' => $taxOrFeeId,
             ]);
 
             $tax = $this->taxHandler->handle(UpsertTaxDTO::fromArray($payload));

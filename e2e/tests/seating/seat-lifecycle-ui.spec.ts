@@ -69,7 +69,7 @@ test.describe('reserved seating lifecycle', () => {
     await adminApi.setAccountFeatureFlag(await adminApi.findAccountIdByEmail(account.email), 'seating', true);
   });
 
-  test('cancelling a date frees its seats and the cancelled ticket can take one back', async ({ authedPage, api, publicApi, account }) => {
+  test('cancelling a date frees its seats, and its cancelled tickets cannot be reactivated onto it', async ({ authedPage, api, publicApi, account }) => {
     const event = await createSeatedEvent(api, account.organizerId, { recurringCount: 2 });
     const [firstDate, secondDate] = event.occurrences;
     const firstDateBuyer = uniqueEmail('first-date');
@@ -107,11 +107,10 @@ test.describe('reserved seating lifecycle', () => {
     await attendees.goto(event.eventId);
     await attendees.openRowAction(firstDateBuyer, 'Activate');
     await authedPage.getByRole('dialog').getByRole('button', { name: 'Confirm' }).click();
-    await expect(authedPage.getByText('Successfully activated attendee')).toBeVisible();
-    await expect(authedPage.getByText(/given to someone else/)).toHaveCount(0);
+    await expect(authedPage.getByText('This event occurrence has been cancelled')).toBeVisible();
 
-    expect((await attendeeByEmail(api, event.eventId, firstDateBuyer)).status).toBe('ACTIVE');
-    expect(await occupiedUids(api, event.eventId, firstDate.id)).toEqual([A10]);
+    expect((await attendeeByEmail(api, event.eventId, firstDateBuyer)).status).toBe('CANCELLED');
+    expect(await occupiedUids(api, event.eventId, firstDate.id)).toEqual([]);
   });
 
   test('best available offers a pair the orphan rule accepts and the buyer checks out', async ({ page, api, publicApi, account }) => {

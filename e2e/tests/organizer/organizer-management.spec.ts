@@ -9,7 +9,7 @@ test.describe('organizer management', () => {
 
     const organizer = new OrganizerPage(authedPage);
     await organizer.gotoEventsDashboard();
-    await organizer.openCreateOrganizerModal('EO');
+    await organizer.openCreateOrganizerModal();
 
     await expect(authedPage.getByRole('heading', { name: 'Create organizer' })).toBeVisible();
     await expect(organizer.contactEmailInput).toHaveValue(account.email);

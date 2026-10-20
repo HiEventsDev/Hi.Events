@@ -28,6 +28,7 @@ class StopImpersonationAction extends BaseAuthAction
         }
 
         $impersonatorId = $this->authManager->payload()->get('impersonator_id');
+        $presentedToken = $this->authManager->getToken();
 
         try {
             $token = $this->handler->handle(new StopImpersonationDTO(
@@ -36,6 +37,8 @@ class StopImpersonationAction extends BaseAuthAction
         } catch (UnauthorizedException $exception) {
             return $this->errorResponse($exception->getMessage(), ResponseCodes::HTTP_FORBIDDEN);
         }
+
+        $this->authManager->manager()->invalidate($presentedToken);
 
         $response = $this->jsonResponse([
             'message' => __('Impersonation ended'),

@@ -15,6 +15,7 @@ import {
 import {arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {WidgetSection} from "../../../utilites/widgetConfig.ts";
+import {useSortableAccessibility} from "../../../hooks/useSortableAccessibility.ts";
 import classes from "./WidgetEditor.module.scss";
 
 const DISPLAY_ORDER: WidgetSection[] = ['header', 'tickets', 'about', 'lineup', 'schedule', 'location', 'organizer', 'custom'];
@@ -98,6 +99,7 @@ export const SectionsPicker = ({value, onChange}: SectionsPickerProps) => {
         });
         return result;
     }, [enabled]);
+    const {id: dndId, accessibility} = useSortableAccessibility(order, id => sectionLabel(id as WidgetSection));
 
     const sensors = useSensors(
         useSensor(PointerSensor, {activationConstraint: {distance: 4}}),
@@ -129,7 +131,7 @@ export const SectionsPicker = ({value, onChange}: SectionsPickerProps) => {
     };
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+        <DndContext id={dndId} accessibility={accessibility} sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <SortableContext items={order} strategy={verticalListSortingStrategy}>
                 <ul className={classes.sectionList}>
                     {order.map(section => (

@@ -32,6 +32,7 @@ interface GroupedOccurrenceTableProps {
     selectedIds: Set<number>;
     onSelectionChange: (ids: Set<number>) => void;
     rowStyle?: (occ: EventOccurrence) => CSSProperties | undefined;
+    selectable?: boolean;
 }
 
 const formatDateHeader = (dateKey: string, eventTimezone: string): string => {
@@ -55,6 +56,7 @@ export const GroupedOccurrenceTable = ({
     selectedIds,
     onSelectionChange,
     rowStyle,
+    selectable = true,
 }: GroupedOccurrenceTableProps) => {
     const groups: DateGroup[] = useMemo(() => {
         const map = new Map<string, EventOccurrence[]>();
@@ -108,7 +110,7 @@ export const GroupedOccurrenceTable = ({
         onSelectionChange(next);
     }, [selectedIds, onSelectionChange]);
 
-    const totalColumns = columns.length + 1;
+    const totalColumns = columns.length + (selectable ? 1 : 0);
 
     return (
         <div className={classes.tableWrapper}>
@@ -117,15 +119,17 @@ export const GroupedOccurrenceTable = ({
                     <MantineTable className={classes.table}>
                         <MantineTable.Thead className={classes.tableHead}>
                             <MantineTable.Tr>
-                                <MantineTable.Th style={{width: 40, paddingLeft: 20}}>
-                                    <Checkbox
-                                        size="xs"
-                                        checked={allSelected}
-                                        indeterminate={someSelected}
-                                        onChange={toggleAll}
-                                        aria-label={t`Select all`}
-                                    />
-                                </MantineTable.Th>
+                                {selectable && (
+                                    <MantineTable.Th style={{width: 40, paddingLeft: 20}}>
+                                        <Checkbox
+                                            size="xs"
+                                            checked={allSelected}
+                                            indeterminate={someSelected}
+                                            onChange={toggleAll}
+                                            aria-label={t`Select all`}
+                                        />
+                                    </MantineTable.Th>
+                                )}
                                 {columns.map(col => (
                                     <MantineTable.Th
                                         key={col.id}
@@ -147,14 +151,16 @@ export const GroupedOccurrenceTable = ({
                                     <MantineTable.Tr key={`header-${group.dateKey}`} className={classes.dateHeaderRow}>
                                         <MantineTable.Td colSpan={totalColumns}>
                                             <div className={classes.dateHeaderContent}>
-                                                <Checkbox
-                                                    size="xs"
-                                                    className={classes.dateHeaderCheckbox}
-                                                    checked={allGroupSelected}
-                                                    indeterminate={someGroupSelected}
-                                                    onChange={() => toggleGroup(group.occurrences)}
-                                                    aria-label={t`Select all on ${group.label}`}
-                                                />
+                                                {selectable && (
+                                                    <Checkbox
+                                                        size="xs"
+                                                        className={classes.dateHeaderCheckbox}
+                                                        checked={allGroupSelected}
+                                                        indeterminate={someGroupSelected}
+                                                        onChange={() => toggleGroup(group.occurrences)}
+                                                        aria-label={t`Select all on ${group.label}`}
+                                                    />
+                                                )}
                                                 <span className={classes.dateHeaderLabel}>{group.label}</span>
                                                 {group.occurrences.length > 1 && (
                                                     <span className={classes.dateHeaderBadge}>
@@ -169,16 +175,18 @@ export const GroupedOccurrenceTable = ({
                                             key={occ.id}
                                             style={rowStyle?.(occ)}
                                         >
-                                            <MantineTable.Td style={{width: 40, paddingLeft: 20}}>
-                                                <div className={classes.rowCheckbox}>
-                                                    <Checkbox
-                                                        size="xs"
-                                                        checked={selectedIds.has(occ.id as number)}
-                                                        onChange={() => toggleRow(occ.id as number)}
-                                                        aria-label={t`Select date`}
-                                                    />
-                                                </div>
-                                            </MantineTable.Td>
+                                            {selectable && (
+                                                <MantineTable.Td style={{width: 40, paddingLeft: 20}}>
+                                                    <div className={classes.rowCheckbox}>
+                                                        <Checkbox
+                                                            size="xs"
+                                                            checked={selectedIds.has(occ.id as number)}
+                                                            onChange={() => toggleRow(occ.id as number)}
+                                                            aria-label={t`Select date`}
+                                                        />
+                                                    </div>
+                                                </MantineTable.Td>
+                                            )}
                                             {columns.map(col => (
                                                 <MantineTable.Td
                                                     key={col.id}

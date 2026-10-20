@@ -5,6 +5,7 @@ import { createCompletedOrder, createLiveEventWithFreeTicket } from '../../api/f
 import { LineupPage } from '../../pages/lineup.page';
 import { PublicEventPage } from '../../pages/public-event.page';
 import { uniqueEmail, uniqueName } from '../../utils/unique';
+import { waitForHydration } from '../../utils/hydration';
 
 const EXCEL_FIXTURE = fileURLToPath(new URL('../../fixtures/assets/lineup-excel.xlsx', import.meta.url));
 
@@ -175,8 +176,8 @@ test.describe('lineup import and export', () => {
     await lineup.goto(event.eventId);
     await lineup.openView('Timetable');
 
-    await expect(page.getByRole('tablist', { name: 'Days' }).getByRole('tab')).toHaveCount(1);
-    await expect(page.getByRole('tablist', { name: 'Days' }).getByRole('tab')).toContainText('Jun 14');
+    await expect(page.getByRole('group', { name: 'Days' }).getByRole('button')).toHaveCount(1);
+    await expect(page.getByRole('group', { name: 'Days' }).getByRole('button')).toContainText('Jun 14');
     const block = page.getByText(headliner, { exact: true }).locator('xpath=ancestor::*[contains(@class, "calendarEventText")]');
     await expect(block).toHaveCount(1);
     await expect(block).toContainText('11:00 PM–1:00 AM');
@@ -233,7 +234,7 @@ test.describe('lineup for visitors', () => {
     await session.getByTestId('session-add-to-calendar').click();
     const [ics] = await Promise.all([
       page.waitForEvent('download'),
-      page.getByRole('button', { name: 'Download .ics' }).click(),
+      page.getByRole('menuitem', { name: 'Download .ics' }).click(),
     ]);
     const calendar = await readFile(await ics.path(), 'utf8');
     expect(calendar).toContain('DTSTART:20300614T213000Z');
@@ -269,6 +270,39 @@ test.describe('lineup for visitors', () => {
       expect(body).toContain('Main Stage');
       expect(body).toContain('See the full schedule');
     }
+  });
+
+  test('the lineup widget follows the Lineup section toggle, and a missing event shows its message', async ({ page, api, account }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const headliner = uniqueName('Late Bill');
+    await api.importLineup(event.eventId, {
+      people: [{ name: headliner, billing_tier: 'HEADLINER' }],
+      slots: [{ starts_at: '2030-06-14 21:30:00', ends_at: '2030-06-14 23:00:00', people: [headliner] }],
+    });
+    await api.updateEventSettings(event.eventId, {
+      homepage_sections: [{ id: 'lineup', type: 'LINEUP', enabled: false }],
+    });
+
+    await page.goto(`/widget/${event.eventId}/lineup`);
+    await expect(page.getByTestId('lineup-widget')).toContainText('Coming soon');
+    await expect(page.getByTestId('lineup-widget')).not.toContainText(headliner);
+    await page.goto(`/widget/${event.eventId}/schedule`);
+    await expect(page.getByTestId('schedule-widget')).toContainText(headliner);
+
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => {
+      if (message.type() === 'error' && /hydrat|#418|#423|#425/i.test(message.text())) {
+        errors.push(message.text());
+      }
+    });
+    for (const variant of ['lineup', 'schedule']) {
+      await page.goto(`/widget/999999999/${variant}`);
+      await waitForHydration(page, 'main.hi-widget-tokens');
+      await expect(page.getByText('This event is not available')).toBeVisible();
+      await expect(page.locator('.hi-widget-loading')).toHaveCount(0);
+    }
+    expect(errors).toEqual([]);
   });
 
   test('turning the lineup sections off hides them from the widget, search data and emails', async ({ page, api, account, publicApi, mailpit }) => {

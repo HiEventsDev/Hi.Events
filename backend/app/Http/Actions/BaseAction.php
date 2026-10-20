@@ -54,13 +54,14 @@ abstract class BaseAction extends Controller
         int $statusCode = ResponseCodes::HTTP_OK,
     ): JsonResponse {
         $metaFields = [];
+        $withheldFields = $this->isWithheldFromCurrentUser(Permission::VIEW_FINANCIALS) ? self::FINANCIAL_QUERY_FIELDS : [];
 
         if (is_a($domainObject, IsFilterable::class, true)) {
-            $metaFields['allowed_filter_fields'] = $domainObject::getAllowedFilterFields();
+            $metaFields['allowed_filter_fields'] = array_values(array_diff($domainObject::getAllowedFilterFields(), $withheldFields));
         }
 
         if (is_a($domainObject, IsSortable::class, true)) {
-            $metaFields['allowed_sorts'] = $domainObject::getAllowedSorts()->toArray();
+            $metaFields['allowed_sorts'] = array_diff_key($domainObject::getAllowedSorts()->toArray(), array_flip($withheldFields));
             $metaFields['default_sort'] = $domainObject::getDefaultSort();
             $metaFields['default_sort_direction'] = $domainObject::getDefaultSortDirection();
         }

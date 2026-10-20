@@ -22,9 +22,28 @@ export const defaultSettings = (type: WidgetType): WidgetSettings => {
     }
 };
 
-export const savedSettings = (widget: Widget): WidgetSettings => widget.type === 'TICKETS' || widget.type === 'BUTTON'
-    ? {...widget.settings, sections: widget.settings.sections ?? ['tickets']}
-    : {...widget.settings};
+export interface SelectableIds {
+    products?: number[];
+    categories?: number[];
+    occurrences?: number[];
+}
+
+const onlySelectable = (ids: number[] | undefined, selectable: number[] | undefined) =>
+    ids && selectable ? ids.filter(id => selectable.includes(id)) : ids;
+
+export const savedSettings = (widget: Widget, selectable: SelectableIds = {}): WidgetSettings => {
+    const settings: WidgetSettings = {
+        ...widget.settings,
+        products: onlySelectable(widget.settings.products, selectable.products),
+        categories: onlySelectable(widget.settings.categories, selectable.categories),
+    };
+    if (settings.occurrence_id && selectable.occurrences && !selectable.occurrences.includes(settings.occurrence_id)) {
+        delete settings.occurrence_id;
+    }
+    return widget.type === 'TICKETS' || widget.type === 'BUTTON'
+        ? {...settings, sections: settings.sections ?? ['tickets']}
+        : settings;
+};
 
 const pick = (settings: WidgetSettings, keys: (keyof WidgetSettings)[]): WidgetSettings => {
     const result: WidgetSettings = {};

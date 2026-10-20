@@ -157,6 +157,21 @@
   min-width: 0;
 }
 
+.permissionHint {
+  display: block;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.hiddenLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .roleGrid .choice {
   @include mixins.respond-below(sm) {
     display: grid;

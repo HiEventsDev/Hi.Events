@@ -38,15 +38,14 @@ class PartialUpdateOrganizerSettingsHandler
                 $organizerSettings->getDefaultAttendeeDetailsCollectionMethod()
             )?->name ?? $organizerSettings->getDefaultAttendeeDetailsCollectionMethod(),
 
-            'default_show_marketing_opt_in' => $dto->getProvided(
-                'defaultShowMarketingOptIn',
-                $organizerSettings->getDefaultShowMarketingOptIn()
-            ),
+            'default_show_marketing_opt_in' => $dto->getProvided('defaultShowMarketingOptIn')
+                ?? $organizerSettings->getDefaultShowMarketingOptIn(),
 
-            'default_pass_platform_fee_to_buyer' => $dto->getProvided(
-                'defaultPassPlatformFeeToBuyer',
-                $organizerSettings->getDefaultPassPlatformFeeToBuyer()
-            ),
+            'default_pass_platform_fee_to_buyer' => $dto->getProvided('defaultPassPlatformFeeToBuyer')
+                ?? $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
+
+            'default_allow_attendee_self_edit' => $dto->getProvided('defaultAllowAttendeeSelfEdit')
+                ?? $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
 
             'social_media_handles' => array_filter([
                 'facebook' => $dto->getProvided('facebookHandle', $organizerSettings->getSocialMediaHandle('facebook')),

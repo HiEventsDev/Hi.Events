@@ -3,7 +3,8 @@ import {useMutation} from "@tanstack/react-query";
 import {t} from "@lingui/macro";
 import {authClient} from "../api/auth.client.ts";
 import {redirectToPreviousUrl} from "../api/client.ts";
-import {Account, IdParam, LoginResponse, TwoFactorLoginRequest} from "../types.ts";
+import {Account, IdParam, LoginResponse, SsoErrorResponse, TwoFactorLoginRequest} from "../types.ts";
+import {ssoError} from "../utilites/ssoErrors.ts";
 
 export type LoginStep = 'start' | 'two-factor' | 'choose-account' | 'recovery-notice';
 
@@ -12,9 +13,10 @@ type AccountChooser = (accountId: IdParam) => void;
 interface UseLoginStepsOptions {
     ssoBinding?: string;
     onComplete?: () => void;
+    onSsoRequired: (error: SsoErrorResponse) => void;
 }
 
-export const useLoginSteps = ({ssoBinding, onComplete = redirectToPreviousUrl}: UseLoginStepsOptions = {}) => {
+export const useLoginSteps = ({ssoBinding, onComplete = redirectToPreviousUrl, onSsoRequired}: UseLoginStepsOptions) => {
     const [step, setStep] = useState<LoginStep>('start');
     const [error, setError] = useState<string | null>(null);
     const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
@@ -44,6 +46,12 @@ export const useLoginSteps = ({ssoBinding, onComplete = redirectToPreviousUrl}: 
             const status = requestError?.response?.status;
             const data = requestError?.response?.data;
             setPendingAccountId(null);
+
+            if (data?.error_code === 'SSO_REQUIRED') {
+                reset();
+                onSsoRequired(ssoError(requestError));
+                return;
+            }
 
             if (status === 401) {
                 reset(data?.message ?? t`Your sign-in session has expired. Please sign in again.`);
@@ -102,6 +110,8 @@ export const useLoginSteps = ({ssoBinding, onComplete = redirectToPreviousUrl}: 
     };
 
     const chooseAccount = (accountId: IdParam) => {
+        setError(null);
+        setTwoFactorError(null);
         setPendingAccountId(accountId);
         chooserRef.current?.(accountId);
     };

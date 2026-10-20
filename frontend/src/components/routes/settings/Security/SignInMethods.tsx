@@ -1,4 +1,4 @@
-import {Button} from "@mantine/core";
+import {Button, Loader} from "@mantine/core";
 import {t, Trans} from "@lingui/macro";
 import {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router";
@@ -9,7 +9,7 @@ import {
     useSendPasswordSetupLink,
     useStartSelfServiceSso,
 } from "../../../../mutations/useSsoMutations.ts";
-import {useGetSsoIdentities} from "../../../../queries/useGetSsoIdentities.ts";
+import {useGetSsoSignInMethods} from "../../../../queries/useGetSsoIdentities.ts";
 import {useGetSsoProviders} from "../../../../queries/useGetSsoProviders.ts";
 import {IdentityConfirmation, SsoProvider, User, UserIdentity} from "../../../../types.ts";
 import {relativeDate} from "../../../../utilites/dates.ts";
@@ -34,15 +34,23 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
     const location = useLocation();
     const navigate = useNavigate();
     const {data: sso} = useGetSsoProviders();
-    const {data: identities = []} = useGetSsoIdentities();
+    const {
+        data: signInMethods,
+        isError: identitiesFailed,
+        isFetching: isFetchingIdentities,
+        refetch: refetchIdentities,
+    } = useGetSsoSignInMethods();
+    const loadedIdentities = signInMethods?.identities;
+    const identities = loadedIdentities ?? [];
+    const linkableConnections = signInMethods?.linkableConnections ?? [];
     const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
     const connectedNoticeShown = useRef(false);
     const startSso = useStartSelfServiceSso();
     const deleteIdentity = useDeleteSsoIdentity();
     const sendPasswordLink = useSendPasswordSetupLink();
-    const organizationProviders = identities
-        .map(identity => identity.organization_provider)
+    const organizationProviders = [...identities.map(identity => identity.organization_provider), ...linkableConnections]
         .filter((provider, index, all): provider is SsoProvider => !!provider && all.findIndex(other => other?.key === provider.key) === index);
+    const connectionAccountName = (provider: SsoProvider) => linkableConnections.find(connection => connection.key === provider.key)?.account_name;
     const providers = [...(sso?.providers ?? []), ...organizationProviders];
     const passwordLoginEnabled = sso?.password_login_enabled ?? true;
     const hasPassword = me.has_password !== false;
@@ -135,9 +143,41 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
         });
     };
 
+    const renderProviders = () => {
+        if (loadedIdentities) {
+            return providers.map(renderProvider);
+        }
+
+        if (identitiesFailed) {
+            return (
+                <SettingsRow label={t`Sign-in options`} description={t`Couldn't load your security settings`}>
+                    <Button
+                        variant="default"
+                        loading={isFetchingIdentities}
+                        onClick={() => refetchIdentities()}
+                        data-testid="sso-identities-retry"
+                    >
+                        {t`Try again`}
+                    </Button>
+                </SettingsRow>
+            );
+        }
+
+        if (providers.length === 0) {
+            return null;
+        }
+
+        return (
+            <SettingsRow label={t`Sign-in options`}>
+                <Loader size="sm"/>
+            </SettingsRow>
+        );
+    };
+
     const renderProvider = (provider: SsoProvider) => {
         const connected = identities.filter(identity => identity.provider_key === provider.key);
         const canDisconnect = signInMethodCount > 1;
+        const accountName = connectionAccountName(provider);
 
         return (
             <SettingsRow
@@ -149,7 +189,7 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
                     </span>
                 )}
                 description={connected.length === 0
-                    ? t`Not connected`
+                    ? (accountName ? t`Not connected. ${accountName} uses this for single sign-on.` : t`Not connected`)
                     : (!canDisconnect ? t`This is how you sign in. Add a password or another option before removing it.` : undefined)}
                 below={connected.length > 0 && (
                     <ul className={classes.devices}>
@@ -198,7 +238,7 @@ export const SignInMethods = ({me, resumeAction, onChangePassword}: SignInMethod
     return (
         <>
             {passwordRow}
-            {providers.map(renderProvider)}
+            {renderProviders()}
 
             {pendingAction && (
                 <ConfirmIdentityModal

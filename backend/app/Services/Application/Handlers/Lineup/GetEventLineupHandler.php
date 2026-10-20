@@ -21,10 +21,12 @@ use HiEvents\Repository\Eloquent\Value\OrderAndDirection;
 use HiEvents\Repository\Eloquent\Value\Relationship;
 use HiEvents\Repository\Interfaces\EventLineupEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventLocationRepositoryInterface;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventScheduleItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSettingsRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpaceRepositoryInterface;
 use HiEvents\Services\Application\Handlers\Lineup\DTO\EventLineupDTO;
+use HiEvents\Services\Domain\Lineup\ScheduleDay;
 use Illuminate\Support\Collection;
 
 class GetEventLineupHandler
@@ -35,6 +37,7 @@ class GetEventLineupHandler
         private readonly EventScheduleItemRepositoryInterface $scheduleItemRepository,
         private readonly EventLocationRepositoryInterface $eventLocationRepository,
         private readonly EventSettingsRepositoryInterface $eventSettingsRepository,
+        private readonly EventRepositoryInterface $eventRepository,
     ) {}
 
     public function handle(int $eventId, bool $forPublic): EventLineupDTO
@@ -132,6 +135,38 @@ class GetEventLineupHandler
             entries: $visibleEntries,
             spaces: $showSchedule ? $spaces : collect(),
             schedule_items: $visibleItems,
+            schedule_days_by_entry_id: $showSchedule ? null : $this->scheduleDaysByEntryId($eventId, $visibleEntries, $scheduleItems),
         );
+    }
+
+    /**
+     * @return array<int, list<string>>|null
+     */
+    private function scheduleDaysByEntryId(int $eventId, Collection $entries, Collection $scheduleItems): ?array
+    {
+        $event = $this->eventRepository->findById($eventId);
+
+        if (! $event->isRecurring()) {
+            return null;
+        }
+
+        $days = $entries->mapWithKeys(fn (EventLineupEntryDomainObject $entry) => [$entry->getId() => []])->all();
+
+        if ($days === [] || $scheduleItems->isEmpty()) {
+            return $days;
+        }
+
+        $timezone = $event->getTimezone() ?? 'UTC';
+
+        foreach ($scheduleItems as $item) {
+            $day = ScheduleDay::keyForUtc($item->getStartsAt(), $timezone);
+            foreach ($item->getPerformers() ?? [] as $performer) {
+                if (array_key_exists($performer->getEventLineupEntryId(), $days)) {
+                    $days[$performer->getEventLineupEntryId()][$day] = $day;
+                }
+            }
+        }
+
+        return array_map(fn (array $entryDays) => collect($entryDays)->sort()->values()->all(), $days);
     }
 }

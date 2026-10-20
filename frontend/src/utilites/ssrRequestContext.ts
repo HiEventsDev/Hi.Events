@@ -6,6 +6,7 @@ export interface SsrRequestContext {
     backendHeaders: Record<string, string>;
     licenceSimulation?: string;
     widgetLocale?: string;
+    locale?: string;
 }
 
 let contextProvider: (() => SsrRequestContext | undefined) | null = null;

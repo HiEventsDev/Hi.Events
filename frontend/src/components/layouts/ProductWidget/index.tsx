@@ -18,7 +18,7 @@ import {WidgetMessage} from "../../widget/WidgetMessage";
 
 const ProductWidget = () => {
     const {eventId} = useParams();
-    const {config, checkoutParams, promoCodeValid: loaderPromoCodeValid, isPreview} = useWidgetRuntime();
+    const {config, checkoutParams, promoCodeValid: loaderPromoCodeValid, isPreview, notFound} = useWidgetRuntime();
     const [selectedOccurrence, setSelectedOccurrence] = useState<EventOccurrence | undefined>();
     const previewPromoQuery = useQuery({
         queryKey: ['widgetPreviewPromoCode', eventId, config.promo_code],
@@ -53,12 +53,13 @@ const ProductWidget = () => {
             productSelectionFromConfig(config),
         ),
         staleTime: WIDGET_EVENT_STALE_TIME,
+        enabled: !notFound,
     });
     const event = eventQuery.data;
     const appearance = useWidgetAppearance(config, event?.settings?.homepage_theme_settings);
     preloadHeavySections(config.sections);
 
-    if (eventQuery.isError || (eventQuery.isFetched && !event)) {
+    if (notFound || eventQuery.isError || (eventQuery.isFetched && !event)) {
         return (
             <WidgetFrame style={appearance.style} mode={appearance.mode}>
                 <WidgetMessage

@@ -33,7 +33,6 @@ const RequiredTwoFactorSetup = () => {
 
     const logout = async () => {
         await authClient.logout();
-        localStorage.removeItem("token");
         window.location.href = "/auth/login";
     };
 

@@ -1,9 +1,9 @@
 import {useMemo} from "react";
 import {t} from "@lingui/macro";
 import {useForm} from "@mantine/form";
-import {Button, MultiSelect, Select, TextInput} from "@mantine/core";
+import {Alert, Button, MultiSelect, Select, TextInput} from "@mantine/core";
 import {TimeInput} from "@mantine/dates";
-import {IconTrash} from "@tabler/icons-react";
+import {IconAlertTriangle, IconTrash} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import {Modal, ModalFooter} from "../../../../common/Modal";
 import {Editor} from "../../../../common/Editor";
@@ -19,6 +19,7 @@ import {confirmationDialog} from "../../../../../utilites/confirmationDialog.tsx
 import {getLineupTerminology, toEventLocal} from "../../../../../utilites/lineup.ts";
 import {DATE_INPUT_FORMAT, LOCAL_DATETIME_FORMAT, TIME_INPUT_FORMAT} from "../../../../../utilites/lineupSchedule.ts";
 import {UNASSIGNED_SPACE} from "./scheduleConstants.ts";
+import {localScheduleDayKey} from "./scheduleDays.ts";
 import classes from "../Lineup.module.scss";
 import {DateField} from "../../../../common/DateField";
 
@@ -34,6 +35,7 @@ interface ScheduleItemModalProps {
     lineup: EventLineup;
     item?: ScheduleItem;
     draft?: ScheduleItemDraft;
+    occurrenceDays?: ReadonlySet<string>;
     onSaved: (start: string) => void;
     onClose: () => void;
 }
@@ -48,7 +50,7 @@ interface ScheduleItemFormValues {
     description: string;
 }
 
-export const ScheduleItemModal = ({event, lineup, item, draft, onSaved, onClose}: ScheduleItemModalProps) => {
+export const ScheduleItemModal = ({event, lineup, item, draft, occurrenceDays, onSaved, onClose}: ScheduleItemModalProps) => {
     const {isReadOnly} = useAccess();
     const upsertMutation = useUpsertScheduleItem();
     const deleteMutation = useDeleteScheduleItem();
@@ -85,6 +87,8 @@ export const ScheduleItemModal = ({event, lineup, item, draft, onSaved, onClose}
     });
 
     const endsNextDay = !!form.values.start_time && !!form.values.end_time && form.values.end_time < form.values.start_time;
+    const offDate = !!occurrenceDays && !!form.values.date && !!form.values.start_time
+        && !occurrenceDays.has(localScheduleDayKey(`${form.values.date} ${form.values.start_time}`));
 
     const entryOptions = useMemo(() => lineup.entries.map(entry => ({
         value: String(entry.id),
@@ -181,9 +185,15 @@ export const ScheduleItemModal = ({event, lineup, item, draft, onSaved, onClose}
                         label={t`Ends`}
                         disabled={isReadOnly}
                         description={endsNextDay ? t`Ends the next day` : undefined}
+                        inputWrapperOrder={['label', 'input', 'description', 'error']}
                         {...form.getInputProps('end_time')}
                     />
                 </div>
+                {offDate && (
+                    <Alert variant="light" color="orange" icon={<IconAlertTriangle size={16}/>}>
+                        {t`Your event has no date on this day, so this slot won't show on your event page.`}
+                    </Alert>
+                )}
                 {isReadOnly
                     ? item?.description && (
                         <div>

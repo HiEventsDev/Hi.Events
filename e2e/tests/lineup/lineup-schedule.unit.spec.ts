@@ -56,6 +56,29 @@ test.describe('lineup schedule grouping', () => {
     expect(firstWeek.entries.map(candidate => candidate.id)).toEqual([1, 3]);
   });
 
+  test('a hidden schedule still limits each date to the people booked on it', () => {
+    const lineup: EventLineup = {
+      entries: [
+        { ...entry(1), schedule_days: ['2030-06-14', '2030-06-28'] },
+        { ...entry(2), schedule_days: ['2030-06-21'] },
+        { ...entry(3), schedule_days: [] },
+        entry(4),
+      ],
+      spaces: [],
+      schedule_items: [],
+    };
+
+    const firstWeek = lineupForOccurrence(lineup, { start_date: '2030-06-14 19:00:00', end_date: '2030-06-15 02:00:00' }, 'UTC');
+    expect(firstWeek.entries.map(candidate => candidate.id)).toEqual([1, 3, 4]);
+    expect(firstWeek.schedule_items).toEqual([]);
+
+    const secondWeek = lineupForOccurrence(lineup, { start_date: '2030-06-22 00:30:00', end_date: null }, 'America/New_York');
+    expect(secondWeek.entries.map(candidate => candidate.id)).toEqual([2, 3, 4]);
+
+    const weekend = lineupForOccurrence(lineup, { start_date: '2030-06-27 18:00:00', end_date: '2030-06-29 23:00:00' }, 'UTC');
+    expect(weekend.entries.map(candidate => candidate.id)).toEqual([1, 3, 4]);
+  });
+
   test('clock changes use the local wall clock for the 05:00 boundary', () => {
     expect(scheduleDayKey('2030-10-27 04:30:00', 'Europe/Dublin')).toBe('2030-10-26');
     expect(scheduleDayKey('2030-10-27 05:00:00', 'Europe/Dublin')).toBe('2030-10-27');

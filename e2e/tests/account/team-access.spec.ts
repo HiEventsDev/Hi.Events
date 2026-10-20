@@ -34,7 +34,8 @@ test.describe('team access', () => {
     await expect(page.getByText(hiddenTitle)).toHaveCount(0);
 
     await page.goto(`/manage/event/${hidden.eventId}/dashboard`);
-    await expect(page).toHaveURL(/\/manage\/events/);
+    await expect(page.getByRole('heading', { name: "You don't have access to this event" })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Go to your events' })).toHaveAttribute('href', '/manage/events');
     await expect(page).not.toHaveURL(/\/auth\/login/);
   });
 
@@ -96,7 +97,8 @@ test.describe('team access', () => {
     await expect(page.getByText(otherTitle)).toHaveCount(0);
 
     await page.goto(`/manage/organizer/${otherOrganizer.id}/dashboard`);
-    await expect(page).not.toHaveURL(new RegExp(`/manage/organizer/${otherOrganizer.id}`));
+    await expect(page.getByRole('heading', { name: "You don't have access to this organizer" })).toBeVisible();
+    await expect(page.getByText('Other Organizer')).toHaveCount(0);
   });
 
   test('turning off financials for a member hides order amounts from them', async ({ freshAccount, mailpit, publicApi, browser }) => {

@@ -24,12 +24,12 @@ const DomainStatus = ({domain}: { domain: AccountSsoDomain }) => {
     }
 };
 
-const RecordField = ({label, value}: { label: string, value: string }) => (
+const RecordField = ({label, copyLabel, value}: { label: string, copyLabel: string, value: string }) => (
     <div className={classes.recordField}>
         <div className={classes.recordLabel}>{label}</div>
         <div className={classes.recordValue}>
             <code>{value}</code>
-            <CopyButton value={value}/>
+            <CopyButton value={value} label={copyLabel}/>
         </div>
     </div>
 );
@@ -109,8 +109,8 @@ export const DomainList = ({accountId, domains, enforcing, setupLocked}: DomainL
                                     ? t`Add this TXT record at your DNS provider, then verify. Subdomains need their own record.`
                                     : t`We couldn't find this TXT record in our daily check. Restore it to keep single sign-on working for this domain.`}
                             </p>
-                            <RecordField label={t`Name`} value={domain.txt_record_name}/>
-                            <RecordField label={t`Value`} value={domain.txt_record_value}/>
+                            <RecordField label={t`Name`} copyLabel={t`Copy TXT record name`} value={domain.txt_record_name}/>
+                            <RecordField label={t`Value`} copyLabel={t`Copy TXT record value`} value={domain.txt_record_value}/>
                             {!setupLocked && <div>
                                 <Button
                                     size="xs"

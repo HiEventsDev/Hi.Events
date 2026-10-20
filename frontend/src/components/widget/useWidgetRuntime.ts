@@ -26,7 +26,7 @@ const usePreviewSettings = (isPreview: boolean) => {
             return;
         }
         const onMessage = (event: MessageEvent) => {
-            if (event.origin === window.location.origin && event.data?.type === PREVIEW_SETTINGS_MESSAGE) {
+            if (event.origin === window.location.origin && event.source === window.parent && event.data?.type === PREVIEW_SETTINGS_MESSAGE) {
                 setSettings(event.data.settings ?? {});
             }
         };
@@ -71,6 +71,7 @@ export const useWidgetRuntime = () => {
         search,
         checkoutParams,
         promoCodeValid: loaderData?.promoCodeValid,
+        notFound: !!loaderData?.notFound,
         isPreview,
     };
 };

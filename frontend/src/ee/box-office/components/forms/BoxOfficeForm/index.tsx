@@ -181,6 +181,7 @@ export const BoxOfficeForm = ({
                         {...form.getInputProps('expires_at')}
                         label={t`Expiration date`}
                         description={t`When sales close`}
+                        defaultTime="23:59"
                     />
                 </InputGroup>
             </AdvancedOptions>

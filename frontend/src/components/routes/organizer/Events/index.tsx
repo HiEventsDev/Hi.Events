@@ -17,10 +17,12 @@ import {EventsDashboardStatusButtons} from "../../../common/EventsDashboardStatu
 import {NoEventsBlankSlate} from "../../../common/NoEventsBlankSlate";
 import {PageBody} from "../../../common/PageBody";
 import {PageTitle} from "../../../common/PageTitle";
+import {useAccess} from "../../../../hooks/useAccess.ts";
 
 const Events = () => {
     const {organizerId, eventsState} = useParams();
     const [searchParams, setSearchParams] = useFilterQueryParamSync();
+    const {isReadOnly} = useAccess();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const {data: eventsData, isFetched: isEventsFetched} = useGetEvents(
         getEventQueryFilters(searchParams) as QueryFilters
@@ -72,7 +74,7 @@ const Events = () => {
             />
 
             {(events?.length === 0 && isEventsFetched)
-                && <NoEventsBlankSlate openCreateModal={openCreateModal} eventsState={eventsState}/>}
+                && <NoEventsBlankSlate openCreateModal={isReadOnly ? undefined : openCreateModal} eventsState={eventsState}/>}
 
             {!isEventsFetched && <SkeletonEvents/>}
 

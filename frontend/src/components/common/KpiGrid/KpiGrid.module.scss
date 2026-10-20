@@ -9,8 +9,24 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5px;
 
+  @include mixins.respond-above(lg) {
+    > :last-child:nth-child(3n + 1) {
+      grid-column: span 3;
+    }
+
+    > :last-child:nth-child(3n + 2) {
+      grid-column: span 2;
+    }
+  }
+
   @include mixins.respond-below(lg) {
     grid-template-columns: repeat(2, 1fr);
+
+    @include mixins.respond-above(sm) {
+      > :last-child:nth-child(odd) {
+        grid-column: span 2;
+      }
+    }
   }
 
   @include mixins.respond-below(sm) {

@@ -623,6 +623,11 @@ export interface UpsertAnnouncementPayload {
   cta_url?: string;
 }
 
+export interface CreateConfigurationPayload {
+  name: string;
+  application_fees: { percentage: number; fixed: number; currency: string };
+}
+
 export class AdminApiClient {
   constructor(private readonly request: APIRequestContext) {}
 
@@ -668,6 +673,23 @@ export class AdminApiClient {
 
   listConfigurations(): Promise<{ id: number; name: string; is_system_default: boolean; default_for_currency: string | null }[]> {
     return unwrap(this.request.get('admin/configurations', { headers: jsonHeaders }));
+  }
+
+  createConfiguration(payload: CreateConfigurationPayload): Promise<{ id: number; name: string }> {
+    return unwrap(this.request.post('admin/configurations', { headers: jsonHeaders, data: payload }));
+  }
+
+  deleteConfiguration(configurationId: number): Promise<void> {
+    return check(this.request.delete(`admin/configurations/${configurationId}`, { headers: jsonHeaders }));
+  }
+
+  assignOrganizerConfiguration(organizerId: number, configurationId: number): Promise<void> {
+    return check(
+      this.request.put(`admin/organizers/${organizerId}/configuration`, {
+        headers: jsonHeaders,
+        data: { configuration_id: configurationId },
+      }),
+    );
   }
 
   createAnnouncement(payload: UpsertAnnouncementPayload): Promise<{ id: number }> {

@@ -6,12 +6,15 @@ namespace HiEvents\Providers;
 
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy;
+use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\Operation;
+use Dedoc\Scramble\Support\Generator\Path;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Dedoc\Scramble\Support\RouteInfo;
 use HiEvents\OpenApi\IntegrationApiReference;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -77,7 +80,21 @@ class ScrambleServiceProvider extends ServiceProvider
                     $operation->description(trim($operation->description."\n\n".'Not available to API keys: sign in to call this endpoint.'));
                     $operation->setExtensionProperty(IntegrationApiReference::SESSION_ONLY_EXTENSION, true);
                 }
+            })
+            ->withDocumentTransformers(static function (OpenApi $openApi): void {
+                collect($openApi->paths)
+                    ->flatMap(static fn (Path $path): array => array_values($path->operations))
+                    ->filter(static fn (Operation $operation): bool => $operation->operationId !== null)
+                    ->groupBy(static fn (Operation $operation): string => $operation->operationId)
+                    ->filter(static fn (Collection $operations): bool => $operations->count() > 1)
+                    ->flatten()
+                    ->each(static fn (Operation $operation) => $operation->setOperationId(self::routeQualifiedOperationId($operation)));
             });
+    }
+
+    private static function routeQualifiedOperationId(Operation $operation): string
+    {
+        return $operation->getAttribute('operationId')->getFallbackEloquent().'.'.Str::camel($operation->method.' '.preg_replace('/[^A-Za-z0-9]+/', ' ', $operation->path));
     }
 
     private static function summaryFromActionName(string $actionName): string

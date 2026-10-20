@@ -17,7 +17,7 @@ class GetSsoProvidersHandler
     ) {}
 
     /**
-     * @return array{providers: array<int, array{key: string, name: string, type: string, logo_url: ?string}>, password_login_enabled: bool, registration_enabled: bool, buttons_visible: bool, enterprise_sso_enabled: bool}
+     * @return array{providers: array<int, array{key: string, name: string, type: string, logo_url: ?string}>, password_login_enabled: bool, registration_enabled: bool, enterprise_sso_enabled: bool}
      */
     public function handle(): array
     {
@@ -33,7 +33,6 @@ class GetSsoProvidersHandler
             )),
             'password_login_enabled' => ! $this->providerRegistry->isPasswordLoginDisabled(),
             'registration_enabled' => ! $this->config->get('app.disable_registration'),
-            'buttons_visible' => $this->providerRegistry->areButtonsVisible(),
             'enterprise_sso_enabled' => $this->connectionRepository->countWhere(['status' => AccountSsoConnectionStatus::ACTIVE->value]) > 0,
         ];
     }

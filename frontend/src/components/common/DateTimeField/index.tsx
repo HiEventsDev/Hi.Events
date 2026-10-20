@@ -3,6 +3,7 @@ import {Group, Input} from "@mantine/core";
 import {TimePicker} from "@mantine/dates";
 import {t} from "@lingui/macro";
 import {DateField} from "../DateField";
+import {joinDateAndTime} from "./dateTimeValue.ts";
 import {getTimePickerFormat} from "../../../utilites/dates.ts";
 import classes from "./DateTimeField.module.scss";
 
@@ -17,16 +18,25 @@ interface DateTimeFieldProps {
     required?: boolean;
     disabled?: boolean;
     minDate?: string;
+    defaultTime?: string;
 }
 
-export const DateTimeField = ({value, onChange, onFocus, onBlur, label, description, error, required, disabled, minDate}: DateTimeFieldProps) => {
+export const DateTimeField = ({value, onChange, onFocus, onBlur, label, description, error, required, disabled, minDate, defaultTime = '00:00'}: DateTimeFieldProps) => {
     const id = useId();
     const [pendingTime, setPendingTime] = useState('');
     const date = value ? value.slice(0, 10) : '';
     const time = value ? value.slice(11, 16) : pendingTime;
+    const [pickerTime, setPickerTime] = useState(time);
+    const [pickerKey, setPickerKey] = useState(0);
+    const describedByLabel = {'aria-describedby': `${id}-label`};
+
+    if (time !== pickerTime) {
+        setPickerTime(time);
+        setPickerKey((key) => key + 1);
+    }
 
     const handleDateChange = (nextDate: string) => {
-        onChange?.(nextDate ? `${nextDate}T${time || '00:00'}` : '');
+        onChange?.(joinDateAndTime(nextDate, time, defaultTime));
     };
 
     const handleTimeChange = (nextTime: string) => {
@@ -34,6 +44,7 @@ export const DateTimeField = ({value, onChange, onFocus, onBlur, label, descript
             return;
         }
         const hhmm = nextTime.slice(0, 5);
+        setPickerTime(hhmm);
         if (date) {
             onChange?.(`${date}T${hhmm}`);
         } else {
@@ -48,9 +59,8 @@ export const DateTimeField = ({value, onChange, onFocus, onBlur, label, descript
             description={description}
             error={error}
             withAsterisk={required}
-            className={classes.wrapper}
         >
-            <Group gap="xs" wrap="nowrap" className={classes.row}>
+            <Group gap="xs" wrap="wrap" className={classes.row}>
                 <DateField
                     id={id}
                     className={classes.date}
@@ -64,6 +74,7 @@ export const DateTimeField = ({value, onChange, onFocus, onBlur, label, descript
                     minDate={minDate?.slice(0, 10)}
                 />
                 <TimePicker
+                    key={pickerKey}
                     className={classes.time}
                     value={time}
                     onChange={handleTimeChange}
@@ -74,6 +85,9 @@ export const DateTimeField = ({value, onChange, onFocus, onBlur, label, descript
                     hoursInputLabel={t`Hours`}
                     minutesInputLabel={t`Minutes`}
                     amPmInputLabel={t`AM/PM`}
+                    hoursInputProps={describedByLabel}
+                    minutesInputProps={describedByLabel}
+                    amPmSelectProps={describedByLabel}
                 />
             </Group>
         </Input.Wrapper>

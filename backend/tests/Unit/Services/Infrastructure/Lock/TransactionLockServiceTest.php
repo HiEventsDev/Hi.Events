@@ -23,6 +23,17 @@ class TransactionLockServiceTest extends TestCase
         (new TransactionLockService($databaseManager))->lockEvent(42);
     }
 
+    public function test_event_lineup_lock_uses_its_own_keyspace_within_int4_range(): void
+    {
+        $databaseManager = Mockery::mock(DatabaseManager::class);
+        $databaseManager
+            ->shouldReceive('statement')
+            ->once()
+            ->with('SELECT pg_advisory_xact_lock(?, ?)', [TransactionLockService::LINEUP_LOCK_KEYSPACE, 7]);
+
+        (new TransactionLockService($databaseManager))->lockEventLineup(TransactionLockService::MAX_LOCK_KEY + 7);
+    }
+
     public function test_order_lock_hashes_the_short_id_in_the_order_keyspace(): void
     {
         $databaseManager = Mockery::mock(DatabaseManager::class);

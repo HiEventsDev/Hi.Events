@@ -1,12 +1,12 @@
 import {t} from "@lingui/macro";
-import {Event, HomepageSection, Organizer, OrganizerStatus} from "../../../../../types.ts";
+import {Event, HomepageSection, IdParam, Organizer, OrganizerStatus} from "../../../../../types.ts";
 import {EventLineup} from "../../../../../api/lineup.client.ts";
 import {buildEventLocationDisplay, summariseEventLocations} from "../../../../../utilites/effectiveLocation.ts";
 import {videoEmbedUrl} from "../../../../layouts/EventHomepage/Sections/VideoSection.tsx";
 
 export interface SectionEmptyState {
     reason: string;
-    action?: { label: string, to: string };
+    action?: { label: string, to: string, organizerId?: IdParam };
 }
 
 const hasVisibleText = (html?: string | null) => !!html && html.replace(/<[^>]+>/g, '').trim().length > 0;
@@ -47,7 +47,10 @@ export const sectionEmptyState = (
                 : null;
         case 'ORGANIZER':
             return event?.organizer && event.organizer.status !== OrganizerStatus.LIVE
-                ? {reason: t`Your organizer profile isn't published.`, action: {label: t`Organizer settings`, to: `/manage/organizer/${event.organizer.id}/settings`}}
+                ? {
+                    reason: t`Your organizer profile isn't published.`,
+                    action: {label: t`Organizer settings`, to: `/manage/organizer/${event.organizer.id}/settings`, organizerId: event.organizer.id},
+                }
                 : null;
         default:
             return customSectionEmptyState(section, imageIds);

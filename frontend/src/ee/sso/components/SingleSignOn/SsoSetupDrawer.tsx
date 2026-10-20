@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Button, UnstyledButton} from "@mantine/core";
+import {Button, Radio} from "@mantine/core";
 import {t} from "@lingui/macro";
 import {IconPencil, IconTrash} from "@tabler/icons-react";
 import {useDeleteSsoConnection} from "../../mutations/useAccountSsoMutations.ts";
@@ -75,25 +75,24 @@ export const SsoSetupDrawer = ({opened, onClose, accountId, sso, testOutcome, se
             <div className={classes.steps}>
                 <SsoStep number={1} title={t`Choose your identity provider`} done={connection !== null}>
                     {connection === null ? (
-                        <div className={classes.providerCards} role="list">
-                            {connectionTypes.map(option => (
-                                <UnstyledButton
-                                    key={option}
-                                    role="listitem"
-                                    className={classes.providerCard}
-                                    data-selected={type === option || undefined}
-                                    aria-pressed={type === option}
-                                    onClick={() => setChosenType(option)}
-                                    data-testid={`sso-provider-card-${option}`}
-                                >
-                                    <span className={classes.providerCardMark}><ConnectionMark type={option} size={22}/></span>
-                                    <span className={classes.providerCardText}>
-                                        <span className={classes.providerCardName}>{connectionTypeLabel(option)}</span>
-                                        <span className={classes.muted}>{connectionTypeDescription(option)}</span>
-                                    </span>
-                                </UnstyledButton>
-                            ))}
-                        </div>
+                        <Radio.Group value={type ?? ''} onChange={(value) => setChosenType(value as AccountSsoConnectionType)}>
+                            <div className={classes.providerCards}>
+                                {connectionTypes.map(option => (
+                                    <Radio.Card
+                                        key={option}
+                                        value={option}
+                                        className={classes.providerCard}
+                                        data-testid={`sso-provider-card-${option}`}
+                                    >
+                                        <span className={classes.providerCardMark}><ConnectionMark type={option} size={22}/></span>
+                                        <span className={classes.providerCardText}>
+                                            <span className={classes.providerCardName}>{connectionTypeLabel(option)}</span>
+                                            <span className={classes.muted}>{connectionTypeDescription(option)}</span>
+                                        </span>
+                                    </Radio.Card>
+                                ))}
+                            </div>
+                        </Radio.Group>
                     ) : (
                         <div className={classes.muted}>{connectionTypeLabel(connection.type)}</div>
                     )}

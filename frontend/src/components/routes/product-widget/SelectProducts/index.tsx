@@ -25,6 +25,7 @@ import {
 import {useForm} from "@mantine/form";
 import {useInputState, useResizeObserver} from "@mantine/hooks";
 import React, {useEffect, useMemo, useRef, useState} from "react";
+import {flushSync} from "react-dom";
 import {showError, showInfo, showSuccess} from "../../../../utilites/notifications.tsx";
 import {useGetEventSeatMapPublic} from "../../../../ee/seating/queries/useGetEventSeatMapPublic.ts";
 import {choicesTotal, SeatChoice, seatedProductIds, ticketOptionsByBand} from "../../../../ee/seating/components/SeatPicker/ticketOptions.ts";
@@ -56,6 +57,7 @@ import {
 } from "../../../../types.ts";
 import {formatCurrency} from "../../../../utilites/currency.ts";
 import {getDisplayPrice} from "../../../common/Currency";
+import {getLineTotal} from "./priceTotals.ts";
 import {eventsClientPublic} from "../../../../api/event.client.ts";
 import {promoCodeClientPublic} from "../../../../api/promo-code.client.ts";
 import {IconCheck, IconChevronDown, IconX} from "@tabler/icons-react"
@@ -152,6 +154,7 @@ const SelectProducts = (props: SelectProductsProps) => {
     const navigate = useNavigate();
 
     const promoRef = useRef<HTMLInputElement>(null);
+    const promoTriggerRef = useRef<HTMLButtonElement>(null);
     const [showPromoCodeInput, setShowPromoCodeInput] = useInputState<boolean>(false);
     const [event, setEvent] = useState(props.event);
     const [orderInProcessOverlayVisible, setOrderInProcessOverlayVisible] = useState(false);
@@ -644,7 +647,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                 }
                 const productPrice = product.prices?.find(p => Number(p.id) === price_id);
                 if (productPrice) {
-                    total += selectedQuantity * getDisplayPrice(productPrice, event?.settings?.price_display_mode);
+                    total += getLineTotal(product, productPrice, selectedQuantity, event?.settings?.price_display_mode);
                 }
             });
         });
@@ -780,6 +783,11 @@ const SelectProducts = (props: SelectProductsProps) => {
         } else {
             showInfo(t`Please select at least one product`);
         }
+    };
+
+    const closePromoCodeInput = () => {
+        flushSync(() => setShowPromoCodeInput(false));
+        promoTriggerRef.current?.focus();
     };
 
     const handleApplyPromoCode = () => {
@@ -1172,7 +1180,8 @@ const SelectProducts = (props: SelectProductsProps) => {
     const promoSection = props.hidePromoCode && !form.values.promo_code ? null : (
         <div className={'hi-promo-code-row'}>
             {(!showPromoCodeInput && !form.values.promo_code) && (
-                <Anchor className={'hi-have-a-promo-code-link'} underline={'always'}
+                <Anchor component={'button'} type={'button'} ref={promoTriggerRef}
+                        className={'hi-have-a-promo-code-link'} underline={'always'}
                         onClick={() => setShowPromoCodeInput(true)}>
                     {t`Have a promo code?`}
                 </Anchor>
@@ -1213,7 +1222,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                             event.preventDefault();
                             handleApplyPromoCode();
                         }
-                    }} mb={0} ref={promoRef}/>
+                    }} mb={0} ref={promoRef} aria-label={t`Promo code`}/>
                     <Button type="button" disabled={promoCodeEventRefetchMutation.isPending}
                             className={'hi-apply-promo-code-button'} variant={'outline'}
                             data-testid="promo-code-apply-button"
@@ -1226,7 +1235,7 @@ const SelectProducts = (props: SelectProductsProps) => {
                         variant="transparent"
                         aria-label={t`close`}
                         title={t`Close`}
-                        onClick={() => setShowPromoCodeInput(false)}
+                        onClick={closePromoCodeInput}
                     >
                         <IconX stroke={1.5} size={20}/>
                     </ActionIcon>

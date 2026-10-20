@@ -66,7 +66,7 @@ export const CreateOrganizerWebhookModal = ({ onClose }: GenericModalProps) => {
                 <TextInput
                     value={secret}
                     readOnly
-                    rightSection={<CopyButton value={secret}/>}
+                    rightSection={<CopyButton value={secret} label={t`Copy signing secret`}/>}
                 />
                 <ModalFooter>
                     <Button onClick={onClose} data-testid="webhook-done-button">

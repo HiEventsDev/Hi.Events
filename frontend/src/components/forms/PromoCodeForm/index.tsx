@@ -167,6 +167,7 @@ export const PromoCodeForm = ({form}: PromoCodeFormProps) => {
                     <DateTimeField
                                {...form.getInputProps('expiry_date')}
                                label={t`Expiry Date`}
+                               defaultTime="23:59"
                     />
                     <NumberInput min={1}
                                  placeholder={t`Unlimited`}

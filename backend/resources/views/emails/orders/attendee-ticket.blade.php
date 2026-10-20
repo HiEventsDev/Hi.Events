@@ -3,7 +3,7 @@
 @php /** @var \HiEvents\DomainObjects\EventSettingDomainObject $eventSettings */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrganizerDomainObject $organizer */ @endphp
 @php /** @var \HiEvents\DomainObjects\OrderDomainObject $order */ @endphp
-@php /** @var array<int, array{attendee: \HiEvents\DomainObjects\AttendeeDomainObject, occurrence: ?\HiEvents\DomainObjects\EventOccurrenceDomainObject, venueName: ?string, addressString: ?string, ticketUrl: string}> $tickets */ @endphp
+@php /** @var array<int, array{attendee: \HiEvents\DomainObjects\AttendeeDomainObject, occurrence: ?\HiEvents\DomainObjects\EventOccurrenceDomainObject, startDate: ?string, endDate: ?string, venueName: ?string, addressString: ?string, ticketUrl: string}> $tickets */ @endphp
 @php /** @var \HiEvents\Services\Domain\Lineup\DTO\EmailLineupHighlightsDTO|null $lineup */ @endphp
 @php /** @see \HiEvents\Mail\Attendee\AttendeeTicketMail */ @endphp
 
@@ -37,8 +37,8 @@
     $occurrence = $ticket['occurrence'];
     $venueName = $ticket['venueName'];
     $addressString = $ticket['addressString'];
-    $displayStart = $occurrence?->getStartDate() ?? $event->getStartDate();
-    $displayEnd = $occurrence?->getEndDate() ?? $event->getEndDate();
+    $displayStart = $ticket['startDate'];
+    $displayEnd = $ticket['endDate'];
 
     $startFormatted = $formatDateTime($displayStart);
     $endFormatted = null;

@@ -12,11 +12,15 @@ use Illuminate\Mail\Mailables\Envelope;
  */
 class AdminAccessGrantedMail extends BaseMail
 {
+    private ?bool $isInvitation = null;
+
     public function __construct(
         private readonly string $newAdminEmail,
         private readonly ?string $grantedByEmail = null,
+        ?bool $isInvitation = null,
     ) {
         parent::__construct();
+        $this->isInvitation = $isInvitation;
     }
 
     public function envelope(): Envelope
@@ -33,6 +37,7 @@ class AdminAccessGrantedMail extends BaseMail
             with: [
                 'newAdminEmail' => $this->newAdminEmail,
                 'grantedByEmail' => $this->grantedByEmail,
+                'isInvitation' => $this->isInvitation === true,
                 'teamUrl' => Url::getFrontEndUrlFromConfig(Url::ACCOUNT_USERS),
             ]
         );

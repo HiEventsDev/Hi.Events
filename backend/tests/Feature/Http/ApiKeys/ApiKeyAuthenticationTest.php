@@ -86,6 +86,20 @@ class ApiKeyAuthenticationTest extends TestCase
         $this->assertDatabaseMissing('organizers', ['name' => 'Created over the API']);
     }
 
+    public function test_read_only_keys_can_run_exports(): void
+    {
+        $eventId = $this->createEvent($this->accountId, $this->organizerId);
+        $apiKey = $this->createApiKey($this->owner, $this->accountId, ApiKeyAccess::READ_ONLY);
+
+        $this->postJson("/events/$eventId/attendees/export", [], $this->apiKeyHeaders($apiKey))
+            ->assertOk()
+            ->assertDownload('attendees.xlsx');
+
+        $this->postJson("/events/$eventId/products/sort", [], $this->apiKeyHeaders($apiKey))
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'API_KEY_READ_ONLY');
+    }
+
     public function test_read_write_keys_can_write(): void
     {
         $apiKey = $this->createApiKey($this->owner, $this->accountId);

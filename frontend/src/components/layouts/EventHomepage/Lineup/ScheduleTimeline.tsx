@@ -7,7 +7,7 @@ import {EventLineup, EventSpace, LineupEntry, ScheduleItem} from "../../../../ap
 import {formatDateWithLocale, getSafeLocale} from "../../../../utilites/dates.ts";
 import {getClientLocale} from "../../../../locales.ts";
 import {initialsFor, profilePhoto, scheduleItemTitle} from "../../../../utilites/lineup.ts";
-import {groupScheduleByDay} from "../../../../utilites/lineupSchedule.ts";
+import {assignScheduleLanes, groupScheduleByDay} from "../../../../utilites/lineupSchedule.ts";
 import {UserGeneratedContent} from "../../../common/UserGeneratedContent";
 import {HomepageSectionClasses} from "./index.tsx";
 import classes from "./Lineup.module.scss";
@@ -25,6 +25,11 @@ interface ScheduleTimelineProps {
 type Layout = 'list' | 'grid';
 
 const PX_PER_MINUTE = 1.6;
+const MIN_BLOCK_HEIGHT = 28;
+const BLOCK_PADDING_Y = 5;
+const BLOCK_TITLE_LINE = 17;
+const BLOCK_TIME_ROW = 16;
+const MIN_HEIGHT_WITH_TIME = 56;
 const ALL_SPACES = 'all';
 
 const useNow = () => {
@@ -93,10 +98,10 @@ export const ScheduleTimeline = ({event, lineup, entriesById, title, sectionClas
                 <h2 className={sectionClasses.sectionTitle}>{title}</h2>
                 {canUseGrid && (
                     <div className={classes.layoutToggle} role="group" aria-label={t`Layout`}>
-                        <button type="button" data-active={activeLayout === 'list' || undefined} onClick={() => setLayout('list')}>
+                        <button type="button" aria-pressed={activeLayout === 'list'} onClick={() => setLayout('list')}>
                             <IconList size={16}/>{t`List`}
                         </button>
-                        <button type="button" data-active={activeLayout === 'grid' || undefined} onClick={() => setLayout('grid')}>
+                        <button type="button" aria-pressed={activeLayout === 'grid'} onClick={() => setLayout('grid')}>
                             <IconLayoutColumns size={16}/>{t`Stages`}
                         </button>
                     </div>
@@ -104,15 +109,14 @@ export const ScheduleTimeline = ({event, lineup, entriesById, title, sectionClas
             </div>
 
             {days.length > 1 && (
-                <div className={classes.dayTabs} role="tablist" aria-label={t`Days`}>
+                <div className={classes.dayTabs} role="group" aria-label={t`Days`}>
                     {days.map(candidate => {
                         const anchor = candidate.items[0].starts_at;
                         return (
                             <button
                                 key={candidate.key}
                                 type="button"
-                                role="tab"
-                                aria-selected={candidate.key === day?.key}
+                                aria-pressed={candidate.key === day?.key}
                                 className={classes.dayTab}
                                 onClick={() => setSelectedDay(candidate.key)}
                             >
@@ -133,7 +137,7 @@ export const ScheduleTimeline = ({event, lineup, entriesById, title, sectionClas
                             key={option.id}
                             type="button"
                             className={classes.spaceFilterChip}
-                            data-active={activeSpaceFilter === option.id || undefined}
+                            aria-pressed={activeSpaceFilter === option.id}
                             onClick={() => setSpaceFilter(option.id)}
                         >
                             {option.id !== ALL_SPACES && (
@@ -317,7 +321,7 @@ const StageGrid = ({items, spaces, tz, now, spaceIndex, entriesById, onOpenItem}
                     </div>
                 ))}
 
-                <div className={classes.timeGutter}>
+                <div className={classes.timeGutter} aria-hidden>
                     {hours.map((hour, index) => (
                         <span key={index} style={{top: index * 60 * PX_PER_MINUTE}}>
                             {formatDateWithLocale(hour.utc().format(), 'timeOnly', tz)}
@@ -325,13 +329,22 @@ const StageGrid = ({items, spaces, tz, now, spaceIndex, entriesById, onOpenItem}
                     ))}
                 </div>
 
-                {columns.map(column => (
-                    <div key={column.key} className={classes.stageColumn}>
-                        {items
-                            .filter(item => String(item.event_space_id ?? 'none') === column.key)
-                            .map(item => {
-                                const top = offset(item.starts_at);
-                                const height = Math.max(offset(item.ends_at) - top, 28);
+                {columns.map(column => {
+                    const blocks = items
+                        .filter(item => String(item.event_space_id ?? 'none') === column.key)
+                        .map(item => {
+                            const top = offset(item.starts_at);
+                            return {item, top, bottom: top + Math.max(offset(item.ends_at) - top, MIN_BLOCK_HEIGHT)};
+                        });
+                    const lanes = assignScheduleLanes(blocks.map(({item, top, bottom}) => ({id: item.id, top, bottom})));
+
+                    return (
+                        <div key={column.key} className={classes.stageColumn}>
+                            {blocks.map(({item, top, bottom}) => {
+                                const height = bottom - top;
+                                const {lane, lanes: laneCount} = lanes.get(item.id) ?? {lane: 0, lanes: 1};
+                                const showTime = height >= MIN_HEIGHT_WITH_TIME;
+                                const titleLines = Math.max(1, Math.floor((height - 2 * BLOCK_PADDING_Y - (showTime ? BLOCK_TIME_ROW : 0)) / BLOCK_TITLE_LINE));
 
                                 return (
                                     <button
@@ -340,18 +353,27 @@ const StageGrid = ({items, spaces, tz, now, spaceIndex, entriesById, onOpenItem}
                                         className={classes.stageBlock}
                                         data-space-index={column.colorIndex}
                                         data-live={isLive(item, now) || undefined}
-                                        style={{top, height}}
+                                        data-testid="event-stage-block"
+                                        style={{
+                                            top,
+                                            height,
+                                            left: `${lane / laneCount * 100}%`,
+                                            width: `${100 / laneCount}%`,
+                                            '--title-lines': titleLines,
+                                        } as React.CSSProperties}
                                         onClick={() => onOpenItem(item.id)}
                                     >
                                         <span className={classes.stageBlockTitle}>{scheduleItemTitle(item, entriesById)}</span>
-                                        <span className={classes.stageBlockTime}>
+                                        <span className={classes.visuallyHidden}>{column.name}</span>
+                                        <span className={showTime ? classes.stageBlockTime : classes.visuallyHidden}>
                                             {formatDateWithLocale(item.starts_at, 'timeOnly', tz)} – {formatDateWithLocale(item.ends_at, 'timeOnly', tz)}
                                         </span>
                                     </button>
                                 );
                             })}
-                    </div>
-                ))}
+                        </div>
+                    );
+                })}
 
                 {showNow && <div className={classes.nowLine} style={{marginTop: nowOffset!}}/>}
             </div>

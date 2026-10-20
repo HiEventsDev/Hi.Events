@@ -35,9 +35,9 @@ export const RegenerateRecoveryCodesModal = ({email, onClose}: RegenerateRecover
         });
     };
 
-    return (
-        <Modal opened onClose={onClose} heading={codes ? t`Your new recovery codes` : t`Generate new recovery codes`} size={520}>
-            {codes ? (
+    if (codes) {
+        return (
+            <Modal key="codes" opened onClose={onClose} heading={t`Your new recovery codes`} size={520}>
                 <div className={classes.modalBody}>
                     <RecoveryCodesDisplay
                         codes={codes}
@@ -51,37 +51,41 @@ export const RegenerateRecoveryCodesModal = ({email, onClose}: RegenerateRecover
                         </Button>
                     </ModalFooter>
                 </div>
-            ) : (
-                <div className={classes.modalBody}>
-                    <p className={classes.modalText}>
-                        {t`Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm.`}
-                    </p>
-                    <OneTimeCodeInput
-                        label={t`Authentication code`}
-                        value={code}
-                        onChange={(value) => {
-                            setCode(value);
-                            setError(null);
-                        }}
-                        onComplete={submit}
-                        error={error}
-                        disabled={regenerate.isPending}
-                        autoFocus
-                        dataTestId="two-factor-regenerate-code"
-                    />
-                    <ModalFooter>
-                        <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
-                        <Button
-                            loading={regenerate.isPending}
-                            disabled={code.length !== 6}
-                            onClick={() => submit()}
-                            data-testid="two-factor-regenerate-submit"
-                        >
-                            {t`Generate new codes`}
-                        </Button>
-                    </ModalFooter>
-                </div>
-            )}
+            </Modal>
+        );
+    }
+
+    return (
+        <Modal key="confirm" opened onClose={onClose} heading={t`Generate new recovery codes`} size={520}>
+            <div className={classes.modalBody}>
+                <p className={classes.modalText}>
+                    {t`Your current recovery codes will stop working straight away. Enter a code from your authenticator app to confirm.`}
+                </p>
+                <OneTimeCodeInput
+                    label={t`Authentication code`}
+                    value={code}
+                    onChange={(value) => {
+                        setCode(value);
+                        setError(null);
+                    }}
+                    onComplete={submit}
+                    error={error}
+                    disabled={regenerate.isPending}
+                    autoFocus
+                    dataTestId="two-factor-regenerate-code"
+                />
+                <ModalFooter>
+                    <Button variant="default" onClick={onClose}>{t`Cancel`}</Button>
+                    <Button
+                        loading={regenerate.isPending}
+                        disabled={code.length !== 6}
+                        onClick={() => submit()}
+                        data-testid="two-factor-regenerate-submit"
+                    >
+                        {t`Generate new codes`}
+                    </Button>
+                </ModalFooter>
+            </div>
         </Modal>
     );
 };

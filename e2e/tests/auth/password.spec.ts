@@ -17,7 +17,7 @@ test.describe('password management', () => {
     await dialog.getByRole('button', { name: 'Change password' }).click();
     await expect(page.getByText('Password changed')).toBeVisible();
 
-    await page.getByRole('button', { name: 'EO', exact: true }).click();
+    await page.getByTestId('account-menu-button').click();
     await page.getByRole('menuitem', { name: 'Logout' }).click();
     await expect(page).toHaveURL(/\/auth\/login/);
     await page.waitForLoadState('networkidle');

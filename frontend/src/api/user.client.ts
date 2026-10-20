@@ -19,7 +19,7 @@ export interface UserMeRequest {
 export interface UpdateUserRequest extends Partial<TeamAccessRequest> {
     first_name: string;
     last_name: string;
-    role: UserRole;
+    role?: UserRole;
     status?: string;
 }
 

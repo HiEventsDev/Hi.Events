@@ -275,6 +275,15 @@
   > svg {
     flex-shrink: 0;
   }
+
+  &[data-tone="warning"] {
+    color: var(--mantine-color-orange-8);
+  }
+}
+
+.noticeText {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .summaryLoading {
@@ -363,7 +372,7 @@
   white-space: nowrap;
 }
 
-.rowMeta, .rowError, .rowNote {
+.rowMeta, .rowError, .rowNote, .rowWarning {
   overflow: hidden;
   font-size: 0.78rem;
   text-overflow: ellipsis;
@@ -381,6 +390,10 @@
 
 .rowNote {
   color: var(--mantine-color-primary-7);
+}
+
+.rowWarning {
+  color: var(--mantine-color-orange-8);
 }
 
 .status {

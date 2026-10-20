@@ -15,6 +15,7 @@ use HiEvents\Repository\Interfaces\EventLineupEntryRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventScheduleItemRepositoryInterface;
 use HiEvents\Repository\Interfaces\EventSpaceRepositoryInterface;
 use HiEvents\Services\Domain\Lineup\EmailLineupHighlightsService;
+use HiEvents\Services\Domain\Lineup\LineupHighlightSelector;
 use Illuminate\Support\Collection;
 use Mockery as m;
 use Tests\TestCase;
@@ -34,7 +35,7 @@ class EmailLineupHighlightsServiceTest extends TestCase
         $spaceRepository = m::mock(EventSpaceRepositoryInterface::class);
         $spaceRepository->shouldReceive('findWhere')->andReturn(new Collection([(new EventSpaceDomainObject)->setId(9)->setName('Main Stage')]));
 
-        return new EmailLineupHighlightsService($entryRepository, $itemRepository, $spaceRepository);
+        return new EmailLineupHighlightsService($entryRepository, $itemRepository, $spaceRepository, new LineupHighlightSelector);
     }
 
     private function entry(int $id, string $name, string $tier): EventLineupEntryDomainObject

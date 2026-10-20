@@ -1,4 +1,4 @@
-import {ComboboxItem, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
+import {Button, ComboboxItem, Group, Select, Skeleton, Table as MantineTable} from '@mantine/core';
 import {t} from '@lingui/macro';
 import {DatePickerInput} from "@mantine/dates";
 import {IconArrowDown, IconArrowsSort, IconArrowUp, IconCalendar} from "@tabler/icons-react";
@@ -240,6 +240,20 @@ const ReportTable = <T extends Record<string, any>>({
                 </Group>
                 <Skeleton height={300} radius="md"/>
             </>
+        );
+    }
+
+    if (reportQuery.isError && !reportQuery.data) {
+        return (
+            <NoResultsSplash
+                heading={t`Couldn't load this report`}
+                imageHref={'/blank-slate/reports.svg'}
+                subHeading={<p>{t`Check your connection and try again.`}</p>}
+            >
+                <Button variant="default" loading={reportQuery.isFetching} onClick={() => reportQuery.refetch()}>
+                    {t`Try again`}
+                </Button>
+            </NoResultsSplash>
         );
     }
 

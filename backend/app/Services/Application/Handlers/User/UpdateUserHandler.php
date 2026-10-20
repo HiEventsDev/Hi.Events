@@ -60,7 +60,7 @@ class UpdateUserHandler
             ]
         );
 
-        if ($updateUserData->role !== Role::ADMIN && $accountUser->getIsAccountOwner()) {
+        if ($updateUserData->role !== null && $updateUserData->role !== Role::ADMIN && $accountUser->getIsAccountOwner()) {
             throw new CannotUpdateResourceException(__(
                 'You cannot update the role of the account owner'
             ));
@@ -90,25 +90,29 @@ class UpdateUserHandler
             );
         }
 
-        $this->accountUserRepository->updateWhere(
-            attributes: array_filter([
-                'role' => $updateUserData->role->name,
-                'status' => $updateUserData->status?->name,
-            ]),
-            where: [
-                'user_id' => $updateUserData->id,
-                'account_id' => $updateUserData->account_id,
-            ]
-        );
+        $accountUserAttributes = array_filter([
+            'role' => $updateUserData->role?->name,
+            'status' => $updateUserData->status?->name,
+        ]);
+
+        if ($accountUserAttributes !== []) {
+            $this->accountUserRepository->updateWhere(
+                attributes: $accountUserAttributes,
+                where: [
+                    'user_id' => $updateUserData->id,
+                    'account_id' => $updateUserData->account_id,
+                ]
+            );
+        }
 
         if ($updateUserData->status === UserStatus::INACTIVE) {
             $this->apiKeyService->revokeAllForMember($updateUserData->id, $updateUserData->account_id);
         }
 
-        if ($updateUserData->access !== null || ! $updateUserData->role->canBeRestricted()) {
+        if ($updateUserData->access !== null || ($updateUserData->role !== null && ! $updateUserData->role->canBeRestricted())) {
             $this->accessUpdateService->update(
                 accountUser: $accountUser,
-                role: $updateUserData->role,
+                role: $updateUserData->role ?? Role::fromName($accountUser->getRole()),
                 access: $updateUserData->access ?? new AccountUserAccessData,
             );
         }

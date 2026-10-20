@@ -11,8 +11,9 @@ import {useGetWebhooks} from "../../../../queries/useGetWebhooks.ts";
 import {useParams} from "react-router";
 import {CreateWebhookModal} from "../../../modals/CreateWebhookModal";
 import {TableSkeleton} from "../../../common/TableSkeleton";
+import {RequirePermission} from "../../../common/WriteAccess";
 
-const Webhooks = () => {
+const WebhookList = () => {
     const {eventId} = useParams();
     const [createModalOpen, {open: openCreateModal, close: closeCreateModal}] = useDisclosure(false);
     const webhooksQuery = useGetWebhooks(eventId);
@@ -26,12 +27,7 @@ const Webhooks = () => {
     };
 
     return (
-        <PageBody>
-            <PageTitle
-                subheading={t`Send real-time order and attendee data to your external systems.`}
-            >
-                {t`Webhooks`}
-            </PageTitle>
+        <>
             <Card>
                 <Group justify="space-between">
                     <CreateButton color={'green'} rightSection={<IconPlus/>} onClick={openCreateModal}>
@@ -59,8 +55,21 @@ const Webhooks = () => {
                     onClose={closeCreateModal}
                 />
             )}
-        </PageBody>
+        </>
     );
 }
+
+const Webhooks = () => (
+    <PageBody>
+        <PageTitle
+            subheading={t`Send real-time order and attendee data to your external systems.`}
+        >
+            {t`Webhooks`}
+        </PageTitle>
+        <RequirePermission permission="VIEW_FINANCIALS" imageHref="/blank-slate/webhooks.svg">
+            <WebhookList/>
+        </RequirePermission>
+    </PageBody>
+);
 
 export default Webhooks;

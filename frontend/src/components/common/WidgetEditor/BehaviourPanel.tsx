@@ -20,6 +20,7 @@ export const BehaviourPanel = ({type, settings, update}: BehaviourPanelProps) =>
                             size="sm"
                             value={settings.checkout ?? 'modal'}
                             onChange={(value) => update({checkout: value as WidgetCheckoutMode})}
+                            aria-label={t`Checkout opens in`}
                             data={[
                                 {value: 'modal', label: t`Pop-up on your site`},
                                 {value: 'new-tab', label: t`New tab`},
@@ -49,7 +50,7 @@ export const BehaviourPanel = ({type, settings, update}: BehaviourPanelProps) =>
             {type !== 'BUTTON' && (
                 <Switch
                     label={t`Fit height to content`}
-                    description={t`Turn off to make the widget fill the height of its container.`}
+                    description={t`Turn off to set the height yourself: give the widget element a height on your page and the widget fills it.`}
                     checked={settings.autoresize !== false}
                     onChange={(event) => update({autoresize: event.currentTarget.checked})}
                 />

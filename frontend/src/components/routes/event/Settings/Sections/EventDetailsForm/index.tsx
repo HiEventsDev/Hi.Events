@@ -126,6 +126,7 @@ export const EventDetailsForm = () => {
                             <DateTimeField
                                        {...form.getInputProps('end_date')}
                                        label={t`End Date`}
+                                       defaultTime="23:59"
                             />
                         </InputGroup>
                     )}

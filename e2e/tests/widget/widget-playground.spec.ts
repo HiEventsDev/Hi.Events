@@ -1,6 +1,7 @@
 import { test, expect } from '../../fixtures';
 import { setWidgetQuantity } from '../../pages/checkout.page';
 import { createLiveEventWithFreeTicket } from '../../api/factory';
+import { uniqueName } from '../../utils/unique';
 
 test.describe('widget playground', () => {
   test('the playground renders a widget with the configured settings', async ({ page, api, account }) => {
@@ -26,14 +27,15 @@ test.describe('widget playground', () => {
     await expect(page.locator('#message-log')).toContainText('hievents:open-checkout');
   });
 
-  test('the playground embeds an organizer events list as a custom element', async ({ page, api, account }) => {
-    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+  test('the playground embeds an organizer events list as a custom element', async ({ page, api }) => {
+    const organizer = await api.createOrganizer(uniqueName('E2E Events Widget Org'));
+    const event = await createLiveEventWithFreeTicket(api, organizer.id);
 
-    await page.goto(`/widget-test?type=events&organizerId=${account.organizerId}&markup=element&layout=compact`);
+    await page.goto(`/widget-test?type=events&organizerId=${organizer.id}&markup=element&layout=compact`);
     const list = page.frameLocator('iframe[title="Hi.Events Events"]');
     await expect(list.getByText(event.title)).toBeVisible();
     await expect(page.locator('#embed-code')).toContainText(`<hievents-widget`);
-    await expect(page.locator('#embed-code')).toContainText(`organizer-id="${account.organizerId}"`);
+    await expect(page.locator('#embed-code')).toContainText(`organizer-id="${organizer.id}"`);
   });
 });
 

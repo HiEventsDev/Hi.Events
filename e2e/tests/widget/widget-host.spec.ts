@@ -13,6 +13,7 @@ import {
 } from '../../pages/embedded-widget';
 import { createFreshOrganizer, createLiveEventWithFreeTicket, createReservedOrder } from '../../api/factory';
 import { uniqueCode, uniqueEmail } from '../../utils/unique';
+import { waitForHydration } from '../../utils/hydration';
 
 type HostWindow = Window & { hieventsLog: { name: string; detail: Record<string, unknown> }[] };
 
@@ -82,6 +83,16 @@ test.describe('widget on a host page', () => {
     widget = await resolveWidgetFrame(page);
     await expect(widget.getByRole('heading', { name: 'Second Ticket' })).toBeVisible();
     await expect(widget.getByRole('heading', { name: event.productTitle })).toHaveCount(0);
+
+    await page.evaluate((productId) => {
+      const element = document.querySelector<HTMLElement>('hievents-widget')!;
+      element.style.display = 'none';
+      element.setAttribute('products', String(productId));
+    }, event.productId);
+    await expect(widgetIframe(page)).toHaveCount(1);
+    await expect(widgetIframe(page)).toHaveAttribute('src', new RegExp(`Products=${event.productId}(&|$)`));
+    expect(await page.evaluate(() => document.querySelector<HTMLElement>('hievents-widget')!.style.display)).toBe('none');
+    await page.evaluate(() => { document.querySelector<HTMLElement>('hievents-widget')!.style.display = ''; });
 
     await page.evaluate((src) => new Promise((resolve, reject) => {
       const script = document.createElement('script');
@@ -188,6 +199,87 @@ test.describe('widget on a host page', () => {
       .toBe(1);
   });
 
+  test('switching the custom element from a button to tickets shows the ticket widget', async ({ page, api, account, baseURL }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    await openEmbedHost(page, baseURL!, `<hievents-widget event-id="${event.eventId}" widget-type="button" button-text="Book now"></hievents-widget>`);
+    await expect(page.getByRole('button', { name: 'Book now' })).toBeVisible();
+
+    await page.evaluate(() => document.querySelector('hievents-widget')!.removeAttribute('widget-type'));
+
+    await expect(page.getByRole('button', { name: 'Book now' })).toHaveCount(0);
+    const widget = await resolveWidgetFrame(page);
+    await expect(widget.getByRole('heading', { name: event.productTitle })).toBeVisible();
+    await expect(widgetIframe(page)).toBeVisible();
+    expect((await widgetIframe(page).boundingBox())!.height).toBeGreaterThan(100);
+  });
+
+  test('the button keeps its colours on a host page that blocks inline styles', async ({ page, api, account, baseURL }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const blockedStyles: string[] = [];
+    page.on('console', (message) => {
+      if (message.text().includes('style-src')) blockedStyles.push(message.text());
+    });
+
+    await openStrictCspHost(page, baseURL!, widgetMarkup({
+      id: String(event.eventId),
+      'widget-type': 'button',
+      'button-text': 'Book now',
+      'secondary-color': '#0f766e',
+    }));
+
+    const button = page.getByRole('button', { name: 'Book now' });
+    await expect(button).toBeVisible();
+    await expect(button).toHaveCSS('background-color', 'rgb(15, 118, 110)');
+    await expect(button).toHaveCSS('min-height', '44px');
+    expect(blockedStyles).toEqual([]);
+  });
+
+  test('with autoresize off the widget fills the height the host gives it, and host iframe rules still win', async ({ page, api, account, baseURL }) => {
+    const event = await createLiveEventWithFreeTicket(api, account.organizerId);
+    const fixedHeightWidget = `<style>.booking { height: 500px; }</style>${widgetMarkup({ id: String(event.eventId), autoresize: 'false' }).replace('class="hievents-widget"', 'class="hievents-widget booking"')}`;
+
+    await openEmbedHost(page, baseURL!, fixedHeightWidget);
+    await expect(widgetIframe(page)).toBeVisible();
+    expect(Math.round((await widgetIframe(page).boundingBox())!.height)).toBe(500);
+
+    await page.unrouteAll();
+    await openEmbedHost(page, baseURL!, `<style>iframe { height: 300px; }</style>${fixedHeightWidget}`);
+    await expect(widgetIframe(page)).toBeVisible();
+    expect(Math.round((await widgetIframe(page).boundingBox())!.height)).toBe(300);
+  });
+
+  test('a missing event or organizer shows its message at once, without hydration errors', async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+
+    await page.goto('/widget/999999999');
+    await waitForHydration(page, 'main.hi-widget-tokens');
+    await expect(page.getByText('This event is not available')).toBeVisible();
+    await expect(page.locator('.hi-widget-loading')).toHaveCount(0);
+    expect(pageErrors).toEqual([]);
+
+    await page.goto('/widget/organizer/999999999');
+    await waitForHydration(page, 'main.hi-widget-tokens');
+    await expect(page.getByText('These events are not available')).toBeVisible({ timeout: 2_000 });
+    await expect(page.locator('.hi-widget-loading')).toHaveCount(0, { timeout: 2_000 });
+
+    const lineupRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/events/999999999/lineup')) {
+        lineupRequests.push(request.url());
+      }
+    });
+    for (const path of ['/widget/999999999/lineup', '/widget/999999999/schedule']) {
+      await page.goto(path);
+      await waitForHydration(page, 'main.hi-widget-tokens');
+      await expect(page.getByText('This event is not available')).toBeVisible();
+      await expect(page.locator('.hi-widget-loading')).toHaveCount(0);
+    }
+    expect(lineupRequests).toEqual([]);
+
+    expect(pageErrors).toEqual([]);
+  });
+
   test('widget routes render their content on the server', { tag: '@smoke' }, async ({ request, api }) => {
     const organizer = await createFreshOrganizer(api);
     const event = await createLiveEventWithFreeTicket(api, organizer.id);
@@ -200,6 +292,16 @@ test.describe('widget on a host page', () => {
     expect(listing).toContain(event.title);
   });
 });
+
+async function openStrictCspHost(page: import('@playwright/test').Page, baseURL: string, body: string) {
+  await page.context().grantPermissions(['local-network-access'], { origin: new URL(EMBED_HOST_URL).origin });
+  await page.route(`${EMBED_HOST_URL}**`, (route) => route.fulfill({
+    contentType: 'text/html',
+    headers: { 'Content-Security-Policy': "style-src 'self'" },
+    body: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Strict host</title><script async src="${baseURL}/widget.js"></script></head><body>${body}</body></html>`,
+  }));
+  await page.goto(EMBED_HOST_URL);
+}
 
 async function resolveWidgetFrameAfterOpen(page: import('@playwright/test').Page, baseURL: string, eventId: number) {
   await openEmbedHost(page, baseURL, widgetMarkup({ id: String(eventId) }));

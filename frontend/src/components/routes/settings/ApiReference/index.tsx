@@ -17,6 +17,7 @@ const ApiReference = () => {
     const apiBaseUrl = useApiBaseUrl();
     const [Reference, setReference] = useState<ReferenceComponent | null>(null);
     const [loadFailed, setLoadFailed] = useState(false);
+    const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
         Promise.all([
@@ -26,6 +27,22 @@ const ApiReference = () => {
             .then(([module]) => setReference(() => module.ApiReferenceReact))
             .catch(() => setLoadFailed(true));
     }, []);
+
+    useEffect(() => {
+        if (!container) {
+            return;
+        }
+
+        const demoteNestedMain = () => container
+            .querySelectorAll('main:not([role])')
+            .forEach(main => main.setAttribute('role', 'region'));
+
+        demoteNestedMain();
+        const observer = new MutationObserver(demoteNestedMain);
+        observer.observe(container, {childList: true, subtree: true});
+
+        return () => observer.disconnect();
+    }, [container]);
 
     const configuration = useMemo<Configuration | null>(() => {
         if (!spec) {
@@ -79,7 +96,7 @@ const ApiReference = () => {
     }
 
     return (
-        <div className={classes.reference} data-testid="api-reference">
+        <div ref={setContainer} className={classes.reference} data-testid="api-reference">
             <Reference configuration={configuration}/>
         </div>
     );

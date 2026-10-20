@@ -77,9 +77,9 @@ const SsoCallback = () => {
         redirectToPreviousUrl(true);
     };
 
-    const steps = useLoginSteps({ssoBinding: flow?.binding, onComplete: finishLogin});
-
     const fail = (error: SsoErrorResponse) => setView({kind: 'error', error});
+
+    const steps = useLoginSteps({ssoBinding: flow?.binding, onComplete: finishLogin, onSsoRequired: fail});
 
     const finishTest = (outcome: TestOutcome, currentFlow: SsoFlow | null) => {
         clearSsoFlow(stateRef.current);

@@ -148,7 +148,6 @@ export const ScheduleCalendar = ({event, lineup, date, onDateChange, readOnly, o
                 slotWidth={72}
                 rowHeight={72}
                 startScrollTime={firstStartOnDate ? `${firstStartOnDate.slice(11, 13)}:00:00` : '09:00:00'}
-                withCurrentTimeIndicator
                 getCurrentTime={() => toCalendarTime(dayjs().tz(tz).format(LOCAL_DATETIME_FORMAT))}
                 withEventsDragAndDrop={!readOnly}
                 withEventResize={!readOnly}

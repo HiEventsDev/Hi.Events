@@ -40,6 +40,11 @@ export const LoginStepView = ({steps, onBack}: LoginStepViewProps) => {
             <AccountChooser
                 accounts={steps.accounts}
                 pendingAccountId={steps.pendingAccountId}
+                error={steps.error ?? steps.twoFactorError}
+                onClearError={() => {
+                    steps.setError(null);
+                    steps.setTwoFactorError(null);
+                }}
                 onChoose={steps.chooseAccount}
                 onBack={onBack}
             />

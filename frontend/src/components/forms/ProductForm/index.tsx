@@ -40,6 +40,7 @@ import {useEffect, useRef, useState} from "react";
 import {getCurrencySymbol} from "../../../utilites/currency.ts";
 import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetTaxesAndFees} from "../../../queries/useGetTaxesAndFees.ts";
+import {useAccess} from "../../../hooks/useAccess.ts";
 import {useGetEventSeatMap} from "../../../ee/seating/queries/useGetEventSeatMap.ts";
 import {seatedProductIds} from "../../../ee/seating/components/SeatPicker/ticketOptions.ts";
 import classes from './ProductForm.module.scss';
@@ -103,6 +104,7 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
     const isDonationProduct = form.values.type === 'DONATION';
     const {data: event} = useGetEvent(eventId);
     const {data: taxesAndFees} = useGetTaxesAndFees();
+    const {isRestricted} = useAccess();
     const isRecurring = event?.type === EventType.RECURRING;
     const typeLocked = Number(product?.quantity_sold) > 0;
     const seatMap = useGetEventSeatMap(eventId, !!event?.has_seat_map && !!product?.id).data;
@@ -428,7 +430,8 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                         <DateTimeField {...form.getInputProps('sale_start_date')}
                                    label={t`Sale Start Date`}/>
                         <DateTimeField {...form.getInputProps('sale_end_date')}
-                                   label={t`Sale End Date`}/>
+                                   label={t`Sale End Date`}
+                                   defaultTime="23:59"/>
                     </InputGroup>
                     <Switch {...form.getInputProps('hide_before_sale_start_date', {type: 'checkbox'})}
                             label={t`Hide product before sale start date`}
@@ -495,15 +498,17 @@ export const ProductForm = ({form, product}: ProductFormProps) => {
                             items: taxAndFeeOptions(TaxAndFeeType.Fee),
                         }]}
                     />
-                    <Button
-                        variant="subtle"
-                        size="compact-sm"
-                        leftSection={<IconPlus size={14}/>}
-                        onClick={openTaxFeeModal}
-                        className={classes.addTaxFeeButton}
-                    >
-                        {t`Create Tax or Fee`}
-                    </Button>
+                    {!isRestricted && (
+                        <Button
+                            variant="subtle"
+                            size="compact-sm"
+                            leftSection={<IconPlus size={14}/>}
+                            onClick={openTaxFeeModal}
+                            className={classes.addTaxFeeButton}
+                        >
+                            {t`Create Tax or Fee`}
+                        </Button>
+                    )}
 
                     {(form.values.type === ProductPriceType.Free && !!form.values.tax_and_fee_ids?.length) && (
                         <Callout variant="info" style={{marginTop: 15}}>

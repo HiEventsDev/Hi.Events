@@ -1,4 +1,4 @@
-import {ReactNode, useCallback, useEffect, useMemo, useState} from "react";
+import {ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState} from "react";
 import {plural, t} from "@lingui/macro";
 import {Button, Loader, SegmentedControl, Switch} from "@mantine/core";
 import {Dropzone} from "@mantine/dropzone";
@@ -45,6 +45,8 @@ import {
 } from "../../../../utilites/lineupImport.ts";
 import {parseDelimitedText, readSpreadsheetFile, SpreadsheetReadError, SpreadsheetSheet} from "../../../../utilites/spreadsheetReader.ts";
 import {LOCAL_DATETIME_FORMAT} from "../../../../utilites/lineupSchedule.ts";
+import {useOccurrenceDays} from "./useOccurrenceDays.ts";
+import {localScheduleDayKey} from "./ScheduleBuilder/scheduleDays.ts";
 import classes from "./ImportLineupModal.module.scss";
 
 const ACCEPTED_TYPES = {
@@ -166,6 +168,7 @@ export const ImportLineupModal = ({event, lineup, onClose}: ImportLineupModalPro
     // eslint-disable-next-line lingui/no-unlocalized-strings
     const isMobile = useMediaQuery('(max-width: 48em)');
     const profilesQuery = useGetProfiles(event.organizer_id);
+    const occurrenceDays = useOccurrenceDays(event);
     const importMutation = useImportLineup();
     const [source, setSource] = useState<Source | null>(null);
     const [reading, setReading] = useState(false);
@@ -354,6 +357,7 @@ export const ImportLineupModal = ({event, lineup, onClose}: ImportLineupModalPro
                         plan={plan}
                         ready={profilesReady}
                         timezone={event.timezone}
+                        occurrenceDays={occurrenceDays}
                         serverErrors={serverErrors}
                         dayFirst={dayFirst}
                         onDayFirstChange={setDayFirst}
@@ -413,6 +417,8 @@ const PickStep = ({reading, failure, onFile, onPaste, onTemplate}: PickStepProps
                 multiple={false}
                 loading={reading}
                 className={classes.dropzone}
+                role="button"
+                aria-label={t`Choose a spreadsheet to import`}
                 data-testid="lineup-import-dropzone"
             >
                 <div className={classes.dropzoneInner}>
@@ -473,6 +479,7 @@ interface PreviewStepProps {
     plan: ImportPlan;
     ready: boolean;
     timezone: string;
+    occurrenceDays?: ReadonlySet<string>;
     serverErrors: Map<string, string>;
     dayFirst: boolean;
     onDayFirstChange: (value: boolean) => void;
@@ -484,7 +491,10 @@ interface PreviewStepProps {
 }
 
 const PreviewStep = (props: PreviewStepProps) => {
-    const {source, plan, ready, timezone, serverErrors, dayFirst, onDayFirstChange, tab, onTabChange, problemsOnly, onProblemsOnlyChange, onReset} = props;
+    const {source, plan, ready, timezone, occurrenceDays, serverErrors, dayFirst, onDayFirstChange, tab, onTabChange, problemsOnly, onProblemsOnlyChange, onReset} = props;
+    const summaryRef = useRef<HTMLDivElement>(null);
+    const summaryId = useId();
+    const isOffDate = (row: SlotImportRow) => !!occurrenceDays && !!row.startsAt && !occurrenceDays.has(localScheduleDayKey(row.startsAt));
     const isError = (row: { status: RowStatus, sheet: string, row: number }) => row.status === 'error' || serverErrors.has(rowKey(row));
     const count = (rows: { status: RowStatus }[], status: RowStatus) => rows.filter(row => row.status === status).length;
     const totalErrors = [...plan.people, ...plan.slots].filter(isError).length;
@@ -497,6 +507,11 @@ const PreviewStep = (props: PreviewStepProps) => {
     const onLineup = count(plan.people, 'update') + count(plan.people, 'unchanged');
     const slotRowCount = plan.slots.length;
     const peopleRowCount = plan.people.length;
+    const offDateSlots = plan.slots.filter(row => row.status !== 'error' && isOffDate(row)).length;
+
+    useEffect(() => {
+        summaryRef.current?.focus();
+    }, [ready]);
 
     if (plan.people.length === 0 && plan.slots.length === 0) {
         return (
@@ -526,19 +541,30 @@ const PreviewStep = (props: PreviewStepProps) => {
 
             {ready
                 ? (
-                    <div className={classes.summary} data-testid="lineup-import-summary">
-                        <SummaryCard icon={<IconUsers size={16}/>} value={peopleToAdd(plan)} label={t`people to add`} testId="lineup-import-people"
+                    <div
+                        ref={summaryRef}
+                        className={classes.summary}
+                        tabIndex={-1}
+                        role="group"
+                        aria-labelledby={['people', 'slots', 'stages', 'errors'].map(card => `${summaryId}-${card}`).join(' ')}
+                        data-testid="lineup-import-summary"
+                    >
+                        <SummaryCard id={`${summaryId}-people`} icon={<IconUsers size={16}/>} value={peopleToAdd(plan)} label={t`people to add`} testId="lineup-import-people"
                                      detail={onLineup > 0 ? t`${onLineup} already on the lineup` : undefined}/>
-                        <SummaryCard icon={<IconCalendarTime size={16}/>} value={addedSlots} label={t`time slots to add`} testId="lineup-import-slots"
+                        <SummaryCard id={`${summaryId}-slots`} icon={<IconCalendarTime size={16}/>} value={addedSlots} label={t`time slots to add`} testId="lineup-import-slots"
                                      detail={repeatSlots > 0 ? t`${repeatSlots} already scheduled` : undefined}/>
-                        <SummaryCard icon={<IconMapPin size={16}/>} value={plan.newStages.length} label={t`new stages or rooms`} testId="lineup-import-stages"
+                        <SummaryCard id={`${summaryId}-stages`} icon={<IconMapPin size={16}/>} value={plan.newStages.length} label={t`new stages or rooms`} testId="lineup-import-stages"
                                      detail={plan.newStages.slice(0, 3).join(', ') || undefined}/>
-                        <SummaryCard icon={<IconAlertTriangle size={16}/>} value={totalErrors} label={t`rows to fix`} testId="lineup-import-errors"
+                        <SummaryCard id={`${summaryId}-errors`} icon={<IconAlertTriangle size={16}/>} value={totalErrors} label={t`rows to fix`} testId="lineup-import-errors"
                                      tone={totalErrors > 0 ? 'warning' : undefined}
                                      detail={totalErrors > 0 ? t`These are skipped` : t`Everything looks good`}/>
                     </div>
                 )
-                : <div className={classes.summaryLoading}><Loader size="sm"/>{t`Checking your saved profiles…`}</div>}
+                : (
+                    <div ref={summaryRef} className={classes.summaryLoading} tabIndex={-1} role="status">
+                        <Loader size="sm"/>{t`Checking your saved profiles…`}
+                    </div>
+                )}
 
             {plan.slots.length > 0 && (
                 <div className={classes.notice}>
@@ -549,6 +575,7 @@ const PreviewStep = (props: PreviewStepProps) => {
                             size="xs"
                             value={dayFirst ? 'day' : 'month'}
                             onChange={value => onDayFirstChange(value === 'day')}
+                            aria-label={t`Date order`}
                             data-testid="lineup-import-date-order"
                             data={[
                                 {value: 'day', label: t`Day/Month`},
@@ -557,6 +584,18 @@ const PreviewStep = (props: PreviewStepProps) => {
                         />
                     )}
                 </div>
+            )}
+
+            {offDateSlots > 0 && (
+                <p className={classes.notice} data-tone="warning">
+                    <IconAlertTriangle size={14}/>
+                    <span className={classes.noticeText}>
+                        {plural(offDateSlots, {
+                            one: "# time slot is on a day your event has no date, so it won't show on your event page.",
+                            other: "# time slots are on days your event has no date, so they won't show on your event page.",
+                        })}
+                    </span>
+                </p>
             )}
 
             {plan.unrecognisedSheets.length > 0 && (
@@ -571,6 +610,7 @@ const PreviewStep = (props: PreviewStepProps) => {
                         size="xs"
                         value={activeTab}
                         onChange={value => onTabChange(value as Tab)}
+                        aria-label={t`Rows to show`}
                         data={[
                             {value: 'slots', label: t`Schedule (${slotRowCount})`},
                             {value: 'people', label: t`People (${peopleRowCount})`},
@@ -585,13 +625,14 @@ const PreviewStep = (props: PreviewStepProps) => {
             <ul className={classes.rows} data-testid="lineup-import-rows">
                 {visibleRows.map(row => activeTab === 'people'
                     ? <PersonRow key={rowKey(row)} row={row as PersonImportRow} serverError={serverErrors.get(rowKey(row))} ready={ready}/>
-                    : <SlotRow key={rowKey(row)} row={row as SlotImportRow} serverError={serverErrors.get(rowKey(row))}/>)}
+                    : <SlotRow key={rowKey(row)} row={row as SlotImportRow} serverError={serverErrors.get(rowKey(row))} offDate={isOffDate(row as SlotImportRow)}/>)}
             </ul>
         </div>
     );
 };
 
-const SummaryCard = ({icon, value, label, detail, tone, testId}: {
+const SummaryCard = ({id, icon, value, label, detail, tone, testId}: {
+    id: string,
     icon: ReactNode,
     value: number,
     label: string,
@@ -599,7 +640,7 @@ const SummaryCard = ({icon, value, label, detail, tone, testId}: {
     tone?: 'warning',
     testId: string,
 }) => (
-    <div className={classes.summaryCard} data-tone={tone} data-testid={testId}>
+    <div id={id} className={classes.summaryCard} data-tone={tone} data-testid={testId}>
         <span className={classes.summaryLabel}>{icon}{label}</span>
         <strong>{value}</strong>
         {detail && <span className={classes.summaryDetail}>{detail}</span>}
@@ -636,13 +677,15 @@ const PersonRow = ({row, serverError, ready}: { row: PersonImportRow, serverErro
     );
 };
 
-const SlotRow = ({row, serverError}: { row: SlotImportRow, serverError?: string }) => {
-    const title = row.title || row.people.join(', ');
+const SlotRow = ({row, serverError, offDate}: { row: SlotImportRow, serverError?: string, offDate: boolean }) => {
+    const title = row.title || row.people.join('; ');
     const status: RowStatus = serverError ? 'error' : row.status;
     const time = row.startsAt
         ? `${formatDateWithLocale(row.startsAt, 'weekdayDate', 'UTC')} · ${formatDateWithLocale(row.startsAt, 'timeOnly', 'UTC')} – ${formatDateWithLocale(row.endsAt, 'timeOnly', 'UTC')}`
         : null;
-    const newNames = row.newPeople.join(', ');
+    const newNames = row.newPeople.join('; ');
+    const newCount = row.newPeople.length;
+    const hasCommaName = row.people.some(name => name.includes(','));
     const error = serverError ?? (row.error ? errorMessage(row.error) : null);
 
     return (
@@ -654,10 +697,20 @@ const SlotRow = ({row, serverError}: { row: SlotImportRow, serverError?: string 
                     ? <span className={classes.rowError}>{error}</span>
                     : (
                         <span className={classes.rowMeta}>
-                            {[time, row.stage, row.title && row.people.join(', ')].filter(Boolean).join(' · ')}
+                            {[time, row.stage, row.title && row.people.join('; ')].filter(Boolean).join(' · ')}
                         </span>
                     )}
-                {!error && newNames && <span className={classes.rowNote}>{t`Creates new profiles for ${newNames}`}</span>}
+                {!error && newCount > 0 && (
+                    <span className={classes.rowNote}>
+                        {plural(newCount, {one: `Creates a new profile for ${newNames}`, other: `Creates new profiles for ${newNames}`})}
+                    </span>
+                )}
+                {!error && hasCommaName && (
+                    <span className={classes.rowWarning}>{t`Treated as one person. Separate several people with a semicolon.`}</span>
+                )}
+                {!error && offDate && (
+                    <span className={classes.rowWarning}>{t`No event date on this day, so it won't show on your event page`}</span>
+                )}
             </div>
             <StatusBadge status={status} kind="slots"/>
         </li>

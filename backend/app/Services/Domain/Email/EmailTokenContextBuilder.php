@@ -41,7 +41,7 @@ class EmailTokenContextBuilder
         $occurrence ??= $order->getSingleEventOccurrence();
 
         $startDateRaw = $occurrence?->getStartDate() ?? $event->getStartDate();
-        $endDateRaw = $occurrence?->getEndDate() ?? $event->getEndDate();
+        $endDateRaw = $occurrence === null ? $event->getEndDate() : $occurrence->getEndDate();
 
         $eventStartDate = $startDateRaw ? new Carbon(DateHelper::convertFromUTC($startDateRaw, $event->getTimezone())) : null;
         $eventEndDate = $endDateRaw ? new Carbon(DateHelper::convertFromUTC($endDateRaw, $event->getTimezone())) : null;

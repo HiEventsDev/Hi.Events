@@ -26,6 +26,7 @@ class WidgetResource extends BaseResource
             'type' => $this->getType(),
             'event_id' => $this->getEventId(),
             'organizer_id' => $this->getOrganizerId(),
+            /** @var array<string, mixed> */
             'settings' => (object) $this->getSettings(),
             'created_at' => $this->getCreatedAt(),
             'updated_at' => $this->getUpdatedAt(),
@@ -33,6 +34,7 @@ class WidgetResource extends BaseResource
                 'views' => $stats->views,
                 'orders' => $stats->orders,
                 $this->mergeWhen($this->isPermitted(Permission::VIEW_FINANCIALS), fn () => [
+                    /** @var array<string, float> */
                     'revenue' => (object) $stats->revenue,
                 ]),
             ],

@@ -5,7 +5,7 @@ import {useGetEvent} from "../../../queries/useGetEvent.ts";
 import {useGetEventOccurrence} from "../../../queries/useGetEventOccurrence.ts";
 import {t} from "@lingui/macro";
 import {useCallback, useMemo, useState} from "react";
-import {Anchor, Progress, Skeleton, Stack, Text} from "@mantine/core";
+import {Anchor, Drawer, Progress, Skeleton, Stack, Text} from "@mantine/core";
 import {IconMapPin, IconWorld} from "@tabler/icons-react";
 import {getEventLocationDisplay} from "../../../utilites/effectiveLocation.ts";
 import {OccurrenceAttendeesAndOrders} from "../../common/OccurrenceAttendeesAndOrders";
@@ -134,9 +134,11 @@ export const ManageOccurrenceModal = ({onClose, occurrenceId}: GenericModalProps
             <Stack className={classes.container}>
                 <div className={classes.header}>
                     <div className={classes.occurrenceInfo}>
-                        <Text className={classes.dateTime}>
-                            {startFormatted}{endFormatted && <> &mdash; {endFormatted}</>}
-                        </Text>
+                        <Drawer.Title component="div">
+                            <Text className={classes.dateTime}>
+                                {startFormatted}{endFormatted && <> &mdash; {endFormatted}</>}
+                            </Text>
+                        </Drawer.Title>
                         {occurrence.label && (
                             <Text className={classes.titleSuffix}>{occurrence.label}</Text>
                         )}

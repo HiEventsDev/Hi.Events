@@ -3,16 +3,19 @@ import {t} from "@lingui/macro";
 import {IconArrowLeft, IconBuildingCommunity, IconChevronRight} from "@tabler/icons-react";
 import {useEffect, useRef} from "react";
 import {Account, IdParam} from "../../../../types.ts";
+import {Callout} from "../../../common/Callout";
 import classes from "./Login.module.scss";
 
 interface AccountChooserProps {
     accounts: Account[];
     pendingAccountId: IdParam | null;
+    error: string | null;
+    onClearError: () => void;
     onChoose: (accountId: IdParam) => void;
     onBack: () => void;
 }
 
-export const AccountChooser = ({accounts, pendingAccountId, onChoose, onBack}: AccountChooserProps) => {
+export const AccountChooser = ({accounts, pendingAccountId, error, onClearError, onChoose, onBack}: AccountChooserProps) => {
     const headingRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
@@ -28,6 +31,12 @@ export const AccountChooser = ({accounts, pendingAccountId, onChoose, onBack}: A
                 <h2 ref={headingRef} tabIndex={-1}>{t`Choose an account`}</h2>
                 <p>{t`You belong to more than one account. Choose where you'd like to go.`}</p>
             </header>
+
+            {error && (
+                <Callout variant="danger" className={classes.formError} onDismiss={onClearError}>
+                    {error}
+                </Callout>
+            )}
 
             <ul className={classes.accountList}>
                 {accounts.map(account => {

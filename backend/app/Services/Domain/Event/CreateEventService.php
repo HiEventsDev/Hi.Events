@@ -271,7 +271,7 @@ class CreateEventService
             'show_marketing_opt_in' => $organizerSettings->getDefaultShowMarketingOptIn(),
             'allow_copy_details_to_all_attendees' => true,
             'pass_platform_fee_to_buyer' => $organizerSettings->getDefaultPassPlatformFeeToBuyer(),
-            'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit() ?? false,
+            'allow_attendee_self_edit' => $organizerSettings->getDefaultAllowAttendeeSelfEdit(),
             'ticket_design_settings' => [
                 'accent_color' => $homepageThemeSettings['accent'] ?? '#333',
             ],

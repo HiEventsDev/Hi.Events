@@ -4,17 +4,25 @@ namespace HiEvents\Services\Domain\Payment\Stripe\EventHandlers;
 
 use Brick\Money\Money;
 use HiEvents\DomainObjects\Enums\PaymentProviders;
+use HiEvents\DomainObjects\EventSettingDomainObject;
 use HiEvents\DomainObjects\Generated\OrderDomainObjectAbstract;
 use HiEvents\DomainObjects\OrderDomainObject;
+use HiEvents\DomainObjects\OrganizerDomainObject;
 use HiEvents\DomainObjects\Status\OrderRefundStatus;
+use HiEvents\Mail\Order\OrderRefunded;
+use HiEvents\Repository\Eloquent\Value\Relationship;
+use HiEvents\Repository\Interfaces\EventRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRefundRepositoryInterface;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
 use HiEvents\Services\Domain\EventStatistics\EventStatisticsRefundService;
+use HiEvents\Services\Domain\Payment\Stripe\StripePaymentIntentRefundService;
 use HiEvents\Services\Infrastructure\DomainEvents\DomainEventDispatcherService;
 use HiEvents\Services\Infrastructure\DomainEvents\Enums\DomainEventType;
 use HiEvents\Services\Infrastructure\DomainEvents\Events\OrderEvent;
+use HiEvents\Services\Infrastructure\Lock\TransactionLockService;
 use HiEvents\Values\MoneyValue;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Log\Logger;
 use Stripe\Refund;
@@ -30,6 +38,9 @@ class ChargeRefundUpdatedHandler
         private readonly EventStatisticsRefundService $eventStatisticsRefundService,
         private readonly OrderRefundRepositoryInterface $orderRefundRepository,
         private readonly DomainEventDispatcherService $domainEventDispatcherService,
+        private readonly TransactionLockService $transactionLockService,
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly Mailer $mailer,
     ) {}
 
     /**
@@ -46,6 +57,8 @@ class ChargeRefundUpdatedHandler
                 return;
             }
 
+            $this->lockOrder($stripePayment->getOrderId());
+
             $existingRefund = $this->orderRefundRepository->findFirstWhere([
                 'refund_id' => $refund->id,
             ]);
@@ -60,20 +73,36 @@ class ChargeRefundUpdatedHandler
                 return;
             }
 
+            if ($this->isStillProcessing($refund)) {
+                $this->logger->info('Stripe refund is still processing', [
+                    'refund_id' => $refund->id,
+                    'payment_intent_id' => $refund->payment_intent,
+                    'status' => $refund->status,
+                    'pending_reason' => $refund->pending_reason ?? null,
+                ]);
+
+                return;
+            }
+
             $order = $this->orderRepository->findById($stripePayment->getOrderId());
 
-            if ($refund->status !== 'succeeded') {
+            if ($refund->status !== Refund::STATUS_SUCCEEDED) {
                 $this->handleFailure($refund, $order);
 
                 return;
             }
 
             $refundedAmount = $this->amountAsFloat($refund->amount, $order->getCurrency());
+            $refundedMoney = MoneyValue::fromMinorUnit($refund->amount, $order->getCurrency());
 
             $this->updateOrderRefundedAmount($order->getId(), $refundedAmount);
             $this->updateOrderStatus($order, $refundedAmount);
-            $this->updateEventStatistics($order, MoneyValue::fromMinorUnit($refund->amount, $order->getCurrency()));
+            $this->updateEventStatistics($order, $refundedMoney);
             $this->createOrderRefund($refund, $order, $refundedAmount);
+
+            if ($this->wasBuyerNotificationRequested($refund) && $order->getEmail() !== null) {
+                $this->notifyBuyer($order, $refundedMoney);
+            }
 
             $this->logger->info(__('Stripe refund successful'), [
                 'order_id' => $order->getId(),
@@ -89,6 +118,40 @@ class ChargeRefundUpdatedHandler
                 ),
             );
         });
+    }
+
+    private function lockOrder(int $orderId): void
+    {
+        $this->transactionLockService->lockOrder($this->orderRepository->findById($orderId)->getShortId());
+    }
+
+    private function isStillProcessing(Refund $refund): bool
+    {
+        return in_array($refund->status, [Refund::STATUS_PENDING, Refund::STATUS_REQUIRES_ACTION], true);
+    }
+
+    private function wasBuyerNotificationRequested(Refund $refund): bool
+    {
+        return ($refund->metadata[StripePaymentIntentRefundService::NOTIFY_BUYER_METADATA_KEY] ?? null) === '1';
+    }
+
+    private function notifyBuyer(OrderDomainObject $order, MoneyValue $refundAmount): void
+    {
+        $event = $this->eventRepository
+            ->loadRelation(new Relationship(OrganizerDomainObject::class, name: 'organizer'))
+            ->loadRelation(EventSettingDomainObject::class)
+            ->findById($order->getEventId());
+
+        $this->mailer
+            ->to($order->getEmail())
+            ->locale($order->getLocale())
+            ->send(new OrderRefunded(
+                order: $order,
+                event: $event,
+                organizer: $event->getOrganizer(),
+                eventSettings: $event->getEventSettings(),
+                refundAmount: $refundAmount,
+            ));
     }
 
     private function amountAsFloat(int $amount, string $currency): float
@@ -127,16 +190,18 @@ class ChargeRefundUpdatedHandler
             OrderDomainObjectAbstract::REFUND_STATUS => OrderRefundStatus::REFUND_FAILED->name,
         ]);
 
+        $this->createOrderRefund($refund, $order, $this->amountAsFloat($refund->amount, $order->getCurrency()));
+
         $this->logger->error(__('Failed to refund stripe charge'), $refund->toArray());
     }
 
-    private function createOrderRefund(Refund $refund, OrderDomainObject $order, float $refundedAmount): void
+    private function createOrderRefund(Refund $refund, OrderDomainObject $order, float $amount): void
     {
         $this->orderRefundRepository->create([
             'order_id' => $order->getId(),
             'payment_provider' => PaymentProviders::STRIPE->value,
             'refund_id' => $refund->id,
-            'amount' => $refundedAmount,
+            'amount' => $amount,
             'currency' => $order->getCurrency(),
             'status' => $refund->status,
             'metadata' => array_merge($refund->metadata?->toArray() ?? [], [

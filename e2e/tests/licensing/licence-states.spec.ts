@@ -241,7 +241,25 @@ test.describe('licence notices', () => {
 
     const modal = await openLicenceModal(page);
     await expect(modal).toContainText('Setup for box office is locked');
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
     await expect(modal.getByRole('link', { name: 'Get a licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
+  });
+
+  test('a lapsed licence says what keeps working and what stops', async ({ freshAccount }) => {
+    await createFixtureSeatMap(freshAccount.api, freshAccount.organizerId, 'theatre', 'Main hall');
+    const eventId = await createEventWithBoxOffice(freshAccount.api, freshAccount.organizerId);
+    const page = await freshAccount.newAuthedPage();
+    await simulateLicence(page, 'LAPSED');
+
+    await page.goto(`/manage/event/${eventId}/box-office`);
+    await expect(licenceBadge(page)).toHaveAttribute('data-tone', 'danger');
+
+    const modal = await openLicenceModal(page);
+    await expect(modal).toContainText('Setup for reserved seating and box office is locked until you renew');
+    await expect(modal).toContainText('Online ticket sales for events with reserved seating keep working');
+    await expect(modal).toContainText('New box office sign-ins are refused, so open box office sessions end within 24 hours');
+    await expect(modal).not.toContainText('scheduled dates');
+    await expect(modal.getByRole('link', { name: 'Renew licence' })).toHaveAttribute('href', /hi\.events\/licensing/);
   });
 
   test('deleting the last seat map template clears the unlicensed notice', async ({ freshAccount }) => {

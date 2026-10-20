@@ -171,9 +171,10 @@ class SendOrderDetailsService
             excludeEmail: $notifiesOrganizer ? $event->getOrganizer()->getEmail() : null,
         );
 
-        foreach ($teamRecipients as $email) {
+        foreach ($teamRecipients as $user) {
             $this->mailer
-                ->to($email)
+                ->to($user->getEmail())
+                ->locale($user->getLocale())
                 ->send(new OrderSummaryForOrganizer($order, $event));
         }
     }

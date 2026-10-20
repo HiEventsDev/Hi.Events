@@ -57,8 +57,8 @@ export const publicOrganizerRouteLoader = async ({params, request}: LoaderFuncti
         const hasPastEventsSection = organizerHomepageLayout(resolveOrganizerHomepageSections(organizer?.settings?.homepage_sections))
             .blocks.some(block => block.kind === 'section' && block.section.type === 'PAST_EVENTS');
 
-        if (hasPastEventsSection) {
-            await getQueryClient().prefetchQuery(getOrganizerPublicEventsQuery(organizerId, PAST_EVENTS_PREVIEW_FILTERS));
+        if (hasPastEventsSection && organizer.id) {
+            await getQueryClient().prefetchQuery(getOrganizerPublicEventsQuery(organizer.id, PAST_EVENTS_PREVIEW_FILTERS));
         }
 
         return {

@@ -22,6 +22,7 @@ import {Editor} from "../../common/Editor";
 import {ChipSelect, ChipSelectOption} from "./ChipSelect.tsx";
 import {DateTimeChip} from "./DateTimeChip.tsx";
 import {PropertyChip} from "./PropertyChip.tsx";
+import {SelectedOrganizerDates} from "./SelectedOrganizerDates.tsx";
 import {
     currentDateTimeIn,
     defaultStartDate,
@@ -376,7 +377,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
 
                             <div className={classes.chips}>
                                 {!isRecurring && (
-                                    <>
+                                    <SelectedOrganizerDates organizerId={form.values.organizer_id}>
                                         <DateTimeChip
                                             value={form.values.start_date}
                                             onChange={(value) => {
@@ -407,7 +408,7 @@ export const CreateEventModal = ({onClose, organizerId}: CreateEventModalProps) 
                                             ariaLabel={t`End date and time`}
                                             dataTestId="create-event-end-chip"
                                         />
-                                    </>
+                                    </SelectedOrganizerDates>
                                 )}
                                 <ChipSelect
                                     data={repeatOptions}

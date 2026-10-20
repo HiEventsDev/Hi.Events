@@ -23,7 +23,7 @@ publicApi.interceptors.request.use((config) => {
 
     config.baseURL = `${baseUrl}/public`;
 
-    const boxOfficeShortId = config.url?.match(/\/box-offices\/([^/?#]+)\//)?.[1];
+    const boxOfficeShortId = config.url?.match(/\/box-offices\/([^/?#]+)(?:[/?#]|$)/)?.[1];
     if (boxOfficeShortId && !config.url?.endsWith('/sessions')) {
         const token = getBoxOfficeSessionToken(boxOfficeShortId);
         if (token) {

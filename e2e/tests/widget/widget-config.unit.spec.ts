@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { resolveWidgetConfig } from '../../../frontend/src/utilites/widgetConfig';
+import { forwardedHostParams, resolveWidgetConfig } from '../../../frontend/src/utilites/widgetConfig';
 import { agentInstructions, settingsForType, widgetAttributes } from '../../../frontend/src/components/common/WidgetEditor/embedCode';
 
 test.describe('widget config', () => {
@@ -41,6 +41,12 @@ test.describe('widget config', () => {
 
     expect(config.sections).toEqual(['header', 'tickets']);
     expect(config.prefill).toEqual({ email: 'a@b.c', first_name: 'Ann' });
+  });
+
+  test('host page attribution parameters are picked out of the widget URL', () => {
+    const search = new URLSearchParams('Layout=grid&aff=PARTNER&promo_code=SAVE10&utm_source=news&utm_campaign=&iframeId=x');
+
+    expect(forwardedHostParams(search)).toEqual({ aff: 'PARTNER', promo_code: 'SAVE10', utm_source: 'news' });
   });
 });
 
@@ -105,5 +111,13 @@ test.describe('widget agent instructions', () => {
 
     expect(brief).not.toContain('hievents:order-completed');
     expect(brief).not.toContain('prefill');
+  });
+
+  test('a fixed-height embed tells the agent to give the widget element a height', () => {
+    const fixed = agentInstructions('TICKETS', widgetAttributes({ eventId: '7' }, 'TICKETS', { autoresize: false }), 'https://tickets.example.com/widget.js');
+    const auto = agentInstructions('TICKETS', widgetAttributes({ eventId: '7' }, 'TICKETS', {}), 'https://tickets.example.com/widget.js');
+
+    expect(fixed).toContain('give the widget element the height it should take');
+    expect(auto).toContain("so don't give it a fixed height.");
   });
 });

@@ -1,6 +1,6 @@
 import {Button} from "@mantine/core";
 import {t} from "@lingui/macro";
-import {FormEvent, ReactNode} from "react";
+import {FormEvent, ReactNode, useEffect, useRef} from "react";
 import {IdentityConfirmation} from "../../../types.ts";
 import {Modal, ModalFooter} from "../Modal";
 import {ConfirmIdentityField, useIdentityConfirmation} from "./index.tsx";
@@ -28,18 +28,30 @@ export const ConfirmIdentityModal = ({
                                          onClose,
                                      }: ConfirmIdentityModalProps) => {
     const identity = useIdentityConfirmation();
+    const formRef = useRef<HTMLFormElement>(null);
+    const wasSubmitting = useRef(isSubmitting);
+
+    useEffect(() => {
+        const settled = wasSubmitting.current && !isSubmitting;
+        wasSubmitting.current = isSubmitting;
+        const focusWasLost = !document.activeElement || document.activeElement === document.body;
+
+        if (settled && focusWasLost) {
+            formRef.current?.querySelector<HTMLElement>('input:not(:disabled), button:not(:disabled)')?.focus();
+        }
+    }, [isSubmitting]);
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
 
-        if (identity.confirmation) {
+        if (identity.confirmation && !isSubmitting) {
             onConfirm(identity.confirmation, identity.setError);
         }
     };
 
     return (
         <Modal opened onClose={onClose} heading={heading} size={440}>
-            <form className={classes.modalBody} onSubmit={submit}>
+            <form ref={formRef} className={classes.modalBody} onSubmit={submit}>
                 <p className={classes.modalText}>{description}</p>
                 <ConfirmIdentityField identity={identity} resumeUrl={resumeUrl} autoFocus/>
                 <ModalFooter>

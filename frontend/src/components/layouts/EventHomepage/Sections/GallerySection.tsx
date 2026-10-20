@@ -12,7 +12,7 @@ export const GallerySection = ({images: availableImages, section, sectionClasses
     section: HomepageSection,
     sectionClasses: HomepageSectionClasses,
 }) => {
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [lightbox, setLightbox] = useState({index: 0, opened: false});
     const images = (section.image_ids ?? [])
         .map(id => availableImages.find(image => Number(image.id) === id))
         .filter((image): image is Image => !!image);
@@ -32,7 +32,7 @@ export const GallerySection = ({images: availableImages, section, sectionClasses
                             type="button"
                             className={classes.galleryItem}
                             style={{backgroundColor: image.avg_colour ?? undefined}}
-                            onClick={() => setOpenIndex(index)}
+                            onClick={() => setLightbox({index, opened: true})}
                             aria-label={t`Open photo ${photoNumber}`}
                         >
                             <img src={image.url} alt="" loading="lazy" decoding="async"/>
@@ -40,16 +40,21 @@ export const GallerySection = ({images: availableImages, section, sectionClasses
                     );
                 })}
             </div>
-            {openIndex !== null && (
-                <Lightbox images={images} index={openIndex} onChange={setOpenIndex} onClose={() => setOpenIndex(null)}/>
-            )}
+            <Lightbox
+                images={images}
+                index={Math.min(lightbox.index, images.length - 1)}
+                opened={lightbox.opened}
+                onChange={index => setLightbox({index, opened: true})}
+                onClose={() => setLightbox(current => ({...current, opened: false}))}
+            />
         </SectionShell>
     );
 };
 
-const Lightbox = ({images, index, onChange, onClose}: {
+const Lightbox = ({images, index, opened, onChange, onClose}: {
     images: Image[],
     index: number,
+    opened: boolean,
     onChange: (index: number) => void,
     onClose: () => void,
 }) => {
@@ -60,6 +65,9 @@ const Lightbox = ({images, index, onChange, onClose}: {
     );
 
     useEffect(() => {
+        if (!opened) {
+            return;
+        }
         const onKey = (keyEvent: KeyboardEvent) => {
             if (keyEvent.key === 'ArrowRight') {
                 step(1);
@@ -70,14 +78,14 @@ const Lightbox = ({images, index, onChange, onClose}: {
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-    }, [step]);
+    }, [step, opened]);
 
     const image = images[index];
     const position = `${index + 1} / ${images.length}`;
 
     return (
         <Modal
-            opened
+            opened={opened}
             onClose={onClose}
             fullScreen
             withCloseButton={false}

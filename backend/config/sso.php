@@ -3,8 +3,6 @@
 return [
     'password_login_disabled' => (bool) env('SSO_PASSWORD_LOGIN_DISABLED', false),
 
-    'buttons_visible' => (bool) env('SSO_BUTTONS_VISIBLE', true),
-
     'allow_private_issuers' => (bool) env('SSO_ALLOW_PRIVATE_ISSUERS', false),
 
     'providers' => [

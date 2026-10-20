@@ -5,6 +5,7 @@ namespace HiEvents\Services\Application\Handlers\Auth\Sso;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
 use HiEvents\DomainObjects\Enums\SsoIntent;
 use HiEvents\DomainObjects\Enums\SsoTicketType;
+use HiEvents\Enterprise\Sso\Services\Domain\SsoConnectionLinkService;
 use HiEvents\Exceptions\ResourceConflictException;
 use HiEvents\Exceptions\SsoException;
 use HiEvents\Services\Application\Handlers\Auth\Sso\DTO\StartSsoDTO;
@@ -27,6 +28,7 @@ class StartSsoHandler
         private readonly SsoTicketService $ticketService,
         private readonly OidcClient $oidcClient,
         private readonly InvitationAcceptanceService $invitationAcceptanceService,
+        private readonly SsoConnectionLinkService $connectionLinkService,
     ) {}
 
     /**
@@ -42,6 +44,10 @@ class StartSsoHandler
 
         if ($dto->intent === SsoIntent::INVITE) {
             $this->assertInvitationIsPending($dto->invitationToken);
+        }
+
+        if ($dto->intent === SsoIntent::LINK && $provider->isAccountConnection()) {
+            $this->connectionLinkService->assertCanLink($provider, (int) $dto->userId);
         }
 
         $binding = SsoTicketService::newSecret();

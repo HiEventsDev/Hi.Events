@@ -119,7 +119,6 @@ export interface SsoProvidersResponse {
     providers: SsoProvider[];
     password_login_enabled: boolean;
     registration_enabled: boolean;
-    buttons_visible: boolean;
     enterprise_sso_enabled: boolean;
 }
 
@@ -275,6 +274,15 @@ export interface UserIdentity {
     organization_provider: SsoProvider | null;
 }
 
+export interface LinkableSsoConnection extends SsoProvider {
+    account_name: string;
+}
+
+export interface SsoSignInMethods {
+    identities: UserIdentity[];
+    linkableConnections: LinkableSsoConnection[];
+}
+
 export interface Invitation {
     first_name: string;
     last_name: string | null;
@@ -282,6 +290,7 @@ export interface Invitation {
     timezone: string | null;
     account_name: string;
     requires_sign_in: boolean;
+    sso_required: boolean;
 }
 
 export interface TrustedDevice {
@@ -1162,6 +1171,7 @@ export interface ProductPrice {
     sale_end_date?: string | Date;
     price_including_taxes_and_fees?: number;
     price_before_discount?: number;
+    price_before_discount_including_taxes_and_fees?: number | null;
     is_discounted?: boolean;
     tax_total?: number;
     fee_total?: number;

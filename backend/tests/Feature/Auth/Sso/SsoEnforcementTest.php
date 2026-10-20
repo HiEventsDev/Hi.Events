@@ -10,6 +10,7 @@ use HiEvents\Mail\User\ForgotPassword;
 use HiEvents\Models\AccountConfiguration;
 use HiEvents\Models\AccountSsoConnection;
 use HiEvents\Models\User;
+use HiEvents\Models\UserIdentity;
 use HiEvents\Services\Domain\Auth\TwoFactor\TrustedDeviceService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
@@ -415,6 +416,175 @@ class SsoEnforcementTest extends TestCase
         $this->assertSame('EXEMPT', $users[$exempt->id]['sso_sign_in']);
         $this->assertSame('PASSWORD', $users[$outside->id]['sso_sign_in']);
         $this->assertSame('PASSWORD', $users[$owner->id]['sso_sign_in']);
+    }
+
+    public function test_requiring_sso_leaves_members_the_connection_cannot_sign_in_signed_in_with_their_api_keys(): void
+    {
+        [$owner, $accountId] = $this->enforcingAccount(enabled: false);
+        $alice = $this->member($accountId, 'alice@acme.test');
+        $aliceAccountId = $this->giveOwnAccount($alice);
+        $staff = $this->member($accountId, 'staff@acme.test', role: Role::SUPERADMIN);
+        $grace = $this->member($accountId, 'grace@acme.test');
+        foreach ([$alice, $staff, $grace] as $member) {
+            $this->createApiKey($member, $accountId, name: 'Here');
+        }
+        $aliceToken = $this->tokenFor($alice, $accountId);
+        $aliceOwnAccountToken = $this->tokenFor($alice, $aliceAccountId);
+        $staffToken = $this->tokenFor($staff, $accountId);
+
+        $preview = $this->previewFor($owner, $accountId);
+        $this->assertFalse($preview['alice@acme.test']['sso_available']);
+        $this->assertFalse($preview['staff@acme.test']['sso_available']);
+        $this->assertTrue($preview['grace@acme.test']['sso_available']);
+
+        $this->travel(5)->seconds();
+        $this->putJson("/accounts/$accountId/sso/enforcement", ['enabled' => true], $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk();
+
+        foreach ([$alice, $staff] as $member) {
+            $this->assertTrue($this->isEnforced($member, $accountId));
+            $this->assertNull($member->fresh()->tokens_valid_after);
+            $this->assertSame(['Here'], $this->apiKeyNames($member));
+        }
+        $this->getJson('/users/me', $this->bearer($aliceToken))->assertOk();
+        $this->getJson('/users/me', $this->bearer($aliceOwnAccountToken))->assertOk();
+        $this->getJson('/users/me', $this->bearer($staffToken))->assertOk();
+        $this->postJson('/auth/login', ['email' => 'alice@acme.test', 'password' => self::PASSWORD, 'account_id' => $accountId])->assertOk();
+
+        $this->assertNotNull($grace->fresh()->tokens_valid_after);
+        $this->assertSame([], $this->apiKeyNames($grace));
+
+        $signIn = $this->teamSignInFor($owner, $accountId);
+        $this->assertSame('PASSWORD', $signIn[$alice->id]);
+        $this->assertSame('PASSWORD', $signIn[$staff->id]);
+        $this->assertSame('SSO', $signIn[$grace->id]);
+    }
+
+    public function test_requiring_sso_for_one_member_the_connection_cannot_sign_in_keeps_their_sessions(): void
+    {
+        [$owner, $accountId] = $this->enforcingAccount();
+        $alice = $this->member($accountId, 'alice@acme.test');
+        $this->giveOwnAccount($alice);
+        $staff = $this->member($accountId, 'staff@acme.test', role: Role::SUPERADMIN);
+
+        foreach ([$alice, $staff] as $member) {
+            $this->createApiKey($member, $accountId, name: 'Here');
+
+            $this->putJson("/accounts/$accountId/sso/members/{$this->accountUserId($member, $accountId)}", ['sso_enforced' => true], $this->bearer($this->tokenFor($owner, $accountId)))
+                ->assertOk();
+
+            $this->assertTrue($this->isEnforced($member, $accountId));
+            $this->assertNull($member->fresh()->tokens_valid_after);
+            $this->assertSame(['Here'], $this->apiKeyNames($member));
+        }
+    }
+
+    public function test_a_member_who_owns_another_account_moves_to_sso_once_linked_but_a_superadmin_never_does(): void
+    {
+        [$owner, $accountId, $connection] = $this->enforcingAccount();
+        $alice = $this->member($accountId, 'alice@acme.test', enforced: true);
+        $this->giveOwnAccount($alice);
+        $staff = $this->member($accountId, 'staff@acme.test', enforced: true, role: Role::SUPERADMIN);
+
+        $signIn = $this->teamSignInFor($owner, $accountId);
+        $this->assertSame('PASSWORD', $signIn[$alice->id]);
+        $this->assertSame('PASSWORD', $signIn[$staff->id]);
+
+        foreach (['alice' => $alice, 'staff' => $staff] as $subject => $member) {
+            UserIdentity::create([
+                'user_id' => $member->id,
+                'account_sso_connection_id' => $connection->id,
+                'provider_key' => 'connection-'.$connection->id,
+                'issuer' => self::CONNECTION_ISSUER,
+                'subject' => 'okta-'.$subject,
+            ]);
+        }
+
+        $preview = $this->previewFor($owner, $accountId);
+        $this->assertTrue($preview['alice@acme.test']['sso_available']);
+        $this->assertFalse($preview['staff@acme.test']['sso_available']);
+
+        $signIn = $this->teamSignInFor($owner, $accountId);
+        $this->assertSame('SSO', $signIn[$alice->id]);
+        $this->assertSame('PASSWORD', $signIn[$staff->id]);
+
+        $this->postJson('/auth/login', ['email' => 'alice@acme.test', 'password' => self::PASSWORD, 'account_id' => $accountId])
+            ->assertForbidden()
+            ->assertJsonPath('error_code', 'SSO_REQUIRED');
+        $this->postJson('/auth/login', ['email' => 'staff@acme.test', 'password' => self::PASSWORD, 'account_id' => $accountId])
+            ->assertOk();
+    }
+
+    public function test_a_personal_google_identity_does_not_count_as_a_way_into_a_workspace_connection(): void
+    {
+        $owner = User::factory()->password(self::PASSWORD)->withTwoFactor($this->ownerSecret)->withAccount()->create();
+        $accountId = $owner->accounts()->first()->id;
+        $this->createConnection($accountId, [
+            'type' => 'GOOGLE_WORKSPACE',
+            'issuer' => 'https://accounts.google.com',
+            'hosted_domain' => 'acme.test',
+            'enforce_sso' => true,
+        ]);
+        $this->addDomain($accountId, 'acme.test');
+
+        foreach (['alice@acme.test' => 'alice.personal@gmail.com', 'bob@acme.test' => 'bob@acme.test'] as $email => $googleEmail) {
+            $member = $this->member($accountId, $email, enforced: true);
+            $this->giveOwnAccount($member);
+            UserIdentity::create([
+                'user_id' => $member->id,
+                'provider_key' => 'google',
+                'issuer' => 'https://accounts.google.com',
+                'subject' => 'google-'.$member->id,
+                'email' => $googleEmail,
+            ]);
+        }
+
+        $preview = $this->previewFor($owner, $accountId);
+        $this->assertFalse($preview['alice@acme.test']['sso_available']);
+        $this->assertTrue($preview['bob@acme.test']['sso_available']);
+
+        $this->postJson('/auth/login', ['email' => 'alice@acme.test', 'password' => self::PASSWORD, 'account_id' => $accountId])
+            ->assertOk();
+    }
+
+    private function giveOwnAccount(User $user): int
+    {
+        $ownAccountId = User::factory()->withAccount()->create()->accounts()->first()->id;
+        $user->accounts()->attach($ownAccountId, [
+            'role' => Role::ADMIN->value,
+            'status' => UserStatus::ACTIVE->name,
+            'is_account_owner' => true,
+        ]);
+
+        return $ownAccountId;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function previewFor(User $owner, int $accountId): array
+    {
+        return collect($this->getJson("/accounts/$accountId/sso/enforcement", $this->bearer($this->tokenFor($owner, $accountId)))
+            ->assertOk()
+            ->json('data.members'))->keyBy('email')->all();
+    }
+
+    /**
+     * @return array<int, string|null>
+     */
+    private function teamSignInFor(User $owner, int $accountId): array
+    {
+        return collect($this->getJson('/users', $this->bearer($this->tokenFor($owner, $accountId)))->assertOk()->json('data'))
+            ->mapWithKeys(fn (array $user) => [$user['id'] => $user['sso_sign_in'] ?? null])
+            ->all();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function apiKeyNames(User $user): array
+    {
+        return DB::table('personal_access_tokens')->where('tokenable_id', $user->id)->pluck('name')->all();
     }
 
     /**

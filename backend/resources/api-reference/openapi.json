@@ -1427,7 +1427,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -1483,7 +1483,9 @@
     "/events/{eventId}/attendees/{attendeePublicId}/check_in": {
       "post": {
         "operationId": "attendees.checkInAttendeeAction",
+        "description": "This endpoint only sets a legacy flag on the attendee. The check-in isn't recorded on a check-in list, so it doesn't appear in the dashboard, check-in counts or exports, and no `checkin.created` or `checkin.deleted` webhook is sent. Use a check-in list instead: get the list's `short_id` from `GET /events/{eventId}/check-in-lists` (every event has a default list), then check attendees in with `POST /public/check-in-lists/{checkInListShortId}/check-ins` and out with `DELETE /public/check-in-lists/{checkInListShortId}/check-ins/{checkInShortId}`.",
         "summary": "Check In Attendee",
+        "deprecated": true,
         "tags": [
           "Attendees"
         ],
@@ -1546,7 +1548,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -2224,7 +2226,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3525,7 +3527,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3691,7 +3693,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3775,7 +3777,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3864,7 +3866,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3953,7 +3955,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4047,7 +4049,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4124,7 +4126,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4174,7 +4176,7 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4343,7 +4345,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4497,7 +4499,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4574,7 +4576,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4896,7 +4898,7 @@
                               ],
                               "minItems": 3,
                               "maxItems": 3,
-                              "additionalItems": false
+                              "items": false
                             },
                             "slots": {
                               "type": "array",
@@ -4948,7 +4950,7 @@
                               ],
                               "minItems": 2,
                               "maxItems": 2,
-                              "additionalItems": false
+                              "items": false
                             },
                             "url": {
                               "type": "string",
@@ -5222,7 +5224,7 @@
                           ],
                           "minItems": 1,
                           "maxItems": 1,
-                          "additionalItems": false
+                          "items": false
                         },
                         {
                           "type": "array",
@@ -5252,7 +5254,7 @@
                           ],
                           "minItems": 1,
                           "maxItems": 1,
-                          "additionalItems": false
+                          "items": false
                         }
                       ]
                     }
@@ -5480,7 +5482,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -5592,7 +5594,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -5669,7 +5671,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -5991,7 +5993,7 @@
                               ],
                               "minItems": 3,
                               "maxItems": 3,
-                              "additionalItems": false
+                              "items": false
                             },
                             "slots": {
                               "type": "array",
@@ -6043,7 +6045,7 @@
                               ],
                               "minItems": 2,
                               "maxItems": 2,
-                              "additionalItems": false
+                              "items": false
                             },
                             "url": {
                               "type": "string",
@@ -8751,7 +8753,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -9140,7 +9142,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -9199,7 +9201,7 @@
     },
     "/public/events/{eventId}": {
       "get": {
-        "operationId": "hiEvents.actions.events.getEventPublicAction_0",
+        "operationId": "events.getEventPublicAction.getPublicEventsEventId",
         "summary": "Get Event (public)",
         "tags": [
           "Events"
@@ -9501,7 +9503,7 @@
     },
     "/public/events/{eventId}/products": {
       "get": {
-        "operationId": "hiEvents.actions.events.getEventPublicAction_0",
+        "operationId": "events.getEventPublicAction.getPublicEventsEventIdProducts",
         "summary": "Get Event (public)",
         "tags": [
           "Events"
@@ -10749,7 +10751,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": []
+                  "additionalProperties": {}
                 }
               }
             }
@@ -10857,7 +10859,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12140,7 +12142,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12163,7 +12165,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12280,7 +12282,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12303,7 +12305,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12326,7 +12328,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12427,7 +12429,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12522,7 +12524,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -12633,7 +12635,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -13602,7 +13604,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -13703,7 +13705,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -13815,7 +13817,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14231,7 +14233,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14443,7 +14445,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14581,7 +14583,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14742,7 +14744,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14765,7 +14767,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14862,7 +14864,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14885,7 +14887,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -14908,7 +14910,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -15308,7 +15310,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -15480,7 +15482,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -17466,7 +17468,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -17909,7 +17911,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -18172,7 +18174,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -19050,11 +19052,30 @@
     "/events/{eventId}/questions": {
       "post": {
         "operationId": "questions.createQuestionAction",
-        "description": "⚠️ Cannot generate request documentation: Cannot use \"::class\" on array",
         "summary": "Create Question",
         "tags": [
           "Questions"
         ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertQuestionRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "`QuestionResource`",
@@ -19201,11 +19222,38 @@
     "/events/{eventId}/questions/{questionId}": {
       "put": {
         "operationId": "questions.editQuestionAction",
-        "description": "⚠️ Cannot generate request documentation: Cannot use \"::class\" on array",
         "summary": "Edit Question",
         "tags": [
           "Questions"
         ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "questionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertQuestionRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "`QuestionResource`",
@@ -19393,7 +19441,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -19904,7 +19952,7 @@
                             },
                             {
                               "type": "array",
-                              "items": []
+                              "items": {}
                             }
                           ]
                         }
@@ -19920,7 +19968,7 @@
                           "properties": {
                             "data": {
                               "type": "object",
-                              "additionalProperties": []
+                              "additionalProperties": {}
                             },
                             "pagination": {
                               "type": "object",
@@ -19958,7 +20006,7 @@
                           "properties": {
                             "data": {
                               "type": "object",
-                              "additionalProperties": []
+                              "additionalProperties": {}
                             },
                             "pagination": {
                               "type": "object",
@@ -19991,7 +20039,7 @@
                         },
                         {
                           "type": "array",
-                          "items": []
+                          "items": {}
                         }
                       ]
                     }
@@ -20296,7 +20344,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": []
+                  "items": {}
                 }
               }
             }
@@ -20804,7 +20852,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -21072,7 +21120,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -21160,7 +21208,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -21273,7 +21321,7 @@
                         },
                         "errors": {
                           "type": "array",
-                          "items": []
+                          "items": {}
                         }
                       },
                       "required": [
@@ -21289,12 +21337,9 @@
                         },
                         "errors": {
                           "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
+                          "items": false,
                           "minItems": 0,
-                          "maxItems": 0,
-                          "additionalItems": false
+                          "maxItems": 0
                         },
                         "requires_relabel_confirmation": {
                           "type": "boolean"
@@ -21632,7 +21677,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -21822,7 +21867,7 @@
                         },
                         "skipped": {
                           "type": "array",
-                          "items": []
+                          "items": {}
                         }
                       },
                       "required": [
@@ -22417,7 +22462,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22440,7 +22485,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22544,7 +22589,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22567,7 +22612,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22674,7 +22719,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22697,7 +22742,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22802,7 +22847,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22825,7 +22870,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -22848,7 +22893,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23070,7 +23115,7 @@
         }
       }
     },
-    "/accounts/{accountId}/taxes-and-fees/{taxId}": {
+    "/accounts/{accountId}/taxes-and-fees/{taxOrFeeId}": {
       "put": {
         "operationId": "taxesAndFees.editTaxOrFeeAction",
         "summary": "Edit Tax Or Fee",
@@ -23087,7 +23132,7 @@
             }
           },
           {
-            "name": "taxId",
+            "name": "taxOrFeeId",
             "in": "path",
             "required": true,
             "schema": {
@@ -23167,9 +23212,7 @@
             }
           }
         }
-      }
-    },
-    "/accounts/{accountId}/taxes-and-fees/{taxOrFeeId}": {
+      },
       "delete": {
         "operationId": "taxesAndFees.deleteTaxOrFeeAction",
         "summary": "Delete Tax Or Fee",
@@ -23332,7 +23375,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23631,7 +23674,7 @@
                     },
                     "products": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23752,7 +23795,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23775,7 +23818,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23854,7 +23897,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23877,7 +23920,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -23982,7 +24025,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -24077,7 +24120,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -24100,7 +24143,7 @@
                     },
                     "errors": {
                       "type": "array",
-                      "items": []
+                      "items": {}
                     }
                   },
                   "required": [
@@ -24769,11 +24812,11 @@
               }
             }
           },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          },
           "401": {
             "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
           },
           "403": {
             "description": "The authenticated user is not allowed to perform this action.",
@@ -24868,11 +24911,11 @@
               }
             }
           },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          },
           "401": {
             "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
           },
           "403": {
             "description": "The authenticated user is not allowed to perform this action.",
@@ -26078,7 +26121,7 @@
           },
           "question_answers": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "email": {
             "type": [
@@ -26691,15 +26734,15 @@
           },
           "by_tender": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "by_operator": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "by_day": {
             "type": "array",
-            "items": []
+            "items": {}
           }
         },
         "required": [
@@ -27321,12 +27364,9 @@
               },
               {
                 "type": "array",
-                "items": {
-                  "type": "string"
-                },
+                "items": false,
                 "minItems": 0,
-                "maxItems": 0,
-                "additionalItems": false
+                "maxItems": 0
               }
             ]
           },
@@ -27369,11 +27409,11 @@
           },
           "per_product": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "recent_check_ins": {
             "type": "array",
-            "items": []
+            "items": {}
           }
         },
         "required": [
@@ -28506,7 +28546,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -28793,7 +28833,7 @@
               },
               "allocations": {
                 "type": "array",
-                "items": []
+                "items": {}
               }
             },
             "required": [
@@ -28815,48 +28855,23 @@
               "products_sold": {
                 "type": "integer"
               },
-              "": {
-                "anyOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "total_gross_sales": {
-                        "type": "number"
-                      },
-                      "total_tax": {
-                        "type": "number"
-                      },
-                      "total_fee": {
-                        "type": "number"
-                      },
-                      "total_refunded": {
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "total_gross_sales",
-                      "total_tax",
-                      "total_fee",
-                      "total_refunded"
-                    ]
-                  },
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "minItems": 0,
-                    "maxItems": 0,
-                    "additionalItems": false
-                  }
-                ]
+              "total_gross_sales": {
+                "type": "number"
+              },
+              "total_tax": {
+                "type": "number"
+              },
+              "total_fee": {
+                "type": "number"
+              },
+              "total_refunded": {
+                "type": "number"
               }
             },
             "required": [
               "orders_created",
               "attendees_registered",
-              "products_sold",
-              null
+              "products_sold"
             ]
           },
           "created_at": {
@@ -29031,7 +29046,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29092,7 +29107,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29324,7 +29339,7 @@
           },
           "attributes": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "images": {
             "type": [
@@ -29422,7 +29437,7 @@
           },
           "band_products": {
             "type": "array",
-            "items": []
+            "items": {}
           }
         },
         "required": [
@@ -29450,7 +29465,7 @@
           },
           "band_products": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "prevent_orphan_seats": {
             "type": "boolean"
@@ -29615,7 +29630,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29633,7 +29648,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29724,7 +29739,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29741,7 +29756,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29940,7 +29955,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -29983,7 +29998,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -30032,7 +30047,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -30046,7 +30061,7 @@
             "anyOf": [
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "null"
@@ -30480,11 +30495,11 @@
                   "null"
                 ],
                 "enum": [
-                  "-1",
-                  "1",
-                  "2",
-                  "3",
-                  "4",
+                  -1,
+                  1,
+                  2,
+                  3,
+                  4,
                   null
                 ]
               },
@@ -30519,7 +30534,7 @@
           },
           "address": {
             "type": "object",
-            "additionalProperties": []
+            "additionalProperties": {}
           },
           "latitude": {
             "type": [
@@ -30867,6 +30882,12 @@
                 "type": "null"
               }
             ]
+          },
+          "schedule_days": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
@@ -30893,7 +30914,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -30946,7 +30967,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31207,6 +31228,7 @@
                   "enum": [
                     "seating",
                     "box_office",
+                    "enterprise_sso",
                     "white_label"
                   ]
                 }
@@ -31263,7 +31285,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31286,7 +31308,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31486,7 +31508,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31603,7 +31625,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31690,7 +31712,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -31827,7 +31849,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32037,7 +32059,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32087,7 +32109,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32501,7 +32523,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32518,7 +32540,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32532,7 +32554,7 @@
             "anyOf": [
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "null"
@@ -32577,7 +32599,7 @@
           },
           "tracking_pixels": {
             "type": "array",
-            "items": []
+            "items": {}
           },
           "first_day_of_week": {
             "type": "integer"
@@ -32632,7 +32654,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32649,7 +32671,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32666,7 +32688,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32719,7 +32741,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -32800,7 +32822,7 @@
           },
           "all_organizers_currencies": {
             "type": "array",
-            "items": []
+            "items": {}
           }
         },
         "required": [
@@ -32973,7 +32995,7 @@
         "properties": {
           "data": {
             "type": "object",
-            "additionalProperties": []
+            "additionalProperties": {}
           },
           "pagination": {
             "type": "object",
@@ -33906,6 +33928,12 @@
               "null"
             ]
           },
+          "price_before_discount_including_taxes_and_fees": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
           "is_discounted": {
             "type": "boolean"
           },
@@ -33970,6 +33998,7 @@
           "sale_end_date",
           "price_including_taxes_and_fees",
           "price_before_discount",
+          "price_before_discount_including_taxes_and_fees",
           "is_discounted",
           "tax_total",
           "fee_total",
@@ -34300,7 +34329,7 @@
               "array",
               "null"
             ],
-            "items": []
+            "items": {}
           },
           "addons": {
             "type": "array",
@@ -34485,7 +34514,7 @@
               "array",
               "null"
             ],
-            "items": []
+            "items": {}
           }
         },
         "required": [
@@ -34544,7 +34573,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               }
             ]
           },
@@ -34657,7 +34686,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               }
             ]
           },
@@ -34694,7 +34723,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -34794,7 +34823,7 @@
             "anyOf": [
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -34827,7 +34856,7 @@
               "array",
               "null"
             ],
-            "items": []
+            "items": {}
           },
           "attendee_id": {
             "type": [
@@ -34900,7 +34929,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -34970,7 +34999,7 @@
               },
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -38082,6 +38111,71 @@
         ],
         "title": "UpsertProfileRequest"
       },
+      "UpsertQuestionRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 10000
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "PHONE",
+              "SINGLE_LINE_TEXT",
+              "MULTI_LINE_TEXT",
+              "CHECKBOX",
+              "RADIO",
+              "DROPDOWN",
+              "MULTI_SELECT_DROPDOWN",
+              "DATE"
+            ]
+          },
+          "product_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "belongs_to": {
+            "type": "string",
+            "enum": [
+              "PRODUCT",
+              "ORDER"
+            ]
+          },
+          "options": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "is_hidden": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "type",
+          "belongs_to",
+          "required",
+          "is_hidden"
+        ],
+        "title": "UpsertQuestionRequest"
+      },
       "UpsertScheduleItemRequest": {
         "type": "object",
         "properties": {
@@ -38563,7 +38657,7 @@
             "anyOf": [
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -38616,7 +38710,7 @@
             "anyOf": [
               {
                 "type": "array",
-                "items": []
+                "items": {}
               },
               {
                 "type": "string"
@@ -38692,7 +38786,8 @@
             "type": "integer"
           },
           "settings": {
-            "type": "string"
+            "type": "object",
+            "additionalProperties": {}
           },
           "created_at": {
             "type": [
@@ -38716,7 +38811,10 @@
                 "type": "integer"
               },
               "revenue": {
-                "type": "string"
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
               }
             },
             "required": [

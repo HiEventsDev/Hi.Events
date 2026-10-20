@@ -331,9 +331,71 @@ class EnterpriseSsoLoginTest extends TestCase
 
         $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('rogue-idp', 'founder@acme.test'))
             ->assertConflict()
-            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN');
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN')
+            ->assertJsonPath('message', 'Sign in with your email and password instead.')
+            ->assertJsonPath('context', []);
 
         $this->assertDatabaseMissing('user_identities', ['user_id' => $owner->id]);
+    }
+
+    public function test_the_owner_of_the_connections_account_is_told_to_connect_it_from_security_settings(): void
+    {
+        [$owner, $accountId] = $this->createAccountOwner();
+        $owner->update(['email' => 'founder@acme.test']);
+        $connection = $this->createConnection($accountId, ['jit_provisioning_enabled' => true]);
+        $this->addDomain($accountId, 'acme.test');
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-founder', 'founder@acme.test'))
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN')
+            ->assertJsonPath('message', 'Sign in with your email and password, then connect this sign-in option from your security settings.')
+            ->assertJsonPath('context.email', 'founder@acme.test');
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-founder', 'founder@acme.test', ['email_verified' => false]))
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN')
+            ->assertJsonPath('context', []);
+
+        $this->assertDatabaseMissing('user_identities', ['user_id' => $owner->id]);
+    }
+
+    public function test_a_superadmin_never_signs_in_or_confirms_their_identity_through_a_connection(): void
+    {
+        [, $accountId] = $this->createAccountOwner();
+        $connection = $this->createConnection($accountId);
+        $this->addDomain($accountId, 'acme.test');
+        $linked = $this->addAccountUser($accountId, Role::SUPERADMIN);
+        $linked->update(['email' => 'linked-staff@acme.test']);
+        UserIdentity::create([
+            'user_id' => $linked->id,
+            'account_sso_connection_id' => $connection->id,
+            'provider_key' => 'connection-'.$connection->id,
+            'issuer' => self::CONNECTION_ISSUER,
+            'subject' => 'okta-staff',
+        ]);
+        $unlinked = $this->addAccountUser($accountId, Role::SUPERADMIN);
+        $unlinked->update(['email' => 'staff@acme.test']);
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-staff', 'linked-staff@acme.test'))
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN')
+            ->assertJsonPath('context', [])
+            ->assertJsonMissingPath('data.token');
+
+        $this->exchangeOidcCode($this->startConnectionFlow($connection), $this->connectionClaims('okta-other', 'staff@acme.test'))
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_LINK_REQUIRES_LOGIN')
+            ->assertJsonPath('context', []);
+        $this->assertDatabaseMissing('user_identities', ['user_id' => $unlinked->id]);
+
+        $token = $this->tokenFor($linked, $accountId);
+        $flow = $this->flowFrom($this->postJson('/users/me/sso-identities/connection-'.$connection->id.'/reauth', [], $this->bearer($token))
+            ->assertOk()
+            ->json('data'));
+
+        $this->exchangeOidcCode($flow, $this->connectionClaims('okta-staff', 'linked-staff@acme.test', ['auth_time' => time()]), '/users/me/sso-identities/exchange', $this->bearer($token))
+            ->assertConflict()
+            ->assertJsonPath('error_code', 'SSO_REAUTH_FAILED');
     }
 
     public function test_a_member_of_other_accounts_cannot_confirm_their_identity_through_a_connection(): void

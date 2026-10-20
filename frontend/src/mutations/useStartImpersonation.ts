@@ -12,7 +12,6 @@ export const useStartImpersonation = () => {
             adminClient.startImpersonation(userId, accountId),
         onSuccess: (response) => {
             if (response.token) {
-                localStorage.setItem('token', response.token);
                 setAuthToken(response.token);
             }
             queryClient.invalidateQueries({queryKey: [GET_ME_QUERY_KEY]});

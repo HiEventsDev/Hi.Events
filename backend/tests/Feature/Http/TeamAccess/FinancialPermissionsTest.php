@@ -126,6 +126,13 @@ class FinancialPermissionsTest extends TestCase
     public function test_event_list_and_stats_drop_revenue_but_keep_counts(): void
     {
         $user = $this->organizerWithoutFinancials();
+        DB::table('event_statistics')->insert([
+            'event_id' => $this->eventId,
+            'products_sold' => 2,
+            'sales_total_gross' => 120.50,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $stats = $this->getJson("/events/{$this->eventId}/stats", $this->headers($user))->assertOk()->json('data');
         $this->assertArrayHasKey('total_orders', $stats);
@@ -140,7 +147,8 @@ class FinancialPermissionsTest extends TestCase
         $this->assertArrayNotHasKey('total_gross_sales', $organizerStats);
 
         $event = $this->getJson('/events', $this->headers($user))->assertOk()->json('data.0');
-        $this->assertArrayNotHasKey('sales_total_gross', $event['statistics'] ?? []);
+        $this->assertSame(2, $event['statistics']['products_sold']);
+        $this->assertArrayNotHasKey('sales_total_gross', $event['statistics']);
     }
 
     public function test_financial_endpoints_are_refused(): void

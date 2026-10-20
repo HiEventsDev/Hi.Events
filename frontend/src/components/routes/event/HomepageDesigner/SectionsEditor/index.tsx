@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {t} from "@lingui/macro";
 import {ActionIcon, Button, Menu, TextInput, Tooltip} from "@mantine/core";
 import {
@@ -44,8 +44,11 @@ import {
     sectionTypeDescription,
     sectionTypeLabel,
 } from "../../../../../utilites/homepageSections.ts";
-import {SectionChanges, SectionContentEditor, SectionsEditorVariant} from "./SectionContentEditor.tsx";
+import {SectionChanges, SectionContentEditor, sectionExceedsLimits, SectionsEditorVariant} from "./SectionContentEditor.tsx";
 import {SectionEmptyState} from "./sectionEmptyState.ts";
+import {useSortableAccessibility} from "../../../../../hooks/useSortableAccessibility.ts";
+import {useAccess} from "../../../../../hooks/useAccess.ts";
+import {useHomepageSaveGuard} from "../../../../common/HomepageDesigner";
 import {NavLink} from "react-router";
 import classes from "./SectionsEditor.module.scss";
 
@@ -79,15 +82,65 @@ interface SectionsEditorProps {
 
 const NO_EMPTY_STATES = new Map<string, SectionEmptyState>();
 
+const MAX_SECTIONS = 40;
+
+const revealInvalidField = (row: HTMLElement) => {
+    const field = row.querySelector<HTMLElement>('[aria-invalid="true"]');
+    if (!field) {
+        row.querySelector<HTMLElement>('[contenteditable="true"]')?.focus({preventScroll: true});
+        row.scrollIntoView({block: 'end'});
+        return;
+    }
+    const [messageId] = field.getAttribute('aria-describedby')?.split(' ') ?? [];
+    const message = messageId ? document.getElementById(messageId) : null;
+    (message ?? field).scrollIntoView({block: 'center', behavior: 'smooth'});
+    field.focus({preventScroll: true});
+};
+
+const sectionLabel = (section: HomepageSection): string =>
+    (section.type === 'TICKETS' ? null : section.heading) || sectionTypeLabel(section.type);
+
 export const SectionsEditor = ({variant, entityId, sections, images, emptyStates = NO_EMPTY_STATES, disabled, onChange, onImagesChanged}: SectionsEditorProps) => {
     const alwaysShownType: HomepageSectionType = variant === 'event' ? 'TICKETS' : 'EVENTS';
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
+    const editorRef = useRef<HTMLDivElement>(null);
+    const [invalidFieldRequest, setInvalidFieldRequest] = useState(0);
+    const {id: dndId, accessibility} = useSortableAccessibility(
+        sections.map(section => section.id),
+        id => {
+            const section = sections.find(candidate => candidate.id === id);
+            return section ? sectionLabel(section) : '';
+        },
+    );
     const sensors = useSensors(
         useSensor(PointerSensor, {activationConstraint: {distance: 4}}),
         useSensor(TouchSensor, {activationConstraint: {delay: 150, tolerance: 6}}),
         useSensor(KeyboardSensor, {coordinateGetter: sortableKeyboardCoordinates}),
     );
+
+    useHomepageSaveGuard(() => {
+        const invalidSection = sections.find(sectionExceedsLimits);
+        if (!invalidSection) {
+            return false;
+        }
+        setExpandedId(invalidSection.id);
+        setInvalidFieldRequest(request => request + 1);
+        return true;
+    });
+
+    useEffect(() => {
+        if (!invalidFieldRequest) {
+            return;
+        }
+        const frame = requestAnimationFrame(() => {
+            const row = editorRef.current?.querySelector<HTMLElement>('[data-expanded]');
+            if (row) {
+                revealInvalidField(row);
+            }
+        });
+        return () => cancelAnimationFrame(frame);
+    }, [invalidFieldRequest]);
 
     const update = (id: string, changes: SectionChanges) => onChange(current => current.map(section => section.id === id
         ? {...section, ...(typeof changes === 'function' ? changes(section) : changes)}
@@ -103,6 +156,14 @@ export const SectionsEditor = ({variant, entityId, sections, images, emptyStates
         });
     };
 
+    const addButtonProps = {
+        variant: 'light',
+        size: 'xs',
+        leftSection: <IconPlus size={14}/>,
+        className: classes.addButton,
+        'data-testid': 'homepage-add-section-button',
+    } as const;
+
     const addSection = (type: HomepageSectionType) => {
         const section: HomepageSection = {id: newSectionId(), type, enabled: true};
         onChange(current => [...current, section]);
@@ -110,14 +171,14 @@ export const SectionsEditor = ({variant, entityId, sections, images, emptyStates
     };
 
     return (
-        <div className={classes.editor}>
+        <div className={classes.editor} ref={editorRef}>
             <p className={classes.help}>
                 {variant === 'event'
                     ? t`Drag to reorder. Sections marked Empty appear on your event page once they have content.`
                     : t`Drag to reorder. Hidden sections stay saved but don't show on your organizer page.`}
             </p>
 
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext id={dndId} accessibility={accessibility} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext items={sections.map(section => section.id)} strategy={verticalListSortingStrategy}>
                     <ul className={classes.list} data-testid="homepage-sections-list">
                         {sections.map(section => (
@@ -149,29 +210,37 @@ export const SectionsEditor = ({variant, entityId, sections, images, emptyStates
                 </SortableContext>
             </DndContext>
 
-            <Menu position="bottom-start" width={300} disabled={disabled}>
-                <Menu.Target>
-                    <Button variant="light" size="xs" leftSection={<IconPlus size={14}/>} className={classes.addButton} data-testid="homepage-add-section-button">
+            {sections.length >= MAX_SECTIONS ? (
+                <Tooltip label={t`You can add up to ${MAX_SECTIONS} sections.`} position="top-start" events={{hover: true, focus: true, touch: true}}>
+                    <Button {...addButtonProps} data-disabled aria-disabled>
                         {t`Add section`}
                     </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                    {CUSTOM_SECTION_TYPES.map(type => {
-                        const Icon = ICONS[type];
-                        return (
-                            <Menu.Item
-                                key={type}
-                                leftSection={<Icon size={16}/>}
-                                onClick={() => addSection(type)}
-                                data-testid={`homepage-add-section-${type.toLowerCase()}`}
-                            >
-                                <div className={classes.menuLabel}>{sectionTypeLabel(type)}</div>
-                                <div className={classes.menuDescription}>{sectionTypeDescription(type)}</div>
-                            </Menu.Item>
-                        );
-                    })}
-                </Menu.Dropdown>
-            </Menu>
+                </Tooltip>
+            ) : (
+                <Menu position="bottom-start" width={300} disabled={disabled}>
+                    <Menu.Target>
+                        <Button {...addButtonProps}>
+                            {t`Add section`}
+                        </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                        {CUSTOM_SECTION_TYPES.map(type => {
+                            const Icon = ICONS[type];
+                            return (
+                                <Menu.Item
+                                    key={type}
+                                    leftSection={<Icon size={16}/>}
+                                    onClick={() => addSection(type)}
+                                    data-testid={`homepage-add-section-${type.toLowerCase()}`}
+                                >
+                                    <div className={classes.menuLabel}>{sectionTypeLabel(type)}</div>
+                                    <div className={classes.menuDescription}>{sectionTypeDescription(type)}</div>
+                                </Menu.Item>
+                            );
+                        })}
+                    </Menu.Dropdown>
+                </Menu>
+            )}
         </div>
     );
 };
@@ -198,7 +267,12 @@ const SectionRow = ({entityId, section, alwaysShown, emptyState, expanded, disab
     const isCustom = CUSTOM_SECTION_TYPES.includes(section.type);
     const titledByCategories = section.type === 'TICKETS';
     const heading = titledByCategories ? null : section.heading;
-    const label = heading || sectionTypeLabel(section.type);
+    const label = sectionLabel(section);
+    const {canManageOrganizer} = useAccess();
+    const emptyAction = emptyState?.action
+        && (emptyState.action.organizerId === undefined || canManageOrganizer(emptyState.action.organizerId))
+        ? emptyState.action
+        : undefined;
 
     return (
         <li
@@ -212,7 +286,7 @@ const SectionRow = ({entityId, section, alwaysShown, emptyState, expanded, disab
             style={{transform: CSS.Transform.toString(transform), transition}}
         >
             <div className={classes.rowHeader}>
-                <button type="button" ref={setActivatorNodeRef} className={classes.grip} aria-label={t`Drag to reorder`} {...attributes} {...listeners}>
+                <button type="button" ref={setActivatorNodeRef} className={classes.grip} aria-label={t`Drag to reorder ${label}`} {...attributes} {...listeners}>
                     <IconGripVertical size={14}/>
                 </button>
                 <button type="button" className={classes.rowTitle} onClick={onToggleExpanded} aria-expanded={expanded}>
@@ -231,13 +305,13 @@ const SectionRow = ({entityId, section, alwaysShown, emptyState, expanded, disab
                         color={section.enabled ? 'gray' : 'orange'}
                         disabled={disabled || alwaysShown}
                         onClick={() => onChange({enabled: !section.enabled})}
-                        aria-label={section.enabled ? t`Hide section` : t`Show section`}
+                        aria-label={section.enabled ? t`Hide ${label}` : t`Show ${label}`}
                         data-testid={`homepage-section-toggle-${section.type.toLowerCase()}`}
                     >
                         {section.enabled ? <IconEye size={16}/> : <IconEyeOff size={16}/>}
                     </ActionIcon>
                 </Tooltip>
-                <ActionIcon variant="subtle" color="gray" onClick={onToggleExpanded} aria-label={t`Section settings`}>
+                <ActionIcon variant="subtle" color="gray" onClick={onToggleExpanded} aria-label={t`Section settings for ${label}`}>
                     <IconChevronDown size={16} className={classes.chevron}/>
                 </ActionIcon>
             </div>
@@ -249,9 +323,9 @@ const SectionRow = ({entityId, section, alwaysShown, emptyState, expanded, disab
                             <IconCircleDashed size={16}/>
                             <span>
                                 {t`Not shown yet.`} {emptyState.reason}
-                                {emptyState.action && (
+                                {emptyAction && (
                                     <>
-                                        {' '}<NavLink to={emptyState.action.to}>{emptyState.action.label}</NavLink>
+                                        {' '}<NavLink to={emptyAction.to}>{emptyAction.label}</NavLink>
                                     </>
                                 )}
                             </span>

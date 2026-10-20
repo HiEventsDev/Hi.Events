@@ -13,7 +13,7 @@ import {InputLabelWithHelp} from "../../common/InputLabelWithHelp";
 import {closestCenter, DndContext, DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
-import {ReactNode} from "react";
+import {ReactNode, useId} from "react";
 import {DateTimeField} from "../../common/DateTimeField";
 
 interface ProductPriceTierFormProps {
@@ -137,6 +137,7 @@ export const ProductPriceTierForm = ({form, product, event, isSeated}: ProductPr
     const prices: ProductPrice[] = form.values.prices ?? [];
     const sortable = prices.length > 1;
     const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
+    const dndId = useId();
 
     const handleDragEnd = ({active, over}: DragEndEvent) => {
         if (over && active.id !== over.id) {
@@ -145,7 +146,7 @@ export const ProductPriceTierForm = ({form, product, event, isSeated}: ProductPr
     };
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={prices.map((_, index) => index)} strategy={verticalListSortingStrategy}>
                 {prices.map((price, index) => {
                     const existingPrice = product?.prices?.find((p) => Number(p.id) === Number(price.id));
@@ -193,6 +194,7 @@ export const ProductPriceTierForm = ({form, product, event, isSeated}: ProductPr
                                 <DateTimeField
                                     {...form.getInputProps(`prices.${index}.sale_end_date`)}
                                     label={t`Sale End Date`}
+                                    defaultTime="23:59"
                                 />
                             </InputGroup>
 

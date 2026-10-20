@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Badge, Button, Loader, Switch} from "@mantine/core";
-import {t} from "@lingui/macro";
+import {plural, t} from "@lingui/macro";
 import {useGetMe} from "../../../../queries/useGetMe.ts";
 import {useGetSsoEnforcementPreview} from "../../queries/useGetSsoEnforcementPreview.ts";
 import {useSetSsoMemberEnforced, useUpdateSsoEnforcement} from "../../mutations/useAccountSsoMutations.ts";
@@ -40,8 +40,11 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
     const owner = preview?.members.find(member => member.is_account_owner);
     const willBeEnforced = (member: SsoEnforcementMember) => member.sso_available && !exempt.includes(member.account_user_id);
     const enforcedCount = onDomainMembers.filter(willBeEnforced).length;
+    const outsideDomainCount = preview?.outside_domain_count ?? 0;
     const meAffected = onDomainMembers.some(member => String(member.user_id) === String(me?.id) && willBeEnforced(member));
-    const unavailableNote = t`Owns another Hi.Events account, so keeps signing in with a password.`;
+    const unavailableNote = (member: SsoEnforcementMember) => member.role === 'SUPERADMIN'
+        ? t`Keeps signing in with a password. ${providerName} can't be used to sign this member in.`
+        : t`Owns another Hi.Events account, so keeps signing in with a password until they connect ${providerName} in their security settings.`;
 
     const toggleExempt = (member: SsoEnforcementMember, isExempt: boolean) => {
         setExempt(current => isExempt
@@ -121,11 +124,15 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
                     <p className={classes.previewSummary}>
                         {onDomainMembers.length === 0
                             ? t`Nobody on your team uses a verified domain yet. People who join from one will need to sign in with ${providerName}.`
-                            : enforcedCount === 1 ? t`1 member will need to sign in with ${providerName}.` : t`${enforcedCount} members will need to sign in with ${providerName}.`}
+                            : plural(enforcedCount, {
+                                one: `# member will need to sign in with ${providerName}.`,
+                                other: `# members will need to sign in with ${providerName}.`,
+                            })}
                         {' '}
-                        {preview.outside_domain_count === 1
-                            ? t`1 member outside your verified domains keeps their current sign-in.`
-                            : t`${preview.outside_domain_count} members outside your verified domains keep their current sign-in.`}
+                        {plural(outsideDomainCount, {
+                            one: '# member outside your verified domains keeps their current sign-in.',
+                            other: '# members outside your verified domains keep their current sign-in.',
+                        })}
                     </p>
 
                     {onDomainMembers.length > 0 && (
@@ -138,13 +145,14 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
                                         <div className={classes.memberText}>
                                             <span className={classes.memberName}>{memberName(member)}</span>
                                             <span className={classes.muted}>{member.email}</span>
-                                            {!member.sso_available && <span className={classes.muted}>{unavailableNote}</span>}
+                                            {!member.sso_available && <span className={classes.muted}>{unavailableNote(member)}</span>}
                                         </div>
                                         {member.sso_available && (
                                             <Switch
                                                 size="sm"
                                                 label={t`Exempt`}
                                                 labelPosition="left"
+                                                aria-label={t`Exempt ${memberName(member)}`}
                                                 checked={isExempt}
                                                 onChange={(event) => toggleExempt(member, event.currentTarget.checked)}
                                             />
@@ -158,6 +166,7 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
                     {owner && (
                         <Callout variant="info">
                             {t`The account owner (${owner.email}) can still sign in with their password and two-factor authentication, so you can recover access if ${providerName} is unavailable. Every admin is emailed when that happens.`}
+                            {!owner.sso_available && owner.role !== 'SUPERADMIN' && <> {t`The owner can connect ${providerName} in their security settings to sign in with it day to day.`}</>}
                         </Callout>
                     )}
 
@@ -183,7 +192,7 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
                             <div className={classes.memberText}>
                                 <span className={classes.memberName}>{memberName(member)}</span>
                                 <span className={classes.muted}>{member.email}</span>
-                                {!member.sso_available && <span className={classes.muted}>{unavailableNote}</span>}
+                                {!member.sso_available && <span className={classes.muted}>{unavailableNote(member)}</span>}
                             </div>
                             {member.sso_enforced && member.sso_available
                                 ? <Badge size="sm" variant="light" color="blue">{t`SSO`}</Badge>
@@ -192,6 +201,7 @@ export const EnforcementPanel = ({accountId, connection, hasVerifiedDomain, setu
                                 size="compact-xs"
                                 variant="subtle"
                                 onClick={() => setMemberEnforced(member, !member.sso_enforced)}
+                                aria-label={member.sso_enforced ? t`Exempt ${memberName(member)}` : t`Require SSO for ${memberName(member)}`}
                                 loading={memberMutation.isPending && memberMutation.variables?.accountUserId === member.account_user_id}
                             >
                                 {member.sso_enforced ? t`Exempt` : t`Require SSO`}

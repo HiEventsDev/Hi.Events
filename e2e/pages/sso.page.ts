@@ -30,7 +30,13 @@ export class SsoPage {
 
 export const providerIsConfigured = async (page: Page): Promise<boolean> => {
   const response = await page.request.get('/api/auth/sso/providers');
-  if (!response.ok()) return false;
+  if (!response.ok()) {
+    throw new Error(`Listing the sign-in providers failed with HTTP ${response.status()}`);
+  }
   const body = await response.json();
-  return body.data.providers.some((provider: { key: string }) => provider.key === 'oidc');
+  const configured = body.data.providers.some((provider: { key: string }) => provider.key === 'oidc');
+  if (!configured && process.env.CI) {
+    throw new Error('No OIDC provider is configured on this stack; set SSO_OIDC_* for the e2e backend');
+  }
+  return configured;
 };

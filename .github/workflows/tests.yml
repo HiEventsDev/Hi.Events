@@ -4,14 +4,29 @@ on:
   push:
     branches: [main, develop, 'v[0-9]+.[0-9]+.[0-9]+-*']
     paths:
+      - 'VERSION'
       - 'backend/**'
       - '.github/workflows/tests.yml'
   pull_request:
     paths:
+      - 'VERSION'
       - 'backend/**'
       - '.github/workflows/tests.yml'
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check backend/VERSION matches VERSION
+        run: |
+          if [ "$(cat VERSION)" != "$(cat backend/VERSION)" ]; then
+            echo "::error file=backend/VERSION::backend/VERSION ($(cat backend/VERSION)) does not match VERSION ($(cat VERSION))"
+            exit 1
+          fi
+
   tests:
     runs-on: ubuntu-latest
 
@@ -20,9 +35,6 @@ jobs:
         php-versions: ['8.3', '8.4', '8.5']
 
     services:
-      # Postgres is started for the Feature suite. The Unit suite does not need
-      # a live connection — it only reads DB_DATABASE for the _test guard check
-      # in CreatesApplication — so it runs in parallel with Postgres warming up.
       postgres:
         image: postgres:15
         env:
@@ -37,9 +49,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    # Job-level env. .env.testing supplies the rest, but the DB host on a CI
-    # runner is 127.0.0.1 (service container exposes its port on the runner),
-    # not the docker network alias used locally — override here.
     env:
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
@@ -78,16 +87,9 @@ jobs:
         run: cd backend && composer install --prefer-dist --no-progress --no-interaction
 
       - name: Stage .env for testing
-        # Laravel auto-loads .env.testing when APP_ENV=testing, but artisan
-        # commands run outside that flow read .env directly. Copy .env.testing
-        # to .env so both paths see the same config.
         run: cp backend/.env.testing backend/.env
 
       - name: Run Unit test suite
-        # Pure unit tests — no DB connection, no migrations. The CreatesApplication
-        # bootstrap detects the absence of DatabaseTransactions / RefreshDatabase
-        # traits and skips migrate:fresh entirely. Runs in parallel with the
-        # Postgres service container coming up.
         run: cd backend && ./vendor/bin/phpunit --testsuite=Unit --no-coverage
 
       - name: Wait for Postgres
@@ -102,7 +104,4 @@ jobs:
           exit 1
 
       - name: Run Feature test suite
-        # Integration tests against the real PostgreSQL test database. The first
-        # test that boots Laravel triggers migrate:fresh once per process via
-        # CreatesApplication::ensureTestDatabaseIsMigrated.
         run: cd backend && ./vendor/bin/phpunit --testsuite=Feature --no-coverage

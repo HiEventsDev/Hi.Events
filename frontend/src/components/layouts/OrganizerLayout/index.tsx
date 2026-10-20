@@ -1,4 +1,5 @@
 import {
+    IconArrowLeft,
     IconArrowsHorizontal,
     IconBrandStripe,
     IconCalendar,
@@ -23,7 +24,7 @@ import { useAccess } from "../../../hooks/useAccess.ts";
 import { t } from "@lingui/macro";
 import { BreadcrumbItem, NavItem } from "../AppLayout/types.ts";
 import AppLayout from "../AppLayout";
-import { Navigate, NavLink, useLocation, useParams } from "react-router";
+import { NavLink, useLocation, useParams } from "react-router";
 import { Badge, Button, Modal, Stack, Text } from "@mantine/core";
 import { useGetOrganizer } from "../../../queries/useGetOrganizer.ts";
 import { useGetOrganizerSettings } from "../../../queries/useGetOrganizerSettings.ts";
@@ -49,6 +50,7 @@ import { confirmationDialog } from "../../../utilites/confirmationDialog.tsx";
 import { showError, showSuccess } from "../../../utilites/notifications.tsx";
 import { useResendEmailConfirmation } from "../../../mutations/useResendEmailConfirmation.ts";
 import { useGetMe } from "../../../queries/useGetMe.ts";
+import { GenericErrorPage } from "../../common/GenericErrorPage";
 
 const OrganizerLayout = () => {
     const { organizerId } = useParams();
@@ -213,7 +215,15 @@ const OrganizerLayout = () => {
     ];
 
     if (isAccessLoaded && !canManageOrganizer(organizerId)) {
-        return <Navigate to={'/manage/events'} replace/>;
+        return (
+            <GenericErrorPage
+                title={t`You don't have access to this organizer`}
+                description={t`Ask an account admin to give you access, or open one of your own events.`}
+                buttonText={t`Go to your events`}
+                buttonUrl="/manage/events"
+                buttonIcon={<IconArrowLeft size={18}/>}
+            />
+        );
     }
 
     return (

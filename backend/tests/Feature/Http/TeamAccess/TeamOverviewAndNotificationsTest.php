@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\TeamAccess;
 use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\EventDomainObject;
 use HiEvents\DomainObjects\Status\UserStatus;
+use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Mail\Account\AdminAccessGrantedMail;
 use HiEvents\Models\User;
 use HiEvents\Repository\Interfaces\EventRepositoryInterface;
@@ -104,7 +105,7 @@ class TeamOverviewAndNotificationsTest extends TestCase
 
         $recipients = $this->app->make(TeamOrderNotificationRecipientService::class)->recipientsFor($this->event(), null);
 
-        $this->assertSame([strtolower($subscribed->email)], $recipients);
+        $this->assertSame([strtolower($subscribed->email)], array_map(fn (UserDomainObject $user) => strtolower($user->getEmail()), $recipients));
     }
 
     public function test_the_organizer_address_is_not_emailed_twice(): void
@@ -153,6 +154,49 @@ class TeamOverviewAndNotificationsTest extends TestCase
         ], $this->headersFor($admin, $this->accountId))->assertOk();
 
         Mail::assertQueued(AdminAccessGrantedMail::class, fn (AdminAccessGrantedMail $mail) => $mail->hasTo($this->owner->email));
+    }
+
+    public function test_owner_is_told_an_invited_admin_has_only_been_invited(): void
+    {
+        $admin = $this->addAccountUser($this->accountId, Role::ADMIN);
+
+        $this->postJson('/users', [
+            'first_name' => 'New',
+            'email' => 'new-admin-'.uniqid().'@test.com',
+            'role' => Role::ADMIN->value,
+        ], $this->headersFor($admin, $this->accountId))->assertCreated();
+
+        Mail::assertQueued(AdminAccessGrantedMail::class, fn (AdminAccessGrantedMail $mail) => $mail->hasTo($this->owner->email)
+            && $mail->content()->with['isInvitation'] === true);
+    }
+
+    public function test_promoting_an_invited_member_is_reported_as_an_invitation(): void
+    {
+        $admin = $this->addAccountUser($this->accountId, Role::ADMIN);
+        $member = $this->addAccountUser($this->accountId, Role::ORGANIZER, UserStatus::INVITED);
+
+        $this->putJson("/users/{$member->id}", [
+            'first_name' => 'Promoted',
+            'last_name' => 'Member',
+            'role' => Role::ADMIN->value,
+        ], $this->headersFor($admin, $this->accountId))->assertOk();
+
+        Mail::assertQueued(AdminAccessGrantedMail::class, fn (AdminAccessGrantedMail $mail) => $mail->content()->with['isInvitation'] === true);
+    }
+
+    public function test_promoting_an_active_member_is_reported_as_admin_access(): void
+    {
+        $admin = $this->addAccountUser($this->accountId, Role::ADMIN);
+        $member = $this->addAccountUser($this->accountId, Role::ORGANIZER);
+
+        $this->putJson("/users/{$member->id}", [
+            'first_name' => 'Promoted',
+            'last_name' => 'Member',
+            'role' => Role::ADMIN->value,
+            'status' => 'ACTIVE',
+        ], $this->headersFor($admin, $this->accountId))->assertOk();
+
+        Mail::assertQueued(AdminAccessGrantedMail::class, fn (AdminAccessGrantedMail $mail) => $mail->content()->with['isInvitation'] === false);
     }
 
     private function subscribedMember(User $user): User

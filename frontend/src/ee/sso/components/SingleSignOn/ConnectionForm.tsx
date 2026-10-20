@@ -22,6 +22,14 @@ interface ConnectionFormProps {
 
 type CheckState = { status: 'idle' | 'checking' | 'valid' } | { status: 'invalid', message: string };
 
+interface ConnectionFormValues {
+    issuer: string;
+    tenant_id: string;
+    hosted_domain: string;
+    client_id: string;
+    client_secret: string;
+}
+
 export const connectionRequest = (connection: AccountSsoConnection, overrides: Partial<AccountSsoConnectionRequest> = {}): AccountSsoConnectionRequest => ({
     type: connection.type,
     client_id: connection.client_id,
@@ -42,14 +50,33 @@ export const ConnectionForm = ({accountId, type, connection, redirectUri, onSave
     const [check, setCheck] = useState<CheckState>({status: 'idle'});
     const isNew = connection === null;
     const locationField = type === 'ENTRA' ? 'tenant_id' : type === 'GOOGLE_WORKSPACE' ? 'hosted_domain' : 'issuer';
+    const usesIssuer = type === 'OKTA' || type === 'OIDC';
 
-    const form = useForm({
+    const identityChanged = (values: ConnectionFormValues): boolean => connection !== null && (
+        connection.type !== type
+        || values.client_id.trim() !== connection.client_id
+        || (usesIssuer && values.issuer.trim().replace(/\/+$/, '') !== connection.issuer)
+        || (type === 'ENTRA' && values.tenant_id.trim().toLowerCase() !== (connection.tenant_id ?? ''))
+        || (type === 'GOOGLE_WORKSPACE' && values.hosted_domain.trim().toLowerCase() !== (connection.hosted_domain ?? ''))
+    );
+    const secretRequired = (values: ConnectionFormValues): boolean => isNew || identityChanged(values);
+
+    const form = useForm<ConnectionFormValues>({
         initialValues: {
-            issuer: connection?.type === type && (type === 'OKTA' || type === 'OIDC') ? connection.issuer : '',
+            issuer: connection?.type === type && usesIssuer ? connection.issuer : '',
             tenant_id: connection?.tenant_id ?? '',
             hosted_domain: connection?.hosted_domain ?? '',
             client_id: connection?.type === type ? connection.client_id : '',
             client_secret: '',
+        },
+        validate: {
+            issuer: (value) => usesIssuer && !value.trim() ? t`Enter the issuer URL, starting with https://.` : null,
+            tenant_id: (value) => type === 'ENTRA' && !value.trim() ? t`Enter the directory (tenant) ID. It looks like 00000000-0000-0000-0000-000000000000.` : null,
+            hosted_domain: (value) => type === 'GOOGLE_WORKSPACE' && !value.trim() ? t`Enter your Google Workspace domain, like example.com.` : null,
+            client_id: (value) => !value.trim() ? t`Enter the client ID.` : null,
+            client_secret: (value, values) => value.trim() || !secretRequired(values)
+                ? null
+                : isNew ? t`Enter the client secret.` : t`Enter the client secret again when you change the identity provider details.`,
         },
     });
 
@@ -133,7 +160,7 @@ export const ConnectionForm = ({accountId, type, connection, redirectUri, onSave
                     <div className={classes.redirectUriLabel}>{t`Redirect URI`}</div>
                     <code className={classes.redirectUriValue}>{redirectUri}</code>
                 </div>
-                <CopyButton value={redirectUri}/>
+                <CopyButton value={redirectUri} label={t`Copy redirect URI`}/>
             </div>
 
             {type === 'ENTRA' && (
@@ -154,7 +181,7 @@ export const ConnectionForm = ({accountId, type, connection, redirectUri, onSave
                     required
                 />
             )}
-            {(type === 'OKTA' || type === 'OIDC') && (
+            {usesIssuer && (
                 <TextInput
                     {...locationInput}
                     label={type === 'OKTA' ? t`Okta domain` : t`Issuer URL`}
@@ -173,9 +200,13 @@ export const ConnectionForm = ({accountId, type, connection, redirectUri, onSave
             <PasswordInput
                 {...form.getInputProps('client_secret')}
                 label={t`Client secret`}
-                description={isNew ? undefined : t`Saved and hidden. Leave blank to keep the current secret.`}
+                description={isNew
+                    ? undefined
+                    : secretRequired(form.values)
+                        ? t`You changed the provider details, so enter the client secret again.`
+                        : t`Saved and hidden. Leave blank to keep the current secret.`}
                 autoComplete="new-password"
-                required={isNew}
+                required={secretRequired(form.values)}
             />
 
             <Group justify="flex-end" gap="sm" mt="md">

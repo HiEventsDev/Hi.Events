@@ -19,7 +19,7 @@ import {getEmbedParentUrl, getParentOrigin} from "../../../utilites/iframeResize
 import {PREVIEW_OPEN_EVENT_MESSAGE, useWidgetAppearance, useWidgetRuntime} from "../../widget/useWidgetRuntime.ts";
 import {WidgetFrame} from "../../widget/WidgetFrame";
 import {WidgetMessage} from "../../widget/WidgetMessage";
-import {WidgetEventsLayout, WidgetRuntimeConfig} from "../../../utilites/widgetConfig.ts";
+import {forwardedHostParams, WidgetEventsLayout, WidgetRuntimeConfig} from "../../../utilites/widgetConfig.ts";
 import classes from "./OrganizerEventsWidget.module.scss";
 
 const locationLabel = (event: Event): string | null => {
@@ -34,7 +34,7 @@ const locationLabel = (event: Event): string | null => {
     return eventLocation.location?.name || address?.venue_name || address?.city || null;
 };
 
-const openEvent = (event: Event, openIn: WidgetRuntimeConfig['open_in'], isPreview: boolean) => {
+const openEvent = (event: Event, openIn: WidgetRuntimeConfig['open_in'], isPreview: boolean, search: URLSearchParams) => {
     if (openIn !== 'page' && isPreview) {
         window.parent.postMessage({type: PREVIEW_OPEN_EVENT_MESSAGE, eventId: event.id}, window.location.origin);
         return;
@@ -43,7 +43,8 @@ const openEvent = (event: Event, openIn: WidgetRuntimeConfig['open_in'], isPrevi
         window.parent.postMessage({type: 'hievents:open-widget', eventId: event.id}, getParentOrigin() || '*');
         return;
     }
-    window.open(eventHomepageUrl(event), '_blank', 'noopener');
+    const hostParams = new URLSearchParams(forwardedHostParams(search)).toString();
+    window.open(eventHomepageUrl(event) + (hostParams ? `?${hostParams}` : ''), '_blank', 'noopener');
 };
 
 const EventItem = ({event, layout, onOpen}: { event: Event; layout: WidgetEventsLayout; onOpen: (event: Event) => void }) => {
@@ -104,19 +105,19 @@ const EventItem = ({event, layout, onOpen}: { event: Event; layout: WidgetEvents
 
 const OrganizerEventsWidget = () => {
     const {organizerId} = useParams();
-    const {config, isPreview} = useWidgetRuntime();
+    const {config, search, isPreview, notFound} = useWidgetRuntime();
     const [status, setStatus] = useState<OrganizerWidgetEventsStatus>('upcoming');
     const organizerQuery = useQuery<Organizer, AxiosError>({
         ...getOrganizerPublicQuery(String(organizerId)),
         staleTime: WIDGET_EVENT_STALE_TIME,
-        enabled: !!organizerId,
+        enabled: !!organizerId && !notFound,
     });
-    const eventsQuery = useGetOrganizerWidgetEvents(String(organizerId), config, status, !!organizerId);
+    const eventsQuery = useGetOrganizerWidgetEvents(String(organizerId), config, status, !!organizerId && !notFound);
     const appearance = useWidgetAppearance(config, organizerQuery.data?.settings?.homepage_theme_settings);
     const layout: WidgetEventsLayout = config.layout ?? 'list';
     const events = eventsQuery.data?.pages.flatMap(page => page.data) ?? [];
 
-    if (eventsQuery.isError) {
+    if (notFound || eventsQuery.isError) {
         return (
             <WidgetFrame style={appearance.style} mode={appearance.mode}>
                 <WidgetMessage title={t`These events are not available`}/>
@@ -129,7 +130,7 @@ const OrganizerEventsWidget = () => {
             {config.show_past && (
                 <SegmentedControl
                     className={classes.tabs}
-                    size="xs"
+                    size="md"
                     value={status}
                     onChange={(value) => setStatus(value as OrganizerWidgetEventsStatus)}
                     data={[
@@ -150,7 +151,7 @@ const OrganizerEventsWidget = () => {
             ) : (
                 <ul className={classes.list} data-layout={layout}>
                     {events.map(event => (
-                        <EventItem key={event.id} event={event} layout={layout} onOpen={(item) => openEvent(item, config.open_in, isPreview)}/>
+                        <EventItem key={event.id} event={event} layout={layout} onOpen={(item) => openEvent(item, config.open_in, isPreview, search)}/>
                     ))}
                 </ul>
             )}

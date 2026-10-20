@@ -23,6 +23,7 @@ import classes from "./ApiKeys.module.scss";
 const DRAFT_STORAGE_KEY = 'hi-api-key-draft';
 const NEVER = 'never';
 const DEFAULT_EXPIRY_DAYS = 90;
+const EXPIRY_REMINDER_MINIMUM_LIFETIME_DAYS = 14;
 
 interface Draft {
     name: string;
@@ -81,6 +82,7 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
 
     const expiresInDays = form.values.expires === NEVER ? null : Number(form.values.expires);
     const expiryDate = expiresInDays === null ? null : dayjs.utc().add(expiresInDays, 'day').toISOString();
+    const getsExpiryReminder = expiresInDays !== null && expiresInDays >= EXPIRY_REMINDER_MINIMUM_LIFETIME_DAYS;
 
     const closeAndForgetDraft = () => {
         safeSessionStorageRemove(DRAFT_STORAGE_KEY);
@@ -158,7 +160,7 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
 
     if (created) {
         return (
-            <Modal opened onClose={finish} heading={t`Copy your API key`} size={560}>
+            <Modal key="reveal" opened onClose={finish} heading={t`Copy your API key`} size={560}>
                 <div className={classes.modalBody}>
                     <Callout variant="warning" title={t`This is the only time you'll see this key`}>
                         {t`Store it somewhere safe, like a password manager or your integration's secret settings. Anyone with this key can use the API as you.`}
@@ -180,6 +182,7 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
                                 color={copied ? 'teal' : undefined}
                                 leftSection={copied ? <IconCheck size={16}/> : <IconCopy size={16}/>}
                                 onClick={copyKey}
+                                data-autofocus
                                 data-testid="api-key-copy"
                             >
                                 {copied ? t`Copied` : t`Copy key`}
@@ -209,7 +212,7 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
     }
 
     return (
-        <Modal opened onClose={closeAndForgetDraft} heading={t`Create API key`} size={560}>
+        <Modal key="form" opened onClose={closeAndForgetDraft} heading={t`Create API key`} size={560}>
             <form className={classes.modalBody} onSubmit={submit} noValidate>
                 {accountName && (
                     <p className={classes.modalText}>
@@ -225,7 +228,7 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
                     placeholder={t`e.g. Zapier`}
                     maxLength={60}
                     required
-                    autoFocus
+                    data-autofocus
                     data-testid="api-key-name"
                     {...form.getInputProps('name')}
                 />
@@ -279,9 +282,11 @@ export const CreateApiKeyModal = ({canEdit, accountName, expiryOptions, timezone
                         data-testid="api-key-expiry"
                     />
                     <div className={classNames(classes.expiryNote, {[classes.expiryWarning]: !expiryDate})}>
-                        {expiryDate
-                            ? t`Stops working on ${formatDateWithLocale(expiryDate, 'shortDate', timezone, locale)}. We'll email you a week before.`
-                            : t`Keys that never expire stay valid until you revoke them. Only use this for servers you control.`}
+                        {!expiryDate
+                            ? t`Keys that never expire stay valid until you revoke them. Only use this for servers you control.`
+                            : getsExpiryReminder
+                                ? t`Stops working on ${formatDateWithLocale(expiryDate, 'shortDate', timezone, locale)}. We'll email you a week before.`
+                                : t`Stops working on ${formatDateWithLocale(expiryDate, 'shortDate', timezone, locale)}.`}
                     </div>
                 </div>
 

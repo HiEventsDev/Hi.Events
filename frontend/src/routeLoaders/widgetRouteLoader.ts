@@ -21,6 +21,7 @@ export interface WidgetLoaderData {
     preset: WidgetSettings | null;
     promoCode: string | null;
     promoCodeValid: boolean | undefined;
+    notFound: boolean;
 }
 
 const isNotFound = (error: unknown) => (error as AxiosError | undefined)?.response?.status === 404;
@@ -75,12 +76,12 @@ export const ticketWidgetRouteLoader = async ({params, request}: LoaderFunctionA
             getQueryClient().ensureQueryData(getEventPublicQuery(...ticketEventQueryArgs(params.eventId, config, promoCodeValid))),
             wantsLineup(config) ? getQueryClient().prefetchQuery(getEventLineupPublicQuery(params.eventId)) : null,
         ]);
-        return {preset, promoCode, promoCodeValid};
+        return {preset, promoCode, promoCodeValid, notFound: false};
     } catch (error) {
         if (!isNotFound(error)) {
             console.error(loggableError(error));
         }
-        return {preset, promoCode, promoCodeValid: undefined};
+        return {preset, promoCode, promoCodeValid: undefined, notFound: isNotFound(error)};
     }
 };
 
@@ -92,12 +93,13 @@ export const eventContentWidgetRouteLoader = async ({params, request}: LoaderFun
             getQueryClient().ensureQueryData(getEventPublicQuery(params.eventId, null, false, config.occurrence_id ?? null)),
             getQueryClient().prefetchQuery(getEventLineupPublicQuery(params.eventId)),
         ]);
+        return {preset, promoCode: null, promoCodeValid: undefined, notFound: false};
     } catch (error) {
         if (!isNotFound(error)) {
             console.error(loggableError(error));
         }
+        return {preset, promoCode: null, promoCodeValid: undefined, notFound: isNotFound(error)};
     }
-    return {preset, promoCode: null, promoCodeValid: undefined};
 };
 
 export const organizerWidgetRouteLoader = async ({params, request}: LoaderFunctionArgs): Promise<WidgetLoaderData> => {
@@ -106,12 +108,13 @@ export const organizerWidgetRouteLoader = async ({params, request}: LoaderFuncti
     try {
         await Promise.all([
             getQueryClient().prefetchQuery(getOrganizerPublicQuery(params.organizerId)),
-            getQueryClient().prefetchInfiniteQuery(organizerWidgetEventsQuery(String(params.organizerId), config, 'upcoming')),
+            getQueryClient().fetchInfiniteQuery(organizerWidgetEventsQuery(String(params.organizerId), config, 'upcoming')),
         ]);
+        return {preset, promoCode: null, promoCodeValid: undefined, notFound: false};
     } catch (error) {
         if (!isNotFound(error)) {
             console.error(loggableError(error));
         }
+        return {preset, promoCode: null, promoCodeValid: undefined, notFound: isNotFound(error)};
     }
-    return {preset, promoCode: null, promoCodeValid: undefined};
 };

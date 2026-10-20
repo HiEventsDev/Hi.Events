@@ -1,5 +1,5 @@
-import {ActionIcon, Avatar, Badge, Button, Menu, Tooltip} from "@mantine/core";
-import {t} from "@lingui/macro";
+import {ActionIcon, Avatar, Badge, Button, Menu, Tooltip, VisuallyHidden} from "@mantine/core";
+import {plural, t} from "@lingui/macro";
 import {
     IconDotsVertical,
     IconLock,
@@ -48,8 +48,8 @@ const accessSummary = (user: User) => {
     const organizerCount = user.access.organizer_ids.length;
     const eventCount = user.access.event_ids.length;
     const parts = [
-        organizerCount === 1 ? t`1 organizer` : organizerCount > 1 ? t`${organizerCount} organizers` : null,
-        eventCount === 1 ? t`1 event` : eventCount > 1 ? t`${eventCount} events` : null,
+        organizerCount > 0 ? plural(organizerCount, {one: '# organizer', other: '# organizers'}) : null,
+        eventCount > 0 ? plural(eventCount, {one: '# event', other: '# events'}) : null,
     ].filter(Boolean);
 
     return parts.length ? parts.join(' · ') : t`No access yet`;
@@ -101,6 +101,7 @@ export const MemberRow = ({
     const isRestricted = user.access?.scope === 'RESTRICTED';
     const canToggleActive = !isInvited && !isMe && !user.is_account_owner && user.role !== 'SUPERADMIN';
     const note = permissionNote(user);
+    const displayName = [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email;
     const grantedOrganizers = organizers
         .filter(organizer => user.access?.organizer_ids.includes(Number(organizer.id)))
         .map(organizer => organizer.name);
@@ -132,10 +133,12 @@ export const MemberRow = ({
 
             <div className={classes.meta}>
                 <div className={classes.cellRole}>
+                    <VisuallyHidden>{t`Role`}</VisuallyHidden>
                     <span className={classes.role}>{user.is_account_owner ? t`Owner` : roleLabel(user.role)}</span>
                 </div>
 
                 <div className={classes.cellAccess}>
+                    <VisuallyHidden>{t`Access`}</VisuallyHidden>
                     <Tooltip
                         label={grantedOrganizers.join(', ')}
                         disabled={!grantedOrganizers.length}
@@ -150,6 +153,7 @@ export const MemberRow = ({
                 </div>
 
                 <div className={classes.cellTwoFactor}>
+                    <VisuallyHidden>{t`Two-factor`}</VisuallyHidden>
                     {user.two_factor_enabled ? (
                         <span className={classes.twoFactorOn}><IconShieldCheck size={14}/>{t`On`}</span>
                     ) : (
@@ -158,23 +162,24 @@ export const MemberRow = ({
                 </div>
 
                 <div className={classes.cellLastSeen}>
+                    <VisuallyHidden>{t`Last active`}</VisuallyHidden>
                     {isInvited ? t`Not joined yet` : user.last_login_at ? relativeDate(user.last_login_at) : t`Never`}
                 </div>
             </div>
 
             <div className={classes.cellActions} onClick={(event) => event.stopPropagation()}>
                 {isInvited ? (
-                    <Button size="compact-sm" variant="light" leftSection={<IconSend size={14}/>} onClick={onResendInvitation} className={classes.inlineAction}>
+                    <Button size="compact-sm" variant="light" leftSection={<IconSend size={14}/>} onClick={onResendInvitation} className={classes.inlineAction} aria-label={t`Resend invitation to ${displayName}`}>
                         {t`Resend`}
                     </Button>
                 ) : (
-                    <Button size="compact-sm" variant="subtle" color="gray" leftSection={<IconPencil size={14}/>} onClick={onEdit} className={classes.inlineAction}>
+                    <Button size="compact-sm" variant="subtle" color="gray" leftSection={<IconPencil size={14}/>} onClick={onEdit} className={classes.inlineAction} aria-label={t`Edit ${displayName}`}>
                         {t`Edit`}
                     </Button>
                 )}
                 <Menu shadow="md" width={210} position="bottom-end">
                     <Menu.Target>
-                        <ActionIcon variant="subtle" color="gray" aria-label={t`More actions`} data-testid="team-member-actions">
+                        <ActionIcon variant="subtle" color="gray" aria-label={t`More actions for ${displayName}`} data-testid="team-member-actions">
                             <IconDotsVertical size={16}/>
                         </ActionIcon>
                     </Menu.Target>

@@ -963,7 +963,7 @@ $router->prefix('/public')->group(
 
         // Box office
         $router->get('/box-offices/{box_office_short_id}', GetBoxOfficePublicAction::class)
-            ->middleware('throttle:60,1,box-office-read');
+            ->middleware('throttle:box-office-read');
         $router->post('/box-offices/{box_office_short_id}/sessions', CreateBoxOfficeSessionPublicAction::class)
             ->middleware('throttle:box-office-session')
             ->middleware('ee.licensed:box_office');

@@ -3,7 +3,6 @@
 namespace HiEvents\Enterprise\Sso\Services\Domain;
 
 use HiEvents\DomainObjects\AccountSsoConnectionDomainObject;
-use HiEvents\DomainObjects\Enums\Role;
 use HiEvents\DomainObjects\Enums\SsoErrorCode;
 use HiEvents\DomainObjects\UserDomainObject;
 use HiEvents\Enterprise\Sso\Repository\Interfaces\AccountSsoConnectionRepositoryInterface;
@@ -24,6 +23,7 @@ class EnterpriseSsoResolver
         private readonly AccountUserRepositoryInterface $accountUserRepository,
         private readonly AccountSsoDomainService $domainService,
         private readonly SsoJitProvisioningService $jitProvisioningService,
+        private readonly SsoConnectionLinkService $connectionLinkService,
         private readonly LoggerInterface $logger,
     ) {}
 
@@ -37,7 +37,15 @@ class EnterpriseSsoResolver
         $accountId = $connection->getAccountId();
         $claimedEmailTrusted = $claims->emailTrusted && $this->domainService->isEmailOnUsableDomain($accountId, $claims->email);
 
-        $user = $this->findLinkedUser($claims) ?? $this->findOrCreateByEmail($connection, $claims, $claimedEmailTrusted);
+        $linkedUser = $this->findLinkedUser($claims);
+
+        if ($linkedUser !== null && $this->connectionLinkService->isSuperAdmin($linkedUser->getId())) {
+            $this->logOutcome($connection, 'superadmin');
+
+            throw $this->signInWithPasswordInstead();
+        }
+
+        $user = $linkedUser ?? $this->findOrCreateByEmail($connection, $claims, $claimedEmailTrusted);
 
         $this->jitProvisioningService->ensureMembership(
             connection: $connection,
@@ -72,10 +80,17 @@ class EnterpriseSsoResolver
         if ($matches->count() > 1 || ($matches->count() === 1 && (! $emailTrusted || $this->isProtectedFromEmailLinking($matches->first())))) {
             $this->logOutcome($connection, $matches->count() > 1 ? 'ambiguous_email' : 'link_requires_login');
 
-            throw new SsoException(
-                SsoErrorCode::LINK_REQUIRES_LOGIN,
-                __('Sign in with your email and password, then connect this sign-in option from your security settings.'),
-            );
+            $canConnect = $matches->count() === 1
+                && $emailTrusted
+                && $this->connectionLinkService->canLink($connection->getAccountId(), $matches->first()->getId());
+
+            throw $canConnect
+                ? new SsoException(
+                    SsoErrorCode::LINK_REQUIRES_LOGIN,
+                    __('Sign in with your email and password, then connect this sign-in option from your security settings.'),
+                    ['email' => $claims->email],
+                )
+                : $this->signInWithPasswordInstead();
         }
 
         if ($matches->count() === 1) {
@@ -104,13 +119,15 @@ class EnterpriseSsoResolver
 
     private function isProtectedFromEmailLinking(UserDomainObject $user): bool
     {
-        return $this->accountUserRepository->findFirstWhere([
-            'user_id' => $user->getId(),
-            'role' => Role::SUPERADMIN->name,
-        ]) !== null || $this->accountUserRepository->findFirstWhere([
+        return $this->connectionLinkService->isSuperAdmin($user->getId()) || $this->accountUserRepository->findFirstWhere([
             'user_id' => $user->getId(),
             'is_account_owner' => true,
         ]) !== null;
+    }
+
+    private function signInWithPasswordInstead(): SsoException
+    {
+        return new SsoException(SsoErrorCode::LINK_REQUIRES_LOGIN, __('Sign in with your email and password instead.'));
     }
 
     private function logOutcome(AccountSsoConnectionDomainObject $connection, string $outcome): void
